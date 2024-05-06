@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
+
 class panel extends wg
 {
     protected static array $defineProps = array(
@@ -42,7 +44,7 @@ class panel extends wg
         return div
         (
             setClass('panel-actions', $headingActionsClass),
-            empty($actions) ? null : toolbar(set::items($actions)),
+            empty($actions) ? null : toolbar::create($actions),
             $actionsBlock
         );
     }

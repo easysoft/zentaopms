@@ -158,6 +158,13 @@ class projectStory extends control
     public function batchUnlinkStory(int $projectID, string $storyIdList = '')
     {
         $storyIdList = empty($storyIdList) ? array() : array_filter(explode(',', $storyIdList));
+        $storyIdList = array_unique($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
         if(empty($storyIdList)) $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
 
         $this->loadModel('execution');

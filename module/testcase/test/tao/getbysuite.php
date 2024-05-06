@@ -1,15 +1,15 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $caseData = zdTable('case');
+    $caseData = zenData('case');
     $caseData->product->range('1{5},2{5}');
 
-    $caseSuiteData = zdTable('suitecase');
+    $caseSuiteData = zenData('suitecase');
     $caseSuiteData->product->range('1{5},2{5}');
     $caseSuiteData->suite->range('1-4');
 

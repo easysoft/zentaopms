@@ -13,11 +13,12 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-jsVar('bugID',     $bug->id);
-jsVar('productID', $bug->product);
-jsVar('branchID',  $bug->branch);
+jsVar('bugID',            $bug->id);
+jsVar('productID',        $bug->product);
+jsVar('branchID',         $bug->branch);
 jsVar('errorNoExecution', $lang->bug->noExecution);
 jsVar('errorNoProject',   $lang->bug->noProject);
+jsVar('isInModal',        isInModal());
 
 $isInModal    = isInModal();
 $canCreateBug = hasPriv('bug', 'create');
@@ -25,15 +26,6 @@ $canViewRepo  = hasPriv('repo', 'revision');
 $canViewMR    = hasPriv('mr', 'view');
 $canViewBug   = hasPriv('bug', 'view');
 $operateList  = $this->loadModel('common')->buildOperateMenu($bug);
-
-/* Handling special tags in bug descriptions. */
-$tplStep   = strip_tags(trim($lang->bug->tplStep));
-$steps     = str_replace('<p>' . $tplStep, '<p class="font-bold my-1">' . $tplStep . '</p><p>', $bug->steps);
-$tplResult = strip_tags(trim($lang->bug->tplResult));
-$steps     = str_replace('<p>' . $tplResult, '<p class="font-bold my-1">' . $tplResult . '</p><p>', $steps);
-$tplExpect = strip_tags(trim($lang->bug->tplExpect));
-$steps     = str_replace('<p>' . $tplExpect, '<p class="font-bold my-1">' . $tplExpect . '</p><p>', $steps);
-$steps     = str_replace('<p></p>', '', $steps);
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
@@ -55,6 +47,31 @@ if(!$bug->deleted)
     /* Construct common actions for bug. */
     $actions = $operateList['mainActions'];
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
+
+    $hasRepo        = $this->loadModel('repo')->getListByProduct($bug->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+    $isExecutionTab = $app->tab == 'execution';
+    foreach($actions as $key => $action)
+    {
+        if($isExecutionTab && !empty($action['data-app'])) unset($actions[$key]['data-app']);
+        if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
+        {
+            unset($actions[$key]);
+            continue;
+        }
+
+        if(empty($project->hasProduct) && isset($action['id']) && $action['id'] == 'toStory')
+        {
+            $action['data-app'] = $app->tab == 'execution' ? 'execution' : 'project';
+            $action['data-tab'] = $app->tab == 'execution' ? 'execution' : 'project';
+            $actions[$key] = $action;
+        }
+        if(!empty($project) && $project->type == 'project' && $project->multiple == '0' && isset($action['id']) && $action['id'] == 'toStory')
+        {
+            $action['data-app'] = 'project';
+            $action['data-tab'] = 'project';
+            $actions[$key] = $action;
+        }
+    }
 }
 
 /* 初始化主栏内容。Init sections in main column. */
@@ -62,7 +79,7 @@ $sections = array();
 $sections[] = setting()
     ->title($lang->bug->legendSteps)
     ->control('html')
-    ->content($steps);
+    ->content($bug->steps);
 
 if($bug->files)
 {
@@ -107,7 +124,7 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions)
+    set::actions(array_values($actions))
 );
 
 modal

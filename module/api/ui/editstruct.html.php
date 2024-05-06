@@ -217,7 +217,7 @@ formPanel
             $attributes
         )
     ),
-    formHidden('attribute', $struct->attribute),
+    formHidden('attribute', json_encode($struct->attribute)),
     formGroup
     (
         set::label($lang->api->desc),

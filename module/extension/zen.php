@@ -22,7 +22,7 @@ class extensionZen extends extension
     {
         /* 判断是否要跳转到安全校验页面。 */
         $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile) die($this->fetch('extension', 'safe', "statusFile=$statusFile"));
+        if($statusFile) die($this->fetch('extension', 'safe', 'statusFile=' . helper::safe64Encode($statusFile)));
     }
 
     /**

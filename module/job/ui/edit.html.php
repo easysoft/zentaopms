@@ -197,6 +197,42 @@ formPanel
         set::width('1/2'),
         on::change('changeFrame')
     ),
+    $job->engine == 'jenkins' ? formRow
+    (
+        setClass('hidden'),
+        set::id('jenkinsServerTR'),
+        formGroup
+        (
+            set::label($lang->job->jkHost),
+            set::required(true),
+            set::width('1/2'),
+            inputGroup
+            (
+                picker
+                (
+                    set::required(true),
+                    set::name('jkServer'),
+                    set::items($jenkinsServerList),
+                    set::value($job->server),
+                    on::change('changeJenkinsServer')
+                ),
+                $lang->job->pipeline,
+                input
+                (
+                    set::name('jkTask'),
+                    set::type('hidden'),
+                    set::value(zget($job, 'rawPipeline', $job->pipeline))
+                ),
+                dropmenu
+                (
+                    setStyle('width', '150px'),
+                    set::id('pipelineDropmenu'),
+                    set::text(urldecode($job->pipeline ? $job->pipeline : $lang->job->selectPipeline)),
+                    $job->pipeline ? set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks', "jenkinsID={$job->server}")) : set::data(array('' => ''))
+                )
+            )
+        )
+    ) : null,
     formGroup
     (
         set::name('useZentao'),
@@ -308,42 +344,6 @@ formPanel
             )
         )
     ),
-    $job->engine == 'jenkins' ? formRow
-    (
-        setClass('hidden'),
-        set::id('jenkinsServerTR'),
-        formGroup
-        (
-            set::label($lang->job->jkHost),
-            set::required(true),
-            set::width('1/2'),
-            inputGroup
-            (
-                picker
-                (
-                    set::required(true),
-                    set::name('jkServer'),
-                    set::items($jenkinsServerList),
-                    set::value($job->server),
-                    on::change('changeJenkinsServer')
-                ),
-                $lang->job->pipeline,
-                input
-                (
-                    set::name('jkTask'),
-                    set::type('hidden'),
-                    set::value(zget($job, 'rawPipeline', $job->pipeline))
-                ),
-                dropmenu
-                (
-                    setStyle('width', '150px'),
-                    set::id('pipelineDropmenu'),
-                    set::text(urldecode($job->pipeline ? $job->pipeline : $lang->job->selectPipeline)),
-                    $job->pipeline ? set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks', "jenkinsID={$job->server}")) : set::data(array('' => ''))
-                )
-            )
-        )
-    ) : null,
     formRow
     (
         set::id('paramDiv'),

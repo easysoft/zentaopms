@@ -16,9 +16,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('pipeline')->gen(5);
+zenData('pipeline')->gen(5);
 su('admin');
 
 $mrTester = new mrTest();

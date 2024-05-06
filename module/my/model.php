@@ -828,13 +828,12 @@ class myModel extends model
     public function getReviewingTypeList()
     {
         $typeList = array();
-        if($this->config->edition == 'ipd' and $this->getReviewingDemands('id_desc', true)) $typeList[] = 'demand';
-        if($this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
+        if($this->config->edition == 'ipd' && $this->getReviewingDemands('id_desc', true)) $typeList[] = 'demand';
         if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
-        if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
-        if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
+        if($this->config->vision != 'or' && $this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
+        if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
-        if($this->getReviewingOA('status', true))         $typeList[] = 'oa';
+        if($this->config->vision != 'or' && $this->getReviewingOA('status', true))         $typeList[] = 'oa';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = $this->config->edition == 'open' ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -861,13 +860,14 @@ class myModel extends model
      */
     public function getReviewingList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
     {
+        $vision     = $this->config->vision;
         $reviewList = array();
-        if($browseType == 'all' || $browseType == 'demand')   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
-        if($browseType == 'all' || $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
-        if($browseType == 'all' || $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
-        if($browseType == 'all' || $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($browseType == 'all' || $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
-        if($browseType == 'all' || $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
+        if($browseType == 'all' || $browseType == 'demand')                                              $reviewList = array_merge($reviewList, $this->getReviewingDemands());
+        if($browseType == 'all' || $browseType == 'story')                                               $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase'))                       $reviewList = array_merge($reviewList, $this->getReviewingCases());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                        $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
+        if($browseType == 'all' || $browseType == 'feedback')                                            $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                             $reviewList = array_merge($reviewList, $this->getReviewingOA());
         if($browseType == 'all' || !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(empty($reviewList)) return array();
 
@@ -1089,14 +1089,26 @@ class myModel extends model
         while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
         if($checkExists) return array_keys($objectIdList);
 
+        $this->loadModel('flow');
+        $this->loadModel('workflowaction');
         $flows       = $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('buildin')->eq(0)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
             $table = zget($this->config->objectTables, $objectType, '');
             if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
+            if(empty($table)) continue;
 
-            if(!empty($table)) $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+
+            $action = $this->workflowaction->getByModuleAndAction($objectType, 'approvalreview');
+            if($action)
+            {
+                foreach($objectGroup[$objectType] as $objectID => $object)
+                {
+                    if(!$this->flow->checkConditions($action->conditions, $object)) unset($objectIdList[$objectType][$objectID], $objectGroup[$objectType][$objectID]);
+                }
+            }
         }
 
         $this->app->loadConfig('action');
@@ -1117,6 +1129,7 @@ class myModel extends model
         if(!common::hasPriv('feedback', 'review')) return array();
         if($this->config->edition == 'open') return array();
 
+        $this->session->set('feedbackProduct', 'all');
         $feedbacks  = $this->loadModel('feedback')->getList('review', $orderBy);
         $reviewList = array();
         foreach($feedbacks as $feedback)

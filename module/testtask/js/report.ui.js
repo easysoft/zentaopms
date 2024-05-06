@@ -11,23 +11,26 @@ window.selectAll = function(e)
     });
 };
 
-window.clickInit = function(e)
-{
-    initReport();
-};
-
-$(document).off('click', 'a[data-toggle=tab].active').on('click', 'a[data-toggle=tab]', function()
-{
-    initReport();
-});
-
-function initReport()
+window.clickInit = function()
 {
     const chartType = $('a[data-toggle=tab].active').data('param');
-    const form      = new FormData();
+
+    initReport(chartType);
+};
+
+window.changeTab = function(e)
+{
+    const chartType = $(e.target).closest('.font-medium').data('param');
+
+    initReport(chartType);
+}
+
+window.initReport = function(chartType)
+{
+    const form = new FormData();
     $('input[name=charts]').each(function()
     {
         if($(this).prop('checked')) form.append('charts[]', $(this).val());
     })
-    postAndLoadPage($.createLink('testtask', 'report', params + '&chartType=' + chartType), form, '#report');
+    postAndLoadPage($.createLink('testtask', 'report', params + '&chartType=' + chartType), form, '#report,pageJS/.zin-page-js,#configJS');
 }

@@ -1,11 +1,14 @@
 $(function()
 {
     if(ganttPlans) initWaterfallGanttBlock();
+    $('#ganttContainer').off('scroll').on('scroll', function(e) {
+        $('#ganttPlans').scrollTop = e.target.scrollTop;
+    });
 });
 
 window.initWaterfallGanttBlock = function()
 {
-    var ganttData = ganttPlans['data'];
+    var ganttData = ganttPlans;
     if(!ganttData) return;
 
     var plans         = [];
@@ -76,7 +79,7 @@ window.initWaterfallGanttBlock = function()
             width: plan.progress + '%',
             background: themeColor,
         }).appendTo($bar);
-        $bar.append('<div class="gantt-task-info text-muted small">' + taskLang + ' ' + plan.completeTasks.length + '/' + plan.tasks.length + '</div>').attr('title', zui.formatDate(plan.startDatetime, 'yyyy-MM-dd') + '~' + zui.formatDate(plan.endDatetime, 'yyyy-MM-dd'));
+        $bar.append('<div class="gantt-task-info text-muted small">' + progressLang + ' ' + plan.taskProgress + '</div>').attr('title', zui.formatDate(plan.startDatetime, 'yyyy-MM-dd') + '~' + zui.formatDate(plan.endDatetime, 'yyyy-MM-dd'));
         var $row = $('<div class="gantt-row" data-id="' + plan.id + '"></div>').append($bar);
         $ganttCanvas.append($row);
     });

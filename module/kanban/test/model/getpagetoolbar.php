@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('kanban')->gen(2);
+zenData('kanban')->gen(2);
 
 /**
 

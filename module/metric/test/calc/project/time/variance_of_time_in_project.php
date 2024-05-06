@@ -12,9 +12,9 @@ cid=1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
-zdTable('project')->config('project_time_close', true, 4)->gen(2000);
+zendata('project')->loadYaml('project_time_close', true, 4)->gen(2000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

@@ -59,13 +59,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('user')->gen(20);
-zdTable('expect')->config('expect')->gen(20);
-zdTable('stakeholder')->config('stakeholder')->gen(20);
+zenData('user')->gen(20);
+zenData('expect')->loadYaml('expect')->gen(20);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
 
-$userqueryTable = zdTable('userquery');
+$userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
 $userqueryTable->sql->range("`(( 1  AND `project` = '11' ) AND ( 1  ))`");
 $userqueryTable->module->range('stakeholder');

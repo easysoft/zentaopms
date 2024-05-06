@@ -23,16 +23,16 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$stories = zdTable('story');
+$stories = zenData('story');
 $stories->status->range('draft,active,changing,active{2}');
 $stories->closedReason->range('{5}');
 $stories->gen(5);
 
-zdTable('storystage')->gen(5);
-zdTable('project')->gen(5);
+zenData('storystage')->gen(5);
+zenData('project')->gen(5);
 
 $postData1 = new stdclass();
 $postData1->status = 'closed';

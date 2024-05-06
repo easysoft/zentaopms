@@ -16,10 +16,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('expect')->gen(0);
-zdTable('user')->gen(5);
+zenData('expect')->gen(0);
+zenData('user')->gen(5);
 
 $expect   = array('', '创建一条期望');
 $progress = array('', '创建一条进展');

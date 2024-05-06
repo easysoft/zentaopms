@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -26,7 +26,7 @@ cid=1
 
 */
 
-$repo = zdTable('repo')->config('repo');
+$repo = zenData('repo')->loadYaml('repo');
 $repo->projects->range('');
 $repo->gen(1);
 

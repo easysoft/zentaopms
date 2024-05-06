@@ -4,10 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 su('admin');
 
-zdTable('project')->config('execution')->gen(100);
-zdTable('task')->gen(100);
-zdTable('user')->gen(100);
-zdTable('build')->gen(50);
+zenData('project')->loadYaml('execution')->gen(100);
+zenData('task')->gen(100);
+zenData('user')->gen(100);
+zenData('build')->gen(50);
 
 /**
 

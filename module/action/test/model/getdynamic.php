@@ -1,16 +1,16 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->config('action_year')->gen(35);
-zdTable('actionrecent')->config('action_year')->gen(35);
-zdTable('doclib')->config('doclib')->gen(15);
-zdTable('doc')->config('doc')->gen(5);
-zdTable('product')->gen(5);
-zdTable('project')->config('execution')->gen(12);
-zdTable('user')->config('user')->gen(3);
-zdTable('userview')->config('userview')->gen(2);
+zenData('action')->loadYaml('action_year')->gen(35);
+zenData('actionrecent')->loadYaml('action_year')->gen(35);
+zenData('doclib')->loadYaml('doclib')->gen(15);
+zenData('doc')->loadYaml('doc')->gen(5);
+zenData('product')->gen(5);
+zenData('project')->loadYaml('execution')->gen(12);
+zenData('user')->loadYaml('user')->gen(3);
+zenData('userview')->loadYaml('userview')->gen(2);
 
 /**
 
@@ -70,14 +70,14 @@ r($action->getDynamicTest($accountList[1]))                                     
 r($action->getDynamicTest($accountList[2]))                                                                                        && p() && e('12');  // 查找用户dev17动态
 r($action->getDynamicTest($accountList[3]))                                                                                        && p() && e('11');  // 查找用户test18动态
 
-zdTable('action')->config('action_week')->gen(35, true, false);
-zdTable('actionrecent')->config('action_week')->gen(35, true, false);
+zenData('action')->loadYaml('action_week')->gen(35, true, false);
+zenData('actionrecent')->loadYaml('action_week')->gen(35, true, false);
 r($action->getDynamicTest($accountList[0], $typeList[1]))                                                                          && p() && e('1');   // 查找今天的动态
 r($action->getDynamicTest($accountList[0], $typeList[2]))                                                                          && p() && e('1');   // 查找昨天的动态
 r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('7');   // 查找上周的动态
 
-zdTable('action')->config('action_year')->gen(35, true, false);
-zdTable('actionrecent')->config('action_year')->gen(35, true, false);
+zenData('action')->loadYaml('action_year')->gen(35, true, false);
+zenData('actionrecent')->loadYaml('action_year')->gen(35, true, false);
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[1]))                                                       && p() && e('1');   // 查找产品1的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[2]))                                                       && p() && e('1');   // 查找产品2的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[3]))                                                       && p() && e('1');   // 查找产品3的动态
@@ -89,16 +89,16 @@ r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $pro
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[3]))               && p() && e('0');   // 查找执行3的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[0], $projectIDList[0], $executionIDList[0], $dateList[1])) && p() && e('0');  // 查找今天的动态
 
-zdTable('action')->config('action_year')->gen(35, true, false);
-zdTable('actionrecent')->config('action_year')->gen(35, true, false);
+zenData('action')->loadYaml('action_year')->gen(35, true, false);
+zenData('actionrecent')->loadYaml('action_year')->gen(35, true, false);
 su('dev17');
 r($action->getDynamicTest())                                                                                                       && p() && e('35');  // 查找全部动态
 r($action->getDynamicTest($accountList[1]))                                                                                        && p() && e('11');  // 查找用户admin动态
 r($action->getDynamicTest($accountList[2]))                                                                                        && p() && e('13');  // 查找用户dev17动态
 r($action->getDynamicTest($accountList[3]))                                                                                        && p() && e('11');  // 查找用户test18动态
 
-zdTable('action')->config('action_year')->gen(35, true, false);
-zdTable('actionrecent')->config('action_year')->gen(35, true, false);
+zenData('action')->loadYaml('action_year')->gen(35, true, false);
+zenData('actionrecent')->loadYaml('action_year')->gen(35, true, false);
 r($action->getDynamicTest($accountList[0], $typeList[1]))                                                                          && p() && e('5');   // 查找今天的动态
 r($action->getDynamicTest($accountList[0], $typeList[2]))                                                                          && p() && e('0');   // 查找昨天的动态
 r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('0');   // 查找上周的动态

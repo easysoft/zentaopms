@@ -48,8 +48,8 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('story')->config('story')->gen(50);
-zdTable('user')->gen(5);
+zenData('story')->loadYaml('story')->gen(50);
+zenData('user')->gen(5);
 su('admin');
 
 $defaultSql = 'select * from zt_story';

@@ -17,12 +17,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
 function initData()
 {
     /* Generate product data. */
-    $product = zdTable('product');
+    $product = zenData('product');
     $product->id->range('1000-1010');
     $product->program->range('1-10');
     $product->name->prefix('product_')->range('1-10');

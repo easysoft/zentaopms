@@ -19,7 +19,7 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-zdTable('projectspec')->gen(0);
+zenData('projectspec')->gen(0);
 
 global $tester;
 $tester->loadModel('programplan');

@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,stage,kanban');
@@ -16,7 +16,7 @@ $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YYYY-M
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $execution->gen(5);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-100');
 $task->name->range('1-100')->prefix('任务');
 $task->execution->range('3-5');
@@ -28,7 +28,7 @@ $task->consumed->range('1-10');
 $task->finishedBy->range(' ,user1,user2');
 $task->gen(100);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range('1-100');
 $bug->title->range('1-100')->prefix('BUG');
 $bug->execution->range('3-5');

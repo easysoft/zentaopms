@@ -14,26 +14,26 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-$storyTable = zdTable('story');
+$storyTable = zenData('story');
 $storyTable->product->range('1-5');
 $storyTable->gen(20);
 
-$planTable = zdTable('productplan');
+$planTable = zenData('productplan');
 $planTable->product->range('1-5');
 $planTable->gen(20);
 
-$releaseTable = zdTable('release');
+$releaseTable = zenData('release');
 $releaseTable->product->range('1-5');
 $releaseTable->gen(20);
 
-$caseTable = zdTable('case');
+$caseTable = zenData('case');
 $caseTable->product->range('1-5');
 $caseTable->gen(20);
 
-zdTable('product')->config('product')->gen(5);
-zdTable('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $products = array(0 ,1, 2);

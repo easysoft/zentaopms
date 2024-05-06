@@ -1,24 +1,24 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1');
 $task->type->range('test');
 $task->name->range('测试任务1');
 $task->status->range('wait');
 $task->gen(1);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-5');
 $story->product->range('1');
 $story->title->range('1-5')->prefix('需求');
 $story->type->range('story');
 $story->gen(5);
 
-zdTable('action')->gen(0);
+zenData('action')->gen(0);
 
 /**
 

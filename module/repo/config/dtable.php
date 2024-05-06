@@ -32,11 +32,12 @@ $config->repo->dtable->fieldList['path']['hint']  = true;
 $config->repo->dtable->fieldList['path']['width'] = '260';
 $config->repo->dtable->fieldList['path']['group'] = 1;
 
-$config->repo->dtable->fieldList['lastSubmit']['name']     = 'lastSubmitTime';
-$config->repo->dtable->fieldList['lastSubmit']['title']    = $lang->repo->lastSubmitTime;
-$config->repo->dtable->fieldList['lastSubmit']['type']     = 'datetime';
-$config->repo->dtable->fieldList['lastSubmit']['sortType'] = false;
-$config->repo->dtable->fieldList['lastSubmit']['width']    = '128';
+$config->repo->dtable->fieldList['lastSubmit']['name']       = 'lastSubmitTime';
+$config->repo->dtable->fieldList['lastSubmit']['title']      = $lang->repo->lastSubmitTime;
+$config->repo->dtable->fieldList['lastSubmit']['type']       = 'datetime';
+$config->repo->dtable->fieldList['lastSubmit']['formatDate'] = 'MM-dd hh:mm';
+$config->repo->dtable->fieldList['lastSubmit']['sortType']   = false;
+$config->repo->dtable->fieldList['lastSubmit']['width']      = '100';
 
 $config->repo->dtable->fieldList['job']['name']  = 'job';
 $config->repo->dtable->fieldList['job']['hidden'] = true;
@@ -45,7 +46,11 @@ $config->repo->dtable->fieldList['actions']['name']  = 'actions';
 $config->repo->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->repo->dtable->fieldList['actions']['type']  = 'actions';
 $config->repo->dtable->fieldList['actions']['width'] = '132';
-$config->repo->dtable->fieldList['actions']['menu']  = array('execJob', 'reportView', 'edit', 'delete');
+$config->repo->dtable->fieldList['actions']['menu']  = array('visit', 'execJob', 'reportView', 'edit', 'delete');
+
+$config->repo->dtable->fieldList['actions']['list']['visit']['icon']   = 'menu-my';
+$config->repo->dtable->fieldList['actions']['list']['visit']['hint']   = $lang->repo->visit;
+$config->repo->dtable->fieldList['actions']['list']['visit']['target'] = '_blank';
 
 $config->repo->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
@@ -123,7 +128,7 @@ $config->repo->commentDtable->fieldList['commit']['name']     = 'commit';
 $config->repo->commentDtable->fieldList['commit']['title']    = $lang->repo->commit;
 $config->repo->commentDtable->fieldList['commit']['sortType'] = false;
 $config->repo->commentDtable->fieldList['commit']['width']    = '50';
-$config->repo->commentDtable->fieldList ['commit']['hint']    = true;
+$config->repo->commentDtable->fieldList['commit']['hint']    = true;
 
 $config->repo->commentDtable->fieldList['time']         = $config->repo->repoDtable->fieldList['time'];
 $config->repo->commentDtable->fieldList['time']['name'] = 'time';
@@ -142,10 +147,6 @@ $config->repo->logDtable->fieldList['revision']['width']        = '100';
 $config->repo->logDtable->fieldList['revision']['checkbox']     = true;
 $config->repo->logDtable->fieldList['revision']['nestedToggle'] = false;
 $config->repo->logDtable->fieldList['revision']['data-app']     = $app->tab;
-
-$config->repo->logDtable->fieldList['commit']['type']     = 'number';
-$config->repo->logDtable->fieldList['commit']['width']    = '50';
-$config->repo->logDtable->fieldList['commit']['sortType'] = false;
 
 $config->repo->logDtable->fieldList['date']['name']     = 'time';
 $config->repo->logDtable->fieldList['date']['type']     = 'datetime';
@@ -183,7 +184,7 @@ $config->repo->taskDtable = new stdclass();
 $config->repo->taskDtable->fieldList = array();
 $config->repo->taskDtable->fieldList['id']['name']     = 'id';
 $config->repo->taskDtable->fieldList['id']['title']    = $lang->idAB;
-$config->repo->taskDtable->fieldList['id']['type']     = 'id';
+$config->repo->taskDtable->fieldList['id']['type']     = 'checkID';
 $config->repo->taskDtable->fieldList['id']['checkbox'] = true;
 
 $config->repo->taskDtable->fieldList['pri']['title']    = $lang->priAB;
@@ -212,7 +213,7 @@ $config->repo->taskDtable->fieldList['assignedTo']['type']        = 'user';
 $config->repo->taskDtable->fieldList['assignedTo']['sortType']    = true;
 $config->repo->taskDtable->fieldList['assignedTo']['show']        = true;
 $config->repo->taskDtable->fieldList['assignedTo']['group']       = 3;
-$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
+$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = '';
 $config->repo->taskDtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
 $config->repo->taskDtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
 
@@ -232,7 +233,14 @@ $config->repo->reviewDtable->fieldList['title']['type']     = 'title';
 $config->repo->reviewDtable->fieldList['title']['data-app'] = $app->tab;
 $config->repo->reviewDtable->fieldList['title']['link']     = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}&from=repo');
 
-$config->repo->reviewDtable->fieldList['fileLocation']['title'] = $lang->repo->file . '/' . $lang->repo->location;
+if($app->tab != 'devops')
+{
+    $config->repo->reviewDtable->fieldList['repo']['title'] = $lang->repo->common;
+    $config->repo->reviewDtable->fieldList['repo']['name']  = 'repoName';
+    $config->repo->reviewDtable->fieldList['repo']['width'] = '150';
+}
+
+$config->repo->reviewDtable->fieldList['fileLocation']['title'] = $lang->repo->codeLocation;
 $config->repo->reviewDtable->fieldList['fileLocation']['name']  = 'entry';
 $config->repo->reviewDtable->fieldList['fileLocation']['width'] = '300';
 

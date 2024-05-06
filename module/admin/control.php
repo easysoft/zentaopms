@@ -55,6 +55,7 @@ class admin extends control
      */
     public function ajaxSetZentaoData()
     {
+        session_write_close();
         if(helper::isIntranet()) return $this->send(array('result' => 'ignore'));
 
         if($this->admin->checkInternet())
@@ -187,7 +188,7 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title  = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
+        $this->view->title  = $this->lang->admin->safe->common . $this->lang->hyphen . $this->lang->admin->safe->set;
         $this->view->gdInfo = function_exists('gd_info') ? gd_info() : array();
         $this->display();
     }
@@ -201,7 +202,7 @@ class admin extends control
      */
     public function checkWeak()
     {
-        $this->view->title     = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->checkWeak;
+        $this->view->title     = $this->lang->admin->safe->common . $this->lang->hyphen . $this->lang->admin->safe->checkWeak;
         $this->view->weakUsers = $this->loadModel('user')->getWeakUsers();
         $this->display();
     }
@@ -529,16 +530,17 @@ class admin extends control
         {
             if($this->config->vision == 'lite' && !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
             $data[] = array(
-                'id'        => $menuKey,
-                'name'      => $menuKey,
-                'content'   => array('html' => "<div class='flex items-center my-1.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
-                'text'      => '',
-                'type'      => 'item',
-                'disabled'  => $menuGroup['disabled'],
-                'url'       => $menuGroup['disabled'] || $currentMenuKey == $menuKey ? '' : $menuGroup['link'],
-                'active'    => $currentMenuKey == $menuKey,
-                'rootClass' => 'admin-menu-item',
-                'attrs'     => array('disabled' => $menuGroup['disabled'])
+                'id'         => $menuKey,
+                'name'       => $menuKey,
+                'content'    => array('html' => "<div class='flex items-center my-1.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
+                'text'       => $menuGroup['name'],
+                'titleClass' => 'hidden',
+                'type'       => 'item',
+                'disabled'   => $menuGroup['disabled'],
+                'url'        => $menuGroup['disabled'] || $currentMenuKey == $menuKey ? '' : $menuGroup['link'],
+                'active'     => $currentMenuKey == $menuKey,
+                'rootClass'  => 'admin-menu-item',
+                'attrs'      => array('disabled' => $menuGroup['disabled'])
             );
         }
 

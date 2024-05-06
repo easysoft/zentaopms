@@ -92,6 +92,9 @@ formPanel
             set::required(strpos(",{$config->bug->resolve->requiredFields},", ',resolvedBuild,') !== false),
             picker
             (
+                set::popWidth('auto'),
+                set::popMaxWidth('300px'),
+                set::popMinWidth('145px'),
                 set::name('resolvedBuild'),
                 set::value(''),
                 set::items($builds)
@@ -132,7 +135,7 @@ formPanel
         set::width('1/3'),
         set::name('assignedTo'),
         set::label($lang->bug->assignedTo),
-        set::value($bug->assignedTo),
+        set::value($assignedTo),
         set::items($users)
     ),
     formGroup

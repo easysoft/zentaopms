@@ -13,7 +13,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->ranzhi->range('1-20')->prefix('ranzhi');
 $user->gen(5);
 

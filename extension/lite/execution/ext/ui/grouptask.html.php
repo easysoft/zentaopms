@@ -90,24 +90,24 @@ toolbar
 (
     hasPriv('task', 'report') ? item(set(array
     (
-        'text'  => $lang->task->report->common,
+        'class' => 'btn ghost',
         'icon'  => 'bar-chart',
-        'class' => 'ghost',
+        'text'  => $lang->task->report->common,
         'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
     (
-        'text'        => $lang->export,
+        'class'       => 'btn ghost',
         'icon'        => 'export',
-        'class'       => 'ghost export',
+        'text'        => $lang->export,
         'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
         'data-toggle' => 'modal'
     ))) : null,
     !empty($importTaskItem) ? dropdown(
         btn(
-            setClass('ghost btn square btn-default'),
+            setClass('btn ghost'),
             set::icon('import'),
-            set::text($lang->import)
+            $lang->import
         ),
         set::items(array_filter(array($importTaskItem))),
         set::placement('bottom-end')

@@ -25,15 +25,15 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->version->range(1);
 $story->gen(20);
-zdTable('storyspec')->gen(20);
-zdTable('storystage')->gen(20);
-zdTable('product')->gen(20);
+zenData('storyspec')->gen(20);
+zenData('storystage')->gen(20);
+zenData('product')->gen(20);
 
 $story       = new storyTest();
 $storyIdList = array(1, 2, 6, 10, 14);

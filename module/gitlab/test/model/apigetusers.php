@@ -16,8 +16,8 @@ cid=1
 
 */
 
-zdTable('pipeline')->gen(5);
-zdTable('oauth')->config('oauth')->gen(4);
+zenData('pipeline')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(4);
 
 $gitlab = $tester->loadModel('gitlab');
 

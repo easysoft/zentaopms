@@ -9,14 +9,14 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
+include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
 
-$release = zdTable('release')->config('release');
+$release = zenData('release')->loadYaml('release');
 $release->status->range('normal,terminate');
 $release->deleted->range('0{2},1');
 $release->gen(5);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $releases = array(1, 2, 3);

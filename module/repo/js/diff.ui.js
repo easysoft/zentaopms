@@ -239,7 +239,7 @@ $(".label-exchange").on('click', function()
     {
         $('#oldRevision').val(target);
         $('#newRevision').val(source);
-        $('#diffForm').trigger('click');
+        window.goDiff();
     }
 });
 
@@ -287,7 +287,7 @@ $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-t
  * @access public
  * @return viod
  */
-function goDiff()
+window.goDiff = function()
 {
     var oldRevision   = $('#oldRevision').val();
     var newRevision   = $('#newRevision').val();

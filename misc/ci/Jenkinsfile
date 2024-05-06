@@ -1,5 +1,5 @@
 library 'z-common@feat-231130'
-library 'z-zentaopms@feat-240104'
+library 'z-zentaopms@feat-240417'
 
 pipeline {
   agent {
@@ -29,11 +29,11 @@ pipeline {
     string description: '指定一个构建Id用于回放', name: 'REPLAY_ID', trim: true
     string description: '指定 zentaoext 分支, 也可以是 tag 或者 commit', name: 'zentaoext_version', trim: true
     string description: '指定 xuanxuan 分支', name: 'xuanxuan_version', trim: true
-    string description: '指定 zdoo 分支', name: 'zdoo_version', trim: true
-    string description: '指定 zdooext 分支', name: 'zdooext_version', trim: true
-    string description: '指定全量降级 revision', name: 'fulldown_version', trim: true
+    string description: '指定开源版全量降级 revision', name: 'fulldown_pms_version', trim: true
+    string description: '指定收费版全量降级 revision', name: 'fulldown_ext_version', trim: true
 
     separator(name: "other", sectionHeader: "其它")
+    booleanParam defaultValue: false, description: '制作英文版', name: 'publish_en'
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
   }
 
@@ -52,7 +52,7 @@ pipeline {
     PUBLISH_ZIP = "${params.publish_zip}"
     PUBLISH_IMAGE = "${params.publish_image}"
     PUBLISH_ZBOX = "${params.publish_zbox}"
-
+    PUBLISH_ENGLISH = "${params.publish_en}"
   }
 
   stages {
@@ -94,14 +94,12 @@ pipeline {
 
               zCheckout([
                 [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
-                [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdoo_version}", j.getReplaySHA("zdoo"), "${env.ZDOO_VERSION}"] ],
-                [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdooext_version}", j.getReplaySHA("zdooext"), "${env.ZDOOEXT_VERSION}"] ],
-                [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}"] ],
-                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
+                [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
+                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_pms_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ],
+                [name: "downRepoExt", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_ext_version}", j.getReplaySHA("${env.DOWNGRADE_EXT_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
               ])
 
               zentaopms.setupEnvAfterCheckoutExt()
-
             }
 
           }
@@ -115,6 +113,7 @@ pipeline {
               j.SaveHeadReport('./.head.md')
 
               // update custom envoronment here
+              env.ZT_MAIN_VER = "20"
 
               // send start msg
               def mdPath = "start.md"
@@ -128,15 +127,15 @@ pipeline {
         stage("Build") {
           when { expression { return params.publish_open || params.publish_biz } }
           stages {
+
             stage("make ciCommon") {
               steps {
                 withCredentials([gitUsernamePassword(credentialsId: 'git-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
                     sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
-                    //sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
+                    // sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
                     sh 'pwd && ls -l && make ciCommon'
-                    sh 'ls -l ${ZENTAO_RELEASE_PATH}'
                   }
                 }
               }
@@ -146,7 +145,7 @@ pipeline {
               steps {
                 container('package') {
                   echo "GIT_BRANCH in jenkinsfile is ${env.GIT_BRANCH}"
-                  sh '${ZENTAO_BUILD_PATH}/script/downgrade/diffDowngrade.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
+                  sh '${ZENTAO_BUILD_PATH}/script/downgrade/diffDowngrade.sh -c $PWD/misc -r $PWD/zentaopms -b ${GIT_BRANCH} -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
                   sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
                 }
               }
@@ -159,22 +158,64 @@ pipeline {
 
             stage("zentaoext") {
               when { expression { return params.publish_biz } }
-              steps {
-                container('package') {
-                  sh 'cd $SRC_ZENTAOEXT_PATH && make'
-                  sh 'cp ${ZENTAO_BUILD_PATH}/zentao*.zip ./'
-                  sh 'cp ${ZENTAO_BUILD_PATH}/docker/Dockerfile.release.ext ./Dockerfile.release.ext'
-                }
-                container('docker') {
-                  sh 'docker build --pull -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG} -f Dockerfile.release.ext ${ZENTAO_RELEASE_PATH}'
-                  sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
-                }
-                script {
-                  buildPkg.uploadSource()
-                  env.PLUGIN_SAFE_EXIST = sh(returnStatus: true, script: 'test -d $SRC_ZENTAOEXT_PATH/zentaopro/safe')
+              stages {
+                stage("基础包") {
+                  steps {
+                    container('package') {
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make build'
+                    }
+                  }
                 }
 
+                stage("降级") {
+                  steps {
+                    container('package') {
+                      sh '${ZENTAO_BUILD_PATH}/script/downgrade/diffDowngrade.sh -c $PWD/misc -r $ZENTAO_BUILD_PATH/zentaoext -b ${GIT_BRANCH} -d downRepoExt -i -s -m -n zentaoext -o "$ZENTAO_BUILD_PATH" -p $DOWNGRADE_VERSIONS'
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make merge-source-all'
+                    }
+                  }
+                }
+
+                stage("加密合并") {
+                  steps {
+                    container('package') {
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make encrypt-all'
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make merge-encrypt-all'
+                    }
+                  }
+                }
+
+                stage("xuan") {
+                  steps {
+                    container('package') {
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make xuan'
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make encrypt-xuan UUID=`uuidgen`'
+                    }
+                  }
+                }
+
+                stage("中转") {
+                  steps {
+                    container('package') {
+                      sh 'ls -l ${ZENTAO_BUILD_PATH}'
+                      sh 'ls -l ${ZENTAO_RELEASE_PATH}'
+                      sh 'cp ${ZENTAO_BUILD_PATH}/zentao*.zip ./'
+                      sh 'cp ${ZENTAO_BUILD_PATH}/docker/Dockerfile.release.ext ./Dockerfile.release.ext'
+                    }
+
+                    container('docker') {
+                      sh 'docker build --pull -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG} -f Dockerfile.release.ext ${ZENTAO_RELEASE_PATH}'
+                      sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
+                    }
+
+                    script {
+                      buildPkg.uploadSource("php8.1", ["php7.0", "php7.1", "php7.2_7.4"])
+                      env.PLUGIN_SAFE_EXIST = sh(returnStatus: true, script: 'test -d $SRC_ZENTAOEXT_PATH/zentaopro/safe')
+                    }
+                  }
+                }
               }
+
             }
 
             stage("SAFe") {
@@ -187,15 +228,15 @@ pipeline {
               steps {
                 container('package') {
                     sh '''${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -n safe -s -i \
-                      -p 8.1,7.2,7.1,7.0,5.4 \
+                      -p 8.1,7.2,7.1,7.0 \
                       -c ${PWD}/misc -r $SRC_ZENTAOEXT_PATH/zentaopro -o ${ZENTAO_BUILD_PATH} \
                       safe '''
                     sh 'cp -v ${ZENTAO_BUILD_PATH}/safe-*.zip ${ZENTAO_RELEASE_PATH}/'
-                    sh 'cd $SRC_ZENTAOEXT_PATH && make safeDown'
+                    sh 'cd $SRC_ZENTAOEXT_PATH && make encrypt-safe-all'
                 }
                 script {
                   env.UPLOADED_PLUGIN_SAFE = 'true'
-                  buildPkg.uploadSAFe(["php5.4_5.6", "php7.0", "php7.1", "php7.2_7.4", "php8.1"])
+                  buildPkg.uploadSAFe(["php7.0", "php7.1", "php7.2_7.4", "php8.1"])
                 }
 
               }
@@ -235,7 +276,7 @@ pipeline {
             axes {
               axis {
                 name "ZLANG"
-                values "cn", "en"
+                values "cn"
               }
               axis {
                 name "PHPVERSION"
@@ -290,11 +331,11 @@ pipeline {
                       script {
                         buildPkg.uploadPMS(env.PHPVERSION)
                         // copy php7.2 as php8.0
-                        if (env.PHPVERSION=="php7.2_7.4") {
-                          buildPkg.uploadPMS('php8.0')
-                          sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.zip'
-                          sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.tar.xz'
-                        }
+                        // if (env.PHPVERSION=="php7.2_7.4") {
+                        //   buildPkg.uploadPMS('php8.0')
+                        //   sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.zip'
+                        //   sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.tar.xz'
+                        // }
                         buildPkg.uploadExt()
                       }
 
@@ -401,10 +442,15 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
-                          //sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
-                          //sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
-                          //sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
+                        }
+                        script {
+                          if (env.PUBLISH_ENGLISH=="true") {
+                            // do copy release/en/
+                          }
                         }
                         container('jnlp') {
                           sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
@@ -436,7 +482,7 @@ pipeline {
                       steps {
                         script {
                           buildZboxLinux.doBuild()
-                          //buildZboxLinux.test()
+                          buildZboxLinux.test()
                           buildZboxLinux.uploadInternal()
                         }
                       }
@@ -450,10 +496,15 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$PMS_VERSION"
-                          //sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$BIZ_VERSION"
-                          //sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$MAX_VERSION"
-                          //sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$IPD_VERSION"
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$PMS_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$BIZ_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$MAX_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$IPD_VERSION"
+                        }
+                        script {
+                          if (env.PUBLISH_ENGLISH=="true") {
+                            // do copy release/en/
+                          }
                         }
                         container('jnlp') {
                           sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
@@ -520,23 +571,23 @@ pipeline {
                   sh 'make test-open'
                   sh 'make build'
 
-                  //sh 'make test-biz'
-                  //sh 'make build-biz'
+                  sh 'make test-biz'
+                  sh 'make build-biz'
 
-                  //sh 'make test-biz-k8s'
-                  //sh 'make build-biz-k8s'
+                  sh 'make test-biz-k8s'
+                  sh 'make build-biz-k8s'
 
-                  //sh 'make test-max'
-                  //sh 'make build-max'
+                  sh 'make test-max'
+                  sh 'make build-max'
 
-                  //sh 'make test-max-k8s'
-                  //sh 'make build-max-k8s'
+                  sh 'make test-max-k8s'
+                  sh 'make build-max-k8s'
 
-                  //sh 'make test-ipd'
-                  //sh 'make build-ipd'
+                  sh 'make test-ipd'
+                  sh 'make build-ipd'
 
-                  //sh 'make test-ipd-k8s'
-                  //sh 'make build-ipd-k8s'
+                  sh 'make test-ipd-k8s'
+                  sh 'make build-ipd-k8s'
 
                   sh 'make markdown-render > ./report.md'
                 }
@@ -545,9 +596,8 @@ pipeline {
             script {
               if (env.BUILD_KIND=='release') {
                 stage("离线镜像包") {
-                  //offlineImage.save()
-                  //offlineImage.release()
-                  sh 'echo'
+                  offlineImage.save()
+                  offlineImage.release()
                 }
               }
               def j = job.newJob()
@@ -557,6 +607,19 @@ pipeline {
           }
 
         } // End Docker Image
+
+        stage("Push Version") {
+          when { environment name:'BUILD_KIND', value:'release' }
+          steps {
+            checkout scmGit(branches: [[name: "master"]],
+              extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+              userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
+            )
+            container('xuanimbot') {
+              sh './script/push_zentao_version.sh'
+            }
+          }
+        }
 
         stage("Upload rongpm") {
           agent {

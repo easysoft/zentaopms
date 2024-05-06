@@ -9,11 +9,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('story')->config('story')->gen(10);
-zdTable('storystage')->gen(0);
-zdTable('user')->gen(5);
+zenData('story')->loadYaml('story')->gen(10);
+zenData('storystage')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $storyIdList = array('', '1,2,3,4,5', '11,12,13,14,15');

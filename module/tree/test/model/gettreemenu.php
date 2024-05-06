@@ -16,20 +16,20 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 
 su('admin');
 
-zdTable('module')->config('module')->gen(20);
-zdTable('projectproduct')->gen(20);
-zdTable('projectstory')->gen(20);
-zdTable('projectcase')->gen(20);
-zdTable('task')->gen(20);
-zdTable('story')->gen(20);
-zdTable('case')->gen(20);
-zdTable('bug')->gen(20);
+zenData('module')->loadYaml('module')->gen(20);
+zenData('projectproduct')->gen(20);
+zenData('projectstory')->gen(20);
+zenData('projectcase')->gen(20);
+zenData('task')->gen(20);
+zenData('story')->gen(20);
+zenData('case')->gen(20);
+zenData('bug')->gen(20);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->project->range('1-100');
 $projectproduct->product->range('1-100');
 $projectproduct->gen(20);

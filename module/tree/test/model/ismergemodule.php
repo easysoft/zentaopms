@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->createdVersion->range('4.0,12.5.3{30}');
 $product->gen(10);
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('1-50');
 $project->openedVersion->range('4.0,12.5.3{30}');
 $project->gen(10);

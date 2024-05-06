@@ -99,10 +99,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pipeline.class.php';
+include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('pipeline')->config('pipeline')->gen(20);
+zenData('user')->gen(5);
+zenData('pipeline')->loadYaml('pipeline')->gen(20);
 
 $types       = array('', 'gitlab', 'test');
 $sorts       = array('id_desc', 'name_asc');

@@ -20,10 +20,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->parent->range('0,`-1`,2{3}');
 $story->estimate->range('[1-4]');
 $story->gen(5);

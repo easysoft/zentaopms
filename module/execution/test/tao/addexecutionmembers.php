@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-zdTable('team')->gen(0);
-zdTable('user')->gen(4);
-$project = zdTable('project');
+zenData('team')->gen(0);
+zenData('user')->gen(4);
+$project = zenData('project');
 $project->project->range('0,1');
 $project->type->range('project,sprint');
 $project->gen(2);

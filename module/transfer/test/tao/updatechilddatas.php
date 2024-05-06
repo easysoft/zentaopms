@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/transfer.class.php';
-zdTable('story')->gen(20);
-$file = zdTable('file');
+include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+zenData('story')->gen(20);
+$file = zenData('file');
 $file->objectType->range('task');
 $file->gen(10);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->project->range('11');
 $task->parent->range('0{3},3{7}');
 $task->mode->range('linear{1},multi{1},0{8}');

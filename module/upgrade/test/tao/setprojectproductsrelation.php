@@ -13,11 +13,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 $upgrade = new upgradeTest();
 
-zdTable('projectproduct')->gen(10);
+zenData('projectproduct')->gen(10);
 
 $projectIDList = array(1);
 $productIDList = array(array(1, 2, 3, 4, 100), array(5, 6, 7, 8), array(9, 10));

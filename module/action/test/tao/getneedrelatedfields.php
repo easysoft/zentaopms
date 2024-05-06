@@ -72,22 +72,22 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('story')->gen(1);
-zdTable('productplan')->gen(1);
-zdTable('branch')->gen(1);
-zdTable('case')->gen(1);
-zdTable('repo')->gen(1);
-zdTable('kanbanlane')->gen(1);
-zdTable('release')->gen(1);
-zdTable('task')->gen(1);
-zdTable('kanbancolumn')->gen(1);
-zdTable('team')->gen(1);
-zdTable('module')->config('module')->gen(1);
-zdTable('review')->gen(1);
-zdTable('testtask')->gen(1);
-zdTable('build')->gen(0);
+zenData('story')->gen(1);
+zenData('productplan')->gen(1);
+zenData('branch')->gen(1);
+zenData('case')->gen(1);
+zenData('repo')->gen(1);
+zenData('kanbanlane')->gen(1);
+zenData('release')->gen(1);
+zenData('task')->gen(1);
+zenData('kanbancolumn')->gen(1);
+zenData('team')->gen(1);
+zenData('module')->loadYaml('module')->gen(1);
+zenData('review')->gen(1);
+zenData('testtask')->gen(1);
+zenData('build')->gen(0);
 
 $actionTest = new actionTest();
 

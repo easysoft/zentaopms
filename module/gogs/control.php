@@ -51,7 +51,7 @@ class gogs extends control
             if(!$this->app->user->admin && !isset($myGogses[$gogs->id])) $gogs->isBindUser = false;
         }
 
-        $this->view->title    = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->browse;
+        $this->view->title    = $this->lang->gogs->common . $this->lang->hyphen . $this->lang->gogs->browse;
         $this->view->gogsList = $gogsList;
         $this->view->orderBy  = $orderBy;
         $this->view->pager    = $pager;
@@ -70,7 +70,9 @@ class gogs extends control
     {
         if($_POST)
         {
-            $gogs = form::data($this->config->gogs->form->create)->get();
+            $gogs = form::data($this->config->gogs->form->create)
+                ->add('createdBy', $this->app->user->account)
+                ->get();
             $priv = $this->checkToken($gogs);
             if(is_array($priv)) return $this->send($priv);
 
@@ -81,7 +83,7 @@ class gogs extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
-        $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->lblCreate;
+        $this->view->title = $this->lang->gogs->common . $this->lang->hyphen . $this->lang->gogs->lblCreate;
         $this->display();
     }
 
@@ -96,7 +98,7 @@ class gogs extends control
     {
         $gogs = $this->gogs->fetchByID($gogsID);
 
-        $this->view->title      = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->view;
+        $this->view->title      = $this->lang->gogs->common . $this->lang->hyphen . $this->lang->gogs->view;
         $this->view->gogs       = $gogs;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->actions    = $this->loadModel('action')->getList('gogs', $gogsID);
@@ -118,7 +120,9 @@ class gogs extends control
 
         if($_POST)
         {
-            $gogs = form::data($this->config->gogs->form->edit)->get();
+            $gogs = form::data($this->config->gogs->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->get();
             $this->checkToken($gogs);
             $this->loadModel('pipeline')->update($gogsID, $gogs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -130,7 +134,7 @@ class gogs extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->edit;
+        $this->view->title = $this->lang->gogs->common . $this->lang->hyphen . $this->lang->gogs->edit;
         $this->view->gogs  = $oldGogs;
         $this->display();
     }

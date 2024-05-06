@@ -19,19 +19,19 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('product')->config('product')->gen(30);
-zdTable('story')->gen(50);
-zdTable('productplan')->gen(20);
-zdTable('release')->gen(20);
-zdTable('build')->gen(20);
-zdTable('case')->gen(20);
-zdTable('project')->config('program')->gen(20);
-zdTable('projectproduct')->gen(30);
-zdTable('bug')->gen(20);
-zdTable('doc')->gen(20);
-zdTable('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(30);
+zenData('story')->gen(50);
+zenData('productplan')->gen(20);
+zenData('release')->gen(20);
+zenData('build')->gen(20);
+zenData('case')->gen(20);
+zenData('project')->loadYaml('program')->gen(20);
+zenData('projectproduct')->gen(30);
+zenData('bug')->gen(20);
+zenData('doc')->gen(20);
+zenData('user')->gen(5);
 
 $productIdList[0] = array();
 $productIdList[1] = range(1, 50);

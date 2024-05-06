@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-zdTable('testresult')->gen('10');
-zdTable('testrun')->gen('10');
+zenData('testresult')->gen('10');
+zenData('testrun')->gen('10');
 
 su('admin');
 

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('category', $category);
+
 $navItems = array();
 $showTag = in_array($category, array('collection', 'discovery', 'latest'));
 

@@ -40,6 +40,10 @@ class pageBase extends wg
     {
         global $lang, $config, $app;
 
+        $setXuanClass = str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')
+            ? setClass('xxc-embed')
+            : null;
+
         $zui  = $this->prop('zui');
         $head = $this->buildHead();
         $body = $this->buildBody();
@@ -64,6 +68,7 @@ class pageBase extends wg
         $jsConfig->zin = !empty($zinMode) ? $zinMode : true;
 
         $headImports = array();
+        $headImports[] = h::favicon($webRoot . 'favicon.ico');
         if($zui)
         {
             $headImports[] = h::importCss($zuiPath . 'zui.zentao.css', setID('zuiCSS'));
@@ -75,6 +80,7 @@ class pageBase extends wg
             if(!empty($extraCSS)) $headImports[] = h::importCss($webRoot . 'js/zui3/' . $extraCSS);
         }
         $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
+        if($setXuanClass) $headImports[] = h::importCss($config->webRoot . 'zentaoclient.css', setID('zentaoclient'));
         if($zui)
         {
             $extraJS = isset($config->zin->extraJS) ? $config->zin->extraJS : 'zin.js';
@@ -108,6 +114,7 @@ class pageBase extends wg
             set($attrs),
             set::className("theme-$themeName", $this->prop('class')),
             set::lang($currentLang),
+            $setXuanClass,
             h::head
             (
                 html($metas),
@@ -120,6 +127,7 @@ class pageBase extends wg
             (
                 set($bodyProps),
                 set::className($bodyClass),
+                $setXuanClass,
                 empty($imports) ? null : h::import($imports),
                 h::css($css, setClass('zin-page-css')),
                 $body,

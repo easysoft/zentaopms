@@ -1,21 +1,21 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-zdTable('project')->config('execution')->gen(30);
-$team = zdTable('team')->config('team');
+zenData('project')->loadYaml('execution')->gen(30);
+$team = zenData('team')->loadYaml('team');
 $team->account->range('admin');
 $team->gen(30);
 
-$task = zdTable('task')->config('task');
+$task = zenData('task')->loadYaml('task');
 $task->project->range('11,60,100');
 $task->execution->range('101,106,124');
 $task->assignedTo->range('admin');
 $task->gen(30);
 
-zdTable('projectstory')->gen(0);
-zdTable('story')->gen(0);
+zenData('projectstory')->gen(0);
+zenData('story')->gen(0);
 
 su('admin');
 

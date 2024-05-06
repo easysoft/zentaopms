@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
-$caseData = zdTable('case');
-$caseData->config('openedby')->gen(10);
+$caseData = zenData('case');
+$caseData->loadYaml('openedby')->gen(10);
 
 /**
 

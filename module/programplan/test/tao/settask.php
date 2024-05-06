@@ -28,18 +28,18 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('stage');
 $project->begin->range('`2023-09-28`');
 $project->end->range('`2024-04-02`');
 $project->gen(10);
-$task = zdTable('task');
+$task = zenData('task');
 $task->execution->range('1-10');
 $task->estStarted->range('`2023-09-28`');
 $task->realStarted->range('`2023-09-28`');
 $task->deadline->range('`2024-04-02`');
 $task->gen(20);
-zdTable('team')->gen(20);
+zenData('team')->gen(20);
 
 global $tester;
 $tester->loadModel('programplan');

@@ -24,11 +24,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-zdTable('action')->config('action_for_pie')->gen(20);
-zdTable('task')->gen(10);
-zdTable('user')->gen(10);
+zenData('action')->loadYaml('action_for_pie')->gen(20);
+zenData('task')->gen(10);
+zenData('user')->gen(10);
 
 $screen = new screenTest();
 

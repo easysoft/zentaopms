@@ -1,5 +1,5 @@
 /*!
- * ZUI: ZUI for Zentao - v1.10.0 - 2024-03-20
+ * ZUI: ZUI for Zentao - v1.10.0 - 2024-04-16
  * http://openzui.com
  * GitHub: https://github.com/easysoft/zui.git 
  * Copyright (c) 2024 cnezsoft.com; Licensed MIT

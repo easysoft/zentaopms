@@ -2,3 +2,8 @@
 #manageLineModal .lineTree .line-item > span {overflow: hidden; white-space: nowrap; text-overflow: clip;}
 #manageLineModal .form-group.required {position: relative;}
 #manageLineModal .form-group.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 0.5rem; right: -0.875rem;}
+#manageLineModal form .form-row{margin-left: 1px;}
+#manageLineModal form .form-row:last-child{position: sticky; bottom: -25px; z-index: 1; background-color: rgba(var(--color-canvas-rgb), .8); padding: 1rem; margin-left:0px;}
+
+li.tree-item > div.listitem > nav.toolbar {margin-left: 0;}
+.lineTree .panel-body {background: var(--color-gray-100);}

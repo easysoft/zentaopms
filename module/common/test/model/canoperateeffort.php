@@ -3,9 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('user')->gen(30);
+zenData('user')->gen(30);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('1-5');
 $project->project->range('0');
 $project->name->prefix("项目")->range('1-5');
@@ -24,7 +24,7 @@ $project->budgetUnit->range("CNY");
 $project->percent->range("0-0");
 $project->gen(5);
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('6-10');
 $execution->project->range('1-5');
 $execution->name->prefix("执行")->range('1-5');
@@ -39,7 +39,7 @@ $execution->status->range("wait");
 $execution->desc->range("[]");
 $execution->gen(5, true, false);
 
-$dept = zdTable('dept')->config('dept');
+$dept = zenData('dept')->loadYaml('dept');
 $dept->manager->range('admin,user1,user2,user3,user4');
 $dept->gen(50);
 

@@ -49,6 +49,8 @@ foreach($charts as $chartType => $chartOption)
                 echarts
                 (
                     set::color($colorList),
+                    set::width('100%'),
+                    set::height('300px'),
                     set::series
                     (
                         array
@@ -60,7 +62,7 @@ foreach($charts as $chartType => $chartOption)
                             )
                         )
                     )
-                )->size('100%', 300)
+                )
             ),
             cell
             (
@@ -118,6 +120,8 @@ $bugStageChart = div
             echarts
             (
                 set::color($colorList),
+                set::width('100%'),
+                set::height('300px'),
                 set::xAxis
                 (
                     array
@@ -128,7 +132,7 @@ $bugStageChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300)
+            )
         ),
         cell
         (
@@ -193,6 +197,8 @@ $bugHandleChart = div
             echarts
             (
                 set::color(array('#FF9800', '#2098EE', '#009688')),
+                set::width('100%'),
+                set::height('300px'),
                 set::xAxis
                 (
                     array
@@ -203,7 +209,7 @@ $bugHandleChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300)
+            )
         ),
         cell
         (
@@ -274,6 +280,8 @@ foreach($bugInfo as $infoKey => $infoValue)
                 echarts
                 (
                     set::color($colorList),
+                    set::width('100%'),
+                    set::height('300px'),
                     set::series
                     (
                         array
@@ -285,7 +293,7 @@ foreach($bugInfo as $infoKey => $infoValue)
                             )
                         )
                     )
-                )->size('100%', 300)
+                )
             ),
             cell
             (

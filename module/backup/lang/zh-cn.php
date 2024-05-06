@@ -27,6 +27,9 @@ $lang->backup->settingDir = '备份目录';
 $lang->backup->settingList['nofile'] = '不备份附件和代码';
 $lang->backup->settingList['nosafe'] = '不需要防下载PHP文件头';
 
+global $config;
+if($config->inContainer) $lang->backup->settingList['nofile'] = '不备份附件';
+
 $lang->backup->waitting         = '<span id="backupType"></span>正在进行中，请稍候...';
 $lang->backup->progressSQL      = '<p>SQL备份中，已备份%s</p>';
 $lang->backup->progressAttach   = '<p>SQL备份完成</p><p>附件备份中，共有%s个文件，已经备份%s个</p>';
@@ -55,3 +58,8 @@ $lang->backup->error->restoreFile     = "附件还原失败，错误：%s";
 $lang->backup->error->backupFile      = "附件备份失败，错误：%s";
 $lang->backup->error->backupCode      = "代码备份失败，错误：%s";
 $lang->backup->error->timeout         = "备份超时";
+
+$lang->backup->notice = new stdclass();
+$lang->backup->notice->higherVersion  = '还原的版本高于当前运行版本，请更新镜像版本到%s后再还原。';
+$lang->backup->notice->lowerVersion   = '还原的版本低于当前运行版本，还原后会执行升级流程。';
+$lang->backup->notice->unknownVersion = '未从当前备份中读取到版本信息，是否还原该备份？';

@@ -50,9 +50,18 @@ toolbar
     hasPriv('task', 'report') ? item(set(array
     (
         'icon'  => 'bar-chart',
-        'text'  => $lang->task->reportChart,
+        'text'  => $lang->task->report->common,
         'class' => 'ghost',
         'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}")
+    ))) : null,
+    hasPriv('task', 'export') ? item(set(array
+    (
+        'icon'        => 'export',
+        'text'        => $lang->export,
+        'class'       => 'ghost',
+        'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type=tree"),
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
     ))) : null,
     !empty($importItems) ? dropdown(
         btn(
@@ -63,15 +72,6 @@ toolbar
         set::items($importItems),
         set::placement('bottom-end')
     ) : null,
-    hasPriv('task', 'export') ? item(set(array
-    (
-        'icon'        => 'export',
-        'text'        => $lang->export,
-        'class'       => 'ghost',
-        'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type=tree"),
-        'data-toggle' => 'modal',
-        'data-size'   => 'sm'
-    ))) : null,
     $canCreateTask ? item(set(array
     (
         'icon' => 'plus',

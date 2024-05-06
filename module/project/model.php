@@ -64,6 +64,7 @@ class projectModel extends model
         if(empty($project) || !isset($project->type)) return true;
 
         $action = strtolower($action);
+
         if($action == 'close')     return $project->status != 'closed';
         if($action == 'group')     return $project->model != 'kanban';
         if($action == 'start')     return $project->status == 'wait' || $project->status == 'suspended';
@@ -71,6 +72,7 @@ class projectModel extends model
         if($action == 'suspend')   return $project->status == 'wait' || $project->status == 'doing';
         if($action == 'activate')  return $project->status == 'done' || $project->status == 'closed';
         if($action == 'whitelist') return $project->acl != 'open';
+        if($action == 'link')      return $project->hasProduct;
 
         return true;
     }
@@ -220,8 +222,8 @@ class projectModel extends model
         $this->app->loadClass('pager', true);
         foreach($projects as $projectID => $project)
         {
-            $orderBy = $project->model == 'waterfall' ? 'id_asc' : 'id_desc';
-            $pager   = $project->model == 'waterfall' ? null : new pager(0, 1, 1);
+            $orderBy = in_array($project->model, array('waterfall', 'ipd')) ? 'id_asc' : 'id_desc';
+            $pager   = in_array($project->model, array('waterfall', 'ipd')) ? null : new pager(0, 1, 1);
             $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
             $project->teamCount  = isset($teamCount[$projectID]) ? $teamCount[$projectID] : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
@@ -261,6 +263,7 @@ class projectModel extends model
         $storySummary  = $this->projectTao->getTotalStoriesByProject($projectIdList);
 
         /* Set project attribute. */
+        $today = helper::today();
         foreach($projects as $projectID => $project)
         {
             $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs             : 0;
@@ -275,6 +278,13 @@ class projectModel extends model
             $project->doingTasks    = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doingTasks          : 0;
             $project->rndDoneTasks  = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doneTasks           : 0;
             $project->liteDoneTasks = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->litedoneTasks       : 0;
+
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended')
+            {
+                $delay = helper::diffDate($today, $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
         }
 
         return $projects;
@@ -751,12 +761,21 @@ class projectModel extends model
      * 获取项目与执行的键值对
      * Get project and execution pairs.
      *
+     * @param  string $multiple
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getProjectExecutionPairs(): array
+    public function getProjectExecutionPairs(string $multiple = '0', string $status = 'all'): array
     {
-        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)
+            ->where('deleted')->eq('0')
+            ->andWhere('multiple')->eq($multiple)
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->beginIF(!in_array($status, array('all', 'undone')))->andWhere('status')->eq($status)->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")->fi()
+            ->fetchPairs();
     }
 
     /**
@@ -907,10 +926,11 @@ class projectModel extends model
      * @param  string  $model all|scrum|waterfall|kanban
      * @param  string  $param noclosed
      * @param  int     $projectID
+     * @param  bool    $pairs
      * @access public
      * @return array   array(projectID => projectName, ...)
      */
-    public function getPairsByModel(string $model = 'all', string $param = '', int $projectID = 0): array
+    public function getPairsByModel(string $model = 'all', string $param = '', int $projectID = 0, bool $pairs = true): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -954,7 +974,7 @@ class projectModel extends model
         $projectPairs = array();
         foreach($allProjects as $programID => $projects)
         {
-            foreach($projects as $project) $projectPairs[$project->id] = $project->name;
+            foreach($projects as $project) $projectPairs[$project->id] = $pairs ? $project->name : $project;
         }
         return $projectPairs;
     }
@@ -1324,6 +1344,10 @@ class projectModel extends model
         $this->updateUserView($projectID, $project->acl);                    // 更新用户视图。
         $this->updateShadowProduct($project, $oldProject);                   // 更新影子产品关联信息。
         $this->updateWhitelist($project, $oldProject);                       // 更新关联的白名单列表。
+
+        $this->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
+        if($oldProject->hasProduct > 0) $this->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
+        $this->updateTeamMembers($project, $oldProject, (array)$this->post->teamMembers); // 更新关联的用户信息。
         if($postProductData) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
@@ -1408,14 +1432,14 @@ class projectModel extends model
 
         $this->projectTao->doStart($projectID, $project);
 
-        $this->recordFirstEnd($projectID);
-
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError())
         {
             if(count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
             return false;
         }
+
+        $this->recordFirstEnd($projectID);
 
         if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'start');
         return common::createChanges($oldProject, $project);
@@ -1717,7 +1741,8 @@ class projectModel extends model
      */
     public function getBudgetWithUnit(float|string $budget): float|string
     {
-        $budget = (float)$budget;
+        $budget    = (float)$budget;
+        $rawBudget = $budget;
         if($budget < $this->config->project->budget->tenThousand)
         {
             $budget = round($budget, $this->config->project->budget->precision);
@@ -1734,7 +1759,7 @@ class projectModel extends model
             $unit   = $this->lang->project->hundredMillion;
         }
 
-        return in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, $this->config->project->budget->precision);
+        return !commonModel::checkNotCN() ? $budget . $unit : round($rawBudget, $this->config->project->budget->precision);
     }
 
     /**
@@ -1789,8 +1814,11 @@ class projectModel extends model
         /* Create actions. */
         $this->loadModel('action');
         if(!empty($needUpdate)) $this->action->create('project', $projectID, 'managed', '', implode(',', $products));
+
+        /* 如果有取消关联的产品，且项目有迭代且是非瀑布项目，记录关联产品执行到action表。*/
+        /* If there are unlinkedProducts and it is multiple project and it isn't waterfall project, record to table action. */
         $unlinkedProducts = array_diff($oldProductIdList, $products);
-        if(!empty($unlinkedProducts))
+        if(!empty($unlinkedProducts) && !empty($project) && $project->multiple && $project->model != 'waterfall' && $project->model != 'waterfallplus')
         {
             $products = $this->dao->select('name')->from(TABLE_PRODUCT)
                 ->where('id')->in($unlinkedProducts)
@@ -2461,7 +2489,6 @@ class projectModel extends model
         $project->surplus     = $project->left     . $this->lang->project->workHourUnit;
         $project->progress    = $project->progress;
         $project->end         = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
-        $project->hasProduct  = zget($this->lang->project->projectTypeList, $project->hasProduct);
         $project->invested    = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
 
         if($project->PM)
@@ -2513,7 +2540,7 @@ class projectModel extends model
 
         if($this->app->viewType == 'mhtml' && $projectID)
         {
-            $output  = $this->lang->project->common . $this->lang->colon;
+            $output  = $this->lang->project->common . $this->lang->hyphen;
             $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             return $output;
         }

@@ -19,7 +19,7 @@ foreach($lang->convert->jira->steps as $key => $label)
 div
 (
     setClass('main-header relative center size-lg mx-auto my-4'),
-    setStyle(array('max-width' => 'var(--zt-page-form-max-width)')),
+    setStyle(array('max-width' => 'var(--zt-panel-form-max-width)')),
     div
     (
         setClass('absolute left-0'),

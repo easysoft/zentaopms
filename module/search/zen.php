@@ -41,7 +41,7 @@ class searchZen extends search
         $this->session->set('searchIngWord',   $words);
         $this->session->set('searchIngType',   $type);
 
-        if(strpos($this->server->http_referer, 'search') === false) $this->session->set('referer', $this->server->http_referer);
+        if(isset($this->server->http_referer) && strpos($this->server->http_referer, 'search') === false) $this->session->set('referer', $this->server->http_referer);
     }
 
     /**

@@ -14,12 +14,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 su('admin');
 
-zdTable('project')->gen(50);
-zdTable('story')->gen(20);
-zdTable('bug')->gen(20);
+zenData('project')->gen(50);
+zenData('story')->gen(20);
+zenData('bug')->gen(20);
 
 $screen = new screenTest();
 

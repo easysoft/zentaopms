@@ -88,6 +88,7 @@ else
                 input
                 (
                     set::name('title'),
+                    set::maxlength(100),
                     set::placeholder($lang->doc->titlePlaceholder)
                 )
             ),
@@ -224,6 +225,7 @@ else
                         setClass('w-full check-list'),
                         inputGroup
                         (
+                            setClass('w-full'),
                             $lang->doc->groups,
                             picker
                             (
@@ -232,7 +234,11 @@ else
                                 set::multiple(true)
                             )
                         ),
-                        users(set::label($lang->doc->users), set::items($users))
+                        div
+                        (
+                            setClass('w-full'),
+                            userPicker(set::label($lang->doc->users), set::items($users))
+                        )
                     )
                 ),
                 formRow

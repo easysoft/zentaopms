@@ -178,7 +178,7 @@ class basePager
         /* Set the cookie name. */
         if(!(defined('RUN_MODE') and RUN_MODE == 'api'))
         {
-            $this->pageCookie = 'pager' . ucfirst($this->app->getModuleName()) . ucfirst($this->app->getMethodName());
+            $this->pageCookie = 'pager' . ucfirst($this->app->rawModule) . ucfirst($this->app->rawMethod);
 
             if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
         }

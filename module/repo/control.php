@@ -8,6 +8,8 @@ declare(strict_types=1);
  * @author      Yidong Wang, Jinyong Zhu
  * @package     repo
  * @link        https://www.zentao.net
+ * @property    repoModel $repo
+ * @property    repoZen   $repoZen
  */
 class repo extends control
 {
@@ -115,8 +117,8 @@ class repo extends control
 
         $this->repoZen->buildRepoSearchForm($products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
-        $this->view->gitlabPairs   = $this->loadModel('gitlab')->getPairs();
+        $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
+        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitfox,gitlab');
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
@@ -236,7 +238,7 @@ class repo extends control
         }
         if(!$repoPairs) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
-        if(!$repoID) $repoID = $this->post->codeRepo;
+        if(!empty($_POST)) $repoID = (int)$this->post->codeRepo;
         if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
 
         $this->scm->setEngine($repoList[$repoID]);
@@ -248,13 +250,14 @@ class repo extends control
 
             $this->repo->saveBranchRelation($repoID, $branch->branchName, $objectID, $objectType);
             $this->loadModel('action')->create($objectType, $objectID, 'createRepoBranch', '', $branch->branchName);
-            $this->sendSuccess(array('callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
         }
 
         $canCreate = $object->status == 'active';
         if($objectType == 'task') $canCreate = $object->status == 'wait' || $object->status == 'doing';
         $this->view->linkedBranches = $this->repo->getLinkedBranch($objectID, $objectType);
         $this->view->repoPairs      = $repoPairs;
+        $this->view->allRepos       = $this->repo->getRepoPairs('repo', 0, false);
         $this->view->repoID         = $repoID;
         $this->view->objectID       = $objectID;
         $this->view->branches       = $this->scm->branch();
@@ -267,21 +270,20 @@ class repo extends control
      * 取消代码分支的关联。
      * Unlink code branch.
      *
-     * @param  int    $objectID
-     * @param  int    $repoID
-     * @param  string $branch
      * @access public
      * @return void
      */
-    public function unlinkBranch(int $objectID, int $repoID, string $branch)
+    public function unlinkBranch()
     {
         $objectType = $this->app->rawModule;
-        $branch     = helper::safe64Decode($branch);
+        $branch     = (string)$this->post->branch;
+        $objectID   = (int)$this->post->objectID;
+        $repoID     = (int)$this->post->repoID;
         $this->repo->unlinkObjectBranch($objectID, $objectType, $repoID, $branch);
         if(dao::isError()) return $this->sendError(dao::getError());
 
         $this->loadModel('action')->create($objectType, $objectID, 'unlinkRepoBranch', '', $branch);
-        $this->sendSuccess(array('callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
     }
 
     /**
@@ -360,8 +362,16 @@ class repo extends control
     {
         $this->commonAction($repoID, $objectID);
 
-        $file     = $entry;
-        $entry    = $this->repo->decodePath($entry);
+        $file  = $entry;
+        $entry = $this->repo->decodePath($entry);
+        $lines = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+        }
+
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
 
@@ -372,7 +382,7 @@ class repo extends control
         if(in_array($repo->SCM, $this->config->repo->gitTypeList)) $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
-        $this->view->title     = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
         $this->view->dropMenus = $dropMenus;
         $this->view->type      = 'view';
         $this->view->branchID  = $this->cookie->repoBranch;
@@ -383,6 +393,7 @@ class repo extends control
         $this->view->repo      = $repo;
         $this->view->revision  = $revision;
         $this->view->file      = $file;
+        $this->view->lines     = $lines;
         $this->view->entry     = $entry;
         $this->view->pathInfo  = $pathInfo;
         $this->view->tree      = $this->repoZen->getViewTree($repo, '', $revision);
@@ -410,7 +421,7 @@ class repo extends control
         if($repoID == 0) $repoID = $this->session->repoID;
         if($revision != 'HEAD')
         {
-            setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            helper::setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $this->cookie->set('repoBranch', $revision);
         }
 
@@ -579,7 +590,7 @@ class repo extends control
      *
      * @param int    $repoID
      * @param int    $objectID
-     * @param int    $revision
+     * @param string $revision
      * @access public
      * @return void
      */
@@ -697,6 +708,13 @@ class repo extends control
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $file  = $entry;
         $entry = $this->repo->decodePath($entry);
+        $lines = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+        }
 
         if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
 
@@ -718,6 +736,7 @@ class repo extends control
         $this->view->entry         = urldecode($entry);
         $this->view->encoding      = str_replace('-', '_', $encoding);
         $this->view->file          = $file;
+        $this->view->lines         = $lines;
         $this->view->repoID        = $repoID;
         $this->view->branchID      = (string) $this->cookie->repoBranch;
         $this->view->objectID      = $objectID;
@@ -726,7 +745,7 @@ class repo extends control
         $this->view->newRevision   = $newRevision;
         $this->view->oldRevision   = $oldRevision;
         $this->view->isBranchOrTag = $isBranchOrTag;
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->diff;
 
         $this->display();
     }
@@ -796,7 +815,7 @@ class repo extends control
         $this->app->loadLang('story');
         if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
 
-        $this->view->title = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setRules;
+        $this->view->title = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->setRules;
         $this->display();
     }
 
@@ -818,7 +837,7 @@ class repo extends control
         if($branch) $branch = base64_decode(helper::safe64Decode($branch));
 
         $latestInDB = $this->repo->getLatestCommit($repoID);
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
+        $this->view->title      = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->showSyncCommit;
         $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID     = $repoID;
         $this->view->repo       = $this->repo->getByID($repoID);
@@ -1000,11 +1019,11 @@ class repo extends control
      * 导入版本库。
      * Import repos.
      *
-     * @param  int    $server
+     * @param  int    $serverID
      * @access public
      * @return void
      */
-    public function import(int $server = 0)
+    public function import(int $serverID = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
 
@@ -1018,18 +1037,22 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $serverList    = $this->loadModel('gitlab')->getList() + $this->loadModel('gitfox')->getList();
-        $defaultServer = empty($server) ? array_shift($serverList) : $this->loadModel('pipeline')->getById($server);
+        $serverList = $this->loadModel('pipeline')->getPairs('gitfox') + $this->loadModel('pipeline')->getPairs('gitlab');
+        if(!$serverID) $serverID = key($serverList);
 
-        $repoList = $defaultServer ? $this->repoZen->getNotExistRepos($defaultServer) : array();
+        $server      = $this->pipeline->getByID($serverID);
+        $hiddenRepos = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
+
+        $repoList = $server ? $this->repoZen->getNotExistRepos($server) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
-        $this->view->servers       = $this->gitlab->getPairs() + $this->gitfox->getPairs();
-        $this->view->products      = $products;
-        $this->view->projects      = $this->product->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->defaultServer = $defaultServer;
-        $this->view->repoList      = array_values($repoList);
+        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
+        $this->view->servers     = $serverList;
+        $this->view->products    = $products;
+        $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->server      = $server;
+        $this->view->repoList    = array_values($repoList);
+        $this->view->hiddenRepos = explode(',', $hiddenRepos);
         $this->display();
     }
 
@@ -1065,7 +1088,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $nRevision);
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->diff;
         $this->view->type        = 'diff';
         $this->view->encoding    = str_replace('-', '_', $encoding);
         $this->view->repoID      = $repoID;
@@ -1105,6 +1128,14 @@ class repo extends control
         $repo     = $this->repo->getByID($repoID);
         $entry    = urldecode($this->repo->decodePath($entry));
         $revision = str_replace('*', '-', $revision);
+        $lines    = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+            $file    = $this->repo->encodePath($entry);
+        }
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
@@ -1130,17 +1161,20 @@ class repo extends control
             $content = helper::convertEncoding($content, $encoding);
         }
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
         $this->view->type        = 'view';
         $this->view->showBug     = $showBug;
         $this->view->repoID      = $repoID;
+        $this->view->repo        = $repo;
         $this->view->revision    = $revision;
         $this->view->oldRevision = '';
         $this->view->file        = $file;
+        $this->view->lines       = $lines;
         $this->view->entry       = $entry;
         $this->view->suffix      = $suffix;
         $this->view->content     = $content ? $content : '';
         $this->view->pathInfo    = $pathInfo;
+        $this->view->objectID    = $objectID;
         $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
         $this->display();
     }
@@ -1164,7 +1198,7 @@ class repo extends control
         if(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
             $syncLog = $this->repoZen->syncLocalCommit($repo);
-            if($syncLog) return print($syncLog);
+            if($syncLog) return print(trim($syncLog));
         }
 
         $this->commonAction($repoID);
@@ -1261,7 +1295,7 @@ class repo extends control
      * @param  int    $repoID
      * @param  string $path
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetSVNDirs(int $repoID, string $path = '')
     {
@@ -1292,7 +1326,8 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  string $type
-     * @param  int    $objectID
+     * @param  string $method
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1352,7 +1387,7 @@ class repo extends control
      * 获取服务器下拉列表数据。
      * Ajax get hosts.
      *
-     * @param  int    $scm
+     * @param  string    $scm
      * @access public
      * @return void
      */
@@ -1388,8 +1423,7 @@ class repo extends control
      * 获取Gitea项目。
      * Ajax get gitea projects.
      *
-     * @param  string $gitlabID
-     * @param  string $projectIdList
+     * @param  int $giteaID
      * @access public
      * @return void
      */
@@ -1397,10 +1431,13 @@ class repo extends control
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
 
+        $importedProjects = $this->repo->getImportedProjects($giteaID);
+
         $options = array();
         $options[] = array('text' => '', 'value' => '');;
         foreach($projects as $project)
         {
+            if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
         return print(json_encode($options));
@@ -1410,8 +1447,7 @@ class repo extends control
      * 获取Gogs项目。
      * Ajax get gogs projects.
      *
-     * @param  string $gitlabID
-     * @param  string $projectIdList
+     * @param  int    $gogsID
      * @access public
      * @return void
      */
@@ -1419,10 +1455,13 @@ class repo extends control
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
 
+        $importedProjects = $this->repo->getImportedProjects($gogsID);
+
         $options = array();
         $options[] = array('text' => '', 'value' => '');;
         foreach($projects as $project)
         {
+            if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
         return print(json_encode($options));
@@ -1432,8 +1471,9 @@ class repo extends control
      * 获取Gitlab项目。
      * Ajax get gitlab projects.
      *
-     * @param  string $gitlabID
-     * @param  string $token
+     * @param  int    $gitlabID
+     * @param  string $projectIdList
+     * @param  string $filter
      * @access public
      * @return void
      */
@@ -1458,9 +1498,9 @@ class repo extends control
      * 获取Gitfox项目。
      * Ajax get gitfox projects.
      *
-     * @param  string $gitfoxID
-     * @param  array $projectIdList
-     * @param  array $filter
+     * @param  int    $gitfoxID
+     * @param  string $projectIdList
+     * @param  string $filter
      * @access public
      * @return void
      */
@@ -1526,7 +1566,6 @@ class repo extends control
      * 根据Url获取代码库信息。
      * API: get repo by url.
      *
-     * @param  string $type  gitlab
      * @access public
      * @return void
      */
@@ -1603,7 +1642,7 @@ class repo extends control
      * @param  int    $repoID
      * @param  string $commit
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetCommitRelation(int $repoID, string $commit)
     {
@@ -1658,7 +1697,7 @@ class repo extends control
      * @param  string $branch
      * @param  string $path
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '')
     {
@@ -1674,7 +1713,7 @@ class repo extends control
      * Get file last commit info.
      *
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetFileCommitInfo()
     {
@@ -1682,5 +1721,69 @@ class repo extends control
         $commit = $this->loadModel('gitlab')->getFileLastCommit($repo, (string)$this->post->path, (string)$this->post->branch);
         $commit->comment = $this->repo->replaceCommentLink($commit->message);
         echo json_encode($commit);
+    }
+
+    /**
+     * 在批量导入代码库页面隐藏代码库。
+     * Hidden repo in import page.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxHiddenRepo()
+    {
+        $repoID   = $this->post->repoID;
+        $serverID = $this->post->serverID;
+
+        $reposID = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
+        if(!$reposID) $reposID = $repoID;
+
+        $repoIDList = explode(',', $reposID);
+        if(!in_array($repoID, $repoIDList)) $reposID .= ",{$repoID}";
+
+        $this->setting->setItem('system.repo.hiddenRepo.' . $serverID, $reposID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * 在批量导入代码库页面显示代码库。
+     * Show repo in import page.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxShowRepo()
+    {
+        $repoID   = $this->post->repoID;
+        $serverID = $this->post->serverID;
+
+        $reposID = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
+        $reposID = str_replace(",{$repoID},", "", ",{$reposID},");
+
+        $this->setting->setItem('system.repo.hiddenRepo.' . $serverID, trim($reposID, ','));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * 通过ajax获取代码库的分支和标签列表。
+     * Ajax: Get branches and tags.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBranchesAndTags(int $repoID)
+    {
+        $repo = $this->repo->getByID($repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $branches = $scm->branch();
+        $tags     = $scm->tags();
+        echo json_encode(array('branches' => $branches, 'tags' => $tags));
     }
 }

@@ -55,10 +55,11 @@ formPanel
         set::control("picker"),
         set::items($members)
     ),
-    formGroup
+    $task->status != 'done' && $task->status != 'closed' && $task->parent >= 0 ? formGroup
     (
         set::width("1/3"),
         set::label($lang->task->left),
+        set::required(true),
         inputControl
         (
             input
@@ -72,7 +73,7 @@ formPanel
             to::suffix($lang->task->suffixHour),
             set::suffixWidth(20)
         )
-    ),
+    ) : null,
     formGroup
     (
         set::name("comment"),

@@ -710,7 +710,7 @@ div
 $actions = $this->loadModel('common')->buildOperateMenu($execution);
 div
 (
-    setClass('center w-2/3'),
+    setClass('w-2/3 center fixed actions-menu'),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),

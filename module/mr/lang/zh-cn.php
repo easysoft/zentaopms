@@ -24,6 +24,10 @@ $lang->mr->editAction   = '%s, 由 <strong>%s</strong> 编辑了 <a href="%s">�
 $lang->mr->removeAction = '%s, 由 <strong>%s</strong> 删除了 <a href="%s">合并请求</a>。';
 $lang->mr->submitType   = '提交方式';
 
+$lang->mr->action = new stdclass();
+$lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
+$lang->mr->action->imported = '$date, 由 <strong>$actor</strong> 导入了合并请求。';
+
 $lang->mr->linkList  = '浏览关联需求、Bug、任务';
 $lang->mr->linkStory = '关联需求';
 $lang->mr->linkBug   = '关联Bug';
@@ -45,6 +49,7 @@ $lang->mr->changes     = '更改数';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = '版本库';
 $lang->mr->jobID       = '流水线任务';
+$lang->mr->commitLogs  = '提交记录';
 
 $lang->mr->canMerge  = "可合并";
 $lang->mr->cantMerge = "不可合并";
@@ -111,14 +116,17 @@ $lang->mr->failMessage       = "您提交的合并请求：<a href='%s'>%s</a> �
 $lang->mr->storySummary      = "本页共 <strong>%s</strong> 个" . $lang->SRCommon;
 
 $lang->mr->apiError = new stdclass;
-$lang->mr->apiError->createMR = "通过API创建合并请求失败，失败原因：%s";
-$lang->mr->apiError->sudo     = "无法以当前用户绑定的GitLab账户进行操作，失败原因：%s";
+$lang->mr->apiError->createMR      = "通过API创建合并请求失败，失败原因：%s";
+$lang->mr->apiError->sudo          = "无法以当前用户绑定的GitLab账户进行操作，失败原因：%s";
+$lang->mr->apiError->emptyResponse = "API请求的对象不存在或者API请求失败。";
+$lang->mr->apiError->notFound      = "API请求的对象不存在，可能已被服务器删除。";
 
 $lang->mr->createFailedFromAPI = "创建合并请求失败。";
 $lang->mr->hasSameOpenedMR     = "存在重复并且未关闭的合并请求: ID%u";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->reopenSuccess       = "已重新打开合并请求。";
 $lang->mr->closeSuccess        = "已关闭合并请求。";
+$lang->mr->unsupportedFeature  = "暂不支持该功能。";
 
 $lang->mr->apiErrorMap[1]  = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2]  = "/Another open merge request already exists for this source branch: !([0-9]+)/";

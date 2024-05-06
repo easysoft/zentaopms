@@ -17,11 +17,11 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-zdTable('product')->gen(4);
-zdTable('productplan')->config('productplan')->gen(10);
-zdTable('story')->config('story')->gen(10);
+zenData('product')->gen(4);
+zenData('productplan')->loadYaml('productplan')->gen(10);
+zenData('story')->loadYaml('story')->gen(10);
 
 $pivot = new pivotTest();
 

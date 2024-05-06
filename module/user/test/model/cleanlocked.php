@@ -28,9 +28,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->fails->range('5');
 $user->locked->range('`2023-01-10 14:34:12`');
 $user->gen(2);

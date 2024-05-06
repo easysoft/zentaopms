@@ -18,8 +18,8 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('mr')->config('mr')->gen(10);
-zdTable('relation')->config('relation')->gen(10);
+zenData('mr')->loadYaml('mr')->gen(10);
+zenData('relation')->loadYaml('relation')->gen(10);
 su('admin');
 
 global $tester;

@@ -56,7 +56,7 @@ class executionZen extends execution
         $build      = !empty($build) ? $this->loadModel('build')->getById((int)$build) : null;
 
         /* Assign. */
-        $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->bug;
+        $this->view->title            = $execution->name . $this->lang->hyphen . $this->lang->execution->bug;
         $this->view->project          = $project;
         $this->view->orderBy          = $orderBy;
         $this->view->type             = $type;
@@ -171,7 +171,7 @@ class executionZen extends execution
             }
         }
 
-        $this->view->title                = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
+        $this->view->title                = $this->lang->execution->manageProducts . $this->lang->hyphen . $execution->name;
         $this->view->execution            = $execution;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
@@ -263,7 +263,7 @@ class executionZen extends execution
         $this->assignModuleForStory($type, $param, $storyType, $execution, $productID);
 
         /* Assign. */
-        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->story;
+        $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->story;
         $this->view->storyType    = $storyType;
         $this->view->param        = $param;
         $this->view->type         = $this->session->executionStoryBrowseType;
@@ -304,7 +304,7 @@ class executionZen extends execution
         }
         else
         {
-            $moduleTree = $this->tree->getProjectStoryTreeMenu($execution->id, 0, array('treeModel', $createModuleLink));
+            $moduleTree = $this->tree->getProjectStoryTreeMenu($execution->id, 0, array('treeModel', $createModuleLink), array('storyType' => $storyType));
         }
 
         $this->view->moduleTree  = $moduleTree;
@@ -733,6 +733,12 @@ class executionZen extends execution
                 return false;
             }
 
+            if(!helper::isZeroDate($task->deadline) && $task->estStarted > $task->deadline)
+            {
+                dao::$errors["deadline[{$bugID}]"] = 'ID: ' . $bugID . $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
             if(!empty($this->config->limitTaskDate))
             {
                 $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
@@ -1024,7 +1030,6 @@ class executionZen extends execution
                 }
                 $build->branchName = trim($build->branchName, ',');
             }
-            $build->actions = $this->build->buildActionList($build, $executionID, 'execution');
 
             if($build->scmPath && $build->filePath)
             {
@@ -1791,6 +1796,11 @@ class executionZen extends execution
 
             $this->view->plan = $plan;
         }
+        if(isset($project->hasProduct) && empty($project->hasProduct))
+        {
+            $product  = $this->loadModel('product')->getShadowProductByProject($project->id);
+            $products = array($product->id => $product->name);
+        }
 
         return $products;
     }
@@ -1919,7 +1929,7 @@ class executionZen extends execution
     protected function correctExecutionCommonLang(object $project, string $type): bool
     {
         if(empty($project)) return false;
-        if($project->model == 'kanban' or ($project->model == 'agileplus' and $type == 'kanban'))
+        if($project->model == 'kanban')
         {
             global $lang;
             $executionLang           = $lang->execution->common;
@@ -2154,6 +2164,13 @@ class executionZen extends execution
             }
         }
 
+        $productPlan = array();
+        if(!empty($planID))
+        {
+            $plan        = $this->productplan->fetchByID((int)$planID);
+            $productPlan = $this->productplan->getPairs($plan->product, $plan->branch, 'unexpired|withMainPlan', true);
+        }
+
         $productPlansOrder = array();
         foreach($productPlans as $productID => $branchPlans)
         {
@@ -2171,6 +2188,8 @@ class executionZen extends execution
         }
 
         $linkedObjects = new stdclass();
+        $linkedObjects->currentPlan          = !empty($planID) ? $planID : 0;
+        $linkedObjects->productPlan          = $productPlan;
         $linkedObjects->allProducts          = $allProducts;
         $linkedObjects->linkedProducts       = $linkedProducts;
         $linkedObjects->productPlans         = array_filter($productPlansOrder);

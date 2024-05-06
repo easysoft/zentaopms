@@ -14,15 +14,15 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zahost.class.php';
+include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
 su('admin');
 
-$host = zdTable('host');
+$host = zenData('host');
 $host->type->range('zahost');
 $host->name->range('宿主机1');
 $host->gen(1);
 
-zdTable('image')->gen(0);
+zenData('image')->gen(0);
 
 $image1 = new stdClass();
 $image1->name     = 'image1';
@@ -55,10 +55,10 @@ $hostID = 1;
 $zahost = new zahostTest();
 r($zahost->insertImageListTest($imageList, $hostID, $downloadedImageList)) && p('') && e('0'); //测试镜像已经插入到 image 表中, 不会再次插入
 
-zdTable('image')->gen(0);
+zenData('image')->gen(0);
 unset($downloadedImageList['image1']);
 r($zahost->insertImageListTest($imageList, $hostID, $downloadedImageList)) && p('0:name') && e('image1'); //测试 image2 镜像已经插入到 image 表中, image1镜像会被插入
 
-zdTable('image')->gen(0);
+zenData('image')->gen(0);
 unset($downloadedImageList['image2']);
 r($zahost->insertImageListTest($imageList, $hostID, $downloadedImageList)) && p('1:name') && e('image2'); //测试image1 和 image2 镜像都没有插入, image2 镜像会被插入

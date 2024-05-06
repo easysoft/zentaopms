@@ -81,7 +81,7 @@ function openApp(url, code, options)
     if(!openedApp)
     {
         if(!url) url = app.url;
-        openedApp = $.extend({opened: true, url: url, zIndex: 0, currentUrl: url}, app);
+        openedApp = $.extend({opened: true, url: url, zIndex: ++apps.zIndex, currentUrl: url}, app);
         forceReload = false;
         apps.openedMap[code] = openedApp;
 
@@ -101,7 +101,7 @@ function openApp(url, code, options)
         ].join(' '));
         const iframe = $iframe[0];
         openedApp.iframe = iframe;
-        openedApp.$app = $('<div class="app-container load-indicator" id="app-' + code + '"></div>')
+        openedApp.$app = $('<div class="app-container loading" id="app-' + code + '"></div>')
             .append($iframe)
             .appendTo('#apps');
 
@@ -111,16 +111,20 @@ function openApp(url, code, options)
         });
         iframe.onload = iframe.onreadystatechange = function(e)
         {
-            const finishLoad = () => $iframe.removeClass('loading').addClass('in');
+            const finishLoad = () =>
+            {
+                openedApp.$app.removeClass('loading');
+                $iframe.removeClass('loading').addClass('in');
+            };
             try
             {
-                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', finishLoad);
+                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', () => setTimeout(finishLoad, 150));
                 setTimeout(finishLoad, 10000);
             }
             catch(e){finishLoad()}
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
-        if(!app.external) return openedApp;
+        openedApp.$app.show().css('z-index', openedApp.zIndex);
     }
     if(!url) url = openedApp.currentUrl;
 
@@ -134,6 +138,7 @@ function openApp(url, code, options)
     {
         $lastItem.removeClass('active');
         $menuNav.find('li[data-app="' + code + '"]>a').addClass('active');
+        openedApp.$app.trigger('showapp', openedApp);
     }
 
     /* Show and load app */
@@ -142,7 +147,7 @@ function openApp(url, code, options)
     if(needLoad)
     {
         reloadApp(code, url, options);
-        openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex)
+        openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex);
     }
     else
     {
@@ -296,6 +301,7 @@ function closeApp(code)
     $('#appTabs a.active[data-app="' + code + '"]').parent().remove();
 
     app.closed = true;
+    app.$app.trigger('hideapp', app);
     app.$app.remove();
     app.$bar.remove();
 
@@ -400,7 +406,7 @@ function getAppCode(urlOrModuleName, defaultCode)
         if(methodLowerCase === 'edit' && (link.params.programID || link.params.$4)) return 'program';
         if(methodLowerCase === 'batchedit') return 'program';
         var moduleGroup = link.params.moduleGroup ? link.params.moduleGroup : link.params.$2;
-        if(methodLowerCase === 'showerrornone' && (moduleGroup || moduleGroup)) return moduleGroup;
+        if(methodLowerCase === 'showerrornone' && moduleGroup) return moduleGroup;
     }
     if(moduleName === 'stakeholder')
     {
@@ -457,7 +463,7 @@ function goBack(target, url, startState)
     const currentState = window.history.state;
     const preState = currentState && currentState.prev;
     if(debug) console.log('[APPS] go back', {target, url, startState, currentState, preState});
-    if(target && currentState && preState)
+    if(target && startState && currentState && preState)
     {
         startState = startState.prev || (currentState && currentState.prev);
         if($.apps.openedMap[target])
@@ -528,9 +534,6 @@ function toggleMenu(toggle)
     var $body = $('body');
     if (toggle === undefined) toggle = $body.hasClass('hide-menu');
     $body.toggleClass('hide-menu', !toggle).toggleClass('show-menu', !!toggle);
-
-    const $toggle = $('#menuToggleMenu .menu-toggle');
-    $toggle.attr('data-title', $toggle.data(toggle ? 'collapseText' : 'unfoldText'));
 
     $.cookie.set('hideMenu', String(!toggle), {expires: config.cookieLife, path: config.webRoot});
     return toggle;
@@ -649,11 +652,10 @@ function initAppsMenu(items)
         if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
 
-
-        $('<li></li>').attr('data-app', item.code)
-        .attr({'data-toggle': 'tooltip', 'data-placement': 'right', 'data-title': item.text, 'data-class-name': 'menu-tooltip'})
-        .append($link)
-        .appendTo($menuMainNav);
+        $('<li class="hint-right"></li>')
+            .attr({'data-app': item.code, 'data-hint': item.text})
+            .append($link)
+            .appendTo($menuMainNav);
 
         if(!apps.defaultCode) apps.defaultCode = item.code;
     });
@@ -669,8 +671,8 @@ function initAppsMenu(items)
         icon:       'icon-search',
         methodName: 'index',
         moduleName: 'search',
-        text:       lang.search,
-        title:      '<i class="icon icon-search"></i> ' + lang.search,
+        text:       langData.search,
+        title:      '<i class="icon icon-search"></i> ' + langData.search,
         url:        '/index.php?m=search&f=index',
         vars:       ''
     };
@@ -690,7 +692,7 @@ function updateAppsMenu(includeAppsBar)
 {
     loadCurrentPage(
     {
-        selector: (includeAppsBar ? '#appsToolbar>*,#visionSwitcher>*,' : '') + 'appsItems()',
+        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + 'appsItems()',
         onRender: function(info)
         {
             if(info.name === 'appsItems')
@@ -706,6 +708,7 @@ function updateAppsMenu(includeAppsBar)
 function changeAppsLang(lang)
 {
     $('html').attr('lang', lang);
+    zui.i18n.setCode(lang);
     $.each(apps.openedMap, function(_code, app)
     {
         if(app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.changeAppLang)
@@ -767,11 +770,11 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     if(!code) return;
 
     const app   = apps.openedMap[code];
-    const items = [{text: lang.open, disabled: app && getLastAppCode() === code, onClick: function(){showApp(code)}}];
+    const items = [{text: langData.open, disabled: app && getLastAppCode() === code, onClick: function(){showApp(code)}}];
     if(app)
     {
-        items.push({text: lang.reload, onClick: function(){reloadApp(code)}});
-        if(code !== 'my') items.push({text: lang.close, onClick: function(){closeApp(code)}});
+        items.push({text: langData.reload, onClick: function(){reloadApp(code)}});
+        if(code !== 'my') items.push({text: langData.close, onClick: function(){closeApp(code)}});
     }
 
     zui.ContextMenu.show({hideOthers: true, element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items, event: event, onClickItem: function(info){info.event.preventDefault();}});
@@ -838,7 +841,8 @@ $.apps = $.extend(apps,
     updateAppsMenu:    updateAppsMenu,
     changeAppsLang:    changeAppsLang,
     changeAppsTheme:   changeAppsTheme,
-    updateUserToolbar: updateUserToolbar
+    updateUserToolbar: updateUserToolbar,
+    closeApp:          closeApp,
 });
 
 window.notifyMessage = function(data)
@@ -911,7 +915,7 @@ window.browserNotify = function()
                     placement: 'bottom-right',
                     time: 0,
                     icon: 'envelope-o',
-                    className: 'primary-pale'
+                    className: 'bg-secondary-50 text-secondary-600 messager-notice'
                 });
             }
             else
@@ -936,11 +940,4 @@ window.startCron = function(restart)
 
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
-if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'text-primary bg-primary-100 bg-opacity-90' });
-
-function hideVisionTips()
-{
-  $('#visionTips').remove();
-  var link = $.createLink('my', 'ajaxSaveVisionTips');
-  $.post(link, {fields: 1});
-}
+if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'bg-secondary-50 text-secondary-600 score-notice'});

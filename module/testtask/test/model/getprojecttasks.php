@@ -3,9 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project')->gen(100);
+$project = zenData('project')->gen(100);
 
-$testtask = zdTable('testtask');
+$testtask = zenData('testtask');
 $testtask->id->range('1-500');
 $testtask->project->range('1-100');
 $testtask->product->range('1-100');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=1
 
 */
 
-zdTable('repo')->config('repo', true)->gen(4);
+zenData('repo')->loadYaml('repo', true)->gen(4);
 
 $repo = new repoTest();
 r($repo->getListTest(0, 'Gitlab')) && p('1:name') && e('testHtml'); // 获取Gitlab类型版本库列表

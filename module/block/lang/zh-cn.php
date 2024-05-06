@@ -48,6 +48,10 @@ $lang->block->contribute      = '我的贡献';
 $lang->block->finish          = '已完成';
 $lang->block->guide           = '使用帮助';
 $lang->block->teamAchievement = '团队成就';
+$lang->block->learnMore       = '了解更多';
+$lang->block->prevPage        = '上一页';
+$lang->block->nextPage        = '下一页';
+$lang->block->experience      = '开始体验';
 
 $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
@@ -101,6 +105,7 @@ $lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span c
 $lang->block->cannotPlaceInLeft  = '此区块无法放置在左侧。';
 $lang->block->cannotPlaceInRight = '此区块无法放置在右侧。';
 $lang->block->tutorial           = '进入新手教程';
+$lang->block->filterProject      = "{$lang->projectCommon}筛选";
 
 $lang->block->productName   = $lang->productCommon . '名称';
 $lang->block->totalStory    = '总' . $lang->SRCommon;
@@ -117,7 +122,11 @@ $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
 $lang->block->summary = new stdclass();
-$lang->block->summary->welcome = '禅道已陪伴您%s，<strong>昨日</strong>完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务、解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug，今日期待优秀的您来处理';
+$lang->block->summary->welcome    = '禅道已陪伴您%s： %s今日期待优秀的您来处理！';
+$lang->block->summary->yesterday  = '<strong>昨日</strong>';
+$lang->block->summary->noWork     = '您暂未处理任务和Bug，';
+$lang->block->summary->finishTask = '完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务';
+$lang->block->summary->fixBug     = '解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug';
 
 $lang->block->dashboard['default'] = '仪表盘';
 $lang->block->dashboard['my']      = '地盘';
@@ -183,19 +192,19 @@ $lang->block->default['qa'][] = array('title' => '指派给我的用例列表', 
 
 $lang->block->default['full']['my'][] = array('title' => '欢迎总览',                               'module' => 'welcome',         'code' => 'welcome',         'width' => '2');
 $lang->block->default['full']['my'][] = array('title' => "使用帮助",                               'module' => 'guide',           'code' => 'guide',           'width' => '2');
-$lang->block->default['full']['my'][] = array('title' => "我近期参与的{$lang->projectCommon}",     'module' => 'project',         'code' => 'recentproject',   'width' => '2');
 $lang->block->default['full']['my'][] = array('title' => "我的待处理",                             'module' => 'assigntome',      'code' => 'assigntome',      'width' => '2', 'params' => array('todoCount' => '20',  'taskCount' => '20', 'bugCount' => '20', 'riskCount' => '20', 'issueCount' => '20', 'storyCount' => '20', 'reviewCount' => '20', 'meetingCount' => '20', 'feedbackCount' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->projectCommon}统计",     'module' => 'project',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->execution->common}统计", 'module' => 'execution',       'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "未关闭{$lang->productCommon}的测试统计", 'module' => 'qa',              'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "我近期参与的{$lang->projectCommon}",     'module' => 'project',         'code' => 'recentproject',   'width' => '2');
 $lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->projectCommon}列表",     'module' => 'project',         'code' => 'project',         'width' => '2', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->execution->common}统计", 'module' => 'execution',       'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->projectCommon}统计",     'module' => 'project',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "未关闭{$lang->productCommon}的测试统计", 'module' => 'qa',              'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "禅道动态",                               'module' => 'zentaodynamic',   'code' => 'zentaodynamic',   'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "团队成就",                               'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "最新动态",                               'module' => 'dynamic',         'code' => 'dynamic',         'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "团队成就",                               'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product',         'code' => 'overview',        'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon}总览",             'module' => 'project',         'code' => 'overview',        'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "{$lang->executionCommon}总览",           'module' => 'execution',       'code' => 'overview',        'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "{$lang->execution->common}总览",         'module' => 'execution',       'code' => 'overview',        'width' => '1');
 
 $lang->block->default['doc'][] = array('title' => '文档统计',                   'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => '我收藏的文档',               'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
@@ -217,7 +226,7 @@ $lang->block->availableBlocks['case']        = '用例';
 $lang->block->availableBlocks['story']       = "{$lang->SRCommon}";
 $lang->block->availableBlocks['requirement'] = "{$lang->URCommon}";
 $lang->block->availableBlocks['product']     = $lang->productCommon . '列表';
-$lang->block->availableBlocks['execution']   = $lang->executionCommon . '列表';
+$lang->block->availableBlocks['execution']   = $lang->execution->common . '列表';
 $lang->block->availableBlocks['plan']        = "计划列表";
 $lang->block->availableBlocks['release']     = '发布列表';
 $lang->block->availableBlocks['build']       = '版本列表';
@@ -228,6 +237,7 @@ $lang->block->availableBlocks['issue']       = '问题';
 $lang->block->availableBlocks['meeting']     = '会议';
 $lang->block->availableBlocks['feedback']    = '反馈';
 $lang->block->availableBlocks['ticket']      = '工单';
+$lang->block->availableBlocks['demand']      = '需求池需求';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon}总览";
@@ -248,6 +258,7 @@ $lang->block->modules['waterfallproject']->availableBlocks['projectdynamic'] = '
 
 $lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
+$lang->block->modules['ipdproject']    = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks['overview']         = "{$lang->productCommon}总览";
@@ -524,12 +535,13 @@ $lang->block->welcome->reviewByMe = '待我评审';
 $lang->block->welcome->assignToMe = '指派给我';
 
 $lang->block->welcome->reviewList = array();
-$lang->block->welcome->reviewList['story'] = $lang->SRCommon . '数';
+$lang->block->welcome->reviewList['story']      = $lang->SRCommon . '数';
+$lang->block->welcome->reviewList['reviewByMe'] = '待我评审数';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']     = '任务数';
-$lang->block->welcome->assignList['bug']      = 'BUG数';
-$lang->block->welcome->assignList['story']    = $lang->SRCommon . '数';
+if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'BUG数';
+if($config->vision != 'or') $lang->block->welcome->assignList['story'] = $lang->SRCommon . '数';
 $lang->block->welcome->assignList['testcase'] = '用例数';
 
 $lang->block->customModeTip = new stdClass();
@@ -581,8 +593,8 @@ $lang->block->projectstatistic->day              = '天';
 $lang->block->projectstatistic->hour             = 'h';
 $lang->block->projectstatistic->leftDaysPre      = '距项目结束还剩';
 $lang->block->projectstatistic->delayDaysPre     = '项目已延期';
-$lang->block->projectstatistic->existRisks       = '存在风险：';
-$lang->block->projectstatistic->existIssues      = '存在问题：';
+$lang->block->projectstatistic->existRisks       = '存在风险';
+$lang->block->projectstatistic->existIssues      = '存在问题';
 $lang->block->projectstatistic->lastestExecution = '最新执行';
 $lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon}已关闭";
 $lang->block->projectstatistic->longTimeProject  = "长期{$lang->projectCommon}";
@@ -608,7 +620,7 @@ $lang->block->qastatistic->resolvedYesterday = '昨日解决';
 $lang->block->qastatistic->resolvedToday     = '今日解决';
 $lang->block->qastatistic->closedYesterday   = '昨日关闭';
 $lang->block->qastatistic->closedToday       = '今日关闭';
-$lang->block->qastatistic->latestTesttask    = '近期测试单';
+$lang->block->qastatistic->unclosedTesttasks = '未关闭的测试单';
 $lang->block->qastatistic->bugStatusStat     = '月度Bug变化情况';
 
 $lang->block->bugstatistic = new stdclass();
@@ -632,9 +644,9 @@ $lang->block->executionstatistic->undoneTask        = '未完成';
 $lang->block->executionstatistic->yesterdayDoneTask = '昨日完成';
 
 $lang->block->executionoverview = new stdclass();
-$lang->block->executionoverview->totalExecution = "{$lang->executionCommon}总量";
+$lang->block->executionoverview->totalExecution = "{$lang->execution->common}总量";
 $lang->block->executionoverview->thisYear       = '今年完成';
-$lang->block->executionoverview->statusCount    = "未关闭{$lang->executionCommon}状态分布";
+$lang->block->executionoverview->statusCount    = "未关闭{$lang->execution->common}状态分布";
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->overview                = '总览数据';
@@ -691,6 +703,7 @@ $lang->block->teamachievement->runCases       = '执行的用例数';
 $lang->block->teamachievement->consumedHours  = '消耗工时';
 $lang->block->teamachievement->totalWorkload  = '累计工作量';
 $lang->block->teamachievement->vs             = '较昨日';
+$lang->block->teamachievement->accrued        = '累计';
 
 $lang->block->estimate = new stdclass();
 $lang->block->estimate->costs    = '人工';
@@ -720,11 +733,10 @@ $lang->block->tooltips['effectiveStory']    = "按{$lang->productCommon}统计�
 $lang->block->tooltips['deliveredStory']    = "按{$lang->productCommon}统计的已交付{$lang->SRCommon}数：{$lang->productCommon}中{$lang->SRCommon}个数求和，所处阶段为已发布或关闭原因为已完成，过滤已删除的{$lang->SRCommon}，过滤已删除的{$lang->productCommon}。";
 $lang->block->tooltips['costs']             = "已投入 = 已消耗工时 / 后台配置的每日可用工时";
 $lang->block->tooltips['sv']                = "进度偏差率 = (EV - PV) / PV * 100% ";
-$lang->block->tooltips['ev']                = "<strong>实际完成</strong>=按{$lang->projectCommon}统计的任务预计工时数*按{$lang->projectCommon}统计的任务进度，过滤已删除的任务，过滤已取消的任务，过滤已删除{$lang->execution->common}下的任务，过滤已删除的{$lang->projectCommon}。<br/>
-<strong>按{$lang->projectCommon}统计的任务预计工时数</strong>：{$lang->projectCommon}中任务的预计工时数求和，过滤已删除的任务，过滤父任务，过滤已删除{$lang->execution->common}的任务，过滤已删除的{$lang->projectCommon}。";
-$lang->block->tooltips['pv']                = "计划完成:瀑布{$lang->projectCommon}中所有任务的预计工时之和，过滤已删除的任务，过滤已取消的任务，过滤已删除的{$lang->execution->common}的任务，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['ev']                = "任务状态为已完成，累加预计工时。<br/>任务状态为已关闭且关闭原因为已完成，累加预计工时。<br/>任务状态为进行中、已暂停，累加（任务预计工时*任务进度）。<br/>";
+$lang->block->tooltips['pv']                = "任务截至日期小于等于本周结束日期，累加预计工时。<br/>任务预计开始日期小于或等于本周结束日期，预计截至日期大于本周结束日期，累加预计工时=(任务的预计工时÷任务工期天数)x 任务预计开始到本周结束日期的天数。<br/>";
 $lang->block->tooltips['cv']                = "成本偏差率 = (EV - AC) / AC * 100%";
-$lang->block->tooltips['ac']                = "实际花费：瀑布{$lang->projectCommon}中所有日志记录的工时之和，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['ac']                = "瀑布{$lang->projectCommon}中本周结束之前所有日志记录的工时之和，过滤已删除的{$lang->projectCommon}。";
 $lang->block->tooltips['executionProgress'] = "<strong>{$lang->execution->common}进度</strong>=按{$lang->execution->common}统计的任务消耗工时数 /（按{$lang->execution->common}统计的任务消耗工时数+按{$lang->execution->common}统计的任务剩余工时数）<br/>
 <strong>按{$lang->execution->common}统计的任务消耗工时数</strong>：{$lang->execution->common}中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。<br/>
 <strong>按{$lang->execution->common}统计的任务剩余工时数</strong>：{$lang->execution->common}中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。";

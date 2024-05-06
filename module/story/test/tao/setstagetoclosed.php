@@ -10,11 +10,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('storystage')->gen(0);
-$story = zdTable('story');
+zenData('storystage')->gen(0);
+$story = zenData('story');
 $story->branch->range('0');
 $story->gen(5);
 global $tester;

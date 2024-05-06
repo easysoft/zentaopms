@@ -36,10 +36,7 @@ toolbar
 $blocks = array();
 foreach($spaceList as $space)
 {
-    $spaceDescTitle = empty($space->desc) ? $lang->kanban->emptyDesc : str_replace("\n", '', strip_tags($space->desc));
-    $pattern        = '/<br[^>]*>|<img[^>]*>/';
-    $spaceDesc      = empty($space->desc) ? $lang->kanban->emptyDesc : preg_replace($pattern, '', $space->desc);
-
+    $pattern      = '/<br[^>]*>|<img[^>]*>/';
     $childActions = array();
     $childActions[] = array('icon' => 'cog-outline', 'url' => createLink('kanban', 'editSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->settingSpace, 'data-toggle' => 'modal');
     if($space->status != 'closed') $childActions[] = array('icon' => 'off',   'url' => createLink('kanban', 'closeSpace',    "spaceID={$space->id}"), 'text' => $lang->kanban->closeSpace,    'data-toggle' => 'modal');
@@ -130,7 +127,6 @@ foreach($spaceList as $space)
         set::titleIcon('cube'),
         $space->status == 'closed' ? to::titleSuffix(span(set::className('label gray'), $lang->kanban->closed)) : null,
         set::headingActions($headingActions),
-        div(set::className('p-2'), html($spaceDesc)),
         !empty($space->kanbans) ? div(set::className('flex flex-wrap'), $kanbans) : div(set::className('dtable'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanban->empty)))
     );
 }

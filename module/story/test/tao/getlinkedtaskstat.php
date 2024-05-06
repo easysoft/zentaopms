@@ -24,10 +24,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->story->range('1');
 $task->execution->range('1{2},2{2},3{2}');
 $task->type->range('devel{6},test{6}');

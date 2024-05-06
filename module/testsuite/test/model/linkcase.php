@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testsuite.class.php';
+include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
 su('admin');
 
-zdTable('testsuite')->gen(2);
-zdTable('case')->gen(3);
+zenData('testsuite')->gen(2);
+zenData('case')->gen(3);
 /**
 
 title=测试 testsuiteModel->linkCase();

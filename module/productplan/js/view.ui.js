@@ -46,6 +46,40 @@ window.onSearchLinks = function(type, result)
     return false;
 };
 
+/**
+ * 计算表格信息的统计。
+ * Set summary for table footer.
+ *
+ * @param  element element
+ * @param  array   checkedIdList
+ * @access public
+ * @return object
+ */
+window.setStatistics = function(element, checkedIdList)
+{
+    const checkedTotal = checkedIdList.length;
+    if(checkedTotal == 0) return {html: summary};
+
+    let checkedEstimate = 0;
+    let checkedCase     = 0;
+    let total           = 0;
+
+    checkedIdList.forEach((rowID) => {
+        const story  = element.getRowInfo(rowID);
+        total += 1;
+        if(story)
+        {
+            checkedEstimate += parseFloat(story.data.estimate);
+            if(cases[rowID]) checkedCase += 1;
+        }
+    })
+
+    const rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
+    return {html: checkedSummary.replace('%total%', checkedTotal)
+        .replace('%estimate%', checkedEstimate.toFixed(1))
+        .replace('%rate%', rate)};
+}
+
 $(document).off('click', '.batch-btn > a, .batch-btn').on('click', '.batch-btn > a, .batch-btn', function()
 {
     const $this  = $(this);

@@ -11,11 +11,11 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/score.class.php';
+include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 $time = date('Y-m-d 12:00:00', strtotime('-1 day'));
-$scoreTable = zdTable('score')->config('score');
+$scoreTable = zenData('score')->loadYaml('score');
 $scoreTable->time->range("`{$time}`");
 $scoreTable->score->range('10');
 $scoreTable->gen(20);

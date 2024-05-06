@@ -16,14 +16,20 @@ jsVar('yesterdayLabel', $lang->yesterday);
 
 $blockNavCode = 'nav-' . uniqid();
 
-$index = 0;
-$count = count($hasViewPriv);
 $menus = array();
 $moreMenus = array();
 foreach($hasViewPriv as $type => $bool)
 {
+    $data = $type == 'story' ? $stories : ${"{$type}s"};
+    if($type != 'todo' && empty($data)) unset($hasViewPriv[$type]);
+}
+
+$index = 1;
+$count = count($hasViewPriv);
+foreach($hasViewPriv as $type => $bool)
+{
     $selected = key($hasViewPriv);
-    if(($longBlock && $count > 9 && $index >= 8) || (!$longBlock && $count > 3 && $index >= 2))
+    if(($longBlock && $count > 5 && $index > 5) || (!$longBlock && $count > 1 && $index > 1))
     {
         $moreMenus[] = array('text' => $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type), 'data-toggle' => 'tab', 'href' => "#assigntome{$type}Tab{$blockNavCode}");
     }
@@ -44,7 +50,7 @@ foreach($hasViewPriv as $type => $bool)
     $index ++;
 }
 
-if(($longBlock && $count > 9) || (!$longBlock && $count > 4))
+if(($longBlock && $count > 5) || (!$longBlock && $count > 1))
 {
     $menus[]  = li
     (
@@ -76,21 +82,21 @@ foreach($hasViewPriv as $type => $bool)
 
     if(empty($config->block->{$configType}->dtable->fieldList)) continue;
     if(!$longBlock && !empty($config->block->{$configType}->dtable->short->fieldList)) $config->block->{$configType}->dtable->fieldList = $config->block->{$configType}->dtable->short->fieldList;
-    if(empty($data)) $data = array();
 
     if($type == 'review')
     {
         $statusList = array();
         foreach($data as $review)
         {
-            $review->module = $review->type;
-
             $reviewType = $review->type;
             if($reviewType == 'projectreview') $reviewType = 'review';
+
+            $review->module = $reviewType;
 
             $typeName = '';
             if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
             if($reviewType == 'story')                $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
+            if($review->type == 'projectreview')      $typeName = $lang->project->common;
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);
@@ -141,6 +147,7 @@ blockPanel
     div($contents),
     h::css
     (
+        '.block-assigntome .panel-heading .panel-title {overflow: hidden; text-overflow: clip; white-space: nowrap; width : 40%}',
         '.block-assigntome .nav > .nav-item > a {padding: 0 16px; border-radius: 4px; height: 28px; color: var(--color-gray-700)}',
         '.block-assigntome .nav > .nav-item > a.active {font-weight: bold; color: var(--color-gray-900); background: var(--color-primary-50)}'
     )

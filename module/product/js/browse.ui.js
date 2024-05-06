@@ -37,6 +37,14 @@ $(document).off('click', '.batchUnlinkStory').on('click', '.batchUnlinkStory', f
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
+    /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+    /* Process selected child story ID. */
+    for(i in checkedList)
+    {
+        const storyID = checkedList[i];
+        if(storyID.includes('-')) checkedList[i] = storyID.slice(storyID.indexOf('-') + 1);
+    }
+
     let batchUnlinkStoryURL = $.createLink('projectstory', 'batchUnlinkStory', 'projectID=' + projectID + '&stories=' + encodeURIComponent(checkedList.join(',')));
     $.get(batchUnlinkStoryURL, function(data)
     {

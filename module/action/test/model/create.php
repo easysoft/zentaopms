@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('actionrecent')->gen(0);
-zdTable('action')->gen(0);
-zdTable('file')->gen(0);
-zdTable('task')->gen(1);
-zdTable('story')->gen(1);
-zdTable('project')->config('execution')->gen(1);
+zenData('actionrecent')->gen(0);
+zenData('action')->gen(0);
+zenData('file')->gen(0);
+zenData('task')->gen(1);
+zenData('story')->gen(1);
+zenData('project')->loadYaml('execution')->gen(1);
 
 /**
 

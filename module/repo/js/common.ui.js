@@ -71,7 +71,7 @@ function arrowTabs(domID, shift, hideRightBtn)
 
     var tabItemWidth = 0;
     const $tabs = $('#' + domID + ' > .tabs-header > .nav-tabs')[0];
-    if($tabs) tabItemWidth = $tabs.clientWidth;
+    if($tabs) tabItemWidth = $tabs.scrollWidth;
     var tabsWidth    = $('#' + domID)[0].clientWidth;
     if($('#' + domID + ' .close-bugs').length) tabsWidth = tabsWidth * 0.7;
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-zdTable('dept')->gen(1);
+zenData('dept')->gen(1);
 
 /**
 
@@ -20,7 +20,7 @@ cid=1
 
 */
 
-zdTable('screen')->gen(0);
+zenData('screen')->gen(0);
 
 $screen = new screenTest();
 

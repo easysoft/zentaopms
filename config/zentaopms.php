@@ -10,6 +10,11 @@
 * @link        http://www.zentao.net
 */
 
+$config->contactUs['phone']  = '4006-8899-23';
+$config->contactUs['email']  = 'co@zentao.net';
+$config->contactUs['qq']     = '1492153927';
+$config->contactUs['wechat'] = '13730922971';
+
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
 $config->productCommonList['zh-cn'][1] = '项目';
@@ -248,8 +253,6 @@ $config->openMethods[] = 'testcase.savexmindimport';
 $config->openMethods[] = 'search.buildzinform';
 $config->openMethods[] = 'search.buildzinquery';
 $config->openMethods[] = 'search.savezinquery';
-$config->openMethods[] = 'search.buildoldform';
-$config->openMethods[] = 'search.saveoldquery';
 $config->openMethods[] = 'space.createapplication';
 $config->openMethods[] = 'ai.adminindex';
 $config->openMethods[] = 'sonarqube.create';
@@ -321,8 +324,6 @@ $config->openMethods[] = 'store.browse';
 $config->openMethods[] = 'store.appview';
 $config->openMethods[] = 'system.editdomain';
 $config->openMethods[] = 'doc.uploaddocs';
-$filter->testreport->default->cookie['preBranch']    = 'reg::word';
-
 $config->openMethods[] = 'cron.schedule';
 $config->openMethods[] = 'cron.consume';
 
@@ -399,6 +400,10 @@ define('TABLE_DESIGN',          '`' . $config->db->prefix . 'design`');
 define('TABLE_DESIGNSPEC',      '`' . $config->db->prefix . 'designspec`');
 define('TABLE_DOCLIB',          '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',             '`' . $config->db->prefix . 'doc`');
+define('TABLE_DEMANDPOOL',      '`' . $config->db->prefix . 'demandpool`');
+define('TABLE_DEMAND',          '`' . $config->db->prefix . 'demand`');
+define('TABLE_DEMANDSPEC',      '`' . $config->db->prefix . 'demandspec`');
+define('TABLE_DEMANDREVIEW',    '`' . $config->db->prefix . 'demandreview`');
 define('TABLE_API',             '`' . $config->db->prefix . 'api`');
 define('TABLE_API_SPEC',        '`' . $config->db->prefix . 'apispec`');
 define('TABLE_APISTRUCT',       '`' . $config->db->prefix . 'apistruct`');
@@ -596,6 +601,13 @@ define('TABLE_AI_ASSISTANT',        '`' . $config->db->prefix . 'ai_assistant`')
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 
+if(!defined('TABLE_ROADMAP'))        define('TABLE_ROADMAP',        '`' . $config->db->prefix . 'roadmap`');
+if(!defined('TABLE_ROADMAPSTORY'))   define('TABLE_ROADMAPSTORY',   '`' . $config->db->prefix . 'roadmapstory`');
+if(!defined('TABLE_CHARTER'))        define('TABLE_CHARTER',        '`' . $config->db->prefix . 'charter`');
+if(!defined('TABLE_MARKET'))         define('TABLE_MARKET',         '`' . $config->db->prefix . 'market`');
+if(!defined('TABLE_MARKETREPORT'))   define('TABLE_MARKETREPORT',   '`' . $config->db->prefix . 'marketreport`');
+if(!defined('TABLE_MARKETRESEARCH')) define('TABLE_MARKETRESEARCH', '`' . $config->db->prefix . 'project`');
+
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
 $config->objectTables['productplan']    = TABLE_PRODUCTPLAN;
@@ -619,6 +631,10 @@ $config->objectTables['user']           = TABLE_USER;
 $config->objectTables['api']            = TABLE_API;
 $config->objectTables['doc']            = TABLE_DOC;
 $config->objectTables['doclib']         = TABLE_DOCLIB;
+$config->objectTables['demand']         = TABLE_DEMAND;
+$config->objectTables['demandpool']     = TABLE_DEMANDPOOL;
+$config->objectTables['demandspec']     = TABLE_DEMANDSPEC;
+$config->objectTables['demandreview']   = TABLE_DEMANDREVIEW;
 $config->objectTables['todo']           = TABLE_TODO;
 $config->objectTables['custom']         = TABLE_LANG;
 $config->objectTables['branch']         = TABLE_BRANCH;
@@ -676,6 +692,12 @@ $config->objectTables['design']         = TABLE_DESIGN;
 $config->objectTables['prompt']         = TABLE_AI_PROMPT;
 $config->objectTables['aiapp']          = TABLE_AI_MINIPROGRAM;
 $config->objectTables['miniprogram']    = TABLE_AI_MINIPROGRAM;
+$config->objectTables['roadmap']        = TABLE_ROADMAP;
+$config->objectTables['charter']        = TABLE_CHARTER;
+$config->objectTables['market']         = TABLE_MARKET;
+$config->objectTables['marketreport']   = TABLE_MARKETREPORT;
+$config->objectTables['marketresearch'] = TABLE_PROJECT;
+$config->objectTables['researchstage']  = TABLE_PROJECT;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
@@ -720,7 +742,7 @@ $config->db->sqliteBlacklist  = array('sqlite_queue', 'cron');
 $config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback');
 $config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase', 'testtask', 'branch', 'tree');
 $config->excludeBranchMenu    = array('product-dashboard', 'product-view');
-$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit', 'metric-preview', 'metric-browse', 'metric-view', 'metriclib-browse', 'qa-index', 'caselib-create', 'feedback-batchedit', 'feedback-batchclose');
+$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'metric-preview', 'metric-browse', 'metric-view', 'metriclib-browse', 'qa-index', 'caselib-create', 'feedback-batchedit', 'feedback-batchclose', 'dimension-browse');
 $config->hasSwitcherModules   = array('design');
 $config->hasSwitcherMethods   = array('project-bug', 'project-testcase', 'execution-bug', 'execution-testcase', 'testtask-cases', 'testtask-view', 'testtask-report', 'testtask-groupcase', 'testtask-linkcase');
 $config->excludeSwitcherList  = array();

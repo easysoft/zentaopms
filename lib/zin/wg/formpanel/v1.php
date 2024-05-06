@@ -158,7 +158,8 @@ class formPanel extends panel
 
             if($listFields && $key)
             {
-                $urlParams        = "module={$app->rawModule}&section=custom&key={$key}";
+                /* Custom button submit params. */
+                $urlParams        = $this->prop('customUrlParams') ? $this->prop('customUrlParams') : "module={$app->rawModule}&section=custom&key={$key}";
                 $headingActions[] = formSettingBtn
                 (
                     set::customFields(array('list' => $listFields, 'show' => $showFields)),
@@ -256,6 +257,7 @@ class formPanel extends panel
                 set($this->props->pick(array_keys($props))),
                 $this->children(),
                 $this->prop('showExtra') ? $this->buildExtraBatchItem() : null,
+                set::hiddenFields($hiddenFields),
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
             );
@@ -291,8 +293,8 @@ class formPanel extends panel
         $props = parent::buildProps();
         $props[] = setClass("is-$defaultMode");
 
-        if($width)     $props[] = setCssVar('--zt-page-form-max-width', $width);
-        elseif($batch) $props[] = setCssVar('--zt-page-form-max-width', 'auto');
+        if($width)     $props[] = setCssVar('--zt-panel-form-max-width', $width);
+        elseif($batch) $props[] = setCssVar('--zt-panel-form-max-width', 'auto');
         if($shadow)    $props[] = setClass('shadow');
 
         return $props;

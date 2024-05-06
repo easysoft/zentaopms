@@ -188,6 +188,7 @@ class datatableModel extends model
                 if($field->buildin) continue;
                 $this->config->$module->datatable->fieldList[$field->field]['title']    = $field->name;
                 $this->config->$module->datatable->fieldList[$field->field]['width']    = '120';
+                $this->config->$module->datatable->fieldList[$field->field]['type']     = 'html';
                 $this->config->$module->datatable->fieldList[$field->field]['fixed']    = 'no';
                 $this->config->$module->datatable->fieldList[$field->field]['required'] = 'no';
             }

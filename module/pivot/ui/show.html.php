@@ -43,7 +43,7 @@ foreach($pivot->filters as $filter)
 
 $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs)
 {
-    $clickable = $this->pivot->isClickable($pivot, 'design');
+    $clickable = !$pivot->builtin;
     list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
 
     return array
@@ -53,6 +53,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             setID('pivotPanel'),
             set::title($pivotName),
             set::shadow(false),
+            set::headingClass('h-14'),
             set::bodyClass('pt-0'),
             $pivot->desc ? to::titleSuffix(
                 icon
@@ -78,14 +79,15 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     set::text($lang->pivot->showPivot),
                     on::click("toggleShowMode('group')"),
                 ),
-                (hasPriv('pivot', 'design') and $clickable) ? item(set(array
+                $this->config->edition != 'open' ? array(
+                (hasPriv('pivot', 'design') && $clickable) ? item(set(array
                 (
                     'text'  => $lang->pivot->designAB,
                     'icon'  => 'design',
                     'class' => 'ghost',
                     'url'   => inlink('design', "id=$pivot->id"),
                 ))) : null,
-                (hasPriv('pivot', 'edit') and $clickable) ? item(set(array
+                (hasPriv('pivot', 'edit') && $clickable) ? item(set(array
                 (
                     'text'  => $lang->edit,
                     'icon'  => 'edit',
@@ -102,7 +104,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     'class' => 'ghost ajax-submit',
                     'url'   => inlink('delete', "id=$pivot->id&confirm=yes&isOld=no"),
                     'data-confirm' => $lang->pivot->deleteTip,
-                ))) : null
+                ))) : null) : null
             ),
             $filters ? div
             (

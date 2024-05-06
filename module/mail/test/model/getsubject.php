@@ -8,20 +8,20 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
+include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
-$testtask = zdTable('testtask');
+$testtask = zenData('testtask');
 $testtask->createdBy->range('admin');
 $testtask->createdDate->range('`' . date('Y-m-d H:i:s') . '`');
 $testtask->gen(2);
-zdTable('doc')->gen(2);
-zdTable('docaction')->gen(0);
-zdTable('task')->gen(2);
-zdTable('story')->gen(2);
-zdTable('bug')->gen(2);
-zdTable('product')->gen(2);
-$project = zdTable('project');
+zenData('doc')->gen(2);
+zenData('docaction')->gen(0);
+zenData('task')->gen(2);
+zenData('story')->gen(2);
+zenData('bug')->gen(2);
+zenData('product')->gen(2);
+$project = zenData('project');
 $project->id->range('101-105');
 $project->name->range('1-5')->prefix('迭代');
 $project->gen(2);

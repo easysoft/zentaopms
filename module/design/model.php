@@ -60,8 +60,9 @@ class designModel extends model
         $this->loadModel('action');
         foreach($designs as $rowID => $design)
         {
-            $design->product = $productID;
-            $design->project = $projectID;
+            $design->product   = $productID;
+            $design->project   = $projectID;
+            $design->createdBy = $this->app->user->account;
             $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->batchcreate->requiredFields, 'notempty')->exec();
 
             if(dao::isError())
@@ -381,10 +382,6 @@ class designModel extends model
             {
                 $this->session->set('designQuery', $query->sql);
                 $this->session->set('designForm', $query->form);
-            }
-            else
-            {
-                $this->session->set('designQuery', ' 1 = 1');
             }
         }
         else

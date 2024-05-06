@@ -3,12 +3,12 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('doclib')->config('doclib')->gen(10);
-zdTable('module')->config('module')->gen(10);
-zdTable('api')->gen(10);
-zdTable('apistruct')->gen(10);
-zdTable('api_lib_release')->gen(0);
-zdTable('apispec')->gen(0);
+zenData('doclib')->loadYaml('doclib')->gen(10);
+zenData('module')->loadYaml('module')->gen(10);
+zenData('api')->gen(10);
+zenData('apistruct')->gen(10);
+zenData('api_lib_release')->gen(0);
+zenData('apispec')->gen(0);
 
 /**
 

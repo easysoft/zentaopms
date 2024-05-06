@@ -17,9 +17,9 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-zdTable('review')->gen(20);
-zdTable('object')->gen(20);
-$project = zdTable('project');
+zenData('review')->gen(20);
+zenData('object')->gen(20);
+$project = zenData('project');
 $project->type->range('stage');
 $project->attribute->range('devel');
 $project->begin->range('`2023-09-28`');

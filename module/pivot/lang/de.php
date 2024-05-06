@@ -138,7 +138,7 @@ $lang->pivot->id            = 'ID';
 $lang->pivot->execution     = $lang->executionCommon;
 $lang->pivot->product       = $lang->productCommon;
 $lang->pivot->user          = 'Name';
-$lang->pivot->bug           = 'Bug';
+$lang->pivot->bugTotal      = 'Bug';
 $lang->pivot->task          = 'Aufgabe';
 $lang->pivot->estimate      = 'Schätzung(h)';
 $lang->pivot->consumed      = 'Verbraucht';
@@ -152,7 +152,7 @@ $lang->pivot->manhourTotal  = "Summe Stunden";
 $lang->pivot->validRate     = "Gültigkeitsrate";
 $lang->pivot->validRateTips = "Lösung ist gelöst/verschoben oder der Status ist gelöst/geschlossen.";
 $lang->pivot->unplanned     = 'Ungeplant';
-$lang->pivot->workhour      = 'Stunden/Tag';
+$lang->pivot->workday       = 'Stunden/Tag';
 $lang->pivot->diffDays      = 'Manntage';
 
 $lang->pivot->typeList['default'] = 'Standard';

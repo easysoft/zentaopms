@@ -248,6 +248,7 @@ $lang->project->summary                = "本页共 %s 个{$lang->projectCommon}
 $lang->project->allSummary             = "本页共 %s 个{$lang->projectCommon}，未开始 %s，进行中 %s，已挂起 %s，已关闭 %s 。";
 $lang->project->checkedSummary         = "选中 %total% 个{$lang->projectCommon}。";
 $lang->project->checkedAllSummary      = "选中 %total% 个{$lang->projectCommon}，未开始 %wait%，进行中 %doing%，已挂起 %suspended%，已关闭 %closed% 。";
+$lang->project->selectProductTip       = "未选择{$lang->productCommon}时，系统会自动创建和{$lang->projectCommon}同名{$lang->productCommon}。";
 
 $lang->project->error = new stdclass();
 $lang->project->error->existProductName = "{$lang->productCommon}名称已存在。";

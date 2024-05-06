@@ -763,17 +763,24 @@ class bugZen extends bug
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
+        if($this->config->edition == 'max') $identifyList = $this->loadModel('review')->getPairs(0, 0, true);
         foreach($bugs as $bug)
         {
             if($bug->story)  $storyIdList[$bug->story] = $bug->story;
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+
+            if(isset($identifyList))
+            {
+                $bug->injection = zget($identifyList, $bug->injection, '');
+                $bug->identify  = zget($identifyList, $bug->identify, '');
+            }
         }
 
         $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';
 
         /* Set view. */
-        $this->view->title           = $product->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->title           = $product->name . $this->lang->hyphen . $this->lang->bug->common;
         $this->view->product         = $product;
         $this->view->branch          = $branch;
         $this->view->browseType      = $browseType;
@@ -782,7 +789,6 @@ class bugZen extends bug
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();
-        $this->view->modules         = $this->tree->getOptionMenu((int)$product->id, 'bug', 0, $branch);
         $this->view->moduleTree      = $this->tree->getTreeMenu((int)$product->id, 'bug', 0, array('treeModel', 'createBugLink'), array(), $branch);
         $this->view->branchTagOption = $branchTagOption;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
@@ -880,6 +886,13 @@ class bugZen extends bug
         $moduleID  = (int)$bug->moduleID;
         $modules   = $this->tree->getOptionMenu($productID, 'bug', 0, ($branch === 'all' || !isset($bug->branches[$branch])) ? 'all' : $branch);
         $moduleID  = isset($modules[$moduleID]) ? $moduleID : '';
+
+        /* Get module owner. */
+        if(!empty($moduleID))
+        {
+            list($account, $realname) = $this->bug->getModuleOwner($moduleID, $productID);
+            $this->updateBug($bug, array('assignedTo' => $account));
+        }
 
         return $this->updateBug($bug, array('modules' => $modules, 'moduleID' => $moduleID));
     }
@@ -982,6 +995,7 @@ class bugZen extends bug
         {
             $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
         }
+        $builds = $this->addReleaseLabelForBuilds($productID, $builds);
 
         return $this->updateBug($bug, array('builds' => $builds));
     }
@@ -1054,8 +1068,9 @@ class bugZen extends bug
         $bug = $this->getBuildsForCreate($bug);
         $bug = $this->getStoriesForCreate($bug);
         $bug = $this->gettasksForCreate($bug);
+        if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
 
-        $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+        $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->hyphen . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
@@ -1113,8 +1128,9 @@ class bugZen extends bug
         unset($productBugs[$bug->id]);
 
         /* Get execution pairs. */
-        $executions = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project);
-        if(!empty($bug->execution) && empty($executions[$bug->execution])) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
+        $unAllowedStage = array('request', 'design', 'review');
+        $executions     = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project, '', $unAllowedStage);
+        if(!empty($bug->execution) && empty($executions[$bug->execution]) && !in_array($execution->attribute, $unAllowedStage)) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
         /* Get project pairs. */
         $projects = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
@@ -1128,18 +1144,20 @@ class bugZen extends bug
         /* Get branch options. */
         $branchTagOption = array();
         if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
+        if($this->config->edition == 'max') $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->project, $bug->product, true);
 
         $this->assignVarsForEdit($bug);
 
-        $this->view->title            = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
-        $this->view->bug              = $bug;
-        $this->view->product          = $product;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->projectID        = $bug->project;
-        $this->view->projects         = $projects;
-        $this->view->executions       = $executions;
-        $this->view->productBugs      = $productBugs;
-        $this->view->branchTagOption  = $branchTagOption;
+        $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
+        $this->view->bug                   = $bug;
+        $this->view->product               = $product;
+        $this->view->moduleOptionMenu      = $moduleOptionMenu;
+        $this->view->projectID             = $bug->project;
+        $this->view->projects              = $projects;
+        $this->view->executions            = $executions;
+        $this->view->productBugs           = $productBugs;
+        $this->view->branchTagOption       = $branchTagOption;
+        $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
     }
 
     /**
@@ -1196,10 +1214,13 @@ class bugZen extends bug
             $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
         }
 
+        $resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
+        $resolvedBuilds = $this->addReleaseLabelForBuilds($bug->product, $resolvedBuilds);
+
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
         $this->view->openedBuilds   = $openedBuilds;
-        $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
+        $this->view->resolvedBuilds = $resolvedBuilds;
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->stories        = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
@@ -1534,7 +1555,7 @@ class bugZen extends bug
         /* Get custom Fields. */
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
-        $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->colon) . "BUG") : '') . $this->lang->bug->batchEdit;
+        $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->hyphen) . "BUG") : '') . $this->lang->bug->batchEdit;
         $this->view->customFields = $customFields;
 
         /* Judge whether the editedBugs is too large and set session. */
@@ -2131,7 +2152,7 @@ class bugZen extends bug
         /* Respond when delete in task kanban. */
         if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}")));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}"), 'closeModal' => true));
     }
 
     /**
@@ -2380,5 +2401,33 @@ class bugZen extends bug
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
 
         return $chartOption;
+    }
+
+    /**
+     * 给版本中的发布增加标识。
+     * Add label for the release in the builds.
+     *
+     * @param  int       $productID
+     * @param  array     $builds
+     * @access protected
+     * @return array
+     */
+    protected function addReleaseLabelForBuilds(int $productID, array $builds): array
+    {
+        $releases = $this->loadModel('build')->getRelatedReleases(array($productID));
+
+        $buildItems = array();
+        foreach($builds as $buildID => $buildName)
+        {
+            $buildItem = array('value' => $buildID, 'text' => $buildName);
+            if(isset($releases[$buildID])) $buildItem['content'] = array('html' => "<div class='flex clip'>{$buildName}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
+            $buildItems[$buildID] = $buildItem;
+        }
+        foreach($releases as $release)
+        {
+            if(isset($buildItems[$release->shadow])) $buildItems[$release->shadow]['content'] = array('html' => "<div class='flex clip'>{$buildItems[$release->shadow]['text']}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
+        }
+
+        return array_values($buildItems);
     }
 }

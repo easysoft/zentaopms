@@ -503,7 +503,7 @@ class programModel extends model
             $query = str_replace('`id`','t1.id', $this->session->projectQuery);
         }
 
-        $stmt = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1');
+        $stmt = $this->dao->select('DISTINCT t1.*, CAST(t1.budget AS UNSIGNED) AS budget')->from(TABLE_PROJECT)->alias('t1');
         if($this->cookie->involved) $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
         $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
@@ -1339,15 +1339,16 @@ class programModel extends model
             $projects = $this->dao->select('distinct t1.project,t2.model,t2.deleted')->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.`date`')->ge($updateTime)
+                ->andWhere('t1.project')->ne(0)
                 ->fetchAll('project');
-            if(empty($projects)) return;
         }
+        if(empty($projects)) return;
 
         /* 1. Refresh stats to db. */
         $this->programTao->updateStats(array_keys($projects));
 
         /* 2. Update programStatsTime. */
-        $this->programTao->updateProcess();
+        $this->programTao->updateProgress();
 
         /* 3. Update projectStatsTime in config. */
         $this->loadModel('setting')->setItem('system.common.global.projectStatsTime', $now);
@@ -1381,5 +1382,29 @@ class programModel extends model
     public function checkPriv(int $programID):bool
     {
         return !empty($programID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->programs},", ",{$programID},") !== false));
+    }
+
+    /**
+     * 通过项目集ID获取子项目集和项目。
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getChildrenPairsByID(int $programID): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
+    /**
+     * 通过项目集ID获取产品。
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getProductPairsByID(int $programID): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs();
     }
 }

@@ -13,12 +13,12 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$action = zdTable('action');
+$action = zenData('action');
 $action->objectType->range('story');
 $action->objectID->range('1-2');
 $action->execution->range('0');
 $action->gen(4);
-$history = zdTable('history');
+$history = zenData('history');
 $history->action->range('1-4');
 $history->field->range('reviewer,reviewers');
 $history->old->range('``');

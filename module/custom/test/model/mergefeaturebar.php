@@ -9,11 +9,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
-zdTable('lang')->config('lang')->gen(10);
-zdTable('userquery')->gen(0);
-zdTable('user')->gen(5);
+zenData('lang')->loadYaml('lang')->gen(10);
+zenData('userquery')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $modules = array('my', 'product', 'project', 'execution');
@@ -25,4 +25,4 @@ r($customTester->mergeFeatureBarTest($modules[1], $methods[1])) && p()      && e
 r($customTester->mergeFeatureBarTest($modules[2], $methods[2])) && p('all') && e('全部'); // 获取项目-项目列表筛选标签
 r($customTester->mergeFeatureBarTest($modules[3], $methods[3])) && p()      && e('0');    // 获取执行-任务列表筛选标签
 
-zdTable('lang')->gen(0);
+zenData('lang')->gen(0);

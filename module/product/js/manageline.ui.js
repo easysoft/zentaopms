@@ -81,6 +81,14 @@ window.isProductLineEmpty = function()
     })
 }
 
+window.updateOrder = function(event, orders)
+{
+    let sortedIdList = {};
+    for(let i in orders) sortedIdList['orders[' + orders[i] + ']'] = i;
+
+    $.post($.createLink('tree', 'updateOrder', 'rootID=0&viewType=line'), sortedIdList);
+}
+
 $(function()
 {
     hasPrompted = false;

@@ -4,9 +4,9 @@ $(function()
     loadResult();
 });
 
-$('#runCaseModal').closest('.modal').on('hide.zui.modal', function()
+$('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function(e)
 {
-    if($('#casesResults').length == 0) loadCurrentPage();
+    if($(e.target).attr('id').indexOf('fileModal') == -1) loadCurrentPage();
 });
 
 /**
@@ -38,8 +38,8 @@ function realChange(event)
     else if($target.val() != '' && $preSelect.val() == 'pass')
     {
         $preSelect.zui('picker').$.changeState({value: 'fail'});
-        $preSelect.parent().addClass('has-error');
-        setTimeout(function(){$preSelect.parent().removeClass('has-error');},'1000');
+        setTimeout(function(){$preSelect.closest('.picker-box.form-group-wrapper').addClass('has-error');}, 10);
+        setTimeout(function(){$preSelect.closest('.picker-box.form-group-wrapper').removeClass('has-error');}, 1000);
     }
 }
 

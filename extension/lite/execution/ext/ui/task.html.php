@@ -54,20 +54,23 @@ toolbar
     hasPriv('task', 'report') ? item(set(array
     (
         'icon'  => 'bar-chart',
-        'class' => 'ghost',
+        'class' => 'btn ghost',
+        'text'  => $lang->task->report->common,
         'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
     (
         'icon'        => 'export',
-        'class'       => 'ghost export',
+        'class'       => 'btn ghost',
+        'text'        => $lang->export,
         'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
         'data-toggle' => 'modal'
     ))) : null,
     $importItems ? dropdown(
         btn(
-            setClass('ghost btn square btn-default'),
-            set::icon('import')
+            setClass('btn ghost'),
+            set::icon('import'),
+            $lang->import
         ),
         set::items($importItems),
         set::placement('bottom-end')

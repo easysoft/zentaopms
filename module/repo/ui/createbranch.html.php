@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-to::header(false);
-to::main(false);
-
 jsVar('module', $objectType);
 jsVar('linkParams', "objectID={$objectID}&repoID=%s");
 modalHeader
@@ -22,18 +19,27 @@ modalHeader
 );
 
 $branchDom = array();
-foreach($linkedBranches as $branchRepo => $branchName)
+foreach($linkedBranches as $branch)
 {
+    $branchName = helper::safe64Encode(base64_encode($branch->BType));
     $branchDom[] = h::tr
     (
-        h::td(zget($repoPairs, $branchRepo, '')),
-        h::td($branchName),
+        h::td(a
+        (
+            set::href(createLink('repo', 'browse', "repoID={$branch->BID}")),
+            zget($allRepos, $branch->BID, '')
+        )),
+        h::td(a(
+            set::href(createLink('repo', 'browse', "repoID={$branch->BID}&branch={$branchName}")),
+            $branch->BType
+        )),
         common::hasPriv($objectType, 'unlinkBranch') ? h::td(
             a
             (
                 setClass('btn ghost toolbar-item square size-sm text-primary ajax-submit'),
                 setData(array(
-                    'url'     => createLink($objectType, 'unlinkBranch', "objectID={$objectID}&repoID={$branchRepo}&branch=" . helper::safe64Encode($branchName)),
+                    'url'     => createLink($objectType, 'unlinkBranch'),
+                    'data'    => "{\"branch\": \"$branch->BType\", \"objectID\": $objectID, \"repoID\": $branch->BID}",
                     'confirm' => sprintf($lang->repo->notice->unlinkBranch, $lang->{$objectType}->common)
                 )),
                 set::title($lang->repo->unlink),
@@ -46,7 +52,7 @@ empty($linkedBranches) ? null : div
 (
     div
     (
-        setClass('panel-title text-lg'),
+        setClass('panel-title text-md'),
         $lang->repo->createdBranch
     ),
 
@@ -75,9 +81,28 @@ empty($linkedBranches) ? null : div
     )
 );
 
+if(empty($linkedBranches) && !$canCreate)
+{
+    div
+    (
+        setClass('canvas text-center py-2'),
+        p
+        (
+            setClass('py-2 my-2'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->noData
+            )
+        )
+    );
+}
+
 $canCreate ? formPanel
 (
+    setID('branchCreateForm'),
     set::title($lang->repo->createBranchAction),
+    set::titleClass('panel-title text-md'),
     formGroup
     (
         setID('repoID'),
@@ -95,7 +120,7 @@ $canCreate ? formPanel
     ),
     formGroup
     (
-        set::id('from'),
+        setID('branchFrom'),
         set::label($lang->repo->branchFrom),
         set::required(true),
         picker
@@ -110,7 +135,8 @@ $canCreate ? formPanel
     (
         set::name('branchName'),
         set::label($lang->repo->branchName),
-        set::required(true)
+        set::required(true),
+        set::value("{$objectType}-{$objectID}")
     ),
     set::actions(array('submit'))
 ) : null;

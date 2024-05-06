@@ -16,8 +16,8 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
-zdTable('module')->config('module')->gen(1);
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+zenData('module')->loadYaml('module')->gen(1);
 
 $upgrade = new upgradeTest();
 

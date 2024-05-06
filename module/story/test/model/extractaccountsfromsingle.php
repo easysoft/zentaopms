@@ -15,7 +15,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('story')->gen(10);
+zenData('story')->gen(10);
 
 global $tester;
 $tester->loadModel('story');

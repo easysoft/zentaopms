@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('testtask')->config('testtask')->gen(10);
+zenData('testtask')->loadYaml('testtask')->gen(10);
 
 /**
 

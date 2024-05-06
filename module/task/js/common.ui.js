@@ -19,6 +19,7 @@ $('#teamTable').on('click.team', '.btn-add', function()
 
     /* Init team's select picker. */
     options.defaultValue = '';
+    options.disabled     = false;
     if(taskMode == 'multi')
     {
         let members = [];

@@ -35,40 +35,56 @@ foreach($executions as $executionItem)
 }
 
 $projectItems = array();
-$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'data-url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}")), 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
+$projectItems[] = array('value' => '0', 'text' => $lang->block->executionstatistic->allProject, 'data-url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}")), 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 foreach($projects as $projectID => $projectName)
 {
     $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}&project={$projectID}"));
-    $projectItems[] = array('text' => $projectName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
+    $projectItems[] = array('value' => $projectID, 'text' => $projectName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 }
 
 /* 燃尽图。Burn chart. */
 $burn = div
 (
-    setClass('h-28'),
     div(setClass('font-bold mb-2'), $lang->block->executionstatistic->burn),
-    burn
+    echarts
     (
-        set::responsive(false),
-        set::height(80),
-        set::referenceLine(true),
-        set::lineSize(3),
-        set::data($chartData['burnLine'])
+        set::color(array('#2B80FF', '#D2D6E5')),
+        set::width('100%'),
+        set::height(140),
+        set::grid(array('left' => '30px', 'top' => '30px', 'right' => '10px', 'bottom' => '0',  'containLabel' => true)),
+        set::legend(array('show' => true, 'right' => '0')),
+        set::xAxis(array('type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'), 'axisLabel' => array('rotate' => 45))),
+        set::yAxis(array('type' => 'value', 'name' => 'H', 'minInterval' => $chartData['baseLine'][0], 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
+        set::series
+        (
+            array
+            (
+                array
+                (
+                    'type' => 'line',
+                    'name' => $lang->block->productstatistic->done,
+                    'data' => $chartData['burnLine'],
+                    'emphasis' => array('label' => array('show' => true))
+                ),
+                array
+                (
+                    'type' => 'line',
+                    'name' => $lang->block->productstatistic->opened,
+                    'data' => $chartData['baseLine'],
+                    'emphasis' => array('label' => array('show' => true))
+                )
+            )
+        )
     )
 );
 
 /* 进度环。Progress circle. */
-$progressCircle = progressCircle
+$progressCircle = div
 (
-    setClass('relative w-28 h-28 hide-before-init opacity-0 transition-opacity'),
-    set::percent($execution->progress),
-    set::size(112),
-    set::text(false),
-    set::circleWidth(0.06),
-    div(span(setClass('text-2xl font-bold'), $execution->progress), '%'),
+    setClass('w-full'),
     row
     (
-        setClass('text-gray items-center gap-1'),
+        setClass('font-bold items-center gap-1 mb-2'),
         $lang->block->executionstatistic->progress,
         icon
         (
@@ -84,13 +100,26 @@ $progressCircle = progressCircle
                 'className' => 'leading-5'
             ))
         )
+    ),
+    div
+    (
+        setClass('w-full center'),
+        progressCircle
+        (
+            setClass('relative w-28 h-28 hide-before-init opacity-0 transition-opacity'),
+            set::percent($execution->progress),
+            set::size(112),
+            set::text(false),
+            set::circleWidth(0.06),
+            div(span(setClass('text-2xl font-bold'), $execution->progress), '%')
+        )
     )
 );
 
 /* 工时信息。 Hours info. */
 $hoursInfo = row
 (
-    setClass('justify-evenly w-full'),
+    setClass('justify-evenly w-full py-1'),
     cell
     (
         setClass('flex-1 text-center'),
@@ -201,7 +230,7 @@ if($longBlock)
         ),
         col
         (
-            setClass('gap-6 flex-auto'),
+            setClass('gap-0 flex-auto'),
             $burn,
             $taskStoryInfo
         )
@@ -235,20 +264,19 @@ statisticBlock
 (
     to::titleSuffix
     (
-        dropdown
+        picker
         (
-            btn
-            (
-                setClass('font-normal rounded-full gray-400-outline size-sm ml-3 text-sm'),
-                set::caret(true),
-                isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
-            ),
-            set::items($projectItems)
+            setClass('font-normal gray-400-outline ml-3 text-base circle filter-project-pricker'),
+            set::width('120px'),
+            set::placeholder($lang->block->filterProject),
+            set::name('project'),
+            set::items($projectItems),
+            set::value(isset($projects[$currentProjectID]) ? $currentProjectID : 0)
         )
     ),
     set::block($block),
     set::active($active),
-    set::moreLink(createLink('execution', 'all', 'status=' . $block->params->type)),
+    set::moreLink(createLink('execution', 'all', 'status=' . zget($block->params, 'type', ''))),
     set::items($items),
     $blockView,
 );

@@ -79,7 +79,7 @@ class docZen extends doc
 
                 $item = array();
                 $item['id']    = $index;
-                $item['title'] = strip_tags($headElement[3]);
+                $item['title'] = array('html' => strip_tags($headElement[3]));
                 $item['hint']  = strip_tags($headElement[3]);
                 $item['url']   = '#anchor' . $index;
                 $item['level'] = $currentLevel;
@@ -174,7 +174,6 @@ class docZen extends doc
         if(!$libID && !$moduleID) return array();
 
         $prefix = $objectType == 'mine' ? "0:" : '';
-        $prefix = $executionID ? "{$executionID}:" : $prefix;
         if($libID && !$moduleID) return array("{$prefix}{$libID}" => true);
 
         $module = $this->loadModel('tree')->getByID($moduleID);
@@ -272,6 +271,7 @@ class docZen extends doc
     {
         $this->lang->doc->name = $this->lang->doclib->name;
         $lib = form::data()
+            ->setDefault('addedBy', $this->app->user->account)
             ->setIF($this->post->type == 'product' && !empty($_POST['product']), 'product', $this->post->product)
             ->setIF($this->post->type == 'project' && !empty($_POST['project']), 'project', $this->post->project)
             ->setIF($this->post->libType != 'api' && !empty($_POST['execution']), 'execution', $this->post->execution)
@@ -521,7 +521,7 @@ class docZen extends doc
 
         $this->setObjectsForCreate($objectType, $lib, $unclosed, $objectID);
 
-        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->uploadDoc;
+        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
         $this->view->linkType         = $objectType;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = empty($lib) ? 0 : zget($lib, $lib->type, 0);
@@ -689,7 +689,7 @@ class docZen extends doc
      */
     protected function assignVarsForView(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown): void
     {
-        $this->view->title             = $this->lang->doc->common . $this->lang->colon . $doc->title;
+        $this->view->title             = $this->lang->doc->common . $this->lang->hyphen . $doc->title;
         $this->view->docID             = $docID;
         $this->view->type              = $type;
         $this->view->objectID          = $objectID;

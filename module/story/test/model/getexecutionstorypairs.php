@@ -14,24 +14,24 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('product')->gen(100);
-$projectstory = zdTable('projectstory');
+zenData('product')->gen(100);
+$projectstory = zenData('projectstory');
 $projectstory->project->range('11{50},36{50}');
 $projectstory->product->range('1,2');
 $projectstory->story->range('1-50');
 $projectstory->gen(100);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->type->range('story');
 $story->product->range('1,2');
 $story->pri->range('0-4');
 $story->estimate->range('1-7');
 $story->gen(50);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('project{25},sprint{25}');
 $project->gen(50);
 

@@ -1,19 +1,19 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 su('admin');
 
-zdTable('bug')->config('bug_activate')->gen(27);
-zdTable('build')->config('build_activate')->gen(3);
-zdTable('product')->config('product_activate')->gen(1);
-zdTable('project')->config('project_activate')->gen(6);
-zdTable('kanbancell')->config('kanbancell_activate')->gen(27);
-zdTable('kanbancolumn')->config('kanbancolumn_activate')->gen(27);
-zdTable('kanbanlane')->config('kanbanlane_activate')->gen(3);
-zdTable('kanbanregion')->config('kanbanregion_activate')->gen(1);
-zdTable('history')->gen(0);
+zenData('bug')->loadYaml('bug_activate')->gen(27);
+zenData('build')->loadYaml('build_activate')->gen(3);
+zenData('product')->loadYaml('product_activate')->gen(1);
+zenData('project')->loadYaml('project_activate')->gen(6);
+zenData('kanbancell')->loadYaml('kanbancell_activate')->gen(27);
+zenData('kanbancolumn')->loadYaml('kanbancolumn_activate')->gen(27);
+zenData('kanbanlane')->loadYaml('kanbanlane_activate')->gen(3);
+zenData('kanbanregion')->loadYaml('kanbanregion_activate')->gen(1);
+zenData('history')->gen(0);
 
 /**
 

@@ -36,20 +36,6 @@ formPanel
     set::back('GLOBAL'),
     formRow
     (
-        $this->app->tab != 'devops' ? setClass('hidden') : null,
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("product[]"),
-            set::label($lang->story->product),
-            set::required(true),
-            set::control(array("control" => "picker","multiple" => true)),
-            set::items($products),
-            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
-        )
-    ),
-    formRow
-    (
         setClass('service hide'),
         formGroup
         (
@@ -77,6 +63,20 @@ formPanel
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
+    ),
+    formRow
+    (
+        $this->app->tab != 'devops' ? setClass('hidden') : null,
+        formGroup
+        (
+            set::width('1/2'),
+            set::name("product[]"),
+            set::label($lang->story->product),
+            set::required(true),
+            set::control(array("control" => "picker","multiple" => true)),
+            set::items($products),
+            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
+        )
     ),
     formGroup
     (

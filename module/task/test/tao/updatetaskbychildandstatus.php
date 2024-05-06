@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 /**
 
@@ -10,12 +10,12 @@ cid=1
 pid=1
 */
 
-zdTable('user')->config('user')->gen(5);
+zenData('user')->loadYaml('user')->gen(5);
 su('user4');
 
 $task = new taskTest();
 
-zdTable('task')->gen(10);
+zenData('task')->gen(10);
 
 $parentTask = new stdclass();
 $parentTask->id         = 1;

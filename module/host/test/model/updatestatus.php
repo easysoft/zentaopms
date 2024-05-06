@@ -19,9 +19,9 @@ cid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('module')->config('module')->gen(100)->fixPath();
-zdTable('host')->config('host')->gen(30);
-zdTable('lang')->gen(0);
+zenData('module')->loadYaml('module')->gen(100)->fixPath();
+zenData('host')->loadYaml('host')->gen(30);
+zenData('lang')->gen(0);
 su('admin');
 
 global $tester;

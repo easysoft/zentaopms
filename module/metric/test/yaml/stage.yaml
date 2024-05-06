@@ -7,14 +7,24 @@ fields:
   range: 11-10000
 - field: type
   range: stage
+- field: project
+  range: 1-10
 - field: deleted
   range: 0{1},1{1}
+- field: begin
+  range: "20240101 000000-20250101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: end
+  range: "20240201 000000-20250201 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
 - field: openedDate
   range: "20100101 000000-20200101 000000:10D"
   type: timestamp
   format: YYYY-MM-DD
 - field: closedDate
-  range: "20110101 000000-20210101 000000:10D"
+  range: "20100201 000000-2020201 000000:10D"
   type: timestamp
   format: YYYY-MM-DD
 ...

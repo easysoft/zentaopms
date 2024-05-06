@@ -19,11 +19,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/artifactrepo.class.php';
+include dirname(__FILE__, 2) . '/lib/artifactrepo.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('pipeline')->config('pipeline')->gen(6);
-zdTable('artifactrepo')->config('artifactrepo')->gen(1);
+zenData('user')->gen(5);
+zenData('pipeline')->loadYaml('pipeline')->gen(6);
+zenData('artifactrepo')->loadYaml('artifactrepo')->gen(1);
 
 $idList = array(0, 1, 2);
 

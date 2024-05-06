@@ -17,8 +17,8 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('productplan')->gen(10);
-$story = zdTable('story');
+zenData('productplan')->gen(10);
+$story = zenData('story');
 $story->version->range('1-4');
 $story->gen(20);
 

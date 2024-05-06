@@ -4,14 +4,14 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 su('admin');
 
-zdTable('project')->config('project')->gen(4);
-zdTable('bug')->gen(0);
-zdTable('doc')->gen(0);
-zdTable('case')->gen(0);
-zdTable('build')->gen(0);
-zdTable('release')->gen(0);
-zdTable('testtask')->gen(0);
-zdTable('design')->gen(0);
+zenData('project')->loadYaml('project')->gen(4);
+zenData('bug')->gen(0);
+zenData('doc')->gen(0);
+zenData('case')->gen(0);
+zenData('build')->gen(0);
+zenData('release')->gen(0);
+zenData('testtask')->gen(0);
+zenData('design')->gen(0);
 
 /**
 

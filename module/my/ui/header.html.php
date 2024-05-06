@@ -10,9 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('mode', $mode);
-jsVar('todoCount', $todoCount);
-jsVar('isMax', $isMax);
-jsVar('isBiz', $isBiz);
-jsVar('isOpenedURAndSR', $isOpenedURAndSR);
-jsVar('rawMethod', $app->rawMethod);
+$badgesOptions = array();
+$badgesOptions['mode']            = $mode;
+$badgesOptions['todoCount']       = $todoCount;
+$badgesOptions['isIPD']           = $isIPD;
+$badgesOptions['isMax']           = $isMax;
+$badgesOptions['isBiz']           = $isBiz;
+$badgesOptions['isOpenedURAndSR'] = $isOpenedURAndSR;
+$badgesOptions['rawMethod']       = $app->rawMethod;
+
+query('#featureBar')->append(on::init()->const('badgesOptions', $badgesOptions)->do('setTimeout(() => {updateMainNavbarBadges(badgesOptions)}, 500)'));

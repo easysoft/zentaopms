@@ -18,14 +18,14 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/design.class.php';
+include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
 
-zdTable('file')->gen(0);
-zdTable('repo')->config('repo')->gen(1);
-zdTable('pipeline')->gen(1);
-zdTable('repohistory')->config('repohistory')->gen(3);
-zdTable('design')->config('design')->gen(1);
-zdTable('relation')->gen(0);
+zenData('file')->gen(0);
+zenData('repo')->loadYaml('repo')->gen(1);
+zenData('pipeline')->gen(1);
+zenData('repohistory')->loadYaml('repohistory')->gen(3);
+zenData('design')->loadYaml('design')->gen(1);
+zenData('relation')->gen(0);
 
 $designs      = array(0, 1, 2);
 $repos        = array(0, 1, 2);

@@ -62,14 +62,14 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('action')->config('action_updatefileobjectid')->gen(11);
-zdTable('doccontent')->config('doccontent_updatefileobjectid')->gen(5);
-zdTable('project')->config('project_updatefileobjectid')->gen(110);
-zdTable('build')->config('build_updatefileobjectid')->gen(5);
-zdTable('file')->config('file_updatefileobjectid')->gen(11);
+zenData('user')->gen(5);
+zenData('action')->loadYaml('action_updatefileobjectid')->gen(11);
+zenData('doccontent')->loadYaml('doccontent_updatefileobjectid')->gen(5);
+zenData('project')->loadYaml('project_updatefileobjectid')->gen(110);
+zenData('build')->loadYaml('build_updatefileobjectid')->gen(5);
+zenData('file')->loadYaml('file_updatefileobjectid')->gen(11);
 su('admin');
 
 $upgrade = new upgradeTest();

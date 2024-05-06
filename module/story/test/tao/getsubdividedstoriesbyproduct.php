@@ -14,11 +14,11 @@ cid=0
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range(7);
 $story->gen(20);
 
-$relation = zdTable('relation');
+$relation = zenData('relation');
 $relation->product->range(7);
 $relation->AID->range('1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18');
 $relation->BID->range('11,1,12,2,13,3,14,4,15,5,16,6,17,7,18,8');

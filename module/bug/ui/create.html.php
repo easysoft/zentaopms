@@ -16,10 +16,10 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 $fields = useFields('bug.create');
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
-$fields->autoLoad('product')
+$fields->autoLoad('product',   array('items' => 'product,module,openedBuild,execution,project,story,task,assignedTo', 'updateOrders' => true))
        ->autoLoad('branch',    'module,openedBuild,execution,project,story,task,assignedTo')
        ->autoLoad('module',    'assignedTo,story')
-       ->autoLoad('project',   'project,openedBuild,execution,story,task,assignedTo')
+       ->autoLoad('project',   'project,openedBuild,execution,story,task,assignedTo,injection,identify')
        ->autoLoad('execution', 'execution,openedBuild,story,task,assignedTo')
        ->autoLoad('allBuilds', 'openedBuild')
        ->autoLoad('allUsers',  'assignedTo')

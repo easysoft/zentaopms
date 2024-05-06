@@ -27,17 +27,17 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('productplan')->gen(0);
-zdTable('story')->gen(0);
-zdTable('storyspec')->gen(0);
-zdTable('storystage')->gen(0);
-zdTable('storyreview')->gen(0);
-zdTable('projectproduct')->gen(0);
-zdTable('projectstory')->gen(0);
-zdTable('planstory')->gen(0);
+zenData('productplan')->gen(0);
+zenData('story')->gen(0);
+zenData('storyspec')->gen(0);
+zenData('storystage')->gen(0);
+zenData('storyreview')->gen(0);
+zenData('projectproduct')->gen(0);
+zenData('projectstory')->gen(0);
+zenData('planstory')->gen(0);
 
 $now   = helper::now();
 $story = new storyTest();

@@ -65,11 +65,11 @@ if($viewType == 'doc' or $viewType == 'api')
         <?php
         if($viewType == 'doc')
         {
-            echo $lang->doc->manageType . $lang->colon . $root->name;
+            echo $lang->doc->manageType . $lang->hyphen . $root->name;
         }
         elseif($viewType == 'api')
         {
-            echo $lang->api->manageType . $lang->colon . $root->name;
+            echo $lang->api->manageType . $lang->hyphen . $root->name;
         }
         elseif($viewType == 'line')
         {
@@ -85,7 +85,7 @@ if($viewType == 'doc' or $viewType == 'api')
         }
         else
         {
-            echo $lang->tree->common . $lang->colon . $root->name;
+            echo $lang->tree->common . $lang->hyphen . $root->name;
         }
         ?>
       </span>

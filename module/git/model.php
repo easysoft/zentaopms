@@ -199,9 +199,9 @@ class gitModel extends model
         {
             $scm           = strtolower($repo->SCM);
             $userList      = $this->loadModel($scm)->apiGetUsers((int)$repo->serviceHost);
-            $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs((int)$repo->serviceHost, $scm, 'openID,account');
+            $accountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs((int)$repo->serviceHost, $scm, 'openID,account');
 
-            foreach($userList as $user) $accountPairs[$user->realname] = zget($acountIDPairs, $user->id, '');
+            foreach($userList as $user) $accountPairs[$user->realname] = zget($accountIDPairs, $user->id, '');
         }
 
         /* Update code commit history. */

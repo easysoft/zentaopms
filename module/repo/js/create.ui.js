@@ -2,6 +2,8 @@ $(function()
 {
     onScmChange();
     $('div.service-project .form-label').addClass('required');
+
+    if(appTab != 'devops' && !hasProduct) zui.Modal.alert(noProductTip);
 });
 
 function onProductChange(event)
@@ -34,6 +36,8 @@ function onHostChange()
     $.get(url, function(response)
     {
         var data = JSON.parse(response);
+        if(Object.keys(data).length <= 1) zui.Modal.alert({message: noRepoLeft, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});
+
         $project.render({items: data});
         $project.$.clear();
         toggleLoading('#serviceProject', false);
@@ -119,10 +123,9 @@ function onScmChange()
         }
 
         var url = $.createLink('repo', 'ajaxGetHosts', "scm=" + scm);
-        $.get(url, function(response)
+        $.getJSON(url, function(data)
         {
-            var data = JSON.parse(response);
-            var $hostPicker = $('#serviceHost').zui('picker');
+            const $hostPicker = $('#serviceHost').zui('picker');
             $hostPicker.render({items: data});
             $hostPicker.$.clear();
         });

@@ -16,12 +16,12 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('group')->gen(0);
-zdTable('usergroup')->gen(0);
-zdTable('acl')->gen(0);
-zdTable('userview')->gen(0);
-zdTable('project')->config('project')->gen(8);
-zdTable('user')->config('user')->gen(2);
+zenData('group')->gen(0);
+zenData('usergroup')->gen(0);
+zenData('acl')->gen(0);
+zenData('userview')->gen(0);
+zenData('project')->loadYaml('project')->gen(8);
+zenData('user')->loadYaml('user')->gen(2);
 
 global $tester,$app;
 $tester->loadModel('project');

@@ -19,7 +19,7 @@ cid=1
 
 function initData ()
 {
-    zdTable('todo')->config('updatedate')->gen(5);
+    zenData('todo')->loadYaml('updatedate')->gen(5);
 }
 
 initData();

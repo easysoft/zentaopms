@@ -16,6 +16,7 @@ $releaseModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'relea
 
 jsVar('initLink', $link);
 jsVar('type', $type);
+jsVar('loadFileUrl', createLink($releaseModule, 'view', "releaseID={$release->id}&type=releaseInfo"));
 $canBeChanged = common::canBeChanged($releaseModule, $release);
 $actions      = $this->loadModel('common')->buildOperateMenu($release);
 foreach($actions as $actionType => $typeActions)
@@ -27,7 +28,11 @@ foreach($actions as $actionType => $typeActions)
         $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$release->id, $action['url']);
         if($actionType == 'suffixActions')
         {
-            if($action['icon'] == 'edit')  $actions['suffixActions'][$key]['text'] = $lang->edit;
+            if($action['icon'] == 'edit')
+            {
+                $actions['suffixActions'][$key]['text']     = $lang->edit;
+                $actions['suffixActions'][$key]['data-app'] = $app->tab;
+            }
             if($action['icon'] == 'trash') $actions['suffixActions'][$key]['text'] = $lang->delete;
         }
     }
@@ -184,6 +189,7 @@ if($canBeChanged)
 
 detailBody
 (
+    setClass('release-view-body'),
     sectionList(
         tabs
         (
@@ -206,6 +212,7 @@ detailBody
                 dtable
                 (
                     setID('finishedStoryDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::cols(array_values($config->release->dtable->story->fieldList)),
                     set::data($storyTableData),
                     set::userMap($users),
@@ -235,6 +242,7 @@ detailBody
                 dtable
                 (
                     setID('resolvedBugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->bug->fieldList)),
                     set::data($bugTableData),
@@ -263,6 +271,7 @@ detailBody
                 dtable
                 (
                     setID('leftBugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                     set::data($leftBugTableData),
@@ -281,6 +290,7 @@ detailBody
                 to::prefix(icon('flag')),
                 set::key('releaseInfo'),
                 set::title($lang->release->basicInfo),
+                set::active($type == 'releaseInfo'),
                 div
                 (
                     setClass('tab-actions'),

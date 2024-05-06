@@ -209,6 +209,11 @@ class fileModel extends model
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
         if(!is_array($_FILES[$htmlTagName]['error']) && $_FILES[$htmlTagName]['error'] != 0) return $_FILES[$htmlTagName];
+        if(is_array($_FILES[$htmlTagName]['error']) && reset($_FILES[$htmlTagName]['error']) != 0)
+        {
+            $_FILES[$htmlTagName]['error'] = reset($_FILES[$htmlTagName]['error']);
+            return $_FILES[$htmlTagName];
+        }
 
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
@@ -565,6 +570,8 @@ class fileModel extends model
      */
     public function checkPriv(object $file): bool
     {
+        if(!$file->objectType || !$file->objectID) return true;
+
         $objectType = $file->objectType;
         $objectID   = $file->objectID;
         $table      = $this->config->objectTables[$objectType];
@@ -582,12 +589,6 @@ class fileModel extends model
         if($objectType == 'release')
         {
             $release = $this->dao->select('project,product')->from(TABLE_RELEASE)->where('id')->eq($objectID)->fetch();
-
-            if(!empty($release->project))
-            {
-                $projectIdList = array_filter(explode(',', $release->project));
-                return $this->loadModel('project')->checkPriv(current($projectIdList));
-            }
             return $this->loadModel('product')->checkPriv($release->product);
         }
 
@@ -1113,7 +1114,7 @@ class fileModel extends model
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
 
-        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'");
         if(strpos('view,edit', $method) !== false)
         {
             if(common::hasPriv($objectType, 'view', $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);

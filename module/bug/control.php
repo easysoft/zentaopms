@@ -123,7 +123,9 @@ class bug extends control
 
         /* 处理列表页面的参数。*/
         /* Processing browse params. */
+        $modules = $this->tree->getOptionMenu((int)$product->id, 'bug', 0, $branch);
         list($moduleID, $queryID, $realOrderBy, $pager) = $this->bugZen->prepareBrowseParams($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID);
+        if(!isset($modules[$moduleID])) $moduleID = 0;
 
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
 
@@ -131,6 +133,7 @@ class bug extends control
         $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+        $this->view->modules = $modules;
         $this->display();
     }
 
@@ -454,14 +457,18 @@ class bug extends control
         /* Set menu. */
         $this->qa->setMenu($oldBug->product, $oldBug->branch);
 
+        $users  = $this->loadModel('user')->getPairs('noclosed');
+        $builds = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
+
         /* 展示相关变量。 */
         /* Show the variables associated. */
         $this->view->title      = $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
         $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->users      = $users;
+        $this->view->assignedTo = isset($users[$oldBug->openedBy]) ? $oldBug->openedBy : $this->bug->getModuleOwner($oldBug->module, $oldBug->product);
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : '0', (int)$oldBug->project, 'stagefilter');
-        $this->view->builds     = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
+        $this->view->builds     = $this->bugZen->addReleaseLabelForBuilds($oldBug->product, $builds);
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
@@ -679,7 +686,7 @@ class bug extends control
 
         $this->qa->setMenu($productID, $branchID);
 
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
+        $this->view->title         = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->common . $this->lang->hyphen . $this->lang->bug->reportChart;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
         $this->view->branchID      = $branchID;
@@ -794,7 +801,7 @@ class bug extends control
         /* Show the variables associated with the batch creation bugs. */
         $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $bugImagesFile);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
+        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchCreate;
         $this->view->moduleID = $moduleID;
         $this->view->product  = $product;
         $this->display();
@@ -1118,14 +1125,19 @@ class bug extends control
 
             list($modules, $productQD) = $this->bugZen->getBatchResolveVars($bugs);
 
-            $users = $this->loadModel('user')->getPairs();
-            $now   = helper::now();
+            $users       = $this->loadModel('user')->getPairs();
+            $now         = helper::now();
+            $skipBugList = array();
             foreach($bugIdList as $bugID)
             {
                 /* 只有激活的bug或者解决方案不为已解决的bug可以解决。 */
                 /* Only active bugs or bugs whose resolution is not fixed can be resolve. */
                 $oldBug = $bugs[$bugID];
-                if($oldBug->resolution == 'fixed' || $oldBug->status != 'active') continue;
+                if($oldBug->resolution == 'fixed' || $oldBug->status != 'active')
+                {
+                    $skipBugList[] = '#' . $bugID;
+                    continue;
+                }
 
                 /* 获取 bug 的指派给人员。 */
                 /* Get bug assignedTo. */
@@ -1170,6 +1182,7 @@ class bug extends control
 
         /* 返回批量解决 bugs 后的响应。 */
         /* Return response after batch resolving bugs. */
+        if(!empty($skipBugList)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->bug->notice->skipNotActive, implode(', ', $skipBugList)), 'load' => true));
         if(empty($message)) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }
@@ -1275,7 +1288,7 @@ class bug extends control
         /* 展示关联的变量。 */
         /* Show the variables associated. */
         $bugIdList = array_unique($this->post->bugIdList);
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchActivate;
         $this->view->bugs      = $this->bug->getByIdList($bugIdList);
         $this->view->users     = $this->user->getPairs('noclosed');
         $this->view->builds    = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'noempty,noreleased');
@@ -1486,7 +1499,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit);
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit, 'all');
 
         unset($productBugs[$bugID]);
         if($type == 'json') return print(helper::jsonEncode($productBugs));
@@ -1596,14 +1609,11 @@ class bug extends control
      * 取消代码分支的关联。
      * Unlink code branch.
      *
-     * @param  int    $bugID
-     * @param  int    $repoID
-     * @param  string $branch
      * @access public
      * @return void
      */
-    public function unlinkBranch(int $bugID, int $repoID, string $branch)
+    public function unlinkBranch()
     {
-        return print($this->fetch('repo', 'unlinkBranch', array('objectID' => $bugID, 'repoID' => $repoID, 'branch' => $branch)));
+        return print($this->fetch('repo', 'unlinkBranch'));
     }
 }

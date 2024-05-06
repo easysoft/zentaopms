@@ -63,7 +63,7 @@ class file extends control
     {
         $file = $this->file->getUpload('imgFile');
 
-        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
+        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
         $file = $file[0];
         if($file)
@@ -184,7 +184,7 @@ class file extends control
                 $output .= '"';
                 foreach($fields as $fieldName => $fieldLabel)
                 {
-                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlspecialchars_decode(strip_tags((string)$row->$fieldName, '<img>'))) : '';
+                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }
                 $output .= '"' . "\n";
@@ -218,7 +218,7 @@ class file extends control
             $output .= "  <row>\n";
             foreach($fields as $fieldName => $fieldLabel)
             {
-                $fieldValue = isset($row->$fieldName) ? htmlSpecialString($row->$fieldName) : '';
+                $fieldValue = isset($row->$fieldName) ? htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>')) : '';
                 $output    .= "    <$fieldName>$fieldValue</$fieldName>\n";
             }
             $output .= "  </row>\n";
@@ -399,7 +399,7 @@ class file extends control
         {
             $file = $this->file->getChunkedFile();
             if(!$file) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->error->noData)));
-            if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
+            if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
             $imageFile = $this->file->saveChunkedFile($file, $uid);
             if(!empty($imageFile))

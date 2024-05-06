@@ -22,7 +22,9 @@ class gitfox extends control
     {
         if($_POST)
         {
-            $gitfox = form::data($this->config->gitfox->form->create)->get();
+            $gitfox = form::data($this->config->gitfox->form->create)
+                ->add('createdBy', $this->app->user->account)
+                ->get();
             $this->checkToken($gitfox);
             $gitfoxID = $this->loadModel('pipeline')->create($gitfox);
 
@@ -32,7 +34,7 @@ class gitfox extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
-        $this->view->title = $this->lang->gitfox->common . $this->lang->colon . $this->lang->gitfox->lblCreate;
+        $this->view->title = $this->lang->gitfox->common . $this->lang->hyphen . $this->lang->gitfox->lblCreate;
 
         $this->display();
     }
@@ -47,14 +49,16 @@ class gitfox extends control
      */
     public function edit(int $gitfoxID)
     {
-        $oldGitFox = $this->gitfox->getByID($gitfoxID);
+        $oldGitFox = $this->gitfox->fetchByID($gitfoxID);
 
         if($_POST)
         {
-            $gitfox = form::data($this->config->gitfox->form->edit)->get();
+            $gitfox = form::data($this->config->gitfox->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->get();
             $this->checkToken($gitfox, $gitfoxID);
             $this->loadModel('pipeline')->update($gitfoxID, $gitfox);
-            $gitFox = $this->gitfox->getByID($gitfoxID);
+            $gitFox = $this->gitfox->fetchByID($gitfoxID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
@@ -64,7 +68,7 @@ class gitfox extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage()', 'closeModal' => true));
         }
 
-        $this->view->title  = $this->lang->gitfox->common . $this->lang->colon . $this->lang->gitfox->edit;
+        $this->view->title  = $this->lang->gitfox->common . $this->lang->hyphen . $this->lang->gitfox->edit;
         $this->view->gitfox = $oldGitFox;
 
         $this->display();
@@ -80,7 +84,7 @@ class gitfox extends control
      */
     public function delete(int $gitfoxID)
     {
-        $oldGitFox = $this->loadModel('pipeline')->getByID($gitfoxID);
+        $oldGitFox = $this->gitfox->fetchByID($gitfoxID);
         $actionID  = $this->pipeline->deleteByObject($gitfoxID, 'gitfox');
         if(!$actionID)
         {
@@ -90,7 +94,7 @@ class gitfox extends control
             return $this->send($response);
         }
 
-        $gitFox   = $this->gitfox->getByID($gitfoxID);
+        $gitFox   = $this->gitfox->fetchByID($gitfoxID);
         $changes  = common::createChanges($oldGitFox, $gitFox);
         $this->loadModel('action')->logHistory($actionID, $changes);
 

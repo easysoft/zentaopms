@@ -20,22 +20,22 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->assignedTo->range('user1,admin,[],test1');
 $bug->status->range('active,resolved,closed');
 $bug->resolution->range('[],fixed{2}');
 $bug->openedDate->range('[2023-01-01 10:00:00,' . date('Y-m-d H:i:s') . ']');
 $bug->gen(10);
 
-$plan = zdTable('productplan');
+$plan = zenData('productplan');
 $plan->end->range('`' . date('Y-m-d', strtotime('+1 day')) . '`');
 $plan->gen(10);
 
-$release = zdTable('release');
+$release = zenData('release');
 $release->product->range('1-4{3}');
 $release->gen(10);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 global $tester;

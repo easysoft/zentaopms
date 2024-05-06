@@ -13,9 +13,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->project->range('0');
 $project->type->range('sprint');
 $project->vision->range('rnd');

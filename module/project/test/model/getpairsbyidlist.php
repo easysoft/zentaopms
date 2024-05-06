@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
-$project = zdTable('project')->gen(100);
+$project = zenData('project')->gen(100);
 
 /**
 

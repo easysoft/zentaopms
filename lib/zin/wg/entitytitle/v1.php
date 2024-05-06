@@ -8,30 +8,30 @@ class entityTitle extends wg
 {
     protected static array $defineProps = array
     (
-        'id?: string|int',                // 对象 ID。
-        'idClass?: array|string',         // ID 类名。
-        'title?: string',                 // 标题文本。
-        'inline?: bool',                  // 是否启用内联样式。
-        'url?: string|bool',              // 标题链接。
-        'object?: object',                // 对象。
-        'deleted?: bool',                 // 是否已删除。
-        'type?: string',                  // 对象类型。
-        'color?: string',                 // 颜色。
-        'gap?: string|int',               // 间隔。
-        'linkProps?: array',              // 链接属性。
-        'titleProps?: array',             // 标题属性。
-        'titleClass?: array|string',      // 标签类名。
-        'joiner?: string="/"',            // 连接符。
-        'joinerClass?: array|string',     // 连接符类名。
-        'parentId?: string|int',          // 父级对象 ID。
-        'parentTitle?: string',           // 父级标题文本。
-        'parentUrl?: string|bool',        // 父级标题链接。
-        'parent?: object',                // 父级对象。
-        'parentType?: string',            // 父级对象类型。
-        'parentColor?: string',           // 父级颜色。
-        'parentClass?: array|string',     // 父级类名。
-        'parentTitleProps?: string',      // 父级标题属性。
-        'parentTitleClass?: array|string' // 父级标签类名。
+        'id?: string|int',                 // 对象 ID。
+        'idClass?: array|string',          // ID 类名。
+        'title?: string',                  // 标题文本。
+        'inline?: bool',                   // 是否启用内联样式。
+        'url?: string|bool',               // 标题链接。
+        'object?: object',                 // 对象。
+        'deleted?: bool',                  // 是否已删除。
+        'type?: string',                   // 对象类型。
+        'color?: string',                  // 颜色。
+        'gap?: string|int',                // 间隔。
+        'linkProps?: array',               // 链接属性。
+        'titleProps?: array',              // 标题属性。
+        'titleClass?: array|string',       // 标签类名。
+        'joiner?: string="/"',             // 连接符。
+        'joinerClass?: array|string',      // 连接符类名。
+        'parentId?: string|int',           // 父级对象 ID。
+        'parentTitle?: string',            // 父级标题文本。
+        'parentUrl?: string|bool',         // 父级标题链接。
+        'parent?: object',                 // 父级对象。
+        'parentType?: string',             // 父级对象类型。
+        'parentColor?: string',            // 父级颜色。
+        'parentClass?: array|string',      // 父级类名。
+        'parentTitleProps?: array|string', // 父级标题属性。
+        'parentTitleClass?: array|string'  // 父级标签类名。
     );
 
     protected static array $defineBlocks = array
@@ -46,22 +46,22 @@ class entityTitle extends wg
         $object = $this->prop('object');
         if($object)
         {
-            if(!$this->hasProp('id'))      $this->setProp('id', $object->id);
-            if(!$this->hasProp('title'))   $this->setProp('title', isset($object->title) ? $object->title : $object->name);
-            if(!$this->hasProp('url'))     $this->setProp('url', $object->url);
-            if(!$this->hasProp('color'))   $this->setProp('color', $object->color);
+            if(!$this->hasProp('id') && isset($object->id))                                 $this->setProp('id', $object->id);
+            if(!$this->hasProp('title') && (isset($object->title) or isset($object->name))) $this->setProp('title', isset($object->title) ? $object->title : $object->name);
+            if(!$this->hasProp('color') && isset($object->color))                           $this->setProp('color', $object->color);
+            if(!$this->hasProp('url') && isset($object->url))                               $this->setProp('url', $object->url);
 
             if(!$this->hasProp('deleted') && isset($object->deleted)) $this->setProp('deleted', $object->deleted);
-            if(!$this->hasProp('parent') && isset($object->parent))  $this->setProp('parent', $object->parent);
+            if(!$this->hasProp('parent') && isset($object->parent))   $this->setProp('parent', $object->parent);
         }
 
         $parent = $this->prop('parent');
         if($parent)
         {
-            if(!$this->hasProp('parentId'))    $this->setProp('parentId', $parent->id);
-            if(!$this->hasProp('parentTitle')) $this->setProp('parentTitle', isset($parent->title) ? $parent->title : $parent->name);
-            if(!$this->hasProp('parentUrl'))   $this->setProp('parentUrl', $parent->url);
-            if(!$this->hasProp('parentColor')) $this->setProp('parentColor', $parent->color);
+            if(!$this->hasProp('parentId') && isset($parent->id))                                 $this->setProp('parentId', $parent->id);
+            if(!$this->hasProp('parentTitle') && (isset($parent->title) or isset($parent->name))) $this->setProp('parentTitle', isset($parent->title) ? $parent->title : $parent->name);
+            if(!$this->hasProp('parentUrl') && isset($parent->url))                               $this->setProp('parentUrl', $parent->url);
+            if(!$this->hasProp('parentColor') && isset($parent->color))                           $this->setProp('parentColor', $parent->color);
         }
     }
 

@@ -42,9 +42,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$table = zdTable('user');
+$table = zenData('user');
 $table->account->range('1-12')->prefix('user');
 $table->password->range('123456,' . md5(123456) . ',user3,' . md5('user4') . ',86893032,' . md5(86893032) . ',13888888888,' . md5(13888888888) . ',`2017-01-01`,' . md5('2017-01-01') . ',Admin123@,123456');
 $table->phone->range('86893032{12}');

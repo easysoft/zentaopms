@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,stage,kanban');
@@ -16,7 +16,7 @@ $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-10');
 $task->execution->range('3');
 $task->name->range('1-10')->prefix('任务');
@@ -24,7 +24,7 @@ $task->type->range('design,devel,test,study,discuss,ui,affair,misc');
 $task->status->range('wait,doing,done,closed');
 $task->gen(10);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-2');
 $product->name->range('正常产品1,多分支产品1');
 $product->type->range('normal,branch');
@@ -32,14 +32,14 @@ $product->status->range('normal');
 $product->createdBy->range('admin,user1');
 $product->gen(2);
 
-$branch = zdTable('branch');
+$branch = zenData('branch');
 $branch->id->range('1-2');
 $branch->product->range('2');
 $branch->name->range('分支1,分支2');
 $branch->status->range('active');
 $branch->gen(2);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-10');
 $story->title->range('1-10')->prefix('需求');
 $story->type->range('story');
@@ -49,20 +49,20 @@ $story->stage->range('projected');
 $story->version->range('1');
 $story->gen(10);
 
-$projectStory = zdTable('projectstory');
+$projectStory = zenData('projectstory');
 $projectStory->project->range('3');
 $projectStory->product->range('1,2');
 $projectStory->story->range('1-10');
 $projectStory->version->range('1');
 $projectStory->gen(10);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->project->range('1-5');
 $projectproduct->product->range('1-2');
 $projectproduct->plan->range('0');
 $projectproduct->gen(5);
 
-$query = zdTable('userquery');
+$query = zenData('userquery');
 $query->id->range('1');
 $query->account->range('admin');
 $query->module->range('story');

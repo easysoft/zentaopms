@@ -1037,7 +1037,13 @@ class searchTao extends searchModel
      */
     private function processStoryRecord(object $record, string $module, array $objectList): object
     {
-        $story  = $objectList[$module][$record->objectID];
+        $story = zget($objectList[$module], $record->objectID, null);
+        if(empty($story))
+        {
+            $record->url = '';
+            return $record;
+        }
+
         $module = 'story';
         $method = 'view';
         if(!empty($story->lib))

@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/transfer.class.php';
-zdTable('project')->gen(15);
-zdTable('bug')->gen(10);
-zdTable('case')->gen(10);
-zdTable('story')->gen(10);
+include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+zenData('project')->gen(15);
+zenData('bug')->gen(10);
+zenData('case')->gen(10);
+zenData('story')->gen(10);
 su('admin');
 
 /**

@@ -22,10 +22,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->gen(1);
-zdTable('project')->gen(1);
+zenData('action')->gen(1);
+zenData('project')->gen(1);
 $actionTest = new actionTest();
 
 r($actionTest->fetchObjectInfoByID(TABLE_ACTION,  1, 'id,objectType,objectID')) && p('id,objectType,product,objectID') && e('1,product,~~,1');   //测试获取历史例句表中的id为1的记录的objectType和objectID字段的值是否正确,未能获取product字段，所以product为空。

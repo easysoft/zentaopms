@@ -31,6 +31,92 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 });
 
 /**
+ * 拖拽用例或者场景。
+ * Drag case or scene.
+ *
+ * @param  from   被拿起的元素
+ * @param  to     放下时的目标元素
+ * @param  type   放在目标元素的上方还是下方
+ * @access public
+ * @return bool
+ */
+window.onSortEnd = function(from, to, type)
+{
+    if(!from || !to) return false;
+
+    if(!from.data.isScene && !to.data.isScene)
+    {
+        if(from.data.parent != to.data.parent) changeScene(from.data.id, to.data.parent);
+        changeOrder(from.data.caseID, from.data.sort, to.data.caseID, to.data.sort, type, 'case');
+    }
+    else if(from.data.isScene && to.data.isScene)
+    {
+        if(from.data.parent == to.data.parent)
+        {
+            zui.Modal.confirm({message: dragModalMessage, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((confirmed) =>
+            {
+                if(confirmed)
+                {
+                    changeScene(from.data.id, to.data.id);
+                }
+                else
+                {
+                    changeOrder(from.data.id, from.data.sort, to.data.id, to.data.sort, type, 'scene');
+                }
+            });
+        }
+        else
+        {
+            changeScene(from.data.id, to.data.id);
+        }
+    }
+    else if(!from.data.isScene && to.data.isScene)
+    {
+        changeScene(from.data.id, to.data.id);
+    }
+    return true;
+}
+
+function changeScene(caseID, sceneID)
+{
+    const url  = $.createLink('testcase', 'changeScene');
+    const form = new FormData();
+    form.append('sourceID', caseID);
+    form.append('targetID', sceneID);
+    $.ajaxSubmit({url, data:form});
+}
+
+function changeOrder(sourceID, sourceOrder, targetID, targetOrder, type, module)
+{
+    const url  = $.createLink('testcase', 'updateOrder');
+    const form = new FormData();
+    form.append('sourceID',    sourceID);
+    form.append('sourceOrder', sourceOrder);
+    form.append('targetID',    targetID);
+    form.append('targetOrder', targetOrder);
+    form.append('type', type);
+    form.append('module', module);
+    $.ajaxSubmit({url, data:form});
+}
+
+/**
+ * 拖拽的用例或者场景是否允许放下。
+ * Is it allowed to drop the dragged case or scene.
+ *
+ * @param  from   被拿起的元素
+ * @param  to     放下时的目标元素
+ * @access public
+ * @return bool
+ */
+window.canSortTo = function(from, to)
+{
+    if(!from || !to) return false;
+    if(!from.data.isScene && !to.data.isScene && from.data.parent != 0 && from.data.parent != to.data.parent) return false;
+    if(from.data.isScene && !to.data.isScene) return false;
+    return true;
+}
+
+/**
  * 切换显示所有用例和自动化用例。
  * Toggles between displaying all cases and automation cases.
  *
@@ -122,7 +208,7 @@ window.setStatistics = function(element, checks)
         });
     }
 
-    return element.options.customData.pageSummary;
+    return element.options.customData ? element.options.customData.pageSummary : '';
 }
 
 /**

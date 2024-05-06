@@ -1,0 +1,7 @@
+.xxc-embed #menu {display: none;}
+.xxc-embed #apps, .xxc-embed #appsBar {left: 0;}
+.xxc-embed #userMenu-toggle {display: none;}
+.xxc-embed #toolbar {position: fixed; right: 130px; height: 47px; z-index: 9999;}
+.xxc-embed .re-login-btn {display: none;}
+.xxc-embed .messagers {bottom: 40px !important;}
+.xxc-embed #basicInfoLink {margin-right: 120px;}

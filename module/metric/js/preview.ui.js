@@ -9,6 +9,11 @@ window.afterPageUpdate = function($target, info, options)
     }
     window.filterChecked = {};
 
+    if(viewType == 'single')
+    {
+        var metricCurrent = $('.metric-tree .metric-current');
+        if(metricCurrent.length) metricCurrent[0].scrollIntoView({block: 'center', inline: 'start' })
+    }
     if(viewType == 'multiple')
     {
         window.renderCheckedLabel();
@@ -16,6 +21,7 @@ window.afterPageUpdate = function($target, info, options)
     }
 
     window.addTitle2Star();
+    window.addDivider();
     window.initFilterPanel();
 }
 
@@ -34,6 +40,13 @@ window.initCheckedList = function()
 window.addTitle2Star = function()
 {
     $('.metric-collect').attr('title', collectStar);
+}
+
+window.addDivider = function()
+{
+    let features = $('#featureBar .nav-feature').find('li.nav-item');
+    let lastItem = features[features.length - 1];
+    $(lastItem).addClass('divider-before');
 }
 
 /* 事件处理函数。 */
@@ -78,7 +91,8 @@ window.handleFilterCheck = function()
 
 window.handleFilterToggle = function($el)
 {
-    $el.toggleClass('primary-600');
+    toggleSearchBtn();
+
     $('.filter-panel').toggleClass('hidden');
 }
 
@@ -269,10 +283,11 @@ window.initFilterPanel = function()
 
     $('#mainMenu').after($('.filter-panel'));
 
-    $('.filter-btn').removeClass('primary-600');
+    toggleSearchBtn(true);
     if(scope == 'filter')
     {
-        $('.filter-btn').addClass('primary-600');
+        toggleSearchBtn(false);
+
         $('.filter-panel').removeClass('hidden');
         window.updateFilterCheck();
     }
@@ -394,8 +409,12 @@ window.handleQueryClick = function(id, viewType = 'single')
     if(!check) return;
 
     var formData = window.getFormData($form);
+    var scopeValue = formData.get('scope') === null     ? '' : formData.get('scope');
+    var dateLabel  = formData.get('dateLabel') === null ? '' : formData.get('dateLabel');
+    var dateBegin  = formData.get('dateBegin') === null ? '' : formData.get('dateBegin').replace(/-/g, '_');
+    var dateEnd    = formData.get('dateEnd') === null   ? '' : formData.get('dateEnd').replace(/-/g, '_');
 
-    $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&viewType=' + viewType), formData, function(resp)
+    $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&scope=' + scopeValue + '&dateLabel=' + dateLabel + '&dateBegin=' + dateBegin + '&dateEnd=' + dateEnd + '&viewType=' + viewType), formData, function(resp)
     {
         if(viewType == 'multiple')
         {
@@ -688,7 +707,8 @@ window.genDataZoom = function(dataLength, initZoom = 10, axis = 'x')
 
 window.hideFilterPanel = function()
 {
-    $('.filter-btn').removeClass('primary-600');
+    toggleSearchBtn(false);
+
     $('.filter-panel').addClass('hidden');
 }
 
@@ -697,4 +717,29 @@ window.deactiveNavMenu = function()
     var itemSelector = 'menu.nav-ajax .nav-item a';
     $(itemSelector).removeClass('active');
     $(itemSelector).find('span.label').remove();
+}
+
+window.toggleSearchBtn = function(active = null)
+{
+    if(active === null)
+    {
+        $('.filter-btn').toggleClass('ring-primary');
+        $('.icon-search').toggleClass('text-primary');
+        $('.filter-btn-text').toggleClass('text-primary');
+    }
+    else
+    {
+        if(active)
+        {
+            $('.filter-btn').addClass('ring-primary');
+            $('.icon-search').addClass('text-primary');
+            $('.filter-btn-text').addClass('text-primary');
+        }
+        else
+        {
+            $('.filter-btn').removeClass('ring-primary');
+            $('.icon-search').removeClass('text-primary');
+            $('.filter-btn-text').removeClass('text-primary');
+        }
+    }
 }

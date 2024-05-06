@@ -46,6 +46,7 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('executionID', isset($executionID) ? $executionID : 0);
+jsVar('typeDesc', $lang->execution->typeDesc);
 
 $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');
 
@@ -82,7 +83,7 @@ formGridPanel
         (
             set::icon('copy'),
             setClass('primary-ghost size-md'),
-            toggle::modal(array('target' => '#copyExecutionModal', 'destoryOnHide' => true)),
+            toggle::modal(array('target' => '#copyExecutionModal', 'destoryOnHide' => true, 'size' => 'sm')),
             $lang->execution->copyExec
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))
@@ -92,6 +93,7 @@ formGridPanel
     on::change('[name=begin],[name=end]', $handleBeginEndChange),
     on::change('[name=teams]', 'loadMembers'),
     on::change('#copyTeam', 'toggleCopyTeam'),
+    on::click('[name=lifetime]', 'toggleOpsTip'),
     set::fields($fields)
 );
 
@@ -103,26 +105,40 @@ modalTrigger
         set::footerClass('justify-center'),
         to::header
         (
-            span
+            div
             (
-                h4
+                setClass('w-full'),
+                div
                 (
-                    set::className('copy-title'),
-                    $lang->execution->copyTitle
+                    h4
+                    (
+                        set::className('copy-title'),
+                        $lang->execution->copyTitle
+                    )
+                ),
+                div
+                (
+                    setClass('flex items-center py-4 border-b border-b-1'),
+                    span
+                    (
+                        setClass('mr-2'),
+                        $lang->execution->selectProject
+                    ),
+                    picker
+                    (
+                        set::className('flex-1 w-full'),
+                        set::name('project'),
+                        set::items($copyProjects),
+                        set::value($projectID),
+                        set::required(true),
+                        on::change('loadProjectExecutions')
+                    )
                 )
-            ),
-            picker
-            (
-                set::className('pickerProject'),
-                set::name('project'),
-                set::items($copyProjects),
-                set::value($projectID),
-                set::required(true),
-                on::change('loadProjectExecutions')
             )
         ),
         to::footer
         (
+            setClass('mt-4'),
             btn
             (
                 setClass('primary btn-wide hidden confirmBtn'),
@@ -133,7 +149,7 @@ modalTrigger
         div
         (
             set::id('copyExecutions'),
-            setClass('flex items-center flex-wrap')
+            setClass('flex items-center flex-wrap gap-4')
         )
     )
 );

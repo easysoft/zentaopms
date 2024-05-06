@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 /**
 
 title=测试executionModel->getSwitcher();
@@ -26,7 +26,7 @@ cid=1
 */
 
 su('admin');
-zdTable('project')->config('execution')->gen(30);
+zenData('project')->loadYaml('execution')->gen(30);
 
 $executionIdList = array(101, 106, 124);
 $moduleList      = array('execution', 'project');

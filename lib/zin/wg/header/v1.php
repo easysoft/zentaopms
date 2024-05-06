@@ -69,7 +69,7 @@ class header extends wg
         return h::header
         (
             setID('header'),
-            commonModel::isTutorialMode() ? setStyle('width', 'fit-content') : null,
+            commonModel::isTutorialMode() ? setStyle('min-width', 'fit-content') : null,
             h::div
             (
                 setClass('container'),
@@ -134,7 +134,7 @@ class header extends wg
                         'class'           => '800',
                         'outerClass'      => 'user-tutorial',
                         'data-width'      => 700,
-                        'data-class-name' => 'modal-inverse',
+                        'data-class-name' => 'modal-inverse tutorial-start',
                         'data-headerless' => true,
                         'data-backdrop'   => true,
                         'data-keyboard'   => true,
@@ -235,7 +235,7 @@ class header extends wg
 
             set::id('userMenu'),
             set::trigger('hover'),
-            set::placement('bottom-start'),
+            set::placement('bottom-end'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
             set::arrow(true),

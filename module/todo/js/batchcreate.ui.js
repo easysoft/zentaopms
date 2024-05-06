@@ -34,7 +34,7 @@ window.changeType = function(e)
     }
 }
 
-window.changFuture = function()
+window.changeFuture = function()
 {
     const isChecked = $('#futureDate[type="checkbox"]').prop('checked');
     const $todoDate = $('#todoDate').zui('datePicker');
@@ -66,27 +66,20 @@ window.initTime = function(e)
     const options = $picker.options;
     const items   = options.items;
     const isBegin = options.name.indexOf('begin') === 0;
+    const index   = parseInt($tr.data('index'));
 
-    const index = parseInt($tr.data('index'));
     if(isBegin)
     {
         let endValue = '';
-        if(!value)
+        items.forEach(function(item, timeIndex)
         {
-            endValue = items[0].value;
-        }
-        else
-        {
-            items.forEach(function(item, timeIndex)
+            if(item.value == value)
             {
-                if(item.value == value)
-                {
-                    endIndex = timeIndex + 3;
-                    endValue = items.length <= endIndex ? '' : items[endIndex].value;
-                    return;
-                }
-            });
-        }
+                endIndex = timeIndex + 3;
+                endValue = items.length <= endIndex ? items[items.length - 1].value : items[endIndex].value;
+                return;
+            }
+        });
         $end.zui('picker').$.setValue(endValue);
         if(typeof endIndex != 'undefined') value = endIndex;
     }
@@ -106,6 +99,7 @@ window.initTime = function(e)
                     return;
                 }
             });
+            if(value == '2350') value='6000';
             $(this).find('[data-name="beginAndEnd"] [data-name="begin"]').zui('picker').$.setValue(value);
             $(this).find('[data-name="beginAndEnd"] [data-name="end"]').zui('picker').$.setValue(endValue);
             if(typeof endIndex != 'undefined') value = endIndex;

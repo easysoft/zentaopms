@@ -25,13 +25,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/ci.class.php';
+include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
 
-zdTable('pipeline')->gen(3);
-zdTable('testtask')->gen(5);
-zdTable('project')->gen(5);
-zdTable('projectproduct')->gen(5);
-zdTable('compile')->config('compile')->gen(1);
+zenData('pipeline')->gen(3);
+zenData('testtask')->gen(5);
+zenData('project')->gen(5);
+zenData('projectproduct')->gen(5);
+zenData('compile')->loadYaml('compile')->gen(1);
 su('admin');
 
 $productID = 0;

@@ -19,6 +19,11 @@ class globalSearch extends wg
         $searchItems = array();
         $searchItems[] = array('key' => 'search', 'text' => $lang->searchAB . ' {0}');
         foreach($lang->searchObjects as $key => $module) $searchItems[] = array('key' => $key, 'text' => $module . ' #{0}');
+        $searchItemsEncoded = json_encode($searchItems);
+
+        pageJS(<<<JS
+            window.getSearchItems = () => JSON.parse(`{$searchItemsEncoded}`);
+        JS);
 
         return zui::globalSearch
         (

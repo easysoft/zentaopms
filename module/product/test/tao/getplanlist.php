@@ -15,8 +15,8 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('productplan')->config('productplan')->gen(30);
-zdTable('user')->gen(5);
+zenData('productplan')->loadYaml('productplan')->gen(30);
+zenData('user')->gen(5);
 su('admin');
 
 $productIdList[0] = array();

@@ -189,13 +189,13 @@ class giteaRepo
     public function createBranch($branchName = '', $ref = 'master')
     {
         global $app;
-        $project = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);
+        $apiRoot = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);
 
         $url   = sprintf($apiRoot, "/repos/{$this->repo->serviceProject}/branches");
         $param = new stdclass();
         $param->old_branch_name = $ref;
         $param->new_branch_name = $branchName;
-        $result = json_decode(commonModel::http($url), $param);
+        $result = json_decode(commonModel::http($url, $param, array(), array(), 'json'));
 
         return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => zget($result, 'message', 'Error'));
     }

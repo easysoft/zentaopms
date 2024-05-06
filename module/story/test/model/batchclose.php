@@ -39,19 +39,19 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1');
 $story->version->range('1');
 $story->gen(20);
 
-$storyspec = zdTable('storyspec');
+$storyspec = zenData('storyspec');
 $storyspec->version->range('1');
 $storyspec->gen(12);
 
-zdTable('product')->gen(1);
+zenData('product')->gen(1);
 
 $story = new storyTest();
 $storyIdList   = array(2, 4, 6, 8, 10, 12);

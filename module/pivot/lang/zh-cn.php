@@ -139,7 +139,6 @@ $lang->pivot->execution     = $lang->execution->common;
 $lang->pivot->product       = $lang->productCommon;
 $lang->pivot->user          = '姓名';
 $lang->pivot->bugTotal      = 'Bug';
-$lang->pivot->bug           = 'Bug';
 $lang->pivot->task          = '任务数';
 $lang->pivot->estimate      = '总预计';
 $lang->pivot->consumed      = '总消耗';
@@ -153,7 +152,6 @@ $lang->pivot->manhourTotal  = "总工时";
 $lang->pivot->validRate     = "有效率";
 $lang->pivot->validRateTips = "方案为已解决或延期/状态为已解决或已关闭";
 $lang->pivot->unplanned     = "未计划";
-$lang->pivot->workhour      = '每天工时';
 $lang->pivot->workday       = '每天工时';
 $lang->pivot->diffDays      = '工作日天数';
 

@@ -71,7 +71,7 @@ class user extends control
         $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         if(!isset($users[$userID])) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->user->error->noAccess, 'locate' => array('back' => true))));
 
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->todo;
         $this->view->deptUsers = $users;
         $this->view->todos     = $todos;
         $this->view->user      = $user;
@@ -120,7 +120,7 @@ class user extends control
         if($storyType == 'requirement') $this->lang->story->title = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
 
         /* Assign. */
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->story;
         $this->view->stories   = $this->story->getUserStories($user->account, $type, $sort, $pager, $storyType, false, 'all');
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->deptUsers = $users;
@@ -165,7 +165,7 @@ class user extends control
         if(strpos($sort, 'Label') !== false) $sort = str_replace('Label', '', $sort);
 
         /* Assign. */
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->task;
         $this->view->tasks     = $this->loadModel('task')->getUserTasks($user->account, $type, 0, $pager, $sort);
         $this->view->deptUsers = $users;
         $this->view->user      = $user;
@@ -205,7 +205,7 @@ class user extends control
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
 
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->bug;
         $this->view->bugs      = $this->loadModel('bug')->getUserBugs($user->account, $type, $orderBy, 0, $pager);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->deptUsers = $users;
@@ -249,7 +249,7 @@ class user extends control
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->testTask;
         $this->view->tasks     = $this->loadModel('testtask')->getByUser($user->account, $pager, $sort);
         $this->view->deptUsers = $users;
         $this->view->user      = $user;
@@ -306,7 +306,7 @@ class user extends control
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
         /* Assign. */
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->testCase;
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->cases     = $cases;
         $this->view->deptUsers = $users;
@@ -343,7 +343,7 @@ class user extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
+        $this->view->title      = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->execution;
         $this->view->executions = $this->user->getExecutions($user->account, 'all', $orderBy, $pager);
         $this->view->deptUsers  = $users;
         $this->view->user       = $user;
@@ -379,7 +379,7 @@ class user extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->issue;
         $this->view->issues    = $this->loadModel('issue')->getUserIssues($type, 0, $user->account, $orderBy, $pager);
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->deptUsers = $users;
@@ -419,7 +419,7 @@ class user extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
 
-        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
+        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->risk;
         $this->view->risks     = $this->loadModel('risk')->getUserRisks($type, $user->account, $orderBy, $pager);
         $this->view->deptUsers = $users;
         $this->view->user      = $user;
@@ -794,7 +794,7 @@ class user extends control
 
         if($this->app->getViewType() == 'json') return $this->send(array('status' => 'success'));
 
-        return $this->send(array('result' => 'success', 'load' => inlink('login', !empty($referer) ? "referer=$referer" : '')));
+        return $this->send(array('result' => 'success', 'locate' => inlink('login', !empty($referer) ? "referer=$referer" : '')));
     }
 
     /**
@@ -960,7 +960,7 @@ class user extends control
 
 
         /* Assign. */
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
+        $this->view->title      = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->dynamic;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->dateGroups = $dateGroups;
         $this->view->deptUsers  = $users;

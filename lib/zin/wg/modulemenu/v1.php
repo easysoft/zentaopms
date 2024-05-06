@@ -50,8 +50,10 @@ class moduleMenu extends wg
         .module-menu-header.is-fixed .module-title {font-size: var(--font-size-base);}
         .module-menu-header.is-fixed > .btn-close {position: absolute; right: 0; font-weight: normal;}
         .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
-        .sidebar.is-collapsed > .module-menu-header.is-fixed {display: flex;}
+        .sidebar > .module-menu-header.is-fixed {display: flex!important;}
         .sidebar-left > .module-menu {margin-right: -8px}
+        .sidebar-left.is-expanded > .module-menu ~ .sidebar-gutter {margin-left: 4px}
+        .sidebar-right.is-expanded > .module-menu ~ .sidebar-gutter {margin-right: 4px}
         .is-expanded > .module-menu ~ .sidebar-gutter > .gutter-toggle {opacity: 0}
         .has-module-menu-header .sidebar-left {transition-property: width;}
         .has-module-menu-header .module-menu {max-height: calc(100vh - 105px); }
@@ -105,7 +107,7 @@ class moduleMenu extends wg
             /* Remove the rendered module. */
             if(isset(static::$filterMap["{$module->parent}-{$module->id}"])) return false;
 
-            if($module->parent != $id) return false;
+            if((string)$module->parent != (string)$id) return false;
 
             static::$filterMap["{$module->parent}-{$module->id}"] = true;
             return true;
@@ -207,7 +209,7 @@ class moduleMenu extends wg
         (
             btn
             (
-                setClass('ghost absolute right-1 top-1'),
+                setClass('ghost absolute right-1.5 top-1'),
                 set::icon('cog-outline'),
                 set::size('sm'),
                 set::caret(false)
@@ -275,9 +277,10 @@ class moduleMenu extends wg
                 zui::tree
                 (
                     set::_tag('menu'),
-                    set::_class('tree col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
+                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
                     set::defaultNestedShow(true),
                     set::hover(true),
+                    set::lines(true),
                     set::preserve($preserve),
                     set($treeProps),
                     set($userTreeProps)
@@ -293,7 +296,7 @@ class moduleMenu extends wg
                         set::size('sm'),
                         set::icon('menu-arrow-left text-gray'),
                         set::hint($app->lang->collapse),
-                        on::click()->call('$this.closest(".sidebar").sidebar("toggle")')
+                        on::click()->do('$this.closest(".sidebar").sidebar("toggle");')
                     )
                 ),
                 $isInSidebar && !empty($header) ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null

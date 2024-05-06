@@ -9,10 +9,10 @@ cid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('project')->config('program')->gen(20);
-zdTable('task')->config('task')->gen(20);
-zdTable('team')->config('team')->gen(30);
-zdTable('user')->gen(5);
+zenData('project')->loadYaml('program')->gen(20);
+zenData('task')->loadYaml('task')->gen(20);
+zenData('team')->loadYaml('team')->gen(30);
+zenData('user')->gen(5);
 su('admin');
 
 global $tester;

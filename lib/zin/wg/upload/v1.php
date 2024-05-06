@@ -44,6 +44,53 @@ class upload extends wg
         'exceededCountHint?: string'       // 上传超出个数限制提示
     );
 
+    protected function created()
+    {
+        global $lang, $app;
+
+        /* Check file type. */
+        $checkFiles = jsCallback('file')
+            ->const('dangerFileTypes', ",{$app->config->file->dangers},")
+            ->const('dangerFile', $lang->file->dangerFile)
+            ->do(<<<'JS'
+            const typeIndex = file.name.lastIndexOf(".");
+            const fileType  = file.name.slice(typeIndex + 1);
+            if(dangerFileTypes.indexOf(fileType) > -1)
+            {
+                zui.Modal.alert(dangerFile);
+                return false;
+            }
+            JS);
+
+        /* Get onAdd function.*/
+        $onAdd = $this->prop('onAdd');
+        if($onAdd)
+        {
+            if(is_object($onAdd))
+            {
+                /*
+                 * 获取在 ui 界面上通过 jsCallback 和 js 定义的 onAdd 函数。
+                 * eg: 1. $onAdd = jsCallbakc()..;
+                 *         fileSelector(set::onAdd($onAdd));
+                 *     2. $onAdd = js()..;
+                 *         fileSelector(set::onAdd($onAdd));
+                 */
+                $objectClass = get_class($onAdd);
+                if($objectClass == 'zin\js')         $onAdd = $onAdd->toJS();
+                if($objectClass == 'zin\jsCallback') $onAdd = $onAdd->buildBody();
+                if(!is_object($onAdd)) $checkFiles = $checkFiles->do($onAdd);
+            }
+            else
+            {
+                /* 获取在 ui 界面上通过 jsRaw 定义的 onAdd 函数。 eg: fileSelector(set::onAdd(jsRaw('window.onAdd'))); */
+                $onAdd      = js::value($onAdd);
+                $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
+            }
+        }
+        $checkFiles = $checkFiles->do('return file');
+        $this->setProp('onAdd', $checkFiles);
+    }
+
     protected function build(): zui
     {
         global $lang, $app;

@@ -63,6 +63,12 @@ class testcaseModel extends model
         /* Insert testcase steps. */
         $this->testcaseTao->insertSteps($caseID, $case->steps, $case->expects, $case->stepType);
 
+        if($case->auto != 'auto')
+        {
+            ob_start();
+            setcookie('onlyAutoCase', '0');
+        }
+
         if(dao::isError()) return false;
         return $caseID;
     }
@@ -192,7 +198,9 @@ class testcaseModel extends model
 
         /* Set related variables. */
         $toBugs       = $this->dao->select('id, title, severity, openedDate')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
-        $case->toBugs = array();
+        $case->toBugs         = array();
+        $case->fromBugData    = array();
+        $case->linkCaseTitles = array();
         foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug;
         if($case->story)
         {
@@ -1429,17 +1437,20 @@ class testcaseModel extends model
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
         }
-        elseif($this->app->tab == 'project' && empty($case->story))
+        elseif($this->app->tab == 'project' && empty($case->story) && empty($case->project))
         {
             $projects = array($this->session->project);
         }
-        elseif($this->app->tab == 'execution' && empty($case->story))
+        elseif($this->app->tab == 'execution' && empty($case->story) && empty($case->execution))
         {
             $projects = array($this->session->execution);
         }
+        if(!empty($case->project))   $projects[] = $case->project;
+        if(!empty($case->execution)) $projects[] = $case->execution;
         if(empty($projects)) return false;
 
         $this->loadModel('action');
+        $projects   = array_unique($projects);
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
         foreach($projects as $projectID)
         {

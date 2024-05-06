@@ -72,9 +72,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$table = zdTable('group');
+$table = zenData('group');
 $table->vision->range('rnd{3},lite{3},or{3}');
 $table->name->range('ADMIN,DEV,QA,LITEADMIN,LITEPROJECT,LITETEAM,IPDADMIN,IPDDEMAND,IPDPMT');
 $table->gen(9);

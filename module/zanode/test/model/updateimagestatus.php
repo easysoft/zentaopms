@@ -15,10 +15,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('image')->gen(1);
-zdTable('user')->gen(5);
+zenData('image')->gen(1);
+zenData('user')->gen(5);
 su('admin');
 
 $postData = new stdclass();

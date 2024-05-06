@@ -15,7 +15,8 @@ include (dirname(__FILE__) . '/common.php');
 global $config;
 
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '-';
+$lang->colon     = ': ';
+$lang->hyphen    = '-';
 $lang->comma     = ',';
 $lang->dot       = '.';
 $lang->at        = ' am ';
@@ -99,7 +100,7 @@ $lang->all                = 'All';
 $lang->viewDetails        = 'View Details';
 $lang->childrenAB         = 'C';
 $lang->branchName         = 'Branch/Platform';
-$lang->deleted            = 'Deleted';
+$lang->recommend          = 'Recommend';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';
@@ -188,6 +189,13 @@ $lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
+
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = 'Sie können uns kontaktieren, wenn Sie Fragen haben.';
+$lang->contactUs->phone  = 'Telefon';
+$lang->contactUs->email  = 'Email';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Standard Module';
 $lang->common->story        = 'Story';

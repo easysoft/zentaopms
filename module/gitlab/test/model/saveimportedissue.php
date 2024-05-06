@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/gitlab.class.php';
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 su('admin');
 
 /**
@@ -15,10 +15,10 @@ cid=1
 
 */
 
-zdTable('task')->gen(20);
-zdTable('bug')->gen(10);
-zdTable('pipeline')->gen(5);
-zdTable('relation')->config('relation')->gen(4);
+zenData('task')->gen(20);
+zenData('bug')->gen(10);
+zenData('pipeline')->gen(5);
+zenData('relation')->loadYaml('relation')->gen(4);
 
 $gitlab  = new gitlabTest();
 

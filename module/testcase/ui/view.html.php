@@ -16,6 +16,28 @@ jsVar('viewParams', "caseID={$case->id}&version={$version}&from={$from}&taskID={
 
 $isInModal = isInModal();
 
+/* 版本列表。Version list. */
+$versions = array();
+for($i = $case->version; $i >= 1; $i--)
+{
+    $versionItem = setting()
+        ->text("#{$i}")
+        ->url(inlink('view', "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}"));
+
+    if($isInModal)
+    {
+        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal-content'));
+    }
+
+    $versionItem->selected($version == $i);
+    $versions[] = $versionItem;
+}
+$versionBtn = count($versions) > 1 ? to::title(dropdown
+(
+    btn(set::type('ghost'), setClass('text-link font-normal text-base'), "#{$version}"),
+    set::items($versions)
+)) : null;
+
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
 if(!$isInModal && hasPriv('testcase', 'create', $case))
@@ -31,11 +53,17 @@ if(!$isInModal && hasPriv('testcase', 'create', $case))
 
 /* 初始化底部操作栏。Init bottom actions. */
 $actions = $this->loadModel('common')->buildOperateMenu($case);
-$actions = $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+$actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
 {
     if(!isset($action['url'])) continue;
-    $actions[$index]['url'] = str_replace('%executionID%', (string)$this->session->execution, $action['url']);
+    $actions[$index]['url'] = str_replace(array('%executionID%', '{runID}'), array((string)$this->session->execution, (string)$runID), $action['url']);
+
+    if($isInModal && !isset($action['data-toggle']) && !isset($action['data-load']))
+    {
+        $actions[$index]['data-load'] = 'modal';
+        $actions[$index]['data-size'] = 'lg';
+    }
 }
 
 $steps = array();
@@ -55,7 +83,7 @@ if(!empty($case->steps) && $stepsType == 'table')
                 width('1/2'),
                 span
                 (
-                    setClass('pr-2 pl-' . (($step->grade - 1) * 2)),
+                    setClass('nowrap pr-2 pl-' . (($step->grade - 1) * 2)),
                     $step->name
                 ),
                 html(nl2br(str_replace(' ', '&nbsp;', $step->desc)))
@@ -98,11 +126,19 @@ $stepsTable = !empty($case->steps) ? div
     ) : div
     (
         setID('stepsView'),
+        setClass('relative'),
         mindmap
         (
             set::data($case->mindMapSteps),
             set::readonly(true)
-        )
+        ),
+        btn
+        (
+            setClass('ghost absolute z-1 top-1 right-1'),
+            set::icon('fullscreen'),
+            on::click()->call('zui.toggleFullscreen', '#stepsView')
+        ),
+        h::css('.is-in-fullscreen > .mindmap-iframe {height: 100%!important}')
     )
 ) : div
 (
@@ -119,8 +155,8 @@ $stepsTable = !empty($case->steps) ? div
 );
 
 $stepsActions = array();
-$stepsActions['items'][] = array('icon' => 'table-large', 'size' => 'xs', 'type' => $stepsType == 'table' ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
-$stepsActions['items'][] = array('icon' => 'tree', 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
+$stepsActions['items'][] = array('icon' => 'table-large', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
+$stepsActions['items'][] = array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
 
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();
@@ -165,5 +201,6 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions)
+    set::actions($actions),
+    $versionBtn
 );

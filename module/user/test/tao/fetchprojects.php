@@ -6,12 +6,12 @@ cid=1
 pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(3);
-zdTable('company')->gen(1);
+zenData('user')->gen(3);
+zenData('company')->gen(1);
 
-$projectTable = zdTable('project');
+$projectTable = zenData('project');
 $projectTable->type->range('project');
 $projectTable->name->range('1-18')->prefix('项目');
 $projectTable->status->range('wait,doing,suspended,closed');
@@ -20,7 +20,7 @@ $projectTable->vision->range('rnd{11},lite');
 $projectTable->deleted->range('0{4},1');
 $projectTable->gen(18);
 
-$teamTable = zdTable('team');
+$teamTable = zenData('team');
 $teamTable->root->range('1-18');
 $teamTable->type->range('project');
 $teamTable->account->range('admin{12},user1{6}');

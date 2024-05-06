@@ -9,8 +9,8 @@ pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('log')->gen(10);
-zdTable('user')->gen(5);
+zenData('log')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
 global $tester;

@@ -18,11 +18,11 @@ cid=1
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/holiday.class.php';
+include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
 
-zdTable('holiday')->config('holiday')->gen(24);
-zdTable('task')->config('task')->gen(10);
-zdTable('user')->gen(1);
+zenData('holiday')->loadYaml('holiday')->gen(24);
+zenData('task')->loadYaml('task')->gen(10);
+zenData('user')->gen(1);
 
 su('admin');
 

@@ -14,9 +14,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
+include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 
 $types  = array('scrum', 'waterfall', 'waterfallplus');
 $method = array('browse', 'browseplus');

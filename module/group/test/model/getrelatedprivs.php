@@ -19,7 +19,7 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
+include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
 
 su('admin');
 

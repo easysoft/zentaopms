@@ -81,12 +81,12 @@ $executions = $this->execution->generateRow($executionStats, $users, $avatarList
 
 /* zin: Define the feature bar on main menu. */
 $productItems = array();
-foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink($this->app->rawModule, $this->app->rawMethod, "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
+foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
 $productName = !empty($product) ? $product->name : '';
 featureBar
 (
-    $project->hasProduct ? to::leading
+    ($project->stageBy == 'product' && $project->hasProduct) ? to::leading
     (
         dropdown
         (
@@ -94,8 +94,10 @@ featureBar
             set::items($productItems)
         )
     ) : null,
+    set::module('project'),
+    set::method('execution'),
     set::current($status),
-    set::linkParams("status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::link('project', 'execution', "status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li
     (
         checkbox
@@ -107,7 +109,7 @@ featureBar
             set::rootClass('ml-4')
         )
     ),
-    $config->edition == 'ipd' ? li
+    $project->model == 'ipd' ? li
     (
         checkbox
         (
@@ -124,7 +126,7 @@ featureBar
 $createLink = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
 toolbar
 (
-    in_array($project->model, array('waterfall', 'waterfallplus')) && $this->config->edition == 'max' ? btnGroup
+    in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($this->config->edition, array('max', 'ipd')) ? btnGroup
     (
         a(setClass('btn square'), icon('gantt-alt'), set::title($lang->programplan->gantt), set::href(createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
         a(setClass('btn square text-primary'), icon('list'), set::title($lang->project->bylist))

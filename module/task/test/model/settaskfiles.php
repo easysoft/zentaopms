@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-6');
 $task->name->prefix('任务')->range('1-6');
 $task->gen(6);
 
-$file = zdTable('file');
+$file = zenData('file');
 $file->id->range('1-10');
 $file->title->prefix('附件')->range('1-10');
 $file->objectType->range('task');

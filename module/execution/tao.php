@@ -266,10 +266,10 @@ class executionTao extends executionModel
      * 设置看板执行的菜单。
      * Set kanban menu.
      *
-     * @access protected
+     * @access public
      * @return void
      */
-    protected function setKanbanMenu()
+    public function setKanbanMenu()
     {
         global $lang;
         $lang->executionCommon = $lang->execution->kanban;
@@ -278,7 +278,7 @@ class executionTao extends executionModel
         $this->lang->execution->menu           = new stdclass();
         $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s", 'subModule' => 'task');
         $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
-        $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
+        $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s", 'alias' => 'bug', 'subModule' => 'projectbuild,build,bug');
         $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
         $this->lang->execution->dividerMenu    = '';
 

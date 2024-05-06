@@ -19,18 +19,18 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('program{10},project{10},sprint{10}');
 $project->project->range('0{10},1-10,11-20');
 $project->gen(30);
 
-zdTable('product')->gen(30);
-zdTable('projectproduct')->gen(30);
-zdTable('productplan')->gen(30);
-zdTable('team')->gen(30);
-zdTable('release')->gen(30);
+zenData('product')->gen(30);
+zenData('projectproduct')->gen(30);
+zenData('productplan')->gen(30);
+zenData('team')->gen(30);
+zenData('release')->gen(30);
 
 $product = new productTest('admin');
 

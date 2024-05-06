@@ -26,7 +26,7 @@ $config->build->dtable->fieldList['branch']['type']  = 'desc';
 $config->build->dtable->fieldList['branch']['group'] = 1;
 
 $config->build->dtable->fieldList['execution']['title'] = $lang->build->execution;
-$config->build->dtable->fieldList['execution']['name']  = 'execution';
+$config->build->dtable->fieldList['execution']['name']  = 'executionName';
 $config->build->dtable->fieldList['execution']['type']  = 'desc';
 $config->build->dtable->fieldList['execution']['group'] = 1;
 
@@ -44,10 +44,11 @@ $config->build->dtable->fieldList['date']['name']     = 'date';
 $config->build->dtable->fieldList['date']['type']     = 'date';
 $config->build->dtable->fieldList['date']['sortType'] = true;
 
-$config->build->dtable->fieldList['actions']['title']      = $lang->actions;
-$config->build->dtable->fieldList['actions']['name']       = 'actions';
-$config->build->dtable->fieldList['actions']['type']       = 'actions';
-$config->build->dtable->fieldList['actions']['actionsMap'] = $config->build->actionList;
+$config->build->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->build->dtable->fieldList['actions']['name']  = 'actions';
+$config->build->dtable->fieldList['actions']['type']  = 'actions';
+$config->build->dtable->fieldList['actions']['list']  = $config->build->actionList;
+$config->build->dtable->fieldList['actions']['menu']  = array('linkStory', 'createTest', 'viewBug', 'edit', 'delete');
 
 $config->build->story                = new stdclass();
 $config->build->bug                  = new stdclass();

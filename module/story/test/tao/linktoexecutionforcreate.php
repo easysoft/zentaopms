@@ -17,10 +17,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-zdTable('story')->gen(5);
-$project = zdTable('project');
+zenData('story')->gen(5);
+$project = zenData('project');
 $project->id->range('11-20');
 $project->project->range('0,1{3}');
 $project->type->range('project,kanban,sprint,sprint');

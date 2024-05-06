@@ -188,7 +188,7 @@ if(!isAjaxRequest('modal'))
         ->items(empty(data('features.story')) ? array('toTaskList' => $lang->task->afterChoices['toTaskList']) : $config->task->afterOptions);
 }
 
-if(!empty(data('features.story'))) $fields->field('type')->checkbox(array('text' => $lang->task->selectTestStory, 'name' => 'selectTestStory'));
+if(!empty(data('features.story')) && empty(data('storyID'))) $fields->field('type')->checkbox(array('text' => $lang->task->selectTestStory, 'name' => 'selectTestStory'));
 
 /* Set hidden control. */
 $fields->field('storyEstimate')

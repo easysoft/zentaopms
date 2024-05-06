@@ -8,10 +8,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('productplan')->config('productplan')->gen(5);
+zenData('user')->gen(5);
+zenData('productplan')->loadYaml('productplan')->gen(5);
 
 $planIdList = array(1, 2, 3);
 

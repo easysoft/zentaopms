@@ -1033,8 +1033,8 @@ class instanceModel extends model
     }
 
     /**
-     * 自动生成pipline表name字段。
-     * Auto generate name of pipline table.
+     * 自动生成pipeline表name字段。
+     * Auto generate name of pipeline table.
      *
      * @param  object     $instance
      * @access protected

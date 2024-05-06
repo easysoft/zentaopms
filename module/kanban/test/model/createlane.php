@@ -27,13 +27,13 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/kanban.class.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 su('admin');
 
-zdTable('kanban')->gen(1);
-zdTable('kanbanregion')->gen(1);
-zdTable('kanbanlane')->gen(1);
-zdTable('kanbangroup')->gen(1);
+zenData('kanban')->gen(1);
+zenData('kanbanregion')->gen(1);
+zenData('kanbanlane')->gen(1);
+zenData('kanbangroup')->gen(1);
 
 $sameAsOtherLane = new stdclass();
 $sameAsOtherLane->name      = '测试创建与其他泳道使用相同看板列的泳道';

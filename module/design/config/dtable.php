@@ -26,7 +26,6 @@ $config->design->dtable->fieldList['type']['statusMap'] = $lang->design->typeLis
 $config->design->dtable->fieldList['type']['sortType']  = true;
 
 $config->design->dtable->fieldList['assignedTo']['type']        = 'assign';
-$config->design->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
 $config->design->dtable->fieldList['assignedTo']['assignLink']  = array('module' => 'design', 'method' => 'assignTo', 'params' => 'designID={id}');
 $config->design->dtable->fieldList['assignedTo']['data-toggle'] = 'modal';
 $config->design->dtable->fieldList['assignedTo']['sortType']    = false;

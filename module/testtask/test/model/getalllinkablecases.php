@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('case')->config('case')->gen(24);
+zenData('case')->loadYaml('case')->gen(24);
 
 /**
 

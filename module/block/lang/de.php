@@ -48,6 +48,10 @@ $lang->block->contribute      = 'Personal Contribution';
 $lang->block->finish          = 'Finish';
 $lang->block->guide           = 'Guide';
 $lang->block->teamAchievement = 'Team Achievements';
+$lang->block->learnMore       = 'Learn More';
+$lang->block->prevPage        = 'Back';
+$lang->block->nextPage        = 'Next';
+$lang->block->experience      = 'Go';
 
 $lang->block->leftToday           = 'Arbeit für Heute';
 $lang->block->myTask              = 'Aufgaben';
@@ -101,6 +105,7 @@ $lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span c
 $lang->block->cannotPlaceInLeft  = 'Kann den Block nicht auf der linken Seite platzieren.';
 $lang->block->cannotPlaceInRight = 'Kann den Block nicht auf der rechten Seite platzieren.';
 $lang->block->tutorial           = 'Enter the tutorial';
+$lang->block->filterProject      = "Filter {$lang->projectCommon}";
 
 $lang->block->productName   = $lang->productCommon . ' Name';
 $lang->block->totalStory    = 'Total Story';
@@ -117,7 +122,11 @@ $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
 $lang->block->summary = new stdclass();
-$lang->block->summary->welcome = 'Zentao has been with you for %s. <strong>Yesterday</strong>, you has finished  <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks , <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>  bugs were resolved.';
+$lang->block->summary->welcome    = 'Zentao has been with you for %s: ';
+$lang->block->summary->yesterday  = '<strong>Yesterday</strong>';
+$lang->block->summary->noWork     = 'You have not yet processed tasks and bugs,';
+$lang->block->summary->finishTask = 'finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks';
+$lang->block->summary->fixBug     = 'resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a> bugs';
 
 $lang->block->dashboard['default'] = 'Dashboard';
 $lang->block->dashboard['my']      = 'My';
@@ -183,19 +192,19 @@ $lang->block->default['qa'][] = array('title' => 'My Case List',   'module' => '
 
 $lang->block->default['full']['my'][] = array('title' => 'welcome',                                         'module' => 'welcome',         'code' => 'welcome',         'width' => '2');
 $lang->block->default['full']['my'][] = array('title' => 'Guides',                                          'module' => 'guide',           'code' => 'guide',           'width' => '2');
-$lang->block->default['full']['my'][] = array('title' => "Recent {$lang->projectCommon}s",                  'module' => 'project',         'code' => 'recentproject',   'width' => '2');
 $lang->block->default['full']['my'][] = array('title' => 'Todo',                                            'module' => 'assigntome',      'code' => 'assigntome',      'width' => '2', 'params' => array('todoCount' => '20',  'taskCount' => '20', 'bugCount' => '20', 'riskCount' => '20', 'issueCount' => '20', 'storyCount' => '20', 'reviewCount' => '20', 'meetingCount' => '20', 'feedbackCount' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} Statistic",       'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "Recent {$lang->projectCommon}s",                  'module' => 'project',         'code' => 'recentproject',   'width' => '2');
+$lang->block->default['full']['my'][] = array('title' => "Undone {$lang->projectCommon} list",              'module' => 'project',         'code' => 'project',         'width' => '2', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Statistic",                'module' => 'project',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "Undone {$lang->execution->common} Statistic",     'module' => 'execution',       'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
+$lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} Statistic",       'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "Unclosed {$lang->productCommon} test statistics", 'module' => 'qa',              'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "Undone {$lang->projectCommon} list",              'module' => 'project',         'code' => 'project',         'width' => '2', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['full']['my'][] = array('title' => "Zentao Dynamic",                                  'module' => 'zentaodynamic',   'code' => 'zentaodynamic',   'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "Team",                                            'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => 'Dynamic',                                         'module' => 'dynamic',         'code' => 'dynamic',         'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "Team",                                            'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon} Overview",                 'module' => 'product',         'code' => 'overview',        'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Overview",                 'module' => 'project',         'code' => 'overview',        'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "{$lang->executionCommon} Overview",               'module' => 'execution',       'code' => 'overview',        'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "{$lang->execution->common} Overview",             'module' => 'execution',       'code' => 'overview',        'width' => '1');
 
 $lang->block->default['doc'][] = array('title' => 'Statistic',                       'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => 'My Collection Document',          'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
@@ -217,7 +226,7 @@ $lang->block->availableBlocks['case']        = 'Cases';
 $lang->block->availableBlocks['story']       = 'Stories';
 $lang->block->availableBlocks['requirement'] = 'Requirements';
 $lang->block->availableBlocks['product']     = $lang->productCommon . 's';
-$lang->block->availableBlocks['execution']   = $lang->executionCommon . 's';
+$lang->block->availableBlocks['execution']   = $lang->execution->common . 's';
 $lang->block->availableBlocks['plan']        = 'Plans';
 $lang->block->availableBlocks['release']     = 'Releases';
 $lang->block->availableBlocks['build']       = 'Builds';
@@ -228,6 +237,7 @@ $lang->block->availableBlocks['issue']       = 'Issues';
 $lang->block->availableBlocks['meeting']     = 'Meetings';
 $lang->block->availableBlocks['feedback']    = 'Feedbacks';
 $lang->block->availableBlocks['ticket']      = 'Tickets';
+$lang->block->availableBlocks['demand']      = 'Demands';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon} Overview";
@@ -248,6 +258,7 @@ $lang->block->modules['waterfallproject']->availableBlocks['projectdynamic'] = '
 
 $lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
+$lang->block->modules['ipdproject']    = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks['overview']         = "{$lang->productCommon} Overview";
@@ -524,12 +535,13 @@ $lang->block->welcome->reviewByMe = 'ReviewByMe';
 $lang->block->welcome->assignToMe = 'AssignToMe';
 
 $lang->block->welcome->reviewList = array();
-$lang->block->welcome->reviewList['story']    = 'Story';
+$lang->block->welcome->reviewList['story']      = 'Story';
+$lang->block->welcome->reviewList['reviewByMe'] = 'Review';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']        = 'Task';
-$lang->block->welcome->assignList['bug']         = 'Bug';
-$lang->block->welcome->assignList['story']       = 'SRStroy';
+if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'Bug';
+if($config->vision != 'or') $lang->block->welcome->assignList['story'] = 'SRStroy';
 $lang->block->welcome->assignList['testcase']    = 'TestCase';
 
 $lang->block->customModeTip = new stdClass();
@@ -581,8 +593,8 @@ $lang->block->projectstatistic->day              = 'day';
 $lang->block->projectstatistic->hour             = 'hour';
 $lang->block->projectstatistic->leftDaysPre      = 'Before the end has ';
 $lang->block->projectstatistic->delayDaysPre     = 'Has been delayed for ';
-$lang->block->projectstatistic->existRisks       = 'Risks:';
-$lang->block->projectstatistic->existIssues      = 'Issues:';
+$lang->block->projectstatistic->existRisks       = 'Risks';
+$lang->block->projectstatistic->existIssues      = 'Issues';
 $lang->block->projectstatistic->lastestExecution = 'Lastest Execution';
 $lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon} has been closed.";
 $lang->block->projectstatistic->longTimeProject  = "Long Time {$lang->projectCommon}";
@@ -608,7 +620,7 @@ $lang->block->qastatistic->resolvedYesterday = 'Resolved Yesterday';
 $lang->block->qastatistic->resolvedToday     = 'Resolved Today';
 $lang->block->qastatistic->closedYesterday   = 'Closed Yesterday';
 $lang->block->qastatistic->closedToday       = 'Closed Today';
-$lang->block->qastatistic->latestTesttask    = 'Latest Testtask';
+$lang->block->qastatistic->unclosedTesttasks = 'Not Closed Testtasks';
 $lang->block->qastatistic->bugStatusStat     = 'Monthly bug changes';
 
 $lang->block->bugstatistic = new stdclass();
@@ -660,7 +672,7 @@ $lang->block->productlist->activatedBug      = 'Activate Bugs';
 $lang->block->sprint = new stdclass();
 $lang->block->sprint->totalExecution = 'Total';
 $lang->block->sprint->thisYear       = 'This Year';
-$lang->block->sprint->statusCount    = "Status of {$lang->executionCommon}";
+$lang->block->sprint->statusCount    = "Status of {$lang->execution->common}";
 
 $lang->block->zentaodynamic = new stdclass();
 $lang->block->zentaodynamic->zentaosalon  = 'ZenTao · China Travel';
@@ -691,6 +703,7 @@ $lang->block->teamachievement->runCases       = 'Run Cases';
 $lang->block->teamachievement->consumedHours  = 'Consumed Hours';
 $lang->block->teamachievement->totalWorkload  = 'Total Workload';
 $lang->block->teamachievement->vs             = 'VS';
+$lang->block->teamachievement->accrued        = 'Accrued';
 
 $lang->block->estimate = new stdclass();
 $lang->block->estimate->costs    = 'Costs';
@@ -720,11 +733,10 @@ $lang->block->tooltips['effectiveStory']    = "Total number of {$lang->SRCommon}
 $lang->block->tooltips['deliveredStory']    = "Number of {$lang->SRCommon} delivered by {$lang->productCommon}: Sum the number of {$lang->SRCommon} in the {$lang->productCommon}, the stage is released or the reason for closure is done, filter the deleted {$lang->SRCommon} and filter the deleted {$lang->productCommon}.";
 $lang->block->tooltips['costs']             = "Have invested = Hours consumed / Available hours per day for admin configuration";
 $lang->block->tooltips['sv']                = "Schedule Variance = (EV - PV) / PV * 100% ";
-$lang->block->tooltips['ev']                = "<strong>Earned Value</strong> = Number of estimated hours worked on tasks by {$lang->projectCommon} * Progress of tasks by {$lang->projectCommon}, filter deleted tasks, filter cancelled tasks, filter tasks in deleted tasks, filter tasks in deleted {$lang->projectCommon}. <br/>
-<strong>Number of estimated hours worked on tasks by {$lang->projectCommon}</strong>: Summarise the estimated hours of tasks in a {$lang->projectCommon}, filter deleted tasks, filter parent tasks, filter tasks in deleted tasks, filter tasks in deleted {$lang->projectCommon}.";
-$lang->block->tooltips['pv']                = "Planned Value: Summarise the estimated hours for all tasks in the waterfall {$lang->projectCommon}, filter deleted tasks, filter cancelled tasks, filter tasks in deleted tasks, filter tasks in deleted {$lang->projectCommon}.";
+$lang->block->tooltips['ev']                = "The task status is done, and the estimated work hours are accumulated.<br/>The task status is closed and the reason for closing is done, and the estimated work hours areaccumulated.<br/>The task status is in doing, suspended, and the estimated work hours are accumulated * progress of task.<br/>";
+$lang->block->tooltips['pv']                = "If the task end date ≤ the end date of the week, the estimated hours are accrued.<br/>If the estimated start date of the task ≤ the end date of the week and the estimated end date ＞the end date of the week, then Cumulative Estimated Hours = (Estimated hours for task ÷ Number of days in the task's work period) x Number of days from the estimated start of the task to the end date of the week.<br/>";
 $lang->block->tooltips['cv']                = 'Cost Variance = (EV - AC) / AC * 100%';
-$lang->block->tooltips['ac']                = "Actual Cost: Summarise all logged hours in the waterfall {$lang->projectCommon}, filtering for deleted {$lang->projectCommon}.";
+$lang->block->tooltips['ac']                = "The sum of all logged work hours in the waterfall {$lang->projectCommon} until the end of the week, filtering for deleted {$lang->projectCommon}.";
 $lang->block->tooltips['executionProgress'] = "<strong>Total Progress</strong> = Number of hours consumed for task by {$lang->execution->common}/(Number of hours consumed for tasks by {$lang->execution->common} + Number of hours remaining for tasks by {$lang->execution->common})<br/>
 <strong>Number of hours consumed for tasks by {$lang->execution->common}</strong>: Summarise the number of hours consumed for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.<br/>
 <strong>Number of hours remaining for tasks by {$lang->execution->common}</strong>: Summarise the number of remaining hours for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.";

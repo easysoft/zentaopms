@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-zdTable('user')->gen(200);
+zenData('user')->gen(200);
 su('admin');
 
-zdTable('project')->config('execution', true)->gen(30);
-zdTable('team')->config('team', true)->gen(60);
+zenData('project')->loadYaml('execution', true)->gen(30);
+zenData('team')->loadYaml('team', true)->gen(60);
 
 /**
 

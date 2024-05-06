@@ -12,8 +12,18 @@ function batchComputeWorkDays()
     const $tr = $(this).closest('tr');
     if($tr.find('div[data-longtime="1"]').length > 0) return false;
 
+    const $days   = $tr.find('[data-name="days"] input');
+    const endDate = $tr.find('[name^=end]').val();
+    if(endDate == longTime)
+    {
+        $days.val('').addClass('disabled');
+        $days.attr('disabled', 'disabled');
+        return false;
+    }
+    $days.removeClass('disabled');
+    $days.removeAttr('disabled');
+
     const beginDate = $tr.find('[name^=begin]').val();
-    const endDate   = $tr.find('[name^=end]').val();
     $tr.find('[name^=days]').val(computeDaysDelta(beginDate, endDate));
 }
 
@@ -79,11 +89,17 @@ batchIgnoreTip = function(index)
 
 window.renderRowData = function($row, index, row)
 {
-
     const aclList = !disabledprograms && row.parent ? programAclList : projectAclList;
     $row.find('[data-name="acl"]').find('.picker-box').on('inited', function(e, info)
     {
         let $acl = info[0];
         $acl.render({items: aclList, required: true});
     });
+
+    if(row.end == longTime)
+    {
+        const $days = $row.find('[data-name="days"] input');
+        $days.val('').addClass('disabled');
+        $days.attr('disabled', 'disabled');
+    }
 }

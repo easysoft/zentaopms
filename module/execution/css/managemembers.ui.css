@@ -1,7 +1,9 @@
 .main-content {padding: 20px; background: #fff;}
 #teamForm tr {border: none;}
 #teamForm tr > th {background: #fff;}
-#teamForm .actions-list {padding-left: 0.5rem;}
+#teamForm .actions-list {padding-left: 3rem;}
 #featureBar .select-dept-box, #featureBar .select-team-box {display: inline-flex;}
-#featureBar .dept-title, #featureBar .team-title {width: 64px;}
+#featureBar .dept-title {width: 120px;}
+#featureBar .team-title {width: 80px;}
+[lang^=zh] #featureBar .dept-title, [lang^=zh] #featureBar .team-title {width: 64px;}
 #featureBar .select-dept-box .picker, #featureBar .select-team-box .picker {width: 270px;}

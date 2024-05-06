@@ -29,50 +29,54 @@ $config->build->search['params']['builder']  = array('operator' => '=',       'c
 $config->build->search['params']['desc']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
 
 $config->build->actionList['linkStory']['icon'] = 'link';
+$config->build->actionList['linkStory']['text'] = $lang->build->linkStory;
 $config->build->actionList['linkStory']['hint'] = $lang->build->linkStory;
-$config->build->actionList['linkStory']['url']  = helper::createLink('build', 'view', 'buildID={id}&type=story&link=true');
+$config->build->actionList['linkStory']['url']  = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');
 
-$config->build->actionList['linkProjectStory'] = $config->build->actionList['linkStory'];
-$config->build->actionList['linkProjectStory']['url'] = helper::createLink('projectbuild', 'view', 'buildID={id}&type=story&link=true');
+$config->build->actionList['linkProjectStory']        = $config->build->actionList['linkStory'];
+$config->build->actionList['linkProjectStory']['url'] = array('module' => 'projectbuild', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');
 
 $config->build->actionList['createTest']['icon']     = 'bullhorn';
+$config->build->actionList['createTest']['text']     = $lang->build->createTest;
 $config->build->actionList['createTest']['hint']     = $lang->build->createTest;
-$config->build->actionList['createTest']['url']      = helper::createLink('testtask', 'create', 'product={product}&execution={execution}&build={id}&projectID={project}');
+$config->build->actionList['createTest']['url']      = array('module' => 'testtask', 'method' => 'create', 'params' => 'product={product}&execution={execution}&build={id}&projectID={project}');
 $config->build->actionList['createTest']['data-app'] = $app->tab;
 
 $config->build->actionList['viewBug']['icon'] = 'bug';
+$config->build->actionList['viewBug']['text'] = $lang->build->viewBug;
 $config->build->actionList['viewBug']['hint'] = $lang->build->viewBug;
-$config->build->actionList['viewBug']['url']  = helper::createLink('execution', 'bug', 'execution={execution}&productID={product}&branchID=all&orderBy=status&build={id}');
+$config->build->actionList['viewBug']['url']  = array('module' => 'execution', 'method' => 'bug', 'params' => 'execution={execution}&productID={product}&branchID=all&orderBy=status&build={id}');
 
-$config->build->actionList['bugList'] = $config->build->actionList['viewBug'];
+$config->build->actionList['bugList']         = $config->build->actionList['viewBug'];
+$config->build->actionList['bugList']['text'] = $lang->build->bugList;
 $config->build->actionList['bugList']['hint'] = $lang->build->bugList;
-$config->build->actionList['bugList']['url']  = helper::createLink('build', 'view', 'buildID={id}&type=generatedBug');
+$config->build->actionList['bugList']['url']  = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}&type=generatedBug');
 
-$config->build->actionList['projectBugList'] = $config->build->actionList['bugList'];
-$config->build->actionList['projectBugList']['url']  = helper::createLink('projectbuild', 'view', 'buildID={id}&type=generatedBug');
+$config->build->actionList['projectBugList']        = $config->build->actionList['bugList'];
+$config->build->actionList['projectBugList']['url'] = array('module' => 'projectbuild', 'method' => 'view', 'params' => 'buildID={id}&type=generatedBug');
 
-$config->build->actionList['buildEdit']['icon'] = 'edit';
-$config->build->actionList['buildEdit']['text'] = $lang->edit;
-$config->build->actionList['buildEdit']['hint'] = $lang->build->edit;
-$config->build->actionList['buildEdit']['url']  = helper::createLink('build', 'edit', 'buildID={id}');
-
-$config->build->actionList['projectbuildEdit'] = $config->build->actionList['buildEdit'];
-$config->build->actionList['projectbuildEdit']['url'] = helper::createLink('projectbuild', 'edit', 'buildID={id}');
+$config->build->actionList['edit']['icon']     = 'edit';
+$config->build->actionList['edit']['text']     = $lang->build->edit;
+$config->build->actionList['edit']['hint']     = $lang->build->edit;
+$config->build->actionList['edit']['url']      = array('module' => $app->tab == 'project' ? 'projectbuild' : 'build', 'method' => 'edit', 'params' => 'buildID={id}');
+$config->build->actionList['edit']['data-app'] = $app->tab;
 
 $config->build->actionList['delete']['icon']         = 'trash';
-$config->build->actionList['delete']['text']         = $lang->delete;
+$config->build->actionList['delete']['text']         = $lang->build->delete;
 $config->build->actionList['delete']['hint']         = $lang->build->delete;
-$config->build->actionList['delete']['url']          = helper::createLink($app->tab == 'project' ? 'projectbuild' : 'build', 'delete', 'buildID={id}');
+$config->build->actionList['delete']['url']          = array('module' => ($app->tab == 'project' ? 'projectbuild' : 'build'), 'method' => 'delete', 'params' => 'buildID={id}');
 $config->build->actionList['delete']['className']    = 'ajax-submit';
 $config->build->actionList['delete']['data-confirm'] = array('message' => $lang->build->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->build->actionList['unlinkBug']['icon']         = 'unlink';
+$config->build->actionList['unlinkBug']['text']         = $lang->build->unlinkBug;
 $config->build->actionList['unlinkBug']['hint']         = $lang->build->unlinkBug;
 $config->build->actionList['unlinkBug']['url']          = '';
 $config->build->actionList['unlinkBug']['className']    = 'ajax-submit';
 $config->build->actionList['unlinkBug']['data-confirm'] = $lang->build->confirmUnlinkBug;
 
 $config->build->actionList['unlinkStory']['icon']         = 'unlink';
+$config->build->actionList['unlinkStory']['text']         = $lang->build->unlinkStory;
 $config->build->actionList['unlinkStory']['hint']         = $lang->build->unlinkStory;
 $config->build->actionList['unlinkStory']['url']          = '';
 $config->build->actionList['unlinkStory']['className']    = 'ajax-submit';
@@ -80,5 +84,5 @@ $config->build->actionList['unlinkStory']['data-confirm'] = $lang->build->confir
 
 $config->build->actions = new stdclass();
 $config->build->actions->view = array();
-$config->build->actions->view['mainActions']   = array($app->tab == 'project' ? 'projectbuildEdit' : 'buildEdit', 'delete');
+$config->build->actions->view['mainActions']   = array('edit', 'delete');
 $config->build->actions->view['suffixActions'] = array();

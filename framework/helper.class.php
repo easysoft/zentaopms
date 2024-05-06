@@ -542,12 +542,14 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
     foreach($items as $item)
     {
         $item->actions = array();
+
+        $actionList = zget($fieldList['actions'], 'list', array());
         foreach($fieldList['actions']['menu'] as $actionKey => $actionMenu)
         {
             if(isset($actionMenu['other']))
             {
                 $currentActionMenu = $actionMenu[0];
-                initItemActions($item, $currentActionMenu, zget($fieldList['actions'], 'list', array()), $model);
+                initItemActions($item, $currentActionMenu, $actionList, $model);
 
                 $otherActionMenus = $actionMenu['other'];
                 $otherAction      = '';
@@ -556,24 +558,26 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
                     $otherActions = explode('|', $otherActionMenu);
                     foreach($otherActions as $otherActionName)
                     {
+                        if(!checkOtherPriv(zget($actionList, $otherActionName, array()), $otherActionName, $item, $model)) continue;
                         if(in_array($otherActionName, array_column($item->actions, 'name'))) continue;
 
                         if(method_exists($model, 'isClickable') && !$model->isClickable($item, $otherActionName)) $otherAction .= '-';
                         $otherAction .= $otherActionName . ',';
                     }
                 }
-                $item->actions[] = 'other:' . $otherAction;
+                if($otherAction) $item->actions[] = 'other:' . $otherAction;
             }
             elseif($actionKey === 'more')
             {
                 $moreAction = '';
                 foreach($actionMenu as $moreActionName)
                 {
+                    if(!checkOtherPriv(zget($actionList, $moreActionName, array()), $moreActionName, $item, $model)) continue;
                     if(method_exists($model, 'isClickable') && !$model->isClickable($item, $moreActionName)) $moreAction .= '-';
                     $moreAction .= $moreActionName . ',';
                 }
 
-                $item->actions[] = 'more:' . $moreAction;
+               if($moreAction) $item->actions[] = 'more:' . $moreAction;
             }
             elseif(is_array($actionMenu))       // Two or more grups.
             {
@@ -603,6 +607,26 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
 }
 
 /**
+ * Check other action priv.
+ *
+ * @param  array  $actionList
+ * @param  string $actionName
+ * @param  object $item
+ * @param  object $model
+ * @access public
+ * @return bool
+ */
+function checkOtherPriv(array $actionConfig, string $action, object $item, object $model)
+{
+    $module = $model->getModuleName();
+    if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module']) $module = $actionConfig['url']['module'];
+
+    $method = $action;
+    if(!empty($actionConfig['url']['method']) && $method != $actionConfig['url']['method']) $method = $actionConfig['url']['method'];
+    return common::hasPriv($module, $method, $item);
+}
+
+/**
  * Set the parent property of the data.
  *
  * @param  array  $items
@@ -613,6 +637,8 @@ function setParent(array $items)
 {
     foreach($items as $item)
     {
+        if(isset($item->isParent)) continue;
+
         /* Set parent attribute. */
         $item->isParent = false;
         if(isset($item->parent) && $item->parent == -1)
@@ -651,7 +677,7 @@ function initTableActions(array &$fieldList, string $actionMenu): void
             $method = $actionConfig['url']['method'];
             $params = !empty($actionConfig['url']['params']) ? $actionConfig['url']['params'] : array();
 
-            $actionConfig['url'] = helper::createLink($module, $method, $params);
+            $actionConfig['url'] = helper::createLink($module, $method, $params, '', !empty($actionConfig['url']['onlybody']));
         }
 
         $fieldList['actions']['actionsMap'][$action] = $actionConfig;
@@ -691,7 +717,11 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'])
         {
             $module = $actionConfig['url']['module'];
-            if(!$notLoadModel) $model  = $app->control->loadModel($module);
+            if(!$notLoadModel)
+            {
+                $rawModule = $module == 'projectbuild' ? 'build' : $module;
+                $model = $app->control->loadModel($rawModule);
+            }
         }
 
         $method = $action;
@@ -738,4 +768,22 @@ function getVisions(): array
     $visions    = array_flip(array_unique(array_filter(explode(',', trim($config->visions, ',')))));
     $visionList = $lang->visionList;
     return array_intersect_key($visionList, $visions);
+}
+
+/**
+ * Save any message with any type to the php log file which prefix with 'php.<today>'.
+ *
+ * @param  mixed  $message
+ * @param  string $file
+ * @param  int    $line
+ * @return void
+ */
+function debug($message = '', $file = 'undefined', $line = 0)
+{
+    if(!is_string($message)) $message = (string)json_encode($message, JSON_PRETTY_PRINT);
+
+    if(empty($file) || $file == 'undefined') $message .= (new Exception())->getTraceAsString();
+
+    global $app;
+    $app->saveError(E_USER_WARNING, $message, $file, $line);
 }

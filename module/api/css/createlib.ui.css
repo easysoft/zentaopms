@@ -1,1 +1,5 @@
 #whiteListBox .form-label {top: 28%;}
+.createLibForm .form-horz .form-label {width: 7rem;}
+.createLibForm .form-horz .form-group {padding-left: 7rem;}
+[lang^=zh] .createLibForm .form-horz .form-label {width: var(--form-horz-label-width);}
+[lang^=zh] .createLibForm .form-horz .form-group {padding-left: var(--form-horz-label-width);}

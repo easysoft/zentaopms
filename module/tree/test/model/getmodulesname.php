@@ -33,8 +33,8 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('module')->config('module', true)->gen(20);
-zdTable('branch')->config('branch', true)->gen(10);
+zenData('module')->loadYaml('module', true)->gen(20);
+zenData('branch')->loadYaml('branch', true)->gen(10);
 
 $moduleIdList[0] = array(1);
 $moduleIdList[1] = array(6);

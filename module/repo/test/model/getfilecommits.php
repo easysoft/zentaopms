@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -20,13 +20,13 @@ cid=8
 
 */
 
-zdTable('pipeline')->gen(4);
-zdTable('repo')->config('repo')->gen(5);
-zdTable('repohistory')->config('repohistory')->gen(4);
-$repoBranch = zdTable('repobranch');
+zenData('pipeline')->gen(4);
+zenData('repo')->loadYaml('repo')->gen(5);
+zenData('repohistory')->loadYaml('repohistory')->gen(4);
+$repoBranch = zenData('repobranch');
 $repoBranch->branch->range('branch3');
 $repoBranch->gen(1);
-zdTable('repofiles')->gen(10);
+zenData('repofiles')->gen(10);
 
 $repo = new repoTest();
 

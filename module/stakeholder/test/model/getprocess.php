@@ -11,10 +11,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('process')->gen(10);
+zenData('user')->gen(5);
+zenData('process')->gen(10);
 
 $stakeholderTester = new stakeholderTest();
 $processPairs      = $stakeholderTester->getProcessTest();

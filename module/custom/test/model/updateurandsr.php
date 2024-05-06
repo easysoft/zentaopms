@@ -9,10 +9,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
-zdTable('lang')->config('lang')->gen(5);
-zdTable('user')->gen(5);
+zenData('lang')->loadYaml('lang')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $key    = array(1, 0);

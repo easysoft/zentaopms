@@ -2139,6 +2139,10 @@ class taskModel extends model
     public static function isClickable(object $task, string $action): bool
     {
         $action = strtolower($action);
+
+        /* 任务不可修改的话，则无法进行操作。 */
+        if(!common::canModify('task', $task)) return false;
+
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
 
@@ -2170,14 +2174,15 @@ class taskModel extends model
         }
 
         /* 根据状态判断是否可以点击。 Check clickable by status. */
-        if($action == 'start')    return $task->status == 'wait';
-        if($action == 'restart')  return $task->status == 'pause';
-        if($action == 'pause')    return $task->status == 'doing';
-        if($action == 'assignto') return !in_array($task->status, array('closed', 'cancel'));
-        if($action == 'close')    return $task->status == 'done' || $task->status == 'cancel';
-        if($action == 'activate') return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
-        if($action == 'finish')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
-        if($action == 'cancel')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
+        if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && !empty($task->executionInfo->type) && $task->executionInfo->type != 'kanban';
+        if($action == 'start')              return $task->status == 'wait';
+        if($action == 'restart')            return $task->status == 'pause';
+        if($action == 'pause')              return $task->status == 'doing';
+        if($action == 'assignto')           return !in_array($task->status, array('closed', 'cancel'));
+        if($action == 'close')              return $task->status == 'done' || $task->status == 'cancel';
+        if($action == 'activate')           return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
+        if($action == 'finish')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
+        if($action == 'cancel')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
         if($action == 'confirmstorychange') return !in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion;
 
         return true;
@@ -2753,7 +2758,7 @@ class taskModel extends model
         }
 
         /* Compute hours and manage team for multi-task. */
-        if($teamData && $teamData->team && count(array_filter($teamData->team)) > 1)
+        if($teamData && !empty($teamData->team) && count(array_filter($teamData->team)) > 1)
         {
             $teams = $this->manageTaskTeam($task->mode, $task, $teamData);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);

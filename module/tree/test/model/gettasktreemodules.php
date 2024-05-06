@@ -18,48 +18,48 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('1-30');
 $project->type->range('sprint');
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-30');
 $projectProduct->product->range('1-30');
 $projectProduct->gen(20);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->module->range('1-100');
 $story->type->range('story');
 $story->gen(20);
 
-$projectStory = zdTable('projectstory');
+$projectStory = zenData('projectstory');
 $projectStory->project->range('1-30');
 $projectStory->story->range('1-30');
 $projectStory->gen(20);
 
-$case = zdTable('case');
+$case = zenData('case');
 $case->execution->range('1-30');
 $case->module->range('1-100');
 $case->gen(20);
 
-$projectCase = zdTable('projectcase');
+$projectCase = zenData('projectcase');
 $projectCase->project->range('1-30');
 $projectCase->gen(20);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->execution->range('1-30');
 $task->module->range('1-100');
 $task->gen(20);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->execution->range('1-30');
 $bug->module->range('1-100');
 $bug->gen(20);
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->root->range('1-30');
 $module->type->range('story{30},task{30},case{30},bug{30}');
 $module->gen(120);

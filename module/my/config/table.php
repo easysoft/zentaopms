@@ -221,7 +221,7 @@ if($config->vision != 'lite')
 {
     $config->my->task->actionList['batchCreate']['icon']          = 'split';
     $config->my->task->actionList['batchCreate']['text']          = $lang->task->batchCreate;
-    $config->my->task->actionList['batchCreate']['hint']          = $lang->task->batchCreate;
+    $config->my->task->actionList['batchCreate']['hint']          = $lang->task->children;
     $config->my->task->actionList['batchCreate']['url']           = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'executionID={execution}&storyID={story}&moduleID={module}&taskID={id}iframe=true');
     $config->my->task->actionList['batchCreate']['data-toggle']   = 'modal';
     $config->my->task->actionList['batchCreate']['data-size']     = 'lg';
@@ -240,6 +240,8 @@ $config->my->task->dtable->fieldList['name']['type']         = 'title';
 $config->my->task->dtable->fieldList['name']['nestedToggle'] = true;
 $config->my->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'), 'data-app' => 'execution');
 $config->my->task->dtable->fieldList['name']['fixed']        = 'left';
+$config->my->task->dtable->fieldList['name']['data-toggle']  = 'modal';
+$config->my->task->dtable->fieldList['name']['data-size']    = 'lg';
 $config->my->task->dtable->fieldList['name']['sortType']     = true;
 
 $config->my->task->dtable->fieldList['pri']['name']     = 'pri';
@@ -795,6 +797,7 @@ $config->my->testtask->dtable->fieldList['title']['type']     = 'title';
 $config->my->testtask->dtable->fieldList['title']['link']     = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->my->testtask->dtable->fieldList['title']['fixed']    = 'left';
 $config->my->testtask->dtable->fieldList['title']['sortType'] = true;
+$config->my->testtask->dtable->fieldList['title']['data-app'] = 'qa';
 
 $config->my->testtask->dtable->fieldList['build']['name']     = 'buildName';
 $config->my->testtask->dtable->fieldList['build']['title']    = $lang->testtask->build;

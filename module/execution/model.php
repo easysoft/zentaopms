@@ -534,14 +534,15 @@ class executionModel extends model
 
             /* Name check. */
             $parentID = $parents[$executionID];
-            if(isset($nameList[$executionName]))
+            if(isset($nameList[$executionName]) && !empty($executionName))
             {
                 foreach($nameList[$executionName] as $repeatID)
                 {
                     if($parentID == $parents[$repeatID])
                     {
                         $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
-                        dao::$errors["name[$executionID]"] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
+                        $repeatTip = $parentID == $projectID ? $this->lang->programplan->error->sameName : sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
+                        dao::$errors["name[$executionID]"] = $repeatTip;
                     }
                 }
             }
@@ -1246,8 +1247,8 @@ class executionModel extends model
         }
         if(dao::isError()) return;
 
-        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
-        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
+        if($begin < ($project->realBegan ? $project->realBegan : $project->begin)) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
+        if($end > ($project->realEnd ? $project->realEnd : $project->end))         dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /**
@@ -1282,8 +1283,7 @@ class executionModel extends model
 
         /* Order by status's content whether or not done. */
         $executions = $this->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
-            ->where('type')->ne('')
-            ->beginIF($this->config->vision == 'lite')->andWhere('vision')->eq($this->config->vision)->fi()
+            ->where('vision')->eq($this->config->vision)
             ->beginIF((!$this->session->multiple && $this->app->tab == 'execution') || strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
@@ -1594,6 +1594,7 @@ class executionModel extends model
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
+        $projectModel   = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
         return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1602,6 +1603,7 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
+            ->beginIF($projectModel == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
@@ -2130,6 +2132,9 @@ class executionModel extends model
 
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
+
+        $child = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('id');
+        $execution->isParent = !empty($child) ? 1 : 0;
 
         return $execution;
     }
@@ -3829,7 +3834,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return ($execution->status != 'closed') && empty($execution->isParent);
+        if($action == 'close')    return $execution->status != 'closed' && (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
@@ -4002,10 +4007,11 @@ class executionModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function buildCaseSearchForm(array $products, int $queryID, string $actionURL)
+    public function buildCaseSearchForm(array $products, int $queryID, string $actionURL, int $executionID)
     {
         $modules = array();
         foreach($products as $product)
@@ -4064,6 +4070,7 @@ class executionModel extends model
             $this->config->testcase->search['params']['branch']['values'] = $branchPairs;
         }
         $this->config->testcase->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->testcase->statusList);
+        $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID);
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
@@ -4503,7 +4510,7 @@ class executionModel extends model
             $branchQuery .= "FIND_IN_SET('0', branch)";
         }
 
-        $branchQuery .= ')';
+        $branchQuery .= " OR branch = '')";
 
         $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
@@ -4727,6 +4734,7 @@ class executionModel extends model
                         if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
+                        if($actionName == 'createChildStage' && $action['disabled']) $action['hint'] = $execution->type == 'stage' ? $this->lang->programplan->error->createdTask : $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                     }
@@ -5100,7 +5108,7 @@ class executionModel extends model
 
         if($this->app->viewType == 'mhtml' and $executionID)
         {
-            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->colon;
+            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->hyphen;
             $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '')\">{$currentExecutionName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             return $output;
         }

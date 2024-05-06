@@ -2,20 +2,20 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/message.class.php';
+include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
 su('admin');
 
-zdTable('user')->gen(50);
-zdTable('todo')->gen(1);
-zdTable('testtask')->gen(1);
-zdTable('meeting')->config('meeting')->gen(1);
-zdTable('mr')->gen(1);
-zdTable('release')->gen(1);
-zdTable('task')->config('task')->gen(9);
-zdTable('taskteam')->config('taskteam')->gen(9);
-zdTable('story')->gen(1);
-zdTable('action')->gen(2);
-zdTable('product')->gen(10);
+zenData('user')->gen(50);
+zenData('todo')->gen(1);
+zenData('testtask')->gen(1);
+zenData('meeting')->loadYaml('meeting')->gen(1);
+zenData('mr')->gen(1);
+zenData('release')->gen(1);
+zenData('task')->loadYaml('task')->gen(9);
+zenData('taskteam')->loadYaml('taskteam')->gen(9);
+zenData('story')->gen(1);
+zenData('action')->gen(2);
+zenData('product')->gen(10);
 
 /**
 

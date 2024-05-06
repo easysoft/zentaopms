@@ -17,9 +17,10 @@ $decodeParam  = helper::safe64Decode($param);
 $buildItems = array();
 foreach($buildPairs as $id => $name)
 {
-    $buildItem['text']   = $name;
-    $buildItem['url']    = helper::createLink($buildModule, 'view', "buildID=$id");
-    $buildItem['active'] = $id == $build->id;
+    $buildItem['text']     = $name;
+    $buildItem['url']      = helper::createLink($buildModule, 'view', "buildID=$id");
+    $buildItem['data-app'] = $app->tab;
+    $buildItem['active']   = $id == $build->id;
 
     $buildItems[] = $buildItem;
 }
@@ -29,9 +30,9 @@ foreach($actions as $actionType => $typeActions)
 {
     foreach($typeActions as $key => $action)
     {
+        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$build->id, $action['url']);
         $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
-        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$build->id, $action['url']);
         if($action['icon'] == 'edit')  $actions[$actionType][$key]['text'] = $lang->edit;
         if($action['icon'] == 'trash') $actions[$actionType][$key]['text'] = $lang->delete;
     }
@@ -147,6 +148,7 @@ detailBody
                 dtable
                 (
                     setID('linkStoryDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->build->story->dtable->fieldList)),
                     set::data($stories),
@@ -184,6 +186,7 @@ detailBody
                 dtable
                 (
                     setID('bugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),
@@ -209,6 +212,7 @@ detailBody
                 set::active($type == 'generatedBug'),
                 dtable
                 (
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->build->generatedBug->dtable->fieldList)),
                     set::data(array_values($generatedBugs)),

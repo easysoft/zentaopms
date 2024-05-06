@@ -359,7 +359,7 @@ $lang->testcase->normal             = 'normal';
 
 /* Translation for drag modal message box. */
 $lang->testcase->dragModalTitle       = 'Drag and drop operation selection';
-$lang->testcase->dragModalMessage     = '<p>There are two possible situations for the current operation: </p><p>1) Adjust the sequence.<br/> 2) Change its scenario, meanwhile its module will be changed accordingly.</p><p>Please select the operation you want to perform.</p>';
+$lang->testcase->dragModalMessage     = 'Are you sure you want to change the scene to which the target belongs? Click to cancel and only adjust the sorting.';
 $lang->testcase->dragModalChangeScene = 'Change its scene';
 $lang->testcase->dragModalChangeOrder = 'Reorder';
 

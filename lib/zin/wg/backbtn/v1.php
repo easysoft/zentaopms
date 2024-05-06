@@ -43,22 +43,22 @@ class backBtn extends btn
         global $app;
 
         $backs = array(
-            'task'           => 'execution-task,my-work,my-contribute,execution-tree,execution-grouptask,project-execution,product-track,repo-view,story-change',
-            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase',
-            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,execution-task,product-track,execution-task,task-view,repo-view,story-change',
-            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,product-track,story-change',
+            'task'           => 'execution-task,my-work,my-contribute,execution-tree,execution-grouptask,project-execution,product-track,repo-view,story-change,execution-kanban,execution-taskkanban,my-index',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index',
+            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,execution-task,product-track,execution-task,task-view,repo-view,story-change,repo-review',
+            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,product-track,story-change,my-index',
             'testsuite'      => 'testsuite-browse,testsuite-view,',
-            'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,',
+            'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,execution-build,my-index',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,execution-testtask',
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,testcase-browse,caselib-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
             'design'         => 'design-browse',
-            'release'        => 'release-browse,release-view,product-roadmap,kanban-view',
-            'productplan'    => 'productplan-browse,kanban-view',
+            'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse',
+            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse',
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
             'projectstory'   => 'projectstory-story',
-            'build'          => 'execution-build,build-view,project-index,kanban-view',
+            'build'          => 'execution-build,build-view,project-index,kanban-view,testtask-browse,projectbuild-browse',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view,project-index',
             'mr'             => 'mr-browse',
             'repo'           => 'repo-log,repo-browse,repo-view',
@@ -74,7 +74,8 @@ class backBtn extends btn
             'zahost'         => 'zahost-browse,zahost-view',
             'stakeholder'    => 'stakeholder-browse',
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution',
-            'ai'             => 'ai-models'
+            'ai'             => 'ai-models',
+            'api'            => 'api-index'
         );
 
         $props  = parent::getProps();

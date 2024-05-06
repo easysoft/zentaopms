@@ -12,12 +12,12 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 $upgrade = new upgradeTest();
 
-zdTable('story')->gen(10);
-zdTable('action')->config('action')->gen(10);
+zenData('story')->gen(10);
+zenData('action')->loadYaml('action')->gen(10);
 
 $versionList = array();
 

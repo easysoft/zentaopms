@@ -13,19 +13,19 @@ cid=1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
 $metric = new metricTest();
 
-zdTable('product')->config('product', true, 4)->gen(10);
-zdTable('story')->config('story_status_closedreason', true, 4)->gen(500, true, false);
+zendata('product')->loadYaml('product', true, 4)->gen(10);
+zendata('story')->loadYaml('story_status_closedreason', true, 4)->gen(500, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('60'); // 测试500条数据全局无效研发需求数。
 
-zdTable('story')->config('story_status_closedreason', true, 4)->gen(839, true, false);
+zendata('story')->loadYaml('story_status_closedreason', true, 4)->gen(839, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('90'); // 测试839条数据全局无效研发需求数。
 
-zdTable('story')->config('story_status_closedreason', true, 4)->gen(1252, true, false);
+zendata('story')->loadYaml('story_status_closedreason', true, 4)->gen(1252, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('135'); // 测试1252条数据全局无效研发需求数。

@@ -1,24 +1,24 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->config('action')->gen(99);
-zdTable('project')->gen(20, true, false);
-zdTable('project')->config('execution')->gen(90, false, false);
-zdTable('product')->config('product')->gen(50, true, false);
-zdTable('projectstory')->gen(10);
-zdTable('productplan')->gen(10);
-zdTable('story')->gen(10);
-zdTable('task')->gen(20);
-zdTable('bug')->gen(10);
-zdTable('kanban')->gen(1);
-zdTable('build')->gen(10);
-zdTable('release')->gen(10);
-zdTable('testsuite')->gen(10);
-zdTable('testtask')->gen(10);
-zdTable('assetlib')->gen(10);
-zdTable('user')->gen(10);
+zenData('action')->loadYaml('action')->gen(99);
+zenData('project')->gen(20, true, false);
+zenData('project')->loadYaml('execution')->gen(90, false, false);
+zenData('product')->loadYaml('product')->gen(50, true, false);
+zenData('projectstory')->gen(10);
+zenData('productplan')->gen(10);
+zenData('story')->gen(10);
+zenData('task')->gen(20);
+zenData('bug')->gen(10);
+zenData('kanban')->gen(1);
+zenData('build')->gen(10);
+zenData('release')->gen(10);
+zenData('testsuite')->gen(10);
+zenData('testtask')->gen(10);
+zenData('assetlib')->gen(10);
+zenData('user')->gen(10);
 
 su('admin');
 

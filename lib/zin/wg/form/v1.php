@@ -228,7 +228,7 @@ class form extends formBase
             $itemsProps = $this->getItemProps($item, $key, $foldableItems, $pinnedItems, $isGrid, $requiredFields);
 
             $formGroup = new formGroup(set($itemsProps));
-            if(isset($itemsProps['foldable']) && $itemsProps['foldable']) $foldableList[] = $formGroup;
+            if(isset($itemsProps['foldable']) && $itemsProps['foldable'] && (!isset($itemsProps['hidden']) || !$itemsProps['hidden'])) $foldableList[] = $formGroup;
             else $list[] = $formGroup;
         }
 
@@ -315,6 +315,10 @@ class form extends formBase
                 if(!($item instanceof formGroup)) continue;
                 $items[$key] = new formRow($item);
             }
+        }
+        else
+        {
+            $items[] = setData('fullModeOrders', $this->prop('fullModeOrders'));
         }
 
         return $items;

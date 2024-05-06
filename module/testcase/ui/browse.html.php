@@ -13,6 +13,7 @@ namespace zin;
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
+jsVar('dragModalMessage', $lang->testcase->dragModalMessage);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -101,7 +102,7 @@ if(!empty($cols['actions']['list']))
     {
         if(!isset($methodParams['url'])) continue;
 
-        $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
+        $cols['actions']['list'][$method]['url'] = str_replace(array('%executionID%', '{runID}'), array((string)$executionID, '0'), $methodParams['url']);
     }
 }
 
@@ -132,6 +133,10 @@ div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
     dtable
     (
+        set::plugins(array('sortable')),
+        set::sortable(strpos($orderBy, 'sort_asc') !== false),
+        set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
+        set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
         set::customCols(!$isOnlyScene),
         set::userMap($users),
         set::cols($cols),
@@ -145,9 +150,9 @@ div(
         set::nested(true),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
-        set::emptyTip($lang->testcase->noCase),
-        set::createTip($lang->testcase->create),
-        set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', 'productID=' . zget($product, 'id', 0) . "&branch={$branch}&moduleID={$moduleID}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
+        set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
+        set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
+        set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
         set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
     )
 );

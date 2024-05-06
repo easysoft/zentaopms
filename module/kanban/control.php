@@ -129,6 +129,8 @@ class kanban extends control
             $space = form::data($this->config->kanban->form->activateSpace)
                 ->add('closedBy', '')
                 ->add('closedDate', null)
+                ->add('activatedBy', $this->app->user->account)
+                ->add('lastEditedBy', $this->app->user->account)
                 ->get();
 
             $this->kanban->activateSpace($spaceID, $space);
@@ -160,6 +162,8 @@ class kanban extends control
             $space = form::data($this->config->kanban->form->closeSpace)
                 ->add('activatedBy', '')
                 ->add('activatedDate', null)
+                ->add('closedBy', $this->app->user->account)
+                ->add('lastEditedBy', $this->app->user->account)
                 ->get();
 
             $this->kanban->closeSpace($spaceID, $space);
@@ -205,7 +209,9 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $kanban = form::data($this->config->kanban->form->create)->get();
+            $kanban = form::data($this->config->kanban->form->create)
+                ->setDefault('createdBy', $this->app->user->account)
+                ->get();
             $this->kanban->create($kanban);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -227,12 +233,14 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $kanban = form::data($this->config->kanban->form->edit)->get();
+            $kanban = form::data($this->config->kanban->form->edit)
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->get();
             $this->kanban->update($kanbanID, $kanban);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage("#header")'));
         }
 
         $kanban = $this->kanban->getByID($kanbanID);
@@ -297,6 +305,8 @@ class kanban extends control
             $kanban = form::data($this->config->kanban->form->activate)
                 ->setDefault('closedBy', '')
                 ->setDefault('closedDate', null)
+                ->setDefault('activatedBy', $this->app->user->account)
+                ->setDefault('lastEditedBy', $this->app->user->account)
                 ->get();
             $this->kanban->activate($kanbanID, $kanban);
 
@@ -327,6 +337,8 @@ class kanban extends control
             $kanban = form::data($this->config->kanban->form->close)
                 ->setDefault('activatedBy', '')
                 ->setDefault('activatedDate', null)
+                ->setDefault('closedBy', $this->app->user->account)
+                ->setDefault('lastEditedBy', $this->app->user->account)
                 ->get();
             $this->kanban->close($kanbanID, $kanban);
 
@@ -745,6 +757,7 @@ class kanban extends control
                 ->add('kanban', $kanbanID)
                 ->add('region', $regionID)
                 ->add('group', $groupID)
+                ->setDefault('createdBy', $this->app->user->account)
                 ->get();
             $this->kanban->createCard($columnID, $card);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -810,7 +823,9 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $card = form::data($this->config->kanban->form->editCard)->get();
+            $card = form::data($this->config->kanban->form->editCard)
+                ->setDefault('lastEditedBy', $this->app->user->account)
+                ->get();
             $this->kanban->updateCard($cardID, $card);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

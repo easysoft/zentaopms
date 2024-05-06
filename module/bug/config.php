@@ -57,7 +57,7 @@ $config->bug->excludeCheckFields = ',severities,oses,browsers,lanes,regions,exec
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create   = array('id' => 'steps', 'tools' => 'bugTools');
-$config->bug->editor->edit     = array('id' => 'steps,comment', 'tools' => 'bugTools');
+$config->bug->editor->edit     = array('id' => 'steps', 'tools' => 'bugTools');
 $config->bug->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'bugTools');
 $config->bug->editor->confirm  = array('id' => 'comment', 'tools' => 'bugTools');
 $config->bug->editor->assignto = array('id' => 'comment', 'tools' => 'bugTools');
@@ -157,6 +157,7 @@ $config->bug->actionList['delete']['hint']         = $lang->bug->delete;
 $config->bug->actionList['delete']['url']          = array('module' => 'bug', 'method' => 'delete', 'params' => 'bugID={id}');
 $config->bug->actionList['delete']['className']    = 'ajax-submit';
 $config->bug->actionList['delete']['data-confirm'] = array('message' => $lang->bug->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->bug->actionList['delete']['notInModal']   = true;
 
 $config->bug->actionList['createBranch']['icon']        = 'treemap';
 $config->bug->actionList['createBranch']['hint']        = $lang->bug->codeBranch;

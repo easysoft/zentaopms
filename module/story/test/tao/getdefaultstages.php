@@ -19,10 +19,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$productplan = zdTable('productplan');
+$productplan = zenData('productplan');
 $productplan->product->range('1,2{3}');
 $productplan->branch->range('0,0,1,2');
 $productplan->gen(4);

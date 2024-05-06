@@ -2,11 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('project')->gen(20);
-zdTable('group')->config('projectgroup')->gen(10);
-zdTable('usergroup')->config('projectusergroup')->gen(10);
-zdTable('grouppriv')->config('projectgrouppriv')->gen(12);
-zdTable('user')->gen(5);
+zenData('project')->gen(20);
+zenData('group')->loadYaml('projectgroup')->gen(10);
+zenData('usergroup')->loadYaml('projectusergroup')->gen(10);
+zenData('grouppriv')->loadYaml('projectgrouppriv')->gen(12);
+zenData('user')->gen(5);
 
 /**
 

@@ -54,7 +54,9 @@ function toggleZeroTaskStory()
         const $storyTd     = $(this);
         $.getJSON(getStoryLink, function(stories)
         {
-            $storyTd.find('[name^=story]').zui('picker').render({items: stories});
+            const $storyPicker = $storyTd.find('[name^=story]').zui('picker');
+            $storyPicker.render({items: stories});
+            $storyPicker.$.setValue(0);
         });
     });
 }
@@ -87,7 +89,7 @@ function setStoryRelated(event)
             {
                 const storyInfo = data['storyInfo'];
 
-                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID));
+                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID), true);
                 $storyEstimate.val(storyInfo.estimate);
                 $storyPri.val(storyInfo.pri);
                 $storyDesc.val(storyInfo.spec);
@@ -163,3 +165,8 @@ function loadLanes(event)
         if(!$row.find('td[data-name="region"][data-ditto="on"]').length) break;
     }
 }
+
+$('#formSettingBtn').on('click', '.checkbox-primary [value=story]', function()
+{
+    $('#formSettingBtn .checkbox-primary [value=preview], #formSettingBtn .checkbox-primary [value=copyStory]').prop('checked', $('#formSettingBtn .checkbox-primary [value=story]').prop('checked'));
+})

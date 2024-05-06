@@ -15,10 +15,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zahost.class.php';
+include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
 su('admin');
 
-$host = zdTable('host');
+$host = zenData('host');
 $host->id->range('1');
 $host->type->range('zahost');
 $host->name->range('宿主机1');
@@ -26,8 +26,8 @@ $host->extranet->range('10.0.1.222');
 $host->zap->range('55001');
 $host->gen(1);
 
-zdTable('image')->gen(0);
-zdTable('image')->config('image')->gen(2);
+zenData('image')->gen(0);
+zenData('image')->loadYaml('image')->gen(2);
 
 $hostID = 1;
 $zahost = new zahostTest();
@@ -35,10 +35,10 @@ r(count($zahost->getImageListTest($hostID))) && p('') && e('4');                
 r($zahost->getImageListTest($hostID)) && p('Ubuntu 20.04:name') && e('Ubuntu 20.04'); //没有下载过镜像的主机获取的 Ubuntu 20.04 镜像
 r($zahost->getImageListTest($hostID)) && p('Windows 10:name')   && e('Windows 10');   //没有下载过镜像的主机获取的 Windows 10 镜像
 
-zdTable('image')->gen(0);
+zenData('image')->gen(0);
 
-$image = zdTable('image');
-$image->config('image');
+$image = zenData('image');
+$image->loadYaml('image');
 $image->name->range('Ubuntu 20.04,Windows 10');
 $image->gen(2);
 

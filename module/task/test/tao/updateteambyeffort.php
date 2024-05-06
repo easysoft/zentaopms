@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('user1');
 
 /**
@@ -11,7 +11,7 @@ timeout=0
 cid=1
 
 */
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-7');
 $task->execution->range('1-7');
 $task->name->prefix("任务")->range('1-7');
@@ -22,7 +22,7 @@ $task->assignedTo->prefix("user")->range('1-7');
 $task->status->range("wait,wait,doing,done,pause,cancel,closed");
 $task->gen(4);
 
-$taskteam = zdTable('taskteam');
+$taskteam = zenData('taskteam');
 $taskteam->id->range('1-20');
 $taskteam->task->range('1-4');
 $taskteam->account->prefix("user")->range('1-5');
@@ -32,7 +32,7 @@ $taskteam->left->range('5');
 $taskteam->status->range("wait");
 $taskteam->gen(20);
 
-$effort = zdTable('effort');
+$effort = zenData('effort');
 $effort->id->range('1-20');
 $effort->objectID->range('1-4');
 $effort->objectType->range('task');
@@ -43,7 +43,7 @@ $effort->date->range('2022\-01\-01');
 $effort->work->prefix('工作内容')->range('1-10');
 $effort->gen(10);
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->gen(20);
 
 $finishTaskEffort = new stdclass();

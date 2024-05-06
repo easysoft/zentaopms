@@ -119,9 +119,20 @@ function loadProductBranches(productID)
             $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch'});
             branch  = $branch.$.value;
         }
+    });
 
-        window.loadProductModules(productID, branch);
-        window.loadProductPlans(productID, branch);
+    window.loadProductModules(productID, branch);
+    window.loadProductPlans(productID, branch);
+}
+
+window.loadProductModules = function(productID, branch)
+{
+    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&needManage=true&extra=nodeleted');
+    $.getJSON(link, function(moduleItems)
+    {
+        let $modulePicker = $('[name=module]').zui('picker');
+        $modulePicker.render({items: moduleItems});
+        $modulePicker.$.setValue(0);
     });
 }
 

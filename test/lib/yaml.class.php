@@ -204,7 +204,7 @@ class yaml
     /**
      * Set fields for yaml file.
      *
-     * @var int
+     * @var object
      * @access public
      */
     public $fields;
@@ -250,17 +250,17 @@ class yaml
      */
     public function __construct($tableName)
     {
-        global $config, $tester;
+        global $config, $tester, $uiTester;
         $this->config    = $config;
-        $this->dao       = $tester->dao;
+        $this->dao       = isset($tester->dao) ? $tester->dao : $uiTester->dao;
         $this->tableName = $tableName;
         $this->fields    = new fields();
         dao::$cache      = array();
 
-        $yamlPath = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
-        $this->configFiles[] = $yamlPath;
+        $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
+        $this->configFiles[] = $yamlFile;
 
-        if(!file_exists($yamlPath)) $this->buildYamlFile($this->tableName);
+        if(!file_exists($yamlFile)) $this->buildYamlFile($this->tableName);
     }
 
     /**
@@ -272,9 +272,9 @@ class yaml
      */
     public function buildYamlFile($tableName)
     {
-        $yamlData['title']   = 'table zt_' . $tableName;
-        $yamlData['author']  = 'automated export';
-        $yamlData['version'] = '1.0';
+        $yamlData['title']              = 'table zt_' . $tableName;
+        $yamlData['author']             = 'automated export';
+        $yamlData['version']            = '1.0';
         $yamlData['fields'][0]['field'] = 'id';
         $yamlData['fields'][0]['range'] = '1-1000';
 
@@ -290,14 +290,14 @@ class yaml
      * @access public
      * @return object $this
      */
-    public function config($fileName, $useCommon = false, $levels = 2)
+    public function loadYaml($fileName, $useCommon = false, $depths = 2)
     {
         $backtrace = debug_backtrace();
         $runPath   = $backtrace[count($backtrace)-1]['file'];
 
         if($useCommon)
         {
-            $yamlFile = dirname($runPath, $levels) . DS . 'yaml' . DS . "{$fileName}.yaml";
+            $yamlFile = dirname($runPath, $depths) . DS . 'yaml' . DS . "{$fileName}.yaml";
             if(is_file($yamlFile)) $this->configFiles[] = $yamlFile;
             return $this;
         }
@@ -310,7 +310,7 @@ class yaml
         $yamlFile = dirname($runPath) . DS . 'yaml' . DS . $runFileName . DS . "{$fileName}.yaml";
 
         /* Try to load common yaml file if yaml file not found in $runFileName path.*/
-        if(!is_file($yamlFile)) $yamlFile = dirname($runPath, $levels) . DS . 'yaml' . DS . "{$fileName}.yaml";
+        if(!is_file($yamlFile)) $yamlFile = dirname($runPath, $depths) . DS . 'yaml' . DS . "{$fileName}.yaml";
 
         if(is_file($yamlFile)) $this->configFiles[] = $yamlFile;
 
@@ -388,12 +388,14 @@ class yaml
      */
     private function getScriptPathAndName()
     {
+        $runFileDir = dirname($_SERVER['SCRIPT_FILENAME']);
+        /* 用例中如果使用了chdir改变了运行路径，那么在这里会还原 */
+        if(strpos(getcwd(), $runFileDir)) chdir(str_replace($runFileDir, '', getcwd()));
         $runFileName = str_replace(strrchr($_SERVER['SCRIPT_FILENAME'], "."), "", $_SERVER['SCRIPT_FILENAME']);
 
         $pos = strripos($runFileName, DS);
         if($pos !== false) $runFileName = mb_substr($runFileName, $pos+1);
 
-        $runFileDir = dirname($_SERVER['SCRIPT_FILENAME']);
 
         return array($runFileDir, $runFileName);
     }
@@ -628,7 +630,7 @@ class yaml
  * @access public
  * @return mixed
  */
-function zdTable($table)
+function zendata($table)
 {
     return new yaml($table);
 }

@@ -22,11 +22,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 su('admin');
 
-zdTable('projectproduct')->config('projectproduct')->gen(30);
-zdTable('product')->config('product')->gen(30);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(30);
+zenData('product')->loadYaml('product')->gen(30);
 
 $product = new productTest('admin');
 

@@ -67,23 +67,21 @@ $config->programplan->datatable->fieldList['actions']['required'] = 'yes';
 $config->programplan->datatable->fieldList['actions']['sort']     = 'no';
 
 $config->programplan->list = new stdclass();
-$config->programplan->list->customCreateFields = 'PM,attribute,acl,milestone,realBegan,realEnd';
+$config->programplan->list->customCreateFields          = 'PM,attribute,acl,milestone,realBegan,realEnd';
+$config->programplan->list->customAgilePlusCreateFields = 'PM,milestone,acl,desc,attribute';
 
 $config->programplan->custom = new stdclass();
-$config->programplan->custom->createFields = 'code,PM,attribute,acl,milestone';
-if(!empty($config->setPercent))
-{
-    $config->programplan->custom->createFields     .= ',percent';
-    $config->programplan->list->customCreateFields .= ',percent';
-}
+$config->programplan->custom->createFields              = 'PM,attribute,milestone';
+$config->programplan->custom->createIpdFields           = 'PM,attribute,milestone';
+$config->programplan->custom->createWaterfallFields     = 'PM,attribute,milestone';
+$config->programplan->custom->createWaterfallplusFields = 'PM,attribute,milestone';
+if(!empty($config->setPercent)) $config->programplan->list->customCreateFields .= ',percent';
 if(!empty($config->setCode))
 {
     $config->programplan->custom->createFields     .= ',code';
     $config->programplan->list->customCreateFields .= ',code';
 }
-$config->programplan->custom->defaultFields = $config->programplan->custom->createFields;
-
-$config->programplan->list->customAgilePlusCreateFields = 'PM,milestone,acl,desc,attribute';
+$config->programplan->custom->defaultFields = 'code,PM,attribute,milestone';
 
 $config->programplan->customAgilePlus = new stdclass();
 $config->programplan->customAgilePlus->createFields  = 'code,PM,milestone,acl,desc,attribute';

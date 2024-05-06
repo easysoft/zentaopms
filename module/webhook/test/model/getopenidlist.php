@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/webhook.class.php';
+include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
 su('admin');
 
-zdTable('action')->gen(10);
-zdTable('oauth')->gen(10);
+zenData('action')->gen(10);
+zenData('oauth')->gen(10);
 
 /**
 

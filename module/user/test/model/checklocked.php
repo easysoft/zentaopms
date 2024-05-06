@@ -14,7 +14,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
 global $config;
 if(empty($config->user)) $config->user = new stdclass();
@@ -25,7 +25,7 @@ $locked = date('Y-m-d H:i:s', time() - ($config->user->lockMinutes + 1) * 60); /
 
 $_SESSION['admin.loginLocked'] = $now; // 把 admin 用户锁定时间存入 session，以供步骤 1 使用。
 
-$table = zdTable('user');
+$table = zenData('user');
 $table->account->range('admin,user1,user2');
 $table->locked->range("`{$locked}`,`{$now}`,`{$locked}`");
 $table->gen(3);
@@ -38,7 +38,7 @@ r($userTest->checkLockedTest('user2')) && p() && e(0); // user3 用户锁定时�
 r($userTest->checkLockedTest('user3')) && p() && e(0); // user2 用户不存在，返回 false。
 
 /* 重新生成一条锁定时间为 null 的数据。*/
-$table = zdTable('user');
+$table = zenData('user');
 $table->account->range('user4');
 $table->locked->setNULL();
 $table->gen(1);

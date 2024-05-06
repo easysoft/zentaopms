@@ -8,11 +8,11 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('build')->config('build')->gen(20);
-zdTable('bug')->config('bug')->gen(20);
-zdTable('user')->gen(20);
+zenData('build')->loadYaml('build')->gen(20);
+zenData('bug')->loadYaml('bug')->gen(20);
+zenData('user')->gen(20);
 su('admin');
 
 $buildID    = array(1, 10, 12);

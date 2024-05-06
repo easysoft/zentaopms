@@ -286,7 +286,7 @@ else
         set::actions(array()),
         div
         (
-            setID('mainContainer'),
+            setID('managePrivFormContainer'),
             setClass('flex'),
             div
             (
@@ -332,7 +332,7 @@ else
                             )
                         )
                     ),
-                    h::body(html($privBodyHtml))
+                    h::tbody(html($privBodyHtml))
                 )
             ),
             div

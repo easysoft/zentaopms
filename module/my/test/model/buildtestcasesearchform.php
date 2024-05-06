@@ -2,11 +2,11 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/my.class.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdTable('product')->gen('10');
-zdTable('scene')->gen('10');
-zdTable('user')->gen('1');
+zenData('product')->gen('10');
+zenData('scene')->gen('10');
+zenData('user')->gen('1');
 
 su('admin');
 

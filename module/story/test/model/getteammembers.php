@@ -13,15 +13,15 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('task')->gen(20);
-$project = zdTable('project');
+zenData('task')->gen(20);
+$project = zenData('project');
 $project->status->range('doing');
 $project->gen(20);
-zdTable('projectstory')->gen(20);
-zdTable('team')->gen(100);
+zenData('projectstory')->gen(20);
+zenData('team')->gen(100);
 
 global $tester;
 $tester->loadModel('story');

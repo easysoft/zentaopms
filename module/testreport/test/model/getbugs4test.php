@@ -9,13 +9,13 @@ pid=1
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testreport.class.php';
+include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
 
-zdTable('bug')->config('getbugs4test_bug')->gen(40);
-zdTable('testtask')->gen(0);
-zdTable('testtask')->gen(20);
-zdTable('build')->gen(10);
-zdTable('user')->gen(1);
+zenData('bug')->loadYaml('getbugs4test_bug')->gen(40);
+zenData('testtask')->gen(0);
+zenData('testtask')->gen(20);
+zenData('build')->gen(10);
+zenData('user')->gen(1);
 
 su('admin');
 

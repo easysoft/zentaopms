@@ -44,15 +44,18 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        $twinsIdList = $storyID . ($story->twins ? "," . trim($story->twins, ',') : '');
-        $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
+        /* Get relation story ID.*/
+        $story->relationStoryID = $this->getRelationStoryID($story->id, $story->type);
+
+        $storyIdList = $storyID . ($story->relationStoryID ? "," . trim($story->relationStoryID, ',') : '') . ($story->twins ? "," . trim($story->twins, ',') : '');
+        $story->executions = $this->dao->select('t1.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
-            ->andWhere('t1.story')->in($twinsIdList)
+            ->andWhere('t1.story')->in($storyIdList)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
 
-        $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($twinsIdList)->orderBy('id DESC')->fetchGroup('execution');
+        $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($storyIdList)->orderBy('id DESC')->fetchGroup('execution');
 
         if($story->toBug)          $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
         if($story->parent > 0)     $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
@@ -208,6 +211,24 @@ class storyModel extends model
         $story = $this->storyTao->getAffectedTwins($story, $users);
 
         return $story;
+    }
+
+    /**
+     * 获取用户需求细分的软件需求。
+     * Get relation story ID.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return string
+     */
+    public function getRelationStoryID(int $storyID, string $storyType = 'requirement'): string
+    {
+        $relationStoryIdList = array();
+        $relationStoryList   = $this->getStoryRelation($storyID, $storyType);
+        foreach($relationStoryList as $relationStory) $relationStoryIdList[$relationStory->id] = $relationStory->id;
+
+        return implode(',', $relationStoryIdList);
     }
 
     /**
@@ -2296,8 +2317,7 @@ class storyModel extends model
         }
         if($excludeStatus) $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
-        if($this->app->rawModule == 'build'   and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
-        if($this->app->rawModule == 'release' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
+        if(in_array($this->app->rawModule, array('build', 'release', 'projectrelease')) && $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
         {
@@ -3084,10 +3104,40 @@ class storyModel extends model
      */
     public function getKanbanGroupData(array $stories): array
     {
-        $storyGroup = array();
-        foreach($stories as $story) $storyGroup[$story->stage][$story->id] = $story;
+        $this->app->loadConfig('execution');
+        $cols = $this->config->execution->storyKanbanCols;
 
-        return $storyGroup;
+        $kanbanData = array();
+        $storyGroup = array();
+        foreach($stories as $story)
+        {
+            unset($story->deleted);
+            $index = array_search($story->stage, $cols) + 1;
+
+            $story->statusLabel = zget($this->lang->story->statusList, $story->status, '');
+            $storyGroup[$index][] = $story;
+        }
+
+        foreach($cols as $index => $stage)
+        {
+            $index ++;
+            $count = isset($storyGroup[$index]) ? count($storyGroup[$index]) : 0;
+
+            $col = new stdclass();
+            $col->name  = $index;
+            $col->title = $this->lang->story->stageList[$stage] . ' (' . $count . ')';
+            $col->key   = $stage;
+            $kanbanData['cols'][] = $col;
+        }
+
+        $lane = new stdclass();
+        $lane->name  = 1;
+        $lane->title = '';
+
+        $kanbanData['lanes'][]  = $lane;
+        $kanbanData['items'][1] = $storyGroup;
+
+        return $kanbanData;
     }
 
     /**
@@ -3159,7 +3209,12 @@ class storyModel extends model
         global $app, $config;
         $action = strtolower($action);
 
-        if($action == 'createbranch') return $story->status == 'active';
+        if($action == 'subdivide')
+        {
+            if(helper::isAjaxRequest('modal') || $config->vision == 'lite') return false;
+            $action = 'batchcreate';
+        }
+
         if($action == 'recallchange') return $story->status == 'changing';
         if($action == 'recall')       return $story->status == 'reviewing';
         if($action == 'close')        return $story->status != 'closed';
@@ -3168,7 +3223,6 @@ class storyModel extends model
         if($action == 'batchcreate'  && $story->parent > 0)    return false;
         if($action == 'batchcreate'  && !empty($story->twins)) return false;
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
-        if($action == 'subdivide' && (!helper::isAjaxRequest('modal') || $config->vision != 'lite')) return false;
         if($action == 'batchcreate'  && $story->type == 'requirement' && $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
 
@@ -3183,7 +3237,7 @@ class storyModel extends model
         }
 
         $disabledFeatures = ",{$config->disabledFeatures},";
-        if($action == 'importToLib') return in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false;
+        if($action == 'importtolib') return in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false;
 
         static $shadowProducts = array();
         static $taskGroups     = array();
@@ -3212,8 +3266,10 @@ class storyModel extends model
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && $story->status == 'active');
+        if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && in_array($story->status, array('active', 'launched')));
         if($action == 'review') return (($isSuperReviewer !== false || in_array($app->user->account, $story->notReview)) && $story->status == 'reviewing');
+
+        if($action == 'createbranch') return $story->type == 'story';
 
         return true;
     }
@@ -3759,7 +3815,6 @@ class storyModel extends model
         $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
         $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
         $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
-        $storyLang->unlinkStory        = str_replace($SRCommon, $URCommon, $storyLang->unlinkStory);
 
         $storyLang->notice->closed           = str_replace($SRCommon, $URCommon, $storyLang->notice->closed);
         $storyLang->notice->reviewerNotEmpty = str_replace($SRCommon, $URCommon, $storyLang->notice->reviewerNotEmpty);

@@ -37,7 +37,8 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
             $metricList[] = li
             (
                 set::className($class . ' metric-item font-medium'),
-                a(
+                a
+                (
                     $metric->name,
                     set::href(helper::createLink('metric', 'preview', $params))
                 )

@@ -104,8 +104,8 @@ class ci extends control
         if(empty($productID)) return print(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
 
         /* Get testtaskID or create testtask. */
-        $this->ci->saveTestTaskForZtf($testType, $productID, $compileID, $taskID, $post->name);
-        $this->ciZen->parseZtfResult($post, $taskID, $jobID, $compileID);
+        if(!$taskID) $taskID = $this->ci->saveTestTaskForZtf($testType, $productID, $compileID, $taskID, $post->name);
+        $this->ciZen->parseZtfResult($post, $taskID, $productID, $jobID, $compileID);
         echo json_encode(array('result' => 'success'));
     }
 }

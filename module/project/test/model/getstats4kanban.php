@@ -2,8 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('project')->config('execution')->gen(100)->fixPath();
-zdTable('user')->gen(100);
+zenData('project')->loadYaml('execution')->gen(100)->fixPath();
+zenData('user')->gen(100);
 
 su('admin');
 

@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$compile = zdTable('compile');
+$compile = zenData('compile');
 $compile->status->range('``,success,failure,created');
 $compile->deleted->range('0,1');
 $compile->gen(10);

@@ -24,11 +24,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('user')->gen(20);
-zdTable('stakeholder')->config('stakeholder')->gen(20);
-zdTable('issue')->config('issue')->gen(20);
+zenData('user')->gen(20);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
+zenData('issue')->loadYaml('issue')->gen(20);
 
 $projectIds = array(0, 11, 100);
 

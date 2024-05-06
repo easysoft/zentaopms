@@ -2,8 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('serverroom')->config('serverroom')->gen(10);
-zdTable('userquery')->config('roomquery')->gen(1);
+zenData('serverroom')->loadYaml('serverroom')->gen(10);
+zenData('userquery')->loadYaml('roomquery')->gen(1);
 su('admin');
 
 /**

@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('瀑布项目1,阶段a,阶段a子1,阶段a子1子1,阶段b');
 $execution->type->range('project,stage{4}');
@@ -19,7 +19,7 @@ $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD
 $execution->realBegan->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-zdTable('task')->config('task')->gen(30);
+zenData('task')->loadYaml('task')->gen(30);
 
 /**
 

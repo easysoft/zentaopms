@@ -1,17 +1,17 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-zdTable('bug')->config('bug_close')->gen(55);
-zdTable('user')->gen(1);
-zdTable('product')->gen(55);
+zenData('bug')->loadYaml('bug_close')->gen(55);
+zenData('user')->gen(1);
+zenData('product')->gen(55);
 
-zdTable('project')->config('project_close')->gen(55);
-zdTable('kanbancell')->config('kanbancell')->gen(27);
-zdTable('kanbancolumn')->config('kanbancolumn')->gen(27);
-zdTable('kanbanlane')->config('kanbanlane')->gen(3);
-zdTable('kanbanregion')->config('kanbanregion')->gen(1);
+zenData('project')->loadYaml('project_close')->gen(55);
+zenData('kanbancell')->loadYaml('kanbancell')->gen(27);
+zenData('kanbancolumn')->loadYaml('kanbancolumn')->gen(27);
+zenData('kanbanlane')->loadYaml('kanbanlane')->gen(3);
+zenData('kanbanregion')->loadYaml('kanbanregion')->gen(1);
 
 su('admin');
 

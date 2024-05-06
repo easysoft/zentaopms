@@ -17,11 +17,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-zdTable('story')->gen(5);
-zdTable('bug')->gen(1);
-$file = zdTable('file');
+zenData('story')->gen(5);
+zenData('bug')->gen(1);
+$file = zenData('file');
 $file->objectType->range('bug');
 $file->objectID->range('1');
 $file->gen(5);

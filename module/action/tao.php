@@ -479,6 +479,7 @@ class actionTao extends actionModel
             case 'execution':
             case 'kanban':
             case 'task':
+            case 'story':
                 $paramString = "{$type}ID={$action->extra}";
                 break;
             case 'project':
@@ -623,17 +624,16 @@ class actionTao extends actionModel
      */
     public function processEffortCondition(string &$condition, string $period, string $begin, string $end, string $beginDate): void
     {
-        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)
+        $effortSQL = $this->dao->select('id')->from(TABLE_EFFORT)
             ->where($condition)
             ->beginIF($period != 'all')
             ->beginIF($begin)->andWhere('date')->gt($begin)->fi()
             ->beginIF($end)->andWhere('date')->lt($end)->fi()
             ->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
-            ->fetchPairs();
-        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
+            ->get();
 
-        $condition .= " OR (`objectID` IN ({$efforts}) AND `objectType` = 'effort')";
+        $condition .= " OR (`objectID` IN ({$effortSQL}) AND `objectType` = 'effort')";
     }
 
     /**

@@ -8,10 +8,10 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
+include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
 
-zdTable('entry')->gen(2);
-zdTable('user')->gen(5);
+zenData('entry')->gen(2);
+zenData('user')->gen(5);
 su('admin');
 
 $nameEmptyTest  = array('name' => '',              'code' => 'code1', 'account' => 'admin', 'ip' => '*', 'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 0, 'desc' => '这是应用描述1');

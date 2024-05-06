@@ -7,18 +7,20 @@ $config->testreport->actionList['edit']['icon']     = 'edit';
 $config->testreport->actionList['edit']['hint']     = $lang->testreport->edit;
 $config->testreport->actionList['edit']['text']     = $lang->testreport->edit;
 $config->testreport->actionList['edit']['url']      = array('module' => 'testreport', 'method' => 'edit', 'params' => 'reportID={id}');
-$config->testreport->actionList['edit']['order']    = 5;
-$config->testreport->actionList['edit']['show']     = 'clickable';
 $config->testreport->actionList['edit']['data-app'] = $app->tab;
 
 $config->testreport->actionList['delete']['icon']         = 'trash';
 $config->testreport->actionList['delete']['hint']         = $lang->testreport->delete;
 $config->testreport->actionList['delete']['text']         = $lang->testreport->delete;
 $config->testreport->actionList['delete']['url']          = array('module' => 'testreport', 'method' => 'delete', 'params' => 'reportID={id}');
-$config->testreport->actionList['delete']['order']        = 10;
-$config->testreport->actionList['delete']['show']         = 'clickable';
-$config->testreport->actionList['delete']['class']        = 'ajax-submit';
+$config->testreport->actionList['delete']['className']    = 'ajax-submit';
 $config->testreport->actionList['delete']['data-confirm'] = array('message' => $lang->testreport->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
+$config->testreport->actionList['create']['icon']     = 'refresh';
+$config->testreport->actionList['create']['hint']     = $lang->testreport->recreate;
+$config->testreport->actionList['create']['text']     = $lang->testreport->recreate;
+$config->testreport->actionList['create']['url']      = array('module' => 'testreport', 'method' => 'create', 'params' => 'reportID={id}');
+$config->testreport->actionList['create']['data-app'] = $app->tab;
 
 $config->testreport->dtable->fieldList['id']['name']     = 'id';
 $config->testreport->dtable->fieldList['id']['title']    = $lang->idAB;

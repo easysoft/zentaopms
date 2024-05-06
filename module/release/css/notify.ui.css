@@ -3,5 +3,5 @@
 #notifyForm > .form-row:nth-child(2) {height : 6rem; margin-top: 0;}
 #notifyForm .user-title {font-weight: 700;}
 #notifyForm .check-list-inline {padding-left: 0;}
-#notifyForm .checkbox-primary {flex: 15%;}
+#notifyForm .checkbox-primary {width: 130px;}
 #notifyForm .checkbox-primary:nth-child(7) {margin-right: calc(30% + 94% / 3);}

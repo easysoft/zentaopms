@@ -3,9 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('testtask')->config('testtask')->gen(20);
-zdTable('build')->gen(1);
-zdTable('product')->gen(1);
+zenData('testtask')->loadYaml('testtask')->gen(20);
+zenData('build')->gen(1);
+zenData('product')->gen(1);
 
 /**
 

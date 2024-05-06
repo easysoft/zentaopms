@@ -10,7 +10,7 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('productplan')->config('productplan')->gen(20);
+zenData('productplan')->loadYaml('productplan')->gen(20);
 
 global $tester, $app;
 $app->rawModule  = 'productplan';

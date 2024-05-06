@@ -97,7 +97,9 @@ class zahost extends control
     {
         if($_POST)
         {
-            $hostInfo = form::data($this->config->zahost->form->create)->get();
+            $hostInfo = form::data($this->config->zahost->form->create)
+                ->add('createdBy', isset($this->app->user->account) ? $this->app->user->account : '')
+                ->get();
             $hostInfo->secret = md5($hostInfo->name . time());
 
             $hostID = $this->zahost->create($hostInfo);
@@ -124,7 +126,10 @@ class zahost extends control
     {
         if($_POST)
         {
-            $hostInfo = form::data($this->config->zahost->form->edit)->add('id', $hostID)->get();
+            $hostInfo = form::data($this->config->zahost->form->edit)
+                ->add('id', $hostID)
+                ->add('editedBy', isset($this->app->user->account) ? $this->app->user->account : '')
+                ->get();
             $changes  = $this->zahost->update($hostInfo);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

@@ -45,11 +45,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('product')->config('product')->gen(10);
-zdTable('projectproduct')->config('projectproduct')->gen(10);
+zenData('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(10);
 su('admin');
 
 $projectIdList = array(11, 60, 100);

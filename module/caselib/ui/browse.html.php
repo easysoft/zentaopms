@@ -31,7 +31,7 @@ featureBar
 (
     set::current($this->session->libBrowseType),
     set::linkParams("libID=$libID&browseType={key}&param=$param&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"),
-    li(searchToggle())
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 $createCaseItem      = array('text' => $lang->testcase->create, 'url' => helper::createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)));

@@ -19,14 +19,14 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('product')->gen(50);
-zdTable('build')->gen(50);
-zdTable('project')->gen(50);
-zdTable('branch')->gen(50);
+zenData('product')->gen(50);
+zenData('build')->gen(50);
+zenData('project')->gen(50);
+zenData('branch')->gen(50);
 
-$release = zdTable('release');
+$release = zenData('release');
 $release->product->range('1-5');
 $release->branch->range('0-1');
 $release->gen(50);

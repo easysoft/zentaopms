@@ -13,10 +13,10 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-zdTable('product')->config('product_closed')->gen(10);
-zdTable('project')->gen(10);
+zenData('product')->loadYaml('product_closed')->gen(10);
+zenData('project')->gen(10);
 
 global $tester;
 

@@ -16,10 +16,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tutorial.class.php';
+include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
 
-zdTable('action')->gen(40);
-zdTable('user')->gen(5);
+zenData('action')->gen(40);
+zenData('user')->gen(5);
 
 
 $tutorial = new tutorialTest();

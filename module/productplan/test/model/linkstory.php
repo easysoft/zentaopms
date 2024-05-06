@@ -9,12 +9,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('product')->gen(20);
-zdTable('planstory')->gen(0);
-zdTable('storyspec')->gen(20);
-$story = zdTable('story');
+zenData('product')->gen(20);
+zenData('planstory')->gen(0);
+zenData('storyspec')->gen(20);
+$story = zenData('story');
 $story->version->range('1');
 $story->gen(20);
 

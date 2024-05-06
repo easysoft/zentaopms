@@ -97,7 +97,6 @@ $lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';
 $lang->job->engineList = array();
 $lang->job->engineList['']        = '';
 $lang->job->engineList['gitlab']  = 'GitLab';
-$lang->job->engineList['gitfox']  = 'GitFox';
 $lang->job->engineList['jenkins'] = 'Jenkins';
 
 $lang->job->engineTips = new stdclass;

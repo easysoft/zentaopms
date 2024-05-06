@@ -1,29 +1,29 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->config('action')->gen(25);
-zdTable('product')->gen(1);
-zdTable('story')->gen(1);
-zdTable('productplan')->gen(1);
-zdTable('release')->gen(1);
-zdTable('project')->gen(1);
-zdTable('task')->gen(1);
-zdTable('build')->config('build')->gen(2);
-zdTable('bug')->gen(1);
-zdTable('case')->gen(2);
-zdTable('testtask')->gen(1);
-zdTable('branch')->gen(1);
-zdTable('module')->gen(1);
-zdTable('testsuite')->config('testsuite')->gen(2);
-zdTable('testreport')->gen(1);
-zdTable('entry')->config('entry')->gen(1);
-zdTable('webhook')->config('webhook')->gen(1);
-zdTable('doclib')->gen(10);
-zdTable('user')->gen(10);
-zdTable('doc')->gen(10);
-zdTable('todo')->gen(10);
+zenData('action')->loadYaml('action')->gen(25);
+zenData('product')->gen(1);
+zenData('story')->gen(1);
+zenData('productplan')->gen(1);
+zenData('release')->gen(1);
+zenData('project')->gen(1);
+zenData('task')->gen(1);
+zenData('build')->loadYaml('build')->gen(2);
+zenData('bug')->gen(1);
+zenData('case')->gen(2);
+zenData('testtask')->gen(1);
+zenData('branch')->gen(1);
+zenData('module')->gen(1);
+zenData('testsuite')->loadYaml('testsuite')->gen(2);
+zenData('testreport')->gen(1);
+zenData('entry')->loadYaml('entry')->gen(1);
+zenData('webhook')->loadYaml('webhook')->gen(1);
+zenData('doclib')->gen(10);
+zenData('user')->gen(10);
+zenData('doc')->gen(10);
+zenData('todo')->gen(10);
 
 su('admin');
 

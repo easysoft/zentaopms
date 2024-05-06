@@ -47,6 +47,8 @@ class tableChart extends wg
         $datas       = $this->prop('datas');
         $colorList   = array('#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC');
         $chartOption = array();
+        $tooltip     = array('show' => true);
+        if($type == 'pie') $tooltip['formatter'] = '{b}';
 
         shuffle($colorList);
 
@@ -54,7 +56,7 @@ class tableChart extends wg
         foreach($datas as $data)
         {
             $color = current($colorList);
-            $chartOption[] = array('name' => $data->name, 'value' => $type == 'pie' ? $data->value : array('value' => $data->value, 'itemStyle' => array('color' => $color)));
+            $chartOption[] = array('name' => $data->name . ($type == 'pie' ? ' : ' . $data->value : ''), 'value' => $type == 'pie' ? $data->value : array('value' => $data->value, 'itemStyle' => array('color' => $color)));
             $tableTR[] = h::tr
             (
                 h::td(label(set::className('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $data->name),
@@ -77,7 +79,10 @@ class tableChart extends wg
                 div(set::className('center text-base font-bold py-2'), $title),
                 echarts
                 (
+                    set::width('100%'),
+                    set::height($chartHeight),
                     set::color($colorList),
+                    set::tooltip($tooltip),
                     $type != 'pie' ? set::xAxis
                     (
                         array
@@ -98,7 +103,7 @@ class tableChart extends wg
                             )
                         )
                     )
-                )->size('100%', $chartHeight),
+                )
             ),
             cell
             (

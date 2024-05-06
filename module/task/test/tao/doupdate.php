@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 /**
 
@@ -11,7 +11,7 @@ cid=1
 
 */
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-9');
 $execution->name->prefix('执行')->range('1-9');
 $execution->type->range('sprint{4},kanban{2},stage{3}');
@@ -23,7 +23,7 @@ $execution->begin->range('(-3M)-(+M):1D')->type('timestamp')->format('YYYY-MM-DD
 $execution->end->range('(+5w)-(+2M):1D')->type('timestamp')->format('YYYY-MM-DD');
 $execution->gen(9);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-9');
 $task->execution->range('1-9');
 $task->name->prefix("任务")->range('1-9');
@@ -33,7 +33,7 @@ $task->assignedTo->prefix("old")->range('1-9');
 $task->status->range("wait,doing,done,pause,cancel,closed");
 $task->gen(9);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $deadline   = '2022-03-29';

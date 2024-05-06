@@ -115,10 +115,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/score.class.php';
+include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
 
-zdTable('score')->gen(0);
-zdTable('user')->gen(5);
+zenData('score')->gen(0);
+zenData('user')->gen(5);
 
 $accounts = array('admin', 'user1');
 $modules  = array('', 'user', 'story', 'task', 'bug', 'testTask', 'execution', 'search', 'ajax');

@@ -184,9 +184,8 @@ class metric extends control
             try
             {
                 $statement = $this->metricZen->prepareDataset($calcGroup);
-                if(empty($statement)) continue;
 
-                $rows = $statement->fetchAll();
+                $rows = !empty($statement) ? $statement->fetchAll() : array();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
                 $recordWithCode = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
@@ -204,6 +203,7 @@ class metric extends control
 
         $metrics = $this->metric->getExecutableMetric();
         foreach($metrics as $code) $this->metric->deduplication($code);
+        $this->metric->rebuildPrimaryKey();
 
         // 恢复之前的调试状态
         $this->config->debug = $originalDebug;
@@ -326,15 +326,20 @@ class metric extends control
         $this->display();
     }
 
-    public function ajaxGetTableAndCharts($metricID, $viewType = 'single', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function ajaxGetTableAndCharts($metricID, $scope = '', $dateLabel = '', $dateBegin = '', $dateEnd = '', $viewType = 'single', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $usePager = (!isset($_POST['scope']) or empty($_POST['scope']));
+        $usePager = empty($scope);
+
+        $dateBegin = str_replace('_', '-', $dateBegin);
+        $dateEnd   = str_replace('_', '-', $dateEnd);
+        $options = array_filter(array('scope' => $scope, 'dateLabel' => $dateLabel, 'dateBegin' => $dateBegin, 'dateEnd' => $dateEnd));
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $metric    = $this->metric->getByID($metricID);
-        $result    = $this->metric->getResultByCode($metric->code, $_POST, 'cron', $usePager ? $pager : null);
-        $allResult = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
+        $result    = $this->metric->getResultByCode($metric->code, $options, 'cron', $usePager ? $pager : null);
+        $allResult = $this->metric->getResultByCode($metric->code, $options, 'cron');
 
         $resultHeader  = $this->metric->getViewTableHeader($metric);
         $resultData    = $this->metric->getViewTableData($metric, $result);

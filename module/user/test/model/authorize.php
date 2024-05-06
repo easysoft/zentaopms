@@ -21,14 +21,14 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
 su('admin');
 
-zdTable('user')->gen(20);
-zdTable('group')->config('group')->gen(100);
-zdTable('usergroup')->config('usergroup')->gen(100);
-zdTable('grouppriv')->config('grouppriv')->gen(100);
+zenData('user')->gen(20);
+zenData('group')->loadYaml('group')->gen(100);
+zenData('usergroup')->loadYaml('usergroup')->gen(100);
+zenData('grouppriv')->loadYaml('grouppriv')->gen(100);
 
 $user = new userTest();
 

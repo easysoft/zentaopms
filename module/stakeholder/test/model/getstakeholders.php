@@ -89,11 +89,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('user')->config('user')->gen(20);
-zdTable('stakeholder')->config('stakeholder')->gen(20);
-zdTable('project')->config('project')->gen(15);
+zenData('user')->loadYaml('user')->gen(20);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
+zenData('project')->loadYaml('project')->gen(15);
 
 $projectIds  = array(0, 11, 100);
 $browseTypes = array('all', 'inside', 'outside', 'key', 'test');

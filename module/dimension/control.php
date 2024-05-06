@@ -29,16 +29,36 @@ class dimension extends control
         {
             /* 构造 1.5 级导航的数据。*/
             /* Build the data of 1.5 level navigation. */
-            $items[] = array
-            (
-                'id'    => $dimension->id,
-                'text'  => $dimension->name,
-                'keys'  => zget(common::convert2Pinyin(array($dimension->name)), $dimension->name, ''),
-            );
+            $item = array();
+            $item['id']   = $dimension->id;
+            $item['text'] = $dimension->name;
+            $item['keys'] = zget(common::convert2Pinyin(array($dimension->name)), $dimension->name, '');
+            $items[] = $item;
         }
+
         $this->view->link        = $this->createLink($module, $method, 'dimensionID={id}');
         $this->view->items       = $items;
         $this->view->dimensionID = $dimensionID;
+        $this->display();
+    }
+
+    /**
+     * Drop menu page, type is used for tree-browsegroup link.
+     *
+     * @access public
+     * @param  string currentModule
+     * @param  string currentMethod
+     * @param  int    dimensionID
+     * @param  string type          screen|pivot|chart
+     * @return void
+     */
+    public function ajaxGetOldDropMenu($currentModule, $currentMethod, $dimensionID, $type = '')
+    {
+        $this->view->currentModule = $currentModule;
+        $this->view->currentMethod = $currentMethod;
+        $this->view->dimensionID   = $dimensionID;
+        $this->view->type          = $type;
+        $this->view->dimensions    = $this->dimension->getList();
         $this->display();
     }
 }

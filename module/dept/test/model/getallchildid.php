@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/dept.class.php';
+include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
 su('admin');
 
-zdTable('dept')->config('dept')->gen(15);
+zenData('dept')->loadYaml('dept')->gen(15);
 /**
 
 title=测试 deptModel->getAllChildId();

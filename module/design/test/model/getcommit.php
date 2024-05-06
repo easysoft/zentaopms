@@ -18,14 +18,14 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/design.class.php';
+include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
 
-$designTable = zdTable('design')->config('design');
+$designTable = zenData('design')->loadYaml('design');
 $designTable->commit->range('[]{2},`1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20`');
 $designTable->gen(3);
 
-zdTable('repohistory')->config('repohistory')->gen(20);
-zdTable('user')->gen(5);
+zenData('repohistory')->loadYaml('repohistory')->gen(20);
+zenData('user')->gen(5);
 
 $idList      = array(0, 1, 3, 4);
 $recPerPages = array(5, 10, 20);

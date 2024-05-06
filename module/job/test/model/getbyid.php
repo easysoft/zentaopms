@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/job.class.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 su('admin');
 
 /**
@@ -17,7 +17,7 @@ cid=1
 
 */
 
-zdTable('job')->gen(1);
+zenData('job')->gen(1);
 
 $jobIDList = array('1', '1000001');
 

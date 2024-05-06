@@ -11,7 +11,6 @@ $config->testcase->edit = new stdclass();
 $config->testcase->edit->requiredFields = 'title,type';
 
 $config->testcase->editor = new stdclass();
-$config->testcase->editor->edit   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testcase->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->testcase->editor->review = array('id' => 'comment', 'tools' => 'simpleTools');
 
@@ -20,7 +19,7 @@ $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status'
 
 $config->testcase->actions = new stdclass();
 $config->testcase->actions->view = array();
-$config->testcase->actions->view['mainActions']   = array('runResult', 'runCase', 'confirmStoryChange', 'review', 'importToLib', 'createBug', 'showScript');
+$config->testcase->actions->view['mainActions']   = array('runResult', 'runCase', 'ztfRun', 'confirmStoryChange', 'review', 'importToLib', 'createBug', 'showScript');
 $config->testcase->actions->view['suffixActions'] = array('edit', 'create', 'createCase', 'delete');
 
 $config->testcase->exportFields = '

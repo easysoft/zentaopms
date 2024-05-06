@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-zdTable('team')->gen(0);
+zenData('team')->gen(0);
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-10');
 $execution->name->range('项目集1,项目1,项目2,项目3,迭代1,迭代2,阶段1,阶段2,看板1,看板2');
 $execution->type->range('program,project{3},sprint{2},stage{2},kanban{2}');

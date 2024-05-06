@@ -34,12 +34,12 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(10);
-zdTable('product')->gen(5);
-zdTable('projectproduct')->config('projectproduct')->gen(10);
+zenData('project')->loadYaml('project')->gen(10);
+zenData('product')->gen(5);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(10);
 $executionIDList = array(2, 3, 5);
 $productIDList   = array(2, 2, 2, 2);
 $typeList        = array('all', 'parent');

@@ -36,12 +36,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/design.class.php';
+include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
 
-zdTable('project')->config('project')->gen(1);
-zdTable('designspec')->gen(0);
-zdTable('design')->gen(0);
-zdTable('user')->gen(5);
+zenData('project')->loadYaml('project')->gen(1);
+zenData('designspec')->gen(0);
+zenData('design')->gen(0);
+zenData('user')->gen(5);
 
 $products  = array(0, 1);
 $stories   = array(0, 1);

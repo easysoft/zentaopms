@@ -10,8 +10,8 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('release')->config('release')->gen(5);
-zdTable('user')->gen(5);
+zenData('release')->loadYaml('release')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $releases = array(0, 1, 6);

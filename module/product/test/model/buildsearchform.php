@@ -14,11 +14,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('product')->gen(2);
+zenData('product')->gen(2);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-10');
 $story->title->range('1-10')->prefix('需求');
 $story->type->range('story');
@@ -28,7 +28,7 @@ $story->stage->range('projected');
 $story->version->range('1');
 $story->gen(10);
 
-$query = zdTable('userquery');
+$query = zenData('userquery');
 $query->id->range('1');
 $query->account->range('admin');
 $query->module->range('story');

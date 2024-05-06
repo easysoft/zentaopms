@@ -1,23 +1,23 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $casedata = zdTable('case');
+    $casedata = zenData('case');
     $casedata->id->range('1');
     $casedata->product->range('1');
     $casedata->project->range('1');
     $casedata->story->range('1');
 
-    $projectcasedata = zdTable('projectcase');
+    $projectcasedata = zenData('projectcase');
     $projectcasedata->case->range('1');
     $projectcasedata->product->range('1');
     $projectcasedata->project->range('1');
 
-    $projectstorydata = zdTable('projectstory');
+    $projectstorydata = zenData('projectstory');
     $projectstorydata->story->range('1-2');
     $projectstorydata->project->range('1-4');
 

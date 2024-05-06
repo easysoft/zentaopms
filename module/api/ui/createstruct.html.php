@@ -128,7 +128,7 @@ formPanel
             )
         )
     ),
-    formHidden('attribute'),
+    formHidden('attribute', ''),
     formGroup
     (
         set::label($lang->api->desc),

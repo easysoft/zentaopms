@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-zdTable('scene')->config('modulebranchscene')->gen('100');
-zdTable('module')->config('module')->gen('50');
-zdTable('case')->config('modulescenecase')->gen('50');
-zdTable('projectcase')->gen('10');
-zdTable('user')->gen('1');
+zenData('scene')->loadYaml('modulebranchscene')->gen('100');
+zenData('module')->loadYaml('module')->gen('50');
+zenData('case')->loadYaml('modulescenecase')->gen('50');
+zenData('projectcase')->gen('10');
+zenData('user')->gen('1');
 
 su('admin');
 

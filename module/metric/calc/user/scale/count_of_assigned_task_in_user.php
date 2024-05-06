@@ -22,9 +22,25 @@ class count_of_assigned_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.id', 't1.assignedTo', 't1.status', 't1.mode', 't4.account', 't3.status as projectStatus', 't2.status as executionStatus', 't4.status as teamStatus');
+    public $fieldList = array('t1.id', "if(t1.mode='multi' and t4.`status`!='done', t4.account, t1.assignedTo) as assignedTo", 't1.status', 't1.mode', 't4.account', 't3.status as projectStatus', 't2.status as executionStatus', 't4.status as teamStatus');
 
     public $result = array();
+
+    public $supportSingleQuery = true;
+
+    public function singleQuery()
+    {
+        $select = "`assignedTo` as `user`, count(`assignedTo`) as `value`";
+        return $this->dao->select($select)->from($this->getSingleSql())
+            ->where('`status`')->notin('closed,calcel')
+            ->andWhere('`projectStatus`')->ne('suspended')
+            ->andWhere('`executionStatus`')->ne('suspended')
+            ->andWhere("(`mode` = 'multi' and `teamStatus` != 'done')", true)
+            ->orWhere('`mode`')->ne('multi')
+            ->markRight(1)
+            ->groupBy('`user`')
+            ->fetchAll();
+    }
 
     public function calculate($row)
     {

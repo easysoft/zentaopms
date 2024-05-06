@@ -5,7 +5,7 @@ su('admin');
 
 function initData()
 {
-    $project = zdTable('project');
+    $project = zenData('project');
     $project->id->range('1-5');
     $project->project->range('1-5');
     $project->name->prefix('项目')->range('1-5');

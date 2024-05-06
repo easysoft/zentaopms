@@ -20,9 +20,13 @@ $lang->mr->diff         = 'View diff';
 $lang->mr->viewInGit    = 'View in APP';
 $lang->mr->link         = 'Link of stories,Bugs,tasks';
 $lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
-$lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>。';
-$lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>。';
+$lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>.';
+$lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>.';
 $lang->mr->submitType   = 'Submit type';
+
+$lang->mr->action = new stdclass();
+$lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
+$lang->mr->action->imported = '$date, <strong>$actor</strong> imported this Merge Request.';
 
 $lang->mr->linkList  = 'Link List of stories,Bugs,tasks';
 $lang->mr->linkStory = 'Link Stories';
@@ -45,6 +49,7 @@ $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Pipeline job';
+$lang->mr->commitLogs  = 'Commit Logs';
 
 $lang->mr->canMerge  = "Can be merged";
 $lang->mr->cantMerge = "Can not be merged";
@@ -105,20 +110,23 @@ $lang->mr->noCompileJob      = 'No Pipeline Job';
 $lang->mr->compileUnexecuted = 'Compile Unexecuted';
 
 $lang->mr->notFound          = "Merge Request does not exist!";
-$lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the pipeline task succeeded.";
+$lang->mr->toCreatedMessage  = "The merge request you submitted: <a href='%s'>%s</a>, the pipeline task succeeded.";
 $lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
 $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
 $lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
 
 $lang->mr->apiError = new stdclass;
-$lang->mr->apiError->createMR = "Failed to create a merge request through API. Reason: %s";
-$lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
+$lang->mr->apiError->createMR      = "Failed to create a merge request through API. Reason: %s";
+$lang->mr->apiError->sudo          = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
+$lang->mr->apiError->emptyResponse = "The object requested by the API does not exist or failed.";
+$lang->mr->apiError->notFound      = "The object requested by the API does not exist, it may be deleted in API Server.";
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
 $lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests: ID%u";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
+$lang->mr->unsupportedFeature  = "Unsupported feature.";
 
 $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";

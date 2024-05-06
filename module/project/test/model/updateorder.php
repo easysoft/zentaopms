@@ -5,7 +5,7 @@ su('admin');
 
 function initData()
 {
-    $project = zdTable('project');
+    $project = zenData('project');
     $project->id->range('1-5');
     $project->gen(5);
 }

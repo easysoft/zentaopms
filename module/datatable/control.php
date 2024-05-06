@@ -25,9 +25,9 @@ class datatable extends control
      */
     public function ajaxDisplay(string $datatableID, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
     {
-        $this->app->loadLang($currentModule);
-        $this->app->loadConfig($currentModule);
+        $this->loadModel($currentModule);
 
+        if($moduleName == 'execution' && $methodName == 'task' && $this->config->vision != 'lite') $this->view->execution = $this->execution->getByID($this->session->execution);
         $this->view->datatableID   = $datatableID;
         $this->view->moduleName    = $moduleName;
         $this->view->methodName    = $methodName;
@@ -50,7 +50,13 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
-            $this->loadModel('setting')->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showModule', $this->post->value);
+            $module = $this->post->currentModule;
+            $method = $this->post->currentMethod;
+
+            $this->app->checkModuleName($module);
+            $this->app->checkMethodName($method);
+
+            $this->loadModel('setting')->setItem($account . '.' . $module . '.' . $method . '.showModule', $this->post->value);
             if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

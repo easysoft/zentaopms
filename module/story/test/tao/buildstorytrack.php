@@ -31,30 +31,30 @@ cid=0
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 
-$case = zdTable('case');
+$case = zenData('case');
 $case->story->range(1);
 $case->gen(5);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->story->range(1);
 $bug->gen(5);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->story->range(1);
 $task->gen(5);
 
-$design = zdTable('design');
+$design = zenData('design');
 $design->story->range(1);
 $design->gen(5);
 
-$relation = zdTable('relation');
+$relation = zenData('relation');
 $relation->AID->range('1-5');
 $relation->AType->range('design');
 $relation->BID->range('1-5');
 $relation->BType->range('commit');
 $relation->gen(5);
 
-zdTable('repohistory')->gen(5);
+zenData('repohistory')->gen(5);
 
 global $tester;
 $storyModel = $tester->loadModel('story');

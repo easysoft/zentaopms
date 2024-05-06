@@ -53,8 +53,10 @@ class pivot extends control
         parse_str($params, $result);
 
         if(method_exists($this->pivotZen, $method)) call_user_func_array(array($this->pivotZen, $method), $result);
+        $this->session->set('backDimension', $dimensionID);
+        $this->session->set('backGroup', $groupID);
 
-        $this->view->title       = $this->lang->pivot->preview;
+        if(!$this->view->title) $this->view->title = $this->lang->pivot->preview;
         $this->view->groups      = $this->loadModel('tree')->getGroupPairs($dimensionID, 0, 1, 'pivot');
         $this->view->menus       = $this->getSidebarMenus($dimensionID, $groupID, $method, $params);
         $this->view->dimensionID = $dimensionID;
@@ -77,7 +79,7 @@ class pivot extends control
     public function ajaxGetSysOptions($type, $object = '', $field = '', $saveAs = '')
     {
         $sql     = isset($_POST['sql'])     ? $_POST['sql']     : '';
-        $filters = isset($_POST['filters']) ? $_POST['filters'] : '';
+        $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
 
         $sql     = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $options = $this->pivot->getSysOptions($type, $object, $field, $sql, $saveAs);

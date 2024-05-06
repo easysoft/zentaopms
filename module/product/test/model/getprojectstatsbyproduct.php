@@ -22,20 +22,20 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('product')->gen(50);
-zdTable('user')->gen(50);
+zenData('product')->gen(50);
+zenData('user')->gen(50);
 
-$project = zdTable('project')->config('execution');
+$project = zenData('project')->loadYaml('execution');
 $project->PM->range('user2,user3');
 $project->gen(50);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->project->range('11,60,61,100');
 $task->gen(30);
 
-$team = zdTable('team');
+$team = zenData('team');
 $team->root->range('11,60,61,100');
 $team->type->range('project');
 $team->account->range('admin,user1,user2');
@@ -43,7 +43,7 @@ $team->days->range('5');
 $team->hours->range('6,7');
 $team->gen(12);
 
-$stakeholder = zdTable('stakeholder');
+$stakeholder = zenData('stakeholder');
 $stakeholder->objectType->range('project');
 $stakeholder->objectID->range('11,60,61,100');
 $stakeholder->user->range('user4,user5');
@@ -51,7 +51,7 @@ $stakeholder->type->range('inside');
 $stakeholder->from->range('');
 $stakeholder->gen(20);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->product->range('1{4},2{4}');
 $projectproduct->project->range('11,60,61,100');
 $projectproduct->gen(8);

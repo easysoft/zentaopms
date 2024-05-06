@@ -30,7 +30,7 @@
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
 
     const DEBUG       = config.debug;
-    const currentCode = window.name.split('-')[1];
+    const currentCode = (window.frameElement ? window.frameElement.name : window.name).split('-')[1];
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
     const startTime   = performance.now();
@@ -139,6 +139,7 @@
         timers.interval = [];
         timers.timeout = [];
 
+        zui.Modal.getAll().forEach(m => !m.options.modal && m.hide());
         $('script.zin-page-js').replaceWith(data);
     }
 
@@ -176,6 +177,22 @@
     {
         if(!DEBUG) return;
 
+        if(data.debug)
+        {
+            data.debug.forEach(dump =>
+            {
+                console.groupCollapsed('%c ZIN %c debug %c' + dump.name, 'color:#fff;font-weight:bold;background:#ec4899', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
+                dump.data.forEach(item =>
+                {
+                    if(typeof item === 'string') console.log('%c' + item, 'font-family:ui-monospace,monospace; padding:0 4px;border-left:1px solid #ff0000;opacity:0.8');
+                    else console.log(item);
+                });
+                console.groupCollapsed('trace');
+                console.log('%c' + dump.trace.join('\n'), 'font-family: ui-monospace,monospace; padding:0 4px;');
+                console.groupEnd();
+                console.groupEnd();
+            });
+        }
         updateZinbar({id: options.id, trace: data.trace, xhprof: data.xhprof}, data.errors, data.basePath);
     }
 
@@ -284,8 +301,23 @@
                 const $dropmenu = $(this);
                 const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
                 if(!$nextDropmenu.length) return $dropmenu.remove();
-                if($dropmenu.data('fetcher') === $nextDropmenu.data('fetcher')) return;
-                $dropmenu.replaceWith($nextDropmenu);
+                const options = $nextDropmenu.data();
+                const oldOptions = $dropmenu.data();
+                if([options.fetcher, options.url, options.text, options.defaultValue].join() === [oldOptions.fetcher, oldOptions.url, oldOptions.text, oldOptions.defaultValue].join()) return;
+                const oldDropmenu = $dropmenu.zui('dropmenu');
+                if(oldDropmenu)
+                {
+                    oldDropmenu.render(options);
+                    $dropmenu.data(options);
+                    const newState = {};
+                    if(options.defaultValue !== undefined) newState.value = options.defaultValue;
+                    if(options.text !== undefined) newState.text = options.text;
+                    oldDropmenu.$.setState(newState);
+                }
+                else
+                {
+                    $dropmenu.replaceWith($nextDropmenu);
+                }
             });
             $data.filter('[data-fetcher]').each(function()
             {
@@ -435,10 +467,13 @@
         if(DEBUG) console.log('[APP]', 'request', options);
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
+        if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
+        const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode};
+        if(options.modal) headers['X-Zui-Modal'] = 'true';
         const ajaxOptions =
         {
-            url:         url,
-            headers:     {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
+            url:         url + (url.includes('?') ? '&zin=1' : '?zin=1'),
+            headers:     headers,
             type:        options.method || 'GET',
             data:        options.data,
             contentType: options.contentType,
@@ -481,7 +516,7 @@
                 }
                 if(Array.isArray(data))
                 {
-                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? response.url : url;
+                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
                     data.forEach((item, idx) => item.selector = selectors[idx]);
                     updatePerfInfo(options, 'renderBegin');
                     renderPage(data, options);
@@ -561,7 +596,7 @@
                 }
             }
         };
-        $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
+        if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         return $.ajax(ajaxOptions);
     }
 
@@ -610,19 +645,20 @@
         {
             $page = $('<div/>')
                 .append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', scrolling: 'auto', style: 'width:100%;height:100%;'}))
-                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0 load-indicator', style: 'z-index:100;'})
+                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0', style: 'z-index:100;'})
                 .insertAfter('body')
                 .on('oldPageLoad.app', () =>
                 {
                     const frame = window.frameElement;
                     frame.classList.remove('loading');
                     frame.classList.add('in');
+                    $page.find('iframe').removeClass('invisible');
                     $page.removeClass('loading').find('iframe').addClass('in');
                     $(document).trigger('pageload.app');
                 });
         }
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
-        const $iframe = $page.find('iframe').removeClass('in');
+        const $iframe = $page.find('iframe').removeClass('in').addClass('invisible');
         if($iframe.attr('src') === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
         currentAppUrl = url;
@@ -705,7 +741,11 @@
         const $target = $(target);
         if(!$target.length) return loadPage({url: options.url, id: target});
 
-        if($target.closest('.modal').length && options.partial === undefined) options.partial = true;
+        if($target.closest('.modal').length)
+        {
+            if(options.modal === undefined)   options.modal = true;
+            if(options.partial === undefined) options.partial = true;
+        }
         if(!options.selector)
         {
             let name = options.component;
@@ -738,15 +778,17 @@
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         let selector = `dtable/${target}:component`;
+        options
         if(options.selector && options.selector !== 'dtable') selector = options.selector;
-        if(!$(target).closest('.modal').length && !options.selector)
+        const isInModal = $(target).closest('.modal').length;
+        if(!isInModal && !options.selector)
         {
             selector += ',#mainMenu>*,pageJS/.zin-page-js,hookCode()';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
         delete options.selector;
-        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector}, options));
+        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector, modal: isInModal}, options));
     }
 
     /**
@@ -774,13 +816,14 @@
         if(!target || target === 'current')
         {
             const lastModal = zui.Modal.last();
-            if(!lastModal) return zui.Modal.open(options);;
+            if(!lastModal) return zui.Modal.open(options);
             target = lastModal.id;
         }
 
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
+        if((modal.options.url || '').toLowerCase() === (options.url || '').toLowerCase() && options.loadingClass === undefined) options.loadingClass = '';
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 
@@ -872,6 +915,11 @@
 
     function loadCurrentPage(options)
     {
+        if(options instanceof Event || options instanceof HTMLElement)
+        {
+            options = {};
+            if(DEBUG) console.warn('[APP] ', 'loadCurrentPage() should not be called with an event or element.');
+        }
         if(typeof options === 'string') options = {selector: options};
         return loadPage(options);
     }
@@ -926,7 +974,7 @@
         loadPage(
         {
             url:           url,
-            selector:      `#${id}>*`,
+            selector:      `#${id}`,
             partial:       options.partial,
             loadingTarget: loadingTarget,
             loadingClass:  'pointer-events-none',
@@ -942,17 +990,30 @@
 
                 if(options.items)
                 {
-                    const $data = $(info.data).filter('.form-group[data-name]');
+                    const $data = $(info.data).children('.form-group[data-name]');
                     items.forEach(name =>
                     {
                         const $item = $data.filter(`[data-name="${name}"]`);
                         $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
                         $item.zuiInit();
                     });
+
+                    if(options.updateOrders)
+                    {
+                        const formGrid = $form.zui();
+                        if(formGrid)
+                        {
+                            const orders = [];
+                            $data.each((_, element) => orders.push($(element).attr('data-name')));
+                            formGrid.updateOrders(orders, $form.data('fullModeOrders'));
+                        }
+                    }
                 }
                 else
                 {
                     $form.html(info.data).zuiInit();
+                    const formGrid = $form.zui();
+                    if(formGrid) formGrid.toggleMode(formGrid.mode, true);
                 }
 
                 let keep = options.keep;
@@ -1218,6 +1279,7 @@
     function changeAppLang(lang)
     {
         if($('html').attr('lang') === lang) return;
+        zui.i18n.setCode(lang);
         reloadPage();
         $('html').attr('lang', lang);
     }
@@ -1393,7 +1455,42 @@
         e.preventDefault();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm});
+    function createSelector(name)
+    {
+        return name.replace(/([[\]])/g, '\\$1');
+    };
+
+    function showValidateMessage(message)
+    {
+        let $firstControl = null;
+        Object.entries(message).forEach(([name, msg]) => {
+            if (Array.isArray(msg)) {
+                msg = msg.join('');
+            }
+            const nameSelector = createSelector(name);
+            const $element = $('.form');
+            let $control = $element.find(`#${nameSelector}`);
+            if(!$control.length) $control = $element.find(`[name="${nameSelector}"]`);
+            if(!$control.length && !name.includes('[')) $control = $element.find(`[name="${nameSelector}[]"]`);
+            if($control.hasClass('pick-value')) $control = $control.closest('.pick');
+            $control.addClass('has-error');
+            const $group = $control.closest('.form-group,.form-batch-control');
+            if(!$group.length) return zui.Messager.show({content: msg, type: 'danger', className: 'bg-danger text-canvas gap-2 messager-success'});
+            if($group.length)
+            {
+                let $tip = $group.find(`#${nameSelector}Tip`);
+                if(!$tip.length)
+                {
+                    $tip = $(`<div class="form-tip ajax-form-tip text-danger pre-line" id="${name}Tip"></div>`).appendTo($group);
+                }
+                $tip.empty().text(msg);
+            }
+            if(!$firstControl) $firstControl = $control;
+        });
+        if($firstControl) $firstControl[0]?.focus();
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1421,6 +1518,14 @@
             {
                 if(confirmed) $(document).trigger('locate.zt', data.confirmed);
                 else $(document).trigger('locate.zt', data.cancelled);
+            });
+        }
+        if(data.alert)
+        {
+            return zui.Modal.alert(data.alert).then(function()
+            {
+                if(data.modal)  loadModal(data.modal);
+                if(data.locate) openUrl(data.locate);
             });
         }
         if(data.load) return openUrl(data);

@@ -14,6 +14,7 @@ jsVar('projectLang', $lang->projectCommon);
 jsVar('window.libType', $type);
 formPanel
 (
+    set::className('createLibForm'),
     set::title($lang->api->createLib),
     formGroup
     (
@@ -96,6 +97,7 @@ formPanel
                 setClass('w-full check-list'),
                 div
                 (
+                    setClass('w-full'),
                     inputGroup
                     (
                         $lang->doclib->group,
@@ -109,10 +111,11 @@ formPanel
                 ),
                 div
                 (
+                    setClass('w-full'),
                     inputGroup
                     (
                         $lang->doclib->user,
-                        users(set::items($users))
+                        userPicker(set::items($users))
                     )
                 )
             )

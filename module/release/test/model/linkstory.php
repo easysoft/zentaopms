@@ -9,15 +9,15 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
+include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
 
-$release = zdTable('release')->config('release');
+$release = zenData('release')->loadYaml('release');
 $release->stories->range('1-5');
 $release->gen(5);
 
-zdTable('story')->config('story')->gen(5);
-zdTable('storystage')->gen(0);
-zdTable('user')->gen(5);
+zenData('story')->loadYaml('story')->gen(5);
+zenData('storystage')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $releaseID  = array(0, 1, 6);

@@ -22,7 +22,7 @@ toolbar
 (
     hasPriv('bug', 'export') ? item(set(array
     (
-        'text'  => $lang->bug->export,
+        'text'  => $lang->export,
         'icon'  => 'export',
         'class' => 'ghost',
         'url'   => createLink('bug', 'export', "productID={$productID}&browseType=&projectID={$project->id}"),

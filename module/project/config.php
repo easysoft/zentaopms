@@ -61,7 +61,7 @@ $config->project->maxCheckList->waterfallplus = $config->project->maxCheckList->
 $config->project->maxCheckList->ipd           = $config->project->maxCheckList->waterfall;
 
 $config->project->scrumList     = array('scrum', 'agileplus');
-$config->project->waterfallList = array('waterfall', 'waterfallplus');
+$config->project->waterfallList = array('waterfall', 'waterfallplus', 'ipd');
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;

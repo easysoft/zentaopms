@@ -64,7 +64,7 @@ div
             h::th($lang->user->account),
             h::td($user->account),
             h::th($lang->user->email),
-            h::td(set::title($user->email), $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : null)
+            h::td(set::title($user->email), $user->email ? a(set::href("javascript:;"), set::onclick("javascript:window.location.href='mailto:{$user->email}'"), $user->email) : null)
         ),
         h::tr
         (

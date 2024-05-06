@@ -2,10 +2,10 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/message.class.php';
+include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
 
-zdTable('todo')->config('todo')->gen(20);
-zdTable('user')->gen(3);
+zenData('todo')->loadYaml('todo')->gen(20);
+zenData('user')->gen(3);
 
 /**
 

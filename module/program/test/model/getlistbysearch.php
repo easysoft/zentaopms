@@ -18,11 +18,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1-20');
 $program->name->range('1-20')->prefix('项目集');
 $program->type->range('program{17},project{3}');
@@ -34,7 +34,7 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(20)->fixPath();
 
-$query = zdTable('userquery');
+$query = zenData('userquery');
 $query->id->range('1');
 $query->account->range('admin');
 $query->module->range('program');

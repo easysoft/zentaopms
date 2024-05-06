@@ -48,7 +48,7 @@ div
                 setClass('text-center'),
                 btn
                 (
-                    on::click('loadCurrentPage'),
+                    on::click('loadCurrentPage()'),
                     set::type('primary'),
                     setClass('px-10'),
                     $lang->refresh

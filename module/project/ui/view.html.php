@@ -34,18 +34,6 @@ if($project->grade > 1)
     );
 }
 
-$totalEstimate = $workhour->totalConsumed + $workhour->totalLeft;
-$progress      = 0;
-if($project->model == 'waterfall')
-{
-    $progressList = $this->project->getWaterfallProgress(array($project->id));
-    $progress     = empty($progressList[$project->id]) ? 0 : $progressList[$project->id];
-}
-elseif($totalEstimate > 0)
-{
-    $progress = floor($workhour->totalConsumed / $totalEstimate * 1000) / 1000 * 100;
-}
-
 $status = $this->processStatus('project', $project);
 
 $relatedProducts = null;
@@ -184,13 +172,13 @@ row
                             'radius'    => array('80%', '90%'),
                             'itemStyle' => array('borderRadius' => '40'),
                             'label'     => array('show' => false),
-                            'data'      => array($progress, 100 - $progress)
+                            'data'      => array($project->progress, 100 - $project->progress)
                         )))
                     ),
                     div
                     (
                         set::className('pie-chart-title text-center'),
-                        div(span(set::className('text-2xl font-bold'), $progress . '%')),
+                        div(span(set::className('text-2xl font-bold'), $project->progress . '%')),
                         div
                         (
                             span
@@ -285,7 +273,7 @@ row
                         )
                     )
                 ),
-                div(setClass('flex mt-4'), div(setClass('clip programBox'), $programDom)),
+                div(setClass('flex mt-4 program'), div(setClass('clip programBox'), $programDom)),
                 div(set::className('detail-content mt-4'), html($project->desc))
             )
         ),
@@ -326,6 +314,7 @@ row
                             ),
                             h::th
                             (
+                                setClass('th-plan'),
                                 span
                                 (
                                     setClass('flex'),
@@ -460,19 +449,19 @@ row
                                     (
                                         setClass('w-1/3'),
                                         span(setClass('text-gray'), $lang->execution->estimateHours),
-                                        span(setClass('ml-2'), (float)$workhour->totalEstimate . 'h')
+                                        span(setClass('ml-2'), (float)$project->estimate . 'h')
                                     ),
                                     div
                                     (
                                         setClass('w-1/3'),
                                         span(setClass('text-gray'), $lang->execution->consumedHours),
-                                        span(setClass('ml-2'), (float)$workhour->totalConsumed . 'h')
+                                        span(setClass('ml-2'), (float)$project->consumed . 'h')
                                     ),
                                     div
                                     (
                                         setClass('w-1/3'),
                                         span(setClass('text-gray'), $lang->execution->leftHours),
-                                        span(setClass('ml-2'), (float)$workhour->totalLeft . 'h')
+                                        span(setClass('ml-2'), (float)$project->left . 'h')
                                     ),
                                     div
                                     (
@@ -484,7 +473,7 @@ row
                                     (
                                         setClass('w-1/3 mt-4'),
                                         span(setClass('text-gray'), $lang->execution->totalHours),
-                                        span(setClass('ml-2'), (float)$workhour->totalLeft . 'h')
+                                        span(setClass('ml-2'), (float)$project->left . 'h')
                                     ),
                                     div
                                     (

@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-zdTable('scene')->config('modulescene')->gen('20');
-zdTable('user')->gen('1');
+zenData('scene')->loadYaml('modulescene')->gen('20');
+zenData('user')->gen('1');
 
 su('admin');
 

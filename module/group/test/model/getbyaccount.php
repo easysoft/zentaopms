@@ -21,13 +21,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
+include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
 
 su('admin');
 
-zdTable('user')->gen(100);
-zdTable('group')->config('group')->gen(10);
-zdTable('usergroup')->config('usergroup')->gen(10);
+zenData('user')->gen(100);
+zenData('group')->loadYaml('group')->gen(10);
+zenData('usergroup')->loadYaml('usergroup')->gen(10);
 
 $group = new groupTest();
 r($group->getByAccountTest('user2'))       && p('2:id,name,role') && e('2,这是一个新的用户分组2,0');  //测试获取user2所在的所有分组

@@ -16,7 +16,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->project->range('0,0,1{7},2{10}');
 $project->parent->range('0,0,1{4},3{3},2');
 $project->type->range('project,project,stage{100}');
@@ -24,7 +24,7 @@ $project->milestone->range('0{3},1{2},0{10}');
 $project->percent->range('90,10,20,30,40,10,20,30,40,10,20,30');
 $project->gen(10)->fixPath();
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->project->range('2-20');
 $projectProduct->product->range('3');
 $projectProduct->gen(10);

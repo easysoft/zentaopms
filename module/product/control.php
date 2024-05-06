@@ -92,7 +92,7 @@ class product extends control
         $projects = $this->loadModel('project')->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
         foreach($projectStats as $project) unset($projects[$project->id]);
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->product->project;
         $this->view->projectStats = $this->productZen->processProjectListData($projectStats);
         $this->view->PMList       = $this->loadModel('user')->getListByAccounts(helper::arrayColumn($projectStats, 'PM'), 'account');
         $this->view->product      = $product;
@@ -240,7 +240,7 @@ class product extends control
 
         $product = $this->product->getByID($productID);
 
-        $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
+        $this->view->title   = $this->lang->product->edit . $this->lang->hyphen . $product->name;
         $this->view->product = $product;
         $this->view->fields  = $this->productZen->getFormFields4Edit($product);
 
@@ -313,7 +313,7 @@ class product extends control
 
         $product = $this->product->getByID($productID);
 
-        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
+        $this->view->title   = $product->name . $this->lang->hyphen .$this->lang->close;
         $this->view->product = $product;
         $this->view->actions = $this->loadModel('action')->getList('product', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
@@ -346,7 +346,7 @@ class product extends control
 
         $product = $this->product->getByID($productID);
 
-        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
+        $this->view->title   = $product->name . $this->lang->hyphen .$this->lang->close;
         $this->view->product = $product;
         $this->view->actions = $this->loadModel('action')->getList('product', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
@@ -380,7 +380,7 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
-        $this->view->title     = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->title     = $product->name . $this->lang->hyphen . $this->lang->product->view;
         $this->view->product   = $product;
         $this->view->actions   = $this->loadModel('action')->getList('product', $productID);
         $this->view->dynamics  = $this->action->getDynamic('all', 'all', 'date_desc', 50, $productID);
@@ -439,7 +439,7 @@ class product extends control
         $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
 
         /* Assign view data. */
-        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->title    = $product->name . $this->lang->hyphen . $this->lang->product->roadmap;
         $this->view->product  = $product;
         $this->view->roadmaps = $roadmaps;
         $this->view->branches = $branches;
@@ -484,7 +484,7 @@ class product extends control
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->product->dynamic;
         $this->view->userIdPairs  = $this->user->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID    = $productID;
@@ -520,7 +520,7 @@ class product extends control
         $product = $this->product->getStatByID($productID);
         if(!$product) return $this->locate('product', 'all');
 
-        $this->view->title = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->title = $product->name . $this->lang->hyphen . $this->lang->product->view;
         echo $this->fetch('block', 'dashboard', 'dashboard=singleproduct');
     }
 
@@ -586,22 +586,12 @@ class product extends control
         if($this->config->systemMode == 'light' && $orderBy == 'program_asc') $orderBy = 'order_asc';
         if(str_contains($orderBy, 'productLine')) $orderBy = str_replace('productLine', 'line', $orderBy);
 
-        if(strtolower($browseType) == 'bysearch')
-        {
-            $queryID  = ($browseType == 'bySearch' || !empty($param)) ? $param : 0;
-            $products = $this->product->getListBySearch($queryID);
-        }
-        else
-        {
-            $products = $this->product->getList($programID, $browseType);
-        }
-
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->product->refreshStats(); // Refresh stats fields of products.
 
-        $productStatList = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story', $programID);
+        $productStatList = $this->productZen->getExportData($programID, $browseType, $orderBy, $param, $pager);
 
         /* Generate root program list. */
         $rootProgramList = $this->loadModel('program')->getRootProgramList();
@@ -673,7 +663,7 @@ class product extends control
         }
 
         $this->view->title    = $this->lang->product->manageLine;
-        $this->view->programs = $this->loadModel('program')->getTopPairs('withDeleted');
+        $this->view->programs = array(0 => $this->lang->null) + $this->loadModel('program')->getTopPairs('withDeleted');
         $this->view->lines    = $this->product->getLines();
         $this->view->fields   = $this->config->product->form->manageLine;
         $this->display();
@@ -752,7 +742,6 @@ class product extends control
             /* 获取导出字段和数据。 */
             $fields       = $this->productZen->getExportFields();
             $productStats = $this->productZen->getExportData($programID, $status, $orderBy, $param);
-            $rowspan      = $this->productZen->getExportRowspan($productStats);
 
             /* 如果只导出选中产品，删除非选中产品。 */
             if($this->post->exportType == 'selected')
@@ -765,7 +754,6 @@ class product extends control
             }
             if($this->config->edition != 'open') list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $productStats);
 
-            $this->post->set('rowspan', $rowspan);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $productStats);
             $this->post->set('kind', 'product');
@@ -1014,7 +1002,7 @@ class product extends control
     public function ajaxGetLine(int $programID, int $productID = 0)
     {
         $lines = array();
-        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
+        if(empty($productID) || $programID) $lines = $this->product->getLinePairs($programID, true);
 
         $items = array();
         foreach($lines as $lineID => $lineName) $items[] = array('text' => $lineName, 'value' => $lineID);

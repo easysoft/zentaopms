@@ -45,7 +45,8 @@ $config->upgrade->maxVersion['max4_8']        = '18_8';
 $config->upgrade->maxVersion['max4_9']        = '18_9';
 $config->upgrade->maxVersion['max4_10']       = '18_10';
 $config->upgrade->maxVersion['max4_10_1']     = '18_10_1';
-$config->upgrade->maxVersion['max4_11']        = '18_11'; // max insert position.
+$config->upgrade->maxVersion['max4_11']       = '18_11';
+$config->upgrade->maxVersion['max4_12']       = '18_12'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']        = '9_5_1';
@@ -129,7 +130,8 @@ $config->upgrade->bizVersion['biz8_8']        = '18_8';
 $config->upgrade->bizVersion['biz8_9']        = '18_9';
 $config->upgrade->bizVersion['biz8_10']       = '18_10';
 $config->upgrade->bizVersion['biz8_10_1']     = '18_10_1';
-$config->upgrade->bizVersion['biz8_11']        = '18_11'; // biz insert position.
+$config->upgrade->bizVersion['biz8_11']       = '18_11';
+$config->upgrade->bizVersion['biz8_12']       = '18_12'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -250,7 +252,8 @@ $config->upgrade->ipdVersion['ipd1_1']       = '18_8';
 $config->upgrade->ipdVersion['ipd1_1_1']     = '18_9';
 $config->upgrade->ipdVersion['ipd1_1_2']     = '18_10';
 $config->upgrade->ipdVersion['ipd1_2']       = '18_10_1';
-$config->upgrade->ipdVersion['ipd1_3']        = '18_11'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd1_3']       = '18_11';
+$config->upgrade->ipdVersion['ipd1_4']       = '18_12'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
@@ -1160,27 +1163,32 @@ $config->delete['20_0_beta1'][] = 'extension/or/demand/lang/fr.php';
 $config->delete['20_0_beta1'][] = 'extension/or/demand/lang/zh-cn.php';
 $config->delete['20_0_beta1'][] = 'extension/or/demand/ext/model/class/feedback.class.php';
 $config->delete['20_0_beta1'][] = 'extension/or/demand/ext/model/feedback.php';
+$config->delete['20_0_beta1'][] = 'module/metric/css/browse.ui.css';
+$config->delete['20_0_beta1'][] = 'module/metric/css/create.ui.css';
+$config->delete['20_0_beta1'][] = 'module/metric/css/edit.ui.css';
+$config->delete['20_0_beta1'][] = 'module/metric/css/implement.ui.css';
+$config->delete['20_0_beta1'][] = 'module/metric/css/view.ui.css';
+$config->delete['20_0_beta1'][] = 'module/metric/js/browse.ui.js';
+$config->delete['20_0_beta1'][] = 'module/metric/js/create.ui.js';
+$config->delete['20_0_beta1'][] = 'module/metric/js/implement.ui.js';
+$config->delete['20_0_beta1'][] = 'module/metric/js/view.ui.js';
+$config->delete['20_0_beta1'][] = 'module/metric/template/metric.php.tmp';
+$config->delete['20_0_beta1'][] = 'module/metric/ui/browse.html.php';
+$config->delete['20_0_beta1'][] = 'module/metric/ui/create.html.php';
+$config->delete['20_0_beta1'][] = 'module/metric/ui/edit.html.php';
+$config->delete['20_0_beta1'][] = 'module/metric/ui/implement.html.php';
+$config->delete['20_0_beta1'][] = 'module/metric/ui/view.html.php';
+$config->delete['20_0_beta1'][] = 'module/metric/ui/viewphpmetric.html.php';
+$config->delete['20_0_beta1'][] = 'module/metric/ui/viewsqlmetric.html.php';
 
-$config->delete['20_0beta1'][] = 'module/metric/css/browse.ui.css';
-$config->delete['20_0beta1'][] = 'module/metric/css/create.ui.css';
-$config->delete['20_0beta1'][] = 'module/metric/css/edit.ui.css';
-$config->delete['20_0beta1'][] = 'module/metric/css/implement.ui.css';
-$config->delete['20_0beta1'][] = 'module/metric/css/view.ui.css';
-$config->delete['20_0beta1'][] = 'module/metric/js/browse.ui.js';
-$config->delete['20_0beta1'][] = 'module/metric/js/create.ui.js';
-$config->delete['20_0beta1'][] = 'module/metric/js/implement.ui.js';
-$config->delete['20_0beta1'][] = 'module/metric/js/view.ui.js';
-$config->delete['20_0beta1'][] = 'module/metric/template/metric.php.tmp';
-$config->delete['20_0beta1'][] = 'module/metric/ui/browse.html.php';
-$config->delete['20_0beta1'][] = 'module/metric/ui/create.html.php';
-$config->delete['20_0beta1'][] = 'module/metric/ui/edit.html.php';
-$config->delete['20_0beta1'][] = 'module/metric/ui/implement.html.php';
-$config->delete['20_0beta1'][] = 'module/metric/ui/view.html.php';
-$config->delete['20_0beta1'][] = 'module/metric/ui/viewphpmetric.html.php';
-$config->delete['20_0beta1'][] = 'module/metric/ui/viewsqlmetric.html.php';
+$config->delete['20_0_beta2'][] = 'module/install/css/showtableprogress.ui.css';
+$config->delete['20_0_beta2'][] = 'module/install/css/step1.ui.css';
+$config->delete['20_0_beta2'][] = 'module/install/css/step2.ui.css';
+$config->delete['20_0_beta2'][] = 'module/install/css/step5.ui.css';
+$config->delete['20_0_beta2'][] = 'module/dimension/view/ajaxgetdropmenu.html.php';
+$config->delete['20_0_beta2'][] = 'extension/lite/story/ext/ui/view.html.php';
 
-
-$config->upgrade->openModules = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution');
+$config->upgrade->openModules = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox');
 
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
 

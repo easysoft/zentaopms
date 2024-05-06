@@ -14,35 +14,6 @@ class gitfoxModel extends model
     protected $repos = array();
 
     /**
-     * 获取gitfox根据id。
-     * Get a gitfox by id.
-     *
-     * @param  int $id
-     * @access public
-     * @return object|false
-     */
-    public function getByID(int $id): object|false
-    {
-        return $this->loadModel('pipeline')->getByID($id);
-    }
-
-    /**
-     * 获取gitfox列表。
-     * Get gitfox list.
-     *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getList(string $orderBy = 'id_desc', object $pager = null): array
-    {
-        $gitfoxList = $this->loadModel('pipeline')->getList('gitfox', $orderBy, $pager);
-
-        return $gitfoxList;
-    }
-
-    /**
      * 获取gitfox id name 键值对。
      * Get gitfox pairs.
      *
@@ -64,7 +35,7 @@ class gitfoxModel extends model
      */
     public function getApiRoot(int $gitfoxID, bool $sudo = true): string|object
     {
-        $gitfox = $this->getByID($gitfoxID);
+        $gitfox = $this->fetchByID($gitfoxID);
         if(!$gitfox || $gitfox->type != 'gitfox') return '';
 
         $apiRoot = new stdclass;
@@ -82,7 +53,7 @@ class gitfoxModel extends model
 
     /**
      * 通过api创建一个gitfox用户。
-     * Create a gitab user by api.
+     * Create a gitlab user by api.
      *
      * @param  int    $gitfoxID
      * @param  int    $projectID
@@ -218,6 +189,33 @@ class gitfoxModel extends model
         $url      = sprintf($apiRoot->url, $apiPath);
 
         return json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+    }
+
+    /**
+     * 通过api获取合并请求。
+     * Get Pull Requests/Merge Requests by API.
+     *
+     * @param  mixed $gitfoxID
+     * @param  mixed $repoID
+     * @return object
+     */
+    public function apiGetMergeRequests(int $gitfoxID, int $repoID): object|null
+    {
+        $apiRoot  = $this->getApiRoot($gitfoxID, false);
+        $apiPath  = "/repos/{$repoID}/pullreq";
+        $url      = sprintf($apiRoot->url, $apiPath);
+
+        $MRs = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+        foreach($MRs as $MR)
+        {
+            $MR->iid               = $MR->number;
+            $MR->source_project_id = $MR->source_repo_id;
+            $MR->target_project_id = $MR->target_repo_id;
+            $MR->work_in_progress  = $MR->is_draft;
+            $MR->draft             = $MR->is_draft;
+        }
+
+        return $MRs;
     }
 
     /**
@@ -582,7 +580,7 @@ class gitfoxModel extends model
 
     /**
      * 通过api获取一个流水线。
-     * Get single pipline by api.
+     * Get single pipeline by api.
      *
      * @param  int    $gitfoxID
      * @param  int    $projectID
@@ -600,7 +598,7 @@ class gitfoxModel extends model
 
     /**
      * 通过api获取一个流水线日志。
-     * Get single pipline logs by api.
+     * Get single pipeline logs by api.
      *
      * @param  int    $gitfoxID
      * @param  int    $projectID

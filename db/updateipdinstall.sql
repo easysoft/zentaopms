@@ -72,7 +72,7 @@ CREATE TABLE `zt_demandreview` (
   `version` smallint(6) NOT NULL DEFAULT '0',
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
-  `reviewDate` datetime NOT NULL
+  `reviewDate` datetime NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`);
 

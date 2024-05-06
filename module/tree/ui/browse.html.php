@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('rootID', $root->id);
+jsVar('viewType', $viewType);
+
 $manageTitle = $lang->tree->manageChild;
 if(strpos($viewType, 'doc') !== false)
 {
@@ -186,7 +189,7 @@ div
     div
     (
         setClass('entity-label flex items-center gap-x-2 text-lg font-bold'),
-        $viewType == 'host' ? $root->name : $lang->tree->common . $lang->colon . $root->name
+        $viewType == 'host' ? $root->name : $lang->tree->common . $lang->hyphen . $root->name
     )
 );
 
@@ -214,11 +217,13 @@ div
             ) : null,
             treeEditor
             (
-                set('selected', $currentModuleID),
-                set('type', $viewType),
-                set('items', $tree),
-                set('canEdit', common::hasPriv('tree', 'edit') && $canBeChanged),
-                set('canDelete', common::hasPriv('tree', 'delete') && $canBeChanged)
+                set::selected($currentModuleID),
+                set::type($viewType),
+                set::items($tree),
+                set::canEdit(common::hasPriv('tree', 'edit') && $canBeChanged),
+                set::canDelete(common::hasPriv('tree', 'delete') && $canBeChanged),
+                set::sortable(array('handle' => '.icon-move')),
+                set::onSort(jsRaw('window.updateOrder'))
             )
         )
     ),

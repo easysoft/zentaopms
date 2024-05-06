@@ -72,7 +72,7 @@ class tabs extends wg
 
         return div
         (
-            setClass('tabs-header'),
+            setClass('tabs-header bg-white'),
             ul
             (
                 setClass('tabs-nav nav nav-tabs gap-x-5', $collapse ? 'relative' : null, $headerClass),

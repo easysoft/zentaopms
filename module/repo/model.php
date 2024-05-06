@@ -7,6 +7,7 @@ declare(strict_types=1);
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@cnezsoft.com>
  * @package     repo
+ * @property    repoTao $repoTao
  * @link        https://www.zentao.net
  */
 class repoModel extends model
@@ -73,19 +74,8 @@ class repoModel extends model
         if($repoID)
         {
             $repo = $this->getByID($repoID);
-            if(empty($repo))
-            {
-                echo(js::alert($this->lang->repo->error->noFound));
-                return print(js::locate('back'));
-            }
-
-            if(!$this->checkPriv($repo))
-            {
-                echo(js::alert($this->lang->repo->error->accessDenied));
-                return print(js::locate('back'));
-            }
-
-            if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+            if(!$repo || !$this->checkPriv($repo)) $repoID = 0;
+            if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
         }
 
         if(!in_array($this->app->methodName, array('maintain', 'create', 'createrepo', 'edit','import'))) common::setMenuVars('devops', $repoID);
@@ -873,6 +863,8 @@ class repoModel extends model
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
                 ->beginIF($hasBranch)->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')->fi()
                 ->where('t1.repo')->eq($repo->id)
+                ->beginIF($begin)->andWhere('t2.`time`')->ge($begin)->fi()
+                ->beginIF($end)->andWhere('t2.`time`')->le($end)->fi()
                 ->beginIF($revisionTime)->andWhere('t2.`time`')->le($revisionTime)->fi()
                 ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
                 ->beginIF($hasBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
@@ -892,6 +884,8 @@ class repoModel extends model
             ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t1.`comment`, 12)')->ne('Merge branch')
             ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
+            ->beginIF($begin)->andWhere('t1.`time`')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('t1.`time`')->le($end)->fi()
             ->beginIF($hasBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' && !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
@@ -1865,8 +1859,8 @@ class repoModel extends model
 
         $accountPairs  = array();
         $userList      = $this->loadModel($repo->SCM)->apiGetUsers($repo->gitService);
-        $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, strtolower($repo->SCM), 'openID,account');
-        foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+        $accountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, strtolower($repo->SCM), 'openID,account');
+        foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($accountIDPairs, $gitlabUser->id, '');
 
         foreach($data->commits as $commit)
         {
@@ -2342,6 +2336,9 @@ class repoModel extends model
             }
         }
 
+        $importedProjects = $this->getImportedProjects($gitlabID);
+        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
+
         return $projects;
     }
 
@@ -2370,6 +2367,9 @@ class repoModel extends model
             $groups      = $this->gitfox->apiGetGroups($gitfoxID, 'name_asc');
             foreach($groups as $group) $groupIDList[] = $group->id;
         }
+
+        $importedProjects = $this->getImportedProjects($gitfoxID);
+        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
 
         return $projects;
     }
@@ -2995,10 +2995,9 @@ class repoModel extends model
         $relation = new stdclass();
         $relation->AType    = $objectType;
         $relation->AID      = $objectID;
-        $relation->BType    = 'repobranch';
+        $relation->BType    = $branch;
         $relation->BID      = $repoID;
         $relation->relation = 'linkrepobranch';
-        $relation->extra    = $branch;
         $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
         return !dao::isError();
@@ -3013,14 +3012,14 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getLinkedBranch(int $objectID, string $objectType): array
+    public function getLinkedBranch(int $objectID = 0, string $objectType = '', int $repoID = 0): array
     {
-        return $this->dao->select('BID,extra')->from(TABLE_RELATION)
-            ->where('AType')->eq($objectType)
-            ->andWhere('BType')->eq('repobranch')
-            ->andWhere('relation')->eq('linkrepobranch')
-            ->andWhere('AID')->eq($objectID)
-            ->fetchPairs();
+        return $this->dao->select('BID,BType,AType')->from(TABLE_RELATION)
+            ->where('relation')->eq('linkrepobranch')
+            ->beginIF($objectType)->andWhere('AType')->eq($objectType)->fi()
+            ->beginIF($repoID)->andWhere('BID')->eq($repoID)->fi()
+            ->beginIF($objectID)->andWhere('AID')->eq($objectID)->fi()
+            ->fetchAll();
     }
 
     /**
@@ -3038,12 +3037,50 @@ class repoModel extends model
     {
         $this->dao->delete()->from(TABLE_RELATION)
             ->where('AType')->eq($objectType)
-            ->andWhere('BType')->eq('repobranch')
             ->andWhere('relation')->eq('linkrepobranch')
             ->andWhere('AID')->eq($objectID)
             ->andWhere('BID')->eq($repoID)
-            ->andWhere('extra')->eq($branch)
+            ->andWhere('BType')->eq($branch)
             ->exec();
         return !dao::isError();
+    }
+
+    /**
+     * 通过产品ID和代码库类型获取代码库列表。
+     * Get repo list by product id.
+     *
+     * @param  int    $productID
+     * @param  string $scm
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getListByProduct(int $productID, string $scm = '', int $limit = 0): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->andWhere("FIND_IN_SET({$productID}, `product`)")
+            ->beginIF($scm)->andWhere('SCM')->in($scm)->fi()
+            ->beginIF($limit)->limit($limit)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取代码库服务器已经导入的项目/代码库。
+     * Get the imported projects/repositories by service host id.
+     *
+     * @param  int   $hostID
+     * @return array
+     */
+    public function getImportedProjects(int $hostID)
+    {
+        $importedProjects = $this->dao->select('serviceProject')->from(TABLE_REPO)
+            ->where('serviceHost')->eq($hostID)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('serviceProject');
+
+        if(dao::isError()) return array();
+
+        return array_keys($importedProjects);
     }
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -16,10 +16,10 @@ cid=8
 
 */
 
-zdTable('pipeline')->gen(5);
-zdTable('product')->gen(20);
-zdTable('project')->gen(20);
-zdTable('repo')->config('repo')->gen(4);
+zenData('pipeline')->gen(5);
+zenData('product')->gen(20);
+zenData('project')->gen(20);
+zenData('repo')->loadYaml('repo')->gen(4);
 
 $repo = new repoTest();
 

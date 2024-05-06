@@ -21,12 +21,12 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('action')->gen(0);
+zenData('user')->gen(5);
+zenData('action')->gen(0);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->begin->range('20231101 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $project->end->range('20231231 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $project->gen(2);

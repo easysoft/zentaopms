@@ -15,10 +15,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('intervention')->config('intervention')->gen(10);
-zdTable('user')->gen(5);
+zenData('intervention')->loadYaml('intervention')->gen(10);
+zenData('user')->gen(5);
 
 $objectIds = array(0 , 60, 70);
 

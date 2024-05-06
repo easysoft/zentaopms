@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/job.class.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 
 /**
 
@@ -17,9 +17,9 @@ cid=1
 
 */
 
-zdTable('pipeline')->gen(5);
-zdTable('job')->gen(5);
-zdTable('repo')->config('repo')->gen(5);
+zenData('pipeline')->gen(5);
+zenData('job')->gen(5);
+zenData('repo')->loadYaml('repo')->gen(5);
 
 su('admin');
 

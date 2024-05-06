@@ -22,12 +22,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('mr')->gen(0);
-zdTable('pipeline')->gen(5);
-zdTable('repo')->config('repo')->gen(1);
-zdTable('job')->config('job')->gen(1);
+zenData('mr')->gen(0);
+zenData('pipeline')->gen(5);
+zenData('repo')->loadYaml('repo')->gen(1);
+zenData('job')->loadYaml('job')->gen(1);
 su('admin');
 
 $mrModel = new mrTest();

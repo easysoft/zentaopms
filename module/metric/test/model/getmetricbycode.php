@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/calc.class.php';
+include dirname(__FILE__, 2) . '/lib/calc.unittest.class.php';
 
-zdTable('user')->config('user', true)->gen(30);
-zdTable('product')->config('product', true)->gen(10);
-zdTable('productplan')->config('productplan', true)->gen(50);
-zdTable('feedback')->config('feedback_create', true)->gen(50);
+zenData('user')->loadYaml('user', true)->gen(30);
+zenData('product')->loadYaml('product', true)->gen(10);
+zenData('productplan')->loadYaml('productplan', true)->gen(50);
+zenData('feedback')->loadYaml('feedback_create', true)->gen(50);
 
 $metric = new metricTest();
 

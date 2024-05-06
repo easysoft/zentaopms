@@ -2,12 +2,12 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testreport.class.php';
+include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
 
-zdTable('testreport')->gen(10);
-zdTable('case')->gen(10);
-zdTable('testrun')->gen(10);
-zdTable('user')->gen(1);
+zenData('testreport')->gen(10);
+zenData('case')->gen(10);
+zenData('testrun')->gen(10);
+zenData('user')->gen(1);
 
 su('admin');
 

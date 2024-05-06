@@ -19,10 +19,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/search.class.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 su('admin');
 
-zdTable('searchindex')->gen(10);
+zenData('searchindex')->gen(10);
 
 $typeList = array('all', array('project', 'story'), array('bug'));
 

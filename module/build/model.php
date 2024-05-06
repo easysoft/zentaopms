@@ -263,30 +263,8 @@ class buildModel extends model
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
         {
-            $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
-                ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
-                ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
-                ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
-                ->where('t1.product')->in($productIdList)
-                ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t1.shadow')->ne(0)
-                ->fetchAll('id');
-
-            /* Get the buildID under the shadow product. */
-            $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
-            if($shadows)
-            {
-                /* Append releases of only shadow and not link build. */
-                $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
-                    ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
-                    ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-                    ->where('t1.shadow')->in($shadows)
-                    ->andWhere('t1.build')->eq(0)
-                    ->andWhere('t1.deleted')->eq(0)
-                    ->fetchAll('id');
-            }
-            $builds = $this->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
+            $releases = $this->getRelatedReleases($productIdList, $buildIdList, $shadows);
+            $builds   = $this->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
         }
 
         krsort($builds);
@@ -407,6 +385,43 @@ class buildModel extends model
         }
 
         return $builds;
+    }
+
+    /**
+     * 获取关联的发布。
+     * Get releated release.
+     *
+     * @param  array|int  $productIdList
+     * @param  string     $buildIdList
+     * @param  array|bool $shadows
+     * @access public
+     * @return array
+     */
+    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false): array
+    {
+        $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
+            ->where('t1.product')->in($productIdList)
+            ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.shadow')->ne(0)
+            ->fetchAll('id');
+
+        if($shadows === false) $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
+        if($shadows)
+        {
+            /* Append releases of only shadow and not link build. */
+            $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                ->where('t1.shadow')->in($shadows)
+                ->andWhere('t1.build')->eq(0)
+                ->andWhere('t1.deleted')->eq(0)
+                ->fetchAll('id');
+        }
+        return $releases;
     }
 
     /**
@@ -790,40 +805,6 @@ class buildModel extends model
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll();
-    }
-
-    /**
-     * 根据权限生成列表中操作列按钮。
-     * Build table action menu for build browse page.
-     *
-     * @param  object $build
-     * @param  int    $executionID
-     * @param  string $from        execution|projectbuild
-     * @access public
-     * @return array
-     */
-    public function buildActionList(object $build, int $executionID = 0, string $from = 'execution'): array
-    {
-        $actions     = array();
-        $executionID = $executionID ? $executionID : (int)$build->execution;
-        $execution   = $this->loadModel('execution')->fetchByID($executionID);
-
-        $module = $from == 'projectbuild' ? 'projectbuild' : 'build';
-        $build->executionDeleted = $execution ? $execution->deleted : 0;
-
-        if(common::hasPriv($module, 'linkstory', $build)) $actions[] = $from == 'projectbuild' ? 'linkProjectStory' : 'linkStory';
-
-        if(common::hasPriv('testtask', 'create', $build)) $actions[] = $execution && $execution->deleted === '1' ? '-createTest' : 'createTest';
-
-        $isNotKanban   = $from == 'execution' && !empty($execution->type) && $execution->type != 'kanban';
-        $isFromProject = $from == 'projectbuild' || empty($execution->type) || $execution->type == 'kanban';
-        if($isNotKanban && common::hasPriv('execution', 'bug', $build)) $actions[] = 'viewBug';
-        if($isFromProject && common::hasPriv($module, 'view', $build))  $actions[] = $from == 'projectbuild' ? 'projectBugList' : 'bugList';
-
-        if(common::hasPriv($module, 'edit', $build))   $actions[] = $module . 'Edit';
-        if(common::hasPriv($module, 'delete', $build)) $actions[] = 'delete';
-
-        return $actions;
     }
 
     /**

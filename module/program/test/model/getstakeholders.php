@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1,2');
 $program->name->range('父项目集1,父项目集2');
 $program->type->range('program');
@@ -13,9 +13,9 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(2);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 
-$stakeholder = zdTable('stakeholder');
+$stakeholder = zenData('stakeholder');
 $stakeholder->objectID->range('1,2');
 $stakeholder->objectType->range('program');
 $stakeholder->type->range('inside');

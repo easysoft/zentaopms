@@ -1,16 +1,16 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-zdTable('bug')->gen(10);
-zdTable('case')->gen(10);
-zdTable('testsuite')->gen(10);
-zdTable('testrun')->gen(10);
-zdTable('casestep')->gen(10);
-zdTable('story')->gen(10);
+zenData('bug')->gen(10);
+zenData('case')->gen(10);
+zenData('testsuite')->gen(10);
+zenData('testrun')->gen(10);
+zenData('casestep')->gen(10);
+zenData('story')->gen(10);
 
-$result = zdTable('testresult');
+$result = zenData('testresult');
 $result->stepResults->range('1-10')->prefix('a:1:{i:')->postfix(';a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}');
 $result->gen(10);
 

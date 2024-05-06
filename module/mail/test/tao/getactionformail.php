@@ -27,11 +27,11 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$action = zdTable('action');
+$action = zenData('action');
 $action->execution->range(1);
 $action->extra->range('``,`Fix:1`');
 $action->gen(2);
-zdTable('history')->gen(5);
+zenData('history')->gen(5);
 
 global $tester;
 $mailModel = $tester->loadModel('mail');

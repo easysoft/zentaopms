@@ -6,6 +6,7 @@ window.renderRowCol = function($result, col, row)
         const index = $result.closest('tr').attr('data-index');
         $.each(stepData[index]['desc'], function(i, desc){
             const stepIndex = desc.number;
+            if(stepIndex == undefined) return false;
             $result.append('<div class="input-group step-box mb-2 gap-x-2"><span class="w-8 flex-none">' + stepIndex + '</span></div>');
             $result.find('.step-box').last().append('<input type="hidden" name="stepType[' + (parseInt(index) + 1) + '][' + stepIndex + ']" id="stepType' + index + stepIndex + '" value="' + desc.type + '"></input>');
             $result.find('.step-box').last().append('<div class="input-group mb-2 gap-x-2 w-full"></div>');

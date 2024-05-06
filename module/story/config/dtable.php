@@ -65,11 +65,30 @@ if($config->edition == 'ipd')
 {
     $config->story->dtable->fieldList['roadmap']['name']     = 'roadmap';
     $config->story->dtable->fieldList['roadmap']['title']    = $lang->story->roadmap;
-    $config->story->dtable->fieldList['roadmap']['fixed']    = 'left';
-    $config->story->dtable->fieldList['roadmap']['required'] = false;
     $config->story->dtable->fieldList['roadmap']['type']     = 'html';
     $config->story->dtable->fieldList['roadmap']['show']     = true;
     $config->story->dtable->fieldList['roadmap']['sortType'] = true;
+    $config->story->dtable->fieldList['roadmap']['width']    = '90';
+
+}
+if($config->vision == 'or')
+{
+    $app->loadLang('demand');
+    $config->story->dtable->fieldList['duration']['title']     = 'duration';
+    $config->story->dtable->fieldList['duration']['width']     = '90';
+    $config->story->dtable->fieldList['duration']['type']      = 'status';
+    $config->story->dtable->fieldList['duration']['show']      = true;
+    $config->story->dtable->fieldList['duration']['sortType']  = true;
+    $config->story->dtable->fieldList['duration']['statusMap'] = $lang->demand->durationList;
+    $config->story->dtable->fieldList['duration']['group']     = 4;
+
+    $config->story->dtable->fieldList['BSA']['title']     = 'BSA';
+    $config->story->dtable->fieldList['BSA']['width']     = '90';
+    $config->story->dtable->fieldList['BSA']['type']      = 'status';
+    $config->story->dtable->fieldList['BSA']['show']      = true;
+    $config->story->dtable->fieldList['BSA']['sortType']  = true;
+    $config->story->dtable->fieldList['BSA']['statusMap'] = $lang->demand->bsaList;
+    $config->story->dtable->fieldList['BSA']['group']     = 4;
 }
 
 $config->story->dtable->fieldList['category']['name']     = 'category';

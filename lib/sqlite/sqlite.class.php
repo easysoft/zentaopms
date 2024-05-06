@@ -52,7 +52,7 @@ class sqlite
      * @access public
      * @return void
      */
-    public function __construct(object $params)
+    public function __construct($params)
     {
         global $app, $config, $dbh;
         $this->app        = $app;
@@ -71,7 +71,7 @@ class sqlite
      * @access public
      * @return object
      */
-    public function connectSqlite(string $sqliteFile = ''): object
+    public function connectSqlite($sqliteFile = '')
     {
         $tmpRoot = $this->app->getTmpRoot();
         if(empty($sqliteFile) || !is_file($sqliteFile)) $sqliteFile = $tmpRoot . 'sqlite.db';
@@ -97,7 +97,7 @@ class sqlite
      * @access public
      * @return string
      */
-    public function formatAttr(string $sql): string
+    public function formatAttr($sql)
     {
         $sql = str_replace('`', '', $sql);
         $sql = preg_replace('/\s*int\s*\(\d+\)\s*NOT NULL AUTO_INCREMENT/i', ' INTEGER PRIMARY KEY AUTOINCREMENT', $sql);
@@ -132,7 +132,7 @@ class sqlite
      * @access public
      * @return string
      */
-    public function formatSQL(string $sql): string
+    public function formatSQL($sql)
     {
         // $sql = $this->formatAttr($sql);
         return $sql;
@@ -146,7 +146,7 @@ class sqlite
      * @access public
      * @return PDOStatement|false
      */
-    public function query(string $sql): PDOStatement|false
+    public function query($sql)
     {
         try
         {
@@ -166,7 +166,7 @@ class sqlite
      * @access public
      * @return PDOStatement|false
      */
-    public function rawQuery($sql): PDOStatement|false
+    public function rawQuery($sql)
     {
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
@@ -181,7 +181,7 @@ class sqlite
      * @access public
      * @return int|false
      */
-    public function exec(string $sql): int|false
+    public function exec($sql)
     {
         return $this->dbh->exec($sql);
     }
@@ -193,7 +193,7 @@ class sqlite
      * @access public
      * @return bool
      */
-    public function beginTransaction(): bool
+    public function beginTransaction()
     {
         return $this->dbh->beginTransaction();
     }
@@ -205,7 +205,7 @@ class sqlite
      * @access public
      * @return bool
      */
-    public function rollBack(): bool
+    public function rollBack()
     {
         return $this->dbh->rollBack();
     }
@@ -217,7 +217,7 @@ class sqlite
      * @access public
      * @return bool
      */
-    public function commit(): bool
+    public function commit()
     {
         return $this->dbh->commit();
     }

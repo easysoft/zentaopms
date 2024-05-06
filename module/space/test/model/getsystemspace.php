@@ -29,10 +29,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/space.class.php';
+include dirname(__FILE__, 2) . '/lib/space.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('space')->config('space')->gen(5);
+zenData('user')->gen(5);
+zenData('space')->loadYaml('space')->gen(5);
 
 $owners = array('', 'admin', 'user1', 'test');
 

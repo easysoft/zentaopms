@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/job.class.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 su('admin');
 
 /**
@@ -15,10 +15,10 @@ cid=1
 
 */
 
-zdTable('pipeline')->config('pipeline')->gen(5);
-zdTable('job')->config('job')->gen(5);
-zdTable('repo')->gen(5);
-zdTable('compile')->gen(0);
+zenData('pipeline')->loadYaml('pipeline')->gen(5);
+zenData('job')->loadYaml('job')->gen(5);
+zenData('repo')->gen(5);
+zenData('compile')->gen(0);
 
 $job = new jobTest();
 r($job->execTest(1)) && p('status')&& e('create_fail'); // 测试执行jenkins job的情况

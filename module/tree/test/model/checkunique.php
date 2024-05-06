@@ -16,10 +16,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-zdTable('module')->config('module')->gen(100);
+zenData('module')->loadYaml('module')->gen(100);
 
 $module1 = new stdclass();
 $module1->name   = '不会重名的模块';

@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-5');
 $task->name->range('1-5')->prefix('任务');
 $task->mode->range('multi');
@@ -15,7 +15,7 @@ $task->consumed->range('0');
 $task->left->range('0');
 $task->gen(5);
 
-$taskTeam = zdTable('taskteam');
+$taskTeam = zenData('taskteam');
 $taskTeam->id->range('1-20');
 $taskTeam->task->range('1{2},2{3},3{2},4{3}');
 $taskTeam->account->range('admin,user1,admin,user1,user2');

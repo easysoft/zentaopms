@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(0);
 date_default_timezone_set('Asia/Shanghai');
 $config = new stdclass();
 

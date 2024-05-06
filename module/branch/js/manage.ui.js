@@ -113,6 +113,5 @@ window.checkedChange = function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    $('#mergeBranch').hide();
-    if(checkedList.length == 2) $('#mergeBranch').show();
+    $('#mergeBranch').toggleClass('hidden', checkedList.includes('0'));
 }

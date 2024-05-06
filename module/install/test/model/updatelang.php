@@ -32,12 +32,12 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('stage')->gen(6);
-$cron = zdTable('cron');
+zenData('stage')->gen(6);
+$cron = zenData('cron');
 $cron->command->range('moduleName=execution&methodName=computeBurn,moduleName=report&methodName=remind');
 $cron->gen(6);
 
-$lang = zdTable('lang');
+$lang = zenData('lang');
 $lang->key->range('support,engineering,project');
 $lang->gen(6);
 

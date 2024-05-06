@@ -21,9 +21,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('storystage')->gen(50);
+zenData('storystage')->gen(50);
 
 $story1 = new stdclass();
 $story1->id = 1;

@@ -224,16 +224,13 @@ class misc extends control
      * 展示验证码图片。
      * Show captcha and save to session.
      *
-     * @param  string $sessionVar
      * @access public
      * @return void
      */
-    public function captcha(string $sessionVar = 'captcha')
+    public function captcha()
     {
-        if(in_array(strtolower($sessionVar), $this->config->misc->disabledSessionVar)) die("The string {$sessionVar} is not allowed to be defined as a session field.");
-
         $captcha = $this->app->loadClass('captcha');
-        $this->session->set($sessionVar, $captcha->getPhrase());
+        $this->session->set('captcha', $captcha->getPhrase());
         $captcha->build();
 
         $obLevel = ob_get_level();

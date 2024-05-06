@@ -23,10 +23,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zahost.class.php';
+include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
 su('admin');
 
-$host = zdTable('host');
+$host = zenData('host');
 $host->type->range('zahost');
 $host->name->range('宿主机1');
 $host->gen(1);
@@ -36,7 +36,7 @@ $hostInfo->id       = 1;
 $hostInfo->vsoft    = 'kvm';
 $hostInfo->hostType = 'physical';
 $hostInfo->name     = '';
-$hostInfo->extranet = '10.0.1.222';
+$hostInfo->extranet = '10.0.0.133';
 $hostInfo->cpuCores = '';
 $hostInfo->memory   = '';
 $hostInfo->diskSize = '';

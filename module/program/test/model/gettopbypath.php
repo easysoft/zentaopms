@@ -9,7 +9,7 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('project')->config('program')->gen(15);
+zenData('project')->loadYaml('program')->gen(15);
 
 su('admin');
 

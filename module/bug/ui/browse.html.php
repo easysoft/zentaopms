@@ -22,7 +22,7 @@ featureBar
     set::current($currentType),
     set::linkParams("product={$product->id}&branch={$branch}&browseType={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle())
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 $canBeChanged         = common::canModify('product', $product);
@@ -70,7 +70,7 @@ if(!isonlybody())
         ))) : null,
         hasPriv('bug', 'export') ? item(set(array
         (
-            'text'  => $lang->bug->export,
+            'text'  => $lang->export,
             'icon'  => 'export',
             'class' => 'ghost',
             'url'   => createLink('bug', 'export', "productID={$product->id}&browseType={$browseType}"),
@@ -91,7 +91,7 @@ if(!isonlybody())
     );
 }
 
-$closeLink   = createLink('bug', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+$closeLink   = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=byModule&param=0&orderBy={$orderBy}&recTotal=0&recPerPage={$pager->recPerPage}");
 $settingLink = $canManageModule ? createLink('tree', 'browse', "productID={$product->id}&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}") : '';
 sidebar
 (

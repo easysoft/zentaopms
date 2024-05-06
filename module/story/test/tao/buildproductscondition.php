@@ -18,7 +18,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 
-zdTable('product')->gen(50);
+zenData('product')->gen(50);
 
 global $tester;
 $storyModel = $tester->loadModel('story');

@@ -25,17 +25,17 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 dao::$cache = array();
-zdTable('user')->gen(10);
-zdTable('group')->config('group')->gen(100);
-zdTable('usergroup')->config('usergroup')->gen(100);
-zdTable('grouppriv')->config('grouppriv')->gen(100);
-zdTable('userview')->config('userview')->gen(10);
-zdTable('team')->config('team')->gen(200);
-zdTable('acl')->config('acl')->gen(100);
-zdTable('stakeholder')->config('stakeholder')->gen(100);
+zenData('user')->gen(10);
+zenData('group')->loadYaml('group')->gen(100);
+zenData('usergroup')->loadYaml('usergroup')->gen(100);
+zenData('grouppriv')->loadYaml('grouppriv')->gen(100);
+zenData('userview')->loadYaml('userview')->gen(10);
+zenData('team')->loadYaml('team')->gen(200);
+zenData('acl')->loadYaml('acl')->gen(100);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(100);
 
-zdTable('product')->gen(20);
-zdTable('projectadmin')->config('projectadmin')->gen(30);
+zenData('product')->gen(20);
+zenData('projectadmin')->loadYaml('projectadmin')->gen(30);
 
 $tester->loadModel('product');
 $product = $tester->user->fetchByID(11, 'product');

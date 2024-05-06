@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ pid=1
 
 */
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-2');
 $execution->name->setFields(array(
     array('field' => 'name1', 'range' => '项目{1},执行{1}'),

@@ -28,7 +28,7 @@ cid=1
 
 */
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('2-5');
 $project->project->range('6-9');
 $project->name->prefix("迭代")->range('2-5');
@@ -46,7 +46,7 @@ $project->percent->range("0-0");
 
 $project->gen(4);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('2-5');
 $task->execution->range('2,3,3,4');
 $task->name->prefix("任务")->range('2-5');

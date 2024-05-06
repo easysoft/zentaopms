@@ -76,10 +76,10 @@ function canSceneDitto(num)
 
     var trList = $("#tableBody").find("tbody").find("tr");
 
-    var rowModule = $(trList[rIndex]).find("td:eq(2)").find("select").val();
+    var rawModule = $(trList[rIndex]).find("td:eq(2)").find("select").val();
     var preModule = $(trList[rIndex-1]).find("td:eq(2)").find("select").val();
 
-    return rowModule == "ditto" || rowModule == preModule;
+    return rawModule == "ditto" || rawModule == preModule;
 }
 
 function onModuleChanged(productID, moduleID, num)

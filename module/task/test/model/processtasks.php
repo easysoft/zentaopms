@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
 /**
@@ -34,7 +34,7 @@ cid=1
 
 */
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-30');
 $task->execution->range('1-5');
 $task->name->prefix("任务")->range('1-30');
@@ -48,13 +48,13 @@ $task->assignedTo->prefix("user")->range('1-7');
 $task->status->range("wait,wait,doing,done,pause,cancel,closed");
 $task->gen(30);
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->type->range('sprint');
 $execution->name->prefix('执行')->range('1-5');
 $execution->gen(5);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-30');
 $story->product->range('1-5');
 $story->title->prefix('需求')->range('1-5');
@@ -62,14 +62,14 @@ $story->status->range('active');
 $story->version->range('1-5');
 $story->gen(30);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-5');
 $product->name->prefix('产品')->range('1-5');
 $product->type->range('normal,branch,platform');
 $product->status->range('normal,closed');
 $product->gen(5);
 
-$taskteam = zdTable('taskteam');
+$taskteam = zenData('taskteam');
 $taskteam->id->range('1-5');
 $taskteam->task->range('2');
 $taskteam->account->prefix("user")->range('1-5');
@@ -79,10 +79,10 @@ $taskteam->left->range('5');
 $taskteam->status->range("wait");
 $taskteam->gen(5);
 
-$effort = zdTable('effort');
+$effort = zenData('effort');
 $effort->gen(1);
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->gen(20);
 
 $task = new taskTest();

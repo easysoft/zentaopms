@@ -16,12 +16,12 @@ $(document).off('locate.zt').on('locate.zt', function(e, data)
 
 $(document).on('shown', '.modal', function()
 {
-    if($(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.name + '"]').closest('.modal-dialog').find('.modal-header>.close').hide();
+    if($(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.frameElement.name + '"]').closest('.modal-dialog').find('.modal-header>.close').hide();
 }).on('hidden', '.modal', function()
 {
     setTimeout(function()
     {
-        if(!$(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.name + '"]').closest('.modal-dialog').find('.modal-header>.close').show();
+        if(!$(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.frameElement.name + '"]').closest('.modal-dialog').find('.modal-header>.close').show();
     }, 500);
 });
 $('body').on('click', '.modal [data-dismiss="modal"]', function(e){e.stopPropagation();});
@@ -32,7 +32,7 @@ $(function()
 
     function resizeModal()
     {
-        const $modal = $('body>.modal-dialog>.modal-content>.modal-body,.modal-body').first();
+        const $modal = $('body>.modal-dialog>.modal-content,.modal-body').first();
         const height = $modal.outerHeight();
         $modal.closest('body').height(height);
     }
@@ -50,7 +50,7 @@ $(function()
             resizeModal();
             $body.zuiInit().removeClass('invisible');
 
-            if(parent.$('iframe[name="' + window.name + '"]').closest('.modal-dialog').find('.modal-header>.close').length) $('body>.modal-dialog>.modal-content>.modal-actions>[data-dismiss="modal"]').hide();
+            if(parent.$('iframe[name="' + window.frameElement.name + '"]').closest('.modal-dialog').find('.modal-header>.close').length) $('body>.modal-dialog>.modal-content>.modal-actions>[data-dismiss="modal"]').hide();
         }
     });
 

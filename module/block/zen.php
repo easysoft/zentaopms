@@ -208,7 +208,7 @@ class blockZen extends block
             $module = $block->module;
             if($module == 'scrumproject' || $module == 'waterfallproject') $module = 'project';
             if($module == 'singleproduct') $module = 'product';
-            if(!empty($module) && $module != 'todo' && !empty($acls['views']) && !isset($acls['views'][$module]))
+            if(!empty($module) && !in_array($module, array('welcome', 'guide', 'assigntome', 'zentaodynamic', 'teamachievement', 'dynamic', 'html')) && !empty($acls['views']) && !isset($acls['views'][$module]))
             {
                 unset($blocks[$key]);
                 continue;
@@ -401,7 +401,7 @@ class blockZen extends block
         else
         {
             $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
-                ->where('date')->gt('1970-01-01')
+                ->where('date')->gt('1971-01-01')
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->orderBy('date_asc')
                 ->limit('1')
@@ -415,6 +415,8 @@ class blockZen extends block
             if(!empty($usageDateInfo->year))  $usageDays .= $usageDateInfo->year . ' ' . $this->lang->year . ' ';
             if(!empty($usageDateInfo->month)) $usageDays .= $usageDateInfo->month . ' ' . $this->lang->month . ' ';
             if(!empty($usageDateInfo->day))   $usageDays .= $usageDateInfo->day . ' ' . $this->lang->day . ' ';
+
+            if(!$usageDays) $usageDays .= "0 {$this->lang->day}";
         }
         else
         {
@@ -435,7 +437,7 @@ class blockZen extends block
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
         $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
-        if(!empty($fixBug))
+        if(!empty($fixBugGroup))
         {
             $fixBugGroup = reset($fixBugGroup);
             $fixBug      = zget($fixBugGroup, 'value', 0);
@@ -469,35 +471,39 @@ class blockZen extends block
                 $assignedGroup = reset($assignedGroup);
                 $count         = zget($assignedGroup, 'value', 0);
             }
-            $assignToMe[$field] = array('number' => $count, 'delay' => 0, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
+            $assignToLink = '';
+            if(common::hasPriv('my', 'work')       && $this->config->vision != 'lite') $assignToLink = helper::createLink('my', 'work',       "mode=$field&type=$type");
+            if(common::hasPriv('my', 'contribute') && $this->config->vision == 'lite') $assignToLink = helper::createLink('my', 'contribute', "mode=$field&type=$type");
+            $assignToMe[$field] = array('number' => $count, 'href' => $assignToLink);
         }
 
         /* 生成待我审批的数据。 */
-        $reviewByMe = array();
-        foreach($this->lang->block->welcome->reviewList as $field => $label)
+        $reviewList = $this->loadModel('my')->getReviewingList('all');
+        $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') && $this->config->vision != 'lite' ? helper::createLink('my', 'audit') : '');
+
+        /* 生成欢迎语。 */
+        $yesterdaySummary = '';
+        if($finishTask || $fixBug)
         {
-            /* 根据不同的模块生成不同的度量项查询码。 */
-            $code = "reviewing_{$field}";
-
-            /* 查询当前指派给当前用户的不同数据。 */
-            $reviewingGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account));
-            $count = 0;
-            if(!empty($reviewingGroup))
-            {
-                $reviewingGroup = reset($reviewingGroup);
-                $count          = zget($reviewingGroup, 'value', 0);
-            }
-            $reviewByMe[$field] = array('number' => $count, 'delay' => 0);
+            if($finishTask) $yesterdaySummary .= sprintf($this->lang->block->summary->finishTask, $finishTask) . ($fixBug ? '、' : $this->lang->comma);
+            if($fixBug)     $yesterdaySummary .= sprintf($this->lang->block->summary->fixBug, $fixBug) . $this->lang->comma;
         }
+        else
+        {
+            $yesterdaySummary .= $this->lang->block->summary->noWork;
+        }
+        $yesterdaySummary = $this->lang->block->summary->yesterday . $yesterdaySummary;
+        $welcomeSummary   = sprintf($this->lang->block->summary->welcome, $usageDays, $yesterdaySummary);
 
-        $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
-        $this->view->welcomeType  = $welcomeType;
-        $this->view->usageDays    = $usageDays;
-        $this->view->finishTask   = $finishTask;
-        $this->view->fixBug       = $fixBug;
-        $this->view->honorary     = $honorary;
-        $this->view->assignToMe   = $assignToMe;
-        $this->view->reviewByMe   = $reviewByMe;
+        $this->view->todaySummary   = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
+        $this->view->welcomeType    = $welcomeType;
+        $this->view->usageDays      = $usageDays;
+        $this->view->finishTask     = $finishTask;
+        $this->view->fixBug         = $fixBug;
+        $this->view->honorary       = $honorary;
+        $this->view->assignToMe     = $assignToMe;
+        $this->view->reviewByMe     = $reviewByMe;
+        $this->view->welcomeSummary = $welcomeSummary;
     }
 
     /**
@@ -711,7 +717,7 @@ class blockZen extends block
         $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID, 'active');
 
         /* Assign view data. */
-        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->title    = $product->name . $this->lang->hyphen . $this->lang->product->roadmap;
         $this->view->product  = $product;
         $this->view->roadmaps = $roadmaps;
         $this->view->branches = $branches;
@@ -730,12 +736,12 @@ class blockZen extends block
         /* 获取最近六个月的年月数组。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         /* 从度量项获取所有产品的月度发布次数的数据。 */
@@ -746,14 +752,14 @@ class blockZen extends block
         $productIdList = array_keys($products);
         $releaseGroup  = $this->metric->getResultByCode('count_of_annual_created_release_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
 
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $releaseData[$group]  = 0;
+            $releaseData[$date]  = 0;
             if(!empty($monthRelease))
             {
                 foreach($monthRelease as $release)
                 {
-                    if($group == "{$release['year']}-{$release['month']}") $releaseData[$group] = $release['value'];
+                    if($date == "{$release['year']}-{$release['month']}") $releaseData[$date] = $release['value'];
                 }
             }
         }
@@ -996,12 +1002,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
         $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
@@ -1048,24 +1054,24 @@ class blockZen extends block
             $product->newExecution      = isset($newExecution[$productID][$productID]) ? $newExecution[$productID][$productID] : '';
             $product->newRelease        = isset($newRelease[$productID][$productID]) ? $newRelease[$productID][$productID] : '';
 
-            foreach($groups as $group)
+            foreach($dates as $date)
             {
-                if(strtotime($group) < strtotime(substr($product->createdDate, 0, 7))) continue;
+                if(strtotime($date) < strtotime(substr($product->createdDate, 0, 7))) continue;
 
-                $product->monthFinish[$group]  = 0;
-                $product->monthCreated[$group] = 0;
+                $product->monthFinish[$date]  = 0;
+                $product->monthCreated[$date] = 0;
                 if(!empty($monthFinish))
                 {
                     foreach($monthFinish as $story)
                     {
-                        if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$group] = $story['value'];
+                        if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$date] = $story['value'];
                     }
                 }
                 if(!empty($monthCreated))
                 {
                     foreach($monthCreated as $story)
                     {
-                        if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$group] = $story['value'];
+                        if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$date] = $story['value'];
                     }
                 }
             }
@@ -1093,12 +1099,14 @@ class blockZen extends block
         /* Get projects. */
         $projectID = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
         if(isset($params['project'])) $projectID = (int)$params['project'];
-        $executions  = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
+
+        $executions    = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
+        $projectIdList = $this->loadModel('project')->getProjectExecutionPairs('1', $status);
         if(empty($executions))
         {
             $this->view->chartData        = array('labels' => array(), 'baseLine' => array(), 'burnLine' => array());
             $this->view->executions       = array();
-            $this->view->projects         = $this->loadModel('project')->getPairs();
+            $this->view->projects         = $this->project->getPairsByIdList(array_keys($projectIdList));
             $this->view->currentProjectID = $projectID;
             return;
         }
@@ -1156,7 +1164,7 @@ class blockZen extends block
 
         $this->view->chartData        = $this->execution->buildBurnData($executionID, $dateList, 'left', $execution->end);
         $this->view->executions       = $executions;
-        $this->view->projects         = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->projects         = $this->project->getPairsByIdList(array_keys($projectIdList));
         $this->view->currentProjectID = $projectID;
     }
 
@@ -1224,8 +1232,20 @@ class blockZen extends block
         $productID = isset($products[$productID]) ? $productID : key($products);
         $productID = !empty($productID) ? $productID : 0;
 
-        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->project, $productID, 0, 'task', false);
-        $this->view->products  = $products;
+        /* Get program plans. */
+        $plans         = $this->loadModel('programplan')->getStage($this->session->project, $productID, 'all', 'order');
+        $plans         = $this->programplan->initGanttPlans($plans);
+        $plansProgress = $this->loadModel('metric')->getResultByCode('progress_of_task_in_execution', array('execution' => implode(',', $plans['planIdList']))); // Get plan progress by metric.
+        $plans         = $plans['datas']['data'];
+        /* Set progress from metric. */
+        foreach($plansProgress as $metric)
+        {
+            if(isset($plans[$metric['execution']])) $plans[$metric['execution']]->taskProgress = ($metric['value'] * 100) . '%';
+        }
+        $project = $this->loadModel('project')->fetchByID($this->session->project);
+
+        $this->view->plans     = $plans ? $plans : array();
+        $this->view->products  = $project->hasProduct ? $products : array();
         $this->view->productID = $productID;
     }
 
@@ -1584,22 +1604,13 @@ class blockZen extends block
         if(!empty($fixedBug))     $fixedBug     = array_column($fixedBug,  null, 'product');
         if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
 
-        $productIdList  = array_keys($products);
-        $doingTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
+        $productIdList     = array_keys($products);
+        $unclosedTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
             ->where('product')->in($productIdList)
             ->andWhere('project')->ne(0)
-            ->andWhere('status')->eq('doing')
+            ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
-            ->orderBy('begin_asc')
-            ->fetchGroup('product');
-
-        $waitTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
-            ->where('product')->in($productIdList)
-            ->andWhere('project')->ne(0)
-            ->andWhere('status')->eq('wait')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('begin')->ge(date('Y-m-d'))
-            ->orderBy('begin_desc')
+            ->orderBy('id_desc')
             ->fetchGroup('product');
 
         /* 将获取出的度量项数据塞入产品列表数据中。 */
@@ -1641,12 +1652,11 @@ class blockZen extends block
                 }
             }
 
-            $product->fixedBugRate   = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
-            $product->totalBug       = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
-            $product->fixedBug       = isset($fixedBug[$productID]['value'])     ? $fixedBug[$productID]['value']         : 0;
-            $product->activatedBug   = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
-            $product->waitTesttasks  = isset($waitTesttasks[$productID])         ? $waitTesttasks[$productID]             : '';
-            $product->doingTesttasks = isset($doingTesttasks[$productID])        ? $doingTesttasks[$productID]            : '';
+            $product->fixedBugRate      = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
+            $product->totalBug          = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
+            $product->fixedBug          = isset($fixedBug[$productID]['value'])     ? $fixedBug[$productID]['value']         : 0;
+            $product->activatedBug      = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
+            $product->unclosedTesttasks = isset($unclosedTesttasks[$productID])    ? $unclosedTesttasks[$productID]        : '';
         }
 
         $this->view->products = $products;
@@ -1822,7 +1832,7 @@ class blockZen extends block
 
         /* 通过度量项获取今年完成的迭代数量。 */
         $finishedExecution      = 0;
-        $finishedExecutionGroup = $project ? $this->metric->getResultByCode('count_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_finished_execution', array('year' => date('Y')));
+        $finishedExecutionGroup = $project ? $this->metric->getResultByCode('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_finished_execution', array('year' => date('Y')));
         if(!empty($finishedExecutionGroup))
         {
             $finishedExecutionGroup = reset($finishedExecutionGroup);
@@ -2006,18 +2016,19 @@ class blockZen extends block
             }
         }
 
-        if(common::hasPriv('todo',  'view'))                                                              $hasViewPriv['todo']        = true;
-        if(common::hasPriv('task',  'view'))                                                              $hasViewPriv['task']        = true;
-        if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                           $hasViewPriv['story']       = true;
-        if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
-        if(common::hasPriv('bug',   'view')     && $this->config->vision != 'lite')                       $hasViewPriv['bug']         = true;
-        if(common::hasPriv('testcase', 'view')  && $this->config->vision != 'lite')                       $hasViewPriv['testcase']    = true;
-        if(common::hasPriv('testtask', 'cases') && $this->config->vision != 'lite')                       $hasViewPriv['testtask']    = true;
-        if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasRisk)    $hasViewPriv['risk']        = true;
-        if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasIssue)   $hasViewPriv['issue']       = true;
-        if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
-        if(common::hasPriv('feedback', 'view')  && in_array($this->config->edition, array('max', 'biz', 'ipd'))) $hasViewPriv['feedback'] = true;
-        if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd'))) $hasViewPriv['ticket']   = true;
+        if(common::hasPriv('todo',  'view'))                                                                      $hasViewPriv['todo']        = true;
+        if(common::hasPriv('demand', 'view') && $this->config->edition == 'ipd' && $this->config->vision == 'or') $hasViewPriv['demand']      = true;
+        if((common::hasPriv('task',  'view') && $this->config->vision == 'rnd') || (common::hasPriv('marketresearch', 'viewTask') && $this->config->vision == 'or')) $hasViewPriv['task'] = true;
+        if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
+        if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
+        if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['bug']         = true;
+        if(common::hasPriv('testcase', 'view')  && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testcase']    = true;
+        if(common::hasPriv('testtask', 'cases') && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testtask']    = true;
+        if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['risk']        = true;
+        if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasIssue)   $hasViewPriv['issue']       = true;
+        if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasMeeting) $hasViewPriv['meeting']     = true;
+        if((common::hasPriv('feedback', 'view') || common::hasPriv('feedback', 'adminView')) && in_array($this->config->edition, array('max', 'biz', 'ipd')))                                  $hasViewPriv['feedback'] = true;
+        if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
         $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
         if($this->config->edition == 'max' or $this->config->edition == 'ipd')
@@ -2025,6 +2036,7 @@ class blockZen extends block
             if($hasRisk) $objectList += array('risk' => 'risks');
             if($hasIssue) $objectList += array('issue' => 'issues');
             $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
+            if($this->config->edition == 'ipd' && $this->config->vision == 'or') $objectList += array('demand' => 'demands');
         }
 
         if($this->config->edition == 'biz') $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
@@ -2042,10 +2054,11 @@ class blockZen extends block
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF($objectType == 'issue' || $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
                 ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
+                ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
-                ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'story' || $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
@@ -2053,6 +2066,7 @@ class blockZen extends block
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
                 ->beginIF($objectType == 'issue' || $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($objectType == 'ticket')->andWhere('t1.status')->in('wait,doing,done')->fi()
+                ->beginIF($objectType == 'demand')->andWhere('t2.deleted')->eq(0)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
@@ -2138,6 +2152,9 @@ class blockZen extends block
             $this->view->meetings = $meetings;
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         }
+
+        /* Compatible with the logic of the back button on the old page. */
+        $this->session->set('demandList', $this->createLink('my', 'index'), 'my');
 
         $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();
@@ -2488,12 +2505,12 @@ class blockZen extends block
         /* 获取最近6个月的年月数组组合。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $this->loadModel('metric');
@@ -2504,19 +2521,19 @@ class blockZen extends block
         $monthFinishedBug   = $this->metric->getResultByCode('count_of_monthly_fixed_bug',      array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度解决Bug数。
 
         /* 重新组装度量项数据为年月和数据的数组。 */
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $doneStoryEstimate[$group] = 0;
-            $doneStoryCount[$group]    = 0;
-            $createStoryCount[$group]  = 0;
-            $fixedBugCount[$group]     = 0;
-            $createBugCount[$group]    = 0;
+            $doneStoryEstimate[$date] = 0;
+            $doneStoryCount[$date]    = 0;
+            $createStoryCount[$date]  = 0;
+            $fixedBugCount[$date]     = 0;
+            $createBugCount[$date]    = 0;
 
             if(!empty($monthFinishedScale))
             {
                 foreach($monthFinishedScale as $scale)
                 {
-                    if($group == "{$scale['year']}-{$scale['month']}") $doneStoryEstimate[$group] = $scale['value'];
+                    if($date == "{$scale['year']}-{$scale['month']}") $doneStoryEstimate[$date] = $scale['value'];
                 }
             }
 
@@ -2524,7 +2541,7 @@ class blockZen extends block
             {
                 foreach($monthCreatedStory as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}") $doneStoryCount[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}") $doneStoryCount[$date] = $story['value'];
                 }
             }
 
@@ -2532,7 +2549,7 @@ class blockZen extends block
             {
                 foreach($monthFinishedStory as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}") $createStoryCount[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}") $createStoryCount[$date] = $story['value'];
                 }
             }
 
@@ -2540,7 +2557,7 @@ class blockZen extends block
             {
                 foreach($monthCreatedBug as $bug)
                 {
-                    if($group == "{$bug['year']}-{$bug['month']}") $fixedBugCount[$group] = $bug['value'];
+                    if($date == "{$bug['year']}-{$bug['month']}") $fixedBugCount[$date] = $bug['value'];
                 }
             }
 
@@ -2548,7 +2565,7 @@ class blockZen extends block
             {
                 foreach($monthFinishedBug as $bug)
                 {
-                    if($group == "{$bug['year']}-{$bug['month']}") $createBugCount[$group] = $bug['value'];
+                    if($date == "{$bug['year']}-{$bug['month']}") $createBugCount[$date] = $bug['value'];
                 }
             }
         }
@@ -2642,12 +2659,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
@@ -2658,17 +2675,17 @@ class blockZen extends block
         $unresovledBugs = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
         $totalBugs      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
         $resolvedRate   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $activateBugs[$group] = 0;
-            $resolveBugs[$group]  = 0;
-            $closeBugs[$group]    = 0;
+            $activateBugs[$date] = 0;
+            $resolveBugs[$date]  = 0;
+            $closeBugs[$date]    = 0;
 
             if(!empty($monthCreatedBugGroup))
             {
                 foreach($monthCreatedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$date] = $data['value'];
                 }
             }
 
@@ -2676,7 +2693,7 @@ class blockZen extends block
             {
                 foreach($monthClosedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$date] = $data['value'];
                 }
             }
         }
@@ -2716,7 +2733,6 @@ class blockZen extends block
         $closedBugGroup    = $this->metric->getResultByCode('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months))); // 关闭Bug数。
         $runCaseGroup      = $this->metric->getResultByCode('count_of_daily_run_case',      array('year' => join(',', $years), 'month' => join(',', $months))); // 执行用例数。
         $consumedGroup     = $this->metric->getResultByCode('hour_of_daily_effort',         array('year' => join(',', $years), 'month' => join(',', $months))); // 消耗工时。
-        $totalEffortGroup  = $this->metric->getResultByCode('day_of_daily_effort',          array('year' => join(',', $years), 'month' => join(',', $months))); // 累计工作量。
 
         /* 获取今日完成任务数和昨日完成任务数。 */
         $finishedTasks  = 0;
@@ -2783,32 +2799,16 @@ class blockZen extends block
             }
         }
 
-        /* 获取总投入的人天和今日投入的人天。 */
-        $totalWorkload = 0;
-        $todayWorkload = 0;
-        if($totalEffortGroup)
-        {
-            foreach($totalEffortGroup as $data)
-            {
-                $totalWorkload += $data['value'];
-                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
-                if($currentDay == date('Y-m-d')) $todayWorkload = $data['value'];
-            }
-        }
-
-        $this->view->finishedTasks   = $finishedTasks;
-        $this->view->comparedTasks   = $finishedTasks - $yesterdayTasks;
-        $this->view->createdStories  = $createdStories;
-        $this->view->comparedStories = $createdStories - $yesterdayStories;
-        $this->view->closedBugs      = $closedBugs;
-        $this->view->comparedBugs    = $closedBugs - $yesterdayBugs;
-        $this->view->runCases        = $runCases;
-        $this->view->comparedCases   = $runCases - $yesterdayCases;
-        $this->view->consumedHours   = $consumedHours;
-        $this->view->comparedHours   = $consumedHours - $yesterdayHours;
-        $this->view->totalWorkload   = $totalWorkload;
-        $this->view->todayWorkload   = $todayWorkload;
-
+        $this->view->finishedTasks    = $finishedTasks;
+        $this->view->yesterdayTasks   = $yesterdayTasks;
+        $this->view->createdStories   = $createdStories;
+        $this->view->yesterdayStories = $yesterdayStories;
+        $this->view->closedBugs       = $closedBugs;
+        $this->view->yesterdayBugs    = $yesterdayBugs;
+        $this->view->runCases         = $runCases;
+        $this->view->yesterdayCases   = $yesterdayCases;
+        $this->view->consumedHours    = $consumedHours;
+        $this->view->yesterdayHours   = $yesterdayHours;
     }
 
     /**
@@ -2841,12 +2841,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
         $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
@@ -2893,22 +2893,22 @@ class blockZen extends block
 
         /* 将按照产品分组的统计数据放入产品列表中。 */
         /* Place statistical data grouped by product into the product list. */
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $product->monthFinish[$group]  = 0;
-            $product->monthCreated[$group] = 0;
+            $product->monthFinish[$date]  = 0;
+            $product->monthCreated[$date] = 0;
             if(!empty($monthFinish))
             {
                 foreach($monthFinish as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$date] = $story['value'];
                 }
             }
             if(!empty($monthCreated))
             {
                 foreach($monthCreated as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$date] = $story['value'];
                 }
             }
         }
@@ -2946,12 +2946,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
@@ -2965,17 +2965,17 @@ class blockZen extends block
         $unresovledBugs = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
         $totalBugs      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
         $resolvedRate   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $activateBugs[$group] = 0;
-            $resolveBugs[$group]  = 0;
-            $closeBugs[$group]    = 0;
+            $activateBugs[$date] = 0;
+            $resolveBugs[$date]  = 0;
+            $closeBugs[$date]    = 0;
 
             if(!empty($monthCreatedBugGroup))
             {
                 foreach($monthCreatedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $activateBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $activateBugs[$date] = $data['value'];
                 }
             }
 
@@ -2983,7 +2983,7 @@ class blockZen extends block
             {
                 foreach($monthClosedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $closeBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $closeBugs[$date] = $data['value'];
                 }
             }
         }
@@ -3084,7 +3084,7 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->view->productID = $productID;
-        $this->view->actions   = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', 30, $productID);
+        $this->view->actions   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 30, $productID);
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
     }
 
@@ -3102,12 +3102,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $this->loadModel('metric');
@@ -3125,20 +3125,20 @@ class blockZen extends block
         $fixedBugCount     = array();
         $createBugCount    = array();
         $releaseCount      = array();
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $doneStoryEstimate[$group] = 0;
-            $doneStoryCount[$group]    = 0;
-            $createStoryCount[$group]  = 0;
-            $fixedBugCount[$group]     = 0;
-            $createBugCount[$group]    = 0;
-            $releaseCount[$group]      = 0;
+            $doneStoryEstimate[$date] = 0;
+            $doneStoryCount[$date]    = 0;
+            $createStoryCount[$date]  = 0;
+            $fixedBugCount[$date]     = 0;
+            $createBugCount[$date]    = 0;
+            $releaseCount[$date]      = 0;
 
             if(!empty($monthStroyScaleGroup))
             {
                 foreach($monthStroyScaleGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $doneStoryEstimate[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $doneStoryEstimate[$date] = $data['value'];
                 }
             }
 
@@ -3146,35 +3146,35 @@ class blockZen extends block
             {
                 foreach($monthCreatedStroyGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $createStoryCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $createStoryCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthFinishedStoryGroup))
             {
                 foreach($monthFinishedStoryGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $doneStoryCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $doneStoryCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthCreatedBugGroup))
             {
                 foreach($monthCreatedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $createBugCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $createBugCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthFixedBugGroup))
             {
                 foreach($monthFixedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $fixedBugCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $fixedBugCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthCreatedReleaseGroup))
             {
                 foreach($monthCreatedReleaseGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $releaseCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $releaseCount[$date] = $data['value'];
                 }
             }
         }
@@ -3273,25 +3273,26 @@ class blockZen extends block
      */
     protected function getProjectsStatisticData(array $projectIdList): array
     {
+        $vision = $this->config->vision;
         /* 敏捷和瀑布相关目的统计信息。 */
-        $riskCountGroup  = $this->loadModel('metric')->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)));
-        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)));
+        $riskCountGroup  = $this->loadModel('metric')->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($riskCountGroup)    $riskCountGroup    = array_column($riskCountGroup,    null, 'project');
         if($issueCountGroup)   $issueCountGroup   = array_column($issueCountGroup,   null, 'project');
 
         /* 敏捷项目的统计信息。 */
-        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)));
-        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)));
-        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)));
-        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)));
-        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)));
-        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)));
-        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)));
-        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)));
-        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)));
-        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)));
-        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)));
-        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)));
+        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
         if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
         if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
@@ -3306,12 +3307,12 @@ class blockZen extends block
         if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
 
         /* 瀑布项目的统计信息。 */
-        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)));
-        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)));
-        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)));
-        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)));
-        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)));
-        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)));
+        $SVGroup           = $this->metric->getResultByCode('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $PVGroup           = $this->metric->getResultByCode('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $EVGroup           = $this->metric->getResultByCode('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $CVGroup           = $this->metric->getResultByCode('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $ACGroup           = $this->metric->getResultByCode('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
         if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
         if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
@@ -3356,11 +3357,11 @@ class blockZen extends block
         }
         elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
-            $project->pv = isset($PVGroup[$projectID]['value']) ? (int)$PVGroup[$projectID]['value'] * 100 : 0;
-            $project->ev = isset($EVGroup[$projectID]['value']) ? (int)$EVGroup[$projectID]['value'] * 100 : 0;
-            $project->ac = isset($ACGroup[$projectID]['value']) ? (int)$ACGroup[$projectID]['value'] * 100 : 0;
-            $project->sv = isset($SVGroup[$projectID]['value']) ? (int)$SVGroup[$projectID]['value'] * 100 : 0;
-            $project->cv = isset($CVGroup[$projectID]['value']) ? (int)$CVGroup[$projectID]['value'] * 100 : 0;
+            $project->pv = isset($PVGroup[$projectID]['value']) ? sprintf('%.2f', $PVGroup[$projectID]['value']) : 0;
+            $project->ev = isset($EVGroup[$projectID]['value']) ? sprintf('%.2f', $EVGroup[$projectID]['value']) : 0;
+            $project->ac = isset($ACGroup[$projectID]['value']) ? sprintf('%.2f', $ACGroup[$projectID]['value']) : 0;
+            $project->sv = isset($SVGroup[$projectID]['value']) ? sprintf('%.4f', $SVGroup[$projectID]['value']) * 100 : 0;
+            $project->cv = isset($CVGroup[$projectID]['value']) ? sprintf('%.4f', $CVGroup[$projectID]['value']) * 100 : 0;
         }
         if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, helper::today());
         $project->risks  = isset($riskCountGroup[$projectID]['value']) ? (int)$riskCountGroup[$projectID]['value'] : 0;

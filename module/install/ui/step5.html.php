@@ -21,10 +21,12 @@ if(isset($error))
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         isset($success) ? panel
         (
             set::title($lang->install->success),
@@ -37,10 +39,11 @@ div
         (
             setClass('bg-canvas m-auto mw-auto'),
             set::title($lang->install->getPriv),
-            set::formClass('w-96 m-auto'),
+            set::headingClass('w-96 m-auto'),
             set::submitBtnText(!empty($config->inQuickon) ? $lang->install->next : $lang->save),
             formRow
             (
+                setClass('w-96 m-auto'),
                 formGroup
                 (
                     set::label($lang->install->company),
@@ -49,7 +52,7 @@ div
             ),
             formRow
             (
-                setClass('hidden'),
+                setClass('w-96 m-auto hidden'),
                 formGroup
                 (
                     set::label($lang->install->working),
@@ -60,6 +63,7 @@ div
             ),
             formRow
             (
+                setClass('w-96 m-auto'),
                 formGroup
                 (
                     set::label($lang->install->account),
@@ -68,6 +72,7 @@ div
             ),
             formRow
             (
+                setClass('w-96 m-auto'),
                 formGroup
                 (
                     set::label($lang->install->password),
@@ -80,7 +85,7 @@ div
             ),
             formRow
             (
-                setClass('importDemoDataRow'),
+                setClass('w-96 m-auto importDemoDataRow'),
                 formGroup
                 (
                     set::label(' '),
@@ -91,7 +96,8 @@ div
                         set::value(1)
                     )
                 )
-            )
+            ),
+            contactUs()
         )
     )
 );

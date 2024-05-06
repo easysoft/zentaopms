@@ -42,7 +42,7 @@ class bugBasicInfo extends wg
         $bug = $this->prop('bug', data('bug'));
         if(!$bug) return array();
 
-        $canViewProduct = common::hasPriv('project', 'view');
+        $canViewProduct = common::hasPriv('product', 'view');
         $canBrowseBug   = common::hasPriv('bug', 'browse');
         $canViewPlan    = common::hasPriv('productplan', 'view');
         $canViewCase    = common::hasPriv('testcase', 'view');
@@ -68,6 +68,7 @@ class bugBasicInfo extends wg
                 'control'  => 'link',
                 'url'      => $productLink,
                 'text'     => $product->name,
+                'title'    => $product->name,
                 'data-app' => 'product'
             ) : $product->name;
         }
@@ -152,6 +153,12 @@ class bugBasicInfo extends wg
         $browserText = '';
         foreach($browserList as $browser) $browserText .= zget($lang->bug->browserList, $browser) . ' ';
         $items[$lang->bug->browser] = trim($browserText);
+
+        if($config->edition == 'max')
+        {
+            $items[$lang->bug->injection] = $bug->injectionTitle;
+            $items[$lang->bug->identify]  = $bug->identifyTitle;
+        }
 
         $items[$lang->bug->keywords] = $bug->keywords;
 

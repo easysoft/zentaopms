@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace zin;
 $waterfallGanttID = uniqid('wg');
 jsVar('waterfallGanttID', $waterfallGanttID);
-jsVar('ganttPlans', $plans);
-jsVar('taskLang', $lang->programplan->task);
+jsVar('ganttPlans', array_values($plans));
+jsVar('progressLang', $lang->programplan->progress);
 
 $productItems = array();
 foreach($products as $id => $productName)
@@ -23,7 +23,7 @@ foreach($products as $id => $productName)
 }
 panel
 (
-    to::titleSuffix
+    $productItems ? to::titleSuffix
     (
         dropdown
         (
@@ -35,20 +35,21 @@ panel
             ),
             set::items($productItems)
         )
-    ),
+    ) : null,
     setID($waterfallGanttID),
     set('headingClass', 'border-b'),
     set::title($block->title),
     div
     (
         set::className('waterfall-gantt'),
-        empty($plans['data']) ? div(setClass('gantt-product-tips'), $lang->block->selectProduct) : div
+        empty($plans) ? div(setClass('gantt-product-tips'), $lang->block->selectProduct) : div
         (
             setClass('gantt clearfix'),
-            div(setClass('gantt-plans pull-left')),
+            div(setClass('gantt-plans pull-left'), setID('ganttPlans')),
             div
             (
                 setClass('gantt-container scrollbar-hover'),
+                setID('ganttContainer'),
                 div
                 (
                     setClass('gantt-canvas'),

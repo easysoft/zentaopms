@@ -333,7 +333,7 @@ class task extends control
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'all'))));
+            return $this->sendError($this->lang->notFound, $this->config->vision == 'lite' ? $this->createLink('project', 'index') : $this->createLink('execution', 'all'));
         }
         if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
 
@@ -390,6 +390,7 @@ class task extends control
         $this->view->modulePath   = $this->tree->getParents($task->module);
         $this->view->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
         $this->view->linkCommits  = $this->loadModel('repo')->getCommitsByObject($taskID, 'task');
+        $this->view->hasGitRepo   = $this->taskZen->checkGitRepo($execution->id);
         $this->display();
     }
 
@@ -463,7 +464,7 @@ class task extends control
         /* Shows the variables needed to start the task page. */
         $assignedTo = empty($task->assignedTo) ? $this->app->user->account : $task->assignedTo;
 
-        $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->start;
+        $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->start;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->members         = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
@@ -621,7 +622,7 @@ class task extends control
             $task->myConsumed = zget($currentTeam, 'consumed', 0);
         }
 
-        $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->finish;
         $this->view->members         = $members;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);
@@ -672,7 +673,7 @@ class task extends control
         }
 
         /* Show the variables associated. */
-        $this->view->title = $this->view->execution->name . $this->lang->colon .$this->lang->task->pause;
+        $this->view->title = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->pause;
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
@@ -719,7 +720,7 @@ class task extends control
             return $this->send($response);
         }
 
-        $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->restart;
+        $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->restart;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->members         = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = $task->assignedTo == '' ? $this->app->user->account : $task->assignedTo;
@@ -762,7 +763,7 @@ class task extends control
             return $this->send($response);
         }
 
-        $this->view->title = $this->view->execution->name . $this->lang->colon .$this->lang->task->finish;
+        $this->view->title = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->finish;
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
@@ -877,7 +878,7 @@ class task extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 
-        $this->view->title = $this->view->execution->name . $this->lang->colon . $this->lang->task->cancel;
+        $this->view->title = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->cancel;
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
@@ -939,7 +940,7 @@ class task extends control
             $this->view->teamMembers = $teamMembers;
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon . $this->lang->task->activate;
+        $this->view->title      = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->activate;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->isMultiple = !empty($this->view->task->team);
         $this->display();
@@ -971,7 +972,7 @@ class task extends control
         $this->executeHooks($taskID);
 
         $link = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
-        return $this->send(array('result' => 'success', 'load' => $link));
+        return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
     }
 
     /**
@@ -1061,8 +1062,9 @@ class task extends control
         if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
 
         $this->execution->setMenu($executionID);
+        if($this->app->tab == 'project') $this->view->projectID = $execution->project;
 
-        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->report->common;
+        $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->report->common;
         $this->view->executionID   = $executionID;
         $this->view->browseType    = $browseType;
         $this->view->chartType     = $chartType;
@@ -1275,14 +1277,11 @@ class task extends control
      * 取消代码分支的关联。
      * Unlink code branch.
      *
-     * @param  int    $taskID
-     * @param  int    $repoID
-     * @param  string $branch
      * @access public
      * @return void
      */
-    public function unlinkBranch(int $taskID, int $repoID, string $branch)
+    public function unlinkBranch()
     {
-        return print($this->fetch('repo', 'unlinkBranch', array('objectID' => $taskID, 'repoID' => $repoID, 'branch' => $branch)));
+        return print($this->fetch('repo', 'unlinkBranch'));
     }
 }

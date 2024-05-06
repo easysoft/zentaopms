@@ -46,7 +46,7 @@ panel
     set::footerActions
     (array(
         $referer ? array('url' => helper::safe64Decode($referer), 'text' => $lang->user->goback) : array('back' => 'APP', 'text' => $lang->user->goback),
-        array('data-url' => createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), 'class' => 'primary', 'text' => $lang->user->relogin, 'onclick' => 'locateLogin(this)')
+        array('data-url' => createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), 'class' => 'primary re-login-btn', 'text' => $lang->user->relogin, 'onclick' => 'locateLogin(this)')
     )),
     set::footerClass('justify-center'),
     div

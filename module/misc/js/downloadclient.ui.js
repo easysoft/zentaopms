@@ -66,3 +66,5 @@ window.showPackageSize = () =>
         }
     });
 };
+
+if(!$('#downloadClient input#os:not(.hidden)').length && !$('#downloadClient button.primary').length) getClient();

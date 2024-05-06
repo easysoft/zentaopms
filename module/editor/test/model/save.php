@@ -8,7 +8,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/editor.class.php';
+include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
 su('admin');
 
 $editor = new editorTest();

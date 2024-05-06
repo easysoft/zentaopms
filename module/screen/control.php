@@ -26,7 +26,8 @@ class screen extends control
      */
     public function browse(int $dimensionID = 0)
     {
-        $this->checkShowGuide();
+        //$this->checkShowGuide();
+        $this->view->showGuide = false;
 
         $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
 
@@ -87,6 +88,9 @@ class screen extends control
      */
     public function view(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
+        if(empty($year))  $year  = date('Y');
+        if(empty($month)) $month = date('n');
+
         if($screenID == 3)
         {
             echo $this->fetch('report', 'annualData', "year={$year}&dept={$dept}&account={$account}");

@@ -15,11 +15,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('module')->config('module')->gen(10);
-zdTable('doclib')->config('doclib')->gen(30);
-zdTable('user')->gen(5);
+zenData('module')->loadYaml('module')->gen(10);
+zenData('doclib')->loadYaml('doclib')->gen(30);
+zenData('user')->gen(5);
 su('admin');
 
 $libs[0]  = array();

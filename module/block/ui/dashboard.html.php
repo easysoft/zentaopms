@@ -15,7 +15,6 @@ foreach($blocks as $block)
 {
     $block->color = isset($block->params->color) ? $block->params->color : null;
     $block->fetch = $block->blockLink;
-    unset($block->title);
 }
 
 $blocks = json_decode(json_encode($blocks), true);
@@ -33,8 +32,10 @@ $blockMenuItems[] = array('text' => $lang->block->reset, 'className' => 'not-ope
 
 dashboard
 (
+    set::onlyLoadVisible(false),
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),
+    set::emptyBlockContent(array('html' => '<div class="panel rounded bg-canvas panel-block shadow"><div class="panel-heading border-b h-12"></div></div>')),
     set::onClickMenu(jsRaw('handleClickBlockMenu')),
     set::onLayoutChange(jsRaw('handleLayoutChange'))
 );
@@ -42,17 +43,103 @@ dashboard
 $remind = $this->loadModel('misc')->getPluginRemind();
 $remind ? modal
 (
-    set::id('expiredModal'),
+    setID('expiredModal'),
     set::title($lang->misc->expiredTipsTitle),
     html($remind)
 ) : null;
 
-$remind = $this->misc->getRemind();
-$remind ? modal
+$upgradeRemind = $this->misc->getUpgradeRemind();
+if($upgradeRemind)
+{
+    $clientLang = common::checkNotCN() ? 'en' : 'cn';
+    $version    = $config->edition == 'open' ? '20_0' : '10_0';
+    $imagePath  = $config->edition == 'open' ? 'static/svg/' : 'static/svg/biz/';
+}
+$upgradeRemind ? modal
 (
-    set::id('annualModal'),
-    set::title($lang->misc->remind),
-    html($remind)
+    setID('upgradeModal'),
+    div
+    (
+        setClass('page-block pageOne'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide1_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('primary'),
+                on::click("togglePage('pageTwo')"),
+                $lang->block->nextPage
+            )
+        )
+    ),
+    div
+    (
+        setClass('page-block pageTwo hidden'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide2_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('mr-4'),
+                on::click("togglePage('pageOne')"),
+                $lang->block->prevPage
+            ),
+            btn
+            (
+                setClass('primary'),
+                on::click("togglePage('pageThree')"),
+                $lang->block->nextPage
+            )
+        )
+    ),
+    div
+    (
+        setClass('page-block pageThree hidden'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide3_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('mr-4'),
+                on::click("togglePage('pageTwo')"),
+                $lang->block->prevPage
+            ),
+            btn
+            (
+                setClass('primary'),
+                on::click("togglePage('pageFour')"),
+                $lang->block->nextPage
+            )
+        )
+    ),
+    div
+    (
+        setClass('page-block pageFour hidden'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide4_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('mr-4'),
+                on::click("togglePage('pageThree')"),
+                $lang->block->prevPage
+            ),
+            btn
+            (
+                setClass('primary'),
+                setData('dismiss', 'modal'),
+                $lang->block->experience
+            )
+        )
+    )
 ) : null;
 
 render();

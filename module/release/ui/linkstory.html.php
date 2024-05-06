@@ -36,7 +36,7 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($allStories),
-    set::checkedRows($checkedRows),
+    set::updateCheckedRows($checkedRows),
     set::loadPartial(true),
     set::footToolbar(array
     (

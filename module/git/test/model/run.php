@@ -12,11 +12,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/git.class.php';
+include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
 
-zdTable('job')->gen(0);
-zdTable('repo')->config('repo')->gen(1);
-zdTable('repohistory')->gen(0);
+zenData('job')->gen(0);
+zenData('repo')->loadYaml('repo')->gen(1);
+zenData('repohistory')->gen(0);
 su('admin');
 
 $git = new gitTest();

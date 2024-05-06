@@ -104,15 +104,15 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/score.class.php';
+include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
 
-zdTable('score')->gen(0);
-zdTable('user')->gen(5);
-zdTable('case')->gen(1);
-zdTable('story')->gen(1);
-zdTable('bug')->gen(1);
-zdTable('task')->config('task')->gen(10);
-zdTable('project')->config('project')->gen(5);
+zenData('score')->gen(0);
+zenData('user')->gen(5);
+zenData('case')->gen(1);
+zenData('story')->gen(1);
+zenData('bug')->gen(1);
+zenData('task')->loadYaml('task')->gen(10);
+zenData('project')->loadYaml('project')->gen(5);
 
 $modules = array('user', 'story', 'task', 'bug', 'testTask', 'execution', 'search', 'ajax');
 $methods = array('login', 'changePassword', 'close', 'finish', 'createFormCase', 'saveTplModal', 'confirm', 'resolve', 'runCase', 'saveQueryAdvanced', 'selectTheme');

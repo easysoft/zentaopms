@@ -12,11 +12,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('story')->gen(1);
-$storyView = zdTable('storyreview');
+zenData('story')->gen(1);
+$storyView = zenData('storyreview');
 $storyView->story->range('1');
 $storyView->reviewer->range('admin,user1,user2');
 $storyView->version->range('1');

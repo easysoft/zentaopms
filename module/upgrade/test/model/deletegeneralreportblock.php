@@ -13,12 +13,12 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 $upgrade = new upgradeTest();
 
-zdTable('config')->config('block_config')->gen(1);
-zdTable('block')->config('waterfall_block')->gen(1);
+zenData('config')->loadYaml('block_config')->gen(1);
+zenData('block')->loadYaml('waterfall_block')->gen(1);
 
 $block = $tester->dao->select('*')->from('zt_block')->where('code')->eq('waterfallgeneralreport')->fetch();
 if(isset($block->block)) $tester->dao->update('zt_block')->set('block')->eq('waterfallgeneralreport')->where('code')->eq('waterfallgeneralreport')->exec();

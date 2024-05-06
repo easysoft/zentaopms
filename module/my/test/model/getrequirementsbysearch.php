@@ -1,16 +1,16 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/my.class.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdTable('story')->config('story')->gen('20');
-zdTable('storyreview')->gen('0');
-zdTable('product')->gen('10');
-zdTable('productplan')->gen('15');
-zdTable('planstory')->gen('20');
-zdTable('userquery')->config('userquery')->gen('2');
-zdTable('user')->gen('1');
-zdTable('action')->gen('0');
+zenData('story')->loadYaml('story')->gen('20');
+zenData('storyreview')->gen('0');
+zenData('product')->gen('10');
+zenData('productplan')->gen('15');
+zenData('planstory')->gen('20');
+zenData('userquery')->loadYaml('userquery')->gen('2');
+zenData('user')->gen('1');
+zenData('action')->gen('0');
 
 su('admin');
 

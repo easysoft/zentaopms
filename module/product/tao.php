@@ -325,7 +325,7 @@ class productTao extends productModel
      */
     protected function createLine(int $programID, string $lineName): int|false
     {
-        if($programID <= 0) return false;
+        if($programID < 0) return false;
         if(empty($lineName)) return false;
 
         $line = new stdClass();
@@ -440,6 +440,7 @@ class productTao extends productModel
      */
     protected function filterNoCasesStory(array $storyIDList): array
     {
+        if(empty($storyIDList)) return array();
         return $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIDList)->andWhere('deleted')->eq(0)->fetchAll('story');
     }
 

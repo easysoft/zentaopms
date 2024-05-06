@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 /**
 
@@ -11,8 +11,8 @@ cid=1
 
 */
 
-zdTable('user')->config('user')->gen(3);
-zdTable('project')->config('project')->gen(1);
+zenData('user')->loadYaml('user')->gen(3);
+zenData('project')->loadYaml('project')->gen(1);
 
 su('user1');
 $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
@@ -29,7 +29,7 @@ done            + wait   = doing
 closeReasonDone + wait   = doing
 */
 
-zdTable('task')->config('taskdoing')->gen(26, true, false);
+zenData('task')->loadYaml('taskdoing')->gen(26, true, false);
 
 r($task->updateParentStatusTest(10)) && p('status') && e('doing');
 r($task->updateParentStatusTest(12)) && p('status') && e('doing');
@@ -50,7 +50,7 @@ pause + doing  = doing
 pause + wait   = doing
 */
 
-zdTable('task')->config('taskpause')->gen(18, true, false);
+zenData('task')->loadYaml('taskpause')->gen(18, true, false);
 
 r($task->updateParentStatusTest(8))  && p('status') && e('doing');
 r($task->updateParentStatusTest(10)) && p('status') && e('doing');
@@ -65,7 +65,7 @@ wait + closed = wait
 wait + cancel = wait
 */
 
-zdTable('task')->config('taskwait')->gen(9, true, false);
+zenData('task')->loadYaml('taskwait')->gen(9, true, false);
 
 r($task->updateParentStatusTest(4)) && p('status') && e('wait');
 r($task->updateParentStatusTest(6)) && p('status') && e('wait');
@@ -77,7 +77,7 @@ done + closed = done
 done + cancel = done
 */
 
-zdTable('task')->config('taskdone')->gen(9, true, false);
+zenData('task')->loadYaml('taskdone')->gen(9, true, false);
 
 r($task->updateParentStatusTest(4)) && p('status,finishedBy,assignedTo') && e('done,user1,user2');
 r($task->updateParentStatusTest(6)) && p('status,finishedBy,assignedTo') && e('done,user1,user2');
@@ -89,7 +89,7 @@ closed + cancel = closed
 cancel + cancel = cancel
 */
 
-zdTable('task')->config('taskclose')->gen(9, true, false);
+zenData('task')->loadYaml('taskclose')->gen(9, true, false);
 
 r($task->updateParentStatusTest(4)) && p('status,closedBy,assignedTo,closedReason') && e('closed,user1,closed,done');
 r($task->updateParentStatusTest(6)) && p('status,closedBy,assignedTo,closedReason') && e('closed,user1,closed,done');

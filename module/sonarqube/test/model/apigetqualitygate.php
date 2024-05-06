@@ -13,7 +13,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->config('pipeline')->gen(5);
+zenData('pipeline')->loadYaml('pipeline')->gen(5);
 
 $sonarqube = $tester->loadModel('sonarqube');
 

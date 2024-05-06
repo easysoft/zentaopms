@@ -164,31 +164,36 @@ class xmind
         $parentNode->appendChild($caseNode);
 
         $topStepList = $this->findTopStepListByCase($case, $stepList);
+        $this->createStepNode($xmlDoc, $config, $caseNode, $stepList, $topStepList);
+    }
 
-        foreach($topStepList as $step)
+    /**
+     * 生成用例步骤节点。
+     * Create step node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $config
+     * @param  object      $parentNode
+     * @param  array       $allSteps
+     * @param  array       $steps
+     * @access private
+     * @return void
+     */
+    private function createStepNode($xmlDoc, $config, $parentNode, $allSteps, $steps)
+    {
+        foreach($steps as $step)
         {
-            $subStepList = $this->findSubStepListByStep($step,$stepList);
+            $subSteps = $this->findSubStepListByStep($step, $allSteps);
+            $suffix   = count($subSteps) > 0 ? $config['group'] : '';
 
-            $suffix   = count($subStepList) > 0 ? $config['group'] : '';
             $stepNode = $this->createNode($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
-            $caseNode->appendChild($stepNode);
+            $parentNode->appendChild($stepNode);
 
-            if(count($subStepList))
+            if($subSteps)
             {
-                foreach($subStepList as $sub)
-                {
-                    $subNode = $this->createNode($xmlDoc, $sub->desc, '', array('nodeType'=>'substep'));
-                    $stepNode->appendChild($subNode);
-
-                    if(!empty($sub->expect))
-                    {
-                        $expectNode = $this->createNode($xmlDoc, $sub->expect, '', array('nodeType'=>'expect'));
-                        $subNode->appendChild($expectNode);
-                    }
-                }
+                $this->createStepNode($xmlDoc, $config, $stepNode, $allSteps, $subSteps);
             }
-
-            if(count($subStepList) == 0 && !empty($step->expect))
+            else if(!empty($step->expect))
             {
                 $expectNode = $this->createNode($xmlDoc, $step->expect, '', array('nodeType'=>'expect'));
                 $stepNode->appendChild($expectNode);

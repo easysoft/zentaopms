@@ -13,14 +13,14 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
+include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
-$action = zdTable('action');
+$action = zenData('action');
 $action->execution->range('101');
 $action->gen(2);
-zdTable('story')->gen(2);
-zdTable('product')->gen(2);
+zenData('story')->gen(2);
+zenData('product')->gen(2);
 
 $mail = new mailTest();
 $mail->objectModel->config->webRoot = '/';

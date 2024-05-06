@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1,2');
 $program->name->range('父项目集1,父项目集2');
 $program->type->range('program');

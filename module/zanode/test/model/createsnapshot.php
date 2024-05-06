@@ -13,10 +13,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('host')->config('host')->gen(5);
-zdTable('user')->gen(5);
+zenData('host')->loadYaml('host')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $zanode = new zanodeTest();

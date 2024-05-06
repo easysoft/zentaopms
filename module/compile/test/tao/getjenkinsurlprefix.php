@@ -15,9 +15,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/compile.class.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 
-zdTable('job')->gen(1);
+zenData('job')->gen(1);
 su('admin');
 
 $compile = new compileTest();

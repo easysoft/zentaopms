@@ -156,6 +156,7 @@ class gitfoxRepo
         $params['order'] = 'asc';
 
         $branches = array();
+        $default  = array();
         for($page = 1; true; $page ++)
         {
             $params['page'] = $page;
@@ -165,7 +166,14 @@ class gitfoxRepo
             foreach($branchList as $branch)
             {
                 if(!isset($branch->name)) continue;
-                $branches[$branch->name] = $branch->name;
+                if($branch->is_default)
+                {
+                    $default[$branch->name] = $branch->name;
+                }
+                else
+                {
+                    $branches[$branch->name] = $branch->name;
+                }
             }
 
             /* Last page. */
@@ -173,7 +181,7 @@ class gitfoxRepo
         }
 
         asort($branches);
-        return $branches;
+        return $default + $branches;
     }
 
     /**

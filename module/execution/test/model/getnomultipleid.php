@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-3');
 $execution->name->range('项目集1,项目1,迭代1');
 $execution->type->range('program,project,sprint');
@@ -15,7 +15,7 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(3);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 /**

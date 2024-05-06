@@ -5,7 +5,7 @@ su('admin');
 
 function initData()
 {
-    zdTable('todo')->config('gettodosbyidlist')->gen(5);
+    zenData('todo')->loadYaml('gettodosbyidlist')->gen(5);
 }
 
 /**

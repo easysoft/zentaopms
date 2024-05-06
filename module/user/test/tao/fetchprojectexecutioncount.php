@@ -6,9 +6,9 @@ cid=1
 pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$projectTable = zdTable('project');
+$projectTable = zenData('project');
 $projectTable->project->range('1-4{6}');
 $projectTable->type->range('sprint,stage,kanban');
 $projectTable->multiple->range('1{4},0,1');

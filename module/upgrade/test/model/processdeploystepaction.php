@@ -19,11 +19,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('deploystep')->config('deploystep')->gen(10);
-zdTable('action')->config('action')->gen(20);
-zdTable('user')->gen(5);
+zenData('deploystep')->loadYaml('deploystep')->gen(10);
+zenData('action')->loadYaml('action')->gen(20);
+zenData('user')->gen(5);
 su('admin');
 
 $upgrade = new upgradeTest();

@@ -18,11 +18,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('product')->gen(1);
-zdTable('repo')->config('repo')->gen(5);
-zdTable('mr')->config('mr')->gen(6);
+zenData('product')->gen(1);
+zenData('repo')->loadYaml('repo')->gen(5);
+zenData('mr')->loadYaml('mr')->gen(6);
 
 $mrModel = new mrTest();
 

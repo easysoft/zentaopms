@@ -189,8 +189,9 @@ class gogsRepo
     public function createBranch($branchName = '', $ref = 'master')
     {
         chdir($this->root);
+        execCmd(escapeCmd("{$this->client} stash"));
         $res = execCmd(escapeCmd("{$this->client} checkout -b {$branchName} origin/{$ref}"), 'array');
-        if(empty($res[0])) return array('result' => 'fail', 'message' => 'Branch is exists.');
+        if(empty($res[0])) return array('result' => 'fail', 'message' => 'Created fail.');
 
         execCmd(escapeCmd("{$this->client} push origin {$branchName}"), 'array');
         return array('result' => 'success', 'message' => '');

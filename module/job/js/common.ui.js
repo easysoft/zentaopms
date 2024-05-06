@@ -69,7 +69,6 @@ window.changeTrigger = function(event)
     {
         useZentao = event;
     }
-    console.log(useZentao)
 
     if(useZentao === '1')
     {
@@ -77,7 +76,6 @@ window.changeTrigger = function(event)
         $('.job-form .sonarqube').show();
         $('.job-form .custom-fields').show();
         $('.job-form .comment-fields').css('display', 'flex');
-        $('.job-form #jenkinsServerTR').show();
         $('.job-form [data-name="triggerType"]').show();
     }
     else
@@ -86,7 +84,6 @@ window.changeTrigger = function(event)
         $('.job-form .sonarqube').hide();
         $('.job-form .custom-fields').hide();
         $('.job-form .comment-fields').hide();
-        $('.job-form #jenkinsServerTR').hide();
         $('.job-form [data-name="triggerType"]').hide();
     }
     $('[name=triggerType]').trigger('change');
@@ -97,7 +94,7 @@ window.changeTrigger = function(event)
  */
 window.setPipeline = function()
 {
-    $('.gitfox-pipeline').addClass('hidden');
+    if($('[name=engine]').val() != 'gitfox') $('.gitfox-pipeline').addClass('hidden');
     const $pipeline = $('[name=gitfoxpipeline]').zui('picker');
     if(!$pipeline) return;
     $pipeline.$.clear();
@@ -202,23 +199,27 @@ window.changeFrame = function(event)
 
 window.changeEngine = function(event)
 {
-    const engine = $(event.target).val();
-    const repos = [];
+    const engine      = $(event.target).val();
+    const repos       = [];
+    let   checkedRepo = '';
     for(const repoID in repoList)
     {
         const repo = repoList[repoID];
         if(engine == 'jenkins')
         {
+            if(repoID == pageRepoID || !checkedRepo) checkedRepo = repoID;
             repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
-            continue;
         }
-
-        if(repo.SCM.toLowerCase() == engine) repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+        else if(repo.SCM.toLowerCase() == engine)
+        {
+            if(repoID == pageRepoID || !checkedRepo) checkedRepo = repoID;
+            repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+        }
     }
 
     const picker = $('[name=repo]').zui('picker');
     picker.render({items: repos});
-    picker.$.setValue(repos.length > 0 ? repos[0].value : '');
+    picker.$.setValue(checkedRepo);
 
     if(engine == 'jenkins')
     {
@@ -227,6 +228,7 @@ window.changeEngine = function(event)
     else
     {
         $('#jenkinsServerTR').addClass('hidden');
+        if(engine == 'gitfox') $('.gitfox-pipeline').removeClass('hidden');
     }
 
     const items = [];
@@ -235,8 +237,6 @@ window.changeEngine = function(event)
         if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
     }
     zui.Picker.query('[name=frame]').render({items: items});
-
-    window.changeRepo();
 }
 
 window.changeRepo = function()

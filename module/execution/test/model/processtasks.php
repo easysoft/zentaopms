@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
-zdTable('project')->config('project')->gen(10);
-zdTable('taskteam')->config('taskteam')->gen(30);
-$task = zdTable('task')->config('task');
+zenData('project')->loadYaml('project')->gen(10);
+zenData('taskteam')->loadYaml('taskteam')->gen(30);
+$task = zenData('task')->loadYaml('task');
 $task->execution->range('2{5},3{2},4{2}');
 $task->gen(30);
 

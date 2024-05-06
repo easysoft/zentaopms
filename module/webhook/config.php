@@ -1,9 +1,9 @@
 <?php
 $config->webhook->create = new stdclass();
-$config->webhook->create->requiredFields = 'name, url';
+$config->webhook->create->requiredFields = 'name';
 
 $config->webhook->edit = new stdclass();
-$config->webhook->edit->requiredFields = 'name, url';
+$config->webhook->edit->requiredFields = 'name';
 
 $config->webhook->dingapiUrl   = 'https://oapi.dingtalk.com/';
 $config->webhook->wechatApiUrl = 'https://qyapi.weixin.qq.com/cgi-bin/';

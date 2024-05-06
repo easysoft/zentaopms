@@ -18,13 +18,13 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->estimate->range('1-10:2');
 $story->gen(100);
 
-zdTable('case')->gen(2);
+zenData('case')->gen(2);
 
 $productIDList = array(1, 0, 10000);
 $typeList      = array('story', 'requirement', 'error');

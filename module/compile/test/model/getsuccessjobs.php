@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('compile')->gen(10);
+zenData('compile')->gen(10);
 su('admin');
 
 /**

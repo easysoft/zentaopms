@@ -11,6 +11,7 @@ class treeEditor extends wg
         'icon?: string',
         'class?: string',
         'sortable?: array',
+        'itemProps?: array',
         'onSort?: function',
         'selected?: string',
         'canUpdateOrder?: bool=false',
@@ -22,7 +23,7 @@ class treeEditor extends wg
     protected function build()
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'onSort'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort'));
         $id = $this->prop('id');
 
         if(empty($id))
@@ -30,13 +31,16 @@ class treeEditor extends wg
             global $app;
             $id = "treeEditor-{$app->rawModule}-{$app->rawMethod}";
         }
+
+        $treeType = (!empty($treeProps['onSort']) || !empty($treeProps['sortable'])) ? 'sortableTree' : 'tree';
         return div
         (
             setStyle('--menu-selected-bg', 'none'),
-            zui::tree
+            zui::$treeType
             (
                 set::_id($id),
                 set::_tag('menu'),
+                set::lines(),
                 set::preserve($id),
                 set($treeProps)
             )
@@ -53,6 +57,8 @@ class treeEditor extends wg
         $editType  = $this->prop('type');
         $selected  = $this->prop('selected');
         $typeList  = array('task' => 'T', 'bug' => 'B', 'case' => 'C');
+        $viewType  = data('viewType') ? data('viewType') : '';
+        $sortTree  = $this->prop('sortable') || $this->prop('onSort');
 
         foreach($items as $key => $item)
         {
@@ -74,12 +80,22 @@ class treeEditor extends wg
                 {
                     $item['icon'] = 'product';
                 }
-                else
+                elseif(isset($item['type']) && $item['type'] == 'story' && $editType != 'story')
                 {
                     $item['actions'] = array();
                     $item['actions']['items'] = array();
 
-                    if($canEdit)   $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . $editType));
+                    if($canEdit)  $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . ($viewType ? $viewType : $item['type'])));
+                    if($canSplit) $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
+                }
+                else
+                {
+                    if($sortTree) $item['trailingIcon'] = 'move muted cursor-move';
+
+                    if(!isset($item['actions']))          $item['actions']          = array();
+                    if(!isset($item['actions']['items'])) $item['actions']['items'] = array();
+
+                    if($canEdit)   $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . $item['type']));
                     if($canDelete) $item['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'url' => createLink('tree', 'delete', 'module=' . $item['id']));
                     if($canSplit)  $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }

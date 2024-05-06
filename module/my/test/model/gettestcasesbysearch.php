@@ -2,11 +2,11 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/my.class.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdTable('case')->config('case_admin_create')->gen('20');
-zdTable('testrun')->gen('20');
-zdTable('user')->gen('1');
+zenData('case')->loadYaml('case_admin_create')->gen('20');
+zenData('testrun')->gen('20');
+zenData('user')->gen('1');
 
 su('admin');
 

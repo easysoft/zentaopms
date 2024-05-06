@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\wg;
+
 /**
  * The model file of action module of ZenTaoPMS.
  *
@@ -282,10 +285,18 @@ class actionModel extends model
      */
     public function getTrashes(string $objectType, string $type, string $orderBy, object $pager = null): array
     {
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
+
         $extra   = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->beginIF($objectType != 'all')->andWhere('objectType')->eq($objectType)->fi()
+            ->beginIF($objectType == 'execution')->andWhere('objectID')->notIn($noMultipleExecutions)->fi()
+            ->beginIF($objectType == 'all')
+            ->andWhere('objectType', true)->ne('execution')
+            ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->markRight(2)
+            ->fi()
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
@@ -321,7 +332,7 @@ class actionModel extends model
 
         /* 将对象名称字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
-        foreach($trashes as $trash)
+        foreach($trashes as $key => $trash)
         {
             if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
             if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
@@ -403,8 +414,16 @@ class actionModel extends model
      */
     public function getTrashObjectTypes(string $type): array
     {
-        $extra = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
-        return $this->dao->select('objectType')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('extra')->eq($extra)->andWhere('vision')->eq($this->config->vision)->fetchAll('objectType');
+        $extra                = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
+        return $this->dao->select('objectType')->from(TABLE_ACTION)
+            ->where('action')->eq('deleted')
+            ->andWhere('extra')->eq($extra)
+            ->andWhere('objectType', true)->ne('execution')
+            ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->markRight(2)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll('objectType');
     }
 
     /**
@@ -1080,6 +1099,7 @@ class actionModel extends model
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
+            if($action->objectType == 'module') return $action;
             if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
@@ -1111,11 +1131,12 @@ class actionModel extends model
         if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
 
+        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
+
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
 
-        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
         return $action;
     }
 
@@ -1950,6 +1971,10 @@ class actionModel extends model
                 $productID = $this->loadModel('product')->getProductIDByProject($object->id);;
                 $this->dao->update(TABLE_PRODUCT)->set('name')->eq($object->name)->set('deleted')->eq(0)->where('id')->eq($productID)->exec();
             }
+
+            /* 恢复隐藏执行。 */
+            /* Resotre hidden execution. */
+            if($action->objectType == 'project' && !$object->multiple) $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('project')->eq($object->id)->andWhere('multiple')->eq('0')->exec();
         }
         if($action->objectType == 'doc' && $object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
 

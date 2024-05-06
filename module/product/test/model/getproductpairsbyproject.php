@@ -21,11 +21,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('project')->gen(50);
-zdTable('user')->gen(5);
-zdTable('projectproduct')->gen(50);
+zenData('project')->gen(50);
+zenData('user')->gen(5);
+zenData('projectproduct')->gen(50);
 
 $projectIDList = array('11', '12', '13', '14', '15', '1000001');
 $statusList    = array('all', 'noclosed');

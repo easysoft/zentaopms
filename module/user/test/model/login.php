@@ -80,18 +80,18 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(2);
-zdTable('company')->gen(1);
-zdTable('group')->gen(3);
+zenData('user')->gen(2);
+zenData('company')->gen(1);
+zenData('group')->gen(3);
 
-$userGroupTable = zdTable('usergroup');
+$userGroupTable = zenData('usergroup');
 $userGroupTable->account->range('admin{2},user1{2}');
 $userGroupTable->group->range('1,2{2},3');
 $userGroupTable->gen(4);
 
-$groupPrivTable = zdTable('grouppriv');
+$groupPrivTable = zenData('grouppriv');
 $groupPrivTable->group->range('1-3{3}');
 $groupPrivTable->module->range('company,dept,group,program,product,execution,qa,bug,testcase');
 $groupPrivTable->method->range('browse{5},all,index,browse{2}');

@@ -14,11 +14,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('pipeline')->gen(5);
-zdTable('oauth')->config('oauth')->gen(5);
-$repo = zdTable('repo')->config('repo');
+zenData('pipeline')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(5);
+$repo = zenData('repo')->loadYaml('repo');
 $repo->SCM->range('Gitlab,Gitea,Gogs');
 $repo->id->range('1,4,5');
 $repo->serviceHost->range('1,4,5');

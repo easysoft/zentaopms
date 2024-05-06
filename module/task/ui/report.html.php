@@ -35,7 +35,7 @@ foreach($lang->task->report->charts as $code => $name)
     $selectCharts[] = $chart;
 }
 
-function getEcharts($tabCharts, $tabDatas)
+function getEcharts($tabCharts, $tabDatas, $chartType)
 {
     global $lang;
     $echarts = array();
@@ -45,7 +45,7 @@ function getEcharts($tabCharts, $tabDatas)
         $echarts[] = tableChart
             (
                 set::item('chart-' . $type),
-                set::type($option->type),
+                set::type($chartType === 'default' ? $option->type : $chartType),
                 set::title($lang->task->report->charts[$type]),
                 set::datas((array)$chartData),
                 set::tableWidth('40%'),
@@ -76,7 +76,7 @@ foreach($lang->report->typeList as $type => $typeName)
             span(setClass('text-gray'),
             html(str_replace('%tab%', $lang->task->waitTask . $lang->testcase->common, $lang->report->notice->help)))
         ),
-        div(getEcharts($charts, $datas))
+        div(getEcharts($charts, $datas, $type))
     );
 }
 
@@ -128,7 +128,7 @@ div
         setClass('ml-5 bg-white px-4 py-2'),
         tabs
         (
-            on::click('.font-medium', 'changeTab'),
+            on::show('.tab-pane')->call('changeTab', jsRaw('event')),
             $chartContents
         )
     )

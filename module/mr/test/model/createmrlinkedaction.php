@@ -17,13 +17,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 su('admin');
 
-zdTable('action')->gen(0);
-zdTable('mr')->gen(1);
-zdTable('relation')->config('relation')->gen(10);
+zenData('action')->gen(0);
+zenData('mr')->gen(1);
+zenData('relation')->loadYaml('relation')->gen(10);
 
 $mrModel = new mrTest();
 r($mrModel->createMRLinkedActionTester(2)) && p() && e('0'); // 不存在的合并请求

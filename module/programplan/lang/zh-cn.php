@@ -69,6 +69,9 @@ $lang->programplan->settingGantt     = '设置甘特图';
 $lang->programplan->viewSetting      = '显示设置';
 $lang->programplan->desc             = '描述';
 $lang->programplan->wait             = '待提交';
+$lang->programplan->enabled          = '启用阶段';
+$lang->programplan->point            = '评审点';
+$lang->programplan->progress         = '进度';
 
 $lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
 $lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";
@@ -77,6 +80,8 @@ $lang->programplan->emptyEnd         = '『计划完成』日期不能为空';
 $lang->programplan->checkBegin       = '『计划开始』应当为合法的日期';
 $lang->programplan->checkEnd         = '『计划完成』应当为合法的日期';
 $lang->programplan->methodTip        = "您可以在该阶段下选择继续创建阶段或创建{$lang->executionCommon}/看板进行工作。{$lang->executionCommon}/看板不支持继续拆分。";
+$lang->programplan->cropStageTip     = "已经开始了的阶段不能再裁剪";
+$lang->programplan->reviewedPointTip = "该评审点已提交评审不能再操作";
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';
@@ -84,6 +89,10 @@ $lang->programplan->milestoneList[0] = '否';
 $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = '是';
 $lang->programplan->delayList[0] = '否';
+
+$lang->programplan->enabledList = array();
+$lang->programplan->enabledList['on']  = '启用';
+$lang->programplan->enabledList['off'] = '停用';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = '阶段';

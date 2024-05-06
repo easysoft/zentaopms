@@ -130,12 +130,14 @@ window.buildColCardActions = function(col)
 window.getItem = function(info)
 {
     const avatar = renderAvatar(info.item);
+
+    info.item.titleAttrs = {};
     if(info.item.cardType == 'story')
     {
         info.item.icon = 'product';
         if(priv.canViewStory)
         {
-            info.item.titleUrl   = $.createLink('story', 'view', `id=${info.item.id}`);
+            info.item.titleUrl   = $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`);
             info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
         }
 
@@ -172,7 +174,7 @@ window.getItem = function(info)
         if(priv.canViewTask)
         {
             info.item.titleUrl   = $.createLink('task', 'view', `id=${info.item.id}`);
-            info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.name};
+            info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
         }
 
         const content = `
@@ -193,6 +195,7 @@ window.getItem = function(info)
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
         info.item.title = {html: info.item.title};
     }
+    info.item.titleAttrs.class = 'card-title clip';
 }
 
 window.renderAvatar = function(item)
@@ -690,7 +693,7 @@ window.searchCards = function(value, order)
 window.changeStoryProduct = function()
 {
     const productID = $('#batchCreateStory [name=productName]').val();
-    if(productID) $('#batchCreateStoryButton').attr('href', $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=&moduleID=0&storyID=0&executionID=' + executionID));
+    if(productID) $('#batchCreateStoryButton').attr('href', $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID));
 };
 
 window.changeBugProduct = function()

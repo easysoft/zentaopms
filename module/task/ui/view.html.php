@@ -29,18 +29,24 @@ if(!$isInModal && hasPriv('task', 'create', $task))
 
 /* 初始化底部操作栏。Init bottom actions. */
 $config->task->actionList['batchCreate']['hint'] = $config->task->actionList['batchCreate']['text'] = $lang->task->children;
-$actions    = !$task->deleted ? $this->loadModel('common')->buildOperateMenu($task) : array();
-$hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
-if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+
+$task->executionInfo = $execution;
+$actions             = !$task->deleted && common::canModify('execution', $execution) ? $this->loadModel('common')->buildOperateMenu($task) : array();
+$hasDivider          = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
+if(!empty($actions)) $actions = array_merge($actions['mainActions'], array('type' => 'divider'), $actions['suffixActions']);
 if(!$hasDivider) unset($actions['type']);
 foreach($actions as $key => $action)
 {
-    if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false)
+    if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false && empty($hasGitRepo)) unset($actions[$key]);
+    if(isset($action['url']) && strpos($action['url'], 'view') !== false)
     {
-        $hasRepo = common::hasPriv('repo', 'createBranch') && $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
-        if(empty($hasRepo) || !common::hasPriv('repo', 'createBranch') || !common::canModify('execution', $execution)) unset($actions[$key]);
+        if($isInModal)
+        {
+            $actions[$key]['data-toggle'] = 'modal';
+            $actions[$key]['data-size']   = 'lg';
+        }
+        if($task->parent == 0) unset($actions[$key]);
     }
-    if(isset($action['url']) && strpos($action['url'], 'view') !== false && $task->parent == 0) unset($actions[$key]);
     if(isset($actions[$key]['url']))
     {
         $actions[$key]['url'] = str_replace(array('{story}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
@@ -69,9 +75,10 @@ if(!$task->fromBug && $task->story)
         'title'    => $task->storyTitle,
         'url'      => createLink('story', 'view', "storyID=$task->storyID"),
         'objectID' => $task->storyID,
+        'color'    => '',
         'toolbar'  => $task->needConfirm ? array
         (
-            array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none text-danger'),
+            array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
             array('text' => $lang->confirm, 'type' => 'primary', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"))
         ) : null,
         'sections' => array
@@ -154,6 +161,7 @@ detail
     (
         set::parentTitle($task->parentName),
         set::parentUrl(createLink('task', 'view', "taskID={$task->parent}")),
+        set::parentTitleProps(array('data-load' => 'modal')),
         to::title(to::leading(label(setClass('gray-pale rounded-full'), $lang->task->childrenAB)))
     ) : null,
     set::urlFormatter(array('{id}' => $task->id, '{parent}' => $task->parent, '{execution}' => $task->execution)),

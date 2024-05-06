@@ -47,10 +47,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(1);
-zdTable('config')->gen(0);  // config 表置空，防止安全设置影响测试结果。
+zenData('user')->gen(1);
+zenData('config')->gen(0);  // config 表置空，防止安全设置影响测试结果。
 
 su('admin');
 
@@ -152,7 +152,7 @@ $result = $userTest->checkPasswordTest($user7);
 r($result) && p('result')                && e(1);    // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 true。
 r($result) && p('errors:password1', '|') && e('~~'); // 密码不为空，两次密码相同，密码为 md5 加密，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。
 
-zdTable('config')->config('config')->gen(1); // 生成自定义常用弱口令。
+zenData('config')->loadYaml('config')->gen(1); // 生成自定义常用弱口令。
 $tester->loadConfigFromDB();                 // 加载自定义常用弱口令。
 
 /* 密码不为空，两次密码相同，密码为明文，修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查。*/

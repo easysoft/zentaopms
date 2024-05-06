@@ -34,6 +34,7 @@ form
             (
                 set::name('title'),
                 set::value($doc->title),
+                set::maxlength(100),
                 set::placeholder($lang->doc->titlePlaceholder)
             )
         ),
@@ -91,7 +92,7 @@ form
     (
         modal
         (
-            modalHeader(),
+            modalHeader(set::title($lang->doc->basicInfo), set::entityText(''), set::entityID(0)),
             set::id('modalBasicInfo'),
             on::change('#product',   "loadObjectModules"),
             on::change('#project',   "loadObjectModules"),
@@ -162,6 +163,7 @@ form
                     setClass('w-full check-list'),
                     inputGroup
                     (
+                        setClass('w-full'),
                         $lang->doc->groups,
                         picker
                         (
@@ -171,7 +173,11 @@ form
                             set::value($doc->groups)
                         )
                     ),
-                    users(set::label($lang->doc->users), set::items($users), set::value($doc->users))
+                    div
+                    (
+                        setClass('w-full'),
+                        userPicker(set::label($lang->doc->users), set::items($users), set::value($doc->users))
+                    )
                 )
             ) : null,
             formRow

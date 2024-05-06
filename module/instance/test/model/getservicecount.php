@@ -12,9 +12,9 @@ cid=1
 
 */
 
-zdTable('user')->gen(5);
-zdTable('instance')->gen(5);
-zdTable('space')->gen(5);
+zenData('user')->gen(5);
+zenData('instance')->gen(5);
+zenData('space')->gen(5);
 
 global $tester, $app;
 $tester->loadModel('instance');

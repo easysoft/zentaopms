@@ -14,10 +14,10 @@ cid=1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
-zdTable('project')->config('project_close', true, 4)->gen(80);
-zdTable('task')->config('task_consumed', true, 4)->gen(1000);
+zendata('project')->loadYaml('project_close', true, 4)->gen(80);
+zendata('task')->loadYaml('task_consumed', true, 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

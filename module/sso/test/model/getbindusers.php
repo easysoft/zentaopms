@@ -12,7 +12,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->ranzhi->range('``,ranzhi1,ranzhi2,ranzhi3,ranzhi4');
 $user->gen(5);
 

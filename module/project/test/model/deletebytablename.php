@@ -1,20 +1,20 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $project = zdTable('project')->config('project')->gen(6);
+    $project = zenData('project')->loadYaml('project')->gen(6);
 
-    $product = zdTable('product');
+    $product = zenData('product');
     $product->id->range('1-3');
     $product->gen(3);
 
-    $projectproduct = zdTable('projectproduct')->config('projectproduct')->gen(5);
+    $projectproduct = zenData('projectproduct')->loadYaml('projectproduct')->gen(5);
 
-    $doclib = zdTable('doclib');
+    $doclib = zenData('doclib');
     $doclib->id->range('1');
     $doclib->execution->range('2');
     $doclib->project->range('1');

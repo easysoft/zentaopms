@@ -15,3 +15,4 @@ $lang->screen->belong    = '所属';
 $lang->screen->dateRange = '日期范围';
 
 $lang->screen->confirmDelete = "您确定要删除该大屏吗？";
+$lang->screen->noMetricData = '度量项已下架或删除';

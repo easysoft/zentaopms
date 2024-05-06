@@ -34,7 +34,15 @@ class programplanTao extends programplanModel
             ->beginIF($browseType == 'all' || $browseType == 'leaf')->andWhere('t1.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('((t1.enabled')->eq('on')
             ->andWhere('t1.deleted')->eq('0')
+            ->markRight(1)
+            ->beginIF($this->app->rawModule == 'programplan' && $this->app->rawMethod == 'create')
+            ->orWhere('(t1.enabled')->eq('off')
+            ->andWhere('t1.deleted')->eq('1')
+            ->markRight(1)
+            ->fi()
+            ->markRight(1)
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
@@ -67,11 +75,23 @@ class programplanTao extends programplanModel
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
-        $this->dao->update(TABLE_PROJECT)->data($plan)->autoCheck()
+        $this->dao->update(TABLE_PROJECT)->data($plan, 'point')->autoCheck()
             ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$relatedIdList}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->checkIF(!empty($plan->code) && $setCode, 'code', 'unique', "id != {$planID} and type in ('sprint','stage','kanban') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->where('id')->eq($planID)
             ->exec();
+
+        /* IPD项目停/启用阶段时，子阶段同样停/启用。*/
+        if(isset($plan->enabled) && $oldPlan->enabled != $plan->enabled) 
+        {
+            $this->dao->update(TABLE_PROJECT)
+                ->set('deleted')->eq($plan->deleted)
+                ->set('enabled')->eq($plan->enabled)
+                ->where('project')->eq($projectID)
+                ->andWhere('grade')->gt(1)
+                ->andWhere("FIND_IN_SET($planID, `path`)")
+                ->exec();
+        }
 
         if($planChanged) $this->insertProjectSpec($planID, $plan);
         if(dao::isError()) return false;
@@ -269,20 +289,21 @@ class programplanTao extends programplanModel
             if($task->mode == 'multi' && !empty($taskTeams[$task->id])) $data->owner_id = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
+            if($task->parent == -1) continue;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] != $task->execution) continue;
                 if(!isset($stageIndex[$index])) continue;
 
                 $stageIndex[$index]['totalEstimate'] += $task->estimate;
-                $stageIndex[$index]['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
+                $stageIndex[$index]['totalConsumed'] += $task->consumed;
                 $stageIndex[$index]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
 
                 $parent = $stage['parent'];
                 if(!isset($stageIndex[$parent])) continue;
 
                 $stageIndex[$parent]['totalEstimate'] += $task->estimate;
-                $stageIndex[$parent]['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
+                $stageIndex[$parent]['totalConsumed'] += $task->consumed;
                 $stageIndex[$parent]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
             }
         }
@@ -427,24 +448,23 @@ class programplanTao extends programplanModel
         if($this->config->edition != 'ipd') return $datas;
 
         $this->loadModel('review');
-        $this->app->loadConfig('stage');
         $reviewPoints = $this->dao->select('t1.*, t2.status, t2.lastReviewedDate,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t1.enabled')->eq(1)
             ->fetchAll('id');
 
         foreach($datas['data'] as $plan)
         {
             if($plan->type != 'plan') continue;
 
-            foreach($reviewPoints as $id => $point)
+            foreach($reviewPoints as $point)
             {
-                if(!isset($this->config->stage->ipdReviewPoint->{$plan->attribute})) continue;
+                if(!isset($this->config->review->ipdReviewPoint->{$plan->attribute})) continue;
                 if(!isset($point->status)) $point->status = '';
 
-                $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
+                $categories = $this->config->review->ipdReviewPoint->{$plan->attribute};
                 if(!in_array($point->category, $categories)) continue;
 
                 $dataID = "{$plan->id}-{$point->category}-{$point->id}";
@@ -514,7 +534,7 @@ class programplanTao extends programplanModel
         $plan->openedDate    = helper::now();
         $plan->openedVersion = $this->config->version;
         if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
-        $this->dao->insert(TABLE_PROJECT)->data($plan)->exec();
+        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point')->exec();
 
         if(dao::isError()) return false;
 
@@ -622,6 +642,9 @@ class programplanTao extends programplanModel
         $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
         $data->textColor     = $this->lang->execution->gantt->stage->textColor;
         $data->bar_height    = $this->lang->execution->gantt->bar_height;
+        /* Set default progress from database. */
+        $data->progress      = $plan->progress / 100;
+        $data->taskProgress  = $plan->progress . '%';
 
         if(!empty($this->config->setPercent)) $data->percent = $plan->percent;
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));

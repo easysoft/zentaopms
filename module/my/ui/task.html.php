@@ -21,7 +21,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode={$mode}&type={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Task')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Task'), set::open($type == 'bySearch')))
 );
 
 $canBatchEdit  = common::hasPriv('task', 'batchEdit');
@@ -32,7 +32,6 @@ $footToolbar = array('items' => array
     $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
-if($type == 'bySearch') $type = $this->session->myTaskType;
 if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);
 if($type == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
 if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
@@ -51,6 +50,7 @@ dtable
     set::defaultSummary(array('html' => $summary)),
     set::checkedSummary($lang->execution->checkedSummary),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),

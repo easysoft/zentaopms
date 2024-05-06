@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=1
 - 编辑日志日期大于今天，查看返回的信息 @日期不能大于今天
 
 */
-$effort = zdTable('effort');
+$effort = zenData('effort');
 $effort->objectType->range('task');
 $effort->objectID->range('1-5');
 $effort->execution->range('1-5');

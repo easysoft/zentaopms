@@ -45,16 +45,16 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 su('admin');
 
-zdTable('user')->gen(20);
-zdTable('dept')->gen(4);
-zdTable('task')->config('task')->gen(10);
-zdTable('project')->gen(10);
-zdTable('project')->config('execution_workload')->gen(10, false, false);
-zdTable('team')->config('team')->gen(5);
+zenData('user')->gen(20);
+zenData('dept')->gen(4);
+zenData('task')->loadYaml('task')->gen(10);
+zenData('project')->gen(10);
+zenData('project')->loadYaml('execution_workload')->gen(10, false, false);
+zenData('team')->loadYaml('team')->gen(5);
 
 $pivot = new pivotTest();
 

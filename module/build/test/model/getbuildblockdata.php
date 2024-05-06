@@ -10,12 +10,12 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(20);
-zdTable('build')->config('build')->gen(20);
-zdTable('userview')->config('userview')->gen(2);
+zenData('project')->loadYaml('project')->gen(20);
+zenData('build')->loadYaml('build')->gen(20);
+zenData('userview')->loadYaml('userview')->gen(2);
 
 $build = new buildTest();
 

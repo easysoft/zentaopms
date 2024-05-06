@@ -128,7 +128,7 @@ class message extends control
         }
         else
         {
-            echo html_entity_decode("<div class='browser-message-content'>{$messages}</div>");
+            echo html_entity_decode("<div class='browser-message-content'><span class='text-secondary-500'>{$messages}</span></div>");
         }
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')->andWhere('status')->ne('wait')->exec();

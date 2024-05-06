@@ -14,7 +14,7 @@ cid=1
 
 */
 
-zdTable('pipeline')->gen(5);
+zenData('pipeline')->gen(5);
 
 $repo = $tester->loadModel('repo');
 

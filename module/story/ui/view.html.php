@@ -17,6 +17,7 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
+if(!isset($executionID)) $executionID = 0;
 
 /* 版本列表。Version list. */
 $versions = array();
@@ -59,10 +60,13 @@ $sections[] = setting()
     ->title($lang->story->legendSpec)
     ->control('html')
     ->content(empty($story->spec) ? $lang->noDesc : $story->spec);
-$sections[] = setting()
-    ->title($lang->story->legendVerify)
-    ->control('html')
-    ->content(empty($story->verify) ? $lang->noDesc : $story->verify);
+if($this->config->vision != 'lite')
+{
+    $sections[] = setting()
+        ->title($lang->story->legendVerify)
+        ->control('html')
+        ->content(empty($story->verify) ? $lang->noDesc : $story->verify);
+}
 if($story->files)
 {
     $sections[] = array
@@ -136,7 +140,7 @@ if($twins)
         ->items($twins);
 }
 
-if($this->config->URAndSR && !$hiddenURS && $config->vision != 'or')
+if($this->config->URAndSR && !$hiddenURS && !in_array($config->vision, array('lite', 'or')))
 {
     $tabs[] = setting()
         ->group('relatives')
@@ -156,10 +160,13 @@ if($isStoryType && hasPriv('story', 'tasks'))
 }
 
 /* 相关信息。 Related info. */
-$tabs[] = setting()
+if($config->vision != 'lite')
+{
+    $tabs[] = setting()
         ->group('relatives')
         ->title($lang->story->legendRelated)
         ->control('storyRelatedList');
+}
 
 $parentTitle = $story->parent > 0 ? set::parentTitle($story->parentName) : null;
 $parentUrl   = $story->parent > 0 ? set::parentUrl(createLink('story', 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
@@ -170,28 +177,47 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
-$actions    = $story->deleted || $isInModal ? array() : $this->loadModel('common')->buildOperateMenu($story);
-$hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
+$hasRepo        = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+$actions        = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
+$hasDivider     = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 foreach($actions as $key => $action)
 {
-    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}'), array($story->id, $story->type, $story->product, $story->branch, $story->module), $action['url']);
+    if(!$hasDivider && isset($action['type']) && $action['type'] == 'divider')
+    {
+        unset($actions[$key]);
+        continue;
+    }
+
+    if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
+    {
+        unset($actions[$key]);
+        continue;
+    }
+
+    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, isset($projectID) ? $projectID : 0), $action['url']);
     if(isset($action['items']))
     {
         foreach($action['items'] as $itemKey => $itemAction)
         {
-            if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}'), array($story->id, $story->type, $story->product, $story->branch, $story->module), $itemAction['url']);
+            if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $executionID), $itemAction['url']);
         }
     }
+
+    if($isInModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
+    {
+        $actions[$key]['data-load'] = 'modal';
+        $actions[$key]['data-size'] = 'lg';
+    }
 }
-if(!$hasDivider) unset($actions['type']);
+
 detail
 (
     set::objectType('story'),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions),
+    set::actions(array_values($actions)),
     $parentTitle,
     $parentUrl,
     $versionBtn,

@@ -23,19 +23,19 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
+include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
-$action = zdTable('action');
+$action = zenData('action');
 $action->execution->range(1);
 $action->extra->range('``,`Fix:1`');
 $action->gen(2);
-zdTable('history')->gen(2);
-$story = zdTable('story');
+zenData('history')->gen(2);
+$story = zenData('story');
 $story->version->range('1');
 $story->gen(2);
-zdTable('storyspec')->gen(2);
-zdTable('product')->gen(2);
+zenData('storyspec')->gen(2);
+zenData('product')->gen(2);
 
 $mail = new mailTest();
 $mail->objectModel->config->webRoot = '/';

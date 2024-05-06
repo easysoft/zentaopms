@@ -151,6 +151,16 @@ panel
                 setClass('nav-item'),
                 a
                 (
+                    $lang->mr->commitLogs,
+                    set::href(inlink('commitlogs', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
+            ),
+            li
+            (
+                setClass('nav-item'),
+                a
+                (
                     $lang->mr->viewDiff,
                     set::href(inlink('diff', "MRID={$MR->id}")),
                     set('data-app', $app->tab)
@@ -284,7 +294,7 @@ panel
 
 div
 (
-    setClass('flex justify-center items-center pt-6'),
+    setClass('detail-actions center sticky mt-4 bottom-4 z-10'),
     floatToolbar
     (
         set::object($MR),

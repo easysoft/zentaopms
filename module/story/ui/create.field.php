@@ -14,7 +14,7 @@ $fields->field('product')
     ->required()
     ->control('inputGroup')
     ->items(false)
-    ->itemBegin('product')->control('picker')->items($createFields['product']['options'])->value($createFields['product']['default'])->itemEnd()
+    ->itemBegin('product')->control('picker')->items($createFields['product']['options'])->value($createFields['product']['default'])->required(true)->itemEnd()
     ->item($isBranchUR ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items($createFields['branch']['options'])->value($createFields['branch']['default']) : null);
 
 $fields->field('module')
@@ -54,6 +54,21 @@ if(isset($createFields['URS']))
         ->hidden(data('hiddenParent'))
         ->items($createFields['parent']['options'])
         ->value($createFields['parent']['default']);
+}
+if(isset($createFields['duration'])) 
+{
+    $fields->field('duration')
+        ->required($createFields['duration']['required'])
+        ->items($createFields['duration']['options'])
+        ->value($createFields['duration']['default']);
+}
+
+if(isset($createFields['BSA']))
+{
+    $fields->field('BSA')
+        ->required($createFields['BSA']['required'])
+        ->items($createFields['BSA']['options'])
+        ->value($createFields['BSA']['default']);
 }
 
 $fields->field('reviewer')

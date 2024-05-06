@@ -69,7 +69,10 @@ class productplan extends control
     {
         if(!empty($_POST))
         {
-            $planData = form::data()->get();
+            $planData = form::data()
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->get();
             $planID   = $this->productplan->create($planData, (int)$this->post->future);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
@@ -103,7 +106,7 @@ class productplan extends control
         $this->view->begin = $lastPlan ? $begin : date('Y-m-d');
         if($parent) $this->view->parentPlan = $this->productplan->getByID($parent);
 
-        $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
+        $this->view->title           = $this->view->product->name . $this->lang->hyphen . $this->lang->productplan->create;
         $this->view->product         = $product;
         $this->view->lastPlan        = $lastPlan;
         $this->view->branch          = $branchID;
@@ -166,7 +169,7 @@ class productplan extends control
             }
             $this->view->branchTagOption = $branchPairs;
         }
-        $this->view->title     = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
+        $this->view->title     = $this->view->product->name . $this->lang->hyphen . $this->lang->productplan->edit;
         $this->view->productID = $plan->product;
         $this->view->oldBranch = $oldBranch;
         $this->view->plan      = $plan;
@@ -318,7 +321,7 @@ class productplan extends control
         $plans = $this->productplan->getList($productID, (string)$branch, $browseType, $pager, $sort, "", $queryID);
         $plans = $this->productplanZen->buildDataForBrowse($plans, $this->view->branchOption);
 
-        $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
+        $this->view->title      = $productName . $this->lang->hyphen . $this->lang->productplan->browse;
         $this->view->productID  = $productID;
         $this->view->branchID   = $branchID;
         $this->view->browseType = $browseType;
@@ -391,6 +394,7 @@ class productplan extends control
         $this->view->orderBy      = $orderBy;
         $this->view->link         = $link;
         $this->view->param        = $param;
+        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
 
         if($this->viewType != 'json')
         {

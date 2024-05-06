@@ -7,3 +7,4 @@
 #stepsTable .steps-body .step > * {padding: 8px; word-break: break-all;}
 .step-change-view-btn {cursor: pointer;}
 .linkCaseTitles, .linkBugTitles {overflow: hidden; white-space: nowrap;}
+.case-basec-info .datalist-item-label {width: 80px;}

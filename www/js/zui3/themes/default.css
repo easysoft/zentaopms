@@ -1,4 +1,3 @@
-
 :root
 {
   --zt-menu-bg: var(--color-gray-900)!important;
@@ -11,4 +10,8 @@
 #quickAddMenu-toggle {
   --tw-ring-color: rgba(var(--color-canvas-rgb),var(--tw-ring-opacity));
   color: var(--color-canvas);
+}
+#navbar {
+  --state-color: rgba(var(--color-inverse-rgb), .04);
+  --state-active-color: rgba(var(--color-inverse-rgb), .08);
 }

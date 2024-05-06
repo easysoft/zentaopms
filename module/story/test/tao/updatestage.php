@@ -10,14 +10,14 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->type->range('normal,branch');
 $product->gen(2);
-zdTable('storystage')->gen(0);
-$story = zdTable('story');
+zenData('storystage')->gen(0);
+$story = zenData('story');
 $story->product->range('1,2,2');
 $story->branch->range('0,0,1');
 $story->gen(3);

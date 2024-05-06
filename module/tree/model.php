@@ -734,10 +734,11 @@ class treeModel extends model
      * @param  int          $rootID
      * @param  int          $startModule
      * @param  string|array $userFunc
+     * @param  array        $extra
      * @access public
      * @return array
      */
-    public function getProjectStoryTreeMenu(int $rootID, int $startModule = 0, string|array$userFunc = ''): array
+    public function getProjectStoryTreeMenu(int $rootID, int $startModule = 0, string|array$userFunc = '', array $extra = array()): array
     {
         $this->app->loadLang('branch');
 
@@ -759,11 +760,12 @@ class treeModel extends model
         $branchGroups = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $rootID);
 
         $productNum = count($products);
+        $storyType  = zget($extra, 'storyType', 'story');
         foreach($products as $id => $product)
         {
             $extra['productID']   = $id;
-            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all");
-            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType=story&orderBy=&type=byProduct&praram=$id");
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all&browseType=&param=0&storyType={$storyType}");
+            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType={$storyType}&orderBy=&type=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
             if($productNum > 1)
             {
@@ -1020,15 +1022,15 @@ class treeModel extends model
                     $table2 = TABLE_CASE;
                 }
 
-                $paths = $this->dao->select("t3.{$field}")->from($table1)->alias('t1')
-                    ->leftJoin($table2)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
-                    ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
+                $paths = $this->dao->select("t4.{$field}")->from(TABLE_PROJECT)->alias('t1')
+                    ->leftJoin($table1)->alias('t2')->on('t1.id=t2.project')
+                    ->leftJoin($table2)->alias('t3')->on("t2.{$linkObject}=t3.id")
+                    ->leftJoin(TABLE_MODULE)->alias('t4')->on('t3.module=t4.id')
                     ->where('t3.deleted')->eq(0)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere("(t1.project = '{$executionID}' OR t4.project = '{$executionID}')")
-                    ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
-                    ->fetchPairs($field, $field);
+                    ->andWhere('t4.deleted')->eq(0)
+                    ->andWhere('t1.project', true)->eq($executionID)->orWhere('t2.project')->eq($executionID)->markRight(1)
+                    ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t3.branch')->eq($branch)->fi()
+                    ->fetchPairs();
             }
             elseif($linkObject == 'bug' && str_contains(',project,execution,', ",{$this->app->tab},"))
             {
@@ -1038,7 +1040,7 @@ class treeModel extends model
                     ->andWhere('t2.deleted')->eq(0)
                     ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
                     ->andWhere("t1.{$this->app->tab}")->eq($executionID)
-                    ->fetchPairs($field, $field);
+                    ->fetchPairs();
             }
             else
             {
@@ -1728,7 +1730,7 @@ class treeModel extends model
         asort($orders);
         $orderInfo = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
         $newOrders = array();
-        foreach($orders as $moduleID => $order)
+        foreach(array_keys($orders) as $moduleID)
         {
             $parent = $orderInfo[$moduleID]->parent;
             $grade  = $orderInfo[$moduleID]->grade;

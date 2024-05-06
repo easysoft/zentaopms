@@ -15,7 +15,8 @@ include(dirname(__FILE__) . '/common.php');
 global $config;
 
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '-';
+$lang->colon     = '：';
+$lang->hyphen    = '-';
 $lang->comma     = '，';
 $lang->dot       = '。';
 $lang->at        = ' 于 ';
@@ -99,7 +100,7 @@ $lang->all                = '全部';
 $lang->viewDetails        = '查看详情';
 $lang->childrenAB         = '子';
 $lang->branchName         = '分支/平台';
-$lang->deleted            = '已删除';
+$lang->recommend          = '推荐';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
@@ -188,6 +189,13 @@ $lang->code         = '代号';
 
 $lang->pri     = '优先级';
 $lang->delayed = '已延期';
+
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = '您有任何问题都可以联系我们。';
+$lang->contactUs->phone  = '电话';
+$lang->contactUs->email  = '邮箱';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = '微信';
 
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
@@ -566,7 +574,7 @@ $lang->clientName     = "大桌面";
 $lang->downloadClient = "下载大桌面";
 $lang->downloadMobile = "下载移动端";
 $lang->clientHelp     = "大桌面使用说明";
-$lang->clientHelpLink = "https://www.zentao.net/book/zentaopmshelp/302.html#4";
+$lang->clientHelpLink = "https://www.zentao.net/book/zentaopmshelp/302.html?fullScreen=zentao&theme=default#4";
 $lang->website        = "https://www.zentao.net";
 
 $lang->suhosinInfo     = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大于%s的数）。 保存并重新启动apache或php-fpm，否则会造成部分数据无法保存。";

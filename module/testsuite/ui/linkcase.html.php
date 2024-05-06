@@ -14,12 +14,13 @@ featureBar
 (
     detailHeader
     (
+        to::prefix(backBtn(set::icon('back'), set::className('btn secondary'), $lang->goback)),
         to::title
         (
             entityLabel(set(array('entityID' => $suite->id, 'level' => 3, 'text' => $suite->name))),
             icon('angle-right'),
             $lang->testsuite->linkCase,
-            li(searchToggle(set::open(true)))
+            li(searchToggle(set::open($browseType == 'bySearch')))
         )
     )
 );
@@ -43,6 +44,7 @@ $cases = initTableData($cases, $config->testsuite->linkcase->dtable->fieldList, 
 $data  = array_values($cases);
 dtable
 (
+    set::extraHeight('+32'),
     set::userMap($users),
     set::data($data),
     set::cols($config->testsuite->linkcase->dtable->fieldList),

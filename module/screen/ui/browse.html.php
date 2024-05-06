@@ -101,7 +101,7 @@ if($showGuide)
                 set::target('_blank')
             ) : null
         ),
-        set::footerClass('form-actions'),
+        set::footerClass('form-actions py-6'),
         set::footerActions(array(array('data-dismiss' => 'modal', 'class' => 'primary', 'text' => $lang->close)))
     );
 }

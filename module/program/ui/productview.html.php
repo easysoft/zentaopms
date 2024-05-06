@@ -33,11 +33,9 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
         ),
         dropdown
         (
-            setClass('btn primary'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
+            btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::placement('bottom-end'),
-            set::items($items),
-            span(setClass('caret'))
+            set::items($items)
         )
     ) : btn
     (

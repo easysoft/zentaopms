@@ -85,6 +85,10 @@ $lang->bug->linkMR           = 'Related MRs';
 $lang->bug->linkCommit       = 'Related Commits';
 $lang->bug->productplan      = $lang->bug->plan;
 $lang->bug->codeBranch       = 'Code branch';
+$lang->bug->unlinkBranch     = 'Unlink code branch';
+$lang->bug->branchName       = 'Branch Name';
+$lang->bug->branchFrom       = 'Create from';
+$lang->bug->codeRepo         = 'Code Library';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = 'Modul';
@@ -367,7 +371,7 @@ $lang->bug->report->openedBugsPerUser->graph->xAxisName   = 'Benutzer';
 $lang->bug->report->resolvedBugsPerUser->graph->xAxisName = 'Benutzer';
 $lang->bug->report->closedBugsPerUser->graph->xAxisName   = 'Benutzer';
 
-$lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Prorität';
+$lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Schwere(S)';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Lösung';
 $lang->bug->report->bugsPerStatus->graph->xAxisName         = 'Status';
 $lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Aktivitätszähler';
@@ -433,6 +437,7 @@ $lang->bug->notice->productDitto          = "This bug is not linked to the same 
 $lang->bug->notice->noBug                 = 'Keine Bugs. ';
 $lang->bug->notice->noModule              = '<div>Sie haben keine Module</div><div>Jetzt verwalten</div>';
 $lang->bug->notice->delayWarning          = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->notice->skipNotActive         = "Bug %s has/have been resolved or closed, it won't be changed again";
 
 $lang->bug->error = new stdclass();
 $lang->bug->error->notExist       = "Bug doesn't exist.";

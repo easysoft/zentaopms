@@ -15,10 +15,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/ci.class.php';
+include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
 
-zdTable('pipeline')->gen(5);
-zdTable('repo')->config('repo')->gen(5);
+zenData('pipeline')->gen(5);
+zenData('repo')->loadYaml('repo')->gen(5);
 su('admin');
 
 $ci = new ciTest();

@@ -2,15 +2,15 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/report.class.php';
+include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
 
-zdTable('action')->config('action_annual')->gen(200);
-zdTable('task')->gen(60);
-zdTable('bug')->gen(60);
-zdTable('story')->gen(60);
-zdTable('case')->gen(80);
-zdTable('testresult')->config('testresult')->gen(80);
-zdTable('user')->gen(1);
+zenData('action')->loadYaml('action_annual')->gen(200);
+zenData('task')->gen(60);
+zenData('bug')->gen(60);
+zenData('story')->gen(60);
+zenData('case')->gen(80);
+zenData('testresult')->loadYaml('testresult')->gen(80);
+zenData('user')->gen(1);
 
 su('admin');
 

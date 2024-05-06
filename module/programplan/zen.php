@@ -78,6 +78,9 @@ class programplanZen extends programplan
                 $plan->realDuration = $this->programplan->getDuration((string)$plan->realBegan, (string)$plan->realEnd);
             }
 
+            /* 阶段停用和删除是一样的效果，方便控制相关数据的展示。 */
+            if($project->model == 'ipd') $plan->deleted = $plan->enabled == 'off' ? '1' : '0';
+
             /* Check duplicated names to avoid to save same names. */
             if(in_array($plan->name, $names)) dao::$errors["name[{$rowID}]"] = empty($plan->type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
             if(isset($plan->code))
@@ -86,8 +89,10 @@ class programplanZen extends programplan
                 if(!empty($this->config->setCode) && empty($plan->code) && strpos(",{$this->config->execution->create->requiredFields},", ',code,') !== false) dao::$errors["code[{$rowID}]"] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
             }
 
-            $totalPercent += $plan->percent;
-            $names[]       = $plan->name;
+            $customKey = 'create' . ucfirst($project->model) . 'Fields';
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false) $totalPercent += $plan->percent;
+
+            $names[] = $plan->name;
             if(!empty($plan->code)) $codes[] = $plan->code;
 
             $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null);
@@ -107,14 +112,14 @@ class programplanZen extends programplan
     public function buildCreateView(object $viewData)
     {
         /* Compute fields for create view. */
-        list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData->executionType);
+        list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData);
 
         if($viewData->project->model == 'ipd')
         {
             $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
         }
 
-        $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $viewData->project->name;
+        $this->view->title              = $this->lang->programplan->create . $this->lang->hyphen . $viewData->project->name;
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);
@@ -141,40 +146,25 @@ class programplanZen extends programplan
      * 处理编辑阶段的请求数据。
      * Processing edit request data.
      *
-     * @param  int       $planID
-     * @param  int       $projectID
+     * @param  int         $planID
+     * @param  int         $projectID
+     * @param  object      $plan
+     * @param  object|null $parentStage
      * @access protected
-     * @return object
+     * @return bool
      */
-    protected function buildPlanForEdit(int $planID, int $projectID): object
+    protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): bool
     {
-        $this->loadModel('execution');
-        if(!empty($this->config->setCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false) $this->config->programplan->form->edit['code']['required'] = true;
-
-        $plan = form::data()->get();
-        if(empty($plan->realBegan)) $plan->realBegan = null;
-        if(empty($plan->realEnd))   $plan->realEnd   = null;
-
-        /* 设置计划和真实起始日期间隔时间。 */
-        /* Set planDuration and realDuration. */
-        if(in_array($this->config->edition, array('max', 'ipd')))
-        {
-            $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
-            $plan->realDuration = $this->programplan->getDuration($plan->realBegan, $plan->realEnd);
-        }
-
         if($plan->parent)
         {
-            $parentStage = $this->programplan->getByID($plan->parent);
-            $plan->acl   = $parentStage->acl;
-            if($parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;
+            if(!empty($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent,  $parentStage->begin);
+            if(!empty($parentStage) && $plan->end   > $parentStage->end)   dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
 
-            if(isset($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
-            if(isset($parentStage) && $plan->end > $parentStage->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
+            if(dao::isError()) return false;
         }
 
-        if($projectID) $this->execution->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
-        if(dao::isError()) return $plan;
+        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
+        if(dao::isError()) return false;
 
         if(!empty($this->config->setPercent))
         {
@@ -196,7 +186,7 @@ class programplanZen extends programplan
             }
         }
 
-        return $plan;
+        return !dao::isError();
     }
 
     /**
@@ -258,28 +248,32 @@ class programplanZen extends programplan
      * 计算创建视图的可见字段字段和必填字段。
      * Compute visibleFields and requiredFields for create view.
      *
-     * @param  string $executionType
+     * @param  object     $viewData
      * @access protected
      * @return array
      */
-    protected function computeFieldsCreateView(string $executionType): array
+    protected function computeFieldsCreateView(object $viewData): array
     {
         $visibleFields      = array();
         $requiredFields     = array();
         $customFields       = array();
-        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
-        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        $customModel        = !empty($viewData->project->model) ? $viewData->project->model : '';
+        $custom             = $viewData->executionType == 'stage' ? 'custom' : 'customAgilePlus';
+        $customCreateFields = $viewData->executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        $createFields       = $custom == 'customAgilePlus' ? 'createFields' : 'create' . ucfirst($customModel) . 'Fields';
         $defaultFields      = $this->config->programplan->$custom->defaultFields;
 
         foreach(explode(',', $this->config->programplan->list->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};
 
-        $showFields = $this->config->programplan->$custom->createFields;
+        $showFields = $this->config->programplan->$custom->$createFields;
         foreach(explode(',', $showFields) as $field)
         {
             if($field) $visibleFields[$field] = '';
         }
 
-        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
+        $createRequiredFields = $this->config->execution->create->requiredFields;
+        if($viewData->project->model == 'ipd' && $viewData->executionType == 'stage' && !$viewData->planID) $createRequiredFields = 'enabled,point,' . trim($createRequiredFields, ',');
+        foreach(explode(',', $createRequiredFields) as $field)
         {
             if($field)
             {

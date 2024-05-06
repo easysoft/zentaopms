@@ -56,7 +56,7 @@ class gitlab extends control
         /* Admin user don't need bind. */
         $gitlabList = $this->gitlab->getList($orderBy, $pager);
 
-        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browse;
         $this->view->gitlabList = $gitlabList;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -75,7 +75,9 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $gitlab = form::data($this->config->gitlab->form->create)->get();
+            $gitlab = form::data($this->config->gitlab->form->create)
+                ->add('createdBy', $this->app->user->account)
+                ->get();
             $this->checkToken($gitlab);
             $gitlabID = $this->loadModel('pipeline')->create($gitlab);
 
@@ -85,7 +87,7 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
-        $this->view->title = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->lblCreate;
+        $this->view->title = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->lblCreate;
 
         $this->display();
     }
@@ -101,7 +103,7 @@ class gitlab extends control
     {
         $gitlab = $this->gitlab->getByID($gitlabID);
 
-        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->view;
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->view;
         $this->view->gitlab     = $gitlab;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->actions    = $this->loadModel('action')->getList('gitlab', $gitlabID);
@@ -123,7 +125,9 @@ class gitlab extends control
 
         if($_POST)
         {
-            $gitlab = form::data($this->config->gitlab->form->edit)->get();
+            $gitlab = form::data($this->config->gitlab->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->get();
             $this->checkToken($gitlab, $gitlabID);
             $this->loadModel('pipeline')->update($gitlabID, $gitlab);
             $gitLab = $this->gitlab->getByID($gitlabID);
@@ -136,7 +140,7 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title  = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->edit;
+        $this->view->title  = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->edit;
         $this->view->gitlab = $oldGitLab;
 
         $this->display();
@@ -323,7 +327,7 @@ class gitlab extends control
         $adminGroupIDList = array();
         foreach($adminGroups as $group) $adminGroupIDList[] = $group->id;
 
-        $this->view->title            = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
+        $this->view->title            = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseGroup;
         $this->view->gitlabID         = $gitlabID;
         $this->view->gitlab           = $this->gitlab->getByID($gitlabID);
         $this->view->gitlabGroupList  = $groups;
@@ -356,7 +360,7 @@ class gitlab extends control
 
         $gitlab = $this->gitlab->getByID($gitlabID);
 
-        $this->view->title    = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->group->create;
+        $this->view->title    = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->group->create;
         $this->view->gitlab   = $gitlab;
         $this->view->gitlabID = $gitlabID;
         $this->display();
@@ -393,7 +397,7 @@ class gitlab extends control
         $gitlab = $this->gitlab->getByID($gitlabID);
         $group  = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
 
-        $this->view->title    = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->group->edit;
+        $this->view->title    = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->group->edit;
         $this->view->gitlab   = $gitlab;
         $this->view->group    = $group;
         $this->view->gitlabID = $gitlabID;
@@ -488,7 +492,7 @@ class gitlab extends control
         $accessLevels   = $this->lang->gitlab->accessLevels;
         $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);
 
-        $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->group->manageMembers;
+        $this->view->title          = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->group->manageMembers;
         $this->view->currentMembers = $currentMembers;
         $this->view->gitlabUsers    = $gitlabUsers;
         $this->view->gitlabID       = $gitlabID;
@@ -524,7 +528,7 @@ class gitlab extends control
             }
         }
 
-        $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseUser;
+        $this->view->title          = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseUser;
         $this->view->gitlabID       = $gitlabID;
         $this->view->gitlabUserList = $users;
         $this->view->orderBy        = $orderBy;
@@ -572,7 +576,7 @@ class gitlab extends control
             }
         }
 
-        $this->view->title     = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->create;
+        $this->view->title     = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->user->create;
         $this->view->userPairs = $userPairs;
         $this->view->users     = $userInfos;
         $this->view->gitlabID  = $gitlabID;
@@ -614,7 +618,7 @@ class gitlab extends control
             if(!isset($bindedUsers[$user->account]) or $user->account == $zentaoBindAccount) $userPairs[$user->account] = $user->realname;
         }
 
-        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->edit;
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->user->edit;
         $this->view->user              = $gitlabUser;
         $this->view->userPairs         = $userPairs;
         $this->view->zentaoBindAccount = $zentaoBindAccount;
@@ -701,7 +705,7 @@ class gitlab extends control
         $this->view->gitlab            = $gitlab;
         $this->view->keyword           = urldecode(urldecode($keyword));
         $this->view->pager             = $result['pager'];
-        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseProject;
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseProject;
         $this->view->gitlabID          = $gitlabID;
         $this->view->gitlabProjectList = $result['projects'];
         $this->view->orderBy           = $orderBy;
@@ -744,7 +748,7 @@ class gitlab extends control
             if($namespace->kind == 'group') $namespaces[$namespace->id] = $namespace->path;
         }
 
-        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->project->create;
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->project->create;
         $this->view->gitlab     = $gitlab;
         $this->view->user       = $user;
         $this->view->namespaces = $namespaces;
@@ -774,7 +778,7 @@ class gitlab extends control
 
         $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
 
-        $this->view->title    = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->project->edit;
+        $this->view->title    = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->project->edit;
         $this->view->project  = $project;
         $this->view->gitlabID = $gitlabID;
         $this->display();
@@ -853,7 +857,7 @@ class gitlab extends control
 
         $this->view->gitlab            = $this->gitlab->getByID($gitlabID);
         $this->view->pager             = $pager;
-        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseBranch;
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseBranch;
         $this->view->gitlabID          = $gitlabID;
         $this->view->projectID         = $projectID;
         $this->view->gitlabBranchList  = empty($branchList) ? $branchList: $branchList[$pageID - 1];
@@ -889,7 +893,7 @@ class gitlab extends control
         $branchPairs = array();
         foreach($branches as $branch) $branchPairs[$branch->name] = $branch->name;
 
-        $this->view->title       = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->createBranch;
+        $this->view->title       = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->createBranch;
         $this->view->gitlabID    = $gitlabID;
         $this->view->projectID   = $projectID;
         $this->view->branchPairs = $branchPairs;
@@ -940,7 +944,7 @@ class gitlab extends control
 
         $this->view->gitlab        = $this->gitlab->getByID($gitlabID);
         $this->view->pager         = $pager;
-        $this->view->title         = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTag;
+        $this->view->title         = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseTag;
         $this->view->gitlabID      = $gitlabID;
         $this->view->projectID     = $projectID;
         $this->view->keyword       = $keyword;
@@ -1040,7 +1044,7 @@ class gitlab extends control
 
         $products = $this->loadModel("product")->getPairs();
 
-        $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->importIssue;
+        $this->view->title           = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->importIssue;
         $this->view->importable      = empty($gitlabIssues) ? false : true;
         $this->view->products        = $products;
         $this->view->gitlabID        = $gitlabID;
@@ -1163,7 +1167,7 @@ class gitlab extends control
             }
         }
 
-        $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->manageProjectMembers;
+        $this->view->title          = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->manageProjectMembers;
         $this->view->userAccessData = $userAccessData;
         $this->view->users          = $users;
         $this->view->repo           = $repo;
@@ -1244,7 +1248,7 @@ class gitlab extends control
             $branches[$branch->name] = $branch->name;
         }
 
-        $this->view->title     = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->createTag;
+        $this->view->title     = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->createTag;
         $this->view->gitlabID  = $gitlabID;
         $this->view->projectID = $projectID;
         $this->view->branches  = $branches;
@@ -1306,7 +1310,7 @@ class gitlab extends control
         if(!empty($_POST))
         {
             $result = $this->gitlab->manageBranchPrivs($gitlabID, $projectID, $hasAccessBranches);
-            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->svaeFailed, implode(', ', $result))));
+            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->saveFailed, implode(', ', $result))));
 
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }
@@ -1314,7 +1318,7 @@ class gitlab extends control
         $branchPairs = array();
         foreach($allBranches as $branch) $branchPairs[$branch->name] = $branch->name;
 
-        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseBranchPriv;
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseBranchPriv;
         $this->view->gitlabID          = $gitlabID;
         $this->view->projectID         = $projectID;
         $this->view->branchPairs       = $branchPairs;
@@ -1347,7 +1351,7 @@ class gitlab extends control
         if(!empty($_POST))
         {
             $result = $this->gitlab->manageTagPrivs($gitlabID, $projectID, $hasAccessTags);
-            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->svaeFailed, implode(', ', $result))));
+            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->saveFailed, implode(', ', $result))));
 
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }
@@ -1355,7 +1359,7 @@ class gitlab extends control
         $tagPairs = array();
         foreach($allTags as $tag) $tagPairs[$tag->name] = $tag->name;
 
-        $this->view->title         = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTagPriv;
+        $this->view->title         = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseTagPriv;
         $this->view->gitlabID      = $gitlabID;
         $this->view->projectID     = $projectID;
         $this->view->hasAccessTags = $hasAccessTags;

@@ -8,7 +8,7 @@
 }
 [lang^='en'] {--zt-menu-width: 106px;}
 
-#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .1s; user-select: none; z-index: 10;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px;}
@@ -18,11 +18,12 @@
 #menu .nav > li > a.active {background: var(--zt-menu-active-bg, rgba(var(--color-primary-400-rgb), .7));}
 #menu .nav > li > a > .text {white-space: nowrap;}
 #menu .nav > li > a > .icon {font-size: 18px; display: inline-flex; align-items: center; justify-content: center;}
-.show-menu .menu-tooltip {display: none;}
+.show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 
 #menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
 #menuMainNav a {cursor: pointer;}
 #menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
+.show-menu #menuFooter [data-hint]::after {content: attr(data-collapse-text)}
 
 #menuMoreNav {display: none;}
 .show-more-nav #menuMoreNav {display: block;}
@@ -39,10 +40,10 @@
 .hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
 .hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
 
-#apps {position: fixed; left: var(--zt-menu-width); top: 0; bottom: var(--zt-apps-bar-height); right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
+#apps {position: fixed; left: var(--zt-menu-width); top: 0; bottom: var(--zt-apps-bar-height); right: 0; background-color: var(--zt-page-bg); transition: left .1s;}
 .hide-menu #apps {left: var(--zt-menu-fold-width)!important;}
 
-#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width); bottom: 0; right: 0; height: var(--zt-apps-bar-height); padding: 0 4px; background: var(--zt-apps-bar-bg); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
+#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width); bottom: 0; right: 0; height: var(--zt-apps-bar-height); padding: 0 4px; background: var(--zt-apps-bar-bg); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .1s; border-top-width: 1px;}
 .hide-menu #appsBar {left: var(--zt-menu-fold-width)!important;}
 #appTabs {flex: auto; user-select: none; --nav-active-color: currentColor}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .6;}
@@ -57,23 +58,23 @@
 #visionSwitcher::before {right: -10px; border-left-color: var(--color-fore); opacity: .1;}
 #versionSwitchBtn {padding: 0 6px;}
 
-.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
+.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg);}
+.app-container.loading {background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
 .app-container.loading:before {background-color: rgba(0,0,0,.1);}
 .app-container.loading:before, .ap p-container.loading::after {transition-delay: 3s;}
 .app-container.loading.open-from-hidden {transition-delay: 0s;}
 .app-container.loading.open-from-hidden > iframe {opacity: 0;}
 .app-container > iframe {width: 100%; height: 100%; background: inherit;}
 
-.browser-message-content {color: rgba(30,168,254)}
-.browser-message-content > a {color: rgba(49,60,82)}
+.messagers > .messager-holder {max-width: 35%;}
+.messager-notice, .score-notice {align-items: flex-start;}
+.messager-notice > .icon-envelope-o, .score-notice > .icon-diamond {margin-top: 2px;}
+.messager-notice > .alert-close {position: fixed; top: 10px; right: 30px; width: 20px; height: 20px;}
+.messager-notice .browser-message-content {color: rgba(30,168,254); max-height: calc(100vh - 14rem); overflow-y: auto;}
+.messager-notice .browser-message-content > span {width: 94%; display: inline-block;}
+.messager-notice .browser-message-content > a {color: rgba(49,60,82)}
 
 .hl-tutorial {position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 0 0 #000!important; box-shadow: 0 0 0 0 #000!important; -webkit-transition: -webkit-box-shadow 1s!important; -o-transition: box-shadow 1s!important; transition: -webkit-box-shadow 1s!important; transition: box-shadow 1s!important; transition: box-shadow 1s,-webkit-box-shadow 1s!important }
 .hl-tutorial.hl-in { -webkit-box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important; box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important }
 .btn.tooltip-tutorial,.hl-tutorial.hl-in:hover { position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important; box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important
 }
-
-#visionTips {width: 280px; height: 0; position: absolute; bottom: 120px; left: 0; z-index: 200; color: #ffffff;}
-#visionTips .inner {width: 270px; height: 58px; position: relative; bottom: 0; left: 0; border-radius: 8px; display: flex; justify-content: space-around; align-items: center;}
-#visionTips .line {width: 2px; height: 31px; position: absolute; bottom: -31px; left: 64px;}
-#visionTips .circle {width: 10px; height: 10px; border-radius: 50%; border-width: 3px; border-style: solid; position: relative; left: -4px; top: 31px; background-color: white;color: #fff; border-color: var(--color-primary-500);}
-#visionTips .inner > button {border-color: white; background: var(--skin-text);}

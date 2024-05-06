@@ -173,7 +173,7 @@ div
     div
     (
         setClass('entity-label flex items-center gap-x-2 entity-title text-lg font-bold'),
-        $lang->tree->common . $lang->colon . $root->name
+        $lang->tree->common . $lang->hyphen . $root->name
     )
 );
 

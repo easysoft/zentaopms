@@ -7,7 +7,11 @@ window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
     {
-        if(row.data.delay > 0) result[result.length] = {html:'<span class="label size-sm circle danger-pale">' + langPostponed + '</span>', className:'flex items-end w-full', style:{flexDirection:"column"}};
+        if(row.data.delay > 0)
+        {
+            result[0].props.className = 'overflow-hidden';
+            result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + langPostponed + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+        }
         return result;
     }
 

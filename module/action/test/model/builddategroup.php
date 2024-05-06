@@ -4,12 +4,12 @@
 use function zin\wg;
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
-zdTable('user')->gen(60);
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+zenData('user')->gen(60);
 su('admin');
 
-zdTable('action')->config('action')->gen(60, true, false);
-zdTable('actionrecent')->config('action')->gen(60, true, false);
+zenData('action')->loadYaml('action')->gen(60, true, false);
+zenData('actionrecent')->loadYaml('action')->gen(60, true, false);
 
 /**
 

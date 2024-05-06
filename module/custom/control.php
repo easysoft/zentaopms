@@ -58,7 +58,7 @@ class custom extends control
             return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 
-        $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
+        $this->view->title       = $this->lang->custom->common . $this->lang->hyphen . $this->lang->$module->common;
         $this->view->field       = $field;
         $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
@@ -393,6 +393,9 @@ class custom extends control
      */
     public function ajaxSaveCustomFields(string $module, string $section, string $key)
     {
+        if(!isset($this->config->custom->customFields[$module][$section])) return;
+        if(!in_array($key, $this->config->custom->customFields[$module][$section])) return;
+
         $account = $this->app->user->account;
         if($this->server->request_method == 'POST')
         {
@@ -412,6 +415,7 @@ class custom extends control
         $this->app->loadLang($module);
         $this->app->loadConfig($module);
 
+        if($module == 'programplan' && $section == 'custom') $key = 'createFields';
         $customFields = $this->config->$module->list->{'custom' . ucfirst($key)};
         $showFields   = $this->config->$module->custom->$key;
         return $this->send(array('result' => 'success', 'key' => $key, 'callback' => 'loadCurrentPage', 'customFields' => $customFields, 'showFields' => $showFields));

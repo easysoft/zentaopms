@@ -32,6 +32,8 @@ class context extends \zin\utils\dataset
 
     public array $data = array();
 
+    public array $debugData = array();
+
     public ?\control $control = null;
 
     public bool $rendered = false;
@@ -280,6 +282,42 @@ class context extends \zin\utils\dataset
         return $js;
     }
 
+    public function addDebugData(string $name, mixed ...$values)
+    {
+        $e         = new \Exception();
+        $trace     = $e->getTraceAsString();
+        $trace     = str_replace($this->control->app->basePath, '', $trace);
+        $stack     = explode("\n", $trace);
+        if(str_contains($stack[0], 'lib/zin/core/context.func.php')) array_shift($stack);
+
+        $finalName = $name;
+        if(empty($finalName))
+        {
+            $statement = $stack[0];
+            if(str_contains($stack[0], '): zin\d('))
+            {
+                $statement = explode('): zin\d(', $statement)[1];
+                if(str_contains($statement, ',')) $finalName = explode(',', $statement)[0];
+                else                              $finalName = explode(')', $statement)[0];
+            }
+            else
+            {
+                $finalName = 'dump';
+            }
+        }
+
+        $isJson = $name[0] !== '$';
+        $data   = $values;
+        if($isJson)
+        {
+            $data = json_encode($values);
+            if($data === false) $isJson = false;
+            else                $data = jsRaw($data);
+        }
+        if(!$isJson) $data = array_map(function($value) {return var_export($value, true);}, $values);
+        $this->debugData[] = array('name' => $finalName, 'data' => $data, 'type' => $isJson ? 'json' : 'var', 'trace' => $stack);
+    }
+
     public function getDebugData() : ?array
     {
         global $app;
@@ -290,6 +328,7 @@ class context extends \zin\utils\dataset
             if(is_array($zinDebug))
             {
                 $zinDebug['basePath'] = $app->getBasePath();
+                $zinDebug['debug']    = $this->debugData;
                 if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
             }
         }
@@ -337,14 +376,15 @@ class context extends \zin\utils\dataset
 
         $hookCode   = $this->includeHooks();
         $rawContent = $this->getRawContent();
-        $zinDebug   = $this->getDebugData();
 
         $node->prebuild(true);
         $this->applyQueries($node);
 
-        $js     = $this->getJS();
-        $css    = $this->getCSS();
-        $result = $renderer->render();
+        $js       = $this->getJS();
+        $css      = $this->getCSS();
+        $result   = $renderer->render();
+        $zinDebug = $this->getDebugData();
+
 
         if(is_object($result)) // renderType = json
         {

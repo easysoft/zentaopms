@@ -13,9 +13,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->program->range('0,1');
 $product->gen(10);
 

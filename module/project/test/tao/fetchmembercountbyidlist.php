@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('11-19');
 $project->project->range('11-19');
 $project->name->prefix("项目")->range('11-19');
@@ -23,8 +23,8 @@ $project->percent->range("0-0");
 $project->openedDate->range("`2023-05-01 10:00:10`");
 $project->gen(9);
 
-zdTable('team')->gen(10);
-zdTable('user')->gen(10);
+zenData('team')->gen(10);
+zenData('user')->gen(10);
 
 /**
 

@@ -88,7 +88,7 @@ class datalist extends wg
     {
         return div
         (
-            setClass('datalist'),
+            setClass('datalist break-all overflow-hidden text-clip'),
             setStyle('--datalist-label-width', $this->prop('labelWidth') . 'px'),
             set($this->getRestProps()),
             $this->buildItems(),

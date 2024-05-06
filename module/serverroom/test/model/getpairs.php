@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('serverroom')->config('serverroom')->gen(10);
+zenData('serverroom')->loadYaml('serverroom')->gen(10);
 su('admin');
 
 /**

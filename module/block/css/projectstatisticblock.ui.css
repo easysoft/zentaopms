@@ -2,11 +2,12 @@
 .projectstatistic-block .tab-content {width: 78%;}
 .projectstatistic-block.block-sm .tab-content {width: 100%;}
 
-.projectstatistic-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; padding-right: 1rem;}
-.projectstatistic-block .project-statistic-table table th {padding-right: 0px; margin-top: 1rem; font-size: 12px;}
-.projectstatistic-block .project-statistic-table table td {padding-left: 0px; margin-top: 1rem;}
+.projectstatistic-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 0.5rem;}
+.projectstatistic-block .project-statistic-table table th {padding-right: 0.25rem; margin-top: 1rem; font-size: 12px;}
+.projectstatistic-block .project-statistic-table table td {padding-left: 0.25rem; margin-top: 1rem;}
 .projectstatistic-block .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
-.projectstatistic-block .scrum table th, .projectstatistic-block .scrum table td {width: 50%}
+.projectstatistic-block .scrum table th {width: calc(50% - 2rem);}
+.projectstatistic-block .scrum table td {width: calc(50% + 2rem)}
 .projectstatistic-block .waterfall table th {width: 100px;}
 .projectstatistic-block .table-data {overflow: hidden;}
 .projectstatistic-block .table-data td {white-space: nowrap;}

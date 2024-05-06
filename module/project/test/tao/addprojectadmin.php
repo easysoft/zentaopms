@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
-zdTable('projectadmin')->gen(0);
+zenData('projectadmin')->gen(0);
 
-zdTable('project')->gen(15);
-$group = zdTable('group');
+zenData('project')->gen(15);
+$group = zenData('group');
 $group->role->range('projectAdmin');
 $group->gen(15);
 

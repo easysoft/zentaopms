@@ -21,7 +21,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->config('user')->gen(2);
+zenData('user')->loadYaml('user')->gen(2);
 
 su('admin');
 

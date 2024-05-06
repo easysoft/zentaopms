@@ -19,7 +19,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->dept->range('0,1');
 $user->role->range(',``,qa');
 $user->gen(10);

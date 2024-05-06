@@ -19,7 +19,8 @@ $config->execution->modelList['waterfallplus'] = 'stage';
 
 $config->execution->statusActions = array('start', 'putoff', 'suspend', 'close', 'activate');
 
-$config->execution->kanbanMethod = array('kanban', 'cfd', 'build', 'view', 'manageproducts', 'team', 'managemembers', 'whitelist', 'addwhitelist', 'edit');
+$config->execution->kanbanMethod    = array('kanban', 'cfd', 'build', 'view', 'manageproducts', 'team', 'managemembers', 'whitelist', 'addwhitelist', 'edit');
+$config->execution->storyKanbanCols = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
 
 global $lang, $app;
 $app->loadLang('task');

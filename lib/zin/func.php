@@ -168,7 +168,7 @@ function progressCircle(): progressCircle {return createWg('progressCircle', fun
 function filter(): filter {return createWg('filter', func_get_args());}
 function resultFilter(): resultFilter {return createWg('resultFilter', func_get_args());}
 function contactList(): contactList {return createWg('contactList', func_get_args());}
-function users(): users {return createWg('users', func_get_args());}
+function userPicker(): userPicker {return createWg('userPicker', func_get_args());}
 function mailto(): mailto {return createWg('mailto', func_get_args());}
 function whitelist(): whitelist {return createWg('whitelist', func_get_args());}
 function modulePicker(): modulePicker {return createWg('modulePicker', func_get_args());}
@@ -191,3 +191,18 @@ function caseBasicInfo(): caseBasicInfo {return createWg('caseBasicInfo', func_g
 function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_args());}
 function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
 function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
+function contactUs(): contactUs {return createWg('contactUs', func_get_args());}
+function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
+function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
+function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
+function thinkTransition(): thinkTransition {return createWg('thinkTransition', func_get_args());}
+function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
+function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
+function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
+function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', func_get_args());}
+function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
+function thinkStepDetail(): thinkStepDetail {return createWg('thinkStepDetail', func_get_args());}
+function thinkInputDetail(): thinkInputDetail {return createWg('thinkInputDetail', func_get_args());}
+function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkTableInputDetail', func_get_args());}
+function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptionsDetail', func_get_args());}
+function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}

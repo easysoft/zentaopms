@@ -61,7 +61,7 @@ $lang->gitfox->createWebhook        = '创建Webhook';
 $lang->gitfox->browseBranchPriv     = '分支保护管理';
 $lang->gitfox->createTag            = '创建标签';
 $lang->gitfox->deleteTag            = '删除标签';
-$lang->gitfox->svaeFailed           = '『%s』保存失败';
+$lang->gitfox->saveFailed           = '『%s』保存失败';
 
 $lang->gitfox->id             = 'ID';
 $lang->gitfox->name           = "应用名称";

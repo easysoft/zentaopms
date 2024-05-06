@@ -15,10 +15,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pipeline.class.php';
+include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('pipeline')->gen(0);
+zenData('user')->gen(5);
+zenData('pipeline')->gen(0);
 
 $pipelineTester = new pipelineTest();
 

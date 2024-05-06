@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('user')->gen(5);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('user')->gen(5);
 
-$team = zdTable('team');
+$team = zenData('team');
 $team->type->range('execution');
 $team->root->range('101-103');
 $team->gen(10);

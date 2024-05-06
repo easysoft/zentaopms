@@ -108,7 +108,7 @@ class form extends fixer
     public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = ''): array
     {
         global $app, $config;
-        if($config->edition == 'open') return $configObject;
+        if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
 
         $moduleName = $moduleName ? $moduleName : $app->getModuleName();
         $methodName = $methodName ? $moduleName : $app->getMethodName();
@@ -117,7 +117,7 @@ class form extends fixer
         if(!$flow) return $configObject;
 
         $action = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        if(!$action) return $configObject;
+        if(!$action || $action->extensionType != 'extend') return $configObject;
 
         $fieldList    = $app->control->workflowaction->getFields($flow->module, $action->action);
         $layouts      = $app->control->loadModel('workflowlayout')->getFields($moduleName, $methodName);

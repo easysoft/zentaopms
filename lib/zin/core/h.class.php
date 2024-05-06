@@ -18,6 +18,8 @@ require_once __DIR__ . DS . 'directive.class.php';
 
 class h extends node
 {
+    public static array $h5Tags = array('div', 'span', 'strong', 'small', 'code', 'canvas', 'br', 'a', 'p', 'img', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'ul', 'li', 'template', 'fieldset', 'legend');
+
     public static array $defineProps = array
     (
         'tagName'   => 'string',
@@ -127,7 +129,15 @@ class h extends node
     public static function input(mixed ...$args): h
     {
         $input = static::create('input', ...$args);
-        $input->setDefaultProps('type', 'text');
+        if($input->prop('type') === 'file')
+        {
+            $name = $input->prop('name');
+            if($name && !str_contains($name, '[')) $input->setProp('name', "{$name}[]");
+        }
+        else
+        {
+            $input->setDefaultProps('type', 'text');
+        }
         return $input;
     }
 
@@ -192,6 +202,15 @@ class h extends node
         return "$url{$mark}v={$config->version}";
     }
 
+    public static function favicon(string $url, mixed ...$args): array
+    {
+        return array
+        (
+            static::create('link', set(array('rel' => 'icon', 'href' => $url, 'type' => 'image/x-icon')), ...$args),
+            static::create('link', set(array('rel' => 'shortcut icon', 'href' => $url, 'type' => 'image/x-icon')), ...$args)
+        );
+    }
+
     public static function import(string|array $file, ?string $type = null, mixed ...$args): ?h
     {
         if(is_array($file))
@@ -218,14 +237,14 @@ class h extends node
 
     public static function globalJS(mixed ...$args): ?h
     {
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode($args, true);
         if(empty($code)) return null;
         return static::create('script', html(...$code), $args);
     }
 
     public static function js(mixed ...$args): ?h
     {
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode($args, true);
         if(empty($code)) return null;
         $code = ';(function(){' . implode("\n", $code) . '}());';
         return static::create('script', html($code), ...$args);
@@ -237,7 +256,7 @@ class h extends node
         return static::js(js()->var($name, $value), $args);
     }
 
-    public static function jsCall(string $funcName, mixed ...$args): h
+    public static function jsCall(string $funcName, mixed ...$args): ?h
     {
         $args  = func_get_args();
         $funcName  = array_shift($args);
@@ -263,14 +282,15 @@ class h extends node
         return static::js($js, $directives);
     }
 
-    protected static function splitRawCode($children)
+    protected static function splitRawCode($children, $includeJS = false)
     {
         $children = \zin\utils\flat($children);
         $code = array();
         $args = array();
         foreach($children as $child)
         {
-            if($child instanceof js) $child = $child->toJS();
+            if($includeJS && $child instanceof js) $child = $child->toJS();
+
             if(is_string($child)) $code[] = $child;
             else                  $args[] = $child;
         }

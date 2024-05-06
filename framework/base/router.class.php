@@ -288,6 +288,16 @@ class baseRouter
     static $loadedLangs = array();
 
     /**
+     * 已加载的目标，可能是 model，tao 或者 zen 的实例化对象。
+     * Targets loaded, maybe instance of model, tao or zen.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedTargets = array();
+
+    /**
      * 全局$lang对象。
      * The global $lang object.
      *
@@ -414,11 +424,14 @@ class baseRouter
      *
      * @param string $appName   the name of the app
      * @param string $appRoot   the root path of the app
+     * @param string $mode      the mode of the app running|installing|upgrading
      * @access public
      * @return void
      */
-    public function __construct(string $appName = 'demo', string $appRoot = '')
+    public function __construct(string $appName = 'demo', string $appRoot = '', string $mode = 'running')
     {
+        if($mode != 'running') $this->{$mode} = true;
+
         $this->setPathFix();
         $this->setBasePath();
         $this->setFrameRoot();
@@ -466,9 +479,6 @@ class baseRouter
      */
     public function setClient(): void
     {
-        $this->setOpenApp();
-        $this->setSuperVars();
-
         $this->startSession();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
@@ -480,6 +490,9 @@ class baseRouter
 
         if($this->config->framework->multiLanguage) $this->loadLang('common');
         if($this->config->framework->multiTheme)    $this->setClientTheme();
+
+        $this->setOpenApp();
+        $this->setSuperVars();
     }
 
     /**
@@ -489,14 +502,15 @@ class baseRouter
      * @param string $appName   应用名称。  The name of the app.
      * @param string $appRoot   应用根路径。The root path of the app.
      * @param string $className 应用类名，如果对router类做了扩展，需要指定类名。When extends router class, you should pass in the child router class name.
+     * @param string $mode      应用模式。  The mode of the app. running|installing|upgrading
      * @static
      * @access public
      * @return static   the app object
      */
-    public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '')
+    public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '', string $mode = 'running')
     {
         if(empty($className)) $className = self::class;
-        return new $className($appName, $appRoot);
+        return new $className($appName, $appRoot, $mode);
     }
 
     /**
@@ -859,7 +873,7 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
-        if(empty($account))                              $account = $this->cookie->za;
+        if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $vision = '';
         $sql    = new sql();
@@ -1166,15 +1180,14 @@ class baseRouter
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
-        /* Keep session if 'zentaosid'(session id) in $_GET. */
-        if(isset($_GET[$this->config->sessionVar]))
-        {
-            helper::restartSession($_GET[$this->config->sessionVar]);
-        }
-        elseif(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
+        if(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
         {
             helper::restartSession($_SERVER['HTTP_TOKEN']);
             $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
+        }
+        elseif(isset($_GET[$this->config->sessionVar]))
+        {
+            helper::restartSession($_GET[$this->config->sessionVar]);
         }
 
         define('SESSION_STARTED', true);
@@ -1195,10 +1208,10 @@ class baseRouter
             $tab     = '';
 
             if(isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = $_SERVER['HTTP_X_ZIN_APP'];
-            elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
             elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $tab = $_COOKIE['tab'];
+            elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
 
-            if(!isset($this->lang->mainNav->{$tab})) $tab = '';
+            if(!isset($this->lang->mainNav->{$tab}) && !isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = '';
             $this->tab = empty($tab) ? 'my' : $tab;
             return;
         }
@@ -1309,8 +1322,9 @@ class baseRouter
     {
         $this->clientDevice = 'desktop';
 
-        if($this->cookie->device == 'mobile')  $this->clientDevice = 'mobile';
-        if($this->cookie->device == 'desktop') $this->clientDevice = 'desktop';
+        $cookieDevice = zget($_COOKIE, 'device', 'desktop');
+        if($cookieDevice == 'mobile')  $this->clientDevice = 'mobile';
+        if($cookieDevice == 'desktop') $this->clientDevice = 'desktop';
 
         if(empty($this->cookie->device) || !str_contains('mobile,desktop', (string) $this->cookie->device))
         {
@@ -2493,8 +2507,7 @@ class baseRouter
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName)) $appName = $this->appName;
 
-        global $loadedTargets;
-        if(isset($loadedTargets[$class][$appName][$moduleName])) return $loadedTargets[$class][$appName][$moduleName];
+        if(isset(self::$loadedTargets[$class][$appName][$moduleName])) return self::$loadedTargets[$class][$appName][$moduleName];
 
         $targetFile = $this->setTargetFile($moduleName, $appName, $class);
 
@@ -2518,14 +2531,14 @@ class baseRouter
         /**
          * 因为zen继承自control，tao继承自model，构造函数里会调用loadTarget方法，赋默认值值防止递归调用。
          */
-        if($class == 'zen' || $class == 'tao') $loadedTargets[$class][$appName][$moduleName] = false;
+        if($class == 'zen' || $class == 'tao') self::$loadedTargets[$class][$appName][$moduleName] = false;
 
         /**
          * 初始化target 对象并返回。
          * Init the target object and return it.
          */
         $target = new $targetClass($appName);
-        $loadedTargets[$class][$appName][$moduleName] = $target;
+        self::$loadedTargets[$class][$appName][$moduleName] = $target;
         return $target;
     }
 
@@ -2609,6 +2622,7 @@ class baseRouter
         /* Remove these three params. */
         unset($passedParams['onlybody']);
         unset($passedParams['tid']);
+        unset($passedParams['zin']);
         unset($passedParams['HTTP_X_REQUESTED_WITH']);
 
         /* Check params from URL. */
@@ -2637,7 +2651,7 @@ class baseRouter
             {
                 if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, true);
 
-                $defaultParams[$key] = $defaultItem['default'];
+                $defaultParams[$key] = helper::convertType(strip_tags((string) $defaultItem['default']), $defaultItem['type']);
             }
             $i ++;
         }
@@ -2710,9 +2724,7 @@ class baseRouter
         $className = strtolower($className);
 
         /* 搜索$coreLibRoot(Search in $coreLibRoot) */
-        $classFile = $this->coreLibRoot . $className;
-        if(is_dir($classFile)) $classFile .= DS . $className;
-        $classFile .= '.class.php';
+        $classFile = $this->coreLibRoot . $className . DS . $className . '.class.php';
         if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, true);
 
         /* 如果是静态调用，则返回(If static, return) */
@@ -2776,6 +2788,10 @@ class baseRouter
      */
     public function loadModuleConfig(string $moduleName, string $appName = '')
     {
+        if(isset(self::$loadedConfigs[$moduleName])) return false;
+
+        self::$loadedConfigs[$moduleName] = $moduleName;
+
         global $config;
 
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
@@ -2788,9 +2804,9 @@ class baseRouter
         /* 加载每一个配置文件。Load every config file. */
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, self::$loadedConfigs)) continue;
+            if(isset(self::$loadedConfigs[$configFile])) continue;
             if(is_string($configFile) && file_exists($configFile)) include $configFile;
-            self::$loadedConfigs[] = $configFile;
+            self::$loadedConfigs[$configFile] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
@@ -2917,30 +2933,35 @@ class baseRouter
      * 加载语言文件，返回全局$lang对象。
      * Load lang and return it as the global lang object.
      *
-     * @param   string $moduleName     the module name
+     * @param   string $moduleName  the module name
      * @param   string $appName     the app name
      * @access  public
-     * @return  bool|object the lang object or false.
+     * @return  object              the lang object
      */
-    public function loadLang(string $moduleName, string $appName = ''): bool|object
+    public function loadLang(string $moduleName, string $appName = ''): object
     {
-        /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
-        $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
-        if(empty($langFilesToLoad)) return false;
-
         /* 加载语言文件。Load lang files. */
         global $lang;
         if(!is_object($lang)) $lang = new language();
         if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
 
+        if(isset(self::$loadedLangs[$moduleName])) return $lang;
+
+        self::$loadedLangs[$moduleName] = $moduleName;
+
+        /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
+        $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
+        if(empty($langFilesToLoad)) return $lang;
+
         foreach($langFilesToLoad as $langFile)
         {
-            if(in_array($langFile, self::$loadedLangs)) continue;
+            if(isset(self::$loadedLangs[$langFile])) continue;
             include $langFile;
-            self::$loadedLangs[] = $langFile;
+            self::$loadedLangs[$langFile] = $langFile;
         }
 
         $this->lang = $lang;
+
         return $lang;
     }
 

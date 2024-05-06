@@ -19,12 +19,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('user')->gen(3);
-zdTable('mr')->gen(0);
-zdTable('pipeline')->gen(1);
-zdTable('oauth')->config('oauth')->gen(1);
+zenData('user')->gen(3);
+zenData('mr')->gen(0);
+zenData('pipeline')->gen(1);
+zenData('oauth')->loadYaml('oauth')->gen(1);
 su('admin');
 
 $mrTester = new mrTest();

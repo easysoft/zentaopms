@@ -16,7 +16,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode=requirement&type={key}&param={$param}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Requirement')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Requirement'), set::open($type == 'bysearch')))
 );
 
 $canBatchEdit     = common::hasPriv('story', 'batchEdit');

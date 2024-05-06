@@ -22,24 +22,24 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-zdTable('module')->config('module')->gen(100);
+zenData('module')->loadYaml('module')->gen(100);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-30');
 $story->product->range('1');
 $story->module->range('2,7,12');
 $story->gen(20);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range('1-30');
 $bug->product->range('1,2,3');
 $bug->module->range('4,9,14');
 $bug->gen(20);
 
-$case = zdTable('case');
+$case = zenData('case');
 $case->id->range('1-30');
 $case->product->range('1');
 $case->module->range('5,10,15');

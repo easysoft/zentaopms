@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,waterfall,kanban');
@@ -15,7 +15,7 @@ $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-10');
 $task->execution->range('3,4,5');
 $task->status->range('wait,doing');
@@ -24,7 +24,7 @@ $task->left->range('3');
 $task->consumed->range('3');
 $task->gen(10);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range('1-10');
 $bug->title->range('1-10')->prefix('Bug');
 $bug->project->range('1');
@@ -35,7 +35,7 @@ $bug->status->range('active');
 $bug->assignedTo->range('admin');
 $bug->gen(10);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-3');
 $product->name->range('正常产品1,多分支产品1,多平台产品1');
 $product->type->range('normal,branch,platform');
@@ -43,7 +43,7 @@ $product->status->range('closed{2},normal');
 $product->createdBy->range('admin,user1');
 $product->gen(3);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->project->range('5-10');
 $projectproduct->product->range('1-3');
 $projectproduct->plan->range('1-3');

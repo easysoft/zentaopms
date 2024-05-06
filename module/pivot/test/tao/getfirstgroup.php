@@ -11,9 +11,9 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-zdTable('module')->config('module_pivot')->gen(9);
+zenData('module')->loadYaml('module_pivot')->gen(9);
 
 $pivot = new pivotTest();
 $dimensionIDList = array(1,2,3);

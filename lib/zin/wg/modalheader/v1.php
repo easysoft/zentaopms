@@ -41,7 +41,7 @@ class modalHeader extends wg
 
         $header = h::div
         (
-            setClass('flex items-center overflow-hidden'),
+            setClass('flex items-center overflow-hidden w-full'),
             $title ? div
             (
                 $title,
@@ -62,7 +62,7 @@ class modalHeader extends wg
 
         return h::div
         (
-            set::className('modal-header panel-form rounded-md canvas mx-auto'),
+            set::className('modal-header panel-form rounded-md canvas mx-auto w-full'),
             set::style(array('margin-bottom' => '0px')),
             $header
         );

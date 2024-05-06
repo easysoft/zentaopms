@@ -12,15 +12,15 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 su('admin');
 
-zdTable('bug')->config('bug_getbugassign')->gen(10);
-zdTable('product')->gen(10);
-zdTable('project')->gen(1);
-zdTable('project')->config('project')->gen(10, false, false);
-zdTable('projectproduct')->gen(5);
-zdTable('user')->gen(2);
+zenData('bug')->loadYaml('bug_getbugassign')->gen(10);
+zenData('product')->gen(10);
+zenData('project')->gen(1);
+zenData('project')->loadYaml('project')->gen(10, false, false);
+zenData('projectproduct')->gen(5);
+zenData('user')->gen(2);
 
 
 $pivot = new pivotTest();

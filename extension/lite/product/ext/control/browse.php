@@ -96,7 +96,7 @@ class product extends control
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
         /* Assign. */
-        $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;
+        $this->view->title           = $productName . $this->lang->hyphen . $this->lang->product->browse;
         $this->view->moduleID        = $moduleID;
         $this->view->pager           = $pager;
         $this->view->orderBy         = $orderBy;

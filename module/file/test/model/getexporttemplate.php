@@ -18,9 +18,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
+include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 
-zdTable('usertpl')->gen(10);
+zenData('usertpl')->gen(10);
 $moduleName = array('task', 'bug', 'story');
 
 $file = new fileTest();

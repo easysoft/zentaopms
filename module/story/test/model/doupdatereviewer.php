@@ -13,16 +13,16 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-10');
 $story->version->range('1');
 $story->twins->range('2,1');
 $story->gen(2);
 
-$storyReview = zdTable('storyreview');
+$storyReview = zenData('storyreview');
 $storyReview->story->range('1{2},2{2}');
 $storyReview->version->range('1');
 $storyReview->reviewer->range('admin,user1,admin,user1');

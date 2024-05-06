@@ -523,6 +523,8 @@ $lang->action->label->unlinkrepobranch        = 'Unlinked branch from';
 $lang->action->label->communicate             = 'Communicate';
 $lang->action->label->changedprogram          = 'Changed program';
 $lang->action->label->aiassistant             = 'AI Assistant';
+$lang->action->label->published               = 'published';
+$lang->action->label->unpublished             = 'unpublished';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

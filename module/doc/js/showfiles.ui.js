@@ -1,9 +1,9 @@
 window.searchTitle = function()
 {
-    const searchTitle = $('.actions-menu .searchBox input[name=title]').val();
+    const searchTitle = $('#featureBar .searchBox input[name=title]').val();
     loadPage(searchLink.replace('%s', searchTitle));
 }
-$(document).on('keypress', '.actions-menu .searchBox #title', function(e)
+$(document).on('keypress', '#featureBar .searchBox #title', function(e)
 {
     if(e.keyCode == 13) loadPage(searchLink.replace('%s', $(this).val()));
 });

@@ -4,7 +4,7 @@ declare(strict_types=1);
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-zdTable('todo')->config('getlistby')->gen(5);
+zenData('todo')->loadYaml('getlistby')->gen(5);
 
 /**
 

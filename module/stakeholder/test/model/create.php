@@ -53,16 +53,16 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('company')->gen(1);
-zdTable('product')->gen(0);
-zdTable('projectproduct')->gen(0);
-zdTable('stakeholder')->gen(0);
-zdTable('group')->gen(0);
-zdTable('acl')->gen(0);
-zdTable('user')->gen(5);
-zdTable('project')->config('project')->gen(15);
+zenData('company')->gen(1);
+zenData('product')->gen(0);
+zenData('projectproduct')->gen(0);
+zenData('stakeholder')->gen(0);
+zenData('group')->gen(0);
+zenData('acl')->gen(0);
+zenData('user')->gen(5);
+zenData('project')->loadYaml('project')->gen(15);
 
 $from        = array('team', 'company', 'outside');
 $account     = array('', 'user1');

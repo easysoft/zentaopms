@@ -12,12 +12,12 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-$fileTable = zdTable('file');
+$fileTable = zenData('file');
 $fileTable->size->range('3244,8416,23854,6567,39421');
 $fileTable->gen(10);
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 
 $fileIds[0] = array();
 $fileIds[1] = range(1, 10);

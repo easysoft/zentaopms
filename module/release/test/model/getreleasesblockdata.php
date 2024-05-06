@@ -11,9 +11,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('product')->config('product')->gen(10);
-zdTable('project')->config('project')->gen(10);
-zdTable('release')->config('release')->gen(100);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('project')->loadYaml('project')->gen(10);
+zenData('release')->loadYaml('release')->gen(100);
 
 $projectIdList = array(0, 1, 2, 3, 4, 5, 100);
 $orderByList   = array('id_asc', 'product_asc');

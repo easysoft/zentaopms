@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/transfer.class.php';
-zdTable('file')->gen(10);
+include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+zenData('file')->gen(10);
 su('admin');
 
 /**

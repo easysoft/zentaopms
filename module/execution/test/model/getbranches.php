@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-2');
 $product->name->range('正常产品1,多分支产品1');
 $product->type->range('normal,branch');
@@ -13,14 +13,14 @@ $product->status->range('normal');
 $product->createdBy->range('admin,user1');
 $product->gen(2);
 
-$branch = zdTable('branch');
+$branch = zenData('branch');
 $branch->id->range('1-2');
 $branch->product->range('2');
 $branch->name->range('分支1,分支2');
 $branch->status->range('active');
 $branch->gen(2);
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->project->range('3{3}, 4{3}, 5{3}');
 $projectProduct->product->range('1-2{2}');
 $projectProduct->branch->range('0-2');

@@ -40,10 +40,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/space.class.php';
+include dirname(__FILE__, 2) . '/lib/space.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('pipeline')->config('pipeline')->gen(5);
+zenData('user')->gen(5);
+zenData('pipeline')->loadYaml('pipeline')->gen(5);
 
 $domains = array('', 'gitlabdev', 'sonardev', 'giteadev', 'gogsdev', 'jenkinsdev', 'testdev');
 

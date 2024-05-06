@@ -110,7 +110,7 @@ window.deleteProductPlan = function(planID)
     });
 }
 
-$(document).off('click', '#table-productplan-browse .batch-btn').on('click', '#table-productplan-browse .batch-btn', function()
+$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();
@@ -142,6 +142,7 @@ $(document).on('click', '[data-target="#createExecutionModal"]', function()
     {
         const $projectPicker = $('#createExecutionModal [name=project]').zui('picker');
         $projectPicker.render({items: projects, disabled: projects.length == 0});
+        $('.projectTips').toggleClass('hidden', projects.length != 0);
         if(projects.length > 0)
         {
             $('#createExecutionModal .createExecutionBtn').attr('id', 'createExecutionButton');
@@ -234,7 +235,7 @@ window.getCol = function(col)
 
 window.getItem = function(info)
 {
-    if(info.item.delay)
+    if(info.item.delay && ['wait', 'doing'].includes(info.item.status))
     {
         info.item.suffix      = productplanLang.expired;
         info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');

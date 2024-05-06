@@ -2,9 +2,16 @@ window.addUnit = function(e)
 {
     if($(e.target).prop('checked'))
     {
-        $('#unitBox').addClass('hidden');
-        $('#addUnitBox').removeClass('hidden');
-        $("[name^='customUnit']").prop('checked', true);
+        var $picker = $('#unitBox').find('.picker').zui('picker').$;
+        if($picker.state.open) $picker.toggle();
+
+        setTimeout(function()
+        {
+          $('#unitBox').addClass('hidden');
+          $('#addUnitBox').removeClass('hidden');
+          $("[name^='customUnit']").prop('checked', true);
+
+        }, 150);
     }
     else
     {
@@ -40,9 +47,10 @@ window.renderDTableCell = function(result, {row, col})
  * @access public
  * @return void
  */
-window.confirmDelist = function(metricID, metricName)
+window.confirmDelist = function(metricID, metricName, isUsed = false)
 {
-    zui.Modal.confirm(confirmDelist.replace('%s', metricName)).then((res) =>
+    var text = isUsed ? confirmDelistInUsed : confirmDelist;
+    zui.Modal.confirm(text.replace('%s', metricName)).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('metric', 'delist', 'metricID=' + metricID)});
     });

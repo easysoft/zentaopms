@@ -88,7 +88,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
@@ -142,7 +142,7 @@ class testcase extends control
 
         /* 展示变量. */
         /* Show the variables. */
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->users       = $this->user->getPairs('noletter');
@@ -266,7 +266,7 @@ class testcase extends control
         $productID = $this->product->checkAccess($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch ? : '';
 
-        $moduleID = $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
+        $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
 
         /* 设置自定义字段。 */
         /* Set custom fields. */
@@ -277,11 +277,12 @@ class testcase extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
-        $this->view->productID  = $productID;
-        $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->gobackLink = isset($output['from']) && $output['from'] == 'global' ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
-        $this->view->needReview = $this->testcase->forceNotReview() == true ? 0 : 1;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->create;
+        $this->view->productID    = $productID;
+        $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->gobackLink   = isset($output['from']) && $output['from'] == 'global' ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
+        $this->view->needReview   = $this->testcase->forceNotReview() == true ? 0 : 1;
+        $this->view->onlyAutoCase = $this->cookie->onlyAutoCase;
         $this->display();
     }
 
@@ -331,7 +332,7 @@ class testcase extends control
 
         /* 展示变量. */
         /* Show the variables. */
-        $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
+        $this->view->title            = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->batchCreate;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? '0' : $branch);
@@ -381,7 +382,7 @@ class testcase extends control
 
         /* 展示变量. */
         /* Show the variables. */
-        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
+        $this->view->title   = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->createBug;
         $this->view->caseID  = $caseID;
         $this->view->version = $version;
         $this->view->runID   = $runID;
@@ -767,7 +768,7 @@ class testcase extends control
         $cases2Link = array_chunk($cases2Link, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
+        $this->view->title      = $case->title . $this->lang->hyphen . $this->lang->testcase->linkCases;
         $this->view->case       = $case;
         $this->view->cases2Link = empty($cases2Link) ? $cases2Link : $cases2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -1169,7 +1170,7 @@ class testcase extends control
         /* Show the variables. */
         $this->testcaseZen->assignForImportFromLib($productID, $branch, $libID, $orderBy, $queryID, $libraries, $projectID);
 
-        $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
+        $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->importFromLib;
         $this->view->libraries  = $libraries;
         $this->view->cases      = $this->testcase->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, $queryID);
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
@@ -1225,7 +1226,7 @@ class testcase extends control
 
         $this->testcaseZen->assignShowImportVars($productID, $branch, $data['caseData'], isset($stepVars) ? $stepVars : 0, $pagerID, $maxImport);
 
-        $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
+        $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->showImport;
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $this->view->cases      = $this->testcase->getByProduct($productID);
         $this->view->stepData   = array_values($data['stepData']);
@@ -1369,6 +1370,7 @@ class testcase extends control
     {
         if($_POST)
         {
+            $this->lang->testcase->title = $this->lang->testcase->sceneTitle;
             $scene = form::data($this->config->testcase->form->createScene)->get();
 
             $this->testcase->createScene($scene);
@@ -1478,20 +1480,20 @@ class testcase extends control
             if($oldCase->scene == $sceneID) return false;
 
             $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->eq($caseID)->exec();
-            if(dao::isError()) return false;
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newCase = new stdclass();
             $newCase->scene = $sceneID;
 
             $changes  = common::createChanges($oldCase, $newCase);
-            $actionID = $this->loadModel('action')->create('case', $caseID, 'edited');
+            $actionID = $this->loadModel('action')->create('case', (int)$caseID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return !dao::isError();
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $oldScene      = $this->testcase->getSceneByID($sourceID);
-        $newScene      = $this->testcase->getSceneByID($sceneID);
+        $oldScene      = $this->testcase->getSceneByID((int)$sourceID);
+        $newScene      = $this->testcase->getSceneByID((int)$sceneID);
         $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, ",{$oldScene->id},") + strlen(",{$oldScene->id},"));
 
         $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldScene->id)->exec();
@@ -1504,7 +1506,7 @@ class testcase extends control
             ->where('path')->like("{$oldScene->path}%")
             ->exec();
 
-        return !dao::isError();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -1591,47 +1593,20 @@ class testcase extends control
      */
     public function updateOrder()
     {
-        $type     = $this->post->type;
-        $sourceID = $this->post->sourceID;
-        $targetID = $this->post->targetID;
-        $dataList = $this->post->dataList;
-        if(!$type || !$sourceID || !$targetID || !$dataList) return false;
-        if($sourceID == $targetID) return false;
+        $sourceID    = $this->post->sourceID;
+        $sourceOrder = $this->post->sourceOrder;
+        $targetID    = $this->post->targetID;
+        $targetOrder = $this->post->targetOrder;
+        $type        = $this->post->type;
+        $module      = $this->post->module;
 
-        $idList      = array_map(function($data){return $data['id'];},    $dataList);
-        $orderList   = array_map(function($data){return $data['order'];}, $dataList);
-        $sourceIndex = array_search($sourceID, $idList);
-        $targetIndex = array_search($targetID, $idList);
+        $table = $module == 'case' ? TABLE_CASE : TABLE_SCENE;
+        if($type == 'after')  $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->lt($targetID)->exec();
+        if($type == 'before') $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->le($targetID)->exec();
 
-        if($sourceIndex === false || $targetIndex === false) return false;
+        $this->dao->update($table)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
 
-        if($sourceIndex > $targetIndex)
-        {
-            $idList    = array_slice($idList,    $targetIndex, $sourceIndex - $targetIndex + 1);
-            $orderList = array_slice($orderList, $targetIndex, $sourceIndex - $targetIndex + 1);
-            array_unshift($idList, array_pop($idList));
-        }
-        else
-        {
-            $idList    = array_slice($idList,    $sourceIndex, $targetIndex - $sourceIndex + 1);
-            $orderList = array_slice($orderList, $sourceIndex, $targetIndex - $sourceIndex + 1);
-            if(count($idList) == 2)
-            {
-                $idList = array_reverse($idList);
-            }
-            else
-            {
-                array_splice($idList, -1, 0, array_shift($idList));
-            }
-        }
-
-        $table = $type == 'case' ? TABLE_CASE : TABLE_SCENE;
-
-        foreach($idList as $key => $id)
-        {
-            if(!isset($orderList[$key])) continue;
-            $this->dao->update($table)->set('sort')->eq($orderList[$key])->where('id')->eq($id)->exec();
-        }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -1734,7 +1709,7 @@ class testcase extends control
     {
         if($_FILES)
         {
-            if($_FILES['file']['size'] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
+            if($_FILES['file']['size'][0] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
 
             /* 保存xmind配置。*/
             /* Sav xmind config. */
@@ -1744,7 +1719,7 @@ class testcase extends control
 
             /* 检查扩展名。*/
             /* Check extension name of file. */
-            $extName = trim(strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION)));
+            $extName = trim(strtolower(pathinfo($_FILES['file']['name'][0], PATHINFO_EXTENSION)));
             if($extName != 'xmind') return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileFormat));
 
             $result = $this->testcaseZen->parseUploadFile($productID, $branch);

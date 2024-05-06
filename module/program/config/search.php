@@ -2,9 +2,9 @@
 global $lang;
 $config->program->search['module']                   = 'program';
 $config->program->search['fields']['name']           = $lang->program->name;
-$config->program->search['fields']['status']         = $lang->program->status;
 $config->program->search['fields']['PM']             = $lang->program->PM;
 $config->program->search['fields']['openedDate']     = $lang->program->openedDate;
+$config->program->search['fields']['status']         = $lang->program->status;
 $config->program->search['fields']['openedBy']       = $lang->program->openedBy;
 $config->program->search['fields']['begin']          = $lang->program->begin;
 $config->program->search['fields']['end']            = $lang->program->end;

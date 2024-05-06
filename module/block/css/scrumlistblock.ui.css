@@ -1,1 +1,1 @@
-.scrumlist-block .scrumName a {overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%;}
+.scrumlist-block .scrumName a {overflow: hidden; text-overflow: clip; white-space: nowrap;}

@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目集1,项目1,迭代1,阶段1,看板1');
 $execution->type->range('program,project,sprint,stage,kanban');
@@ -16,7 +16,7 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-$burn = zdTable('burn');
+$burn = zenData('burn');
 $burn->execution->range('3{5},4{5},5{5}');
 $burn->date->range('20220111 000000:1D')->type('timestamp')->format('YY/MM/DD');
 $burn->estimate->range('94.3,56.3,55.3,37.8,33.8');
