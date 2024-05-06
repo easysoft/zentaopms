@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package     mr
  * @link        https://www.zentao.net
  * @property    mrModel $mr
+ * @property    mrZen   $mrZen
  */
 class mr extends control
 {

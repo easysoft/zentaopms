@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @author      dingguodong <dingguodong@easycorp.ltd>
  * @package     mr
  * @link        https://www.zentao.net
+ * @property    gitlabModel $gitlab
  */
 class mrModel extends model
 {
