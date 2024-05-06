@@ -994,10 +994,15 @@ class story extends control
         $stories       = $this->story->getByList($_POST['storyIdList']);
         $activeStories = array();
         $storyPairs    = array();
+        $hasParent     = false;
         foreach($stories as $story)
         {
             if(str_contains(',draft,reviewing,changing,closed,', ",{$story->status},")) continue;
-            if($story->isParent == '1') continue;
+            if($story->isParent == '1')
+            {
+                $hasParent = true;
+                continue;
+            }
 
             $activeStories[$story->id] = $story;
             $storyPairs[$story->id]    = $story->title;
@@ -1012,6 +1017,7 @@ class story extends control
         $this->view->taskType       = empty($_POST['type'])           ? ''      : $_POST['type'];
         $this->view->stories        = $activeStories;
         $this->view->storyPairs     = $storyPairs;
+        $this->view->hasParent      = $hasParent;
         $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 'allModule');
         $this->view->members        = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->storyTasks     = $this->loadModel('task')->getStoryTaskCounts(array_keys($stories), $executionID);
