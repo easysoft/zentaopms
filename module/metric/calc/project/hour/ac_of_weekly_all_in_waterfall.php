@@ -22,7 +22,7 @@ class ac_of_weekly_all_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallEfforts';
 
-    public $fieldList = array('t1.project', 't1.`date`', 't1.consumed');
+    public $fieldList = array('t1.project', 't1.date', 't1.consumed');
 
     public $result = array();
 
