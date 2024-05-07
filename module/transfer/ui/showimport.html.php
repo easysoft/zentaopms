@@ -78,7 +78,7 @@ else
             setClass('toolbar form-actions form-group no-label'),
             $this->session->insert ? btn(set::btnType('submit'), setClass('primary btn-wide'), $submitText) : btn(set('data-toggle', 'modal'), set('data-target', '#importNoticeModal'), setClass('primary btn-wide'), $submitText),
             btn(set::url($backLink), setClass('btn-back btn-wide'), $lang->goback),
-            $this->session->insert && $dataInsert != '' ? formHidden('insert', $dataInsert) : null,
+            $this->session->insert ? formHidden('insert', $dataInsert != '' ? $dataInsert : 1) : null,
             formHidden('isEndPage', $isEndPage ? 1 : 0),
             formHidden('pagerID', $pagerID),
             html(sprintf($lang->file->importPager, $allCount, $pagerID, $allPager))
