@@ -1767,7 +1767,7 @@ class story extends control
             }
 
             $this->post->set('rows', $this->story->getExportStories($orderBy, $storyType, $postData));
-            $this->fetch('transfer', 'export', 'model=story');
+            $this->fetch('transfer', 'export', "model=$storyType");
         }
 
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;

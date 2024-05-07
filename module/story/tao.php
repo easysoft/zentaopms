@@ -347,7 +347,7 @@ class storyTao extends storyModel
 
             /* Merge plan title. */
             $story->planTitle = '';
-            $storyPlans       = explode(',', trim($story->plan, ','));
+            $storyPlans       = explode(',', trim((string)$story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
 
             if(isset($childItems[$story->id]))
@@ -357,7 +357,7 @@ class storyTao extends storyModel
             }
 
             $story->parent = array();
-            foreach(explode(',', trim($story->path, ',')) as $parentID)
+            foreach(explode(',', trim((string)$story->path, ',')) as $parentID)
             {
                 if(!$parentID) continue;
                 if($parentID == $story->id) continue;

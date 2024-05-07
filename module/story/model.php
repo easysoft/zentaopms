@@ -4619,15 +4619,17 @@ class storyModel extends model
         /* Get stories. */
         $stories        = array();
         $selectedIDList = $this->cookie->checkedItem ? $this->cookie->checkedItem : '0';
-        if($this->session->storyOnlyCondition)
+        $queryCondition = $storyType . 'QueryCondition';
+        $onlyCondition  = $storyType . 'OnlyCondition';
+        if($this->session->$onlyCondition)
         {
-            $queryCondition = $postData->exportType == 'selected' ? ' `id` ' . helper::dbIN($selectedIDList) : str_replace('`story`', '`id`', $this->session->storyQueryCondition);
-            $stories        = $this->dao->select('id,title,linkStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
+            $queryCondition = $postData->exportType == 'selected' ? ' `id` ' . helper::dbIN($selectedIDList) : str_replace('`story`', '`id`', $this->session->$queryCondition);
+            $stories        = $this->dao->select('id,title,type,grade,linkStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
         }
         else
         {
             $orderBy  = " ORDER BY " . helper::wrapSqlAfterOrderBy($orderBy);
-            $querySQL = $this->session->storyQueryCondition . $orderBy;
+            $querySQL = $this->session->$queryCondition . $orderBy;
             if($postData->exportType == 'selected') $querySQL = "SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$selectedIDList})" . $orderBy;
 
             $stmt = $this->app->dbQuery($querySQL);
@@ -4678,6 +4680,10 @@ class storyModel extends model
         $fileIdList   = array_unique($fileIdList);
         $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $filesInfo    = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
+
+        $gradeGroup = $this->dao->select('type, grade, name')->from(TABLE_STORYGRADE)
+            ->where('status')->eq('enable')
+            ->fetchGroup('type', 'grade');
 
         foreach($stories as $story)
         {
@@ -4740,6 +4746,10 @@ class storyModel extends model
 
             /* Set child story title. */
             if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
+
+            $gradePairs   = zget($gradeGroup, $story->type, array());
+            $grade        = zget($gradePairs, $story->grade, '');
+            $story->grade = $grade->name;
         }
 
         return $stories;
