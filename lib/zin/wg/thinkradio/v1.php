@@ -25,6 +25,11 @@ class thinkRadio extends thinkStep
         'type' => 'question'
     );
 
+    public static function getPageJS(): string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function buildBody(): array
     {
         global $lang;
@@ -33,18 +38,6 @@ class thinkRadio extends thinkStep
         list($requiredName, $optionName, $otherName, $required, $enableOther, $data) = $this->prop(array('requiredName', 'optionName', 'otherName', 'required', 'enableOther', 'data'));
         $requiredItems = $lang->thinkwizard->step->requiredList;
 
-        $items[] = formGroup
-        (
-            setStyle(array('display' => 'flex')),
-            set::label(data('lang.thinkwizard.step.label.required')),
-            radioList
-            (
-                set::name($requiredName),
-                set::inline(true),
-                set::value($required),
-                set::items($requiredItems),
-            )
-        );
         $items[] = formGroup
         (
             set::label(data('lang.thinkwizard.step.label.option')),
@@ -56,6 +49,20 @@ class thinkRadio extends thinkStep
                 set::enableOther($enableOther),
                 set::otherName('enableOther')
             ),
+        );
+
+        $items[] = formGroup
+        (
+            setStyle(array('display' => 'flex')),
+            set::label(data('lang.thinkwizard.step.label.required')),
+            radioList
+            (
+                set::name($requiredName),
+                set::inline(true),
+                set::value($required),
+                set::items($requiredItems),
+                bind::change('changeIsRequired(event)')
+            )
         );
         $items[] = $this->children();
         return $items;
