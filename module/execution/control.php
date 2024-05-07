@@ -384,7 +384,7 @@ class execution extends control
 
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
-        $queryID    = ($browseType == 'bysearch') ? $param : 0;
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
