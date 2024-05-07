@@ -1,0 +1,11 @@
+.think-check-list .checkbox-primary, .think-check-list .radio-primary {width: 100%; min-height: 3rem; border: 1px solid var(--color-gray-300); color: var(--color-gray-800); padding: 0.75rem 1.625rem 0.75rem 1.5rem; border-radius: var(--radius); font-size: 1rem;}
+.think-check-list .checkbox-primary>label,.think-check-list .radio-primary>label {width: 100%; padding-left: 0;}
+.think-check-list .checkbox-primary>label:after, .think-check-list .checkbox-primary>label:before,
+.think-check-list .radio-primary>label:after, .think-check-list .radio-primary>label:before {right: 0; left: unset;}
+.think-check-list .checkbox-primary.checked, .think-check-list .checkbox-primary>input.checked .think-check-list .checkbox-primary>input[type=checkbox]:checked,
+.think-check-list .radio-primary.checked, .think-check-list .radio-primary>input.checked, .think-check-list .radio-primary>input[type=radio]:checked {color: var(--color-primary-500); border: 1px solid var(--color-primary-500);}
+.think-check-list>.item-input>input[type=text] {background-color: #fff;}
+.think-check-list .checkbox-primary:hover, .think-check-list .radio-primary:hover {box-shadow: 0px 0.25rem 0.5rem 0px rgba(var(--color-primary-500-rgb), .3); border: 1px solid var(--color-primary-500);}
+.think-check-list .radio-primary>label {font-family: ZentaoIcon !important;}
+.think-check-list .radio-primary>label:before, .think-check-list .radio-primary.checked>label:before, .think-check-list .radio-primary>input[type=radio]:checked+label:before {display: none;}
+.think-check-list .radio-primary>label:after {content: "\e5ca"; color: var(--color-primary-500); background-color: unset; top: 2px; font-weight: 600;}
