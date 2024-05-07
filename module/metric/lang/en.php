@@ -400,12 +400,18 @@ $lang->metric->tips->click2InsertData        = "Click <span class='ke-icon-holde
 $lang->metric->tips->noticeUnchangeable      = "[Scope], [Object], [Purpose], [Date Type], and [Code] will affect the acquisition of measurement values, cannot be changed after creation.";
 $lang->metric->tips->noticeCode              = "The code must be a combination of English letters, numbers or underscores.";
 $lang->metric->tips->noticeRecalculate       = "Updating data..., please do not manipulate metric data.";
-$lang->metric->tips->noticeRecalculateConfig = "The system will recalculate the historical data collected by non-scheduled tasks in published metrics by default.";
 $lang->metric->tips->noticeRepublish         = "If there are multiple releases, recalculate from before the last release time.";
-$lang->metric->tips->noticeRewriteHistoryLib = "(When checked, the system will recalculate published metric with date type  based on historical data and overwrite all existing metric records)";
 $lang->metric->tips->banRecalculate          = "The metric has not been published or has no date type";
 $lang->metric->tips->noticeDeduplication     = "Deduplication...";
 $lang->metric->tips->noticeDoneDeduplication = "Deduplication done";
+
+$lang->metric->tips->noticeRecalculateConfig = array();
+$lang->metric->tips->noticeRecalculateConfig['all']    = "The system will recalculate the historical data collected by non-scheduled tasks in published metrics by default.";
+$lang->metric->tips->noticeRecalculateConfig['single'] = "The system will recalculate the historical data collected by non-scheduled tasks in this metric by default.";
+
+$lang->metric->tips->noticeRewriteHistoryLib = array();
+$lang->metric->tips->noticeRewriteHistoryLib['all']    = "(When checked, the system will recalculate published metric with date type  based on historical data and overwrite all existing metric records)";
+$lang->metric->tips->noticeRewriteHistoryLib['single'] = "(When checked, the system will recalculate this metric based on historical data and overwrite all existing metric values)";
 
 $lang->metric->recalculateLog = "%s计算完成";
 
