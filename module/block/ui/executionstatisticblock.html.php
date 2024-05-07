@@ -62,14 +62,14 @@ $burn = div
                 array
                 (
                     'type' => 'line',
-                    'name' => $lang->block->productstatistic->done,
+                    'name' => $lang->execution->charts->burn->graph->actuality,
                     'data' => $chartData['burnLine'],
                     'emphasis' => array('label' => array('show' => true))
                 ),
                 array
                 (
                     'type' => 'line',
-                    'name' => $lang->block->productstatistic->opened,
+                    'name' => $lang->execution->charts->burn->graph->reference,
                     'data' => $chartData['baseLine'],
                     'emphasis' => array('label' => array('show' => true))
                 )
