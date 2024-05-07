@@ -453,12 +453,18 @@ class chartModel extends model
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
+
+        $position = 'top';
+        if($settings['type'] == 'stackedBar' or $settings['type'] == 'stackedBarY')  $position = 'inside';
+        if($settings['type'] == 'cluBarY') $position = 'right';
+        $label = array('show' => true, 'position' => $position, 'formatter' => '{c}');
+
         $series = array();
         foreach($yDatas as $index => $yData)
         {
             $fieldName  = $this->chartTao->switchFieldName($fields, $langs, $metrics, $index);
             $seriesName = $fieldName . '(' . $this->lang->chart->aggList[$aggs[$index]] . ')';
-            $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack);
+            $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack, 'label' => $label);
         }
 
         $grid  = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
