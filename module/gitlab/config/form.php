@@ -25,8 +25,8 @@ $config->gitlab->form->user->create['email']            = array('type' => 'strin
 $config->gitlab->form->user->create['password']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->gitlab->form->user->create['password_repeat']  = array('type' => 'string', 'required' => false, 'default' => '');
 $config->gitlab->form->user->create['projects_limit']   = array('type' => 'int', 'required' => false, 'default' => '100000');
-$config->gitlab->form->user->create['can_create_group'] = array('type' => 'string', 'required' => false, 'default' => '');
-$config->gitlab->form->user->create['external']         = array('type' => 'string', 'required' => false, 'default' => '');
+$config->gitlab->form->user->create['can_create_group'] = array('type' => 'bool', 'required' => false, 'default' => false);
+$config->gitlab->form->user->create['external']         = array('type' => 'bool', 'required' => false, 'default' => false);
 
 $config->gitlab->form->user->edit = array();
 $config->gitlab->form->user->edit['id']               = array('type' => 'int', 'required' => true);
@@ -37,8 +37,8 @@ $config->gitlab->form->user->edit['email']            = array('type' => 'string'
 $config->gitlab->form->user->edit['password']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->gitlab->form->user->edit['password_repeat']  = array('type' => 'string', 'required' => false, 'default' => '');
 $config->gitlab->form->user->edit['projects_limit']   = array('type' => 'int', 'required' => false, 'default' => '100000');
-$config->gitlab->form->user->edit['can_create_group'] = array('type' => 'string', 'required' => false, 'default' => '0');
-$config->gitlab->form->user->edit['external']         = array('type' => 'string', 'required' => false, 'default' => '0');
+$config->gitlab->form->user->edit['can_create_group'] = array('type' => 'bool', 'required' => false, 'default' => false);
+$config->gitlab->form->user->edit['external']         = array('type' => 'bool', 'required' => false, 'default' => false);
 
 $config->gitlab->form->group = new stdclass();
 
