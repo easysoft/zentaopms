@@ -326,6 +326,7 @@ $config->openMethods[] = 'system.editdomain';
 $config->openMethods[] = 'doc.uploaddocs';
 $config->openMethods[] = 'cron.schedule';
 $config->openMethods[] = 'cron.consume';
+$config->openMethods[] = 'metric.recalculatesetting';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
