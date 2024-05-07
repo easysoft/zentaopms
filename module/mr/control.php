@@ -144,7 +144,6 @@ class mr extends control
         $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $projectID, $pager);
         $repoList = $this->loadModel('repo')->getList($projectID);
 
-        $projects  = array();
         $repoPairs = array();
         foreach($repoList as $repo)
         {
@@ -152,8 +151,6 @@ class mr extends control
 
             $repoPairs[$repo->id] = $repo->name;
             if($repoID && $repoID != $repo->id) continue;
-
-            $projects += $this->mrZen->getAllProjects($repo, $MRList);
         }
 
         $openIDList = array();
@@ -168,7 +165,6 @@ class mr extends control
 
         $this->view->title       = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList      = $MRList;
-        $this->view->projects    = $projects;
         $this->view->pager       = $pager;
         $this->view->mode        = $mode;
         $this->view->repoID      = $repoID;
