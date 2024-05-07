@@ -4638,14 +4638,19 @@ class storyModel extends model
 
         if(empty($stories)) return $stories;
 
-        $storyIdList = array_keys($stories);
-        $children    = array();
+        $storyIdList  = array_keys($stories);
+        $children     = array();
+        $parentIdList = array();
         foreach($stories as $story)
         {
-            if($story->parent > 0 and isset($stories[$story->parent]))
+            if($story->parent > 0)
             {
-                $children[$story->parent][$story->id] = $story;
-                unset($stories[$story->id]);
+                $parentIdList[] = $story->parent;
+                if(isset($stories[$story->parent]))
+                {
+                    $children[$story->parent][$story->id] = $story;
+                    unset($stories[$story->id]);
+                }
             }
         }
 
@@ -4667,6 +4672,7 @@ class storyModel extends model
         $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+        $parents    = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($parentIdList)->fetchPairs('id', 'title');
 
         /* Get related objects title or names. */
         $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
@@ -4747,9 +4753,11 @@ class storyModel extends model
             /* Set child story title. */
             if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
 
-            $gradePairs   = zget($gradeGroup, $story->type, array());
-            $grade        = zget($gradePairs, $story->grade, '');
-            $story->grade = $grade->name;
+            $gradePairs    = zget($gradeGroup, $story->type, array());
+            $grade         = zget($gradePairs, $story->grade, '');
+            $story->grade  = $grade->name;
+
+            $story->parentName = zget($parents, $story->parent, '');
         }
 
         return $stories;
