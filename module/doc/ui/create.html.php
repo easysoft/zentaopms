@@ -21,7 +21,7 @@ if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false)
             html
             (
                 sprintf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType),
-                common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice', '', '', true) : '###')
+                common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice') : '###')
             )
         );
     }
