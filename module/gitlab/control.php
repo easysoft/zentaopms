@@ -550,7 +550,7 @@ class gitlab extends control
         if($_POST)
         {
             $gitlabUser = form::data($this->config->gitlab->form->user->create)->get();
-            if(!empty($_FILES['avatar'])) $gitlabUser->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
+            if(!empty($_FILES['avatar']['name'][0])) $gitlabUser->avatar = curl_file_create($_FILES['avatar']['tmp_name'][0], $_FILES['avatar']['type'][0], $_FILES['avatar']['name'][0]);
 
             $this->gitlab->createUser($gitlabID, $gitlabUser);
 
@@ -560,14 +560,14 @@ class gitlab extends control
                 foreach($message as &$msg) if(is_string($msg)) $msg = zget($this->lang->gitlab->errorResonse, $msg, $msg);
                 return $this->send(array('result' => 'fail', 'message' => $message));
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
         $users       = $this->loadModel('user')->getList();
         $bindedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'account,openID');
         $userPairs   = array();
         $userInfos   = array();
-        foreach($users as $key => $user)
+        foreach($users as $user)
         {
             if(!isset($bindedUsers[$user->account]))
             {
@@ -599,12 +599,12 @@ class gitlab extends control
             $gitlabUser = form::data($this->config->gitlab->form->user->edit)
                 ->removeIF(!$this->post->password, 'password,password_repeat')
                 ->get();
-            if(!empty($_FILES['avatar']['name'])) $gitlabUser->avatar = curl_file_create($_FILES['avatar']['tmp_name'], $_FILES['avatar']['type'], $_FILES['avatar']['name']);
+            if(!empty($_FILES['avatar']['name'][0])) $gitlabUser->avatar = curl_file_create($_FILES['avatar']['tmp_name'][0], $_FILES['avatar']['type'][0], $_FILES['avatar']['name'][0]);
 
             $this->gitlab->editUser($gitlabID, $gitlabUser);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'reload' => inlink('browseUser', "gitlabID=$gitlabID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
         $gitlabUser        = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
