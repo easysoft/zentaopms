@@ -158,9 +158,7 @@ class metricModel extends model
                 $dateB = strtotime($b->dateString);
             }
 
-            if ($dateA == $dateB) {
-                return 0;
-            }
+            if ($dateA == $dateB) return 0;
 
             return ($dateA > $dateB) ? -1 : 1;
         });
@@ -633,9 +631,13 @@ class metricModel extends model
         $dateType   = $metric->dateType;
 
         if($dateType != 'nodate') $dataFields[] = 'year';
-        if(in_array($dateType, array('month', 'day'))) $dataFields[] = 'month';
-        if($dateType == 'week') $dataFields[] = 'week';
-        if($dateType == 'day') $dataFields[] = 'day';
+        if($dateType == 'month')  $dataFields[] = 'month';
+        if($dateType == 'week')   $dataFields[] = 'week';
+        if($dateType == 'day')
+        {
+            $dataFields[] = 'month';
+            $dataFields[] = 'day';
+        }
 
         if($metric->scope != 'system') $dataFields[] = $metric->scope;
 

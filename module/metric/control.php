@@ -91,21 +91,21 @@ class metric extends control
         $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
 
-        $this->view->metrics       = $metrics;
-        $this->view->groupMetrics  = $groupMetrics;
-        $this->view->current       = $current;
-        $this->view->metricList    = $this->lang->metric->metricList;
-        $this->view->scope         = $scope;
-        $this->view->title         = $this->lang->metric->common;
-        $this->view->viewType      = $viewType;
-        $this->view->recTotal      = count($metrics);
-        $this->view->filters       = $filters;
-        $this->view->filtersBase64 = $filtersBase64;
-        $this->view->dtablePager   = $pager;
-        $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
-        $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
+        $this->view->metrics          = $metrics;
+        $this->view->groupMetrics     = $groupMetrics;
+        $this->view->current          = $current;
+        $this->view->metricList       = $this->lang->metric->metricList;
+        $this->view->scope            = $scope;
+        $this->view->title            = $this->lang->metric->common;
+        $this->view->viewType         = $viewType;
+        $this->view->recTotal         = count($metrics);
+        $this->view->filters          = $filters;
+        $this->view->filtersBase64    = $filtersBase64;
+        $this->view->dtablePager      = $pager;
+        $this->view->chartTypeList    = $this->metric->getChartTypeList($resultHeader);
+        $this->view->echartOptions    = $this->metric->getEchartsOptions($resultHeader, $allResultData);
         $this->view->metricRecordType = $this->metric->getMetricRecordType($currentCode, $currentScope);
-        $this->view->noDataTip     = $this->metric->getNoDataTip($currentCode);
+        $this->view->noDataTip        = $this->metric->getNoDataTip($currentCode);
 
         $this->display();
     }

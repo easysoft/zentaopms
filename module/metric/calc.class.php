@@ -209,7 +209,6 @@ class baseCalc
      */
     protected function filterByOptions($rows, $options)
     {
-
         if(empty($options)) return $rows;
 
         $rows = (array)$rows;
