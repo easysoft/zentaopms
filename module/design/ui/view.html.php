@@ -40,7 +40,7 @@ foreach($config->design->view->operateList['common'] as $operate)
     $commonActions[] = $config->design->actionList[$operate];
 }
 
-$moduleName = empty($project->hasProduct) ? 'projectstory' : 'story';
+$moduleName = empty($project->hasProduct) ? 'projectstory' : (isset($design->storyInfo) ? $design->storyInfo->type : 'story');
 $storyName  = zget($stories, $design->story, '');
 if($common::hasPriv($moduleName, 'view'))
 {

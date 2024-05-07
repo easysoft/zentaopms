@@ -252,6 +252,8 @@ class designModel extends model
             $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID={$relation->BID}&projectID={$design->project}"), "# {$revision}", '', "title='{$revision}' class='flex clip'");
         }
 
+        if($design->story > 0) $design->storyInfo = $this->loadModel('story')->fetchByID((int)$design->story);
+
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
 

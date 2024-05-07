@@ -2250,7 +2250,7 @@ class storyModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
             ->beginIF(!$hasParent or $hasParent == 'false')->andWhere('t1.isParent')->eq('0')->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
-            ->beginIF($type != 'full' || $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
+            ->beginIF($type != 'full' && $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($order)
             ->fetchAll();
