@@ -16,8 +16,7 @@ include 'component/queryform.html.php';
 include 'component/tableandcharts.html.php';
 
 jsVar('updateTimeTip', $lang->metric->updateTimeTip);
-
-
+jsVar('calcTitleList', $lang->metric->calcTitleList);
 
 $star = (!empty($metric->collector) and strpos($metric->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
 div

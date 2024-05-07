@@ -11,5 +11,6 @@ declare(strict_types=1);
 namespace zin;
 include 'component/tableandcharts.html.php';
 jsVar('updateTimeTip', $lang->metric->updateTimeTip);
+jsVar('calcTitleList', $lang->metric->calcTitleList);
 
 $fnGenerateTableAndCharts($metric);
