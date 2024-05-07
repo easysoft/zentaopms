@@ -126,7 +126,7 @@ $hoursInfo = row
         div
         (
             span(setClass('text-lg num font-bold'), !empty($execution->totalEstimate) ? $execution->totalEstimate : 0),
-            span(setClass('text-gray'), 'h')
+            span(setClass('text-gray'), ' h')
         ),
         div
         (
@@ -140,7 +140,7 @@ $hoursInfo = row
         div
         (
             span(setClass('text-lg num font-bold'), !empty($execution->totalConsumed) ? $execution->totalConsumed : 0),
-            span(setClass('text-gray'), 'h')
+            span(setClass('text-gray'), ' h')
         ),
         div
         (
@@ -154,7 +154,7 @@ $hoursInfo = row
         div
         (
             span(setClass('text-lg num font-bold'), !empty($execution->totalLeft) ? $execution->totalLeft : 0),
-            span(setClass('text-gray'), 'h')
+            span(setClass('text-gray'), ' h')
         ),
         div
         (
