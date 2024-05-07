@@ -52,6 +52,7 @@ if(common::canModify('execution', $execution))
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
 if($execution->type != 'stage') unset($cols['design']);
+
 $tableData = initTableData($tasks, $cols, $this->task);
 $tableData = array_map(
     function($task)

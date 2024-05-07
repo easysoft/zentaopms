@@ -152,6 +152,11 @@ window.renderCell = function(result, info)
     }
 
     if(['estimate', 'consumed','left'].includes(info.col.name) && result) result[0] = {html: result[0] + ' h'};
+    if(info.col.name == 'design')
+    {
+        result[0] = {html: task.designName};
+        result[1].attrs['title'] = task.designName;
+    }
 
     return result;
 }

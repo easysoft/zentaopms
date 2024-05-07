@@ -191,9 +191,8 @@ $config->task->dtable->fieldList['mailto']['delimiter'] = ',';
 
 if($config->edition == 'max')
 {
-    $config->task->dtable->fieldList['design']['title']      = $lang->task->design;
-    $config->task->dtable->fieldList['design']['type']       = 'text';
-    $config->task->dtable->fieldList['design']['dataSource'] = array('module' => 'story', 'method' => 'getDesignPairs', 'params' => ['projectID' => 0, 'storyID' => 0]);
+    $config->task->dtable->fieldList['design']['title'] = $lang->task->design;
+    $config->task->dtable->fieldList['design']['type']  = 'text';
 }
 
 $config->task->dtable->fieldList['actions']['type']     = 'actions';

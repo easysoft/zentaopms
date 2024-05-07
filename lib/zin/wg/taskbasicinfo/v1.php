@@ -74,6 +74,11 @@ class taskBasicInfo extends wg
             'items' => $this->getModuleItems($task, $product)
         );
 
+        if($config->edition == 'max' && $execution->type == 'stage')
+        {
+            $items[$lang->task->design] = array('control' => 'text', 'text' => $task->designName, 'title' => $task->designName, 'control' => 'link', 'url' => createLink('design', 'view', "designID=$task->design"));
+        }
+
         $items[$lang->task->fromBug] = array
         (
             'control'   => 'entityTitle',
