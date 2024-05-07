@@ -271,7 +271,7 @@ $config->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
 
 $config->block->modules['common'] = new stdclass();
 $config->block->modules['common']->moreLinkList = new stdclass();
-$config->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
+$config->block->modules['common']->moreLinkList->dynamic = 'my|dynamic|';
 
 $config->block->modules['doc'] = new stdclass();
 $config->block->modules['doc']->moreLinkList = new stdclass();

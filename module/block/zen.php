@@ -290,10 +290,14 @@ class blockZen extends block
             {
                 $block->moreLink = $this->createLink('testtask', 'browse', 'productID=0&branch=0&type=all,totalStatus');
             }
+            elseif($block->code == 'recentproject' || $block->code == 'project')
+            {
+                $block->moreLink = $this->config->vision == 'or' ? $this->createLink('marketresearch', 'all') : $this->createLink('project', 'browse');
+            }
         }
         elseif($block->code == 'dynamic')
         {
-            $block->moreLink = $this->createLink('company', 'dynamic');
+            $block->moreLink = $this->createLink('my', 'dynamic');
         }
 
         return $block;
