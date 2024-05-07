@@ -24,6 +24,7 @@ class thinkInput extends thinkStep
             formGroup
             (
                 setClass('w-1/2'),
+                setStyle(array('display' => 'flex')),
                 set::label($lang->thinkwizard->step->label->required),
                 radioList
                 (

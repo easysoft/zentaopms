@@ -35,6 +35,7 @@ class thinkRadio extends thinkStep
 
         $items[] = formGroup
         (
+            setStyle(array('display' => 'flex')),
             set::label(data('lang.thinkwizard.step.label.required')),
             radioList
             (
