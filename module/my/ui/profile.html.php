@@ -98,11 +98,12 @@ div
         set::className('py-2'),
         $getItems(array($lang->user->commiter => $user->commiter, $lang->user->skype    => $user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : '')),
         $getItems(array($lang->user->visits   => $user->visits,   $lang->user->whatsapp => $user->whatsapp)),
-        $getItems(array($lang->user->last     => $user->last,     $lang->user->whatsapp => $user->whatsapp)),
+        $getItems(array($lang->user->last     => $user->last,     $lang->user->slack    => $user->slack)),
         $getItems(array($lang->user->ip       => $user->ip,       $lang->user->dingding => $user->dingding))
     ),
     center
     (
+        setClass('w-full fixed actions-menu my-profile'),
         floatToolbar
         (
             set::object($user),
