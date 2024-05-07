@@ -35,15 +35,3 @@ $('.theme-switch .block').on('click', '.theme-block', function()
     selectTheme($(this).attr('data-theme'));
     $(this).parent().addClass('active');
 })
-
-$('.guide-block').on('click', '.guide-tab', function()
-{
-    const tab = $(this).data('tab');
-    localStorage.setItem('guideblock', tab);
-})
-
-if(localStorage.getItem('guideblock'))
-{
-    const tab = localStorage.getItem('guideblock');
-    $('.guide-block a.guide-tab[data-tab=' + tab + ']').trigger('click');;
-}
