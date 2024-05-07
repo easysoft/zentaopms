@@ -721,6 +721,7 @@ class taskZen extends task
 
         $testTasks = array();
         $execution = $this->loadModel('execution')->getByID($executionID);
+        $now       = helper::now();
         foreach($postData->testStory as $key => $storyID)
         {
             if(empty($storyID)) continue;
@@ -738,6 +739,8 @@ class taskZen extends task
             $task->type       = 'test'; /* Setting the task type to test to prevent duplicate tasks from being created. */
             $task->vision     = $this->config->vision;
             $task->project    = $execution->project;
+            $task->openedBy   = $this->app->user->account;
+            $task->openedDate = $now;
 
             $testTasks[] = $task;
         }
