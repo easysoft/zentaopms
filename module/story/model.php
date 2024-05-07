@@ -4756,8 +4756,7 @@ class storyModel extends model
             $gradePairs    = zget($gradeGroup, $story->type, array());
             $grade         = zget($gradePairs, $story->grade, '');
             $story->grade  = $grade->name;
-
-            $story->parentName = zget($parents, $story->parent, '');
+            $story->parent = zget($parents, $story->parent, '');
         }
 
         return $stories;

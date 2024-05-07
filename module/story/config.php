@@ -33,13 +33,13 @@ $config->story->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTo
 
 $config->story->list = new stdclass();
 $config->story->exportFields = '
-    id, product, branch, module, plan, source, sourceNote, title, spec, verify, keywords,
+    id, product, branch, module, plan, source, sourceNote, title, spec, verify, grade, parent, keywords,
     pri, estimate, status, stage, category, taskCountAB, bugCountAB, caseCountAB,
     openedBy, openedDate, assignedTo, assignedDate, mailto,
     reviewedBy, reviewedDate,
     closedBy, closedDate, closedReason,
     lastEditedBy, lastEditedDate,
-    linkStories, duplicateStory, files';
+    duplicateStory, files';
 
 $config->story->list->customCreateFields      = '';
 $config->story->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,keywords,mailto';
