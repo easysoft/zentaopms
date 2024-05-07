@@ -1,7 +1,7 @@
 <?php
 $lang->transfer = new stdclass();
 
-$lang->transfer->importCase     = '导入EXCEL';
+$lang->transfer->importCase     = '导入Excel';
 $lang->transfer->importNotice   = '请先导出模板，按照模板格式填写数据后再导入。';
 $lang->transfer->noRequire      = '%s行的“ %s” 是必填字段，不能为空。';
 $lang->transfer->exportTemplate = '导出模板';

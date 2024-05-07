@@ -1,7 +1,7 @@
 <?php
 $lang->transfer = new stdclass();
 
-$lang->transfer->importCase     = 'Import EXCEL';
+$lang->transfer->importCase     = 'Import Excel';
 $lang->transfer->importNotice   = 'Notice: Importing data is risky! Make sure to complete the following steps in sequence before merging.';
 $lang->transfer->noRequire      = 'Row %s has“%s ”which is a required field and it should not be blank.';
 $lang->transfer->exportTemplate = 'Export Template';
