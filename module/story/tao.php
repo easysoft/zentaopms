@@ -315,16 +315,18 @@ class storyTao extends storyModel
 
         if($type != 'story')
         {
-            $sameTypeChildren = $this->dao->select('parent, id')->from(TABLE_STORY)
-                 ->where('parent')->in(array_keys($stories))
-                 ->andWhere('type')->eq($type)
-                 ->andWhere('deleted')->eq(0)
+            $sameTypeChildren = $this->dao->select('distinct t1.parent')->from(TABLE_STORY)->alias('t1')
+                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.parent = t2.id')
+                 ->where('t1.parent')->in(array_keys($stories))
+                 ->andWhere('t1.type = t2.type')
+                 ->andWhere('t2.deleted')->eq(0)
                  ->fetchPairs();
 
-            $otherTypeChildren = $this->dao->select('parent, id')->from(TABLE_STORY)
-                 ->where('parent')->in(array_keys($stories))
-                 ->andWhere('type')->ne($type)
-                 ->andWhere('deleted')->eq(0)
+            $otherTypeChildren = $this->dao->select('distinct t1.parent')->from(TABLE_STORY)->alias('t1')
+                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.parent = t2.id')
+                 ->where('t1.parent')->in(array_keys($stories))
+                 ->andWhere('t1.type != t2.type')
+                 ->andWhere('t2.deleted')->eq(0)
                  ->fetchPairs();
         }
 
@@ -337,8 +339,11 @@ class storyTao extends storyModel
             }
 
             /* Judge parent story if has same type child or other type child. */
-            if($story->type != 'story' && $story->isParent == '1' && !empty($sameTypeChildren[$story->id]))  $story->hasSameTypeChild  = true;
-            if($story->type != 'story' && $story->isParent == '1' && !empty($otherTypeChildren[$story->id])) $story->hasOtherTypeChild = true;
+            if($story->type != 'story' && $story->isParent == '1')
+            {
+                if(isset($sameTypeChildren[$story->id]))  $story->hasSameTypeChild  = true;
+                if(isset($otherTypeChildren[$story->id])) $story->hasOtherTypeChild = true;
+            }
 
             /* Merge plan title. */
             $story->planTitle = '';
@@ -1973,6 +1978,30 @@ class storyTao extends storyModel
                     {
                         $disabled    = true;
                         $unlinkTitle = $this->lang->execution->notAllowedUnlinkStory;
+                    }
+
+                    $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+                    if($canBatchCreateStory)
+                    {
+                        $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                    }
+                    elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+                    {
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                    }
+                    elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+                    {
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                    }
+                    elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
+                    {
+                        $title = $this->lang->story->split;
+                        if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
+                        if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                        if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
+                        if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                        if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
+                        $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'tree');
                     }
                 }
 
