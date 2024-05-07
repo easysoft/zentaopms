@@ -114,6 +114,7 @@ $lang->gitlab->apiError[8]  = 'is invalid';
 $lang->gitlab->apiError[9]  = 'admin is a reserved name';
 $lang->gitlab->apiError[10] = 'has already been taken';
 $lang->gitlab->apiError[11] = 'Missing CI config file';
+$lang->gitlab->apiError[12] = 'is too big (should be at most 200.0 KB)';
 
 $lang->gitlab->errorLang[0]  = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[1]  = '私有分组的项目，可见性级别不能设为公开。';
@@ -127,6 +128,7 @@ $lang->gitlab->errorLang[8]  = '格式错误';
 $lang->gitlab->errorLang[9]  = 'admin是保留名';
 $lang->gitlab->errorLang[10] = 'GitLab项目已存在';
 $lang->gitlab->errorLang[11] = '缺少CI配置文件';
+$lang->gitlab->errorLang[12] = '头像大小不能超过200KB';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
 $lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';
