@@ -129,9 +129,9 @@ class thinkTableInput extends thinkStep
     protected function buildBody(): array
     {
         $items = parent::buildBody();
-        $items[] = $this->buildRequiredControl();
-        $items[] = $this->buildisSupportAddControl();
         $items[] = $this->buildRowsTitleControl();
+        $items[] = $this->buildisSupportAddControl();
+        $items[] = $this->buildRequiredControl();
 
         return $items;
     }
