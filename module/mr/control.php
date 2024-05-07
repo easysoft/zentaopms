@@ -34,7 +34,7 @@ class mr extends control
             if($this->app->tab == 'execution')
             {
                 $this->view->executionID = $this->session->execution;
-                $this->loadModel('execution')->setMenu($this->session->execution);
+                $this->loadModel('execution')->setMenu((int)$this->session->execution);
             }
 
             if($this->app->tab == 'project')
