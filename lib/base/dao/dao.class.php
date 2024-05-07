@@ -382,9 +382,17 @@ class baseDAO
      */
     public function descTable($tableName)
     {
+        static $tablesDesc = array();
+        if(isset($tablesDesc[$tableName])) return $tablesDesc[$tableName];
+
         $dbh = $this->slaveDBH ? $this->slaveDBH : $this->dbh;
         $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-        $fields = $dbh->rawQuery("DESC $tableName")->fetchAll();
+
+        $fields = array();
+        $stmt   = $dbh->rawQuery("DESC $tableName");
+        while($field = $stmt->fetch()) $fields[$field->field] = $field;
+        $tablesDesc[$tableName] = $fields;
+
         $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
         return $fields;
@@ -647,21 +655,33 @@ class baseDAO
         /* INSERT INTO table VALUES(...) */
         if($this->method == 'insert' and !empty($this->sqlobj->data))
         {
+            $desc       = $this->descTable($this->table);
             $skipFields = $this->sqlobj->skipFields;
-            $fields = '(';
-            $values = 'VALUES(';
+            $values     = array();
             foreach($this->sqlobj->data as $field => $value)
             {
                 if(strpos($skipFields, ",$field,") !== false) continue;
 
-                $fields .= "`{$field}`,";
-                $values .= $this->sqlobj->quote($value) . ',';
+                $values[$field] = $this->sqlobj->quote($value);
+                unset($desc[$field]);
             }
-            $fields = substr($fields, 0, -1);
-            $values = substr($values, 0, -1);
-            $fields .= ')';
-            $values .= ')';
-            $sql .= $fields . ' ' . $values;
+
+            /* If field can not null, add this field use default value. */
+            foreach($desc as $field)
+            {
+                if(strtolower($field->null) == 'yes') continue;
+                if(strtolower($field->extra) == 'auto_increment') continue;
+                if($field->default !== '') continue;
+
+                $values[$field->field] = "''";
+                if(strpos($field->type, 'date')    !== false) $values[$field->field] = "'0000-00-00'";
+                if(strpos($field->type, 'int')     !== false) $values[$field->field] = "0";
+                if(strpos($field->type, 'float')   !== false) $values[$field->field] = "0";
+                if(strpos($field->type, 'decimal') !== false) $values[$field->field] = "0";
+                if(strpos($field->type, 'double')  !== false) $values[$field->field] = "0";
+            }
+
+            $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
 
         /**
