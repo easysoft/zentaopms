@@ -8729,7 +8729,7 @@ class upgradeModel extends model
     }
 
     /**
-     * 将设置阶段时自定义字段更改为按项目模型 保存。
+     * 将设置阶段时自定义字段更改为按项目模型保存。
      * Set stage custom fields by project model.
      *
      * @access public
@@ -8746,7 +8746,7 @@ class upgradeModel extends model
         foreach($createFields as $createField)
         {
             unset($createField->id);
-            $createField->key = 'createWaterfallFields';   //瀑布模型
+            $createField->key = 'createWaterfallFields'; //瀑布模型
             $this->dao->replace(TABLE_CONFIG)->data($createField)->exec();
             $createField->key = 'createWaterfallplusFields'; //融合瀑布模型
             $this->dao->replace(TABLE_CONFIG)->data($createField)->exec();
@@ -8754,5 +8754,6 @@ class upgradeModel extends model
 
         /* 删除旧的config。*/
         $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('programplan')->andWhere('section')->eq('custom')->andWhere('`key`')->eq('createFields')->exec();
+        return true;
     }
 }
