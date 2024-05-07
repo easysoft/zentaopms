@@ -45,6 +45,7 @@ detailHeader
         (
             set::icon('back'),
             set::type('secondary'),
+            set::url('release', 'browse', "productID={$release->product}"),
             $lang->goback
         ),
         entityLabel(set(array('entityID' => $release->id, 'level' => 2, 'text' => $release->name))),
