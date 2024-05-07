@@ -170,6 +170,7 @@ detailBody
             ),
             item
             (
+                set::trClass('moduleTR'),
                 set::name($lang->task->module),
                 set::required(strpos(",{$this->config->task->edit->requiredFields},", ",module,") !== false),
                 formGroup

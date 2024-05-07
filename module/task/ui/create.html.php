@@ -25,6 +25,7 @@ jsVar('requiredFields', $config->task->create->requiredFields);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimateAB, '0'));
 jsVar('taskID', $taskID ?? 0);
 jsVar('toTaskList', !empty($task->id));
+jsVar('showFields', $showFields);
 
 $fields = useFields('task.create');
 $fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');

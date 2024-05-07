@@ -189,6 +189,13 @@ $config->task->dtable->fieldList['mailto']['sortType']  = true;
 $config->task->dtable->fieldList['mailto']['group']     = 9;
 $config->task->dtable->fieldList['mailto']['delimiter'] = ',';
 
+if($config->edition == 'max')
+{
+    $config->task->dtable->fieldList['design']['title']      = $lang->task->design;
+    $config->task->dtable->fieldList['design']['type']       = 'text';
+    $config->task->dtable->fieldList['design']['dataSource'] = array('module' => 'story', 'method' => 'getDesignPairs', 'params' => ['projectID' => 0, 'storyID' => 0]);
+}
+
 $config->task->dtable->fieldList['actions']['type']     = 'actions';
 $config->task->dtable->fieldList['actions']['width']    = '160px';
 $config->task->dtable->fieldList['actions']['list']     = $config->task->actionList;
