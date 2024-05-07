@@ -752,9 +752,10 @@ class router extends baseRouter
      */
     public function checkInstalled()
     {
+        if(!$this->config->installed) return false;
         if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
 
-        return isset($this->config->installed) && $this->config->installed;
+        return true;
     }
 
     /**
