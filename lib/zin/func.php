@@ -206,3 +206,5 @@ function thinkInputDetail(): thinkInputDetail {return createWg('thinkInputDetail
 function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkTableInputDetail', func_get_args());}
 function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptionsDetail', func_get_args());}
 function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
+function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', func_get_args());}
+function thinkRadioList(): thinkRadioList {return createWg('thinkRadioList', func_get_args());}
