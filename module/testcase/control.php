@@ -1606,7 +1606,7 @@ class testcase extends control
 
         $this->dao->update($table)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
     }
 
     /**
