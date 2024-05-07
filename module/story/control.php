@@ -187,7 +187,7 @@ class story extends control
             $story = $this->story->getByID($storyID);
             if($story)
             {
-                $fields['parent']['default'] = $storyID;
+                if(isset($fields['parent'])) $fields['parent']['default'] = $storyID;
                 $gradeOptions = $this->story->getGradeOptions($story, $storyType);
                 $fields['grade']['options'] = $gradeOptions;
                 $fields['grade']['default'] = current($gradeOptions);
