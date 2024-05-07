@@ -18,6 +18,11 @@ class thinkCheckbox extends thinkRadio
         'maxCount?: string',
     );
 
+    public static function getPageJS(): string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function buildBody(): array
     {
         $items = parent::buildBody();
@@ -29,6 +34,7 @@ class thinkCheckbox extends thinkRadio
             formGroup
             (
                 set::label(data('lang.thinkwizard.step.label.minCount')),
+                setClass('selectable-rows hidden'),
                 input
                 (
                     set::placeholder(data('lang.thinkwizard.step.inputContent')),
@@ -40,6 +46,7 @@ class thinkCheckbox extends thinkRadio
             formGroup
             (
                 set::label(data('lang.thinkwizard.step.label.maxCount')),
+                setClass('selectable-rows hidden'),
                 input
                 (
                     set::placeholder(data('lang.thinkwizard.step.inputContent')),
