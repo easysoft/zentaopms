@@ -1258,6 +1258,13 @@ class commonModel extends model
         $module = strtolower($module);
         $method = strtolower($method);
 
+        global $config;
+        if(isset($config->{$module}->groupPrivs[$method]))
+        {
+            $groupPriv = strtolower($config->{$module}->groupPrivs[$method]);
+            if($groupPriv && $groupPriv != $method) return self::hasPriv($module, $groupPriv, $object, $vars);
+        }
+
         if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
 
         return self::$userPrivs[$module][$method][$vars];
