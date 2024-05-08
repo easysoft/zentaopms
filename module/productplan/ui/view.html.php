@@ -24,17 +24,19 @@ $confirmLang['delete']   = $lang->productplan->confirmDelete;
 
 $decodeParam = helper::safe64Decode($param);
 
-jsVar('initLink',       $link);
-jsVar('type',           $type);
-jsVar('linkParams',     $decodeParam);
-jsVar('orderBy',        $orderBy);
-jsVar('planID',         $plan->id);
-jsVar('confirmLang',    $confirmLang);
-jsVar('unlinkURL',      $unlinkURL);
-jsVar('childrenAB',     $lang->story->childrenAB);
-jsVar('cases',          $storyCases);
-jsVar('summary',        $summary);
-jsVar('checkedSummary', $lang->product->checkedSRSummary);
+jsVar('initLink',        $link);
+jsVar('type',            $type);
+jsVar('linkParams',      $decodeParam);
+jsVar('orderBy',         $orderBy);
+jsVar('planID',          $plan->id);
+jsVar('confirmLang',     $confirmLang);
+jsVar('unlinkURL',       $unlinkURL);
+jsVar('childrenAB',      $lang->story->childrenAB);
+jsVar('cases',           $storyCases);
+jsVar('summary',         $summary);
+jsVar('checkedSummary',  $lang->product->checkedSRSummary);
+jsVar('storyPageID',     $storyPager->pageID);
+jsVar('storyRecPerPage', $storyPager->recPerPage);
 
 $bugCols   = array();
 $storyCols = array();
@@ -42,6 +44,13 @@ foreach($config->productplan->defaultFields['story'] as $field)
 {
     if($field == 'branch' && $product->type == 'normal') continue;
     $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
+    if($field == 'id' && common::hasPriv('execution', 'storySort'))
+    {
+        $storyCols['sort']['title'] = $lang->productplan->updateOrder;
+        $storyCols['sort']['fixed'] = 'left';
+        $storyCols['sort']['align'] = 'center';
+        $storyCols['sort']['group'] = 1;
+    }
 }
 if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
 foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
@@ -242,6 +251,9 @@ detailBody
                 dtable
                 (
                     setID('storyDTable'),
+                    set::plugins(array('sortable')),
+                    set::sortHandler('.move-plan'),
+                    set::onSortEnd(jsRaw('window.onSortEnd')),
                     set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::bordered(true),

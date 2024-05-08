@@ -15,6 +15,11 @@ window.renderStoryCell = function(result, info)
         if(story.parent > 0) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
         if(html) result.unshift({html});
     }
+
+    if(info.col.name == 'sort')
+    {
+        result[0] = {html: "<i class='icon-move'></i>", className: 'text-gray cursor-move move-plan'};
+    }
     return result;
 };
 
@@ -124,3 +129,18 @@ $(function()
         window.showLink(type, linkParams);
     }
 })
+
+window.onSortEnd = function(from, to, type)
+{
+    if(!from || !to) return false;
+
+    const url  = $.createLink('productplan', 'ajaxStorySort', `planID=${planID}`);
+    const form = new FormData();
+
+    form.append('storyIdList', JSON.stringify(this.state.rowOrders));
+    form.append('orderBy',     orderBy);
+    form.append('pageID',      storyPageID);
+    form.append('recPerPage',  storyRecPerPage);
+
+    $.ajaxSubmit({url, data:form});
+}

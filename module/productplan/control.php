@@ -509,10 +509,14 @@ class productplan extends control
         if(empty($planID)) return true;
 
         /* Get story id list. */
-        $storyIDList = explode(',', trim($this->post->stories, ','));
+        $storyIdList = json_decode($this->post->storyIdList, true);
+        asort($storyIdList);
+        $storyIdList = array_flip($storyIdList);
 
         /* Update the story order according to the plan. */
-        $this->loadModel('story')->sortStoriesOfPlan($planID, $storyIDList, $this->post->orderBy, $this->post->pageID, $this->post->recPerPage);
+        $this->loadModel('story')->sortStoriesOfPlan($planID, $storyIdList, $this->post->orderBy, $this->post->pageID, $this->post->recPerPage);
+
+        return $this->sendSuccess();
     }
 
     /**
