@@ -45,7 +45,7 @@ if(empty($suites))
 {
     if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
     {
-        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID={$productID}"), 'data-app' => $app->tab);
+        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID={$productID}"), 'data-app' => 'qa');
     }
 }
 else
