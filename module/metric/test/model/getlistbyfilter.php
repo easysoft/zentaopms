@@ -10,7 +10,7 @@ cid=1
 - 执行metric模块的getListByFilter方法，参数是$filters1 
  - 第0条的code属性 @count_of_program
  - 第1条的code属性 @count_of_doing_program
-- 执行metric模块的getListByFilter方法，参数是$filters1  @24
+- 执行metric模块的getListByFilter方法，参数是$filters1  @25
 - 执行metric模块的getListByFilter方法，参数是$filters2 
  - 第0条的code属性 @count_of_story_in_execution
  - 第1条的code属性 @count_of_finished_story_in_execution
@@ -18,12 +18,12 @@ cid=1
 - 执行metric模块的getListByFilter方法，参数是$filters3 
  - 第0条的code属性 @count_of_execution
  - 第1条的code属性 @count_of_wait_execution
-- 执行metric模块的getListByFilter方法，参数是$filters3  @22
+- 执行metric模块的getListByFilter方法，参数是$filters3  @25
 - 执行metric模块的getListByFilter方法，参数是$filters4 
  - 第0条的code属性 @count_of_program
  - 第1条的code属性 @count_of_doing_program
 - 执行metric模块的getListByFilter方法，参数是$filters4, 'wait'  @0
-- 执行metric模块的getListByFilter方法，参数是$filters4  @204
+- 执行metric模块的getListByFilter方法，参数是$filters4  @212
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -44,4 +44,4 @@ r($metric->getListByFilter($filters3)) && p('0:code;1:code') && e('count_of_exec
 r(count($metric->getListByFilter($filters3))) && p('') && e(25);
 r($metric->getListByFilter($filters4)) && p('0:code;1:code') && e('count_of_program,count_of_doing_program');
 r($metric->getListByFilter($filters4, 'wait')) && p('') && e('0');
-r(count($metric->getListByFilter($filters4))) && p('') && e(224);
+r(count($metric->getListByFilter($filters4))) && p('') && e(212);
