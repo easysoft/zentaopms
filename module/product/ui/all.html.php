@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('orderBy', $orderBy);
+
 /* Get field list for data table. */
 if(str_contains($orderBy, 'line')) $orderBy = str_replace('line', 'productLine', $orderBy);
 $fnGetTableFieldList = function() use ($config)
@@ -123,10 +125,15 @@ toolbar
     ) : null
 );
 
-$canBatchEdit = hasPriv('product', 'batchEdit');
+$canBatchEdit   = hasPriv('product', 'batchEdit');
+$canUpdateOrder = hasPriv('product', 'updateOrder');
 dtable
 (
     set::id('products'),
+    set::plugins(array('sortable')),
+    set::sortable($canUpdateOrder && strpos($orderBy, 'order') === false),
+    set::onSortEnd($canUpdateOrder ? jsRaw('window.onSortEnd') : null),
+    set::canSortTo($canUpdateOrder ? jsRaw('window.canSortTo') : null),
     set::cols($cols),
     set::data($productStats),
     set::userMap($users),

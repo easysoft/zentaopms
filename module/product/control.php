@@ -538,10 +538,12 @@ class product extends control
         if(strpos($orderBy, 'program') === false) return false;
 
         /* Get sorted id list. */
-        $sortedIdList = explode(',', trim($this->post->products, ','));
+        $products = json_decode($this->post->products, true);
+        asort($products);
+        $products = array_flip($products);
 
         /* Sort by sorted id list. */
-        $this->product->updateOrder($sortedIdList);
+        $this->product->updateOrder($products);
     }
 
     /**
