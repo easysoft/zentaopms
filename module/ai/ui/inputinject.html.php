@@ -31,7 +31,7 @@ $auditInject = function() use($module, $method)
     $auditScript = '';
     if(isset($this->config->ai->injectAuditButton->locations[$module][$method]))
     {
-        $publishBtn      = html::commonButton($this->lang->ai->promptPublish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide');
+        $publishBtn      = html::commonButton($this->lang->ai->promptPublish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide ajax-submit');
         $targetContainer = $this->config->ai->injectAuditButton->locations[$module][$method]['action']->targetContainer;
         $injectMethod    = $this->config->ai->injectAuditButton->locations[$module][$method]['action']->injectMethod;
 
@@ -100,7 +100,8 @@ $auditInject = function() use($module, $method)
 
                 const promptId = publishButton.dataset.promptid;
                 const publishLink = document.createElement('a');
-                publishLink.href = $.createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true') + '#app=admin';
+                publishLink.href      = $.createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true') + '#app=admin';
+                publishLink.className = 'ajax-submit';
                 publishLink.style.display = 'none';
                 document.body.appendChild(publishLink);
                 publishLink.click();

@@ -883,7 +883,7 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'load' => $this->inlink('models') . '#app=admin'));
 
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');
@@ -891,7 +891,7 @@ class ai extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if($backToTestingLocation)
         {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => array('locate' => $this->inlink('promptview', "id=$id") . '#app=admin')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => $this->inlink('promptview', "id=$id") . '#app=admin'));
         }
 
         return $this->send(array('result' => 'success'));
