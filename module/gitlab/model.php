@@ -2416,11 +2416,11 @@ class gitlabModel extends model
     {
         $action = strtolower($action);
 
-        if(!commonModel::hasPriv('space', 'browse')) return false;
+        if(!common::hasPriv('space', 'browse')) return false;
 
-        if(!in_array(strtolower(strtolower($action)), array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
+        if(!in_array($action, array('browseproject', 'browsegroup', 'browseuser', 'browsebranch', 'browsetag')))
         {
-            if(!commonModel::hasPriv('instance', 'manage')) return false;
+            if(!common::hasPriv('instance', 'manage', new stdclass())) return false;
         }
 
         return true;
