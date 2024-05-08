@@ -717,7 +717,7 @@ class storyZen extends story
         if($this->view->hiddenPlan) unset($fields['plan']);
 
         $hiddenGrade = !$this->story->showGrade($storyType);
-        if($hiddenGrade && $storyType == 'epic') unset($fields['parent']);
+        if($hiddenGrade && $storyType == 'epic') $fields['parent']['hidden'] = true;
 
         $this->view->branchID    = $branch;
         $this->view->gradeRule   = $this->config->{$storyType}->gradeRule;
@@ -1111,7 +1111,7 @@ class storyZen extends story
             unset($fields['region']);
             unset($fields['lane']);
         }
-        if($this->app->tab == 'project' || $this->app->tab == 'execution') unset($fields['parent']);
+        if($this->app->tab == 'project' || $this->app->tab == 'execution') $fields['parent']['hidden'] = true;
 
         return $fields;
     }
