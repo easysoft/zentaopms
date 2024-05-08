@@ -1089,7 +1089,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancell` (
   `lane` mediumint(8) NOT NULL DEFAULT '0',
   `column` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
-  `cards` text NULL,
+  `cards` mediumtext NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `card_group` ON `zt_kanbancell`(`kanban`,`type`,`lane`,`column`);
@@ -2183,7 +2183,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `join` date NULL,
   `visits` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite',
-  `ip` char(15) NOT NULL DEFAULT '',
+  `ip` varchar(255) NOT NULL DEFAULT '',
   `last` int(11) unsigned NOT NULL DEFAULT '0',
   `fails` tinyint(5) NOT NULL DEFAULT '0',
   `locked` datetime NULL,
