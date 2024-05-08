@@ -2247,13 +2247,15 @@ class storyModel extends model
      */
     public function getProductStoryPairs(int|array $productIdList = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string|array $status = 'all', string $order = 'id_desc', int $limit = 0, string $type = 'full', string $storyType = 'story', bool|string $hasParent = true): array
     {
+        if($hasParent === 'false') $hasParent = false;
+
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
             ->from(TABLE_STORY)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('1=1')
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
-            ->beginIF(!$hasParent or $hasParent == 'false')->andWhere('t1.isParent')->eq('0')->fi()
+            ->beginIF(!$hasParent)->andWhere('t1.isParent')->eq('0')->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($type != 'full' && $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
             ->andWhere('t1.deleted')->eq('0')

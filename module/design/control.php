@@ -88,7 +88,7 @@ class design extends control
 
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
-        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
         $queryID       = $type == 'bySearch' ? $param : 0;
 
         /* Build Search Form. */
@@ -149,7 +149,7 @@ class design extends control
 
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
-        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story');
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
@@ -187,7 +187,7 @@ class design extends control
 
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
-        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
         $project = $this->loadModel('project')->getByID($projectID);
 
@@ -223,7 +223,7 @@ class design extends control
 
         $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->design   = $design;
-        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions  = $this->loadModel('action')->getList('design', $design->id);
         $this->view->repos    = $this->loadModel('repo')->getRepoPairs('project', $design->project);
@@ -266,7 +266,7 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
         $project       = $this->loadModel('project')->getByID($design->project);
-        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
         $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
         $this->view->design   = $design;
@@ -445,7 +445,7 @@ class design extends control
     {
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
-        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'story', $hasParent);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'full', $hasParent);
 
         $items = array();
         foreach($stories as $storyID => $storyTitle)
