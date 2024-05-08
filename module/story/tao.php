@@ -235,7 +235,7 @@ class storyTao extends storyModel
         $track->cases  = $this->loadModel('testcase')->getStoryCases($story->id);
         $track->bugs   = $this->loadModel('bug')->getStoryBugs($story->id);
         $track->tasks  = $this->loadModel('task')->getListByStory($story->id, 0, $projectID);
-        if($this->config->edition != 'max') return $track;
+        if(!in_array($this->config->edition, array('max', 'ipd'))) return $track;
 
         /* 获取关联需求的设计、关联版本库提交。 */
         $track->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($story->id)->andWhere('deleted')->eq('0')->fetchAll('id');
