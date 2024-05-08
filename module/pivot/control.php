@@ -113,9 +113,6 @@ class pivot extends control
         $fields = $post->fieldSettings;
         $langs  = isset($post->langs) ? (is_array($post->langs) ? $post->langs : json_decode($post->langs, true)) : array();
 
-        $processSqlData = $this->loadModel('chart')->getTables($sql);
-        $sql = $processSqlData['sql'];
-
         if(isset($settings['summary']) and $settings['summary'] == 'notuse')
         {
             list($data, $configs) = $this->pivot->genOriginSheet($fields, $settings, $sql, $filterFormat, $langs);

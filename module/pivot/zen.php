@@ -142,8 +142,6 @@ class pivotZen extends pivot
 
         list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
-        $tables = $this->loadModel('chart')->getTables($sql);
-        $sql    = $tables['sql'];
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 

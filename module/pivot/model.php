@@ -206,7 +206,7 @@ class pivotModel extends model
         $columnFields = array();
         foreach(array_keys(get_object_vars($columns)) as $type) $columnFields[$type] = $type;
 
-        extract($this->chart->getTables($querySQL));
+        extract($this->bi->getTables($querySQL));
 
         /* 获取field的键值对以及相关联的对象。 */
         /* Get field key value pairs and related objects. */
