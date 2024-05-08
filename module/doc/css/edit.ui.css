@@ -1,5 +1,5 @@
-#title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
-#title:focus {box-shadow: none; outline: unset}
+#docEditForm #title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
+#docEditForm #title:focus {box-shadow: none; outline: unset}
 .titleBox{padding: 7px; background: #fff}
 #modalBasicInfo .form-group {margin-top: 0.5rem}
 #modalBasicInfo .modal-header {padding-bottom: 0.5rem;}
