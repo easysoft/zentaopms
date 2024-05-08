@@ -64,7 +64,7 @@ class thinkStepDetail extends wg
                 setStyle(array('margin-top' => '-30px')),
                 section
                 (
-                    setClass(' break-words"'),
+                    setClass('break-words'),
                     set::content($item->desc),
                     set::useHtml(true)
                 )
