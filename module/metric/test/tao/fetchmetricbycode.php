@@ -16,15 +16,15 @@ cid=1
  - 属性purpose @scale
  - 属性object @productplan
 - 获取codeList[3]的id,scale,product
- - 属性id @197
+ - 属性id @205
  - 属性purpose @scale
  - 属性object @execution
 - 获取codeList[4]的id,scale,product
- - 属性id @236
+ - 属性id @244
  - 属性purpose @scale
  - 属性object @story
 - 获取codeList[5]的id,scale,product
- - 属性id @254
+ - 属性id @262
  - 属性purpose @scale
  - 属性object @bug
 
@@ -42,6 +42,6 @@ $codeList[5] = 'count_of_daily_fixed_bug_in_user';
 
 r($metric->fetchMetricByCode($codeList[1])) && p('id,purpose,object') && e('13,scale,product');      // 获取codeList[1]的id,scale,product
 r($metric->fetchMetricByCode($codeList[2])) && p('id,purpose,object') && e('145,scale,productplan'); // 获取codeList[2]的id,scale,product
-r($metric->fetchMetricByCode($codeList[3])) && p('id,purpose,object') && e('197,scale,execution');   // 获取codeList[3]的id,scale,product
-r($metric->fetchMetricByCode($codeList[4])) && p('id,purpose,object') && e('236,scale,story');       // 获取codeList[4]的id,scale,product
-r($metric->fetchMetricByCode($codeList[5])) && p('id,purpose,object') && e('254,scale,bug');         // 获取codeList[5]的id,scale,product
+r($metric->fetchMetricByCode($codeList[3])) && p('id,purpose,object') && e('205,scale,execution');   // 获取codeList[3]的id,scale,product
+r($metric->fetchMetricByCode($codeList[4])) && p('id,purpose,object') && e('244,scale,story');       // 获取codeList[4]的id,scale,product
+r($metric->fetchMetricByCode($codeList[5])) && p('id,purpose,object') && e('262,scale,bug');         // 获取codeList[5]的id,scale,product
