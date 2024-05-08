@@ -1016,6 +1016,8 @@ class repoZen extends repo
                 $productStories = $this->loadModel('story')->getBySearch($productID, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories));
                 $allStories     = array_merge($allStories, $productStories);
             }
+
+            $allStories = array_filter($allStories, function($story) { return $story->isParent == '0'; });
         }
         else
         {

@@ -2215,7 +2215,7 @@ class storyModel extends model
         $stories      = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere($productQuery)
-            ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
+            ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
