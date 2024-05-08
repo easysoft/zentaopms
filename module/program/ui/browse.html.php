@@ -182,7 +182,7 @@ toolbar
 );
 
 $canBatchEdit = common::hasPriv('project', 'batchEdit');
-$canSortable  = common::hasPriv('program', 'updateOrder') && strpos($orderBy, 'order_asc') !== false;
+$canSortable  = (common::hasPriv('program', 'updateOrder') && strpos($orderBy, 'order_asc') !== false);
 dtable
 (
     setID('projectviews'),

@@ -120,10 +120,9 @@ window.footerSummary = function(element, checkedIdList)
 window.canSortTo = function(from, to)
 {
     if(!from || !to) return false;
-    if(from.data.type != to.data.type) return false;
     if(from.data.parent != to.data.parent) return false;
     return true;
-}
+};
 
 /**
  * 拖拽项目集或项目。
@@ -138,14 +137,13 @@ window.onSortEnd = function(from, to, type)
 {
     if(!from || !to) return false;
     if(!canSortTo(from, to)) return false;
-    if(from.data.type != to.data.type) return false;
 
+    const url  = $.createLink('program', 'updateOrder');
     const form = new FormData();
-    form.append('sourceID',    sourceID);
-    form.append('sourceOrder', sourceOrder);
-    form.append('targetID',    targetID);
-    form.append('targetOrder', targetOrder);
-    $.ajaxSubmit({$.createLink('program', 'updateOrder'), data:form});
+    form.append('sourceID', from.data.id);
+    form.append('targetID', to.data.id);
+    form.append('type', type);
+    $.ajaxSubmit({url, data:form});
 
     return true;
-}
+};

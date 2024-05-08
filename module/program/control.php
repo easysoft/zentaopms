@@ -635,13 +635,32 @@ class program extends control
      */
     public function updateOrder()
     {
-        $sourceID    = (int)$this->post->sourceID;
-        $sourceOrder = (int)$this->post->sourceOrder;
-        $targetID    = (int)$this->post->targetID;
-        $targetOrder = (int)$this->post->targetOrder;
+        $sourceID = (int)$this->post->sourceID;
+        $targetID = (int)$this->post->targetID;
+        $type     = $this->post->type == 'after' ? 'after' : 'before';
 
-        $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($targetOrder)->where('id')->eq($sourceID)->exec();
-        $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($sourceOrder)->where('id')->eq($targetID)->exec();
+        $program   = $this->program->fetchByID($sourceID);
+        $oldOrders = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('parent')->eq($program->parent)->orderBy('`order`')->fetchPairs('id', 'order');
+        $newOrders = array();
+        foreach(array_keys($oldOrders) as $i => $programID)
+        {
+            if($programID == $sourceID) continue;
+
+            $newIndex = ($i + 1) * 5;
+            $newOrders[$newIndex] = $programID;
+            if($programID == $targetID)
+            {
+                $newIndex = $type == 'before' ? $newIndex - 1 : $newIndex - 1;
+                $newOrders[$newIndex] = $sourceID;
+            }
+        }
+        ksort($newOrders);
+        $newOrders = array_combine($newOrders, $oldOrders);
+
+        foreach($newOrders as $programID => $order)
+        {
+            if($order != $oldOrders[$programID]) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($programID)->exec();
+        }
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
     }
