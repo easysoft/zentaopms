@@ -1067,11 +1067,10 @@ class searchTao extends searchModel
      *
      * @param  object  $record
      * @param  array   $objectList
-     * @param  string  $module
      * @access private
      * @return object
      */
-    private function processDocRecord(object $record, array $objectList, string $module): object
+    private function processDocRecord(object $record, array $objectList): object
     {
         $doc = $objectList['doc'][$record->objectID];
         $module = 'doc';
