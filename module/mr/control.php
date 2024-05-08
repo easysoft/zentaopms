@@ -40,7 +40,7 @@ class mr extends control
             if($this->app->tab == 'project')
             {
                 $this->view->projectID   = $this->session->project;
-                $this->loadModel('project')->setMenu($this->session->project);
+                $this->loadModel('project')->setMenu((int)$this->session->project);
             }
         }
     }
