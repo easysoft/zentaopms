@@ -122,6 +122,7 @@ class executionTao extends executionModel
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->ne('closed')
             ->andWhere('t2.stage')->in('wait,planned,projected,developing')
+            ->andWhere('t2.isParent')->eq('0')
             ->groupBy('project')
             ->fetchAll('project');
 
