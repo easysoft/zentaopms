@@ -107,3 +107,45 @@ window.footerSummary = function(element, checkedIdList)
 
     return {html: summary};
 };
+
+/**
+ * 拖拽的项目集或者项目是否允许放下。
+ * Is it allowed to drop the dragged program or project.
+ *
+ * @param  from   被拿起的元素
+ * @param  to     放下时的目标元素
+ * @access public
+ * @return bool
+ */
+window.canSortTo = function(from, to)
+{
+    if(!from || !to) return false;
+    if(from.data.type != to.data.type) return false;
+    if(from.data.parent != to.data.parent) return false;
+    return true;
+}
+
+/**
+ * 拖拽项目集或项目。
+ * Drag program or project.
+ *
+ * @param  from   被拿起的元素                                                                                                                                                                                                                                                           * @param  to     放下时的目标元素
+ * @param  type   放在目标元素的上方还是下方
+ * @access public
+ * @return bool
+ */
+window.onSortEnd = function(from, to, type)
+{
+    if(!from || !to) return false;
+    if(!canSortTo(from, to)) return false;
+    if(from.data.type != to.data.type) return false;
+
+    const form = new FormData();
+    form.append('sourceID',    sourceID);
+    form.append('sourceOrder', sourceOrder);
+    form.append('targetID',    targetID);
+    form.append('targetOrder', targetOrder);
+    $.ajaxSubmit({$.createLink('program', 'updateOrder'), data:form});
+
+    return true;
+}

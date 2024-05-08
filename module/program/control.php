@@ -635,13 +635,15 @@ class program extends control
      */
     public function updateOrder()
     {
-        $programs = $this->post->programs;
-        if(!$programs) return $this->send(array('result' => 'success'));
+        $sourceID    = (int)$this->post->sourceID;
+        $sourceOrder = (int)$this->post->sourceOrder;
+        $targetID    = (int)$this->post->targetID;
+        $targetOrder = (int)$this->post->targetOrder;
 
-        foreach($programs as $programID => $order) $this->program->updateOrder((int) $programID, (int) $order);
+        $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($targetOrder)->where('id')->eq($sourceID)->exec();
+        $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($sourceOrder)->where('id')->eq($targetID)->exec();
 
-        if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
     }
 
     /*
