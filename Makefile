@@ -193,6 +193,7 @@ package:
 	chmod -R 777 zentaopms/www/data
 	chmod -R 777 zentaopms/config
 	chmod -R 777 zentaopms/extension/custom
+	chmod 777 zentaopms/extension
 	chmod 777 zentaopms/module
 	chmod 777 zentaopms/www
 	chmod a+rx zentaopms/bin/*
