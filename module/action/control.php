@@ -284,20 +284,25 @@ class action extends control
             }
 
             /* 获取评论内容并生成一条action数据。 */
-            $commentData = form::data($this->config->action->form->comment)->get();
-            $actionID    = $this->action->create($objectType, $objectID, 'Commented', isset($commentData->actioncomment) ? $commentData->actioncomment : $this->post->comment);
-            if(empty($actionID))
-            {
-                if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
-                return print(js::error($this->lang->error->accessDenied));
-            }
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
+            $commentData = form::data($this->config->action->form->comment)
+                ->setIF($this->post->comment, 'actioncomment', $this->post->comment)
+                ->get();
 
+            if($commentData->actioncomment)
+            {
+                $actionID = $this->action->create($objectType, $objectID, 'Commented', $commentData->actioncomment);
+                if(empty($actionID))
+                {
+                    if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                    return print(js::error($this->lang->error->accessDenied));
+                }
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
+            }
             if($isInZinPage) return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => (int)$objectID))));
 
-            /* 用于ZIN的新UI。*/
-            /* For new UI with ZIN. */
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => $objectID))));
+            /* 用于旧页面。*/
+            /* For oldPage. */
+            return print(js::reload('parent'));
         }
 
         $this->view->title      = $this->lang->action->create;
