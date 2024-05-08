@@ -371,7 +371,7 @@ class sonarqubeModel extends model
 
         if(!commonModel::hasPriv('space', 'browse')) return false;
         if(in_array($action, array('browseproject', 'reportview', 'browseissue'))) return true;
-        if(!commonModel::hasPriv('instance', 'manage')) return false;
+        if(!commonModel::hasPriv('instance', 'manage', $sonarqube)) return false;
         return true;
     }
 }
