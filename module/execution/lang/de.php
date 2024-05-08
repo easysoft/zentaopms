@@ -281,7 +281,7 @@ $lang->execution->importPlanStories         = 'Verknüpfe Story aus Plan';
 $lang->execution->importBug                 = 'Importiere Bugs';
 $lang->execution->tree                      = 'Baum';
 $lang->execution->treeTask                  = 'Aufgabe anzeigen';
-$lang->execution->treeStory                 = 'Story anzeigen';
+$lang->execution->treeStory                 = 'Only Stories';
 $lang->execution->treeViewTask              = 'Tree View Task';
 $lang->execution->treeViewStory             = 'Tree View Story';
 $lang->execution->storyKanban               = 'Story Kanban';
@@ -577,7 +577,7 @@ $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = 'Alle aufklappen';
 $lang->execution->treeLevel['root']  = 'Alle zuklappen';
 $lang->execution->treeLevel['task']  = 'Aufgabe anzeigen';
-$lang->execution->treeLevel['story'] = 'Story anzeigen';
+$lang->execution->treeLevel['story'] = 'Only Stories';
 
 $lang->execution->action = new stdclass();
 $lang->execution->action->opened               = '$date, created by <strong>$actor</strong>. $extra' . "\n";

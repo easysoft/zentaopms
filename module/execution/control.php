@@ -1864,15 +1864,17 @@ class execution extends control
 
         $execution = $this->execution->getById($executionID);
         $project   = $this->project->getById($execution->project);
-        if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
 
+        if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
         if($this->app->tab == 'project') $this->view->projectID = $execution->project;
+
+        $gradeGroup = $this->loadModel('story')->getGradeGroup();
 
         $this->view->title       = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
-        $this->view->tree        = $this->execution->buildTree($tree, (bool)$project->hasProduct);
+        $this->view->tree        = $this->execution->buildTree($tree, (bool)$project->hasProduct, $gradeGroup);
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->display();
     }

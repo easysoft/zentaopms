@@ -4687,10 +4687,7 @@ class storyModel extends model
         $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $filesInfo    = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
 
-        $gradeGroup = $this->dao->select('type, grade, name')->from(TABLE_STORYGRADE)
-            ->where('status')->eq('enable')
-            ->fetchGroup('type', 'grade');
-
+        $gradeGroup = $this->getGradeGroup();
         foreach($stories as $story)
         {
             $story->spec   = '';
@@ -5072,9 +5069,7 @@ class storyModel extends model
      */
     public function addGradeLabel(array $stories): array
     {
-        $gradeGroup = $this->dao->select('type, grade, name')->from(TABLE_STORYGRADE)
-            ->where('status')->eq('enable')
-            ->fetchGroup('type', 'grade');
+        $gradeGroup = $this->getGradeGroup();
 
         $storyList = $this->getByList(array_keys($stories));
 
@@ -5110,6 +5105,19 @@ class storyModel extends model
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->orderBy('grade_asc')
             ->fetchAll();
+    }
+
+    /**
+     * Get story grade group.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGradeGroup(): array
+    {
+        return $this->dao->select('type, grade, name')->from(TABLE_STORYGRADE)
+            ->where('status')->eq('enable')
+            ->fetchGroup('type', 'grade');
     }
 
     /**

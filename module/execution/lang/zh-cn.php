@@ -281,7 +281,7 @@ $lang->execution->importPlanStories         = "按计划关联{$lang->SRCommon}"
 $lang->execution->importBug                 = '导入Bug';
 $lang->execution->tree                      = '树状图';
 $lang->execution->treeTask                  = '只看任务';
-$lang->execution->treeStory                 = "只看{$lang->SRCommon}";
+$lang->execution->treeStory                 = "仅需求";
 $lang->execution->treeViewTask              = '树状图查看任务';
 $lang->execution->treeViewStory             = "树状图查看{$lang->SRCommon}";
 $lang->execution->storyKanban               = "{$lang->SRCommon}看板";
@@ -577,7 +577,7 @@ $lang->execution->treeLevel = array();
 $lang->execution->treeLevel['all']   = '全部展开';
 $lang->execution->treeLevel['root']  = '全部折叠';
 $lang->execution->treeLevel['task']  = '全部显示';
-$lang->execution->treeLevel['story'] = "只看{$lang->SRCommon}";
+$lang->execution->treeLevel['story'] = "仅需求";
 
 $lang->execution->action = new stdclass();
 $lang->execution->action->opened               = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";

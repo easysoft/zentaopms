@@ -4564,10 +4564,11 @@ class executionModel extends model
      *
      * @param  array $trees
      * @param  bool  $hasProduct
+     * @param  array $gradeGroup
      * @access pubic
      * @return array
      */
-    public function buildTree(array $trees, bool $hasProduct = true): array
+    public function buildTree(array $trees, bool $hasProduct = true, array $gradeGroup = array()): array
     {
         $treeData = array();
         foreach($trees as $index => $tree)
@@ -4591,9 +4592,11 @@ class executionModel extends model
                     break;
                 case 'story':
                     $this->app->loadLang('story');
-                    $treeData[$index]['url']    = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $gradePairs = zget($gradeGroup, $tree->type, array());
+                    $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'branch':
@@ -4612,7 +4615,7 @@ class executionModel extends model
             if(isset($tree->children))
             {
                 if($tree->type == 'task') $treeData[$index]['content']['html'] = "<span class='title' title='{$tree->title}'>{$tree->title}</span>";
-                $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct);
+                $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct, $gradeGroup);
             }
         }
         return $treeData;
