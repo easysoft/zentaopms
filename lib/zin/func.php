@@ -208,3 +208,4 @@ function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptions
 function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
 function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', func_get_args());}
 function thinkRadioList(): thinkRadioList {return createWg('thinkRadioList', func_get_args());}
+function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
