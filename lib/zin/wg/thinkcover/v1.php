@@ -5,13 +5,14 @@ namespace zin;
 class thinkCover extends wg
 {
     protected static array $defineProps = array(
-        'item: object', //模型信息
+        'item: object',      // 模型信息
+        'actionUrl: string', // 开始按钮链接
     );
 
     protected function buildCoverContentBlock()
     {
         global $lang;
-        $item = $this->prop('item');
+        list($item, $actionUrl) = $this->prop(array('item', 'actionUrl'));
         return div
         (
             setClass('bg-white px-8 w-full relative'),
@@ -54,9 +55,11 @@ class thinkCover extends wg
                     )
                 )
             ),
-            btn(
+            a
+            (
                 setClass('toolbar-item btn primary px-8 py-2 absolute bottom-8'),
                 setStyle(array('left' => '50%', 'margin-left' => '-45px')),
+                set::href($actionUrl),
                 $lang->thinkwizard->run->start
             )
         );
