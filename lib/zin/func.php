@@ -209,3 +209,4 @@ function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_g
 function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', func_get_args());}
 function thinkRadioList(): thinkRadioList {return createWg('thinkRadioList', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
+function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}
