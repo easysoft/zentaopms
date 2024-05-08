@@ -126,12 +126,12 @@ toolbar
 );
 
 $canBatchEdit   = hasPriv('product', 'batchEdit');
-$canUpdateOrder = hasPriv('product', 'updateOrder');
+$canUpdateOrder = hasPriv('product', 'updateOrder')  && strpos($orderBy, 'order') !== false;
 dtable
 (
     set::id('products'),
     set::plugins(array('sortable')),
-    set::sortable($canUpdateOrder && strpos($orderBy, 'order') === false),
+    set::sortable($canUpdateOrder),
     set::onSortEnd($canUpdateOrder ? jsRaw('window.onSortEnd') : null),
     set::canSortTo($canUpdateOrder ? jsRaw('window.canSortTo') : null),
     set::cols($cols),

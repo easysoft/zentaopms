@@ -41,8 +41,8 @@ function getCheckedItems()
 };
 
 /**
- * 拖拽的用例或者场景是否允许放下。
- * Is it allowed to drop the dragged case or scene.
+ * 拖拽的产品是否允许放下。
+ * Is it allowed to drop the dragged product.
  *
  * @param  from   被拿起的元素
  * @param  to     放下时的目标元素
@@ -52,13 +52,12 @@ function getCheckedItems()
 window.canSortTo = function(from, to)
 {
     if(!from || !to) return false;
-    if(from.data.program != to.data.program) return false;
     return true;
 }
 
 /**
- * 拖拽用例或者场景。
- * Drag case or scene.
+ * 拖拽产品。
+ * Drag product.
  *
  * @param  from   被拿起的元素
  * @param  to     放下时的目标元素
@@ -69,7 +68,6 @@ window.canSortTo = function(from, to)
 window.onSortEnd = function(from, to, type)
 {
     if(!from || !to) return false;
-    if(from.data.program != to.data.program) return false;
 
     const url  = $.createLink('product', 'updateOrder');
     const form = new FormData();

@@ -535,7 +535,7 @@ class product extends control
     {
         /* Can only be order by program sorting. */
         $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'program') === false) return false;
+        if(strpos($orderBy, 'order') === false) return false;
 
         /* Get sorted id list. */
         $products = json_decode($this->post->products, true);
@@ -579,7 +579,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all(string $browseType = 'noclosed', string $orderBy = 'program_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $programID = 0)
+    public function all(string $browseType = 'noclosed', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $programID = 0)
     {
         /* Set env data. */
         $this->productZen->setMenu4All();
