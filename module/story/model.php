@@ -1605,11 +1605,16 @@ class storyModel extends model
             $oldStoryPlan = $oldStory->type == 'story' ? $oldStory->plan : '';
             $this->updateStoryOrderOfPlan((int)$storyID, (string)$planID, $oldStoryPlan);
 
-            /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
+            /* 用需、业需追加计划，软需替换计划。 */
             $productType = $products[$oldStory->product]->type;
-            if($productType == 'normal') $story->plan = $planID;
-            if(empty($oldPlanID)) $story->plan = $planID;
-            if($oldStory->branch) $story->plan = $planID;
+            if($oldStory->type != 'story')
+            {
+                $story->plan = trim("{$oldStory->plan},{$planID}", ',');
+            }
+            elseif($productType == 'normal' || empty($oldStory->plan) || $oldStory->branch)
+            {
+                $story->plan = $planID;
+            }
 
             /* Change stage. */
             if($planID)
@@ -1618,7 +1623,7 @@ class storyModel extends model
                 if($oldStory->stage == 'defining') $story->stage = 'planning';
                 if($productType != 'normal' and $oldStory->branch == 0)
                 {
-                    if(!empty($oldPlanID)) $story->plan = trim("{$story->plan},{$planID}", ',');
+                    if(!empty($oldPlanID) && $oldStory->type == 'story') $story->plan = trim("{$story->plan},{$planID}", ',');
                     foreach(explode(',', $plan->branch) as $planBranch)
                     {
                         if(isset($oldStoryStages[$storyID][$planBranch])) continue;
