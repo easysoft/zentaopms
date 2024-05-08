@@ -32,7 +32,7 @@ class count_of_assigned_task_in_user extends baseCalc
     {
         $select = "`assignedTo` as `user`, count(`assignedTo`) as `value`";
         return $this->dao->select($select)->from($this->getSingleSql())
-            ->where('`status`')->notin('closed,calcel')
+            ->where('`status`')->notin('closed,cancel')
             ->andWhere('`projectStatus`')->ne('suspended')
             ->andWhere('`executionStatus`')->ne('suspended')
             ->andWhere("(`mode` = 'multi' and `teamStatus` != 'done')", true)
