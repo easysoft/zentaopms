@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
 
 class thinkCheckList extends wg
@@ -52,24 +52,55 @@ class thinkCheckList extends wg
         $props = $this->props->pick(['primary', 'type', 'name', 'disabled']);
         if(!empty($props['name']) && !empty($item['value'])) $props['id'] = $props['name'] . $item['value'];
 
-        if(!empty($item['isOther'])) return div
+        $itemClass = $this->prop('type') === 'checkbox' ? 'gap-4 px-4' : 'gap-3 px-3';
+        $text      = $item['text'];
+        unset($item['text']);
+        if(!empty($item['isOther']))
+        {
+            return div
+            (
+                setClass('item-control has-input w-full py-3 flex items-center justify-between border cursor-pointer ' . $itemClass),
+                setData('type', $this->prop('type')),
+                on::click('toggleChecked'),
+                div
+                (
+                    setClass('flex items-start text-lg gap-1.5 flex-1'),
+                    div(setStyle(array('min-width' => '60px')), $text),
+                    new textarea
+                    (
+                        set(array(
+                            'rows'     => 1,
+                            'disabled' => !isset($item['checked']) || !$item['checked'],
+                            'name'     => isset($item['value']) ? $item['value'] : 'other',
+                            'value'    => isset($item['showText']) ? $item['showText'] : ''
+                        )),
+                        on::input('inputOther'),
+                        on::click('stopPropagation')
+                    ),
+                ),
+                new checkbox
+                (
+                    set($props),
+                    set($item),
+                    $this->prop('type') == 'radio' ? on::click('stopPropagation') : null,
+                    isset($item['checked']) && $item['checked'] ? set::rootClass('checked') : null
+                )
+            );
+        }
+        return div
         (
-            setClass('w-full relative cursor-pointer item-input'),
+            setData('type', $this->prop('type')),
+            on::click('toggleChecked'),
+            setClass('item-control w-full py-3 flex items-center justify-between border cursor-pointer ' . $itemClass),
+            div(setClass('text-lg flex-1'), $text),
             new checkbox
             (
                 set($props),
                 set($item),
-                isset($item['checked']) && $item['checked'] ? set::rootClass('checked') : null,
-                on::change('handleInput')
-            ),
-            new input(set(array(
-                'disabled' => !isset($item['checked']) || !$item['checked'],
-                'name'     => $item['value'],
-                'class'    => 'absolute top-2',
-                'style'    => array('width' => '80%', 'height' => '32px', 'right' => '45px')
-            ))),
+                $this->prop('type') == 'radio' ? on::click('stopPropagation') : null,
+                isset($item['checked']) && $item['checked'] ? set::rootClass('checked') : null
+            )
         );
-        return new checkbox(set($props), set($item), isset($item['checked']) && $item['checked'] ? set::rootClass('checked') : null, on::change('handleInput'));
     }
 
     protected function build()
