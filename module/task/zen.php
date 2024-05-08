@@ -39,7 +39,7 @@ class taskZen extends task
     protected function assignCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output, string $cardPosition)
     {
         /* Get information about the task. */
-        $task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
+        $task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID, $output);
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
 
         /* Get module information. */
@@ -1227,10 +1227,10 @@ class taskZen extends task
      * @param  object    $task
      * @param  int       $executionID
      * @param  string    $afterChoose continueAdding|toTaskList|toStoryList
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function generalCreateResponse(object $task, int $executionID, string $afterChoose): array
+    public function generalCreateResponse(object $task, int $executionID, string $afterChoose): array
     {
         /* Set the universal return value. */
         $response['result']  = 'success';
@@ -1825,10 +1825,11 @@ class taskZen extends task
      * @param  int       $taskID
      * @param  int       $todoID
      * @param  int       $bugID
-     * @access protected
+     * @param  array     $output feedback扩展使用
+     * @access public
      * @return object
      */
-    protected function setTaskByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
+    public function setTaskByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output = array()): object
     {
         $task = $this->config->task->create->template;
         $task->module = $moduleID;
