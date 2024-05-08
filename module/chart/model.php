@@ -739,47 +739,6 @@ class chartModel extends model
     }
 
     /**
-     * 获取sql中的表、字段。
-     * Get tables and fields form sql.
-     *
-     * @param  string $sql
-     * @access public
-     * @return array|false
-     */
-    public function getTables(string $sql): array|false
-    {
-        $processedSql = trim($sql, ';');
-        $processedSql = str_replace(array("\r\n", "\n"), ' ', $processedSql);
-        $processedSql = str_replace('`', '', $processedSql);
-        preg_match_all('/^select (.+) from (.+)$/i', $processedSql, $selectAndFrom);
-        if(empty($selectAndFrom[2][0])) return false;
-
-        $tableSql = $fromSql = $selectAndFrom[2][0];
-        if(stripos($fromSql, 'where') !== false)    $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'where')));
-        if(stripos($fromSql, 'limit') !== false)    $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'limit')));
-        if(stripos($fromSql, 'having') !== false)   $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'having')));
-        if(stripos($fromSql, 'group by') !== false) $tableSql = trim(substr($fromSql, 0, stripos($fromSql, 'group by')));
-
-        /* Remove such as "left join|right join|join", "on (t1.id=t2.id)", result like t1, t2 as t3. */
-        $tableSql .= ' ';
-        if(stripos($tableSql, 'join') !== false) $tableSql = preg_replace(array('/join\s+([A-Z]+_\w+ .*)on/Ui', '/,\s*on\s+[^,]+/i'), array(',$1,on', ''), $tableSql);
-        $tableSql = str_replace(array('left', 'right'), '', $tableSql);
-
-        /* Match t2 as t3 */
-        preg_match_all('/(\w+) +as +(\w+)/i', $tableSql, $matchOut);
-
-        $tableSql = preg_replace('/as +\w+/i', ' ', $tableSql);
-        $tableSql = trim(str_replace(array('(', ')', ','), ' ', $tableSql));
-        $tableSql = preg_replace('/ +/', ' ', $tableSql);
-
-        $tables = explode(' ', $tableSql);
-
-        list($fields, $sql) = $this->chartTao->getFieldsBySql($selectAndFrom[1][0], $sql, $matchOut);
-
-        return array('sql' => $sql, 'tables' => $tables, 'fields' => $fields);
-    }
-
-    /**
      * 在sql中将变量解析为空字符串。
      * Parse variables to null string in sql.
      *
