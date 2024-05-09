@@ -1191,6 +1191,22 @@ $config->delete['20_0_beta2'][] = 'extension/lite/story/ext/ui/view.html.php';
 $config->delete['20_0'][] = 'extension/biz/task/ext/control/create.php';
 $config->delete['20_0'][] = 'extension/max/task/ext/control/create.php';
 $config->delete['20_0'][] = 'extension/ipd/task/ext/control/create.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/browse.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/browse.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/browsereview.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/browsereview.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/detail.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/detail.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/exportdetail.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/exportdetail.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/exportstat.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/exportstat.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/personal.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/personal.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/review.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/review.php';
+$config->delete['20_0'][] = 'extension/biz/attend/ext/control/stat.php';
+$config->delete['20_0'][] = 'extension/max/attend/ext/control/stat.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox');
 
