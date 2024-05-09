@@ -857,7 +857,7 @@ class docModel extends model
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
         $files = $this->loadModel('file')->getUpload();
-        if(empty($files)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        if(isset($files['name'])) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         $lib = $this->getLibByID($doc->lib);
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
@@ -936,11 +936,10 @@ class docModel extends model
      * Create a doc.
      *
      * @param  object            $doc
-     * @param  array|bool        $labels
      * @access public
      * @return array|bool|string
      */
-    public function create(object $doc, array|bool $labels = false): array|bool|string
+    public function create(object $doc): array|bool|string
     {
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
         if(empty($doc->lib) && strpos((string)$doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
@@ -972,7 +971,7 @@ class docModel extends model
         }
 
         $files = $this->loadModel('file')->getUpload();
-        if($lib->type == 'attachment' && empty($labels)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        if($doc->type == 'attachment' && isset($files['name'])) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         $doc->draft  = $docContent->content;
         $doc->vision = $this->config->vision;

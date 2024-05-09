@@ -152,6 +152,7 @@ $contentDom = div
         div
         (
             setClass('panel-actions flex'),
+            $editorGroup ? setClass('hasEditor') : null,
             div
             (
                 setClass('toolbar'),
@@ -166,6 +167,7 @@ $contentDom = div
                 common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
                 (
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
+                    $doc->type != 'text' ? setData('toggle', 'modal') : null,
                     setClass('btn ghost'),
                     icon('edit')
                 ) : null,

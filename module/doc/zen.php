@@ -453,11 +453,11 @@ class docZen extends doc
      * 在上传文件后的返回。
      * Return after upload files.
      *
-     * @param  array     $docResult
+     * @param  array|string $docResult
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterUploadDocs(array $docResult): bool|int
+    protected function responseAfterUploadDocs(array|string $docResult): bool|int
     {
         if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

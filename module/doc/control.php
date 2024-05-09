@@ -288,12 +288,20 @@ class doc extends control
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-            $docData = form::data($this->config->doc->create)->get();
+            if($_POST['type'] == 'attachment' && isset($_FILES['name']))
+            {
+                $this->config->doc->form->create['title']['required'] = false;
+                $this->config->doc->form->create['title']['skipRequired'] = true;
+            }
+
+            $docData = form::data($this->config->doc->form->create)
+                ->setDefault('addedBy', $this->app->user->account)
+                ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->uploadFormat == 'combinedDocs')
             {
-                $docResult = $this->doc->create($docData, $this->post->labels);
+                $docResult = $this->doc->create($docData);
             }
             else
             {

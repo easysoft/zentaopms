@@ -33,14 +33,15 @@ $config->doc->editor->objectlibs = array('id' => 'comment,lastComment', 'tools' 
 $config->doc->markdown = new stdclass();
 $config->doc->markdown->create = array('id' => 'contentMarkdown', 'tools' => 'withchange');
 
-$config->doc->iconList['html']     = 'rich-text';
-$config->doc->iconList['markdown'] = 'markdown';
-$config->doc->iconList['url']      = 'text-link';
-$config->doc->iconList['text']     = 'wiki-file';
-$config->doc->iconList['template'] = 'wiki-file';
-$config->doc->iconList['word']     = 'word';
-$config->doc->iconList['ppt']      = 'ppt';
-$config->doc->iconList['excel']    = 'excel';
+$config->doc->iconList['html']       = 'rich-text';
+$config->doc->iconList['markdown']   = 'markdown';
+$config->doc->iconList['url']        = 'text-link';
+$config->doc->iconList['text']       = 'wiki-file';
+$config->doc->iconList['template']   = 'wiki-file';
+$config->doc->iconList['word']       = 'word';
+$config->doc->iconList['ppt']        = 'ppt';
+$config->doc->iconList['excel']      = 'excel';
+$config->doc->iconList['attachment'] = 'attachment';
 
 $config->doc->objectIconList['product']   = 'icon-product';
 $config->doc->objectIconList['project']   = 'icon-project';
