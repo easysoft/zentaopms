@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('docType', $docType);
+jsVar('officeTypes', $config->doc->officeTypes);
 if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false)
 {
     set::title($lang->doc->create);
