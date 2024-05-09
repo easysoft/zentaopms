@@ -6,62 +6,35 @@ $(function()
     if(appTab != 'devops' && !hasProduct) zui.Modal.alert(noProductTip);
 });
 
-function onProductChange(event)
-{
-    var projects = $('[name="projects[]"]').val();
-    var products = $('[name="product[]"]').val();
-
-    $.post($.createLink('repo', 'ajaxProjectsOfProducts'), {'products': products.join(','), 'projects': projects.join(',')}, function(response)
-    {
-        var data      = JSON.parse(response);
-        var $projects = $('#projects').zui('picker');
-        $projects.render({items: data});
-        $projects.$.clear();
-    });
-}
-
 function onHostChange()
 {
     var host     = $('[name=serviceHost]').val();
     var url      = $.createLink('repo', 'ajaxGetProjects', "host=" + host);
-    var $project = $('#serviceProject').zui('picker');
+
+    const repo = zui.Dropmenu.query('#repoDropMenu');
+
     if(host == '')
     {
-      $project.render({items: []});
-      $project.$.clear();
+      repo.render({fetcher: ''});
       return false;
     }
 
-    toggleLoading('#serviceProject', true);
-    $.get(url, function(response)
-    {
-        var data = JSON.parse(response);
-        if(Object.keys(data).length <= 1) zui.Modal.alert({message: noRepoLeft, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});
-
-        $project.render({items: data});
-        $project.$.clear();
-        toggleLoading('#serviceProject', false);
-    });
+    toggleLoading('#repoDropMenu', true);
+    repo.render({fetcher: url})
+    toggleLoading('#repoDropMenu', false);
 }
 
 function onProjectChange()
 {
-    var serviceProject = $('#serviceProject').zui('picker').$.state.value;
-    var items          = $('#serviceProject').zui('picker').$.state.items;
+    var serviceProject = $('#repoDropMenu').find('span').first().text();
     if(!serviceProject)
     {
         $('#name').val('');
         return;
     }
-
-    for(i in items)
+    else
     {
-        if(items[i].value == serviceProject)
-        {
-            var projectName = items[i].text.split('/');
-            $('#name').val(projectName[1].trim());
-            break;
-        }
+        $('#name').val(serviceProject);
     }
 }
 
