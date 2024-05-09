@@ -52,10 +52,10 @@ if(!$hideStory)
                     'icon' => 'eye',
                     'class' => 'ghost',
                     'hint' => $lang->preview,
-                    'data-url' => '#',
+                    'data-url' => empty($storyID) ? '#' : createLink('story', 'view', "storyID={$storyID}"),
                     'data-toggle' => 'modal',
                     'data-size' => 'lg',
-                    'disabled' => true
+                    'disabled' => empty($storyID)
                 )
             )
         )
