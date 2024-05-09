@@ -278,6 +278,7 @@ $lang->metric->objectList['mergeRequest']  = "Merge Request";
 $lang->metric->objectList['code']          = "Code";
 $lang->metric->objectList['vulnerability'] = "Vulnerability";
 $lang->metric->objectList['codeAnalysis']  = "Code Analysis";
+$lang->metric->objectList['review']        = "Review";
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
     $lang->metric->objectList['feedback'] = "Feedback";
@@ -285,10 +286,10 @@ if(in_array($config->edition, array('biz', 'max', 'ipd')))
 }
 if(in_array($config->edition, array('max', 'ipd')))
 {
-    $lang->metric->objectList['risk']        = "Risk";
-    $lang->metric->objectList['issue']       = "Issue";
+    $lang->metric->objectList['risk']  = "Risk";
+    $lang->metric->objectList['issue'] = "Issue";
+    $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['review'] = "Review";
 $lang->metric->objectList['other']  = "Other";
 
 $lang->metric->chartTypeList = array();

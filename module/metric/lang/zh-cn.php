@@ -278,6 +278,7 @@ $lang->metric->objectList['mergeRequest']  = "合并请求";
 $lang->metric->objectList['code']          = "代码";
 $lang->metric->objectList['vulnerability'] = "安全漏洞";
 $lang->metric->objectList['codeAnalysis']  = "代码分析";
+$lang->metric->objectList['review']        = "评审";
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
     $lang->metric->objectList['feedback'] = "反馈";
@@ -285,10 +286,10 @@ if(in_array($config->edition, array('biz', 'max', 'ipd')))
 }
 if(in_array($config->edition, array('max', 'ipd')))
 {
-    $lang->metric->objectList['risk']     = "风险";
-    $lang->metric->objectList['issue']    = "问题";
+    $lang->metric->objectList['risk']  = "风险";
+    $lang->metric->objectList['issue'] = "问题";
+    $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['review'] = "评审";
 $lang->metric->objectList['other']  = "其他";
 
 $lang->metric->chartTypeList = array();
