@@ -48,6 +48,7 @@ formPanel
             set::name('repoID'),
             set::items($repoPairs),
             set::value($repo->id),
+            set::required(true),
             on::change('changeRepo')
         )
     ) : null,
