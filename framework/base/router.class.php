@@ -1674,11 +1674,10 @@ class baseRouter
         $isEncrypted = false;
         if(str_contains($file2Included, 'extension' . DS . $this->config->edition . DS))
         {
-            $fp = fopen($file2Included, 'r');
+            $fp    = fopen($file2Included, 'r');
             $line1 = fgets($fp);
-            $line2 = fgets($fp);
             fclose($fp);
-            if(str_starts_with($line1, '<?php //') and str_starts_with($line2, "if(!extension_loaded('ionCube Loader'))")) $isEncrypted = true;
+            if(strpos($line1, '<?php //') === 0) $isEncrypted = true;
         }
 
         /**
