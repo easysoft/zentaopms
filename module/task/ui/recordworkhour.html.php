@@ -190,7 +190,8 @@ else
             set::name('work'),
             set::label($lang->task->work),
             set::width('auto'),
-            set::control('textarea')
+            set::control('textarea'),
+            set::required($config->edition != 'open')
         ),
         formBatchItem
         (

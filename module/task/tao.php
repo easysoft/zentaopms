@@ -289,6 +289,10 @@ class taskTao extends taskModel
             {
                 dao::$errors["consumed[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
             }
+            elseif(!$record->work && $this->config->edition != 'open')
+            {
+                dao::$errors["work[$id]"] = sprintf($this->lang->error->notempty, $this->lang->task->work);
+            }
 
             /* Check left hours. */
             if($left === '') dao::$errors["left[$id]"] = $this->lang->task->error->left;

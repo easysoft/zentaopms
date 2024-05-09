@@ -23,6 +23,7 @@ formPanel
     set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
     formGroup
     (
+        set::required(true),
         set::width('1/3'),
         set::label($lang->task->date),
         set::name('date'),
@@ -35,6 +36,7 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->task->currentConsumed),
+            set::required(true),
             inputControl
             (
                 input
@@ -65,6 +67,7 @@ formPanel
     ),
     formGroup
     (
+        set::required($config->edition != 'open'),
         set::label($lang->task->work),
         set::control('textarea'),
         set::name('work'),
