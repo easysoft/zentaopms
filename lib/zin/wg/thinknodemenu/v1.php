@@ -41,15 +41,16 @@ class thinkNodeMenu extends wg
         {
             if(!is_object($setting)) continue;
 
-            $item   = array(
+            $item = array(
                 'key'         => $setting->id,
                 'text'        => $setting->title,
-                'hint'        => $setting->title,
+                'hint'        => $setting->type == 'question' && !$setting->answer ? $this->lang->thinkrun->error->unanswered :$setting->title,
                 'url'         => $setting->url,
                 'data-id'     => $setting->id,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
                 'selected'    => $setting->id == $activeKey,
+                'disabled'    => $setting->type == 'question' && !$setting->answer,
                 'actions'     => $this->prop('showAction') ? $this->getActions($setting) : null,
                 'data-wizard' => $setting->wizard,
             );
