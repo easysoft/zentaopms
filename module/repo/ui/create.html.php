@@ -89,7 +89,7 @@ formPanel
             set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
             set::width('1/2'),
-            set::control(array('type' => 'dropmenu', 'id' => 'repoDropMenu', 'url' => createLink('repo', 'ajaxGetProjects', "serverID={$serverID}"))),
+            set::control(array('type' => 'dropmenu', 'id' => 'repoDropMenu', 'url' => createLink('repo', 'ajaxGetProjects'))),
         )
     ),
     formGroup
