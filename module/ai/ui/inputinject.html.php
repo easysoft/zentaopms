@@ -125,7 +125,7 @@ $auditInject = function() use($module, $method)
                 exitLink.click();
 
                 /* TODO: find a way to close app. */
-                // if($.appCode !== 'admin') $.apps.close($.appCode);
+                if($.apps.currentCode != 'admin') $.apps.closeApp($.apps.currentCode);
             });
         }
         const regenButton = document.getElementById('promptRegenerate');
