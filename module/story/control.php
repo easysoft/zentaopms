@@ -1401,12 +1401,17 @@ class story extends control
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, 'all', (string)$story->branch);
 
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Get stories to link. */
-        $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type);
+        $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager);
 
         /* Assign. */
         $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->hyphen .$this->lang->story->linkStory;
         $this->view->type         = $type;
+        $this->view->pager        = $pager;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
 

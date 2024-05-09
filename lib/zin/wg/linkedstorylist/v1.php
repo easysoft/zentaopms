@@ -135,7 +135,7 @@ class linkedStoryList extends storyList
                 setData(array('toggle' => 'modal', 'size' => 'lg')),
                 setID('linkButton'),
                 is_array($newLinkBtn) ? set($newLinkBtn) : null,
-                $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)
+                $lang->story->linkStory
             );
             return array($list, $btn);
         }

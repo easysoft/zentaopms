@@ -14,9 +14,8 @@ use function zin\utils\flat;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-$isInModal     = isInModal();
-$isRequirement = $story->type == 'requirement';
-$isStoryType   = $story->type == 'story';
+$isInModal   = isInModal();
+$isStoryType = $story->type == 'story';
 if(!isset($executionID)) $executionID = 0;
 
 /* 版本列表。Version list. */
@@ -50,7 +49,7 @@ if(!$isInModal && hasPriv('story', 'create'))
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->story->create,
-        'url'  => createLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type")
+        'url'  => createLink($story->type, 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type")
     );
 }
 
@@ -88,9 +87,10 @@ if($story->children)
     $cols['estimate']   = $config->story->dtable->fieldList['estimate'];
     $cols['status']     = $config->story->dtable->fieldList['status'];
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
+    $cols['title']['title']        = $lang->story->name;
     $cols['id']['checkbox']        = false;
     $cols['title']['nestedToggle'] = false;
-    $cols['actions']['minWidth']   = 190;
+    $cols['actions']['minWidth']   = 200;
     if($isInModal)
     {
         $cols['title']['data-toggle'] = 'modal';
@@ -100,11 +100,11 @@ if($story->children)
     foreach(array_keys($cols) as $fieldName) $cols[$fieldName]['sortType'] = false;
 
     $options = array('users' => $users);
-    foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options);
+    foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options, $child->type, $maxGradeGroup);
 
     $sections[] = array
     (
-        'title'          => $isRequirement ? $lang->story->story : $lang->story->children,
+        'title'          => $lang->story->children,
         'control'        => 'dtable',
         'id'             => 'table-story-children',
         'cols'           => $cols,
@@ -140,11 +140,11 @@ if($twins)
         ->items($twins);
 }
 
-if($this->config->URAndSR && !$hiddenURS && !in_array($config->vision, array('lite', 'or')))
+if(!in_array($config->vision, array('lite', 'or')))
 {
     $tabs[] = setting()
         ->group('relatives')
-        ->title($isStoryType ? $lang->story->requirement : $lang->story->story)
+        ->title($lang->story->linkStories)
         ->control('linkedStoryList')
         ->items($relations)
         ->story($story);
@@ -169,7 +169,7 @@ if($config->vision != 'lite')
 }
 
 $parentTitle = $story->parent > 0 ? set::parentTitle($story->parentName) : null;
-$parentUrl   = $story->parent > 0 ? set::parentUrl(createLink('story', 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
+$parentUrl   = $story->parent > 0 ? set::parentUrl(createLink($story->parentType, 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
 
 $versionBtn = count($versions) > 1 ? to::title(dropdown
 (

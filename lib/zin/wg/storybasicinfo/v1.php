@@ -78,6 +78,8 @@ class storyBasicInfo extends wg
         $hiddenPlan = $this->prop('hiddenPlan', data('hiddenPlan'));
         $statusText = $this->prop('statusText', $story->status);
         $users      = $this->prop('users', data('users'));
+        $gradePairs = $this->prop('gradePairs', data('gradePairs'));
+        $showGrade  = $this->prop('showGrade', data('showGrade'));
         $items      = array();
 
         if(!$product->shadow)
@@ -93,7 +95,15 @@ class storyBasicInfo extends wg
             'control' => 'breadcrumb',
             'items'   => $this->getModuleItems($story, $product)
         );
-        if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan)
+        if(isset($story->parentName))
+        {
+            $items[$lang->story->parent] = $story->parentName;
+        }
+        if($showGrade)
+        {
+            $items[$lang->story->grade] = zget($gradePairs, $story->grade);
+        }
+        if(!$hiddenPlan)
         {
             $planTitleItems = array();
             if(isset($story->planTitle) && $story->planTitle)

@@ -59,13 +59,17 @@ class entityList extends wg
 
     protected function getItems()
     {
+        global $lang;
         $items = $this->prop('items', array());
         $list  = array();
 
-        foreach($items as $key => $entity)
+        foreach($items as $key => $entities)
         {
-            if(is_string($entity)) $entity = (object)array('id' => $key, 'title' => $entity);
-            $list[] = $this->getItem($entity);
+            $list[] = array('id' => $key, 'title' => $lang->story->typeList[$key]);
+            foreach($entities as $entity)
+            {
+                $list[] = $this->getItem($entity);
+            }
         }
 
         return $list;
