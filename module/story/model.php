@@ -468,6 +468,23 @@ class storyModel extends model
     }
 
     /**
+     * 批量获取关联传入项目ID的需求，并按照项目分组。
+     * Fetch stories by project id list.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function fetchStoriesByProjectIdList(array $projectIdList = array()): array
+    {
+        return $this->dao->select("t2.*,t1.project")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+    }
+
+    /**
      * Create a story.
      *
      * @param  object $story
