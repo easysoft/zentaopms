@@ -288,7 +288,7 @@ class doc extends control
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-            if($_POST['type'] == 'attachment' && isset($_FILES['name']))
+            if($_POST['type'] == 'attachment' && empty($_FILES['files']['name'][0]))
             {
                 $this->config->doc->form->create['title']['required'] = false;
                 $this->config->doc->form->create['title']['skipRequired'] = true;
