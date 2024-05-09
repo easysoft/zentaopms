@@ -19,7 +19,7 @@ class caselibTao extends caselibModel
             $caseData = new stdclass();
 
             $caseData->lib          = $lib;
-            $caseData->module       = $data->module[$key];
+            $caseData->module       = (int)$data->module[$key];
             $caseData->title        = $data->title[$key];
             $caseData->pri          = (int)$data->pri[$key];
             $caseData->type         = $data->type[$key];
