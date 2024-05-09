@@ -1,7 +1,7 @@
 <?php
 /**
  * 按人员统计的待处理工单数
- * Count of wait ticket in user.
+ * Count of assignedTo ticket in user.
  *
  * 范围：user
  * 对象：ticket
@@ -18,11 +18,11 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_wait_ticket_in_user extends baseCalc
+class count_of_assigned_ticket_in_user extends baseCalc
 {
     public $dataset = 'getAllTickets';
 
-    public $fieldList = array('t1.status', 't1.assignedTo');
+    public $fieldList = array('t1.assignedTo');
 
     public $result = array();
 
@@ -30,7 +30,7 @@ class count_of_wait_ticket_in_user extends baseCalc
     {
         $assignedTo = $row->assignedTo;
 
-        if(empty($assignedTo) || $assignedTo == 'closed' || $row->status != 'wait') return false;
+        if(empty($assignedTo) || $assignedTo == 'closed') return false;
 
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = 0;
         $this->result[$assignedTo] += 1;
