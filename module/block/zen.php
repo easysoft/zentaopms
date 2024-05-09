@@ -468,7 +468,7 @@ class blockZen extends block
             if($field == 'testcase') $code = "assigned_case";
 
             /* 查询当前指派给当前用户的不同数据。 */
-            $assignedGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account), 'realtime', null, $this->config->vision);
+            $assignedGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account), 'realtime', null, $field != 'feedback' ? $this->config->vision : '');
             $count = 0;
             if(!empty($assignedGroup))
             {
