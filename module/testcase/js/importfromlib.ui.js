@@ -27,7 +27,7 @@ window.toggleLib = function(event)
 {
     const libID = $(event.target).val();
     const link  = $.createLink('testcase','importFromLib','productID=' + productID + '&branch=' + branch + '&libID=' + libID);
-    loadPage(link, '#mainContent');
+    openUrl(link);
 }
 
 $(document).off('click', '.import-btn').on('click', '.import-btn', function()
