@@ -671,13 +671,14 @@ class testcase extends control
     }
 
     /**
+     * 批量修改用例的分支。
      * Batch change branch.
      *
      * @param  int    $branchID
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID)
+    public function batchChangeBranch(int $branchID)
     {
         $caseIdList  = zget($_POST, 'caseIdList',  array());
         $sceneIdList = zget($_POST, 'sceneIdList', array());
