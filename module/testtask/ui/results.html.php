@@ -28,7 +28,7 @@ div
     ),
     div
     (
-        setClass('leading-6 h-6 my-2'),
+        setClass('leading-6 my-2', empty($case->precondition) ? 'h-6' : ''),
         nl2br($case->precondition)
     )
 );
