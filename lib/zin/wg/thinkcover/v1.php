@@ -9,16 +9,22 @@ class thinkCover extends wg
         'actionUrl: string', // 开始按钮链接
     );
 
+    public static function getPageCSS(): string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function buildCoverContentBlock()
     {
         global $lang;
-        list($item, $actionUrl) = $this->prop(array('item', 'actionUrl'));
+        $item = $this->prop('item');
+
         return div
         (
-            setClass('bg-white px-8 w-full relative'),
+            setClass('bg-white px-8 w-full relative pt-10 pb-6'),
             div
             (
-                setClass('flex items-center w-full'),
+                setClass('flex items-center w-full pt-10 pb-10'),
                 div
                 (
                     setClass('w-3/5 px-4'),
@@ -54,11 +60,21 @@ class thinkCover extends wg
                         set::src($item->thumbnail)
                     )
                 )
-            ),
+            )
+        );
+    }
+
+    protected function buildAction()
+    {
+        global $lang;
+        $actionUrl = $this->prop('actionUrl');
+
+        return div
+        (
+            setClass('py-3 fixed bottom-0 flex justify-center bg-white toolbar-btn'),
             a
             (
-                setClass('toolbar-item btn primary px-8 py-2 absolute bottom-8'),
-                setStyle(array('left' => '50%', 'margin-left' => '-45px')),
+                setClass('btn primary px-8 py-2'),
                 set::href($actionUrl),
                 $lang->thinkwizard->run->start
             )
@@ -71,6 +87,7 @@ class thinkCover extends wg
         return array
         (
             $this->buildCoverContentBlock(),
+            $this->buildAction()
         );
     }
 }
