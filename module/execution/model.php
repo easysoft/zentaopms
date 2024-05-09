@@ -3834,7 +3834,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed' && (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
+        if($action == 'close')    return $execution->status != 'closed' && (!empty($execution->isIPDStage) || !isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
