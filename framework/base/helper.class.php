@@ -796,11 +796,12 @@ class baseHelper
      * 获取远程IP。
      * Get remote ip.
      *
-     * @param  bool  $proxy
+     * @param  bool   $proxy
+     * @param  bool   $single
      * @access public
      * @return string
      */
-    public static function getRemoteIp($proxy = true)
+    public static function getRemoteIp($proxy = true, $single = true)
     {
         $ip = '';
         if(!empty($_SERVER["REMOTE_ADDR"])) $ip = $_SERVER["REMOTE_ADDR"];
@@ -809,6 +810,9 @@ class baseHelper
         {
             if(!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
             if(!empty($_SERVER['HTTP_CLIENT_IP']))       $ip = $_SERVER['HTTP_CLIENT_IP'];
+
+            /* The Proxy Server like CDN will change the HTTP_X_FORWARDED_FOR header with value 'realIP, proxyIP'. */
+            if($single && strpos($ip, ',') !== false) $ip = trim(explode(',', $ip)[0]);
         }
 
         return $ip;
