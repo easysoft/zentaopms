@@ -45,7 +45,12 @@ class history extends wg
         global $app, $lang;
 
         if(!$this->hasProp('title'))      $this->setProp('title',      $lang->history);
-        if(!$this->hasProp('commentBtn')) $this->setProp('commentBtn', $lang->action->create);
+
+        if(!$this->hasProp('commentBtn'))
+        {
+            if(!isset($lang->action->create)) $app->loadLang('action');
+            $this->setProp('commentBtn', $lang->action->create);
+        }
 
         $objectType = $this->prop('objectType');
         $objectID   = $this->prop('objectID');
