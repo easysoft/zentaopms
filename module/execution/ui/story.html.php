@@ -80,11 +80,20 @@ if(!$product)
     $product = new stdclass();
     $product->id = 0;
 }
-$canModifyProduct = common::canModify('product', $product);
-$canCreate        = $canModifyProduct && hasPriv('story', 'create');
-$canBatchCreate   = $canModifyProduct && hasPriv('story', 'batchCreate');
-$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
-$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
+$canModifyProduct                     = common::canModify('product', $product);
+$canOpreate['create']                 = $canModifyProduct && hasPriv('story', 'create');
+$canOpreate['batchCreate']            = $canModifyProduct && hasPriv('story', 'batchCreate');
+$canOpreate['createEpic']             = $canModifyProduct && hasPriv('epic', 'create');
+$canOpreate['batchCreateEpic']        = $canModifyProduct && hasPriv('epic', 'batchCreate');
+$canOpreate['createRequirement']      = $canModifyProduct && hasPriv('requirement', 'create');
+$canOpreate['batchCreateRequirement'] = $canModifyProduct && hasPriv('requirement', 'batchCreate');
+
+$createLink                 = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
+$batchCreateLink            = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
+$createEpicLink             = createLink('epic', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}") . "#app={$app->tab}";
+$batchCreateEpicLink        = createLink('epic', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}") . "#app={$app->tab}";
+$createRequirementLink      = createLink('requirement', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}") . "#app={$app->tab}";
+$batchCreateRequirementLink = createLink('requirement', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}") . "#app={$app->tab}";
 
 /* Tutorial create link. */
 if(commonModel::isTutorialMode())
@@ -94,8 +103,15 @@ if(commonModel::isTutorialMode())
     $canBatchCreate = false;
 }
 
-$createItem      = array('text' => $lang->story->create,      'url' => $createLink);
-$batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+if($canOpreate['create'])      $createItem[] = array('text' => $lang->story->create,      'url' => $createLink);
+if($canOpreate['batchCreate']) $createItem[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+if(in_array($execution->attribute, array('request', 'design')))
+{
+    if($canOpreate['createEpic'])             $createItem[] = array('text' => $lang->epic->create,                               'url' => $createEpicLink);
+    if($canOpreate['batchCreateEpic'])        $createItem[] = array('text' => $lang->epic->batchCreate . $lang->ERCommon,        'url' => $batchCreateEpicLink);
+    if($canOpreate['createRequirement'])      $createItem[] = array('text' => $lang->requirement->create,                        'url' => $createRequirementLink);
+    if($canOpreate['batchCreateRequirement']) $createItem[] = array('text' => $lang->requirement->batchCreate . $lang->URCommon, 'url' => $batchCreateRequirementLink);
+}
 
 $canLinkStory     = $execution->hasProduct && $canModifyProduct && hasPriv('execution', 'linkStory');
 $canlinkPlanStory = $execution->hasProduct && $canModifyProduct && hasPriv('execution', 'importPlanStories');
@@ -110,6 +126,32 @@ if(commonModel::isTutorialMode())
 
 $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl);
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
+
+$createBtnGroup = null;
+if(count($createItem) >= 2)
+{
+    $createBtnGroup = btngroup
+    (
+        btn
+        (
+            setClass('btn secondary'),
+            set::icon('plus'),
+            set::url($createLink),
+            $lang->story->create
+        ),
+        dropdown
+        (
+            btn(setClass('btn secondary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items($createItem),
+            set::placement('bottom-end')
+        )
+    );
+}
+elseif(count($createItem) == 1)
+{
+    $createBtnGroup = item(set($createItem[0] + array('class' => 'btn secondary', 'icon' => 'plus')));
+}
 
 $product ? toolbar
 (
@@ -129,25 +171,7 @@ $product ? toolbar
         'data-toggle' => 'modal'
     ))) : null,
 
-    $canCreate && $canBatchCreate ? btngroup
-    (
-        btn
-        (
-            setClass('btn secondary'),
-            set::icon('plus'),
-            set::url($createLink),
-            $lang->story->create
-        ),
-        dropdown
-        (
-            btn(setClass('btn secondary dropdown-toggle'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::items(array_filter(array($createItem, $batchCreateItem))),
-            set::placement('bottom-end')
-        )
-    ) : null,
-    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $createBtnGroup,
 
     $canLinkStory && $canlinkPlanStory ? btngroup
     (
@@ -426,7 +450,7 @@ dtable
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->story->noStory),
     set::createTip($lang->story->create),
-    set::createLink($canCreate ? $createLink : '')
+    set::createLink($canOpreate['create'] ? $createLink : '')
 );
 
 render();
