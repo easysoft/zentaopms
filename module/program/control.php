@@ -635,28 +635,16 @@ class program extends control
      */
     public function updateOrder()
     {
-        $sourceID = (int)$this->post->sourceID;
-        $targetID = (int)$this->post->targetID;
-        $type     = $this->post->type == 'after' ? 'after' : 'before';
+        $programIdList = json_decode($this->post->programIdList, true);
+        if(!$programIdList) return $this->send(array('result' => 'success'));
 
-        $program   = $this->program->fetchByID($sourceID);
-        $oldOrders = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('parent')->eq($program->parent)->orderBy('`order`')->fetchPairs('id', 'order');
-        $newOrders = array();
-        foreach(array_keys($oldOrders) as $i => $programID)
-        {
-            if($programID == $sourceID) continue;
+        asort($programIdList);
+        $programIdList = array_flip($programIdList);
 
-            $newIndex = ($i + 1) * 5;
-            $newOrders[$newIndex] = $programID;
-            if($programID == $targetID)
-            {
-                $newIndex = $type == 'before' ? $newIndex - 1 : $newIndex - 1;
-                $newOrders[$newIndex] = $sourceID;
-            }
-        }
-        ksort($newOrders);
-        $newOrders = array_combine($newOrders, $oldOrders);
+        $oldOrders = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($programIdList)->orderBy('`order`')->fetchPairs('id', 'order');
+        if(count($programIdList) != count($oldOrders)) return $this->send(array('result' => 'success'));
 
+        $newOrders = array_combine($programIdList, $oldOrders);
         foreach($newOrders as $programID => $order)
         {
             if($order != $oldOrders[$programID]) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($programID)->exec();

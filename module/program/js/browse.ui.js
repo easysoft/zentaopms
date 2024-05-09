@@ -140,9 +140,7 @@ window.onSortEnd = function(from, to, type)
 
     const url  = $.createLink('program', 'updateOrder');
     const form = new FormData();
-    form.append('sourceID', from.data.id);
-    form.append('targetID', to.data.id);
-    form.append('type', type);
+    form.append('programIdList', JSON.stringify(this.state.rowOrders));
     $.ajaxSubmit({url, data:form});
 
     return true;

@@ -121,6 +121,7 @@ class programZen extends program
         $status = strtolower($status);
         $this->view->summary = '';
 
+        if(strpos($orderBy, 'order') !== false) $orderBy = "grade,{$orderBy}";
         if(strtolower($status) == 'bysearch')
         {
             $programs = $this->program->getListBySearch($orderBy, $param, true, $pager);

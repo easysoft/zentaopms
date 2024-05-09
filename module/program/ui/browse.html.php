@@ -182,14 +182,14 @@ toolbar
 );
 
 $canBatchEdit = common::hasPriv('project', 'batchEdit');
-$canSortable  = (common::hasPriv('program', 'updateOrder') && strpos($orderBy, 'order_asc') !== false);
+$canSort      = (common::hasPriv('program', 'updateOrder') && strpos($orderBy, 'order_asc') !== false);
 dtable
 (
     setID('projectviews'),
     set::plugins(array('sortable')),
-    set::sortable($canSortable),
-    set::onSortEnd($canSortable ? jsRaw('window.onSortEnd') : null),
-    set::canSortTo($canSortable ? jsRaw('window.canSortTo') : null),
+    set::sortable($canSort),
+    set::onSortEnd($canSort ? jsRaw('window.onSortEnd') : null),
+    set::canSortTo($canSort ? jsRaw('window.canSortTo') : null),
     set::cols($cols),
     set::data(array_values($data)),
     set::userMap($users),
