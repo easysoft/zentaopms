@@ -210,3 +210,4 @@ function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', fun
 function thinkRadioList(): thinkRadioList {return createWg('thinkRadioList', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
 function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}
+function thinkRun(): thinkRun {return createWg('thinkRun', func_get_args());}
