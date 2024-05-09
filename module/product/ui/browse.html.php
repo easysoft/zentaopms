@@ -204,12 +204,8 @@ $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
 if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']['link'] = array('url' => helper::createLink('projectstory', 'view', 'storyID={id}&projectID={project}'));
 
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
-<<<<<<< HEAD
 if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
-=======
-if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 if($storyType == 'story' && $config->edition == 'ipd') unset($setting['roadmap']);
->>>>>>> master
 $cols = array_values($setting);
 
 /* DataTable data. */
@@ -222,28 +218,11 @@ foreach($stories as $story)
     $story->rawModule    = $story->module;
     $story->from         = $app->tab;
     $options['branches'] = zget($branchOptions, $story->product, array());
-<<<<<<< HEAD
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
 }
 
 /* Generate toolbar of DataTable footer. */
-$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $gradePairs)
-=======
-    $data[] = $this->story->formatStoryForList($story, $options, $storyType);
-    if(!isset($story->children)) continue;
-
-    /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        if($app->rawModule == 'projectstory' && $child->project != $story->project) continue;
-        $child->rawModule = $child->module;
-        $data[] = $this->story->formatStoryForList($child, $options, $storyType);
-    }
-}
-
-/* Generate toolbar of DataTable footer. */
-$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID)
->>>>>>> master
+$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $gradePairs)
 {
     /* Flag variables of permissions. */
     $canBeChanged         = common::canModify('product', $product);
@@ -253,14 +232,9 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $canBatchChangeGrade  = $canBeChanged && hasPriv($storyType, 'batchChangeGrade');
     $canBatchChangeStage  = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
     $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
-<<<<<<< HEAD
-    $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && $product && $product->type == 'normal';
-    $canBatchChangePlan   = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && $product->type == 'normal';
-    $canBatchChangeParent = $canBeChanged && hasPriv($storyType, 'batchChangeParent');
-=======
     $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
     $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && $storyType == 'story' && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
->>>>>>> master
+    $canBatchChangeParent = $canBeChanged && hasPriv($storyType, 'batchChangeParent');
     $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
     $canBatchUnlink       = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib  = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
@@ -388,13 +362,8 @@ featureBar
 
 toolbar
 (
-<<<<<<< HEAD
-    (!hasPriv($storyType, 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'text' => $lang->story->report->common, 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink($storyType, 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") . ($app->tab == 'project' ? '#app=project' : '')))),
-    !hasPriv($storyType, 'export') ? null : item(set(array('id' => 'exportBtn', 'text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType"), 'data-toggle' => 'modal'))),
-=======
-    (!hasPriv('story', 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") . ($app->tab == 'project' ? '#app=project' : '')))),
-    !hasPriv('story', 'export') ? null : item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"), 'data-toggle' => 'modal'))),
->>>>>>> master
+    (!hasPriv($storyType, 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink($storyType, 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") . ($app->tab == 'project' ? '#app=project' : '')))),
+    !hasPriv($storyType, 'export') ? null : item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType"), 'data-toggle' => 'modal'))),
     $fnBuildCreateStoryButton(),
     $fnBuildLinkStoryButton()
 );
