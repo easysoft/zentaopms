@@ -817,7 +817,7 @@ class bugZen extends bug
         $executionID = (int)$bug->executionID;
 
         $products  = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
-        $productID = isset($products[$productID]) ? $productID : '';
+        $productID = isset($products[$productID]) ? $productID : key($products);
 
         if($this->app->tab == 'project' && $projectID)
         {
