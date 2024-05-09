@@ -35,6 +35,7 @@ $cols['progress']['sortType'] = false;
 
 $projectStats = initTableData($projectStats, $cols, $this->project);
 
+$this->loadModel('story');
 $waitCount      = 0;
 $doingCount     = 0;
 $suspendedCount = 0;
@@ -46,8 +47,9 @@ foreach($projectStats as $project)
     if($project->status == 'suspended') $suspendedCount ++;
     if($project->status == 'closed')    $closedCount ++;
 
-    $projectStories = $this->loadModel('story')->getExecutionStoryPairs($project->id);
-    $project->storyCount = count($projectStories);
+    $projectStories = $this->story->getExecutionStories($project->id);
+    $project->storyCount  = count($projectStories);
+    $project->storyPoints = round(array_sum(array_column($projectStories, 'estimate')), 2) . ' ' . $this->config->hourUnit;
 
     $executions = $this->loadModel('execution')->getStatData($project->id, 'all');
     $project->executionCount = count($executions);
