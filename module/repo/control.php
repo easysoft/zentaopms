@@ -1415,7 +1415,10 @@ class repo extends control
         $server         = $this->loadModel('pipeline')->getByID($serverID);
         $getProjectFunc = 'ajaxGet' . $server->type . 'Projects';
 
-        $this->$getProjectFunc($serverID);
+        $repos = $this->$getProjectFunc($serverID);
+
+        $this->view->repos = $this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'));
+        $this->display();
     }
 
     /**
@@ -1490,7 +1493,8 @@ class repo extends control
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
         }
-        return print(json_encode($options));
+
+        return $options;
     }
 
     /**
@@ -1517,7 +1521,8 @@ class repo extends control
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->path, 'value' => $project->id);
         }
-        return print(json_encode($options));
+
+        return $options;
     }
 
     /**
