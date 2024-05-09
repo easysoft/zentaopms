@@ -194,6 +194,7 @@ detailBody
                         setClass(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
                         setID('branch'),
                         set::name('branch'),
+                        set::required(true),
                         set::items($branchTagOption),
                         set::value($case->branch)
                     )
