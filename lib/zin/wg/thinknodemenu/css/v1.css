@@ -26,7 +26,7 @@
 .think-node-menu .tree .tree-item .item-content-thinmory>.form-control {position: absolute; top: 0; left: 0; z-index: 2;}
 .think-node-menu .tree .tree-item.tree-item-input .item-content-thinmory {margin-left: calc((-4)*var(--space)) !important;}
 
-.has-sidebar .sidebar header .btn.is-collapsed .icon:before {content: "\e931";}
+.has-sidebar .think-node-menu>.toggle-btn.is-collapsed .icon:before {content: "\e931";}
 .has-sidebar .sidebar .sidebar-gutter {left: 96%;}
 .has-sidebar .sidebar.is-expanded .gutter-toggle {top: unset; bottom: 12px;}
 .has-sidebar .is-expanded > .think-node-menu ~ .sidebar-gutter > .gutter-toggle {opacity: 0;}

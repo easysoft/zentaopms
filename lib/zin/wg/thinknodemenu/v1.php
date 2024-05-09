@@ -189,7 +189,7 @@ class thinkNodeMenu extends wg
         return btn
         (
             set::type('ghost'),
-            setClass('text-gray absolute top-2 right-3 z-10'),
+            setClass('text-gray absolute top-2 right-3 z-10 toggle-btn'),
             set::icon('fold-all'),
             on::click('toggleQuestionShow'),
         );
