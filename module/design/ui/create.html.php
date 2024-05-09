@@ -53,9 +53,13 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name('type'),
             set::label($lang->design->type),
-            set::items($lang->design->typeList)
+            picker
+            (
+                set::name('type'),
+                set::items($lang->design->typeList),
+                set::value(strtoupper($type)),
+            )
         )
     ),
     formRow
