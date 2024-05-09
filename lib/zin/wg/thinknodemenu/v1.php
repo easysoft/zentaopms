@@ -12,6 +12,12 @@ class thinkNodeMenu extends wg
         'modules: array',
         'activeKey?: int',
         'hover?: bool=true',
+        'showAction?: bool=true',
+        'checkbox?: bool',
+        'preserve?: string|bool',
+        'checkOnClick?: bool|string',
+        'defaultNestedShow?: bool=true',
+        'onCheck?: function'
     );
 
     public static function getPageCSS(): ?string
@@ -44,7 +50,7 @@ class thinkNodeMenu extends wg
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
                 'selected'    => $setting->id == $activeKey,
-                'actions'     => $this->getActions($setting),
+                'actions'     => $this->prop('showAction') ? $this->getActions($setting) : null,
                 'data-wizard' => $setting->wizard,
             );
 
@@ -178,22 +184,55 @@ class thinkNodeMenu extends wg
         return $menus;
     }
 
+    private function buildActions(): node
+    {
+        return btn
+        (
+            set::type('ghost'),
+            setClass('text-gray absolute top-2 right-3 z-10'),
+            set::icon('fold-all'),
+            on::click('toggleQuestionShow'),
+        );
+    }
+
     protected function build(): array
     {
         $this->setMenuTreeProps();
-        $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
+        $treeProps   = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck')));
+        $isInSidebar = $this->parent instanceof sidebar;
 
         return array
         (
             div
             (
-                setClass('think-node-menu rounded shadow ring bg-white col'),
-                h::main
+                setClass('think-node-menu rounded bg-white col bg-canvas mt-1 ml-4 pb-3 h-full'),
+                zui::tree
                 (
-                    setClass('col flex-auto overflow-y-auto overflow-x-hidden pb-2'),
-                    zui::tree(set::_tag('menu'), $treeProps)
-                )
-            )
+                    set::_tag('menu'),
+                    set::defaultNestedShow(true),
+                    set::hover(true),
+                    set::className('bg-canvas col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden'),
+                    $treeProps
+                ),
+                $isInSidebar ? array
+                (
+
+                    $this->buildActions(),
+                    row
+                    (
+                        setClass('w-full h-10 justify-end p-1 absolute bottom-0 right-0 pr-4 z-10 bg-canvas'),
+                        btn
+                        (
+                            set::type('ghost'),
+                            set::size('sm'),
+                            set::icon('menu-arrow-left text-gray'),
+                            set::hint($this->lang->collapse),
+                            on::click()->do('$this.closest(".sidebar").sidebar("toggle");')
+                        )
+                    ),
+                    h::js("$('#mainContainer').addClass('has-sidebar');$('#mainContainer .sidebar').addClass('relative');")
+                ) : null,
+            ),
         );
     }
 }
