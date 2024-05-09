@@ -1682,4 +1682,86 @@ class repoZen extends repo
 
         return $message;
     }
+
+    /**
+     * 构建代码库路径。
+     * Build repo paths.
+     *
+     * @param  array $repos
+     * @access protected
+     * @return array
+     */
+    protected function buildRepoPaths(array $repos): array
+    {
+        $pathList = array();
+        foreach($repos as $repoID => $path)
+        {
+            $paths  = explode('/', $path);
+            $parent = '';
+            foreach($paths as $path)
+            {
+                $path = trim($path);
+                if($path === '') continue;
+
+                $parentID = $parent == '' ? '0' : $pathList[$parent]['path'];
+                $parent  .= $parent == '' ? $path : '/' . $path;
+                if(!isset($pathList[$parent]))
+                {
+                    $pathList[$parent] = array(
+                        'id'     => $repoID,
+                        'parent' => $parentID,
+                        'path'   => $parent,
+                        'text'   => $path,
+                        'key'    => $repoID,
+                    );
+                }
+            }
+        }
+
+        ksort($pathList);
+        return $this->buildRepoTree($pathList, '0');
+    }
+
+    /**
+     * 组装代码库生成父子结构。
+     * Assemble repo path to generate parent-child structure.
+     *
+     * @param  array $pathList
+     * @param  string $parent
+     * @access protected
+     * @return array
+     */
+    protected function buildRepoTree(array $pathList = array(), string $parent = '0'): array
+    {
+        $treeList = array();
+        $key      = 0;
+        $pathName = array();
+        $repoName = array();
+
+        foreach($pathList as $path)
+        {
+            if ($path['parent'] == $parent)
+            {
+                $treeList[$key] = $path;
+                $repoName[$key] = $path['text'];
+                /* Default value is '~', because his ascii code is large in string. */
+                $pathName[$key] = '~';
+
+                $children = $this->buildRepoTree($pathList, $path['path']);
+
+                if($children)
+                {
+                    $treeList[$key]['items'] = $children;
+                    $treeList[$key]['type']  = 'parent';
+                    $repoName[$key]          = '';
+                    $pathName[$key]          = $path['path'];
+                }
+            }
+
+            $key++;
+        }
+
+        array_multisort($pathName, SORT_ASC, $repoName, SORT_ASC, $treeList);
+        return $treeList;
+    }
 }
