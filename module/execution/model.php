@@ -1578,6 +1578,26 @@ class executionModel extends model
     }
 
     /**
+     * 批量查询关联传入项目的执行，并按照项目分组。
+     * Fetch executions of linked project by project id list.
+     *
+     * @param  array   $projectIdList
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionsByProjectIdList(array $projectIdList = array()): array
+    {
+        return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.multiple')->eq('1')
+            ->andWhere('t1.project')->in($projectIdList)
+            ->fetchGroup('project', 'id');
+    }
+
+    /**
      * 获取执行列表信息。
      * Get execution list information.
      *
