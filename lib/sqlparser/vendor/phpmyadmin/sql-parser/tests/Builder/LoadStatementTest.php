@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -7,7 +9,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class LoadStatementTest extends TestCase
 {
-    public function testBuilder()
+    public function testBuilder(): void
     {
         /* Assertion 1 */
         $query = 'LOAD DATA CONCURRENT INFILE '

@@ -7,7 +7,11 @@ window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
     {
-        if(row.data.delay > 0) result[result.length] = {html:'<span class="label size-sm circle danger-pale">' + langPostponed + '</span>', className:'flex items-end w-full', style:{flexDirection:"column"}};
+        if(row.data.delay > 0)
+        {
+            result[0].props.className = 'overflow-hidden';
+            result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + langPostponed + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+        }
         return result;
     }
 
@@ -20,7 +24,7 @@ window.renderCell = function(result, {col, row})
     return result;
 }
 
-$(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
+$(document).off('click', '#table-project-browse .batch-btn').on('click', '#table-project-browse .batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();

@@ -20,7 +20,7 @@ class entry extends baseEntry
 
         if($this->app->action == 'options') throw EndResponseException::create($this->send(204));
 
-        if(!isset($this->app->user) or $this->app->user->account == 'guest') throw EndResponseException::create($this->sendError(401, 'Unauthorized'));
+        if(!$this->loadModel('user')->isLogon()) throw EndResponseException::create($this->sendError(401, 'Unauthorized'));
 
         $this->dao = $this->loadModel('common')->dao;
     }
@@ -219,11 +219,11 @@ class baseEntry
      * Send error response
      *
      * @param  int    $code
-     * @param  string $msg
+     * @param  string|object $msg
      * @access public
      * @return string
      */
-    public function sendError(int $code, string $msg)
+    public function sendError(int $code, string|object $msg)
     {
         $response = new stdclass();
         $response->error = $msg;
@@ -495,7 +495,10 @@ class baseEntry
         {
             foreach($data as $object) $this->formatFields($object, $fields);
         }
-        $this->formatFields($data, $fields);
+        else
+        {
+            $this->formatFields($data, $fields);
+        }
 
         return $data;
     }
@@ -705,7 +708,7 @@ class baseEntry
         $method = $this->app->getMethodName();
         if($module and $method and !$this->loadModel('common')->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
         {
-            return $this->send(403, array('error' => 'Access not allowed'));
+            die($this->send(403, array('error' => 'Access not allowed')));
         }
     }
 

@@ -14,9 +14,9 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('mr')->config('mr')->gen(3);
+zenData('mr')->loadYaml('mr')->gen(3);
 su('admin');
 
 $mrModel = new mrTest();

@@ -39,7 +39,7 @@ class taskZen extends task
     protected function assignCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output, string $cardPosition)
     {
         /* Get information about the task. */
-        $task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
+        $task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID, $output);
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
 
         /* Get module information. */
@@ -59,7 +59,7 @@ class taskZen extends task
         $executionTypeLang = zget($this->lang->execution->typeList, $execution->type, '');
         $this->lang->task->noticeLinkStory = sprintf($this->lang->task->noticeLinkStory, $executionTypeLang);
 
-        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->create;
+        $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->create;
         $this->view->customFields  = $customFields;
         $this->view->modulePairs   = $modulePairs;
         $this->view->showFields    = $this->config->task->custom->createFields;
@@ -185,7 +185,7 @@ class taskZen extends task
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getById($executionID);
 
-            $this->view->title     = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->title     = $execution->name . $this->lang->hyphen . $this->lang->task->batchEdit;
             $this->view->execution = $execution;
             $this->view->modules   = $this->tree->getTaskOptionMenu($executionID, 0, !empty($this->config->task->allModule) ? 'allModule' : '');
         }
@@ -279,7 +279,7 @@ class taskZen extends task
             $taskMembers = $this->view->members;
         }
 
-        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
+        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
         $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active', '', false);
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
@@ -314,7 +314,7 @@ class taskZen extends task
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
-        $this->view->title   = $this->view->execution->name . $this->lang->colon . $this->lang->task->assign;
+        $this->view->title   = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
         $this->view->task    = $task;
         $this->view->members = $members;
         $this->view->users   = $this->loadModel('user')->getPairs();
@@ -353,6 +353,10 @@ class taskZen extends task
         $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active', '', false);
 
         list($customFields, $checkedFields) = $this->getCustomFields($execution, 'batchCreate');
+        if(isset($customFields['story'])) $customFields['preview'] = $customFields['copyStory'] = '';
+
+        $showFields = $this->config->task->custom->batchCreateFields;
+        if(strpos(",$showFields,", ',story,') !== false) $showFields .= ',preview,copyStory';
 
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
@@ -368,7 +372,7 @@ class taskZen extends task
         $this->view->customFields  = $customFields;
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
-        $this->view->showFields    = $this->config->task->custom->batchCreateFields;
+        $this->view->showFields    = $showFields;
 
         $this->display();
     }
@@ -447,7 +451,7 @@ class taskZen extends task
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')
-            ->setIF(!$oldTask->mode && !$task->assignedTo && !empty($this->post->team), 'assignedTo', $this->post->team[0])
+            ->setIF(!$oldTask->mode && !$task->assignedTo && !empty($this->post->team), 'assignedTo', zget($this->post->team, 0, ''))
             ->setIF($task->story !== false && $task->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$task->story))
             ->setIF($task->status == 'wait' && $task->left == $oldTask->left && $task->consumed == 0 && $task->estimate, 'left', $task->estimate)
             ->setIF($task->status == 'done', 'left', 0)
@@ -717,6 +721,7 @@ class taskZen extends task
 
         $testTasks = array();
         $execution = $this->loadModel('execution')->getByID($executionID);
+        $now       = helper::now();
         foreach($postData->testStory as $key => $storyID)
         {
             if(empty($storyID)) continue;
@@ -734,6 +739,8 @@ class taskZen extends task
             $task->type       = 'test'; /* Setting the task type to test to prevent duplicate tasks from being created. */
             $task->vision     = $this->config->vision;
             $task->project    = $execution->project;
+            $task->openedBy   = $this->app->user->account;
+            $task->openedDate = $now;
 
             $testTasks[] = $task;
         }
@@ -1220,10 +1227,10 @@ class taskZen extends task
      * @param  object    $task
      * @param  int       $executionID
      * @param  string    $afterChoose continueAdding|toTaskList|toStoryList
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function generalCreateResponse(object $task, int $executionID, string $afterChoose): array
+    public function generalCreateResponse(object $task, int $executionID, string $afterChoose): array
     {
         /* Set the universal return value. */
         $response['result']  = 'success';
@@ -1328,7 +1335,7 @@ class taskZen extends task
             $task->story   = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] . "(#$task->story)" : '';
             $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bugs[$task->fromBug]->title;
 
-            if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module] . "(#$task->module)";
+            if(isset($relatedModules[$task->module])) $task->module = $relatedModules[$task->module] . "(#$task->module)";
 
             /* Convert username to real name. */
             if(!empty($task->mailto))
@@ -1583,10 +1590,15 @@ class taskZen extends task
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
-        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour' || $from == 'edittask';
+        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour';
 
-        $execution = $this->loadModel('execution')->getByID((int)$task->execution);
+        if($this->app->rawMethod == 'recordworkhour')
+        {
+            $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+            return $response;
+        }
 
+        $execution    = $this->loadModel('execution')->getByID((int)$task->execution);
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
         if((($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban') || $from == 'taskkanban')
         {
@@ -1594,21 +1606,7 @@ class taskZen extends task
             return $response;
         }
 
-        if($this->app->rawMethod == 'recordworkhour')
-        {
-            if($from == 'edittask')
-            {
-                $response['callback'] = "refreshConsumed('{$task->consumed}');";
-            }
-            else
-            {
-                $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
-            }
-        }
-        else
-        {
-            $response['load'] =  $from != 'edittask';
-        }
+        $response['load'] = $from != 'edittask';
         return $response;
     }
 
@@ -1681,14 +1679,14 @@ class taskZen extends task
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
 
-        if(helper::isAjaxRequest('modal') && ($this->app->tab == 'execution' || $this->config->vision == 'lite'))
+        if(helper::isAjaxRequest('modal') && (($execution->multiple && $this->app->tab == 'execution') || (!$execution->multiple && $this->app->tab == 'project') || $this->config->vision == 'lite'))
         {
             $response['closeModal'] = true;
             $response['callback']   = "refreshKanban()";
             return $response;
         }
 
-        $link = $this->createLink('execution', 'browse', "executionID={$execution->id}");
+        $link = $this->createLink('execution', 'task', "executionID={$execution->id}");
         if($this->app->tab == 'my') $link = $this->createLink('my', 'work', 'mode=task');
         if($this->app->tab == 'project' && $execution->multiple) $link = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         $response['load'] = $link;
@@ -1827,10 +1825,11 @@ class taskZen extends task
      * @param  int       $taskID
      * @param  int       $todoID
      * @param  int       $bugID
-     * @access protected
+     * @param  array     $output feedback扩展使用
+     * @access public
      * @return object
      */
-    protected function setTaskByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID): object
+    public function setTaskByObjectID(int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output = array()): object
     {
         $task = $this->config->task->create->template;
         $task->module = $moduleID;
@@ -1903,10 +1902,35 @@ class taskZen extends task
         $this->execution->setMenu($executionID);
         if($this->app->tab == 'project')
         {
-            $this->project->setMenu($execution->project);
+            $this->project->setMenu((int)$execution->project);
             $this->view->projectID = $execution->project;
         }
 
         return $executionID;
+    }
+
+    /**
+     * 检查是否有gitlab, gitea, gogs, gitfox 代码库。
+     * Check gitlab, gitea, gogs, gitfox repo for execution.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return bool
+     */
+    protected function checkGitRepo(int $executionID): bool
+    {
+        $this->loadModel('repo');
+        $repoList   = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $productIds = $this->loadModel('product')->getProductIDByProject($executionID, false);
+        foreach($repoList as $repo)
+        {
+            $linkedProducts = explode(',', $repo->product);
+            foreach($productIds as $productID)
+            {
+                if(in_array($productID, $linkedProducts)) return true;
+            }
+        }
+
+        return false;
     }
 }

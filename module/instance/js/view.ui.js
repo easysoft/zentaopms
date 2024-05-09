@@ -31,7 +31,7 @@ const postData = new FormData();
 postData.append('idList[]', instanceID);
 window.afterPageUpdate = function()
 {
-    refreshStatus();
+    if(inQuickon) refreshStatus();
 }
 
 function refreshStatus()

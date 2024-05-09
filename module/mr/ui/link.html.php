@@ -59,12 +59,15 @@ $bugCols['title']['link']        = array('module' => 'bug', 'method' => 'view', 
 $bugs = initTableData($bugs, $bugCols);
 
 $taskCols = $config->mr->taskDtable->fieldList;
-$taskCols['actions']    = $actionMenu;
+$taskCols['assignedTo']['currentUser'] = $app->user->account;
+
+$taskCols['actions'] = $actionMenu;
 $taskCols['actions']['list']['unlink']['data-confirm'] = $lang->mr->confirmUnlinkTask;
 $taskCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=task&linkID={id}&confirm=yes");
 
 $tasks = initTableData($tasks, $taskCols);
 
+$linkStoryBtn = $linkBugBtn = $linkTaskBtn = null;
 if(common::hasPriv('mr', 'linkStory'))
 {
     $linkStoryBtn = btn(set(array(
@@ -134,6 +137,16 @@ panel
                 (
                     $lang->mr->view,
                     set::href(inlink('view', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
+            ),
+            li
+            (
+                setClass('nav-item'),
+                a
+                (
+                    $lang->mr->commitLogs,
+                    set::href(inlink('commitlogs', "MRID={$MR->id}")),
                     set('data-app', $app->tab)
                 )
             ),

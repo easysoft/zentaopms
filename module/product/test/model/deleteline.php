@@ -24,11 +24,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('product')->gen(10);
-zdTable('module')->config('lines')->gen(30);
+zenData('user')->gen(5);
+zenData('product')->gen(10);
+zenData('module')->loadYaml('lines')->gen(30);
 
 $lineIdList = range(1, 5);
 

@@ -1,25 +1,26 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-$product = zdTable('product');
-$product->type->range('normal,branch');
-$product->gen(2);
-zdTable('storystage')->gen(0);
-$story = zdTable('story');
-$story->product->range('1,2,2');
-$story->branch->range('0,0,1');
-$story->gen(3);
 
 /**
 
 title=测试 storyModel->setStageToClosed();
-cid=1
-pid=1
+cid=0
+
+- 不传入任何数据。 @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+$product = zenData('product');
+$product->type->range('normal,branch');
+$product->gen(2);
+zenData('storystage')->gen(0);
+$story = zenData('story');
+$story->product->range('1,2,2');
+$story->branch->range('0,0,1');
+$story->gen(3);
 global $tester;
 $storyModel = $tester->loadModel('story');
 

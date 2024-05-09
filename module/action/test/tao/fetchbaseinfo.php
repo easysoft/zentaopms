@@ -28,9 +28,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->gen(5);
+zenData('action')->gen(5);
 
 $actionIDList = array(1, 2, 3, 0);
 

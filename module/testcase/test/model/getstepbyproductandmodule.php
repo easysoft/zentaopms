@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-zdTable('case')->config('modulecase')->gen('100');
-zdTable('casestep')->gen('100');
-zdTable('user')->gen('1');
+zenData('case')->loadYaml('modulecase')->gen('100');
+zenData('casestep')->gen('100');
+zenData('user')->gen('1');
 
 su('admin');
 

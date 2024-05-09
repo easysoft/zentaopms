@@ -36,14 +36,16 @@ $lang->action->new           = '新值为';
 $lang->action->to            = '到';
 $lang->action->superReviewer = '超级评审人';
 
-$lang->action->trash       = '回收站';
-$lang->action->undelete    = '还原';
-$lang->action->hideOne     = '隐藏';
-$lang->action->hideAll     = '全部隐藏';
-$lang->action->editComment = '修改备注';
-$lang->action->create      = '添加备注';
-$lang->action->comment     = '备注';
-$lang->action->byQuery     = '搜索';
+$lang->action->trash         = '回收站';
+$lang->action->undelete      = '还原';
+$lang->action->hideOne       = '隐藏';
+$lang->action->hideAll       = '全部隐藏';
+$lang->action->editComment   = '修改备注';
+$lang->action->create        = '添加备注';
+$lang->action->comment       = '备注';
+$lang->action->actioncomment = '备注';
+$lang->action->lastComment   = '备注';
+$lang->action->byQuery       = '搜索';
 
 $lang->action->trashAction    = '回收站列表';
 $lang->action->undeleteAction = '还原数据';
@@ -68,7 +70,7 @@ $lang->action->hasCreatedTask     = '该父阶段已创建任务，无法恢复�
 $lang->action->hasDeletedParent   = '恢复该阶段需要同时恢复已删除的父阶段%s，';
 $lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
 $lang->action->whetherToRestore   = '是否恢复？';
-$lang->action->undeleteModuleTip  = '子目录恢复后，会同步恢复他的上级目录。';
+$lang->action->undeleteModuleTip  = '子目录恢复后，会同步恢复他的上级目录，确认要恢复吗？';
 $lang->action->undeleteTaskTip    = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
 
 $lang->action->hasOtherType = array();
@@ -141,6 +143,7 @@ $lang->action->objectTypes['team']             = '团队';
 $lang->action->objectTypes['whitelist']        = '白名单';
 $lang->action->objectTypes['pipeline']         = 'GitLab服务器';
 $lang->action->objectTypes['gitlab']           = 'GitLab服务器';
+$lang->action->objectTypes['gitfox']           = 'GitFox服务器';
 $lang->action->objectTypes['gitea']            = 'Gitea服务器';
 $lang->action->objectTypes['gogs']             = 'Gogs服务器';
 $lang->action->objectTypes['jenkins']          = 'Jenkins服务器';
@@ -153,6 +156,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab标签保护';
+$lang->action->objectTypes['gitfoxuser']       = 'GitFox用户';
 $lang->action->objectTypes['giteauser']        = 'Gitea用户';
 $lang->action->objectTypes['gogsuser']         = 'Gogs用户';
 $lang->action->objectTypes['kanbanspace']      = '看板空间';
@@ -275,6 +279,8 @@ $lang->action->desc->online               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->offline              = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->linkhost             = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
 $lang->action->desc->createrepobranch     = '$date, 由 <strong>$actor</strong> 创建了代码分支 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkrepobranch     = '$date, 由 <strong>$actor</strong> 取消关联了代码分支 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->changedprogram       = '$date, 由 <strong>$actor</strong> 调整了所属项目集。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -516,7 +522,12 @@ $lang->action->label->offline                 = '下架了';
 $lang->action->label->linkhost                = '主机关联到';
 $lang->action->label->delist                  = '下架了';
 $lang->action->label->createrepobranch        = '创建了分支从';
+$lang->action->label->unlinkrepobranch        = '取消关联了分支从';
 $lang->action->label->communicate             = '沟通了';
+$lang->action->label->changedprogram          = '调整了项目集';
+$lang->action->label->published               = '发布了';
+$lang->action->label->unpublished             = '下架了';
+$lang->action->label->aiassistant             = 'AI 助手';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -799,6 +810,11 @@ $lang->action->dynamicAction->gitlab['created']   = '创建GitLab服务器';
 $lang->action->dynamicAction->gitlab['edited']    = '编辑GitLab服务器';
 $lang->action->dynamicAction->gitlab['deleted']   = '删除GitLab服务器';
 $lang->action->dynamicAction->gitlab['undeleted'] = '还原GitLab服务器';
+
+$lang->action->dynamicAction->gitfox['created']   = '创建GitLab服务器';
+$lang->action->dynamicAction->gitfox['edited']    = '编辑GitLab服务器';
+$lang->action->dynamicAction->gitfox['deleted']   = '删除GitLab服务器';
+$lang->action->dynamicAction->gitfox['undeleted'] = '还原GitLab服务器';
 
 $lang->action->dynamicAction->gitea['created']   = '创建Gitea服务器';
 $lang->action->dynamicAction->gitea['edited']    = '编辑Gitea服务器';

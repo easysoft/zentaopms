@@ -14,19 +14,19 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 
 su('admin');
 
-zdTable('module')->config('module')->gen(100);
-zdTable('project')->gen(100);
-zdTable('product')->gen(100);
-zdTable('projectcase')->gen(100);
-zdTable('projectstory')->gen(100);
-zdTable('case')->gen(100);
-zdTable('bug')->gen(100);
+zenData('module')->loadYaml('module')->gen(100);
+zenData('project')->gen(100);
+zenData('product')->gen(100);
+zenData('projectcase')->gen(100);
+zenData('projectstory')->gen(100);
+zenData('case')->gen(100);
+zenData('bug')->gen(100);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->project->range('1-100');
 $projectproduct->product->range('1-100');
 $projectproduct->gen(20);

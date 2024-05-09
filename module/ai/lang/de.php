@@ -53,7 +53,7 @@ $lang->ai->promptUnpublish         = 'Unpublish Prompt';
 $lang->ai->promptBrowse            = 'Browse Prompts';
 $lang->ai->promptView              = 'View Prompt';
 $lang->ai->promptExecute           = 'Execute Prompt';
-$lang->ai->promptExecutionReset    = 'Reset Execute Prompt';
+$lang->ai->promptExecutionReset    = 'Reset Prompt Execution';
 $lang->ai->roleTemplates           = 'Manage Role Templates';
 $lang->ai->chat                    = 'Chat';
 $lang->ai->createMiniProgram       = 'Create AI Mini Program';
@@ -67,13 +67,21 @@ $lang->ai->deleteMiniProgram       = 'Delete AI Mini Program';
 $lang->ai->exportMiniProgram       = 'Export AI Mini Program';
 $lang->ai->importMiniProgram       = 'Import AI Mini Program';
 $lang->ai->editMiniProgramCategory = 'Manage group';
+$lang->ai->assistants              = 'Browse AI Assistants';
+$lang->ai->assistantView           = 'View AI Assistant';
+$lang->ai->assistantCreate         = 'Create AI Assistant';
+$lang->ai->assistantEdit           = 'Edit AI Assistant';
+$lang->ai->assistantPublish        = 'Publish AI Assistant';
+$lang->ai->assistantWithdraw       = 'Withdraw AI Assistant';
+$lang->ai->assistantDelete         = 'Delete AI Assistant';
 
+$lang->ai->store                  = 'Store';
 $lang->ai->export                 = 'Export';
 $lang->ai->import                 = 'Import';
 $lang->ai->saveFail               = 'Save failed';
 $lang->ai->installPackage         = 'Installation package';
 $lang->ai->toPublish              = 'Publish after installation';
-$lang->ai->toZentaoStoreAIPage    = 'Click to jump to Zentao official app store AI mini programs page';
+$lang->ai->toZentaoStoreAIPage    = 'Click to jump to Zentao official app store AI mini programs page.';
 
 $lang->ai->chatPlaceholderMessage = 'Hi, I\'m Adao, your AI assistant at ZenTao!';
 $lang->ai->chatPlaceholderInput   = 'type here...';
@@ -117,6 +125,7 @@ $lang->ai->prompts->lastEditor   = 'Last Editor';
 $lang->ai->prompts->modelNeutral = 'Model Neutral';
 
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
+$lang->ai->prompts->fieldSeparator = ', ';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm = 'The current prompt is not complete, continue designing?';
@@ -558,7 +567,7 @@ $lang->ai->models->concealTip     = 'Visible when editing';
 $lang->ai->models->upgradeBiz     = 'For more AI features, all in <a target="_blank" href="https://www.zentao.net/page/enterprise.html" class="text-blue">ZenTao Biz</a>.';
 $lang->ai->models->noModelError   = 'No language model is configured, please contact the administrator.';
 $lang->ai->models->noModels       = 'There is currently no language model.';
-$lang->ai->models->confirmDelete  = 'Are you sure you want to delete this language model?';
+$lang->ai->models->confirmDelete  = 'After deleting the model, the associated AI prompters, AI mini programs, and AI chats will be unavailable. Do you want to delete them?';
 $lang->ai->models->confirmDisable = 'Are you sure you want to disable this language model?';
 $lang->ai->models->default        = 'Default model';
 $lang->ai->models->defaultTip     = 'The default language model (the first available language model) will be used to run prompts and mini programs that are not specified with a language model, and will also be used for chat.';
@@ -964,3 +973,38 @@ $lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role'
 
 $lang->ai->aiResponseException = array();
 $lang->ai->aiResponseException['notFunctionCalling'] = 'The response is not a function calling';
+
+$lang->ai->assistant = new stdclass();
+$lang->ai->assistant->view                     = 'AI Assistant Details';
+$lang->ai->assistant->title                    = 'AI Assistant';
+$lang->ai->assistant->create                   = 'Add Assistant';
+$lang->ai->assistant->edit                     = 'Edit Assistant';
+$lang->ai->assistant->details                  = 'Assistant Details';
+$lang->ai->assistant->name                     = 'Assistant Name';
+$lang->ai->assistant->refModel                 = 'Referenced Language Model';
+$lang->ai->assistant->createdDate              = 'Creation Time';
+$lang->ai->assistant->publishedDate            = 'Publication Time';
+$lang->ai->assistant->desc                     = 'Description';
+$lang->ai->assistant->descPlaceholder          = 'Please briefly describe the functions of this AI assistant and the experience it can bring to users.';
+$lang->ai->assistant->systemMessage            = 'System Built-in Message';
+$lang->ai->assistant->systemMessagePlaceholder = 'You can give this AI dialogue a "persona", for example, "You are a weekly report assistant, you will generate a formatted weekly report based on the input content".';
+$lang->ai->assistant->greetings                = 'Greetings';
+$lang->ai->assistant->greetingsPlaceholder     = 'You can set the greeting message for this AI dialogue, for example, "Hello, I am your weekly report assistant, are you still troubled by writing weekly reports? Try sending me a week\'s work?"';
+$lang->ai->assistant->publish                  = 'Publish';
+$lang->ai->assistant->withdraw                 = 'Disable';
+$lang->ai->assistant->confirmPublishTip        = 'After publishing, it will be displayed in the AI dialogue and client dialogue in the lower right corner of ZenTao. Do you want to confirm the publication? ';
+$lang->ai->assistant->confirmWithdrawTip       = 'After deactivation, front-end users will not be able to see this AI assistant. Do you confirm the deactivation? ';
+$lang->ai->assistant->duplicateTip             = 'Assistant names in the same language model cannot be same.';
+$lang->ai->assistant->confirmDeleteTip         = 'Do you want to confirm the deletion? ';
+$lang->ai->assistant->switchAndClearContext    = 'Switch assistant %s, context has been cleared';
+$lang->ai->assistant->noLlm                    = 'No language model is available, please create a language model first.';
+$lang->ai->assistant->defaultAssistant         = 'Omni Assistant';
+
+$lang->ai->assistant->statusList = array();
+$lang->ai->assistant->statusList['0']   = 'Unpublished';
+$lang->ai->assistant->statusList['off'] = 'Unpublished';
+$lang->ai->assistant->statusList['1']   = 'Published';
+$lang->ai->assistant->statusList['on']  = 'Published';
+
+// for render action changes.
+$lang->aiassistant = $lang->ai->assistant;

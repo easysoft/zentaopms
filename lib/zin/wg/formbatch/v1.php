@@ -40,6 +40,7 @@ class formBatch extends formBase
         'addRowIcon?: string|false',    // 添加行的图标，如果设置为 `false` 则不显示图标
         'deleteRowIcon?: string|false', // 删除行的图标，如果设置为 `false` 则不显示图标
         'onRenderRow?: function',       // 渲染行时的回调函数。
+        'hiddenFields?: array',         // 被隐藏的字段。
         'onRenderRowCol?: function'     // 渲染列时的回调函数。
     );
 
@@ -50,7 +51,6 @@ class formBatch extends formBase
      * @access protected
      */
     protected static array $defaultProps = array(
-        'minRows' => 1,
         'maxRows' => 100,
         'mode'    => 'add'
     );
@@ -91,16 +91,21 @@ class formBatch extends formBase
      */
     protected function buildContent(): array|node
     {
-        $items         = array_merge($this->block('children'), $this->prop('items', array()));
+        $items         = array_merge($this->prop('items', array()), $this->block('children'));
+        $hiddenFields  = $this->prop('hiddenFields', array());
         $templateItems = array();
         $headItems     = array();
         $otherItems    = array();
 
         foreach($items as $item)
         {
-            if($item instanceof item || is_array($item)) $item = $this->onBuildItem($item);
+            if($item instanceof item || is_array($item))
+            {
+                $item = $this->onBuildItem($item);
+            }
             if($item instanceof formBatchItem)
             {
+                if($item->hasProp('name') && is_null($item->prop('hidden'))) $item->setProp('hidden', in_array($item->prop('name'), $hiddenFields));
                 list($headItem, $templateItem) = $item->build();
                 $headItems[]     = $headItem;
                 $templateItems[] = $templateItem;
@@ -126,11 +131,11 @@ class formBatch extends formBase
         return array(
             div
             (
-                setClass('form-batch-container'),
+                setClass('form-batch-container relative'),
                 h::table
                 (
                     setClass('table form-batch-table'),
-                    h::thead(h::tr($headItems)),
+                    h::thead(setClass('sticky top-0 bg-canvas z-10'), h::tr($headItems)),
                     h::tbody(),
                 )
             ),

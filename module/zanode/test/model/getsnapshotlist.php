@@ -5,6 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 zanodemodel->getSnapshotList().
+timeout=0
 cid=1
 
 - 测试获取 node id 1 id_desc 快照列表 @11:defaultSnap1,failed;1:defaultSnap,creating
@@ -31,10 +32,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('user')->gen(10);
-zdTable('image')->config('image')->gen(20);
+zenData('user')->gen(10);
+zenData('image')->loadYaml('image')->gen(20);
 
 su('admin');
 

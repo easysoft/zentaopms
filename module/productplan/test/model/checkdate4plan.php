@@ -8,10 +8,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('productplan')->config('productplan')->gen(5);
-zdTable('user')->gen(5);
+zenData('productplan')->loadYaml('productplan')->gen(5);
+zenData('user')->gen(5);
 
 $planIdList = array(1, 2, 3);
 $beginList  = array('2030-01-01', '2021-06-02', '2020-01-01');

@@ -1,0 +1,5 @@
+.recalculate-log {height: 200px; border: solid 1px var(--color-gray-300); overflow: auto}
+.recalculate-text {padding-top: 4px; padding-bottom: 4px}
+.panel-footer {display: flex; justify-content: center}
+.modal-actions > button {visibility: hidden}
+.clear-shadow {border: none; box-shadow: none}

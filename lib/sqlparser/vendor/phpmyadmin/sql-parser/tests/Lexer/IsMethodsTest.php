@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Lexer;
 
 use PhpMyAdmin\SqlParser\Context;
@@ -8,7 +10,7 @@ use PhpMyAdmin\SqlParser\Token;
 
 class IsMethodsTest extends TestCase
 {
-    public function testIsKeyword()
+    public function testIsKeyword(): void
     {
         $this->assertEquals(1 | Token::FLAG_KEYWORD_RESERVED, Context::isKeyword('SELECT'));
         $this->assertEquals(1 | Token::FLAG_KEYWORD_RESERVED, Context::isKeyword('ALL'));
@@ -30,7 +32,7 @@ class IsMethodsTest extends TestCase
         $this->assertNull(Context::isKeyword('bar baz'));
     }
 
-    public function testIsOperator()
+    public function testIsOperator(): void
     {
         $this->assertEquals(Token::FLAG_OPERATOR_ARITHMETIC, Context::isOperator('%'));
         $this->assertEquals(Token::FLAG_OPERATOR_LOGICAL, Context::isOperator('!'));
@@ -43,7 +45,7 @@ class IsMethodsTest extends TestCase
         $this->assertNull(Context::isOperator('a'));
     }
 
-    public function testIsWhitespace()
+    public function testIsWhitespace(): void
     {
         $this->assertTrue(Context::isWhitespace(' '));
         $this->assertTrue(Context::isWhitespace("\r"));
@@ -55,7 +57,7 @@ class IsMethodsTest extends TestCase
         $this->assertFalse(Context::isWhitespace("\u1000"));
     }
 
-    public function testIsComment()
+    public function testIsComment(): void
     {
         $this->assertEquals(Token::FLAG_COMMENT_BASH, Context::isComment('#'));
         $this->assertEquals(Token::FLAG_COMMENT_C, Context::isComment('/*'));
@@ -72,7 +74,7 @@ class IsMethodsTest extends TestCase
         $this->assertNull(Context::isComment('--not a comment'));
     }
 
-    public function testIsBool()
+    public function testIsBool(): void
     {
         $this->assertTrue(Context::isBool('true'));
         $this->assertTrue(Context::isBool('false'));
@@ -81,7 +83,7 @@ class IsMethodsTest extends TestCase
         $this->assertFalse(Context::isBool('falsee'));
     }
 
-    public function testIsNumber()
+    public function testIsNumber(): void
     {
         $this->assertTrue(Context::isNumber('+'));
         $this->assertTrue(Context::isNumber('-'));
@@ -100,7 +102,7 @@ class IsMethodsTest extends TestCase
         $this->assertTrue(Context::isNumber('E'));
     }
 
-    public function testIsString()
+    public function testIsString(): void
     {
         $this->assertEquals(Token::FLAG_STRING_SINGLE_QUOTES, Context::isString("'"));
         $this->assertEquals(Token::FLAG_STRING_DOUBLE_QUOTES, Context::isString('"'));
@@ -112,7 +114,7 @@ class IsMethodsTest extends TestCase
         $this->assertNull(Context::isString('foo bar'));
     }
 
-    public function testIsSymbol()
+    public function testIsSymbol(): void
     {
         $this->assertEquals(Token::FLAG_SYMBOL_VARIABLE, Context::isSymbol('@'));
         $this->assertEquals(Token::FLAG_SYMBOL_BACKTICK, Context::isSymbol('`'));
@@ -124,7 +126,7 @@ class IsMethodsTest extends TestCase
         $this->assertNull(Context::isSymbol('id'));
     }
 
-    public function testisSeparator()
+    public function testisSeparator(): void
     {
         $this->assertTrue(Context::isSeparator('+'));
         $this->assertTrue(Context::isSeparator('.'));

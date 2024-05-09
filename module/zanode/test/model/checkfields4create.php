@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeTao->checkFields4Create().
+timeout=0
 cid=1
 
 - 测试添加物理机节点时必填项
@@ -27,10 +29,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('host')->config('host')->gen(1);
-zdTable('user')->gen(5);
+zenData('host')->loadYaml('host')->gen(1);
+zenData('user')->gen(5);
 su('admin');
 
 $zanode = new zanodeTest();

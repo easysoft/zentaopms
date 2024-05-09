@@ -15,7 +15,8 @@ include (dirname(__FILE__) . '/common.php');
 global $config;
 
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '-';
+$lang->colon     = ': ';
+$lang->hyphen    = '-';
 $lang->comma     = ',';
 $lang->dot       = '.';
 $lang->at        = ' à ';
@@ -99,6 +100,7 @@ $lang->all                = 'All';
 $lang->viewDetails        = 'View Details';
 $lang->childrenAB         = 'C';
 $lang->branchName         = 'Branch/Platform';
+$lang->recommend          = 'Recommend';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Réinitialiser';
@@ -121,6 +123,7 @@ $lang->importSuccess   = 'Sauvé';
 $lang->fail            = 'Echec';
 $lang->addFiles        = 'Fichiers ajoutés ';
 $lang->deleteSuccess   = 'Supprimé';
+$lang->deleted         = 'Supprimé';
 $lang->files           = 'Fichiers ';
 $lang->pasteText       = 'Collage Multi-lignes';
 $lang->uploadImages    = 'Upload Multi-images';
@@ -186,6 +189,13 @@ $lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
+
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = 'Vous pouvez nous contacter si vous avez des questions.';
+$lang->contactUs->phone  = 'Téléphone';
+$lang->contactUs->email  = 'Email';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Module Commun';
 $lang->common->story        = 'Story';
@@ -468,12 +478,6 @@ $lang->visionList = array();
 $lang->visionList['rnd']  = 'Full Feature Interface';
 $lang->visionList['lite'] = 'Operation Management Interface';
 
-if($config->edition == 'ipd')
-{
-    $lang->visionList['or']   = 'OR & MM Interface';
-    $lang->visionList['rnd']  = 'IPD Interface';
-}
-
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
 $lang->createObjects['bug']         = 'Bug';
@@ -589,6 +593,9 @@ $lang->chooseUsersToMail  = "Choisissez les utilisateurs à avertir.";
 $lang->noticePasteImg     = "Vous pouvez déposer des images dans l'éditeur.";
 $lang->pasteImgFail       = "Echec lors de la dépose des images. Essayez plus tard.";
 $lang->pasteImgUploading  = "Chargement...";
+
+$lang->visionTips = "You can switch vision here";
+$lang->IKnow      = "I know";
 
 /* Time formats settings. */
 if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');

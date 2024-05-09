@@ -1,1 +1,210 @@
-a:4:{s:5:"query";s:51:"LOCK TABLES table1 AS table1 LOW_PRIORITY WRITE abc";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:51:"LOCK TABLES table1 AS table1 LOW_PRIORITY WRITE abc";s:3:"len";i:51;s:4:"last";i:51;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:16:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:4:"LOCK";s:5:"value";s:4:"LOCK";s:7:"keyword";s:4:"LOCK";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:4;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"TABLES";s:5:"value";s:6:"TABLES";s:7:"keyword";s:6:"TABLES";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:5;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:11;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"table1";s:5:"value";s:6:"table1";s:7:"keyword";N;s:4:"type";i:0;s:5:"flags";i:0;s:8:"position";i:12;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:18;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:2:"AS";s:5:"value";s:2:"AS";s:7:"keyword";s:2:"AS";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:19;}i:7;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:21;}i:8;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"table1";s:5:"value";s:6:"table1";s:7:"keyword";N;s:4:"type";i:0;s:5:"flags";i:0;s:8:"position";i:22;}i:9;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:28;}i:10;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:12:"LOW_PRIORITY";s:5:"value";s:12:"LOW_PRIORITY";s:7:"keyword";s:12:"LOW_PRIORITY";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:29;}i:11;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:41;}i:12;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:5:"WRITE";s:5:"value";s:5:"WRITE";s:7:"keyword";s:5:"WRITE";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:42;}i:13;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:47;}i:14;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:3:"abc";s:5:"value";s:3:"abc";s:7:"keyword";N;s:4:"type";i:0;s:5:"flags";i:0;s:8:"position";i:48;}i:15;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:16;s:3:"idx";i:16;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:45:"PhpMyAdmin\SqlParser\Statements\LockStatement":5:{s:6:"locked";a:1:{i:0;O:46:"PhpMyAdmin\SqlParser\Components\LockExpression":2:{s:5:"table";O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";s:6:"table1";s:6:"column";N;s:4:"expr";s:6:"table1";s:5:"alias";s:6:"table1";s:8:"function";N;s:8:"subquery";N;}s:4:"type";s:18:"LOW_PRIORITY WRITE";}}s:6:"isLock";b:1;s:7:"options";N;s:5:"first";i:0;s:4:"last";i:15;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:1:{i:0;a:3:{i:0;s:17:"Unexpected token.";i:1;r:107;i:2;i:0;}}}}
+{
+    "query": "LOCK TABLES table1 AS table1 LOW_PRIORITY WRITE abc",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "LOCK TABLES table1 AS table1 LOW_PRIORITY WRITE abc",
+        "len": 51,
+        "last": 51,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "LOCK",
+                    "value": "LOCK",
+                    "keyword": "LOCK",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 4
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "TABLES",
+                    "value": "TABLES",
+                    "keyword": "TABLES",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 5
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 11
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "table1",
+                    "value": "table1",
+                    "keyword": null,
+                    "type": 0,
+                    "flags": 0,
+                    "position": 12
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 18
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "AS",
+                    "value": "AS",
+                    "keyword": "AS",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 19
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 21
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "table1",
+                    "value": "table1",
+                    "keyword": null,
+                    "type": 0,
+                    "flags": 0,
+                    "position": 22
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 28
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "LOW_PRIORITY",
+                    "value": "LOW_PRIORITY",
+                    "keyword": "LOW_PRIORITY",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 29
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 41
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "WRITE",
+                    "value": "WRITE",
+                    "keyword": "WRITE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 42
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 47
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "abc",
+                    "value": "abc",
+                    "keyword": null,
+                    "type": 0,
+                    "flags": 0,
+                    "position": 48
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 16,
+            "idx": 16
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\LockStatement",
+                "locked": [
+                    {
+                        "@type": "PhpMyAdmin\\SqlParser\\Components\\LockExpression",
+                        "table": {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                            "database": null,
+                            "table": "table1",
+                            "column": null,
+                            "expr": "table1",
+                            "alias": "table1",
+                            "function": null,
+                            "subquery": null
+                        },
+                        "type": "LOW_PRIORITY WRITE"
+                    }
+                ],
+                "isLock": true,
+                "options": null,
+                "first": 0,
+                "last": 15
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": [
+            [
+                "Unexpected token.",
+                {
+                    "@type": "@16"
+                },
+                0
+            ]
+        ]
+    }
+}

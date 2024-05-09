@@ -21,6 +21,7 @@ modalHeader
 
 formPanel
 (
+    set::className('editLibForm'),
     in_array($type, array('product', 'project')) ? formGroup
     (
         set::label($lang->api->{$type}),
@@ -66,6 +67,7 @@ formPanel
                 setClass('w-full check-list'),
                 div
                 (
+                    setClass('w-full'),
                     inputGroup
                     (
                         $lang->doclib->group,
@@ -80,6 +82,7 @@ formPanel
                 ),
                 div
                 (
+                    setClass('w-full'),
                     inputGroup
                     (
                         $lang->doclib->user,

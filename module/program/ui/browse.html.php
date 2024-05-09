@@ -1,7 +1,6 @@
 <?php
 namespace zin;
 
-$confirmDeleteLang['program'] = $lang->program->confirmDelete;
 $confirmDeleteLang['project'] = $lang->project->confirmDelete;
 jsVar('confirmDeleteLang',   $confirmDeleteLang);
 jsVar('programBudgetLang',   $lang->program->programBudget);
@@ -12,11 +11,14 @@ jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 jsVar('langManDay',          $lang->program->manDay);
 
 $this->loadModel('project');
-$cols    = $this->loadModel('datatable')->getSetting('program');
-$data    = array();
-$parents = array();
+$cols         = $this->loadModel('datatable')->getSetting('program');
+$data         = array();
+$parents      = array();
+$showCheckbox = false;
 foreach($programs as $program)
 {
+    if($program->type == 'project') $showCheckbox = true;
+
     if(empty($program->parent)) $program->parent = 0;
 
     /* Delay status. */
@@ -180,9 +182,14 @@ toolbar
 );
 
 $canBatchEdit = common::hasPriv('project', 'batchEdit');
+$canSort      = (common::hasPriv('program', 'updateOrder') && strpos($orderBy, 'order_asc') !== false);
 dtable
 (
     setID('projectviews'),
+    set::plugins(array('sortable')),
+    set::sortable($canSort),
+    set::onSortEnd($canSort ? jsRaw('window.onSortEnd') : null),
+    set::canSortTo($canSort ? jsRaw('window.canSortTo') : null),
     set::cols($cols),
     set::data(array_values($data)),
     set::userMap($users),
@@ -202,12 +209,14 @@ dtable
             $canBatchEdit ? array
             (
                 'text'      => $lang->edit,
-                'className' => 'secondary size-sm batch-btn',
+                'type'      => 'secondary',
+                'className' => 'size-sm batch-btn',
                 'data-page' => 'batch',
                 'data-formaction' => $this->createLink('project', 'batchEdit')
             ) : null
         )
     )),
+    set::footer(array($showCheckbox ? 'checkbox' : null, 'toolbar', 'checkedInfo', 'flex', 'pager')),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::emptyTip($lang->program->noProgram),
     set::createTip($lang->program->create),

@@ -45,6 +45,7 @@ $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Pipeline job';
+$lang->mr->commitLogs  = 'Commit Logs';
 
 $lang->mr->canMerge  = "Can be merged";
 $lang->mr->cantMerge = "Can not be merged";
@@ -111,8 +112,10 @@ $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. P
 $lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
 
 $lang->mr->apiError = new stdclass;
-$lang->mr->apiError->createMR = "Failed to create a merge request through API. Reason: %s";
-$lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
+$lang->mr->apiError->createMR      = "Failed to create a merge request through API. Reason: %s";
+$lang->mr->apiError->sudo          = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
+$lang->mr->apiError->emptyResponse = "The object requested by the API does not exist or failed.";
+$lang->mr->apiError->notFound      = "The object requested by the API does not exist, it may be deleted in API Server.";
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
 $lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests: ID%u";
@@ -129,6 +132,9 @@ $lang->mr->apiErrorMap[6] = "Invalid PullRequest: There are no changes between t
 $lang->mr->apiErrorMap[7] = "/(user doesn't have access to repo).*/";
 $lang->mr->apiErrorMap[8] = "/(git apply).*/";
 
+
+
+
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
 $lang->mr->errorLang[3] = "Unauthorized";
@@ -137,6 +143,9 @@ $lang->mr->errorLang[5] = 'Another open merge request already exists for this so
 $lang->mr->errorLang[6] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[7] = "user doesn't have access to repo";
 $lang->mr->errorLang[8] = 'The source branch and target branch cannot be merged';
+
+
+
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";

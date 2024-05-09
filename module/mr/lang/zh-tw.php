@@ -37,6 +37,7 @@ $lang->mr->changes     = '更改數';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = '版本庫';
 $lang->mr->jobID       = '構建任務';
+$lang->mr->commitLogs  = '提交記錄';
 
 $lang->mr->canMerge  = "可合併";
 $lang->mr->cantMerge = "不可合併";
@@ -101,13 +102,16 @@ $lang->mr->failMessage       = "您提交的合併請求：<a href='%s'>%s</a> �
 $lang->mr->storySummary      = "本頁共 <strong>%s</strong> 個" . $lang->SRCommon;
 
 $lang->mr->apiError = new stdclass;
-$lang->mr->apiError->createMR = "通過API創建合併請求失敗，失敗原因：%s";
-$lang->mr->apiError->sudo     = "無法以當前用戶綁定的GitLab賬戶進行操作，失敗原因：%s";
+$lang->mr->apiError->createMR      = "通過API創建合併請求失敗，失敗原因：%s";
+$lang->mr->apiError->sudo          = "無法以當前用戶綁定的GitLab賬戶進行操作，失敗原因：%s";
+$lang->mr->apiError->emptyResponse = "API请求的对象不存在或者API请求失败。";
+$lang->mr->apiError->notFound      = "API请求的对象不存在，可能已被服务器删除。";
 
 $lang->mr->createFailedFromAPI = "創建合併請求失敗。";
 $lang->mr->accessGitlabFailed  = "當前無法連接到GitLab伺服器。";
 $lang->mr->reopenSuccess       = "已重新打開合併請求。";
 $lang->mr->closeSuccess        = "已關閉合併請求。";
+$lang->mr->unsupportedFeature  = "暫不支持該功能。";
 
 $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";

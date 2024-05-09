@@ -405,7 +405,6 @@ $(function()
     var bindFormListenEvent = function(form, fieldSelector)
     {
         form.off('.tutorial').off('submit');
-        console.log('fieldSelector is', fieldSelector)
         if(fieldSelector.includes('dtable-checkbox'))
         {
             form.on('click.tutorial', fieldSelector, fieldChangeEvent)
@@ -447,7 +446,6 @@ $(function()
     {
         var iWindow = getAppWindow();
         form = iWindow.$(task.nav.form);
-        console.log(form)
         if(!form.is('form') && current !== 'linkStory') form = form.find('form')
         if(!form) return;
 
@@ -468,7 +466,6 @@ $(function()
             form = iWindow.$(task.nav.form);
         }
 
-        console.log('form is', form)
         formWrapper = form.closest('#mainContent');
         if(!formWrapper.length) formWrapper = form;
 
@@ -533,7 +530,7 @@ $(function()
             requiredFields = requiredFields.split(',');
             $.each(requiredFields, function(_, requiredId)
             {
-                var $required = $$('#' + requiredId);
+                var $required = $$('[name^=' + requiredId);
                 var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
                 if($authBlock.length)
                 {

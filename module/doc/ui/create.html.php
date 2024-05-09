@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('docType', $docType);
+jsVar('officeTypes', $config->doc->officeTypes);
 if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false)
 {
     set::title($lang->doc->create);
@@ -21,7 +23,7 @@ if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false)
             html
             (
                 sprintf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType),
-                common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice', '', '', true) : '###')
+                common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice') : '###')
             )
         );
     }
@@ -88,6 +90,7 @@ else
                 input
                 (
                     set::name('title'),
+                    set::maxlength(100),
                     set::placeholder($lang->doc->titlePlaceholder)
                 )
             ),
@@ -224,6 +227,7 @@ else
                         setClass('w-full check-list'),
                         inputGroup
                         (
+                            setClass('w-full'),
                             $lang->doc->groups,
                             picker
                             (
@@ -232,7 +236,11 @@ else
                                 set::multiple(true)
                             )
                         ),
-                        users(set::label($lang->doc->users), set::items($users))
+                        div
+                        (
+                            setClass('w-full'),
+                            userPicker(set::label($lang->doc->users), set::items($users))
+                        )
                     )
                 ),
                 formRow

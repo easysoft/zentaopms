@@ -86,6 +86,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent > .pull-right > .button-group  .text{margin-left: 0px;}
 .pull-right .icon-plus.icon-sm:before{vertical-align: 4%;}
 #ganttView .gantt_resizer{min-width: unset !important;}
+div.delayed {background: #FFEBEB; color: #FB2B2B;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -100,7 +101,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
     <div class='btn-group'>
-      <?php if(!empty($project->division)):?>
+      <?php if($project->stageBy == 'product'):?>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -257,7 +258,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     var $ganttDridData  = $ganttView.find('.gantt_grid_data');
 
     var ganttRowHeight = $ganttView.find('.gantt_row').first().outerHeight() || 25;
-    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($plans['data'])?> * ganttRowHeight;
+    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($stages['data'])?> * ganttRowHeight;
     <?php if($selectCustom == 'task'):?>
     var ganttWidth  = $ganttDridData.width() - 100;
     <?php else:?>
@@ -577,7 +578,7 @@ $(function()
         $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
-    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
+    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($stages));?>);
     if(!ganttData.data) ganttData.data = [];
 
     <?php
@@ -627,8 +628,40 @@ $(function()
     if(showFields.indexOf('realBegan') != -1) gantt.config.columns.push({name: 'realBegan', align: 'center', resize: true, width: 80});
     if(showFields.indexOf('realEnd') != -1) gantt.config.columns.push({name: 'realEnd', align: 'center', resize: true, width: 80});
     if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: true, width: 60});
-    if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('delay') != -1)
+    {
+        gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60, template:function(item)
+        {
+            if(item.delayDays > 0) return "<div class='delayed'>" + item.delay + "</div>";
+            return item.delay;
+        }});
+    }
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
+
+    gantt.config.layout =
+    {
+        css: "gantt_container",
+        cols:
+        [
+            {
+                width:600,
+                rows:
+                [
+                    {view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"},
+                    {view: "scrollbar", id: "gridScroll", group:"horizontal"}
+                ]
+            },
+            {resizer: true, width: 1},
+            {
+                rows:
+                [
+                    {view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer"},
+                    {view: "scrollbar", id: "scrollHor", group:"horizontal"}
+                ]
+            },
+            {view: "scrollbar", id: "scrollVer"}
+        ]
+    };
 
     function getDeadlineBtn(task)
     {

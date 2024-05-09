@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/job.class.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 su('admin');
 
 /**
@@ -14,7 +14,7 @@ cid=1
 - 获取trigger type为commit的repo为2的name第2条的name属性 @这是一个Job2
 
 */
-zdTable('job')->gen(5);
+zenData('job')->gen(5);
 
 $job = new jobTest();
 

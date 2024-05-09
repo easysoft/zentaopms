@@ -15,8 +15,8 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(5);
-zdTable('projectproduct')->config('projectproduct')->gen(5);
+zenData('project')->loadYaml('project')->gen(5);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(5);
 
 global $tester;
 $tester->loadModel('programplan');

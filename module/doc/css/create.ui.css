@@ -1,6 +1,6 @@
 .editor-container {margin-top: 0px !important;}
-#title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
-#title:focus {box-shadow: none; outline: unset}
+#titleBox #title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
+#titleBox #title:focus {box-shadow: none; outline: unset}
 .titleBox{padding: 7px; background: #fff}
 #modalBasicInfo .form-group {margin-top: 0.5rem}
 .form-horz>:not([hidden])~:not([hidden]){margin-top: 0;}
@@ -15,5 +15,5 @@
 .m-doc-create #main {min-height: 0;}
 .m-doc-create #main > .container {max-width: initial!important; padding: 0!important}
 
-.form{display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; padding: 0px 2px 2px 2px}
+#mainContent > .form{display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; padding: 0px 2px 2px 2px}
 [data-name='showTitle'].items-center {align-items: center !important;}

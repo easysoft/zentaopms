@@ -26,7 +26,7 @@ if($canExportBug) $exportItem = array
 (
     'icon' => 'export',
     'class' => 'ghost',
-    'text' => $lang->bug->export,
+    'text' => $lang->export,
     'data-toggle' => 'modal',
     'url' => $this->createLink('bug', 'export', "productID={$productID}&browseType=&executionID={$execution->id}")
 );
@@ -78,6 +78,12 @@ if(isset($cols['module']))      $cols['module']['map']      = $modulePairs;
 if(isset($cols['branch']))      $cols['branch']['map']      = $branchOption;
 if(isset($cols['project']))     $cols['project']['map']     = $projectPairs;
 if(isset($cols['openedBuild'])) $cols['openedBuild']['map'] = $builds;
+if(isset($cols['plan']))        $cols['plan']['map']        = array('') + $plans;
+if(isset($cols['task']))        $cols['task']['map']        = array('') + $tasks;
+if(isset($cols['toTask']))      $cols['toTask']['map']      = array('') + $tasks;
+if(isset($cols['story']))       $cols['story']['map']       = array('') + $stories;
+
+if(isset($cols['activatedCount'])) $cols['activatedCount']['map'] = array('');
 
 $bugs = initTableData($bugs, $cols, $this->execution);
 
@@ -86,6 +92,8 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($bugs)),
+    set::priList($lang->bug->priList),
+    set::severityList($lang->bug->severityList),
     set::checkable($canBatchAssignTo),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={name}_{sortType}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),

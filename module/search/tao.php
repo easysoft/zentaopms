@@ -49,7 +49,7 @@ class searchTao extends searchModel
                 $value = zget($formField, 'value', '');
 
                 if(empty($field)) continue;
-                if($value) $fieldValues[$formField->field][$value] = $value;
+                if($value) $fieldValues[$field][$value] = $value;
             }
         }
 
@@ -99,6 +99,42 @@ class searchTao extends searchModel
         $this->session->set($formSessionName, $queryForm);
 
         return $queryForm;
+    }
+
+    /**
+     * Init the old search session for the first time search.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $fieldParams
+     * @access public
+     * @return void
+     */
+    public function initOldSession(string $module, array $fields, array $fieldParams)
+    {
+        $formSessionName  = $module . 'Form';
+        if(isset($_SESSION[$formSessionName]) and $_SESSION[$formSessionName] != false) return;
+
+        for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
+        {
+            /* Var names. */
+            $fieldName    = "field$i";
+            $andOrName    = "andOr$i";
+            $operatorName = "operator$i";
+            $valueName    = "value$i";
+
+            $currentField = key($fields);
+            $operator     = isset($fieldParams[$currentField]['operator']) ? $fieldParams[$currentField]['operator'] : '=';
+
+            $queryForm[$fieldName]    = key($fields);
+            $queryForm[$andOrName]    = 'and';
+            $queryForm[$operatorName] = $operator;
+            $queryForm[$valueName]    =  '';
+
+            if(!next($fields)) reset($fields);
+        }
+        $queryForm['groupAndOr'] = 'and';
+        $this->session->set($formSessionName, $queryForm);
     }
 
     /**
@@ -189,7 +225,7 @@ class searchTao extends searchModel
             }
             elseif($field == 'scene')
             {
-                $allScenes = $value === '0' ? array() : ($value === '' ? array(0) : $this->loadModel('testcase')->getAllChildId($value));
+                $allScenes = $value === '0' ? array() : ($value === '' ? array(0) : $this->loadModel('testcase')->getAllChildId((int)$value));
                 if(count($allScenes)) $condition = helper::dbIN($allScenes);
             }
             else
@@ -1001,7 +1037,13 @@ class searchTao extends searchModel
      */
     private function processStoryRecord(object $record, string $module, array $objectList): object
     {
-        $story  = $objectList[$module][$record->objectID];
+        $story = zget($objectList[$module], $record->objectID, null);
+        if(empty($story))
+        {
+            $record->url = '';
+            return $record;
+        }
+
         $module = 'story';
         $method = 'view';
         if(!empty($story->lib))
@@ -1025,11 +1067,10 @@ class searchTao extends searchModel
      *
      * @param  object  $record
      * @param  array   $objectList
-     * @param  string  $module
      * @access private
      * @return object
      */
-    private function processDocRecord(object $record, array $objectList, string $module): object
+    private function processDocRecord(object $record, array $objectList): object
     {
         $doc = $objectList['doc'][$record->objectID];
         $module = 'doc';

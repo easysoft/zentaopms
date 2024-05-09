@@ -53,8 +53,11 @@ class ai extends control
         /* Redirect to models ifuser has priv. */
         if(commonModel::hasPriv('ai', 'models')) return $this->locate($this->createLink('ai', 'models'));
 
+        /* Redirect to assistants ifuser has priv. */
+        if(commonModel::hasPriv('ai', 'assistants')) return $this->locate($this->createLink('ai', 'assistants'));
+
         /* User has no priv, deny access. */
-        return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'locate' => $this->createLink('admin', 'index')));
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'locate' => 'back'));
     }
 
     /**
@@ -191,7 +194,7 @@ class ai extends control
         $result = $this->ai->toggleModel($modelID, true);
         if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->sendSuccess(array('load' => array($modelID)));
+        return $this->sendSuccess(array('load' => true, 'message' => ''));
     }
 
     /**
@@ -206,7 +209,7 @@ class ai extends control
         $result = $this->ai->toggleModel($modelID, false);
         if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->sendSuccess(array('load' => array($modelID), 'message' => ''));
+        return $this->sendSuccess(array('load' => true, 'message' => ''));
     }
 
     /**
@@ -581,7 +584,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->colon} " . $this->lang->ai->prompts->assignRole . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->assignRole . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->view->roleTemplates  = $this->ai->getRoleTemplates();
         $this->display();
     }
@@ -620,7 +623,7 @@ class ai extends control
         $this->view->prompt           = $prompt;
         $this->view->promptID         = $promptID;
         $this->view->lastActiveStep   = $this->ai->getLastActiveStep($prompt);
-        $this->view->title            = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->colon} " . $this->lang->ai->prompts->selectDataSource . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->title            = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->selectDataSource . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -656,7 +659,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->colon} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -697,7 +700,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->colon} " . $this->lang->ai->prompts->setTargetForm . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setTargetForm . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -735,7 +738,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->colon} " . $this->lang->ai->prompts->finalize . " {$this->lang->colon} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->finalize . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -880,7 +883,7 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
-        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'load' => $this->inlink('models') . '#app=admin'));
 
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');
@@ -888,7 +891,7 @@ class ai extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if($backToTestingLocation)
         {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'locate' => $this->inlink('promptview', "id=$id") . '#app=admin'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'load' => $this->inlink('promptview', "id=$id") . '#app=admin'));
         }
 
         return $this->send(array('result' => 'success'));

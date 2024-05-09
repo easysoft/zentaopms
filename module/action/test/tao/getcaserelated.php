@@ -32,10 +32,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->config('action')->gen(8);
-zdTable('case')->gen(10);
+zenData('action')->loadYaml('action')->gen(8);
+zenData('case')->gen(10);
 
 $actionTest = new actionTest();
 

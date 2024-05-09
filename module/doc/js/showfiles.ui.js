@@ -1,9 +1,9 @@
 window.searchTitle = function()
 {
-    const searchTitle = $('.actions-menu .searchBox input[name=title]').val();
+    const searchTitle = $('#featureBar .searchBox input[name=title]').val();
     loadPage(searchLink.replace('%s', searchTitle));
 }
-$(document).on('keypress', '.actions-menu .searchBox #title', function(e)
+$(document).on('keypress', '#featureBar .searchBox #title', function(e)
 {
     if(e.keyCode == 13) loadPage(searchLink.replace('%s', $(this).val()));
 });
@@ -12,9 +12,11 @@ window.renderCell = function(result, {col, row})
 {
     if(col.name == 'title')
     {
-        let titleHtml = '';
+        let titleHtml  = '';
+        let titleClass = '';
         if(imageExtensionList.includes(row.data.extension))
         {
+            titleClass = 'file-name';
             titleHtml += `<div style='display: inline-block'><img width='16' src='${row.data.webPath}' data-extension='${row.data.extension}' data-id='${row.data.id}' data-width='${row.data.imageWidth}'/></div>`;
         }
         else
@@ -22,7 +24,7 @@ window.renderCell = function(result, {col, row})
             titleHtml += row.data.fileIcon;
         }
 
-        titleHtml += `<span class='ml-1'>${row.data.fileName}</span>`;
+        titleHtml += `<span class='ml-1 ${titleClass}'>${row.data.fileName}</span>`;
 
         result[0] = {html: titleHtml};
         return result;

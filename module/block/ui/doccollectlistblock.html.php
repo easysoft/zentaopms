@@ -15,10 +15,9 @@ namespace zin;
   <?php if(empty($docList)):?>
     <div class='table-empty-tip'><p><span class='text-muted'><?php echo $lang->doc->noDoc;?></p></span></div>
   <?php else:?>
-  <div class="doc-list table-row w-full">
+  <div class="doc-list table-row w-full pt-4 px-2">
     <?php $rank = 1;?>
     <?php foreach($docList as $doc):?>
-    <?php if(!$doc->collects) continue;?>
     <div class='doc-title'>
       <span class="pri-<?php echo $rank;?> label-pri label-rank label-rank-<?php echo $rank;?>"><?php echo $rank;?></span>
       <?php

@@ -1,22 +1,21 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-zdTable('story')->gen(1);
-zdTable('storyspec')->gen(5);
 
 /**
 
 title=测试 storyModel->updateStoryProduct();
-cid=1
-pid=1
+cid=0
 
-判断需求变更所属产品之前的产品ID >> 1
-判断需求变更所属产品之后的产品ID >> 2
+- 判断需求变更所属产品之前的产品ID属性product @1
+- 判断需求变更所属产品之后的产品ID属性product @2
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+zenData('story')->gen(1);
+zenData('storyspec')->gen(5);
 
 $story = new storyTest();
 global $tester;

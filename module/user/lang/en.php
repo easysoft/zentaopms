@@ -17,6 +17,7 @@ $lang->user->company          = 'Company';
 $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
 $lang->user->password         = 'Password';
+$lang->user->passwordfield    = 'Password';
 $lang->user->password1        = 'Password';
 $lang->user->password2        = 'Repeat Password';
 $lang->user->role             = 'Role';

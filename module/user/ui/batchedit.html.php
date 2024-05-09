@@ -40,7 +40,7 @@ formBatchPanel
     on::click('button[type=submit]', 'encryptPassword'),
     div
     (
-        setClass('form-horz'),
+        setClass('form-horz my-2'),
         formGroup
         (
             setClass('flex verify-box'),

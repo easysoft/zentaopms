@@ -1,18 +1,22 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-zdTable('projectstory')->gen(0);
 
 /**
 
 title=测试 storyModel->linkStory();
-cid=1
-pid=1
+cid=0
+
+- 获取关联需求后的执行下的需求数量 @1
+- 获取关联需求后的执行下的需求数量 @2
+- 获取关联需求后的执行下的需求数量 @1
+- 获取关联需求后的执行下的需求数量 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+zenData('projectstory')->gen(0);
 
 $storyTest = new storyTest();
 $stories1 = $storyTest->linkStoryTest(11, 1, 300);

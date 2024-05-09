@@ -51,6 +51,7 @@ class picker extends wg
         'placeholder?: string',             // 选择框上的占位文本。
         'valueSplitter?: string',           // 多个值的分隔字符串，默认为 `,`。
         'items: string|array|function',     // 列表项或表项获取方法。
+        'pinyinKeys?: bool=false',          // 启用拼音。
         'menu?: array',                     // 附加的菜单选项。
         'hotkey?: boolean',                 // 是否启用快捷键。
         'search?: boolean|number',          // 是否启用搜索。
@@ -89,6 +90,7 @@ class picker extends wg
         $pickerItems  = is_array($items) ? array() : $items;
         $hasZeroValue = false;
         $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
+        $pinyinKeys   = $this->prop('pinyinKeys');
         if(is_array($defaultValue)) $defaultValue = implode($this->prop('valueSplitter', ','), $defaultValue);
         if(is_array($items) && !empty($items))
         {
@@ -98,6 +100,7 @@ class picker extends wg
                 if(!is_string($item['value'])) $item['value'] = strval($item['value']);
 
                 if($item['value'] === '0') $hasZeroValue  = true;
+                if($pinyinKeys && !isset($item['keys']) && class_exists('common')) $item['keys'] = implode(' ', common::convert2Pinyin(array($item['text'])));
                 $pickerItems[] = $item;
             }
         }

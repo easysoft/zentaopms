@@ -1192,9 +1192,9 @@ class taskModel extends model
      * @access public
      * @return string
      */
-    public function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
+    public function getAssignedTo4Multi(string|array|bool $members, object $task, string $type = 'current'): string
     {
-        if(empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
+        if(!$members || empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
 
         /* Format task team members. */
         if(!is_array($members)) $members = explode(',', trim($members, ','));
@@ -2139,6 +2139,10 @@ class taskModel extends model
     public static function isClickable(object $task, string $action): bool
     {
         $action = strtolower($action);
+
+        /* 任务不可修改的话，则无法进行操作。 */
+        if(!common::canModify('task', $task)) return false;
+
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
 
@@ -2169,15 +2173,18 @@ class taskModel extends model
             }
         }
 
+        $executionInfo = zget($task, 'executionInfo', array());
+
         /* 根据状态判断是否可以点击。 Check clickable by status. */
-        if($action == 'start')    return $task->status == 'wait';
-        if($action == 'restart')  return $task->status == 'pause';
-        if($action == 'pause')    return $task->status == 'doing';
-        if($action == 'assignto') return !in_array($task->status, array('closed', 'cancel'));
-        if($action == 'close')    return $task->status == 'done' || $task->status == 'cancel';
-        if($action == 'activate') return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
-        if($action == 'finish')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
-        if($action == 'cancel')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
+        if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && zget($executionInfo, 'type') != 'kanban';
+        if($action == 'start')              return $task->status == 'wait';
+        if($action == 'restart')            return $task->status == 'pause';
+        if($action == 'pause')              return $task->status == 'doing';
+        if($action == 'assignto')           return !in_array($task->status, array('closed', 'cancel'));
+        if($action == 'close')              return $task->status == 'done' || $task->status == 'cancel';
+        if($action == 'activate')           return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
+        if($action == 'finish')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
+        if($action == 'cancel')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
         if($action == 'confirmstorychange') return !in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion;
 
         return true;
@@ -2753,7 +2760,7 @@ class taskModel extends model
         }
 
         /* Compute hours and manage team for multi-task. */
-        if($teamData && $teamData->team && count(array_filter($teamData->team)) > 1)
+        if($teamData && !empty($teamData->team) && count(array_filter($teamData->team)) > 1)
         {
             $teams = $this->manageTaskTeam($task->mode, $task, $teamData);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
@@ -3166,24 +3173,6 @@ class taskModel extends model
 
         if(dao::isError()) return false;
         return common::createChanges($oldTask, $task);
-    }
-
-    /**
-     * 获取任务关联的代码分支。
-     * Get linked branch of task.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return array
-     */
-    public function getLinkedBranch(int $taskID): array
-    {
-        return $this->dao->select('BID,extra')->from(TABLE_RELATION)
-            ->where('AType')->eq('task')
-            ->andWhere('BType')->eq('repobranch')
-            ->andWhere('relation')->eq('linkrepobranch')
-            ->andWhere('AID')->eq($taskID)
-            ->fetchPairs();
     }
 
     /**

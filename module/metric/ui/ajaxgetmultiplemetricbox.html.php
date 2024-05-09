@@ -9,124 +9,14 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('updateTimeTip', $lang->metric->updateTimeTip);
-
 $metricID = $metric->id;
+$current  = $metric;
+$viewType = 'multiple';
+include 'component/queryform.html.php';
+include 'component/tableandcharts.html.php';
 
-$fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID, $dateLabels, $defaultDate)
-{
-    if(!$metricRecordType) return null;
-    $formGroups = array();
-    if($metric->scope != 'system') $objectPairs = $this->metric->getPairsByScope($metric->scope);
-
-    if($metricRecordType == 'scope' || $metricRecordType == 'scope-date')
-    {
-        $formGroups[] = formGroup
-        (
-            setClass('query-inline picker-nowrap w-40'),
-            set::label($this->lang->metric->query->scope[$metric->scope]),
-            set::name('scope_' . $metricID),
-            set::control(array('control' => 'picker', 'multiple' => true)),
-            set::items($objectPairs),
-            set::placeholder($this->lang->metric->placeholder->{$metric->scope})
-        );
-    }
-
-    if($metricRecordType == 'scope' || $metricRecordType == 'system')
-    {
-        $btnLabels = array();
-        foreach($this->lang->metric->query->dayLabels as $key => $label)
-        {
-            $active = $key == '7' ? ' selected' : '';
-            $btnLabels[] = btn
-            (
-                setClass("$active default w-16 p-0"),
-                set::key($key),
-                $label
-            );
-        }
-        $formGroups[] = formGroup
-        (
-            setClass('query-calc-date query-inline w-64'),
-            btngroup
-            (
-                $btnLabels
-            ),
-            on::click('.query-calc-date button.btn', 'window.handleCalcDateClick(target)'),
-        );
-    }
-
-    if($metricRecordType == 'date' || $metricRecordType == 'scope-date')
-    {
-        $btnLabels = array();
-        foreach($dateLabels as $key => $label)
-        {
-            $active = $key == $defaultDate ? ' selected' : '';
-            $btnLabels[] = btn
-            (
-                setClass("$active default w-16 p-0"),
-                set::key($key),
-                $label
-            );
-        }
-        $formGroups[] = formGroup
-        (
-            setClass('query-date query-inline w-64'),
-            btngroup
-            (
-                $btnLabels
-            ),
-            on::click('.query-date button.btn', 'window.handleDateLabelClick(target)'),
-        );
-
-        $formGroups[] = formGroup
-        (
-            setClass('query-inline w-80'),
-            // set::label($this->lang->metric->date),
-            inputGroup
-            (
-                datePicker
-                (
-                    setClass('query-date-picker'),
-                    set::name('dateBegin'),
-                    set('id', 'dateBegin' . $metricID),
-                    set::placeholder($this->lang->metric->placeholder->select)
-                ),
-                $this->lang->metric->to,
-                datePicker
-                (
-                    setClass('query-date-picker'),
-                    set::name('dateEnd'),
-                    set('id', 'dateEnd' . $metricID),
-                    set::placeholder($this->lang->metric->placeholder->select)
-                )
-            ),
-            on::change('.query-date-picker', 'window.handleDatePickerChange(target)'),
-        );
-    }
-
-    return form
-    (
-        set::id('queryForm' . $metricID),
-        setClass('ml-4'),
-        formRow
-        (
-            set::width('max'),
-            $formGroups,
-            !empty($formGroups) ? formGroup
-            (
-                setClass('query-btn'),
-                btn
-                (
-                    setClass('btn secondary'),
-                    set::text($this->lang->metric->query->action),
-                    set::onclick("window.handleQueryClick($metricID, 'multiple')")
-                )
-            ) : null
-        ),
-        set::actions(array())
-    );
-};
+jsVar('updateTimeTip', $lang->metric->updateTimeTip);
+jsVar('calcTitleList', $lang->metric->calcTitleList);
 
 $star = (!empty($metric->collector) and strpos($metric->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
 div
@@ -186,59 +76,5 @@ div
         )
     )
 );
-$fnGenerateQueryForm();
-div
-(
-    setClass('table-and-chart table-and-chart-multiple'),
-    $groupData ? div
-    (
-        setClass('table-side'),
-        setStyle(array('flex-basis' => $tableWidth . 'px')),
-        div
-        (
-            dtable
-            (
-                setID('ajaxmetric' . $metric->id),
-                set::height(328),
-                set::rowHeight(32),
-                set::bordered(true),
-                set::cols($groupHeader),
-                set::data(array_values($groupData)),
-                set::footPager(usePager('dtablePager', $pagerExtra)),
-                $headerGroup ? set::plugins(array('header-group')) : null,
-                set::onRenderCell(jsRaw('window.renderDTableCell')),
-                set::loadPartial(true)
-            )
-        )
-    ) : null,
-    $echartOptions ? div
-    (
-        setClass('chart-side'),
-        div
-        (
-            setClass('chart-type'),
-            picker
-            (
-                set::name('chartType'),
-                set::items($chartTypeList),
-                set::value('line'),
-                set::required(true),
-                set::onchange("window.handleChartTypeChange($metricID, 'multiple')")
-            )
-        ),
-        div
-        (
-            setClass('chart chart-multiple'),
-            echarts
-            (
-                set::xAxis($echartOptions['xAxis']),
-                set::yAxis($echartOptions['yAxis']),
-                set::legend($echartOptions['legend']),
-                set::series($echartOptions['series']),
-                isset($echartOptions['dataZoom']) ? set::dataZoom($echartOptions['dataZoom']) : null,
-                set::grid($echartOptions['grid']),
-                set::tooltip($echartOptions['tooltip'])
-            )->size('100%', '100%')
-        )
-    ) : null
-);
+$fnGenerateQueryForm($viewType);
+$fnGenerateTableAndCharts($metric);

@@ -36,29 +36,6 @@ formPanel
     set::back('GLOBAL'),
     formRow
     (
-        $this->app->tab != 'devops' ? setClass('hidden') : null,
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("product[]"),
-            set::label($lang->story->product),
-            set::required(true),
-            set::control(array("control" => "picker","multiple" => true)),
-            set::items($products),
-            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
-        )
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("projects[]"),
-        set::label($lang->repo->projects),
-        set::control(array("control" => "picker","multiple" => true)),
-        set::items($projects),
-        set::value(empty($relatedProjects) ? '' : implode(',', array_values($relatedProjects)))
-    ),
-    formRow
-    (
         setClass('service hide'),
         formGroup
         (
@@ -80,25 +57,26 @@ formPanel
         set::items($repoGroups),
         set::control("picker")
     ),
-    formRow
-    (
-        ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
-        set::style(array('display' => $server->type == 'gitlab' ? 'none' : 'flex')),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("client"),
-            set::label($lang->repo->client),
-            set::required(true),
-            set::placeholder($lang->repo->example->client->git)
-        )
-    ),
     formGroup
     (
         set::width('1/2'),
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
+    ),
+    formRow
+    (
+        $this->app->tab != 'devops' ? setClass('hidden') : null,
+        formGroup
+        (
+            set::width('1/2'),
+            set::name("product[]"),
+            set::label($lang->story->product),
+            set::required(true),
+            set::control(array("control" => "picker","multiple" => true)),
+            set::items($products),
+            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
+        )
     ),
     formGroup
     (

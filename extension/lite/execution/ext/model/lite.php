@@ -15,61 +15,23 @@ public function setMenu(int $executionID, int $buildID = 0, string $extra = '')
     $currentKanban = zget($kanbanList, $execution->id, '');
     if(empty($currentKanban)) $this->accessDenied();
 
-    $lowerModule = strtolower($this->app->rawModule);
-    $lowerMethod = strtolower($this->app->rawMethod);
+    $subMenu = $this->lang->execution->menu;
 
-    $modulePageNav  = "";
-    $modulePageNav .= "<div class='btn-group angle-btn active'><div class='btn-group'>";
-    $modulePageNav .= "<button data-toggle='dropdown' type='button' class='btn' style='border-radius: 4px;'>{$currentKanban->name} <span class='caret'></span></button>";
-    $modulePageNav .= "<ul class='dropdown-menu'>";
-    foreach($kanbanList as $kanbanID => $kanban)
+    foreach($subMenu as $key => $value)
     {
-        if($this->session->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->session->kanbanview}|") !== false)
+        if(common::hasPriv('execution', $key))
         {
-            $method = $this->session->kanbanview;
-        }
-        elseif($this->cookie->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->cookie->kanbanview}|") !== false)
-        {
-            $method = $this->cookie->kanbanview;
+            $tmpValue = explode('|', $value['link']);
+            $subMenu->{$key}['name']   = $tmpValue[0];
+            $subMenu->{$key}['module'] = $tmpValue[1];
+            $subMenu->{$key}['method'] = $tmpValue[2];
+            $subMenu->{$key}['vars']   = $tmpValue[3];
         }
         else
         {
-            $method = 'kanban';
-        }
-
-        $module = 'execution';
-
-        if($lowerModule == 'task' and $lowerMethod == 'create')
-        {
-            $module = 'task';
-            $method = 'create';
-        }
-
-        $modulePageNav .=  '<li>' . html::a(helper::createLink($module, $method, "execution=$kanban->id"), $kanban->name) . '</li>';
-    }
-    $modulePageNav .= "</ul></div></div>";
-
-    if($lowerModule == 'execution' and strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") !== false)
-    {
-        $this->session->set('kanbanview', $lowerMethod);
-        setcookie('kanbanview', $lowerMethod, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-    }
-
-    if(strpos('|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") !== false) $this->lang->TRActions = $this->getTRActions($lowerMethod);
-    if(strpos('|relation|maintainrelation|', "|{$lowerMethod}|") !== false) $this->lang->TRActions = $this->getTRActions('gantt');
-    if($lowerModule == 'task' or ($lowerModule == 'execution' and strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") === false))
-    {
-        if($this->session->kanbanview)
-        {
-            $this->lang->TRActions = $this->getTRActions($this->session->kanbanview);
-        }
-        elseif($this->cookie->kanbanview)
-        {
-            $this->lang->TRActions = $this->getTRActions($this->cookie->kanbanview);
+            unset($subMenu->$key);
         }
     }
-
-    $this->lang->modulePageNav = $modulePageNav;
 }
 
 public function getTree(int $executionID): array
@@ -115,38 +77,4 @@ public function getTree(int $executionID): array
     }
 
     return array_values($newTrees);
-}
-
-public function getTRActions(string $currentMethod): string
-{
-    $subMenu = $this->lang->execution->menu;
-
-    foreach($subMenu as $key => $value)
-    {
-        if(common::hasPriv('execution', $key))
-        {
-            $tmpValue = explode('|', $value['link']);
-            $subMenu->{$key}['name']   = $tmpValue[0];
-            $subMenu->{$key}['module'] = $tmpValue[1];
-            $subMenu->{$key}['method'] = $tmpValue[2];
-            $subMenu->{$key}['vars']   = $tmpValue[3];
-        }
-        else
-        {
-            unset($subMenu->$key);
-        }
-    }
-
-    $TRActions  = '';
-    $TRActions .= "<div class='btn-group dropdown'>";
-    $TRActions .= html::a("javascript:;", "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'> </i>" . $subMenu->{$currentMethod}['name'] . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
-    $TRActions .= "<ul class='dropdown-menu pull-right'>";
-    foreach($subMenu as $subKey => $subName)
-    {
-        $active = $this->session->kanbanview == $subKey ? "class='active'" : '';
-        $TRActions .=  "<li $active>" . html::a(helper::createLink('execution', $subName['method'], $subName['vars']), "<i class='icon icon-" . $this->lang->execution->icons[$subName['method']] . "'></i> " . $subName['name']) . '</li>';
-    }
-
-    $TRActions .= "</ul></div>";
-    return $TRActions;
 }

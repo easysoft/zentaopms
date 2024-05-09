@@ -12,11 +12,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once __DIR__ . DS . 'wg.class.php';
+require_once __DIR__ . DS . 'node.class.php';
 require_once __DIR__ . DS . 'zin.func.php';
 
-class item extends wg
+class item extends node
 {
+    public bool $notRenderInGlobal = true;
+
     public function build(): array|node|directive
     {
         if($this->parent instanceof node && method_exists($this->parent, 'onBuildItem'))

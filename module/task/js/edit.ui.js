@@ -264,11 +264,3 @@ function updateAssignedTo()
         $('#assignedTo').picker({disabled: true});
     }
 }
-
-window.refreshConsumed = function(consumed)
-{
-    $('input[name=consumed]').val(consumed);
-
-    consumed = String(consumed) + 'h';
-    $('#consumedSpan').html(consumed);
-}

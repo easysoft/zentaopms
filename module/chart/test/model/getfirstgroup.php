@@ -13,8 +13,8 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('module')->config('module')->gen(27);
-zdTable('user')->gen(5);
+zenData('module')->loadYaml('module')->gen(27);
+zenData('user')->gen(5);
 su('admin');
 
 global $tester;

@@ -97,17 +97,17 @@ formPanel
     (
         set::name('avatar'),
         set::label($lang->gitlab->user->avatar),
-        set::control(array('control' => 'file', 'class' => 'hidden', 'id' => 'files')),
+        set::control(array('control' => 'input', 'type' => 'file', 'class' => 'hidden', 'id' => 'files')),
         h::div
         (
-            set::id('avatarUpload'),
+            setID('avatarUpload'),
             setClass('text-center'),
-            html(html::avatar(array('avatar'=> $user->avatar_url ? $user->avatar_url : 'theme/default/images/repo/avatar.jpeg', 'account'=>''), 50)),
+            html(html::avatar(array('avatar' => $user->avatar_url ? $user->avatar_url : 'theme/default/images/repo/avatar.jpeg', 'account' => ''), 50)),
             h::a
             (
                 set::href('javascript:void(0)'),
                 setClass('btn-avatar'),
-                set::id('avatarUploadBtn'),
+                setID('avatarUploadBtn'),
                 set::title($lang->gitlab->user->avatar),
                 icon
                 (

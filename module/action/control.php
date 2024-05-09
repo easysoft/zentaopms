@@ -171,11 +171,25 @@ class action extends control
         if($oldAction->objectType == 'module' && $confirmChange == 'no')
         {
             $module     = $this->loadModel('tree')->getById($oldAction->objectID);
-            $repeatName = $this->loadModel('tree')->checkUnique($module);
-            if($module->type == 'doc' && $module->parent > 0 && !$repeatName)
+            $repeatName = $this->tree->checkUnique($module);
+            if($module->type == 'doc' && $module->parent  > 0 && !$repeatName)
             {
-                $url = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
-                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: '{$this->lang->action->undeleteModuleTip}'}); $.ajaxSubmit({url: '{$url}'});"));
+                $parents         = $this->tree->getParents($oldAction->objectID, true);
+                $isDeletedParent = false;
+                foreach($parents as $parent)
+                {
+                    if($parent->id == $oldAction->objectID) continue;
+                    if($parent->deleted)
+                    {
+                        $isDeletedParent = true;
+                        break;
+                    }
+                }
+                if($isDeletedParent)
+                {
+                    $url = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
+                    return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteModuleTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
+                }
             }
         }
         elseif($oldAction->objectType == 'task' && $confirmChange == 'no')
@@ -270,20 +284,25 @@ class action extends control
             }
 
             /* 获取评论内容并生成一条action数据。 */
-            $commentData = form::data($this->config->action->form->comment)->get();
-            $actionID    = $this->action->create($objectType, $objectID, 'Commented', isset($commentData->actioncomment) ? $commentData->actioncomment : $this->post->comment);
-            if(empty($actionID))
-            {
-                if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
-                return print(js::error($this->lang->error->accessDenied));
-            }
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
+            $commentData = form::data($this->config->action->form->comment)
+                ->setIF($this->post->comment, 'actioncomment', $this->post->comment)
+                ->get();
 
+            if($commentData->actioncomment)
+            {
+                $actionID = $this->action->create($objectType, $objectID, 'Commented', $commentData->actioncomment);
+                if(empty($actionID))
+                {
+                    if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                    return print(js::error($this->lang->error->accessDenied));
+                }
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
+            }
             if($isInZinPage) return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => (int)$objectID))));
 
-            /* 用于ZIN的新UI。*/
-            /* For new UI with ZIN. */
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => $objectID))));
+            /* 用于旧页面。*/
+            /* For oldPage. */
+            return print(js::reload('parent'));
         }
 
         $this->view->title      = $this->lang->action->create;

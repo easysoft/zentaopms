@@ -14,10 +14,10 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(5);
+zenData('project')->loadYaml('project')->gen(5);
 
 global $tester;
 $tester->loadModel('programplan');

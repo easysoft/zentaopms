@@ -12,10 +12,10 @@ cid=1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
-zdTable('product')->config('product_shadow', $useCommon = true, $levels = 4)->gen(10);
-zdTable('bug')->config('bug_resolution_status', $useCommon = true, $levels = 4)->gen(1000);
+zendata('product')->loadYaml('product_shadow', $useCommon = true, $levels = 4)->gen(10);
+zendata('bug')->loadYaml('bug_resolution_status', $useCommon = true, $levels = 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

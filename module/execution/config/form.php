@@ -48,7 +48,7 @@ $config->execution->form->create['whitelist']     = array('type' => 'array',  'r
 $config->execution->form->create['openedVersion'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => $config->version);
 $config->execution->form->create['vision']        = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => $config->vision);
 
-$config->execution->form->edit['project']   = array('type' => 'int',    'required' => true,  'control' => 'select', 'default' => 0);
+$config->execution->form->edit['project']   = array('type' => 'int',    'required' => false, 'control' => 'select', 'default' => 0);
 $config->execution->form->edit['name']      = array('type' => 'string', 'required' => true,  'control' => 'text',   'default' => '', 'filter' => 'trim');
 $config->execution->form->edit['code']      = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
 $config->execution->form->edit['begin']     = array('type' => 'date',   'required' => true,  'control' => 'date',   'default' => null);

@@ -1,21 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-
-$story = zdTable('story');
-$story->version->range('1-4');
-$story->gen(20);
-
-su('admin');
 
 /**
 
 title=测试 storyModel->getDataOfStoriesPerStatus();
-cid=1
-pid=1
+cid=0
+
+- 按照需求状态分组，获取分组后的需求数量 @4
+- 按照需求状态分组，获取各个需求状态的需求数量，查看draft下的数据
+ - 第draft条的name属性 @草稿
+ - 第draft条的value属性 @5
+- 按照需求状态分组，获取各个需求状态的需求数量，查看active下的数据
+ - 第active条的name属性 @激活
+ - 第active条的value属性 @5
+- 按照需求状态分组，获取各个需求状态的需求数量，查看closed下的数据
+ - 第closed条的name属性 @已关闭
+ - 第closed条的value属性 @5
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+
+$story = zenData('story');
+$story->version->range('1-4');
+$story->gen(20);
+
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

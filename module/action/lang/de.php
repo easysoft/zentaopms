@@ -36,14 +36,16 @@ $lang->action->new           = 'New';
 $lang->action->to            = 'To';
 $lang->action->superReviewer = 'Super Reviewer';
 
-$lang->action->trash       = 'Aufräumen';
-$lang->action->undelete    = 'Wiederherstellen';
-$lang->action->hideOne     = 'Verstecken';
-$lang->action->hideAll     = 'Alle verstecken';
-$lang->action->editComment = 'Bearbeiten';
-$lang->action->create      = 'Kommentar hinzufügen';
-$lang->action->comment     = 'Kommentar';
-$lang->action->byQuery     = 'Search';
+$lang->action->trash         = 'Aufräumen';
+$lang->action->undelete      = 'Wiederherstellen';
+$lang->action->hideOne       = 'Verstecken';
+$lang->action->hideAll       = 'Alle verstecken';
+$lang->action->editComment   = 'Bearbeiten';
+$lang->action->create        = 'Kommentar hinzufügen';
+$lang->action->comment       = 'Kommentar';
+$lang->action->actioncomment = 'Kommentar';
+$lang->action->lastComment   = 'Kommentar';
+$lang->action->byQuery       = 'Search';
 
 $lang->action->trashAction    = 'Recycle List';
 $lang->action->undeleteAction = 'Reset Data';
@@ -68,7 +70,7 @@ $lang->action->hasCreatedTask     = 'Tasks have been created in this parent phas
 $lang->action->hasDeletedParent   = 'Restoring this phase requires restoring the deleted parent phase %s at the same time.';
 $lang->action->hasChangedAttr     = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
 $lang->action->whetherToRestore   = 'Confirm to restore?';
-$lang->action->undeleteModuleTip  = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized.';
+$lang->action->undeleteModuleTip  = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized, would you like to proceed with restoring the directory?';
 $lang->action->undeleteTaskTip    = 'The execution associated with this task has been removed. If you choose to restore it, the task will no longer be visible. Would you like to proceed with restoring the task?';
 
 $lang->action->hasOtherType = array();
@@ -141,6 +143,7 @@ $lang->action->objectTypes['team']             = 'Team';
 $lang->action->objectTypes['whitelist']        = 'Whitelist';
 $lang->action->objectTypes['pipeline']         = 'GitLib';
 $lang->action->objectTypes['gitlab']           = 'GitLab Server';
+$lang->action->objectTypes['gitfox']           = 'GitFox Server';
 $lang->action->objectTypes['gitea']            = 'Gitea Server';
 $lang->action->objectTypes['gogs']             = 'Gogs Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
@@ -153,6 +156,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab Branch';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab Tag Protected';
+$lang->action->objectTypes['gitfoxuser']       = 'GitFox User';
 $lang->action->objectTypes['giteauser']        = 'Gitea User';
 $lang->action->objectTypes['gogsuser']         = 'Gogs User';
 $lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
@@ -275,6 +279,8 @@ $lang->action->desc->online               = '$date, set online by <strong>$actor
 $lang->action->desc->offline              = '$date, set offline by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->linkhost             = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->createrepobranch     = '$date, <strong>$actor</strong> created code branch <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkrepobranch     = '$date, <strong>$actor</strong> unlinked code branch <strong>$extra</strong>.' . "\n";
+$lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adjust the program <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -516,7 +522,12 @@ $lang->action->label->offline                 = 'offline';
 $lang->action->label->linkhost                = 'link hosts to';
 $lang->action->label->delist                  = 'delist';
 $lang->action->label->createrepobranch        = 'Created branch from';
+$lang->action->label->unlinkrepobranch        = 'Unlinked branch from';
 $lang->action->label->communicate             = 'Communicate';
+$lang->action->label->changedprogram          = 'Changed program';
+$lang->action->label->aiassistant             = 'AI Assistant';
+$lang->action->label->published               = 'published';
+$lang->action->label->unpublished             = 'unpublished';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -799,6 +810,11 @@ $lang->action->dynamicAction->gitlab['created']   = 'Create GitLab Server';
 $lang->action->dynamicAction->gitlab['edited']    = 'Edit GitLab Server';
 $lang->action->dynamicAction->gitlab['deleted']   = 'Delete GitLab Server';
 $lang->action->dynamicAction->gitlab['undeleted'] = 'Undelete GitLab Server';
+
+$lang->action->dynamicAction->gitfox['created']   = 'Create GitFox Server';
+$lang->action->dynamicAction->gitfox['edited']    = 'Edit GitFox Server';
+$lang->action->dynamicAction->gitfox['deleted']   = 'Delete GitFox Server';
+$lang->action->dynamicAction->gitfox['undeleted'] = 'Undelete GitFox Server';
 
 $lang->action->dynamicAction->gitea['created']   = 'Create Gitea Server';
 $lang->action->dynamicAction->gitea['edited']    = 'Edit Gitea Server';

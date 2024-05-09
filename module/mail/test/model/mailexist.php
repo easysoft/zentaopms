@@ -11,10 +11,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
+include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 
 $mail = new mailTest();
 

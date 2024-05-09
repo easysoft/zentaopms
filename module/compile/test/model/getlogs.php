@@ -2,16 +2,16 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('job')->config('job')->gen(6);
-zdTable('compile')->gen(6);
-zdTable('pipeline')->gen(6);
+zenData('job')->loadYaml('job')->gen(6);
+zenData('compile')->gen(6);
+zenData('pipeline')->gen(6);
 su('admin');
 
 /**
 
 title=测试 compileModel->getLogs();
+timeout=0
 cid=1
-pid=1
 
 - 检查jenkins返回的logs。 @Started by
 - 检查gitlab返回的logs。 @<font styl

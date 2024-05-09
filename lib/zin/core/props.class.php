@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace zin;
 
 use zin\utils\classlist;
-use zin\utils\style;
+use zin\utils\styleset;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'classlist.class.php';
-require_once dirname(__DIR__) . DS . 'utils' . DS . 'style.class.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'styleset.class.php';
 
 /**
  * Manage properties for html element and widgets
@@ -28,9 +28,9 @@ class props extends \zin\utils\dataset
      * Style property
      *
      * @access public
-     * @var    style
+     * @var    styleset
      */
-    public style $style;
+    public styleset $style;
 
     /**
      * Class property
@@ -50,7 +50,7 @@ class props extends \zin\utils\dataset
      */
     public function __construct(array $props = array())
     {
-        $this->style = new style();
+        $this->style = new styleset();
         $this->class = new classlist();
 
         parent::__construct($props);

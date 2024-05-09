@@ -14,14 +14,14 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-$projectTable = zdTable('project')->config('project');
+$projectTable = zenData('project')->loadYaml('project');
 $projectTable->acl->range('private');
 $projectTable->gen(15);
 
-zdTable('stakeholder')->config('stakeholder')->gen(20);
-zdTable('user')->gen(5);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
+zenData('user')->gen(5);
 
 $objectIds[0] = array();
 $objectIds[1] = range(1, 10);

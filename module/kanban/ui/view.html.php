@@ -70,6 +70,10 @@ jsVar('vision', $config->vision);
 jsVar('colorList', $config->kanban->cardColorList);
 jsVar('canMoveCard', common::hasPriv('kanban', 'moveCard'));
 jsVar('canModify', (!empty($this->config->CRKanban) || $kanban->status != 'closed'));
+jsVar('canViewPlan', common::hasPriv('productplan', 'view') && $config->vision != 'lite');
+jsVar('canViewRelease', common::hasPriv('release', 'view') && $config->vision != 'lite');
+jsVar('canViewExecution', common::hasPriv('execution', 'task') && $config->vision != 'lite');
+jsVar('canViewBuild', common::hasPriv('build', 'view') && $config->vision != 'lite');
 
 dropmenu(set::tab('kanban'), set::objectID($kanban->id));
 

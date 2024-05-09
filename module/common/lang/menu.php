@@ -229,7 +229,7 @@ $lang->scrum->menu->story       = array('link' => "{$lang->common->story}|projec
 $lang->scrum->menu->projectplan = array('link' => "{$lang->productplan->shortCommon}|projectplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api');
 $lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
-$lang->scrum->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
 $lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -266,6 +266,13 @@ $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->module}|tree|browse|product=%s&view=story");
 
+$lang->scrum->menu->devops['subMenu']       = new stdclass();
+$lang->scrum->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
+$lang->scrum->menu->devops['subMenu']->mr   = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+
+$lang->scrum->menu->devops['menuOrder'][5]  = 'repo';
+$lang->scrum->menu->devops['menuOrder'][15] = 'mr';
+
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index      = array('link' => "$lang->dashboard|project|index|project=%s");
@@ -274,7 +281,7 @@ $lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|pro
 $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
 $lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s");
-$lang->waterfall->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+if(helper::hasFeature('devops')) $lang->waterfall->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
 $lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -310,6 +317,13 @@ $lang->waterfall->menu->design['subMenu']->hlds = array('link' => "{$lang->desig
 $lang->waterfall->menu->design['subMenu']->dds  = array('link' => "{$lang->design->DDS}|design|browse|projectID=%s&productID=0&browseType=DDS");
 $lang->waterfall->menu->design['subMenu']->dbds = array('link' => "{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
 $lang->waterfall->menu->design['subMenu']->ads  = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
+
+$lang->waterfall->menu->devops['subMenu']       = new stdclass();
+$lang->waterfall->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
+$lang->waterfall->menu->devops['subMenu']->mr   = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+
+$lang->waterfall->menu->devops['menuOrder'][5]  = 'repo';
+$lang->waterfall->menu->devops['menuOrder'][15] = 'mr';
 
 /* Kanban project menu. */
 $lang->kanbanProject = new stdclass();
@@ -347,7 +361,7 @@ if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$
 
 $lang->execution->menu->story      = array('link' => "{$lang->common->story}|execution|story|executionID=%s", 'subModule' => 'story,requirement,epic', 'alias' => 'storyview,storykanban,linkstory,batchtotask');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
-$lang->execution->menu->devops     = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create');
+if(helper::hasFeature('devops')) $lang->execution->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create');
 $lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
@@ -451,7 +465,7 @@ $lang->qa->menu->index         = array('link' => "$lang->dashboard|qa|index");
 $lang->qa->menu->bug           = array('link' => "{$lang->bug->common}|bug|browse|productID=%s", 'subModule' => 'bug');
 $lang->qa->menu->testcase      = array('link' => "{$lang->testcase->shortCommon}|testcase|browse|productID=%s", 'subModule' => 'testcase,story');
 $lang->qa->menu->testsuite     = array('link' => "{$lang->testcase->testsuite}|testsuite|browse|productID=%s", 'subModule' => 'testsuite');
-$lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult', 'exclude' => 'testtask-browseunits');
+$lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask,build', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult', 'exclude' => 'testtask-browseunits');
 $lang->qa->menu->report        = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 $lang->qa->menu->caselib       = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
 $lang->qa->menu->automation    = array('link' => "{$lang->automation->common}:", 'subModule' => 'automation', 'alias' => '', 'class' => "qa-automation-menu");
@@ -477,7 +491,7 @@ $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|r
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
 if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
-$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitfox,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
@@ -661,6 +675,7 @@ $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';
 $lang->navGroup->gitlab           = 'devops';
+$lang->navGroup->gitfox           = 'devops';
 $lang->navGroup->gogs             = 'devops';
 $lang->navGroup->gitea            = 'devops';
 $lang->navGroup->sonarqube        = 'devops';

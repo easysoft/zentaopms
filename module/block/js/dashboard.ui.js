@@ -2,6 +2,7 @@ $(function()
 {
     if($('#expiredModal').length) zui.Modal.open({id: 'expiredModal'});
     if($('#annualModal').length)  zui.Modal.open({id: 'annualModal'});
+    if($('#upgradeModal').length)  zui.Modal.open({id: 'upgradeModal'});
 });
 
 function deleteBlock(dashboard, data, block)
@@ -30,7 +31,7 @@ function resetBlocks(dashboard, data, block)
     {
         if(!result) return;
         const url = zui.formatString(data.url, block);
-        $.ajaxSubmit({url: url, method: 'GET', onSuccess: () => loadComponent('#dashboard')});
+        $.ajaxSubmit({url: url, load: false, method: 'GET', onSuccess: () => loadComponent('#dashboard')});
     });
 }
 
@@ -83,3 +84,14 @@ window.handleClickBlockMenu = function(info, block)
     if(type === 'create') return createBlock(this, data, block);
     if(type === 'reset')  return resetBlocks(this, data, block);
 };
+
+/**
+ * Toggle Page when the next page btn click.
+ *
+ * @param {string} target
+ */
+window.togglePage = function(target)
+{
+    $('#upgradeModal .page-block').addClass('hidden');
+    $(`#upgradeModal .${target}`).removeClass('hidden');
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 /**
 
@@ -23,7 +23,7 @@ done            + wait   = doing
 closeReasonDone + wait   = doing
 */
 
-zdTable('task')->config('taskdoing')->gen(26, true, false);
+zenData('task')->loadYaml('taskdoing')->gen(26, true, false);
 
 r($task->getParentStatusById(1)) && p() && e('doing');
 r($task->getParentStatusById(2)) && p() && e('doing');
@@ -44,7 +44,7 @@ pause + doing  = doing
 pause + wait   = doing
 */
 
-zdTable('task')->config('taskpause')->gen(18, true, false);
+zenData('task')->loadYaml('taskpause')->gen(18, true, false);
 
 r($task->getParentStatusById(11)) && p() && e('doing');
 r($task->getParentStatusById(12)) && p() && e('doing');
@@ -59,7 +59,7 @@ wait + closed = wait
 wait + cancel = wait
 */
 
-zdTable('task')->config('taskwait')->gen(9, true, false);
+zenData('task')->loadYaml('taskwait')->gen(9, true, false);
 
 r($task->getParentStatusById(21)) && p() && e('wait');
 r($task->getParentStatusById(22)) && p() && e('wait');
@@ -71,7 +71,7 @@ done + closed = done
 done + cancel = done
 */
 
-zdTable('task')->config('taskdone')->gen(9, true, false);
+zenData('task')->loadYaml('taskdone')->gen(9, true, false);
 
 r($task->getParentStatusById(31)) && p() && e('done');
 r($task->getParentStatusById(32)) && p() && e('done');
@@ -83,7 +83,7 @@ closed + cancel = closed
 cancel + cancel = cancel
 */
 
-zdTable('task')->config('taskclose')->gen(9, true, false);
+zenData('task')->loadYaml('taskclose')->gen(9, true, false);
 
 r($task->getParentStatusById(41)) && p() && e('closed');
 r($task->getParentStatusById(42)) && p() && e('closed');

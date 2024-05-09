@@ -2,7 +2,7 @@
 global $lang, $app;
 $config->story->dtable = new stdclass();
 
-$config->story->dtable->defaultField = array('id', 'title', 'pri', 'plan', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
+$config->story->dtable->defaultField = array('id', 'title', 'pri', 'plan', 'roadmap', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
 
 $config->story->dtable->fieldList['id']['name']     = 'id';
 $config->story->dtable->fieldList['id']['title']    = $lang->idAB;
@@ -60,6 +60,36 @@ $config->story->dtable->fieldList['plan']['width']      = '136';
 $config->story->dtable->fieldList['plan']['show']       = true;
 $config->story->dtable->fieldList['plan']['group']      = 4;
 $config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
+
+if($config->edition == 'ipd')
+{
+    $config->story->dtable->fieldList['roadmap']['name']     = 'roadmap';
+    $config->story->dtable->fieldList['roadmap']['title']    = $lang->story->roadmap;
+    $config->story->dtable->fieldList['roadmap']['type']     = 'html';
+    $config->story->dtable->fieldList['roadmap']['show']     = true;
+    $config->story->dtable->fieldList['roadmap']['sortType'] = true;
+    $config->story->dtable->fieldList['roadmap']['width']    = '90';
+
+}
+if($config->vision == 'or')
+{
+    $app->loadLang('demand');
+    $config->story->dtable->fieldList['duration']['title']     = 'duration';
+    $config->story->dtable->fieldList['duration']['width']     = '90';
+    $config->story->dtable->fieldList['duration']['type']      = 'status';
+    $config->story->dtable->fieldList['duration']['show']      = true;
+    $config->story->dtable->fieldList['duration']['sortType']  = true;
+    $config->story->dtable->fieldList['duration']['statusMap'] = $lang->demand->durationList;
+    $config->story->dtable->fieldList['duration']['group']     = 4;
+
+    $config->story->dtable->fieldList['BSA']['title']     = 'BSA';
+    $config->story->dtable->fieldList['BSA']['width']     = '90';
+    $config->story->dtable->fieldList['BSA']['type']      = 'status';
+    $config->story->dtable->fieldList['BSA']['show']      = true;
+    $config->story->dtable->fieldList['BSA']['sortType']  = true;
+    $config->story->dtable->fieldList['BSA']['statusMap'] = $lang->demand->bsaList;
+    $config->story->dtable->fieldList['BSA']['group']     = 4;
+}
 
 $config->story->dtable->fieldList['category']['name']     = 'category';
 $config->story->dtable->fieldList['category']['title']    = $lang->story->category;
@@ -326,7 +356,7 @@ $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['dat
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['data-id']     = 'storyEstimateModal';
 
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
-$config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlinkStory;
+$config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->story->unlink;
 
 $config->story->taskTable = new stdclass();
 $config->story->taskTable->fieldList['id']['name']     = 'id';

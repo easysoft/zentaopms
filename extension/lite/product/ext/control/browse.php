@@ -81,7 +81,6 @@ class product extends control
         $project = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
 
         /* Get stories. */
-        if(in_array($browseType, array('reviewing', 'draft', 'changing'))) $browseType .= 'story';
         $stories = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -97,7 +96,7 @@ class product extends control
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
         /* Assign. */
-        $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;
+        $this->view->title           = $productName . $this->lang->hyphen . $this->lang->product->browse;
         $this->view->moduleID        = $moduleID;
         $this->view->pager           = $pager;
         $this->view->orderBy         = $orderBy;

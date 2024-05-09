@@ -15,10 +15,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-zdTable('module')->config('module')->gen(30);
+zenData('module')->loadYaml('module')->gen(30);
 
 $root           = array(1, 2, 1);
 $parentModuleID = array(1, 11, 4);

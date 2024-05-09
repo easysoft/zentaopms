@@ -95,9 +95,11 @@ $fields->field('task')
     ->value(data('bug.taskID'));
 
 $fields->field('feedbackBy')
+    ->id('feedbackBy')
     ->control('input');
 
 $fields->field('notifyEmail')
+    ->id('notifyEmail')
     ->control('input');
 
 $fields->field('browser')

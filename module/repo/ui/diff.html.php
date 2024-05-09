@@ -85,7 +85,7 @@ if($repo->SCM != 'Subversion')
     (
         setID('source'),
         set::objectID($objectID),
-        set::text($oldRevision),
+        set::text(substr($oldRevision, 0, 10)),
         set::data(array('data' => $menuData, 'tabs' => $tabs))
     );
     $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
@@ -94,16 +94,15 @@ if($repo->SCM != 'Subversion')
     (
         setID('target'),
         set::objectID($objectID),
-        set::text($newRevision),
+        set::text(substr($newRevision, 0, 10)),
         set::data(array('data' => $menuData, 'tabs' => $tabs))
     );
     $breadcrumbItems[] = btn
     (
-        set::id('diffForm'),
         set::type('primary'),
         set::size('md'),
         $lang->repo->compare,
-        on::click('goDiff')
+        on::click()->call('window.goDiff')
     );
 }
 else
@@ -131,11 +130,10 @@ else
     );
     $breadcrumbItems[] = btn
     (
-        set::id('diffForm'),
         set::type('primary'),
         set::size('md'),
         $lang->repo->compare,
-        on::click('goDiff')
+        on::click()->call('window.goDiff')
     );
 }
 div(
@@ -148,7 +146,26 @@ div(
     )
 );
 
-if($diffs) include 'diffeditor.html.php';
+if($diffs)
+{
+    include 'diffeditor.html.php';
+}
+else
+{
+    div
+    (
+        setClass('dtable-empty-tip'),
+        div
+        (
+            setClass('row gap-4 items-center'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->repo->notice->noChanges
+            )
+        )
+    );
+}
 
 jsVar('oldRevision', $oldRevision);
 jsVar('newRevision', $newRevision);

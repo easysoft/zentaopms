@@ -18,10 +18,10 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/jenkins.class.php';
+include dirname(__FILE__, 2) . '/lib/jenkins.unittest.class.php';
 
-zdTable('job')->config('job')->gen('10');
-zdTable('user')->gen('1');
+zenData('job')->loadYaml('job')->gen('10');
+zenData('user')->gen('1');
 
 su('admin');
 

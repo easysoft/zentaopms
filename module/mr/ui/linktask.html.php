@@ -31,7 +31,9 @@ searchForm
 (
     set::module('task'),
     set::simple(true),
-    set::show(true)
+    set::show(true),
+    set::extraHeight('+144'),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'mr-task')"))
 );
 
 div
@@ -44,6 +46,7 @@ div
         $lang->repo->unlinkedTasks . "({$pager->recTotal})"
     )
 );
+$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
 $allTasks = initTableData($allTasks, $config->repo->taskDtable->fieldList);
 $data = array_values($allTasks);
 dtable

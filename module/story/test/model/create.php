@@ -1,34 +1,39 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->create();
+cid=0
+
+- 检查创建后的数据。
+ - 属性id @5
+ - 属性title @test story
+- 如果传入执行，检查需求是否已经关联到执行了。 @1
+- 如果传入Bug，检查Bug是否已经关闭了。 @closed
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('product')->gen(20);
-zdTable('project')->gen(20);
-zdTable('bug')->gen(2);
-zdTable('relation')->gen(0);
-zdTable('storyreview')->gen(0);
-zdTable('projectstory')->gen(0);
+zenData('product')->gen(20);
+zenData('project')->gen(20);
+zenData('bug')->gen(2);
+zenData('relation')->gen(0);
+zenData('storyreview')->gen(0);
+zenData('projectstory')->gen(0);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->type->range('requirement,story{10}');
 $story->parent->range('0,0,0,0');
 $story->product->range('1');
 $story->version->range('1');
 $story->gen(4);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(4);
-
-/**
-
-title=测试 storyModel->create();
-cid=1
-pid=1
-
-*/
 
 $data  = new stdclass();
 $data->product     = 1;

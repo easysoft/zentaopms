@@ -63,7 +63,7 @@ window.uploadImages = function(selector, options, $uploadBtn)
 
     if(!files.length)
     {
-        zui.Modal.alert(options.uploadEmpty);
+        if(!$uploadBtn.hasClass('disabled')) zui.Modal.alert(options.errorUploadEmpty);
         return;
     }
 
@@ -105,7 +105,7 @@ window.uploadImages = function(selector, options, $uploadBtn)
                 {
                     $.ajax(
                     {
-                        url: locateUrl,
+                        url: options.locateUrl,
                         headers:{'X-Zui-Modal': true},
                         dataType: 'json',
                         success: function(data)

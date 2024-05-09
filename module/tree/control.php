@@ -72,6 +72,7 @@ class tree extends control
         {
             $syncConfig             = json_decode($this->config->global->syncProduct, true);
             $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
+            $this->view->productID  = $rootID;
         }
 
         /* 获取产品的分支。 Get branches of product. */
@@ -260,7 +261,6 @@ class tree extends control
         {
             $this->tree->updateOrder($_POST['orders']);
             if($viewType == 'story' and !empty($rootID) and !empty($moduleID)) $this->loadModel('action')->create('module', $rootID, 'moved', '', $moduleID);
-            die(js::reload('parent'));
         }
     }
 
@@ -270,10 +270,11 @@ class tree extends control
      *
      * @param  int    $rootID
      * @param  string $viewType
+     * @param  string $oldPage  yes|no
      * @access public
      * @return void
      */
-    public function manageChild(int $rootID, string $viewType)
+    public function manageChild(int $rootID, string $viewType, string $oldPage = 'no')
     {
         if(!empty($_POST))
         {
@@ -286,6 +287,7 @@ class tree extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderModulePicker($rootID, '$viewType');"));
             }
 
+            if($oldPage == 'yes') return print(js::reload('parent'));
             return $this->sendSuccess(array('load' => true));
         }
     }

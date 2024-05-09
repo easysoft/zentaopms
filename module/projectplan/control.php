@@ -70,4 +70,42 @@ class projectplan extends control
     {
         echo $this->fetch('productplan', 'view', "planID=$planID&type=$type&orderBy=$orderBy&link=$link&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
+
+    /**
+     * 关联需求。
+     * Link stories.
+     *
+     * @param  int    $planID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStory(int $planID = 0, string $browseType = '', int $param = 0, string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    {
+        echo $this->fetch('productplan', 'linkStory', "planID={$planID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+    }
+
+    /**
+     * 计划管理Bug列表。
+     * Link bug list.
+     *
+     * @param  int    $planID
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkBug(int $planID = 0, string $browseType = '', string $param = '0', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    {
+        echo $this->fetch('productplan', 'linkBug', "planID={$planID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+    }
 }

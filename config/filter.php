@@ -360,6 +360,7 @@ $filter->testcase->browse->cookie['caseSuite']       = 'int';
 $filter->testcase->browse->cookie['preBranch']       = 'reg::word';
 $filter->testcase->browse->cookie['onlyAutoCase']    = 'int';
 $filter->testcase->create->cookie['lastCaseModule']  = 'int';
+$filter->testcase->create->cookie['onlyAutoCase']    = 'int';
 $filter->testcase->default->cookie['lastProduct']    = 'int';
 $filter->testcase->default->cookie['preProductID']   = 'int';
 $filter->testcase->export->cookie['checkedItem']     = 'reg::checked';

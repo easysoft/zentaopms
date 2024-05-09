@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/compile.class.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 su('admin');
 
 /**
 
 title=测试 compileModel->getBuildUrl();
+timeout=0
 cid=1
-pid=1
 
 - 检测password为空时获取的信息属性userPWD @123456:zxd
 - 检测token为空时获取的信息属性url @https://gitlabdev.qc.oop.cc/job/11/build/api/json

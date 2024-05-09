@@ -8,13 +8,13 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('build')->config('build')->gen(10);
-zdTable('project')->config('execution')->gen(30);
-zdTable('release')->config('release')->gen(5);
-zdTable('product')->config('product')->gen(5);
-zdTable('user')->gen(5);
+zenData('build')->loadYaml('build')->gen(10);
+zenData('project')->loadYaml('execution')->gen(30);
+zenData('release')->loadYaml('release')->gen(5);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $productIdList[0] = array();

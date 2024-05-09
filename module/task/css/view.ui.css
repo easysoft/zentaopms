@@ -3,3 +3,4 @@
 #mainContent .table-data tbody > tr > td,#mainContent .table-data tbody > tr > th {word-break: break-all;}
 #mainContent .detail-body .section > .h4 {font-size: 1rem !important;}
 #mainContent .detail-body .section > .article {font-size: 13px; font-weight: 400;}
+#mainContent .detail-body .detail-card-header .detail-card-toolbar .toolbar .btn.toolbar-item {max-height: 20px;}

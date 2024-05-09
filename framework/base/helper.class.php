@@ -16,6 +16,26 @@ declare(strict_types=1);
 class baseHelper
 {
     /**
+     * 已加载的目录.
+     * The loaded directories.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedDirs = array();
+
+    /**
+     * 已经包含的文件.
+     * The included files.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $includedFiles = array();
+
+    /**
      * 设置一个对象的成员变量。
      * Set the member's value of one object.
      * <code>
@@ -170,7 +190,7 @@ class baseHelper
 
         $sign = !str_contains($link, '?') ? "?" : "&";
         $appendString = '';
-        if($onlyBody or self::inOnlyBodyMode()) $appendString = $sign . "onlybody=yes";
+        if($onlyBody or (self::inOnlyBodyMode() && !self::isAjaxRequest('modal'))) $appendString = $sign . "onlybody=yes";
         if(self::isWithTID() and !str_contains($link, 'tid=')) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
         return $link . $appendString;
     }
@@ -212,16 +232,13 @@ class baseHelper
     static public function import($file)
     {
         $file = realpath($file);
-        if($file === false || !is_file($file)) return false;
+        if($file === false) return false;
 
-        static $includedFiles = array();
-        if(!isset($includedFiles[$file]))
-        {
-            include $file;
-            $includedFiles[$file] = true;
-            return true;
-        }
+        if(isset(self::$includedFiles[$file])) return true;
+        if(!is_file($file)) return false;
 
+        include $file;
+        self::$includedFiles[$file] = true;
         return true;
     }
 
@@ -665,6 +682,7 @@ class baseHelper
     static public function ls($dir, $pattern = '')
     {
         if(empty($dir)) return array();
+        if(isset(self::$loadedDirs[$dir][$pattern])) return self::$loadedDirs[$dir][$pattern];
 
         $files = array();
         $dir   = realpath($dir);
@@ -672,7 +690,10 @@ class baseHelper
         if($dir === false) return array();
 
         if(is_dir($dir)) $files = glob($dir . DIRECTORY_SEPARATOR . '*' . $pattern);
-        return empty($files) ? array() : $files;
+
+        self::$loadedDirs[$dir][$pattern] = $files ?: array();
+
+        return self::$loadedDirs[$dir][$pattern];
     }
 
     /**
@@ -803,6 +824,7 @@ class baseHelper
      */
     public static function restartSession($sessionID = '')
     {
+        if(!preg_match('/^\w+$/', $sessionID)) $sessionID = '';
         if(empty($sessionID)) $sessionID = sha1((string)mt_rand(0, mt_getrandmax()));
 
         session_write_close();

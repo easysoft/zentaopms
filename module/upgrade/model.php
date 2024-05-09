@@ -46,6 +46,8 @@ class upgradeModel extends model
     public function getVersionsToUpdate(string $openVersion, string $fromEdition): array
     {
         $versions = array();
+        /* pms20beta2 is a version released between pms18.11 and pms18.12, which was upgraded to pms20 and lost 18.11 upgrade sql. */
+        if($openVersion == '20_0_beta2') $versions['18_11'] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
 
         /* Always update open sql. */
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
@@ -339,7 +341,7 @@ class upgradeModel extends model
         $createHead = array_shift($lines);
         $createFoot = array_pop($lines);
 
-        preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
+        preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
         $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
@@ -359,7 +361,7 @@ class upgradeModel extends model
 
                 $dbSQLLine = rtrim($dbSQLLine, ',');
                 $dbSQLLine = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $dbSQLLine);
-                $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $dbSQLLine);
+                $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/i', " DEFAULT '$1'", $dbSQLLine);
 
                 list($field) = explode(' ', $dbSQLLine);
                 $fields[$field] = rtrim($dbSQLLine, ',');
@@ -400,7 +402,7 @@ class upgradeModel extends model
 
         $line = rtrim($line, ',');
         $line = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $line);
-        $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $line);
+        $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/i', " DEFAULT '$1'", $line);
 
         list($field) = explode(' ', $line);
         if(isset($fields[$field]) and strpos($fields[$field], ' NULL') === false and strpos($line, ' DEFAULT NULL') !== false) $line = str_replace(' DEFAULT NULL', '', $line); // e.g. standard sql like [ `content` text DEFAULT NULL ] , but current db sql like [ `content` text ].
@@ -474,14 +476,14 @@ class upgradeModel extends model
         $defaultPos = stripos($stdField, ' DEFAULT ');
         if($defaultPos === false) return false; // No default in std, don't change.
 
-        $stdDefault = substr($stdField, $defaultPos + 9);
+        $stdDefault = str_replace("'", '', substr($stdField, $defaultPos + 9));
         if($stdDefault == 'NULL') return false; // Default is NULL, don't change.
-        if(strpos($stdField, 'text') !== false && $stdDefault == "''") return false; // Default is '' and text type, don't change.
+        if(strpos($stdField, 'text') !== false && empty($stdDefault)) return false; // Default is '' and text type, don't change.
 
         $defaultPos = stripos($dbField,  ' DEFAULT ');
         if($defaultPos === false) return true; // No default in db, change it.
 
-        $dbDefault = substr($dbField, $defaultPos + 9);
+        $dbDefault = str_replace("'", '', substr($dbField, $defaultPos + 9));
 
         return $stdDefault != $dbDefault;
     }
@@ -3460,7 +3462,16 @@ class upgradeModel extends model
     public function adjustPriv15_0()
     {
         $executionPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('execution')->limit(1)->fetch();
-        if(empty($executionPriv)) $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('execution')->where('module')->eq('project')->exec();
+        if(empty($executionPriv))
+        {
+            $projectPrivList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->fetchAll();
+            $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('execution')->where('module')->eq('project')->exec();
+            foreach($projectPrivList as $projectPriv)
+            {
+                if(!in_array($projectPriv->method, array('browse', 'story', 'bug', 'testtask', 'doc', 'build', 'index', 'create', 'edit', 'batchedit', 'start', 'activate', 'suspend', 'close', 'delete', 'export', 'manageProducts', 'manageMembers', 'team', 'unlinkMember', 'unlinkStory', 'view'))) continue;
+                $this->dao->replace(TABLE_GROUPPRIV)->data($projectPriv)->exec();
+            }
+        }
 
         $groups = $this->dao->select('id')->from(TABLE_GROUP)->fetchPairs('id', 'id');
         foreach($groups as $groupID)
@@ -5150,10 +5161,13 @@ class upgradeModel extends model
 
         foreach($data->files as $file => $check)
         {
-            $dirRoot  = $customRoot . DS . dirname($file);
-            $fileName = basename($file);
+            if(!preg_match('/[a-z]/', $file[0])) continue;
+
             $fromPath = $this->app->getModuleRoot() . $file;
-            $toPath   = $dirRoot . DS . $fileName;
+            if(!is_file($fromPath)) continue;
+
+            $dirRoot = $customRoot . DS . dirname($file);
+            $toPath  = $dirRoot . DS . basename($file);
             /* If the directory doesn't exist and there is no permission to create the directory, set the response and return it. */
             if(!is_dir($dirRoot))
             {
@@ -8505,6 +8519,8 @@ class upgradeModel extends model
         $model->createdDate = helper::now();
         $model->createdBy   = 'system';
 
+        if(empty($model->type)) return;
+
         $credentials = new stdclass();
         $credentials->key = $aiConfig->key ?: '';
 
@@ -8554,43 +8570,191 @@ class upgradeModel extends model
     }
 
     /**
-     * 检查是否添加了18.10版本的需求池字段，如果没有就添加。
-     * Check if the demand pool field of version 18.10 is added, if not, add it.
-     *
-     * @access public
-     * @return void
-     */
-    public function update1810(): void
-    {
-        $fields = $this->dao->query('DESC ' . TABLE_DEMANDPOOL)->fetchAll();
-        foreach($fields as $field)
-        {
-            if($field->Field == 'products') return;
-        }
-
-        /* Execute open edition. */
-        $this->saveLogs('Execute 18_10');
-        $this->execSQL($this->getUpgradeFile('18.10'));
-    }
-
-    /**
-     * 检查是否添加了18.10.1版本的需求反馈字段，如果没有就添加。
-     * Check if the demand feedback field of version 18.10.1 is added, if not, add it.
+     * 检查是否添加了18.10.1版本的 AI 表，如果没有就添加。
+     * Check if the AI table of version 18.10.1 is added, if not, add it.
      *
      * @access public
      * @return void
      */
     public function update18101(): void
     {
-        $fields = $this->dao->query('DESC ' . TABLE_DEMAND)->fetchAll();
-        foreach($fields as $field)
-        {
-            if($field->Field == 'feedback') return;
-        }
+        $count = $this->dao->select('COUNT(*) AS count')->from('information_schema.TABLES')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq(str_replace('`', '', TABLE_AI_MODEL))->fetch('count');
+        if($count) return;
 
         /* Execute open edition. */
         $this->saveLogs('Execute 18_10_1');
         $this->execSQL($this->getUpgradeFile('18.10.1'));
+    }
+
+    /**
+     * 检查是否执行了18.11版本的SQL。
+     * Exec 18.11 sql file.
+     *
+     * @access public
+     * @return void
+     */
+    public function update1811(): void
+    {
+        /* Execute open edition. */
+        $this->saveLogs('Execute 18_11');
+        $this->execSQL($this->getUpgradeFile('18.11'));
+    }
+
+    /**
+     * 更新通过工作流添加的字段的默认值。
+     * Update the default value of the fields added through the workflow.
+     *
+     * @access public
+     * @return true
+     */
+    public function updateWorkflowFieldDefaultValue(): bool
+    {
+        if($this->config->edition == 'open') return false;
+        $this->loadModel('workflowfield');
+
+        $tables     = $this->dao->select('module, `table`')->from(TABLE_WORKFLOW)->fetchPairs();
+        $nullFields = $this->dao->select('module, field, type')->from(TABLE_WORKFLOWFIELD)
+            ->where('buildin')->eq(0)
+            ->andWhere('type')->in('date, datetime, text')
+            ->andWhere('field')->notin('id, subStatus, deleted')
+            ->fetchAll();
+        $notNullFields = $this->dao->select('module, field, type, length, `default`')->from(TABLE_WORKFLOWFIELD)
+            ->where('buildin')->eq(0)
+            ->andWhere('type')->notin('date, datetime, text')
+            ->andWhere('field')->notin('id, subStatus, deleted')
+            ->fetchAll();
+        if(!$nullFields && !$notNullFields) return true;
+
+        $sqls = array();
+        foreach($nullFields as $field)
+        {
+            if(!isset($tables[$field->module])) continue;
+
+            $table = $tables[$field->module];
+            $sqls[] = "ALTER TABLE `$table` MODIFY `$field->field` $field->type NULL;";
+        }
+
+        foreach($notNullFields as $field)
+        {
+            if(!isset($tables[$field->module])) continue;
+
+            $table    = $tables[$field->module];
+            $isNumber = in_array($field->type, $this->config->workflowfield->numberTypes);
+
+            if($field->length)
+            {
+                if($field->type == 'decimal')
+                {
+                    list($integerDigits, $decimalDigits) = explode(',', $field->length);
+                    $field->length = $integerDigits + $decimalDigits . ',' . $decimalDigits;
+                }
+
+                $field->type .= "($field->length)";
+            }
+
+            $sql = "ALTER TABLE `$table` MODIFY `$field->field` $field->type NOT NULL";
+            if($field->default)
+            {
+                $sql .= ' DEFAULT ' . $this->dbh->quote($field->default) . ';';
+            }
+            else
+            {
+                $sql .= $isNumber ? ' DEFAULT 0;' : " DEFAULT '';";
+            }
+            $sqls[] = $sql;
+        }
+
+        if(!$sqls) return true;
+
+        try
+        {
+            foreach($sqls as $sql)
+            {
+                $this->saveLogs($sql);
+                $this->dbh->query($sql);
+            }
+        }
+        catch(PDOException $exception)
+        {
+            static::$errors[] = $exception->getMessage();
+        }
+        return true;
+    }
+
+    /**
+     * 将值为'0000-00-00'的日期类型字段值更新为NULL。
+     * Update the default value of the fields.
+     *
+     * @access public
+     * @return true
+     */
+    public function updateZeroDateToNull()
+    {
+        set_time_limit(0);
+
+        if($this->config->db->driver == 'mysql')
+        {
+            try
+            {
+                $this->dao->exec("SET @@sql_mode=''");
+                $tables = $this->dao->select("TABLE_NAME, COLUMN_NAME, DATA_TYPE")->from('information_schema.COLUMNS')
+                    ->where("TABLE_SCHEMA")->eq($this->config->db->name)
+                    ->andWhere("TABLE_NAME")->like($this->config->db->prefix . '%')
+                    ->andWhere("DATA_TYPE")->in('date,datetime')
+                    ->fetchAll();
+
+                foreach($tables as $table)
+                {
+                    $tableName  = $table->TABLE_NAME;
+                    $columnName = $table->COLUMN_NAME;
+                    $columnType = $table->DATA_TYPE;
+
+                    if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
+
+                    if($columnType == 'date')
+                    {
+                        $this->dbh->exec("UPDATE `$tableName` SET `$columnName` = NULL WHERE `$columnName` = '0000-00-00'");
+                    }
+                    elseif($columnType == 'datetime')
+                    {
+                        $this->dbh->exec("UPDATE `$tableName` SET `$columnName` = NULL WHERE `$columnName` = '0000-00-00 00:00:00'");
+                    }
+                }
+            }
+            catch(PDOException $e)
+            {
+                $this->saveLogs($e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * 将设置阶段时自定义字段更改为按项目模型保存。
+     * Set stage custom fields by project model.
+     *
+     * @access public
+     * @return true
+     */
+    public function updateProgramplanCustom()
+    {
+        $createFields = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('module')->eq('programplan')
+            ->andWhere('section')->eq('custom')
+            ->andWhere('`key`')->eq('createFields')
+            ->fetchAll();
+
+        foreach($createFields as $createField)
+        {
+            unset($createField->id);
+            $createField->key = 'createWaterfallFields'; //瀑布模型
+            $this->dao->replace(TABLE_CONFIG)->data($createField)->exec();
+            $createField->key = 'createWaterfallplusFields'; //融合瀑布模型
+            $this->dao->replace(TABLE_CONFIG)->data($createField)->exec();
+        }
+
+        /* 删除旧的config。*/
+        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('programplan')->andWhere('section')->eq('custom')->andWhere('`key`')->eq('createFields')->exec();
+        return true;
     }
 
     /**

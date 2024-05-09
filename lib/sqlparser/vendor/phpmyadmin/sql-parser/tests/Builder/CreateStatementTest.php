@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Components\CreateDefinition;
@@ -15,11 +17,9 @@ use PhpMyAdmin\SqlParser\TokensList;
 
 class CreateStatementTest extends TestCase
 {
-    public function testBuilder()
+    public function testBuilder(): void
     {
-        $parser = new Parser(
-            'CREATE USER "jeffrey"@"localhost" IDENTIFIED BY "mypass"'
-        );
+        $parser = new Parser('CREATE USER "jeffrey"@"localhost" IDENTIFIED BY "mypass"');
         $stmt = $parser->statements[0];
         $this->assertEquals(
             'CREATE USER "jeffrey"@"localhost" IDENTIFIED BY "mypass"',
@@ -27,7 +27,7 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderDatabase()
+    public function testBuilderDatabase(): void
     {
         // CREATE DATABASE ...
         $parser = new Parser(
@@ -42,12 +42,8 @@ class CreateStatementTest extends TestCase
             $stmt->build()
         );
 
-
         // CREATE SCHEMA ...
-        $parser = new Parser(
-            'CREATE SCHEMA `mydb` ' .
-            'DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci'
-        );
+        $parser = new Parser('CREATE SCHEMA `mydb` DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci');
         $stmt = $parser->statements[0];
 
         $this->assertEquals(
@@ -57,7 +53,7 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderDefaultInt()
+    public function testBuilderDefaultInt(): void
     {
         $parser = new Parser(
             'CREATE TABLE IF NOT EXISTS t1 (' .
@@ -74,7 +70,28 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderCollate()
+    public function testBuilderWithComments(): void
+    {
+        $parser = new Parser('CREATE TABLE tab1 (`col1` TIMESTAMP /*!40100 DEFAULT NULL */)');
+        $stmt = $parser->statements[0];
+        $this->assertEquals(
+            // TODO: fix with https://github.com/phpmyadmin/sql-parser/issues/256
+            "CREATE TABLE tab1 (\n  `col1` timestamp DEFAULT NULL\n) ",
+            $stmt->build()
+        );
+    }
+
+    public function testBuilderCompressed(): void
+    {
+        $parser = new Parser('CREATE TABLE users ( user_id int ) PAGE_COMPRESSED=1 PAGE_COMPRESSION_LEVEL=9;');
+        $stmt = $parser->statements[0];
+        $this->assertEquals(
+            "CREATE TABLE users (\n  `user_id` int\n) PAGE_COMPRESSED=1 PAGE_COMPRESSION_LEVEL=9",
+            $stmt->build()
+        );
+    }
+
+    public function testBuilderCollate(): void
     {
         $parser = new Parser(
             'CREATE TABLE IF NOT EXISTS t1 (' .
@@ -91,7 +108,7 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderDefaultComment()
+    public function testBuilderDefaultComment(): void
     {
         $parser = new Parser(
             'CREATE TABLE `wp_audio` (' .
@@ -110,25 +127,25 @@ class CreateStatementTest extends TestCase
         );
     }
 
-    public function testBuilderTable()
+    public function testBuilderTable(): void
     {
         /* Assertion 1 */
         $stmt = new CreateStatement();
 
         $stmt->name = new Expression('', 'test', '');
-        $stmt->options = new OptionsArray(array('TABLE'));
-        $stmt->fields = array(
+        $stmt->options = new OptionsArray(['TABLE']);
+        $stmt->fields = [
             new CreateDefinition(
                 'id',
-                new OptionsArray(array('NOT NULL', 'AUTO_INCREMENT')),
-                new DataType('INT', array(11), new OptionsArray(array('UNSIGNED')))
+                new OptionsArray(['NOT NULL', 'AUTO_INCREMENT']),
+                new DataType('INT', [11], new OptionsArray(['UNSIGNED']))
             ),
             new CreateDefinition(
                 '',
                 null,
-                new Key('', array(array('name' => 'id')), 'PRIMARY KEY')
-            )
-        );
+                new Key('', [['name' => 'id']], 'PRIMARY KEY')
+            ),
+        ];
 
         $this->assertEquals(
             "CREATE TABLE `test` (\n" .
@@ -168,9 +185,24 @@ class CreateStatementTest extends TestCase
             ') ENGINE=InnoDB DEFAULT CHARSET=latin1';
         $parser = new Parser($query);
         $this->assertEquals($query, $parser->statements[0]->build());
+
+        /* Assertion 5 */
+        $parser = new Parser(
+            'CREATE table table_name WITH' .
+            ' cte (col1) AS ( SELECT 1 UNION ALL SELECT 2 )' .
+            ' SELECT col1 FROM cte'
+        );
+        $stmt = $parser->statements[0];
+
+        $this->assertEquals(
+            'CREATE TABLE table_name WITH' .
+            ' cte(col1) AS (SELECT 1 UNION ALL SELECT 2)' .
+            ' SELECT col1 FROM cte',
+            $stmt->build()
+        );
     }
 
-    public function testBuilderPartitions()
+    public function testBuilderPartitions(): void
     {
         /* Assertion 1 */
         $query = 'CREATE TABLE ts (' . "\n"
@@ -217,10 +249,13 @@ class CreateStatementTest extends TestCase
         $this->assertEquals($query, $parser->statements[0]->build());
     }
 
-    public function partitionQueries()
+    /**
+     * @return string[][]
+     */
+    public function partitionQueriesProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'subparts' => <<<EOT
 CREATE TABLE `ts` (
   `id` int(11) DEFAULT NULL,
@@ -243,8 +278,9 @@ SUBPARTITION s5 ENGINE=InnoDB
 )
 )
 EOT
-            ),
-            array(
+            ,
+            ],
+            [
                 'parts' => <<<EOT
 CREATE TABLE ptest (
   `event_date` date NOT NULL
@@ -258,16 +294,15 @@ PARTITION p3 ENGINE=InnoDB,
 PARTITION p4 ENGINE=InnoDB
 )
 EOT
-            )
-        );
+            ,
+            ],
+        ];
     }
 
     /**
-     * @dataProvider partitionQueries
-     *
-     * @param string $query
+     * @dataProvider partitionQueriesProvider
      */
-    public function testBuilderPartitionsEngine($query)
+    public function testBuilderPartitionsEngine(string $query): void
     {
         $parser = new Parser($query);
         $stmt = $parser->statements[0];
@@ -275,8 +310,22 @@ EOT
         $this->assertEquals($query, $stmt->build());
     }
 
-    public function testBuilderView()
+    public function testBuilderView(): void
     {
+        $parser = new Parser(
+            'CREATE OR REPLACE VIEW xviewmytable  AS SELECT mytable.id '
+            . 'AS id, mytable.personid AS personid FROM mytable '
+            . 'WHERE (mytable.birth > \'1990-01-19\') GROUP BY mytable.personid  ;'
+        );
+        $stmt = $parser->statements[0];
+
+        $this->assertEquals(
+            'CREATE OR REPLACE VIEW xviewmytable  AS SELECT mytable.id '
+            . 'AS `id`, mytable.personid AS `personid` FROM mytable '
+            . 'WHERE (mytable.birth > \'1990-01-19\') GROUP BY mytable.personid ',
+            $stmt->build()
+        );
+
         $parser = new Parser(
             'CREATE VIEW myView (vid, vfirstname) AS ' .
             'SELECT id, first_name FROM employee WHERE id = 1'
@@ -328,9 +377,36 @@ EOT
             'SELECT id, first_name, FROMzz employee WHERE id = 2  ',
             $stmt->build()
         );
+
+        $parser = new Parser('CREATE VIEW `view_programlevelpartner`  AS SELECT `p`.`country_id`'
+        . 'AS `country_id` FROM `program_level_partner` `p` ORDER BY `p`.`id` asc');
+        $stmt = $parser->statements[0];
+        $this->assertEquals(
+            'CREATE VIEW `view_programlevelpartner`  AS SELECT `p`.`country_id`'
+            . ' AS `country_id` FROM `program_level_partner` AS `p` ORDER BY `p`.`id` ASC ',
+            $stmt->build()
+        );
+
+        $parser = new Parser('CREATE VIEW `view_zg_bycountry`  AS '
+        . 'SELECT `d`.`zg_id` FROM `view_zg_value` AS `d` GROUP BY `d`.`ind_id`;');
+        $stmt = $parser->statements[0];
+        $this->assertEquals(
+            'CREATE VIEW `view_zg_bycountry`  AS '
+            . 'SELECT `d`.`zg_id` FROM `view_zg_value` AS `d` GROUP BY `d`.`ind_id` ',
+            $stmt->build()
+        );
+
+        $parser = new Parser('CREATE view view_name AS WITH  aa(col1)'
+        . ' AS ( SELECT 1 UNION ALL SELECT 2 ) SELECT col1 FROM cte AS `d` ');
+        $stmt = $parser->statements[0];
+        $this->assertEquals(
+            'CREATE view view_name  AS WITH aa(col1)'
+            . ' AS (SELECT 1 UNION ALL SELECT 2) SELECT col1 FROM cte AS `d`  ',
+            $stmt->build()
+        );
     }
 
-    public function testBuilderViewComplex()
+    public function testBuilderViewComplex(): void
     {
         $parser = new Parser(
             'CREATE VIEW withclause AS' . "\n"
@@ -347,15 +423,13 @@ EOT
         $stmt = $parser->statements[0];
 
         $this->assertEquals(
-            'CREATE VIEW withclause  AS ' . "\n"
-            . "\n"
-            . 'WITH cte AS (' . "\n"
-                . 'SELECT p.name, p.shape' . "\n"
-                . 'FROM gis_all as p' . "\n"
-            . ')' . "\n"
-            . "\n"
-            . 'SELECT cte.*' . "\n"
-            . 'FROM cte' . "\n"
+            'CREATE VIEW withclause  AS '
+            . 'WITH cte AS ('
+                . 'SELECT p.name, p.shape '
+                . 'FROM gis_all AS `p`'
+            . ') '
+            . 'SELECT cte.* '
+            . 'FROM cte '
             . 'CROSS JOIN gis_all ',
             $stmt->build()
         );
@@ -377,25 +451,39 @@ EOT
         $stmt = $parser->statements[0];
 
         $this->assertEquals(
-            'CREATE VIEW withclause2  AS ' . "\n"
-            . "\n"
-            . 'WITH cte AS (' . "\n"
-                . "\t" . 'SELECT p.name, p.shape' . "\n"
-                . "\t" . 'FROM gis_all as p' . "\n"
-            . '), cte2 AS (' . "\n"
-                . "\t" . 'SELECT p.name as n2, p.shape as sh2' . "\n"
-                . "\t" . 'FROM gis_all as p' . "\n"
-            . ')' . "\n"
-            . "\n"
-            . 'SELECT cte.*,cte2.*' . "\n"
-            . 'FROM cte,cte2' . "\n"
-            . 'CROSS JOIN gis_all ',
+            'CREATE VIEW withclause2  AS '
+            . 'WITH cte AS ('
+                . 'SELECT p.name, p.shape'
+                . ' FROM gis_all AS `p`'
+            . '), cte2 AS ('
+                . 'SELECT p.name AS `n2`, p.shape AS `sh2`'
+                . ' FROM gis_all AS `p`'
+            . ')'
+            . ' SELECT cte.*, cte2.* '
+            . 'FROM cte, cte2'
+            . ' CROSS JOIN gis_all ',
             $stmt->build()
         );
     }
 
-    public function testBuilderCreateProcedure()
+    public function testBuilderCreateProcedure(): void
     {
+        $parser = new Parser(
+            'CREATE DEFINER=`root`@`%`'
+            . ' PROCEDURE `test2`(IN `_var` INT) DETERMINISTIC'
+            . ' MODIFIES SQL DATA SELECT _var'
+        );
+
+        /** @var CreateStatement $stmt */
+        $stmt = $parser->statements[0];
+
+        $this->assertSame(
+            'CREATE DEFINER=`root`@`%`'
+            . ' PROCEDURE `test2` (IN `_var` INT)  DETERMINISTIC'
+            . ' MODIFIES SQL DATA SELECT _var',
+            $stmt->build()
+        );
+
         $parser = new Parser(
             'CREATE DEFINER=`root`@`%`'
             . ' PROCEDURE `test2`(IN `_var` INT) NOT DETERMINISTIC NO SQL'
@@ -440,10 +528,11 @@ EOT
         );
     }
 
-    public function testBuilderCreateFunction()
+    public function testBuilderCreateFunction(): void
     {
         $parser = new Parser(
-            'CREATE DEFINER=`root`@`localhost`'
+            'DELIMITER $$' . "\n"
+            . 'CREATE DEFINER=`root`@`localhost`'
             . ' FUNCTION `inventory_in_stock`(`p_inventory_id` INT) RETURNS tinyint(1)'
             . ' READS SQL DATA'
             . ' COMMENT \'My best function written by a friend\'\'s friend\''
@@ -566,13 +655,13 @@ EOT
         );
     }
 
-    public function testBuilderTrigger()
+    public function testBuilderTrigger(): void
     {
         $stmt = new CreateStatement();
 
-        $stmt->options = new OptionsArray(array('TRIGGER'));
+        $stmt->options = new OptionsArray(['TRIGGER']);
         $stmt->name = new Expression('ins_sum');
-        $stmt->entityOptions = new OptionsArray(array('BEFORE', 'INSERT'));
+        $stmt->entityOptions = new OptionsArray(['BEFORE', 'INSERT']);
         $stmt->table = new Expression('account');
         $stmt->body = 'SET @sum = @sum + NEW.amount';
 
@@ -583,9 +672,10 @@ EOT
         );
     }
 
-    public function testBuilderRoutine()
+    public function testBuilderRoutine(): void
     {
         $parser = new Parser(
+            'DELIMITER $$' . "\n" .
             'CREATE FUNCTION test (IN `i` INT) RETURNS VARCHAR ' .
             'BEGIN ' .
             'DECLARE name VARCHAR DEFAULT ""; ' .
@@ -606,18 +696,16 @@ EOT
         );
     }
 
-    public function testBuildSelect()
+    public function testBuildSelect(): void
     {
-        $parser = new Parser(
-            'CREATE TABLE new_tbl SELECT * FROM orig_tbl'
-        );
+        $parser = new Parser('CREATE TABLE new_tbl SELECT * FROM orig_tbl');
         $this->assertEquals(
             'CREATE TABLE new_tbl SELECT * FROM orig_tbl',
             $parser->statements[0]->build()
         );
     }
 
-    public function testBuildCreateTableSortedIndex()
+    public function testBuildCreateTableSortedIndex(): void
     {
         $parser = new Parser(
             <<<'SQL'
@@ -659,10 +747,9 @@ SQL;
             . ' ENGINE=InnoDB AUTO_INCREMENT=4465 DEFAULT CHARSET=utf8 TABLESPACE `innodb_system`',
             $stmt->build()
         );
-
     }
 
-    public function testBuildCreateTableComplexIndexes()
+    public function testBuildCreateTableComplexIndexes(): void
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
         $parser = new Parser(

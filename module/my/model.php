@@ -235,7 +235,7 @@ class myModel extends model
     }
 
     /**
-     * 获取我的最新动态。
+     * 获取最新动态。
      * Get latest actions.
      *
      * @access public
@@ -243,21 +243,8 @@ class myModel extends model
      */
     public function getActions(): array
     {
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
-        $users   = $this->loadModel('user')->getList();
-
-        $simplifyUsers = array();
-        foreach($users as $user)
-        {
-            $simplifyUser = new stdclass();
-            $simplifyUser->id       = $user->id;
-            $simplifyUser->account  = $user->account;
-            $simplifyUser->realname = $user->realname;
-            $simplifyUser->avatar   = $user->avatar;
-            $simplifyUsers[$user->account] = $simplifyUser;
-        }
-
         $maxCount = 5;
+        $actions  = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc,id_desc', 50);
         $actions  = $this->action->processDynamicForAPI($actions);
         $actions  = array_slice($actions, 0, $maxCount);
 
@@ -550,6 +537,7 @@ class myModel extends model
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array_keys($products), 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        unset($this->config->bug->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
@@ -677,7 +665,7 @@ class myModel extends model
         $this->config->product->search['params']['product']['values'] = $products;
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
         $this->config->product->search['fields']['title']             = $this->lang->story->title;
-        unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['fields']['module'], $this->config->product->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
@@ -754,6 +742,7 @@ class myModel extends model
         unset($this->config->product->search['fields']['plan']);
         unset($this->config->product->search['fields']['stage']);
         unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
@@ -779,7 +768,7 @@ class myModel extends model
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
         $this->config->ticket->search['params']['product']['values'] = $grantProducts;
-        $this->config->ticket->search['params']['module']['values']  = $this->loadModel('tree')->getAllModulePairs();
+        $this->config->ticket->search['params']['module']['values']  = $this->loadModel('feedback')->getModuleList('ticket', true, 'no');
         $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array_keys($grantProducts), 'all', 'releasetag');
 
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
@@ -839,13 +828,12 @@ class myModel extends model
     public function getReviewingTypeList()
     {
         $typeList = array();
-        if($this->config->edition == 'ipd' and $this->getReviewingDemands('id_desc', true)) $typeList[] = 'demand';
-        if($this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
+        if($this->config->edition == 'ipd' && $this->getReviewingDemands('id_desc', true)) $typeList[] = 'demand';
         if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
-        if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
-        if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
+        if($this->config->vision != 'or' && $this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
+        if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
-        if($this->getReviewingOA('status', true))         $typeList[] = 'oa';
+        if($this->config->vision != 'or' && $this->getReviewingOA('status', true))         $typeList[] = 'oa';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = $this->config->edition == 'open' ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -872,13 +860,14 @@ class myModel extends model
      */
     public function getReviewingList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
     {
+        $vision     = $this->config->vision;
         $reviewList = array();
-        if($browseType == 'all' || $browseType == 'demand')   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
-        if($browseType == 'all' || $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
-        if($browseType == 'all' || $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
-        if($browseType == 'all' || $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($browseType == 'all' || $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
-        if($browseType == 'all' || $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
+        if($browseType == 'all' || $browseType == 'demand')                                              $reviewList = array_merge($reviewList, $this->getReviewingDemands());
+        if($browseType == 'all' || $browseType == 'story')                                               $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase'))                       $reviewList = array_merge($reviewList, $this->getReviewingCases());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                        $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
+        if($browseType == 'all' || $browseType == 'feedback')                                            $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                             $reviewList = array_merge($reviewList, $this->getReviewingOA());
         if($browseType == 'all' || !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(empty($reviewList)) return array();
 
@@ -1086,7 +1075,7 @@ class myModel extends model
      */
     public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
     {
-        if($this->config->edition != 'max') return array();
+        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
         $stmt = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
@@ -1100,14 +1089,26 @@ class myModel extends model
         while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
         if($checkExists) return array_keys($objectIdList);
 
+        $this->loadModel('flow');
+        $this->loadModel('workflowaction');
         $flows       = $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('buildin')->eq(0)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
             $table = zget($this->config->objectTables, $objectType, '');
             if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
+            if(empty($table)) continue;
 
-            if(!empty($table)) $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+
+            $action = $this->workflowaction->getByModuleAndAction($objectType, 'approvalreview');
+            if($action)
+            {
+                foreach($objectGroup[$objectType] as $objectID => $object)
+                {
+                    if(!$this->flow->checkConditions($action->conditions, $object)) unset($objectIdList[$objectType][$objectID], $objectGroup[$objectType][$objectID]);
+                }
+            }
         }
 
         $this->app->loadConfig('action');
@@ -1128,6 +1129,7 @@ class myModel extends model
         if(!common::hasPriv('feedback', 'review')) return array();
         if($this->config->edition == 'open') return array();
 
+        $this->session->set('feedbackProduct', 'all');
         $feedbacks  = $this->loadModel('feedback')->getList('review', $orderBy);
         $reviewList = array();
         foreach($feedbacks as $feedback)
@@ -1267,7 +1269,10 @@ class myModel extends model
             }
             else
             {
-                $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->andWhere('deleted')->eq('0')->fetchAll('id');
+                $objectGroup[$objectType] = $this->dao->select('*')->from($table)
+                    ->where('id')->in($idList)
+                    ->beginIF(strpos(',attend,overtime,makeup,leave,lieu,', ",{$objectType},") === false)->andWhere('deleted')->eq('0')->fi()
+                    ->fetchAll('id');
             }
         }
 

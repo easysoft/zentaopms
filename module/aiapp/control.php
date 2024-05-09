@@ -48,8 +48,9 @@ class aiapp extends control
     public function browseMiniProgram($id)
     {
         $miniProgram = $this->ai->getMiniProgramByID($id);
+        if(empty($miniProgram)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->aiapp->noMiniProgram, 'locate' => $this->createLink('aiapp', 'square'))));
+
         if($miniProgram->model == 0) $miniProgram->model = 'default';
-        if(empty($miniProgram)) return $this->sendError($this->lang->aiapp->noMiniProgram);
 
         $this->view->miniProgram  = $miniProgram;
         $this->view->models       = $this->ai->getLanguageModelNamesWithDefault();
@@ -57,6 +58,7 @@ class aiapp extends control
         $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->aiapp->getCollectedMiniProgramIDs($this->app->user->id);
         $this->view->title        = "{$this->lang->aiapp->title}#{$miniProgram->id} $miniProgram->name";
+        $this->view->hasModels    = $this->ai->hasModelsAvailable();
         $this->display();
     }
 
@@ -72,7 +74,7 @@ class aiapp extends control
         if(empty($_POST)) return $this->locate($this->createLink('ai', 'browseMiniProgram', "id=$id"));
 
         $miniProgram  = $this->ai->getMiniProgramByID($id);
-        if(empty($miniProgram)) return $this->sendError($this->lang->aiapp->noMiniProgram);
+        if(empty($miniProgram)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->aiapp->noMiniProgram, 'locate' => $this->createLink('aiapp', 'square'))));
         if($miniProgram->published === '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'message' => $this->lang->aiapp->unpublishedTip, 'reason' => 'unpublished'));
 
         $history = $this->post->history;
@@ -139,8 +141,6 @@ class aiapp extends control
         else if($category === 'discovery') $miniPrograms = $this->ai->getMiniPrograms('', 'active', 'createdDate_desc', $pager);
         else if($category === 'latest')    $miniPrograms = $this->aiapp->getLatestMiniPrograms($pager);
         else                               $miniPrograms = $this->ai->getMiniPrograms($category, 'active', 'createdDate_desc', $pager);
-
-        if(empty($miniPrograms)) return $this->locate($this->createLink('aiapp', 'square', array('category' => 'discovery')));
 
         $squareCategoryArray = $this->aiapp->getSquareCategoryArray();
         $usedCategoryArray   = $this->aiapp->getUsedCategoryArray();

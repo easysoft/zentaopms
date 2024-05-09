@@ -2,9 +2,30 @@
 $config->screen->builtinScreen = array(6, 8);
 $config->screen->builtinChart  = array(10018, 10019, 10020, 10021, 10022, 10211, 10212, 10213, 10214, 10215, 10216, 10217, 10218, 10219, 10220);
 $config->screen->builtinPivot  = array(1000, 1001, 1002);
+$config->screen->phpChart      = array(20002, 20004, 20007, 20010, 20011, 20012, 20013);
 
 $config->screen->phpScreen = array();
 $config->screen->phpScreen['usageReport'] = 1001;
+
+$config->screen->editCanvasConfig = new stdclass();
+$config->screen->editCanvasConfig->width            = 1300;
+$config->screen->editCanvasConfig->height           = 1080;
+$config->screen->editCanvasConfig->filterShow       = false;
+$config->screen->editCanvasConfig->hueRotate        = 0;
+$config->screen->editCanvasConfig->saturate         = 1;
+$config->screen->editCanvasConfig->contrast         = 1;
+$config->screen->editCanvasConfig->brightness       = 1;
+$config->screen->editCanvasConfig->opacity          = 1;
+$config->screen->editCanvasConfig->rotateZ          = 0;
+$config->screen->editCanvasConfig->rotateX          = 0;
+$config->screen->editCanvasConfig->rotateY          = 0;
+$config->screen->editCanvasConfig->skewX            = 0;
+$config->screen->editCanvasConfig->skewY            = 0;
+$config->screen->editCanvasConfig->blendMode        = 'normal';
+$config->screen->editCanvasConfig->background       = '#001028';
+$config->screen->editCanvasConfig->selectColor      = true;
+$config->screen->editCanvasConfig->chartThemeColor  = 'dark';
+$config->screen->editCanvasConfig->previewScaleType = 'scrollY';
 
 $config->screen->chartConfig = array();
 $config->screen->chartConfig['cluBarX']     = '{"category" : "Bars", "categoryName" : "柱状图", "chartFrame" : "echarts", "chartKey" : "VBarCommon", "conKey" : "VCBarCommon", "image" : "bar_x.png", "key" : "BarCommon", "package" : "Charts", "title" : "簇状柱形图", "dataset" : {}}';
@@ -18,6 +39,7 @@ $config->screen->chartConfig['line']        = '{"category" : "Lines", "categoryN
 $config->screen->chartConfig['table']       = '{"category" : "Tables", "categoryName" : "列表", "chartFrame" : "common", "chartKey" : "VTableMergeCell", "conKey" : "VCTableMergeCell", "image" : "table_scrollboard.png", "key" : "TableMergeCell", "package" : "Tables", "title" : "透视表", "dataset" : {}, "tableInfo": {}}';
 $config->screen->chartConfig['card']        = '{"category" : "Texts", "categoryName" : "文本", "chartFrame" : "common", "chartKey" : "VTextCommon", "conKey" : "VCTextCommon", "image" : "text_static.png", "key" : "TextCommon", "package" : "Informations", "title" : "文字", "dataset" : {}}';
 $config->screen->chartConfig['waterpolo']   = '{"category" : "Mores", "categoryName" : "更多", "chartFrame" : "common", "chartKey" : "VWaterPolo", "conKey" : "VCWaterPolo", "image" : "water_WaterPolo.png", "key" : "WaterPolo", "package" : "Charts", "title" : "水球图", "dataset" : {}}';
+$config->screen->chartConfig['metric']      = '{"category" : "Metrics", "categoryName" : "度量项", "chartFrame" : "common", "chartKey" : "VMetrics", "conKey" : "VCMetrics", "image" : "bar_x.png", "key" : "Metrics", "package" : "Metrics", "title" : "度量项", "dataset" : {}}';
 
 $config->screen->chartOption['cluBarX']     = '{"legend":{"show":true,"top":40,"textStyle":{"color":"#B9B8CE"},"left":"center"},"xAxis":{"show":true,"name":"","nameGap":15,"nameTextStyle":{"color":"#B9B8CE","fontSize":12},"inverse":false,"axisLabel":{"show":true,"fontSize":12,"color":"#B9B8CE","rotate":0},"position":"bottom","axisLine":{"show":true,"lineStyle":{"color":"#B9B8CE","width":1},"onZero":true},"axisTick":{"show":true,"length":5},"splitLine":{"show":false,"lineStyle":{"color":"#484753","width":1,"type":"solid"}},"type":"category"},"yAxis":{"show":true,"name":"","nameGap":15,"nameTextStyle":{"color":"#B9B8CE","fontSize":12},"inverse":false,"axisLabel":{"show":true,"fontSize":12,"color":"#B9B8CE","rotate":0},"position":"left","axisLine":{"show":true,"lineStyle":{"color":"#B9B8CE","width":1},"onZero":true},"axisTick":{"show":true,"length":5},"splitLine":{"show":true,"lineStyle":{"color":"#484753","width":1,"type":"solid"}},"type":"value"},"grid":{"show":false,"left":"10%","top":90,"right":"10%","bottom":"60"},"title":{"text":"","show":true,"textStyle":{"color":"#BFBFBF","fontSize":18},"subtextStyle":{"color":"#A2A2A2","fontSize":14},"top":10,"x":"center"},"tooltip":{"show":true,"trigger":"axis","axisPointer":{"show":true,"type":"shadow"}},"dataset":{},"series":[{"type":"bar","barWidth":15,"label":{"show":true,"position":"top","color":"#fff","fontSize":12},"itemStyle":{"color":null,"borderRadius":2}}],"backgroundColor":"rgba(0,0,0,0)"}';
 $config->screen->chartOption['cluBarY']     = '{"legend":{"show":true,"top":40,"textStyle":{"color":"#B9B8CE"},"left":"center"},"xAxis":{"show":true,"name":"","nameGap":15,"nameTextStyle":{"color":"#B9B8CE","fontSize":12},"inverse":false,"axisLabel":{"show":true,"fontSize":12,"color":"#B9B8CE","rotate":0},"position":"bottom","axisLine":{"show":true,"lineStyle":{"color":"#B9B8CE","width":1},"onZero":true},"axisTick":{"show":true,"length":5},"splitLine":{"show":false,"lineStyle":{"color":"#484753","width":1,"type":"solid"}},"type":"value"},"yAxis":{"show":true,"name":"","nameGap":15,"nameTextStyle":{"color":"#B9B8CE","fontSize":12},"inverse":false,"axisLabel":{"show":true,"fontSize":12,"color":"#B9B8CE","rotate":0},"position":"left","axisLine":{"show":true,"lineStyle":{"color":"#B9B8CE","width":1},"onZero":true},"axisTick":{"show":true,"length":5},"splitLine":{"show":true,"lineStyle":{"color":"#484753","width":1,"type":"solid"}},"type":"category"},"grid":{"show":false,"left":"10%","top":70,"right":"10%","bottom":"60"},"title":{"text":"","show":true,"textStyle":{"color":"#BFBFBF","fontSize":18},"subtextStyle":{"color":"#A2A2A2","fontSize":14},"top":10,"x":"center"},"tooltip":{"show":true,"trigger":"axis","axisPointer":{"show":true,"type":"shadow"}},"dataset":{},"series":[{"type":"bar","barWidth":null,"label":{"show":true,"position":"right","color":"#fff","fontSize":12},"itemStyle":{"color":null,"borderRadius":0}}],"backgroundColor":"rgba(0,0,0,0)"}';
@@ -27,6 +49,7 @@ $config->screen->chartOption['pie']         = '{"legend":{"show":true,"top":30,"
 $config->screen->chartOption['radar']       = '{"legend":{"show":true,"top":40,"textStyle":{"color":"#B9B8CE"},"data":[],"left":"center"},"title":{"text":"\u6298\u7ebf\u56fe","show":true,"textStyle":{"color":"#BFBFBF","fontSize":18},"subtextStyle":{"color":"#A2A2A2","fontSize":14},"top":10,"x":"center"},"tooltip":{"show":true},"grid":{"top":90},"dataset":{},"radar":{"shape":"polygon","radius":["0%","60%"],"center":["50%","55%"],"splitArea":{"show":true},"splitLine":{"show":true},"axisName":{"show":true,"color":"#eee","fontSize":12},"axisLine":{"show":true},"axisTick":{"show":true},"indicator":[]},"series":[{"name":"radar","type":"radar","areaStyle":{"opacity":0.1},"data":[]}],"backgroundColor":"rgba(0,0,0,0)"}';
 $config->screen->chartOption['line']        = '{"legend":{"show":true,"top":40,"textStyle":{"color":"#B9B8CE"},"left":"center"},"xAxis":{"show":true,"name":"","nameGap":15,"nameTextStyle":{"color":"#B9B8CE","fontSize":12},"inverse":false,"axisLabel":{"show":true,"fontSize":12,"color":"#B9B8CE","rotate":0},"position":"bottom","axisLine":{"show":true,"lineStyle":{"color":"#B9B8CE","width":1},"onZero":true},"axisTick":{"show":true,"length":5},"splitLine":{"show":false,"lineStyle":{"color":"#484753","width":1,"type":"solid"}},"type":"category"},"yAxis":{"show":true,"name":"","nameGap":15,"nameTextStyle":{"color":"#B9B8CE","fontSize":12},"inverse":false,"axisLabel":{"show":true,"fontSize":12,"color":"#B9B8CE","rotate":0},"position":"left","axisLine":{"show":true,"lineStyle":{"color":"#B9B8CE","width":1},"onZero":true},"axisTick":{"show":true,"length":5},"splitLine":{"show":true,"lineStyle":{"color":"#484753","width":1,"type":"solid"}},"type":"value"},"grid":{"show":false,"left":"10%","top":90,"right":"10%","bottom":"60"},"title":{"text":"","show":true,"textStyle":{"color":"#BFBFBF","fontSize":18},"subtextStyle":{"color":"#A2A2A2","fontSize":14},"top":10,"x":"center"},"tooltip":{"show":true,"trigger":"axis","axisPointer":{"type":"line"}},"dataset":{},"series":[{"type":"line","label":{"show":true,"position":"top","color":"#fff","fontSize":12},"symbolSize":5,"itemStyle":{"color":null,"borderRadius":0},"lineStyle":{"type":"solid","width":3,"color":null}},{"type":"line","label":{"show":true,"position":"top","color":"#fff","fontSize":12},"symbolSize":5,"itemStyle":{"color":null,"borderRadius":0},"lineStyle":{"type":"solid","width":3,"color":null}}],"backgroundColor":"rgba(0,0,0,0)"}';
 $config->screen->chartOption['table']       = '{}';
+$config->screen->chartOption['waterpolo']   = '{}';
 
 $config->screen->fieldConfig = new stdclass();
 $config->screen->fieldConfig->bug       = new stdclass();
@@ -35,7 +58,6 @@ $config->screen->fieldConfig->execution = new stdclass();
 // $config->screen->fieldConfig->project   = new stdclass();
 // $config->screen->fieldConfig->task      = new stdclass();
 // $config->screen->fieldConfig->testcase  = new stdclass();
-
 
 $this->loadLang('bug');
 $config->screen->fieldConfig->bug->name = $this->lang->bug->common;

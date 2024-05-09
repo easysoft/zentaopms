@@ -17,7 +17,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$release = zdTable('release');
+$release = zenData('release');
 $release->stories->range('2');
 $release->branch->range('0,1,2');
 $release->gen(3);

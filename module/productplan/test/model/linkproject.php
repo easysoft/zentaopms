@@ -8,19 +8,19 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('productplan')->config('productplan')->gen(5);
-zdTable('projectproduct')->config('projectproduct')->gen(30);
-zdTable('product')->config('product')->gen(5);
-zdTable('project')->config('execution')->gen(30);
-zdTable('story')->config('story')->gen(0);
-zdTable('projectstory')->gen(0);
-zdTable('storystage')->gen(0);
-zdTable('module')->gen(0);
-zdTable('kanbancolumn')->gen(0);
-zdTable('kanbancell')->gen(0);
+zenData('user')->gen(5);
+zenData('productplan')->loadYaml('productplan')->gen(5);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(30);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('project')->loadYaml('execution')->gen(30);
+zenData('story')->loadYaml('story')->gen(0);
+zenData('projectstory')->gen(0);
+zenData('storystage')->gen(0);
+zenData('module')->gen(0);
+zenData('kanbancolumn')->gen(0);
+zenData('kanbancell')->gen(0);
 
 $projectIdList = array(11, 60, 100);
 $plans         = array(array(2), array(3));

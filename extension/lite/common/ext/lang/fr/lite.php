@@ -1,4 +1,9 @@
 <?php
+global $config;
+list($productModule, $productMethod)     = explode('-', $config->productLink);
+list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
+list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+
 $lang->execution->common  = 'Kanban';
 $lang->executionCommon    = 'Kanban';
 $lang->task->common       = 'Task';
@@ -53,8 +58,17 @@ else
 $lang->task->common = 'Task';
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
-/* Ticket. */
-if($config->edition != 'open') $lang->feedback->menu->ticket = array('link' => 'Ticket|ticket|browse|browseType=unclosed');
+/* Feedback. */
+if($config->edition != 'open')
+{
+    $lang->feedback->menu->ticket   = array('link' => 'Ticket|ticket|browse|browseType=unclosed');
+    $lang->feedback->menu->products = array('link' => 'Setting|feedback|products', 'alias' => 'manageproduct');
+
+    $lang->feedback->menuOrder[5]  = 'browse';
+    $lang->feedback->menuOrder[10] = 'ticket';
+    $lang->feedback->menuOrder[15] = 'faq';
+    $lang->feedback->menuOrder[20] = 'products';
+}
 
 /* My menu. */
 $lang->my->menu           = new stdclass();
@@ -63,7 +77,6 @@ $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'sub
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|work|mode=task&type=assignedTo", 'subModule' => 'task');
 $lang->my->menu->contacts = array('link' => "{$lang->contact->common}|my|managecontacts|");
 
-global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => 'Effort|effort|calendar|', 'exclude' => 'my-todo');
 
 /* My menu order. */
@@ -185,7 +198,6 @@ $lang->createObjects['kanban']    = 'Kanban';
 $lang->createIcons['execution'] = 'kanban';
 
 /* Xuan */
-global $config;
 if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 {
     $lang->xuanxuan = new stdclass();

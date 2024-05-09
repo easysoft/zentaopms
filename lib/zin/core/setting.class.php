@@ -140,3 +140,30 @@ function setting(array|string $setting = null, mixed $value = null): setting
 {
     return new setting($setting, $value);
 }
+
+/**
+ * Convert setting to array.
+ *
+ * @param  array|setting $setting  - Setting data or setting instance.
+ * @return array
+ */
+function toArray(array|setting $setting): array
+{
+    return $setting instanceof setting ? $setting->toArray() : $setting;
+}
+
+/**
+ * Convert setting list to array.
+ *
+ * @param  array $array  - Array data.
+ * @return setting
+ */
+function toArrayList(array $array): array
+{
+    $list = array();
+    foreach($array as $key => $val)
+    {
+        $list[$key] = $val instanceof setting ? $val->toArray() : $val;
+    }
+    return $list;
+}

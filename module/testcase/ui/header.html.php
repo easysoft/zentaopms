@@ -227,21 +227,20 @@ if(!empty($productID))
 $createItems = array();
 if($canCreateCase)
 {
-    $params = "productID={$productID}&branch={$branch}&moduleID={$moduleID}";
-    if($app->tab == 'project') $params .= "&from=project&param={$projectID}";
-    $createItems[] = array('text' => $lang->testcase->create, 'url' => createLink('testcase', 'create', $params), 'data-app' => $app->tab);
+    $createCaseLink = createLink('testcase', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : ''));
+    $createItems[] = array('text' => $lang->testcase->create, 'url' => $createCaseLink, 'data-app' => $app->tab);
 }
 
 if($canBatchCreateCase)
 {
-    $link = createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
-    $createItems[] = array('text' => $lang->testcase->batchCreate, 'url' => $link, 'data-app' => $app->tab);
+    $batchCreateCaseLink = createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
+    $createItems[] = array('text' => $lang->testcase->batchCreate, 'url' => $batchCreateCaseLink, 'data-app' => $app->tab);
 }
 
 if($canCreateScene)
 {
-    $link = createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$moduleID");
-    $createItems[] = array('text' => $lang->testcase->newScene, 'url' => $link, 'data-app' => $app->tab);
+    $createSceneLink = createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$moduleID");
+    $createItems[] = array('text' => $lang->testcase->newScene, 'url' => $createSceneLink, 'data-app' => $app->tab);
 }
 
 $currentCreateItem = current($createItems);
@@ -261,7 +260,7 @@ toolbar
     $canAutomation ? btn
     (
         setClass('ghost square'),
-        set::icon('wrench'),
+        set::icon('backend'),
         set::hint($lang->testcase->automation),
         set::url(inlink('automation', "productID={$productID}")),
         set('data-toggle', 'modal'),

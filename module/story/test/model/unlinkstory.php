@@ -1,9 +1,19 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->unlinkStory();
+cid=0
+
+- 删除用户需求1的关联关系之前，获取关联关系数量 @1
+- 删除用户需求1的关联关系之后，获取关联关系数量 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$relation = zdTable('relation');
+$relation = zenData('relation');
 $relation->product->range(1);
 $relation->AID->range('1,11,1,2,12,2,3,13,3,4,14,4,5,15,5,6,16,6,7,17,7,8,18,8');
 $relation->BID->range('11,1,1,12,2,2,13,3,3,14,4,4,15,5,5,16,6,6,17,7,7,18,8,8');
@@ -11,17 +21,6 @@ $relation->AType->range('requirement,story,design');
 $relation->BType->range('story,requirement,commit');
 $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
-
-/**
-
-title=测试 storyModel->unlinkStory();
-cid=1
-pid=1
-
-删除用户需求1的关联关系之前，获取关联关系数量 >> 1
-删除用户需求1的关联关系之后，获取关联关系数量 >> 0
-
-*/
 
 global $tester;
 $tester->loadModel('story');

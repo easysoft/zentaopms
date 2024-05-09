@@ -12,11 +12,11 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 $upgrade = new upgradeTest();
 
-zdTable('project')->config('project_for_fix_path')->gen(5);
+zenData('project')->loadYaml('project_for_fix_path')->gen(5);
 
 $programList = array(1, 2, 3, 4, 5);
 

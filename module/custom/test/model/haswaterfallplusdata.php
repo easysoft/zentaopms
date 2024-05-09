@@ -9,16 +9,16 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
-zdTable('project')->gen(0);
-zdTable('user')->gen(5);
+zenData('project')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $customTester = new customTest();
 r($customTester->hasWaterfallplusDataTest()) && p() && e('0'); // 测试系统中无融合瀑布项目数据
 
-$projectTable = zdTable('project');
+$projectTable = zenData('project');
 $projectTable->model->range('waterfallplus');
 $projectTable->deleted->range('0');
 $projectTable->gen(5);

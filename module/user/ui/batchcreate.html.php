@@ -278,7 +278,7 @@ formBatchPanel
     ),
     div
     (
-        setClass('form-horz'),
+        setClass('form-horz my-2'),
         formGroup
         (
             setClass('flex verify-box'),
@@ -293,5 +293,3 @@ formBatchPanel
 );
 
 formHidden('verifyRand', $rand);
-
-render();

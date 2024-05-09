@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-3');
 $product->name->range('正常产品1,多分支产品1,多平台产品1');
 $product->type->range('normal,branch,platform');
@@ -13,22 +13,22 @@ $product->status->range('closed{2},normal');
 $product->createdBy->range('admin,user1');
 $product->gen(3);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->project->range('5-10');
 $projectproduct->product->range('1-3');
 $projectproduct->plan->range('1-3');
 $projectproduct->gen(5);
 
-$branch = zdTable('branch');
+$branch = zenData('branch');
 $branch->id->range('1-2');
 $branch->product->range('2');
 $branch->name->range('分支1,分支2');
 $branch->status->range('active');
 $branch->gen(2);
 
-zdTable('team')->gen(0);
+zenData('team')->gen(0);
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-10');
 $execution->name->range('项目集1,项目1,项目2,项目3,迭代1,迭代2,阶段1,阶段2,看板1,看板2');
 $execution->type->range('program,project{3},sprint{2},stage{2},kanban{2}');

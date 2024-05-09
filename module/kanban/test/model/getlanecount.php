@@ -3,8 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('kanbanregion')->gen(5);
-zdTable('kanbanlane')->gen(20);
+zenData('kanbanregion')->gen(5);
+zenData('kanbanlane')->gen(20);
 
 /**
 

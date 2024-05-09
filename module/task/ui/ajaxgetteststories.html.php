@@ -16,159 +16,80 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
     if($field) $requiredFields[$field] = '';
 }
 
-$taskTR = array();
-$i      = 0;
+$formData   = array();
+$storyItems = array();
 foreach($testStories as $storyID => $storyTitle)
 {
-    $taskTR[] = h::tr
-        (
-            h::td
-            (
-                setClass('border-b border-l'),
-                div($storyID, setClass('ml-2 flex items-center h-8'))
-            ),
-            h::td
-            (
-                setClass('c-testStory'),
-                picker
-                (
-                    setID("testStory{$i}"),
-                    set::name("testStory[$i]"),
-                    set::value($storyID),
-                    set::items($testStories),
-                    set::required(true)
-                )
-            ),
-            h::td
-            (
-                setClass('c-testPri'),
-                priPicker
-                (
-                    setID("testPri{$i}"),
-                    set::name("testPri[$i]"),
-                    set::required(true),
-                    set::value(empty($task->pri) ? 3 : $task->pri),
-                    set::items(array_filter($lang->task->priList))
-                )
-            ),
-            h::td
-            (
-                setClass('c-testEstStarted'),
-                datepicker
-                (
-                    setID("testEstStarted{$i}"),
-                    set::name("testEstStarted[$i]"),
-                    set::placeholder($lang->task->estStarted),
-                    set::value(empty($task->estStarted) ? '' : $task->estStarted)
-                )
-            ),
-            h::td
-            (
-                setClass('text-center text-gray border-b'),
-                span('—')
-            ),
-            h::td
-            (
-                setClass('c-testDeadline'),
-                datepicker
-                (
-                    setID("testDeadline{$i}"),
-                    set::name("testDeadline[$i]"),
-                    set::placeholder($lang->task->deadline),
-                    set::value(empty($task->deadline) ? '' : $task->deadline)
-                )
-            ),
-            h::td
-            (
-                setClass('c-testAssignedTo'),
-                picker
-                (
-                    setID("testAssignedTo{$i}"),
-                    set::name("testAssignedTo[$i]"),
-                    set::value(empty($task->assignedTo) ? '' : $task->assignedTo),
-                    set::items($members)
-                )
-            ),
-            h::td
-            (
-                inputControl
-                (
-                    setClass('c-estimate'),
-                    input
-                    (
-                        setID("testEstimate{$i}"),
-                        set::name("testEstimate[$i]")
-                    ),
-                    to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20)
-                )
-            ),
-            h::td
-            (
-                setClass('c-actions'),
-                btnGroup
-                (
-                    set::items(array(
-                        array('class' => 'btn ghost text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                        array('class' => 'btn ghost text-gray', 'icon' => 'trash', 'onclick' => 'removeItem(this)')
-                    ))
-                )
-            )
-        );
-    $i ++;
+    $storyItems[$storyID] = "#$storyID $storyTitle";
+    $formData[] = array('testID' => $storyID, 'testStory' => $storyID);
 }
 
-h::table
+formBatch
 (
-    setClass('table table-form'),
-    setID('testTaskTable'),
-    h::thead
+    setClass('border rounded'),
+    set::tagName('div'),
+    set::actions(false),
+    set::data($formData),
+    set::minRows(1),
+    set::maxRows(count($formData)),
+    formBatchItem
     (
-        h::tr
-        (
-            setClass('text-gray text-left'),
-            h::th('ID'),
-            h::th($lang->task->storyAB),
-            h::th
-            (
-                $lang->task->pri,
-                setClass(isset($requiredFields['pri']) ? 'required' : '')
-            ),
-            h::th
-            (
-                $lang->task->datePlan,
-                set('colspan', 3),
-                setClass((isset($requiredFields['estStarted']) || isset($requiredFields['deadline'])) ? 'required' : '')
-            ),
-            h::th
-            (
-                $lang->task->assignedTo,
-            ),
-            h::th
-            (
-                $lang->task->estimateAB,
-                setClass(isset($requiredFields['estimate']) ? 'required' : '')
-            ),
-            h::th
-            (
-                setClass('c-actions'),
-            )
-        ),
-        h::col(setStyle('width', '80px')),
-        h::col(setStyle('width', 'auto')),
-        h::col(setStyle('width', '80px')),
-        h::col(setStyle('width', '140px')),
-        h::col(setStyle('width', '30px')),
-        h::col(setStyle('width', '140px')),
-        h::col(setStyle('width', '120px')),
-        h::col(setStyle('width', '100px')),
-        h::col(setStyle('width', '70px')),
+        set::name('testStory'),
+        set::label($lang->task->story),
+        set::control('picker'),
+        set::items($storyItems),
+        set::width('auto')
     ),
-    h::tbody
+    formBatchItem
     (
-        $taskTR
-    )
+        set::name('testPri'),
+        set::label($lang->task->pri),
+        set::required(isset($requiredFields['pri'])),
+        set::control('priPicker'),
+        set::items(array_filter($lang->task->priList)),
+        set::width('80px'),
+        set::value(empty($task->pri) ? 3 : $task->pri)
+    ),
+    formBatchItem
+    (
+        set::name('testEstStarted'),
+        set::label($lang->task->estStarted),
+        set::required(isset($requiredFields['estStarted'])),
+        set::control('date'),
+        set::width('160px'),
+        set::ditto(true),
+        set::value(empty($task->estStarted) ? '' : $task->estStarted)
+    ),
+    formBatchItem
+    (
+        set::name('testDeadline'),
+        set::label($lang->task->deadline),
+        set::required(isset($requiredFields['deadline'])),
+        set::control('date'),
+        set::width('160px'),
+        set::ditto(true),
+        set::value(empty($task->deadline) ? '' : $task->deadline)
+    ),
+    formBatchItem
+    (
+        set::name('testAssignedTo'),
+        set::label($lang->task->assignedTo),
+        set::control('picker'),
+        set::items($members),
+        set::width('160px'),
+        set::ditto(true),
+    ),
+    formBatchItem
+    (
+        set::name('testEstimate'),
+        set::label($lang->task->estimateAB),
+        set::required(isset($requiredFields['estimate'])),
+        set::width('80px'),
+        set::control(array
+        (
+            'control'     => 'inputControl',
+            'suffix'      => $lang->task->suffixHour,
+            'suffixWidth' => 20
+        ))
+    ),
 );
-
-/* ====== Render page ====== */
-render();

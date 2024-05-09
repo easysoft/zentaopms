@@ -17,9 +17,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 su('admin');
 
-zdTable('user')->gen(5);
-zdTable('account')->gen(10);
-zdTable('userquery')->gen(1);
+zenData('user')->gen(5);
+zenData('account')->gen(10);
+zenData('userquery')->gen(1);
 
 global $tester;
 $accountModel = $tester->loadModel('account');

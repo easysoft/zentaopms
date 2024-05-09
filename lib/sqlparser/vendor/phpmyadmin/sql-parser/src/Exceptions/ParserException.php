@@ -1,37 +1,30 @@
 <?php
 
-/**
- * Exception thrown by the parser.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Exceptions;
 
+use Exception;
 use PhpMyAdmin\SqlParser\Token;
 
 /**
  * Exception thrown by the parser.
- *
- * @category   Exceptions
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
-class ParserException extends \Exception
+class ParserException extends Exception
 {
     /**
      * The token that produced this error.
      *
-     * @var Token
+     * @var Token|null
      */
     public $token;
 
     /**
-     * Constructor.
-     *
-     * @param string $msg   the message of this exception
-     * @param Token  $token the token that produced this exception
-     * @param int    $code  the code of this error
+     * @param string     $msg   the message of this exception
+     * @param Token|null $token the token that produced this exception
+     * @param int        $code  the code of this error
      */
-    public function __construct($msg = '', Token $token = null, $code = 0)
+    public function __construct($msg = '', ?Token $token = null, $code = 0)
     {
         parent::__construct($msg, $code);
         $this->token = $token;

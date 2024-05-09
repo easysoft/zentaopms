@@ -34,19 +34,19 @@ $(function()
             var $dropmenu = $('<ul class="dropdown-menu pull-right"></ul>');
             if(typeof(storyType) != 'undefined' && storyType == 'requirement')
             {
-                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=requirement')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
+                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxOldCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=requirement')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
             else if(typeof(extra) != 'undefined' && extra == 'unsetStory')
             {
-                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=unsetStory')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
+                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxOldCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=unsetStory')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
             else if((currentModule == 'marketreport' || currentModule == 'marketresearch') && currentMethod == 'browse')
             {
-                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=unsetMarket')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
+                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxOldCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=unsetMarket')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
             else
             {
-                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
+                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxOldCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
             <?php if($showSwitchLink):?>
             $dropmenu.append("<li><a href='javascript:saveDatatableConfig(\"mode\", \"<?php echo $mode == 'table' ? 'datatable' : 'table';?>\", true);' id='switchToDatatable'><?php echo $mode == 'table' ? $lang->datatable->switchToDatatable : $lang->datatable->switchToTable;?></a></li>");
@@ -83,7 +83,7 @@ $(function()
                 currentMethod: currentMethod,
             },
             success:function(){window.location.reload();},
-            url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
+            url: '<?php echo $this->createLink('datatable', 'ajaxOldSave')?>'
         });
     });
 
@@ -99,7 +99,7 @@ $(function()
             dataType: 'json',
             data: {target: datatableId, name: name, value: value, global: global},
             success:function(e){if(reload) window.location.reload();},
-            url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
+            url: '<?php echo $this->createLink('datatable', 'ajaxOldSave')?>'
         });
         $.get(createLink('score', 'ajax', "method=switchToDataTable"));
     };
@@ -114,7 +114,7 @@ $(function()
         <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo $lang->datatable->displaySetting;?></h4>
       </div>
       <div class="modal-body">
-        <form class="form-condensed not-watch no-stash" method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
+        <form class="form-condensed not-watch no-stash" method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxOldSave')?>'>
           <table class='table table-form'>
             <tr>
               <td class='w-160px'><?php echo $lang->datatable->showModule;?></td>

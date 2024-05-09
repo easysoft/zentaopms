@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('category', $category);
+
 $navItems = array();
 $showTag = in_array($category, array('collection', 'discovery', 'latest'));
 
@@ -125,15 +127,33 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
         )
     );
 };
-
-div(
+if(empty($miniPrograms))
+{
+    panel(
+        div(
+            setClass('dtable-empty-tip'),
+            div(
+                setClass('row gap-4 items-center'),
+                span
+                (
+                    setClass('text-gray'),
+                    $lang->noData
+                ),
+            )
+        )
+    );
+}
+else
+{
+    div(
     setClass('miniprogram-container'),
     array_map($miniProgramCard, $miniPrograms),
-);
+    );
+}
 
-div(
+empty($miniPrograms) ? null : div(
     setClass('pager-container'),
-    pager()
+    pager(set(usePager()))
 );
 
 render();

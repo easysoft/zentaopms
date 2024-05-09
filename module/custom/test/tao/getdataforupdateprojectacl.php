@@ -9,20 +9,20 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
-$projectTable = zdTable('project')->config('project');
+$projectTable = zenData('project')->loadYaml('project');
 $projectTable->acl->range('open{10},program{4}');
 $projectTable->PM->range('admin,user1,user2,user3,user4');
 $projectTable->gen(14);
 
-$stakeholderTable = zdTable('stakeholder');
+$stakeholderTable = zenData('stakeholder');
 $stakeholderTable->objectID->range('1-10');
 $stakeholderTable->objectType->range('program');
 $stakeholderTable->user->range('user4,user3,user2,user1,admin');
 $stakeholderTable->gen(10);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $customTester = new customTest();

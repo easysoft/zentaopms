@@ -1,5 +1,5 @@
 <?php
-class gitlab
+class gitlabRepo
 {
     public $client;
     public $projectID;
@@ -688,7 +688,7 @@ class gitlab
 
         $param = new stdclass();
         $param->path     = urldecode($path);
-        $param->ref_name = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
+        $param->ref_name = $toRevision ? $toRevision : $this->branch;
 
         $fromDate = $beginDate ? $beginDate : $this->getCommittedDate($fromRevision);
         $toDate   = $endDate ? $endDate : $this->getCommittedDate($toRevision);
@@ -812,9 +812,9 @@ class gitlab
             if($multi)
             {
                 $results = commonModel::http($api . "&page=1", null, array(), array(), 'data', 'GET', 30, true, false);
-                if(empty($results['header']['X-Total-Pages'])) return array();
+                if(empty($results['header']['X-Total-Pages']) && empty($results['header']['x-total-pages'])) return array();
 
-                $totalPages = $results['header']['X-Total-Pages'];
+                $totalPages = isset($results['header']['X-Total-Pages']) ? isset($results['header']['X-Total-Pages']) : $results['header']['x-total-pages'];
                 if($totalPages == 1)
                 {
                     $allResults = json_decode($results['body']);
@@ -993,5 +993,50 @@ class gitlab
 
         $api = $this->root . $target . '?' . http_build_query($params);
         return $api;
+    }
+
+    /**
+     * 通过API创建合并请求。
+     * Create mr by api.
+     *
+     *  @param object $MR
+     *  @param string $openID
+     *  @param string $assignee
+     *  @access public
+     *  @return object|null
+     */
+    public function createMR(object $MR, string $openID, string $assignee): object|null
+    {
+        $MRObject = new stdclass();
+        $MRObject->title                = $MR->title;
+        $MRObject->target_project_id    = $MR->targetProject;
+        $MRObject->source_branch        = $MR->sourceBranch;
+        $MRObject->target_branch        = $MR->targetBranch;
+        $MRObject->description          = $MR->description;
+        $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+        $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
+        if(!empty($assignee)) $MRObject->assignee_ids = $assignee;
+
+        global $app;
+        $url = str_replace('repository/', '', $this->root);
+        $url .= "merge_requests?private_token={$this->token}";
+        if(!$app->user->admin) $url .= "&sudo={$openID}";
+        return json_decode(commonModel::http($url, $MRObject));
+
+    }
+
+    /**
+     * Get a mr by api.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function getSingleMR(int $MRID): null|object
+    {
+        $this->root = str_replace('repository/', '', $this->root);
+
+        $MR = $this->fetch("merge_requests/$MRID");
+        return $MR ? $MR : null;
     }
 }

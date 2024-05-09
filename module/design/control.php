@@ -107,7 +107,7 @@ class design extends control
         if(isset($project->hasProduct) && $project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
         if(!helper::hasFeature('devops')) $this->config->design->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
 
-        $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
+        $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->browse;
         $this->view->designs   = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
         $this->view->projectID = $projectID;
         $this->view->productID = $productID;
@@ -138,6 +138,7 @@ class design extends control
         {
             $designData = form::data()
                 ->add('project', $projectID)
+                ->setDefault('createdBy', $this->app->user->account)
                 ->get();
 
             $designID = $this->design->create($designData);
@@ -151,7 +152,7 @@ class design extends control
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
-        $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
+        $this->view->title      = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->create;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->stories    = $this->story->addGradeLabel($stories);
         $this->view->productID  = $productID;
@@ -191,7 +192,7 @@ class design extends control
 
         $project = $this->loadModel('project')->getByID($projectID);
 
-        $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
+        $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->batchCreate;
         $this->view->stories   = $this->story->addGradeLabel($stories);
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
         $this->view->type      = $type;
@@ -221,7 +222,7 @@ class design extends control
         $productIdList = $design->product ? $design->product : array_keys($products);
         $project       = $this->loadModel('project')->getByID($design->project);
 
-        $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
+        $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->view;
         $this->view->design   = $design;
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
@@ -249,7 +250,7 @@ class design extends control
 
         if($_POST)
         {
-            $designData = form::data()->get();
+            $designData = form::data()->setDefault('editedBy', $this->app->user->account)->get();
             $changes    = $this->design->update($designID, $designData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -268,7 +269,7 @@ class design extends control
         $project       = $this->loadModel('project')->getByID($design->project);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
-        $this->view->title    = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
+        $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->edit;
         $this->view->design   = $design;
         $this->view->project  = $project;
         $this->view->stories  = $this->story->addGradeLabel($stories);
@@ -295,7 +296,7 @@ class design extends control
     {
         if($_POST)
         {
-            $this->design->linkCommit($designID, $repoID, $_POST['revision']);
+            $this->design->linkCommit($designID, $repoID, $this->post->revision);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
@@ -333,7 +334,7 @@ class design extends control
         $this->config->design->linkcommit->dtable->fieldList['revision']['link'] = sprintf($this->config->design->linkcommit->dtable->fieldList['revision']['link'], $repoID, $design->project);
         if(empty($repo->SCM) || $repo->SCM != 'Git') unset($this->config->design->linkcommit->dtable->fieldList['commit']);
 
-        $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->linkCommit;
+        $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->linkCommit;
         $this->view->repos     = $repos;
         $this->view->repoID    = $repoID;
         $this->view->repo      = $repo;
@@ -387,7 +388,7 @@ class design extends control
 
         $this->config->design->viewcommit->dtable->fieldList['actions']['list']['unlinkCommit']['url'] = sprintf($this->config->design->viewcommit->actionList['unlinkCommit']['url'], $designID);
 
-        $this->view->title  = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
+        $this->view->title  = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->submission;
         $this->view->design = $design;
         $this->view->pager  = $pager;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
@@ -485,7 +486,7 @@ class design extends control
     {
         if($_POST)
         {
-            $designData = form::data()->get();
+            $designData = form::data()->setDefault('editedBy', $this->app->user->account)->get();
             $changes    = $this->design->assign($designID, $designData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -501,7 +502,7 @@ class design extends control
 
         $design = $this->design->getByID($designID);
 
-        $this->view->title  = $this->lang->design->common . $this->lang->colon . $this->lang->design->assignedTo;
+        $this->view->title  = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->assignedTo;
         $this->view->design = $design;
         $this->view->users  = $this->loadModel('project')->getTeamMemberPairs($design->project);
         $this->display();

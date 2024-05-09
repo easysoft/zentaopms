@@ -9,12 +9,12 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/projectstory.class.php';
+include dirname(__FILE__, 2) . '/lib/projectstory.unittest.class.php';
 su('admin');
 
-zdTable('story')->gen(20);
-zdTable('projectstory')->gen(20);
-$project = zdTable('project');
+zenData('story')->gen(20);
+zenData('projectstory')->gen(20);
+$project = zenData('project');
 $project->type->range('program{10},sprint{10}');
 $project->gen(20);
 

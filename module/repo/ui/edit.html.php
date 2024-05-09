@@ -25,37 +25,16 @@ formPanel
     on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->edit),
     set::back('repo-maintain'),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("product[]"),
-        set::label($lang->story->product),
-        set::required(true),
-        set::control(array("control" => "picker","multiple" => true)),
-        set::items($products),
-        set::value($repo->product)
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("projects[]"),
-        set::label($lang->repo->projects),
-        set::control(array("control" => "picker","multiple" => true)),
-        set::items($relatedProjects),
-        set::value($repo->projects)
-    ),
     formRow
     (
         formGroup
         (
             set::width('1/2'),
-            set::name("SCM"),
             set::label($lang->product->typeAB),
-            set::required(true),
-            set::value($repo->SCM),
-            set::control("picker"),
-            set::items($lang->repo->scmList)
+            set::control("static"),
+            set::value(zget($lang->repo->scmList, $repo->SCM, ''))
         ),
+        formHidden('SCM', $repo->SCM),
         h::span
         (
             setClass('tips-git leading-8 ml-2'),
@@ -68,13 +47,11 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name("serviceHost"),
             set::label($lang->repo->serviceHost),
-            set::required(true),
-            set::value(isset($repo->gitService) ? $repo->gitService : ''),
-            set::control("picker"),
-            set::items(!empty($serviceHosts) ? $serviceHosts : array())
-        )
+            set::value(zget($serviceHosts, $repo->serviceHost, '')),
+            set::control("static")
+        ),
+        formHidden('serviceHost', $repo->serviceHost)
     ),
     formRow
     (
@@ -82,13 +59,11 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
-            set::required(true),
-            set::control("picker"),
-            set::items(!empty($projects) ? $projects : array()),
-            set::value(isset($repo->project) ? $repo->project : '')
-        )
+            set::control("static"),
+            set::value(!empty($project) ? $project->name_with_namespace : '')
+        ),
+        formHidden('serviceProject', $repo->serviceProject)
     ),
     formGroup
     (
@@ -110,15 +85,6 @@ formPanel
             set::placeholder($lang->repo->example->path->git),
             set::value($repo->path)
         )
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("encoding"),
-        set::label($lang->repo->encoding),
-        set::required(true),
-        set::value($repo->encoding),
-        set::placeholder($lang->repo->encodingsTips)
     ),
     formRow
     (
@@ -171,6 +137,16 @@ formPanel
                 )))
             )
         )
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name("product[]"),
+        set::label($lang->story->product),
+        set::required(true),
+        set::control(array("control" => "picker","multiple" => true)),
+        set::items($products),
+        set::value($repo->product)
     ),
     formGroup
     (

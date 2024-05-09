@@ -1,1 +1,347 @@
-a:4:{s:5:"query";s:95:"INSERT INTO `person` (`firstname`, `lastname`, `email`) VALUES (:firstname, :lastname, :email);";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:95:"INSERT INTO `person` (`firstname`, `lastname`, `email`) VALUES (:firstname, :lastname, :email);";s:3:"len";i:95;s:4:"last";i:95;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:29:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"INSERT";s:5:"value";s:6:"INSERT";s:7:"keyword";s:6:"INSERT";s:4:"type";i:1;s:5:"flags";i:35;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:6;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:4:"INTO";s:5:"value";s:4:"INTO";s:7:"keyword";s:4:"INTO";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:7;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:11;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:8:"`person`";s:5:"value";s:6:"person";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:2;s:8:"position";i:12;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:20;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:"(";s:5:"value";s:1:"(";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:21;}i:7;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:11:"`firstname`";s:5:"value";s:9:"firstname";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:2;s:8:"position";i:22;}i:8;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:",";s:5:"value";s:1:",";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:33;}i:9;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:34;}i:10;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:10:"`lastname`";s:5:"value";s:8:"lastname";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:2;s:8:"position";i:35;}i:11;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:",";s:5:"value";s:1:",";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:45;}i:12;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:46;}i:13;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:7:"`email`";s:5:"value";s:5:"email";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:2;s:8:"position";i:47;}i:14;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:")";s:5:"value";s:1:")";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:54;}i:15;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:55;}i:16;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"VALUES";s:5:"value";s:6:"VALUES";s:7:"keyword";s:6:"VALUES";s:4:"type";i:1;s:5:"flags";i:35;s:8:"position";i:56;}i:17;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:62;}i:18;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:"(";s:5:"value";s:1:"(";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:63;}i:19;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:10:":firstname";s:5:"value";s:9:"firstname";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:16;s:8:"position";i:64;}i:20;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:",";s:5:"value";s:1:",";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:74;}i:21;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:75;}i:22;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:9:":lastname";s:5:"value";s:8:"lastname";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:16;s:8:"position";i:76;}i:23;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:",";s:5:"value";s:1:",";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:85;}i:24;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:86;}i:25;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:":email";s:5:"value";s:5:"email";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:16;s:8:"position";i:87;}i:26;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:")";s:5:"value";s:1:")";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:93;}i:27;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:";";s:5:"value";s:1:";";s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";i:94;}i:28;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:29;s:3:"idx";i:29;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:47:"PhpMyAdmin\SqlParser\Statements\InsertStatement":8:{s:4:"into";O:43:"PhpMyAdmin\SqlParser\Components\IntoKeyword":7:{s:4:"type";N;s:4:"dest";O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";s:6:"person";s:6:"column";N;s:4:"expr";s:8:"`person`";s:5:"alias";N;s:8:"function";N;s:8:"subquery";N;}s:7:"columns";a:3:{i:0;s:9:"firstname";i:1;s:8:"lastname";i:2;s:5:"email";}s:6:"values";N;s:14:"fields_options";N;s:14:"fields_keyword";N;s:13:"lines_options";N;}s:6:"values";a:1:{i:0;O:40:"PhpMyAdmin\SqlParser\Components\ArrayObj":2:{s:3:"raw";a:3:{i:0;s:10:":firstname";i:1;s:9:":lastname";i:2;s:6:":email";}s:6:"values";a:3:{i:0;s:9:"firstname";i:1;s:8:"lastname";i:2;s:5:"email";}}}s:3:"set";N;s:6:"select";N;s:14:"onDuplicateSet";N;s:7:"options";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:0:{}}s:5:"first";i:0;s:4:"last";i:26;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:0:{}}}
+{
+    "query": "INSERT INTO `person` (`firstname`, `lastname`, `email`) VALUES (:firstname, :lastname, :email);",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "INSERT INTO `person` (`firstname`, `lastname`, `email`) VALUES (:firstname, :lastname, :email);",
+        "len": 95,
+        "last": 95,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "INSERT",
+                    "value": "INSERT",
+                    "keyword": "INSERT",
+                    "type": 1,
+                    "flags": 35,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "INTO",
+                    "value": "INTO",
+                    "keyword": "INTO",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 7
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 11
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`person`",
+                    "value": "person",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 12
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 20
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 21
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`firstname`",
+                    "value": "firstname",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 22
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 33
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 34
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`lastname`",
+                    "value": "lastname",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 35
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 45
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 46
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "`email`",
+                    "value": "email",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 2,
+                    "position": 47
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 54
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 55
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "VALUES",
+                    "value": "VALUES",
+                    "keyword": "VALUES",
+                    "type": 1,
+                    "flags": 35,
+                    "position": 56
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 62
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "(",
+                    "value": "(",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 63
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ":firstname",
+                    "value": "firstname",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 16,
+                    "position": 64
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 74
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 75
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ":lastname",
+                    "value": "lastname",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 16,
+                    "position": 76
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ",",
+                    "value": ",",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 85
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 86
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ":email",
+                    "value": "email",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 16,
+                    "position": 87
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ")",
+                    "value": ")",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 93
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ";",
+                    "value": ";",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 94
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 29,
+            "idx": 29
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\InsertStatement",
+                "into": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\IntoKeyword",
+                    "type": null,
+                    "dest": {
+                        "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                        "database": null,
+                        "table": "person",
+                        "column": null,
+                        "expr": "`person`",
+                        "alias": null,
+                        "function": null,
+                        "subquery": null
+                    },
+                    "columns": [
+                        "firstname",
+                        "lastname",
+                        "email"
+                    ],
+                    "values": null,
+                    "fields_options": null,
+                    "fields_keyword": null,
+                    "lines_options": null
+                },
+                "values": [
+                    {
+                        "@type": "PhpMyAdmin\\SqlParser\\Components\\ArrayObj",
+                        "raw": [
+                            ":firstname",
+                            ":lastname",
+                            ":email"
+                        ],
+                        "values": [
+                            "firstname",
+                            "lastname",
+                            "email"
+                        ]
+                    }
+                ],
+                "set": null,
+                "select": null,
+                "with": null,
+                "onDuplicateSet": null,
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": []
+                },
+                "first": 0,
+                "last": 26
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": []
+    }
+}

@@ -1,21 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zdTable('productplan')->gen(10);
-$story = zdTable('story');
-$story->version->range('1-4');
-$story->gen(20);
-
-su('admin');
 
 /**
 
 title=测试 storyModel->getDataOfStoriesPerPlan();
-cid=1
-pid=1
+cid=0
+
+- 按照计划分组，获取分组后的需求数量 @5
+- 按照计划分组，获取各个计划的需求数量，查看1下的数据
+ - 第1条的name属性 @1.0
+ - 第1条的value属性 @4
+- 按照计划分组，获取各个计划的需求数量，查看4下的数据
+ - 第4条的name属性 @1.0
+ - 第4条的value属性 @4
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zenData('productplan')->gen(10);
+$story = zenData('story');
+$story->version->range('1-4');
+$story->gen(20);
+
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

@@ -1,36 +1,44 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-zdTable('story')->gen(10);
-zdTable('storyspec')->gen(30);
-zdTable('product')->gen(30);
 
 /**
 
 title=测试 storyModel->update();
-cid=1
-pid=1
+cid=0
 
-编辑用户需求，判断返回的信息，stage为空 >> 2,4,1,测试来源备注1,2
-编辑软件需求，判断返回的信息，stage为wait，parent为2 >> 2,4,1,测试来源备注1,2
+- 编辑用户需求，判断返回的信息，stage为空
+ - 属性pri @4
+ - 属性estimate @1
+ - 属性sourceNote @测试来源备注1
+ - 属性product @2
+- 编辑软件需求，判断返回的信息，stage为wait，parent为2
+ - 属性pri @4
+ - 属性estimate @1
+ - 属性sourceNote @测试来源备注1
+ - 属性product @2
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+zenData('story')->gen(10);
+zenData('storyspec')->gen(30);
+zenData('product')->gen(30);
 
 $story  = new storyTest();
 $story1 = $tester->loadModel('story')->fetchByID(2);
-$story1->parent       = 2;
-$story1->pri          = 4;
-$story1->plan         = '0';
-$story1->estimate     = 1;
-$story1->sourceNote   = '测试来源备注1';
-$story1->product      = 2;
-$story1->linkStories  = '';
-$story1->spec         = '';
-$story1->verify       = '';
-$story1->deleteFiles  = array();
+$story1->parent        = 2;
+$story1->pri           = 4;
+$story1->plan          = '0';
+$story1->estimate      = 1;
+$story1->sourceNote    = '测试来源备注1';
+$story1->product       = 2;
+$story1->linkStories   = '';
+$story1->spec          = '';
+$story1->verify        = '';
+$story1->retractedDate = NULL;
+$story1->deleteFiles   = array();
 unset($story1->approvedDate);
 unset($story1->lastEditedDate);
 unset($story1->changedDate);

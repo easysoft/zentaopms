@@ -15,7 +15,7 @@ class form extends formBase
     protected static array $defineProps = array
     (
         'id?: string="$GID"',              // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
-        'items?: array',                   // 使用一个列定义对象数组来定义表单项。
+        'items?: array',                   // 使用一个表单项定义对象数组来定义表单项。
         'fields?: string|array|fieldList', // 表单字段配置。
         'fullModeOrders?: string|array',   // 完整模式下字段显示顺序。
         'foldableItems?: array|string',    // 可折叠的表单项。
@@ -66,7 +66,6 @@ class form extends formBase
 
             $defaultProps = array();
             $defaultProps['submitBtnText'] = $text;
-            $defaultProps['class']         = 'px-3 pb-4';
             $this->setDefaultProps($defaultProps);
         }
 
@@ -96,7 +95,10 @@ class form extends formBase
                 $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
             }
         }
+    }
 
+    protected function beforeBuild()
+    {
         $fields = $this->prop('fields');
         if(is_string($fields)) $fields = explode(',', $fields);
         if(is_array($fields))  $fields = useFields($fields);
@@ -117,23 +119,23 @@ class form extends formBase
                 $this->setProp('autoLoad', $autoLoad);
             }
         }
-   }
+    }
 
     protected function getItemLabel(string $name): ?string
     {
         $labelData = $this->prop('labelData');
         $lblName   = 'lbl' . ucfirst($name);
 
-        if(is_array($labelData))  return isset($labelData[$lblName]) ? $labelData[$lblName] : (isset($labelData[$name]) ? $labelData[$name] : null);
         if(is_object($labelData)) return isset($labelData->$lblName) ? $labelData->$lblName : (isset($labelData->$name) ? $labelData->$name : null);
+        if(is_array($labelData))  return isset($labelData[$lblName]) ? $labelData[$lblName] : (isset($labelData[$name]) ? $labelData[$name] : null);
         return null;
     }
 
     protected function getItemValue(string $name): ?string
     {
         $data = $this->prop('data');
-        if(is_array($data))  return isset($data[$name]) ? strval($data[$name]) : null;
         if(is_object($data)) return isset($data->$name) ? strval($data->$name) : null;
+        if(is_array($data))  return isset($data[$name]) ? strval($data[$name]) : null;
         return null;
     }
 
@@ -226,7 +228,7 @@ class form extends formBase
             $itemsProps = $this->getItemProps($item, $key, $foldableItems, $pinnedItems, $isGrid, $requiredFields);
 
             $formGroup = new formGroup(set($itemsProps));
-            if(isset($itemsProps['foldable']) && $itemsProps['foldable']) $foldableList[] = $formGroup;
+            if(isset($itemsProps['foldable']) && $itemsProps['foldable'] && (!isset($itemsProps['hidden']) || !$itemsProps['hidden'])) $foldableList[] = $formGroup;
             else $list[] = $formGroup;
         }
 
@@ -314,7 +316,17 @@ class form extends formBase
                 $items[$key] = new formRow($item);
             }
         }
+        else
+        {
+            $items[] = setData('fullModeOrders', $this->prop('fullModeOrders'));
+        }
 
         return $items;
+    }
+
+    protected function build()
+    {
+        $this->beforeBuild();
+        return parent::build();
     }
 }

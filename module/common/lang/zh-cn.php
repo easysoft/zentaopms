@@ -15,7 +15,8 @@ include(dirname(__FILE__) . '/common.php');
 global $config;
 
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '-';
+$lang->colon     = '：';
+$lang->hyphen    = '-';
 $lang->comma     = '，';
 $lang->dot       = '。';
 $lang->at        = ' 于 ';
@@ -99,6 +100,7 @@ $lang->all                = '全部';
 $lang->viewDetails        = '查看详情';
 $lang->childrenAB         = '子';
 $lang->branchName         = '分支/平台';
+$lang->recommend          = '推荐';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
@@ -121,6 +123,7 @@ $lang->importSuccess   = '导入成功';
 $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
 $lang->deleteSuccess   = '删除成功';
+$lang->deleted         = '已删除';
 $lang->files           = '附件 ';
 $lang->pasteText       = '多项录入';
 $lang->uploadImages    = '多图上传 ';
@@ -186,6 +189,13 @@ $lang->code         = '代号';
 
 $lang->pri     = '优先级';
 $lang->delayed = '已延期';
+
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = '您有任何问题都可以联系我们。';
+$lang->contactUs->phone  = '电话';
+$lang->contactUs->email  = '邮箱';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = '微信';
 
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
@@ -468,12 +478,6 @@ $lang->visionList = array();
 $lang->visionList['rnd']  = '研发综合界面';
 $lang->visionList['lite'] = '运营管理界面';
 
-if($config->edition == 'ipd')
-{
-    $lang->visionList['or']   = '需求与市场管理界面';
-    $lang->visionList['rnd']  = 'IPD研发管理界面';
-}
-
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';
 $lang->createObjects['bug']         = 'Bug';
@@ -568,11 +572,11 @@ $lang->colorPicker           = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 
 $lang->downNotify     = "下载桌面提醒";
-$lang->clientName     = "客户端";
-$lang->downloadClient = "下载客户端";
+$lang->clientName     = "大桌面";
+$lang->downloadClient = "下载大桌面";
 $lang->downloadMobile = "下载移动端";
-$lang->clientHelp     = "客户端使用说明";
-$lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
+$lang->clientHelp     = "大桌面使用说明";
+$lang->clientHelpLink = "https://www.zentao.net/book/zentaopmshelp/302.html?fullScreen=zentao&theme=default#4";
 $lang->website        = "https://www.zentao.net";
 
 $lang->suhosinInfo     = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大于%s的数）。 保存并重新启动apache或php-fpm，否则会造成部分数据无法保存。";
@@ -589,6 +593,9 @@ $lang->chooseUsersToMail = "选择要发信通知的用户...";
 $lang->noticePasteImg    = "可以在编辑器直接贴图。";
 $lang->pasteImgFail      = "贴图失败，请稍后重试。";
 $lang->pasteImgUploading = "正在上传图片，请稍后...";
+
+$lang->visionTips = "您可以在这里切换界面";
+$lang->IKnow      = "我知道了";
 
 /* 时间格式设置。*/
 if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');

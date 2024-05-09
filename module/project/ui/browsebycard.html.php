@@ -80,7 +80,7 @@ toolbar
         'icon'          => 'plus',
         'text'          => $lang->project->create,
         'class'         => 'primary create-project-btn',
-        'url'           => createLink('project', 'createGuide'),
+        'url'           => createLink('project', 'createGuide', "programID={$programID}"),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
     ))) : null
@@ -336,7 +336,7 @@ div
     !empty($projectStats) ? div
     (
         setID('cardsFooter'),
-        pager()
+        pager(set(usePager()))
     ) : null
 );
 

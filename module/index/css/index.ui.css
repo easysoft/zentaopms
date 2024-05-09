@@ -1,4 +1,14 @@
-#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg, var(--color-primary-600)); width: var(--zt-menu-width, 96px); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
+:root
+{
+    --zt-apps-bar-height: 36px;
+    --zt-apps-bar-bg: var(--color-canvas);
+    --zt-menu-width: 100px;
+    --zt-menu-fold-width: 64px;
+    --zt-menu-bg: var(--color-primary-600);
+}
+[lang^='en'] {--zt-menu-width: 106px;}
+
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .1s; user-select: none; z-index: 10;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px;}
@@ -7,31 +17,34 @@
 #menu .nav > li > a:hover {background: var(--zt-menu-hover-bg, rgba(var(--color-primary-400-rgb), .4)); color: var(--color-canvas);}
 #menu .nav > li > a.active {background: var(--zt-menu-active-bg, rgba(var(--color-primary-400-rgb), .7));}
 #menu .nav > li > a > .text {white-space: nowrap;}
-#menu .nav > li > a > .icon {font-size: 18px;}
-.show-menu .menu-tooltip {display: none;}
+#menu .nav > li > a > .icon {font-size: 18px; display: inline-flex; align-items: center; justify-content: center;}
+.show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 
 #menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
 #menuMainNav a {cursor: pointer;}
 #menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
+.show-menu #menuFooter [data-hint]::after {content: attr(data-collapse-text)}
 
 #menuMoreNav {display: none;}
 .show-more-nav #menuMoreNav {display: block;}
 #menuMoreNav > li > a.with-popover-show {background-color: rgba(255,255,255,.1);}
-#menuMoreList {background: var(--zt-menu-bg, var(--color-gray-800)); padding: 8px 0;}
+#menuMoreList {background: var(--zt-menu-bg); padding: 8px 0; min-width: 100px;}
 #menuMoreList > .menu-item {padding: 1px 12px!important; height: 32px!important;}
+#menuMoreList > .menu-item > a > .text {flex: auto;}
 
-.hide-menu #menu {width: var(--zt-menu-fold-width, 40px)!important;}
+.hide-menu #menu {width: var(--zt-menu-fold-width)!important;}
 .hide-menu #menu .nav > li {padding: 4px}
 .hide-menu #menu .nav > .divider {padding: 0; margin: 6px}
 .hide-menu #menu .nav > li > a {justify-content: center;}
 .hide-menu #menu .nav > li > a > .text {display: none;}
+.hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
 .hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
 
-#apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: 40px; right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
-.hide-menu #apps {left: var(--zt-menu-fold-width, 40px)!important;}
+#apps {position: fixed; left: var(--zt-menu-width); top: 0; bottom: var(--zt-apps-bar-height); right: 0; background-color: var(--zt-page-bg); transition: left .1s;}
+.hide-menu #apps {left: var(--zt-menu-fold-width)!important;}
 
-#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: 40px; padding: 0 4px; background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
-.hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px)!important;}
+#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width); bottom: 0; right: 0; height: var(--zt-apps-bar-height); padding: 0 4px; background: var(--zt-apps-bar-bg); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .1s; border-top-width: 1px;}
+.hide-menu #appsBar {left: var(--zt-menu-fold-width)!important;}
 #appTabs {flex: auto; user-select: none; --nav-active-color: currentColor}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .6;}
 #appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
@@ -41,23 +54,27 @@
 #appsToolbar > .btn-zentao > .icon {color: var(--color-primary-400)}
 
 #visionSwitcher {flex: none; position: relative; margin-right: 12px; margin-left: 4px;}
-#visionSwitcher::before, #visionSwitcher::after {content: ''; display: block; position: absolute; right: -9px; top: -4px; width: 0; height: 0; border-style: solid; border-width: 20px 0 20px 10px; border-color: transparent transparent transparent var(--color-canvas);}
+#visionSwitcher::before, #visionSwitcher::after {content: ''; display: block; position: absolute; right: -9px; top: -2px; width: 0; height: 0; border-style: solid; border-width: 18px 0 18px 8px; border-color: transparent transparent transparent var(--color-canvas);}
 #visionSwitcher::before {right: -10px; border-left-color: var(--color-fore); opacity: .1;}
 #versionSwitchBtn {padding: 0 6px;}
 
-.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
+.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg);}
+.app-container.loading {background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
 .app-container.loading:before {background-color: rgba(0,0,0,.1);}
 .app-container.loading:before, .ap p-container.loading::after {transition-delay: 3s;}
 .app-container.loading.open-from-hidden {transition-delay: 0s;}
 .app-container.loading.open-from-hidden > iframe {opacity: 0;}
 .app-container > iframe {width: 100%; height: 100%; background: inherit;}
 
-.browser-message-content {color: rgba(30,168,254)}
-.browser-message-content > a {color: rgba(49,60,82)}
+.messagers > .messager-holder {max-width: 35%;}
+.messager-notice, .score-notice {align-items: flex-start;}
+.messager-notice > .icon-envelope-o, .score-notice > .icon-diamond {margin-top: 2px;}
+.messager-notice > .alert-close {position: fixed; top: 10px; right: 30px; width: 20px; height: 20px;}
+.messager-notice .browser-message-content {color: rgba(30,168,254); max-height: calc(100vh - 14rem); overflow-y: auto;}
+.messager-notice .browser-message-content > span {width: 94%; display: inline-block;}
+.messager-notice .browser-message-content > a {color: rgba(49,60,82)}
 
 .hl-tutorial {position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 0 0 #000!important; box-shadow: 0 0 0 0 #000!important; -webkit-transition: -webkit-box-shadow 1s!important; -o-transition: box-shadow 1s!important; transition: -webkit-box-shadow 1s!important; transition: box-shadow 1s!important; transition: box-shadow 1s,-webkit-box-shadow 1s!important }
 .hl-tutorial.hl-in { -webkit-box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important; box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important }
 .btn.tooltip-tutorial,.hl-tutorial.hl-in:hover { position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important; box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important
 }
-
-[lang^='en'] {--zt-menu-width: 106px;}

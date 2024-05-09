@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testtask.class.php';
+include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 
-zdTable('testtask')->gen(5);
+zenData('testtask')->gen(5);
 
 su('admin');
 

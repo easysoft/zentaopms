@@ -20,11 +20,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('doccontent')->config('doccontent')->gen(10);
-zdTable('docaction')->config('docaction')->gen(20);
-zdTable('doc')->config('doc')->gen(10);
+zenData('doccontent')->loadYaml('doccontent')->gen(10);
+zenData('docaction')->loadYaml('docaction')->gen(20);
+zenData('doc')->loadYaml('doc')->gen(10);
 su('admin');
 
 $docIdList[0] = array();

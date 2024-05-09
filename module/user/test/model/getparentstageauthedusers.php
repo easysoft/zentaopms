@@ -12,11 +12,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
-zdTable('user')->gen(10);
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+zenData('user')->gen(10);
 su('admin');
 
-$userView = zdTable('userview');
+$userView = zenData('userview');
 $userView->gen(400);
 
 $user = new userTest();

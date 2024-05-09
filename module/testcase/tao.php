@@ -321,7 +321,12 @@ class testcaseTao extends testcaseModel
      */
     protected function getRelatedSteps(array $caseIdList): array
     {
-        return $this->dao->select('id, parent, `case`, version, type, `desc`, expect')->from(TABLE_CASESTEP)->where('`case`')->in($caseIdList)->orderBy('version desc,id')->fetchGroup('case', 'id');
+        return $this->dao->select('DISTINCT t2.id, t2.parent, t2.`case`, t2.version, t2.type, t2.`desc`, t2.expect')
+            ->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.version = t2.version')
+            ->where('t1.id')->in($caseIdList)
+            ->orderBy('t2.id')
+            ->fetchGroup('case', 'id');
     }
 
     /**
@@ -393,7 +398,7 @@ class testcaseTao extends testcaseModel
     protected function updateCase2Project(object $oldCase, object $case): bool
     {
         $productChanged = $oldCase->product != $case->product;
-        $storyChanged   = $oldCase->story   != $case->story;
+        $storyChanged   = $oldCase->story   != zget($case, 'story', $oldCase->story);
 
         if(!$productChanged && !$storyChanged) return true;
 
@@ -620,7 +625,7 @@ class testcaseTao extends testcaseModel
             $this->dao->insert(TABLE_SCENE)->data($scene)->autoCheck()->exec();
             $sceneID = $this->dao->lastInsertID();
 
-            $this->dao->update(TABLE_SCENE)->set('`order`')->eq($sceneID)->where('id')->eq($sceneID)->exec();
+            $this->dao->update(TABLE_SCENE)->set('sort')->eq($sceneID)->where('id')->eq($sceneID)->exec();
         }
         else
         {

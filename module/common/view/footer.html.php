@@ -15,6 +15,8 @@ $.initSidebar();
 needPing = false;
 $(function()
 {
+    if(window.parent && window.parent.zin) return;
+
     var windowBlur = false;
     if(window.Notification && Notification.permission == 'granted')
     {

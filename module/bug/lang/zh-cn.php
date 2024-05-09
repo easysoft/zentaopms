@@ -84,6 +84,11 @@ $lang->bug->case             = '相关用例';
 $lang->bug->linkMR           = '相关合并请求';
 $lang->bug->linkCommit       = '相关代码版本';
 $lang->bug->productplan      = $lang->bug->plan;
+$lang->bug->codeBranch       = '代码分支';
+$lang->bug->unlinkBranch     = '解除关联代码分支';
+$lang->bug->branchName       = '分支名称';
+$lang->bug->branchFrom       = '创建自';
+$lang->bug->codeRepo         = '仓库名称';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = '模块';
@@ -432,6 +437,7 @@ $lang->bug->notice->productDitto          = "该 bug 与上一 bug 不属于同�
 $lang->bug->notice->noBug                 = '暂时没有 Bug。';
 $lang->bug->notice->noModule              = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 $lang->bug->notice->delayWarning          = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->notice->skipNotActive         = "Bug %s 已解决或已关闭，不再修改。";
 
 $lang->bug->error = new stdclass();
 $lang->bug->error->notExist       = 'Bug不存在。';

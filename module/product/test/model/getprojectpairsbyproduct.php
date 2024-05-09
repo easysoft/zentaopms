@@ -22,22 +22,22 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->type->range('normal{2},branch,normal{2}');
 $product->gen(5);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->status->range('wait{2},doing{4},suspended,closed');
 $project->multiple->range('0{25},1{25}');
 $project->deleted->range('0');
 $project->gen(50);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->product->range('1-4');
 $projectproduct->project->range('11-70');
 $projectproduct->branch->range('0{2},1,0');

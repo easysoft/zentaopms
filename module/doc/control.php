@@ -245,12 +245,13 @@ class doc extends control
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
 
         $this->doc->delete(TABLE_DOCLIB, $libID);
-        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => true, 'app' => $this->app->tab));
 
-        $objectType = $lib->type;
-        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
         $moduleName = 'doc';
+        $objectType = $lib->type;
         $methodName = zget($this->config->doc->spaceMethod, $objectType);
+        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => $this->createLink($moduleName, $methodName), 'app' => $this->app->tab));
+
+        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
         if($this->app->tab == 'execution' && $objectType == 'execution')
         {
             $moduleName = 'execution';
@@ -332,7 +333,11 @@ class doc extends control
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-            $docData   = form::data()->get();
+            $docData = form::data()
+                ->setDefault('addedBy', $this->app->user->account)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->get();
+
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docData->lib, $docResult);
@@ -350,7 +355,7 @@ class doc extends control
 
         $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
-        $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
+        $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->create;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
@@ -383,7 +388,10 @@ class doc extends control
             if($comment == false)
             {
                 if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-                $docData = form::data()->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")->get();
+                $docData = form::data()
+                    ->setDefault('editedBy', $this->app->user->account)
+                    ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->get();
                 $result  = $this->doc->update($docID, $docData);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -401,7 +409,7 @@ class doc extends control
 
         $this->docZen->setObjectsForEdit($lib->type, $objectID);
 
-        $this->view->title            = $lib->name . $this->lang->colon . $this->lang->doc->edit;
+        $this->view->title            = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
         $this->view->type             = $lib->type;
@@ -597,6 +605,9 @@ class doc extends control
         $object = $this->doc->getObjectByID($type, $objectID);
         if(empty($_POST) && !empty($searchTitle)) $this->post->title = $searchTitle;
 
+        $this->session->set('storyList', $this->app->getURI(true), 'doc');
+        $this->session->set('bugList', $this->app->getURI(true), 'doc');
+
         /* Load pager. */
         $rawMethod = $this->app->rawMethod;
         $this->app->rawMethod = 'showFiles';
@@ -724,7 +735,7 @@ class doc extends control
 
         /* Build the search form. */
         $queryID = $browseType == 'bySearch' ? $param : 0;
-        $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bySearch&orderBy={$orderBy}&param=myQueryID";
+        $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bySearch&orderBy={$orderBy}&param=0";
         if($this->app->rawMethod == 'tablecontents') $params = "type={$type}&" . $params;
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params);
         if($libType == 'api') $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
@@ -741,7 +752,7 @@ class doc extends control
 
         $executionID = $type == 'project' && $lib->type == 'execution' ? $lib->execution : 0;
 
-        $this->view->title             = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
+        $this->view->title             = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->hyphen . $this->lang->doc->tableContents;
         $this->view->type              = $type;
         $this->view->objectType        = $type;
         $this->view->spaceType         = $type;

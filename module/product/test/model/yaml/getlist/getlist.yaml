@@ -5,7 +5,7 @@ fields:
     - field: id
       range: 1-50
     - field: program
-      range: 1-10
+      range: 1
     - field: shadow
       range: 0-1
     - field: line

@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('delayInfo', $lang->project->delayInfo);
+jsVar('LONG_TIME', LONG_TIME);
+jsVar('longTimeText', $lang->project->longTime);
 
 foreach($projects as $project) $project->consumed .= $lang->execution->workHourUnit;
 if(!$longBlock)
@@ -27,13 +29,13 @@ if(!$longBlock)
 
 blockPanel
 (
-    setClass('list-block'),
+    setClass('list-block project-list-block'),
     dtable
     (
         setID('project'),
         set::height(318),
         set::bordered(false),
-        set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
+        set::fixedLeftWidth($longBlock ? '0.22' : '0.5'),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->project->dtable->fieldList)),
         set::data(array_values($projects)),

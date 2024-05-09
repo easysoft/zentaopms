@@ -48,6 +48,7 @@ body {margin: 0pt}
 .board-footer.story {bottom: 0;}
 .board-footer.task {bottom: 0;}
 .board-footer p{height: 14px; padding:0px 3px; margin-bottom:2px;}
+.checkbox-primary>label, .radio-primary>label {height:18px;}
 </style>
 <?php
 $i        = 0;
@@ -111,11 +112,13 @@ $dataType = '';
             </tr>
           </table>
           <?php elseif($dataType == 'bug'):?>
+          <?php unset($lang->bug->statusList['']);?>
           <div><?php echo $lang->bug->assignTo . '：'; echo empty($content->assignedTo) ? '' : $realnames[$content->assignedTo]->realname;?></div>
           <div><?php echo $lang->printKanban->taskStatus . '：' . html::checkbox("bug$content->id", $lang->bug->statusList, $content->status);?></div>
           <?php else:?>
+          <?php unset($lang->task->statusList['']);?>
           <div><?php echo $lang->task->assign . '：'; echo empty($content->assignedTo) ? '' : $realnames[$content->assignedTo]->realname;?></div>
-          <div><?php echo $lang->printKanban->taskStatus . '：' . html::checkbox("task$content->id", $lang->task->statusList,$content->status);?></div>
+          <div><?php echo $lang->printKanban->taskStatus . '：' . html::checkbox("task$content->id", $lang->task->statusList, $content->status);?></div>
           <table class='table-1' id='record'>
             <tr>
               <td align='center'><?php echo $lang->task->date?></td>

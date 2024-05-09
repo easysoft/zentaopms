@@ -1,30 +1,50 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->subdivide();
+cid=0
+
+- 将用户需求1拆分两个软件需求，查看relation表记录的数量。 @4
+- 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+ - 属性AID @1
+ - 属性BID @2
+ - 属性relation @subdivideinto
+- 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+ - 属性AID @2
+ - 属性BID @1
+ - 属性relation @subdividedfrom
+- 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+ - 属性AID @1
+ - 属性BID @3
+ - 属性relation @subdivideinto
+- 将用户需求1拆分两个软件需求，查看relation表记录的关系。
+ - 属性AID @3
+ - 属性BID @1
+ - 属性relation @subdividedfrom
+- 将软件需求2拆分两个子需求，查看子需求的数量。 @2
+- 将软件需求2拆分两个子需求，查看父需求的parent字段。 @-1
+- 将软件需求2拆分两个子需求，查看子需求5的parent字段。 @4
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('product')->gen(2);
-zdTable('relation')->gen(1);
+zenData('product')->gen(2);
+zenData('relation')->gen(1);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->type->range('requirement,story{10}');
 $story->parent->range('0,0,0,0,4,4');
 $story->product->range('1');
 $story->version->range('1');
 $story->gen(6);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(6);
-
-/**
-
-title=测试 storyModel->subdivide();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 $requirementResult = $story->subdivideTest(1, array(2, 3), 'requirement');

@@ -35,7 +35,7 @@ if($project)
     }
     elseif($project->model == 'agileplus')
     {
-        $fields->field('project')
+        $fields->field('type')
             ->label($lang->execution->method)
             ->disabled()
             ->value(zget($lang->execution->typeList, data('execution.type')));
@@ -86,14 +86,12 @@ $fields->field('name')
     ->value(data('execution.name'))
     ->wrapAfter(empty($config->setCode) && $project->model == 'ipd');
 
-if(!empty($config->setCode))
-{
-    $fields->field('code')
-        ->label($lang->execution->code)
-        ->value(data('execution.code'))
-        ->required(in_array('code', explode(',', $config->execution->edit->requiredFields)))
-        ->width('1/4');
-}
+$fields->field('code')
+       ->label($lang->execution->code)
+       ->value(data('execution.code'))
+       ->hidden(empty($config->setCode))
+       ->required(in_array('code', explode(',', $config->execution->edit->requiredFields)))
+       ->width('1/4');
 
 if($project && $project->model != 'ipd')
 {
@@ -125,7 +123,7 @@ $fields->field('days')
     ->value(data('execution.days'))
     ->width($hasPercent ? '1/4' : '1/2');
 
-if($hasPercent)
+if($hasPercent && $project && $project->model != 'ipd')
 {
     $fields->field('percent')
         ->label($lang->stage->percent)
@@ -144,10 +142,12 @@ $fields->field('productsBox')
         'planGroups'        => data('productPlans'),
         'linkedProducts'    => data('linkedProducts'),
         'linkedBranches'    => data('linkedBranches'),
-        'productPlans'      => data('productPlans'),
+        'productPlans'      => data('productPlan'),
+        'currentPlan'       => data('currentPlan'),
         'project'           => data('project'),
         'isStage'           => isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')),
         'errorSameProducts' => $lang->execution->errorSameProducts,
+        'from'              => 'execution'
     ));
 
 $fields->field('PO')

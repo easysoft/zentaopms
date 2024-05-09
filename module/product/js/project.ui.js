@@ -23,8 +23,6 @@ window.link2Project = function(e)
 
     $.get($.createLink('project', 'ajaxGetLinkedProducts', 'projectID=' + selectProjectID), function(product)
     {
-        let   products = [];
-        let   branches = [];
         const formData = new FormData();
 
         var linkedProducts = JSON.parse(product);
@@ -33,12 +31,12 @@ window.link2Project = function(e)
             for(var branchID in linkedProducts[productID])
             {
                 formData.append('products[]', productID);
-                formData.append('branch[' + productID + '][]', branchID);
+                formData.append('branch[]', branchID);
             }
         }
 
         formData.append('products[]', currentProductID);
-        formData.append('branch[' + currentProductID + '][]', currentBranchID);
+        formData.append('branch[]', currentBranchID);
 
         $.ajaxSubmit({
             url:  $.createLink('project', 'manageProducts', 'projectID=' + selectProjectID),

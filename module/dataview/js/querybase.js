@@ -41,7 +41,7 @@ function query(callback) {
         if(resp.result !== 'success')
         {
             $('#exportDataview').addClass('hidden');
-            var message = resp.message.errorInfo ? resp.message.errorInfo[2] : resp.message;
+            var message = resp.message;
             $('.error').removeClass('hidden');
             $('.error td').html(message);
             drawTable([], []);

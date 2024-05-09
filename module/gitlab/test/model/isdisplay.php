@@ -1,8 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/gitlab.class.php';
-su('admin');
+include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
 /**
 
@@ -31,15 +30,15 @@ cid=1
 
 */
 
-zdTable('user')->gen(10);
+zenData('user')->gen(10);
 
-$userGroup = zdTable('usergroup');
+$userGroup = zenData('usergroup');
 $userGroup->account->range('user1,user2');
 $userGroup->group->range('3,4');
 $userGroup->gen(2);
 
-zdTable('group')->gen(10);
-$groupPriv = zdTable('grouppriv');
+zenData('group')->gen(10);
+$groupPriv = zenData('grouppriv');
 $groupPriv->group->range('3,4{2}');
 $groupPriv->module->range('space,instance');
 $groupPriv->method->range('browse,manage');

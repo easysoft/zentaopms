@@ -164,6 +164,13 @@ class bugModel extends model
         if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask,       TABLE_TASK,    'name');
         if($bug->relatedBug)   $bug->relatedBugTitles  = $this->bugTao->getBugPairsByList($bug->relatedBug);
 
+        if($this->config->edition == 'max')
+        {
+            $identifyList = ($bug->injection || $bug->identify) ? $this->loadModel('review')->getPairs($bug->project, $bug->product, true) : array();
+            $bug->injectionTitle = zget($identifyList, $bug->injection, '');
+            $bug->identifyTitle  = zget($identifyList, $bug->identify, '');
+        }
+
         $bug->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
         $bug->files        = $this->file->getByObject('bug', $bugID);
@@ -598,7 +605,7 @@ class bugModel extends model
     {
         $bug = $this->getByID($bugID);
 
-        $excludeBugs .= ",{$bug->id},{$bug->relatedBug}";
+        $excludeBugs .= ",{$bug->id}";
 
         if($bySearch) return $this->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
 
@@ -1029,27 +1036,26 @@ class bugModel extends model
      * @param  int|string $branch
      * @param  string     $search
      * @param  int        $limit
+     * @param  string     $range    single|all
      * @access public
      * @return array
      */
-    public function getProductBugPairs(int $productID, int|string $branch = '', string $search = '', int $limit = 0): array
+    public function getProductBugPairs(int $productID, int|string $branch = '', string $search = '', int $limit = 0, string $range = 'single'): array
     {
         /* 获取产品的bugs。 */
         /* Get product bugs. */
-        $data = $this->dao->select('id, title')->from(TABLE_BUG)
-            ->where('product')->eq((int)$productID)
+        $productID = (int)$productID;
+        return $this->dao->select("id, CONCAT(IF(product = $productID, '', CONCAT('{$this->lang->product->common}#', product, '@')), id, ':', title) AS title, IF(product = $productID, 0, product) AS `order`")->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->beginIF($range == 'single')->andWhere('product')->eq($productID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
+            ->beginIF($range == 'all' && !$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
             ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
+            ->orderBy('`order`, id desc')
             ->beginIF($limit)->limit($limit)->fi()
-            ->fetchAll();
-        /* 将bugs转为bug键对。 */
-        /* Convert bugs to bug pairs. */
-        $bugs = array();
-        foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
-        return $bugs;
+            ->fetchPairs('id', 'title');
     }
 
     /**
@@ -1261,19 +1267,22 @@ class bugModel extends model
                 if(!isset($caseSteps[$stepId])) continue;
                 $step = $caseSteps[$stepId];
 
-                $stepDesc   = str_replace("\n", "<br />", $step->desc);
-                $stepExpect = str_replace("\n", "<br />", $step->expect);
+                $stepDesc   = str_replace("\n", '</p><p>', $step->desc);
+                $stepExpect = str_replace("\n", '</p><p>', $step->expect);
                 $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
 
-                $bugStep   .= $step->name . '. ' . $stepDesc . "<br />";
-                $bugResult .= $step->name . '. ' . $stepResult . "<br />";
-                $bugExpect .= $step->name . '. ' . $stepExpect . "<br />";
+                $bugStep   .= '<p>' . $step->name . '. ' . $stepDesc   . '</p>';
+                $bugResult .= '<p>' . $step->name . '. ' . $stepResult . '</p>';
+                $bugExpect .= '<p>' . $step->name . '. ' . $stepExpect . '</p>';
             }
         }
 
         $bugSteps  = $run->case->precondition != '' ? "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition : '';
+        $bugSteps .= '<p></p>';
         $bugSteps .= !empty($stepResults) && !empty($bugStep)   ? str_replace(array('<br/>', '<p></p>'), '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
+        $bugSteps .= '<p></p>';
         $bugSteps .= !empty($stepResults) && !empty($bugResult) ? str_replace(array('<br/>', '<p></p>'), '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
+        $bugSteps .= '<p></p>';
         $bugSteps .= !empty($stepResults) && !empty($bugExpect) ? str_replace(array('<br/>', '<p></p>'), '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
 
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getByID($run->task);
@@ -1822,7 +1831,7 @@ class bugModel extends model
         if($module == 'bug' && $action == 'confirm')  return $object->status == 'active' && $object->confirmed == 0;
         /* 如果bug不是关闭状态，这个bug可以被指派。 */
         /* If the status isn't closed, the bug can be assginTo. */
-        if($module == 'bug' && $action == 'assignTo') return $object->status != 'closed';
+        if($module == 'bug' && $action == 'assignto') return $object->status != 'closed';
         /* 如果bug是激活状态，这个bug可以被解决。 */
         /* If the status is active, the bug can be resolve. */
         if($module == 'bug' && $action == 'resolve')  return $object->status == 'active';

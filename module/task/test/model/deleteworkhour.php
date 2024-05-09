@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
-$effort = zdTable('task');
+$effort = zenData('task');
 $effort->gen(1);
 
-$effort = zdTable('effort');
+$effort = zenData('effort');
 $effort->gen(1);
 
 /**

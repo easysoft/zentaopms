@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 storyModel->recordReviewAction();
-cid=1
+cid=0
 
 - 执行story模块的recordReviewActionTest方法，参数是$storyData 属性action @reviewed
 - 执行story模块的recordReviewActionTest方法，参数是$storyData 属性action @reviewpassed
@@ -14,12 +15,12 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('product')->gen(1);
+zenData('product')->gen(1);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range(1);
 $story->plan->range('0,1,0{100}');
 $story->duplicateStory->range('0,4,0{100}');
@@ -31,7 +32,7 @@ $story->twins->range('``{27},30,``,28');
 $story->version->range('1');
 $story->gen(30);
 
-$storyReview = zdTable('storyreview');
+$storyReview = zenData('storyreview');
 $storyReview->story->range('1-30');
 $storyReview->reviewer->range('admin');
 $storyReview->version->range('1');
@@ -55,7 +56,6 @@ $storyData->finalResult = 'clarify';
 r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewclarified');
 $storyData->finalResult = 'revert';
 r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewreverted');
-
 
 $story->objectModel->app->user->account = 'admin';
 $story->objectModel->app->rawModule = 'story';

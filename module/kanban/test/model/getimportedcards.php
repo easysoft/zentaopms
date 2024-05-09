@@ -1,15 +1,15 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/kanban.class.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 su('admin');
 
-zdTable('kanban')->gen('25');
-zdTable('kanbancard')->gen('1000');
-zdTable('productplan')->gen('100');
-zdTable('release')->gen('100');
-zdTable('build')->gen('100');
-zdTable('project')->config('execution')->gen('300');
+zenData('kanban')->gen('25');
+zenData('kanbancard')->gen('1000');
+zenData('productplan')->gen('100');
+zenData('release')->gen('100');
+zenData('build')->gen('100');
+zenData('project')->loadYaml('execution')->gen('300');
 
 /**
 

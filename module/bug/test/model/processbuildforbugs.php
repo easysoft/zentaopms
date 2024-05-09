@@ -51,14 +51,14 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-zdTable('bug')->gen(100);
-zdTable('build')->gen(100);
-zdTable('release')->gen(100);
-zdTable('branch')->gen(100);
-zdTable('product')->gen(100);
-zdTable('project')->config('execution')->gen(50);
+zenData('bug')->gen(100);
+zenData('build')->gen(100);
+zenData('release')->gen(100);
+zenData('branch')->gen(100);
+zenData('product')->gen(100);
+zenData('project')->loadYaml('execution')->gen(50);
 
 $bugIDList1 = array('1', '2', '3');
 $bugIDList2 = array('4', '5', '6');

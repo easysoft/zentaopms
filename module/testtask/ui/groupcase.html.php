@@ -48,6 +48,7 @@ toolbar
     (
         set::className('ghost'),
         set::icon('export'),
+        setData('toggle', 'modal'),
         set::url($this->createLink('testcase', 'export', "productID=$productID&orderBy=case_desc&taskID=$task->id")),
         $lang->export
     ) : null,
@@ -68,8 +69,11 @@ toolbar
     btn(set::icon('back'), set::className('ghost'), set::url($this->session->testtaskList), $lang->goback)
 );
 
-$config->testcase->actionList['runCase']['url']    = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={id}&caseID={case}&version={version}');
-$config->testcase->actionList['edit']['url']       = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={case}&comment=false&executionID=%executionID%');
+$config->testcase->actionList['runCase']['url']             = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={id}&caseID={case}&version={version}');
+$config->testcase->actionList['edit']['url']                = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={case}&comment=false&executionID=%executionID%');
+$config->testcase->actionList['unlinkCase']['url']          = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'caseID={id}');
+$config->testcase->actionList['unlinkCase']['class']        = 'ajax-submit';
+$config->testcase->actionList['unlinkCase']['data-confirm'] = $lang->testtask->confirmUnlinkCase;
 
 $config->testcase->group->dtable->fieldList['actions']['list']         = $config->testcase->actionList;
 $config->testcase->group->dtable->fieldList['id']['name']              = 'case';

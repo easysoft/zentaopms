@@ -60,7 +60,7 @@ class todo extends control
             $todo->id = $todoID;
             $this->todoZen->afterCreate($todo, $form);
 
-            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
 
             if($from == 'block')
             {
@@ -69,9 +69,9 @@ class todo extends control
                 return $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 
+            if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
             if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc')));
         }
 
@@ -94,8 +94,10 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $form       = form::batchData($this->config->todo->batchCreate->form);
-            $todosData  = $this->todoZen->beforeBatchCreate($form);
+            $form      = form::batchData($this->config->todo->batchCreate->form);
+            $todosData = $this->todoZen->beforeBatchCreate($form);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $todoIdList = $this->todo->batchCreate($todosData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -104,8 +106,8 @@ class todo extends control
             if($this->post->futureDate) $date = 'future';
             if($date == date('Ymd'))    $date = 'today';
 
+            if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
-            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
             return $this->sendSuccess(array('closeModal' => true, 'load' => $this->createLink('my', 'todo', "type={$date}")));
         }
 
@@ -131,7 +133,7 @@ class todo extends control
                 if($this->post->type && in_array($this->post->type, $this->config->todo->moduleList)) $this->config->todo->edit->requiredFields = str_replace(',name,', ',', ",{$this->config->todo->edit->requiredFields},");
                 $this->config->todo->edit->form['name']['required'] = false;
             }
-            $form = form::data($this->config->todo->edit->form);
+            $form = form::data($this->config->todo->edit->form)->setIF($this->post->private == 'on', 'private', '1');
             $form = $this->todoZen->addCycleYearConfig($form);
 
             /* Processing edit request data. */
@@ -389,9 +391,11 @@ class todo extends control
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
 
             $tab = $this->app->tab;
-            if($todo->type == 'bug')   $tab = 'qa';
-            if($todo->type == 'task')  $tab = 'execution';
-            if($todo->type == 'story') $tab = 'product';
+            if($todo->type == 'bug')      $tab = 'qa';
+            if($todo->type == 'task')     $tab = 'execution';
+            if($todo->type == 'story')    $tab = 'product';
+            if($todo->type == 'feedback') $tab = 'feedback';
+            if(in_array($todo->type, array('issue', 'risk'))) $tab = 'project';
 
             $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
             return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => array('url' => $confirmURL, 'app' => $tab), 'canceled' => array('url' => $cancelURL)), 'closeModal' => true));
@@ -402,7 +406,7 @@ class todo extends control
             return $this->send(array('status' => 'success'));
         }
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
+        return $this->sendSuccess(array('load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'), 'closeModal' => true));
     }
 
     /**
@@ -506,12 +510,12 @@ class todo extends control
             $assemble->testTasks = $testTasks;
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
-                $iroData = $this->todoZen->exportInfo((string)$this->config->edition, (string)$user->account);
+                $iroData = $this->todoZen->exportAssociated((string)$this->config->edition, (string)$user->account);
                 $assemble->issues        = $iroData[0];
                 $assemble->risks         = $iroData[1];
                 $assemble->opportunities = $iroData[2];
             }
-            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', (string)$user->account);
+            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportAssociated('qcVersion', (string)$user->account);
 
             $todos = $this->todoZen->assembleExportData((array)$todos, $assemble, $todoLang, (array)$times);
 
@@ -521,7 +525,7 @@ class todo extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = $this->app->user->account . ' - ' . $this->lang->todo->common;
+        $this->view->fileName = $this->app->user->account . '-' . $this->lang->todo->common;
         $this->display();
     }
 

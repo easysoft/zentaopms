@@ -80,7 +80,7 @@ div
     (
         set::className('py-2'),
         $getItems(array($lang->user->realname => $user->realname,         $lang->user->gender => zget($lang->user->genderList, $user->gender))),
-        $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : '')),
+        $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email, set::target('_self')) : '')),
         $getItems(array($lang->user->dept     => html($deptName),         $lang->user->role   => zget($lang->user->roleList, $user->role, ''))),
         $getItems(array($lang->user->abbr->join   => formatTime($user->join), $lang->user->priv   => trim($groupName)))
     ),
@@ -98,11 +98,12 @@ div
         set::className('py-2'),
         $getItems(array($lang->user->commiter => $user->commiter, $lang->user->skype    => $user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : '')),
         $getItems(array($lang->user->visits   => $user->visits,   $lang->user->whatsapp => $user->whatsapp)),
-        $getItems(array($lang->user->last     => $user->last,     $lang->user->whatsapp => $user->whatsapp)),
+        $getItems(array($lang->user->last     => $user->last,     $lang->user->slack    => $user->slack)),
         $getItems(array($lang->user->ip       => $user->ip,       $lang->user->dingding => $user->dingding))
     ),
     center
     (
+        setClass('w-full fixed actions-menu my-profile'),
         floatToolbar
         (
             set::object($user),

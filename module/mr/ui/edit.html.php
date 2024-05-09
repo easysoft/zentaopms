@@ -22,10 +22,6 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-$hostName = $this->loadModel('pipeline')->getByID($MR->hostID)->name;
-$sourceProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->sourceProject)->name_with_namespace : $MR->sourceProject;
-$targetProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;
-
 $noEditBranch = $MR->status == 'merged' || $MR->status == 'closed' || $host->type == 'gogs';
 
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
@@ -44,30 +40,36 @@ formPanel
         ),
         formGroup
         (
-            set::labelWidth('5em'),
-            set::label($lang->mr->sourceBranch),
-            set::value($MR->sourceBranch),
+            setClass('hidden'),
+            set::label($lang->mr->targetProject),
+            set::value($targetProject),
             set::control('static')
-        )
+        ),
     ),
     formRow
     (
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->mr->targetProject),
-            set::value($targetProject),
+            set::label($lang->mr->sourceBranch),
+            set::value($MR->sourceBranch),
             set::control('static')
         ),
         formGroup
         (
-            set::labelWidth('6em'),
+            set::width('1/2'),
             !$noEditBranch ? set::required(true) : null,
             set::label($lang->mr->targetBranch),
             set::value($MR->targetBranch),
             !$noEditBranch ? set::name('targetBranch') : null,
-            !$noEditBranch ? set::items($targetBranchList) : set::control('static')
-        )
+            !$noEditBranch ? set::items($branches) : set::control('static')
+        ),
+        $noEditBranch ? input
+        (
+            set::type('hidden'),
+            set::name('targetBranch'),
+            set::value($MR->targetBranch)
+        ) : null,
     ),
     formGroup
     (
@@ -111,7 +113,7 @@ formPanel
     ),
     formRow
     (
-        setClass('hidden'),
+        $MR->needCI == '1' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),

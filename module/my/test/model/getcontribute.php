@@ -2,16 +2,16 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/my.class.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdTable('project')->config('program')->gen('15');
-zdTable('product')->config('product')->gen('20');
-zdTable('team')->gen('20');
-zdTable('bug')->gen('20');
-zdTable('task')->config('task')->gen('20');
-zdTable('story')->config('story')->gen('20');
-zdTable('doc')->gen('20');
-zdTable('user')->gen('1');
+zenData('project')->loadYaml('program')->gen('15');
+zenData('product')->loadYaml('product')->gen('20');
+zenData('team')->gen('20');
+zenData('bug')->gen('20');
+zenData('task')->loadYaml('task')->gen('20');
+zenData('story')->loadYaml('story')->gen('20');
+zenData('doc')->gen('20');
+zenData('user')->gen('1');
 
 su('admin');
 

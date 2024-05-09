@@ -20,31 +20,31 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
+include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
-$testtask = zdTable('testtask');
+$testtask = zenData('testtask');
 $testtask->createdBy->range('admin');
 $testtask->createdDate->range('`' . date('Y-m-d H:i:s') . '`');
 $testtask->gen(2);
-$doc = zdTable('doc');
+$doc = zenData('doc');
 $doc->version->range('1');
 $doc->mailto->range('`admin,user1`');
 $doc->gen(2);
-zdTable('doccontent')->gen(5);
-$task = zdTable('task');
+zenData('doccontent')->gen(5);
+$task = zenData('task');
 $task->assignedTo->range('user1,user2');
 $task->mailto->range('user3,user4');
 $task->gen(2);
-$story = zdTable('story');
+$story = zenData('story');
 $story->version->range('1');
 $story->gen(2);
-zdTable('storyspec')->gen(2);
-zdTable('bug')->gen(2);
-zdTable('kanbancard')->gen(2);
-zdTable('release')->gen(2);
-zdTable('product')->gen(2);
-$project = zdTable('project');
+zenData('storyspec')->gen(2);
+zenData('bug')->gen(2);
+zenData('kanbancard')->gen(2);
+zenData('release')->gen(2);
+zenData('product')->gen(2);
+$project = zenData('project');
 $project->id->range('101-105');
 $project->name->range('1-5')->prefix('迭代');
 $project->gen(2);

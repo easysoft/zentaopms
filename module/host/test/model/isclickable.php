@@ -20,7 +20,7 @@ cid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('host')->config('host')->gen(30);
+zenData('host')->loadYaml('host')->gen(30);
 su('admin');
 
 global $tester;

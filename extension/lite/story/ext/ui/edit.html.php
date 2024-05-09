@@ -38,7 +38,7 @@ jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
 jsVar('storyStatus', $story->status);
 jsVar('lastReviewer', explode(',', $lastReviewer));
-jsVar('reviewers', $reviewers);
+jsVar('storyReviewers', $storyReviewers);
 jsVar('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);
 jsVar('oldProductID', $story->product);
 jsVar('twins', $story->twins);
@@ -169,6 +169,7 @@ detailBody
     history(),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             set::title($lang->story->legendBasicInfo),

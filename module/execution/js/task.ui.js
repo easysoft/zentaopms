@@ -19,6 +19,8 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 }).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
 {
     const dtable = zui.DTable.query($('#table-execution-task'));
+    if(!$('#table-execution-task').length) return;
+
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
@@ -74,15 +76,17 @@ window.setStatistics = function(element, checkedIDList)
         }
     })
 
-    const summary = checkedIDList.length > 0 ? checkedSummary : pageSummary;
-    return {
-        html: summary.replace('%total%', totalCount)
-            .replace('%wait%', waitCount)
-            .replace('%doing%', doingCount)
-            .replace('%estimate%', totalEstimate.toFixed(1))
-            .replace('%consumed%', totalConsumed.toFixed(1))
-            .replace('%left%', totalLeft.toFixed(1))
-    };
+    let summary = checkedIDList.length > 0 ? checkedSummary : pageSummary;
+    summary =  summary.replace('%total%', totalCount)
+        .replace('%wait%', waitCount)
+        .replace('%doing%', doingCount)
+        .replace('%estimate%', totalEstimate.toFixed(1))
+        .replace('%consumed%', totalConsumed.toFixed(1))
+        .replace('%left%', totalLeft.toFixed(1));
+
+    $('.dtable-check-info').attr('title', summary.replace(/<[^>]+>/g,""));
+
+    return {html: summary};
 }
 
 /**
@@ -102,15 +106,15 @@ window.renderCell = function(result, info)
         let html = '';
 
         const module = this.options.modules[info.row.data.module];
-        if(module) html += '<span class="label gray-pale rounded-full mr-1">' + module + '</span>'; // 添加模块标签
+        if(module) html += '<span class="label gray-pale rounded-full mr-1 whitespace-nowrap">' + module + '</span>'; // 添加模块标签
 
         if(task.mode)
         {
-            html += "<span class='label gray-pale rounded-xl mr-1'>" + multipleAB + "</span>";
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + multipleAB + "</span>";
         }
         if(task.parent > 0)
         {
-            html += "<span class='label gray-pale rounded-xl mr-1'>" + childrenAB + "</span>";
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span>";
         }
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
@@ -148,6 +152,11 @@ window.renderCell = function(result, info)
     }
 
     if(['estimate', 'consumed','left'].includes(info.col.name) && result) result[0] = {html: result[0] + ' h'};
+    if(info.col.name == 'design')
+    {
+        result[0] = {html: task.designName};
+        result[1].attrs['title'] = task.designName;
+    }
 
     return result;
 }

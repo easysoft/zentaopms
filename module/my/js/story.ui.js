@@ -32,6 +32,7 @@ window.renderCell = function(result, info)
     if(info.col.name == 'title' && result[0])
     {
         const story = info.row.data;
+        if(story.shadow) result[0].props.href += '#app=project';
         if(story.parent > 0)
         {
             let html = "<span class='label gray-pale rounded-xl' title='" + children + "'>" + childrenAB + "</span>";

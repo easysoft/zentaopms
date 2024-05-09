@@ -51,6 +51,11 @@ function onChangeAppType(event)
             $('#url').attr('placeholder', gitlabUrlTips);
             $('#token').attr('placeholder', gitlabTokenTips);
             break;
+        case 'gitfox':
+            $('#createAppForm').attr('action', $.createLink('gitfox', 'create'));
+            $('#url').attr('placeholder', gitfoxUrlTips);
+            $('#token').attr('placeholder', gitfoxTokenTips);
+            break;
         case 'gitea':
             $('#createAppForm').attr('action', $.createLink('gitea', 'create'));
             break;

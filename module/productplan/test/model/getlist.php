@@ -9,12 +9,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('productplan')->config('productplan')->gen(20);
-zdTable('product')->config('product')->gen(20);
-zdTable('story')->gen(20);
-zdTable('bug')->gen(20);
+zenData('productplan')->loadYaml('productplan')->gen(20);
+zenData('product')->loadYaml('product')->gen(20);
+zenData('story')->gen(20);
+zenData('bug')->gen(20);
 $productplan = new Productplan('admin');
 
 $dataList = array();

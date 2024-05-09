@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -19,11 +19,11 @@ cid=1
 
 */
 
-zdTable('task')->gen(10);
-$bug = zdTable('bug');
+zenData('task')->gen(10);
+$bug = zenData('bug');
 $bug->execution->range('0');
 $bug->gen(10);
-zdTable('repo')->config('repo')->gen(4);
+zenData('repo')->loadYaml('repo')->gen(4);
 
 $repoID   = 1;
 $repoRoot = '';
@@ -45,6 +45,10 @@ $action->actor  = 'user4';
 $action->date   = '2023-12-29 13:14:36';
 $action->extra  = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
 $action->action = 'gitcommited';
+
+global $app;
+include($app->getModuleRoot() . '/repo/control.php');
+$app->control = new repo();
 
 $repo = new repoTest();
 $repo->setBugStatusByCommitTest($log, $action, $repoID);

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/todo.class.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
 
 /**
@@ -10,7 +10,7 @@ timeout=0
 cid=1
 */
 
-zdTable('todo')->config('closetodo')->gen(1);
+zenData('todo')->loadYaml('closetodo')->gen(1);
 
 global $tester;
 $todo = new todoTest();

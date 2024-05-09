@@ -6,7 +6,7 @@ window.renderCell = function(result, {col, row})
     if(col.name === 'name')
     {
         var iconHtml = '<span class="' + (row.data.kind == 'dir' ? 'directory' : 'file') + ' mini-icon"></span>';
-        result[0] = {html:iconHtml + '<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.name + '</a>'};
+        result[0] = {html: iconHtml + '<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.name + '</a>', className: row.data.account ? '' : 'hidden'};
 
         return result;
     }
@@ -78,6 +78,7 @@ window.renderCommentCell = function(result, {col, row})
 {
     if(col.name === 'revision')
     {
+        console.log(row.data);
         result[0] = {html:'<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.revision + '</a>', style:{flexDirection:"column"}};
 
         return result;
@@ -263,7 +264,6 @@ $('.copy-btn').on('click', function()
     copyText[0].selectionStart = copyText[0].selectionEnd;
     copyText[0].blur();
 
-    $(that).tooltip('show');
     var that = this;
     setTimeout(function()
     {

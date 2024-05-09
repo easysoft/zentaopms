@@ -121,7 +121,7 @@ formPanel
             set::name('password2')
         )
     ),
-    formRowGroup(set::title($lang->my->form->lblBasic)),
+    formRowGroup(set::title($lang->my->form->lblContact)),
     $contacts,
     formRow
     (

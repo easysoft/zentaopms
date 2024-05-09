@@ -3,9 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project')->config('project')->gen(3);
-$product = zdTable('product')->config('product')->gen(3);
-$projectproduct = zdTable('projectproduct')->config('projectproduct')->gen(5);
+$project = zenData('project')->loadYaml('project')->gen(3);
+$product = zenData('product')->loadYaml('product')->gen(3);
+$projectproduct = zenData('projectproduct')->loadYaml('projectproduct')->gen(5);
 
 /**
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-zdTable('user')->gen(5);
-zdTable('project')->config('program')->gen(20);
-zdTable('product')->config('product')->gen(20);
-zdTable('stakeholder')->config('stakeholder')->gen(20);
+zenData('user')->gen(5);
+zenData('project')->loadYaml('program')->gen(20);
+zenData('product')->loadYaml('product')->gen(20);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
 su('admin');
 
 /**

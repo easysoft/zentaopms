@@ -13,13 +13,13 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 $upgrade = new upgradeTest();
 
 $types = array('bug', 'build', 'doc', 'doclib', 'effort', 'task', 'testtask', 'effort');
 
-foreach ($types as $type) zdTable($type)->config($type)->gen(4);
+foreach ($types as $type) zenData($type)->loadYaml($type)->gen(4);
 
 $projectIDList = array(1, 2);
 $productIDList = array(array(1, 2), array(3, 4));

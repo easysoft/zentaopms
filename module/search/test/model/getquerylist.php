@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/search.class.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 su('admin');
 
-$query = zdTable('userquery');
+$query = zenData('userquery');
 $query->account->range('admin{5},test{5}');
 $query->common->range('0{5},1{1}');
 $query->gen(10);

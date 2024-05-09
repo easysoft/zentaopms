@@ -21,9 +21,9 @@ js::set('requiredFields', $config->task->edit->requiredFields);
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2>
-      <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?>
+      <?php echo $lang->task->common . $lang->hyphen . $lang->task->batchEdit;?>
       <?php if($executionName and $execution->multiple):?>
-      <small class='text-muted'><?php echo $lang->task->execution . $lang->colon . ' ' . $executionName;?></small>
+      <small class='text-muted'><?php echo $lang->task->execution . $lang->hyphen . ' ' . $executionName;?></small>
       <?php endif;?>
     </h2>
     <div class='pull-right btn-toolbar'>

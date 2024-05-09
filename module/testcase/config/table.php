@@ -50,7 +50,6 @@ $config->testcase->dtable->fieldList['status']['sortType']  = true;
 
 $config->testcase->dtable->fieldList['stage']['title']    = $lang->testcase->stage;
 $config->testcase->dtable->fieldList['stage']['type']     = 'text';
-$config->testcase->dtable->fieldList['stage']['map']      = "RAWJS<(value) => {const stageList = JSON.parse('" . json_encode($lang->testcase->stageList) . "'); return value.split(',').map((v) => stageList[v]).join('{$lang->comma}');}>RAWJS";
 $config->testcase->dtable->fieldList['stage']['group']    = 2;
 $config->testcase->dtable->fieldList['stage']['sortType'] = true;
 
@@ -212,6 +211,7 @@ $config->testcase->bug->dtable->fieldList['assignedTo'] = $config->bug->dtable->
 $config->testcase->bug->dtable->fieldList['resolvedBy'] = $config->bug->dtable->fieldList['resolvedBy'];
 $config->testcase->bug->dtable->fieldList['resolution'] = $config->bug->dtable->fieldList['resolution'];
 
+if(!isset($config->testcase->zerocase)) $config->testcase->zerocase = new stdclass();
 $config->testcase->zerocase->dtable = new stdclass();
 $config->testcase->zerocase->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->testcase->zerocase->dtable->fieldList['id']['type']  = 'checkID';
@@ -265,7 +265,7 @@ $config->testcase->importfromlib->dtable->fieldList['id']['fixed'] = false;
 $config->testcase->importfromlib->dtable->fieldList['branch']['name']    = 'branch';
 $config->testcase->importfromlib->dtable->fieldList['branch']['title']   = $lang->testcase->branch;
 $config->testcase->importfromlib->dtable->fieldList['branch']['type']    = 'control';
-$config->testcase->importfromlib->dtable->fieldList['branch']['control'] = array('control' => 'picker', 'props' => array('required' => true));
+$config->testcase->importfromlib->dtable->fieldList['branch']['control'] = array('type' => 'picker', 'props' => array('required' => true));
 $config->testcase->importfromlib->dtable->fieldList['branch']['width']   = '200px';
 
 $config->testcase->importfromlib->dtable->fieldList['pri']['name']  = 'pri';
@@ -278,6 +278,7 @@ $config->testcase->importfromlib->dtable->fieldList['title']['type']        = 't
 $config->testcase->importfromlib->dtable->fieldList['title']['fixed']       = false;
 $config->testcase->importfromlib->dtable->fieldList['title']['link']        = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 $config->testcase->importfromlib->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->testcase->importfromlib->dtable->fieldList['title']['data-size']   = 'lg';
 
 $config->testcase->importfromlib->dtable->fieldList['fromModule']['name']  = 'fromModule';
 $config->testcase->importfromlib->dtable->fieldList['fromModule']['title'] = $lang->testcase->fromModule;
@@ -286,7 +287,7 @@ $config->testcase->importfromlib->dtable->fieldList['fromModule']['type']  = 'ca
 $config->testcase->importfromlib->dtable->fieldList['module']['name']    = 'module';
 $config->testcase->importfromlib->dtable->fieldList['module']['title']   = $lang->testcase->module;
 $config->testcase->importfromlib->dtable->fieldList['module']['type']    = 'control';
-$config->testcase->importfromlib->dtable->fieldList['module']['control'] = array('control' => 'picker', 'props' => "RAWJS<window.getModuleCellProps>RAWJS");
+$config->testcase->importfromlib->dtable->fieldList['module']['control'] = array('type' => 'picker', 'props' => "RAWJS<window.getModuleCellProps>RAWJS");
 $config->testcase->importfromlib->dtable->fieldList['module']['width']   = '200px';
 
 $config->testcase->importfromlib->dtable->fieldList['type']['name']      = 'type';

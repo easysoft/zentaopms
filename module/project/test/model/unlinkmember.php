@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$team = zdTable('team');
+$team = zenData('team');
 $team->id->range('2-9');
 $team->root->range('2,7-9{3}');
 $team->type->range('project,execution{7}');
@@ -13,7 +13,7 @@ $team->days->range('7');
 $team->hours->range('7');
 $team->gen(8);
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('2,6,8,9');
 $execution->project->range('2,3');
 $execution->name->prefix('项目')->range('8,9');

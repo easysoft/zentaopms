@@ -1,21 +1,20 @@
-.panel-heading .title {font-size: 18px; font-weight: 600}
+.panel-heading .title {font-size: 18px; font-weight: 600; max-width: 90%;}
 .panel-heading { justify-content: space-between; }
 .panel-actions { margin-left: auto; }
 
 #docPanel.is-in-fullscreen {background: #fff; overflow-y: scroll}
 #docPanel.is-in-fullscreen .panel-actions, #docPanel.is-in-fullscreen .selelct-version {display: none;}
-#docPanel .panel-actions, #docPanel .selelct-version {display: flex;}
 #docPanel {flex: 1 1 100%; margin-right: 1.5rem;}
 
 .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
-#history{ position: relative; flex: 0 1 40%; z-index: 120;}
+#history{ position: relative; flex: 0 1 40%; z-index: 120; min-width: 300px;}
 #history > #closeBtn { position: absolute; right: 0; top: 0;}
 
 .main-content-cell > .panel {max-height: calc(100vh - 110px); overflow-y: auto;}
 .main-content-cell > .panel > .doc-content {padding-right: 0;}
 
-#contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 3rem; right: 1rem; z-index: 100; flex: 0 1 30%;}
+#contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 3.5rem; right: 1rem; z-index: 100; flex: 0 1 30%;}
 #contentTree .tree-item .item-content > a {white-space: nowrap; text-overflow: clip; overflow: hidden;}
 
 #docPanel::-webkit-scrollbar,
@@ -24,5 +23,6 @@
 
 .w-144 {width: 36rem;}
 
-#outlineToggle {display: block; position: absolute; top: 5.5rem; right: 3.5rem; z-index: 110;}
+#outlineToggle {display: block; position: absolute; top: 6.5rem; right: 3.5rem; z-index: 100;}
 #docPanel .panel-heading > .panel-actions {min-width: 320px;}
+#docPanel .detail-content {max-width: var(--zt-panel-form-max-width); overflow: hidden;}

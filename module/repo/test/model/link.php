@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 /**
 
@@ -16,8 +16,8 @@ cid=1
 
 */
 
-zdTable('repo')->config('repo', true)->gen(4);
-zdTable('repohistory')->config('repohistory')->gen(1);
+zenData('repo')->loadYaml('repo', true)->gen(4);
+zenData('repohistory')->loadYaml('repohistory')->gen(1);
 
 $revision = 'c808480afe22d3a55d94e91c59a8f3170212ade0';
 $links    = array(1, 2);

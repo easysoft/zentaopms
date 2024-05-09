@@ -25,10 +25,10 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('story')->gen(10);
-zdTable('task')->gen(10);
-zdTable('bug')->gen(10);
-zdTable('relation')->config('relation')->gen(10);
+zenData('story')->gen(10);
+zenData('task')->gen(10);
+zenData('bug')->gen(10);
+zenData('relation')->loadYaml('relation')->gen(10);
 su('admin');
 
 global $tester;

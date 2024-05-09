@@ -25,9 +25,9 @@ class datatable extends control
      */
     public function ajaxDisplay(string $datatableID, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
     {
-        $this->app->loadLang($currentModule);
-        $this->app->loadConfig($currentModule);
+        $this->loadModel($currentModule);
 
+        if($moduleName == 'execution' && $methodName == 'task' && $this->config->vision != 'lite') $this->view->execution = $this->execution->getByID($this->session->execution);
         $this->view->datatableID   = $datatableID;
         $this->view->moduleName    = $moduleName;
         $this->view->methodName    = $methodName;
@@ -50,7 +50,13 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
-            $this->loadModel('setting')->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showModule', $this->post->value);
+            $module = $this->post->currentModule;
+            $method = $this->post->currentMethod;
+
+            $this->app->checkModuleName($module);
+            $this->app->checkMethodName($method);
+
+            $this->loadModel('setting')->setItem($account . '.' . $module . '.' . $method . '.showModule', $this->post->value);
             if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -124,7 +130,17 @@ class datatable extends control
         $cols = $this->datatable->getSetting($module, $method, true, $extra);
         if(!$method) $method = $this->app->getMethodName();
 
-        if($module == 'testcase') unset($cols['assignedTo']);
+        if($module == 'testcase')
+        {
+            unset($cols['assignedTo']);
+            unset($cols['product']);
+            unset($cols['module']);
+        }
+        if($module == 'bug')
+        {
+            unset($cols['product']);
+            unset($cols['module']);
+        }
         if(zget($this->config->datatable->moduleAlias, "$module-$method", $module) == 'story')
         {
             unset($cols['product'], $cols['module']);
@@ -160,6 +176,8 @@ class datatable extends control
 
         if($module == 'execution' && $method == 'bug')
         {
+            unset($cols['execution']);
+            unset($cols['branch']);
             $execution = $this->loadModel('execution')->getByID($this->session->execution);
             $project   = $this->loadModel('project')->getByID($execution->project);
             if(!$project->hasProduct && $project->model != 'scrum') unset($cols['plan']);
@@ -175,10 +193,125 @@ class datatable extends control
 
         if($extra == 'unsetStory' && isset($cols['story'])) unset($cols['story']);
 
+        if($this->config->edition == 'ipd' && $module == 'product' && $method == 'browse' && $extra != 'requirement') unset($cols['roadmap']);
+
         $this->view->module = $module;
         $this->view->method = $method;
         $this->view->cols   = $cols;
         $this->view->extra  = $extra;
+        $this->display();
+    }
+
+    /**
+     * Save config
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxOldSave()
+    {
+        if(!empty($_POST))
+        {
+            $account = $this->app->user->account;
+            if($account == 'guest') return $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
+
+            $name = 'datatable.' . $this->post->target . '.' . $this->post->name;
+            $this->loadModel('setting')->setItem($account . '.' . $name, $this->post->value);
+            if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
+            if($this->post->showBranch !== false) $this->setting->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showBranch', $this->post->showBranch);
+            if($this->post->global) $this->setting->setItem('system.' . $name, $this->post->value);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
+            return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * custom fields.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function ajaxOldCustom(string $module, string $method, string $extra = '')
+    {
+        $moduleName = $module;
+        $target     = $module . ucfirst($method);
+        $mode       = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
+        $key        = $mode == 'datatable' ? 'cols' : 'tablecols';
+
+        if($module == 'testtask')
+        {
+            $this->loadModel('testcase');
+            $this->app->loadConfig('testtask');
+            $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
+            $this->config->testcase->datatable->fieldList['actions']['width'] = '100';
+            $this->config->testcase->datatable->fieldList['status']['width']  = '90';
+        }
+        if($module == 'testcase')
+        {
+            $this->loadModel('testcase');
+            unset($this->config->testcase->datatable->fieldList['assignedTo']);
+        }
+
+        $this->view->module = $module;
+        $this->view->method = $method;
+        $this->view->mode   = $mode;
+
+        $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+        $setting = '';
+        if(isset($this->config->datatable->$target->$key)) $setting = $this->config->datatable->$target->$key;
+        if(empty($setting))
+        {
+            $this->loadModel($module);
+            $setting = json_encode($this->config->$module->datatable->defaultField);
+        }
+
+        $cols = $this->datatable->getOldFieldList($module);
+
+        if($module == 'story' && $extra != 'requirement') unset($cols['SRS']);
+
+        if($extra == 'requirement')
+        {
+            unset($cols['plan']);
+            unset($cols['stage']);
+            unset($cols['taskCount']);
+            unset($cols['bugCount']);
+            unset($cols['caseCount']);
+            unset($cols['URS']);
+
+            $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        }
+
+        if($moduleName == 'project' and $method == 'bug')
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+
+            if(!$project->multiple) unset($cols['execution']);
+            if(!$project->hasProduct and $project->model != 'scrum') unset($cols['plan']);
+            if(!$project->hasProduct) unset($cols['branch']);
+        }
+
+        if($moduleName == 'execution' and $method == 'bug')
+        {
+            $execution = $this->loadModel('execution')->getByID($this->session->execution);
+            $project   = $this->loadModel('project')->getByID($execution->project);
+            if(!$project->hasProduct and $project->model != 'scrum') unset($cols['plan']);
+            if(!$project->hasProduct) unset($cols['branch']);
+        }
+
+        if($moduleName == 'execution' and $method == 'story')
+        {
+            $execution = $this->loadModel('execution')->getByID($this->session->execution);
+            if(!$execution->hasProduct and !$execution->multiple) unset($cols['plan']);
+            if(!$execution->hasProduct) unset($cols['branch']);
+        }
+        if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
+
+        $this->view->cols    = $cols;
+        $this->view->setting = $setting;
         $this->display();
     }
 
@@ -216,6 +349,30 @@ class datatable extends control
             $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$requirementCustom}&key=cols");
         }
         return $this->send(array('result' => 'success', 'load' => true));
+    }
+
+    /**
+     * Ajax reset old cols.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  int    $system
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function ajaxOldReset(string $module, string $method, int $system = 0, string $confirm = 'no')
+    {
+        if($confirm == 'no') return print(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxOldReset', "module=$module&method=$method&system=$system&confirm=yes")));
+
+        $account = $this->app->user->account;
+        $target  = $module . ucfirst($method);
+        $mode    = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
+        $key     = $mode == 'datatable' ? 'cols' : 'tablecols';
+
+        $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
+        if($system) $this->setting->deleteItems("owner=system&module=datatable&section=$target&key=$key");
+        return print(js::reload('parent'));
     }
 
     /**

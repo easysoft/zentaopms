@@ -116,6 +116,7 @@ foreach($results as $i => $result)
             width('56px'),
             !empty($stepResult['files']) ? a
             (
+                on::click('setFileModalHeight'),
                 set::href("#stepResult{$modalID}"),
                 set('data-toggle', 'modal'),
                 icon('paper-clip'),
@@ -125,7 +126,7 @@ foreach($results as $i => $result)
         $fileModals[] = modal
         (
             set::id("stepResult{$modalID}"),
-            !empty($stepResult['files']) ? fileList(set::files($stepResult['files'])) : ''
+            !empty($stepResult['files']) ? fileList(set::extra($stepResult['id']), set::files($stepResult['files'])) : ''
         );
 
         $stepResultTrs[] = div

@@ -45,7 +45,7 @@ form
             set::value($showModule)
         )
     ),
-    $moduleName == 'execution' && $methodName == 'task' && $this->config->vision != 'lite' ? formGroup
+    !empty($execution->multiple) || !empty($execution->hasProduct) ? formGroup
     (
         set::label($lang->datatable->showAllModule),
         radiolist

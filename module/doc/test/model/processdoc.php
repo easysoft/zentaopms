@@ -41,11 +41,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('doc')->config('doc')->gen(5);
-zdTable('doccontent')->config('doccontent')->gen(5);
-zdTable('user')->gen(5);
+zenData('doc')->loadYaml('doc')->gen(5);
+zenData('doccontent')->loadYaml('doccontent')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $docIds     = range(0, 5);

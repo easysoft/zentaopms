@@ -31,26 +31,6 @@ function removeAllTips()
     $('.text-warning').remove();
 }
 
-$(document).on('click', '#copyProjects button', function()
-{
-    const copyProjectID = $(this).hasClass('primary-outline') ? 0 : $(this).data('id');
-    setCopyProject(copyProjectID);
-    zui.Modal.hide();
-});
-
-/**
- * Set copy project.
- *
- * @param  int $copyProjectID
- * @access public
- * @return void
- */
-function setCopyProject(copyProjectID)
-{
-    const programID = $('[name=parent]').val();
-    loadPage($.createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + copyProjectID));
-}
-
 /**
  * Fuzzy search projects by project name.
  *

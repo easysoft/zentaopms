@@ -1,1 +1,2 @@
 .panel-heading{justify-content: flex-start;}
+.batchcreate-stakeholder-panel .form-batch-container {max-height: calc(100vh - 280px)!important;}

@@ -16,13 +16,14 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/ci.class.php';
+include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
 
-zdTable('pipeline')->gen(3);
-zdTable('job')->config('job')->gen(10);
-zdTable('compile')->config('compile')->gen(10);
+zenData('pipeline')->gen(3);
+zenData('job')->loadYaml('job')->gen(10);
+zenData('compile')->loadYaml('compile')->gen(10);
 su('admin');
 
+libxml_use_internal_errors(true);
 $ci = new ciTest();
 
 r($ci->syncCompileStatusTest(1)) && p('status') && e('created'); // 同步jenkins构建结果

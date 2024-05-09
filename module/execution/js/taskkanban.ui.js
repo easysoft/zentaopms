@@ -1,4 +1,4 @@
-$('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%')});
+$('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%'); window.hideAllAction();});
 $('#kanbanList').on('exitFullscreen', () => {$('#kanbanList > div').css('height', 'calc(100vh - 120px)')});
 
 searchValue = '';
@@ -233,11 +233,12 @@ window.getItem = function(info)
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
         info.item.title = {html: info.item.title};
     }
-    info.item.titleUrl   = $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
-    info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
+    info.item.titleUrl   = info.laneInfo.type == 'story' ? $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`) : $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
+    info.item.titleAttrs = {'data-toggle': 'modal', 'data-size': 'lg', 'title': info.item.title, 'class': 'card-title clip'};
 
     info.item.content = {html: content};
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
+    info.item.titleAttrs = {'class': 'card-title clip'};
 }
 
 window.getItemActions = function(item)
@@ -434,6 +435,19 @@ function exitFullScreen()
 {
     $('.btn').show();
     $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
+    $('#kanbanList .card-heading a').each(function(){restoreDiv($(this));});
+    $('#kanbanList .avatar').closest('a').each(function(){restoreDiv($(this));});
+}
+
+function restoreDiv(obj)
+{
+    const $this      = $(obj);
+    const relatedDiv = $this.data('relatedDiv');
+    if(relatedDiv)
+    {
+        relatedDiv.remove();
+        $this.show().removeData('relatedDiv');
+    }
 }
 
 document.addEventListener('fullscreenchange', function (e)
@@ -459,6 +473,15 @@ document.addEventListener('msfullscreenChange', function (e)
 window.hideAllAction = function()
 {
     $('.btn').hide();
+    $('#kanbanList .card-heading a').each(function(){replaceDiv($(this));});
+    $('#kanbanList .avatar').closest('a').each(function(){replaceDiv($(this));});
+}
+
+function replaceDiv(obj)
+{
+    var $this  = $(obj);
+    var newDiv = $('<div></div>').addClass($this.attr('class')).html($this.html());
+    $this.data('relatedDiv', newDiv).before(newDiv).hide();
 }
 
 /**
@@ -530,3 +553,14 @@ window.refreshKanban = function(url)
 };
 
 waitDom('.c-group .picker-box .picker-single-selection', function(){this.html(kanbanLang.laneGroup + ': ' + this.html());});
+
+$(document).off('click', '#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
+{
+    const planID = $('[name=plan]').val();
+    if(planID)
+    {
+        var param = "&param=executionID=" + executionID + ",browseType=" + browseType + ",orderBy=id_asc,groupBy=" + groupBy;
+        $.ajaxSubmit({url: $.createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=taskKanban&extra=' + param)});
+    }
+    return false;
+})

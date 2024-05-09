@@ -18,7 +18,7 @@ $config->project->dtable->fieldList['name']['name']       = 'name';
 $config->project->dtable->fieldList['name']['type']       = 'title';
 $config->project->dtable->fieldList['name']['sortType']   = true;
 $config->project->dtable->fieldList['name']['link']       = array('module' => 'project', 'method' => 'index', 'params' => 'projectID={id}');
-$config->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
+if($config->vision != 'lite') $config->project->dtable->fieldList['name']['iconRender'] = 'RAWJS<function(val,row){ if(row.data.model == \'scrum\') return \'icon-sprint text-gray\'; if([\'waterfall\', \'kanban\', \'agileplus\', \'waterfallplus\', \'ipd\'].indexOf(row.data.model) !== -1) return \'icon-\' + row.data.model + \' text-gray\'; return \'\';}>RAWJS';
 $config->project->dtable->fieldList['name']['group']      = 1;
 $config->project->dtable->fieldList['name']['required']   = true;
 
@@ -44,6 +44,7 @@ $config->project->dtable->fieldList['hasProduct']['title']    = $lang->project->
 $config->project->dtable->fieldList['hasProduct']['name']     = 'hasProduct';
 $config->project->dtable->fieldList['hasProduct']['type']     = 'category';
 $config->project->dtable->fieldList['hasProduct']['sortType'] = true;
+$config->project->dtable->fieldList['hasProduct']['map']      = $lang->project->projectTypeList;
 $config->project->dtable->fieldList['hasProduct']['group']    = 2;
 
 $config->project->dtable->fieldList['PM']['title']       = $lang->project->PM;
@@ -57,7 +58,7 @@ $config->project->dtable->fieldList['PM']['group']       = 3;
 $config->project->dtable->fieldList['PM']['required']    = true;
 
 $config->project->dtable->fieldList['storyPoints']['title']    = $lang->project->storyPoints;
-$config->project->dtable->fieldList['storyPoints']['type']     = 'number';
+$config->project->dtable->fieldList['storyPoints']['type']     = 'count';
 $config->project->dtable->fieldList['storyPoints']['group']    = 4;
 $config->project->dtable->fieldList['storyPoints']['show']     = true;
 $config->project->dtable->fieldList['storyPoints']['width']    = '120px';
@@ -65,6 +66,7 @@ $config->project->dtable->fieldList['storyPoints']['sortType'] = false;
 
 $config->project->dtable->fieldList['storyCount']['title']    = $lang->project->storyCount;
 $config->project->dtable->fieldList['storyCount']['type']     = 'number';
+$config->project->dtable->fieldList['storyCount']['show']     = true;
 $config->project->dtable->fieldList['storyCount']['group']    = 4;
 $config->project->dtable->fieldList['storyCount']['width']    = '120px';
 $config->project->dtable->fieldList['storyCount']['sortType'] = false;

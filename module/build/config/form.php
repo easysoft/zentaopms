@@ -17,7 +17,7 @@ $config->build->form->create['builds']         = array('type' => 'array',     'r
 $config->build->form->create['bugs']           = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->create['stories']        = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->create['date']           = array('type' => 'date',      'required' => true,  'default' => helper::today());
-$config->build->form->create['createdBy']      = array('type' => 'string',    'required' => false, 'default' => $app->user->account);
+$config->build->form->create['createdBy']      = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->create['createdDate']    = array('type' => 'datetime ', 'required' => false, 'default' => $now);
 
 $config->build->form->edit['execution'] = array('type' => 'int',       'required' => $app->tab == 'execution', 'default' => 0);

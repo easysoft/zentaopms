@@ -13,12 +13,14 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
-jsVar('bug',                  $bug);
-jsVar('confirmChangeProduct', $lang->bug->notice->confirmChangeProduct);
-jsVar('moduleID',             $bug->module);
-jsVar('tab',                  $this->app->tab);
-jsVar('released',             $lang->build->released);
-jsVar('confirmUnlinkBuild',   sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+jsVar('bug',                   $bug);
+jsVar('confirmChangeProduct',  $lang->bug->notice->confirmChangeProduct);
+jsVar('moduleID',              $bug->module);
+jsVar('tab',                   $this->app->tab);
+jsVar('released',              $lang->build->released);
+jsVar('confirmUnlinkBuild',    sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+jsVar('projectExecutionPairs', $projectExecutionPairs);
+jsVar('edition',               $config->edition);
 
 detailHeader
 (
@@ -100,20 +102,25 @@ detailBody
         section
         (
             set::title($lang->files),
+            $bug->files ? fileList
+            (
+                set::files($bug->files),
+                set::fieldset(false),
+                set::showEdit(true),
+                set::showDelete(true)
+            ) : null,
             fileSelector()
         ),
         section
         (
             set::title($lang->bug->legendComment),
-            editor
-            (
-                set::name('comment'),
-            )
+            editor(set::name('comment'))
         )
     ),
     history(),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             setClass('mt-5'),
@@ -318,6 +325,7 @@ detailBody
             ),
             item
             (
+                set::trClass('browserTR'),
                 set::name($lang->bug->browser),
                 set::required(strpos(",{$config->bug->edit->requiredFields},", ',browser,') !== false),
                 formGroup

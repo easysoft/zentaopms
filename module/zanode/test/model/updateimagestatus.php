@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->updateImageStatus().
+timeout=0
 cid=1
 
 - 测试修改镜像的状态和路径
@@ -13,10 +15,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('image')->gen(1);
-zdTable('user')->gen(5);
+zenData('image')->gen(1);
+zenData('user')->gen(5);
 su('admin');
 
 $postData = new stdclass();

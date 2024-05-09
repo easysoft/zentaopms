@@ -4,9 +4,9 @@ $(function()
     loadResult();
 });
 
-$('#runCaseModal').closest('.modal').on('hide.zui.modal', function()
+$('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function(e)
 {
-    loadCurrentPage();
+    if($(e.target).attr('id').indexOf('fileModal') == -1) loadCurrentPage();
 });
 
 /**
@@ -38,8 +38,8 @@ function realChange(event)
     else if($target.val() != '' && $preSelect.val() == 'pass')
     {
         $preSelect.zui('picker').$.changeState({value: 'fail'});
-        $preSelect.parent().addClass('has-error');
-        setTimeout(function(){$preSelect.parent().removeClass('has-error');},'1000');
+        setTimeout(function(){$preSelect.closest('.picker-box.form-group-wrapper').addClass('has-error');}, 10);
+        setTimeout(function(){$preSelect.closest('.picker-box.form-group-wrapper').removeClass('has-error');}, 1000);
     }
 }
 
@@ -53,4 +53,15 @@ function realChange(event)
 function checkStepValue(event)
 {
     if($(event.target).val() == 'pass') custom = true;
+}
+
+/**
+ * Set height of the file modal.
+ *
+ * @access public
+ * @return void
+ */
+function setFileModalHeight()
+{
+    $($(this).data('target')).find('.modal-content').css('max-height', $('#runCaseModal').height() + 'px');
 }

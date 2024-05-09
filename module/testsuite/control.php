@@ -155,7 +155,7 @@ class testsuite extends control
         $productID  = $this->product->checkAccess($productID, $this->products);
         $this->loadModel('qa')->setMenu($productID);
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testsuite->create;
         $this->view->productID = $productID;
         $this->display();
     }
@@ -250,7 +250,7 @@ class testsuite extends control
         $productID = $this->product->checkAccess($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($productID);
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testsuite->edit;
         $this->view->suite     = $suite;
         $this->view->productID = $productID;
         $this->display();
@@ -270,7 +270,7 @@ class testsuite extends control
         /* Check user access rights. */
         $this->testsuiteZen->checkTestsuiteAccess($suiteID);
 
-        $this->testsuite->deleteSuiteByID($suiteID);
+        $this->testsuite->delete(TABLE_TESTSUITE, $suiteID);
         $message = $this->executeHooks($suiteID) ? : '';
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -282,6 +282,7 @@ class testsuite extends control
      * Link cases to a test suite.
      *
      * @param  int    $suiteID
+     * @param  string $browseType
      * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -289,7 +290,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function linkCase(int $suiteID, int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkCase(int $suiteID, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* 当前页面URI存入session。 */
         /* Save the URI of current page into session. */
@@ -325,7 +326,7 @@ class testsuite extends control
         $this->config->testcase->search['params']['story']['values']  = array('' => '') + $this->testsuite->getCaseLinkedStories($productID);
 
         $this->config->testcase->search['module']    = 'testsuite';
-        $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
+        $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&browseType=bySearch&param=myQueryID");
 
         $scene = $this->testcase->getSceneMenu($productID);
         $this->config->testcase->search['params']['scene']['values'] = $scene;
@@ -338,14 +339,15 @@ class testsuite extends control
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
-        $this->view->title     = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->cases     = $this->testsuite->getUnlinkedCases($suite, $param, $pager);
-        $this->view->suiteID   = $suiteID;
-        $this->view->param     = $param;
-        $this->view->pager     = $pager;
-        $this->view->suite     = $suite;
-        $this->view->productID = $productID;
+        $this->view->title      = $suite->name . $this->lang->hyphen . $this->lang->testsuite->linkCase;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->cases      = $this->testsuite->getUnlinkedCases($suite, $browseType, $param, $pager);
+        $this->view->suiteID    = $suiteID;
+        $this->view->param      = $param;
+        $this->view->pager      = $pager;
+        $this->view->suite      = $suite;
+        $this->view->productID  = $productID;
+        $this->view->browseType = $browseType;
         $this->display();
     }
 

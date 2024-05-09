@@ -58,7 +58,7 @@ window.loadProductPlans = function(productID, branch)
         if(items.length == 0) return;
 
         let $inputGroup = $planIdBox.closest('.input-group');
-        $inputGroup.html("<div id='planIdBox' class='picker-box'></div>")
+        $inputGroup.html("<div id='planIdBox' class='picker-box w-full'></div>")
         new zui.Picker('#planIdBox.picker-box', {items: items, name: 'plan', defaultValue: planID.toString()});
         if(items.length == 0)
         {
@@ -81,7 +81,6 @@ window.setLane = function(e)
 let formSettingLabelClicked = false;
 $(document).on('click', 'form.form-setting-form .row label.state', function()
 {
-    console.log(formSettingLabelClicked);
     if(formSettingLabelClicked) return;
     formSettingLabelClicked = true;
 

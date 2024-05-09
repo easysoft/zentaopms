@@ -54,9 +54,8 @@ class stakeholder extends control
         if($_POST)
         {
             if($this->post->from != 'outside') $this->config->stakeholder->create->requiredFields .= ',user';
-            $stakeholderData = form::data()
-                ->setDefault('objectID', $objectID)
-                ->get();
+            if($this->post->from == 'outside' && $this->post->newUser) $this->config->stakeholder->create->requiredFields .= ',company';
+            $stakeholderData = form::data()->setDefault('objectID', $objectID)->get();
 
             $stakeholderID = $this->stakeholder->create($stakeholderData);
 
@@ -65,8 +64,8 @@ class stakeholder extends control
             $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
-            $moduleName = $this->app->tab == 'program' ? 'program'              : $this->moduleName;
-            $methodName = $this->app->tab == 'program' ? 'stakeholder'          : 'browse';
+            $moduleName = $this->app->tab == 'program' ? 'program'             : $this->moduleName;
+            $methodName = $this->app->tab == 'program' ? 'stakeholder'         : 'browse';
             $param      = $this->app->tab == 'program' ? "programID=$objectID" : "projectID=$objectID";
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($moduleName, $methodName, $param)));
         }
@@ -318,7 +317,7 @@ class stakeholder extends control
 
         if($stakeholder->objectType == 'project') $this->view->projectID = $stakeholder->objectID;
 
-        $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
+        $this->view->title      = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->view;
         $this->view->user       = $stakeholder;
         $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
         $this->view->expects    = $this->stakeholder->getExpectByUser($stakeholderID);
@@ -348,7 +347,7 @@ class stakeholder extends control
 
         $this->commonAction($stakeholderID, 'stakeholder');
 
-        $this->view->title = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->title = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
         $this->view->user  = $this->stakeholder->getByID($stakeholderID);
         $this->view->users = $this->loadModel('user')->getTeamMemberPairs($this->view->user->objectID, 'project', 'nodeleted');
 
@@ -382,7 +381,7 @@ class stakeholder extends control
             return $this->send(array('result' => 'success', 'closeModal' => true));
         }
 
-        $this->view->title = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->title = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
         $this->view->user  = $this->stakeholder->getByID($stakeholderID);
 
         $this->display();
@@ -414,7 +413,7 @@ class stakeholder extends control
         $this->app->loadLang('issue');
         $stakeholder = $this->stakeholder->getByID($stakeholderID);
 
-        $this->view->title       = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->title       = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
         $this->view->stakeholder = $stakeholder;
         $this->view->projectID   = $stakeholder->objectID;
         $this->view->issueList   = $this->stakeholder->getStakeholderIssue($stakeholder->user);

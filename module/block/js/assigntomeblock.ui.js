@@ -1,4 +1,4 @@
-$('.assigntome-block .nav.nav-tabs').on('show', function(event, info)
+window.handleAssignToMeTabShow = function()
 {
     let activeMore = false;
     $(this).find('.menu-item a[data-toggle=tab]').each(function()
@@ -15,7 +15,7 @@ $('.assigntome-block .nav.nav-tabs').on('show', function(event, info)
         $(this).find('.nav-item a[data-toggle=dropdown] span').html(moreLabel);
         $(this).find('.nav-item a[data-toggle=dropdown]').removeClass('active');
     }
-});
+};
 
 /**
  * 对部分列进行重定义。

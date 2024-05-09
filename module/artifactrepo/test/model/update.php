@@ -28,10 +28,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/artifactrepo.class.php';
+include dirname(__FILE__, 2) . '/lib/artifactrepo.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('artifactrepo')->config('artifactrepo')->gen(5);
+zenData('user')->gen(5);
+zenData('artifactrepo')->loadYaml('artifactrepo')->gen(5);
 
 $names     = array('修改制品库名称1', '修改制品库名称2', '修改制品库名称3', '修改制品库名称4', '修改制品库名称5');
 $repoName  = '修改代码库名称';

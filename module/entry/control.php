@@ -28,7 +28,7 @@ class entry extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title   = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->list;
+        $this->view->title   = $this->lang->entry->common . $this->lang->hyphen . $this->lang->entry->list;
         $this->view->entries = $this->entry->getList($orderBy, $pager);
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
@@ -46,9 +46,9 @@ class entry extends control
     {
         if($_POST)
         {
+            if($this->post->freePasswd) unset($this->config->entry->form->create['account']);
             $entry = form::data($this->config->entry->form->create)
                 ->setIF($this->post->allIP === 'on', 'ip', '*')
-                ->setIF($this->post->freePasswd == '1', 'account', '')
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->remove('allIP')
@@ -62,7 +62,7 @@ class entry extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title = $this->lang->entry->common . $this->lang->colon . $this->lang->entry->create;
+        $this->view->title = $this->lang->entry->common . $this->lang->hyphen . $this->lang->entry->create;
         $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->display();
     }
@@ -79,9 +79,9 @@ class entry extends control
     {
         if($_POST)
         {
+            if($this->post->freePasswd) unset($this->config->entry->form->edit['account']);
             $entry = form::data($this->config->entry->form->edit)
                 ->setIF($this->post->allIP === 'on', 'ip', '*')
-                ->setIF($this->post->freePasswd == '1', 'account', '')
                 ->add('editedBy', $this->app->user->account)
                 ->add('editedDate', helper::now())
                 ->remove('allIP')
@@ -99,7 +99,7 @@ class entry extends control
         }
 
         $entry = $this->entry->getById($id);
-        $this->view->title = $this->lang->entry->edit . $this->lang->colon . $entry->name;
+        $this->view->title = $this->lang->entry->edit . $this->lang->hyphen . $entry->name;
         $this->view->users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->entry = $entry;
         $this->display();
@@ -139,7 +139,7 @@ class entry extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $entry = $this->entry->getByID($id);
-        $this->view->title   = $this->lang->entry->log . $this->lang->colon . $entry->name;
+        $this->view->title   = $this->lang->entry->log . $this->lang->hyphen . $entry->name;
         $this->view->logs    = $this->entry->getLogs($id, $orderBy, $pager);
         $this->view->entry   = $entry;
         $this->view->orderBy = $orderBy;

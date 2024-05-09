@@ -1,26 +1,36 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchChangeBranch();
+cid=0
+
+- 批量修改需求的所属分支，判断被修改分支需求的数量 @3
+- 批量修改需求的所属分支，判断需求2修改后的分支ID第2条的branch属性 @2
+- 批量修改需求的所属分支，判断需求4修改后的分支ID第4条的branch属性 @2
+- 批量修改需求的所属分支，判断需求6修改后的分支ID第6条的branch属性 @2
+- 批量修改需求的所属分支，并同步修改计划，判断被修改分支需求的数量 @3
+- 批量修改需求的所属分支，并同步修改计划，判断需求2修改后的分支ID和计划
+ - 属性branch @3
+ - 属性plan @2,3
+- 批量修改需求的所属分支，并同步修改计划，判断需求4修改后的分支ID第4条的branch属性 @3
+- 批量修改需求的所属分支，并同步修改计划，判断需求6修改后的分支ID第6条的branch属性 @3
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1{3},2{3}');
 $story->branch->range('0{3},0-4');
 $story->plan->range('``{3},2,``,3');
 $story->status->range('draft,active,closed');
 $story->version->range('1');
 $story->gen(6);
-zdTable('storyspec')->gen(20);
-zdTable('product')->gen(20);
-
-/**
-
-title=测试 storyModel->batchChangeBranch();
-cid=1
-pid=1
-
-*/
+zenData('storyspec')->gen(20);
+zenData('product')->gen(20);
 
 $storyIdList = array(2, 4, 6);
 $plans[2][1] = new stdclass();

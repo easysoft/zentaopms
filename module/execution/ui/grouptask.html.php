@@ -23,7 +23,8 @@ if(isset($lang->execution->groupFilter[$groupBy]))
                 ($filterKey == $filter) ? set('class', 'active') : null,
                 span(setClass('text'), $name),
                 ($filterKey == $filter) ? span(setClass('label size-sm rounded-full white'), $allCount) : null,
-                set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}&filter={$filterKey}"))
+                set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}&filter={$filterKey}")),
+                set('data-app', $app->tab)
             )
         );
     }
@@ -38,7 +39,8 @@ else
             set('class', 'active'),
             span(setClass('text'), $lang->all),
             span(setClass('label size-sm rounded-full white'), $allCount),
-            set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}"))
+            set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}")),
+            set('data-app', $app->tab)
         )
     );
 }
@@ -73,7 +75,7 @@ $canImportTask = hasPriv('task', 'importTask');
 $canImportBug  = hasPriv('task', 'importBug');
 if(common::canModify('execution', $execution))
 {
-    $createLink = $this->createLink('task', 'create', "executionID={$execution->id}" . ($app->tab == 'project' ? '#app=project' : ''));
+    $createLink = $this->createLink('task', 'create', "executionID={$execution->id}") . ($app->tab == 'project' ? '#app=project' : '');
     if(commonModel::isTutorialMode())
     {
         $wizardParams   = helper::safe64Encode("executionID={$execution->id}");
@@ -97,10 +99,11 @@ toolbar
 (
     hasPriv('task', 'report') ? item(set(array
     (
-        'text'  => $lang->task->report->common,
-        'icon'  => 'bar-chart',
-        'class' => 'ghost',
-        'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
+        'text'     => $lang->task->report->common,
+        'icon'     => 'bar-chart',
+        'class'    => 'ghost',
+        'url'      => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}"),
+        'data-app' => $app->tab
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
     (
@@ -120,7 +123,7 @@ toolbar
         set::items($importItems),
         set::placement('bottom-end')
     ) : null,
-    $canCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
+    $canCreate && isset($createItem) ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 );
 
 $groupList = array();
@@ -128,9 +131,11 @@ foreach($lang->execution->groups as $key => $value)
 {
     if(empty($key)) continue;
     $link = createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$key}");
-    $groupList[] = array(
-        'text' => $value,
-        'url'  => $link
+    $groupList[] = array
+    (
+        'text'     => $value,
+        'url'      => $link,
+        'data-app' => $app->tab
     );
 }
 
@@ -274,7 +279,6 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
         foreach($groupTasks as $task)
         {
             $assignedToStyle = $task->assignedTo == $app->user->account ? "style='color:red'" : '';
-            $taskLink        = $this->createLink('task','view',"taskID=$task->id");
 
             $tbody[] = h::tr
             (
@@ -318,7 +322,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                     !empty($task->mode) ? span(setClass('label gray-pale rounded-xl'), $lang->task->multipleAB) : null,
                     $task->parent > 0  ? span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB) : null,
                     (isset($task->children) && $task->children == true) ? span(setClass('label gray-pale rounded-xl'), $lang->task->parentAB) : null,
-                    a(set::href(createLink('task', 'view', "task=$task->id")), $task->name)
+                    a(set::href(createLink('task', 'view', "task=$task->id")), $task->name, set('data-app', $app->tab))
                 ),
                 h::td
                 (
@@ -397,9 +401,10 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                         (
                             array
                             (
-                                'url'         => createLink('task', 'edit', "taskID=$task->id"),
-                                'class'       => 'btn ghost toolbar-item text-primary square size-sm',
-                                'icon'        => 'edit'
+                                'url'      => createLink('task', 'edit', "taskID=$task->id"),
+                                'class'    => 'btn ghost toolbar-item text-primary square size-sm',
+                                'icon'     => 'edit',
+                                'data-app' => $app->tab
                             )
                         )
                     ) : null,
@@ -511,7 +516,7 @@ else
             (
                 set::text($lang->task->create),
                 set::icon('plus'),
-                set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '' . ($app->tab == 'project' ? '#app=project' : '')))),
+                set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '')) . ($app->tab == 'project' ? '#app=project' : '')),
                 setClass('btn primary-pale border-primary ml-2')
             ) : null
         )

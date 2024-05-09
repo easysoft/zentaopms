@@ -6,9 +6,9 @@ cid=1
 pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$table = zdTable('task');
+$table = zenData('task');
 $table->execution->range('1-5{10}');
 $table->parent->range('1,0{6}');
 $table->assignedTo->range('user1{2},user2{4},user3');

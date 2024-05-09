@@ -16,10 +16,14 @@ window.clickInit = function(e)
     initReport();
 };
 
-$(document).off('click', 'a[data-toggle=tab].active').on('click', 'a[data-toggle=tab]', function()
+window.handleShowReportTab = (event) =>
 {
-    initReport();
-});
+    $(event.target).find('[data-zui-echarts]').each(function()
+    {
+        const echart = $(this).zui();
+        if(echart) echart.chart.resize();
+    });
+};
 
 function initReport()
 {

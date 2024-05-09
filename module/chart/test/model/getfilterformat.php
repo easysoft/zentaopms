@@ -29,7 +29,7 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $testNoDefault = array();
@@ -83,7 +83,7 @@ r($chart->getFilterFormat(array($selectFilter))) && p('year:operator,value')    
 r($chart->getFilterFormat(array($inputFilter)))  && p('project:operator,value') && e("like,'%1%'");  //测试input
 
 r($chart->getFilterFormat(array($emptyDateFilter))) && p('') && e('0'); //测试date没有begin和end
-r($chart->getFilterFormat(array($dateFilter)))      && p('openedDate:operator,value') && e("BETWEEN,'2023-01-01' and '2023-02-01'"); //测试input
+r($chart->getFilterFormat(array($dateFilter)))      && p('openedDate:operator,value') && e("BETWEEN,'2023-01-01 00:00:00' and '2023-02-01 23:59:59'"); //测试input
 
 r($chart->getFilterFormat(array($inFilter)))      && p('id:operator-value', '-') && e('IN-("1","2","3")'); //测试in
 r($chart->getFilterFormat(array($notNullFilter))) && p('id:operator,value')      && e('IS NOT NULL,~~');  //测试is not null

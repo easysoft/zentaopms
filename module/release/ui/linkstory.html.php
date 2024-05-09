@@ -39,8 +39,8 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($allStories),
-    set::checkedRows($checkedRows),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
+    set::updateCheckedRows($checkedRows),
     set::loadPartial(true),
     set::footToolbar(array
     (

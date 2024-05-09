@@ -12,11 +12,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 
 su('admin');
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->type->range('host');
 $module->parent->range('0,1');
 $module->path->range(',1,`,1,2,`');

@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
-zdTable('projectstory')->gen(0); // Clear the table zt_projectstory to make sure the story is not projected.
+zenData('projectstory')->gen(0); // Clear the table zt_projectstory to make sure the story is not projected.
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-4');
 $task->type->range('test,devel,design,story');
 $task->design->range('0{2},1,0{4}');
@@ -15,23 +15,23 @@ $task->story->range('0{3},1');
 $task->status->range('wait');
 $task->gen(4);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range(1);
 $bug->product->range('1');
 $bug->title->range('Bug1');
 $bug->gen(1);
 
-$todo = zdTable('todo');
+$todo = zenData('todo');
 $todo->id->range(1);
 $todo->name->range('待办1');
 $todo->gen(1);
 
-$design = zdTable('design');
+$design = zenData('design');
 $design->id->range(1);
 $design->name->range('设计1');
 $design->gen(1);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-5');
 $story->product->range('1');
 $story->title->range('1-5')->prefix('需求');

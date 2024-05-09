@@ -58,7 +58,7 @@ class usersEntry extends entry
         $fields = 'type,dept,account,password,visions,realname,join,role,email,commiter,gender,group,passwordStrength';
         $this->batchSetPost($fields);
 
-        if(!in_array($this->request('gendar', zget($_POST, 'gendar', 'f')), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
+        if(!in_array($this->request('gender', zget($_POST, 'gender', 'f')), array('f', 'm'))) return $this->sendError(400, "The value of gender must be 'f' or 'm'");
 
         $password = $this->request('password', zget($_POST, 'password', '')) ? md5($this->request('password', zget($_POST, 'password', ''))) : '';
 
@@ -66,15 +66,16 @@ class usersEntry extends entry
         if(!is_array($visions)) $visions = explode(',', $visions);
 
         if($this->request('group')) $this->setPost('group', explode(',', $this->request('group')));
-        $this->setPost('password1', $password);
-        $this->setPost('password2', $password);
+        $this->setPost('password1', $password . $this->app->session->rand);
+        $this->setPost('password2', $password . $this->app->session->rand);
         $this->setPost('passwordStrength', 3);
         $this->setPost('visions', $visions);
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
+        $this->setPost('passwordLength', strlen($_POST['password1']));
         unset($_POST['password']);
 
         $control = $this->loadController('user', 'create');
-        $this->requireFields('account,password1,realname');
+        $this->requireFields('account,gender,password1,realname');
 
         $control->create();
 

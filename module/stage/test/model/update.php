@@ -23,9 +23,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
+include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
 
-zdTable('stage')->config('stage')->gen(1);
+zenData('stage')->loadYaml('stage')->gen(1);
 
 $stageIds      = array(0, 1, 2);
 $changeName    = array('name' => '修改后的需求');

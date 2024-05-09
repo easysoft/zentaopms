@@ -49,6 +49,12 @@ class programplan extends control
      */
     public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0)
     {
+        if($type == 'lists')
+        {
+            echo $this->fetch('project', 'execution', "status=all&projectID={$projectID}");
+            return;
+        }
+
         $this->app->loadLang('stage');
         $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
         $this->commonAction($projectID, $productID);
@@ -79,6 +85,7 @@ class programplan extends control
      */
     public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage')
     {
+        $this->loadModel('review');
         $this->productID = $this->commonAction($projectID, $productID);
         if($_POST)
         {
@@ -93,7 +100,7 @@ class programplan extends control
                 if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
             }
 
-            $locate = $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
+            $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -120,6 +127,9 @@ class programplan extends control
         /* Set programplan typeList. */
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
+        /* Unset percent for create IPD project.*/
+        if($project->model == 'ipd') $this->config->programplan->list->customCreateFields = str_replace(',percent', '', $this->config->programplan->list->customCreateFields);
+
         $viewData = new stdclass();
         $viewData->productID     = $productID;
         $viewData->planID        = $planID;
@@ -145,7 +155,29 @@ class programplan extends control
     {
         if($_POST)
         {
-            $plan = $this->programplanZen->buildPlanForEdit($planID, $projectID);
+            $this->loadModel('execution');
+            if(!empty($this->config->setCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false) $this->config->programplan->form->edit['code']['required'] = true;
+
+            $plan = form::data()->get();
+            if(empty($plan->realBegan)) $plan->realBegan = null;
+            if(empty($plan->realEnd))   $plan->realEnd   = null;
+
+            /* 设置计划和真实起始日期间隔时间。 */
+            /* Set planDuration and realDuration. */
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
+                $plan->realDuration = $this->programplan->getDuration($plan->realBegan, $plan->realEnd);
+            }
+
+            if($plan->parent)
+            {
+                $parentStage = $this->programplan->getByID($plan->parent);
+                $plan->acl   = $parentStage->acl;
+                if($parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;
+            }
+
+            $this->programplanZen->prepareEditPlan($planID, $projectID, $plan, isset($parentStage) ? $parentStage : null);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->programplan->update($planID, $projectID, $plan);

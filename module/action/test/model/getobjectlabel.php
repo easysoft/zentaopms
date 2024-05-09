@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
 /**
@@ -35,6 +35,12 @@ cid=1
 - 测试获取objectType story objectId 25的动态信息 @用户需求|story|view|storyID=%s
 
 */
+
+global $lang, $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$app::$loadedLangs = array();
+$app->loadLang('action');
 
 $objectType   = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'bug', 'testcase', 'case', 'testtask', 'user', 'doc', 'doclib', 'todo', 'branch', 'module', 'testsuite', 'caselib', 'testreport', 'entry', 'webhook', 'review');
 $objectId     = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,25);

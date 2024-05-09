@@ -111,7 +111,7 @@ class projectTao extends projectModel
             ->autoCheck('begin,end')
             ->check('end',  'gt', $project->begin)
             ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
@@ -399,6 +399,13 @@ class projectTao extends projectModel
         $this->loadModel('action')->create('product', $productID, 'opened');
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
         if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
+
+        $productSettingList = isset($this->config->global->productSettingList) ? json_decode($this->config->global->productSettingList, true) : array();
+        if($this->config->edition != 'open' && $productSettingList)
+        {
+            $productSettingList[] = $productID;
+            $this->loadModel('setting')->setItem('system.common.global.productSettingList', json_encode($productSettingList));
+        }
 
         /* Link product. */
         $projectProduct = new stdclass();
@@ -1007,15 +1014,16 @@ class projectTao extends projectModel
         {
             unset($lang->project->menu->projectplan);
             unset($lang->project->menu->settings['subMenu']->module);
-            return true;
         }
 
         $projectProduct = (int)$this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
         if(isset($lang->project->menu->settings['subMenu']->module['link'])) $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-        if(in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
+        if(!$hasProduct && in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
 
         unset($lang->project->menu->settings['subMenu']->products);
+
+        if(!$hasProduct) unset($lang->project->menu->settings['subMenu']->products);
         if(!in_array($model, $this->config->project->scrumList)) unset($lang->project->menu->projectplan);
         return true;
     }

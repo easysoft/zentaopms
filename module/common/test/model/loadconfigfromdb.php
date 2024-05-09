@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('config')->gen(5);
+zenData('config')->gen(5);
 
 /**
 

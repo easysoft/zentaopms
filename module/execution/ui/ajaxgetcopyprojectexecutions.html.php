@@ -17,9 +17,8 @@ if(empty($executions))
 {
     $executionsBox[] = div
         (
-            setClass('inline-flex items-center'),
-            setClass('alert with-icon w-full'),
-            icon('exclamation-sign text-gray icon-2x pl-2 text-warning'),
+            setClass('inline-flex items-center with-icon w-full bg-gray-100 py-4'),
+            icon('exclamation-sign icon-2x pl-2 text-warning'),
             span
             (
                 set::className('font-bold ml-2'),
@@ -42,7 +41,7 @@ else
                 setClass('text-gray'),
                 $lang->icons[$execution->type]
             ),
-            span($execution->name)
+            span(setClass('text-left'), $execution->name)
         );
     }
 }

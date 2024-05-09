@@ -39,3 +39,9 @@ window.showLink = function(obj)
     const link        = $tabContent.find('.link').data('url');
     $tabContent.load(link);
 };
+
+window.onSearchLinks = function(type, result)
+{
+    loadTarget(result.load, type, {partial: true})
+    return false;
+};

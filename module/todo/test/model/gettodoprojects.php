@@ -5,8 +5,8 @@ su('admin');
 
 function initData()
 {
-    zdTable('todo')->config('gettodoprojects')->gen(10);
-    zdTable('task')->gen(4);
+    zenData('todo')->loadYaml('gettodoprojects')->gen(10);
+    zenData('task')->gen(4);
 }
 
 /**

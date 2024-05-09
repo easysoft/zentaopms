@@ -5,7 +5,7 @@ su('admin');
 
 function initData ()
 {
-    zdTable('todo')->gen(1);
+    zenData('todo')->gen(1);
 }
 
 /**

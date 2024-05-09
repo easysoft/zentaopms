@@ -9,12 +9,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('build')->gen(0);
-zdTable('branch')->gen(10);
-zdTable('product')->gen(10);
-zdTable('project')->gen(10);
+zenData('build')->gen(0);
+zenData('branch')->gen(10);
+zenData('product')->gen(10);
+zenData('project')->gen(10);
 su('admin');
 
 $executionIDList = array('101', '131', '161');

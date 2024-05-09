@@ -69,7 +69,7 @@ class header extends wg
         return h::header
         (
             setID('header'),
-            commonModel::isTutorialMode() ? setStyle('width', 'fit-content') : null,
+            commonModel::isTutorialMode() ? setStyle('min-width', 'fit-content') : null,
             h::div
             (
                 setClass('container'),
@@ -134,7 +134,7 @@ class header extends wg
                         'class'           => '800',
                         'outerClass'      => 'user-tutorial',
                         'data-width'      => 700,
-                        'data-class-name' => 'modal-inverse',
+                        'data-class-name' => 'modal-inverse tutorial-start',
                         'data-headerless' => true,
                         'data-backdrop'   => true,
                         'data-keyboard'   => true,
@@ -184,19 +184,26 @@ class header extends wg
         );
 
         $langItems = array();
-        foreach ($app->config->langs as $key => $value)
+        foreach($app->config->langs as $key => $value)
         {
             $langItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectLang(\"$key\")", 'active' => $app->cookie->lang == $key);
         }
         $items[] = array('text' => $lang->lang, 'icon' => 'lang', 'items' => $langItems);
+
+        /* Zentao desktop client menu. */
+        if(isset($config->xxserver->installed) && $config->xuanxuan->turnon)
+        {
+            $clientSubMenu = array();
+            $clientSubMenu[] = array('text' => $lang->downloadClient, 'url' => createLink('misc', 'downloadClient'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
+            $clientSubMenu[] = array('text' => $lang->clientHelp, 'url' => $lang->clientHelpLink, 'attrs' => array('data-app' => 'help'));
+            $items[] = array('text' => $lang->clientName, 'icon' => 'desktop', 'items' => $clientSubMenu);
+        }
 
         $helpItems = array();
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
         $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
         $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
-
-        /* printClientLink */
 
         $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
         $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
@@ -228,7 +235,7 @@ class header extends wg
 
             set::id('userMenu'),
             set::trigger('hover'),
-            set::placement('bottom-start'),
+            set::placement('bottom-end'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
             set::arrow(true),

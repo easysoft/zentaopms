@@ -20,7 +20,6 @@ $config->productplan->dtable->fieldList['title']['sortType']     = true;
 $config->productplan->dtable->fieldList['title']['align']        = 'left';
 $config->productplan->dtable->fieldList['title']['nestedToggle'] = true;
 $config->productplan->dtable->fieldList['title']['group']        = 'g1';
-$config->productplan->dtable->fieldList['title']['data-app']     = $app->tab;
 
 $config->productplan->dtable->fieldList['status']['name']      = 'status';
 $config->productplan->dtable->fieldList['status']['title']     = $lang->productplan->status;
@@ -83,7 +82,9 @@ $config->productplan->dtable->fieldList['execution']['show']     = true;
 
 $config->productplan->dtable->fieldList['desc']['name']     = 'desc';
 $config->productplan->dtable->fieldList['desc']['title']    = $lang->productplan->desc;
+$config->productplan->dtable->fieldList['desc']['width']    = '160';
 $config->productplan->dtable->fieldList['desc']['type']     = 'html';
+$config->productplan->dtable->fieldList['desc']['hint']     = true;
 $config->productplan->dtable->fieldList['desc']['sortType'] = false;
 $config->productplan->dtable->fieldList['desc']['group']    = 'g7';
 $config->productplan->dtable->fieldList['desc']['show']     = true;

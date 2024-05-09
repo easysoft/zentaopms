@@ -2,8 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(10);
-zdTable('task')->config('task')->gen(30);
+zenData('user')->gen(10);
+zenData('task')->loadYaml('task')->gen(30);
 
 su('admin');
 

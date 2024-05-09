@@ -23,6 +23,11 @@ foreach($fieldParams as $name => $param)
         $condition->control = 'date';
     }
 
+    if(isset($param['class']) && in_array('datetime', explode(' ', $param['class'])))
+    {
+        $condition->control = 'datetime';
+    }
+
     if(is_array($param['values']))
     {
         $condition->items = array();

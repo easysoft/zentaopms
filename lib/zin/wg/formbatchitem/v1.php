@@ -47,7 +47,7 @@ class formBatchItem extends wg
         'tipProps?: string',            // 列标题上的提示触发按钮其他属性。
         'ditto?: bool',                 // 是否显示同上按钮。
         'defaultDitto?:string="on"',    // 同上按钮的默认值。
-        'hidden?: bool=false',          // 是否隐藏
+        'hidden?: bool',                // 是否隐藏
         'readonly?: bool=false'         // 是否只读
     );
 
@@ -68,7 +68,7 @@ class formBatchItem extends wg
             else if(empty($control)) $control = array();
 
             if(!isset($control['required']) && $required !== null) $control['required']    = $required;
-            if(!isset($control['control']))                        $control['control']        = 'text';
+            if(!isset($control['control']))                        $control['control']     = 'text';
             if($name !== null)                                     $control['name']        = $name;
             if($value !== null)                                    $control['value']       = $value;
             if($disabled !== null)                                 $control['disabled']    = $disabled;

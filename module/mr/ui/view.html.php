@@ -151,6 +151,16 @@ panel
                 setClass('nav-item'),
                 a
                 (
+                    $lang->mr->commitLogs,
+                    set::href(inlink('commitlogs', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
+            ),
+            li
+            (
+                setClass('nav-item'),
+                a
+                (
                     $lang->mr->viewDiff,
                     set::href(inlink('diff', "MRID={$MR->id}")),
                     set('data-app', $app->tab)
@@ -209,7 +219,7 @@ panel
                         h::a
                         (
                             setClass('font-normal ml-2 mr-2'),
-                            set::href($sourceBranch ? zget($sourceBranch, 'web_url', '') : ''),
+                            set::href($sourceBranch),
                             set::target('_blank'),
                             set::disabled($sourceDisabled),
                             $sourceProject->name_with_namespace . ':' . $MR->sourceBranch
@@ -218,7 +228,7 @@ panel
                         h::a
                         (
                             setClass('font-normal ml-2 mr-2'),
-                            set::href($targetBranch ? zget($targetBranch, 'web_url', '') : ''),
+                            set::href($targetBranch),
                             set::target('_blank'),
                             $targetProject->name_with_namespace . ':' . $MR->targetBranch
                         )
@@ -284,7 +294,7 @@ panel
 
 div
 (
-    setClass('flex justify-center items-center pt-6'),
+    setClass('detail-actions center sticky mt-4 bottom-4 z-10'),
     floatToolbar
     (
         set::object($MR),

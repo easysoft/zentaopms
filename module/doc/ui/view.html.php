@@ -45,7 +45,7 @@ toolbar
 $versionList = array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"));
+    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'active' => $itemVersion == $version);
 }
 
 $star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
@@ -72,7 +72,7 @@ if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition =
     ) : null;
 }
 
-$createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;
+$createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->hyphen} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->hyphen} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;
 
 $keywordsLabel = array();
 if($doc->keywords)
@@ -134,20 +134,21 @@ $contentDom = div
             setClass('flex-1 w-0'),
             div
             (
-                setClass('title clip'),
+                setClass('title clip inline-flex'),
+                set::title($doc->title),
                 $doc->title
-            )
+            ),
+            $doc->status != 'draft' ? dropdown
+            (
+                btn
+                (
+                    setClass('ghost btn square btn-default selelct-version inline-flex ml-1'),
+                    span(setClass('pl-1'), 'V' . ($version ? $version : $doc->version))
+                ),
+                set::items($versionList)
+            ) : null
         ),
         $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
-        $doc->status != 'draft' ? dropdown
-        (
-            btn
-            (
-                setClass('ghost btn square btn-default selelct-version'),
-                'V' . ($version ? $version : $doc->version)
-            ),
-            set::items($versionList)
-        ) : null,
         div
         (
             setClass('panel-actions flex'),
@@ -193,7 +194,7 @@ $contentDom = div
     ),
     div
     (
-        setClass('info'),
+        setClass('info mb-4'),
         span
         (
             setClass('user-time text-gray mr-2'),
@@ -252,6 +253,7 @@ $treeDom = isset($outlineTree) ? div
     setID('contentTree'),
     tree
     (
+        set::className('pl-4'),
         set::items($outlineTree),
         set::defaultNestedShow(true)
     )

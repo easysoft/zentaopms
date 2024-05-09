@@ -11,19 +11,15 @@ declare(strict_types=1);
 namespace zin;
 
 $isInModal = isAjaxRequest('modal');
+
+data('caselib', $lib);
 detailHeader
 (
     $isInModal ? to::prefix('') : '',
     to::title(entityLabel(set(array('entityID' => $lib->id, 'level' => 1, 'text' => $lib->name))))
 );
 
-$commonActions = array();
-foreach($config->caselib->actionList as $operate => $settings)
-{
-    if(!common::hasPriv('caselib', $operate)) continue;
-
-    $commonActions[] = $settings;
-}
+$commonActions = $this->loadModel('common')->buildOperateMenu($lib);
 detailBody
 (
     sectionList
@@ -34,15 +30,15 @@ detailBody
             set::content($lib->desc),
             set::useHtml(true)
         ),
-        history(set::objectID($lib->id))
     ),
+    history(set::objectID($lib->id)),
     floatToolbar
     (
         !$isInModal ? set::prefix
         (
             array(array('icon' => 'back', 'text' => $lang->goback, 'url' => 'javascript:goBack("execution-task", "execution-task")'))
         ) : '',
-        set::suffix($commonActions),
+        set::suffix($commonActions['mainActions']),
         set::object($lib)
     )
 );

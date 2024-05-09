@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('extension')->config('extension')->gen(20);
+zenData('extension')->loadYaml('extension')->gen(20);
 /**
 
 title=测试 extensionModel->getDependsExtension();

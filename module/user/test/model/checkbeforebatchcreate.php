@@ -62,10 +62,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->config('user')->gen(1);
-zdTable('config')->gen(0);  // config 表置空，防止安全设置影响测试结果。
+zenData('user')->loadYaml('user')->gen(1);
+zenData('config')->gen(0);  // config 表置空，防止安全设置影响测试结果。
 
 su('admin');
 
@@ -191,7 +191,7 @@ r($result) && p('errors:password[1]')      && e('~~');                          
 
 /* 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查。*/
 $config->safe->changeWeak = 1;
-zdTable('config')->config('config')->gen(1); // 生成自定义常用弱口令。
+zenData('config')->loadYaml('config')->gen(1); // 生成自定义常用弱口令。
 $tester->loadConfigFromDB();                 // 加载自定义常用弱口令。
 $result = $userTest->checkBeforeBatchCreateTest($users3, $verifyPassword);
 r($result) && p('result')                  && e(0);                                                                                                                       // 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 false。

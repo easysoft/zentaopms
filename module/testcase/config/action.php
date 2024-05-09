@@ -13,7 +13,7 @@ $config->testcase->actionList['confirmStoryChange']['className'] = 'ajax-submit'
 $config->testcase->actionList['runCase']['icon']         = 'play';
 $config->testcase->actionList['runCase']['text']         = $lang->testtask->runCase;
 $config->testcase->actionList['runCase']['hint']         = $lang->testtask->runCase;
-$config->testcase->actionList['runCase']['url']          = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={caseID}&version={version}');
+$config->testcase->actionList['runCase']['url']          = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={runID}&caseID={caseID}&version={version}');
 $config->testcase->actionList['runCase']['notLoadModel'] = true;
 $config->testcase->actionList['runCase']['data-toggle']  = 'modal';
 $config->testcase->actionList['runCase']['data-size']    = 'lg';
@@ -21,7 +21,7 @@ $config->testcase->actionList['runCase']['data-size']    = 'lg';
 $config->testcase->actionList['ztfRun']['icon']         = 'play';
 $config->testcase->actionList['ztfRun']['text']         = $lang->testtask->runCase;
 $config->testcase->actionList['ztfRun']['hint']         = $lang->testtask->runCase;
-$config->testcase->actionList['ztfRun']['url']          = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID=0&caseID={caseID}&version={version}');
+$config->testcase->actionList['ztfRun']['url']          = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={runID}&caseID={caseID}&version={version}');
 $config->testcase->actionList['ztfRun']['notLoadModel'] = true;
 $config->testcase->actionList['ztfRun']['className']    = 'ztf-case';
 $config->testcase->actionList['ztfRun']['data-toggle']  = 'modal';
@@ -30,7 +30,7 @@ $config->testcase->actionList['ztfRun']['data-size']    = 'lg';
 $config->testcase->actionList['runResult']['icon']        = 'list-alt';
 $config->testcase->actionList['runResult']['text']        = $lang->testtask->results;
 $config->testcase->actionList['runResult']['hint']        = $lang->testtask->results;
-$config->testcase->actionList['runResult']['url']         = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID=0&caseID={caseID}');
+$config->testcase->actionList['runResult']['url']         = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID={runID}&caseID={caseID}');
 $config->testcase->actionList['runResult']['data-toggle'] = 'modal';
 $config->testcase->actionList['runResult']['data-size']   = 'lg';
 
@@ -90,6 +90,11 @@ $config->testcase->actionList['deleteScene']['text']      = $lang->testcase->del
 $config->testcase->actionList['deleteScene']['hint']      = $lang->testcase->deleteScene;
 $config->testcase->actionList['deleteScene']['url']       = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
 $config->testcase->actionList['deleteScene']['className'] = 'ajax-submit';
+
+$config->testcase->actionList['createCase']['icon']      = 'copy';
+$config->testcase->actionList['createCase']['text']      = $lang->testcase->copy;
+$config->testcase->actionList['createCase']['hint']      = $lang->testcase->copy;
+$config->testcase->actionList['createCase']['url']       = array('module' => 'caselib', 'method' => 'createCase', 'params' => 'libID={lib}&moduleID={module}&param={id}');
 
 $config->testcase->actionList['delete']['icon']         = 'trash';
 $config->testcase->actionList['delete']['text']         = $lang->testcase->deleteAction;

@@ -69,6 +69,9 @@ $lang->programplan->settingGantt     = 'Gantt Setting';
 $lang->programplan->viewSetting      = 'Setting';
 $lang->programplan->desc             = 'Description';
 $lang->programplan->wait             = 'Wait';
+$lang->programplan->enabled          = 'Enabling Stage';
+$lang->programplan->point            = 'Review Point';
+$lang->programplan->progress         = 'Progress';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
@@ -77,6 +80,8 @@ $lang->programplan->emptyEnd         = '『End』should not be blank';
 $lang->programplan->checkBegin       = '『Begin』should be valid date';
 $lang->programplan->checkEnd         = '『End』should be valid date';
 $lang->programplan->methodTip        = "You can choose to continue creating stages or {$lang->executionCommon}/Kanban for work in this stage. It's not supported to further split the {$lang->executionCommon}/Kanban.";
+$lang->programplan->cropStageTip     = "Stages that have already started cannot be cropped";
+$lang->programplan->reviewedPointTip = "The review point has been submitted for review and can no longer be operated.";
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';
@@ -84,6 +89,10 @@ $lang->programplan->milestoneList[0] = 'No';
 $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = 'Yes';
 $lang->programplan->delayList[0] = 'No';
+
+$lang->programplan->enabledList = array();
+$lang->programplan->enabledList['on']  = 'On';
+$lang->programplan->enabledList['off'] = 'Off';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = 'Stage';
@@ -96,9 +105,8 @@ $lang->programplan->confirmDelete     = 'Do you want to delete the current plan?
 $lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
 $lang->programplan->workloadTips      = 'The proportion of the sub stage workload is divided by 100%.';
 
-$lang->programplan->stageCustom = new stdClass();
-$lang->programplan->stageCustom->date = 'Show Date';
-$lang->programplan->stageCustom->task = 'Show Task';
+$lang->programplan->stageCustom['date'] = 'Show Date';
+$lang->programplan->stageCustom['task'] = 'Show Task';
 
 $lang->programplan->ganttCustom['PM']           = 'Manager';
 $lang->programplan->ganttCustom['deadline']     = 'Deadline';

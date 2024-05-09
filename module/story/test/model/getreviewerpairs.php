@@ -1,23 +1,27 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getReviewerPairs();
+cid=0
+
+- 执行storyModel模块的getReviewerPairs方法，参数是1, 2 属性user2 @rejust
+- 执行storyModel模块的getReviewerPairs方法，参数是1, 1 属性admin @~~
+- 执行storyModel模块的getReviewerPairs方法，参数是2, 1 属性admin @~~
+- 执行storyModel模块的getReviewerPairs方法，参数是2, 2 属性user1 @pass
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$storyView = zdTable('storyreview');
+$storyView = zenData('storyreview');
 $storyView->story->range('1-5');
 $storyView->reviewer->range('admin,user1,user2');
 $storyView->version->range('1,2');
 $storyView->result->range('``,pass,rejust');
 $storyView->gen(10);
-
-/**
-
-title=测试 storyModel->getReviewerPairs();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

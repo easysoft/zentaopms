@@ -63,10 +63,12 @@ foreach($dirItems as $dirItem)
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
             setClass('py-2'),
@@ -126,6 +128,7 @@ div
                     $checkTrs
                 )
             ),
+            contactUs(),
             cell
             (
                 setClass('text-center mt-4'),

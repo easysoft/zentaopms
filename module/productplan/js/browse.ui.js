@@ -142,6 +142,7 @@ $(document).on('click', '[data-target="#createExecutionModal"]', function()
     {
         const $projectPicker = $('#createExecutionModal [name=project]').zui('picker');
         $projectPicker.render({items: projects, disabled: projects.length == 0});
+        $('.projectTips').toggleClass('hidden', projects.length != 0);
         if(projects.length > 0)
         {
             $('#createExecutionModal .createExecutionBtn').attr('id', 'createExecutionButton');
@@ -234,7 +235,7 @@ window.getCol = function(col)
 
 window.getItem = function(info)
 {
-    if(info.item.delay)
+    if(info.item.delay && ['wait', 'doing'].includes(info.item.status))
     {
         info.item.suffix      = productplanLang.expired;
         info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');

@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->create().
+timeout=0
 cid=1
 
 - 测试创建一个执行节点
@@ -14,10 +16,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('host')->gen(0);
-zdTable('user')->gen(5);
+zenData('host')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $zanode = new zanodeTest();

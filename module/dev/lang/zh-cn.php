@@ -177,6 +177,10 @@ $lang->dev->tableList['approval']              = '审批';
 $lang->dev->tableList['approvalflow']          = '审批流';
 $lang->dev->tableList['chart']                 = '图表';
 $lang->dev->tableList['dataset']               = '数据集';
+$lang->dev->tableList['dataview']              = '数据表';
+$lang->dev->tableList['dimension']             = '维度';
+$lang->dev->tableList['metric']                = '度量项';
+$lang->dev->tableList['pivot']                 = '透视表';
 
 $lang->dev->groupList['my']        = '我的地盘';
 $lang->dev->groupList['program']   = '项目集';

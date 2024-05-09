@@ -87,6 +87,30 @@ function isFieldRequired(?string $name, ?string $requiredFields = null): bool
 }
 
 /**
+ * Join mailto to string with comma.
+ *
+ * @param string $mailto
+ * @param array  $users
+ * @return string
+ */
+function joinMailtoList(string $mailto, ?array $users): string
+{
+    global $lang;
+    $users = $users ? $users : data('users');
+
+    $mailtoList = array();
+    if(!empty($mailto))
+    {
+        foreach(explode(',', $mailto) as $account)
+        {
+            if(empty($account)) continue;
+            $mailtoList[] = zget($users, trim($account));
+        }
+    }
+    return implode($lang->comma, $mailtoList);
+}
+
+/**
  * Determine whether the request is ajax.
  *
  * @param ?string $type 'zin'|'modal'|'fetch'|null

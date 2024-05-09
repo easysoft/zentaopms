@@ -237,7 +237,7 @@ class storyTao extends storyModel
         $track->cases  = $this->loadModel('testcase')->getStoryCases($story->id);
         $track->bugs   = $this->loadModel('bug')->getStoryBugs($story->id);
         $track->tasks  = $this->loadModel('task')->getListByStory($story->id, 0, $projectID);
-        if($this->config->edition != 'max') return $track;
+        if(!in_array($this->config->edition, array('max', 'ipd'))) return $track;
 
         /* 获取关联需求的设计、关联版本库提交。 */
         $track->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($story->id)->andWhere('deleted')->eq('0')->fetchAll('id');
@@ -446,9 +446,9 @@ class storyTao extends storyModel
     {
         /* 获取查询条件。 */
         $rawModule = $this->app->rawModule;
-        $this->loadModel('search')->setQuery($rawModule == 'projectstory' ? 'story' : 'executionStory', $queryID);
+        $this->loadModel('search')->setQuery($rawModule == 'projectstory' ? 'projectstory' : 'executionStory', $queryID);
         if(!$this->session->executionStoryQuery) $this->session->set('executionStoryQuery', ' 1 = 1');
-        if($rawModule == 'projectstory') $this->session->set('executionStoryQuery', $this->session->storyQuery);
+        if($rawModule == 'projectstory') $this->session->set('executionStoryQuery', $this->session->projectstoryQuery);
 
         /* 处理查询条件。 */
         $storyQuery = $this->replaceAllProductQuery($this->session->executionStoryQuery);
@@ -1071,10 +1071,11 @@ class storyTao extends storyModel
      * Update twins.
      *
      * @param  array     $storyIdList
+     * @param  int       $mainStoryID
      * @access protected
      * @return void
      */
-    protected function updateTwins(array $storyIdList): void
+    protected function updateTwins(array $storyIdList, int $mainStoryID): void
     {
         if(count($storyIdList) <= 1) return;
 
@@ -1084,6 +1085,9 @@ class storyTao extends storyModel
             unset($twinsIdList[$storyID]);
             $this->dao->update(TABLE_STORY)->set('twins')->eq(',' . implode(',', $twinsIdList) . ',')->where('id')->eq($storyID)->exec();
         }
+
+        $storyFiles = $this->dao->select('files')->from(TABLE_STORYSPEC)->where('story')->eq($mainStoryID)->fetch('files');
+        $this->dao->update(TABLE_STORYSPEC)->set('files')->eq($storyFiles)->where('story')->in($storyIdList)->exec();
     }
 
     /**
@@ -1613,14 +1617,15 @@ class storyTao extends storyModel
         $this->app->loadLang('task');
         $this->config->story->affect = new stdclass();
         $this->config->story->affect->projects = new stdclass();
-        $this->config->story->affect->projects->fields[] = array('name' => 'id',         'title' => $this->lang->task->id);
-        $this->config->story->affect->projects->fields[] = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'), 'data-toggle' => 'modal', 'data-size' => 'lg');
-        $this->config->story->affect->projects->fields[] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
-        $this->config->story->affect->projects->fields[] = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
-        $this->config->story->affect->projects->fields[] = array('name' => 'left',       'title' => $this->lang->task->left);
+        $this->config->story->affect->projects->fields['id']         = array('name' => 'id',         'title' => $this->lang->task->id);
+        $this->config->story->affect->projects->fields['name']       = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
+        $this->config->story->affect->projects->fields['assignedTo'] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
+        $this->config->story->affect->projects->fields['consumed']   = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
+        $this->config->story->affect->projects->fields['left']       = array('name' => 'left',       'title' => $this->lang->task->left);
 
         if(empty($story->executions)) return $story;
-        foreach($story->executions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
+        $storyExecutions = $story->executions;
+        foreach($storyExecutions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
         $story->teams = $this->dao->select('account, root')->from(TABLE_TEAM)->where('root')->in(array_keys($story->executions))->andWhere('type')->eq('execution')->fetchGroup('root');
 
         foreach($story->tasks as $executionTasks)
@@ -1629,6 +1634,11 @@ class storyTao extends storyModel
             {
                 $task->status     = $this->processStatus('task', $task);
                 $task->assignedTo = zget($users, $task->assignedTo);
+                if(isset($storyExecutions[$task->execution]))
+                {
+                    $taskExecution = $storyExecutions[$task->execution];
+                    if(!$taskExecution->multiple) $this->config->story->affect->projects->fields['name']['link'] .= '#app=project';
+                }
             }
         }
         return $story;
@@ -1658,9 +1668,9 @@ class storyTao extends storyModel
         $this->config->story->affect->bugs->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->bug->lastEditedBy);
 
         /* Get affected bugs. */
-        $twinsIdList = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList = $story->id . ($story->relationStoryID ? ',' . trim($story->relationStoryID, ',') : '') . ($story->twins ? ',' . trim($story->twins, ',') : '');
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')
-            ->andWhere('story')->in($twinsIdList)
+            ->andWhere('story')->in($storyIdList)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
@@ -1698,9 +1708,9 @@ class storyTao extends storyModel
         $this->config->story->affect->cases->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->testcase->lastEditedBy);
 
         /* Get affected cases. */
-        $twinsIdList = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList  = $story->id . ($story->relationStoryID ? ',' . trim($story->relationStoryID, ',') : '') . ($story->twins ? ',' . trim($story->twins, ',') : '');
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
-            ->andWhere('story')->in($twinsIdList)
+            ->andWhere('story')->in($storyIdList)
             ->fetchAll();
         foreach($story->cases as $case)
         {
@@ -1864,7 +1874,7 @@ class storyTao extends storyModel
             $actReview = array('name' => 'review', 'url' => $canReview ? $reviewLink : null, 'hint' => $title, 'disabled' => !$canReview);
         }
 
-        $canRecall = common::hasPriv($story->type, 'recall') && $this->isClickable($story, 'recall');
+        $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, $story->status == 'changing' ? 'recallchange' : 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
         $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
@@ -2005,6 +2015,7 @@ class storyTao extends storyModel
                     }
                 }
 
+                if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
                 $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
                 $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled, 'title' => $unlinkTitle);
             }

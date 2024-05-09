@@ -29,6 +29,7 @@ require_once __DIR__ . DS . 'context.func.php';
 require_once __DIR__ . DS . 'query.class.php';
 require_once __DIR__ . DS . 'on.class.php';
 require_once __DIR__ . DS . 'jquery.class.php';
+require_once __DIR__ . DS . 'style.class.php';
 
 /**
  * Create block content.

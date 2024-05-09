@@ -21,9 +21,9 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(5);
-zdTable('product')->config('product')->gen(10);
-$program = zdTable('project')->config('program');
+zenData('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(10);
+$program = zenData('project')->loadYaml('program');
 $program->PM->range('admin');
 $program->gen(10);
 

@@ -48,7 +48,6 @@ unset($lang->project->endList[999]);
 $isLongTime = data('project.end') == LONG_TIME;
 $fields->field('begin')
     ->label($lang->project->planDate)
-    ->checkbox(array('text' => $lang->project->longTime, 'name' => 'longTime', 'checked' => $isLongTime))
     ->required()
     ->controlBegin('dateRangePicker')
     ->beginName('begin')
@@ -82,6 +81,7 @@ $fields->field('productsBox')
         'hasNewProduct'     => data('app.rawMethod') == 'create',
         'isStage'           => data('isStage'),
         'errorSameProducts' => $lang->project->errorSameProducts,
+        'selectTip'         => $lang->project->selectProductTip
     ));
 
 if($model == 'waterfall' || $model == 'waterfallplus')
@@ -112,7 +112,7 @@ $budgetHidden = isset($config->project->{$app->rawMethod}->requiredFields) && st
 $budgetFuture = data('project.budget') !== null && !data('project.budget') && !$budgetHidden;
 $fields->field('budget')
     ->label($lang->project->budget)
-    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'btn ghost' . ($budgetFuture || data('parentProgram') ? ' disabled pointer-events-none' : '')), 'prefixWidth' => 34, 'disabled' => $budgetFuture))
+    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'ghost' . ($budgetFuture || data('parentProgram') ? ' disabled pointer-events-none' : '')), 'prefixWidth' => 34, 'disabled' => $budgetFuture))
     ->placeholder(data('parentProgram') && !empty(data('parentProgram.budget')) ? $lang->project->parentBudget . zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget') : '')
     ->tip(' ')
     ->tipProps(array('id' => 'budgetTip'))

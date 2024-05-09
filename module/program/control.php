@@ -120,11 +120,13 @@ class program extends control
             $this->view->program = $program;
         }
 
+        $this->loadModel('product')->refreshStats();
+
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $products = $this->loadModel('product')->getList($programID, $browseType);
+        $products = $this->product->getList($programID, $browseType);
         $this->view->products = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story',  $programID);
 
         $this->view->title         = $this->lang->program->product;
@@ -386,32 +388,39 @@ class program extends control
      * Delete a program.
      *
      * @param  int    $programID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete(int $programID)
+    public function delete(int $programID, string $confirm = 'no')
     {
         /* The program can NOT be deleted if it has a child program. */
-        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq('0')->fetch('count');
-        if($childrenCount)
+        $childrenPairs = $this->program->getChildrenPairsByID($programID);
+        if(count($childrenPairs))
         {
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Can not delete the program has children.'));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x',  message: '{$this->lang->program->hasChildren}'})"));
         }
 
         /* The program can NOT be deleted if it has a product. */
-        $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetch('count');
-        if($productCount) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasProduct}');"));
+        $productPairs = $this->program->getProductPairsByID($programID);
+        if(count($productPairs)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x',  message: '{$this->lang->program->hasProduct}'})"));
 
         /* Mark the program is deleted and record the action log. */
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('deleted')->eq('0')->fetch();
-        if($program)
+        if($confirm == 'no')
         {
-            $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq('1')->where('id')->eq($programID)->exec();
-            $this->loadModel('action')->create('program', $programID, 'deleted', '', actionModel::CAN_UNDELETED);
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x',  message: '" . sprintf($this->lang->program->confirmDelete, $program->name) . "'}).then((res) => {if(res) $.ajaxSubmit({url: '" . $this->createLink('program', 'delete', "programID={$programID}&confirm=yes") . "'});});"));
         }
-
-        return $this->send(array('result' => 'success'));
+        else
+        {
+            if($program)
+            {
+                $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq('1')->where('id')->eq($programID)->exec();
+                $this->loadModel('action')->create('program', $programID, 'deleted', '', actionModel::CAN_UNDELETED);
+            }
+            return $this->send(array('result' => 'success', 'load' => true));
+        }
     }
 
     /**
@@ -626,13 +635,22 @@ class program extends control
      */
     public function updateOrder()
     {
-        $programs = $this->post->programs;
-        if(!$programs) return $this->send(array('result' => 'success'));
+        $programIdList = json_decode($this->post->programIdList, true);
+        if(!$programIdList) return $this->send(array('result' => 'success'));
 
-        foreach($programs as $programID => $order) $this->program->updateOrder((int) $programID, (int) $order);
+        asort($programIdList);
+        $programIdList = array_flip($programIdList);
 
-        if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->send(array('result' => 'success'));
+        $oldOrders = $this->dao->select('id,`order`')->from(TABLE_PROJECT)->where('id')->in($programIdList)->orderBy('`order`')->fetchPairs('id', 'order');
+        if(count($programIdList) != count($oldOrders)) return $this->send(array('result' => 'success'));
+
+        $newOrders = array_combine($programIdList, $oldOrders);
+        foreach($newOrders as $programID => $order)
+        {
+            if($order != $oldOrders[$programID]) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($programID)->exec();
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
     }
 
     /*

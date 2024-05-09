@@ -28,12 +28,12 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $bug = zdTable('bug');
+    $bug = zenData('bug');
     $bug->id->range('1-10');
     $bug->status->range("resolved,active,closed");
     $bug->title->prefix("BUG")->range('1-10');

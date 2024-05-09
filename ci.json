@@ -1,22 +1,17 @@
 {
   "pkg": {
     "xuanxuan": {
-      "gitVersion": "f501e962d26241befbe0b18cf770e41e0f49d7e4",
-      "version": "8.0"
+      "gitVersion": "43de52ba50fdb43ac1bc89e623e29e3ecdd4cce1",
+      "version": "8.1"
     },
     "zentaoext": {
-      "gitVersion": "master",
       "gitRepo": "easycorp/zentaoext"
     },
-    "zdoo": {
-      "gitVersion": "master"
-    },
-    "zdooext": {
-      "gitVersion": "master"
-    },
     "downgrade": {
-      "gitVersion": "release-20.0.stable",
       "gitRepo": "devops/zentaopms-downgrade"
+    },
+    "downgradeExt": {
+      "gitRepo": "devops/zentaoext-downgrade"
     }
   },
   "image": {
@@ -44,6 +39,7 @@
       "snapshot": "easycorp-snapshot"
     }
   },
+  "push_version": "true",
   "notice": {
     "users": "qishiyao,hufangzhou,zhujinyong,caoyanyi",
     "groups": "38a4e39b-df5d-4606-a988-e22673bdc358",

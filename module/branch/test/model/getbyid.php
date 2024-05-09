@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/branch.class.php';
+include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
 
-zdTable('product')->config('product')->gen(10);
-zdTable('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
-$branch = zdTable('branch')->config('branch');
+$branch = zenData('branch')->loadYaml('branch');
 $branch->desc->range('分支描述');
 $branch->gen(10);
 

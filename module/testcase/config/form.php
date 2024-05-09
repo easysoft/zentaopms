@@ -30,7 +30,7 @@ $config->testcase->form->create['openedDate']     = array('required' => false, '
 $config->testcase->form->create['auto']           = array('required' => false, 'type' => 'string', 'default' => 'no');
 $config->testcase->form->create['script']         = array('required' => false, 'type' => 'string', 'default' => '');
 
-$config->testcase->form->batchCreate = common::formConfig('testcase', 'batchCreate');
+$config->testcase->form->batchCreate = array();
 $config->testcase->form->batchCreate['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchCreate['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchCreate['scene']        = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -68,7 +68,7 @@ $config->testcase->form->edit['auto']         = array('required' => false, 'type
 $config->testcase->form->edit['script']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->edit['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
-$config->testcase->form->batchEdit = common::formConfig('testcase', 'batchEdit');
+$config->testcase->form->batchEdit = array();
 $config->testcase->form->batchEdit['pri']          = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->batchEdit['status']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchEdit['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -108,7 +108,7 @@ $config->testcase->form->review['result']       = array('required' => true,  'ty
 $config->testcase->form->review['reviewedBy']   = array('required' => false, 'type' => 'array',  'default' => array(''));
 $config->testcase->form->review['comment']      = array('required' => false, 'type' => 'string', 'default' => '');
 
-$config->testcase->form->showImport = common::formConfig('testcase', 'showImport');
+$config->testcase->form->showImport = array();
 $config->testcase->form->showImport['rawID']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->showImport['product']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->showImport['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
@@ -124,7 +124,7 @@ $config->testcase->form->showImport['desc']         = array('required' => false,
 $config->testcase->form->showImport['expect']       = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->showImport['stepType']     = array('required' => false, 'type' => 'array',  'default' => array());
 
-$config->testcase->form->automation = common::formConfig('testcase', 'automation');
+$config->testcase->form->automation = array();
 $config->testcase->form->automation['product']      = array('required' => true,  'type' => 'int',    'default' => 0);
 $config->testcase->form->automation['node']         = array('required' => true,  'type' => 'int',    'default' => 0);
 $config->testcase->form->automation['scriptPath']   = array('required' => true,  'type' => 'string', 'default' => '');

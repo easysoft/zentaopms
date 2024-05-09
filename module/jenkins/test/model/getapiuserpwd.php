@@ -16,10 +16,10 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/jenkins.class.php';
+include dirname(__FILE__, 2) . '/lib/jenkins.unittest.class.php';
 
-zdTable('pipeline')->gen('5');
-zdTable('user')->gen('1');
+zenData('pipeline')->gen('5');
+zenData('user')->gen('1');
 
 su('admin');
 

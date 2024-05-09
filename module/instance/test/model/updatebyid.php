@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('instance')->gen(1);
+zenData('instance')->gen(1);
 
 /**
 

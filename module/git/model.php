@@ -183,14 +183,15 @@ class gitModel extends model
      */
     public function updateCommit(object $repo, array $commentGroup, bool $printLog = true): bool
     {
-        if($repo->SCM == 'Gitlab') return false;
+        $this->loadModel('repo');
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return false;
 
         /* Load module and print log. */
         if($printLog) $this->printLog("begin repo $repo->id");
         if(!$this->setRepo($repo)) return false;
 
         /* Get branches and commits. */
-        $branches = $this->loadModel('repo')->getBranches($repo);
+        $branches = $this->repo->getBranches($repo);
         $commits  = $repo->commits;
 
         $accountPairs = array();
@@ -198,9 +199,9 @@ class gitModel extends model
         {
             $scm           = strtolower($repo->SCM);
             $userList      = $this->loadModel($scm)->apiGetUsers((int)$repo->serviceHost);
-            $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs((int)$repo->serviceHost, $scm, 'openID,account');
+            $accountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs((int)$repo->serviceHost, $scm, 'openID,account');
 
-            foreach($userList as $user) $accountPairs[$user->realname] = zget($acountIDPairs, $user->id, '');
+            foreach($userList as $user) $accountPairs[$user->realname] = zget($accountIDPairs, $user->id, '');
         }
 
         /* Update code commit history. */

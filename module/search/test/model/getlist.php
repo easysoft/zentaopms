@@ -1,28 +1,28 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/search.class.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
-zdTable('task')->gen(10);
-zdTable('bug')->gen(10);
-zdTable('case')->gen(10);
-zdTable('todo')->gen(10);
-zdTable('build')->gen(10);
-zdTable('product')->gen(10);
-zdTable('release')->gen(10);
-zdTable('testtask')->config('testtask')->gen(10);
-zdTable('testsuite')->gen(10);
-zdTable('testreport')->gen(10);
-zdTable('productplan')->gen(10);
-zdTable('project')->gen(100);
-zdTable('storyspec')->gen(10);
-zdTable('doccontent')->gen(10);
+zenData('task')->gen(10);
+zenData('bug')->gen(10);
+zenData('case')->gen(10);
+zenData('todo')->gen(10);
+zenData('build')->gen(10);
+zenData('product')->gen(10);
+zenData('release')->gen(10);
+zenData('testtask')->loadYaml('testtask')->gen(10);
+zenData('testsuite')->gen(10);
+zenData('testreport')->gen(10);
+zenData('productplan')->gen(10);
+zenData('project')->gen(100);
+zenData('storyspec')->gen(10);
+zenData('doccontent')->gen(10);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->version->range('1');
 $story->gen(10);
 
-$doc = zdTable('doc');
+$doc = zenData('doc');
 $doc->version->range('1');
 $doc->gen(10);
 

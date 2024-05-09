@@ -6,11 +6,27 @@
 title=测试 storyModel->batchReview();
 cid=0
 
+- 执行$review1[1]属性status @active
+- 执行$twin属性status @active
+- 执行$review2[2]属性status @closed
+- 执行$reviewList[1]
+ - 属性reviewer @admin
+ - 属性result @pass
+- 执行$reviewList[2]
+ - 属性reviewer @admin
+ - 属性result @reject
+- 执行$reviewList[28]
+ - 属性reviewer @admin
+ - 属性result @pass
+- 执行$reviewList[30]
+ - 属性reviewer @admin
+ - 属性result @pass
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range(1);
 $story->plan->range('0,1,0{100}');
 $story->duplicateStory->range('0,4,0{100}');
@@ -24,12 +40,12 @@ $story->version->range('1');
 $story->reviewedBy->range('``');
 $story->gen(30);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-30');
 $storySpec->version->range('1');
 $storySpec->gen(30);
 
-$storyReview = zdTable('storyreview');
+$storyReview = zenData('storyreview');
 $storyReview->story->range('1-30');
 $storyReview->reviewer->range('admin');
 $storyReview->version->range('1');

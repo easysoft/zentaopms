@@ -24,17 +24,17 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->name->range('项目集1,项目1,项目2,项目3');
 $project->parent->range('0,1{2},0');
 $project->type->range('program,project{3}');
 $project->gen('4');
 
-$line = zdTable('module');
+$line = zenData('module');
 $line->name->range('产品线1');
 $line->type->range('line');
 $line->gen('1');

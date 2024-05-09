@@ -12,10 +12,11 @@ class scm
      */
     public function setEngine($repo)
     {
-        $className = $repo->SCM;
-        if($className == 'Git') $className = 'GitRepo';
-        if(!class_exists($className)) require(strtolower($className) . '.class.php');
-        $this->engine = new $className($repo->client, $className == 'Gitlab' ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
+        $scm = strtolower($repo->SCM);
+        $className = $scm . 'Repo';
+        if($scm == 'git') $scm = 'gitrepo';
+        if(!class_exists($className)) require($scm . '.class.php');
+        $this->engine = new $className($repo->client, in_array($scm, array('gitlab', 'gitfox')) ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
     }
 
     /**
@@ -311,6 +312,43 @@ class scm
     public function getFilesByCommit($revision)
     {
         return $this->engine->getFilesByCommit($revision);
+    }
+
+    /**
+     * Create mr by api.
+     *
+     * @param  object $MR
+     * @param  string $openID
+     * @param  string $assignee
+     * @access public
+     * @return null|object
+     */
+    public function createMR($MR, $openID = '', $assignee = '')
+    {
+        return $this->engine->createMR($MR, $openID, $assignee);
+    }
+
+    /**
+     * Get a mr by api.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function getSingleMR($MRID)
+    {
+        return $this->engine->getSingleMR($MRID);
+    }
+
+    /**
+     * Get pipeline list by api.
+     *
+     * @access public
+     * @return array
+     */
+    public function pipelines()
+    {
+        return $this->engine->pipelines();
     }
 }
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/block.class.php';
+include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $config = zdTable('config');
+    $config = zenData('config');
     $config->id->range('1');
     $config->owner->range('system');
     $config->module->range('sso');

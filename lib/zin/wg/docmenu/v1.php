@@ -16,13 +16,14 @@ class docMenu extends wg
         'settingLink?: string',
         'menuLink: string',
         'title?: string',
+        'preserve?: string|bool',
         'linkParams?: string="%s"',
         'libID?: int=0',
         'moduleID?: int=0',
         'spaceType?: string',
         'objectType?: string',
         'objectID?: int=0',
-        'hover?: bool=true'
+        'hover?: bool=true',
     );
 
     public static function getPageCSS(): ?string
@@ -130,7 +131,7 @@ class docMenu extends wg
                 'hint'        => $setting->name,
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
-                'titleAttrs'  => array('data-app' => $this->tab),
+                'titleAttrs'  => array('data-app' => $this->tab, 'class' => 'item-title w-full'),
                 'data-id'     => $itemID,
                 'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
                 'data-type'   => $setting->type,
@@ -395,49 +396,46 @@ class docMenu extends wg
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
-        $currentModule = $app->rawModule;
-        $currentMethod = $app->rawMethod;
-
         if(!$settingText) $settingText = $lang->moduleSetting;
-
-        $datatableId = $app->moduleName . ucfirst($app->methodName);
 
         return div
         (
             setClass('col gap-2 py-3 px-7'),
-            $settingLink
-                ? a
+            $settingLink ? a
+            (
+                setClass('btn'),
+                setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
+                setStyle('box-shadow', 'none'),
+                set('data-app', $app->tab),
+                set('data-size', array('width' => '600px', 'height' => '200px')),
+                set('data-toggle', 'modal'),
+                set('data-class-name', 'doc-setting-modal'),
+                set::href($settingLink),
+                span
                 (
-                    setClass('btn'),
-                    setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
-                    setStyle('box-shadow', 'none'),
-                    set('data-app', $app->tab),
-                    set('data-size', array('width' => '600px', 'height' => '200px')),
-                    set('data-toggle', 'modal'),
-                    set::href($settingLink),
-                    span
-                    (
-                        setClass('text-primary'),
-                        $settingText
-                    )
+                    setClass('text-primary'),
+                    $settingText
                 )
-                : null
+            ) : null
         );
     }
 
     protected function build(): array
     {
+        global $app;
+
         $this->setMenuTreeProps();
         $title     = $this->getTitle();
         $menuLink  = $this->prop('menuLink', '');
         $objectID  = $this->prop('objectID', 0);
         $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
+        $preserve  = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
 
         $isInSidebar = $this->parent instanceof sidebar;
 
         $header = h::header
         (
-            setClass('module-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
+            setClass('doc-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
             span
             (
                 setClass('module-title text-lg font-semibold clip'),
@@ -459,17 +457,23 @@ class docMenu extends wg
                 ) : null,
                 div
                 (
-                    setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
+                    setClass('doc-menu rounded shadow ring bg-white col'),
                     h::main
                     (
                         setClass($menuLink ? 'pt-3' : ''),
-                        setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                        setClass('col scrollbar-thin scrollbar-hover  flex-auto overflow-y-auto overflow-x-hidden pl-2 pr-1 py-1'),
                         setStyle('--menu-selected-bg', 'none'),
-                        zui::tree(set::_tag('menu'), $treeProps)
+                        zui::tree
+                        (
+                            set::_tag('menu'),
+                            set::lines(),
+                            set::preserve($preserve),
+                            $treeProps
+                        )
                     ),
                     $this->buildBtns()
                 ),
-                $isInSidebar ? h::js("$('#mainContainer').addClass('has-module-menu-header')") : null
+                $isInSidebar ? h::js("$('#mainContainer').addClass('has-doc-menu-header')") : null
             )
         );
     }

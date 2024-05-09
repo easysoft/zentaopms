@@ -12,7 +12,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/gitea.class.php';
+include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
 
 $giteaModel = new giteaTest();
 

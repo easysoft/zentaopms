@@ -251,7 +251,7 @@ class productZen extends product
         if(isset($fields['RD']))      $fields['RD']['options']      = $rdUsers;
         if(isset($fields['groups']))  $fields['groups']['options']  = $this->loadModel('group')->getPairs();
         if(isset($fields['program'])) $fields['program']['options'] = $this->loadModel('program')->getTopPairs('noclosed');
-        if($programID and isset($fields['line'])) $fields['line']['options'] = $this->product->getLinePairs($programID);
+        if(isset($fields['line']))    $fields['line']['options'] = $this->product->getLinePairs($programID, true);
 
         return $fields;
     }
@@ -382,7 +382,7 @@ class productZen extends product
         /* Collect product lines of program lines. */
         $linePairs = array();
         foreach($programIdList as $programID) $linePairs[$programID] = array();
-        foreach($productLines as $programID => $line) $linePairs[$programID][$line->id] = $line->name;
+        foreach($productLines as $line) $linePairs[$line->root][$line->id] = $line->name;
 
         return array($productLines, $linePairs);
     }
@@ -396,13 +396,9 @@ class productZen extends product
      */
     protected function getExportFields(): array
     {
-        $productLang   = $this->lang->product;
-        $productConfig = $this->config->product;
-
-        /* 获取字段语言项。 */
-        $fields     = explode(',', $productConfig->list->exportFields);
-        $fieldPairs = array();
-        foreach($fields as $fieldName)
+        $fieldList       = $this->loadModel('datatable') ->getSetting('product', 'all');
+        $extendFieldList = $this->product->getFlowExtendFields();
+        foreach($extendFieldList as $field => $name)
         {
             if(str_contains(strtolower($fieldName), 'epic') && !$this->config->enableER) continue;
             if(str_contains(strtolower($fieldName), 'requirement') && !$this->config->URAndSR) continue;
@@ -410,8 +406,16 @@ class productZen extends product
             $fieldName = trim($fieldName);
             $fieldPairs[$fieldName] = zget($productLang, $fieldName);
 
-            if($this->config->systemMode == 'light' && ($fieldName == 'line' or $fieldName == 'program')) unset($fieldPairs[$fieldName]);
+            $extCol = $config->product->dtable->extendField;
+            $extCol['name']  = $field;
+            $extCol['title'] = $name;
+
+            $fieldList[$field] = $extCol;
         }
+
+        $fieldPairs = array();
+        foreach($fieldList as $fieldKey => $field) $fieldPairs[$fieldKey] = $field['title'];
+        if($this->config->systemMode == 'light') unset($fieldPairs['productLine'], $fieldPairs['program']);
 
         return $fieldPairs;
     }
@@ -421,66 +425,23 @@ class productZen extends product
      * Get export product data.
      *
      * @param  int       $programID
-     * @param  string    $status
+     * @param  string    $browseType
      * @param  string    $orderBy
      * @param  int       $param
+     * @param  object    $pager
      * @access protected
      * @return array
      */
-    protected function getExportData(int $programID, string $status, string $orderBy, int $param = 0): array
+    protected function getExportData(int $programID, string $browseType, string $orderBy, int $param = 0, object|null $pager = null): array
     {
-        $lines        = $this->product->getLinePairs();
         $users        = $this->user->getPairs('noletter');
-        $products     = strtolower($status) == 'bysearch' ? $this->product->getListBySearch($param) : $this->product->getList($programID, $status);
-        $productStats = $this->product->getStats(array_keys($products), $orderBy, null, $status);
+        $products     = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch((int)$param) : $this->product->getList($programID, $browseType);
+        $productStats = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story', $programID);
 
-        foreach($productStats as $product)
-        {
-            $product->line              = zget($lines, $product->line, '');
-            $product->manager           = zget($users, $product->PO, '');
-            $product->changedStories    = (int)$product->changingStories;
-            $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
-            $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
-            $product->unResolvedBugs    = (int)$product->unresolvedBugs;
-            $product->program           = $product->programName;
-        }
+        $data = array();
+        foreach($productStats as $product) $data[] = $this->product->formatDataForList($product, $users);
 
-        return $productStats;
-    }
-
-    /**
-     * 获取导出的合并单元格信息。
-     * Get rowspan for export.
-     *
-     * @param  array $products
-     * @access protected
-     * @return array
-     */
-    protected function getExportRowspan(array $products): array
-    {
-        $lastRecord = array('program' => '', 'line' => '');
-        $colIndexs  = array('program' => 0,  'line' => 0);
-        $rowspan    = array();
-
-        foreach($products as $i => $product)
-        {
-            foreach($lastRecord as $field => $lastID)
-            {
-                if($product->{$field} !== $lastID)
-                {
-                    $rowspan[$i]['rows'][$field] = 1;
-                    $colIndexs[$field] = $i;
-                }
-                else
-                {
-                    $colIndex = $colIndexs[$field];
-                    $rowspan[$colIndex]['rows'][$field] ++;
-                }
-                $lastRecord[$field] = $product->{$field};
-            }
-        }
-
-        return $rowspan;
+        return $data;
     }
 
     /**
@@ -647,7 +608,7 @@ class productZen extends product
     protected function buildProductForActivate(): object
     {
         $productData = form::data($this->config->product->form->activate)
-            ->setIF($this->config->vision == 'or', 'wait', 'normal')
+            ->setIF($this->config->vision == 'or', 'status', 'normal')
             ->get();
 
         return $this->loadModel('file')->processImgURL($productData, $this->config->product->editor->activate['id'], $this->post->uid);
@@ -678,20 +639,12 @@ class productZen extends product
     {
         $data = $form->get();
 
-        /* When there are products under the line, the program cannot be modified  */
-        if(!$this->canChangeProgram($data)) return false;
-
         /* 拼装产品线列表。列表项目集编号为键，该项目集下的产品线名称列表为值。 */
         /* Build product line list. The program id as key, line name list as value. */
         $lines = array();
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
-            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and empty($data->programs[$id]))
-            {
-                dao::$errors["programs[{$id}]"] = $this->lang->product->programEmpty;
-                return false;
-            }
 
             $programID = $data->programs[$id];
             if(!isset($lines[$programID])) $lines[$programID] = array();
@@ -907,9 +860,10 @@ class productZen extends product
 
         /* If invoked by projectstory module and not choose product, then get the modules of project story. */
         if(!isset($this->tree)) $this->loadModel('tree');
-        if(!empty($projectID) && $this->app->rawModule == 'projectstory')
+        $project = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
+        if(!empty($projectID) && !empty($project->hasProduct) && $this->app->rawModule == 'projectstory')
         {
-            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink), array('storyType' => $storyType));
         }
 
         /* Pre generate parameters. */
@@ -924,14 +878,13 @@ class productZen extends product
      * Get products of the project.
      *
      * @param  int       $projectID
-     * @param  string    $storyType
      * @param  bool      $isProjectStory
      * @access protected
      * @return array
      */
-    protected function getProjectProductList(int $projectID, string $storyType, bool $isProjectStory): array
+    protected function getProjectProductList(int $projectID, bool $isProjectStory): array
     {
-        if($isProjectStory && $storyType == 'story') return $this->product->getProducts($projectID);
+        if($isProjectStory) return $this->product->getProducts($projectID);
 
         return array();
     }
@@ -1162,7 +1115,6 @@ class productZen extends product
 
         /* Save browse type into session for buildSearchForm. */
         if($browseType != 'bymodule' && $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
-        if(($browseType == 'bymodule' || $browseType == 'bybranch') && $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
     }
 
     /**
@@ -1184,6 +1136,8 @@ class productZen extends product
     {
         if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
 
+        if($this->config->edition == 'ipd' && $storyType == 'story') unset($this->config->product->search['fields']['roadmap']);
+
         if(isset($project->hasProduct) && empty($project->hasProduct))
         {
             /* The none-product project don't need display the product in the search form. */
@@ -1198,11 +1152,17 @@ class productZen extends product
             }
         }
 
+        if($this->config->edition == 'ipd' && $storyType == 'requirement')
+        {
+            $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+        }
+
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&" : '';
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
 
         $this->config->product->search['onMenuBar'] = 'yes';
+        if($this->app->rawModule != 'product') $this->config->product->search['module'] = $this->app->rawModule;
         $queryID = ($browseType == 'bysearch') ? $param : 0;
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $projectID);
     }
@@ -1399,39 +1359,6 @@ class productZen extends product
     }
 
     /**
-     * 如果修改产品线的项目集，检查该产品线下是否有关联产品。如果有关联产品将不能修改项目集。
-     * If the program of a product line changed, check whether there are related products under the product line. If there is an associated product, the program can not be modified.
-     *
-     * @param  object    $lines
-     * @access protected
-     * @return bool
-     */
-    protected function canChangeProgram(object $lines): bool
-    {
-        if(!in_array($this->config->systemMode, array('ALM', 'PLM'))) return true;
-
-        /* 获取修改项目集的产品线。 */
-        /* Get the product lines which program change. */
-        $oldLines = $this->product->getLines();
-        $changedProgramLines = array();
-        foreach($oldLines as $oldLine)
-        {
-            $oldLineID = 'id' . $oldLine->id;
-            if($lines->programs[$oldLineID] != $oldLine->root) $changedProgramLines[$oldLine->id] = $oldLine->name;
-        }
-
-        /* 检查修改项目集的产品线下是否有关联产品。 */
-        /* Check whether there are related products under the product line. */
-        if($changedProgramLines)
-        {
-            $hasProductLines = $this->dao->select('id,line')->from(TABLE_PRODUCT)->where('line')->in(array_keys($changedProgramLines))->fetchPairs('line', 'line');
-            foreach($hasProductLines as $lineID) dao::$errors["id{$lineID}"][] = sprintf($this->lang->product->changeLineError, $changedProgramLines[$lineID]);
-            if(dao::isError()) return false;
-        }
-        return true;
-    }
-
-    /**
      * 设置需求列表数据。
      * Set the data of requirement list.
      *
@@ -1452,7 +1379,7 @@ class productZen extends product
         $projectID       = $project ? (int)$project->id : 0;
         $productName     = ($isProjectStory && empty($product)) ? $this->lang->product->all : $this->products[$productID];
         $storyIdList     = $this->getStoryIdList($stories);
-        $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
+        $projectProducts = $this->getProjectProductList($projectID, $isProjectStory);
         list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
 
         $gradeList  = $this->loadModel('story')->getGradeList('');
@@ -1463,7 +1390,7 @@ class productZen extends product
         $showModule = empty($this->config->product->browse->showModule) ? 0 : $this->config->product->browse->showModule;
         if($isProjectStory) $showModule = empty($this->config->projectstory->story->showModule) ? 0 : $this->config->projectstory->story->showModule;
 
-        $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
+        $this->view->title           = $productName . $this->lang->hyphen . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
         $this->view->productID       = $productID;
         $this->view->product         = $product;
         $this->view->projectID       = $projectID;
@@ -1489,12 +1416,13 @@ class productZen extends product
 
         $storyType = $isProjectStory ? 'all' : $storyType;
         $this->view->summary    = $this->product->summary($stories, $storyType);
-        $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' || empty($branch)) ? '' : $branch, 'unexpired,noclosed', true);
+        $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, isset($projectProducts[$productID]) ? array(BRANCH_MAIN) + $projectProducts[$productID]->branches : (($branch === 'all' || empty($branch)) ? '' : $branch), 'unexpired,noclosed', true);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->modules    = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+        $this->view->roadmaps   = ($this->config->edition == 'ipd' && $storyType == 'requirement') ? $this->loadModel('roadmap')->getPairs($product->id) : array();
 
         $this->display();
     }

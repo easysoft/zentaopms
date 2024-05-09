@@ -45,7 +45,7 @@ if(empty($libTree))
             )
         )
     );
-    render();
+    renderPage();
     return;
 }
 
@@ -68,11 +68,12 @@ if($app->rawModule == 'api')
         ))) : null,
         $libID && common::hasPriv('api', 'releases') ? item(set(array
         (
-            'icon'        => 'version',
-            'class'       => 'ghost',
-            'text'        => $lang->api->releases,
-            'url'         => createLink('api', 'releases', "libID={$libID}"),
-            'data-toggle' => 'modal'
+            'icon'            => 'version',
+            'class'           => 'ghost',
+            'text'            => $lang->api->releases,
+            'url'             => createLink('api', 'releases', "libID={$libID}"),
+            'data-toggle'     => 'modal',
+            'data-class-name' => 'releaseModal'
         ))) : null,
         $libID && common::hasPriv('api', 'createRelease') ? item(set(array
         (

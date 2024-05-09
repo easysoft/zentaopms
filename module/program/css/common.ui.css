@@ -1,4 +1,2 @@
 .items-center {align-items: center !important}
 #ignore {text-decoration: underline; cursor: pointer; color: #ef7b0f; padding-left: 5px;}
-
-.form-group[data-name=budget] .has-prefix .input-control-prefix {padding: 0}

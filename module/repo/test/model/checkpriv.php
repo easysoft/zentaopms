@@ -1,8 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
-su('admin');
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 /**
 
@@ -19,10 +18,11 @@ cid=1
 
 */
 
-zdTable('user')->gen(10);
-zdTable('project')->gen(20);
-zdTable('product')->gen(5);
-zdTable('repo')->config('repo')->gen(5);
+zenData('user')->gen(10);
+zenData('project')->gen(20);
+zenData('product')->gen(5);
+zenData('repo')->loadYaml('repo')->gen(5);
+su('admin');
 
 $checkPriv = new repoTest();
 

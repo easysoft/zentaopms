@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/job.class.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 su('admin');
 
 /**
@@ -16,8 +16,8 @@ cid=1
 
 */
 
-zdTable('pipeline')->config('pipeline')->gen(5);
-zdTable('job')->config('job')->gen(5);
+zenData('pipeline')->loadYaml('pipeline')->gen(5);
+zenData('job')->loadYaml('job')->gen(5);
 
 $jenkins1 = new stdclass();
 $jenkins1->url      = 'pms.cc.cc';

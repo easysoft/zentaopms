@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 /**
@@ -13,7 +13,7 @@ timeout=0
 cid=1
 
 */
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range('1-3');
 $bug->product->range('1-3');
 $bug->title->prefix("Bug")->range('1-3');

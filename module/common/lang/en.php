@@ -15,7 +15,8 @@ include (dirname(__FILE__) . '/common.php');
 global $config;
 
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '-';
+$lang->colon     = ': ';
+$lang->hyphen    = '-';
 $lang->comma     = ',';
 $lang->dot       = '.';
 $lang->at        = ' on ';
@@ -99,6 +100,7 @@ $lang->all                = 'All';
 $lang->viewDetails        = 'View Details';
 $lang->childrenAB         = 'C';
 $lang->branchName         = 'Branch/Platform';
+$lang->recommend          = 'Recommend';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Reset';
@@ -121,6 +123,7 @@ $lang->importSuccess   = 'Saved';
 $lang->fail            = 'Fail';
 $lang->addFiles        = 'Added Files ';
 $lang->deleteSuccess   = 'Deleted Success';
+$lang->deleted         = 'Deleted';
 $lang->files           = 'Files ';
 $lang->pasteText       = 'Multi-line Paste';
 $lang->uploadImages    = 'Multi-image Upload';
@@ -186,6 +189,13 @@ $lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
+
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = 'If you have any questions, please contact us.';
+$lang->contactUs->phone  = 'Phone';
+$lang->contactUs->email  = 'Email';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Common Module';
 $lang->common->story        = 'Story';
@@ -468,12 +478,6 @@ $lang->visionList = array();
 $lang->visionList['rnd']  = 'Full Feature Interface';
 $lang->visionList['lite'] = 'Operation Management Interface';
 
-if($config->edition == 'ipd')
-{
-    $lang->visionList['or']   = 'OR & MM Interface';
-    $lang->visionList['rnd']  = 'IPD Interface';
-}
-
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
 $lang->createObjects['bug']         = 'Bug';
@@ -589,6 +593,9 @@ $lang->chooseUsersToMail  = "Choose users that will be notified.";
 $lang->noticePasteImg     = "You can paste images into the editor.";
 $lang->pasteImgFail       = "Failed to paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";
+
+$lang->visionTips = "You can switch vision here";
+$lang->IKnow      = "I know";
 
 /* Time formats settings. */
 if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');

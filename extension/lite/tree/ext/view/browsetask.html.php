@@ -26,7 +26,7 @@ li.story-item > .tree-actions .tree-action[data-type=delete] {display: none;}
     </a>
     <div class="divider"></div>
     <div class="page-title">
-      <span class='text' title='<?php echo $root->name;?>'><?php echo $lang->tree->common . $lang->colon . $root->name;?></span>
+      <span class='text' title='<?php echo $root->name;?>'><?php echo $lang->tree->common . $lang->hyphen . $root->name;?></span>
     </div>
   </div>
 </div>

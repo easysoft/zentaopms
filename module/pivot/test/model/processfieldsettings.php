@@ -13,7 +13,7 @@ id为1003的透视表,存在BSA字段，判断更新的BSA配置是否正确。 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 global $tester;
 $pivotTest = new pivotTest();

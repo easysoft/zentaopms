@@ -6,10 +6,11 @@
  * @access public
  * @return void
  */
-window.setRole = function(account, roleID)
+window.setRole = function(e, roleID)
 {
-    const role  = roles[account];
-    const $role = $('#role' + roleID);
+    const account = $(e.target).val();
+    const role    = roles[account];
+    const $role   = $('#role' + roleID);
     $role.val(role);
 
     let members    = [];

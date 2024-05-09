@@ -54,7 +54,7 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/search.class.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 su('admin');
 
 $typeList   = array('all', array('project', 'story', 'bug'));

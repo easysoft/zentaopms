@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->editSnapshot().
+timeout=0
 cid=1
 
 - 测试编辑快照
@@ -14,10 +16,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('image')->config('image')->gen(1);
-zdTable('user')->gen(5);
+zenData('image')->loadYaml('image')->gen(1);
+zenData('user')->gen(5);
 su('admin');
 
 $snapshot = new stdclass();

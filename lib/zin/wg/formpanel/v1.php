@@ -38,6 +38,8 @@ class formPanel extends panel
         'formID?: string="$GID"',                      // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
         'formClass?: string',                          // 表单样式。
         'method?: "get"|"post"="post"',                // 表单提交方式。
+        'enctype?: string',                            // 表单提交类型。
+        'tagName?: string="form"',                     // 表单标签名。
         'url?: string',                                // 表单提交地址。
         'actions?: array',                             // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string="form-group no-label"', // 表单操作按钮栏类名。
@@ -62,7 +64,8 @@ class formPanel extends panel
         'foldableItems?: array|string',                // 可折叠的表单项。
         'pinnedItems?: array|string',                  // 固定显示的表单项。
         'customBtn?: array|bool',                      // 是否显示表单自定义按钮。
-        'customFields?: array=[]'                      // @deprecated 自定义表单项。
+        'customFields?: array=[]',                     // @deprecated 自定义表单项。
+        'showExtra?: bool=true'                        // 是否显示工作流字段。
     );
 
     public static function getPageJS(): ?string
@@ -72,6 +75,14 @@ class formPanel extends panel
 
     protected function created()
     {
+        $fields = $this->prop('fields');
+        if(is_object($fields))
+        {
+            global $app;
+            $fields = $app->control->appendExtendFields($fields);
+            $this->setProp('fields', $fields);
+        }
+
         $customFields = $this->prop('customFields');
         if($customFields === true)
         {
@@ -147,7 +158,8 @@ class formPanel extends panel
 
             if($listFields && $key)
             {
-                $urlParams        = "module={$app->rawModule}&section=custom&key={$key}";
+                /* Custom button submit params. */
+                $urlParams        = $this->prop('customUrlParams') ? $this->prop('customUrlParams') : "module={$app->rawModule}&section=custom&key={$key}";
                 $headingActions[] = formSettingBtn
                 (
                     set::customFields(array('list' => $listFields, 'show' => $showFields)),
@@ -159,6 +171,65 @@ class formPanel extends panel
         }
 
         return parent::buildHeadingActions();
+    }
+
+    protected function buildExtraMain()
+    {
+        global $app;
+
+        $layout = $this->prop('layout');
+        if($layout == 'grid') return null;
+
+        $data      = data($app->getModuleName());
+        $fields    = $app->control->appendExtendForm('info', $data);
+        $extraMain = array();
+        foreach($fields as $field)
+        {
+            $extraMain[] = formGroup
+            (
+                $field->control == 'file' && $data->files ? fileList
+                (
+                    set::files($data->files),
+                    set::extra($field->field),
+                    set::fieldset(false),
+                    set::showEdit(true),
+                    set::showDelete(true)
+                ) : null,
+                set::width($field->width),
+                set::label($field->name),
+                set::id($field->field),
+                set::name($field->field),
+                set::required($field->required),
+                set::disabled((bool)$field->readonly),
+                set::control($field->control),
+                set::items($field->items),
+                set::value($field->value)
+            );
+        }
+        return $extraMain;
+    }
+
+    protected function buildExtraBatchItem()
+    {
+        global $app;
+
+        $data   = data($app->getModuleName());
+        $fields = $app->control->appendExtendForm('info', $data);
+
+        $formBatchItem = array();
+        foreach($fields as $field)
+        {
+            $formBatchItem[] = formBatchItem
+            (
+                set::name($field->field),
+                set::label($field->name),
+                set::required($field->required),
+                set::control($field->control),
+                set::items($field->items),
+                set::width('200px')
+            );
+        }
+        return $formBatchItem;
     }
 
     /**
@@ -185,6 +256,8 @@ class formPanel extends panel
                 set::id($formID),
                 set($this->props->pick(array_keys($props))),
                 $this->children(),
+                $this->prop('showExtra') ? $this->buildExtraBatchItem() : null,
+                set::hiddenFields($hiddenFields),
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
             );
@@ -203,6 +276,7 @@ class formPanel extends panel
             set::className($this->prop('formClass')),
             set($this->props->pick($formProps)),
             $this->children(),
+            $this->buildExtraMain(),
             $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
         );
     }
@@ -219,8 +293,8 @@ class formPanel extends panel
         $props = parent::buildProps();
         $props[] = setClass("is-$defaultMode");
 
-        if($width)     $props[] = setCssVar('--zt-page-form-max-width', $width);
-        elseif($batch) $props[] = setCssVar('--zt-page-form-max-width', 'auto');
+        if($width)     $props[] = setCssVar('--zt-panel-form-max-width', $width);
+        elseif($batch) $props[] = setCssVar('--zt-panel-form-max-width', 'auto');
         if($shadow)    $props[] = setClass('shadow');
 
         return $props;
@@ -234,11 +308,14 @@ class formPanel extends panel
      */
     protected function buildBody(): node
     {
+        global $app;
+
         return div
         (
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
-            $this->buildContainer($this->buildForm())
+            $this->buildContainer($this->buildForm()),
+            html($app->control->appendExtendCssAndJS())
         );
     }
 }

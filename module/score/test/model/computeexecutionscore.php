@@ -15,10 +15,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/score.class.php';
+include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('project')->config('project')->gen(5);
+zenData('user')->gen(5);
+zenData('project')->loadYaml('project')->gen(5);
 
 $executionIds = array(0, 101, 110);
 $methods      = array('close', 'start');

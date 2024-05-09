@@ -19,6 +19,11 @@ class globalSearch extends wg
         $searchItems = array();
         $searchItems[] = array('key' => 'search', 'text' => $lang->searchAB . ' {0}');
         foreach($lang->searchObjects as $key => $module) $searchItems[] = array('key' => $key, 'text' => $module . ' #{0}');
+        $searchItemsEncoded = json_encode($searchItems);
+
+        pageJS(<<<JS
+            window.getSearchItems = () => JSON.parse(`{$searchItemsEncoded}`);
+        JS);
 
         return zui::globalSearch
         (
@@ -28,7 +33,7 @@ class globalSearch extends wg
             set::searchHint($lang->searchAB),
             set::popPlacement('top-start'),
             set::popWidth(240),
-            set::searchBox(array('circle' => true, 'prefixClass' => 'text-primary opacity-100')),
+            set::searchBox(array('circle' => true, 'prefixClass' => 'text-primary opacity-100', 'className' => 'size-md')),
             set::getSearchType(jsRaw('window.getGlobalSearchType')),
             set::onSearch(jsRaw('window.handleGlobalSearch')),
             inherit($this)

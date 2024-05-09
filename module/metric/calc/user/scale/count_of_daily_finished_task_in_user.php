@@ -26,6 +26,19 @@ class count_of_daily_finished_task_in_user extends baseCalc
 
     public $result = array();
 
+    public $supportSingleQuery = true;
+
+    public function singleQuery()
+    {
+        $select = "`finishedBy`, YEAR(`finishedDate`) as `year`, MONTH(`finishedDate`) as `month`, DAY(`finishedDate`) as `day`, COUNT(`finishedBy`) as `value`";
+        return $this->dao->select($select)->from($this->getSingleSql())
+            ->where('`projectStatus`')->ne('suspended')
+            ->andWhere('`executionStatus`')->ne('suspended')
+            ->andWhere('`finishedDate` IS NOT NULL')
+            ->groupBy("`finishedBy`, `year`, `month`, `day`")
+            ->fetchAll();
+    }
+
     public function calculate($row)
     {
         $finishedDate = $row->finishedDate;

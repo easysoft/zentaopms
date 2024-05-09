@@ -1,15 +1,15 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-zdTable('case')->gen('20');
-zdTable('story')->gen('20');
-zdTable('project')->gen('100', true, false);
-zdTable('project')->config('execution')->gen('100', false, false);
-zdTable('projectcase')->gen('100');
-zdTable('projectstory')->gen('4');
-zdTable('user')->gen('1');
+zenData('case')->gen('20');
+zenData('story')->gen('20');
+zenData('project')->gen('100', true, false);
+zenData('project')->loadYaml('execution')->gen('100', false, false);
+zenData('projectcase')->gen('100');
+zenData('projectstory')->gen('4');
+zenData('user')->gen('1');
 
 su('admin');
 

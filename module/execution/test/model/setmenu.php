@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目集1,项目1,迭代1,阶段1,看板1');
 $execution->type->range('execution,project,sprint,stage,kanban');

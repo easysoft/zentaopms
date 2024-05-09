@@ -1,15 +1,21 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
 
 /**
 
 title=测试 storyModel->replaceURLang();
-cid=1
-pid=1
+cid=0
+
+- 查看更换语言之前的create属性create @提研发需求
+- 查看更换语言之前的create属性create @提用户需求
+- 查看更换语言之前的common属性common @研发需求
+- 查看更换语言之前的common属性common @用户需求
+- 查看更换语言之前的title属性title @研发需求名称
+- 查看更换语言之前的title属性title @用户需求名称
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

@@ -135,6 +135,13 @@ detailBody
         section
         (
             set::title($lang->files),
+            $task->files ? fileList
+            (
+                set::files($task->files),
+                set::fieldset(false),
+                set::showEdit(true),
+                set::showDelete(true)
+            ) : null,
             fileSelector()
         ),
         formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)
@@ -142,6 +149,7 @@ detailBody
     history(),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             setClass('mt-5'),
@@ -162,6 +170,7 @@ detailBody
             ),
             item
             (
+                set::trClass('moduleTR'),
                 set::name($lang->task->module),
                 set::required(strpos(",{$this->config->task->edit->requiredFields},", ",module,") !== false),
                 formGroup
@@ -206,7 +215,7 @@ detailBody
                     set::value($task->parent),
                     set::items($tasks)
                 )
-            ) : null,
+            ) : formHidden('parent', $task->parent),
             empty($modeText) ? item
             (
                 set::name($lang->task->mode),
@@ -329,8 +338,8 @@ detailBody
                         setClass('text-left'),
                         h::th(),
                         h::th($lang->task->teamMember),
-                        h::th($lang->task->estimate),
-                        h::th($lang->task->consumedAB),
+                        !empty($task->team) ? h::th($lang->task->estimate) : null,
+                        !empty($task->team) ? h::th($lang->task->consumedAB) : null,
                         h::th($lang->task->left)
                     ),
                     $teamForm,
@@ -392,7 +401,7 @@ detailBody
                         (
                             set::name('estimate'),
                             set::value($task->estimate),
-                            !empty($task->team) ? set::readonly(true) : null
+                            !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
                         ),
                         to::suffix($lang->task->suffixHour),
                         set::suffixWidth(20)
@@ -411,13 +420,13 @@ detailBody
                         setID('consumedSpan'),
                         $task->consumed . $lang->task->suffixHour
                     ),
-                    btn
+                    common::hasPriv('task', 'recordWorkhour') ? btn
                     (
-                        setClass('ghost text-primary'),
+                        setClass('ghost text-primary', !empty($task->children) ? 'disabled' : true),
                         icon('time'),
                         set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
                         setData('toggle', 'modal')
-                    ),
+                    ) : null,
                     formHidden('consumed', $task->consumed)
                 )
             ),
@@ -432,7 +441,7 @@ detailBody
                         (
                             set::name('left'),
                             set::value($task->left),
-                            !empty($task->team) ? set::readonly(true) : null
+                            !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
                         ),
                         to::suffix($lang->task->suffixHour),
                         set::suffixWidth(20)

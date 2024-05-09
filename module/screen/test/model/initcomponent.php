@@ -1,21 +1,25 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 /**
-title=测试 screenModel->initComponent();
-cid=1
-pid=1
 
-当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表类型为组件的设置类型。   >> xline
-当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表id为组件的设置id。       >> 1000
-当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表名称为组件的设置名称。   >> test chart
-当图表为自定义图表时, 判断是否正确生成了option对象。                                     >> 1
-当图表为自定义图表时，判断是否正确生成了option->dataset对象。                            >>1
-当图表为自定义图表时，组件的设置名称为图表的名称。                                       >> test chart
-当图表为自定义图表时，组件的设置id为图表的id。                                           >> 1
+title=测试 screenModel->initComponent();
+timeout=0
+cid=1
+
+- 当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表类型为组件的设置类型。 @xline
+- 当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表id为组件的设置id。 @1000
+- 当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表名称为组件的设置名称。 @test chart
+- 当图表为自定义图表时, 判断是否正确生成了option对象。 @1
+- 当图表为自定义图表时，判断是否正确生成了option->dataset对象。 @1
+- 当图表为自定义图表时，组件的设置名称为图表的名称。 @test chart
+- 当图表为自定义图表时，组件的设置id为图表的id。 @1
+
 */
+
+zenData('screen')->gen(0);
 
 $screen = new screenTest();
 

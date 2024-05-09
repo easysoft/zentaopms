@@ -309,22 +309,37 @@ class installZen extends install
         /* Set the session save path when the session save path is null. */
         $customSession = $this->setSessionPath();
         $configContent = <<<EOT
-        <?php
-        \$config->installed     = (bool)getenv('ZT_INSTALLED');
-        \$config->debug         = (int)getenv('ZT_DEBUG');
-        \$config->requestType   = getenv('ZT_REQUEST_TYPE');
-        \$config->timezone      = getenv('ZT_TIMEZONE');
-        \$config->db->driver    = getenv('ZT_DB_DRIVER');
-        \$config->db->host      = getenv('ZT_DB_HOST');
-        \$config->db->port      = getenv('ZT_DB_PORT');
-        \$config->db->name      = getenv('ZT_DB_NAME');
-        \$config->db->user      = getenv('ZT_DB_USER');
-        \$config->db->encoding  = getenv('ZT_DB_ENCODING');
-        \$config->db->password  = getenv('ZT_DB_PASSWORD');
-        \$config->db->prefix    = getenv('ZT_DB_PREFIX');
-        \$config->webRoot       = getWebRoot();
-        \$config->default->lang = getenv('ZT_DEFAULT_LANG');
-        EOT;
+<?php
+\$config->installed     = (bool)getenv('ZT_INSTALLED');
+\$config->debug         = (int)getenv('ZT_DEBUG');
+\$config->requestType   = getenv('ZT_REQUEST_TYPE');
+\$config->timezone      = getenv('ZT_TIMEZONE');
+\$config->db->driver    = getenv('ZT_DB_DRIVER');
+\$config->db->host      = getenv('ZT_DB_HOST');
+\$config->db->port      = getenv('ZT_DB_PORT');
+\$config->db->name      = getenv('ZT_DB_NAME');
+\$config->db->user      = getenv('ZT_DB_USER');
+\$config->db->encoding  = getenv('ZT_DB_ENCODING');
+\$config->db->password  = getenv('ZT_DB_PASSWORD');
+\$config->db->prefix    = getenv('ZT_DB_PREFIX');
+\$config->webRoot       = getWebRoot();
+\$config->default->lang = getenv('ZT_DEFAULT_LANG');
+
+\$hasSlaveDB = (string)getenv('ENABLE_DB_SLAVE');
+if(\$hasSlaveDB && \$hasSlaveDB != 'false')
+{
+    \$slaveDB = new stdclass();
+    \$slaveDB->host        = getenv('ZT_SLAVE_DB_HOST');
+    \$slaveDB->port        = getenv('ZT_SLAVE_DB_PORT');
+    \$slaveDB->name        = getenv('ZT_SLAVE_DB_NAME');
+    \$slaveDB->user        = getenv('ZT_SLAVE_DB_USER');
+    \$slaveDB->password    = getenv('ZT_SLAVE_DB_PASSWORD');
+    \$slaveDB->driver      = getenv('ZT_DB_DRIVER');
+    \$slaveDB->encoding    = getenv('ZT_DB_ENCODING');
+    \$slaveDB->prefix      = getenv('ZT_DB_PREFIX');
+    \$config->slaveDBList  = array(\$slaveDB);
+}
+EOT;
 
         if($customSession) $configContent .= "\n\$config->customSession = true;";
 

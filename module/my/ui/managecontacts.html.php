@@ -12,27 +12,20 @@ namespace zin;
 
 $listID = isset($list->id) ? $list->id : 0;
 
-$myContactList     = array();
-$publicContactList = array();
+$myContactList      = array();
+$publicContactList  = array();
+$isActivePublicList = false;
 foreach($lists as $contactList)
 {
+    $selected = $listID == $contactList->id;
     if($contactList->account == $app->user->account)
     {
-        $myContactList[] = li
-        (
-            setClass('contact ellipsis pl-2 ' . ($listID == $contactList->id ? 'active' : '')),
-            set('data-id', $contactList->id),
-            $contactList->listName
-        );
+        $myContactList[] = array('text' => $contactList->listName, 'url' => createLink('my', 'manageContacts', "listID=$contactList->id"), 'selected' => $selected);
     }
     else if($contactList->public)
     {
-        $publicContactList[] = li
-        (
-            setClass('contact ellipsis pl-2'),
-            set('data-id', $contactList->id),
-            $contactList->listName
-        );
+        $publicContactList[] = array('text' => $contactList->listName, 'url' => createLink('my', 'manageContacts', "listID=$contactList->id"), 'selected' => $selected);
+        if($selected) $isActivePublicList = true;
     }
 }
 
@@ -42,63 +35,49 @@ if(!empty($list->userList))
     foreach(explode(',', $list->userList) as $account) $userList[] = zget($users, $account);
 }
 
-panel
+div
 (
-    set::shadow(false),
-    setClass('panel-form px-4 mx-auto size-lg'),
-    on::click('#createContact', 'createContact'),
-    on::click('.contact', 'getContact'),
+    setClass('canvas shadow ring rounded mx-auto'),
+    style::maxWidth(1200),
     div
     (
         setID('manageContacts'),
-        setClass('w-full flex'),
+        setClass('row'),
         cell
         (
-            set::width('180px'),
-            setClass('border-r overflow-hidden'),
-            div
+            setClass('col flex-none p-4 gap-3 w-48 items-stretch'),
+            div(setClass('text-gray'), $lang->my->contactList),
+            btn
             (
-                setClass('border-b py-3 pr-4'),
-                div(span(setClass('text-gray'), $lang->my->contactList)),
-                div
-                (
-                    setClass('pt-3'),
-                    a
-                    (
-                        setID('createContact'),
-                        setClass('btn primary-pale bd-primary w-full'),
-                        icon('plus'),
-                        $lang->my->createContacts
-                    )
-                )
+                set::type('primary-pale'),
+                set::icon('plus'),
+                set::url('my', 'manageContacts'),
+                setData('load', '#contactPanel'),
+                setClass('w-full'),
+                $lang->my->createContacts
             ),
             tabs
             (
                 setID('contactTab'),
-                setClass('pr-4'),
                 tabPane
                 (
-                    set::key('my'),
                     set::title($lang->my->myContact),
-                    set::active(true),
-                    ul
-                    (
-                        setClass('pl-0'),
-                        $myContactList
-                    )
+                    set::active(!$isActivePublicList),
+                    simpleList(set::items($myContactList)),
                 ),
                 tabPane
                 (
-                    set::key('public'),
                     set::title($lang->my->publicContact),
-                    ul($publicContactList)
+                    set::active($isActivePublicList),
+                    simpleList(set::items($publicContactList)),
                 )
             )
         ),
+        divider(),
         cell
         (
             setID('contactPanel'),
-            setClass('flex-1 px-8'),
+            setClass('flex-1 px-8 pb-8'),
             div
             (
                 set('class', 'panel-title text-lg flex w-full py-6'),
@@ -120,11 +99,13 @@ panel
             ($mode == 'create' || $mode == 'edit') ? form
             (
                 set::actions(array()),
+                $listID ? null : on::init()->removeClass('#contactTab .selected', 'selected'),
                 formRow
                 (
                     formGroup
                     (
                         set::width('1/2'),
+                        set::required(true),
                         set::label($lang->user->contacts->listName),
                         input
                         (
@@ -138,6 +119,7 @@ panel
                     formGroup
                     (
                         set::label($lang->user->contacts->selectedUsers),
+                        set::required(true),
                         picker
                         (
                             set::multiple(true),
@@ -194,5 +176,3 @@ panel
         )
     )
 );
-
-render();

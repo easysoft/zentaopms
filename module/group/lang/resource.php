@@ -532,6 +532,8 @@ $lang->resource->story->batchChangeParent  = 'batchChangeParent';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->relieved           = 'relievedTwins';
+$lang->resource->story->createBranch       = 'codeBranch';
+$lang->resource->story->unlinkBranch       = 'unlinkBranch';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -563,6 +565,8 @@ $lang->story->methodOrder[125] = 'batchChangeParent';
 $lang->story->methodOrder[130] = 'batchToTask';
 $lang->story->methodOrder[135] = 'processStoryChange';
 $lang->story->methodOrder[140] = 'relieved';
+$lang->story->methodOrder[145] = 'createBranch';
+$lang->story->methodOrder[150] = 'unlinkBranch';
 
 /* Requirement. */
 $lang->resource->requirement = new stdclass();
@@ -972,6 +976,8 @@ $lang->resource->task->recordWorkhour     = 'recordWorkhourAction';
 $lang->resource->task->editEffort         = 'editEffort';
 $lang->resource->task->deleteWorkhour     = 'deleteWorkhour';
 $lang->resource->task->report             = 'reportChart';
+$lang->resource->task->createBranch       = 'codeBranch';
+$lang->resource->task->unlinkBranch       = 'unlinkBranch';
 
 $lang->task->methodOrder[5]   = 'create';
 $lang->task->methodOrder[10]  = 'batchCreate';
@@ -996,6 +1002,8 @@ $lang->task->methodOrder[100] = 'editEffort';
 $lang->task->methodOrder[105] = 'deleteWorkhour';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';
+$lang->task->methodOrder[120] = 'createBranch';
+$lang->task->methodOrder[125] = 'unlinkBranch';
 
 /* Build. */
 $lang->resource->build = new stdclass();
@@ -1055,6 +1063,8 @@ $lang->resource->bug->delete             = 'deleteAction';
 $lang->resource->bug->batchChangeModule  = 'batchChangeModule';
 $lang->resource->bug->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->bug->batchChangePlan    = 'batchChangePlan';
+$lang->resource->bug->createBranch       = 'codeBranch';
+$lang->resource->bug->unlinkBranch       = 'unlinkBranch';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
@@ -1080,6 +1090,8 @@ $lang->bug->methodOrder[95]  = 'delete';
 $lang->bug->methodOrder[100] = 'linkBugs';
 $lang->bug->methodOrder[105] = 'batchChangeModule';
 $lang->bug->methodOrder[110] = 'batchChangeBranch';
+$lang->bug->methodOrder[115] = 'createBranch';
+$lang->bug->methodOrder[120] = 'unlinkBranch';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -1344,6 +1356,7 @@ $lang->zanode->methodOrder[80] = 'deleteSnapshot';
 
 $lang->resource->repo = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
+$lang->resource->repo->visit           = 'visit';
 $lang->resource->repo->view            = 'view';
 $lang->resource->repo->log             = 'log';
 $lang->resource->repo->revision        = 'revisionAction';
@@ -1364,7 +1377,6 @@ $lang->resource->repo->linkTask        = 'linkTask';
 $lang->resource->repo->unlink          = 'unlink';
 $lang->resource->repo->import          = 'importAction';
 $lang->resource->repo->createRepo      = 'createRepoAction';
-$lang->resource->repo->createBranch    = 'createBranchAction';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
@@ -1386,7 +1398,6 @@ $lang->repo->methodOrder[90]  = 'linkTask';
 $lang->repo->methodOrder[95]  = 'unlink';
 $lang->repo->methodOrder[100] = 'import';
 $lang->repo->methodOrder[105] = 'createRepo';
-$lang->repo->methodOrder[110] = 'createBranch';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1609,38 +1620,40 @@ $lang->svn->methodOrder[15] = 'apiSync';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
-$lang->resource->mr->create    = 'create';
-$lang->resource->mr->browse    = 'browseAction';
-$lang->resource->mr->edit      = 'edit';
-$lang->resource->mr->delete    = 'delete';
-$lang->resource->mr->view      = 'viewAction';
-$lang->resource->mr->accept    = 'accept';
-$lang->resource->mr->diff      = 'viewDiff';
-$lang->resource->mr->link      = 'linkList';
-$lang->resource->mr->linkStory = 'linkStory';
-$lang->resource->mr->linkBug   = 'linkBug';
-$lang->resource->mr->linkTask  = 'linkTask';
-$lang->resource->mr->unlink    = 'unlink';
-$lang->resource->mr->approval  = 'approval';
-$lang->resource->mr->close     = 'close';
-$lang->resource->mr->reopen    = 'reopen';
+$lang->resource->mr->create     = 'create';
+$lang->resource->mr->browse     = 'browseAction';
+$lang->resource->mr->edit       = 'edit';
+$lang->resource->mr->delete     = 'delete';
+$lang->resource->mr->view       = 'viewAction';
+$lang->resource->mr->accept     = 'accept';
+$lang->resource->mr->diff       = 'viewDiff';
+$lang->resource->mr->link       = 'linkList';
+$lang->resource->mr->linkStory  = 'linkStory';
+$lang->resource->mr->linkBug    = 'linkBug';
+$lang->resource->mr->linkTask   = 'linkTask';
+$lang->resource->mr->unlink     = 'unlink';
+$lang->resource->mr->approval   = 'approval';
+$lang->resource->mr->close      = 'close';
+$lang->resource->mr->reopen     = 'reopen';
+$lang->resource->mr->commitLogs = 'commitLogs';
 
-$lang->mr->methodOrder[10] = 'create';
-$lang->mr->methodOrder[15] = 'browse';
-$lang->mr->methodOrder[20] = 'edit';
-$lang->mr->methodOrder[25] = 'delete';
-$lang->mr->methodOrder[35] = 'view';
-$lang->mr->methodOrder[45] = 'accept';
-$lang->mr->methodOrder[50] = 'diff';
-$lang->mr->methodOrder[55] = 'link';
-$lang->mr->methodOrder[60] = 'linkStory';
-$lang->mr->methodOrder[65] = 'linkBug';
-$lang->mr->methodOrder[70] = 'linkTask';
-$lang->mr->methodOrder[75] = 'unlink';
-$lang->mr->methodOrder[80] = 'approval';
-$lang->mr->methodOrder[85] = 'close';
-$lang->mr->methodOrder[90] = 'reopen';
-$lang->mr->methodOrder[95] = 'addReview';
+$lang->mr->methodOrder[10]  = 'create';
+$lang->mr->methodOrder[15]  = 'browse';
+$lang->mr->methodOrder[20]  = 'edit';
+$lang->mr->methodOrder[25]  = 'delete';
+$lang->mr->methodOrder[35]  = 'view';
+$lang->mr->methodOrder[45]  = 'accept';
+$lang->mr->methodOrder[50]  = 'diff';
+$lang->mr->methodOrder[55]  = 'link';
+$lang->mr->methodOrder[60]  = 'linkStory';
+$lang->mr->methodOrder[65]  = 'linkBug';
+$lang->mr->methodOrder[70]  = 'linkTask';
+$lang->mr->methodOrder[75]  = 'unlink';
+$lang->mr->methodOrder[80]  = 'approval';
+$lang->mr->methodOrder[85]  = 'close';
+$lang->mr->methodOrder[90]  = 'reopen';
+$lang->mr->methodOrder[95]  = 'addReview';
+$lang->mr->methodOrder[100] = 'commitLogs';
 
 /* App. */
 $lang->resource->app = new stdclass();
@@ -1817,21 +1830,11 @@ $lang->chart->methodOrder[2] = 'preview';
 
 /* Metric. */
 $lang->resource->metric = new stdclass();
-$lang->resource->metric->browse    = 'browseAction';
 $lang->resource->metric->preview   = 'preview';
 $lang->resource->metric->details   = 'detailsAction';
-$lang->resource->metric->view      = 'viewAction';
-$lang->resource->metric->edit      = 'editAction';
-$lang->resource->metric->implement = 'implementAction';
-$lang->resource->metric->delete    = 'deleteAction';
 
-$lang->metric->methodOrder[0]  = 'browse';
-$lang->metric->methodOrder[5]  = 'preview';
-$lang->metric->methodOrder[6]  = 'details';
-$lang->metric->methodOrder[10] = 'view';
-$lang->metric->methodOrder[15] = 'edit';
-$lang->metric->methodOrder[20] = 'implement';
-$lang->metric->methodOrder[25] = 'delete';
+$lang->metric->methodOrder[0]  = 'preview';
+$lang->metric->methodOrder[5]  = 'details';
 
 /* Report . */
 $lang->resource->report = new stdclass();
@@ -1940,6 +1943,13 @@ $lang->resource->ai->deleteMiniProgram       = 'deleteMiniProgram';
 $lang->resource->ai->exportMiniProgram       = 'exportMiniProgram';
 $lang->resource->ai->importMiniProgram       = 'importMiniProgram';
 $lang->resource->ai->editMiniProgramCategory = 'editMiniProgramCategory';
+$lang->resource->ai->assistants              = 'assistants';
+$lang->resource->ai->assistantCreate         = 'assistantCreate';
+$lang->resource->ai->assistantEdit           = 'assistantEdit';
+$lang->resource->ai->assistantDelete         = 'assistantDelete';
+$lang->resource->ai->assistantView           = 'assistantView';
+$lang->resource->ai->assistantPublish        = 'assistantPublish';
+$lang->resource->ai->assistantWithdraw       = 'assistantWithdraw';
 
 $lang->resource->aiapp = new stdclass();
 $lang->resource->aiapp->square                  = 'miniProgramSquare';

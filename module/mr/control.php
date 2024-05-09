@@ -8,6 +8,8 @@ declare(strict_types=1);
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     mr
  * @link        https://www.zentao.net
+ * @property    mrModel $mr
+ * @property    mrZen   $mrZen
  */
 class mr extends control
 {
@@ -25,11 +27,20 @@ class mr extends control
         if($this->app->getMethodName() != 'browse')
         {
             $this->loadModel('ci')->setMenu();
-            $this->view->objectID = $this->app->tab == 'execution' ? $this->session->execution : 0;
+
+            $this->view->objectID = 0;
+            if(in_array($this->app->tab, array('execution', 'project'))) $this->view->objectID = $this->session->{$this->app->tab};
+
             if($this->app->tab == 'execution')
             {
                 $this->view->executionID = $this->session->execution;
-                $this->loadModel('execution')->setMenu($this->session->execution);
+                $this->loadModel('execution')->setMenu((int)$this->session->execution);
+            }
+
+            if($this->app->tab == 'project')
+            {
+                $this->view->projectID   = $this->session->project;
+                $this->loadModel('project')->setMenu((int)$this->session->project);
             }
         }
     }
@@ -62,8 +73,12 @@ class mr extends control
 
             $this->loadModel('execution')->setMenu($objectID);
         }
+        elseif($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+        }
 
-        if($this->app->tab == 'execution' && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
+        if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
         $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
@@ -84,17 +99,9 @@ class mr extends control
 
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => $repo->serviceProject);
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
-        $MRList         = $this->mr->batchSyncMR($MRList);
         $projects       = $this->mrZen->getAllProjects($repo, $MRList);
 
-        /* Check whether Mr is linked with the product. */
-        foreach($MRList as $MR)
-        {
-            $product         = $this->mr->getMRProduct($MR);
-            $MR->linkButton  = empty($product) ? false : true;
-        }
-
-        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->title      = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->projects   = $projects;
         $this->view->pager      = $pager;
@@ -115,7 +122,7 @@ class mr extends control
      * @param  int    $repoID
      * @param  string $mode
      * @param  string $param
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -123,7 +130,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function browseByExecution(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $executionID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseByExecution(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($param == 'assignee' || $param == 'creator')
         {
@@ -134,11 +141,9 @@ class mr extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $executionID, $pager);
-        $repoList = $this->loadModel('repo')->getList($executionID);
-        $MRList   = $this->mr->batchSyncMR($MRList);
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $projectID, $pager);
+        $repoList = $this->loadModel('repo')->getList($projectID);
 
-        $projects  = array();
         $repoPairs = array();
         foreach($repoList as $repo)
         {
@@ -146,8 +151,6 @@ class mr extends control
 
             $repoPairs[$repo->id] = $repo->name;
             if($repoID && $repoID != $repo->id) continue;
-
-            $projects += $this->mrZen->getAllProjects($repo, $MRList);
         }
 
         $openIDList = array();
@@ -157,15 +160,16 @@ class mr extends control
             foreach(array('gitlab', 'gitea', 'gogs') as $service) $openIDList += $this->pipeline->getProviderPairsByAccount($service);
         }
 
-        $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $objectName = $this->app->tab == 'project' ? 'projectID' : 'executionID';
+        $this->view->{$objectName} = $projectID;
+
+        $this->view->title       = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList      = $MRList;
-        $this->view->projects    = $projects;
         $this->view->pager       = $pager;
         $this->view->mode        = $mode;
         $this->view->repoID      = $repoID;
         $this->view->param       = $param;
-        $this->view->objectID    = $executionID;
-        $this->view->executionID = $executionID;
+        $this->view->objectID    = $projectID;
         $this->view->repoList    = $repoList;
         $this->view->repoPairs   = $repoPairs;
         $this->view->orderBy     = $orderBy;
@@ -189,6 +193,7 @@ class mr extends control
         {
             $MR = form::data($this->config->mr->form->create)
                 ->setIF($this->post->needCI == 0, 'jobID', 0)
+                ->add('createdBy', $this->app->user->account)
                 ->get();
             $result = $this->mr->create($MR);
             return $this->send($result);
@@ -204,15 +209,22 @@ class mr extends control
             $repo     = $repoList[$repoID];
         }
 
-        if($repo->SCM == 'Gitlab') $repo->serviceProject = (int)$repo->serviceProject;
-        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) $repo->serviceProject = (int)$repo->serviceProject;
+        if($repo->SCM == 'GitFox')
+        {
+            $project = $this->loadModel('gitfox')->apiGetSingleRepo($repo->gitService, $repo->serviceProject);
+        }
+        else
+        {
+            $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
+        }
 
         $jobPairs = array();
         $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
         foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
 
         $repoPairs = array();
-        if($this->app->tab == 'execution' && $objectID)
+        if(in_array($this->app->tab, array('execution', 'project')) && $objectID)
         {
             $repoList = $this->loadModel('repo')->getList($objectID);
             foreach($repoList as $repoInfo)
@@ -246,13 +258,14 @@ class mr extends control
         {
             $MR = form::data($this->config->mr->form->edit)
                 ->setIF($this->post->needCI == 0, 'jobID', 0)
+                ->add('editedBy', $this->app->user->account)
                 ->get();
             $result = $this->mr->update($MRID, $MR);
             return $this->send($result);
         }
 
         $MR = $this->mr->fetchByID($MRID);
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
         $this->view->title = $this->lang->mr->edit;
         $this->view->MR    = $MR;
         $this->view->rawMR = isset($rawMR) ? $rawMR : false;
@@ -309,20 +322,31 @@ class mr extends control
         $MR = $this->mr->fetchByID($MRID);
         if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
 
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
-        if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) return $this->display();
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
+        if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
 
         /* Sync MR from GitLab to ZenTaoPMS. */
-        $MR   = $this->mr->apiSyncMR($MR);
+        $oldMR = $MR;
+        $MR    = $this->mr->apiSyncMR($MR);
+
+        $changes = common::createChanges($oldMR, $MR);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('mr', $MR->id, 'synced');
+            $this->action->logHistory($actionID, $changes);
+        }
+
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
 
         $projectOwner  = false;
-        if($host->type == 'gitlab')
+        if(in_array(strtolower($host->type), array('gitlab', 'gitfox')))
         {
             $MR->sourceProject = (int)$MR->sourceProject;
             $MR->targetProject = (int)$MR->targetProject;
         }
-        $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+
+        $projectMethod = $host->type == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
+        $sourceProject = $this->loadModel($host->type)->$projectMethod($MR->hostID, $MR->sourceProject);
         if(isset($MR->hostID) && !$this->app->user->admin)
         {
             $openID = $this->loadModel('pipeline')->getOpenIdByAccount($MR->hostID, $host->type, $this->app->user->account);
@@ -339,9 +363,9 @@ class mr extends control
         $this->view->projectOwner  = $projectOwner;
         $this->view->projectEdit   = $this->mrZen->checkProjectEdit($host->type, $sourceProject, $MR);
         $this->view->sourceProject = $sourceProject;
-        $this->view->targetProject = $this->{$host->type}->apiGetSingleProject($MR->hostID, $MR->targetProject);
-        $this->view->sourceBranch  = $this->{$host->type}->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
-        $this->view->targetBranch  = $this->{$host->type}->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
+        $this->view->targetProject = $this->{$host->type}->$projectMethod($MR->hostID, $MR->targetProject);
+        $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, $MR->sourceProject, $MR->sourceBranch);
+        $this->view->targetBranch  = $this->mrZen->getBranchUrl($host, $MR->targetProject, $MR->targetBranch);
         $this->display();
     }
 
@@ -432,7 +456,7 @@ class mr extends control
         $this->view->MR    = $MR;
         if($MR->synced)
         {
-            $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
+            $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
             if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
         }
 
@@ -548,8 +572,9 @@ class mr extends control
         $tasks   = $this->mr->getLinkList($MRID, $productID, 'task',  $type == 'task'  ? $orderBy : '', $taskPager);
         $builds  = $this->loadModel('build')->getBuildPairs($productID);
 
-        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
+        $this->view->title      = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->link;
         $this->view->MR         = $MR;
+        $this->view->repoID     = $MR->repoID;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->stories    = $stories;
         $this->view->bugs       = $bugs;
@@ -780,6 +805,54 @@ class mr extends control
     }
 
     /**
+     * 查看合并请求的提交记录。
+     * Show the commit logs for this Merge Request.
+     *
+     * @param  int  $MRID
+     * @return void
+     */
+    public function commitLogs(int $MRID)
+    {
+        $MR = $this->mr->fetchByID($MRID);
+        $this->view->title = $this->lang->mr->commitLogs;
+        $this->view->MR    = $MR;
+        if($MR->synced)
+        {
+            $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
+            if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
+        }
+
+        $repo = $this->loadModel('repo')->getByID($MR->repoID);
+
+        $commitLogs = $this->mr->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
+        foreach($commitLogs as $commitLog)
+        {
+            $commitLog->repoID = $MR->repoID;
+            if(strtolower($repo->SCM) == 'gitfox')
+            {
+                $commitLog->id = $commitLog->sha;
+                $commitLog->committed_date  = $commitLog->author->when;
+                $commitLog->committer_name  = $commitLog->author->identity->name;
+                $commitLog->committer_email = $commitLog->author->identity->email;
+            }
+            elseif(in_array(strtolower($repo->SCM), array('gitea', 'gogs')))
+            {
+                $commitLog->id = $commitLog->sha;
+                $commitLog->committed_date  = $commitLog->author->committer->date;
+                $commitLog->committer_name  = $commitLog->author->committer->name;
+                $commitLog->committer_email = $commitLog->author->committer->email;
+                $commitLog->title           = $commitLog->commit->message;
+            }
+
+            $commitLog->id = substr($commitLog->id, 0, 10);
+        }
+
+        $this->view->commitLogs  = $commitLogs;
+        $this->view->repo        = $repo;
+        $this->display();
+    }
+
+    /**
      * 获取构建列表。
      * AJAX: Get job list.
      *
@@ -817,14 +890,14 @@ class mr extends control
 
    /**
     * 获取分支权限。
-    * Ajax get branch pivs.
+    * Ajax get branch privileges.
     *
     * @param  int    $hostID
     * @param  string $project
     * @access public
     * @return void
     */
-   public function ajaxGetBranchPivs(int $hostID, string $project)
+   public function ajaxGetBranchPrivs(int $hostID, string $project)
    {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if(in_array($host->type, array('gitea', 'gogs')))
@@ -840,5 +913,68 @@ class mr extends control
         $branches    = $this->loadModel($host->type)->apiGetBranchPrivs($hostID, $project);
         foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
         echo json_encode($branchPrivs);
+   }
+
+   /**
+    * AJAX: sync Merge Requests from API server.
+    *
+    * @param  int  $repoID
+    * @return void
+    */
+   public function ajaxSyncMRs(int $repoID)
+   {
+        if(!$repoID) $this->sendSuccess();
+
+        $repo   = $this->loadModel('repo')->getByID($repoID);
+        $rawMRs = $this->loadModel(strtolower($repo->SCM))->apiGetMergeRequests($repo->gitService, (int)$repo->serviceProject);
+        if(empty($rawMRs)) $this->sendSuccess();
+
+        $MRs = $this->dao->select('`id`,`sourceProject`,`sourceBranch`,`targetProject`,`targetBranch`,`mriid`')->from(TABLE_MR)->where('repoID')->eq($repoID)->fetchAll();
+
+        $needSyncMRs = $rawMRs;
+        foreach($rawMRs as $index => $rawMR)
+        {
+            if($rawMR->state == 'merged' || $rawMR->source_project_id != $rawMR->target_project_id)
+            {
+                unset($needSyncMRs[$index]);
+                continue;
+            }
+
+            foreach($MRs as $MR)
+            {
+                if($MR->mriid == $rawMR->iid
+                && $MR->sourceProject == $rawMR->source_project_id && $MR->sourceBranch  == $rawMR->source_branch
+                && $MR->targetProject == $rawMR->target_project_id && $MR->targetBranch  == $rawMR->target_branch)
+                {
+                    unset($needSyncMRs[$index]);
+                }
+            }
+        }
+
+        foreach($needSyncMRs as $needSyncMR)
+        {
+            $MR = new stdclass();
+            $MR->hostID        = $repo->serviceHost;
+            $MR->mriid         = $needSyncMR->iid;
+            $MR->sourceProject = $needSyncMR->source_project_id;
+            $MR->sourceBranch  = $needSyncMR->source_branch;
+            $MR->targetProject = $needSyncMR->target_project_id;
+            $MR->targetBranch  = $needSyncMR->target_branch;
+            $MR->title         = $needSyncMR->title;
+            $MR->repoID        = $repoID;
+            $MR->createdBy     = $this->app->user->account;
+            $MR->createdDate   = helper::now();
+            $MR->assignee      = $MR->createdBy;
+            $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
+                ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
+                ->exec();
+            if(!dao::isError())
+            {
+                $mrID = $this->dao->lastInsertID();
+                $this->loadModel('action')->create('mr', $mrID, 'imported');
+            }
+        }
+
+        $this->sendSuccess();
    }
 }

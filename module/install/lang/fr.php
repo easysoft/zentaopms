@@ -44,7 +44,7 @@ EOT;
 $lang->install->selectMode          = "Select mode";
 $lang->install->introduction        = "ZenTao 15.0+ Feature Introduction";
 $lang->install->howToUse            = "How do you like to use ZenTao?";
-$lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
+$lang->install->guideVideo          = 'https://dl.zentao.net/vedio/zentaoconcepteng0716.mp4';
 $lang->install->introductionContent = <<<EOT
 <div>
   <h4>Dear users,</h4>
@@ -65,7 +65,7 @@ $lang->install->introductionContent = <<<EOT
     </div>
   </div>
   <div class='text-center introduction-link'>
-    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Introduction Document</a>
+    <a href='https://dl.zentao.net/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Introduction Document</a>
     <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Introduction Video</a>
   </div>
 </div>

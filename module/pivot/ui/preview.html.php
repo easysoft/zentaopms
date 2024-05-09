@@ -16,6 +16,12 @@ $generateData = function() use ($lang) {return div(setClass('bg-canvas center te
 $viewFile = strtolower($method) . '.html.php';
 if(file_exists($viewFile)) include_once $viewFile;
 
+if($this->config->edition != 'open')
+{
+    $pivotPath = $this->app->getModuleExtPath('pivot', 'ui');
+    include $pivotPath['common'] . 'exportdata.html.php';
+}
+
 jsVar('dimensionID', $dimensionID);
 jsVar('groupID', $groupID);
 
@@ -36,43 +42,52 @@ if($config->edition != 'open')
             'text'  => $lang->export,
             'icon'  => 'export',
             'class' => 'ghost',
-            'url'   => '#export',
-            'data-toggle' => 'modal'
+            'data-target' => '#export',
+            'data-toggle' => 'modal',
+            'data-size' => 'sm'
         ))) : null,
         hasPriv('pivot', 'browse') ? item(set(array
         (
             'text'  => $lang->pivot->toDesign,
             'class' => 'primary',
             'url'   => inlink('browse'),
-            'data-toggle' => 'modal'
         ))) : null,
     );
 }
 
+sidebar
+(
+    set::width(240),
+    moduleMenu
+    (
+        to::header
+        (
+            div
+            (
+                setClass('bg-canvas my-3 mx-5 text-xl font-semibold text-ellipsis'),
+                $groups[$groupID]
+            )
+        ),
+        set::title($groups[$groupID]),
+        set::activeKey($currentMenu),
+        set::modules($menus),
+        set::closeLink(''),
+        set::showDisplay(false),
+        set::titleShow(false),
+        to::footer
+        (
+            $this->config->edition == 'open' ? div
+            (
+                set::width(240),
+                setClass('bg-canvas px-4 py-2 module-menu'),
+                html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
+            ) : null
+        )
+    )
+);
 div
 (
-    setClass('flex gap-4'),
-    sidebar
-    (
-        set::width(240),
-        moduleMenu
-        (
-            set::title($groups[$groupID]),
-            set::activeKey($currentMenu),
-            set::modules($menus),
-            set::closeLink(''),
-            set::showDisplay(false)
-        ),
-        $config->edition == 'open' ? div
-        (
-            setClass('bg-canvas px-4 pb-4'),
-            html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
-        ) : null
-    ),
-    div
-    (
-        setID('pivotContent'),
-        setClass('flex col gap-4 w-full'),
-        $generateData()
-    )
+    setID('pivotContent'),
+    setClass('flex col gap-4 w-full'),
+    $generateData()
 );

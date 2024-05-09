@@ -12,12 +12,18 @@ window.checkUnlink = function()
             const branchID = +$branch.val();
             if(unmodifiableBranches.includes(branchID) && linkedStoryIDList[productID][branchID])
             {
-                zui.Modal.alert(unLinkProductTip.replace("%s", allProducts[productID] + branchGroups[productID][branchID]));
+                zui.Modal.confirm(unLinkProductTip.replace("%s", allProducts[productID] + branchGroups[productID][branchID])).then((result) =>
+                {
+                    if(!result) $elem.prop('checked', true);
+                });
             }
         }
         else
         {
-            zui.Modal.alert(unLinkProductTip.replace("%s", allProducts[productID]));
+            zui.Modal.confirm(unLinkProductTip.replace("%s", allProducts[productID])).then((result) =>
+            {
+                if(!result) $elem.prop('checked', true);
+            });
         }
     }
 }

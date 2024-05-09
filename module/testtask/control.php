@@ -124,7 +124,7 @@ class testtask extends control
 
         $this->testtaskZen->prepareSummaryForBrowse($testtasks);
 
-        $this->view->title     = $product->name . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->title     = $product->name . $this->lang->hyphen . $this->lang->testtask->common;
         $this->view->users     = $users;
         $this->view->tasks     = $testtasks;
         $this->view->product   = $product;
@@ -175,7 +175,7 @@ class testtask extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->title      = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->common;
         $this->view->tasks      = $this->testtask->getProductUnitTasks($productID, $browseType, $sort, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->product    = $this->product->getByID($productID);
@@ -337,7 +337,7 @@ class testtask extends control
         $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
         $runs = $this->testtaskZen->processRowspanForUnitCases($runs);
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->runs      = $runs;
         $this->view->productID = $productID;
@@ -460,7 +460,7 @@ class testtask extends control
             $this->products[$productID] = $product->name;
         }
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
+        $this->view->title      = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->common . $this->lang->hyphen . $this->lang->testtask->reportChart;
         $this->view->productID  = $productID;
         $this->view->taskID     = $taskID;
         $this->view->browseType = $browseType;
@@ -518,7 +518,7 @@ class testtask extends control
         /* Process the rowspan property of cases for use by front-end component groupings. */
         $cases = $this->testtaskZen->processRowspanForGroupCase($cases, $task->build);
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->cases;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->canBeChanged = common::canBeChanged('testtask', $task);
         $this->view->productID    = $productID;
@@ -608,7 +608,7 @@ class testtask extends control
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
-        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
+        $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->start;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->testtask = $testtask;
@@ -644,7 +644,7 @@ class testtask extends control
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
-        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->close;
+        $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->close;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
         $this->view->testtask = $testtask;
@@ -680,7 +680,7 @@ class testtask extends control
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
-        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->block;
+        $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->block;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->testtask = $testtask;
@@ -716,7 +716,7 @@ class testtask extends control
         /* Set menu. */
         $this->loadModel('qa')->setMenu($productID, $testtask->branch);
 
-        $this->view->title    = $testtask->name . $this->lang->colon . $this->lang->testtask->activate;
+        $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->activate;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->testtask = $testtask;
@@ -747,7 +747,7 @@ class testtask extends control
         if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
         if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->app->methodName == 'view' ? $browseList : true));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->app->methodName == 'view' ? $browseList : true, 'closeModal' => true));
     }
 
     /**
@@ -797,7 +797,7 @@ class testtask extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
         $cases = $this->testtask->getLinkableCases($productID, $task, $type, $param, $pager);
 
-        $this->view->title        = $task->name . $this->lang->colon . $this->lang->testtask->linkCase;
+        $this->view->title        = $task->name . $this->lang->hyphen . $this->lang->testtask->linkCase;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->suites       = $this->loadModel('testsuite')->getSuites($task->product);
         $this->view->relatedTasks = $this->testtask->getRelatedTestTasks($productID, $taskID);
@@ -1037,7 +1037,7 @@ class testtask extends control
         $executions = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, '', 0, '', array('review', 'design', 'request'));
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk', 0, 'execution', '', false);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
+        $this->view->title      = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->importUnitResult;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->executions = $executions;
         $this->view->builds     = $builds;

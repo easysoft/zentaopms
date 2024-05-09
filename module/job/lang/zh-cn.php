@@ -27,8 +27,10 @@ $lang->job->buildSpec       = '构建对象'; // 'pipeline@server'
 $lang->job->engine          = '引擎';
 $lang->job->server          = '服务器';
 $lang->job->pipeline        = '流水线';
+$lang->job->gitfoxpipeline  = '关联流水线';
 $lang->job->buildType       = '构建类型';
 $lang->job->frame           = '工具/框架';
+$lang->job->useZentao       = '禅道触发';
 $lang->job->triggerType     = '触发方式';
 $lang->job->atDay           = '自定义日期';
 $lang->job->atTime          = '执行时间';
@@ -51,6 +53,7 @@ $lang->job->projectKey      = 'SonarQube项目';
 
 $lang->job->lblBasic = '基本信息';
 
+$lang->job->auto           = '自动';
 $lang->job->example        = '举例';
 $lang->job->commitEx       = "用于匹配创建构建任务的关键字，多个关键字用','分割";
 $lang->job->cronSample     = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
@@ -66,6 +69,9 @@ $lang->job->selectPipeline = '请选择流水线';
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';
 $lang->job->buildTypeList['buildAndTest']   = '构建测试';
+
+$lang->job->zentaoTrigger['1'] = '是';
+$lang->job->zentaoTrigger['0'] = '否';
 
 $lang->job->triggerTypeList['tag']      = '打标签';
 $lang->job->triggerTypeList['commit']   = '提交注释包含关键字';

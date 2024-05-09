@@ -18,7 +18,7 @@ $this->loadModel('file');
 if(isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'calendar')) unset($lang->exportTypeList['selected']);
 
 /* Generate custom export fields. */
-$hideExportRange     = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
+if(!isset($hideExportRange)) $hideExportRange = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
 $customExportRowList = array();
 $isCustomExport      = (!empty($customExport) and !empty($allExportFields));
 $showBizGuide        = $config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide) ? true : false;
@@ -27,7 +27,7 @@ $bizName             = $showBizGuide ? "<a href='{$bizGuideLink}' target='_blank
 
 if($isCustomExport)
 {
-    $allExportFields  = explode(',', $allExportFields);
+    if(is_string($allExportFields)) $allExportFields = explode(',', $allExportFields);
     $hasDefaultField  = isset($selectedFields);
     $selectedFields   = $hasDefaultField ? explode(',', $selectedFields) : array();
     $moduleName       = $this->moduleName;
@@ -115,11 +115,16 @@ if($isCustomExport)
     );
 }
 
+$isNotZh = strpos($app->getClientLang(), 'zh-') === false;
 formPanel
 (
     setID('exportPanel'),
     css('.form-horz .form-label.required:after{content:""}'), // Remove required tag.
     css('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
+    $isNotZh ? css('#exportPanel .form-label{width: 70px}') : null,
+    $isNotZh ? css('#exportPanel .form-group{padding-left: 70px}') : null,
+    $isNotZh ? css('#exportPanel .customFieldsBox .form-label{width: 100px}') : null,
+    $isNotZh ? css('#exportPanel .customFieldsBox .form-group{padding-left: 100px}') : null,
     setCssVar('--form-horz-label-width', '4rem'),
     set::target('_self'),
     set::actions(array()),

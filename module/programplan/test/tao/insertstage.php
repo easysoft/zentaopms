@@ -39,12 +39,12 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('project');
 $project->gen(2);
-zdTable('projectspec')->gen(0);
-zdTable('product')->gen(2);
-zdTable('projectproduct')->gen(2);
+zenData('projectspec')->gen(0);
+zenData('product')->gen(2);
+zenData('projectproduct')->gen(2);
 
 global $tester;
 $tester->loadModel('programplan');

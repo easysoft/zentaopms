@@ -96,7 +96,6 @@ $config->metric->dateType['count_of_monthly_fixed_bug_in_product'] = 'month';
 $config->metric->dateType['count_of_monthly_closed_bug_in_product'] = 'month';
 $config->metric->dateType['count_of_monthly_created_bug_in_product'] = 'month';
 $config->metric->dateType['count_of_annual_created_case_in_product'] = 'year';
-$config->metric->dateType['count_of_feedback_in_product'] = 'year';
 $config->metric->dateType['count_of_annual_created_feedback_in_product'] = 'year';
 $config->metric->dateType['count_of_annual_closed_feedback_in_product'] = 'year';
 $config->metric->dateType['count_annual_closed_execution_in_project'] = 'year';

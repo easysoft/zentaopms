@@ -16,7 +16,7 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->gen(1);
+zenData('pipeline')->gen(1);
 
 global $tester;
 $mrModel = $tester->loadModel('mr');

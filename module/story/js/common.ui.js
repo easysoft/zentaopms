@@ -22,7 +22,7 @@ window.unlinkTwins = function(e)
     const $ul      = $this.closest('ul');
     const postData = new FormData();
     postData.append('twinID', $this.data('id'));
-    zui.Modal.confirm({message: relievedTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: window.relievedTip || $ul.data('relievedTip'), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res)
         {

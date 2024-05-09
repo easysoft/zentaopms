@@ -18,7 +18,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode=testcase&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Testcase')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Testcase'), set::open($type == 'bysearch')))
 );
 
 $canBatchEdit = common::hasPriv('testcase', 'batchEdit');

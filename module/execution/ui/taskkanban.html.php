@@ -180,10 +180,11 @@ row
         (
             setID('importAction'),
             set::arrow(true),
+            set::caret(false),
             btn(set::type('link'), set::icon('import'), $lang->import),
             set::items(array
             (
-                common::hasPriv('execution', 'importTask') ? array('text' => $lang->execution->importTask, 'url' => createLink('execution', 'importTask', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
+                common::hasPriv('execution', 'importTask') && $execution->multiple ? array('text' => $lang->execution->importTask, 'url' => createLink('execution', 'importTask', "execution=$execution->id")) : null,
                 ($features['qa'] && common::hasPriv('execution', 'importBug')) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))
         ) : null,
@@ -191,6 +192,7 @@ row
         (
             setClass('kanbanSetting mr-2'),
             btn(set::type('link'), icon('ellipsis-v')),
+            set::caret(false),
             set::items(array
             (
                 common::hasPriv('execution', 'setKanban') ? array('text' => $lang->execution->setKanban, 'url' => createLink('execution', 'setKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
@@ -232,28 +234,36 @@ div
     )
 );
 
+$linkStoryByPlanTips = $lang->execution->linkNormalStoryByPlanTips;
+$linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
+
 modal
 (
     setID('linkStoryByPlan'),
-    to::header
+    setData('size', '500px'),
+    set::modalProps(array('title' => $lang->execution->linkStoryByPlan)),
+    div
     (
-        h4($lang->execution->linkStoryByPlan),
-        "({$lang->execution->linkStoryByPlanTips})"
+        setClass('flex-auto'),
+        icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+        $linkStoryByPlanTips
     ),
-    inputGroup
+    form
     (
-        setClass('mt-1'),
-        picker
+        setClass('text-center', 'py-4'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->linkStory),
+        formGroup
         (
-            set::width(200),
-            setID('plan'),
-            set::name('plan'),
-            set::items($allPlans)
-        ),
-        span
-        (
-            setClass('input-group-btn'),
-            btn(setClass('primary'), setID('toStoryButton'), set::onclick('linkPlanStory()'), $lang->execution->linkStory)
+            set::label($lang->execution->selectStoryPlan),
+            set::required(true),
+            setClass('text-left'),
+            picker
+            (
+                set::name('plan'),
+                set::required(true),
+                set::items($allPlans)
+            )
         )
     )
 );

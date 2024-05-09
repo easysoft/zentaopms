@@ -27,7 +27,7 @@ class stage extends control
 
         $this->stage->setMenu($type);
 
-        $this->view->title   = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
         $this->view->orderBy = $orderBy;
         $this->view->type    = $type;
@@ -53,7 +53,7 @@ class stage extends control
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
         $this->view->orderBy = $orderBy;
         $this->view->type    = $type;
-        $this->view->title   = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
 
         $this->display('stage', 'browse');
     }
@@ -78,7 +78,7 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->create;
+        $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
 
         $this->display();
     }
@@ -103,7 +103,7 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type")));
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->batchCreate;
+        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
 
         $this->display();
     }
@@ -132,7 +132,7 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->title = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->edit;
+        $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->edit;
         $this->view->stage = $stage;
 
         $this->display();
@@ -183,14 +183,14 @@ class stage extends control
             if($data->lang == 'all') $this->custom->deleteItems("lang={$currentLang}&module=stage&section=typeList");
             foreach($data->keys as $index => $key)
             {
-                $value = $data->values[$index];
+                $value = empty($data->values[$index]) ? '' : $data->values[$index];
                 if(!$value || !$key) continue;
                 $this->custom->setItem("{$data->lang}.stage.typeList.{$key}", $value);
             }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->setType;
+        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->setType;
         $this->view->currentLang = $currentLang;
         $this->view->lang2Set    = !empty($lang2Set) ? $lang2Set : $lang;
         $this->view->fieldList   = $fieldList;

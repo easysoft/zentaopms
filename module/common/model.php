@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package     common
  * @version     $Id$
  * @link        https://www.zentao.net
+ * @property    router $app
  */
 class commonModel extends model
 {
@@ -29,6 +30,15 @@ class commonModel extends model
      * @access public
      */
     public static $requestErrors = array();
+
+    /**
+     * 缓存用户是否有某个模块、方法的访问权限。
+     * Cache the user's access rights to a module or method.
+     *
+     * @var array
+     * @access public
+     */
+    public static $userPrivs = array();
 
     /**
      * 设置用户配置信息。
@@ -394,6 +404,8 @@ class commonModel extends model
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
+        $this->commonTao->updateDBWebRoot($this->config->system);
+
         /* Override the items defined in config/config.php and config/my.php. */
         if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
         if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
@@ -440,7 +452,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
-            if($module == 'block') return true;
+            if($module == 'block' && stripos(',dashboard,printblock,create,edit,delete,close,reset,layout,', ",{$method},") !== false) return true;
             if($module == 'index'    and $method == 'app') return true;
             if($module == 'my'       and $method == 'guidechangetheme') return true;
             if($module == 'product'  and $method == 'showerrornone') return true;
@@ -462,11 +474,11 @@ class commonModel extends model
      */
     public function deny(string $module, string $method, bool $reload = true)
     {
-        if($reload)
+        if($reload && $this->loadModel('user')->isLogon())
         {
             /* Get authorize again. */
             $user = $this->app->user;
-            $user->rights = $this->loadModel('user')->authorize($user->account);
+            $user->rights = $this->user->authorize($user->account);
             $user->groups = $this->user->getGroups($user->account);
             $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $this->session->set('user', $user);
@@ -594,6 +606,7 @@ class commonModel extends model
         foreach($menuOrder as $key => $group)
         {
             if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue; // 后台权限分组中没有给导航视图
+            if(!isset($lang->mainNav->$group)) continue;
 
             $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
@@ -934,18 +947,16 @@ class commonModel extends model
         /* Set the query condition session. */
         if($onlyCondition)
         {
-            $queryCondition = explode(' WHERE ', $sql);
-            $queryCondition = isset($queryCondition[1]) ? $queryCondition[1] : '';
+            $queryCondition = substr($sql, strpos($sql, ' WHERE ') + 7);
             if($queryCondition)
             {
-                $queryCondition = explode(' ORDER BY ', $queryCondition);
-                $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+                if(strpos($queryCondition, ' ORDER BY') !== false) $queryCondition = substr($queryCondition, 0, strpos($queryCondition, ' ORDER BY '));
+                $queryCondition = str_replace('t1.', '', $queryCondition);
             }
         }
         else
         {
-            $queryCondition = explode(' ORDER BY ', $sql);
-            $queryCondition = $queryCondition[0];
+            $queryCondition = strpos($sql, ' ORDER BY') !== false ? substr($sql, 0, strpos($sql, ' ORDER BY ')) : $sql;
         }
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
@@ -1061,7 +1072,7 @@ class commonModel extends model
      */
     public function checkSafeFile()
     {
-        if($this->app->isContainer()) return false;
+        if($this->config->inContainer) return false;
 
         if($this->app->hasValidSafeFile()) return false;
 
@@ -1239,6 +1250,33 @@ class commonModel extends model
      */
     public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
     {
+        global $app;
+        if(empty($app->user->account)) return false;
+
+        if($object) return self::getUserPriv($module, $method, $object, $vars);
+
+        $module = strtolower($module);
+        $method = strtolower($method);
+
+        if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
+
+        return self::$userPrivs[$module][$method][$vars];
+    }
+
+    /**
+     * 获取用户是否有某个模块、方法的访问权限。
+     * Get the user has the access permission of one module and method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  mixed  $object
+     * @param  string $vars
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function getUserPriv(string $module, string $method, mixed $object = null, string $vars = ''): bool
+    {
         global $app,$config;
         $module = strtolower($module);
         $method = strtolower($method);
@@ -1247,6 +1285,11 @@ class commonModel extends model
         if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($app->user)) return false;
         list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
+
+        /* Compatible with old search. */
+        if($module == 'search' && $method == 'buildoldform')  $method = 'buildform';
+        if($module == 'search' && $method == 'saveoldquery')  $method = 'savequery';
+        if($module == 'search' && $method == 'buildoldquery') $method = 'buildquery';
 
         /* If the user is doing a tutorial, have all tutorial privileges. */
         if(commonModel::isTutorialMode())
@@ -1561,30 +1604,6 @@ class commonModel extends model
     }
 
     /**
-     * 检查RESTful API调用是否合法。
-     * Check an entry of new API.
-     *
-     * @access public
-     * @return void
-     */
-    private function checkNewEntry()
-    {
-        $entry = $this->loadModel('entry')->getByKey(session_id());
-        if(!$entry or !$entry->account or !$this->checkIP($entry->ip)) return false;
-
-        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
-        if(!$user) return false;
-
-        $user->last   = time();
-        $user->rights = $this->loadModel('user')->authorize($user->account);
-        $user->groups = $this->user->getGroups($user->account);
-        $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
-        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
-        $this->session->set('user', $user);
-        $this->app->user = $user;
-    }
-
-    /**
      * 检查旧版API调用是否合法。
      * Check an entry.
      *
@@ -1593,9 +1612,6 @@ class commonModel extends model
      */
     public function checkEntry()
     {
-        /* if the API is new version, goto checkNewEntry. */
-        if($this->app->version) return $this->checkNewEntry();
-
         /* Old version. */
         if(!isset($_GET[$this->config->moduleVar]) or !isset($_GET[$this->config->methodVar])) $this->response('EMPTY_ENTRY');
         if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
@@ -1630,7 +1646,7 @@ class commonModel extends model
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) helper::end(js::locate($this->config->webRoot));
+        if($isFreepasswd) header("Location: {$this->config->webRoot}");
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));
@@ -1672,7 +1688,7 @@ class commonModel extends model
             if($result)
             {
                 if($timestamp <= $entry->calledTime) $this->response('CALLED_TIME');
-                $this->loadModel('entry')->updateCalledTime($entry->code, $timestamp);
+                $this->loadModel('entry')->updateCalledTime($entry->code, (int)$timestamp);
                 unset($_GET['time']);
                 return $result;
             }
@@ -1710,7 +1726,7 @@ class commonModel extends model
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 
-        global $app, $config;
+        global $config;
         static $productsStatus   = array();
         static $executionsStatus = array();
 
@@ -1721,7 +1737,7 @@ class commonModel extends model
         {
             if(!isset($productsStatus[$object->product]))
             {
-                $product = $commonModel->loadModel('product')->getByID($object->product);
+                $product = $commonModel->loadModel('product')->getByID((int)$object->product);
                 $productsStatus[$object->product] = $product ? $product->status : '';
             }
             if($productsStatus[$object->product] == 'closed') return false;
@@ -1829,6 +1845,8 @@ class commonModel extends model
         commonModel::$requestErrors = array();
 
         $requestType = 'GET';
+        if(func_num_args() >= 6 ) $requestType = $method; /* Specify $method parameter explicitly. */
+
         if(!is_array($headers)) $headers = (array)$headers;
 
         $headers[] = 'API-RemoteIP: ' . helper::getRemoteIp(); /* Real IP of real user. */
@@ -1900,6 +1918,13 @@ class commonModel extends model
 
             $saasLog  = date('Ymd H:i:s') . ': ' . $app->getURI() . "\n";
             $saasLog .= "{$requestType} url:    {$url}\n";
+
+            if($app->config->debug)
+            {
+                $saasLog .= 'request  header: ' . json_encode($headers) . PHP_EOL;
+                if(isset($newHeader)) $saasLog .= 'response header: ' . json_encode($newHeader) . PHP_EOL;
+            }
+
             if(!empty($data)) $saasLog .= 'data:   ' . print_r($data, true) . "\n";
             $saasLog .= 'results:' . print_r($response, true) . "\n";
 
@@ -2023,6 +2048,8 @@ class commonModel extends model
 
         foreach($lang->$moduleName->$menuKey as $label => $menu)
         {
+            if(!$menu) continue;
+
             $lang->$moduleName->$menuKey->$label = static::setMenuVarsEx($menu, $objectID, $params);
             if(isset($menu['subMenu']))
             {
@@ -2324,39 +2351,86 @@ class commonModel extends model
             $actions = array();
             foreach($actionList as $action)
             {
-                $actionData = $config->{$moduleName}->actionList[$action];
+                $actionData = !empty($config->{$moduleName}->actionList[$action]) ? $config->{$moduleName}->actionList[$action] : array();
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
-                if(!empty($actionData['url']) && is_array($actionData['url']))
+                if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
+                if($isInModal && !isset($actionData['data-target']) && isset($actionData['data-toggle']) && $actionData['data-toggle'] == 'modal')
                 {
-                    $module = $actionData['url']['module'];
-                    $method = $actionData['url']['method'];
-                    $params = $actionData['url']['params'];
-                    if(!common::hasPriv($module, $method)) continue;
-                    $actionData['url'] = helper::createLink($module, $method, $params);
+                    $actionData['data-load'] = 'modal';
+                    unset($actionData['data-toggle']);
                 }
-                else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
+
+                if(isset($actionData['items']) && is_array($actionData['items']))
                 {
-                    $module = $actionData['data-url']['module'];
-                    $method = $actionData['data-url']['method'];
-                    $params = $actionData['data-url']['params'];
-                    if(!common::hasPriv($module, $method)) continue;
-                    $actionData['data-url'] = helper::createLink($module, $method, $params);
+                    foreach($actionData['items'] as $key => $itemAction)
+                    {
+                        $itemActionData = $config->{$moduleName}->actionList[$itemAction];
+                        $itemActionData = $this->checkPrivForOperateAction($itemActionData, $itemAction, $moduleName, $data, $menu);
+                        if(($isInModal && !empty($itemActionData['notInModal'])) || $itemActionData === false)
+                        {
+                            unset($actionData['items'][$key]);
+                        }
+                        else
+                        {
+                            $actionData['items'][$key] = $itemActionData;
+                        }
+                    }
+                    if(!empty($actionData['items'])) $actions[] = $actionData;
                 }
                 else
                 {
-                    if(!common::hasPriv($moduleName, $action)) continue;
+                    $actionData = $this->checkPrivForOperateAction($actionData, $action, $moduleName, $data, $menu);
+                    if($actionData !== false) $actions[] = $actionData;
                 }
 
-                if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) continue;
-
-                if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
-
-                $actions[] = $actionData;
             }
             $actionsMenu[$menu] = $actions;
         }
         return $actionsMenu;
+    }
+
+    /**
+     * 检查详情页操作按钮的权限。
+     * Check the privilege of the operate action.
+     *
+     * @param  array      $actionData
+     * @param  string     $action
+     * @param  string     $moduleName
+     * @param  object     $data
+     * @param  object     $menu
+     * @access protected
+     * @return array|bool
+     */
+    protected function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
+    {
+        if(!empty($actionData['url']) && is_array($actionData['url']))
+        {
+            $module = $actionData['url']['module'];
+            $method = $actionData['url']['method'];
+            $params = $actionData['url']['params'];
+            if(!common::hasPriv($module, $method)) return false;
+            $actionData['url'] = helper::createLink($module, $method, $params);
+        }
+        else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
+        {
+            $module = $actionData['data-url']['module'];
+            $method = $actionData['data-url']['method'];
+            $params = $actionData['data-url']['params'];
+            if(!common::hasPriv($module, $method)) return false;
+            $actionData['data-url'] = helper::createLink($module, $method, $params);
+        }
+        else
+        {
+            if(!common::hasPriv($moduleName, $action)) return false;
+        }
+
+        if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
+        if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
+
+        if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
+        if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
+        return $actionData;
     }
 
     /**
@@ -2907,7 +2981,7 @@ class commonModel extends model
 
         $html .= "</ul>";
         $html .= "<a class='dropdown-toggle' data-toggle='dropdown'>";
-        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
+        $html .= "<i class='icon icon-plus'></i>";
         $html .= "</a>";
 
         echo $html;
@@ -3502,6 +3576,54 @@ class commonModel extends model
             }
         }
         echo '</nav>';
+    }
+
+    /**
+     * Print icon of comment.
+     *
+     * @param string $commentFormLink
+     * @param object $object
+     *
+     * @static
+     * @access public
+     * @return mixed
+     */
+    public static function printCommentIcon(string $commentFormLink, object $object = null)
+    {
+        global $lang;
+
+        if(!commonModel::hasPriv('action', 'comment', $object)) return false;
+        echo html::commonButton('<i class="icon icon-chat-line"></i> ' . $lang->action->create, '', 'btn btn-link pull-right btn-comment');
+        echo <<<EOF
+<div class="modal fade modal-comment">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title">{$lang->action->create}</h4>
+      </div>
+      <div class="modal-body">
+        <form class="load-indicator not-watch" action="{$commentFormLink}" target='hiddenwin' method='post'>
+          <div class="form-group">
+            <textarea id='comment' name='comment' class="form-control" rows="8" autofocus="autofocus"></textarea>
+          </div>
+          <div class="form-group form-actions text-center">
+            <button type="submit" class="btn btn-primary btn-wide">{$lang->save}</button>
+            <button type="button" class="btn btn-wide" data-dismiss="modal">{$lang->close}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(function()
+{
+    \$body = $('body', window.parent.document);
+    if(\$body.hasClass('hide-modal-close')) \$body.removeClass('hide-modal-close');
+});
+</script>
+EOF;
     }
 }
 

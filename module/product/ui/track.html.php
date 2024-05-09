@@ -15,7 +15,6 @@ namespace zin;
 if($config->URAndSR && $this->app->rawModule == 'projectstory' && $this->session->hasProduct)
 {
     $productItems = array();
-    $projectProducts = $this->product->getPairs();
     foreach($projectProducts as $id => $name)
     {
         $productItems[] = array('text' => $name, 'url' => createLink('projectstory', 'track', "projectID={$this->session->project}&productID={$id}"), 'active' => $productID == $id);
@@ -184,17 +183,14 @@ function getBugTd($bugs)
     return $bugItems;
 };
 
+$colspan = 4;
+if($config->URAndSR) $colspan ++;
+if(in_array($config->edition, array('max', 'ipd'))) $colspan ++;
+if(in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('devops')) $colspan ++;
 div
 (
     setClass('main-col'),
-    empty($tracks) ? div(
-        setClass('table-empty-tip'),
-        span
-        (
-            setClass('text-gray'),
-            $lang->noData
-        )
-    ) : div(
+    div(
         setClass('main-table'),
         h::table
         (
@@ -222,17 +218,25 @@ div
             ),
             h::tbody
             (
-                $getRequirements($tracks)
+                !empty($tracks) ? $getRequirements($tracks) : h::tr
+                (
+                    h::td
+                    (
+                        setClass('text-gray text-center empty-tip'),
+                        set::colspan($colspan),
+                        $lang->product->noData
+                    )
+                )
             )
         ),
-        div
+        !empty($tracks) ? div
         (
             setClass('table-footer'),
             pager(
                 set::_className('flex justify-end items-center'),
                 set::linkCreator(createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&projectID={$projectID}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pagerID={page}"))
             )
-        )
+        ) : null
     )
 );
 

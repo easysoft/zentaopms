@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Utils;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,302 +11,311 @@ use PhpMyAdmin\SqlParser\Utils\Routine;
 class RoutineTest extends TestCase
 {
     /**
-     * @dataProvider getReturnTypeProvider
+     * @param string[] $expected
      *
-     * @param mixed $def
+     * @dataProvider getReturnTypeProvider
      */
-    public function testGetReturnType($def, array $expected)
+    public function testGetReturnType(string $def, array $expected): void
     {
         $this->assertEquals($expected, Routine::getReturnType($def));
     }
 
-    public function getReturnTypeProvider()
+    /**
+     * @return array<int, array<int, string|array<int, string>>>
+     * @psalm-return list<array{string, string[]}>
+     */
+    public function getReturnTypeProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 '',
-                array(
+                [
                     '',
                     '',
                     '',
                     '',
                     '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'TEXT',
-                array(
+                [
                     '',
                     '',
                     'TEXT',
                     '',
                     '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'INT(20)',
-                array(
+                [
                     '',
                     '',
                     'INT',
                     '20',
                     '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'INT UNSIGNED',
-                array(
+                [
                     '',
                     '',
                     'INT',
                     '',
                     'UNSIGNED',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'VARCHAR(1) CHARSET utf8',
-                array(
+                [
                     '',
                     '',
                     'VARCHAR',
                     '1',
                     'utf8',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'ENUM(\'a\', \'b\') CHARSET latin1',
-                array(
+                [
                     '',
                     '',
                     'ENUM',
                     '\'a\',\'b\'',
                     'latin1',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'DECIMAL(5,2) UNSIGNED ZEROFILL',
-                array(
+                [
                     '',
                     '',
                     'DECIMAL',
                     '5,2',
                     'UNSIGNED ZEROFILL',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'SET(\'test\'\'esc"\',   \'more\\\'esc\')',
-                array(
+                [
                     '',
                     '',
                     'SET',
                     '\'test\'\'esc"\',\'more\\\'esc\'',
                     '',
-                ),
-            )
-        );
+                ],
+            ],
+        ];
     }
 
     /**
-     * @dataProvider getParameterProvider
+     * @param string[] $expected
      *
-     * @param mixed $def
+     * @dataProvider getParameterProvider
      */
-    public function testGetParameter($def, array $expected)
+    public function testGetParameter(string $def, array $expected): void
     {
         $this->assertEquals($expected, Routine::getParameter($def));
     }
 
-    public function getParameterProvider()
+    /**
+     * @return array<int, array<int, string|array<int, string>>>
+     * @psalm-return list<array{string, string[]}>
+     */
+    public function getParameterProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 '',
-                array(
+                [
                     '',
                     '',
                     '',
                     '',
                     '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '`foo` TEXT',
-                array(
+                [
                     '',
                     'foo',
                     'TEXT',
                     '',
                     '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '`foo` INT(20)',
-                array(
+                [
                     '',
                     'foo',
                     'INT',
                     '20',
                     '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'IN `fo``fo` INT UNSIGNED',
-                array(
+                [
                     'IN',
                     'fo`fo',
                     'INT',
                     '',
                     'UNSIGNED',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'OUT bar VARCHAR(1) CHARSET utf8',
-                array(
+                [
                     'OUT',
                     'bar',
                     'VARCHAR',
                     '1',
                     'utf8',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '`"baz\'\'` ENUM(\'a\', \'b\') CHARSET latin1',
-                array(
+                [
                     '',
                     '"baz\'\'',
                     'ENUM',
                     '\'a\',\'b\'',
                     'latin1',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'INOUT `foo` DECIMAL(5,2) UNSIGNED ZEROFILL',
-                array(
+                [
                     'INOUT',
                     'foo',
                     'DECIMAL',
                     '5,2',
                     'UNSIGNED ZEROFILL',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '`foo``s func` SET(\'test\'\'esc"\',   \'more\\\'esc\')',
-                array(
+                [
                     '',
                     'foo`s func',
                     'SET',
                     '\'test\'\'esc"\',\'more\\\'esc\'',
                     '',
-                ),
-            )
-        );
+                ],
+            ],
+        ];
     }
 
     /**
-     * @dataProvider getParametersProvider
+     * @param array<string, int|string[]|string[][]> $expected
+     * @psalm-param array{
+     *   num: int,
+     *   dir: string[],
+     *   name: string[],
+     *   type: string[],
+     *   length: string[],
+     *   length_arr: string[][],
+     *   opts: string[]
+     * } $expected
      *
-     * @param mixed $query
+     * @dataProvider getParametersProvider
      */
-    public function testGetParameters($query, array $expected)
+    public function testGetParameters(string $query, array $expected): void
     {
         $parser = new Parser($query);
         $this->assertEquals($expected, Routine::getParameters($parser->statements[0]));
     }
 
-    public function getParametersProvider()
+    /**
+     * @return array<int, array<int, string|array<string, int|string[]|string[][]>>>
+     * @psalm-return list<array{string, array{
+     *   num: int,
+     *   dir: string[],
+     *   name: string[],
+     *   type: string[],
+     *   length: string[],
+     *   length_arr: string[][],
+     *   opts: string[]
+     * }}>
+     */
+    public function getParametersProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'CREATE PROCEDURE `foo`() SET @A=0',
-                array(
+                [
                     'num' => 0,
-                    'dir' => array(),
-                    'name' => array(),
-                    'type' => array(),
-                    'length' => array(),
-                    'length_arr' => array(),
-                    'opts' => array(),
-                ),
-            ),
-            array(
+                    'dir' => [],
+                    'name' => [],
+                    'type' => [],
+                    'length' => [],
+                    'length_arr' => [],
+                    'opts' => [],
+                ],
+            ],
+            [
                 'CREATE DEFINER=`user\\`@`somehost``(` FUNCTION `foo```(`baz` INT) BEGIN SELECT NULL; END',
-                array(
+                [
                     'num' => 1,
-                    'dir' => array(
-                        0 => '',
-                    ),
-                    'name' => array(
-                        0 => 'baz',
-                    ),
-                    'type' => array(
-                        0 => 'INT',
-                    ),
-                    'length' => array(
-                        0 => '',
-                    ),
-                    'length_arr' => array(
-                        0 => array(),
-                    ),
-                    'opts' => array(
-                        0 => '',
-                    ),
-                ),
-            ),
-            array(
+                    'dir' => [0 => ''],
+                    'name' => [0 => 'baz'],
+                    'type' => [0 => 'INT'],
+                    'length' => [0 => ''],
+                    'length_arr' => [
+                        0 => [],
+                    ],
+                    'opts' => [0 => ''],
+                ],
+            ],
+            [
                 'CREATE PROCEDURE `foo`(IN `baz\\)` INT(25) zerofill unsigned) BEGIN SELECT NULL; END',
-                array(
+                [
                     'num' => 1,
-                    'dir' => array(
-                        0 => 'IN',
-                    ),
-                    'name' => array(
-                        0 => 'baz\\)',
-                    ),
-                    'type' => array(
-                        0 => 'INT',
-                    ),
-                    'length' => array(
-                        0 => '25',
-                    ),
-                    'length_arr' => array(
-                        0 => array('25'),
-                    ),
-                    'opts' => array(
-                        0 => 'UNSIGNED ZEROFILL',
-                    ),
-                ),
-            ),
-            array(
+                    'dir' => [0 => 'IN'],
+                    'name' => [0 => 'baz\\)'],
+                    'type' => [0 => 'INT'],
+                    'length' => [0 => '25'],
+                    'length_arr' => [
+                        0 => ['25'],
+                    ],
+                    'opts' => [0 => 'UNSIGNED ZEROFILL'],
+                ],
+            ],
+            [
                 'CREATE PROCEDURE `foo`(IN `baz\\` INT(001) zerofill, out bazz varchar(15) charset utf8) ' .
                 'BEGIN SELECT NULL; END',
-                array(
+                [
                     'num' => 2,
-                    'dir' => array(
+                    'dir' => [
                         0 => 'IN',
                         1 => 'OUT',
-                    ),
-                    'name' => array(
+                    ],
+                    'name' => [
                         0 => 'baz\\',
                         1 => 'bazz',
-                    ),
-                    'type' => array(
+                    ],
+                    'type' => [
                         0 => 'INT',
                         1 => 'VARCHAR',
-                    ),
-                    'length' => array(
+                    ],
+                    'length' => [
                         0 => '1',
                         1 => '15',
-                    ),
-                    'length_arr' => array(
-                        0 => array('1'),
-                        1 => array('15'),
-                    ),
-                    'opts' => array(
+                    ],
+                    'length_arr' => [
+                        0 => ['1'],
+                        1 => ['15'],
+                    ],
+                    'opts' => [
                         0 => 'ZEROFILL',
                         1 => 'utf8',
-                    ),
-                ),
-            )
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 }

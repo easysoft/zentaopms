@@ -27,9 +27,10 @@ div
             (
                 formGroup
                 (
+                    setClass('w-1/2'),
                     set::label($lang->upgrade->fromVersion),
                     picker
-                    ( 
+                    (
                         set::name('fromVersion'),
                         set::required(true),
                         set::items($lang->upgrade->fromVersions),

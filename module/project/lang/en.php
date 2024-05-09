@@ -249,6 +249,7 @@ $lang->project->summary                = "Total {$lang->projectCommon}s: %s.";
 $lang->project->allSummary             = "Total {$lang->projectCommon}s: %s, Wait: %s, Doing: %s, Suspended: %s, Closed: %s.";
 $lang->project->checkedSummary         = 'Seleted: %total%.';
 $lang->project->checkedAllSummary      = 'Seleted: %total%, Wait: %wait%, Doing: %doing%, Suspended: %suspended%, Closed: %closed%.';
+$lang->project->selectProductTip       = "When no {$lang->productCommon} is selected, the system will automatically create a {$lang->productCommon} with the same name as the {$lang->projectCommon}.";
 
 $lang->project->error = new stdclass();
 $lang->project->error->existProductName = "{$lang->productCommon} name already exists.";

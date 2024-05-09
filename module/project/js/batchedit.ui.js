@@ -12,8 +12,18 @@ function batchComputeWorkDays()
     const $tr = $(this).closest('tr');
     if($tr.find('div[data-longtime="1"]').length > 0) return false;
 
+    const $days   = $tr.find('[data-name="days"] input');
+    const endDate = $tr.find('[name^=end]').val();
+    if(endDate == longTime)
+    {
+        $days.val('').addClass('disabled');
+        $days.attr('disabled', 'disabled');
+        return false;
+    }
+    $days.removeClass('disabled');
+    $days.removeAttr('disabled');
+
     const beginDate = $tr.find('[name^=begin]').val();
-    const endDate   = $tr.find('[name^=end]').val();
     $tr.find('[name^=days]').val(computeDaysDelta(beginDate, endDate));
 }
 
@@ -79,18 +89,17 @@ batchIgnoreTip = function(index)
 
 window.renderRowData = function($row, index, row)
 {
-    /* 如果某个项目是长期项目，更新计划完成日期和可用工作日的样式。*/
-    /* If a project is a long-term project, update the style of the planned completion date and available working days. */
-    if(row.end == LONG_TIME)
-    {
-        $row.find('[data-name="end"] [id^=end]').attr('data-longTime', 1).addClass('hidden').next().removeClass('hidden');
-        $row.find('[name^=days]').val(0).attr('readonly', true);
-    }
-
     const aclList = !disabledprograms && row.parent ? programAclList : projectAclList;
     $row.find('[data-name="acl"]').find('.picker-box').on('inited', function(e, info)
     {
         let $acl = info[0];
         $acl.render({items: aclList, required: true});
     });
+
+    if(row.end == longTime)
+    {
+        const $days = $row.find('[data-name="days"] input');
+        $days.val('').addClass('disabled');
+        $days.attr('disabled', 'disabled');
+    }
 }

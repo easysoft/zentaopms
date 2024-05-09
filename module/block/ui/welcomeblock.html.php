@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+use zin\utils\style;
+
 $getMeasureItem = function($data)
 {
     global $lang;
@@ -28,102 +30,78 @@ $getMeasureItem = function($data)
                 set('class', 'text-3xl h-10'),
                 !empty($info['href']) ? a(setClass('text-primary'), set('href', $info['href']), $info['number']) : span($info['number'])
             ),
-            div(zget($welcomeLabel, $key, '')),
-            !empty($info['delay']) ? div
-            (
-                set('class', 'label danger-pale circle size-sm'),
-                $lang->block->delay . ' ' . $info['delay']
-            ) : null
+            div(zget($welcomeLabel, $key, ''))
         );
     }
     return $items;
 };
 
-$blockNavCode = 'nav-' . uniqid();
-panel
+blockPanel
 (
-    set('class', 'welcome-block'),
+    set::title(false),
+    set::headingClass('px-0 py-1 border-b-0'),
+    set::bodyClass('p-0'),
+    set::bodyProps(array('style' => array('background-image' => 'linear-gradient(90deg, var(--color-secondary-50) 0%, var(--color-canvas) 22%)'))),
     to::heading
     (
-        div
+        row
         (
-            set('class', 'panel-title flex w-full'),
+            setClass('flex-auto items-center p-2 gap-2'),
             cell
             (
-                set('width', '22%'),
-                set('class', 'center'),
-                span($todaySummary)
-
+                set::width('22%'),
+                setClass('text-center font-bold text-md'),
+                $todaySummary
             ),
             cell
             (
-                set::className('pr-8'),
-                span(set('class', 'text-sm font-normal'), html(sprintf($lang->block->summary->welcome, $usageDays, $finishTask, $fixBug)))
+                setClass('text-sm'),
+                html($welcomeSummary)
             )
         )
     ),
-    div
+    row
     (
-        set('class', 'flex h-32'),
+        setClass('h-full'),
         cell
         (
-            set('width', '22%'),
-            set('align', 'center'),
-            set::className('gradient border-right py-2'),
-            center
+            setClass('center flex-none gap-2'),
+            set::width('22%'),
+            strong(sprintf($lang->block->welcomeList[$welcomeType], $app->user->realname)),
+            userAvatar
             (
-                set('class', 'font-bold'),
-                sprintf($lang->block->welcomeList[$welcomeType], $app->user->realname)
+                set::className('welcome-avatar'),
+                set('user', $this->app->user)
             ),
-            center
+            $honorary ? label
             (
-                set::className('my-1'),
-                center
-                (
-                    set::className('rounded-full avatar-border-one'),
-                    center
-                    (
-                        set::className('rounded-full avatar-border-two'),
-                        userAvatar
-                        (
-                            set::className('welcome-avatar ellipsis'),
-                            set('user', $this->app->user)
-                        )
-                    )
-                )
-            ),
-            $honorary ? center(span(set('class', 'label circle honorary text-xs'), $honorary)) : null
+                setClass('rounded-full size-sm'),
+                setStyle('background', 'linear-gradient(87.65deg, rgba(255, 186, 52, 0.8) -19.92%, rgba(253, 222, 164, 0.8) 112.97%)'),
+                setStyle('border', '0.5px solid #FF9F46'),
+                setStyle('color', '#7E5403'),
+                $honorary
+            ) : null,
         ),
+        divider(setClass('h-10 self-center')),
         cell
         (
-            set('width', '78%'),
-            set::className('px-8'),
-            tabs
-            (
-                empty($lang->block->welcome->reviewList) ? null : tabPane
-                (
-                    set::key("reviewByMe_$blockNavCode"),
-                    set::title($lang->block->welcome->reviewByMe),
-                    div
-                    (
-                        set::className('flex justify-around text-center'),
-                        $getMeasureItem($reviewByMe)
-                    )
-                ),
-                tabPane
-                (
-                    set::key("assignToMe_$blockNavCode"),
-                    set::title($lang->block->welcome->assignToMe),
-                    set::active(true),
-                    div
-                    (
-                        set::className('flex justify-around text-center'),
-                        $getMeasureItem($assignToMe)
-                    )
-                )
-            )
+            setClass('col text-center py-4'),
+            set::width('16%'),
+            div(span(setClass('font-bold text-md'), $lang->block->welcome->reviewByMe)),
+            div(set::className('flex-auto center'), $getMeasureItem($reviewByMe))
+        ),
+        divider(setClass('h-10 self-center')),
+        cell
+        (
+            setClass('col flex-auto py-4'),
+            div(span(setClass('font-bold text-md ml-8'), $lang->block->welcome->assignToMe)),
+            div(setClass('flex-auto flex justify-around text-center items-center'), $getMeasureItem($assignToMe))
         )
+    ),
+    h::css
+    (
+        '.block-welcome .tabs-nav > .nav-item > a {padding: 0 8px; border-radius: 4px; height: 28px}',
+        '.block-welcome .tabs-nav > .nav-item > a:not(.active) {font-weight: normal; color: var(--color-gray-700)}',
+        '.block-welcome .tabs-nav > .nav-item > a.active {font-weight: bold; color: var(--color-gray-900); background: var(--color-primary-50)}'
     )
 );
-
-render();

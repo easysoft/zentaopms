@@ -35,13 +35,13 @@ class fileModel extends model
     /**
      * Get files of an object.
      *
-     * @param  string   $objectType
-     * @param  string   $objectID
-     * @param  string   $extra
+     * @param  string    $objectType
+     * @param  int|array $objectID
+     * @param  string    $extra
      * @access public
      * @return array
      */
-    public function getByObject(string $objectType, int $objectID, string $extra = ''): array
+    public function getByObject(string $objectType, int|array $objectID, string $extra = ''): array
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
@@ -54,6 +54,30 @@ class fileModel extends model
 
         foreach($files as $file) $this->setFileWebAndRealPaths($file);
         return $files;
+    }
+
+    /**
+     * Delete files by object.
+     *
+     * @param  string    $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function deleteByObject($objectType, $objectID)
+    {
+        $files = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+
+        foreach($files as $file)
+        {
+            $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->eq($file->id)->exec();
+        }
+
+        return true;
     }
 
     /**
@@ -185,6 +209,11 @@ class fileModel extends model
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
         if(!is_array($_FILES[$htmlTagName]['error']) && $_FILES[$htmlTagName]['error'] != 0) return $_FILES[$htmlTagName];
+        if(is_array($_FILES[$htmlTagName]['error']) && reset($_FILES[$htmlTagName]['error']) != 0)
+        {
+            $_FILES[$htmlTagName]['error'] = reset($_FILES[$htmlTagName]['error']);
+            return $_FILES[$htmlTagName];
+        }
 
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
@@ -541,6 +570,8 @@ class fileModel extends model
      */
     public function checkPriv(object $file): bool
     {
+        if(!$file->objectType || !$file->objectID) return true;
+
         $objectType = $file->objectType;
         $objectID   = $file->objectID;
         $table      = $this->config->objectTables[$objectType];
@@ -558,12 +589,6 @@ class fileModel extends model
         if($objectType == 'release')
         {
             $release = $this->dao->select('project,product')->from(TABLE_RELEASE)->where('id')->eq($objectID)->fetch();
-
-            if(!empty($release->project))
-            {
-                $projectIdList = array_filter(explode(',', $release->project));
-                return $this->loadModel('project')->checkPriv(current($projectIdList));
-            }
             return $this->loadModel('product')->checkPriv($release->product);
         }
 
@@ -684,11 +709,14 @@ class fileModel extends model
      *
      * @param  object       $data
      * @param  string|array $editorList
+     * @param  mixed        $uid
      * @access public
      * @return object
      */
-    public function processImgURL(object $data, string|array $editorList, string $uid = ''): object
+    public function processImgURL(object $data, string|array $editorList, mixed $uid = ''): object
     {
+        if(!is_string($uid)) return $data;
+
         if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
         if(empty($editorList)) return $data;
 
@@ -847,7 +875,12 @@ class fileModel extends model
      */
     public function replaceImgURL(object $data, string $fields): object
     {
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
         if(is_string($fields)) $fields = explode(',', str_replace(' ', '', $fields));
+
+        $textareaFields = $this->dao->select('id,field')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchPairs();
+        if($textareaFields) $fields = array_merge($fields, $textareaFields);
 
         foreach($fields as $field)
         {
@@ -855,8 +888,6 @@ class fileModel extends model
             $data->$field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $data->$field);
 
             /* Convert plain text URLs into HTML hyperlinks. */
-            $moduleName = $this->app->getModuleName();
-            $methodName = $this->app->getMethodName();
             if(isset($this->config->file->convertURL['common'][$methodName]) or isset($this->config->file->convertURL[$moduleName][$methodName]))
             {
                 $fieldData = $data->$field;
@@ -933,7 +964,7 @@ class fileModel extends model
         /* Judge the content type. */
         $mimes       = $this->config->file->mimes;
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
-        $fileName    = urlencode($fileName);
+        $fileName    = str_replace('+', ' ', urlencode($fileName));
 
         helper::header('Content-type', $contentType);
         helper::header('Content-Disposition', "attachment; filename=\"$fileName\"");
@@ -1083,7 +1114,7 @@ class fileModel extends model
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
 
-        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'");
         if(strpos('view,edit', $method) !== false)
         {
             if(common::hasPriv($objectType, 'view', $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);

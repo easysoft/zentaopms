@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -16,7 +16,7 @@ cid=1
 
 */
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-10');
 $execution->name->range('项目集1,项目1,项目2,项目3,迭代1,迭代2,阶段1,阶段2,看板1,看板2');
 $execution->type->range('program,project,sprint{2},stage{2},kanban{2}');
@@ -30,7 +30,7 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(10);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-3');
 $product->name->range('1-3')->prefix('产品');
 $product->code->range('1-3')->prefix('product');
@@ -41,7 +41,7 @@ $product->QD->range('user1');
 $product->RD->range('user2');
 $product->gen(3);
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->project->range('2{3}, 3{3}, 4{3}, 5, 6, 7, 8, 9, 10');
 $projectProduct->product->range('1-3');
 $projectProduct->branch->range('0');

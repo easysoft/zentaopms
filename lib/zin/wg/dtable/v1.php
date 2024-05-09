@@ -5,22 +5,23 @@ namespace zin;
 class dtable extends wg
 {
     protected static array $defineProps = array(
-        'className?:string="shadow rounded"', // 表格样式。
-        'id?:string',                            // ID。
-        'customCols?: bool|array',               // 是否支持自定义列。
-        'cols?:array',                           // 表格列配置。
-        'data?:array',                           // 表格数据源。
-        'module?:string',                        // 模块信息，主要是获取语言项。
-        'emptyTip?:string',                      // 表格数据源为空时显示的文本。
-        'createTip?:string',                     // 表格数据源为空时的创建文本。
-        'createLink?:array|string',              // 表格数据源为空时的创建链接。
-        'createAttr?:string',                    // 表格数据源为空时的创建链接属性。
-        'sortLink?:array|string',                // 排序链接。
-        'orderBy?:string',                       // 排序字段。
-        'loadPartial?: bool',                    // 启用部分加载，不更新浏览器地址栏 URL。
-        'loadOptions?: array',                   // 分页和排序加载选项。
-        'userMap?: array',                       // 用户账号姓名对应列表
-        'unassignedText?: string'                // 未指派文本
+        'className?:string="shadow ring rounded"', // CSS 类。
+        'id?:string',                              // ID。
+        'customCols?: bool|array',                 // 是否支持自定义列。
+        'cols?:array',                             // 表格列配置。
+        'dataModifier?:callable|array',            // 数据处理函数。
+        'data?:array',                             // 表格数据源。
+        'module?:string',                          // 模块信息，主要是获取语言项。
+        'emptyTip?:string',                        // 表格数据源为空时显示的文本。
+        'createTip?:string',                       // 表格数据源为空时的创建文本。
+        'createLink?:array|string',                // 表格数据源为空时的创建链接。
+        'createAttr?:string',                      // 表格数据源为空时的创建链接属性。
+        'sortLink?:array|string',                  // 排序链接。
+        'orderBy?:string',                         // 排序字段。
+        'loadPartial?: bool',                      // 启用部分加载，不更新浏览器地址栏 URL。
+        'loadOptions?: array',                     // 分页和排序加载选项。
+        'userMap?: array',                         // 用户账号姓名对应列表
+        'unassignedText?: string'                  // 未指派文本
     );
 
     static $dtableID = 0;
@@ -51,6 +52,24 @@ class dtable extends wg
         $this->initFooterBar();
 
         $tableData = $this->prop('data', array());
+        $dataModifier = $this->prop('dataModifier');
+        if($dataModifier)
+        {
+            if(is_callable($dataModifier))
+            {
+                $tableData = array_map($dataModifier, $tableData);
+            }
+            elseif(is_array($dataModifier))
+            {
+                foreach($dataModifier as $key => $modifier)
+                {
+                    foreach($tableData as $index => &$item)
+                    {
+                        $item[$key] = $modifier($item[$key], $item, $index);
+                    }
+                }
+            }
+        }
         $this->setProp('data', array_values($tableData));
     }
 
@@ -118,9 +137,11 @@ class dtable extends wg
      */
     public function initCols(string $module)
     {
-        global $app;
+        global $app, $lang;
+
         $colConfigs = $this->prop('cols');
         $dataPairs  = $this->prop('userMap', array());
+
         foreach($colConfigs as $field => &$config)
         {
             if(is_object($config)) $config = (array)$config;
@@ -139,6 +160,49 @@ class dtable extends wg
                 if(!empty($config['userMap'])) $dataPairs = $config['userMap'];
                 $delimiter = is_string($config['delimiter']) ? $config['delimiter'] : ',';
                 $config['map'] = jsRaw("(value) => {return window.setMultipleCell(value, '" . json_encode($dataPairs). "', '{$delimiter}')}");
+            }
+
+            if(isset($config['type']))
+            {
+                if($config['type'] === 'pri' && !isset($config['priList']) && !$this->prop('priList'))
+                {
+                    $moduleName = $app->getModuleName();
+                    if(isset($lang->$moduleName->priList))   $this->setProp('priList', $lang->$moduleName->priList);
+                    elseif($app->getMethodName() === 'task') $this->setProp('priList', $lang->task->priList);
+                }
+                if($config['type'] === 'severity' && !isset($config['severityList']) && !$this->prop('severityList'))
+                {
+                    $moduleName = $app->getModuleName();
+                    if(isset($lang->$moduleName->severityList)) $this->setProp('severityList', $lang->$moduleName->severityList);
+                    elseif($app->getMethodName() === 'bug') $this->setProp('priList', $lang->bug->severityList);
+                }
+                if($config['type'] === 'assign' && !isset($config['currentUser']) && isset($app->user) && !$this->prop('currentUser'))
+                {
+                    $this->setProp('currentUser', $app->user->account);
+                }
+            }
+
+            if(isset($config['modifier']))
+            {
+                $modifier = $config['modifier'];
+                if($modifier)
+                {
+                    $tableData = $this->prop('data', array());
+                    $key       = $config['name'];
+                    if(!is_array($modifier)) $modifier = array($modifier);
+                    foreach($tableData as &$item)
+                    {
+                        foreach($modifier as $subModifier)
+                        {
+                            if(!is_callable($subModifier)) continue;
+                            if($subModifier instanceof \Closure) $subModifier = $subModifier->bindTo($item);
+                            if(is_object($item)) $item->$key = $subModifier($item->$key);
+                            else                 $item[$key] = $subModifier($item[$key]);
+                        }
+                    }
+                    $this->setProp('data', array_values($tableData));
+                }
+                unset($config['modifier']);
             }
         }
 

@@ -12,7 +12,7 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 $upgrade = new upgradeTest();
 r($upgrade->deleteTmpModelTest()) && p() && e('0'); // 测试删除临时 model 文件，然后获取 tmp 目录下文件数量。

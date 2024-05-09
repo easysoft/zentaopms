@@ -30,6 +30,26 @@ foreach($lang->productplan->orderList as $order => $label)
     $orderItems[] = array('text' => $label, 'active' => $orderBy == $order, 'url' => $this->createLink($app->rawModule, 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&queryID=$queryID&orderBy=$order"));
 }
 
+$labelItems = array();
+if($product->type == 'normal')
+{
+    $labelItems[] = array('text' => $lang->productplan->all . ' ' . $planCount, 'icon' => 'delay', 'class' => 'statistic-plan');
+}
+else
+{
+    $branchItems = array();
+    foreach($branches as $key => $value)
+    {
+        $branchItems[] = array('text' => $value, 'active' => $key == $branchID, 'url' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$key}"));
+    }
+    $labelItems[] = array('text' => $branches[$branchID], 'items' => $branchItems, 'type' => 'dropdown', 'icon' => 'delay', 'className' => 'statistic-plan btn btn-caret');
+}
+
+!empty($labelItems) ? featureBar
+(
+    set::items($labelItems)
+) : null;
+
 toolbar
 (
     set::className('w-full justify-end'),

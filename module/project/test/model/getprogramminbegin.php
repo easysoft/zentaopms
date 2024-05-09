@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project')->config('project')->gen(11);
+$project = zenData('project')->loadYaml('project')->gen(11);
 
 /**
 

@@ -13,7 +13,7 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('table',      $selectedTable);?>
 <?php js::set('type',       $type);?>
-<?php js::set('dataview',   $dataview);?>
+<?php js::set('dataview',   $data ? $data : '');?>
 <?php js::set('fieldCount', count($fields));?>
 <?php js::set('warningDesign', $lang->dataview->error->warningDesign);?>
 <?php js::set('viewResult',    $lang->dataview->viewResult);?>

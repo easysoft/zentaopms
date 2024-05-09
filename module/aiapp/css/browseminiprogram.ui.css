@@ -116,6 +116,7 @@
 
 pre.message-content {
     white-space: pre-wrap;
+    font-family: inherit !important;
 }
 
 .ai-message-content {
@@ -226,4 +227,9 @@ pre.message-content {
 
 .loading-bar {
     background: #E4E4E4;
+}
+
+textarea::placeholder {
+    white-space: nowrap;
+    overflow: hidden;
 }

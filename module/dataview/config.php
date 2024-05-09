@@ -10,6 +10,9 @@ $config->dataview->groupChild['product'] = array('story' => 'story,storyestimate
 $config->dataview->groupChild['project'] = array('measure' => 'measqueue,measrecords,meastemplate', 'projectContent' => 'programactivity,programoutput,programprocess,programreport,projectcase,projectproduct,projectspec,projectstory', 'review' => 'review,reviewissue,reviewlist,reviewresult');
 $config->dataview->groupChild['company'] = array('user' => 'user,usercontact,usergroup,userquery,usertpl,userview');
 
+$config->dataview->multipleMappingFields = array();
+$config->dataview->multipleMappingFields[] = 'testcase-stage';
+
 $config->dataview->columnTypes = new stdclass();
 $config->dataview->columnTypes->TINY       = 'number';
 $config->dataview->columnTypes->SHORT      = 'number';

@@ -37,19 +37,32 @@ toolbar
     $canCreatePlan ? item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->productplan->create, 'url' => createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}")))) : null
 );
 
-$cols      = $this->loadModel('datatable')->getSetting('productplan');
+$cols = $this->loadModel('datatable')->getSetting('productplan');
+$cols['title']['data-app'] = $app->tab;
+if($app->rawModule == 'projectplan') $cols['actions']['list']['createExecution']['url']['params'] = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID={id}";
+
 $tableData = initTableData($plans, $cols, $this->productplan);
 foreach($tableData as $plan)
 {
+    $otherActions = array();
+    foreach($plan->actions as $i => $action)
+    {
+        if(is_string($action) && strpos($action, 'other:') !== false)
+        {
+            $otherActions = explode(',', str_replace('other:', '', $action));
+            break;
+        }
+    }
+
     $otherActions = array_filter(array_map(function($action) use($plan)
     {
-        if($plan->status == 'doing' && (str_contains($action, 'close') || str_contains($action, 'activate'))) return $action;
-        if($plan->status == 'done' && str_contains($action, 'activate')) return $action;
-        if($plan->status == 'closed' && str_contains($action, 'close')) return $action;
+        if($plan->status == 'doing' && (strpos($action, 'close') !== false || strpos($action, 'activate') !== false)) return $action;
+        if($plan->status == 'done' && strpos($action, 'activate') !== false) return $action;
+        if($plan->status == 'closed' && strpos($action, 'close') !== false) return $action;
         if($plan->status == 'wait') return $action;
         return null;
-    }, explode(',', str_replace('other:', '', $plan->actions[1]))));
-    $plan->actions[1] = 'other:' . implode(',', $otherActions);
+    }, $otherActions));
+    if($otherActions) $plan->actions[$i] = 'other:' . implode(',', $otherActions);
 }
 
 $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
@@ -74,11 +87,11 @@ if($canBatchAction)
         foreach($lang->productplan->statusList as $statusKey => $statusText)
         {
             $items[$statusKey] = array
-                (
-                    'text'     => $statusText,
-                    'class'    => 'batch-btn',
-                    'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}")
-                );
+            (
+                'text'     => $statusText,
+                'class'    => 'batch-btn ajax-btn not-open-url',
+                'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}")
+            );
             if($statusKey == 'closed') $items[$statusKey]['data-page'] = 'batch';
         }
 

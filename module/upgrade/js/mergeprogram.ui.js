@@ -85,8 +85,8 @@ window.changeProjectType = function()
     const projectType = $('input[name=projectType]:checked').val();
 
     $('.programForm, .formTitle').toggleClass('hidden', projectType == 'project' && mode == 'light');
-    $('.createProjectTip').toggleClass('hidden', projectType == 'project');
-    $('.createExecutionTip').toggleClass('hidden', projectType == 'execution');
+    $('.createProjectTip').toggleClass('hidden', projectType != 'project');
+    $('.createExecutionTip').toggleClass('hidden', projectType != 'execution');
     $('[name=projectAcl]').closest('.check-list').toggleClass('hidden', projectType == 'project');
     $('[name=programAcl]').closest('.check-list').toggleClass('hidden', projectType == 'execution');
     $('.projectName').toggleClass('hidden', projectType == 'project');

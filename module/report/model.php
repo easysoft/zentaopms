@@ -149,7 +149,7 @@ class reportModel extends model
             ->andWhere('t1.assignedTo')->ne('closed')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.deadline', true)->eq('1970-01-01')
+            ->andWhere('t1.deadline', true)->isNull()
             ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
             ->markRight(1)
             ->fetchGroup('user');
@@ -175,7 +175,7 @@ class reportModel extends model
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait,doing')
             ->andWhere('t3.status')->ne('suspended')
-            ->andWhere('t1.deadline', true)->eq('1970-01-01')
+            ->andWhere('t1.deadline', true)->isNull()
             ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))
             ->markRight(1)
             ->fetchGroup('user');
@@ -190,13 +190,10 @@ class reportModel extends model
      */
     public function getUserTodos(): array
     {
-        $stmt = $this->dao->select('t1.*, t2.account as user')
-            ->from(TABLE_TODO)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.account = t2.account')
-            ->where('t1.cycle')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->in('wait,doing')
+        $stmt = $this->dao->select('*')->from(TABLE_TODO)
+            ->where('cycle')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->in('wait,doing')
             ->query();
 
         $todos = array();
@@ -204,7 +201,9 @@ class reportModel extends model
         {
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
-            $todos[$todo->user][] = $todo;
+
+            $user = !empty($todo->assignedTo) ? $todo->assignedTo : $todo->account;
+            $todos[$user][] = $todo;
         }
         return $todos;
     }

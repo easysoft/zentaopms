@@ -29,10 +29,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/design.class.php';
+include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
 
-zdTable('design')->gen(0);
-zdTable('user')->gen(5);
+zenData('design')->gen(0);
+zenData('user')->gen(5);
 
 $hldsDesgins   = array(array('type' => 'HLDS', 'name' => '概要设计1'),   array('type' => 'HLDS', 'name' => '概要设计2'));
 $ddsDesgins    = array(array('type' => 'DDS',  'name' => '详细设计1'),   array('type' => 'DDS',  'name' => '详细设计2'));

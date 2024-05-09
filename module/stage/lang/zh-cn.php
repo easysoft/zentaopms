@@ -39,7 +39,7 @@ $lang->stage->ipdTypeList['plan']      = '计划';
 $lang->stage->ipdTypeList['develop']   = '开发';
 $lang->stage->ipdTypeList['qualify']   = '验证';
 $lang->stage->ipdTypeList['launch']    = '发布';
-$lang->stage->ipdTypeList['lifecycle'] = '全生命周期';
+$lang->stage->ipdTypeList['lifecycle'] = '生命周期';
 
 $lang->stage->viewList      = '浏览列表';
 $lang->stage->noStage       = '暂时没有阶段';

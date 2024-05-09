@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(5);
-zdTable('task')->config('task')->gen(8);
-zdTable('kanbanlane')->config('kanbanlane')->gen(10);
-zdTable('kanbancolumn')->config('kanbancolumn')->gen(18);
-zdTable('kanbancell')->config('kanbancell')->gen(18);
+zenData('project')->loadYaml('project')->gen(5);
+zenData('task')->loadYaml('task')->gen(8);
+zenData('kanbanlane')->loadYaml('kanbanlane')->gen(10);
+zenData('kanbancolumn')->loadYaml('kanbancolumn')->gen(18);
+zenData('kanbancell')->loadYaml('kanbancell')->gen(18);
 
 /**
 

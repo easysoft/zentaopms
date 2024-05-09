@@ -13,10 +13,9 @@ namespace zin;
 $items = array();
 $items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 'static', 'width' => '32px', 'class' => 'no');
 $items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
-$items[] = array('name' => 'name_with_namespace', 'label' => $lang->repo->repo, 'control' => 'static', 'width' => '264px');
-$items[] = array('name' => 'name', 'label' => $lang->repo->importName);
-$items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products);
-$items[] = array('name' => 'projects', 'label' => $lang->repo->projects, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $projects);
+$items[] = array('name' => $server->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static');
+$items[] = array('name' => $server->type == 'gitlab' ? 'name' : 'identifier', 'label' => $lang->repo->importName, 'className' => 'w-1/3');
+$items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products, 'className' => 'w-1/4');
 
 $no = 1;
 foreach($repoList as $repo)
@@ -41,18 +40,22 @@ foreach($repoList as $repo)
         set::name('servers'),
         set::id('servers'),
         set::placeholder($lang->repo->importServer),
-        set::items(array('' => '') + $gitlabPairs),
-        set::value($gitlab->id)
+        set::items(array('' => '') + $servers),
+        set::value($server->id)
     )
 );
 
+jsVar('serverID', $server->id);
+jsVar('hiddenRepos', $hiddenRepos);
+jsVar('hideLang', $this->lang->repo->hide);
+jsVar('showLang', $this->lang->repo->show);
 formBatchPanel
 (
     h::input
     (
         set::type('hidden'),
         set::name('serviceHost'),
-        set::value($gitlab->id)
+        set::value($server->id)
     ),
     set::id('repoList'),
     set::back('repo-maintain'),
@@ -61,7 +64,6 @@ formBatchPanel
     set::items($items),
     set::data($repoList),
     set::maxRows(count($repoList)),
-    on::change('[data-name="product"]', 'loadProductProjects')
 );
 
 render();

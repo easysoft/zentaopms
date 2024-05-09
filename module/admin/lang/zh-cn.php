@@ -123,6 +123,7 @@ $lang->admin->setModule->OA             = '办公';
 $lang->admin->setModule->deploy         = '运维';
 $lang->admin->setModule->traincourse    = '学堂';
 $lang->admin->setModule->setCode        = '代号';
+$lang->admin->setModule->measrecord     = '度量';
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common                   = '安全策略';
@@ -213,8 +214,9 @@ $lang->admin->productFeature['max'][] = '严格权限控制，方式灵活安全
 
 $lang->admin->ai = new stdclass();
 $lang->admin->ai->model        = '语言模型';
-$lang->admin->ai->conversation = '会话';
-$lang->admin->ai->miniPrograms = '小程序';
-$lang->admin->ai->prompt       = '提词';
+$lang->admin->ai->conversation = 'AI 会话';
+$lang->admin->ai->miniPrograms = 'AI 小程序';
+$lang->admin->ai->prompt       = 'AI 提词';
+$lang->admin->ai->assistant    = 'AI 助手';
 
 include dirname(__FILE__) . '/menu.php';

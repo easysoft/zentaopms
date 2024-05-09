@@ -25,7 +25,11 @@ foreach($disabledFeatures as $feature)
     if(is_array($feature) && empty($disabledScrumFeatures)) continue;
     $trs[] = h::tr
     (
-        h::td(is_array($feature) && !empty($disabledScrumFeatures) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature]),
+        h::td
+        (
+            setClass('text-left'),
+            is_array($feature) && !empty($disabledScrumFeatures) ? sprintf($lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $lang->custom->features[$feature]
+        ),
         h::td
         (
             icon
@@ -51,7 +55,11 @@ foreach($config->custom->allFeatures as $feature)
 
     $trs[] = h::tr
     (
-        h::td(($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature]),
+        h::td
+        (
+            setClass('text-left'),
+            ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $lang->custom->features[$feature]
+        ),
         h::td
         (
             icon
@@ -73,18 +81,22 @@ foreach($config->custom->allFeatures as $feature)
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         formPanel
         (
-            setClass('bg-canvas'),
+            setClass('bg-canvas m-auto pb-8'),
             set::title($lang->install->selectMode),
             set::titleClass('text-xl'),
             set::actions(array()),
+            on::click('.selectUsageBtn', 'selectUsage'),
             to::heading
             (
+                setClass('justify-start gap-1'),
                 span
                 (
                     setClass('text-gray'),
@@ -93,12 +105,12 @@ div
                         setClass('text-warning px-1'),
                         'help'
                     ),
-                    $this->lang->upgrade->remarkDesc
+                    $lang->upgrade->remarkDesc
                 )
             ),
             h::table
             (
-                setClass('table bordered'),
+                setClass('table bordered text-center'),
                 h::thead
                 (
                     h::tr
@@ -111,12 +123,12 @@ div
                         h::td
                         (
                             width('1/3'),
-                            $this->lang->custom->modeList['light']
+                            $lang->custom->modeList['light']
                         ),
                         h::td
                         (
                             width('1/3'),
-                            $this->lang->custom->modeList['ALM']
+                            $lang->custom->modeList['ALM']
                         )
                     )
                 ),
@@ -124,9 +136,9 @@ div
                 (
                     h::tr
                     (
-                        h::td($lang->custom->usage),
-                        h::td($this->lang->custom->modeIntroductionList['light']),
-                        h::td($this->lang->custom->modeIntroductionList['ALM']),
+                        h::td(setClass('text-left'), $lang->custom->usage),
+                        h::td($lang->custom->modeIntroductionList['light']),
+                        h::td($lang->custom->modeIntroductionList['ALM']),
                     ),
                     $trs,
                     h::tr
@@ -140,10 +152,9 @@ div
                         (
                             btn
                             (
-                                on::click('selectUsage'),
                                 set::id('light'),
                                 set::btnType('submit'),
-                                setClass('px-4'),
+                                setClass('px-4 selectUsageBtn'),
                                 $lang->custom->useLight
                             )
                         ),
@@ -151,16 +162,16 @@ div
                         (
                             btn
                             (
-                                on::click('selectUsage'),
                                 set::id('ALM'),
                                 set::btnType('submit'),
-                                setClass('px-4'),
+                                setClass('px-4 selectUsageBtn'),
                                 $lang->custom->useALM
                             )
                         )
                     )
                 )
             ),
+            contactUs(),
             input
             (
                 set::name('mode'),

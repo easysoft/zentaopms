@@ -436,7 +436,7 @@ class testreportZen extends testreport
      * @access public
      * @return array
      */
-    protected function buildReportBugData(array $tasks, array $productIdList, string $begin, string $end, array $builds): array
+    public function buildReportBugData(array $tasks, array $productIdList, string $begin, string $end, array $builds): array
     {
         /* Get activated bugs. */
         $buildIdList   = array_keys($builds) + array_keys($this->testreport->getChildBuilds($builds));

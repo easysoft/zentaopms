@@ -14,12 +14,22 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/my.class.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdtable('action')->gen('100');
-zdTable('user')->gen('1');
+zendata('action')->gen('100');
+zendata('doc')->gen('0');
+zendata('api')->gen('0');
+zendata('doclib')->gen('0');
+zendata('project')->gen('0');
+zendata('product')->gen('0');
+zenData('user')->gen('1');
 
 su('admin');
+
+global $lang, $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$app->loadLang('action');
 
 $my = new myTest();
 

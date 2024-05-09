@@ -17,7 +17,7 @@ $config->productplan->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#F
 $config->productplan->future = '2030-01-01';
 
 global $app, $lang;
-$config->productplan->defaultFields['story']     = array('id', 'title', 'module', 'pri', 'status', 'openedBy', 'assignedTo', 'estimate', 'stage', 'actions');
+$config->productplan->defaultFields['story']     = array('id', 'title', 'pri', 'branch', 'module', 'status', 'openedBy', 'estimate', 'stage', 'assignedTo', 'actions');
 $config->productplan->defaultFields['bug']       = array('id', 'title', 'pri', 'status', 'openedBy', 'assignedTo', 'actions');
 $config->productplan->defaultFields['linkStory'] = array('id', 'pri', 'plan', 'module', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
 $config->productplan->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'status');
@@ -47,35 +47,42 @@ $config->productplan->actionList['activate']['hint']         = $lang->productpla
 $config->productplan->actionList['activate']['text']         = $lang->productplan->activate;
 $config->productplan->actionList['activate']['url']          = helper::createLink('productplan', 'activate', 'planID={id}');
 $config->productplan->actionList['activate']['data-confirm'] = $lang->productplan->confirmActivate;
-$config->productplan->actionList['activate']['className']    = 'ajax-submit';
+$config->productplan->actionList['activate']['innerClass']   = 'ajax-submit';
 
 $config->productplan->actionList['createExecution']['icon']         = 'plus';
 $config->productplan->actionList['createExecution']['hint']         = $lang->productplan->createExecution;
 $config->productplan->actionList['createExecution']['text']         = $lang->productplan->createExecution;
-$config->productplan->actionList['createExecution']['data-target']  = '#createExecutionModal';
-$config->productplan->actionList['createExecution']['data-toggle']  = 'modal';
 $config->productplan->actionList['createExecution']['url']          = array('module' => 'execution', 'method' => 'create');
 $config->productplan->actionList['createExecution']['notLoadModel'] = true;
+if(!$app->rawModule || $app->rawModule != 'projectplan')
+{
+    $config->productplan->actionList['createExecution']['data-target'] = '#createExecutionModal';
+    $config->productplan->actionList['createExecution']['data-toggle'] = 'modal';
+}
 
-$config->productplan->actionList['linkStory']['icon'] = 'link';
-$config->productplan->actionList['linkStory']['hint'] = $lang->productplan->linkStory;
-$config->productplan->actionList['linkStory']['text'] = $lang->productplan->linkStory;
-$config->productplan->actionList['linkStory']['url']  = helper::createLink($app->rawModule, 'view', 'planID={id}&type=story&orderBy=id_desc&link=true');
+$config->productplan->actionList['linkStory']['icon']         = 'link';
+$config->productplan->actionList['linkStory']['hint']         = $lang->productplan->linkStory;
+$config->productplan->actionList['linkStory']['text']         = $lang->productplan->linkStory;
+$config->productplan->actionList['linkStory']['notLoadModel'] = true;
+if($app->rawModule) $config->productplan->actionList['linkStory']['url']  = array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=story&orderBy=id_desc&link=true');
 
-$config->productplan->actionList['linkBug']['icon'] = 'bug';
-$config->productplan->actionList['linkBug']['hint'] = $lang->productplan->linkBug;
-$config->productplan->actionList['linkBug']['text'] = $lang->productplan->linkBug;
-$config->productplan->actionList['linkBug']['url']  = helper::createLink($app->rawModule, 'view', 'planID={id}&type=bug&orderBy=id_desc&link=true');
+$config->productplan->actionList['linkBug']['icon']         = 'bug';
+$config->productplan->actionList['linkBug']['hint']         = $lang->productplan->linkBug;
+$config->productplan->actionList['linkBug']['text']         = $lang->productplan->linkBug;
+$config->productplan->actionList['linkBug']['notLoadModel'] = true;
+if($app->rawModule) $config->productplan->actionList['linkBug']['url']  = array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=bug&orderBy=id_desc&link=true');
 
-$config->productplan->actionList['edit']['icon'] = 'edit';
-$config->productplan->actionList['edit']['hint'] = $lang->productplan->edit;
-$config->productplan->actionList['edit']['text'] = $lang->productplan->edit;
-$config->productplan->actionList['edit']['url']  = helper::createLink($app->rawModule, 'edit', 'planID={id}');
+$config->productplan->actionList['edit']['icon']         = 'edit';
+$config->productplan->actionList['edit']['hint']         = $lang->productplan->edit;
+$config->productplan->actionList['edit']['text']         = $lang->productplan->edit;
+$config->productplan->actionList['edit']['notLoadModel'] = true;
+if($app->rawModule) $config->productplan->actionList['edit']['url']  = array('module' => $app->rawModule, 'method' => 'edit', 'params' => 'planID={id}');
 
-$config->productplan->actionList['create']['icon'] = 'split';
-$config->productplan->actionList['create']['hint'] = $lang->productplan->createChildren;
-$config->productplan->actionList['create']['text'] = $lang->productplan->createChildren;
-$config->productplan->actionList['create']['url']  = helper::createLink($app->rawModule, 'create', 'product={product}&branch={branch}&parent={id}');
+$config->productplan->actionList['create']['icon']         = 'split';
+$config->productplan->actionList['create']['hint']         = $lang->productplan->createChildren;
+$config->productplan->actionList['create']['text']         = $lang->productplan->createChildren;
+$config->productplan->actionList['create']['notLoadModel'] = true;
+if($app->rawModule) $config->productplan->actionList['create']['url']  = array('module' => $app->rawModule, 'method' => 'create', 'params' => 'product={product}&branch={branch}&parent={id}');
 
 $config->productplan->actionList['delete']['icon']         = 'trash';
 $config->productplan->actionList['delete']['hint']         = $lang->productplan->delete;
@@ -91,3 +98,8 @@ $config->productplan->actionList['unlinkBug']['url']  = 'javascript:unlinkObject
 $config->productplan->actionList['unlinkStory']['icon'] = 'unlink';
 $config->productplan->actionList['unlinkStory']['hint'] = $lang->productplan->unlinkStory;
 $config->productplan->actionList['unlinkStory']['url']  = 'javascript:unlinkObject("story", "{id}")';
+
+$config->productplan->actions = new stdclass();
+$config->productplan->actions->view = array();
+$config->productplan->actions->view['mainActions']   = array('start', 'finish', 'close', 'activate', 'create');
+$config->productplan->actions->view['suffixActions'] = array('edit', 'delete');

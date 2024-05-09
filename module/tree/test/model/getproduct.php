@@ -14,11 +14,11 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-zdTable('module')->config('module')->gen(100);
-zdTable('product')->gen(100);
+zenData('module')->loadYaml('module')->gen(100);
+zenData('product')->gen(100);
 
 $moduleID = array(2, 7, 19, 200);
 

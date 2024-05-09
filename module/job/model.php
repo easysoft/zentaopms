@@ -149,6 +149,8 @@ class jobModel extends model
               $atDay = trim($atDay, ',');
               return "{$triggerType}({$atDay}, {$job->atTime})";
           }
+
+          return $this->lang->job->auto;
     }
 
     /**
@@ -329,6 +331,7 @@ class jobModel extends model
 
         if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID, $extraParam);
         if($job->engine == 'gitlab')  $compile = $this->execGitlabPipeline($job);
+        if($job->engine == 'gitfox')  $compile = $this->execGitfoxPipeline($job);
 
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
@@ -440,6 +443,38 @@ class jobModel extends model
     }
 
     /**
+     * 执行gitfox流水线。
+     * Exec gitfox pipeline.
+     *
+     * @param  object $job
+     * @access public
+     * @return object
+     */
+    public function execGitfoxPipeline(object $job): object
+    {
+        $pipeline = json_decode($job->pipeline);
+
+        /* Run pipeline. */
+        $compile      = new stdclass();
+        $pipelineName = zget($pipeline, 'name', '');
+        $params       = array('branch' => zget($pipeline, 'reference', ''));
+        $apiRoot      = $this->loadModel('gitfox')->getApiRoot($job->server);
+        $pipeline     = json_decode(common::http(sprintf($apiRoot->url, "/repos/{$pipeline->project}/pipelines/{$pipelineName}/executions"), $params, array(), $apiRoot->header));
+        if(!empty($pipeline->message))
+        {
+            dao::$errors[] = $pipeline->message;
+            $compile->status = 'create_fail';
+        }
+        else
+        {
+            $compile->queue  = $pipeline->number;
+            $compile->status = zget($pipeline, 'status', 'create_fail');
+        }
+
+        return $compile;
+    }
+
+    /**
      * 获取版本库最新tag。
      * Get last tag of one repo.
      *
@@ -512,25 +547,6 @@ class jobModel extends model
             ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
             ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
             ->fetchPairs();
-    }
-
-    /**
-     * 判断按钮是否可点击。
-     * Adjust the action is clickable.
-     *
-     * @param  object $object
-     * @param  string $action
-     * @param  string $module
-     * @access public
-     * @return bool
-     */
-    public static function isClickable(object $object, string $action, string $module = 'job'): bool
-    {
-        $action = strtolower($action);
-
-        if($module == 'job' && $action == 'exec') return $object->canExec;
-
-        return true;
     }
 
     /**

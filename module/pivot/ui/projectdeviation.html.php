@@ -79,6 +79,7 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
             setID('pivotPanel'),
             set::title($title),
             set::shadow(false),
+            set::headingClass('h-14'),
             set::bodyClass('pt-0'),
             to::titleSuffix(
                 icon
@@ -95,7 +96,6 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
                 set::cols($cols),
                 set::data($executions),
                 set::emptyTip($lang->error->noData),
-                set::height(jsRaw('getHeight'))
             )
         ),
         panel
@@ -106,6 +106,8 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
             $chartData ? null : setClass('hidden'),
             $chartData ? echarts
             (
+                set::width('100%'),
+                set::height(300),
                 set::xAxis
                 (
                     array
@@ -146,7 +148,7 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
                         )
                     )
                 )
-            )->size('100%', 300) : null
+            ) : null
         )
     );
 };

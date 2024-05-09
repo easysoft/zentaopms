@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Components\Condition;
@@ -11,11 +13,11 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class StatementTest extends TestCase
 {
-    public function testBuilder()
+    public function testBuilder(): void
     {
         $stmt = new SelectStatement();
 
-        $stmt->options = new OptionsArray(array('DISTINCT'));
+        $stmt->options = new OptionsArray(['DISTINCT']);
 
         $stmt->expr[] = new Expression('sakila', 'film', 'film_id', 'fid');
         $stmt->expr[] = new Expression('COUNT(film_id)');

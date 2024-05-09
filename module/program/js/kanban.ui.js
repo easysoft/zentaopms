@@ -20,7 +20,7 @@ window.getItem = function(info)
     {
         info.item.titleUrl = $.createLink('execution', 'task', `id=${info.item.id}`);
     }
-    else if(info.item.type == 'doingProjects' && privs.canViewProject)
+    else if(['waitingProjects', 'doingProjects'].includes(info.item.type) && privs.canViewProject)
     {
         info.item.titleUrl = $.createLink('project', 'index', `id=${info.item.id}`);
     }

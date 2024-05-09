@@ -27,6 +27,9 @@ $lang->backup->settingDir = 'Backup Directory';
 $lang->backup->settingList['nofile'] = 'Do not back up files or codes.';
 $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file header.';
 
+global $config;
+if($config->inContainer) $lang->backup->settingList['nofile'] = 'Do not back up files.';
+
 $lang->backup->waitting         = '<span id="backupType"></span> is ongoing. Please wait...';
 $lang->backup->progressSQL      = '<p>SQL backup: %s is backed up.</p>';
 $lang->backup->progressAttach   = '<p>SQL backup is completed.</p><p>Attachment backing up.</p>';
@@ -55,3 +58,8 @@ $lang->backup->error->restoreFile     = "Failed to restore the file. Error %s.";
 $lang->backup->error->backupFile      = "Failed to back up the file. Error %s.";
 $lang->backup->error->backupCode      = "Failed to back up the code. Error %s.";
 $lang->backup->error->timeout     = "Backup timeout.";
+
+$lang->backup->notice = new stdclass();
+$lang->backup->notice->higherVersion  = 'The version of the backup is higher than the current version. Please update the Docker image version to %s before restoring.';
+$lang->backup->notice->lowerVersion   = 'The version of the backup is lower than the current version, and the upgrade process will be performed after restoration.';
+$lang->backup->notice->unknownVersion = 'The version information not found. Do you want to restore this backup anyway?';

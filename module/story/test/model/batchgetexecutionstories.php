@@ -1,30 +1,38 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
 
-zdTable('product')->gen(100);
-$projectstory = zdTable('projectstory');
+/**
+
+title=测试 storyModel->batchGetExecutionStories();
+cid=0
+
+- 不传入数据。 @0
+- 传入有关联需求的项目数据，不传入产品数据。 @25
+- 传入有关联需求的项目数据，传入有需求的产品数据。 @25
+- 传入有关联需求的项目数据，传入无需求的产品数据。 @0
+- 传入有关联需求的项目数据，不传入产品数据。 @25
+- 传入有关联需求的项目数据，传入有需求的产品数据。 @25
+- 传入有关联需求的项目数据，传入无需求的产品数据。 @25
+- 传入分页。 @5
+
+*/
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+
+zenData('product')->gen(100);
+$projectstory = zenData('projectstory');
 $projectstory->project->range('11{50},36{50}');
 $projectstory->product->range('1');
 $projectstory->story->range('1-50');
 $projectstory->gen(100);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1');
 $story->gen(50);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('project{25},sprint{25}');
 $project->gen(50);
-
-/**
-
-title=测试 storyModel->batchGetExecutionStories();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

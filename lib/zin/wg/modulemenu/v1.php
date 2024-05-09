@@ -18,15 +18,47 @@ class moduleMenu extends wg
         'showDisplay?: bool=true',
         'allText?: string',
         'title?: string',
+        'titleShow?: bool=true',
         'app?: string=""',
         'checkbox?: bool',
+        'preserve?: string|bool',
+        'tree?: array',
         'checkOnClick?: bool|string',
         'onCheck?: function'
     );
 
+    protected static array $defineBlocks = array
+    (
+        'header'   => array(),
+        'footer'   => array()
+    );
+
     public static function getPageCSS(): ?string
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+        return <<<'CSS'
+        .module-menu {max-height: calc(100vh - 79px); min-height: 32px; --menu-selected-bg: none;}
+        .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
+        .module-menu .tree-item * {white-space: nowrap;}
+        .module-menu .tree-item .item-content {color: var(--color-gray-700)}
+        .module-menu .tree-item > .selected .item-content {color: var(--color-fore)}
+        .has-module-menu-header #mainMenu {padding-left: 180px;}
+        .module-menu-header.is-fixed {position: absolute; left: 0; top: -44px; width: 160px; height: 32px; border: 1px solid var(--color-border); justify-content: center; padding: 0 24px; border-right: 0;}
+        .module-menu-header.is-fixed::before,
+        .module-menu-header.is-fixed::after {content: ''; position: absolute; top: 0; right: -12px; width: 0; height: 0; border-style: solid; border-color: transparent transparent transparent var(--color-border); border-width: 15px 0 15px 12px;}
+        .module-menu-header.is-fixed::after {right: -11px; border-color: transparent transparent transparent var(--color-canvas);}
+        .has-module-menu-header.is-sidebar-left-collapsed .module-menu-header.is-fixed {left: var(--gutter-width)}
+        .module-menu-header.is-fixed .module-title {font-size: var(--font-size-base);}
+        .module-menu-header.is-fixed > .btn-close {position: absolute; right: 0; font-weight: normal;}
+        .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
+        .sidebar > .module-menu-header.is-fixed {display: flex!important;}
+        .sidebar-left > .module-menu {margin-right: -8px}
+        .sidebar-left.is-expanded > .module-menu ~ .sidebar-gutter {margin-left: 4px}
+        .sidebar-right.is-expanded > .module-menu ~ .sidebar-gutter {margin-right: 4px}
+        .is-expanded > .module-menu ~ .sidebar-gutter > .gutter-toggle {opacity: 0}
+        .has-module-menu-header .sidebar-left {transition-property: width;}
+        .has-module-menu-header .module-menu {max-height: calc(100vh - 105px); }
+        .has-module-menu-header .module-menu > .tree {padding-top: 8px; padding-bottom: 8px;}
+        CSS;
     }
 
     private array $modules = array();
@@ -75,7 +107,7 @@ class moduleMenu extends wg
             /* Remove the rendered module. */
             if(isset(static::$filterMap["{$module->parent}-{$module->id}"])) return false;
 
-            if($module->parent != $id) return false;
+            if((string)$module->parent != (string)$id) return false;
 
             static::$filterMap["{$module->parent}-{$module->id}"] = true;
             return true;
@@ -113,39 +145,77 @@ class moduleMenu extends wg
     private function buildActions(): node|null
     {
         $settingLink = $this->prop('settingLink');
-        $settingText = $this->prop('settingText');
         $showDisplay = $this->prop('showDisplay');
-        $tab         = $this->prop('settingApp');
         if(!$settingLink && !$showDisplay) return null;
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
-        $currentModule = $app->rawModule;
-        $currentMethod = $app->rawMethod;
 
-        if(!$settingText) $settingText = $lang->moduleSetting;
+        $items = array();
+        if($settingLink)
+        {
+            $tab         = $this->prop('settingApp',  $app->tab);
+            $settingText = $this->prop('settingText', $lang->moduleSetting);
 
-        $datatableId = $app->moduleName . ucfirst($app->methodName);
+            if(empty($this->prop('items')))
+            {
+                return btn
+                (
+                    setClass('m-4 mt-0'),
+                    set::text($settingText),
+                    set::url($settingLink),
+                    set::type('primary-pale'),
+                    setData('app', $tab),
+                );
+            }
 
-        return div
+            $items[] = array
+            (
+                'text'      => $settingText,
+                'url'       => $settingLink,
+                'data-app'  => $tab
+            );
+        }
+        if($showDisplay)
+        {
+            $datatableId   = $app->moduleName . ucfirst($app->methodName);
+            $currentModule = $app->rawModule;
+            $currentMethod = $app->rawMethod;
+
+            if(empty($this->prop('items')))
+            {
+                return btn
+                (
+                    setClass('m-4 mt-0'),
+                    set::text($lang->displaySetting),
+                    set::url(createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
+                    set::type('primary-pale'),
+                    setData(array('toggle' => 'modal', 'size' => 'md'))
+                );
+            }
+
+            $items[] = array
+            (
+                'text'        => $lang->displaySetting,
+                'url'         => createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod"),
+                'data-toggle' => 'modal',
+                'data-size'   => 'md'
+            );
+        }
+
+        if(empty($items)) return null;
+
+        return dropdown
         (
-            setClass('module-menu-actions col gap-2 py-3 px-4'),
-            $settingLink ? btn
+            btn
             (
-                set::type('primary-pale'),
-                set::url($settingLink),
-                set::size('md'),
-                setData(array('app' => $tab ? $tab : $app->tab)),
-                $settingText
-            ) : null,
-            $showDisplay ? btn
-            (
-                toggle::modal(),
-                set::size('md'),
-                set::type('ghost text-gray'),
-                set::url(createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
-                $lang->displaySetting
-            ) : null
+                setClass('ghost absolute right-1.5 top-1'),
+                set::icon('cog-outline'),
+                set::size('sm'),
+                set::caret(false)
+            ),
+            set::items($items),
+            set::placement('bottom-end')
         );
     }
 
@@ -177,12 +247,14 @@ class moduleMenu extends wg
         global $app;
         $this->setMenuTreeProps();
 
-        $title       = $this->getTitle();
-        $treeProps   = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
-        $preserve    = $app->getModuleName() . '-' . $app->getMethodName();
-        $isInSidebar = $this->parent instanceof sidebar;
+        $title         = $this->getTitle();
+        $userTreeProps = $this->prop('tree');
+        $treeProps     = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
+        $preserve      = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
+        $isInSidebar   = $this->parent instanceof sidebar;
+        $titleShow     = $this->prop('titleShow');
 
-        $header = h::header
+        $header = $titleShow ? h::header
         (
             setClass('module-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
             span
@@ -191,7 +263,7 @@ class moduleMenu extends wg
                 $title
             ),
             $this->buildCloseBtn()
-        );
+        ) : null;
 
         return array
         (
@@ -199,20 +271,36 @@ class moduleMenu extends wg
             div
             (
                 setID('moduleMenu'),
-                setClass('shadow-sm rounded bg-canvas col rounded-sm'),
+                setClass('module-menu shadow ring rounded bg-canvas col relative'),
+                $this->block('header'),
                 $isInSidebar ? null : $header,
                 zui::tree
                 (
                     set::_tag('menu'),
-                    set::_class('tree col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
+                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
                     set::defaultNestedShow(true),
                     set::hover(true),
+                    set::lines(true),
                     set::preserve($preserve),
-                    set($treeProps)
+                    set($treeProps),
+                    set($userTreeProps)
                 ),
-                $this->buildActions()
+                $this->buildActions(),
+                $this->block('footer'),
+                row
+                (
+                    setClass('justify-end p-1'),
+                    btn
+                    (
+                        set::type('ghost'),
+                        set::size('sm'),
+                        set::icon('menu-arrow-left text-gray'),
+                        set::hint($app->lang->collapse),
+                        on::click()->do('$this.closest(".sidebar").sidebar("toggle");')
+                    )
+                ),
+                $isInSidebar && !empty($header) ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
             ),
-            $isInSidebar ? h::js("$('#mainContainer').addClass('has-module-menu-header')") : null
        );
     }
 }

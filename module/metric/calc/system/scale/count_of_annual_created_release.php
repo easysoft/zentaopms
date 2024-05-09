@@ -20,7 +20,7 @@
  */
 class count_of_annual_created_release extends baseCalc
 {
-    public $dataset = "getReleases";
+    public $dataset = "getAllReleases";
 
     public $fieldList = array('t1.date');
 

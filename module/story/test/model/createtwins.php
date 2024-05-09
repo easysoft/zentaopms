@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 storyModel->create();
-cid=1
+title=测试 storyModel->createTwins();
+cid=0
 
 - 检查创建后的数据。
  - 属性id @5
@@ -11,24 +12,24 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('product')->gen(2);
-zdTable('project')->gen(2);
-zdTable('bug')->gen(2);
-zdTable('relation')->gen(0);
-zdTable('storyreview')->gen(0);
-zdTable('projectstory')->gen(0);
+zenData('product')->gen(2);
+zenData('project')->gen(2);
+zenData('bug')->gen(2);
+zenData('relation')->gen(0);
+zenData('storyreview')->gen(0);
+zenData('projectstory')->gen(0);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->type->range('requirement,story{10}');
 $story->parent->range('0,0,0,0');
 $story->product->range('1');
 $story->version->range('1');
 $story->gen(4);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(4);
 

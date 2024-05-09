@@ -42,11 +42,11 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
+include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('project')->config('project')->gen(10);
-zdTable('stage')->config('stage')->gen(12);
+zenData('user')->gen(5);
+zenData('project')->loadYaml('project')->gen(10);
+zenData('stage')->loadYaml('stage')->gen(12);
 
 $sorts      = array('id_desc', 'id_asc');
 $projectIds = array(0, 11, 60, 100);

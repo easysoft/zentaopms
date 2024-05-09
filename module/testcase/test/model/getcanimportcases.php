@@ -9,12 +9,12 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('product')->gen(45);
-zdTable('branch')->gen(20);
-zdTable('case')->config('case')->gen(50);
-zdTable('module')->config('module_import')->gen(50);
-zdTable('userquery')->config('userquery')->gen(1);
-zdTable('user')->gen(1);
+zenData('product')->gen(45);
+zenData('branch')->gen(20);
+zenData('case')->loadYaml('case')->gen(50);
+zenData('module')->loadYaml('module_import')->gen(50);
+zenData('userquery')->loadYaml('userquery')->gen(1);
+zenData('user')->gen(1);
 
 su('admin');
 

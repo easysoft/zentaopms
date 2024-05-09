@@ -51,7 +51,8 @@ class productTao extends productModel
         return $this->dao->select("t1.*, IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.name')->ne('')
-            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
+            ->beginIF($this->config->vision != 'or' && $this->config->vision != 'lite')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
+            ->beginIF(($this->config->vision == 'or' || $this->config->vision == 'lite') && $this->app->tab == 'feedback')->andWhere('t1.status')->eq('normal')->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->andWhere('((1=1')
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
@@ -324,7 +325,7 @@ class productTao extends productModel
      */
     protected function createLine(int $programID, string $lineName): int|false
     {
-        if($programID <= 0) return false;
+        if($programID < 0) return false;
         if(empty($lineName)) return false;
 
         $line = new stdClass();
@@ -439,6 +440,7 @@ class productTao extends productModel
      */
     protected function filterNoCasesStory(array $storyIDList): array
     {
+        if(empty($storyIDList)) return array();
         return $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIDList)->andWhere('deleted')->eq(0)->fetchAll('story');
     }
 
@@ -952,5 +954,35 @@ class productTao extends productModel
         }
 
         return $productBugs;
+    }
+
+    /**
+     * 当产品线的项目集发生变化时，更新产品线下产品的项目集。
+     * Sync program to product when line's program changed.
+     *
+     * @param  int        $programID
+     * @param  int        $lineID
+     * @access protected
+     * @return void
+     */
+    protected function syncProgramToProduct(int $programID, int $lineID): void
+    {
+        $this->loadModel('action');
+        $oldProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->fetchAll('id');
+        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('line')->eq($lineID)->exec();
+
+        if(!dao::isError())
+        {
+            $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->fetchAll('id');
+            foreach($products as $productID => $product)
+            {
+                if($oldProducts[$productID]->program != $product->program)
+                {
+                    $changes  = common::createChanges($oldProducts[$productID], $product);
+                    $actionID = $this->action->create('product', $productID, 'ChangedProgram');
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+        }
     }
 }

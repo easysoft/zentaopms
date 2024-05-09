@@ -1,23 +1,23 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/compile.class.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 
-zdTable('compile')->gen(10);
-zdTable('job')->config('job')->gen(1);
-zdTable('repo')->gen(1);
-zdTable('pipeline')->gen(1);
+zenData('compile')->gen(10);
+zenData('job')->loadYaml('job')->gen(1);
+zenData('repo')->gen(1);
+zenData('pipeline')->gen(1);
 su('admin');
 
 /**
 
 title=测试 compileModel->exec();
+timeout=0
 cid=1
-pid=1
 
-检测job不存在时是否能执行编译 >> 0
-检测job存在但是->id不等于->job是否能执行编译 >> 1
-检测job存在同时->id等于->job是否能执行编译 >> 1
+- 检测job不存在时是否能执行编译 @0
+- 检测job存在但是$compile->id不等于$compile->job是否能执行编译 @1
+- 检测job存在同时$compile->id等于$compile->job是否能执行编译 @1
 
 */
 $compile1 = new stdclass();

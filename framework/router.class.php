@@ -122,12 +122,14 @@ class router extends baseRouter
      * @param   string $moduleName  the module name
      * @param   string $appName     the app name
      * @access  public
-     * @return  bool|object the lang object or false.
+     * @return  object              the lang object or false.
      */
-    public function loadLang($moduleName, $appName = ''): bool|object
+    public function loadLang($moduleName, $appName = ''): object
     {
         global $lang;
         if(!is_object($lang)) $lang = new language();
+
+        if(isset(self::$loadedModules[$moduleName])) return $lang;
 
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common') $this->setCommonLang();
@@ -298,7 +300,7 @@ class router extends baseRouter
         $config->executionLink = 'execution-task';
 
         /* Get user preference. */
-        $account     = $this->session->user->account ?? '';
+        $account     = $_SESSION['user']->account ?? '';
         $userSetting = array();
         if($this->dbh and !empty($this->config->db->name) and $account)
         {
@@ -350,20 +352,21 @@ class router extends baseRouter
                 $lang->ERCommon = $ERPairs[$config->URSR] ?? reset($ERPairs);
                 $lang->URCommon = $URPairs[$config->URSR] ?? reset($URPairs);
                 $lang->SRCommon = $SRPairs[$config->URSR] ?? reset($SRPairs);
-            }
 
-            /* Replace common lang. */
-            $customMenus = array();
-            try
-            {
-                $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
-            }
-            catch(PDOException){}
-            foreach($customMenus as $menu)
-            {
-                /* Modified the language item of dev story-related navigation, which will only affect users whose personalized value is the same as the story concept default value.*/
-                if(in_array($menu->key, array('ERCommon', 'URCommon', 'SRCommon')) && $URSR != $config->URSR) continue;
-                if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
+                /* Replace common lang. */
+                $customMenus = array();
+                try
+                {
+                    $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+                }
+                catch(PDOException){}
+
+                foreach($customMenus as $menu)
+                {
+                    /* Modified the language item of dev story-related navigation, which will only affect users whose personalized value is the same as the story concept default value.*/
+                    if(in_array($menu->key, array('ERCommon', 'URCommon', 'SRCommon')) && $URSR != $config->URSR) continue;
+                    if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
+                }
             }
         }
     }
@@ -402,7 +405,10 @@ class router extends baseRouter
      */
     public function loadModuleConfig($moduleName, $appName = '')
     {
-        $extConfigPath = array();
+        if(isset(self::$loadedConfigs[$moduleName])) return false;
+
+        self::$loadedConfigs[$moduleName] = $moduleName;
+
         global $config;
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
@@ -419,6 +425,7 @@ class router extends baseRouter
         $configDirFiles = helper::ls($this->getModulePath($appName, $moduleName) . DS . 'config', '.php');
 
         /* 查找扩展配置文件。Get extension config files. */
+        $extConfigPath = array();
         if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($moduleName, 'config');
         if($config->framework->extensionLevel >= 1)
         {
@@ -437,9 +444,9 @@ class router extends baseRouter
         /* 加载每一个配置文件。Load every config file. */
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, self::$loadedConfigs)) continue;
+            if(isset(self::$loadedConfigs[$configFile])) continue;
             if(file_exists($configFile)) include $configFile;
-            self::$loadedConfigs[] = $configFile;
+            self::$loadedConfigs[$configFile] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
@@ -757,8 +764,26 @@ class router extends baseRouter
      */
     public function checkInstalled()
     {
+        if(!$this->config->installed) return false;
         if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
 
-        return isset($this->config->installed) && $this->config->installed;
+        return true;
+    }
+
+    /**
+     * 获取禅道版本在不同语言下的显示名称。
+     * Get the display name of the ZenTaoPMS version in different language.
+     *
+     * @param  string $version 20.0|biz9.0|max5.0|ipd2.0
+     * @return string
+     */
+    public function getVersionName($version = '')
+    {
+        global $config, $lang;
+        $editionName = $config->edition === 'open' ? $lang->pmsName : $lang->{$config->edition . 'Name'};
+        $versionName = empty($version) ? $config->version : $version;
+        $versionName = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $versionName);
+        $versionName = ($config->inQuickon ? $lang->devopsPrefix : '') . $versionName;
+        return $versionName;
     }
 }

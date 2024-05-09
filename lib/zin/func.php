@@ -33,6 +33,13 @@ function formBatch(): formBatch {return createWg('formBatch', func_get_args());}
 function formBatchItem(): formBatchItem {return createWg('formBatchItem', func_get_args());}
 function formBatchPanel(): formBatchPanel {return createWg('formBatchPanel', func_get_args());}
 function batchActions(): batchActions {return createWg('batchActions', func_get_args());}
+function content(): content {return createWg('content', func_get_args());}
+function idLabel(): idLabel {return createWg('idLabel', func_get_args());}
+function listItem(): listItem {return createWg('listitem', func_get_args());}
+function simpleList(): simpleList {return createWg('simplelist', func_get_args());}
+function entityList(): entityList {return createWg('entityList', func_get_args());}
+function breadcrumb(): breadcrumb {return createWg('breadcrumb', func_get_args());}
+function datalist(): datalist {return createWg('datalist', func_get_args());}
 function control(): control {return createWg('control', func_get_args());}
 function select(): select {return createWg('select', func_get_args());}
 function formLabel(): formLabel {return createWg('formLabel', func_get_args());}
@@ -59,7 +66,6 @@ function pageBase(): pageBase {return createWg('pageBase', func_get_args());}
 function page(): page {return createWg('page',    func_get_args());}
 function fragment(): fragment {return createWg('fragment',    func_get_args());}
 function btnGroup(): btnGroup {return createWg('btnGroup', func_get_args());}
-function mainMenu(): mainMenu {return createWg('mainMenu', func_get_args());}
 function row(): row {return createWg('row', func_get_args());}
 function col(): col {return createWg('col', func_get_args());}
 function center(): center {return createWg('center', func_get_args());}
@@ -68,6 +74,8 @@ function divider(): divider {return createWg('divider', func_get_args());}
 function actionItem(): actionItem {return createWg('actionItem', func_get_args());}
 function nav(): nav {return createWg('nav', func_get_args());}
 function label(): label {return createWg('label', func_get_args());}
+function statusLabel(): statusLabel {return createWg('statusLabel', func_get_args());}
+function branchLabel(): branchLabel {return createWg('branchLabel', func_get_args());}
 function dtable(): dtable {return createWg('dtable', func_get_args());}
 function menu(): menu {return createWg('menu', func_get_args());}
 function dropdown(): dropdown {return createWg('dropdown', func_get_args());}
@@ -115,11 +123,15 @@ function blockPanel(): blockPanel {return createWg('blockPanel', func_get_args()
 function section(): section {return createWg('section', func_get_args());}
 function sectionCard(): sectionCard {return createWg('sectionCard', func_get_args());}
 function sectionList(): sectionList {return createWg('sectionList', func_get_args());}
+function entityTitle(): entityTitle {return createWg('entityTitle',func_get_args());}
 function entityLabel(): entityLabel {return createWg('entityLabel',func_get_args());}
 function tableData(): tableData {return createWg('tableData',func_get_args());}
+function detail(): detail {return createWg('detail', func_get_args());}
+function detailCard(): detailCard {return createWg('detailCard', func_get_args());}
 function detailHeader(): detailHeader {return createWg('detailHeader', func_get_args());}
 function detailSide(): detailSide {return createWg('detailSide', func_get_args());}
 function detailBody(): detailBody {return createWg('detailBody', func_get_args());}
+function detailForm(): detailForm {return createWg('detailForm', func_get_args());}
 function echarts(): echarts {return createWg('echarts', func_get_args());}
 function popovers(): popovers {return createWg('popovers', func_get_args());}
 function backBtn(): backBtn {return createWg('backBtn', func_get_args());}
@@ -156,9 +168,45 @@ function progressCircle(): progressCircle {return createWg('progressCircle', fun
 function filter(): filter {return createWg('filter', func_get_args());}
 function resultFilter(): resultFilter {return createWg('resultFilter', func_get_args());}
 function contactList(): contactList {return createWg('contactList', func_get_args());}
-function users(): users {return createWg('users', func_get_args());}
+function userPicker(): userPicker {return createWg('userPicker', func_get_args());}
 function mailto(): mailto {return createWg('mailto', func_get_args());}
 function whitelist(): whitelist {return createWg('whitelist', func_get_args());}
 function modulePicker(): modulePicker {return createWg('modulePicker', func_get_args());}
 function visionSwitcher(): visionSwitcher {return createWg('visionSwitcher', func_get_args());}
 function chatBtn(): chatBtn {return createWg('chatBtn', func_get_args());}
+function storyList(): storyList {return createWg('storyList', func_get_args());}
+function linkedStoryList(): linkedStoryList {return createWg('linkedStoryList', func_get_args());}
+function twinsStoryList(): twinsStoryList {return createWg('twinsStoryList', func_get_args());}
+function executionTaskList(): executionTaskList {return createWg('executionTaskList', func_get_args());}
+function relatedList(): relatedList {return createWg('relatedList', func_get_args());}
+function storyRelatedList(): storyRelatedList {return createWg('storyRelatedList', func_get_args());}
+function storyBasicInfo(): storyBasicInfo {return createWg('storyBasicInfo', func_get_args());}
+function storyLifeInfo(): storyLifeInfo {return createWg('storyLifeInfo', func_get_args());}
+function taskTeam(): taskTeam {return createWg('taskTeam', func_get_args());}
+function taskBasicInfo(): taskBasicInfo {return createWg('taskBasicInfo', func_get_args());}
+function taskEffortInfo(): taskEffortInfo {return createWg('taskEffortInfo', func_get_args());}
+function taskLifeInfo(): taskLifeInfo {return createWg('taskLifeInfo', func_get_args());}
+function taskMiscInfo(): taskMiscInfo {return createWg('taskMiscInfo', func_get_args());}
+function caseBasicInfo(): caseBasicInfo {return createWg('caseBasicInfo', func_get_args());}
+function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_args());}
+function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
+function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
+function contactUs(): contactUs {return createWg('contactUs', func_get_args());}
+function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
+function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
+function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
+function thinkTransition(): thinkTransition {return createWg('thinkTransition', func_get_args());}
+function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
+function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
+function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
+function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', func_get_args());}
+function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
+function thinkStepDetail(): thinkStepDetail {return createWg('thinkStepDetail', func_get_args());}
+function thinkInputDetail(): thinkInputDetail {return createWg('thinkInputDetail', func_get_args());}
+function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkTableInputDetail', func_get_args());}
+function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptionsDetail', func_get_args());}
+function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
+function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', func_get_args());}
+function thinkRadioList(): thinkRadioList {return createWg('thinkRadioList', func_get_args());}
+function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
+function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
 /**
 
@@ -11,7 +11,7 @@ cid=1
 
 */
 
-zdTable('bug')->gen(10);
+zenData('bug')->gen(10);
 $planID = 1;
 
 $bugIdList[0] = array(3);

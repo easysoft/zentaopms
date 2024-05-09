@@ -31,6 +31,7 @@ $config->repo->svnBatchNum = 10;
 $config->repo->images      = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary      = '|pdf|';
 $config->repo->synced      = '';
+$config->repo->notSyncSCM  = array('Gitlab', 'GitFox');
 
 $config->repo->repoSyncLog = new stdclass();
 $config->repo->repoSyncLog->one            = '1';
@@ -70,12 +71,15 @@ $config->repo->gitlab = new stdclass;
 $config->repo->gitlab->perPage = 300;
 $config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
 
+$config->repo->gitfox = new stdclass;
+$config->repo->gitfox->apiPath = "%s/api/v1/repos/%s/+/";
+
 $config->repo->gitea = new stdclass;
 $config->repo->gitea->apiPath = "%s/api/v1/repos/%s/";
 
-$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs');
-$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs');
-$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git');
+$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs', 'gitfox');
+$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs', 'GitFox');
+$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git', 'GitFox');
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';
@@ -163,10 +167,8 @@ $config->repo->fileExt["yaml"]             = array('.yaml', '.yml');
 $config->repo->search['module'] = 'repo';
 $config->repo->search['fields']['name']     = $lang->repo->name;
 $config->repo->search['fields']['product']  = $lang->repo->product;
-$config->repo->search['fields']['projects'] = $lang->repo->projects;
 $config->repo->search['fields']['SCM']      = $lang->repo->SCM;
 
 $config->repo->search['params']['name']     = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->repo->search['params']['product']  = array('operator' => 'include', 'control' => 'select', 'values' => '');
-$config->repo->search['params']['projects'] = array('operator' => 'include', 'control' => 'select', 'values' => '');
 $config->repo->search['params']['SCM']      = array('operator' => '=', 'control' => 'select', 'values' => $lang->repo->scmList);

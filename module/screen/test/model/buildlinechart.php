@@ -12,14 +12,13 @@ cid=1
 
 */
 
-
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-zdTable('product')->gen(5);
-zdTable('project')->config('program')->gen(5);
-zdTable('story')->config('story')->gen(20);
-zdTable('bug')->config('bug')->gen(15);
+zenData('product')->gen(5);
+zenData('project')->loadYaml('program')->gen(5);
+zenData('story')->loadYaml('story')->gen(20);
+zenData('bug')->loadYaml('bug')->gen(15);
 
 $screen = new screenTest();
 

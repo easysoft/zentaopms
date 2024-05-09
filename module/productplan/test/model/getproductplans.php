@@ -2,11 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $today = helper::today();
-$productplan = zdTable('productplan')->config('productplan');
+$productplan = zenData('productplan')->loadYaml('productplan');
 $productplan->end->range("`2022-01-30`{5},`{$today}`{5}");
 $productplan->gen(30);
 

@@ -75,7 +75,7 @@ class productModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
+            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
     }
@@ -129,7 +129,7 @@ class productModel extends model
             ->where('t3.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t3.vision)")
-            ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
+            ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)->fi()
             ->fetchPairs('id', 'name');
     }
 
@@ -550,11 +550,7 @@ class productModel extends model
         if(empty($sortedIdList)) return;
 
         /* Get the list of products before sorting. */
-        $products = $this->dao->select('t1.`order`, t1.id')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.id')->in($sortedIdList)
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
-            ->fetchPairs('order', 'id');
+        $products = $this->dao->select('`order`, id')->from(TABLE_PRODUCT)->where('id')->in($sortedIdList)->orderBy('order_asc')->fetchPairs('order', 'id');
 
         /* Update order by sorted id list. */
         foreach($products as $order => $id)
@@ -598,23 +594,22 @@ class productModel extends model
                 {
                     $maxOrder   += 10; //Reserve for extension. Increment the order number by 10.
                     $line->order = $maxOrder;
-                }
 
-                /* Update product line. */
-                if(!$isInsert)
+                    /* Insert product line. */
+                    $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+                    $lineID = $this->dao->lastInsertID();
+
+                    /* Compute product line path and update it. */
+                    $path = ",$lineID,";
+                    $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+                }
+                else
                 {
                     unset($line->order);
                     $this->dao->update(TABLE_MODULE)->data($line)->where('id')->eq($lineID)->exec();
-                    continue;
                 }
 
-                /* Insert product line. */
-                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-                $lineID = $this->dao->lastInsertID();
-
-                /* Compute product line path and update it. */
-                $path = ",$lineID,";
-                $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+                if(!dao::isError()) $this->productTao->syncProgramToProduct($programID, (int)$lineID);
             }
         }
 
@@ -746,6 +741,7 @@ class productModel extends model
         }
 
         $searchConfig['params']['grade']['values'] = $gradePairs;
+        if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
 
         /* Get product plan data. */
         $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
@@ -826,7 +822,7 @@ class productModel extends model
      * @param  int    $productID
      * @param  string $branch        'all'|''|int
      * @param  int    $appendProject
-     * @param  string $status        all|noclosed
+     * @param  string $status        all|noclosed|closed
      * @param  string $param         multiple|
      * @access public
      * @return array
@@ -843,6 +839,7 @@ class productModel extends model
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($status == 'noclosed')->andWhere('t2.status')->ne('closed')->fi()
+            ->beginIF($status == 'closed')->andWhere('t2.status')->eq('closed')->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('t2.multiple')->ne('0')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($product->type != 'normal' and $branch !== '' and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()
@@ -1068,10 +1065,10 @@ class productModel extends model
 
         $stats = $this->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
 
-        $latestReleases       = $this->productTao->getStatisticByType($productIdList, 'latestReleases');
-        $projectCountPairs    = $this->productTao->getProjectCountPairs($productIdList);
-        $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
-        $coveragePairs        = $this->getCaseCoveragePairs($productIdList);
+        $latestReleases      = $this->productTao->getStatisticByType($productIdList, 'latestReleases');
+        $projectCountPairs   = $this->productTao->getProjectCountPairs($productIdList);
+        $executionCountPairs = $this->productTao->getExecutionCountPairs($productIdList);
+        $coveragePairs       = $this->getCaseCoveragePairs($productIdList);
 
         foreach($stats as $product)
         {
@@ -1154,14 +1151,15 @@ class productModel extends model
      * Get product line pairs by program.
      *
      * @param  int|array $programID
+     * @param  bool      $filterRoot
      * @access public
      * @return string[]
      */
-    public function getLinePairs(int|array $programIdList = 0): array
+    public function getLinePairs(int|array $programIdList = 0, bool $filterRoot = false): array
     {
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->beginIF($programIdList)->andWhere('root')->in($programIdList)->fi()
+            ->beginIF($programIdList || $filterRoot)->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'name');
     }
@@ -1231,7 +1229,7 @@ class productModel extends model
         }
 
         $casesCount = count($this->productTao->filterNoCasesStory($storyIdList));
-        $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
+        $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 4);
 
         if($storyType == 'all')         return sprintf($this->lang->product->allSummary, $total, $totalEstimate, $rate * 100 . "%");
         if($storyType == 'epic')        return sprintf($this->lang->product->epicSummary, $ERTotal, $totalEstimate);
@@ -1254,6 +1252,7 @@ class productModel extends model
         $action = strtolower($action);
 
         if($action == 'close') return $product->status != 'closed';
+        if($action == 'activate') return $product->status == 'closed';
 
         return true;
     }
@@ -1581,7 +1580,7 @@ class productModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(strpos($status, 'nowait') !== false)->andWhere('t1.status')->ne('wait')->fi()
-            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(strpos($status, '|') === false && !in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
             ->andWhere('t1.PO', true)->eq($this->app->user->account)
             ->orWhere('t1.QD')->eq($this->app->user->account)
@@ -1845,16 +1844,7 @@ class productModel extends model
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmap)
         {
-            foreach($branchRoadmap as $branch => $roadmapItems)
-            {
-                /* Split roadmap items into multiple lines. */
-                $totalData = count($roadmapItems);
-                $rows      = ceil($totalData / 8);
-                $maxPerRow = ceil($totalData / $rows);
-
-                $groupRoadmap[$year][$branch] = array_chunk($roadmapItems, (int)$maxPerRow);
-                foreach(array_keys($groupRoadmap[$year][$branch]) as $row) krsort($groupRoadmap[$year][$branch][$row]);
-            }
+            foreach($branchRoadmap as $branch => $roadmapItems) $groupRoadmap[$year][$branch][] = array_reverse($roadmapItems);
         }
 
         return array($groupRoadmap, $return);
@@ -1875,10 +1865,15 @@ class productModel extends model
     {
         $total           = 0;
         $return          = false;
+        $today           = helper::today();
         $orderedReleases = array();
 
         /* Collect releases. */
-        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
+        foreach($releases as $release)
+        {
+            if($release->date > $today) continue;
+            $orderedReleases[$release->date][] = $release;
+        }
 
         krsort($orderedReleases);
         foreach($orderedReleases as $releases)
@@ -1998,13 +1993,18 @@ class productModel extends model
         if($module == 'testtask'   && $method == 'unitcases')   return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
 
         if(($module == 'story' && in_array($method, array('create', 'batchcreate'))) || ($module == 'product' && $method == 'browse'))  return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}&browseType=unclosed&param=0&storyType={$params[0]}");
+        if($module == 'story' && $method == 'view') return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}");
 
         if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
         if($module == 'product'    && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
         if($module == 'product'    && in_array($method, array('create', 'showimport')))   return helper::createLink($module,    'browse', "productID=%s&type=$extra");
+        if($module == 'bug'        && in_array($method, array('edit', 'view')))           return helper::createLink($module,    'browse', "productID=%s");
+        if($module == 'testcase'   && in_array($method, array('edit', 'view')))           return helper::createLink($module,    'browse', "productID=%s");
         if($module == 'ticket'     && in_array($method, array('browse', 'view', 'edit'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
         if($module == 'testreport' && in_array($method, array('edit', 'browse')))         return helper::createLink($module,    'browse', "objectID=%s");
         if($module == 'feedback'   && $this->config->vision == 'lite')                    return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
+
+        if($module == 'tree' && !empty($extra)) return helper::createLink('tree', $method, "productID=%s&view={$extra}&currentModuleID=0{$branchParam}");
 
         if($module == 'design')      return helper::createLink('design',      'browse', "productID=%s");
         if($module == 'execution')   return helper::createLink('execution',   $method,  "objectID=$extra&productID=%s");
@@ -2015,9 +2015,10 @@ class productModel extends model
         if($module == 'ticket')      return helper::createLink('ticket',      $method,  'productID=%s');
         if($module == 'testtask')    return helper::createLink('testtask',    'browse', "productID=%s&branch={$branchID}");
 
+        if(in_array($module, array('productplan', 'release', 'roadmap')) && $method != 'create') return helper::createLink($module, 'browse', "productID=%s{$branchParam}");
+
         if($module == 'api'         || $module == 'doc')     return helper::createLink('doc',   'productSpace', "objectID=%s");
         if($module == 'productplan' || $module == 'release') return helper::createLink($module, $method,        "productID=%s{$branchParam}");
-        if(in_array($module, array('productplan', 'release', 'roadmap')) && $method != 'create') return helper::createLink($module, 'browse', "productID=%s{$branchParam}");
 
         if($module == 'testcase' && in_array($method, array('groupcase', 'zerocase')) && $this->app->tab == 'project')
         {
@@ -2046,6 +2047,7 @@ class productModel extends model
     {
         $updateTime = zget($this->app->config->global, 'productStatsTime', '');
         $now        = helper::now();
+        if($updateTime && time() - strtotime($updateTime) < $this->config->product->refreshInterval && !$refreshAll) return;
 
         /*
          * If productStatsTime is before two weeks ago, refresh all products directly.

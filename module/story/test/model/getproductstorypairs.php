@@ -1,29 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-$story = zdTable('story');
-$story->estimate->range('1-4');
-$story->gen(20);
-
-zdTable('product')->gen(20);
-
-su('admin');
 
 /**
 
 title=测试 storyModel->getProductStoryPairs();
-cid=1
-pid=1
+cid=0
 
-获取产品1下的所有软件需求数量 >> 3
-获取产品1下的所有用户需求数量 >> 4
-获取产品2可关联的需求数量 >> 2
-查看通过产品1获取的软件需求的名称字段 >> 4:软件需求4 (优先级:4,预计工时:0),2:软件需求2 (优先级:2,预计工时:20)
-查看通过产品1获取的用户需求的键值对详情 >> 1:用户需求1,2:用户需求2,更多...
-查看通过产品3获取的软件需求的键值对详情 >> 10:软件需求10 (优先级:2,预计工时:9)
+- 获取产品1下的所有软件需求数量 @2
+- 获取产品1下的所有用户需求数量 @1
+- 查看通过产品1获取的软件需求的名称字段
+ - 属性4 @4:软件需求4 (优先级:4,预计工时:4)
+ - 属性2 @2:软件需求2 (优先级:2,预计工时:2)
+- 查看通过产品3获取的软件需求的键值对详情属性10 @10:软件需求10 (优先级:2,预计工时:2)
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+$story = zenData('story');
+$story->estimate->range('1-4');
+$story->gen(20);
+
+zenData('product')->gen(20);
+
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

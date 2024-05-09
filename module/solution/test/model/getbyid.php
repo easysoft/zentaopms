@@ -21,11 +21,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/solution.class.php';
+include dirname(__FILE__, 2) . '/lib/solution.unittest.class.php';
 
-zdTable('space')->config('space')->gen(2);
-zdTable('solution')->config('solution')->gen(2);
-zdTable('instance')->config('instance')->gen(4);
+zenData('space')->loadYaml('space')->gen(2);
+zenData('solution')->loadYaml('solution')->gen(2);
+zenData('instance')->loadYaml('instance')->gen(4);
 
 $solutionModel = new solutionTest();
 

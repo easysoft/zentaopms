@@ -39,6 +39,8 @@ class upgradeTao extends upgradeModel
      */
     protected function convertBuiltInDataSet(): void
     {
+        $this->loadModel('dataset');
+        $this->loadModel('dataview');
         $dataview = new stdclass();
         $dataview->group       = $this->getDataviewGroupID($this->lang->dataview->builtIn);
         $dataview->createdBy   = 'system';

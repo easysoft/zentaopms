@@ -3,6 +3,7 @@ global $lang, $app;
 
 $config->product = new stdclass();
 $config->product->showAllProjects = 0;
+$config->product->refreshInterval = 120;
 
 $config->product->create = new stdclass();
 $config->product->edit   = new stdclass();
@@ -11,7 +12,7 @@ $config->product->edit->requiredFields   = 'name';
 
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
-$config->product->custom->batchEditFields = 'PO,QD,RD,status,type,acl';
+$config->product->custom->batchEditFields = 'line,PO,QD,RD,status,type,acl';
 if($config->systemMode == 'ALM' || $config->systemMode == 'PLM') $config->product->custom->batchEditFields .= ',program';
 
 /* Export fields of product list page. */
@@ -79,3 +80,8 @@ $config->product->actionList['delete']['hint']         = $lang->product->delete;
 $config->product->actionList['delete']['url']          = helper::createLink('product', 'delete', 'productID={id}');
 $config->product->actionList['delete']['class']        = 'ajax-submit';
 $config->product->actionList['delete']['data-confirm'] = array('message' => $lang->product->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
+$config->product->actions = new stdclass();
+$config->product->actions->view = array();
+$config->product->actions->view['mainActions']   = array('close', 'activate');
+$config->product->actions->view['suffixActions'] = array('edit', 'delete');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\ExpressionArray;
@@ -8,32 +10,28 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class ExpressionArrayTest extends TestCase
 {
-    public function testParse()
+    public function testParse(): void
     {
         $component = ExpressionArray::parse(
             new Parser(),
             $this->getTokensList('(expr)'),
-            array(
-                'breakOnParentheses' => true
-            )
+            ['breakOnParentheses' => true]
         );
-        $this->assertEquals(array(), $component);
+        $this->assertEquals([], $component);
     }
 
-    public function testParse2()
+    public function testParse2(): void
     {
         $component = ExpressionArray::parse(
             new Parser(),
             $this->getTokensList('(expr) +'),
-            array(
-                'parenthesesDelimited' => true
-            )
+            ['parenthesesDelimited' => true]
         );
         $this->assertCount(1, $component);
         $this->assertEquals('(expr)', $component[0]->expr);
     }
 
-    public function testParseWithCommentsNoOptions()
+    public function testParseWithCommentsNoOptions(): void
     {
         $component = ExpressionArray::parse(
             new Parser(),
@@ -43,14 +41,12 @@ class ExpressionArrayTest extends TestCase
         $this->assertEquals('(expr)', $component[0]->expr);
     }
 
-    public function testParseWithCommentsAndOptions()
+    public function testParseWithCommentsAndOptions(): void
     {
         $component = ExpressionArray::parse(
             new Parser(),
             $this->getTokensList('(expr -- comment ?)'),
-            array(
-                'parenthesesDelimited' => true
-            )
+            ['parenthesesDelimited' => true]
         );
         $this->assertCount(1, $component);
         $this->assertEquals('(expr', $component[0]->expr);

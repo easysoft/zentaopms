@@ -75,10 +75,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
+include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('stage')->gen(0);
+zenData('user')->gen(5);
+zenData('stage')->gen(0);
 
 $stage1 = new stdclass();
 $stage1->name    = '新建的需求';

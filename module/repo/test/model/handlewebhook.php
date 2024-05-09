@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -22,11 +22,11 @@ cid=1
 
 */
 
-zdTable('task')->gen(10);
-$bug = zdTable('bug');
+zenData('task')->gen(10);
+$bug = zenData('bug');
 $bug->execution->range('0');
 $bug->gen(10);
-zdTable('repo')->config('repo')->gen(4);
+zenData('repo')->loadYaml('repo')->gen(4);
 
 $repoID = 1;
 $event  = 'Push Hook';
@@ -139,6 +139,10 @@ $data   = '{
     "visibility_level": 0
   }
 }';
+
+global $app;
+include($app->getModuleRoot() . '/repo/control.php');
+$app->control = new repo();
 
 $repo = new repoTest();
 $repo->handleWebhookTest($event, json_decode($data), $repoID);

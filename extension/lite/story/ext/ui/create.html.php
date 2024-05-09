@@ -28,7 +28,7 @@ formPanel
     (
         setClass('panel-title text-lg'),
         $lang->story->create,
-        $forceReview ? checkbox(set::id('needNotReview'), set::rootClass('text-base font-medium'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null
+        !$forceReview ? checkbox(set::id('needNotReview'), set::rootClass('text-base font-medium'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null
     )),
     set::actions(array
     (
@@ -45,6 +45,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->story->module),
+            set::required(strpos($config->story->create->requiredFields, 'module') !== false),
             modulePicker
             (
                 set::required(true),
@@ -80,13 +81,15 @@ formPanel
     ) : null,
     formRow
     (
+        set::id('reviewerBox'),
+        set::hidden(!$forceReview),
         formGroup
         (
             set::width('1/2'),
             set::label($lang->story->reviewedBy),
+            set::required(true),
             inputGroup
             (
-                set::id('reviewerBox'),
                 picker
                 (
                     setID('reviewer'),
@@ -96,7 +99,7 @@ formPanel
                     set::value($fields['reviewer']['default'])
                 )
             ),
-            formHidden('needNotReview', 1)
+            formHidden('needNotReview', $forceReview ? 0 : 1)
         )
     ),
     $type == 'story' && !$this->config->URAndSR ? formRow
@@ -189,6 +192,7 @@ formPanel
         set::control('input'),
         set::values($fields['keywords']['default'])
     ),
+    formHidden('status', 'active'),
     formHidden('type', $type)
 );
 

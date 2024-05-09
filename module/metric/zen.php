@@ -45,20 +45,18 @@ class metricZen extends metric
      * 成功插入度量数据后，其他的额外操作。
      * Process after create metric.
      *
-     * @param  string    $scope
+     * @param  int       $metricID
+     * @param  string    $afterCreate
+     * @param  string    $from   metric|metriclib
+     * @param  string    $location
      * @access protected
      * @return array
      */
-    protected function responseAfterCreate($metricID, $scope, $afterCreate)
+    protected function responseAfterCreate($metricID, $afterCreate, $from, $location)
     {
-        if($afterCreate == 'back')
-        {
-            $location = $this->createLink('metric', 'browse', "scope=$scope");
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
-        }
+        if($afterCreate == 'back' && $location) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
 
-        $closeModal = false;
-        $location = $this->createLink('metric', 'implement', "metricID=$metricID");
+        $location = $this->createLink('metric', 'implement', "metricID=$metricID&from=$from");
         $callback = array('name' => 'loadImplement', 'params' => $location);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback);
     }
@@ -70,10 +68,13 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit($scope)
+    protected function responseAfterEdit($metricID, $afterEdit, $location)
     {
-        $location = $this->createLink('metric', 'browse', "scope=$scope");
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+        if($afterEdit == 'back' && $location) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+
+        $location = $this->createLink('metric', 'implement', "metricID=$metricID");
+        $callback = array('name' => 'loadImplement', 'params' => $location);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback);
     }
 
     /**
@@ -97,6 +98,12 @@ class metricZen extends metric
             $calc->setDAO($dao);
 
             return $calc->getStatement();
+        }
+
+        foreach($calcList as $calc)
+        {
+            $calc->setHolidays($this->loadModel('holiday')->getList());
+            $calc->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
         }
 
         $dataset   = $this->metric->getDataset($dao);
@@ -181,22 +188,22 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
-        $yesterday = strtotime('-1 day', strtotime('today'));
-        $yesterday = date('j', $yesterday);
+        $yesterday = date('j', strtotime('-1 day', strtotime('today')));
         $today     = date('j');
         $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
 
         $now        = helper::now();
-        $dateValues = $this->metric->generateDateValues($now);
+        $dateValues = $this->metric->parseDateStr($now);
 
         $records = array();
         foreach($calcList as $code => $calc)
         {
             $metric       = $this->metric->getByCode($code);
             $dateType     = $this->metric->getDateTypeByCode($code);
-            $recordCommon = $this->buildMetricRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
+            $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
             $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
 
+            if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
             $results = $calc->getResult($options);
             if(is_array($results))
             {
@@ -227,6 +234,58 @@ class metricZen extends metric
         return $records;
     }
 
+    protected function prepareReuseMetricResult($calc, $options)
+    {
+        $reuseMetrics = array();
+        foreach($calc->reuseMetrics as $key => $reuseMetric)
+        {
+            $reuseMetrics[$key] = $this->metric->getResultByCode($reuseMetric, $options);
+        }
+
+        $calc->calculate($reuseMetrics);
+    }
+
+    protected function getRecordByCodeAndDate($code, $calc, $date)
+    {
+        $now = helper::now();
+
+        $metric   = $this->metric->getByCode($code);
+        $dateType = $this->metric->getDateTypeByCode($code);
+
+        if($dateType == 'nodate') return array();
+        if($this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
+
+        $dateConfig   = $this->metric->parseDateStr($date, $dateType);
+        $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);
+        $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope, "{$date} 23:59:59");
+
+        $results = $calc->getResult($dateConfig);
+        if(is_array($results))
+        {
+            foreach($results as $record)
+            {
+                $record = (object)$record;
+                if(empty($record->value)) continue;
+
+                $record->metricID   = $metric->id;
+                $record->metricCode = $code;
+                $record->date       = $now;
+                $record->system     = $metric->scope == 'system' ? 1 : 0;
+
+                $uniqueKey = $this->getUniqueKeyByRecord($record);
+                if(!isset($initRecords[$uniqueKey]))
+                {
+                    $initRecords[$uniqueKey] = $record;
+                    continue;
+                }
+
+                $initRecords[$uniqueKey]->value = $record->value;
+            }
+        }
+
+        return array_values($initRecords);
+    }
+
     /**
      * 根据度量项编码，初始化度量数据。
      * Initialize metric data based on metric code.
@@ -237,7 +296,7 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function initMetricRecords($recordCommon, $scope)
+    protected function initMetricRecords($recordCommon, $scope, $date = 'now')
     {
         $records = array();
         if($scope == 'system')
@@ -250,7 +309,10 @@ class metricZen extends metric
         }
         else
         {
-            $scopeList = $this->metric->getPairsByScope($scope);
+            if($date == 'now') $date = helper::today();
+
+            $scopeList = $this->metric->getPairsByScopeAndDate($scope, $date);
+
             foreach($scopeList as $key => $value)
             {
                 $record = clone $recordCommon;
@@ -276,7 +338,7 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function buildMetricRecordCommonFields($metricID, $code, $date, $dateValues)
+    protected function buildRecordCommonFields($metricID, $code, $date, $dateValues)
     {
         $record = new stdclass();
         $record->value      = 0;
@@ -322,12 +384,15 @@ class metricZen extends metric
      */
     protected function calcMetric($rows, $calcList)
     {
-        foreach($rows as $row)
+        foreach($calcList as $code => $calc)
         {
-            foreach($calcList as $calc)
+            if(!$calc->reuse)
             {
-                $record = $this->getCalcFields($calc, $row);
-                $calc->calculate($record);
+                foreach($rows as $row)
+                {
+                    $record = $this->getCalcFields($calc, $row);
+                    $calc->calculate($record);
+                }
             }
         }
     }
@@ -371,7 +436,7 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function getBasicInfo(object $view, string $fields = 'scope,object,purpose,code,unit,stage')
+    protected function getBasicInfo(object $view, string $fields = 'scope,object,purpose,dateType,name,alias,code,unit,stage')
     {
         extract((array)$view);
 
@@ -382,7 +447,9 @@ class metricZen extends metric
         if(strpos($fields, 'scope') !== false)      $legendBasic['scope']       = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
         if(strpos($fields, 'object') !== false)     $legendBasic['object']      = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
         if(strpos($fields, 'purpose') !== false)    $legendBasic['purpose']     = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
+        if(strpos($fields, 'dateType') !== false)   $legendBasic['dateType']    = array('name' => $this->lang->metric->dateType, 'text' => zget($this->lang->metric->dateTypeList, $metric->dateType));
         if(strpos($fields, 'name') !== false)       $legendBasic['name']        = array('name' => $this->lang->metric->name, 'text' => $metric->name);
+        if(strpos($fields, 'alias') !== false)      $legendBasic['alias']       = array('name' => $this->lang->metric->alias, 'text' => $metric->alias);
         if(strpos($fields, 'code') !== false)       $legendBasic['code']        = array('name' => $this->lang->metric->code, 'text' => $metric->code);
         if(strpos($fields, 'unit') !== false)       $legendBasic['unit']        = array('name' => $this->lang->metric->unit, 'text' => $unit);
         if($isOldMetric)
@@ -536,11 +603,14 @@ class metricZen extends metric
      */
     protected function prepareActionPriv(array $metrics): array
     {
+        $this->loadModel('screen');
         foreach($metrics as $metric)
         {
-            $metric->canEdit      = $metric->stage == 'wait';
-            $metric->canImplement = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
-            $metric->canDelist    = $metric->stage == 'released';
+            $metric->canEdit        = $metric->stage == 'wait';
+            $metric->canImplement   = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
+            $metric->canDelist      = $metric->stage == 'released' && $metric->builtin === '0';
+            $metric->canRecalculate = $metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate';
+            $metric->isUsed         = $this->screen->checkIFChartInUse($metric->id, 'metric');
         }
         return $metrics;
     }

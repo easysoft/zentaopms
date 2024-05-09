@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-6');
 $execution->name->range('项目1,迭代1,迭代2,迭代3,迭代4,迭代5');
 $execution->type->range('project,stage,sprint,stage{2},sprint');

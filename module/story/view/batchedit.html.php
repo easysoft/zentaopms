@@ -19,7 +19,7 @@
 <div class='main-content' id='mainContent'>
 <div class='main-header'>
   <h2>
-    <?php echo $lang->story->common . $lang->colon . $lang->story->batchEdit;?>
+    <?php echo $lang->story->common . $lang->hyphen . $lang->story->batchEdit;?>
   </h2>
   <div class='pull-right btn-toolbar'>
     <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchEditFields')?>

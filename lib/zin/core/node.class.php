@@ -99,7 +99,7 @@ class node implements \JsonSerializable
 
     public function id(): ?string
     {
-        return $this->props->get('id');
+        return strval($this->props->get('id'));
     }
 
     public function displayID(): string
@@ -266,6 +266,7 @@ class node implements \JsonSerializable
     {
         if($item === null || is_bool($item)) return;
 
+        if($item instanceof \Closure) $item = $item();
         if(is_array($item))
         {
             foreach($item as $child) $this->add($child, $blockName, $prepend);
@@ -569,9 +570,9 @@ class node implements \JsonSerializable
      * Serialized to JSON string.
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function jsonSerialize(): string
+    public function jsonSerialize(): mixed
     {
         return json_encode($this->toJSON());
     }
@@ -763,10 +764,10 @@ function findInNode(array $selectors, node|array $list, bool $first = false, boo
     if($list instanceof node)
     {
         $data = $list->buildData;
-        if(!$data || !isset($data->content) || empty($data->content)) return array();
+        if(!$data) return array();
 
-        $list = $data->content;
-        if(!$onlyContent) $list = array_merge($data->before, $list, $data->after);
+        $list = $data->content ? $data->content : array();
+        if(!$onlyContent) $list = array_merge($data->before ? $data->before : array(), $list, $data->after ? $data->after : array());
     }
     if($reverse) $list = array_reverse($list);
     $result = array();

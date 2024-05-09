@@ -37,7 +37,7 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-$relationoftasks = zdTable('relationoftasks');
+$relationoftasks = zenData('relationoftasks');
 $relationoftasks->id->range('1-100');
 $relationoftasks->execution->range('1-10');
 $relationoftasks->pretask->range('1-100');

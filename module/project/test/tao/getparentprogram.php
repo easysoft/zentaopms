@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 function initData()
 {
-    $project = zdTable('project');
+    $project = zenData('project');
     $project->id->range('1-10,11-19');
     $project->project->range('0{10},11-19');
     $project->name->setFields(array(
@@ -33,7 +33,7 @@ function initData()
     $project->openedDate->range("`2023-05-01 10:00:10`");
     $project->gen(18);
 
-    zdTable('user')->gen(10);
+    zenData('user')->gen(10);
 }
 
 /**

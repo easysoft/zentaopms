@@ -17,7 +17,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('module')->config('lines', $useCommon = true)->gen(20);
+zenData('module')->loadYaml('lines', $useCommon = true)->gen(20);
 $product = $tester->loadModel('product');
 
 $programIdList1 = array();

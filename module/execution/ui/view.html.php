@@ -18,27 +18,6 @@ $chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "e
 
 /* Construct suitable actions for the current execution. */
 $execution->rawID = $execution->id;
-$operateMenus = array();
-foreach($config->execution->view->operateList['main'] as $operate)
-{
-    if(!common::hasPriv('execution', $operate)) continue;
-    if(!$this->execution->isClickable($execution, $operate)) continue;
-
-    $operateMenus[] = $config->execution->actionList[$operate];
-}
-
-/* Construct common actions for execution. */
-$commonActions = array();
-foreach($config->execution->view->operateList['common'] as $operate)
-{
-    if(!common::hasPriv('execution', $operate)) continue;
-
-    $settings = $config->execution->actionList[$operate];
-    $settings['text'] = '';
-    if($operate == 'edit') unset($settings['data-toggle']);
-
-    $commonActions[] = $settings;
-}
 
 $programDom = null;
 if($config->systemMode == 'ALM' && isset($execution->projectInfo->grade) && $execution->projectInfo->grade > 1)
@@ -110,16 +89,20 @@ if(!empty($execution->projectInfo->hasProduct) || $features['plan'])
             foreach($product->plans as $planIDList)
             {
                 $planIDList = explode(',', $planIDList);
+                $planIDList = array_filter($planIDList);
                 foreach($planIDList as $planID)
                 {
                     if(!isset($planGroups[$productID][$planID])) continue;
 
-                    $class = '';
+                    $class = 'clip';
+                    if(count($planIDList) <= 2) $class .= ' flex flex-1 w-0 items-center';
+                    if(count($planIDList) > 2)  $class .= ' flex-none w-1/3';
+
                     if(count($plans) > 2)      $class .= ' mt-2';
-                    if(count($plans) % 3 != 0) $class .= ' pl-4';
+                    if(count($plans) % 3 != 0) $class .= ' pl-6';
                     $plans[] = div
                     (
-                        setClass("flex-none w-1/3 clip {$class}"),
+                        setClass($class),
                         icon('calendar mr-2'),
                         a
                         (
@@ -161,6 +144,8 @@ div
                 echarts
                 (
                     set::color(array('#2B80FF', '#E3E4E9')),
+                    set::width(120),
+                    set::height(120),
                     set::series
                     (
                         array
@@ -175,7 +160,7 @@ div
                             )
                         )
                     )
-                )->size(120, 120),
+                ),
                 div
                 (
                     set::className('pie-chart-title text-center'),
@@ -542,14 +527,7 @@ div
                 (
                     h::tr
                     (
-                        h::td
-                        (
-                            div
-                            (
-                                setClass('flex flex-wrap member-list pt-2'),
-                                $membersDom
-                            )
-                        )
+                        h::td(div(setClass('flex flex-wrap member-list pt-2'), $membersDom))
                     )
                 )
             ),
@@ -562,14 +540,7 @@ div
                 (
                     h::tr
                     (
-                        h::th
-                        (
-                            div
-                            (
-                                setClass('flex items-center justify-between'),
-                                span($lang->execution->DurationStats)
-                            )
-                        )
+                        h::th(div(setClass('flex items-center justify-between'), span($lang->execution->DurationStats)))
                     )
                 ),
                 h::tbody
@@ -584,58 +555,26 @@ div
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->begin
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->begin
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->begin),
+                                    span(setClass('ml-2'), $execution->begin)
                                 ),
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->end
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->end
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->end),
+                                    span(setClass('ml-2'), $execution->end)
                                 ),
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->realBeganAB
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->realBeganAB),
+                                    span(setClass('ml-2'), helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan)
                                 ),
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->realEndAB
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->realEndAB),
+                                    span(setClass('ml-2'), helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd)
                                 )
                             )
                         )
@@ -649,14 +588,7 @@ div
                 (
                     h::tr
                     (
-                        h::th
-                        (
-                            div
-                            (
-                                setClass('flex items-center justify-between'),
-                                span($lang->execution->lblStats)
-                            )
-                        )
+                        h::th(div(setClass('flex items-center justify-between'), span($lang->execution->lblStats)))
                     )
                 ),
                 h::tbody
@@ -671,72 +603,32 @@ div
                                 div
                                 (
                                     setClass('w-1/3'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->estimateHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalEstimate . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->estimateHours),
+                                    span(setClass('ml-2'), $execution->totalEstimate . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->consumedHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalConsumed . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->consumedHours),
+                                    span(setClass('ml-2'), $execution->totalConsumed . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->leftHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalLeft . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->leftHours),
+                                    span(setClass('ml-2'), $execution->totalLeft . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3 mt-4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->totalDays
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->days
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->totalDays),
+                                    span(setClass('ml-2'), $execution->days)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3 mt-4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->totalHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalHours . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->totalHours),
+                                    span(setClass('ml-2'), $execution->totalHours . $lang->execution->workHourUnit)
                                 )
                             )
                         )
@@ -773,17 +665,11 @@ div
                 (
                     h::tr
                     (
-                        h::td
-                        (
-                            div
-                            (
-                                setClass('flex flex-wrap pt-2'),
-                                $docLibDom
-                            )
-                        )
+                        h::td(div(setClass('flex flex-wrap pt-2'), $docLibDom))
                     )
                 )
-            ) : null
+            ) : null,
+            html($this->printExtendFields($execution, 'html', 'position=info', false))
         )
     ),
     div
@@ -793,11 +679,7 @@ div
         (
             to::heading
             (
-                div
-                (
-                    set('class', 'panel-title'),
-                    $lang->execution->latestDynamic
-                )
+                div(set('class', 'panel-title'), $lang->execution->latestDynamic)
             ),
             to::headingActions
             (
@@ -812,6 +694,7 @@ div
             set::shadow(false),
             dynamic()
         ),
+        html($this->printExtendFields($execution, 'html', 'position=basic', false)),
         div
         (
             setClass('mt-4'),
@@ -824,14 +707,15 @@ div
     )
 );
 
+$actions = $this->loadModel('common')->buildOperateMenu($execution);
 div
 (
-    setClass('center w-2/3'),
+    setClass('w-2/3 center fixed actions-menu'),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        set::main($operateMenus),
-        set::suffix($commonActions),
+        set::main($actions['mainActions']),
+        set::suffix($actions['suffixActions']),
         set::object($execution)
     )
 );

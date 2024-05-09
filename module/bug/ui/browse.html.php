@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('productID',      $product->id);
 jsVar('branch',         $branch);
+jsVar('today',          date('Y-m-d'));
 jsVar('caseCommonLang', $this->lang->testcase->common);
 
 $queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
@@ -21,7 +22,7 @@ featureBar
     set::current($currentType),
     set::linkParams("product={$product->id}&branch={$branch}&browseType={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle())
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 $canBeChanged         = common::canModify('product', $product);
@@ -69,7 +70,7 @@ if(!isonlybody())
         ))) : null,
         hasPriv('bug', 'export') ? item(set(array
         (
-            'text'  => $lang->bug->export,
+            'text'  => $lang->export,
             'icon'  => 'export',
             'class' => 'ghost',
             'url'   => createLink('bug', 'export', "productID={$product->id}&browseType={$browseType}"),
@@ -90,7 +91,7 @@ if(!isonlybody())
     );
 }
 
-$closeLink   = createLink('bug', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+$closeLink   = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=byModule&param=0&orderBy={$orderBy}&recTotal=0&recPerPage={$pager->recPerPage}");
 $settingLink = $canManageModule ? createLink('tree', 'browse', "productID={$product->id}&view=bug&currentModuleID=0&branch=0&from={$this->lang->navGroup->bug}") : '';
 sidebar
 (
@@ -171,13 +172,14 @@ if($canBatchAction)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('bug');
-if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
-if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
-if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
-if(isset($cols['plan']))      $cols['plan']['map']      = $plans;
-if(isset($cols['task']))      $cols['task']['map']      = $tasks;
-if(isset($cols['toTask']))    $cols['toTask']['map']    = $tasks;
-if(isset($cols['story']))     $cols['story']['map']     = $stories;
+if(isset($cols['branch']))         $cols['branch']['map']         = array(BRANCH_MAIN => $lang->trunk) + $branchTagOption;
+if(isset($cols['project']))        $cols['project']['map']        = array('') + $projectPairs;
+if(isset($cols['execution']))      $cols['execution']['map']      = array('') + $executions;
+if(isset($cols['plan']))           $cols['plan']['map']           = array('') + $plans;
+if(isset($cols['task']))           $cols['task']['map']           = array('') + $tasks;
+if(isset($cols['toTask']))         $cols['toTask']['map']         = array('') + $tasks;
+if(isset($cols['story']))          $cols['story']['map']          = array('') + $stories;
+if(isset($cols['activatedCount'])) $cols['activatedCount']['map'] = array('');
 if($product->type == 'normal') unset($cols['branch']);
 foreach($cols as $colName => $col)
 {

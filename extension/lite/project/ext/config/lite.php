@@ -16,3 +16,5 @@ unset($config->project->dtable->team->fieldList['days']);
 unset($config->project->dtable->team->fieldList['hours']);
 unset($config->project->dtable->team->fieldList['total']);
 unset($config->project->dtable->team->fieldList['limited']);
+
+$config->project->dtable->fieldList['actions']['menu'] = array(array('start|activate|close', 'other' => array('suspend', 'activate|close')), 'edit', 'group', 'whitelist', 'delete');

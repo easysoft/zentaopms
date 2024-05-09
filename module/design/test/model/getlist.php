@@ -165,15 +165,15 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/design.class.php';
+include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
 
-$userqueryTable = zdTable('userquery');
+$userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
 $userqueryTable->sql->range("`(( 1  AND `name`  LIKE '%设计%' ) AND ( 1  ))`");
 $userqueryTable->module->range('design');
 $userqueryTable->gen(1);
 
-zdTable('design')->config('design')->gen(30);
+zenData('design')->loadYaml('design')->gen(30);
 
 $projects = array(0, 11, 1);
 $products = array(0, 1, 11);

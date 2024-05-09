@@ -8,7 +8,7 @@ jsVar('confirmDisableTip', $lang->ai->models->confirmDisable);
 
 detailHeader
 (
-    set::backUrl($this->createLink('ai', 'models')),
+    backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback),
     to::title
     (
         entityLabel

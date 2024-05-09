@@ -131,6 +131,7 @@ class executionModel extends model
         }
 
         $this->session->set('execution', $executionID, $this->app->tab);
+        $this->lang->switcherMenu = $this->getSwitcher($executionID, (string)$this->app->rawModule, (string)$this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
 
         if($execution->type != 'kanban' && $this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')
@@ -275,7 +276,7 @@ class executionModel extends model
         if(empty($project) || $project->model != 'kanban') $this->loadModel('kanban')->createExecutionLane($executionID);
 
         /* Api create infinites stages. */
-        if(isset($execution->parent) && ($execution->parent != $execution->project) && $execution->type == 'stage')
+        if(isset($execution->parent) && ($execution->parent != $execution->project) && ($execution->type == 'stage' || $project->model == 'ipd'))
         {
             $parent = $this->fetchByID($execution->parent);
             $grade  = $parent->grade + 1;
@@ -531,14 +532,15 @@ class executionModel extends model
 
             /* Name check. */
             $parentID = $parents[$executionID];
-            if(isset($nameList[$executionName]))
+            if(isset($nameList[$executionName]) && !empty($executionName))
             {
                 foreach($nameList[$executionName] as $repeatID)
                 {
                     if($parentID == $parents[$repeatID])
                     {
                         $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
-                        dao::$errors["name[$executionID]"] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
+                        $repeatTip = $parentID == $projectID ? $this->lang->programplan->error->sameName : sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
+                        dao::$errors["name[$executionID]"] = $repeatTip;
                     }
                 }
             }
@@ -1243,8 +1245,8 @@ class executionModel extends model
         }
         if(dao::isError()) return;
 
-        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
-        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
+        if($begin < ($project->realBegan ? $project->realBegan : $project->begin)) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
+        if($end > ($project->realEnd ? $project->realEnd : $project->end))         dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /**
@@ -1590,6 +1592,7 @@ class executionModel extends model
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
+        $projectModel   = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
         return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1598,6 +1601,7 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
+            ->beginIF($projectModel == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
@@ -2126,6 +2130,9 @@ class executionModel extends model
 
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
+
+        $child = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('id');
+        $execution->isParent = !empty($child) ? 1 : 0;
 
         return $execution;
     }
@@ -2788,10 +2795,11 @@ class executionModel extends model
      * @param  array  $stories
      * @param  string $extra
      * @param  array  $lanes
+     * @param  string $storyType
      * @access public
      * @return bool
      */
-    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array()): bool
+    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array(), string $storyType = 'story'): bool
     {
         if(empty($executionID) || empty($stories)) return false;
 
@@ -2840,6 +2848,7 @@ class executionModel extends model
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($action == 'linked2execution' and $execution->type == 'kanban') $action = 'linked2kanban';
             if($execution->multiple or $execution->type == 'project') $this->action->create('story', $storyID, $action, '', $executionID);
+            if($storyType == 'requirement' and $execution->model == 'ipd') $this->dao->update(TABLE_STORY)->set('status')->eq('developing')->where('id')->eq($storyID)->exec();
         }
 
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
@@ -2939,6 +2948,7 @@ class executionModel extends model
     public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0): array|bool
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        $storyType = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('type');
         if($execution->type == 'project')
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
@@ -2946,6 +2956,9 @@ class executionModel extends model
             if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+
+        /* In ipd project, unlink stories change it's status to launched. */
+        if($execution->model == 'ipd' and $storyType == 'requirement') $this->dao->update(TABLE_STORY)->set('status')->eq('launched')->where('id')->eq($storyID)->exec();
 
         /* Resolve TABLE_KANBANCELL's field cards. */
         if($execution->type == 'kanban')
@@ -3825,7 +3838,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return ($execution->status != 'closed') && empty($execution->isParent);
+        if($action == 'close')    return $execution->status != 'closed' && (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
@@ -3998,10 +4011,11 @@ class executionModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function buildCaseSearchForm(array $products, int $queryID, string $actionURL)
+    public function buildCaseSearchForm(array $products, int $queryID, string $actionURL, int $executionID)
     {
         $modules = array();
         foreach($products as $product)
@@ -4060,6 +4074,7 @@ class executionModel extends model
             $this->config->testcase->search['params']['branch']['values'] = $branchPairs;
         }
         $this->config->testcase->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->testcase->statusList);
+        $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID);
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
@@ -4499,7 +4514,7 @@ class executionModel extends model
             $branchQuery .= "FIND_IN_SET('0', branch)";
         }
 
-        $branchQuery .= ')';
+        $branchQuery .= " OR branch = '')";
 
         $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
@@ -4726,6 +4741,7 @@ class executionModel extends model
                         if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
+                        if($actionName == 'createChildStage' && $action['disabled']) $action['hint'] = $execution->type == 'stage' ? $this->lang->programplan->error->createdTask : $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                     }
@@ -4748,6 +4764,7 @@ class executionModel extends model
 
             /* Append tasks and child stages. */
             if(!empty($execution->tasks)) $rows = $this->appendTasks($execution->tasks, $rows);
+            if(!empty($execution->points)) $rows = $this->appendPoints($execution->points, $rows);
         }
 
         return $rows;
@@ -5073,5 +5090,41 @@ class executionModel extends model
     public function getChildIdGroup(array $parentIdList): array
     {
         return $this->dao->select('id,parent')->from(TABLE_EXECUTION)->where('parent')->in($parentIdList)->andWhere('type')->in('stage,kanban,sprint')->fetchGroup('parent', 'id');
+    }
+
+    /*
+     * 获取旧页面1.5级下拉。
+     * Get execution switcher.
+     *
+     * @param  int     $executionID
+     * @param  string  $currentModule
+     * @param  string  $currentMethod
+     * @access public
+     * @return string
+     */
+    public function getSwitcher(int $executionID, string $currentModule, string $currentMethod): string
+    {
+        if($currentModule == 'execution' and in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return '';
+
+        $currentExecutionName = $this->lang->execution->common;
+        if($executionID)
+        {
+            $currentExecution     = $this->getById($executionID);
+            $currentExecutionName = $currentExecution->name;
+        }
+
+        if($this->app->viewType == 'mhtml' and $executionID)
+        {
+            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->hyphen;
+            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '')\">{$currentExecutionName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            return $output;
+        }
+
+        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=");
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'>{$currentExecutionName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
     }
 }

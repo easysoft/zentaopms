@@ -72,7 +72,7 @@ formBatchPanel
                         setID('futureDate'),
                         set::name('futureDate'),
                         $lang->todo->periods['future'],
-                        on::click('window.changFuture')
+                        on::click('window.changeFuture')
                     )
                 )
             )

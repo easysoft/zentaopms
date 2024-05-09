@@ -9,9 +9,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
+include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
 
-$release = zdTable('release')->config('release');
+$release = zenData('release')->loadYaml('release');
 $release->stories->range('`1,2,3`,[]');
 $release->bugs->range('`1,2,3`,[]');
 $release->notify->range('`PO,QD,feedback`,`SC,ET,PT,CT`');
@@ -19,12 +19,12 @@ $release->status->range('normal,terminate');
 $release->deleted->range('0{2},1');
 $release->gen(5);
 
-zdTable('story')->config('story')->gen(5);
-zdTable('bug')->config('bug')->gen(5);
-zdTable('product')->config('product')->gen(5);
-zdTable('build')->config('build')->gen(5);
-zdTable('team')->gen(0);
-zdTable('user')->gen(5);
+zenData('story')->loadYaml('story')->gen(5);
+zenData('bug')->loadYaml('bug')->gen(5);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('build')->loadYaml('build')->gen(5);
+zenData('team')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $releases = array(1, 2, 3);

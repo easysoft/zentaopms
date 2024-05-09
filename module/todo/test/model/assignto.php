@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/todo.class.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    zdTable('todo')->config('assignto')->gen(5);
+    zenData('todo')->loadYaml('assignto')->gen(5);
 }
 
 /**

@@ -1,21 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-$productplan = zdTable('productplan');
-$productplan->product->range('1,2{3}');
-$productplan->branch->range('0,0,1,2');
-$productplan->gen(4);
 
 /**
 
 title=测试 storyModel->getDefaultStages();
-cid=1
-pid=1
+cid=0
+
+- 不传入任何数据。 @0
+- 传入不是多分支的计划。 @planned
+- 传入多分支计划。
+ -  @planned
+ - 属性1 @planned
+- 传入不是多分支的计划，传入关联项目的分支。 @projected
+- 传入多分支的计划，传入关联项目的分支。
+ -  @projected
+ - 属性1 @planned
+ - 属性2 @projected
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+$productplan = zenData('productplan');
+$productplan->product->range('1,2{3}');
+$productplan->branch->range('0,0,1,2');
+$productplan->gen(4);
 
 global $tester;
 $storyModel = $tester->loadModel('story');

@@ -19,8 +19,10 @@ class formBase extends wg
 {
     protected static array $defineProps = array(
         'id?: string="$GID"',           // ID，如果不指定则自动生成（使用 zin 部件 GID）。
+        'tagName?: string="form"',      // 标签名。
         'method?: "get"|"post"="post"', // 表单提交方式。
         'url?: string',                 // 表单提交地址。
+        'enctype?: string',             // 表单提交类型。
         'actions?: array',              // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string',        // 表单操作按钮栏类名。
         'target?: string="ajax"',       // 表单提交目标，如果是 `'ajax'` 提交则为 ajax，在禅道中除非特殊目的，都使用 ajax 进行提交。
@@ -86,15 +88,33 @@ class formBase extends wg
 
     protected function buildProps(): array
     {
-        list($url, $target, $method, $id) = $this->prop(array('url', 'target', 'method', 'id'));
-        return array
+        list($url, $target, $method, $id, $enctype, $tagName) = $this->prop(array('url', 'target', 'method', 'id', 'enctype', 'tagName'));
+        $props = array
         (
             set::id($id),
-            set::className('form load-indicator', $target === 'ajax' ? 'form-ajax' : ''),
-            set::action(empty($url) ? $_SERVER['REQUEST_URI'] : $url),
-            set::target($target === 'ajax' ? null: $target),
-            set::method($method)
+            set::className('form load-indicator', $target === 'ajax' ? 'form-ajax' : '')
         );
+        if($tagName === 'form')
+        {
+            $props[] = set(array
+            (
+                'action'  => empty($url) ? $_SERVER['REQUEST_URI'] : $url,
+                'target'  => $target === 'ajax' ? null: $target,
+                'enctype' => $enctype,
+                'method'  => $method
+            ));
+        }
+        else
+        {
+            $props[] = set(array
+            (
+                'data-action'  => $url,
+                'data-target'  => $target,
+                'data-enctype' => $enctype,
+                'data-method'  => $method
+            ));
+        }
+        return $props;
     }
 
     protected function buildAfter(): array
@@ -109,7 +129,8 @@ class formBase extends wg
 
     protected function build()
     {
-        return h::form
+        $tagName = $this->prop('tagName');
+        return h::$tagName
         (
             $this->buildProps(),
             set($this->getRestProps()),

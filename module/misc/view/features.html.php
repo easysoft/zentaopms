@@ -28,7 +28,7 @@
           <div class='text-center' style='position:relative'>
             <p><?php echo $lang->install->introduction;?></p>
             <div class='download-file'>
-              <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank'><?php echo $lang->misc->feature->downloadFile;?></a>
+              <a href='https://dl.zentao.net/zentao/zentaoconcept.pdf' target='_blank'><?php echo $lang->misc->feature->downloadFile;?></a>
             </div>
           </div>
         </div>

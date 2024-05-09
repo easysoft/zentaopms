@@ -1,8 +1,6 @@
 <?php
 
-/**
- * `SET` statement.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
@@ -10,12 +8,10 @@ use PhpMyAdmin\SqlParser\Components\OptionsArray;
 use PhpMyAdmin\SqlParser\Components\SetOperation;
 use PhpMyAdmin\SqlParser\Statement;
 
+use function trim;
+
 /**
  * `SET` statement.
- *
- * @category   Statements
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class SetStatement extends Statement
 {
@@ -24,41 +20,43 @@ class SetStatement extends Statement
      *
      * @see Statement::$CLAUSES
      *
-     * @var array
+     * @var array<string, array<int, int|string>>
+     * @psalm-var array<string, array{non-empty-string, (1|2|3)}>
      */
-    public static $CLAUSES = array(
-        'SET' => array(
+    public static $CLAUSES = [
+        'SET' => [
             'SET',
-            3
-        ),
-        '_END_OPTIONS' => array(
+            3,
+        ],
+        '_END_OPTIONS' => [
             '_END_OPTIONS',
-            1
-        )
-    );
+            1,
+        ],
+    ];
 
     /**
-     * Possible exceptions in SET statment.
+     * Possible exceptions in SET statement.
      *
-     * @var array
+     * @var array<string, int|array<int, int|string>>
+     * @psalm-var array<string, (positive-int|array{positive-int, ('var'|'var='|'expr'|'expr=')})>
      */
-    public static $OPTIONS = array(
-        'CHARSET' => array(
+    public static $OPTIONS = [
+        'CHARSET' => [
             3,
             'var',
-        ),
-        'CHARACTER SET' => array(
+        ],
+        'CHARACTER SET' => [
             3,
             'var',
-        ),
-        'NAMES' => array(
+        ],
+        'NAMES' => [
             3,
             'var',
-        ),
-        'PASSWORD' => array(
+        ],
+        'PASSWORD' => [
             3,
             'expr',
-        ),
+        ],
         'SESSION' => 3,
         'GLOBAL' => 3,
         'PERSIST' => 3,
@@ -67,36 +65,40 @@ class SetStatement extends Statement
         '@@GLOBAL' => 3,
         '@@PERSIST' => 3,
         '@@PERSIST_ONLY' => 3,
-    );
+    ];
 
-    public static $END_OPTIONS = array(
-        'COLLATE' => array(
+    /**
+     * @var array<string, int|array<int, int|string>>
+     * @psalm-var array<string, (positive-int|array{positive-int, ('var'|'var='|'expr'|'expr=')})>
+     */
+    public static $END_OPTIONS = [
+        'COLLATE' => [
             1,
             'var',
-        ),
-        'DEFAULT' => 1
-    );
+        ],
+        'DEFAULT' => 1,
+    ];
 
     /**
      * Options used in current statement.
      *
-     * @var OptionsArray[]
+     * @var OptionsArray|null
      */
     public $options;
 
     /**
      * The end options of this query.
      *
-     * @var OptionsArray
-     *
      * @see static::$END_OPTIONS
+     *
+     * @var OptionsArray|null
      */
     public $end_options;
 
     /**
      * The updated values.
      *
-     * @var SetOperation[]
+     * @var SetOperation[]|null
      */
     public $set;
 

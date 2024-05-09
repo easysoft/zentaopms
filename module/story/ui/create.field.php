@@ -15,7 +15,7 @@ $fields->field('product')
     ->required()
     ->control('inputGroup')
     ->items(false)
-    ->itemBegin('product')->control('picker')->items($createFields['product']['options'])->value($createFields['product']['default'])->itemEnd()
+    ->itemBegin('product')->control('picker')->items($createFields['product']['options'])->value($createFields['product']['default'])->required(true)->itemEnd()
     ->item($isBranchUR ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items($createFields['branch']['options'])->value($createFields['branch']['default']) : null);
 
 $fields->field('module')
@@ -54,6 +54,34 @@ $fields->field('grade')
     ->required()
     ->items($createFields['grade']['options'])
     ->value($createFields['grade']['default']);
+if(isset($createFields['URS']))
+{
+    $fields->field('URS')
+        ->label($lang->story->requirement)
+        ->control('inputGroup')
+        ->items(false)
+        ->checkbox(array('text' => $lang->story->loadAllStories, 'id' => 'loadURS'))
+        ->itemBegin('URS[]')->control('picker')->id('URS')->items($createFields['URS']['options'])->value($createFields['URS']['default'])->multiple()->itemEnd();
+    $fields->field('parent')
+        ->hidden(data('hiddenParent'))
+        ->items($createFields['parent']['options'])
+        ->value($createFields['parent']['default']);
+}
+if(isset($createFields['duration']))
+{
+    $fields->field('duration')
+        ->required($createFields['duration']['required'])
+        ->items($createFields['duration']['options'])
+        ->value($createFields['duration']['default']);
+}
+
+if(isset($createFields['BSA']))
+{
+    $fields->field('BSA')
+        ->required($createFields['BSA']['required'])
+        ->items($createFields['BSA']['options'])
+        ->value($createFields['BSA']['default']);
+}
 
 $fields->field('reviewer')
     ->width('full')
@@ -150,11 +178,13 @@ $fields->field('sourceNote')
 $fields->field('feedbackBy')
     ->foldable()
     ->className('feedbackBox')
+    ->id('feedbackBy')
     ->value($createFields['feedbackBy']['default']);
 
 $fields->field('notifyEmail')
     ->foldable()
     ->className('feedbackBox')
+    ->id('notifyEmail')
     ->value($createFields['notifyEmail']['default']);
 
 $fields->field('mailto')

@@ -20,7 +20,7 @@ class todoZen extends todo
      */
     protected function buildCreateView(string $date)
     {
-        $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
+        $this->view->title = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->create;
         $this->view->date  = date('Y-m-d', strtotime($date));
         $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time  = date::now();
@@ -46,7 +46,7 @@ class todoZen extends todo
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
 
-        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
+        $this->view->title      = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->batchCreate;
         $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
         $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time       = date::now();
@@ -66,7 +66,7 @@ class todoZen extends todo
     protected function buildEditView(object $todo): void
     {
         $todo->date = date("Y-m-d", strtotime($todo->date));
-        $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
+        $this->view->title = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->edit;
         $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo  = $todo;
         $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
@@ -118,11 +118,12 @@ class todoZen extends todo
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
-            ->cleanInt('pri, begin, end, private')
+            ->cleanInt('pri, begin, end')
             ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
             ->setIF(empty($rawData->date) || $this->post->switchDate || $this->post->cycle, 'date', FUTURE_TIME)
             ->setIF(empty($rawData->begin) || $this->post->switchTime, 'begin', '2400')
             ->setIF(empty($rawData->begin) || empty($rawData->end) || $this->post->switchTime, 'end', '2400')
+            ->setIF($rawData->private == 'on', 'private', 1)
             ->setIF($rawData->status == 'done', 'finishedBy', $this->app->user->account)
             ->setIF($rawData->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
@@ -229,14 +230,24 @@ class todoZen extends todo
      *
      * @param  form      $form
      * @access protected
-     * @return object
+     * @return array|false
      */
-    protected function beforeBatchCreate(form $form): array
+    protected function beforeBatchCreate(form $form): array|false
     {
         $todos = $form->get();
-        foreach($todos as $todo)
+        foreach($todos as $rawID => $todo)
         {
-            $todo->date = $this->post->futureDate ? FUTURE_TIME : $this->post->date;
+            if($todo->end < $todo->begin)
+            {
+                dao::$errors["end[{$rawID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+                continue;
+            }
+
+            $account = $this->app->user->account;
+            $todo->date         = $this->post->futureDate ? FUTURE_TIME : $this->post->date;
+            $todo->account      = $account;
+            $todo->assignedBy   = $account;
+            $todo->assignedDate = helper::now();
             if(!empty($todo->switchTime))
             {
                 $todo->begin = '2400';
@@ -246,6 +257,8 @@ class todoZen extends todo
 
             unset($todo->switchTime);
         }
+
+        if(dao::isError()) return false;
         return $todos;
     }
 
@@ -273,15 +286,15 @@ class todoZen extends todo
 
         /* Process todo. */
         $todo = $form->add('account', $oldTodo->account)
-            ->cleanInt('pri, begin, end, private')
+            ->cleanInt('pri, begin, end')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
             ->setIF(empty($postData->date) || $this->post->switchDate || $this->post->cycle, 'date', FUTURE_TIME)
             ->setIF(empty($postData->begin) || $this->post->dateSwitcher, 'begin', '2400')
             ->setIF(empty($postData->end) || $this->post->dateSwitcher, 'end', '2400')
+            ->setIF($postData->private == 'on', 'private', 1)
             ->setDefault('assignedBy', $oldTodo->assignedTo != $this->post->assignedTo ? $this->app->user->account : $oldTodo->assignedBy)
             ->setDefault('type', $objectType)
-            ->setDefault('private', 0)
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
@@ -451,7 +464,7 @@ class todoZen extends todo
         $this->view->showFields   = $this->config->todo->custom->batchEditFields;
         $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time         = date::now();
-        $this->view->title        = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
+        $this->view->title        = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->batchEdit;
 
         $this->display();
     }

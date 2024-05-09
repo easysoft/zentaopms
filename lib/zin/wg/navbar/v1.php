@@ -19,14 +19,14 @@ class navbar extends wg
         $object = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         if(empty($object)) return;
 
-        $executionPairs = array();
-        $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
-        $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
-        $executionList  = $app->dbh->query("SELECT id,name,parent FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $executionPairs   = array();
+        $userCondition    = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
+        $orderBy          = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
+        $executionList    = $app->dbh->query("SELECT id,name,parent FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $parentExecutions = array_flip(array_column($executionList, 'parent'));
         foreach($executionList as $execution)
         {
-            if(isset($executionPairs[$execution->parent])) unset($executionPairs[$execution->parent]);
-            if($execution->id == $executionID) continue;
+            if($execution->id == $executionID || isset($parentExecutions[$execution->id])) continue;
             $executionPairs[$execution->id] = $execution->name;
         }
 
@@ -112,6 +112,7 @@ class navbar extends wg
 
         global $app, $lang;
         if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
+        commonModel::replaceMenuLang();
         commonModel::setMainMenu();
         commonModel::checkMenuVarsReplaced();
 
@@ -127,7 +128,7 @@ class navbar extends wg
         $activeMenu   = '';
         $activeMenuID = data('activeMenuID');
         $items        = array();
-        foreach ($menu as $menuItem)
+        foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(isset($menuItem->class) && strpos($menuItem->class, 'automation-menu'))

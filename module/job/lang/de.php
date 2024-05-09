@@ -27,8 +27,10 @@ $lang->job->buildSpec       = 'Build Target'; // 'pipeline@server'
 $lang->job->engine          = 'Engine';
 $lang->job->server          = 'Server';
 $lang->job->pipeline        = 'Pipeline';
+$lang->job->gitfoxpipeline  = 'Pipeline';
 $lang->job->buildType       = 'Build Type';
 $lang->job->frame           = 'Frame';
+$lang->job->useZentao       = 'Trigger by ZenTao';
 $lang->job->triggerType     = 'Trigger';
 $lang->job->atDay           = 'Custom Days';
 $lang->job->atTime          = 'At Time';
@@ -51,6 +53,7 @@ $lang->job->projectKey      = 'SonarQube Project';
 
 $lang->job->lblBasic = 'Basic Info';
 
+$lang->job->auto           = 'Auto';
 $lang->job->example        = 'e.g.';
 $lang->job->commitEx       = "Used to match the keywords used to create a compile. Multiple keywords are separated by ','";
 $lang->job->cronSample     = 'e.g. 0 0 2 * * 2-6/1 means 2:00 a.m. every weekday.';
@@ -66,6 +69,9 @@ $lang->job->selectPipeline = 'Please select a pipeline';
 $lang->job->buildTypeList['build']          = 'Only Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build And Deploy';
 $lang->job->buildTypeList['buildAndTest']   = 'Build And Test';
+
+$lang->job->zentaoTrigger['1'] = 'Yes';
+$lang->job->zentaoTrigger['0'] = 'No';
 
 $lang->job->triggerTypeList['tag']      = 'Tag';
 $lang->job->triggerTypeList['commit']   = 'Code Commit';

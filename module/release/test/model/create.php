@@ -9,17 +9,17 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/release.class.php';
+include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
 
-$build = zdTable('build')->config('build');
+$build = zenData('build')->loadYaml('build');
 $build->project->range('1{2},0{3}');
 $build->execution->range('0,101,0{3}');
 $build->gen(5);
 
-zdTable('story')->config('story')->gen(5);
-zdTable('bug')->gen(0);
-zdTable('release')->gen(0);
-zdTable('user')->gen(5);
+zenData('story')->loadYaml('story')->gen(5);
+zenData('bug')->gen(0);
+zenData('release')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $syncList = array(true, false);

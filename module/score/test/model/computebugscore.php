@@ -24,11 +24,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/score.class.php';
+include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('case')->gen(1);
-zdTable('bug')->gen(1);
+zenData('user')->gen(5);
+zenData('case')->gen(1);
+zenData('bug')->gen(1);
 
 $caseIds = array(0, 1, 2);
 $methods = array('createFormCase', 'saveTplModal', 'confirm', 'resolve', 'create');

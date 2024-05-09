@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('orderBy', $orderBy);
+
 /* Get field list for data table. */
 if(str_contains($orderBy, 'line')) $orderBy = str_replace('line', 'productLine', $orderBy);
 $fnGetTableFieldList = function() use ($config)
@@ -28,19 +30,16 @@ $fnGetTableFieldList = function() use ($config)
         $fieldList[$field] = $extCol;
     }
 
+    end($fieldList);
+    $endField = key($fieldList);
+    $fieldList[$endField]['align'] = 'left';
+
     return $fieldList;
 };
 $cols = $fnGetTableFieldList();
 
 /* Closure function for generating table data. */
 $productStats = initTableData($productStats, $cols, $this->product);
-$fnGenerateTableData = function($productList) use($users)
-{
-    $data = array();
-    foreach($productList as $product) $data[] = $this->product->formatDataForList($product, $users);
-
-    return $data;
-};
 
 /* Closure function for generating program menu. */
 $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseType, $orderBy, $param, $recTotal, $recPerPage, $pageID)
@@ -93,19 +92,25 @@ featureBar
     li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
-$canCreate = hasPriv('product', 'create');
+$canCreate     = hasPriv('product', 'create');
+$canExport     = hasPriv('product', 'export');
+$canManageLine = in_array($this->config->systemMode, array('ALM', 'PLM')) && hasPriv('product', 'manageLine');
 toolbar
 (
-    hasPriv('product', 'export') ? btn
+    $canExport ? btn
     (
-        set::className('ghost text-darker'),
+        set::className('ghost text-darker pr-0'),
         set::icon('export'),
         toggle::modal(array('url' => createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param"))),
         $lang->export
     ) : null,
-    in_array($this->config->systemMode, array('ALM', 'PLM')) && hasPriv('product', 'manageLine') ? btn
+    $canExport && $canManageLine ? div
     (
-        set::className('ghost text-primary'),
+        setClass('divider')
+    ) : null,
+    $canManageLine ? btn
+    (
+        set::className('ghost text-primary pl-0'),
         set::icon('edit'),
         toggle::modal(array('url' => createLink('product', 'manageLine', $browseType), 'id' => 'manageLineModal')),
         $lang->product->line
@@ -120,12 +125,17 @@ toolbar
     ) : null
 );
 
-$canBatchEdit = hasPriv('product', 'batchEdit');
+$canBatchEdit   = hasPriv('product', 'batchEdit');
+$canUpdateOrder = hasPriv('product', 'updateOrder')  && strpos($orderBy, 'order') !== false;
 dtable
 (
     set::id('products'),
+    set::plugins(array('sortable')),
+    set::sortable($canUpdateOrder),
+    set::onSortEnd($canUpdateOrder ? jsRaw('window.onSortEnd') : null),
+    set::canSortTo($canUpdateOrder ? jsRaw('window.canSortTo') : null),
     set::cols($cols),
-    set::data($fnGenerateTableData($productStats)),
+    set::data($productStats),
     set::userMap($users),
     set::customCols(true),
     set::checkable($canBatchEdit),

@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1');
 $program->name->range('项目集一');
 $program->model->range('program');

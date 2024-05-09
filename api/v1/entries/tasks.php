@@ -104,9 +104,10 @@ class tasksEntry extends entry
         $fields = 'name,type,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
         $this->batchSetPost($fields);
 
-        $assignedTo = $this->request('assignedTo', array(0 => ''));
-        if($assignedTo and !is_array($assignedTo)) $assignedTo = array($assignedTo);
-        $this->setPost('assignedTo', $assignedTo);
+        $this->setPost('execution',  $executionID);
+        $this->setPost('assignedTo', $this->request('assignedTo', ''));
+        $this->setPost('module',     $this->request('module', 0));
+        $this->setPost('story',      $this->request('story', 0));
 
         if($this->request('multiple'))
         {
@@ -114,8 +115,6 @@ class tasksEntry extends entry
             $this->setPost('mode', $this->request('mode', 'linear'));
             $this->setPost('teamSource', array_fill(0, count($this->request('team')), ''));
         }
-
-        $this->setPost('execution', $executionID);
 
         $control = $this->loadController('task', 'create');
         $this->requireFields('name,assignedTo,type,estStarted,deadline');

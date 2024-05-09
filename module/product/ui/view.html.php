@@ -58,11 +58,13 @@ div
                     echarts
                     (
                         set::color(array('#2B80FF', '#E3E4E9')),
+                        set::width(120),
+                        set::height(120),
                         set::series
                         (
                             array(array('type' => 'pie', 'radius' => array('80%', '90%'), 'itemStyle' => array('borderRadius' => '40'), 'label' => array('show' => false), 'data' => array($product->storyDeliveryRate, 100 - $product->storyDeliveryRate)))
                         )
-                    )->size(120, 120),
+                    ),
                     div
                     (
                         set::className('pie-chart-title text-center'),
@@ -263,7 +265,8 @@ div
                         span(setClass('ml-2'), $product->executions)
                     )
                 )
-            )
+            ),
+            html($this->printExtendFields($product, 'html', "position=info", false))
         )
     ),
     cell
@@ -288,6 +291,7 @@ div
             set::shadow(false),
             dynamic()
         ),
+        html($this->printExtendFields($product, 'html', "position=basic", false)),
         div
         (
             setClass('mt-4'),
@@ -300,7 +304,8 @@ div
     )
 );
 
-$actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product) : array();
+$actionMenuList = !$product->deleted ? $this->loadModel('common')->buildOperateMenu($product) : array();
+
 div
 (
     setClass('w-2/3 center fixed actions-menu'),
@@ -308,8 +313,8 @@ div
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
-        !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
+        !empty($actionMenuList['mainActions']) ? set::main($actionMenuList['mainActions']) : null,
+        !empty($actionMenuList['suffixActions']) ? set::suffix($actionMenuList['suffixActions']) : null,
         set::object($product)
     )
 );

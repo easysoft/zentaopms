@@ -1,8 +1,6 @@
 <?php
 
-/**
- * `DELETE` statement.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
@@ -18,6 +16,10 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Statement;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
+
+use function count;
+use function stripos;
+use function strlen;
 
 /**
  * `DELETE` statement.
@@ -41,121 +43,118 @@ use PhpMyAdmin\SqlParser\TokensList;
  *   FROM tbl_name[.*] [, tbl_name[.*]] ...
  *   USING table_references
  *   [WHERE where_condition]
- *
- *
- * @category   Statements
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class DeleteStatement extends Statement
 {
     /**
      * Options for `DELETE` statements.
      *
-     * @var array
+     * @var array<string, int|array<int, int|string>>
+     * @psalm-var array<string, (positive-int|array{positive-int, ('var'|'var='|'expr'|'expr=')})>
      */
-    public static $OPTIONS = array(
+    public static $OPTIONS = [
         'LOW_PRIORITY' => 1,
         'QUICK' => 2,
-        'IGNORE' => 3
-    );
+        'IGNORE' => 3,
+    ];
 
     /**
      * The clauses of this statement, in order.
      *
      * @see Statement::$CLAUSES
      *
-     * @var array
+     * @var array<string, array<int, int|string>>
+     * @psalm-var array<string, array{non-empty-string, (1|2|3)}>
      */
-    public static $CLAUSES = array(
-        'DELETE' => array(
+    public static $CLAUSES = [
+        'DELETE' => [
             'DELETE',
             2,
-        ),
+        ],
         // Used for options.
-        '_OPTIONS' => array(
+        '_OPTIONS' => [
             '_OPTIONS',
             1,
-        ),
-        'FROM' => array(
+        ],
+        'FROM' => [
             'FROM',
             3,
-        ),
-        'PARTITION' => array(
+        ],
+        'PARTITION' => [
             'PARTITION',
             3,
-        ),
-        'USING' => array(
+        ],
+        'USING' => [
             'USING',
             3,
-        ),
-        'WHERE' => array(
+        ],
+        'WHERE' => [
             'WHERE',
             3,
-        ),
-        'ORDER BY' => array(
+        ],
+        'ORDER BY' => [
             'ORDER BY',
             3,
-        ),
-        'LIMIT' => array(
+        ],
+        'LIMIT' => [
             'LIMIT',
             3,
-        )
-    );
+        ],
+    ];
 
     /**
      * Table(s) used as sources for this statement.
      *
-     * @var Expression[]
+     * @var Expression[]|null
      */
     public $from;
 
     /**
      * Joins.
      *
-     * @var JoinKeyword[]
+     * @var JoinKeyword[]|null
      */
     public $join;
 
     /**
      * Tables used as sources for this statement.
      *
-     * @var Expression[]
+     * @var Expression[]|null
      */
     public $using;
 
     /**
      * Columns used in this statement.
      *
-     * @var Expression[]
+     * @var Expression[]|null
      */
     public $columns;
 
     /**
      * Partitions used as source for this statement.
      *
-     * @var ArrayObj
+     * @var ArrayObj|null
      */
     public $partition;
 
     /**
      * Conditions used for filtering each row of the result set.
      *
-     * @var Condition[]
+     * @var Condition[]|null
      */
     public $where;
 
     /**
      * Specifies the order of the rows in the result set.
      *
-     * @var OrderKeyword[]
+     * @var OrderKeyword[]|null
      */
     public $order;
 
     /**
      * Conditions used for limiting the size of the result set.
      *
-     * @var Limit
+     * @var Limit|null
      */
     public $limit;
 
@@ -166,25 +165,31 @@ class DeleteStatement extends Statement
     {
         $ret = 'DELETE ' . OptionsArray::build($this->options);
 
-        if (! is_null($this->columns) && count($this->columns) > 0) {
+        if ($this->columns !== null && count($this->columns) > 0) {
             $ret .= ' ' . ExpressionArray::build($this->columns);
         }
-        if (! is_null($this->from) && count($this->from) > 0) {
+
+        if ($this->from !== null && count($this->from) > 0) {
             $ret .= ' FROM ' . ExpressionArray::build($this->from);
         }
-        if (! is_null($this->join) && count($this->join) > 0) {
+
+        if ($this->join !== null && count($this->join) > 0) {
             $ret .= ' ' . JoinKeyword::build($this->join);
         }
-        if (! is_null($this->using) && count($this->using) > 0) {
+
+        if ($this->using !== null && count($this->using) > 0) {
             $ret .= ' USING ' . ExpressionArray::build($this->using);
         }
-        if (! is_null($this->where) && count($this->where) > 0) {
+
+        if ($this->where !== null && count($this->where) > 0) {
             $ret .= ' WHERE ' . Condition::build($this->where);
         }
-        if (! is_null($this->order) && count($this->order) > 0) {
+
+        if ($this->order !== null && count($this->order) > 0) {
             $ret .= ' ORDER BY ' . ExpressionArray::build($this->order);
         }
-        if (! is_null($this->limit) && strlen($this->limit) > 0) {
+
+        if ($this->limit !== null && strlen((string) $this->limit) > 0) {
             $ret .= ' LIMIT ' . Limit::build($this->limit);
         }
 
@@ -200,11 +205,7 @@ class DeleteStatement extends Statement
         ++$list->idx; // Skipping `DELETE`.
 
         // parse any options if provided
-        $this->options = OptionsArray::parse(
-            $parser,
-            $list,
-            static::$OPTIONS
-        );
+        $this->options = OptionsArray::parse($parser, $list, static::$OPTIONS);
         ++$list->idx;
 
         /**
@@ -234,8 +235,6 @@ class DeleteStatement extends Statement
         for (; $list->idx < $list->count; ++$list->idx) {
             /**
              * Token parsed at this moment.
-             *
-             * @var Token
              */
             $token = $list->tokens[$list->idx];
 
@@ -249,31 +248,31 @@ class DeleteStatement extends Statement
                     if ($token->keyword !== 'FROM') {
                         $parser->error('Unexpected keyword.', $token);
                         break;
-                    } else {
-                        ++$list->idx; // Skip 'FROM'
-                        $this->from = ExpressionArray::parse($parser, $list);
-
-                        $state = 2;
                     }
+
+                    ++$list->idx; // Skip 'FROM'
+                    $this->from = ExpressionArray::parse($parser, $list);
+
+                    $state = 2;
                 } else {
                     $this->columns = ExpressionArray::parse($parser, $list);
                     $state = 1;
                 }
             } elseif ($state === 1) {
-                if ($token->type === Token::TYPE_KEYWORD) {
-                    if ($token->keyword !== 'FROM') {
-                        $parser->error('Unexpected keyword.', $token);
-                        break;
-                    } else {
-                        ++$list->idx; // Skip 'FROM'
-                        $this->from = ExpressionArray::parse($parser, $list);
-
-                        $state = 2;
-                    }
-                } else {
+                if ($token->type !== Token::TYPE_KEYWORD) {
                     $parser->error('Unexpected token.', $token);
                     break;
                 }
+
+                if ($token->keyword !== 'FROM') {
+                    $parser->error('Unexpected keyword.', $token);
+                    break;
+                }
+
+                ++$list->idx; // Skip 'FROM'
+                $this->from = ExpressionArray::parse($parser, $list);
+
+                $state = 2;
             } elseif ($state === 2) {
                 if ($token->type === Token::TYPE_KEYWORD) {
                     if (stripos($token->keyword, 'JOIN') !== false) {
@@ -312,27 +311,22 @@ class DeleteStatement extends Statement
                     }
                 }
             } elseif ($state === 3) {
-                if ($token->type === Token::TYPE_KEYWORD) {
-                    if ($token->keyword === 'WHERE') {
-                        ++$list->idx; // Skip 'WHERE'
-                        $this->where = Condition::parse($parser, $list);
-                        $state = 4;
-                    } else {
-                        $parser->error('Unexpected keyword.', $token);
-                        break;
-                    }
-                } else {
+                if ($token->type !== Token::TYPE_KEYWORD) {
                     $parser->error('Unexpected token.', $token);
                     break;
                 }
+
+                if ($token->keyword !== 'WHERE') {
+                    $parser->error('Unexpected keyword.', $token);
+                    break;
+                }
+
+                ++$list->idx; // Skip 'WHERE'
+                $this->where = Condition::parse($parser, $list);
+                $state = 4;
             } elseif ($state === 4) {
-                if ($multiTable === true
-                    && $token->type === Token::TYPE_KEYWORD
-                ) {
-                    $parser->error(
-                        'This type of clause is not valid in Multi-table queries.',
-                        $token
-                    );
+                if ($multiTable === true && $token->type === Token::TYPE_KEYWORD) {
+                    $parser->error('This type of clause is not valid in Multi-table queries.', $token);
                     break;
                 }
 
@@ -355,23 +349,23 @@ class DeleteStatement extends Statement
                 }
             } elseif ($state === 5) {
                 if ($token->type === Token::TYPE_KEYWORD) {
-                    if ($token->keyword === 'LIMIT') {
-                        ++$list->idx; // Skip 'LIMIT'
-                        $this->limit = Limit::parse($parser, $list);
-                        $state = 6;
-                    } else {
+                    if ($token->keyword !== 'LIMIT') {
                         $parser->error('Unexpected keyword.', $token);
                         break;
                     }
+
+                    ++$list->idx; // Skip 'LIMIT'
+                    $this->limit = Limit::parse($parser, $list);
+                    $state = 6;
                 }
             }
         }
 
         if ($state >= 2) {
-            foreach ($this->from as $from_expr) {
-                $from_expr->database = $from_expr->table;
-                $from_expr->table = $from_expr->column;
-                $from_expr->column = null;
+            foreach ($this->from as $fromExpr) {
+                $fromExpr->database = $fromExpr->table;
+                $fromExpr->table = $fromExpr->column;
+                $fromExpr->column = null;
             }
         }
 

@@ -25,6 +25,22 @@ jsVar('pathSvnTip', $lang->repo->example->path->svn);
 jsVar('clientGitTip', $lang->repo->example->client->git);
 jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
+jsVar('noProductTip', $lang->repo->error->noProduct);
+jsVar('noRepoLeft', $lang->repo->notice->noRepoLeft);
+jsVar('hasProduct', !empty($products));
+jsVar('appTab', $app->tab);
+
+$scmList = array();
+foreach($this->lang->repo->scmList as $scm => $scmName)
+{
+    $item = array('text' => $scmName, 'value' => $scm);
+    if($scm == 'GitFox')
+    {
+        $item['content'] = array('html' => "<div class='flex clip'>{$scmName}</div><label class='label bg-primary-50 text-primary ml-2 flex-none'>{$this->lang->recommend}</label>", 'class' => 'w-full flex nowrap');
+    }
+
+    $scmList[] = $item;
+}
 
 formPanel
 (
@@ -36,29 +52,6 @@ formPanel
     set::back('GLOBAL'),
     formRow
     (
-        $this->app->tab != 'devops' ? setClass('hidden') : null,
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("product[]"),
-            set::label($lang->story->product),
-            set::required(true),
-            set::control(array("control" => "picker","multiple" => true)),
-            set::items($products),
-            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
-        )
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("projects[]"),
-        set::label($lang->repo->projects),
-        set::control(array("control" => "picker","multiple" => true)),
-        set::items($projects),
-        set::value(empty($relatedProjects) ? '' : implode(',', array_values($relatedProjects)))
-    ),
-    formRow
-    (
         formGroup
         (
             set::width('1/2'),
@@ -66,9 +59,8 @@ formPanel
             set::name('SCM'),
             set::label($lang->product->typeAB),
             set::required(true),
-            set::value('Gitlab'),
             set::control('picker'),
-            set::items($lang->repo->scmList)
+            set::items($scmList)
         ),
         h::span
         (
@@ -121,15 +113,6 @@ formPanel
             set::placeholder($lang->repo->example->path->git)
         )
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("encoding"),
-        set::label($lang->repo->encoding),
-        set::required(true),
-        set::value("utf-8"),
-        set::placeholder($lang->repo->encodingsTips)
-    ),
     formRow
     (
         ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
@@ -179,6 +162,21 @@ formPanel
                 )))
             )
         )
+    ),
+    formRow
+    (
+        $this->app->tab != 'devops' ? setClass('hidden') : null,
+        formGroup
+        (
+            set::width('1/2'),
+            set::name("product[]"),
+            set::label($lang->story->product),
+            set::required(true),
+            set::control(array("control" => "picker","multiple" => true)),
+            set::items($products),
+            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
+        ),
+        empty($products) ? span(setClass('leading-8 ml-2'), $lang->repo->error->noProduct) : null
     ),
     formGroup
     (

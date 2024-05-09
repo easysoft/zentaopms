@@ -15,22 +15,22 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-$projectstoryTable = zdTable('projectstory');
+$projectstoryTable = zenData('projectstory');
 $projectstoryTable->project->range('101-110');
 $projectstoryTable->gen(20);
 
-$taskTable = zdTable('task');
+$taskTable = zenData('task');
 $taskTable->execution->range('101-110');
 $taskTable->gen(20);
 
-$buildTable = zdTable('build');
+$buildTable = zenData('build');
 $buildTable->execution->range('101-110');
 $buildTable->gen(20);
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('user')->gen(5);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
 $executions = array(0, 101, 106);

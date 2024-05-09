@@ -68,7 +68,7 @@ formBatchPanel
     (
         set::name('title'),
         set::label($lang->story->title),
-        set::control('static'),
+        set::disabled(true),
         set::width('300px')
     ),
     /* Field of status. */
@@ -76,7 +76,7 @@ formBatchPanel
     (
         set::name('statusName'),
         set::label($lang->story->status),
-        set::control('static'),
+        set::disabled(true),
         set::width('60px')
     ),
     /* Field of closeReason. */

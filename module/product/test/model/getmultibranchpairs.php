@@ -14,9 +14,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->type->range('normal{5},branch{5},platform{5}');
 $product->deleted->range('0,1');
 $product->gen(15);

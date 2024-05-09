@@ -2,13 +2,13 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/my.class.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdTable('task')->config('task')->gen('40');
-zdTable('story')->gen('40');
-zdTable('project')->config('program')->gen('80');
-zdTable('taskteam')->gen('0');
-zdTable('user')->gen('1');
+zenData('task')->loadYaml('task')->gen('40');
+zenData('story')->gen('40');
+zenData('project')->loadYaml('program')->gen('80');
+zenData('taskteam')->gen('0');
+zenData('user')->gen('1');
 
 su('admin');
 

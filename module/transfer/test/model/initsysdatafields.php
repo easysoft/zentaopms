@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-zdTable('user')->gen(5);
-zdTable('project')->config('execution')->gen(30);
+zenData('user')->gen(5);
+zenData('project')->loadYaml('execution')->gen(30);
 
-$userview = zdTable('userview');
+$userview = zenData('userview');
 $userview->account->range('admin,user1,user2');
 $userview->gen(3);
 su('admin');
@@ -24,7 +24,7 @@ global $tester, $app;
 $app->methodName = 'ajaxgettbody';
 $transfer = $tester->loadModel('transfer');
 
-r($transfer->initSysDataFields()) && p('project:1') && e('项目11'); // 测试通过project模块的getpairs方法获取数据
+r($transfer->initSysDataFields()) && p('project:11') && e('项目11'); // 测试通过project模块的getpairs方法获取数据
 r($transfer->initSysDataFields()) && p('user:admin') && e('admin'); // 测试通过user模块的getpairs方法获取数据
 
 $app->methodName = 'browse';

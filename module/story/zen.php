@@ -229,7 +229,7 @@ class storyZen extends story
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->title = $product->name . $this->lang->hyphen . $this->lang->story->batchClose;
         }
         /* The stories of a execution. */
         elseif($this->app->tab == 'execution' && $executionID)
@@ -238,7 +238,7 @@ class storyZen extends story
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
-            $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->story->batchClose;
             $this->view->executionID = $executionID;
         }
         elseif($this->app->tab == 'project')
@@ -301,10 +301,11 @@ class storyZen extends story
      * @param  int       $storyID
      * @param  int       $bugID
      * @param  int       $todoID
-     * @access protected
+     * @param  string    $extra feedback扩展使用
+     * @access public
      * @return object
      */
-    protected function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID): object
+    public function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID, string $extra = ''): object
     {
         $initStory = new stdclass();
         $initStory->source     = '';
@@ -932,7 +933,7 @@ class storyZen extends story
         $modules         = array($productID => $modulePairs);
         $branchTagOption = array($productID => $branchTagOption);
         $products        = array($productID => $product);
-        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, $branches, 'unexpired', true));
+        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, $branches, '', true));
 
         return array('branchProduct' => $branchProduct, 'modules' => $modules, 'branchTagOption' => $branchTagOption, 'products' => $products, 'plans' => $plans);
 
@@ -1152,6 +1153,17 @@ class storyZen extends story
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->{$moduleName}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if($this->post->type == 'requirement') $fields['plan']['required'] = false;
+        if(!empty($_POST['modules']) && !empty($fields['module']['required']))
+        {
+            /* Check empty module in the product with multi-branches. */
+            $fields['module']['required'] = false;
+            $this->config->story->create->requiredFields = str_replace(',module,', ',', ",{$this->config->story->create->requiredFields},");
+            foreach($_POST['modules'] as $key => $moduleID)
+            {
+                if(empty($moduleID)) dao::$errors["modules[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->story->module);
+            }
+        }
+        if(dao::isError()) return false;
 
         $storyData = form::data($fields)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
@@ -1174,7 +1186,7 @@ class storyZen extends story
         if($storyData->status != 'draft' and $this->story->checkForceReview() and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $story->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+        if($this->config->systemMode == 'PLM' and $storyData->type == 'requirement' and $storyData->status == 'active' and $this->config->vision == 'rnd') $storyData->status = 'launched';
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
@@ -1230,6 +1242,7 @@ class storyZen extends story
             ->setDefault('estimate', $oldStory->estimate)
             ->setDefault('stage', $oldStory->stage)
             ->setDefault('stagedBy', $oldStory->stagedBy)
+            ->setDefault('childStories', $oldStory->childStories)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)
@@ -1365,7 +1378,7 @@ class storyZen extends story
             if(in_array($task->name, $taskNames)) dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $task->name;
             if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted) dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
             if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$task->estimate)) dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
-            if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+            if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($executionID, (string)$task->estStarted, (string)$task->deadline);
 
             $taskNames[] = $task->name;
         }
@@ -1674,10 +1687,11 @@ class storyZen extends story
      * @param  int       $objectID
      * @param  int       $storyID
      * @param  string    $storyType
-     * @access protected
+     * @param  string    $extra feedback扩展使用
+     * @access public
      * @return string
      */
-    protected function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType): string
+    public function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType, string $extra = ''): string
     {
         if($this->app->getViewType() == 'xhtml') return $this->createLink('story', 'view', "storyID=$storyID", 'html');
 
@@ -1723,6 +1737,11 @@ class storyZen extends story
         {
             helper::setcookie('storyModuleParam', '0', 0);
             return $this->session->storyList;
+        }
+
+        if($this->app->tab == 'product')
+        {
+            return $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
         }
 
         helper::setcookie('storyModule', '0', 0);
@@ -1779,17 +1798,9 @@ class storyZen extends story
 
         if($from != 'execution') return helper::createLink($storyType, 'view', "storyID={$storyID}&version=0&param=0&storyType={$storyType}");
 
-        $execution = $this->execution->getByID($this->session->execution);
-
-        $module = 'story';
-        $method = 'view';
-        $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
-        if($execution->multiple)
-        {
-            $module = 'execution';
-            $method = 'storyView';
-            $params = "storyID=$storyID";
-        }
+        $module = 'execution';
+        $method = 'storyView';
+        $params = "storyID=$storyID";
         return helper::createLink($module, $method, $params);
     }
 
@@ -1958,5 +1969,25 @@ class storyZen extends story
         if($projectInfo->model == 'waterfall') $this->view->hiddenPlan = true;
         if($projectInfo->model == 'kanban')    $this->view->hiddenPlan = true;
         if(!$projectInfo->multiple)            $this->view->hiddenPlan = true;
+    }
+
+    /**
+     * Convert child ID.
+     *
+     * @param  array    $storyIdList
+     * @access protected
+     * @return array
+     */
+    protected function convertChildID(array $storyIdList)
+    {
+        $storyIdList = array_unique($storyIdList);
+        $storyIdList = array_filter($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+        return $storyIdList;
     }
 }

@@ -17,7 +17,7 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('repo')->config('repo')->gen(10);
+zenData('repo')->loadYaml('repo')->gen(10);
 su('admin');
 
 global $tester;
@@ -27,7 +27,7 @@ $svn->setRepos();
 r(count($svn->repos)) && p() && e('5'); // 获取不到数据时，提示错误信息
 r($svn->repos) && p('1:name,SCM') && e('svn-1,Subversion'); // 获取第一条svn记录的name和SCM属性
 
-zdTable('repo')->gen(0);
+zenData('repo')->gen(0);
 dao::$cache = array();
 
 ob_start();

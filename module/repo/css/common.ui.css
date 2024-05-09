@@ -13,8 +13,8 @@
 .btn-left, .btn-right {display: none;}
 #linkObject{display: none;}
 #monacoTree .tree-item-content span {cursor: pointer;}
-.directory {background-image:url('theme/default/images/repo/dir.png');}
-.file {background-image:url('theme/default/images/repo/txt.png');}
+#table-repo-browse .directory {background-image:url('theme/default/images/repo/dir.png');}
+#table-repo-browse .file {background-image:url('theme/default/images/repo/txt.png');}
 .mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom; margin-right: 5px;}
 .tree-item, .listitem, .item-content {cursor: pointer;}
 .sync-content {margin: 10px}
@@ -41,6 +41,7 @@
 #monacoTabs .tab-content {margin-top: 40px;}
 #monacoTabsContainer {background: #efefef;}
 .monaco-dropmenu{background: #efefef; height: 40px; line-height: 40px;}
+.ghost.monaco-dropmenu:hover{background-color: #efefef;}
 #fileTabs > .btn {background: #efefef; border: none; --tw-ring-shadow: none;}
 #fileTabs > .btn-right {padding-right: 40px;}
 #repoBranchDropMenu > .dropmenu-btn {background: white; --tw-ring-color: none; color: inherit; margin-bottom: 10px;}

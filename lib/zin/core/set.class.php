@@ -106,16 +106,6 @@ function setClass(mixed ...$class): set
 }
 
 /**
- * Set widget style attribute.
- *
- * @return set
- */
-function setStyle(array|string $name, ?string $value = null): set
-{
-    return set()->addToMap('style', is_array($name) ? $name : array($name => $value));
-}
-
-/**
  * Set widget CSS variable.
  *
  * @return set

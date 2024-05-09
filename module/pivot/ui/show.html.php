@@ -25,7 +25,7 @@ foreach($pivot->filters as $filter)
     if($from == 'query')
     {
         $typeOption = $filter['typeOption'];
-        if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->getFilterOptions($typeOption);
+        if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->pivot->getSysOptions($typeOption);
 
         $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()))));
     }
@@ -34,15 +34,16 @@ foreach($pivot->filters as $filter)
         if($type == 'select' && !isset($options[$field]))
         {
             $fieldSetting = $pivot->fieldSettings->$field;
-            $options[$field] = $this->getFilterOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql);
+            $options[$field] = $this->pivot->getSysOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql, zget($filter, 'saveAs', ''));
         }
 
         $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
     }
 }
 
-$generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs)
+$generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs)
 {
+    $clickable = !$pivot->builtin;
     list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
 
     return array
@@ -50,8 +51,9 @@ $generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs
         panel
         (
             setID('pivotPanel'),
-            set::title($title),
+            set::title($pivotName),
             set::shadow(false),
+            set::headingClass('h-14'),
             set::bodyClass('pt-0'),
             $pivot->desc ? to::titleSuffix(
                 icon
@@ -61,6 +63,49 @@ $generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs
                     'help'
                 )
             ) : null,
+            toolbar
+            (
+                item
+                (
+                    setID('origin-query'),
+                    setClass('ghost'),
+                    set::text($lang->pivot->showOrigin),
+                    on::click("toggleShowMode('origin')"),
+                ),
+                item
+                (
+                    setID('pivot-query'),
+                    setClass('ghost hidden'),
+                    set::text($lang->pivot->showPivot),
+                    on::click("toggleShowMode('group')"),
+                ),
+                $this->config->edition != 'open' ? array(
+                (hasPriv('pivot', 'design') && $clickable) ? item(set(array
+                (
+                    'text'  => $lang->pivot->designAB,
+                    'icon'  => 'design',
+                    'class' => 'ghost',
+                    'url'   => inlink('design', "id=$pivot->id"),
+                ))) : null,
+                (hasPriv('pivot', 'edit') && $clickable) ? item(set(array
+                (
+                    'text'  => $lang->edit,
+                    'icon'  => 'edit',
+                    'class' => 'ghost',
+                    'url'   => inlink('edit', "id=$pivot->id", '', true),
+                    'data-toggle' => 'modal',
+                    'data-type'   => 'iframe',
+                    'data-size'  => 'sm'
+                ))) : null,
+                (hasPriv('pivot', 'delete') and $clickable) ? item(set(array
+                (
+                    'text'  => $lang->delete,
+                    'icon'  => 'trash',
+                    'class' => 'ghost ajax-submit',
+                    'url'   => inlink('delete', "id=$pivot->id&confirm=yes&isOld=no"),
+                    'data-confirm' => $lang->pivot->deleteTip,
+                ))) : null) : null
+            ),
             $filters ? div
             (
                 setID('conditions'),
@@ -83,6 +128,13 @@ $generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs
                 set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
                 $cellSpan ? set::getCellSpan(jsRaw('getCellSpan')) : null,
                 $cellSpan ? set::cellSpanOptions($cellSpan) : null
+            ),
+            div
+            (
+                setID('exportData'),
+                setClass('hidden'),
+                rawContent(),
+                $this->pivot->buildPivotTable($data, $configs),
             )
         )
     );

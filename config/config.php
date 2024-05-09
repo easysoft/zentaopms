@@ -36,6 +36,9 @@ $config->sessionVar  = 'zentaosid';               // 请求类型为GET：sessio
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
 $config->visions     = ',rnd,lite,or,';           // 支持的界面类型。                       Supported vision formats.
 
+/* ZIN 设置。 ZIN settings. */
+$config->zin = new stdclass();
+
 /* 支持的主题和语言。Supported themes and languages. */
 $config->themes['default'] = 'default';
 $config->langs['zh-cn']    = '简体';
@@ -165,8 +168,8 @@ $config->maxCount      = 500;
 $config->moreLinks     = array();
 
 /* 渠成平台设置。CNE Api settings. */
-$config->inQuickon    = getenv('IN_QUICKON');
-$config->inContainer  = getenv('IN_CONTAINER');
+$config->inQuickon    = strtolower((string)getenv('IN_QUICKON')) == 'true';
+$config->inContainer  = strtolower((string)getenv('IS_CONTAINER')) == 'true' || strtolower((string)getenv('IN_CONTAINER')) == 'true';
 $config->k8space      = 'quickon-system';
 $config->demoAccounts = '';  // 用于演示的账号列表，该账号安装的应用30钟后会自动删除。 In account list for demo, app instance of demo will be removed in 30 minutes.
 $config->demoAppLife  = 30; // Demo安装的应用实例存续时长(分钟)。The minutes life of instance which demo account installed.
@@ -206,7 +209,7 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 if($config->inContainer || $config->inQuickon)
 {
     $webRoot = getenv('ZT_WEB_ROOT') ? trim(getenv('ZT_WEB_ROOT'), '/') : '';
-    $config->installed     = (bool)getenv('ZT_INSTALLED');
+    $config->installed     = strtolower((string)getenv('ZT_INSTALLED')) == 'true';
     $config->debug         = (int)getenv('ZT_DEBUG');
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
     $config->timezone      = getenv('ZT_TIMEZONE');
@@ -223,7 +226,7 @@ if($config->inContainer || $config->inQuickon)
 }
 
 /* 引用自定义的配置。 Include the custom config file. */
-$myConfigRoot = (defined('RUN_MODE') and RUN_MODE == 'test') ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
+$myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
 $myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
 if(file_exists($myConfig)) include $myConfig;
 

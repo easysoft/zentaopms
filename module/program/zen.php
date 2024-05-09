@@ -37,6 +37,8 @@ class programZen extends program
     protected function buildProgramForCreate(): object
     {
         $fields = $this->config->program->form->create;
+        if($this->post->longTime) $fields['end']['skipRequired'] = true;
+
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->create->requiredFields, ',')) as $field)
         {
@@ -68,8 +70,10 @@ class programZen extends program
      */
     protected function buildProgramForEdit(int $programID): object
     {
-        $oldProgram   = $this->program->fetchByID($programID);
-        $fields       = $this->config->program->form->edit;
+        $oldProgram = $this->program->fetchByID($programID);
+        $fields     = $this->config->program->form->edit;
+        if($this->post->longTime) $fields['end']['skipRequired'] = true;
+
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->edit->requiredFields, ',')) as $field)
         {
@@ -117,6 +121,7 @@ class programZen extends program
         $status = strtolower($status);
         $this->view->summary = '';
 
+        if(strpos($orderBy, 'order') !== false) $orderBy = "grade,{$orderBy}";
         if(strtolower($status) == 'bysearch')
         {
             $programs = $this->program->getListBySearch($orderBy, $param, true, $pager);
@@ -326,6 +331,7 @@ class programZen extends program
                 (
                     'id'    => $program->id,
                     'text'  => $program->name,
+                    'label' => false,
                     'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
                     'items' => $this->buildTree($programs, $program->id)
                 );

@@ -24,19 +24,36 @@ $confirmLang['delete']   = $lang->productplan->confirmDelete;
 
 $decodeParam = helper::safe64Decode($param);
 
-jsVar('initLink',    $link);
-jsVar('type',        $type);
-jsVar('linkParams',  $decodeParam);
-jsVar('orderBy',     $orderBy);
-jsVar('planID',      $plan->id);
-jsVar('confirmLang', $confirmLang);
-jsVar('unlinkURL',   $unlinkURL);
-jsVar('childrenAB',  $lang->story->childrenAB);
-jsVar('gradeGroup',  $gradeGroup);
+jsVar('initLink',        $link);
+jsVar('type',            $type);
+jsVar('linkParams',      $decodeParam);
+jsVar('orderBy',         $orderBy);
+jsVar('planID',          $plan->id);
+jsVar('confirmLang',     $confirmLang);
+jsVar('unlinkURL',       $unlinkURL);
+jsVar('childrenAB',      $lang->story->childrenAB);
+jsVar('cases',           $storyCases);
+jsVar('summary',         $summary);
+jsVar('checkedSummary',  $lang->product->checkedSRSummary);
+jsVar('storyPageID',     $storyPager->pageID);
+jsVar('storyRecPerPage', $storyPager->recPerPage);
+jsVar('gradeGroup',      $gradeGroup);
 
-$bugCols     = array();
-$storyCols   = array();
-foreach($config->productplan->defaultFields['story'] as $field) $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
+$bugCols   = array();
+$storyCols = array();
+foreach($config->productplan->defaultFields['story'] as $field)
+{
+    if($field == 'branch' && $product->type == 'normal') continue;
+    $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
+    if($field == 'id' && common::hasPriv('execution', 'storySort'))
+    {
+        $storyCols['sort']['title'] = $lang->productplan->updateOrder;
+        $storyCols['sort']['fixed'] = 'left';
+        $storyCols['sort']['align'] = 'center';
+        $storyCols['sort']['group'] = 1;
+    }
+}
+if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
 foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
 $storyCols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
@@ -164,6 +181,21 @@ $fnGetChildrenPlans = function($childrenPlans)
     return $childrenPlanItems;
 };
 
+$actions = $this->loadModel('common')->buildOperateMenu($plan);
+foreach($actions as $actionType => $typeActions)
+{
+    foreach($typeActions as $key => $action)
+    {
+        $actions[$actionType][$key]['url']       = str_replace(array('{id}', '{product}', '{branch}'), array((string)$plan->id, $plan->product, $plan->branch), $action['url']);
+        $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
+        $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+        if($actionType == 'suffixActions')
+        {
+            if($action['icon'] == 'edit')  $actions['suffixActions'][$key]['text'] = $lang->edit;
+            if($action['icon'] == 'trash') $actions['suffixActions'][$key]['text'] = $lang->delete;
+        }
+    }
+}
 detailHeader
 (
     to::prefix
@@ -174,7 +206,12 @@ detailHeader
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
     ),
-    (!$plan->deleted && $actionMenus) ? to::suffix(btnGroup(set::items($actionMenus))) : null
+    !$plan->deleted && $actions ? to::suffix
+    (
+        btnGroup(set::items($actions['mainActions'])),
+        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider mx-2')): null,
+        btnGroup(set::items($actions['suffixActions']))
+    ) : null
 );
 
 detailBody
@@ -190,13 +227,20 @@ detailBody
                 set::key('stories'),
                 set::title($lang->productplan->linkedStories),
                 set::active($type == 'story'),
-                toolbar
+                $plan->parent >= 0 ? toolbar
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
                     setStyle('top', '-8px'),
-                    dropdown
+                    empty($createStoryLink) && empty($batchCreateStoryLink) ? null : dropdown
                     (
-                        btn(set::text($lang->story->create), set::target('_parent'), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
+                        btn
+                        (
+                            set::text($lang->story->create),
+                            setClass('open-url secondary' . (empty($createStoryLink) ? ' disabled' : '')),
+                            set::icon('plus'),
+                            set::caret(true),
+                            set::url($createStoryLink)
+                        ),
                         set::items(array(
                             array('text' => $lang->story->batchCreate . $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''),
                             array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : ''),
@@ -214,10 +258,14 @@ detailBody
                         set::text($lang->productplan->linkStory),
                         bind::click("window.showLink('story')")
                     ) : null
-                ),
+                ) : null,
                 dtable
                 (
                     setID('storyDTable'),
+                    set::plugins(array('sortable')),
+                    set::sortHandler('.move-plan'),
+                    set::onSortEnd(jsRaw('window.onSortEnd')),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::bordered(true),
                     set::cols($storyCols),
@@ -228,7 +276,7 @@ detailBody
                     set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={$storyPager->recPerPage}&page={$storyPager->pageID}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
-                    set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
+                    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
                     set::footPager
                     (
                         usePager('storyPager', '', array(
@@ -245,21 +293,22 @@ detailBody
                 set::key('bugs'),
                 set::title($lang->productplan->linkedBugs),
                 set::active($type == 'bug'),
-                toolbar
+                $plan->parent >= 0 && common::hasPriv('productplan', 'linkBug')? toolbar
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
                     setStyle('top', '-8px'),
-                    common::hasPriv('productplan', 'linkBug') ? btn
+                    btn
                     (
                         set::type('primary'),
                         set::icon('link'),
                         set::text($lang->productplan->linkBug),
                         bind::click("window.showLink('bug')")
-                    ) : null
-                ),
+                    )
+                ) : null,
                 dtable
                 (
                     setID('bugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::bordered(true),
                     set::cols($bugCols),
@@ -298,6 +347,7 @@ detailBody
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
                     item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
                 ),
+                html($this->printExtendFields($plan, 'html', 'position=all', false)),
                 h::hr(setClass('mt-4')),
                 history(set::objectID($plan->id), set::commentBtn(false))
             )

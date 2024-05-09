@@ -1,6 +1,3 @@
-ALTER TABLE `zt_demand` ADD COLUMN `feedback` mediumint(9) NOT NULL DEFAULT '0';
-ALTER TABLE `zt_demand` ADD COLUMN `keywords` varchar(255) NOT NULL DEFAULT '';
-
 CREATE TABLE IF NOT EXISTS `zt_ai_model` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,

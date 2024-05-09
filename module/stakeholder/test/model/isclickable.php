@@ -13,10 +13,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('stakeholder')->gen(1);
+zenData('user')->gen(5);
+zenData('stakeholder')->gen(1);
 
 $idList  = array(0, 1);
 $actions = array('expcet', 'notExists');

@@ -63,6 +63,12 @@ class testcaseModel extends model
         /* Insert testcase steps. */
         $this->testcaseTao->insertSteps($caseID, $case->steps, $case->expects, $case->stepType);
 
+        if($case->auto != 'auto')
+        {
+            ob_start();
+            setcookie('onlyAutoCase', '0');
+        }
+
         if(dao::isError()) return false;
         return $caseID;
     }
@@ -192,7 +198,9 @@ class testcaseModel extends model
 
         /* Set related variables. */
         $toBugs       = $this->dao->select('id, title, severity, openedDate')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
-        $case->toBugs = array();
+        $case->toBugs         = array();
+        $case->fromBugData    = array();
+        $case->linkCaseTitles = array();
         foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug;
         if($case->story)
         {
@@ -201,7 +209,7 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title, severity, openedDate')->fetch();
+        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('id, title, severity, openedDate')->fetch();
         if($case->linkCase || $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
 
         $case->currentVersion = $version ? $version : $case->version;
@@ -597,7 +605,7 @@ class testcaseModel extends model
 
         $this->testcaseTao->updateCase2Project($oldCase, $case);
 
-        if($case->stepChanged) $this->testcaseTao->updateStep($case, $oldCase);
+        if(!empty($case->stepChanged)) $this->testcaseTao->updateStep($case, $oldCase);
 
         if($oldCase->lib && empty($oldCase->product))
         {
@@ -613,7 +621,7 @@ class testcaseModel extends model
         $this->loadModel('file')->processFile4Object('testcase', $oldCase, $case);
 
         /* Join the steps to diff. */
-        if($case->stepChanged && $case->steps)
+        if(!empty($case->stepChanged) && $case->steps)
         {
             $oldCase->steps = $this->joinStep($oldCase->steps);
             $case->steps    = $this->joinStep($this->getByID($oldCase->id, $case->version)->steps);
@@ -1133,13 +1141,17 @@ class testcaseModel extends model
 
         $action = strtolower($action);
 
-        if($action == 'runcase')            return $case->auto == 'no' && $case->status != 'wait';
+        if($action == 'runcase')            return (empty($case->lib) || !empty($case->product)) && $case->auto == 'no' && $case->status != 'wait';
+        if($action == 'runresult')          return !$case->lib || !empty($case->product);
+        if($action == 'importtolib')        return !$case->lib || !empty($case->product);
         if($action == 'ztfrun')             return $case->auto == 'auto';
         if($action == 'confirmchange')      return isset($case->caseStatus) && isset($case->caseVersion) && $case->caseStatus != 'wait' && $case->version < $case->caseVersion;
         if($action == 'confirmstorychange') return !empty($case->needconfirm) || (isset($case->browseType) && $case->browseType == 'needconfirm');
         if($action == 'createbug')          return isset($case->caseFails) && $case->caseFails > 0;
+        if($action == 'create')             return !$case->lib || !empty($case->product);
         if($action == 'review')             return ($config->testcase->needReview || !empty($config->testcase->forceReview)) && (isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait');
         if($action == 'showscript')         return $case->auto == 'auto';
+        if($action == 'createcase')         return $case->lib && empty($case->product);
 
         return true;
     }
@@ -1425,17 +1437,20 @@ class testcaseModel extends model
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
         }
-        elseif($this->app->tab == 'project' && empty($case->story))
+        elseif($this->app->tab == 'project' && empty($case->story) && empty($case->project))
         {
             $projects = array($this->session->project);
         }
-        elseif($this->app->tab == 'execution' && empty($case->story))
+        elseif($this->app->tab == 'execution' && empty($case->story) && empty($case->execution))
         {
             $projects = array($this->session->execution);
         }
+        if(!empty($case->project))   $projects[] = $case->project;
+        if(!empty($case->execution)) $projects[] = $case->execution;
         if(empty($projects)) return false;
 
         $this->loadModel('action');
+        $projects   = array_unique($projects);
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
         foreach($projects as $projectID)
         {
@@ -1467,11 +1482,8 @@ class testcaseModel extends model
     public function processDatas($datas)
     {
         if(isset($datas->datas)) $datas = $datas->datas;
-        $columnKey  = array();
-        $caseData   = array();
         $stepData   = array();
         $stepVars   = 0;
-
         foreach($datas as $row => $cellValue)
         {
             foreach($cellValue as $field => $value)
@@ -1537,6 +1549,7 @@ class testcaseModel extends model
                                 $num = key($stepData[$row]['desc']); $caseStep[$num]['content'] = $step;
                             }
                         }
+                        $caseStep[$num]['number'] = $num;
                     }
 
                     unset($num);
@@ -1852,6 +1865,7 @@ class testcaseModel extends model
         foreach($scenes as $id => $scene)
         {
             $scene = $this->buildSceneBaseOnCase($scene, $fieldTypes, zget($cases, $id, array()));
+            $scene->scene = $scene->parent;
 
             if(isset($scenes[$scene->parent]))
             {

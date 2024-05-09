@@ -236,6 +236,7 @@ $config->program->browse->dtable->fieldList['budget']['name']     = 'budget';
 $config->program->browse->dtable->fieldList['budget']['title']    = $lang->program->budget;
 $config->program->browse->dtable->fieldList['budget']['width']    = 90;
 $config->program->browse->dtable->fieldList['budget']['type']     = 'format';
+$config->program->browse->dtable->fieldList['budget']['align']    = 'right';
 $config->program->browse->dtable->fieldList['budget']['sortType'] = true;
 $config->program->browse->dtable->fieldList['budget']['show']     = true;
 $config->program->browse->dtable->fieldList['budget']['group']    = 3;
@@ -245,6 +246,7 @@ $config->program->browse->dtable->fieldList['invested']['title']    = $lang->pro
 $config->program->browse->dtable->fieldList['invested']['minWidth'] = 70;
 $config->program->browse->dtable->fieldList['invested']['width']    = 70;
 $config->program->browse->dtable->fieldList['invested']['type']     = 'format';
+$config->program->browse->dtable->fieldList['invested']['align']    = 'right';
 $config->program->browse->dtable->fieldList['invested']['sortType'] = false;
 $config->program->browse->dtable->fieldList['invested']['show']     = true;
 $config->program->browse->dtable->fieldList['invested']['group']    = 3;
@@ -319,7 +321,7 @@ $config->program->browse->dtable->fieldList['actions']['actionsMap'] = array
     'project_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->project->suspend,        'url'  => helper::createLink('project', 'suspend', "projectID={id}"),  'data-toggle' => 'modal'),
     'project_close'     => array('icon'  => 'icon-off',          'hint' => $lang->project->close,          'url'  => helper::createLink('project', 'close', "projectID={id}"),    'data-toggle' => 'modal'),
     'project_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->project->activate,       'url'  => helper::createLink('project', 'activate', "projectID={id}"), 'data-toggle' => 'modal'),
-    'project_other'     => array('caret' => true,                'hint' => $lang->project->other,          'type' => 'dropdown'),
+    'project_other'     => array('caret' => true,                'hint' => $lang->program->other,          'type' => 'dropdown'),
     'project_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->project->edit,           'url'  => helper::createLink('project', 'edit', "projectID={id}")),
     'project_team'      => array('icon'  => 'icon-groups',       'hint' => $lang->project->manageMembers,  'url'  => helper::createLink('project', 'team', "projectID={id}")),
     'project_group'     => array('icon'  => 'icon-lock',         'hint' => $lang->project->group,          'url'  => helper::createLink('project', 'group', "projectID={id}")),

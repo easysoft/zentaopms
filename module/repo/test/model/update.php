@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -26,7 +26,7 @@ cid=1
 
 */
 
-$repo = zdTable('repo')->config('repo');
+$repo = zenData('repo')->loadYaml('repo');
 $repo->projects->range('');
 $repo->gen(1);
 
@@ -41,4 +41,4 @@ $repo = new repoTest();
 r($repo->updateTest(1, $data1, true)) && p('0:field,old,new') && e('name,testHtml,repo1'); //更新版本库1名字
 r($repo->updateTest(1, $data2, true)) && p('0:field,old,new') && e('product,1,2');        //更新版本库1所属产品
 r($repo->updateTest(1, $data3, true)) && p('0:field,old,new') && e('projects,~~,3');      //更新版本库1相关项目
-r($repo->updateTest(1, $data4, true)) && p('webhook:0') && e('changeServerProject');      //更新版本库1仓库
+r($repo->updateTest(1, $data4, true)) && p('webhook:0')       && e('changeServerProject');      //更新版本库1仓库

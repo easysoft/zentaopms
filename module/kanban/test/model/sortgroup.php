@@ -21,8 +21,8 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('kanbanregion')->gen(5);
-zdTable('kanbangroup')->gen(200);
+zenData('kanbanregion')->gen(5);
+zenData('kanbangroup')->gen(200);
 
 global $tester;
 $tester->loadModel('kanban');

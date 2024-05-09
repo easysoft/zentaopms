@@ -65,41 +65,41 @@ statisticBlock
     set::items($items),
     $product ? div
     (
-        setClass($longBlock ? 'row' : 'col gap-3', 'h-full overflow-hidden items-stretch p-2'),
-        center
+        setClass($longBlock ? 'row' : 'col gap-3 pl-3 pt-1', 'h-full overflow-hidden items-stretch p-2'),
+        div
         (
             setClass('flex-1 gap-4'),
+            div
+            (
+                setClass('row items-center gap-1 font-bold', $longBlock ? 'py-2' : ''),
+                $lang->block->productstatistic->deliveryRate,
+                icon
+                (
+                    setClass('text-light text-sm'),
+                    toggle::tooltip
+                    (
+                        array
+                        (
+                            'title'     => $lang->block->tooltips['deliveryRate'],
+                            'placement' => 'bottom',
+                            'type'      => 'white',
+                            'className' => 'text-dark border border-light leading-5'
+                        )
+                    ),
+                    'help'
+                )
+            ),
             progressCircle
             (
                 set::percent($product->storyDeliveryRate),
                 set::size(112),
                 set::text(false),
                 set::circleWidth(0.06),
-                div(span(setClass('text-2xl font-bold'), $product->storyDeliveryRate), '%'),
-                div
-                (
-                    setClass('row text-sm text-gray items-center gap-1'),
-                    $lang->block->productstatistic->deliveryRate,
-                    icon
-                    (
-                        setClass('text-light text-sm'),
-                        toggle::tooltip
-                        (
-                            array
-                            (
-                                'title'     => $lang->block->tooltips['deliveryRate'],
-                                'placement' => 'bottom',
-                                'type'      => 'white',
-                                'className' => 'text-dark border border-light leading-5'
-                            )
-                        ),
-                        'help'
-                    )
-                )
+                div(span(setClass('text-2xl font-bold'), $product->storyDeliveryRate), '%')
             ),
             row
             (
-                setClass('justify-center items-center gap-4'),
+                setClass('justify-center items-center gap-4 mt-4'),
                 center
                 (
                     div
@@ -181,8 +181,8 @@ statisticBlock
         ),
         col
         (
-            setClass('flex-1 gap-1.5 pr-3 py-2', $longBlock ? '' : 'pl-3'),
-            div($lang->block->productstatistic->storyStatistics),
+            setClass('flex-1 gap-1.5 pr-3 ', $longBlock ? 'py-2' : 'pl-3'),
+            div(setClass('font-bold'), $lang->block->productstatistic->storyStatistics),
             row
             (
                 setClass('text-sm text-gray gap-2'),
@@ -193,9 +193,11 @@ statisticBlock
             echarts
             (
                 set::color(array('#2B80FF', '#17CE97')),
+                set::width('100%'),
+                set::height(170),
                 set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0')),
-                set::xAxis(array('type' => 'category', 'data' => array_keys($monthFinish), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
+                set::xAxis(array('type' => 'category', 'data' => array_keys($monthFinish), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'), 'axisLabel' => array('rotate' => 45))),
                 set::yAxis(array('type' => 'value', 'name' => $lang->number, 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
                 set::series
                 (
@@ -217,12 +219,12 @@ statisticBlock
                         )
                     )
                 )
-            )->size('100%', 170),
+            )
         ),
         ($product->newPlan || $product->newExecution || $product->newRelease) ? col
         (
-            setClass('flex-1 gap-4 pr-3 py-2', $longBlock ? 'border-l pl-4' : 'pl-3'),
-            div($lang->block->productstatistic->news),
+            setClass('flex-1 gap-3 pr-3 ', $longBlock ? 'border-l pl-4 py-2' : 'pl-3 pt-2'),
+            div(setClass('font-bold'), $lang->block->productstatistic->news),
             $product->newPlan ? div
             (
                 setClass($longBlock ? 'col' : 'row', 'gap-2'),
@@ -237,7 +239,7 @@ statisticBlock
                     ) : $product->newPlan->title,
                     label
                     (
-                        setClass('gray-pale rounded-full px-1'),
+                        setClass('gray-pale rounded-full px-1 nowrap'),
                         zget($lang->productplan->statusList, $product->newPlan->status)
                     )
                 )
@@ -256,7 +258,7 @@ statisticBlock
                     ) : $product->newExecution->name,
                     label
                     (
-                        setClass('important-pale rounded-full'),
+                        setClass('important-pale rounded-full nowrap'),
                         zget($lang->execution->statusList, $product->newExecution->status)
                     )
                 )
@@ -275,7 +277,7 @@ statisticBlock
                     ) : $product->newRelease->name,
                     label
                     (
-                        setClass('rounded-full', ($product->newRelease->status == 'normal' ? 'success-pale' : 'gray-pale')),
+                        setClass('rounded-full nowrap', ($product->newRelease->status == 'normal' ? 'success-pale' : 'gray-pale')),
                         zget($lang->release->statusList, $product->newRelease->status)
                     )
                 )

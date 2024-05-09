@@ -1,18 +1,21 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-zdTable('storyestimate')->gen(10);
 
 /**
 
 title=测试 storyModel->saveEstimateInfo();
-cid=1
-pid=1
+cid=0
+
+- 执行$storyInfo
+ - 属性round @2
+ - 属性average @1.5
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+zenData('storyestimate')->gen(10);
 
 $_POST['account'][0]  = 'dev1';
 $_POST['estimate'][0] = '1';

@@ -734,10 +734,11 @@ class treeModel extends model
      * @param  int          $rootID
      * @param  int          $startModule
      * @param  string|array $userFunc
+     * @param  array        $extra
      * @access public
      * @return array
      */
-    public function getProjectStoryTreeMenu(int $rootID, int $startModule = 0, string|array$userFunc = ''): array
+    public function getProjectStoryTreeMenu(int $rootID, int $startModule = 0, string|array$userFunc = '', array $extra = array()): array
     {
         $this->app->loadLang('branch');
 
@@ -759,11 +760,12 @@ class treeModel extends model
         $branchGroups = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $rootID);
 
         $productNum = count($products);
+        $storyType  = zget($extra, 'storyType', 'story');
         foreach($products as $id => $product)
         {
             $extra['productID']   = $id;
-            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all");
-            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType=story&orderBy=&type=byProduct&praram=$id");
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all&browseType=&param=0&storyType={$storyType}");
+            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType={$storyType}&orderBy=&type=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
             if($productNum > 1)
             {
@@ -1020,15 +1022,15 @@ class treeModel extends model
                     $table2 = TABLE_CASE;
                 }
 
-                $paths = $this->dao->select("t3.{$field}")->from($table1)->alias('t1')
-                    ->leftJoin($table2)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
-                    ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
+                $paths = $this->dao->select("t4.{$field}")->from(TABLE_PROJECT)->alias('t1')
+                    ->leftJoin($table1)->alias('t2')->on('t1.id=t2.project')
+                    ->leftJoin($table2)->alias('t3')->on("t2.{$linkObject}=t3.id")
+                    ->leftJoin(TABLE_MODULE)->alias('t4')->on('t3.module=t4.id')
                     ->where('t3.deleted')->eq(0)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere("(t1.project = '{$executionID}' OR t4.project = '{$executionID}')")
-                    ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
-                    ->fetchPairs($field, $field);
+                    ->andWhere('t4.deleted')->eq(0)
+                    ->andWhere('t1.project', true)->eq($executionID)->orWhere('t2.project')->eq($executionID)->markRight(1)
+                    ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t3.branch')->eq($branch)->fi()
+                    ->fetchPairs();
             }
             elseif($linkObject == 'bug' && str_contains(',project,execution,', ",{$this->app->tab},"))
             {
@@ -1038,7 +1040,7 @@ class treeModel extends model
                     ->andWhere('t2.deleted')->eq(0)
                     ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
                     ->andWhere("t1.{$this->app->tab}")->eq($executionID)
-                    ->fetchPairs($field, $field);
+                    ->fetchPairs();
             }
             else
             {
@@ -1199,6 +1201,32 @@ class treeModel extends model
     }
 
     /**
+     * Create the manage link of a module.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return object
+     */
+    public function createManageLink(string $type, object $module): object
+    {
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
+        $name = $module->name;
+        if(strpos('bug,case', $type) !== false) $name .= '[' . strtoupper(substr($type, 0, 1)) . ']';
+        if($type == 'bug' && $module->owner)    $name .= '[' . $users[$module->owner] . ']';
+
+        $data = new stdclass();
+        $data->id     = (string)$module->id;
+        $data->parent = (string)$module->parent;
+        $data->name   = $name;
+        $data->url    = helper::createLink('subject', 'browse', "currentModuleID={$module->id}");
+
+        return $data;
+    }
+
+    /**
      * 设置Bug模块树的点击链接。
      * Click link to set Bug module tree.
      *
@@ -1349,11 +1377,30 @@ class treeModel extends model
      * @param  string $type
      * @param  object $module
      * @access public
+     * @return object
+     */
+    public function createTicketLink(string $type, object $module): object
+    {
+        $data = new stdclass();
+        $data->id     = $module->id;
+        $data->parent = $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('ticket', $this->app->methodName, "type=byModule&param={$module->id}");
+
+        return $data;
+    }
+
+    /**
+     * Create link of practice.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
      * @return string
      */
-    public function createTicketLink(string $type, object $module): string
+    public function createPracticeLink(string $type, object $module): string
     {
-        return html::a(helper::createLink('ticket', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        return html::a(helper::createLink('traincourse', 'practicebrowse', "moduleID={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
     }
 
     /**
@@ -1498,11 +1545,11 @@ class treeModel extends model
             ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
             ->andWhere('type')->in($type)
-            ->andWhere('')
-            ->markLeft(1)
-            ->where("branch")->eq(0)
-            ->beginIF($branch != 0)->orWhere("branch")->eq((int)$branch)->fi()
+            ->beginIF($branch !== 'all')
+            ->andWhere("(branch")->eq(0)
+            ->orWhere("branch")->eq((int)$branch)
             ->markRight(1)
+            ->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('`order`, type desc')
             ->fetchAll();
@@ -1565,16 +1612,21 @@ class treeModel extends model
      * Get parents of a module.
      *
      * @param  int    $moduleID
+     * @param  bool   $queryAll
      * @access public
      * @return array
      */
-    public function getParents(int $moduleID): array
+    public function getParents(int $moduleID, bool $queryAll = false): array
     {
         if($moduleID == 0) return array();
         $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch('path');
         $path = trim($path, ',');
         if(!$path) return array();
-        return $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($path)->andWhere('deleted')->eq(0)->orderBy('grade')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('id')->in($path)
+            ->beginIF(!$queryAll)->andWhere('deleted')->eq(0)->fi()
+            ->orderBy('grade')
+            ->fetchAll();
     }
 
     /**
@@ -1678,7 +1730,7 @@ class treeModel extends model
         asort($orders);
         $orderInfo = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
         $newOrders = array();
-        foreach($orders as $moduleID => $order)
+        foreach(array_keys($orders) as $moduleID)
         {
             $parent = $orderInfo[$moduleID]->parent;
             $grade  = $orderInfo[$moduleID]->grade;

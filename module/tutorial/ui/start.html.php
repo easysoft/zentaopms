@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+setID('startModal');
+
 div
 (
     setID('start'),

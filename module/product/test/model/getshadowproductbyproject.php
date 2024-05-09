@@ -14,12 +14,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->shadow->range('1');
 $product->gen(1);
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1');
 $projectProduct->product->range('1');
 $projectProduct->gen(1);

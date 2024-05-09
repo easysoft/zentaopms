@@ -37,7 +37,6 @@ else
 {
     $projectItem = array($project->id => $project->name_with_namespace);
 }
-
 formPanel
 (
     set::title($lang->mr->create),
@@ -58,39 +57,39 @@ formPanel
         set::name('hostID'),
         set::value($repo->gitService)
     ),
-    formRow
+    formGroup
     (
-        formGroup
-        (
-            set::width('1/2'),
-            set::required(true),
-            set::label($lang->mr->sourceProject),
-            set::name('sourceProject'),
-            set::id('sourceProject'),
-            set::items($projectItem)
-        ),
-        formGroup
-        (
-            set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
-            set::required(true),
-            set::label($lang->mr->sourceBranch),
-            set::name('sourceBranch'),
-            set::items(array())
-        )
+        set::width('1/2'),
+        set::readonly(true),
+        set::label($lang->mr->sourceProject),
+        set::name('sourceProject'),
+        set::id('sourceProject'),
+        set::items($projectItem),
+        set::value($repo->id),
+        setClass(count($repoPairs) > 1 ? 'hidden' : '')
+    ),
+    formGroup
+    (
+        setClass('hidden'),
+        set::name('targetProject'),
+        set::id('targetProject'),
+        set::items($projectItem),
+        set::value($repo->id)
     ),
     formRow
     (
         formGroup
         (
             set::width('1/2'),
+            set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
             set::required(true),
-            set::label($lang->mr->targetProject),
-            set::id('targetProject'),
-            set::name('targetProject'),
-            set::items($projectItem)
+            set::label($lang->mr->sourceBranch),
+            set::name('sourceBranch'),
+            set::items(array())
         ),
         formGroup
         (
+            set::width('1/2'),
             set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
             set::required(true),
             set::label($lang->mr->targetBranch),

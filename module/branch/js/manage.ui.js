@@ -91,7 +91,6 @@ window.clickSubmit = function()
 
     const formUrl  = $('#mergeForm').attr('action');
     const formData = new FormData($("#mergeForm")[0]);
-    console.log(branchNamePairs);
     if(targetBranchName && typeof branchNamePairs[targetBranchName] === 'undefined')
     {
         zui.Modal.confirm(confirmMergeMessage).then((res) => {
@@ -114,6 +113,5 @@ window.checkedChange = function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    $('#mergeBranch').hide();
-    if(checkedList.length == 2) $('#mergeBranch').show();
+    $('#mergeBranch').toggleClass('hidden', checkedList.includes('0'));
 }

@@ -17,9 +17,9 @@ $fields->field('project')
     ->items(data('allProjects'))
     ->value(data('projectID'));
 
-if(!empty($project->model) && $project->model == 'agileplus')
+if(!empty($project->model) and in_array($project->model, array('agileplus', 'ipd', 'waterfallplus')))
 {
-    unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);
+    if($project->model == 'agileplus' ) unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);
     $fields->field('method')
         ->required()
         ->name('type')
@@ -42,7 +42,7 @@ $fields->field('code')
 
 $fields->field('type')
     ->required()
-    ->control('checkBtnGroup')
+    ->control($isStage ? 'picker' : 'checkBtnGroup')
     ->label($showExecutionExec ? $lang->execution->execType : $lang->execution->type)
     ->name($isStage ? 'attribute' : 'lifetime')
     ->hidden($isKanban)
@@ -89,6 +89,7 @@ $fields->field('productsBox')
         'project'           => data('project'),
         'isStage'           => data('isStage'),
         'errorSameProducts' => $lang->execution->errorSameProducts,
+        'from'              => 'execution'
     ));
 
 $fields->field('desc')
@@ -99,7 +100,7 @@ $fields->field('desc')
 
 $fields->field('PO')->foldable()->required(strpos($requiredFields, ",PO,") !== false)->items(data('poUsers'))->value(data('execution.PO'));
 $fields->field('QD')->foldable()->required(strpos($requiredFields, ",QD,") !== false)->items(data('qdUsers'))->value(data('execution.QD'));
-$fields->field('PM')->foldable()->required(strpos($requiredFields, ",PM,") !== false)->items(data('pmUsers'))->value(data('execution.PM'));
+$fields->field('PM')->foldable()->required(strpos($requiredFields, ",PM,") !== false)->items(data('pmUsers'))->value(data('execution.PM'))->label($showExecutionExec ? $lang->execution->execPM : $lang->execution->PM);
 $fields->field('RD')->foldable()->required(strpos($requiredFields, ",RD,") !== false)->items(data('rdUsers'))->value(data('execution.RD'));
 
 $fields->field('teamName')

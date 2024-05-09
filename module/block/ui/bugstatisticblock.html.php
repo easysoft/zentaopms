@@ -43,7 +43,27 @@ statisticBlock
             set::width($longBlock ? '30%' : '100%'),
             div
             (
-                setClass('flex justify-center w-full'),
+                setClass('flex justify-center w-full col'),
+                div
+                (
+                    setClass('row text-sm items-center font-bold gap-1 pl-5 pb-1'),
+                    $lang->block->qastatistic->fixBugRate,
+                    icon
+                    (
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
+                        (
+                            array
+                            (
+                                'title'     => $lang->block->tooltips['resolvedRate'],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
+                        ),
+                        'help'
+                    )
+                ),
                 progressCircle
                 (
                     set::percent($resolvedRate),
@@ -51,26 +71,6 @@ statisticBlock
                     set::text(false),
                     set::circleWidth('0.06'),
                     div(span(setClass('text-2xl font-bold'), $resolvedRate), '%'),
-                    div
-                    (
-                        setClass('row text-sm text-gray items-center gap-1'),
-                        $lang->block->qastatistic->fixBugRate,
-                        icon
-                        (
-                            setClass('text-light text-sm'),
-                            toggle::tooltip
-                            (
-                                array
-                                (
-                                    'title'     => $lang->block->tooltips['resolvedRate'],
-                                    'placement' => 'bottom',
-                                    'type'      => 'white',
-                                    'className' => 'text-dark border border-light leading-5'
-                                )
-                            ),
-                            'help'
-                        )
-                    )
                 )
             ),
             cell
@@ -125,6 +125,8 @@ statisticBlock
             (
                 set::title(array('text' => $lang->block->qastatistic->bugStatusStat, 'textStyle' => array('fontSize' => '12'))),
                 set::color(array('#66a2ff', '#9ea3b0')),
+                set::width('100%'),
+                set::height(200),
                 set::tooltip(array('trigger' => 'axis')),
                 set::grid(array('left' => '10px', 'top' => '50px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0', 'top' => '25px', 'textStyle' => array('fontSize' => '11'))),
@@ -151,7 +153,7 @@ statisticBlock
                         )
                     )
                 )
-            )->size('100%', 200)
+            )
         )
     )
 );

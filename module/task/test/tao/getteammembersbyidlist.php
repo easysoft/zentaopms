@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$taskTeam = zdTable('taskteam');
+$taskTeam = zenData('taskteam');
 $taskTeam->id->range('1-5');
 $taskTeam->task->range('1{2},2{3}');
 $taskTeam->account->range('admin,dev01,admin,dev01,dev02');

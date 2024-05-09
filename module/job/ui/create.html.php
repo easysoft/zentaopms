@@ -11,24 +11,36 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('frameList', $lang->job->frameList);
-jsVar('repoPairs', $repoPairs);
-jsVar('gitlabRepos', $gitlabRepos);
+jsVar('triggerList', $lang->job->triggerTypeList);
+jsVar('repoList', $repoList);
+jsVar('pageRepoID', $repoID);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
 
-if($this->session->repoID)
+$engine = '';
+if($repo)
 {
-    $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($this->session->repoID)->fetch('name');
-    dropmenu(set::objectID($this->session->repoID), set::text($repoName), set::tab('repo'));
+    dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
+
+    if($repo->SCM == 'GitFox')
+    {
+        $engine = 'gitfox';
+    }
+    elseif($repo->SCM != 'Gitlab')
+    {
+        $engine = 'jenkins';
+    }
 }
 
 formPanel
 (
     set::title($lang->job->create),
+    setClass('job-form'),
     set::labelWidth('10em'),
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),
     on::click('.custom', 'setValueInput'),
+    on::click('select.paramValue', 'changeCustomField'),
     set::actionsClass('w-2/3'),
     formGroup
     (
@@ -45,9 +57,9 @@ formPanel
             set::width('1/2'),
             set::label($lang->job->engine),
             set::required(true),
-            set::items(array('' => '') + $lang->job->engineList),
-            set::value(''),
-            on::change('changeEngine')
+            set::items($lang->job->engineList),
+            set::value($engine),
+            on::change('window.changeEngine')
         ),
         h::span
         (
@@ -63,9 +75,9 @@ formPanel
             set::label($lang->job->repo),
             set::required(true),
             set::name('repo'),
-            set::items($repoPairs),
+            set::items(array()),
             set::width('1/2'),
-            on::change('changeRepo')
+            on::change('window.changeRepo')
         ),
         formGroup
         (
@@ -77,6 +89,15 @@ formPanel
             set::width('1/2'),
             set::items(array())
         )
+    ),
+    formGroup
+    (
+        setClass('gitfox-pipeline hidden'),
+        set::label($lang->job->gitfoxpipeline),
+        set::required(true),
+        set::name('gitfoxpipeline'),
+        set::items(array()),
+        set::width('1/2')
     ),
     formGroup
     (
@@ -95,24 +116,66 @@ formPanel
     ),
     formRow
     (
+        setClass('hidden'),
+        set::id('jenkinsServerTR'),
         formGroup
         (
-            set::name('triggerType'),
+            set::label($lang->job->jkHost),
+            set::required(true),
             set::width('1/2'),
-            set::label($lang->job->triggerType),
-            set::items($lang->job->triggerTypeList),
-            on::change('changeTriggerType')
+            inputGroup
+            (
+                picker
+                (
+                    set::name('jkServer'),
+                    set::items($jenkinsServerList),
+                    on::change('changeJenkinsServer')
+                ),
+                $lang->job->pipeline,
+                input
+                (
+                    set::name('jkTask'),
+                    set::type('hidden')
+                ),
+                dropmenu
+                (
+                    setStyle('width', '150px'),
+                    set::id('pipelineDropmenu'),
+                    set::popPlacement('top'),
+                    set::text($lang->job->selectPipeline),
+                    set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks'))
+                )
+            )
         )
+    ),
+    formGroup
+    (
+        set::name('useZentao'),
+        set::label($lang->job->useZentao),
+        set::control('radioListInline'),
+        set::items($lang->job->zentaoTrigger),
+        set::value('1'),
+        set::width('1/2'),
+        on::change('window.changeTrigger')
+    ),
+    formGroup
+    (
+        set::name('triggerType'),
+        set::width('1/2'),
+        set::required(true),
+        set::label($lang->job->triggerType),
+        set::items($lang->job->triggerTypeList),
+        on::change('window.changeTriggerType')
     ),
     formRow
     (
         setClass('svn-fields hidden'),
         formGroup
         (
-            set::id('svnDirBox'),
+            set::name('svnDir[]'),
             set::width('1/2'),
             set::label($lang->job->svnDir),
-            set::control('static'),
+            set::items(array())
         )
     ),
     formRow
@@ -182,40 +245,6 @@ formPanel
                 timePicker
                 (
                     set::name('atTime')
-                )
-            )
-        )
-    ),
-    formRow
-    (
-        setClass('hidden'),
-        set::id('jenkinsServerTR'),
-        formGroup
-        (
-            set::label($lang->job->jkHost),
-            set::required(true),
-            set::width('1/2'),
-            inputGroup
-            (
-                picker
-                (
-                    set::name('jkServer'),
-                    set::items($jenkinsServerList),
-                    on::change('changeJenkinsServer')
-                ),
-                $lang->job->pipeline,
-                input
-                (
-                    set::name('jkTask'),
-                    set::type('hidden')
-                ),
-                dropmenu
-                (
-                    setStyle('width', '150px'),
-                    set::id('pipelineDropmenu'),
-                    set::popPlacement('top'),
-                    set::text($lang->job->selectPipeline),
-                    set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks'))
                 )
             )
         )

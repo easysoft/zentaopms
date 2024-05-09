@@ -9,15 +9,15 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
-$projectTable = zdTable('project');
+$projectTable = zenData('project');
 $projectTable->id->range('1-5');
 $projectTable->model->range('scrum');
 $projectTable->gen(5);
 
-zdTable('issue')->gen(0);
-zdTable('user')->gen(5);
+zenData('issue')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $editionList = array('open', 'ipd', 'max');
@@ -27,7 +27,7 @@ r($customTester->hasScrumIssueDataTest($editionList[0])) && p() && e('0'); // �
 r($customTester->hasScrumIssueDataTest($editionList[1])) && p() && e('0'); // 测试ipd版中无问题数据
 r($customTester->hasScrumIssueDataTest($editionList[2])) && p() && e('0'); // 测试旗舰版中无问题数据
 
-$issueTable = zdTable('issue');
+$issueTable = zenData('issue');
 $issueTable->deleted->range('0');
 $issueTable->project->range('1-5');
 $issueTable->gen(5);

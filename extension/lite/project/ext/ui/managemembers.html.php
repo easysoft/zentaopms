@@ -103,7 +103,7 @@ foreach($teamMembers as $member)
                 input
                 (
                     set::id("role{$i}"),
-                    set::name("roles[$i]"),
+                    set::name("role[$i]"),
                     set::value($member->role)
                 )
             ),
@@ -179,7 +179,7 @@ h::table
             input
             (
                 set::id("role{$i}"),
-                set::name("roles[$i]")
+                set::name("role[$i]")
             )
         ),
         h::td

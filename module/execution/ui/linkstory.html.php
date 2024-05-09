@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+data('activeMenuID', $storyType);
+
 featureBar(li
 (
     setClass('nav-item'),
@@ -29,6 +31,8 @@ searchForm
 $cols = $config->execution->linkStory->dtable->fieldList;
 $cols['module']['map']  = $modules;
 $cols['product']['map'] = $productPairs;
+
+if($storyType == 'requirement') $cols['title']['title'] = str_replace($lang->SRCommon, $lang->URCommon, $lang->story->title);
 if($productType != 'normal')
 {
     $cols['branch']['title'] = $lang->product->branchName[$productType];
@@ -44,7 +48,7 @@ jsVar('gradeGroup', $gradeGroup);
 $footToolbar['items'][] = array(
     'text'      => $lang->save,
     'className' => 'btn secondary batch-btn ajax-btn import-story-btn size-sm',
-    'data-url'  => createLink('execution', 'linkStory', "objectID=$object->id")
+    'data-url'  => createLink('execution', 'linkStory', "projectID=$object->id&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&extra=&storyType=$storyType")
 );
 if(!isInModal())
 {
@@ -67,13 +71,13 @@ dtable
     set::cols($cols),
     set::data($allStories),
     set::orderBy($orderBy),
-    set::sortLink(createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}")),
+    set::sortLink(createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&extra={$extra}&storyType={$storyType}")),
     set::checkable(true),
     set::onRenderCell(jsRaw('window.onRenderLinkStoryCell')),
     set::showToolbarOnChecked(false),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array(
-        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra") . "#app={$app->tab}"
+        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra&storyType={$storyType}") . "#app={$app->tab}"
     )))
 );
 

@@ -78,10 +78,9 @@ div(
             set::arrow(false),
             set::staticMenu(true),
             set::key('dropdown'),
-            set::className('absolute top-0 right-0 z-10 monaco-dropmenu'),
             btn
             (
-                setClass('ghost text-black pull-right'),
+                setClass('ghost text-black absolute top-0 right-0 z-10 monaco-dropmenu'),
                 set::icon('ellipsis-v rotate-90')
             ),
             set::items
@@ -106,7 +105,7 @@ $inModal ? null : sidebar
             setID('repoBranchDropMenu'),
             setClass('px-2'),
             set::objectID($dropMenus['selected']),
-            set::text($dropMenus['selected']),
+            set::text($dropMenus['selected'] ? $dropMenus['selected'] : $revision),
             set::data(array('data' => $menuData, 'tabs' => $tabs))
         )
     ),

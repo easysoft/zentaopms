@@ -31,6 +31,8 @@ class editor extends wg
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
         .tippy-content zen-editor-menu-item .label {all: unset;}
+        .tiptap.ProseMirror {padding-top: 0.5rem;}
+        .tiptap.ProseMirror p {margin:0;}
     CSS;
 
     public static function getPageCSS(): ?string
@@ -64,12 +66,13 @@ class editor extends wg
             setClass('absolute right-0'),
             btn
             (
-                on::click("showSaveModal('$editor', '$type')"),
+                setClass('ghost border-l border-r border-light'),
+                on::click("window.showSaveModal('$editor', '$type')"),
                 $lang->user->saveTemplate
             ),
             dropdown
             (
-                btn($lang->user->applyTemplate),
+                btn($lang->user->applyTemplate, setClass('ghost')),
                 set::items(array('url' => createLink('user', 'ajaxGetTemplates', "editor=$editor&type=$type")))
             )
         );

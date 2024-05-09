@@ -2,9 +2,9 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/personnel.class.php';
+include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('1-6');
 $project->project->range('0{3},3,4,3');
 $project->type->range('program,project{2},sprint{8}');
@@ -15,7 +15,7 @@ $project->multiple->range('1');
 $project->deleted->range('`0`');
 $project->gen(6);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-20');
 $task->name->range('task1');
 $task->project->range('2{2},3{2}');
@@ -27,7 +27,7 @@ $task->consumed->range('5');
 $task->deleted->range('`0`');
 $task->gen(20);
 
-$effort = zdTable('effort');
+$effort = zenData('effort');
 $effort->id->range('1-30');
 $effort->objectType->range('task');
 $effort->objectID->range('1-20');
@@ -37,7 +37,7 @@ $effort->consumed->range('2,3');
 $effort->deleted->range('`0`');
 $effort->gen(30);
 
-zdTable('user')->gen(20);
+zenData('user')->gen(20);
 
 /**
 

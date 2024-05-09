@@ -14,7 +14,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
 $beginList = array('2022-04-01', '2022-04-02', '2022-04-03', '2022-04-04', '2022-04-05');

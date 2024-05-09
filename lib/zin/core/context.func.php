@@ -128,3 +128,17 @@ function data()
     if(count($args) >= 2) return setPageData($args[0], $args[1]);
     return getPageData($args[0]);
 }
+
+function d(mixed $nameOrData, mixed ...$values)
+{
+    if(is_string($nameOrData))
+    {
+        $name = $nameOrData;
+    }
+    else
+    {
+        $name = '';
+        array_unshift($values, $nameOrData);
+    }
+    context::current()->addDebugData($name, ...$values);
+}

@@ -3,8 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('project')->gen(20);
-$team = zdTable('team');
+zenData('project')->gen(20);
+$team = zenData('team');
 $team->root->range('11');
 $team->gen(10);
 

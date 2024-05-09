@@ -407,13 +407,12 @@ class userEntry extends entry
         if($this->request('gender') and !in_array($this->request('gender'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
         $this->setPost('gender', $gender);
 
-        $password = $this->request('password', zget($_POST, 'password', ''));
-        if($password)
-        {
-            $this->setPost('password1', md5($password));
-            $this->setPost('password2', md5($password));
-            $this->setPost('passwordStrength', 2);
-        }
+        $password    = $this->request('password', zget($_POST, 'password', ''));
+        $setPassword = $password ? md5($password) . $this->app->session->rand : '';
+        $this->setPost('password1', $setPassword);
+        $this->setPost('password2', $setPassword);
+        $this->setPost('passwordStrength', 3);
+        $this->setPost('passwordLength', strlen($setPassword));
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'edit');

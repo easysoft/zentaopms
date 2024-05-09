@@ -20,14 +20,14 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('bug')->gen(5);
-zdTable('task')->gen(5);
-zdTable('story')->gen(5);
-zdTable('pipeline')->gen(5);
-zdTable('relation')->gen(0);
-zdTable('mr')->config('mr')->gen(5);
+zenData('bug')->gen(5);
+zenData('task')->gen(5);
+zenData('story')->gen(5);
+zenData('pipeline')->gen(5);
+zenData('relation')->gen(0);
+zenData('mr')->loadYaml('mr')->gen(5);
 
 $mrModel = new mrTest();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Utils;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,12 +11,15 @@ use PhpMyAdmin\SqlParser\Utils\Misc;
 class MiscTest extends TestCase
 {
     /**
-     * @dataProvider getAliasesProvider
+     * @param mixed[] $expected
+     * @psalm-param array<string, array{
+     *   alias: (string|null),
+     *   tables: array<string, array{alias: (string|null), columns: array<string, string>}>
+     * }> $expected
      *
-     * @param mixed $query
-     * @param mixed $db
+     * @dataProvider getAliasesProvider
      */
-    public function testGetAliases($query, $db, array $expected)
+    public function testGetAliases(string $query, ?string $db, array $expected): void
     {
         $parser = new Parser($query);
         $statement = empty($parser->statements[0]) ?
@@ -22,106 +27,111 @@ class MiscTest extends TestCase
         $this->assertEquals($expected, Misc::getAliases($statement, $db));
     }
 
-    public function getAliasesProvider()
+    /**
+     * @return array<int, array<int, string|mixed[]|null>>
+     * @psalm-return list<array{string, (string|null), array<string, array{
+     *   alias: (string|null),
+     *   tables: array<string, array{alias: (string|null), columns: array<string, string>}>
+     * }>}>
+     */
+    public function getAliasesProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'select * from (select 1) tbl',
                 'mydb',
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 'select i.name as `n`,abcdef gh from qwerty i',
                 'mydb',
-                array(
-                    'mydb' => array(
+                [
+                    'mydb' => [
                         'alias' => null,
-                        'tables' => array(
-                            'qwerty' => array(
+                        'tables' => [
+                            'qwerty' => [
                                 'alias' => 'i',
-                                'columns' => array(
+                                'columns' => [
                                     'name' => 'n',
                                     'abcdef' => 'gh',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'select film_id id,title from film',
                 'sakila',
-                array(
-                    'sakila' => array(
+                [
+                    'sakila' => [
                         'alias' => null,
-                        'tables' => array(
-                            'film' => array(
+                        'tables' => [
+                            'film' => [
                                 'alias' => null,
-                                'columns' => array(
-                                    'film_id' => 'id',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                                'columns' => ['film_id' => 'id'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'select `sakila`.`A`.`actor_id` as aid,`F`.`film_id` `fid`,'
                 . 'last_update updated from `sakila`.actor A join `film_actor` as '
                 . '`F` on F.actor_id = A.`actor_id`',
                 'sakila',
-                array(
-                    'sakila' => array(
+                [
+                    'sakila' => [
                         'alias' => null,
-                        'tables' => array(
-                            'film_actor' => array(
+                        'tables' => [
+                            'film_actor' => [
                                 'alias' => 'F',
-                                'columns' => array(
+                                'columns' => [
                                     'film_id' => 'fid',
                                     'last_update' => 'updated',
-                                ),
-                            ),
-                            'actor' => array(
+                                ],
+                            ],
+                            'actor' => [
                                 'alias' => 'A',
-                                'columns' => array(
+                                'columns' => [
                                     'actor_id' => 'aid',
                                     'last_update' => 'updated',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 'SELECT film_id FROM (SELECT * FROM film) as f;',
                 'sakila',
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 '',
                 null,
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 'SELECT 1',
                 null,
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 'SELECT * FROM orders AS ord WHERE 1',
                 'db',
-                array(
-                    'db' => array(
+                [
+                    'db' => [
                         'alias' => null,
-                        'tables' => array(
-                            'orders' => array(
+                        'tables' => [
+                            'orders' => [
                                 'alias' => 'ord',
-                                'columns' => array(),
-                            ),
-                        ),
-                    ),
-                ),
-            )
-        );
+                                'columns' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }

@@ -12,6 +12,8 @@ public function getPairs(string $mode = '', int $programID = 0, array|string $ap
 {
     if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
+    if($this->app->rawModule == 'feedback' && $this->app->rawMethod == 'productsetting') return parent::getPairs($mode, $programID, $append, $shadow);
+
     $projects        = $this->loadModel('project')->getPairsByProgram();
     $projectIdList   = array_keys($projects);
 

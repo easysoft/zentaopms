@@ -20,10 +20,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mail.class.php';
+include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
-$notify = zdTable('notify');
+$notify = zenData('notify');
 $notify->objectType->range('mail');
 $notify->toList->range('1-8')->prefix('user');
 $notify->status->range('wait,fail');

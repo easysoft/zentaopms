@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 /**
 
@@ -11,15 +11,15 @@ cid=1
 
 */
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->mode->range('multi');
 $task->gen(6);
 
-zdTable('team')->gen(0);
-zdTable('taskteam')->gen(0);
-zdTable('effort')->gen(0);
+zenData('team')->gen(0);
+zenData('taskteam')->gen(0);
+zenData('effort')->gen(0);
 
-$user = zdTable('user')->gen(50);
+$user = zenData('user')->gen(50);
 
 $taskIDList     = array(1,2,3,4,5,6);
 $taskStatusList = array('doing','wait','done');

@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+data('testcase', $case);
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 jsVar('tab', $this->app->tab);
@@ -99,7 +100,7 @@ detailBody
                 )
             )
         ),
-        section
+        !$isLibCase ? section
         (
             set::title($lang->testcase->scene),
             formGroup
@@ -113,7 +114,7 @@ detailBody
                     set::required(true)
                 )
             )
-        ),
+        ) : null,
         section
         (
             set::title($lang->testcase->precondition),
@@ -158,6 +159,7 @@ detailBody
     history(set::objectID($case->id)),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             setClass('mt-5'),
@@ -167,6 +169,7 @@ detailBody
                 set::name($lang->testcase->lib),
                 picker
                 (
+                    setID('lib'),
                     set::name('lib'),
                     set::items($libraries),
                     set::required(true),
@@ -204,6 +207,7 @@ detailBody
                 (
                     modulePicker
                     (
+                        setID('module'),
                         set::items($moduleOptionMenu),
                         set::value($case->module),
                         set::manageLink(createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}"))

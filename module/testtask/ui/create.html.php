@@ -157,22 +157,25 @@ formPanel
         set::control('picker'),
         set::items($testreports)
     ),
-    formGroup
+    formRow
     (
-        set::label($lang->testtask->name),
-        set::required(true),
-        inputGroup
+        formGroup
         (
+            set::label($lang->testtask->name),
+            set::required(true),
             input
             (
-                zui::width('1/2'),
                 set::name('name'),
                 set::required(true)
-            ),
-            $lang->testtask->pri,
+            )
+        ),
+        formGroup
+        (
+            set::label($lang->testtask->pri),
+            set::labelWidth('60px'),
+            set::width('40'),
             priPicker
             (
-                zui::width('80px'),
                 set::name('pri'),
                 set::items($lang->testtask->priList),
                 set::value(3)

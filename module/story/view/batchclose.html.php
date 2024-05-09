@@ -15,7 +15,7 @@
 <?php js::set('app', $app->tab);?>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
-    <h2><?php echo ($storyType == 'story' ? $lang->SRCommon : $lang->URCommon) . $lang->colon . $lang->story->batchClose;?></h2>
+    <h2><?php echo ($storyType == 'story' ? $lang->SRCommon : $lang->URCommon) . $lang->hyphen . $lang->story->batchClose;?></h2>
   </div>
   <?php if(isset($suhosinInfo)):?>
   <div class='alert alert-info'><?php echo $suhosinInfo;?></div>

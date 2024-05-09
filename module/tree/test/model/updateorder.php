@@ -17,10 +17,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-zdTable('module')->config('module')->gen(100);
+zenData('module')->loadYaml('module')->gen(100);
 
 $orders1 = array('12' => 1, '16' => 4, '32' => 2);
 $orders2 = array('11' => 7, '18' => 2, '31' => 5);

@@ -173,7 +173,6 @@ class aiappModel extends model
         if($collectedIDs === null) $collectedIDs = $this->getCollectedMiniProgramIDs($this->app->user->id);
         if($latestSum === null)    $latestSum    = $this->countLatestMiniPrograms();
 
-        if(empty($collectedIDs))   unset($squareCategoryArray['collection']);
         if($latestSum == 0)        unset($squareCategoryArray['latest']);
         return $squareCategoryArray;
     }

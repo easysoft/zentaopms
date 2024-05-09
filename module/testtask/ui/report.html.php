@@ -26,16 +26,23 @@ detailHeader
 $reports = array();
 foreach($lang->testtask->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-$echarts = array();
-foreach($charts as $type => $option)
+function getEcharts($tabCharts, $tabDatas)
 {
-    $chartData = $datas[$type];
-    $echarts[] = tableChart
-    (
-        set::type($option->type),
-        set::title($lang->testtask->report->charts[$type]),
-        set::datas((array)$chartData)
-    );
+    global $lang;
+    $echarts = array();
+    foreach($tabCharts as $type => $option)
+    {
+        $chartData = $tabDatas[$type];
+        $echarts[] = tableChart
+        (
+            set::item('chart-' . $type),
+            set::type($option->type),
+            set::title($lang->testtask->report->charts[$type]),
+            set::datas((array)$chartData),
+            set::tableWidth('40%')
+        );
+    }
+    return $echarts;
 }
 
 $tabItems = array();
@@ -50,7 +57,7 @@ foreach($lang->report->typeList as $type => $typeName)
         set::key($type),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
         div(set::className('pb-4 pt-2'), span(set::className('text-gray'), html(str_replace('%tab%', $lang->testtask->wait . $lang->testcase->common, $lang->report->notice->help)))),
-        div($echarts)
+        div(getEcharts($charts, $datas))
     );
 }
 
@@ -92,7 +99,11 @@ div
         set::flex('1'),
         set::className('bg-white px-4 py-2'),
         set::id('report'),
-        tabs($tabItems)
+        tabs
+        (
+            on::click('.font-medium', 'changeTab'),
+            $tabItems
+        )
     )
 );
 

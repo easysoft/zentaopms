@@ -1,20 +1,28 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-$user = zdTable('user');
-$user->dept->range('0,1');
-$user->role->range(',``,qa');
-$user->gen(10);
 
 /**
 
 title=测试 storyModel->checkforcereview();
-cid=1
-pid=1
+cid=0
+
+- 执行story模块的checkForceReview方法  @0
+- 执行story模块的checkForceReview方法  @1
+- 执行story模块的checkForceReview方法  @0
+- 执行story模块的checkForceReview方法  @0
+- 执行story模块的checkForceReview方法  @1
+- 执行story模块的checkForceReview方法  @0
+- 执行story模块的checkForceReview方法  @1
+- 执行story模块的checkForceReview方法  @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+$user = zenData('user');
+$user->dept->range('0,1');
+$user->role->range(',``,qa');
+$user->gen(10);
 
 global $tester;
 $tester->loadModel('story');
@@ -37,13 +45,6 @@ r((int)$tester->story->checkForceReview()) && p() && e('0');
 $tester->story->config->story->forceReviewRoles = '';
 $tester->story->config->story->forceReviewDepts = '1';
 r((int)$tester->story->checkForceReview()) && p() && e('0');
-
-
-
-
-
-
-
 
 $tester->story->config->story->needReview = 1;
 $tester->story->config->story->forceNotReview      = '';

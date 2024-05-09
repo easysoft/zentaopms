@@ -26,7 +26,7 @@ $config->custom->requiredModules[35] = 'execution';
 $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[45] = 'build';
 
-$config->custom->allFeatures   = array('program', 'productRR', 'productUR', 'productLine', 'projectScrum', 'projectWaterfall', 'projectKanban', 'projectAgileplus', 'projectWaterfallplus', 'execution', 'qa', 'devops', 'kanban', 'doc', 'report', 'system', 'admin', 'vision', 'ai');
+$config->custom->allFeatures   = array('program', 'productRR', 'productUR', 'productLine', 'projectScrum', 'projectWaterfall', 'projectKanban', 'projectAgileplus', 'projectWaterfallplus', 'execution', 'qa', 'devops', 'ai', 'report', 'kanban', 'doc', 'system', 'admin', 'vision');
 $config->custom->dataFeatures  = array('productER', 'productUR', 'waterfall', 'waterfallplus');
 $config->custom->scrumFeatures = array();
 
@@ -92,6 +92,20 @@ if(!empty($config->setCode))
 }
 
 $config->custom->notSetMethods = array('required', 'browsestoryconcept', 'product', 'role', 'execution', 'limitTaskDate', 'hours');
+
+$config->custom->customFields = array();
+$config->custom->customFields['common']      = array('global' => array('hideVisionTips'));
+$config->custom->customFields['doc']         = array('common' => array('docContentType'));
+$config->custom->customFields['bug']         = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
+$config->custom->customFields['caselib']     = array('custom' => array('createFields'));
+$config->custom->customFields['execution']   = array('custom' => array('batchEditFields'));
+$config->custom->customFields['product']     = array('custom' => array('createFields', 'batchEditFields'));
+$config->custom->customFields['programplan'] = array('custom' => array('createWaterfallFields', 'createIpdFields', 'createWaterfallplusFields'), 'customAgilePlus' => array('createFields'));
+$config->custom->customFields['story']       = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
+$config->custom->customFields['task']        = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
+$config->custom->customFields['testcase']    = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
+$config->custom->customFields['todo']        = array('custom' => array('batchCreateFields', 'batchEditFields'));
+$config->custom->customFields['user']        = array('custom' => array('batchCreateFields', 'batchEditFields'));
 
 global $lang;
 $config->custom->commonLang = array('$URCOMMON' => $lang->URCommon, '$SRCOMMON' => $lang->SRCommon, '$PRODUCTCOMMON' => $lang->productCommon, '$PROJECTCOMMON' => $lang->projectCommon, '$EXECUTIONCOMMON' => $lang->executionCommon);

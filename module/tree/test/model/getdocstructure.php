@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
 /**
@@ -14,7 +14,7 @@ cid=1
 
 */
 
-zdTable('module')->config('module')->gen(30);
+zenData('module')->loadYaml('module')->gen(30);
 
 $tree = new treeTest();
 

@@ -13,12 +13,12 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
-zdTable('project')->config('istopstage')->gen(5);
+zenData('project')->loadYaml('istopstage')->gen(5);
 
 $plan = new programplanTest();
 

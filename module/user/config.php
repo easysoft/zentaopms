@@ -9,6 +9,10 @@ $config->user->edit->requiredFields   = 'account,realname,visions';
 $config->user->availableBatchCreateFields = 'dept,email,gender,commiter,join,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
 $config->user->availableBatchEditFields   = 'dept,email,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
 
+$config->user->list = new stdclass();
+$config->user->list->customBatchCreateFields = 'dept,email,gender,commiter,join,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
+$config->user->list->customBatchEditFields   = 'dept,email,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
+
 $config->user->custom = new stdclass();
 $config->user->custom->batchCreateFields = 'dept,join,email,gender';
 $config->user->custom->batchEditFields   = 'dept,join,email,commiter';

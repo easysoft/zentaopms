@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/block.class.php';
+include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
 
 su('admin');
 
 function initData()
 {
-    $block = zdTable('block');
+    $block = zenData('block');
     $block->id->range('2-5');
     $block->account->range('admin');
     $block->vision->range('rnd,lite');

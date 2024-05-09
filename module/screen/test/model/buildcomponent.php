@@ -1,11 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
-zdTable('product')->gen(2);
-zdTable('story')->config('story')->gen(20);
-zdTable('action')->gen(20);
+zenData('screen')->gen(0);
+zenData('product')->gen(2);
+zenData('story')->loadYaml('story')->gen(20);
+zenData('action')->gen(20);
 
 /**
 
@@ -49,7 +50,7 @@ foreach($components as $component)
 }
 
 if($component1) $screen->buildComponentTest($component1);
-r(isset($component1->option->dataset[0][0]) && $component1->option->dataset[0][0] == '正常产品1') && p('') && e('1');  //有图表id的元素判断是否正常生成了刻度和数据。
+r(isset($component1->option->header[0]) && $component1->option->header[0] == '产品') && p('') && e('1');  //有图表id的元素判断是否正常生成了刻度和数据。
 
 if($component2) $screen->buildComponentTest($component2);
 r(isset($component2) && $component2->option->dataset[0]->label == '请选择') && p('') && e('1');  //判断是否正常生成了Select组件。

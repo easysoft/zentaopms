@@ -32,13 +32,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/search.class.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 su('admin');
 
-zdTable('issue')->gen(2);
-zdTable('story')->gen(2);
+zenData('issue')->gen(2);
+zenData('story')->gen(2);
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,stage,kanban');

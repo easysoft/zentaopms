@@ -1,4 +1,247 @@
-a:4:{s:5:"query";s:80:"ALTER USER 'jeffrey'@'localhost'
-  IDENTIFIED BY 'new_password' PASSWORD EXPIRE;";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:80:"ALTER USER 'jeffrey'@'localhost'
-  IDENTIFIED BY 'new_password' PASSWORD EXPIRE;";s:3:"len";i:80;s:4:"last";i:80;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:17:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:5:"ALTER";s:5:"value";s:5:"ALTER";s:7:"keyword";s:5:"ALTER";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:5;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:4:"USER";s:5:"value";s:4:"USER";s:7:"keyword";s:4:"USER";s:4:"type";i:1;s:5:"flags";i:33;s:8:"position";i:6;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:10;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:21:"'jeffrey'@'localhost'";s:5:"value";s:17:"jeffrey@localhost";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:4;s:8:"position";i:11;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:3:"
-  ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:32;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:10:"IDENTIFIED";s:5:"value";s:10:"IDENTIFIED";s:7:"keyword";s:10:"IDENTIFIED";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:35;}i:7;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:45;}i:8;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:2:"BY";s:5:"value";s:2:"BY";s:7:"keyword";s:2:"BY";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:46;}i:9;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:48;}i:10;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:14:"'new_password'";s:5:"value";s:12:"new_password";s:7:"keyword";N;s:4:"type";i:7;s:5:"flags";i:1;s:8:"position";i:49;}i:11;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:63;}i:12;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:8:"PASSWORD";s:5:"value";s:8:"PASSWORD";s:7:"keyword";s:8:"PASSWORD";s:4:"type";i:1;s:5:"flags";i:33;s:8:"position";i:64;}i:13;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:72;}i:14;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"EXPIRE";s:5:"value";s:6:"EXPIRE";s:7:"keyword";s:6:"EXPIRE";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:73;}i:15;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:";";s:5:"value";s:1:";";s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";i:79;}i:16;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:17;s:3:"idx";i:17;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:46:"PhpMyAdmin\SqlParser\Statements\AlterStatement":5:{s:5:"table";O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";s:17:"jeffrey@localhost";s:6:"column";N;s:4:"expr";s:21:"'jeffrey'@'localhost'";s:5:"alias";N;s:8:"function";N;s:8:"subquery";N;}s:7:"altered";a:1:{i:0;O:46:"PhpMyAdmin\SqlParser\Components\AlterOperation":3:{s:7:"options";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:2:{i:2;a:4:{s:4:"name";s:2:"BY";s:6:"equals";b:0;s:4:"expr";O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";N;s:6:"column";s:12:"new_password";s:4:"expr";s:22:"'new_password'PASSWORD";s:5:"alias";N;s:8:"function";N;s:8:"subquery";N;}s:5:"value";s:22:"'new_password'PASSWORD";}i:3;s:10:"IDENTIFIED";}}s:5:"field";O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";N;s:6:"column";s:6:"EXPIRE";s:4:"expr";s:6:"EXPIRE";s:5:"alias";N;s:8:"function";N;s:8:"subquery";N;}s:7:"unknown";a:0:{}}}s:7:"options";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:1:{i:3;s:4:"USER";}}s:5:"first";i:0;s:4:"last";i:15;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:0:{}}}
+{
+    "query": "ALTER USER 'jeffrey'@'localhost'\n  IDENTIFIED BY 'new_password' PASSWORD EXPIRE;",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "ALTER USER 'jeffrey'@'localhost'\n  IDENTIFIED BY 'new_password' PASSWORD EXPIRE;",
+        "len": 80,
+        "last": 80,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "ALTER",
+                    "value": "ALTER",
+                    "keyword": "ALTER",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 5
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "USER",
+                    "value": "USER",
+                    "keyword": "USER",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 10
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'jeffrey'@'localhost'",
+                    "value": "jeffrey@localhost",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 4,
+                    "position": 11
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "\n  ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 32
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "IDENTIFIED",
+                    "value": "IDENTIFIED",
+                    "keyword": "IDENTIFIED",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 35
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 45
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "BY",
+                    "value": "BY",
+                    "keyword": "BY",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 46
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 48
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'new_password'",
+                    "value": "new_password",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 49
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 63
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "PASSWORD",
+                    "value": "PASSWORD",
+                    "keyword": "PASSWORD",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 64
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 72
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "EXPIRE",
+                    "value": "EXPIRE",
+                    "keyword": "EXPIRE",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 73
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ";",
+                    "value": ";",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 79
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 17,
+            "idx": 17
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\AlterStatement",
+                "table": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                    "database": null,
+                    "table": "jeffrey@localhost",
+                    "column": null,
+                    "expr": "'jeffrey'@'localhost'",
+                    "alias": null,
+                    "function": null,
+                    "subquery": null
+                },
+                "altered": [
+                    {
+                        "@type": "PhpMyAdmin\\SqlParser\\Components\\AlterOperation",
+                        "options": {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                            "options": {
+                                "3": "IDENTIFIED",
+                                "4": {
+                                    "name": "BY",
+                                    "equals": false,
+                                    "expr": {
+                                        "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                                        "database": null,
+                                        "table": null,
+                                        "column": "new_password",
+                                        "expr": "'new_password' PASSWORD",
+                                        "alias": null,
+                                        "function": null,
+                                        "subquery": null
+                                    },
+                                    "value": "'new_password' PASSWORD"
+                                }
+                            }
+                        },
+                        "field": {
+                            "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                            "database": null,
+                            "table": null,
+                            "column": "EXPIRE",
+                            "expr": "EXPIRE",
+                            "alias": null,
+                            "function": null,
+                            "subquery": null
+                        },
+                        "partitions": null,
+                        "unknown": []
+                    }
+                ],
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": {
+                        "3": "USER"
+                    }
+                },
+                "first": 0,
+                "last": 15
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": []
+    }
+}

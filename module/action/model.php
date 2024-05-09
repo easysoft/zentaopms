@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\wg;
+
 /**
  * The model file of action module of ZenTaoPMS.
  *
@@ -192,7 +195,9 @@ class actionModel extends model
             if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
             if($actionName == 'changedbycharter' && $action->objectType == 'story') $this->actionTao->processActionExtra(TABLE_CHARTER, $action, 'name', 'charter', 'view');
             if(($actionName == 'finished' && $objectType == 'todo') || ($actionName == 'closed' && in_array($action->objectType, array('story', 'demand'))) || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processAppendLinkByExtra($action);
+            if($actionName == 'distributed' && $objectType == 'story') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view');
 
+            if(in_array($actionName, array('retracted', 'restored')) && $action->objectType != 'demand') $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
             if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask', 'converttotask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
             if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
@@ -201,6 +206,7 @@ class actionModel extends model
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory', 'linkur', 'unlinkur', 'linkrelatedstory', 'unlinkrelatedstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
             if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
+            if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
@@ -279,10 +285,18 @@ class actionModel extends model
      */
     public function getTrashes(string $objectType, string $type, string $orderBy, object $pager = null): array
     {
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
+
         $extra   = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->beginIF($objectType != 'all')->andWhere('objectType')->eq($objectType)->fi()
+            ->beginIF($objectType == 'execution')->andWhere('objectID')->notIn($noMultipleExecutions)->fi()
+            ->beginIF($objectType == 'all')
+            ->andWhere('objectType', true)->ne('execution')
+            ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->markRight(2)
+            ->fi()
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
@@ -318,7 +332,7 @@ class actionModel extends model
 
         /* 将对象名称字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
-        foreach($trashes as $trash)
+        foreach($trashes as $key => $trash)
         {
             if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
             if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
@@ -400,8 +414,16 @@ class actionModel extends model
      */
     public function getTrashObjectTypes(string $type): array
     {
-        $extra = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
-        return $this->dao->select('objectType')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('extra')->eq($extra)->andWhere('vision')->eq($this->config->vision)->fetchAll('objectType');
+        $extra                = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
+        return $this->dao->select('objectType')->from(TABLE_ACTION)
+            ->where('action')->eq('deleted')
+            ->andWhere('extra')->eq($extra)
+            ->andWhere('objectType', true)->ne('execution')
+            ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->markRight(2)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll('objectType');
     }
 
     /**
@@ -575,7 +597,7 @@ class actionModel extends model
             }
             else
             {
-                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
+                if(in_array($actionType, array('restoredsnapshot', 'createdsnapshot')) && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
                 $desc = str_replace('$' . $key, (string)$value, $desc);
             }
@@ -1091,6 +1113,7 @@ class actionModel extends model
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
+            if($action->objectType == 'module') return $action;
             if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
@@ -1122,11 +1145,12 @@ class actionModel extends model
         if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
 
+        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
+
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
 
-        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
         return $action;
     }
 
@@ -1552,14 +1576,18 @@ class actionModel extends model
      * 处理操作记录用于API。
      * Process action for API.
      *
-     * @param  array  $actions
-     * @param  array  $users
-     * @param  array  $objectLang
+     * @param  array|object $actions
+     * @param  array|object $users
+     * @param  array|object $objectLang
      * @access public
      * @return array
      */
-    public function processActionForAPI(array $actions, array $users = array(), array $objectLang = array()): array
+    public function processActionForAPI(array|object $actions, array|object $users = array(), array|object $objectLang = array()): array
     {
+        if(is_object($actions))    $actions    = (array)$actions;
+        if(is_object($users))      $users      = (array)$users;
+        if(is_object($objectLang)) $objectLang = (array)$objectLang;
+
         foreach($actions as $action)
         {
             $action->actor = zget($users, $action->actor);
@@ -1861,11 +1889,11 @@ class actionModel extends model
      * 获取对象类型为team的link元素。
      * Get link element of objecttype team.
      *
-     * @param  object  $action
-     * @access private
+     * @param  object    $action
+     * @access protected
      * @return array
      */
-    private function getObjectTypeTeamParams(object $action): array
+    protected function getObjectTypeTeamParams(object $action): array
     {
         if($action->project) return array('project', 'team', 'projectID=' . $action->project);
         if($action->execution) return array('execution', 'team', 'executionID=' . $action->execution);
@@ -1879,10 +1907,10 @@ class actionModel extends model
      *
      * @param  object      $action
      * @param  object      $object
-     * @access private
+     * @access protected
      * @return string|bool
      */
-    private function checkActionCanUndelete(object $action, object $object): string|bool
+    protected function checkActionCanUndelete(object $action, object $object): string|bool
     {
         if($action->objectType == 'execution')
         {
@@ -1938,12 +1966,12 @@ class actionModel extends model
      * 恢复被删除对象的关联数据。
      * Recover related data of deleted object.
      *
-     * @param  object  $action
-     * @param  object  $object
-     * @access private
+     * @param  object    $action
+     * @param  object    $object
+     * @access protected
      * @return void
      */
-    private function recoverRelatedData(object $action, object $object): void
+    protected function recoverRelatedData(object $action, object $object): void
     {
         if($action->objectType == 'release' && $object->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($object->shadow)->exec();
 
@@ -1959,6 +1987,10 @@ class actionModel extends model
                 $productID = $this->loadModel('product')->getProductIDByProject($object->id);;
                 $this->dao->update(TABLE_PRODUCT)->set('name')->eq($object->name)->set('deleted')->eq(0)->where('id')->eq($productID)->exec();
             }
+
+            /* 恢复隐藏执行。 */
+            /* Resotre hidden execution. */
+            if($action->objectType == 'project' && !$object->multiple) $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('project')->eq($object->id)->andWhere('multiple')->eq('0')->exec();
         }
         if($action->objectType == 'doc' && $object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
 
@@ -1993,10 +2025,10 @@ class actionModel extends model
      * @param  string|int $projectID
      * @param  string|int $executionID
      * @param  array      $executions
-     * @access private
+     * @access protected
      * @return string
      */
-    private function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
+    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
     {
         /* 验证用户的产品/项目/执行权限。 */
         /* Verify user's product/project/execution permissions。*/
@@ -2052,11 +2084,11 @@ class actionModel extends model
      * 执行和项目相关操作记录的extra信息。
      * Build execution and project action extra info.
      *
-     * @param  object  $action
-     * @access private
+     * @param  object    $action
+     * @access protected
      * @return void
      */
-    private function processExecutionAndProjectActionExtra(object $action): void
+    protected function processExecutionAndProjectActionExtra(object $action): void
     {
         $this->app->loadLang('execution');
         $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');

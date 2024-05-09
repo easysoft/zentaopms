@@ -1,4 +1,4 @@
-.panel-form .headingActions {position: absolute; top: 0px; right: 40px;}
+.panel-form .headingActions {position: absolute; top: 0px; right: 40px; padding: 1rem 1.25rem !important;}
 .copy-card:hover {border-color: rgba(var(--color-secondary-499-rgb),var(--tw-bg-opacity)); background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); cursor: pointer;}
 #copyKanbanModal .modal-body {margin-left: -8px; margin-right: -8px;}
 #fixedColBox .items-center, #autoColBox .items-center {align-items: center !important;}

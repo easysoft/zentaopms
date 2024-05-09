@@ -252,7 +252,6 @@ let composing = false;
  */
 window.aiBrowseMiniProgram.handleInputEnter = function(event)
 {
-    console.log(composing, 3);
     if(event.code === 'Enter' && !composing)
     {
         event.preventDefault();
@@ -272,13 +271,11 @@ window.aiBrowseMiniProgram.clearInputAndChat = function()
 window.aiBrowseMiniProgram.handleInputCompositionStart = function()
 {
     composing = true;
-    console.log(composing, 1);
 };
 
 window.aiBrowseMiniProgram.handleInputCompositionEnd = function()
 {
     composing = false;
-    console.log(composing, 2);
 };
 
 /**
@@ -422,8 +419,19 @@ function createServerNotification(content)
     return $(`<div class="server-notification">${content}</div>`);
 }
 
+/**
+ * Append current path.
+ */
+function appendCurrentPath()
+{
+    $('#heading .toolbar')
+        .append(`<i class="icon icon-angle-right"></i>`)
+        .append(`<span class="ml-2">${pathname}</span>`);
+}
+
 $(function()
 {
+    appendCurrentPath();
     $('#to-language-model').prop('href', $.createLink('ai', 'models'));
     $('#reload-current').on('click', () =>
     {
@@ -466,5 +474,13 @@ $(function()
             .on('compositionend', window.aiBrowseMiniProgram.handleInputCompositionEnd);
 
         $inputBox.attr('data-bind', 'true');
+    }
+
+    if(!hasModels)
+    {
+        $('.chat').addClass('hidden');
+        $('.chat-nomodel').removeClass('hidden');
+        $('form .footer .btn.primary').attr('disabled', 'disabled');
+        $('.generate-btn').attr('disabled', 'disabled');
     }
 });

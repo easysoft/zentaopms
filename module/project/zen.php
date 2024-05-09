@@ -13,11 +13,12 @@ class projectZen extends project
     /**
      * Append extras data to post data.
      *
-     * @param  object $postData
+     * @param  object       $postData
+     * @param  int          $copyProjectID
      * @access protected
      * @return object|false
      */
-    protected function prepareCreateExtras(object $postData): object|false
+    protected function prepareCreateExtras(object $postData, int $copyProjectID = 0): object|false
     {
         $project = $postData->setDefault('status', 'wait')
             ->setIF($this->post->longTime || $this->post->delta == '999', 'end', LONG_TIME)
@@ -40,6 +41,13 @@ class projectZen extends project
             ->join('storyType', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->get();
+
+        $copyProject = $this->project->getByID($copyProjectID);
+        if($copyProject)
+        {
+            $project->multiple   = $copyProject->multiple;
+            $project->hasProduct = $copyProject->hasProduct;
+        }
 
         if(!isset($this->config->setCode) || $this->config->setCode == 0) unset($project->code);
 
@@ -99,7 +107,7 @@ class projectZen extends project
         if($hasProduct)
         {
             /* Check if products not empty. */
-            if(!$this->post->products || empty($this->post->products[0]))
+            if(!$this->post->products || (empty($this->post->products[0]) && !array_filter($this->post->products)))
             {
                 dao::$errors['products[0]'] = $this->app->rawMethod == 'create' ? $this->lang->project->error->productNotEmpty : $this->lang->project->errorNoProducts;
                 return false;
@@ -264,7 +272,7 @@ class projectZen extends project
         if($this->app->tab == 'product' && !empty($output['productID'])) $this->product->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
-        if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
+        if($copyProjectID) $copyProject = isset($this->view->copyProject) ? $this->view->copyProject : $this->getCopyProject((int)$copyProjectID);
         $shadow = $copyProjectID && empty($copyProject->hasProduct) ? 1 : 0;
 
         if($model == 'kanban')
@@ -305,11 +313,17 @@ class projectZen extends project
                 foreach($plans as $planID => $plan)
                 {
                     if(empty($plan)) continue;
-                    $planDate = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? ' ' . $this->lang->productplan->future : " [{$plan->begin} ~ {$plan->end}]";
+                    $planBegin = $plan->begin == $this->config->productplan->future ? $this->lang->productplan->future : $plan->begin;
+                    $planEnd   = $plan->end == $this->config->productplan->future ? $this->lang->productplan->future : $plan->end;
+                    $planDate  = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? ' ' . $this->lang->productplan->future : " [{$planBegin} ~ {$planEnd}]";
                     $productPlans[$productID][$branchID][$planID] = $plan->title . $planDate;
                 }
             }
         }
+
+        /* Get copy projects. */
+        $copyProjects = $this->project->getPairsByModel($model, '', 0, false);
+        $copyProjectPairs = array_combine(array_keys($copyProjects), array_column($copyProjects, 'name'));
 
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
@@ -321,8 +335,8 @@ class projectZen extends project
         $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
         $this->view->allProducts         = $allProducts;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
-        $this->view->copyProjects        = $this->project->getPairsByModel($model);
-        $this->view->copyPinyinList      = common::convert2Pinyin($this->view->copyProjects);
+        $this->view->copyProjects        = $copyProjects;
+        $this->view->copyPinyinList      = common::convert2Pinyin($copyProjectPairs);
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->parentProgram       = $parentProgram;
         $this->view->programList         = $this->program->getParentPairs();
@@ -331,10 +345,11 @@ class projectZen extends project
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
         $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $this->view->productPlans        = $productPlans;
-        $this->view->linkedProducts      = $linkedProducts;
-        $this->view->linkedBranches      = $linkedBranches;
-        $this->view->isStage             = in_array($model, array('waterfall', 'waterfallplus', 'ipd'));
         $this->view->groups              = $this->loadModel('group')->getPairs();
+
+        if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
+        if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
+
         $this->display();
     }
 
@@ -367,6 +382,11 @@ class projectZen extends project
             foreach($projectBranches[$productID] as $branchID => $branch) $linkedBranches[$productID][$branchID] = $branchID;
             if(!empty($plans[$productID]))
             {
+                if(isset($plans[$productID]['']) && !isset($plans[$productID][0]))
+                {
+                    $plans[$productID][0] = $plans[$productID][''];
+                    unset($plans[$productID]['']);
+                }
                 foreach($plans[$productID] as $branchID => $branchPlans)
                 {
                     if(isset($branchPlans['']))
@@ -379,7 +399,6 @@ class projectZen extends project
                         {
                             $branchPlans[0] = $branchPlans[''];
                         }
-                        unset($plans[$productID]['']);
                         unset($branchPlans['']);
                     }
                 }
@@ -786,7 +805,7 @@ class projectZen extends project
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
 
-        $this->view->title            = $project->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->title            = $project->name . $this->lang->hyphen . $this->lang->bug->common;
         $this->view->bugs             = $bugs;
         $this->view->build            = $this->loadModel('build')->getById($build);
         $this->view->buildID          = $this->view->build ? $this->view->build->id : 0;
@@ -1032,7 +1051,8 @@ class projectZen extends project
         if(!$project->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($project->id);
-            $this->project->deleteByTableName('zt_product', $productID);
+            $product   = $this->product->getById($productID);
+            if($product->shadow) $this->project->deleteByTableName('zt_product', $productID);
         }
     }
 
@@ -1346,7 +1366,6 @@ class projectZen extends project
 
                 if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
             }
-            $build->actions = $this->build->buildActionList($build, 0, 'projectbuild');
 
             if($project->multiple && empty($build->execution))
             {
@@ -1551,8 +1570,9 @@ class projectZen extends project
             $project->PM     = zget($users, $project->PM);
             $project->status = $this->processStatus('project', $project);
             $project->model  = zget($this->lang->project->modelList, $project->model);
-            $project->budget = $project->budget != 0 ? $projectBudget . zget($this->lang->project->unitList, $project->budgetUnit) : $this->lang->project->future;
+            $project->budget = !empty($projectBudget) ? $projectBudget . zget($this->lang->project->unitList, $project->budgetUnit) : $this->lang->project->future;
             $project->parent = $project->parentName;
+            $project->end    = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);
@@ -1661,7 +1681,7 @@ class projectZen extends project
             $columnCards = array();
             foreach($region as $laneKey => $laneData)
             {
-                $lanes[] = array('name' => $laneKey, 'title' => zget($programPairs, $laneKey));
+                $lanes[] = array('name' => "lane$laneKey", 'title' => zget($programPairs, $laneKey));
                 $columns = array();
                 foreach(array('wait', 'doing', 'closed') as $columnKey)
                 {
@@ -1676,7 +1696,7 @@ class projectZen extends project
                     foreach($cardList as $card)
                     {
                         $columnKey = $columnKey == 'doing' ? 'doingProjects' : $columnKey;
-                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'type' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
+                        $items["lane$laneKey"][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'type' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
 
                         if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
                         $columnCards[$columnKey] ++;
@@ -1687,7 +1707,7 @@ class projectZen extends project
                             {
                                 $columnKey = 'doingExecutions';
                                 $execution = $latestExecutions[$card->id];
-                                $items[$laneKey][$columnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'type' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+                                $items["lane$laneKey"][$columnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'type' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
 
                                 if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
                                 $columnCards[$columnKey] ++;

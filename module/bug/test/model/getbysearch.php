@@ -45,7 +45,7 @@ cid=1
 
 function initData()
 {
-    $bug = zdTable('bug');
+    $bug = zenData('bug');
     $bug->id->range('1-10');
     $bug->product->range('1,2');
     $bug->branch->range('0,1');

@@ -1,20 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-$story = zdTable('story');
-$story->version->range('1-4');
-$story->gen(20);
-
-su('admin');
 
 /**
 
 title=测试 storyModel->getDataOfStoriesPerStage();
-cid=1
-pid=1
+cid=0
+
+- 按照需求阶段分组，获取分组后的需求数量 @10
+- 按照需求阶段分组，获取各个需求阶段的需求数量，查看wait下的数据
+ - 第wait条的name属性 @未开始
+ - 第wait条的value属性 @1
+- 按照需求阶段分组，获取各个需求阶段的需求数量，查看planned下的数据
+ - 第planned条的name属性 @已计划
+ - 第planned条的value属性 @1
+- 按照需求阶段分组，获取各个需求阶段的需求数量，查看released下的数据
+ - 第released条的name属性 @已发布
+ - 第released条的value属性 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+$story = zenData('story');
+$story->version->range('1-4');
+$story->gen(20);
+
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

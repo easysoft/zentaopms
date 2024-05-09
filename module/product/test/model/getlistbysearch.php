@@ -13,9 +13,9 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(5);
-zdTable('product')->config('product')->gen(30);
-$userquery = zdTable('userquery');
+zenData('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(30);
+$userquery = zenData('userquery');
 $userquery->id->range(1);
 $userquery->sql->range("`(( 1   AND `name`  LIKE '%产品%' ) AND ( 1  ))`");
 $userquery->module->range('product');

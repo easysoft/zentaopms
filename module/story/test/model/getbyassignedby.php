@@ -4,8 +4,7 @@
 /**
 
 title=测试 storyModel->getByAssignedby();
-timeout=0
-cid=1
+cid=0
 
 - 查看产品 1 由我指派的需求 @0
 - 查看产品 2 由我指派的需求 @0
@@ -15,7 +14,7 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
 $productIDList = array(1, 2, 3, 4 ,5);

@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: SQL parser 0\n"
+"Project-Id-Version: SQL parser 5\n"
 "Report-Msgid-Bugs-To: translators@phpmyadmin.net\n"
-"POT-Creation-Date: 2017-08-21 12:54+0200\n"
+"POT-Creation-Date: 2023-02-26 22:46+0100\n"
 "PO-Revision-Date: 2015-10-15 11:03+0200\n"
 "Last-Translator: Michal Čihař <michal@cihar.com>\n"
 "Language-Team: Kyrgyz <https://hosted.weblate.org/projects/phpmyadmin/master/"
@@ -19,16 +19,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2.5-dev\n"
 
-#: src/Component.php:43 src/Component.php:63
+#: src/Component.php:39 src/Component.php:59
 msgid "Not implemented yet."
 msgstr ""
 
-#: src/Components/AlterOperation.php:241 src/Statement.php:334
+#: src/Components/AlterOperation.php:415 src/Statement.php:359
 msgid ""
 "A new statement was found, but no delimiter between it and the previous one."
 msgstr ""
 
-#: src/Components/AlterOperation.php:253
+#: src/Components/AlterOperation.php:427
+msgid "Missing comma before start of a new alter operation."
+msgstr ""
+
+#: src/Components/AlterOperation.php:472
 msgid "Unrecognized alter operation."
 msgstr ""
 
@@ -37,195 +41,244 @@ msgstr ""
 msgid "%1$d values were expected, but found %2$d."
 msgstr ""
 
-#: src/Components/Array2d.php:111
+#: src/Components/Array2d.php:108
 msgid "An opening bracket followed by a set of values was expected."
 msgstr ""
 
-#: src/Components/ArrayObj.php:114 src/Components/CreateDefinition.php:201
+#: src/Components/ArrayObj.php:106 src/Components/CreateDefinition.php:233
 msgid "An opening bracket was expected."
 msgstr ""
 
-#: src/Components/CaseExpression.php:135 src/Components/CaseExpression.php:164
-#: src/Components/CaseExpression.php:176 src/Components/CaseExpression.php:190
-#: src/Statements/DeleteStatement.php:227
-#: src/Statements/DeleteStatement.php:244
-#: src/Statements/DeleteStatement.php:292
-#: src/Statements/DeleteStatement.php:303
-#: src/Statements/DeleteStatement.php:333
-#: src/Statements/DeleteStatement.php:344
+#: src/Components/CaseExpression.php:133 src/Components/CaseExpression.php:161
+#: src/Components/CaseExpression.php:172 src/Components/CaseExpression.php:184
+#: src/Components/IndexHint.php:134 src/Components/IndexHint.php:164
+#: src/Components/LockExpression.php:173 src/Components/LockExpression.php:180
+#: src/Components/LockExpression.php:188 src/Statements/DeleteStatement.php:249
+#: src/Statements/DeleteStatement.php:268
+#: src/Statements/DeleteStatement.php:308
+#: src/Statements/DeleteStatement.php:320
+#: src/Statements/DeleteStatement.php:346
+#: src/Statements/DeleteStatement.php:353
 #: src/Statements/InsertStatement.php:189
-#: src/Statements/InsertStatement.php:217 src/Statements/LoadStatement.php:258
-#: src/Statements/ReplaceStatement.php:155
-#: src/Statements/ReplaceStatement.php:182
+#: src/Statements/InsertStatement.php:220 src/Statements/LoadStatement.php:265
+#: src/Statements/LockStatement.php:85 src/Statements/ReplaceStatement.php:149
+#: src/Statements/ReplaceStatement.php:178
 msgid "Unexpected keyword."
 msgstr ""
 
-#: src/Components/CaseExpression.php:199
+#: src/Components/CaseExpression.php:192
 msgid "Unexpected end of CASE expression"
 msgstr ""
 
-#: src/Components/CreateDefinition.php:223
+#: src/Components/CaseExpression.php:212
+msgid "Potential duplicate alias of CASE expression."
+msgstr ""
+
+#: src/Components/CaseExpression.php:225
+msgid "An alias expected after AS but got "
+msgstr ""
+
+#: src/Components/CaseExpression.php:238 src/Components/Expression.php:352
+#: src/Components/Expression.php:372 src/Components/Expression.php:424
+msgid "An alias was previously found."
+msgstr ""
+
+#: src/Components/CaseExpression.php:252
+#, fuzzy
+#| msgid "Database %1$s has been created."
+msgid "An alias was expected after AS."
+msgstr "%1$s аттуу берилиштер базасы түзүлдү."
+
+#: src/Components/CreateDefinition.php:255
 msgid ""
 "A symbol name was expected! A reserved keyword can not be used as a column "
 "name without backquotes."
 msgstr ""
 
-#: src/Components/CreateDefinition.php:237
+#: src/Components/CreateDefinition.php:268
 #, fuzzy
 #| msgid "Database %1$s has been created."
 msgid "A symbol name was expected!"
 msgstr "%1$s аттуу берилиштер базасы түзүлдү."
 
-#: src/Components/CreateDefinition.php:270
+#: src/Components/CreateDefinition.php:300
 #, fuzzy
 #| msgid "Database %1$s has been created."
 msgid "A comma or a closing bracket was expected."
 msgstr "%1$s аттуу берилиштер базасы түзүлдү."
 
-#: src/Components/CreateDefinition.php:286
+#: src/Components/CreateDefinition.php:313 src/Statements/WithStatement.php:328
 msgid "A closing bracket was expected."
 msgstr ""
 
-#: src/Components/DataType.php:123
+#: src/Components/DataType.php:130
 msgid "Unrecognized data type."
 msgstr ""
 
-#: src/Components/Expression.php:244 src/Components/Expression.php:394
+#: src/Components/ExpressionArray.php:106 src/Statements/WithStatement.php:197
+msgid "An expression was expected."
+msgstr ""
+
+#: src/Components/Expression.php:257 src/Components/Expression.php:435
 #, fuzzy
 #| msgid "Database %1$s has been created."
 msgid "An alias was expected."
 msgstr "%1$s аттуу берилиштер базасы түзүлдү."
 
-#: src/Components/Expression.php:332 src/Components/Expression.php:351
-#: src/Components/Expression.php:383
-msgid "An alias was previously found."
-msgstr ""
-
-#: src/Components/Expression.php:364
+#: src/Components/Expression.php:403
 msgid "Unexpected dot."
 msgstr ""
 
-#: src/Components/ExpressionArray.php:102
-msgid "An expression was expected."
+#: src/Components/IndexHint.php:140 src/Components/IndexHint.php:170
+#: src/Components/Key.php:259 src/Components/LockExpression.php:161
+#: src/Components/SetOperation.php:138 src/Statement.php:258
+#: src/Statements/DeleteStatement.php:263
+#: src/Statements/DeleteStatement.php:315
+#: src/Statements/ExplainStatement.php:161
+#: src/Statements/InsertStatement.php:203
+#: src/Statements/InsertStatement.php:240 src/Statements/LoadStatement.php:270
+#: src/Statements/LoadStatement.php:291 src/Statements/LoadStatement.php:310
+#: src/Statements/LockStatement.php:93 src/Statements/LockStatement.php:100
+#: src/Statements/PurgeStatement.php:106 src/Statements/PurgeStatement.php:119
+#: src/Statements/PurgeStatement.php:140
+#: src/Statements/ReplaceStatement.php:163 src/Statements/WithStatement.php:132
+msgid "Unexpected token."
 msgstr ""
 
-#: src/Components/Limit.php:86 src/Components/Limit.php:108
+#: src/Components/Limit.php:78 src/Components/Limit.php:105
 msgid "An offset was expected."
 msgstr ""
 
-#: src/Components/OptionsArray.php:143
+#: src/Components/LockExpression.php:91 src/Components/LockExpression.php:201
+msgid "Unexpected end of LOCK expression."
+msgstr ""
+
+#: src/Components/OptionsArray.php:146
 #, php-format
 msgid "This option conflicts with \"%1$s\"."
 msgstr ""
 
-#: src/Components/RenameOperation.php:109
+#: src/Components/RenameOperation.php:103
 msgid "The old name of the table was expected."
 msgstr ""
 
-#: src/Components/RenameOperation.php:119
+#: src/Components/RenameOperation.php:109
 msgid "Keyword \"TO\" was expected."
 msgstr ""
 
-#: src/Components/RenameOperation.php:135
+#: src/Components/RenameOperation.php:124
 msgid "The new name of the table was expected."
 msgstr ""
 
-#: src/Components/RenameOperation.php:153
+#: src/Components/RenameOperation.php:140
 #, fuzzy
 #| msgid "Database %1$s has been created."
 msgid "A rename operation was expected."
 msgstr "%1$s аттуу берилиштер базасы түзүлдү."
 
-#: src/Components/SetOperation.php:117
+#: src/Components/SetOperation.php:121
 msgid "Missing expression."
 msgstr ""
 
-#: src/Lexer.php:237
+#: src/Lexer.php:274
 msgid "Unexpected character."
 msgstr ""
 
-#: src/Lexer.php:278
+#: src/Lexer.php:313
 msgid "Expected whitespace(s) before delimiter."
 msgstr ""
 
-#: src/Lexer.php:296 src/Lexer.php:314
+#: src/Lexer.php:329 src/Lexer.php:348
 msgid "Expected delimiter."
 msgstr ""
 
-#: src/Lexer.php:843
+#: src/Lexer.php:1004
 #, php-format
 msgid "Ending quote %1$s was expected."
 msgstr ""
 
-#: src/Lexer.php:884
+#: src/Lexer.php:1056
 msgid "Variable name was expected."
 msgstr ""
 
-#: src/Parser.php:423
+#: src/Parser.php:456
 msgid "Unexpected beginning of statement."
 msgstr ""
 
-#: src/Parser.php:442
+#: src/Parser.php:499
 msgid "Unrecognized statement type."
 msgstr ""
 
-#: src/Parser.php:527
+#: src/Parser.php:587
 msgid "No transaction was previously started."
 msgstr ""
 
-#: src/Statement.php:242 src/Statements/DeleteStatement.php:254
-#: src/Statements/DeleteStatement.php:306
-#: src/Statements/InsertStatement.php:226
-#: src/Statements/InsertStatement.php:246 src/Statements/LoadStatement.php:261
-#: src/Statements/LoadStatement.php:291 src/Statements/LoadStatement.php:310
-#: src/Statements/ReplaceStatement.php:190
-msgid "Unexpected token."
-msgstr ""
-
-#: src/Statement.php:306
+#: src/Statement.php:327
 msgid "This type of clause was previously parsed."
 msgstr ""
 
-#: src/Statement.php:366
+#: src/Statement.php:398
 msgid "Unrecognized keyword."
 msgstr ""
 
-#: src/Statement.php:377
+#: src/Statement.php:409
 msgid "Keyword at end of statement."
 msgstr ""
 
-#: src/Statement.php:503
+#: src/Statement.php:555
 msgid "Unexpected ordering of clauses."
 msgstr ""
 
-#: src/Statements/CreateStatement.php:375
+#: src/Statements/CreateStatement.php:549
 msgid "The name of the entity was expected."
 msgstr ""
 
-#: src/Statements/CreateStatement.php:430
+#: src/Statements/CreateStatement.php:598
 #, fuzzy
 #| msgid "Database %1$s has been created."
 msgid "A table name was expected."
 msgstr "%1$s аттуу берилиштер базасы түзүлдү."
 
-#: src/Statements/CreateStatement.php:438
+#: src/Statements/CreateStatement.php:603
 #, fuzzy
 #| msgid "Database %1$s has been created."
 msgid "At least one column definition was expected."
 msgstr "%1$s аттуу берилиштер базасы түзүлдү."
 
-#: src/Statements/CreateStatement.php:550
+#: src/Statements/CreateStatement.php:707
 msgid "A \"RETURNS\" keyword was expected."
 msgstr ""
 
-#: src/Statements/DeleteStatement.php:314
+#: src/Statements/DeleteStatement.php:329
 msgid "This type of clause is not valid in Multi-table queries."
 msgstr ""
 
-#: tests/Lexer/LexerTest.php:19 tests/Parser/ParserTest.php:58
-msgid "error #1"
+#: src/Statements/LockStatement.php:120
+msgid "Unexpected end of LOCK statement."
 msgstr ""
 
-#: tests/Lexer/LexerTest.php:46 tests/Parser/ParserTest.php:80
-msgid "strict error"
+#: src/Statements/PurgeStatement.php:138
+msgid "Unexpected keyword"
+msgstr ""
+
+#: src/Statements/WithStatement.php:118
+#, fuzzy
+#| msgid "Database %1$s has been created."
+msgid "The name of the CTE was expected."
+msgstr "%1$s аттуу берилиштер базасы түзүлдү."
+
+#: src/Statements/WithStatement.php:137
+#, fuzzy
+#| msgid "Database %1$s has been created."
+msgid "AS keyword was expected."
+msgstr "%1$s аттуу берилиштер базасы түзүлдү."
+
+#: src/Statements/WithStatement.php:149
+#, fuzzy
+#| msgid "Database %1$s has been created."
+msgid "Subquery of the CTE was expected."
+msgstr "%1$s аттуу берилиштер базасы түзүлдү."
+
+#: src/Statements/WithStatement.php:266
+msgid "Unexpected end of the WITH CTE."
 msgstr ""

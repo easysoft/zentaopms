@@ -1,21 +1,25 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zdTable("user")->gen(5);
-$story = zdTable('story');
-$story->version->range('1-4');
-$story->gen(20);
-
-su('admin');
 
 /**
 
 title=测试 storyModel->getDataOfStoriesPerOpenedBy();
-cid=1
-pid=1
+cid=0
+
+- 按照创建人分组，获取分组后的需求数量 @4
+- 按照创建人分组，获取各个创建人的需求数量，查看用户test3下的数据
+ - 第user2条的name属性 @用户2
+ - 第user2条的value属性 @5
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zenData("user")->gen(5);
+$story = zenData('story');
+$story->version->range('1-4');
+$story->gen(20);
+
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

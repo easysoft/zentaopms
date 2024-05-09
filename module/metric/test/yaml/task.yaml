@@ -19,6 +19,10 @@ fields:
   range: "20100101 000000-20210101 230000:10D"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
+- field: deadline
+  range: "20100201 000000-20210201 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
 - field: estimate
   range: 1{10},2{9},4{8},5{7},6{5},8{4},10{1},
 - field: consumed

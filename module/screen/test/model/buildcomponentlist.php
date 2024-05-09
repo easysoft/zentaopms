@@ -1,14 +1,15 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 /**
-title=测试 screenModel->buildComponentList();
-cid=1
-pid=1
 
-测试带有空元素的情况下，生成的组件列表数量是否正确。 >> 1
+title=测试 screenModel->buildComponentList();
+timeout=0
+cid=1
+
+- 测试带有空元素的情况下，生成的组件列表数量是否正确。 @1
 
 */
 

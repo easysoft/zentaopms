@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$service     = strtolower(key($lang->space->appType));
 $showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();
 foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
@@ -18,6 +19,8 @@ $colWidth = isInModal() ? 'full' : '2/3';
 
 jsVar('gitlabUrlTips', $lang->gitlab->placeholder->url);
 jsVar('gitlabTokenTips', $lang->gitlab->placeholder->token);
+jsVar('gitfoxUrlTips', $lang->gitfox->placeholder->url);
+jsVar('gitfoxTokenTips', $lang->gitfox->placeholder->token);
 jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
 jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
 jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
@@ -164,19 +167,31 @@ if($config->inQuickon)
     );
 }
 
+$typeList = array();
+foreach($lang->space->appType as $type => $typeName)
+{
+    $item = array('text' => $typeName, 'value' => $type);
+    if($type == 'gitfox')
+    {
+        $item['content'] = array('html' => "<div class='flex clip'>{$typeName}</div><label class='label bg-primary-50 text-primary ml-2 flex-none'>{$this->lang->recommend}</label>", 'class' => 'w-full flex nowrap');
+    }
+
+    $typeList[] = $item;
+}
+
 formPanel
 (
     $config->inQuickon ? setClass('externalPanel hidden') : setClass('externalPanel'),
     set::formID('createAppForm'),
     set::title($lang->space->install),
-    set::url($this->createLink('gitlab', 'create')),
+    set::url($this->createLink($service, 'create')),
     set::actionsClass('w-2/3'),
     formGroup
     (
         set::width($colWidth),
         set::label($lang->app->common),
         set::name('appType'),
-        set::items($lang->space->appType),
+        set::items($typeList),
         set::required(true),
         on::change('onChangeAppType')
     ),
@@ -193,17 +208,17 @@ formPanel
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitlab->name),
+        set::label($lang->{$service}->name),
         set::name('name'),
         set::required(true)
     ),
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitlab->url),
+        set::label($lang->{$service}->url),
         set::name('url'),
         set::required(true),
-        set::placeholder($lang->gitlab->placeholder->url)
+        set::placeholder($lang->{$service}->placeholder->url)
     ),
     formRow
     (
@@ -222,10 +237,14 @@ formPanel
         formGroup
         (
             set::width($colWidth),
-            set::label($lang->gitlab->token),
+            set::label($lang->{$service}->token),
             set::name('token'),
-            set::placeholder($lang->gitlab->placeholder->token),
-            set::required(true)
+            set::placeholder($lang->{$service}->placeholder->token),
+            set::required(true),
+            set::control(array(
+                'type' => 'textarea',
+                'rows' => 4
+            ))
         )
     ),
     formRow

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * The tao file of metric module of ZenTaoPMS.
  *
@@ -98,6 +97,22 @@ class metricTao extends metricModel
     }
 
     /**
+     * 根据编号列表获取度项。
+     * Fetch metric list by id list.
+     *
+     * @param  array     $metricIDList
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricsByCodeList($codeList)
+    {
+        return $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq(0)
+            ->andWhere('code')->in($codeList)
+            ->fetchAll();
+    }
+
+    /**
      * 根据度量项编码获取度量项数据。
      * Fetch metric by code.
      *
@@ -105,11 +120,10 @@ class metricTao extends metricModel
      * @access protected
      * @return object|false
      */
-    protected function fetchMetricByCode(string $code): object|false
+    protected function fetchMetricByCode($code)
     {
         return $this->dao->select('*')->from(TABLE_METRIC)
-            ->where('deleted')->eq('0')
-            ->andWhere('code')->eq($code)
+            ->where('code')->eq($code)
             ->fetch();
     }
 
@@ -122,7 +136,7 @@ class metricTao extends metricModel
      * @access protected
      * @return array
      */
-    protected function fetchMetricsWithFilter(array $filters, string $stage = 'all'): array
+    protected function fetchMetricsWithFilter($filters, $stage = 'all')
     {
         $scopes   = null;
         $objects  = null;
@@ -153,7 +167,7 @@ class metricTao extends metricModel
      * @access protected
      * @return array
      */
-    protected function fetchMetricsByCollect(string $stage): array
+    protected function fetchMetricsByCollect($stage)
     {
         return $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
@@ -191,52 +205,95 @@ class metricTao extends metricModel
      * @access protected
      * @return array|false
      */
-    protected function getObjectsWithPager($code, $scope, $pager = null, $extra = array())
+    protected function getObjectsWithPager($metric, $query, $pager = null, $extra = array())
     {
+        $code  = $metric->code;
+        $scope = $metric->scope;
+        $dateType = $metric->dateType;
+
         if($scope == 'system') return false;
 
         $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->beginIF(!empty($extra))->andWhere($scope)->in($extra)->fi()
-            ->fetchPairs();
-        $objects = array();
+            ->beginIF(!empty($extra))->andWhere($scope)->in($extra)->fi();
+
+        $scopeObjects = $this->processDAOWithDate($scopeObjects, $query, $dateType)->fetchPairs();
+
+        $objects = null;
         if($scope == 'product')
         {
             $objects = $this->dao->select('id')->from(TABLE_PRODUCT)
                 ->where('deleted')->eq(0)
                 ->andWhere('shadow')->eq(0)
-                ->andWhere('id')->in($scopeObjects)
-                ->beginIF(!empty($pager))->page($pager)->fi()
-                ->fetchPairs();
+                ->andWhere('id')->in($scopeObjects);
         }
         elseif($scope == 'project')
         {
             $objects = $this->dao->select('id')->from(TABLE_PROJECT)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->eq('project')
-                ->andWhere('id')->in($scopeObjects)
-                ->beginIF(!empty($pager))->page($pager)->fi()
-                ->fetchPairs();
+                ->andWhere('id')->in($scopeObjects);
         }
         elseif($scope == 'execution')
         {
             $objects = $this->dao->select('id')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage,kanban')
-                ->andWhere('id')->in($scopeObjects)
-                ->beginIF(!empty($pager))->page($pager)->fi()
-                ->fetchPairs();
+                ->andWhere('id')->in($scopeObjects);
         }
         elseif($scope == 'user')
         {
             $objects = $this->dao->select('account')->from(TABLE_USER)
                 ->where('deleted')->eq('0')
-                ->andWhere('account')->in($scopeObjects)
-                ->beginIF(!empty($pager))->page($pager)->fi()
-                ->fetchPairs();
+                ->andWhere('account')->in($scopeObjects);
         }
 
-        return $objects;
+        if(!is_null($objects))
+        {
+            if(!empty($pager)) $objects = $objects->page($pager);
+
+            return $objects->fetchPairs();
+        }
+        return array();
+    }
+
+    /**
+     * Process dao with query date values.
+     *
+     * @param  object    $stmt
+     * @param  object    $query
+     * @param  string    $dateType
+     * @access protected
+     * @return object
+     */
+    protected function processDAOWithDate($stmt, $query, $dateType)
+    {
+        $dateBegin  = $this->processRecordQuery($query, 'dateBegin', 'date');
+        $dateEnd    = $this->processRecordQuery($query, 'dateEnd', 'date');
+        $calcDate   = $this->processRecordQuery($query, 'calcDate', 'date');
+
+        list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
+
+        $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
+        $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
+        $monthBegin = empty($dateBegin) ? '' : $dateBegin->month;
+        $monthEnd   = empty($dateEnd)   ? '' : $dateEnd->month;
+        $weekBegin  = empty($dateBegin) ? '' : $dateBegin->week;
+        $weekEnd    = empty($dateEnd)   ? '' : $dateEnd->week;
+        $dayBegin   = empty($dateBegin) ? '' : $dateBegin->day;
+        $dayEnd     = empty($dateEnd)   ? '' : $dateEnd->day;
+
+        $stmt = $stmt->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->ge($monthBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->le($monthEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->ge($weekBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
+            ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi();
+
+        return $stmt;
     }
 
     /**
@@ -250,51 +307,31 @@ class metricTao extends metricModel
      * @access protected
      * @return array
      */
-    protected function fetchMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
+    protected function fetchMetricRecords($code, $fieldList, $query = array(), $pager = null)
     {
-        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+        $metric   = $this->fetchMetricByID($code);
+        $scopeKey = $metric->scope;
+        $dateType = $metric->dateType;
 
-        $dateType = $this->getDateType($dateList);
         $query['dateType'] = $dateType;
 
         $scopeValue = $this->processRecordQuery($query, 'scope');
-        $dateBegin  = $this->processRecordQuery($query, 'dateBegin', 'date');
-        $dateEnd    = $this->processRecordQuery($query, 'dateEnd', 'date');
-        list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
 
-        $calcDate  = $this->processRecordQuery($query, 'calcDate', 'date');
+        $objectList = $this->getObjectsWithPager($metric, $query, $pager, $scopeValue);
 
-        $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
-        $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
-        $monthBegin = empty($dateBegin) ? '' : $dateBegin->month;
-        $monthEnd   = empty($dateEnd)   ? '' : $dateEnd->month;
-        $weekBegin  = empty($dateBegin) ? '' : $dateBegin->week;
-        $weekEnd    = empty($dateEnd)   ? '' : $dateEnd->week;
-        $dayBegin   = empty($dateBegin) ? '' : $dateBegin->day;
-        $dayEnd     = empty($dateEnd)   ? '' : $dateEnd->day;
-
-        $metric      = $this->fetchMetricByID($code, 'scope');
-        $scopeKey    = $metric->scope;
-        $objectList  = $this->getObjectsWithPager($code, $scopeKey, $pager, $scopeValue);
-
-        $fieldList = array_merge($fieldList, array('id', 'value', 'date'));
-        $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
+        $fieldList = array_merge($fieldList, array('id', 'value', 'date', 'calcType', 'calculatedBy'));
+        $wrapFields = array_map(function ($value) {
+            return "`$value`";
+        }, $fieldList);
         $dataFieldStr = implode(',', $wrapFields);
 
         $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->beginIF($scopeKey != 'system')->andWhere($scopeKey)->in($objectList)->fi()
-            ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->ge($monthBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->le($monthEnd)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->ge($weekBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
-            ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
+            ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi();
+
+        $stmt = $this->processDAOWithDate($stmt, $query, $dateType)
             ->beginIF($scopeKey != 'system')->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF($scopeKey == 'system')->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
 
@@ -313,56 +350,31 @@ class metricTao extends metricModel
      * @access protected
      * @return array
      */
-    protected function fetchLatestMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
+    protected function fetchLatestMetricRecords($code, $fieldList, $query = array(), $pager = null)
     {
         $metric       = $this->fetchMetricByID($code);
-        $metricScope  = $metric->scope;
+        $dateType     = $metric->dateType;
         $lastCalcDate = substr($metric->lastCalcTime, 0, 10);
-        $objectList   = $this->getObjectsWithPager($code, $metricScope);
+        $objectList   = $this->getObjectsWithPager($metric, $query);
 
-        $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
-        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
-
-        $dateType = $this->getDateType($dateList);
         $query['dateType'] = $dateType;
 
-        $scope     = $this->processRecordQuery($query, 'scope');
-        $dateBegin = $this->processRecordQuery($query, 'dateBegin', 'date');
-        $dateEnd   = $this->processRecordQuery($query, 'dateEnd', 'date');
-        list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
-
-        $calcDate  = $dateType == 'nodate' ? $lastCalcDate : null;
-
-        $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
-        $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
-        $monthBegin = empty($dateBegin) ? '' : $dateBegin->month;
-        $monthEnd   = empty($dateEnd)   ? '' : $dateEnd->month;
-        $weekBegin  = empty($dateBegin) ? '' : $dateBegin->week;
-        $weekEnd    = empty($dateEnd)   ? '' : $dateEnd->week;
-        $dayBegin   = empty($dateBegin) ? '' : $dateBegin->day;
-        $dayEnd     = empty($dateEnd)   ? '' : $dateEnd->day;
-
-        $scopeKey   = current($scopeList);
-        $scopeValue = $scope;
+        $scopeValue = $this->processRecordQuery($query, 'scope');
+        $scopeKey   = $metric->scope;
 
         $fieldList = array_merge($fieldList, array('id', 'value', 'date'));
-        $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
+        $wrapFields = array_map(function ($value) {
+            return "`$value`";
+        }, $fieldList);
         $dataFieldStr = implode(',', $wrapFields);
 
         $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->beginIF($metricScope != 'system')->andWhere($metricScope)->in($objectList)->fi()
-            ->beginIF(!empty($scope))->andWhere($scopeKey)->in($scopeValue)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->ge($monthBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->le($monthEnd)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->ge($weekBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
-            ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
-            ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
-            ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
+            ->beginIF($scopeKey != 'system')->andWhere($scopeKey)->in($objectList)->fi()
+            ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi();
+
+        $stmt = $this->processDAOWithDate($stmt, $query, $dateType)
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
 
@@ -404,7 +416,7 @@ class metricTao extends metricModel
      * @access protected
      * @return array|false
      */
-    protected function getRecordFields(string $code): array|false
+    protected function getRecordFields($code)
     {
         $record = $this->dao->select('*')
             ->from(TABLE_METRICLIB)
@@ -417,7 +429,7 @@ class metricTao extends metricModel
         $fields = array();
         foreach(array_keys((array)$record) as $field)
         {
-            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date'))) continue;
+            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date', 'calcType', 'calculatedBy'))) continue;
             if(!empty($record->$field)) $fields[] = $field;
         }
 
@@ -431,7 +443,7 @@ class metricTao extends metricModel
      * @access protected
      * @return void
      */
-    protected function createDistinctTempTable(): void
+    protected function createDistinctTempTable()
     {
         $sql  = "CREATE TABLE IF NOT EXISTS `metriclib_distinct` ( ";
         $sql .= " id INT AUTO_INCREMENT PRIMARY KEY ";
@@ -450,7 +462,7 @@ class metricTao extends metricModel
      * @access protected
      * @return void
      */
-    protected function insertDistinctId2TempTable(string $code, array $fields): void
+    protected function insertDistinctId2TempTable($code, $fields)
     {
         if(empty($fields)) return;
         /**
@@ -459,10 +471,11 @@ class metricTao extends metricModel
         $intersect = array_intersect($fields, array('year', 'month', 'week', 'day'));
         foreach($fields as $key => $field) $fields[$key] = "`$field`";
         if(empty($intersect)) $fields[] = 'left(date, 10)';
+        $table = TABLE_METRICLIB;
 
         $sql  = "INSERT INTO `metriclib_distinct` (id) ";
         $sql .= "SELECT MAX(id) AS id ";
-        $sql .= "FROM zt_metriclib WHERE metricCode = '{$code}' ";
+        $sql .= "FROM $table WHERE metricCode = '{$code}' ";
         $sql .= "GROUP BY " . implode(',', $fields);
 
         $this->dao->exec($sql);
@@ -476,9 +489,10 @@ class metricTao extends metricModel
      * @access protected
      * @return void
      */
-    protected function deleteDuplicationRecord(string $code): void
+    protected function deleteDuplicationRecord($code)
     {
-        $sql  = "DELETE FROM zt_metriclib ";
+        $table = TABLE_METRICLIB;
+        $sql  = "DELETE FROM $table ";
         $sql .= "WHERE id NOT IN (SELECT id FROM metriclib_distinct) ";
         $sql .= "AND metricCode = '{$code}'";
 
@@ -492,8 +506,24 @@ class metricTao extends metricModel
      * @access protected
      * @return void
      */
-    protected function dropDistinctTempTable(): void
+    protected function dropDistinctTempTable()
     {
         $this->dao->exec("DROP TABLE IF EXISTS `metriclib_distinct`");
+    }
+
+    /**
+     * 重建id列顺序。
+     * Rebuild id column order.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function rebuildIdColumn()
+    {
+        $table = TABLE_METRICLIB;
+        $tableRowCount = $this->dao->select('COUNT(id) as rowcount')->from(TABLE_METRICLIB)->fetch('rowcount');
+        $autoIncrement = $tableRowCount + 1;
+        $this->dao->exec("SET @count = 0;UPDATE $table SET `id` = @count:= @count + 1;");
+        $this->dao->exec("ALTER TABLE $table AUTO_INCREMENT = $autoIncrement");
     }
 }

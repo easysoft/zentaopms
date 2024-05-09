@@ -11,7 +11,6 @@ $config->testcase->edit = new stdclass();
 $config->testcase->edit->requiredFields = 'title,type';
 
 $config->testcase->editor = new stdclass();
-$config->testcase->editor->edit   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testcase->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->testcase->editor->review = array('id' => 'comment', 'tools' => 'simpleTools');
 
@@ -20,8 +19,8 @@ $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status'
 
 $config->testcase->actions = new stdclass();
 $config->testcase->actions->view = array();
-$config->testcase->actions->view['mainActions']   = array('runResult', 'runCase', 'review', 'importToLib', 'createBug', 'showScript');
-$config->testcase->actions->view['suffixActions'] = array('edit', 'create', 'delete');
+$config->testcase->actions->view['mainActions']   = array('runResult', 'runCase', 'ztfRun', 'confirmStoryChange', 'review', 'importToLib', 'createBug', 'showScript');
+$config->testcase->actions->view['suffixActions'] = array('edit', 'create', 'createCase', 'delete');
 
 $config->testcase->exportFields = '
     id, product, branch, module, story, scene,
@@ -103,31 +102,36 @@ $config->testcase->editscene->requiredFields = 'product,title';
 
 $app->loadLang('story');
 $config->testcase->zerocase = new stdclass();
-$config->testcase->zerocase->actionList['change']['icon']        = 'change';
-$config->testcase->zerocase->actionList['change']['text']        = $lang->story->change;
-$config->testcase->zerocase->actionList['change']['hint']        = $lang->story->change;
-$config->testcase->zerocase->actionList['change']['url']         = array('module' => 'story', 'method' => 'change', 'params' => 'bugID={id}');
-$config->testcase->zerocase->actionList['change']['data-toggle'] = 'modal';
+$config->testcase->zerocase->actionList['change']['icon']         = 'change';
+$config->testcase->zerocase->actionList['change']['text']         = $lang->story->change;
+$config->testcase->zerocase->actionList['change']['hint']         = $lang->story->change;
+$config->testcase->zerocase->actionList['change']['url']          = array('module' => 'story', 'method' => 'change', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['change']['data-toggle']  = 'modal';
+$config->testcase->zerocase->actionList['change']['notLoadModel'] = true;
 
-$config->testcase->zerocase->actionList['review']['icon']        = 'review';
-$config->testcase->zerocase->actionList['review']['text']        = $lang->story->review;
-$config->testcase->zerocase->actionList['review']['hint']        = $lang->story->review;
-$config->testcase->zerocase->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'bugID={id}');
-$config->testcase->zerocase->actionList['review']['data-toggle'] = 'modal';
+$config->testcase->zerocase->actionList['review']['icon']         = 'search';
+$config->testcase->zerocase->actionList['review']['text']         = $lang->story->review;
+$config->testcase->zerocase->actionList['review']['hint']         = $lang->story->review;
+$config->testcase->zerocase->actionList['review']['url']          = array('module' => 'story', 'method' => 'review', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['review']['data-toggle']  = 'modal';
+$config->testcase->zerocase->actionList['review']['notLoadModel'] = true;
 
-$config->testcase->zerocase->actionList['close']['icon']        = 'off';
-$config->testcase->zerocase->actionList['close']['text']        = $lang->story->close;
-$config->testcase->zerocase->actionList['close']['hint']        = $lang->story->close;
-$config->testcase->zerocase->actionList['close']['url']         = array('module' => 'story', 'method' => 'close', 'params' => 'bugID={id}');
-$config->testcase->zerocase->actionList['close']['data-toggle'] = 'modal';
+$config->testcase->zerocase->actionList['close']['icon']         = 'off';
+$config->testcase->zerocase->actionList['close']['text']         = $lang->story->close;
+$config->testcase->zerocase->actionList['close']['hint']         = $lang->story->close;
+$config->testcase->zerocase->actionList['close']['url']          = array('module' => 'story', 'method' => 'close', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['close']['data-toggle']  = 'modal';
+$config->testcase->zerocase->actionList['close']['notLoadModel'] = true;
 
-$config->testcase->zerocase->actionList['edit']['icon'] = 'edit';
-$config->testcase->zerocase->actionList['edit']['text'] = $lang->story->edit;
-$config->testcase->zerocase->actionList['edit']['hint'] = $lang->story->edit;
-$config->testcase->zerocase->actionList['edit']['url']  = array('module' => 'story', 'method' => 'edit', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['edit']['icon']         = 'edit';
+$config->testcase->zerocase->actionList['edit']['text']         = $lang->story->edit;
+$config->testcase->zerocase->actionList['edit']['hint']         = $lang->story->edit;
+$config->testcase->zerocase->actionList['edit']['url']          = array('module' => 'story', 'method' => 'edit', 'params' => 'bugID={id}');
+$config->testcase->zerocase->actionList['edit']['notLoadModel'] = true;
 
-$config->testcase->zerocase->actionList['createcase']['icon']      = 'sitemap';
-$config->testcase->zerocase->actionList['createcase']['text']      = $lang->testcase->create;
-$config->testcase->zerocase->actionList['createcase']['hint']      = $lang->testcase->create;
-$config->testcase->zerocase->actionList['createcase']['url']       = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch=0&module=0&from=0&param=0&storyID={id}');
-$config->testcase->zerocase->actionList['createcase']['data-app']  = 'qa';
+$config->testcase->zerocase->actionList['createcase']['icon']         = 'sitemap';
+$config->testcase->zerocase->actionList['createcase']['text']         = $lang->testcase->create;
+$config->testcase->zerocase->actionList['createcase']['hint']         = $lang->testcase->create;
+$config->testcase->zerocase->actionList['createcase']['url']          = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch=0&module=0&from=0&param=0&storyID={id}');
+$config->testcase->zerocase->actionList['createcase']['data-app']     = 'qa';
+$config->testcase->zerocase->actionList['createcase']['notLoadModel'] = true;

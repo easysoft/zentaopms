@@ -1004,7 +1004,7 @@ CREATE TABLE `zt_demandreview` (
   `version` smallint(6) NOT NULL DEFAULT 0,
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
-  `reviewDate` datetime NOT NULL,
+  `reviewDate` datetime DEFAULT NULL,
   UNIQUE KEY `demand` (`demand`,`version`,`reviewer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_demandspec` (
@@ -2180,6 +2180,7 @@ CREATE TABLE `zt_metric` (
   `stage` enum('wait','released') DEFAULT 'wait',
   `type` enum('php','sql') DEFAULT 'php',
   `name` varchar(90) NOT NULL DEFAULT '',
+  `alias` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(90) NOT NULL DEFAULT '',
   `unit` varchar(10) NOT NULL DEFAULT '',
   `dateType` varchar(50) NOT NULL DEFAULT '',
@@ -2207,8 +2208,8 @@ CREATE TABLE `zt_metric` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_metriclib` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `metricID` mediumint(8) NOT NULL DEFAULT 0,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `metricID` mediumint(9) NOT NULL DEFAULT 0,
   `metricCode` varchar(100) NOT NULL DEFAULT '',
   `system` char(30) NOT NULL DEFAULT '0',
   `program` char(30) NOT NULL DEFAULT '',
@@ -2224,10 +2225,13 @@ CREATE TABLE `zt_metriclib` (
   `week` char(2) NOT NULL DEFAULT '0',
   `day` char(2) NOT NULL DEFAULT '0',
   `value` varchar(100) NOT NULL DEFAULT '0',
+  `calcType` enum('cron','inference') NOT NULL DEFAULT 'cron',
+  `calculatedBy` varchar(30) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `metricID` (`metricID`),
-  KEY `metricCode` (`metricCode`)
+  KEY `metricCode` (`metricCode`),
+  KEY `date` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_module` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2357,6 +2361,7 @@ CREATE TABLE `zt_object` (
   `category` char(30) NOT NULL DEFAULT '',
   `version` varchar(255) NOT NULL DEFAULT '',
   `type` enum('reviewed','taged') NOT NULL DEFAULT 'reviewed',
+  `enabled` enum('0','1') NOT NULL DEFAULT '1',
   `range` text DEFAULT NULL,
   `data` text DEFAULT NULL,
   `storyEst` char(30) NOT NULL DEFAULT '',
@@ -2749,6 +2754,7 @@ CREATE TABLE `zt_project` (
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `parallel` mediumint(9) NOT NULL DEFAULT 0,
+  `enabled` enum('on','off') NOT NULL DEFAULT 'on',
   `colWidth` smallint(6) NOT NULL DEFAULT 264,
   `minColWidth` smallint(6) NOT NULL DEFAULT 200,
   `maxColWidth` smallint(6) NOT NULL DEFAULT 384,
@@ -2842,7 +2848,7 @@ CREATE TABLE `zt_relationoftasks` (
   `task` mediumint(8) unsigned NOT NULL,
   `action` enum('begin','end') NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `relationoftasks` (`execution`,`task`)
+  KEY `relationoftasks` (`execution`,`task`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_release` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -3424,6 +3430,7 @@ CREATE TABLE `zt_story` (
   `submitedBy` varchar(30) NOT NULL DEFAULT '',
   `roadmap` varchar(255) NOT NULL DEFAULT '',
   `URChanged` enum('0','1') NOT NULL DEFAULT '0',
+  `unlinkReason` enum('','omit','other') NOT NULL DEFAULT '',
   `retractedReason` enum('','omit','other') NOT NULL DEFAULT '',
   `retractedBy` varchar(30) NOT NULL DEFAULT '',
   `retractedDate` datetime DEFAULT NULL,

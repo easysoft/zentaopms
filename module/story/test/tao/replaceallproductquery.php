@@ -1,14 +1,17 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 /**
 
 title=测试 storyModel->replaceAllProductQuery();
-cid=1
-pid=1
+cid=0
+
+- 不传入数据。 @0
+- 传入符合条件的查询语句。 @1 = 1
+- 传入不符合条件的查询语句。 @`product` = 1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 global $tester;
 $storyModel = $tester->loadModel('story');

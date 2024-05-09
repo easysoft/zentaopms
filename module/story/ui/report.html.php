@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 
 namespace zin;
+data('activeMenuID', $storyType);
 jsVar('params', "productID={$productID}&branchID={$branchID}&storyType={$storyType}&browseType={$browseType}&moduleID={$moduleID}");
 jsVar('projectID', $projectID);
 jsVar('storyType', $storyType);
@@ -30,16 +31,22 @@ detailHeader
 $reports = array();
 foreach($lang->story->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-$echarts = array();
-foreach($charts as $type => $option)
+function getEcharts($charts, $datas, $chartType)
 {
-    $chartData = $datas[$type];
-    $echarts[] = tableChart
-    (
-        set::type($option->type),
-        set::title($lang->story->report->charts[$type]),
-        set::datas((array)$chartData),
-    );
+    global $lang;
+    $echarts = array();
+    foreach($charts as $type => $option)
+    {
+        $chartData = $datas[$type];
+        $echarts[] = tableChart
+        (
+            set::item('chart-' . $type),
+            set::type($chartType),
+            set::title($lang->story->report->charts[$type]),
+            set::datas((array)$chartData),
+        );
+    }
+    return $echarts;
 }
 
 $tabItems = array();
@@ -54,7 +61,7 @@ foreach($lang->report->typeList as $type => $typeName)
         set::active($type == $chartType),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
         div(setClass('pb-4 pt-2'), span(setClass('text-gray'), html(str_replace('%tab%', $lang->product->unclosed . $lang->story->common, $lang->report->notice->help)))),
-        div($echarts)
+        div(getEcharts($charts, $datas, $type))
     );
 }
 
@@ -78,28 +85,13 @@ div
         ),
         btn
         (
-            setData
-            (
-                array
-                (
-                    'on'   => 'click',
-                    'call' => 'selectAll',
-                )
-            ),
+            bind::click('selectAll'),
             $lang->selectAll
         ),
         btn
         (
             setClass('primary ml-4 inited'),
-            setData
-            (
-                array
-                (
-                    'on'     => 'click',
-                    'call'   => 'clickInit',
-                    'params' => 'event',
-                )
-            ),
+            bind::click('clickInit'),
             $lang->story->report->create
         )
     ),
@@ -108,8 +100,10 @@ div
         set::flex('1'),
         setClass('bg-white px-4 py-2'),
         setID('report'),
-        tabs($tabItems)
+        tabs
+        (
+            on::show('.tab-pane')->call('handleShowReportTab', jsRaw('event')),
+            $tabItems
+        )
     )
 );
-
-render();

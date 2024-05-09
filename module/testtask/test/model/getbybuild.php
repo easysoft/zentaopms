@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('testtask')->gen(5); // 前 5 条测试单的 build 字段值分别为 11, 12, 13, 14, 15。
+zenData('testtask')->gen(5); // 前 5 条测试单的 build 字段值分别为 11, 12, 13, 14, 15。
 su('admin');
 
 /**

@@ -36,16 +36,16 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(1);
-zdTable('company')->gen(1);
+zenData('user')->gen(1);
+zenData('company')->gen(1);
 
-$viewTable = zdTable('userview');
+$viewTable = zenData('userview');
 $viewTable->account->range('admin');
 $viewTable->gen(1);
 
-$groupTable = zdTable('usergroup');
+$groupTable = zenData('usergroup');
 $groupTable->account->range('admin');
 $groupTable->group->range('1,2');
 $groupTable->gen(2);

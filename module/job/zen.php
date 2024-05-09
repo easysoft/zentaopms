@@ -42,25 +42,18 @@ class jobZen extends job
         $jobList  = $this->job->getList($repoID, $orderBy, $pager);
         foreach($jobList as $job)
         {
-            $job->canExec = true;
-
-            if($job->engine == 'gitlab')
-            {
-                $pipeline = json_decode($job->pipeline);
-                $branch   = $this->gitlab->apiGetSingleBranch($job->server, (int)$pipeline->project, $pipeline->reference);
-                if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
-                /* query buildSpec */
-                if(is_numeric($job->pipeline))  $job->pipeline = $this->gitlab->getProjectName($job->server, $job->pipeline);
-                if(isset($pipeline->reference)) $job->pipeline = $this->gitlab->getProjectName($job->server, (int)$pipeline->project);
-            }
-            elseif($job->engine == 'jenkins')
+            if($job->engine == 'jenkins')
             {
                 if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
+            }
+            else
+            {
+                $job->pipeline = $job->repoName;
             }
 
             $job->lastExec    = $job->lastExec ? $job->lastExec : '';
             $job->triggerType = $this->job->getTriggerConfig($job);
-            $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
+            $job->buildSpec   = !empty($job->pipeline) ? urldecode($job->pipeline) . '@' . $job->jenkinsName : $job->jenkinsName;
             $job->engine      = zget($this->lang->job->engineList, $job->engine);
             $job->frame       = zget($this->lang->job->frameList, $job->frame);
             $job->productName = zget($products, $job->product, '');
@@ -105,34 +98,6 @@ class jobZen extends job
         }
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', 'repoID=' . ($repoID ? $repoID : $this->post->repo)));
-    }
-
-    /**
-     * 获取版本库列表。
-     * Get repo list.
-     *
-     * @param  int       $projectID
-     * @param  object    $repo
-     * @access protected
-     * @return array
-     */
-    protected function getRepoList(int $projectID, object $repo = null): array
-    {
-        $repoList    = $this->loadModel('repo')->getList($projectID);
-        $repoPairs   = $repo ? array($repo->id => $repo->name) : array();
-        $gitlabRepos = array();
-        $repoTypes   = $repo ? array($repo->id => $repo->SCM) : array();
-
-        foreach($repoList as $repo)
-        {
-            if(empty($repo->synced)) continue;
-
-            $repoPairs[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-            $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-        }
-
-        return array($repoPairs, $gitlabRepos, $repoTypes);
     }
 
     /**

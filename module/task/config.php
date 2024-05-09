@@ -29,7 +29,7 @@ $config->task->unfinishedStatus = array('wait', 'doing', 'pause');
 
 $config->task->editor = new stdclass();
 $config->task->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->task->editor->edit     = array('id' => 'desc,comment', 'tools' => 'simpleTools');
+$config->task->editor->edit     = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->task->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->task->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->task->editor->start    = array('id' => 'comment', 'tools' => 'simpleTools');
@@ -74,7 +74,7 @@ $config->task->create->template->mode       = '';
 $config->task->create->template->assignedTo = '';
 $config->task->create->template->name       = '';
 $config->task->create->template->story      = 0;
-$config->task->create->template->type       = '';
+$config->task->create->template->type       = 'devel';
 $config->task->create->template->pri        = 3;
 $config->task->create->template->estimate   = '';
 $config->task->create->template->desc       = '';
@@ -136,10 +136,11 @@ $config->task->actionList['edit']['data-app'] = $app->tab;
 if($config->vision != 'lite')
 {
     $config->task->actionList['batchCreate']['icon']     = 'split';
-    $config->task->actionList['batchCreate']['hint']     = $lang->task->batchCreate;
-    $config->task->actionList['batchCreate']['text']     = $lang->task->batchCreate;
+    $config->task->actionList['batchCreate']['hint']     = $lang->task->children;
+    $config->task->actionList['batchCreate']['text']     = $lang->task->children;
     $config->task->actionList['batchCreate']['url']      = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
     $config->task->actionList['batchCreate']['data-app'] = $app->tab;
+
 }
 
 $config->task->actionList['create']['icon']     = 'copy';
@@ -155,10 +156,12 @@ $config->task->actionList['delete']['url']          = helper::createLink('task',
 $config->task->actionList['delete']['data-confirm'] = array('message' => $lang->task->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->task->actionList['delete']['class']        = 'ajax-submit';
 
-$config->task->actionList['view']['icon'] = 'chevron-double-up';
-$config->task->actionList['view']['hint'] = $lang->task->parent;
-$config->task->actionList['view']['text'] = $lang->task->parent;
-$config->task->actionList['view']['url']  = helper::createLink('task', 'view', 'taskID={parent}');
+$config->task->actionList['view']['icon']     = 'chevron-double-up';
+$config->task->actionList['view']['hint']     = $lang->task->parent;
+$config->task->actionList['view']['text']     = $lang->task->parent;
+$config->task->actionList['view']['url']      = helper::createLink('task', 'view', 'taskID={parent}');
+$config->task->actionList['view']['showText'] = true;
+$config->task->actionList['view']['data-app'] = $app->tab;
 
 $config->task->actionList['cancel']['icon']        = 'ban-circle';
 $config->task->actionList['cancel']['hint']        = $lang->task->cancel;
@@ -185,10 +188,12 @@ $config->task->actionList['assignTo']['url']         = helper::createLink('task'
 $config->task->actionList['assignTo']['data-toggle'] = 'modal';
 
 $config->task->actionList['createBranch']['icon']        = 'treemap';
-$config->task->actionList['createBranch']['hint']        = $lang->task->createBranch;
-$config->task->actionList['createBranch']['text']        = $lang->task->createBranch;
-$config->task->actionList['createBranch']['url']         = helper::createLink('repo', 'createBranch', 'taskID={id}&execution={execution}');
+$config->task->actionList['createBranch']['hint']        = $lang->task->codeBranch;
+$config->task->actionList['createBranch']['text']        = $lang->task->codeBranch;
+$config->task->actionList['createBranch']['url']         = helper::createLink('task', 'createBranch', 'taskID={id}');
 $config->task->actionList['createBranch']['data-toggle'] = 'modal';
 
-$config->task->view->operateList['main']   = array('batchCreate', 'assignTo', 'start', 'restart', 'createBranch', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
-$config->task->view->operateList['common'] = array('edit', 'create', 'delete', 'view');
+$config->task->actions = new stdclass();
+$config->task->actions->view = array();
+$config->task->actions->view['mainActions']   = array('batchCreate', 'assignTo', 'start', 'restart', 'createBranch', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
+$config->task->actions->view['suffixActions'] = array('edit', 'create', 'delete', 'view');

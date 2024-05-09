@@ -1,22 +1,29 @@
 <?php
 
-/**
- * Defines a context class that is later extended to define other contexts.
- *
- * A context is a collection of keywords, operators and functions used for
- * parsing.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser;
 
 use PhpMyAdmin\SqlParser\Exceptions\LoaderException;
 
+use function class_exists;
+use function explode;
+use function intval;
+use function is_array;
+use function is_int;
+use function is_numeric;
+use function str_replace;
+use function str_starts_with;
+use function strlen;
+use function strtoupper;
+use function substr;
+
 /**
+ * Defines a context class that is later extended to define other contexts.
+ *
+ * A context is a collection of keywords, operators and functions used for parsing.
+ *
  * Holds the configuration of the context that is currently used.
- *
- * @category Contexts
- *
- * @license  https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 abstract class Context
 {
@@ -24,29 +31,23 @@ abstract class Context
      * The maximum length of a keyword.
      *
      * @see static::$TOKEN_KEYWORD
-     *
-     * @var int
      */
-    const KEYWORD_MAX_LENGTH = 30;
+    public const KEYWORD_MAX_LENGTH = 30;
 
     /**
      * The maximum length of a label.
      *
      * @see static::$TOKEN_LABEL
      * Ref: https://dev.mysql.com/doc/refman/5.7/en/statement-labels.html
-     *
-     * @var int
      */
-    const LABEL_MAX_LENGTH = 16;
+    public const LABEL_MAX_LENGTH = 16;
 
     /**
      * The maximum length of an operator.
      *
      * @see static::$TOKEN_OPERATOR
-     *
-     * @var int
      */
-    const OPERATOR_MAX_LENGTH = 4;
+    public const OPERATOR_MAX_LENGTH = 4;
 
     /**
      * The name of the default content.
@@ -84,16 +85,17 @@ abstract class Context
      *
      * Elements are sorted by flags, length and keyword.
      *
-     * @var array
+     * @var array<string,int>
+     * @phpstan-var non-empty-array<non-empty-string,Token::FLAG_KEYWORD_*|int>
      */
-    public static $KEYWORDS = array();
+    public static $KEYWORDS = [];
 
     /**
      * List of operators and their flags.
      *
-     * @var array
+     * @var array<string, int>
      */
-    public static $OPERATORS = array(
+    public static $OPERATORS = [
         // Some operators (*, =) may have ambiguous flags, because they depend on
         // the context they are being used in.
         // For example: 1. SELECT * FROM table; # SQL specific (wildcard)
@@ -137,127 +139,224 @@ abstract class Context
         ')' => 16,
         '.' => 16,
         ',' => 16,
-        ';' => 16
-    );
+        ';' => 16,
+    ];
 
     /**
-     * The mode of the MySQL server that will be used in lexing, parsing and
-     * building the statements.
+     * The mode of the MySQL server that will be used in lexing, parsing and building the statements.
+     *
+     * @internal use the {@see Context::getMode()} method instead.
+     *
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html
+     * @link https://mariadb.com/kb/en/sql-mode/
      *
      * @var int
      */
-    public static $MODE = 0;
+    public static $MODE = self::SQL_MODE_NONE;
 
-    /*
-     * Server SQL Modes
-     * https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html
+    public const SQL_MODE_NONE = 0;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_allow_invalid_dates
+     * @link https://mariadb.com/kb/en/sql-mode/#allow_invalid_dates
      */
+    public const SQL_MODE_ALLOW_INVALID_DATES = 1;
 
-    // Compatibility mode for Microsoft's SQL server.
-    // This is the equivalent of ANSI_QUOTES.
-    const SQL_MODE_COMPAT_MYSQL = 2;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_allow_invalid_dates
-    const SQL_MODE_ALLOW_INVALID_DATES = 1;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_ansi_quotes
-    const SQL_MODE_ANSI_QUOTES = 2;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_error_for_division_by_zero
-    const SQL_MODE_ERROR_FOR_DIVISION_BY_ZERO = 4;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_high_not_precedence
-    const SQL_MODE_HIGH_NOT_PRECEDENCE = 8;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_ignore_space
-    const SQL_MODE_IGNORE_SPACE = 16;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_auto_create_user
-    const SQL_MODE_NO_AUTO_CREATE_USER = 32;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_auto_value_on_zero
-    const SQL_MODE_NO_AUTO_VALUE_ON_ZERO = 64;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_backslash_escapes
-    const SQL_MODE_NO_BACKSLASH_ESCAPES = 128;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_dir_in_create
-    const SQL_MODE_NO_DIR_IN_CREATE = 256;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_dir_in_create
-    const SQL_MODE_NO_ENGINE_SUBSTITUTION = 512;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_field_options
-    const SQL_MODE_NO_FIELD_OPTIONS = 1024;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_key_options
-    const SQL_MODE_NO_KEY_OPTIONS = 2048;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_table_options
-    const SQL_MODE_NO_TABLE_OPTIONS = 4096;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_unsigned_subtraction
-    const SQL_MODE_NO_UNSIGNED_SUBTRACTION = 8192;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_zero_date
-    const SQL_MODE_NO_ZERO_DATE = 16384;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_no_zero_in_date
-    const SQL_MODE_NO_ZERO_IN_DATE = 32768;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_only_full_group_by
-    const SQL_MODE_ONLY_FULL_GROUP_BY = 65536;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_pipes_as_concat
-    const SQL_MODE_PIPES_AS_CONCAT = 131072;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_real_as_float
-    const SQL_MODE_REAL_AS_FLOAT = 262144;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_strict_all_tables
-    const SQL_MODE_STRICT_ALL_TABLES = 524288;
-
-    // https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sqlmode_strict_trans_tables
-    const SQL_MODE_STRICT_TRANS_TABLES = 1048576;
-
-    // Custom modes.
-
-    // The table and column names and any other field that must be escaped will
-    // not be.
-    // Reserved keywords are being escaped regardless this mode is used or not.
-    const SQL_MODE_NO_ENCLOSING_QUOTES = 1073741824;
-
-    /*
-     * Combination SQL Modes
-     * https://dev.mysql.com/doc/refman/5.0/en/sql-mode.html#sql-mode-combo
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_ansi_quotes
+     * @link https://mariadb.com/kb/en/sql-mode/#ansi_quotes
      */
+    public const SQL_MODE_ANSI_QUOTES = 2;
 
-    // REAL_AS_FLOAT, PIPES_AS_CONCAT, ANSI_QUOTES, IGNORE_SPACE
-    const SQL_MODE_ANSI = 393234;
+    /** Compatibility mode for Microsoft's SQL server. This is the equivalent of {@see SQL_MODE_ANSI_QUOTES}. */
+    public const SQL_MODE_COMPAT_MYSQL = 2;
 
-    // PIPES_AS_CONCAT, ANSI_QUOTES, IGNORE_SPACE, NO_KEY_OPTIONS,
-    // NO_TABLE_OPTIONS, NO_FIELD_OPTIONS,
-    const SQL_MODE_DB2 = 138258;
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_error_for_division_by_zero
+     * @link https://mariadb.com/kb/en/sql-mode/#error_for_division_by_zero
+     */
+    public const SQL_MODE_ERROR_FOR_DIVISION_BY_ZERO = 4;
 
-    // PIPES_AS_CONCAT, ANSI_QUOTES, IGNORE_SPACE, NO_KEY_OPTIONS,
-    // NO_TABLE_OPTIONS, NO_FIELD_OPTIONS, NO_AUTO_CREATE_USER
-    const SQL_MODE_MAXDB = 138290;
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_high_not_precedence
+     * @link https://mariadb.com/kb/en/sql-mode/#high_not_precedence
+     */
+    public const SQL_MODE_HIGH_NOT_PRECEDENCE = 8;
 
-    // PIPES_AS_CONCAT, ANSI_QUOTES, IGNORE_SPACE, NO_KEY_OPTIONS,
-    // NO_TABLE_OPTIONS, NO_FIELD_OPTIONS
-    const SQL_MODE_MSSQL = 138258;
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_ignore_space
+     * @link https://mariadb.com/kb/en/sql-mode/#ignore_space
+     */
+    public const SQL_MODE_IGNORE_SPACE = 16;
 
-    // PIPES_AS_CONCAT, ANSI_QUOTES, IGNORE_SPACE, NO_KEY_OPTIONS,
-    // NO_TABLE_OPTIONS, NO_FIELD_OPTIONS, NO_AUTO_CREATE_USER
-    const SQL_MODE_ORACLE = 138290;
+    /**
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_auto_create_user
+     * @link https://mariadb.com/kb/en/sql-mode/#no_auto_create_user
+     */
+    public const SQL_MODE_NO_AUTO_CREATE_USER = 32;
 
-    // PIPES_AS_CONCAT, ANSI_QUOTES, IGNORE_SPACE, NO_KEY_OPTIONS,
-    // NO_TABLE_OPTIONS, NO_FIELD_OPTIONS
-    const SQL_MODE_POSTGRESQL = 138258;
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_no_auto_value_on_zero
+     * @link https://mariadb.com/kb/en/sql-mode/#no_auto_value_on_zero
+     */
+    public const SQL_MODE_NO_AUTO_VALUE_ON_ZERO = 64;
 
-    // STRICT_TRANS_TABLES, STRICT_ALL_TABLES, NO_ZERO_IN_DATE, NO_ZERO_DATE,
-    // ERROR_FOR_DIVISION_BY_ZERO, NO_AUTO_CREATE_USER
-    const SQL_MODE_TRADITIONAL = 1622052;
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_no_backslash_escapes
+     * @link https://mariadb.com/kb/en/sql-mode/#no_backslash_escapes
+     */
+    public const SQL_MODE_NO_BACKSLASH_ESCAPES = 128;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_no_dir_in_create
+     * @link https://mariadb.com/kb/en/sql-mode/#no_dir_in_create
+     */
+    public const SQL_MODE_NO_DIR_IN_CREATE = 256;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_no_engine_substitution
+     * @link https://mariadb.com/kb/en/sql-mode/#no_engine_substitution
+     */
+    public const SQL_MODE_NO_ENGINE_SUBSTITUTION = 512;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_field_options
+     * @link https://mariadb.com/kb/en/sql-mode/#no_field_options
+     */
+    public const SQL_MODE_NO_FIELD_OPTIONS = 1024;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_key_options
+     * @link https://mariadb.com/kb/en/sql-mode/#no_key_options
+     */
+    public const SQL_MODE_NO_KEY_OPTIONS = 2048;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_no_table_options
+     * @link https://mariadb.com/kb/en/sql-mode/#no_table_options
+     */
+    public const SQL_MODE_NO_TABLE_OPTIONS = 4096;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_no_unsigned_subtraction
+     * @link https://mariadb.com/kb/en/sql-mode/#no_unsigned_subtraction
+     */
+    public const SQL_MODE_NO_UNSIGNED_SUBTRACTION = 8192;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_no_zero_date
+     * @link https://mariadb.com/kb/en/sql-mode/#no_zero_date
+     */
+    public const SQL_MODE_NO_ZERO_DATE = 16384;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_no_zero_in_date
+     * @link https://mariadb.com/kb/en/sql-mode/#no_zero_in_date
+     */
+    public const SQL_MODE_NO_ZERO_IN_DATE = 32768;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_only_full_group_by
+     * @link https://mariadb.com/kb/en/sql-mode/#only_full_group_by
+     */
+    public const SQL_MODE_ONLY_FULL_GROUP_BY = 65536;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_pipes_as_concat
+     * @link https://mariadb.com/kb/en/sql-mode/#pipes_as_concat
+     */
+    public const SQL_MODE_PIPES_AS_CONCAT = 131072;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_real_as_float
+     * @link https://mariadb.com/kb/en/sql-mode/#real_as_float
+     */
+    public const SQL_MODE_REAL_AS_FLOAT = 262144;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_strict_all_tables
+     * @link https://mariadb.com/kb/en/sql-mode/#strict_all_tables
+     */
+    public const SQL_MODE_STRICT_ALL_TABLES = 524288;
+
+    /**
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_strict_trans_tables
+     * @link https://mariadb.com/kb/en/sql-mode/#strict_trans_tables
+     */
+    public const SQL_MODE_STRICT_TRANS_TABLES = 1048576;
+
+    /**
+     * Custom mode.
+     * The table and column names and any other field that must be escaped will not be.
+     * Reserved keywords are being escaped regardless this mode is used or not.
+     */
+    public const SQL_MODE_NO_ENCLOSING_QUOTES = 1073741824;
+
+    /**
+     * Equivalent to {@see SQL_MODE_REAL_AS_FLOAT}, {@see SQL_MODE_PIPES_AS_CONCAT}, {@see SQL_MODE_ANSI_QUOTES},
+     * {@see SQL_MODE_IGNORE_SPACE}.
+     *
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_ansi
+     * @link https://mariadb.com/kb/en/sql-mode/#ansi
+     */
+    public const SQL_MODE_ANSI = 393234;
+
+    /**
+     * Equivalent to {@see SQL_MODE_PIPES_AS_CONCAT}, {@see SQL_MODE_ANSI_QUOTES}, {@see SQL_MODE_IGNORE_SPACE},
+     * {@see SQL_MODE_NO_KEY_OPTIONS}, {@see SQL_MODE_NO_TABLE_OPTIONS}, {@see SQL_MODE_NO_FIELD_OPTIONS}.
+     *
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_db2
+     * @link https://mariadb.com/kb/en/sql-mode/#db2
+     */
+    public const SQL_MODE_DB2 = 138258;
+
+    /**
+     * Equivalent to {@see SQL_MODE_PIPES_AS_CONCAT}, {@see SQL_MODE_ANSI_QUOTES}, {@see SQL_MODE_IGNORE_SPACE},
+     * {@see SQL_MODE_NO_KEY_OPTIONS}, {@see SQL_MODE_NO_TABLE_OPTIONS}, {@see SQL_MODE_NO_FIELD_OPTIONS},
+     * {@see SQL_MODE_NO_AUTO_CREATE_USER}.
+     *
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_maxdb
+     * @link https://mariadb.com/kb/en/sql-mode/#maxdb
+     */
+    public const SQL_MODE_MAXDB = 138290;
+
+    /**
+     * Equivalent to {@see SQL_MODE_PIPES_AS_CONCAT}, {@see SQL_MODE_ANSI_QUOTES}, {@see SQL_MODE_IGNORE_SPACE},
+     * {@see SQL_MODE_NO_KEY_OPTIONS}, {@see SQL_MODE_NO_TABLE_OPTIONS}, {@see SQL_MODE_NO_FIELD_OPTIONS}.
+     *
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_mssql
+     * @link https://mariadb.com/kb/en/sql-mode/#mssql
+     */
+    public const SQL_MODE_MSSQL = 138258;
+
+    /**
+     * Equivalent to {@see SQL_MODE_PIPES_AS_CONCAT}, {@see SQL_MODE_ANSI_QUOTES}, {@see SQL_MODE_IGNORE_SPACE},
+     * {@see SQL_MODE_NO_KEY_OPTIONS}, {@see SQL_MODE_NO_TABLE_OPTIONS}, {@see SQL_MODE_NO_FIELD_OPTIONS},
+     * {@see SQL_MODE_NO_AUTO_CREATE_USER}.
+     *
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_oracle
+     * @link https://mariadb.com/kb/en/sql-mode/#oracle
+     */
+    public const SQL_MODE_ORACLE = 138290;
+
+    /**
+     * Equivalent to {@see SQL_MODE_PIPES_AS_CONCAT}, {@see SQL_MODE_ANSI_QUOTES}, {@see SQL_MODE_IGNORE_SPACE},
+     * {@see SQL_MODE_NO_KEY_OPTIONS}, {@see SQL_MODE_NO_TABLE_OPTIONS}, {@see SQL_MODE_NO_FIELD_OPTIONS}.
+     *
+     * @link https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sqlmode_postgresql
+     * @link https://mariadb.com/kb/en/sql-mode/#postgresql
+     */
+    public const SQL_MODE_POSTGRESQL = 138258;
+
+    /**
+     * Equivalent to {@see SQL_MODE_STRICT_TRANS_TABLES}, {@see SQL_MODE_STRICT_ALL_TABLES},
+     * {@see SQL_MODE_NO_ZERO_IN_DATE}, {@see SQL_MODE_NO_ZERO_DATE}, {@see SQL_MODE_ERROR_FOR_DIVISION_BY_ZERO},
+     * {@see SQL_MODE_NO_AUTO_CREATE_USER}.
+     *
+     * @link https://dev.mysql.com/doc/refman/en/sql-mode.html#sqlmode_traditional
+     * @link https://mariadb.com/kb/en/sql-mode/#traditional
+     */
+    public const SQL_MODE_TRADITIONAL = 1622052;
 
     // -------------------------------------------------------------------------
     // Keyword.
@@ -341,22 +440,24 @@ abstract class Context
         if ($str[0] === '#') {
             return Token::FLAG_COMMENT_BASH;
         }
+
         // If comment is opening C style (/*), warning, it could be a MySQL command (/*!)
         if (($len > 1) && ($str[0] === '/') && ($str[1] === '*')) {
             return ($len > 2) && ($str[2] === '!') ?
                 Token::FLAG_COMMENT_MYSQL_CMD : Token::FLAG_COMMENT_C;
         }
+
         // If comment is closing C style (*/), warning, it could conflicts with wildcard and a real opening C style.
         // It would looks like the following valid SQL statement: "SELECT */* comment */ FROM...".
         if (($len > 1) && ($str[0] === '*') && ($str[1] === '/')) {
             return Token::FLAG_COMMENT_C;
         }
+
         // If comment is SQL style (--\s?):
-        if (($len > 2) && ($str[0] === '-')
-            && ($str[1] === '-') && static::isWhitespace($str[2])
-        ) {
+        if (($len > 2) && ($str[0] === '-') && ($str[1] === '-') && static::isWhitespace($str[2])) {
             return Token::FLAG_COMMENT_SQL;
         }
+
         if (($len === 2) && $end && ($str[0] === '-') && ($str[1] === '-')) {
             return Token::FLAG_COMMENT_SQL;
         }
@@ -395,7 +496,7 @@ abstract class Context
      */
     public static function isNumber($str)
     {
-        return (($str >= '0') && ($str <= '9')) || ($str === '.')
+        return ($str >= '0') && ($str <= '9') || ($str === '.')
             || ($str === '-') || ($str === '+') || ($str === 'e') || ($str === 'E');
     }
 
@@ -415,11 +516,16 @@ abstract class Context
         if (strlen($str) === 0) {
             return null;
         }
+
         if ($str[0] === '@') {
             return Token::FLAG_SYMBOL_VARIABLE;
-        } elseif ($str[0] === '`') {
+        }
+
+        if ($str[0] === '`') {
             return Token::FLAG_SYMBOL_BACKTICK;
-        } elseif ($str[0] === ':' || $str[0] === '?') {
+        }
+
+        if ($str[0] === ':' || $str[0] === '?') {
             return Token::FLAG_SYMBOL_PARAMETER;
         }
 
@@ -441,9 +547,12 @@ abstract class Context
         if (strlen($str) === 0) {
             return null;
         }
+
         if ($str[0] === '\'') {
             return Token::FLAG_STRING_SINGLE_QUOTES;
-        } elseif ($str[0] === '"') {
+        }
+
+        if ($str[0] === '"') {
             return Token::FLAG_STRING_DOUBLE_QUOTES;
         }
 
@@ -477,26 +586,27 @@ abstract class Context
      *
      * Contexts may be used by accessing the context directly.
      *
-     * @param string $context name of the context or full class name that
-     *                        defines the context
+     * @param string $context name of the context or full class name that defines the context
      *
-     * @throws LoaderException if the specified context doesn't exist
+     * @return void
+     *
+     * @throws LoaderException if the specified context doesn't exist.
      */
     public static function load($context = '')
     {
         if (empty($context)) {
             $context = self::$defaultContext;
         }
+
         if ($context[0] !== '\\') {
             // Short context name (must be formatted into class name).
             $context = self::$contextPrefix . $context;
         }
+
         if (! class_exists($context)) {
-            throw @new LoaderException(
-                'Specified context ("' . $context . '") does not exist.',
-                $context
-            );
+            throw @new LoaderException('Specified context ("' . $context . '") does not exist.', $context);
         }
+
         self::$loadedContext = $context;
         self::$KEYWORDS = $context::$KEYWORDS;
     }
@@ -521,6 +631,7 @@ abstract class Context
             try {
                 /* Trying to load the new context */
                 static::load($context);
+
                 return $context;
             } catch (LoaderException $e) {
                 /* Replace last two non zero digits by zeroes */
@@ -532,42 +643,167 @@ abstract class Context
                         break 2;
                     }
                 } while (intval($part) === 0 && $i > 0);
+
                 $context = substr($context, 0, $i) . '00' . substr($context, $i + 2);
             }
         }
+
         /* Fallback to loading at least matching engine */
-        if (strncmp($context, 'MariaDb', 7) === 0) {
+        if (str_starts_with($context, 'MariaDb')) {
             return static::loadClosest('MariaDb100300');
-        } elseif (strncmp($context, 'MySql', 5) === 0) {
+        }
+
+        if (str_starts_with($context, 'MySql')) {
             return static::loadClosest('MySql50700');
         }
+
         return null;
+    }
+
+    /**
+     * Gets the SQL mode.
+     */
+    public static function getMode(): int
+    {
+        return static::$MODE;
     }
 
     /**
      * Sets the SQL mode.
      *
-     * @param string $mode The list of modes. If empty, the mode is reset.
+     * @param int|string $mode
+     *
+     * @return void
      */
-    public static function setMode($mode = '')
+    public static function setMode($mode = self::SQL_MODE_NONE)
     {
-        static::$MODE = 0;
-        if (empty($mode)) {
+        if (is_int($mode)) {
+            static::$MODE = $mode;
+
             return;
         }
-        $mode = explode(',', $mode);
-        foreach ($mode as $m) {
-            static::$MODE |= constant('static::SQL_MODE_' . $m);
+
+        static::$MODE = self::SQL_MODE_NONE;
+        if ($mode === '') {
+            return;
         }
+
+        $modes = explode(',', $mode);
+        foreach ($modes as $sqlMode) {
+            static::$MODE |= self::getModeFromString($sqlMode);
+        }
+    }
+
+    /**
+     * @psalm-suppress MixedReturnStatement, MixedInferredReturnType Is caused by the LSB of the constants
+     */
+    private static function getModeFromString(string $mode): int
+    {
+        // phpcs:disable SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants.DisallowedLateStaticBindingForConstant
+        switch ($mode) {
+            case 'ALLOW_INVALID_DATES':
+                return static::SQL_MODE_ALLOW_INVALID_DATES;
+
+            case 'ANSI_QUOTES':
+                return static::SQL_MODE_ANSI_QUOTES;
+
+            case 'COMPAT_MYSQL':
+                return static::SQL_MODE_COMPAT_MYSQL;
+
+            case 'ERROR_FOR_DIVISION_BY_ZERO':
+                return static::SQL_MODE_ERROR_FOR_DIVISION_BY_ZERO;
+
+            case 'HIGH_NOT_PRECEDENCE':
+                return static::SQL_MODE_HIGH_NOT_PRECEDENCE;
+
+            case 'IGNORE_SPACE':
+                return static::SQL_MODE_IGNORE_SPACE;
+
+            case 'NO_AUTO_CREATE_USER':
+                return static::SQL_MODE_NO_AUTO_CREATE_USER;
+
+            case 'NO_AUTO_VALUE_ON_ZERO':
+                return static::SQL_MODE_NO_AUTO_VALUE_ON_ZERO;
+
+            case 'NO_BACKSLASH_ESCAPES':
+                return static::SQL_MODE_NO_BACKSLASH_ESCAPES;
+
+            case 'NO_DIR_IN_CREATE':
+                return static::SQL_MODE_NO_DIR_IN_CREATE;
+
+            case 'NO_ENGINE_SUBSTITUTION':
+                return static::SQL_MODE_NO_ENGINE_SUBSTITUTION;
+
+            case 'NO_FIELD_OPTIONS':
+                return static::SQL_MODE_NO_FIELD_OPTIONS;
+
+            case 'NO_KEY_OPTIONS':
+                return static::SQL_MODE_NO_KEY_OPTIONS;
+
+            case 'NO_TABLE_OPTIONS':
+                return static::SQL_MODE_NO_TABLE_OPTIONS;
+
+            case 'NO_UNSIGNED_SUBTRACTION':
+                return static::SQL_MODE_NO_UNSIGNED_SUBTRACTION;
+
+            case 'NO_ZERO_DATE':
+                return static::SQL_MODE_NO_ZERO_DATE;
+
+            case 'NO_ZERO_IN_DATE':
+                return static::SQL_MODE_NO_ZERO_IN_DATE;
+
+            case 'ONLY_FULL_GROUP_BY':
+                return static::SQL_MODE_ONLY_FULL_GROUP_BY;
+
+            case 'PIPES_AS_CONCAT':
+                return static::SQL_MODE_PIPES_AS_CONCAT;
+
+            case 'REAL_AS_FLOAT':
+                return static::SQL_MODE_REAL_AS_FLOAT;
+
+            case 'STRICT_ALL_TABLES':
+                return static::SQL_MODE_STRICT_ALL_TABLES;
+
+            case 'STRICT_TRANS_TABLES':
+                return static::SQL_MODE_STRICT_TRANS_TABLES;
+
+            case 'NO_ENCLOSING_QUOTES':
+                return static::SQL_MODE_NO_ENCLOSING_QUOTES;
+
+            case 'ANSI':
+                return static::SQL_MODE_ANSI;
+
+            case 'DB2':
+                return static::SQL_MODE_DB2;
+
+            case 'MAXDB':
+                return static::SQL_MODE_MAXDB;
+
+            case 'MSSQL':
+                return static::SQL_MODE_MSSQL;
+
+            case 'ORACLE':
+                return static::SQL_MODE_ORACLE;
+
+            case 'POSTGRESQL':
+                return static::SQL_MODE_POSTGRESQL;
+
+            case 'TRADITIONAL':
+                return static::SQL_MODE_TRADITIONAL;
+
+            default:
+                return self::SQL_MODE_NONE;
+        }
+        // phpcs:enable
     }
 
     /**
      * Escapes the symbol by adding surrounding backticks.
      *
-     * @param array|string $str   the string to be escaped
-     * @param string       $quote quote to be used when escaping
+     * @param string[]|string $str   the string to be escaped
+     * @param string          $quote quote to be used when escaping
      *
-     * @return string|array
+     * @return string|string[]
      */
     public static function escape($str, $quote = '`')
     {
@@ -579,9 +815,7 @@ abstract class Context
             return $str;
         }
 
-        if ((static::$MODE & self::SQL_MODE_NO_ENCLOSING_QUOTES)
-            && (! static::isKeyword($str, true))
-        ) {
+        if ((static::$MODE & self::SQL_MODE_NO_ENCLOSING_QUOTES) && (! static::isKeyword($str, true))) {
             return $str;
         }
 
@@ -594,6 +828,7 @@ abstract class Context
 
     /**
      * Returns char used to quote identifiers based on currently set SQL Mode (ie. standard or ANSI_QUOTES)
+     *
      * @return string either " (double quote, ansi_quotes mode) or ` (backtick, standard mode)
      */
     public static function getIdentifierQuote()
@@ -604,14 +839,16 @@ abstract class Context
     /**
      * Function verifies that given SQL Mode constant is currently set
      *
-     * @return boolean false on empty param, true/false on given constant/int value
-     * @param int $flag for example Context::SQL_MODE_ANSI_QUOTES
+     * @param int $flag for example {@see Context::SQL_MODE_ANSI_QUOTES}
+     *
+     * @return bool false on empty param, true/false on given constant/int value
      */
     public static function hasMode($flag = null)
     {
         if (empty($flag)) {
             return false;
         }
+
         return (self::$MODE & $flag) === $flag;
     }
 }

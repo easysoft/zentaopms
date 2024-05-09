@@ -12,7 +12,6 @@ if($config->systemMode != 'light')
         ->value(data('fields.program.default'));
 
     $fields->field('line')
-        ->hidden(empty(data('fields.program.default')))
         ->control('picker')
         ->items(data('fields.line.options'))
         ->value(data('fields.line.default'));

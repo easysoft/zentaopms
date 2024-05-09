@@ -20,13 +20,13 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('project');
 $project->gen(10);
-zdTable('task')->gen(10);
+zenData('task')->gen(10);
 
 $names    = array('新阶段31', '新阶段121', '阶段211', '新增的阶段');
 $parent    = array('2', '2', '2', '2');

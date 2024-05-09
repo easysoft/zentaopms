@@ -14,8 +14,8 @@ cid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->gen(5);
-zdTable('oauth')->config('oauth')->gen(1);
+zenData('pipeline')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(1);
 su('admin');
 
 global $tester;

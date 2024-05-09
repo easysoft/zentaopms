@@ -51,6 +51,7 @@ class backupZen extends backup
      * backupSQL
      *
      * @param  string    $fileName
+     * @param  string    $reload
      * @access protected
      * @return array
      */
@@ -73,7 +74,6 @@ class backupZen extends backup
                 printf($this->lang->backup->error->noWritable, $this->backupPath);
             }
         }
-        
 
         if(!$nosafe) $this->backup->addFileHeader($backFileName);
         return array('result' => 'success');
@@ -84,6 +84,7 @@ class backupZen extends backup
      * Backup appendix file.
      *
      * @param  string    $fileName
+     * @param  string    $reload
      * @access protected
      * @return array
      */
@@ -111,6 +112,7 @@ class backupZen extends backup
      * Backup code
      *
      * @param  string    $fileName
+     * @param  string    $reload
      * @access protected
      * @return array
      */

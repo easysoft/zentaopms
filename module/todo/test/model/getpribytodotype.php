@@ -1,17 +1,17 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/todo.class.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 su('admin');
 
 function initData()
 {
-    zdTable('todo')->config('todo')->gen(10);
-    zdTable('bug')->gen(10);
-    zdTable('task')->gen(10);
-    zdTable('story')->gen(10);
-    zdTable('testtask')->gen(10);
+    zenData('todo')->loadYaml('todo')->gen(10);
+    zenData('bug')->gen(10);
+    zenData('task')->gen(10);
+    zenData('story')->gen(10);
+    zenData('testtask')->gen(10);
 }
 
 /**

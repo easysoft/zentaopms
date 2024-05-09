@@ -41,10 +41,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/chart.class.php';
+include dirname(__FILE__, 2) . '/lib/chart.unittest.class.php';
 
-zdTable('story')->config('story')->gen(50);
-zdTable('user')->gen(5);
+zenData('story')->loadYaml('story')->gen(50);
+zenData('user')->gen(5);
 su('admin');
 
 $date = array();

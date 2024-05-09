@@ -685,8 +685,8 @@ class baseControl
         unset($this->view->pager->lang);
 
         $output['status'] = is_object($this->view) ? 'success' : 'fail';
-        $output['data']   = json_encode($this->view);
-        $output['md5']    = md5(json_encode($this->view));
+        $output['data']   = json_encode($this->view) ? json_encode($this->view) : '';
+        $output['md5']    = md5($output['data']);
 
         $this->output = json_encode($output);
     }
@@ -1006,7 +1006,8 @@ class baseControl
          * 设置 zin 渲染上下文数据。
          */
         $context = \zin\context();
-        $context->data = (array)$this->view;
+        $context->control = $this;
+        $context->data    = (array)$this->view;
         $context->data['zinDebug'] = array();
 
         if($this->config->debug && $this->config->debug >= 2 && $this->config->installed)
@@ -1032,7 +1033,7 @@ class baseControl
         ob_start();
         include $viewFile;
 
-        if(!$context->rendered) \zin\render();
+        if(!$context->rendered) \zin\renderPage();
         $content = ob_get_clean();
 
         ob_start();
@@ -1085,7 +1086,7 @@ class baseControl
             {
                 print(urldecode(json_encode($data)));
                 $response = helper::removeUTF8Bom(ob_get_clean());
-                return helper::end($response);
+                return print($response);
             }
 
             /* Zand will use ob_get_clean() to print, so cannot clean so early. */

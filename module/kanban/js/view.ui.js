@@ -157,6 +157,7 @@ window.buildColActions = function(col)
  */
 window.getItem = function(info)
 {
+    info.item.titleAttrs = {};
     if(info.item.fromType == 'execution')
     {
         renderExecutionItem(info);
@@ -182,6 +183,8 @@ window.getItem = function(info)
         renderGeneralItem(info);
     }
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
+
+    info.item.titleAttrs.class = 'card-title clip';
 }
 
 window.renderGeneralItem = function(info)
@@ -226,7 +229,7 @@ window.renderGeneralItem = function(info)
 window.renderExecutionItem = function(info)
 {
     info.item.icon       = 'run';
-    info.item.titleUrl   = $.createLink('execution', 'task', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewExecution ? $.createLink('execution', 'task', `id=${info.item.fromID}`) : null;
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
     if(info.item.delay)
     {
@@ -242,7 +245,7 @@ window.renderExecutionItem = function(info)
     {
         statusBox = '<span class="label label-deleted">' + executionLang.deleted + '</span>';
     }
-    const date = '<span class="ml-2 label ' + (info.item.delay ? 'danger' : 'lighter') + '">' + info.item.end.slice(5) + ' ' + cardLang.deadlineAB + '</span>';
+    const date = '<span class="ml-2 label ' + (info.item.delay ? 'danger' : 'ghost') + '">' + info.item.end.slice(5) + ' ' + cardLang.deadlineAB + '</span>';
     info.item.content = {html: statusBox + date}
     if(kanban.performable == 1)
     {
@@ -252,7 +255,7 @@ window.renderExecutionItem = function(info)
 window.renderReleaseItem = function(info)
 {
     info.item.icon       = 'publish';
-    info.item.titleUrl   = $.createLink('release', 'view', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewRelease ? $.createLink('release', 'view', `id=${info.item.fromID}`) : '';
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     if(info.item.deleted == '0')
@@ -269,7 +272,7 @@ window.renderReleaseItem = function(info)
 window.renderBuildItem = function(info)
 {
     info.item.icon       = 'ver';
-    info.item.titleUrl   = $.createLink('build', 'view', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewBuild ? $.createLink('build', 'view', `id=${info.item.fromID}`) : '';
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     const date = '<span class="label gray-pale">' + info.item.date + '</span>';
@@ -278,24 +281,24 @@ window.renderBuildItem = function(info)
 window.renderProductplanItem = function(info)
 {
     info.item.icon       = 'delay';
-    info.item.titleUrl   = $.createLink('productplan', 'view', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewPlan ? $.createLink('productplan', 'view', `id=${info.item.fromID}`) : '';
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     if(info.item.deleted == '0')
     {
-        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + executionLang.statusList[info.item.objectStatus] + '</span>';
+        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + productplanLang.statusList[info.item.objectStatus] + '</span>';
     }
     else
     {
-        statusBox = '<span class="label label-deleted">' + executionLang.deleted + '</span>';
+        statusBox = '<span class="label label-deleted">' + productplanLang.deleted + '</span>';
     }
 
     const today     = zui.formatDate(new Date(), 'yyyy-MM-dd');
-    const labelType = (info.item.begin <= today && info.item.end >= today) ? 'danger' : 'lighter';
+    const labelType = (info.item.begin <= today && info.item.end >= today) ? 'danger' : 'ghost';
 
     const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
     info.item.content      = {html: info.item.desc}
-    info.item.contentClass = 'text-gray';
+    info.item.contentClass = 'text-gray clip mr-2';
     info.item.footer       = {html: statusBox + date}
 }
 window.renderTicketItem = function(info)

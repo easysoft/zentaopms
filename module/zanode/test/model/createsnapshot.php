@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->createSnapshot().
+timeout=0
 cid=1
 
 - 测试执行节点连接失败时创建快照 @失败
@@ -11,10 +13,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('host')->config('host')->gen(5);
-zdTable('user')->gen(5);
+zenData('host')->loadYaml('host')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $zanode = new zanodeTest();

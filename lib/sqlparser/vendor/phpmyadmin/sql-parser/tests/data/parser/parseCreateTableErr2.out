@@ -1,1 +1,115 @@
-a:4:{s:5:"query";s:12:"CREATE TABLE";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:12:"CREATE TABLE";s:3:"len";i:12;s:4:"last";i:12;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:4:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"CREATE";s:5:"value";s:6:"CREATE";s:7:"keyword";s:6:"CREATE";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:6;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:5:"TABLE";s:5:"value";s:5:"TABLE";s:7:"keyword";s:5:"TABLE";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:7;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:4;s:3:"idx";i:4;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:47:"PhpMyAdmin\SqlParser\Statements\CreateStatement":17:{s:4:"name";N;s:13:"entityOptions";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:0:{}}s:6:"fields";a:0:{}s:6:"select";N;s:4:"like";N;s:11:"partitionBy";N;s:13:"partitionsNum";N;s:14:"subpartitionBy";N;s:16:"subpartitionsNum";N;s:10:"partitions";N;s:5:"table";N;s:6:"return";N;s:10:"parameters";N;s:4:"body";a:0:{}s:7:"options";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:1:{i:6;s:5:"TABLE";}}s:5:"first";i:0;s:4:"last";i:3;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:2:{i:0;a:3:{i:0;s:36:"The name of the entity was expected.";i:1;r:30;i:2;i:0;}i:1;a:3:{i:0;s:44:"At least one column definition was expected.";i:1;r:23;i:2;i:0;}}}}
+{
+    "query": "CREATE TABLE",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "CREATE TABLE",
+        "len": 12,
+        "last": 12,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "CREATE",
+                    "value": "CREATE",
+                    "keyword": "CREATE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "TABLE",
+                    "value": "TABLE",
+                    "keyword": "TABLE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 7
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 4,
+            "idx": 4
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\CreateStatement",
+                "name": null,
+                "entityOptions": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": []
+                },
+                "fields": [],
+                "with": null,
+                "select": null,
+                "like": null,
+                "partitionBy": null,
+                "partitionsNum": null,
+                "subpartitionBy": null,
+                "subpartitionsNum": null,
+                "partitions": null,
+                "table": null,
+                "return": null,
+                "parameters": null,
+                "body": [],
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": {
+                        "6": "TABLE"
+                    }
+                },
+                "first": 0,
+                "last": 3
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": [
+            [
+                "The name of the entity was expected.",
+                {
+                    "@type": "@5"
+                },
+                0
+            ],
+            [
+                "At least one column definition was expected.",
+                {
+                    "@type": "@4"
+                },
+                0
+            ]
+        ]
+    }
+}

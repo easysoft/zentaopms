@@ -2,10 +2,10 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->gen('10');
-zdTable('user')->gen(10);
+zenData('action')->gen('10');
+zenData('user')->gen(10);
 
 su('admin');
 

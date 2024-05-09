@@ -1,4 +1,9 @@
 <?php
+global $config;
+list($productModule, $productMethod)     = explode('-', $config->productLink);
+list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
+list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+
 $lang->execution->common  = '看板';
 $lang->executionCommon    = '看板';
 $lang->task->common       = '任务';
@@ -53,8 +58,17 @@ else
 $lang->task->common = '任务';
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
-/* Ticket. */
-if($config->edition != 'open') $lang->feedback->menu->ticket = array('link' => '工单|ticket|browse|browseType=unclosed');
+/* Feedback. */
+if($config->edition != 'open')
+{
+    $lang->feedback->menu->ticket   = array('link' => '工单|ticket|browse|browseType=unclosed');
+    $lang->feedback->menu->products = array('link' => '设置|feedback|products', 'alias' => 'manageproduct');
+
+    $lang->feedback->menuOrder[5]  = 'browse';
+    $lang->feedback->menuOrder[10] = 'ticket';
+    $lang->feedback->menuOrder[15] = 'faq';
+    $lang->feedback->menuOrder[20] = 'products';
+}
 
 /* My menu. */
 $lang->my->menu           = new stdclass();
@@ -63,7 +77,6 @@ $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'sub
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
 $lang->my->menu->contacts = array('link' => "{$lang->contact->common}|my|managecontacts|");
 
-global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => '日志|effort|calendar|', 'exclude' => 'my-todo');
 
 /* My menu order. */
@@ -186,7 +199,6 @@ $lang->createObjects['kanban']    = '通用看板';
 $lang->createIcons['execution'] = 'kanban';
 
 /* Xuan */
-global $config;
 if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 {
     $lang->xuanxuan = new stdclass();

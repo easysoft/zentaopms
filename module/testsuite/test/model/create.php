@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testsuite.class.php';
-zdTable('testsuite')->gen(1);
+include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+zenData('testsuite')->gen(1);
 
 /**
 

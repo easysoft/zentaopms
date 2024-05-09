@@ -20,9 +20,9 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-zdTable('review')->gen(20);
-zdTable('object')->gen(20);
-$project = zdTable('project');
+zenData('review')->gen(20);
+zenData('object')->gen(20);
+$project = zenData('project');
 $project->type->range('stage');
 $project->attribute->range('devel');
 $project->begin->range('`2023-09-28`');
@@ -32,9 +32,9 @@ $project->gen(10);
 global $tester;
 $tester->loadModel('programplan');
 
-$tester->programplan->app->loadConfig('stage');
-$tester->programplan->config->stage->ipdReviewPoint = new stdclass();
-$tester->programplan->config->stage->ipdReviewPoint->devel = array('PP');
+$tester->programplan->app->loadConfig('review');
+$tester->programplan->config->review->ipdReviewPoint = new stdclass();
+$tester->programplan->config->review->ipdReviewPoint->devel = array('PP');
 
 $plans = $tester->programplan->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('stage')->fetchAll('id');
 $plans = $tester->programplan->processPlans($plans);

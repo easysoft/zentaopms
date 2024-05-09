@@ -1,8 +1,6 @@
 <?php
 
-/**
- * `REPLACE` statement.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
@@ -14,6 +12,10 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Statement;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
+
+use function count;
+use function strlen;
+use function trim;
 
 /**
  * `REPLACE` statement.
@@ -35,34 +37,31 @@ use PhpMyAdmin\SqlParser\TokensList;
  *   [PARTITION (partition_name,...)]
  *   [(col_name,...)]
  *   SELECT ...
- *
- * @category   Statements
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class ReplaceStatement extends Statement
 {
     /**
      * Options for `REPLACE` statements and their slot ID.
      *
-     * @var array
+     * @var array<string, int|array<int, int|string>>
+     * @psalm-var array<string, (positive-int|array{positive-int, ('var'|'var='|'expr'|'expr=')})>
      */
-    public static $OPTIONS = array(
+    public static $OPTIONS = [
         'LOW_PRIORITY' => 1,
-        'DELAYED' => 1
-    );
+        'DELAYED' => 1,
+    ];
 
     /**
      * Tables used as target for this statement.
      *
-     * @var IntoKeyword
+     * @var IntoKeyword|null
      */
     public $into;
 
     /**
      * Values to be replaced.
      *
-     * @var Array2d
+     * @var Array2d[]|null
      */
     public $values;
 
@@ -70,7 +69,7 @@ class ReplaceStatement extends Statement
      * If SET clause is present
      * holds the SetOperation.
      *
-     * @var SetOperation[]
+     * @var SetOperation[]|null
      */
     public $set;
 
@@ -78,7 +77,7 @@ class ReplaceStatement extends Statement
      * If SELECT clause is present
      * holds the SelectStatement.
      *
-     * @var SelectStatement
+     * @var SelectStatement|null
      */
     public $select;
 
@@ -90,11 +89,11 @@ class ReplaceStatement extends Statement
         $ret = 'REPLACE ' . $this->options;
         $ret = trim($ret) . ' INTO ' . $this->into;
 
-        if (! is_null($this->values) && count($this->values) > 0) {
+        if ($this->values !== null && count($this->values) > 0) {
             $ret .= ' VALUES ' . Array2d::build($this->values);
-        } elseif (! is_null($this->set) && count($this->set) > 0) {
+        } elseif ($this->set !== null && count($this->set) > 0) {
             $ret .= ' SET ' . SetOperation::build($this->set);
-        } elseif (! is_null($this->select) && strlen($this->select) > 0) {
+        } elseif ($this->select !== null && strlen((string) $this->select) > 0) {
             $ret .= ' ' . $this->select->build();
         }
 
@@ -104,17 +103,15 @@ class ReplaceStatement extends Statement
     /**
      * @param Parser     $parser the instance that requests parsing
      * @param TokensList $list   the list of tokens to be parsed
+     *
+     * @return void
      */
     public function parse(Parser $parser, TokensList $list)
     {
         ++$list->idx; // Skipping `REPLACE`.
 
         // parse any options if provided
-        $this->options = OptionsArray::parse(
-            $parser,
-            $list,
-            static::$OPTIONS
-        );
+        $this->options = OptionsArray::parse($parser, $list, static::$OPTIONS);
 
         ++$list->idx;
 
@@ -134,8 +131,6 @@ class ReplaceStatement extends Statement
         for (; $list->idx < $list->count; ++$list->idx) {
             /**
              * Token parsed at this moment.
-             *
-             * @var Token
              */
             $token = $list->tokens[$list->idx];
 
@@ -150,49 +145,41 @@ class ReplaceStatement extends Statement
             }
 
             if ($state === 0) {
-                if ($token->type === Token::TYPE_KEYWORD
-                    && $token->keyword !== 'INTO'
-                ) {
+                if ($token->type === Token::TYPE_KEYWORD && $token->keyword !== 'INTO') {
                     $parser->error('Unexpected keyword.', $token);
                     break;
                 }
+
                 ++$list->idx;
                 $this->into = IntoKeyword::parse(
                     $parser,
                     $list,
-                    array('fromReplace' => true)
+                    ['fromReplace' => true]
                 );
 
                 $state = 1;
             } elseif ($state === 1) {
-                if ($token->type === Token::TYPE_KEYWORD) {
-                    if ($token->keyword === 'VALUE'
-                        || $token->keyword === 'VALUES'
-                    ) {
-                        ++$list->idx; // skip VALUES
-
-                        $this->values = Array2d::parse($parser, $list);
-                    } elseif ($token->keyword === 'SET') {
-                        ++$list->idx; // skip SET
-
-                        $this->set = SetOperation::parse($parser, $list);
-                    } elseif ($token->keyword === 'SELECT') {
-                        $this->select = new SelectStatement($parser, $list);
-                    } else {
-                        $parser->error(
-                            'Unexpected keyword.',
-                            $token
-                        );
-                        break;
-                    }
-                    $state = 2;
-                } else {
-                    $parser->error(
-                        'Unexpected token.',
-                        $token
-                    );
+                if ($token->type !== Token::TYPE_KEYWORD) {
+                    $parser->error('Unexpected token.', $token);
                     break;
                 }
+
+                if ($token->keyword === 'VALUE' || $token->keyword === 'VALUES') {
+                    ++$list->idx; // skip VALUES
+
+                    $this->values = Array2d::parse($parser, $list);
+                } elseif ($token->keyword === 'SET') {
+                    ++$list->idx; // skip SET
+
+                    $this->set = SetOperation::parse($parser, $list);
+                } elseif ($token->keyword === 'SELECT') {
+                    $this->select = new SelectStatement($parser, $list);
+                } else {
+                    $parser->error('Unexpected keyword.', $token);
+                    break;
+                }
+
+                $state = 2;
             }
         }
 

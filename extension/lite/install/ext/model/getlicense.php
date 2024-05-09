@@ -5,7 +5,7 @@
  * @access public
  * @return string
  */
-public function getLicense()
+public function getLicense(): string
 {
     $clientLang = $this->app->getClientLang();
     $licenseCN  = file_get_contents($this->app->getBasePath() . 'doc/LICENSE.LITE.CN');

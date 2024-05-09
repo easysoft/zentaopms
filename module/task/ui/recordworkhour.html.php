@@ -74,7 +74,7 @@ if($efforts)
                     common::hasPriv('task', 'editEffort') ? a
                     (
                         setClass('btn ghost toolbar-item square size-sm text-primary edit-effort'),
-                        on::click()->call('loadModal', createLink('task', 'editEffort', "id={$effort->id}")),
+                        $canOperateEffort ? on::click()->call('loadModal', createLink('task', 'editEffort', "id={$effort->id}")) : null,
                         !$canOperateEffort ? set::disabled(true) : null,
                         set::title($operateTips ? sprintf($operateTips, $lang->task->update) : ''),
                         icon('edit'),

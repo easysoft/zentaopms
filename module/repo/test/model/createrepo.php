@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -15,7 +15,7 @@ cid=1
 
 */
 
-zdTable('pipeline')->gen(5);
+zenData('pipeline')->gen(5);
 
 $repoTest = new repoTest();
 
@@ -26,7 +26,7 @@ $repo->name         = 'abc&&';
 $repo->serviceHost  = 1;
 $repo->path         = 'unit_test_project17';
 $repo->desc         = 'unit_test_project desc';
-$repo->namespace    = 1;
+$repo->namespace    = '1';
 $repo->SCM          = 'Gitlab';
 $repo->acl          = '{"acl":"open","groups":[""],"users":[""]}';
 

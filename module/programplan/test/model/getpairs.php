@@ -11,11 +11,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('getpairs')->gen(10);
-zdTable('projectproduct')->config('getprojectproduct')->gen(20);
+zenData('project')->loadYaml('getpairs')->gen(10);
+zenData('projectproduct')->loadYaml('getprojectproduct')->gen(20);
 
 $executionIDList = array(11, 12, 13, 14, 15);
 $productIDList   = array(11, 12, 13, 14, 15);

@@ -4,13 +4,13 @@
 use function zin\wg;
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
-zdTable('action')->config('action')->gen(20);
-zdTable('userquery')->config('userquery')->gen(2);
-zdTable('story')->gen(10);
-zdTable('pipeline')->gen(5);
+zenData('action')->loadYaml('action')->gen(20);
+zenData('userquery')->loadYaml('userquery')->gen(2);
+zenData('story')->gen(10);
+zenData('pipeline')->gen(5);
 
 /**
 

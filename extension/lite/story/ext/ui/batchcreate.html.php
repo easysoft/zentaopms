@@ -21,13 +21,13 @@ foreach($fields as $fieldKey => $fieldConfig)
 }
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($lang, $fields)
+$fnGenerateFields = function() use ($lang, $fields, $config)
 {
     /* Generate fields with the appropriate properties. */
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
 
-    return array_merge($items, array_map(function($name, $field)
+    $cols = array_merge($items, array_map(function($name, $field)
     {
         $field['name'] = $name;
         if(!empty($field['options'])) $field['items'] = $field['options'];
@@ -37,13 +37,21 @@ $fnGenerateFields = function() use ($lang, $fields)
 
         return $field;
     }, array_keys($fields), array_values($fields)));
+
+    foreach($cols as $index => $col)
+    {
+        $colName = $col['name'];
+        if(str_contains(",{$config->story->create->requiredFields},", ",{$colName},")) $cols[$index]['required'] = true;
+    }
+
+    return $cols;
 };
 
 formBatchPanel
 (
     set::id('dataform'),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
-    set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
+    set::title($storyID ? $storyTitle . $lang->hyphen . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),
     set::customFields(array('list' => array(), 'show' => $showFields, 'key' => 'batchCreateFields')),
@@ -55,7 +63,7 @@ formBatchPanel
         array('text' => $lang->goback,           'data-back'   => 'APP',    'class' => 'open-url')
     )),
     formHidden('type', $type),
-    formHidden('status')
+    formHidden('status', '')
 );
 
 render();

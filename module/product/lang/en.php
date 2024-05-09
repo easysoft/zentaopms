@@ -43,6 +43,7 @@ $lang->product->track            = 'View Stories Matrix';
 $lang->product->checkedProducts  = "%s {$lang->productCommon}s selected";
 $lang->product->pageSummary      = "Total {$lang->productCommon}s: %s.";
 $lang->product->lineSummary      = "Total product lines: %s, Total {$lang->productCommon}s: %s.";
+$lang->product->noData           = 'No data.';
 
 $lang->product->indexAction    = "All {$lang->productCommon}";
 $lang->product->closeAction    = "Close {$lang->productCommon}";
@@ -117,6 +118,7 @@ $lang->product->nameIsDuplicate      = "『%s』 product line already exists, pl
 $lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->product->reviewStory          = 'You are not a reviewer for needs "%s" , and cannot review. This operation has been filtered';
 $lang->product->confirmDeleteLine    = "Do you want to delete this product line?";
+$lang->product->lineChangeProgram    = "The product line has already been associated with {$lang->productCommon}s. After adjusting the program, all {$lang->productCommon}s under the product line will synchronously adjust to the new program.";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";

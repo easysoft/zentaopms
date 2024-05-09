@@ -82,6 +82,8 @@ blockPanel
             echarts
             (
                 set::color(array('#2B80FF')),
+                set::width('100%'),
+                set::height($longBlock ? 200 : 175),
                 set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
                 set::xAxis(array('type' => 'category', 'data' => array_keys($releaseData), 'axisTick' => array('alignWithLabel' => true))),
                 set::yAxis(array('type' => 'value', 'name' => $lang->number, 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
@@ -98,7 +100,7 @@ blockPanel
                         )
                     )
                 )
-            )->size('100%', $longBlock ? 200 : 175)
+            )
         ),
         cell
         (

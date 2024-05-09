@@ -14,10 +14,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
+include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 su('admin');
 
-$testcase = zdTable('case');
+$testcase = zenData('case');
 $testcase->lib->range('0,1,2,3');
 $testcase->product->range('3,2,1,0');
 $testcase->fromCaseID->range('4,3,2,1');

@@ -29,16 +29,16 @@ cid=1
  - 第4条的old属性 @linux
  - 第4条的new属性 @Linux
 - 设置name字段为必填字段，但是不填写name字段，执行更新操作以后返回false,数据并未更新。 @0
-- 查看name字段的错误信息。name字段的第一条属性 @『名称』不能为空。
+- 查看name字段的错误信息。第name条的0属性 @『名称』不能为空。
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
 $zanode = new zanodeTest();
 
-zdTable('host')->config('host')->gen(1);
+zenData('host')->loadYaml('host')->gen(1);
 
 $hostInfo = new stdclass();
 
@@ -54,7 +54,7 @@ $diff = $zanode->update($hostID, $hostInfo);
 r($diff) && p('0:field,old,new;1:field,old,new;5:field,old,new') && e('name,~~,test name;extranet,10.0.0.1,test extranet;desc,~~,test desc');   //更新一个测试节点，检查更新的name，extranet，desc字段是否正确。
 r($diff) && p('2:field,old,new;3:field,old,new;4:field,old,new') && e('memory,~~,3.13;diskSize,~~,3.14;osName,linux,Linux');                    //更新一个测试节点，检查更新的memory，diskSize，osName字段是否正确。
 
-zdTable('host')->config('host')->gen(1);
+zenData('host')->loadYaml('host')->gen(1);
 global $config;
 $config->zanode->edit->requiredFields = 'name';
 $hostInfo->name = '';

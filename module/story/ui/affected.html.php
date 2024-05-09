@@ -17,16 +17,17 @@ if($story->type == 'story')
                 foreach($story->teams[$executionID] as $member) $teams .= zget($users, $member->account) . ' ';
             }
 
-            $affectedTaskCount += count(zget($story->tasks, $executionID, array()));
+            $executionTasks     = array_values(zget($story->tasks, $executionID, array()));
+            $affectedTaskCount += count($executionTasks);
             $affectedProjects[] = h6
             (
                 $execution->name,
                 $teams ? h::small(icon('group'), $teams) : null
             );
-            $affectedProjects[] = dtable
+            $affectedProjects[] = empty($executionTasks) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
             (
                 set::cols($config->story->affect->projects->fields),
-                set::data(array_values(zget($story->tasks, $executionID, array())))
+                set::data($executionTasks)
             );
         }
 
@@ -51,10 +52,11 @@ if($story->type == 'story')
                     to::suffix(label(count($story->bugs))),
                     set::key('affectedBugs'),
                     set::title($lang->story->affectedBugs),
-                    dtable
+                    empty($story->bugs) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
                     (
                         set::cols($config->story->affect->bugs->fields),
-                        set::data(array_values($story->bugs))
+                        set::data(array_values($story->bugs)),
+                        set::style(array('min-width' => '100%'))
                     )
                 ),
                 tabPane
@@ -62,10 +64,11 @@ if($story->type == 'story')
                     to::suffix(label(count($story->cases))),
                     set::key('affectedCases'),
                     set::title($lang->story->affectedCases),
-                    dtable
+                    empty($story->cases) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
                     (
                         set::cols($config->story->affect->cases->fields),
-                        set::data(array_values($story->cases))
+                        set::data(array_values($story->cases)),
+                        set::style(array('min-width' => '100%'))
                     )
                 ),
                 empty($story->twins) ? null : tabPane
@@ -73,10 +76,11 @@ if($story->type == 'story')
                     to::suffix(label(count($story->twins))),
                     set::key('affectedTwins'),
                     set::title($lang->story->affectedTwins),
-                    dtable
+                    empty($story->twins) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
                     (
                         set::cols($config->story->affect->twins->fields),
-                        set::data(array_values($story->twins))
+                        set::data(array_values($story->twins)),
+                        set::style(array('min-width' => '100%'))
                     )
                 )
             )
@@ -85,7 +89,7 @@ if($story->type == 'story')
 }
 else
 {
-    $getAffectedTabs = function($story, $users)
+    $getAffectedTabs = function($story)
     {
         global $lang, $config;
         return formGroup

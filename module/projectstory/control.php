@@ -86,7 +86,7 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function track($projectID = 0, $productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track(int $projectID = 0, int $productID = 0, int $branch = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($productID)) $productID = key($products);
@@ -123,12 +123,14 @@ class projectStory extends control
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $extra
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function linkStory($projectID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recPerPage = 50, $pageID = 1)
+    public function linkStory($projectID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recPerPage = 50, $pageID = 1, $extra = '', $storyType = 'story')
     {
-        echo $this->fetch('execution', 'linkStory', "projectID={$projectID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('execution', 'linkStory', "projectID={$projectID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&extra={$extra}&storyType=$storyType");
     }
 
     /**
@@ -156,6 +158,13 @@ class projectStory extends control
     public function batchUnlinkStory(int $projectID, string $storyIdList = '')
     {
         $storyIdList = empty($storyIdList) ? array() : array_filter(explode(',', $storyIdList));
+        $storyIdList = array_unique($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
         if(empty($storyIdList)) $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
 
         $this->loadModel('execution');

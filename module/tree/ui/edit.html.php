@@ -33,29 +33,30 @@ formPanel
     (
         formGroup
         (
-            set::width('2/3'),
             set::label($lang->tree->product),
+            set::width('1/2'),
             picker
             (
                 set::name('root'),
                 set::value($module->root),
                 set::items($products),
+                set::required(true),
                 on::change('loadBranches')
             )
         ),
-        $product->type != 'normal' ? formGroup
+        formGroup
         (
-            set::width('1/3'),
-            setClass('branchBox'),
+            setClass('branchBox', $product->type == 'normal' ? 'hidden' : ''),
             control
             (
                 set::type('picker'),
                 set::name('branch'),
                 set::value($module->branch),
                 set::items($branches),
+                set::required(true),
                 on::change('loadModules')
             )
-        ) : null
+        )
     ) : null,
     $type == 'doc' ? formGroup
     (
@@ -71,6 +72,7 @@ formPanel
     ) : null,
     formGroup
     (
+        set::className($hidden ? 'hidden' : ''),
         set::name('name'),
         set::label($name),
         set::control('input'),
@@ -78,7 +80,7 @@ formPanel
     ),
     $module->type != 'line' ? formGroup
     (
-        set::className($hidden ? 'moduleBox hidden' : 'moduleBox'),
+        set::className('moduleBox ', $hidden ? 'hidden' : ''),
         set::label(($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
         picker
         (

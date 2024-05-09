@@ -10,8 +10,8 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('project')->config('execution')->gen(20);
-$projectproduct = zdTable('projectproduct')->config('projectproduct');
+zenData('project')->loadYaml('execution')->gen(20);
+$projectproduct = zenData('projectproduct')->loadYaml('projectproduct');
 $projectproduct->project->range('101-120');
 $projectproduct->gen(20);
 

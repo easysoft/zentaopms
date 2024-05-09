@@ -268,14 +268,14 @@ class install extends control
             /* Restart the session because the session save path is null when start the session last time. */
             session_write_close();
 
-            $tmpRootInfo     = $this->install->getTmpRoot();
+            $tmpRootInfo     = $this->installZen->getTmpRoot();
             $sessionSavePath = $tmpRootInfo['path'] . 'session';
             if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
 
             session_save_path($sessionSavePath);
             $customSession = true;
 
-            $sessionResult = $this->install->checkSessionSavePath();
+            $sessionResult = $this->installZen->checkSessionSavePath();
             if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
 
             session_start();
@@ -382,7 +382,8 @@ class install extends control
             /* Update created date of metrics. */
             $this->loadModel('metric')->updateMetricDate();
 
-            $link = $this->config->inQuickon ? inlink('app') : inlink('step6');
+            $skipApp = (string)getenv('ZT_SKIP_DEVOPS_INIT');
+            $link = ($this->config->inQuickon && (!$skipApp || $skipApp == 'false')) ? inlink('app') : inlink('step6');
             return $this->send(array('result' => 'success', 'load' => $link));
         }
 

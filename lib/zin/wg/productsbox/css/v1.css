@@ -3,3 +3,4 @@
 .productBox .planBox{padding-right: 0px;}
 .productBox .c-actions {position: absolute; width: 100px; right: -100px;}
 .productBox .c-actions.first-action {bottom: calc(calc(100% - 64px) / 2);}
+.productBox.noProductBox .planBox {padding: 0px;}

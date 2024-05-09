@@ -15,7 +15,7 @@ $projectAclList = array();
 foreach($lang->program->subAcls as $acl => $label) $programAclList[] = array('text' => $label, 'value' => $acl);
 foreach($lang->project->acls as $acl => $label)    $projectAclList[] = array('text' => $label, 'value' => $acl);
 
-jsVar('LONG_TIME', LONG_TIME);
+jsVar('longTime', LONG_TIME);
 jsVar('weekend', $config->execution->weekend);
 jsVar('programAclList', $programAclList);
 jsVar('projectAclList', $projectAclList);
@@ -87,18 +87,17 @@ formBatchPanel
     (
         set::name('end'),
         set::label($lang->project->end),
-        set::control('date'),
         set::width('120px'),
-        inputControl
+        set::control(array
         (
-            setClass('has-suffix-icon hidden'),
-            to::suffix(icon('calendar')),
-            input
+            'control' => 'date',
+            'display' => jsRaw("(value) => (value === '" . LONG_TIME . "' ? '" . $lang->project->longTime . "' : zui.formatDate(value, 'yyyy-MM-dd'))"),
+            'actions' => array
             (
-                set::value($lang->project->longTime),
-                set::disabled(true)
+                array('text' => $lang->datepicker->dpText->TEXT_TODAY, 'data-set-date' => helper::today()),
+                array('text' => $lang->project->longTime, 'data-set-date' => LONG_TIME)
             )
-        )
+        )),
     ),
     formBatchItem
     (

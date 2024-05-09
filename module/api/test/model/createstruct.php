@@ -3,9 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('doclib')->config('doclib')->gen(10);
-zdTable('apistruct')->gen(0);
-zdTable('apistruct_spec')->gen(0);
+zenData('doclib')->loadYaml('doclib')->gen(10);
+zenData('apistruct')->gen(0);
+zenData('apistruct_spec')->gen(0);
 /**
 
 title=测试 apiModel->createStruct();

@@ -44,9 +44,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('action')->config('action')->gen(18);
+zenData('action')->loadYaml('action')->gen(18);
 $actionTest = new actionTest();
 
 $objectTypeList = array('project', 'testtask', 'buld', 'story', 'requirement', 'case', 'testcase', 'module', 'bug', 'testsuite');

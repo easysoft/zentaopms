@@ -16,8 +16,27 @@ $releaseModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'relea
 
 jsVar('initLink', $link);
 jsVar('type', $type);
+jsVar('loadFileUrl', createLink($releaseModule, 'view', "releaseID={$release->id}&type=releaseInfo"));
 $canBeChanged = common::canBeChanged($releaseModule, $release);
-$menus        = $this->release->buildOperateViewMenu($release);
+$actions      = $this->loadModel('common')->buildOperateMenu($release);
+foreach($actions as $actionType => $typeActions)
+{
+    foreach($typeActions as $key => $action)
+    {
+        $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
+        $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$release->id, $action['url']);
+        if($actionType == 'suffixActions')
+        {
+            if($action['icon'] == 'edit')
+            {
+                $actions['suffixActions'][$key]['text']     = $lang->edit;
+                $actions['suffixActions'][$key]['data-app'] = $app->tab;
+            }
+            if($action['icon'] == 'trash') $actions['suffixActions'][$key]['text'] = $lang->delete;
+        }
+    }
+}
 detailHeader
 (
     to::prefix
@@ -26,12 +45,18 @@ detailHeader
         (
             set::icon('back'),
             set::type('secondary'),
+            set::url('release', 'browse', "productID={$release->product}"),
             $lang->goback
         ),
         entityLabel(set(array('entityID' => $release->id, 'level' => 2, 'text' => $release->name))),
         $release->deleted ? span(setClass('label danger'), $lang->release->deleted) : null
     ),
-    !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
+    !empty($actions['mainActions']) || !empty($actions['suffixActions']) ? to::suffix
+    (
+        btnGroup(set::items($actions['mainActions'])),
+        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider')): null,
+        btnGroup(set::items($actions['suffixActions']))
+    ) : null
 );
 
 jsVar('releaseID', $release->id);
@@ -167,6 +192,7 @@ if($canBeChanged)
 
 detailBody
 (
+    setClass('release-view-body'),
     sectionList(
         tabs
         (
@@ -189,6 +215,7 @@ detailBody
                 dtable
                 (
                     setID('finishedStoryDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::cols(array_values($config->release->dtable->story->fieldList)),
                     set::data($storyTableData),
                     set::userMap($users),
@@ -219,6 +246,7 @@ detailBody
                 dtable
                 (
                     setID('resolvedBugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->bug->fieldList)),
                     set::data($bugTableData),
@@ -247,6 +275,7 @@ detailBody
                 dtable
                 (
                     setID('leftBugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                     set::data($leftBugTableData),
@@ -265,6 +294,7 @@ detailBody
                 to::prefix(icon('flag')),
                 set::key('releaseInfo'),
                 set::title($lang->release->basicInfo),
+                set::active($type == 'releaseInfo'),
                 div
                 (
                     setClass('tab-actions'),
@@ -312,9 +342,10 @@ detailBody
                             )
                         )
                     ),
+                    html($this->printExtendFields($release, 'html', 'position=all', false)),
                     fileList(set::files($release->files)),
                     h::hr(set::className('mt-6')),
-                    history(set::objectID($release->id))
+                    history(set::objectID($release->id), set::objectType('release'))
                 )
             )
         )

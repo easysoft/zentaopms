@@ -139,10 +139,16 @@ function checkFormSetting()
  */
 function validate(showError = false)
 {
-    var pivot = DataStorage.pivot;
+    var pivot        = DataStorage.pivot;
     var formSettings = pivot.settings;
-    /* Code for temporary */
-    var isReady = true;
+    var isReady      = true;
+    var firstErrDom  = null;
+
+    if("summary" in formSettings && formSettings.summary == 'notuse')
+    {
+        if(isReady) $('#datagrid-tip').addClass('hidden');
+        return true;
+    }
 
     /* check group settings. */
     var exist = false;
@@ -164,6 +170,8 @@ function validate(showError = false)
             var error = '<div id="groupLabel" class="text-danger help-text">' + moreThanOneLang + '</div>';
             tr.find('#group1').addClass('has-error');
             tr.find('#group1').next().after(error);
+
+            firstErrDom = tr.find('#group1').parents('tr');
         }
     }
 
@@ -183,7 +191,9 @@ function validate(showError = false)
             {
                 var error = '<div id="column' + index + 'Label" class="text-danger help-text">' + notemptyLang.replace('%s', pivotLang.step2.columnField) + '</div>';
                 $column.find('#column').addClass('has-error');
-                $column.find('#column').next().after(error);
+                $column.find('#column').parent().after(error);
+
+                if(!firstErrDom) firstErrDom = $column.find('#column').parents('.column');
             }
         }
 
@@ -195,11 +205,14 @@ function validate(showError = false)
                 var error = '<div id="stat' + index + 'Label" class="text-danger help-text">' + notemptyLang.replace('%s', pivotLang.step2.calcMode) + '</div>';
                 $column.find('#stat').addClass('has-error');
                 $column.find('#stat').next().after(error);
+
+                if(!firstErrDom) firstErrDom = $column.find('#stat').parents('.column');
             }
         }
     });
 
     if(isReady)  $('#datagrid-tip').addClass('hidden');
+    if(!isReady && firstErrDom) firstErrDom[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
     return isReady;
 }
 
@@ -425,7 +438,7 @@ function select(name, options, selected, attrib, callback)
     });
 }
 
-function setDateField(query)
+function setDateField(control)
 {
     var $period = $('#selectPeriod');
     if(!$period.length)
@@ -433,10 +446,10 @@ function setDateField(query)
         $period = $("<ul id='selectPeriod' class='dropdown-menu'><li><a href='#MONDAY'>" + datepickerText.TEXT_WEEK_MONDAY + "</a></li><li><a href='#SUNDAY'>" + datepickerText.TEXT_WEEK_SUNDAY + "</a></li><li><a href='#MONTHBEGIN'>" + datepickerText.TEXT_MONTH_BEGIN + "</a></li><li><a href='#MONTHEND'>" + datepickerText.TEXT_MONTH_END + "</a></li></ul>").appendTo('body');
         $period.find('li > a').click(function(event)
         {
-            var target = $(query).parents('table, #queryFilters, #filterItems,#filterForm').find('[data-index="' + $period.attr('data-index') + '"]').find('#default:visible');
+            var target = control.parents('table, #queryFilters, #filterItems,#filterForm').find('[data-index="' + $period.attr('data-index') + '"]').find('#default:visible');
             if(target.length)
             {
-                target.val($(this).attr('href').replace('#', '$'));
+                target.val($(this).attr('href').replace('#', '$')).trigger('change');
                 $period.hide();
             }
             event.stopPropagation();
@@ -444,10 +457,14 @@ function setDateField(query)
         });
     }
 
-    if(query == '.form-date')     $(query).datepicker();
-    if(query == '.form-datetime') $(query).datetimepicker();
+    if(control.hasClass('form-date'))     control.datepicker();
+    if(control.hasClass('form-datetime')) control.datetimepicker();
 
-    $(query).on('show', function(e)
+    var dateVal = control.val();
+    control.val('').datetimepicker('update').trigger('mousedown');
+    control.val(dateVal);
+
+    control.on('show', function(e)
     {
         var $e   = $(e.target);
         var ePos = $e.offset();

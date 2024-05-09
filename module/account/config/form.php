@@ -1,5 +1,4 @@
 <?php
-global $app;
 $config->account->form = new stdclass();
 $config->account->form->create = array();
 $config->account->form->create['name']        = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
@@ -12,7 +11,6 @@ $config->account->form->create['mobile']      = array('type' => 'string', 'requi
 $config->account->form->create['type']        = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->account->form->create['status']      = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->account->form->create['extra']       = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
-$config->account->form->create['createdBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->account->form->create['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
 $config->account->form->edit = array();
@@ -26,5 +24,4 @@ $config->account->form->edit['mobile']     = array('type' => 'string', 'required
 $config->account->form->edit['type']       = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->account->form->edit['status']     = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->account->form->edit['extra']      = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
-$config->account->form->edit['editedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->account->form->edit['editedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());

@@ -25,6 +25,28 @@ class dataviewModel extends model
         $this->loadBIDAO();
     }
 
+
+    /**
+     * Verify the sql with select statement.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return void
+     */
+    public function verifySqlWithModify($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+
+        if(count($parser->statements) == 0) return array('result' => 'fail', 'message' => $this->lang->dataview->empty);
+        if(count($parser->statements) > 1)  return array('result' => 'fail', 'message' => $this->lang->dataview->onlyOne);
+
+        $statement = $parser->statements[0];
+        if($statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement == false) return array('result' => 'fail', 'message' => $this->lang->dataview->allowSelect);
+
+        return true;
+    }
+
     /**
      * 获取模块名数组。
      * Get module names.
@@ -276,7 +298,7 @@ class dataviewModel extends model
     public function getTypeOptions(string $objectName): array
     {
         $schema  = $this->includeTable($objectName);
-        if(empty($schema)) return array();
+        if(is_null($schema)) return array();
 
         $options = array();
         foreach($schema->fields as $key => $field)
@@ -317,9 +339,9 @@ class dataviewModel extends model
     *
     * @param  string $table
     * @access public
-    * @return object
+    * @return object|null
     */
-    public function includeTable(string $table): object
+    public function includeTable(string $table): object|null
     {
         $path = __DIR__ . DS . 'table' . DS . "$table.php";
         if(file_exists($path))
@@ -334,6 +356,8 @@ class dataviewModel extends model
             include $path;
             return $schema;
         }
+
+        return null;
     }
 
     /**

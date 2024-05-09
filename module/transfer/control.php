@@ -67,7 +67,7 @@ class transfer extends control
             /* 获取导出模板字段。*/
             /* Get export template fields. */
             $fields = $this->config->$module->templateFields;
-            if($module == 'task' and isset($executionID)) $fields = $this->transferZen->processTaskTemplateFields($executionID, $fields);
+            if($module == 'task' and isset($executionID)) $fields = $this->transferZen->processTaskTemplateFields((int)$executionID, $fields);
 
             /* 初始化字段列表并拼接下拉菜单数据。*/
             /* Init field list and append dropdown menu data. */
@@ -121,7 +121,7 @@ class transfer extends control
             $this->session->set('fileImportFileName', $fileName);
             $this->session->set('fileImportExtension', $extension);
 
-            return $this->send(array('result' => 'success', 'load' => $locate, 'closeModel' => 'true'));
+            return $this->send(array('result' => 'success', 'load' => $locate, 'closeModal' => true));
         }
 
         $this->view->title = $this->lang->transfer->importCase;
@@ -147,7 +147,11 @@ class transfer extends control
         /* Get the import field data of the module. */
         $this->loadModel($module);
         $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
-        if($module == 'testcase' and !empty($_SESSION[$module . 'TemplateFields']) and is_array($importFields)) $this->config->$module->templateFields = implode(',', $importFields);
+        if($module == 'testcase' and !empty($_SESSION[$module . 'TemplateFields']) and is_array($importFields))
+        {
+            $this->config->$module->templateFields = implode(',', $importFields);
+            $this->config->testcase->datatable->fieldList['branch']['dataSource']['params'] = '$productID&active';
+        }
 
         /* 初始化字段列表。*/
         /* Init field list. */

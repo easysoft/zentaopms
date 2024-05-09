@@ -37,7 +37,7 @@ $fnGetKanbanTeams = function($kanbanID) use ($memberGroup, $users, $usersAvatar)
         $teamElements[] = div
         (
             set::title(zget($users, $member->account)),
-            userAvatar(set::avatar(zget($usersAvatar, $member->account)), set::account($member->account), set::realname(zget($member, 'realname', ''))),
+            avatar(set::src(zget($usersAvatar, $member->account)), set::text(zget($member, 'realname', '')), set::size('sm'), set::className('mr-1')),
         );
     }
     if(count($teams) > 4) $teamElements[] = span('… ');
@@ -47,7 +47,7 @@ $fnGetKanbanTeams = function($kanbanID) use ($memberGroup, $users, $usersAvatar)
         $teamElements[] = div
         (
             set::title(zget($users, $lastMember->account)),
-            userAvatar(set::avatar(zget($usersAvatar, $lastMember->account)), set::account($lastMember->account), set::realname(zget($lastMember, 'realname', '')), set::style(array('width' => '24px', 'height' => '24px'))),
+            avatar(set::src(zget($usersAvatar, $lastMember->account)), set::text(zget($lastMember, 'realname', '')), set::size('sm')),
         );
     }
     return $teamElements;
@@ -98,7 +98,7 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
             div
             (
                 setClass('panel-body'),
-                div(setClass('kanban-desc'), $kanban->desc),
+                div(setClass('kanban-desc'), html($kanban->desc)),
                 row
                 (
                     setClass('kanban-footer'),

@@ -16,7 +16,7 @@
 .regionMenu li {text-align: center; float: left; position: relative; display: block;}
 .regionMenu li a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 0.8rem; margin-left: -10px; background: none; outline: 0; cursor: pointer !important; display: block; color: rgba(var(--color-black-rgb),var(--tw-text-opacity))}
 .regionMenu li:first-child > a {margin-left: 0px}
-.regionMenu li a:before {content: ""; position: absolute; top: -0.2rem; left: 0; background: #e9e9e9; height: 100%; width: 100%; z-index: -1; border-top-left-radius: 1rem; border-top-right-radius: 1rem; transform: perspective(0.5rem) rotateX(2deg); transform-origin: bottom;}
+.regionMenu li a:before {content: ""; position: absolute; top: -0.2rem; left: 0; background: #EFF1F3; height: 100%; width: 100%; z-index: -1; border-top-left-radius: 1rem; border-top-right-radius: 1rem; transform: perspective(0.5rem) rotateX(2deg); transform-origin: bottom;}
 .regionMenu li.active > a {z-index: 1; color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
 .regionMenu li.active > a:before {background: #fff}
 .regionMenu li a:hover {color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
@@ -35,3 +35,4 @@
 #kanbanList.is-in-fullscreen {background: var(--color-canvas);}
 #kanbanList.is-in-fullscreen .kanban-list {height: 100%}
 #kanbanList.is-in-fullscreen .btn {display: none;}
+.is-collapsed .icon-angle-top:before { content: "\e313"; }

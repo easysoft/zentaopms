@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $project = zdTable('project');
+    $project = zenData('project');
     $project->id->range('11-19,101-109');
     $project->project->range('11-19');
     $project->name->setFields(array(
@@ -31,7 +31,7 @@ function initData()
     $project->openedDate->range("`2023-05-01 10:00:10`");
     $project->gen(18);
 
-    zdTable('task')->gen(10);
+    zenData('task')->gen(10);
 }
 
 /**

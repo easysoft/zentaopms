@@ -18,3 +18,20 @@ window.confirmDisable = function(modelID)
         if(res) $.ajaxSubmit({url: $.createLink('ai', 'modeldisable', `modelID=${modelID}`)});
     })
 };
+
+$(function()
+{
+    const container = window.frameElement?.closest('.load-indicator');
+    if(container)
+    {
+        delete container.dataset.loading;
+        container.classList.remove('loading');
+        container.classList.remove('no-delay');
+    }
+
+    /* If user navigated to this page from old page, reload. */
+    if(window.name === 'app-admin-old')
+    {
+        $.apps.reloadApp('admin', $.createLink('ai', 'models'));
+    }
+});

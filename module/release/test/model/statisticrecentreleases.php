@@ -3,8 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('product')->config('product')->gen(10);
-zdTable('release')->config('release')->gen(100);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('release')->loadYaml('release')->gen(100);
 
 /**
 

@@ -637,6 +637,7 @@ class userModel extends model
 
         $this->dao->begin();
 
+        if(!isset($user->type)) $user->type = $oldUser->type;
         if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
         /* 获取所有的联系方式字段。*/
@@ -689,7 +690,7 @@ class userModel extends model
         {
             if(!empty($user->password)) $this->app->user->password = $user->password;
             $this->app->user->realname = $user->realname;
-            $this->app->user->role     = $user->role;
+            $this->app->user->role     = isset($user->role) ? $user->role : $oldUser->role;
         }
 
         return true;
@@ -877,7 +878,7 @@ class userModel extends model
         $user = $this->identifyUser($account, $password);
         if(!$user) return false;
 
-        $ip   = helper::getRemoteIp();
+        $ip   = substr(helper::getRemoteIp(), 0, 15);
         $last = $this->server->request_time;
         $user = $this->checkNeedModifyPassword($user, $passwordStrength);
 
@@ -2810,6 +2811,27 @@ class userModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * Save old user template.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function saveOldUserTemplate(string $type)
+    {
+        $template = fixer::input('post')
+            ->setDefault('account', $this->app->user->account)
+            ->setDefault('type', $type)
+            ->stripTags('content', $this->config->allowedTags)
+            ->get();
+
+        $condition = "`type`='$type' and account='{$this->app->user->account}'";
+        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
+        if(!dao::isError()) $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
+    }
+
 
     /**
      * 获取当前用户可以查看的模板列表。

@@ -14,8 +14,8 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
-zdTable('group')->gen(5);
+include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+zenData('group')->gen(5);
 su('admin');
 
 $updateName = array('name' => '更新分组',              'desc' => '');

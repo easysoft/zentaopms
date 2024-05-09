@@ -26,6 +26,16 @@ php_value display_errors 1
 php_value max_input_vars 100000
 </IfModule>
 
+<IfModule php_module>
+# php settings.
+Php_value post_max_size 100M
+Php_flag  file_uploads On
+Php_value upload_max_filesize 100M
+Php_value display_errors 1
+# for post vars limit.
+Php_value max_input_vars 100000
+</IfModule>
+
 # yslow settings.
 <IfModule mod_expires.c>
 ExpiresActive On

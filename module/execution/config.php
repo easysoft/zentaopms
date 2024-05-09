@@ -10,7 +10,7 @@ $config->execution->defaultBurnPeriod = 30;
 $config->execution->list = new stdclass();
 $config->execution->list->exportFields          = 'id,name,projectName,PM,begin,end,status,estimate,consumed,left,progress';
 $config->execution->list->customCreateFields    = '';
-$config->execution->list->customBatchEditFields = 'days,lifetime,teamName,desc,PO,QD,PM,RD';
+$config->execution->list->customBatchEditFields = 'days,lifetime,team,desc,PO,QD,PM,RD';
 
 $config->execution->modelList['scrum']         = 'sprint';
 $config->execution->modelList['waterfall']     = 'stage';
@@ -19,7 +19,8 @@ $config->execution->modelList['waterfallplus'] = 'stage';
 
 $config->execution->statusActions = array('start', 'putoff', 'suspend', 'close', 'activate');
 
-$config->execution->kanbanMethod = array('kanban', 'cfd', 'build', 'view', 'manageproducts', 'team', 'managemembers', 'whitelist', 'addwhitelist', 'edit');
+$config->execution->kanbanMethod    = array('kanban', 'cfd', 'build', 'view', 'manageproducts', 'team', 'managemembers', 'whitelist', 'addwhitelist', 'edit');
+$config->execution->storyKanbanCols = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
 
 global $lang, $app;
 $app->loadLang('task');
@@ -229,6 +230,7 @@ $config->execution->actionList['putoff']['url']         = helper::createLink('ex
 $config->execution->actionList['putoff']['data-toggle'] = 'modal';
 $config->execution->actionList['putoff']['data-size']   = 'lg';
 
-$config->execution->view = new stdclass();
-$config->execution->view->operateList['main']   = array('putoff', 'start', 'activate', 'suspend', 'close');
-$config->execution->view->operateList['common'] = array('edit', 'delete');
+$config->execution->actions = new stdclass();
+$config->execution->actions->view = array();
+$config->execution->actions->view['mainActions']   = array('putoff', 'start', 'activate', 'suspend', 'close');
+$config->execution->actions->view['suffixActions'] = array('edit', 'delete');

@@ -20,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 su('admin');
 
-zdTable('account')->gen(0);
+zenData('account')->gen(0);
 
 $accountData = new stdclass();
 $accountData->name        = '测试账号';

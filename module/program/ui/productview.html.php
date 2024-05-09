@@ -33,11 +33,9 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
         ),
         dropdown
         (
-            setClass('btn primary'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
+            btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::placement('bottom-end'),
-            set::items($items),
-            span(setClass('caret'))
+            set::items($items)
         )
     ) : btn
     (
@@ -289,7 +287,7 @@ dtable
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$pageSummary}');}")),
     set::emptyTip($lang->program->noProgram),
     set::createTip($lang->program->create),
-    set::createLink(hasPriv('product', 'create') ? createLink('product', 'create') : null)
+    set::createLink(hasPriv('program', 'create') ? createLink('program', 'create') : null)
 );
 
 render();

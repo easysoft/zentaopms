@@ -67,10 +67,9 @@ class pivotZen extends pivot
             if($this->config->edition == 'open' && $group->grade == 1) continue;
 
             $pivots = $this->pivot->getAllPivotByGroupID($group->id);
-
             if(empty($group->collector) && empty($pivots)) continue;
 
-            $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
+            if($group->grade > 1) $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
 
             if($pivots) $pivots = $this->pivot->processPivot($pivots, false);
 
@@ -78,7 +77,7 @@ class pivotZen extends pivot
             {
                 $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}");
                 $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
-                $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->id, 'name' => $pivot->name, 'url' => $url);
+                $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->grade > 1 ? $group->id : 0, 'name' => $pivot->name, 'url' => $url);
             }
         }
 
@@ -125,25 +124,6 @@ class pivotZen extends pivot
     }
 
     /**
-     * 获取透视表过滤器下拉选项。
-     * Get filter options of pivot.
-     *
-     * @param  string $type
-     * @param  string $object
-     * @param  string $field
-     * @param  string $sql
-     * @access public
-     * @return array
-     */
-    public function getFilterOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
-    {
-        $result  = array();
-        $options = $this->pivot->getSysOptions($type, $object, $field, $sql);
-        foreach($options as $key => $value) $result[] = array('text' => $value, 'value' => $key);
-        return $result;
-    }
-
-    /**
      * Preview pivots of a group.
      *
      * @param  int    $groupID
@@ -154,10 +134,11 @@ class pivotZen extends pivot
     public function show(int $groupID, int $pivotID): void
     {
         $pivot = $this->pivot->getByID($pivotID);
-        if($this->post->filterValues)
+        if(isset($_POST['filterValues']) and $_POST['filterValues'])
         {
             foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
         }
+        if(isset($_POST['summary']) and $_POST['summary']) $pivot->settings['summary'] = $this->post->summary;
 
         list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
@@ -166,8 +147,16 @@ class pivotZen extends pivot
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 
-        list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+        if(isset($pivot->settings['summary']) and $pivot->settings['summary'] == 'notuse')
+        {
+            list($data, $configs) = $this->pivot->genOriginSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+        }
+        else
+        {
+            list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+        }
 
+        $this->view->pivotName    = $pivot->name;
         $this->view->title        = $pivot->name;
         $this->view->currentMenu  = $groupID . '_' . $pivot->id;
         $this->view->currentGroup = $groupID;
@@ -187,9 +176,10 @@ class pivotZen extends pivot
      */
     public function convertDataForDtable(object $data, array $configs): array
     {
-        $columns  = array();
-        $rows     = array();
-        $cellSpan = array();
+        $columns      = array();
+        $rows         = array();
+        $cellSpan     = array();
+        $columnMaxLen = array();
 
         $headerRow1 = !empty($data->cols[0]) ? $data->cols[0] : array();
         $headerRow2 = !empty($data->cols[1]) ? $data->cols[1] : array();
@@ -217,6 +207,8 @@ class pivotZen extends pivot
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
 
+                    $columnMaxLen[$field] = mb_strlen($column->label);
+
                     /* 把被切片的字段名设置为数据表格的列配置的 headerGroup 属性。*/
                     /* Set the sliced field name as the headerGroup attribute of the column configuration of the data table. */
                     $columns[$field]['headerGroup'] = $column->label;
@@ -239,7 +231,9 @@ class pivotZen extends pivot
             $columns[$field]['minWidth'] = 128;
             $columns[$field]['align']    = 'center';
 
-            if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
+            $columnMaxLen[$field] = mb_strlen($column->label);
+
+            // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
 
             $index++;
         }
@@ -267,6 +261,8 @@ class pivotZen extends pivot
                 /* Defind row data of the data table. */
                 $rows[$rowKey][$field] = $value;
 
+                $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
+
                 /* 定义数据表格合并单元格的配置。*/
                 /* Define configuration to merge cell of the data table. */
                 if(isset($configs[$rowKey][$index]) && $configs[$rowKey][$index] > 1)
@@ -283,6 +279,11 @@ class pivotZen extends pivot
 
                 $index++;
             }
+        }
+
+        foreach($columns as $field => $column)
+        {
+            $columns[$field]['width'] = 16 * $columnMaxLen[$field];
         }
 
         return array($columns, $rows, $cellSpan);

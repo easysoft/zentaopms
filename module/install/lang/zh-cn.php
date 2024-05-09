@@ -44,7 +44,7 @@ EOT;
 $lang->install->selectMode          = "请选择使用模式";
 $lang->install->introduction        = "禅道15系列功能介绍";
 $lang->install->howToUse            = "请问您计划如何使用禅道的新版本呢";
-$lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/program0716.mp4';
+$lang->install->guideVideo          = 'https://dl.zentao.net/vedio/program0716.mp4';
 $lang->install->introductionContent = <<<EOT
 <div>
   <h4>尊敬的用户您好，欢迎您使用禅道项目管理系统。</h4>
@@ -65,7 +65,7 @@ $lang->install->introductionContent = <<<EOT
     </div>
   </div>
   <div class='text-center introduction-link'>
-    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> 文档介绍</a>
+    <a href='https://dl.zentao.net/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> 文档介绍</a>
     <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> 视频介绍</a>
   </div>
 </div>

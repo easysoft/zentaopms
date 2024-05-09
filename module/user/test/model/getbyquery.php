@@ -41,9 +41,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$table = zdTable('user');
+$table = zenData('user');
 $table->type->range('outside{2},inside{8}');
 $table->role->range('dev,qa,pm,po,td,pd,qd,top,others');
 $table->deleted->range('1,0{9}');

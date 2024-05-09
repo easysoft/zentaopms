@@ -27,6 +27,8 @@ blockPanel
         set::bordered(false),
         set::horzScrollbarPos('inside'),
         set::fixedLeftWidth('50%'),
+        set::priList($lang->bug->priList),
+        set::severityList($lang->bug->severityList),
         set::cols(array_values($config->block->bug->dtable->fieldList)),
         set::data(array_values($bugs))
     )

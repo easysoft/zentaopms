@@ -60,8 +60,9 @@ class designModel extends model
         $this->loadModel('action');
         foreach($designs as $rowID => $design)
         {
-            $design->product = $productID;
-            $design->project = $projectID;
+            $design->product   = $productID;
+            $design->project   = $projectID;
+            $design->createdBy = $this->app->user->account;
             $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->batchcreate->requiredFields, 'notempty')->exec();
 
             if(dao::isError())
@@ -153,7 +154,7 @@ class designModel extends model
         if(!isset($repo->SCM)) return true;
 
         /* If the repo type is Gitlab, first store the commit log in the repohistory table and get the commit ID. */
-        if($repo->SCM == 'Gitlab')
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $logs = array();
             foreach($this->session->designRevisions as $commit)
@@ -169,8 +170,8 @@ class designModel extends model
                 }
             }
             $this->repo->saveCommit($repoID, array('commits' => $logs), 0);
-            $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
         }
+        $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
 
         $this->designTao->updateLinkedCommits($designID, $repoID, $revisions);
 
@@ -383,10 +384,6 @@ class designModel extends model
             {
                 $this->session->set('designQuery', $query->sql);
                 $this->session->set('designForm', $query->form);
-            }
-            else
-            {
-                $this->session->set('designQuery', ' 1 = 1');
             }
         }
         else

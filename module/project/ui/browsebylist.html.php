@@ -20,7 +20,7 @@ featureBar
     set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox
     (
-        set::rootClass('ml-2'),
+        set::rootClass('ml-2 mr-4'),
         set::name('involved'),
         set::text($lang->project->mine),
         set::checked($this->cookie->involved ? 'checked' : '')
@@ -61,7 +61,7 @@ toolbar
         'icon'          => 'plus',
         'text'          => $lang->project->create,
         'class'         => 'primary create-project-btn',
-        'url'           => commonModel::isTutorialMode() ? createLink('project', 'create', 'mode=scrum&programID=0') : createLink('project', 'createGuide'),
+        'url'           => commonModel::isTutorialMode() ? createLink('project', 'create', 'mode=scrum&programID=0') : createLink('project', 'createGuide', "programID={$programID}"),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
     ))) : null

@@ -49,11 +49,11 @@ $modeDropdown = dropdown
 );
 
 $handleLongTimeChange = jsCallback()->do(<<<'JS'
-    const endPicker = $element.find('[name=end]').closest('[data-zui-datepicker]').zui('datePicker');
-    const longTime = $element.find('[name=longTime]').prop('checked');
-    endPicker.render({disabled: longTime});
-    if(longTime) endPicker.$.setValue('');
-    $element.find('[name=days]').attr('disabled', longTime ? 'disabled' : null);
+    const endPicker  = $element.find('[name=end]').closest('[data-zui-datepicker]').zui('datePicker');
+    const isLongTime = $element.find('[name=longTime]').prop('checked');
+    endPicker.render({disabled: isLongTime});
+    if(isLongTime) endPicker.$.setValue('');
+    $element.find('[name=days]').attr('disabled', isLongTime ? 'disabled' : null);
 JS);
 
 $toggleLongTime = jsCallback()->do(<<<'JS'
@@ -69,19 +69,20 @@ JS);
 formGridPanel
 (
     to::titleSuffix($modeDropdown),
+    set::ajax(array('submitDisabledValue' => false)),
     to::headingActions
     (
         btn
         (
             set::icon('copy'),
-            setClass('primary-ghost size-md'),
-            toggle::modal(array('target' => '#copyProjectModal', 'destoryOnHide' => true)),
+            setClass('primary-ghost size-md copy-project-btn'),
+            toggle::modal(array('target' => '#copyProjectModal', 'destoryOnHide' => true, 'size' => 'sm')),
             $lang->project->copy
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
     formHidden('storyType[]', 'story'),
-    on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .pick *', 'removeTips'),
+    on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .picker-box *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
     on::click('[name=multiple]', $toggleLongTime),
     on::change('[name=parent]')->toggleClass('.productsBox .linkProduct .form-label', 'required', "\$(target).val() > 0"),
@@ -99,19 +100,41 @@ formGridPanel
     set::loadUrl($loadUrl)
 );
 
+$toggleActiveProject = jsCallback()->do(<<<'JS'
+    if($this.hasClass('primary-outline'))
+    {
+        $this.removeClass('primary-outline');
+    }
+    else
+    {
+        $('#copyProjects button.project-block.primary-outline').removeClass('primary-outline');
+        $this.addClass('primary-outline');
+    }
+JS
+);
+
+$copySelectedProject = jsCallback()->const('model', $model)->do(<<<'JS'
+    const copyProjectID = $('#copyProjects button.project-block.primary-outline').length == 1 ? $('#copyProjects button.project-block.primary-outline').data('id') : 0;
+    const programID     = $('[name=parent]').val();
+    loadPage($.createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + copyProjectID));
+    zui.Modal.hide();
+JS
+);
+
 $copyProjectsBox = array();
 if(!empty($copyProjects))
 {
-    foreach($copyProjects as $id => $name)
+    foreach($copyProjects as $id => $project)
     {
         $copyProjectsBox[] = btn
         (
             setClass('project-block justify-start'),
             setClass($copyProjectID == $id ? 'primary-outline' : ''),
             set('data-id', $id),
-            set('data-pinyin', zget($copyPinyinList, $name, '')),
-            icon(setClass('text-gray'), $lang->icons['project']),
-            span($name, set::title($name))
+            set('data-pinyin', zget($copyPinyinList, $project->name, '')),
+            icon(setClass('text-gray'), !empty($project->model) ? ($project->model == 'scrum' ? 'sprint' : $project->model) : $lang->icons['project']),
+            on::click($toggleActiveProject),
+            span($project->name, set::title($project->name), setClass('text-left'))
         );
     }
 }
@@ -134,24 +157,51 @@ modal
     set::id('copyProjectModal'),
     to::header
     (
-        span
+        div
         (
-            h4
+            setClass('w-full'),
+            span
             (
-                set::className('copy-title'),
-                $lang->project->copyTitle
+                h4
+                (
+                    set::className('copy-title'),
+                    $lang->project->copyTitle
+                )
+            ),
+            div
+            (
+                setClass('py-4 border-b border-b-1'),
+                inputControl
+                (
+                    to::suffix(icon('search')),
+                    set::suffixWidth('sm'),
+                    input
+                    (
+                        set::name('projectName'),
+                        set::placeholder($lang->project->searchByName)
+                    )
+                )
             )
-        ),
-        input
+        )
+    ),
+    to::footer
+    (
+        div
         (
-            set::name('projectName'),
-            set::placeholder($lang->project->searchByName)
+            setClass('flex mt-4 w-full justify-center'),
+            btn
+            (
+                setClass('px-6'),
+                set::type('primary'),
+                on::click($copySelectedProject),
+                $lang->confirm
+            )
         )
     ),
     div
     (
         set::id('copyProjects'),
-        setClass('flex items-center flex-wrap'),
+        setClass('flex items-center flex-wrap gap-4'),
         $copyProjectsBox
     )
 );

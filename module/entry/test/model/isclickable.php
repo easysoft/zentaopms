@@ -14,7 +14,7 @@ sed: can't read /home/xieqiyu/repo/zentaopms/test/config/my.php: No such file or
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
+include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
 
 $object     = new stdclass();
 $actionList = array('log', 'edit', 'delete');

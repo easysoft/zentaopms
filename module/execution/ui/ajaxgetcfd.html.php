@@ -38,6 +38,8 @@ if(hasPriv('execution', 'cfd'))
     $cfdChart = isset($chartData['labels']) && count($chartData['labels']) != 1 ? echarts
     (
         set::series($chartSeries),
+        set::width('100%'),
+        set::height('150%'),
         set::tooltip(array(
             'trigger'     => 'axis',
             'axisPointer' => array('type' => 'cross', 'label' => array('backgroundColor' => '#6a7985')),
@@ -65,7 +67,7 @@ if(hasPriv('execution', 'cfd'))
             'axisPointer'   => array('label' => array('show' => true, 'precision' => 0)),
             'axisLine'      => array('show' => true, 'lineStyle' => array('color' => '#999', 'width' => 1))
         )))
-    )->size('100%', '150%') : div
+    ) : div
     (
         setClass('table-empty-tip text-center'),
         span

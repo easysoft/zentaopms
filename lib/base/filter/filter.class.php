@@ -553,14 +553,30 @@ class baseValidater
         {
             if(is_array($files['name']))
             {
-                foreach($files['name'] as $i => $fileName)
+                foreach($files['name'] as $fileName)
                 {
-                    $extension = ltrim(strrchr($fileName, '.'), '.');
-                    if(stripos(",{$config->file->dangers},", ",{$extension},") !== false)
+                    if(is_array($fileName))
                     {
-                        unset($_FILES);
-                        return array();
+                        foreach($fileName as $name)
+                        {
+                            $extension = ltrim(strrchr($name, '.'), '.');
+                            if(stripos(",{$config->file->dangers},", ",{$extension},") !== false)
+                            {
+                                unset($_FILES);
+                                return array();
+                            }
+                        }
                     }
+                    else
+                    {
+                        $extension = ltrim(strrchr($fileName, '.'), '.');
+                        if(stripos(",{$config->file->dangers},", ",{$extension},") !== false)
+                        {
+                            unset($_FILES);
+                            return array();
+                        }
+                    }
+
                 }
             }
             else
@@ -1345,6 +1361,16 @@ class baseFixer
      */
     public function get(string $fields = ''): mixed
     {
+        global $config;
+
+        if(!empty($this->rawconfig))
+        {
+            foreach($this->rawconfig as $field => $fieldConfig)
+            {
+                if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor') $this->stripTags($field, $config->allowedTags);
+            }
+        }
+
         $fields = str_replace(' ', '', trim($fields));
         foreach($this->data as $field => $value) $this->specialChars($field);
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -15,10 +15,10 @@ cid=1
 
 */
 
-$repo = zdTable('repo')->config('repo');
+$repo = zenData('repo')->loadYaml('repo');
 $repo->synced->range('0');
 $repo->gen(4);
-zdTable('repohistory')->config('repohistory')->gen(4);
+zenData('repohistory')->loadYaml('repohistory')->gen(4);
 
 $repo = new repoTest();
 

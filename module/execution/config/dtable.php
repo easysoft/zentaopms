@@ -196,6 +196,7 @@ $config->execution->importBug->dtable->fieldList['title']['title']       = $lang
 $config->execution->importBug->dtable->fieldList['title']['type']        = 'shortNestedTitle';
 $config->execution->importBug->dtable->fieldList['title']['sortType']    = false;
 $config->execution->importBug->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->execution->importBug->dtable->fieldList['title']['data-size']   = 'lg';
 $config->execution->importBug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 
 $config->execution->importBug->dtable->fieldList['status']['title']     = $lang->bug->status;

@@ -20,10 +20,10 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('pipeline')->gen(5);
-zdTable('oauth')->config('oauth')->gen(5);
+zenData('pipeline')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(5);
 
 $mrModel = new mrTest();
 

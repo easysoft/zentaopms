@@ -15,6 +15,7 @@ formPanel
 (
     formRow
     (
+        set::width('1/2'),
         formGroup
         (
             set::label($lang->kanbancard->progress),

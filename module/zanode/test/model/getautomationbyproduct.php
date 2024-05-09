@@ -5,6 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 zanodemodel->getAutomationByProduct().
+timeout=0
 cid=1
 
 - 测试获取 id 1 的自动化设置
@@ -28,13 +29,13 @@ cid=1
 - 测试获取 空的 id 0 的自动化设置 @0
 - 测试获取 不存在的 id 111 的自动化设置 @0
 
- */
+*/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('user')->gen(10);
-zdTable('automation')->gen(5);
+zenData('user')->gen(10);
+zenData('automation')->gen(5);
 
 su('admin');
 

@@ -71,8 +71,10 @@ class form extends fixer
     {
         global $app, $config;
 
+        $form = new form;
         if($configObject === null) $configObject = $config->{$app->moduleName}->form->{$app->methodName};
-        return (new form)->config($configObject);
+        $configObject = $form->appendExtendFormConfig($configObject);
+        return $form->config($configObject);
     }
 
     /**
@@ -86,8 +88,59 @@ class form extends fixer
     {
         global $app, $config;
 
+        $form = new form;
         if($configObject === null) $configObject = $config->{$app->moduleName}->form->{$app->methodName};
-        return (new form)->config($configObject, 'batch');
+        $configObject = $form->appendExtendFormConfig($configObject);
+        return $form->config($configObject, 'batch');
+    }
+
+
+    /**
+     * 追加工作流新增的字段到表单提交配置。
+     * append workflow form config.
+     *
+     * @param  array  $config
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return array
+     */
+    public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = ''): array
+    {
+        global $app, $config;
+        if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
+
+        $moduleName = $moduleName ? $moduleName : $app->getModuleName();
+        $methodName = $methodName ? $moduleName : $app->getMethodName();
+
+        $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return $configObject;
+
+        $action = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action || $action->extensionType != 'extend') return $configObject;
+
+        $fieldList    = $app->control->workflowaction->getFields($flow->module, $action->action);
+        $layouts      = $app->control->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $notEmptyRule = $app->control->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+        if($layouts)
+        {
+            foreach($fieldList as $key => $field)
+            {
+                if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+
+                $required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
+                if($field->control == 'multi-select' || $field->control == 'checkbox')
+                {
+                    $configObject[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
+                }
+                else
+                {
+                    $configObject[$field->field] = array('required' => $required, 'type' => 'string');
+                    if($field->control == 'richtext') $configObject[$field->field]['control'] = 'editor';
+                }
+            }
+        }
+        return $configObject;
     }
 
     /**
@@ -172,8 +225,8 @@ class form extends fixer
     {
         global $app;
 
-        $rowDataList   = array();
-        $baseField = '';
+        $rowDataList = array();
+        $baseField   = '';
 
         foreach($fieldConfigs as $field => $config)
         {
@@ -215,7 +268,7 @@ class form extends fixer
                 if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter']);
 
                 /* 检查必填字段。Check required fields. */
-                if(isset($config['required']) && $config['required'] && $this->checkEmpty($rowData->$field))
+                if(isset($config['required']) && $config['required'] && empty($rowData->$field))
                 {
                     $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
                     $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
@@ -228,21 +281,6 @@ class form extends fixer
         }
 
         $this->dataList = $rowDataList;
-    }
-
-    /**
-     * 检查为空。
-     * Empty checking.
-     *
-     * @param  mixed $data
-     * @return bool
-     */
-    public function checkEmpty(mixed $data): bool
-    {
-        if(is_array($data)) return empty($data);
-
-        $data = (string)$data;
-        return empty(strlen($data));
     }
 
     /**
@@ -284,7 +322,7 @@ class form extends fixer
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter']);
 
-        if(isset($config['required']) && $config['required'] && isset($data) && $this->checkEmpty($data))
+        if(isset($config['required']) && $config['required'] && empty($data))
         {
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
             $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
@@ -348,11 +386,6 @@ class form extends fixer
     public function get(string $fields = ''): mixed
     {
         global $config;
-
-        foreach($this->rawconfig as $field => $fieldConfig)
-        {
-            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor') $this->stripTags($field, $config->allowedTags);
-        }
 
         if($this->formType == 'single') return parent::get($fields);
         foreach($this->dataList as $rowIndex => $data)

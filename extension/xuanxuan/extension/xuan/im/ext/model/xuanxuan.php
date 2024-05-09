@@ -33,3 +33,8 @@ public function messageGetNotifyList()
 {
     return $this->loadExtension('xuanxuan')->messageGetNotifyList();
 }
+
+public function getAiChatLatestContext($moduleId, $userId)
+{
+    return $this->loadExtension('xuanxuan')->getAiChatLatestContext($moduleId, $userId);
+}

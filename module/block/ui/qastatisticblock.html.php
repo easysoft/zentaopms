@@ -95,53 +95,30 @@ $buildProgressBars = function(object $product, bool $longBlock): node
 $buildTesttasks = function(object $product, bool $longBlock): node|null
 {
     global $lang;
-    $waitTesttasks = array();
-    if(!empty($product->waitTesttasks))
+    $unclosedTesttasks = array();
+    if(!empty($product->unclosedTesttasks))
     {
-        foreach($product->waitTesttasks as $waitTesttask)
+        foreach($product->unclosedTesttasks as $waitTesttask)
         {
-            $waitTesttasks[] = div
+            $unclosedTesttasks[] = div
             (
                 setClass('clip', $longBlock ? 'py-1' : 'py-0.5'),
-                hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name)
+                hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), set('title', $waitTesttask->name), $waitTesttask->name) : span(set('title', $waitTesttask->name), $waitTesttask->name)
             );
-            if(count($waitTesttasks) >= 2) break;
+            if(count($unclosedTesttasks) >= 6) break;
         }
     }
 
-    $doingTesttasks = array();
-    if(!empty($product->doingTesttasks))
-    {
-        foreach($product->doingTesttasks as $doingTesttask)
-        {
-            $doingTesttasks[] = div
-            (
-                setClass('clip', $longBlock ? 'py-1' : 'py-0.5'),
-                common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$doingTesttask->id}")), $doingTesttask->name) : span($doingTesttask->name)
-            );
-            if(count($doingTesttasks) >= 2) break;
-        }
-    }
-
-    if(empty($waitTesttasks) && empty($doingTesttasks)) return null;
-
-    return col
+    return $unclosedTesttasks ? col
     (
         setClass('min-w-0 flex-1 gap-1.5 px-3 pt-2 border-l'),
-        div($lang->block->qastatistic->latestTesttask),
-        empty($doingTesttasks) ? null : div
+        div(setClass('font-bold'), $lang->block->qastatistic->unclosedTesttasks),
+        div
         (
             setClass($longBlock ? 'py-2' : 'pt-2'),
-            div(setClass('text-sm', $longBlock ? 'pb-2' : 'pb-1'), $lang->testtask->statusList['doing']),
-            $doingTesttasks
+            $unclosedTesttasks
         ),
-        empty($waitTesttasks) ? null : div
-        (
-            setClass($longBlock ? 'py-2' : 'pt-2'),
-            div(setClass('text-sm', $longBlock ? 'pb-2' : 'pb-1'), $lang->testtask->statusList['wait']),
-            $waitTesttasks
-        )
-    );
+    ) : null;
 };
 
 $testTasksView = !empty($product) ? $buildTesttasks($product, $longBlock) : null;
@@ -153,22 +130,22 @@ statisticBlock
     set::items($items),
     $product ? div
     (
-        setClass($longBlock ? 'row' : 'col gap-3', 'h-full overflow-hidden items-stretch px-2 py-3'),
+        setClass('h-full overflow-hidden items-stretch px-2', $longBlock ? 'row py-3' : 'col gap-2 pt-1'),
         center
         (
-            setClass('gap-4 px-5', $testTasksView ? 'flex-none' : 'flex-1'),
+            setClass('gap-2 px-5 justify-start ', $testTasksView ? 'flex-none' : 'flex-1', $longBlock ? ' py-2' : ''),
+            div
+            (
+                setClass('w-full font-bold'),
+                $lang->block->qastatistic->fixBugRate
+            ),
             progressCircle
             (
                 set::percent($product->fixedBugRate),
                 set::size(112),
                 set::text(false),
                 set::circleWidth(0.06),
-                div(span(setClass('text-2xl font-bold'), $product->fixedBugRate), '%'),
-                div
-                (
-                    setClass('row text-gray items-center gap-1'),
-                    $lang->block->qastatistic->fixBugRate
-                )
+                div(span(setClass('text-2xl font-bold'), $product->fixedBugRate), '%')
             ),
             row
             (
@@ -208,7 +185,7 @@ statisticBlock
             col
             (
                 setClass('flex-1 gap-1.5 px-3 py-2'),
-                div($lang->block->qastatistic->bugStatistics),
+                div(setClass('font-bold'), $lang->block->qastatistic->bugStatistics),
                 !empty($product) ? $buildProgressBars($product, $longBlock) : null
             ),
             $testTasksView

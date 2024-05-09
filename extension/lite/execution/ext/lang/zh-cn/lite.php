@@ -1,4 +1,5 @@
 <?php
+global $lang;
 unset($lang->execution->featureBar['all']['undone']);
 unset($lang->execution->featureBar['all']['wait']);
 unset($lang->execution->featureBar['all']['suspended']);

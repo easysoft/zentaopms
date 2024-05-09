@@ -29,6 +29,7 @@ featureBar
 if(!isset($browseType)) $browseType = 'all';
 if(!isset($orderBy))    $orderBy = '';
 
+$canCreateTask  = false;
 $canImportTask  = hasPriv('task', 'importTask');
 $canImportBug   = hasPriv('task', 'importBug');
 if(common::canModify('execution', $execution))
@@ -38,6 +39,7 @@ if(common::canModify('execution', $execution))
     {
         $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug');
     }
+    $canCreateTask = hasPriv('task', 'create');
 }
 $importItems = !empty($importTaskItem) && empty($importBugItem) ? array($importTaskItem) : array();
 $importItems = empty($importTaskItem) && !empty($importBugItem) ? array($importBugItem) : $importItems;
@@ -48,33 +50,34 @@ toolbar
     hasPriv('task', 'report') ? item(set(array
     (
         'icon'  => 'bar-chart',
-        'text'  => $lang->task->reportChart,
+        'text'  => $lang->task->report->common,
         'class' => 'ghost',
         'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}")
     ))) : null,
-    !empty($importItems) ? dropdown(
-        btn(
-            setClass('ghost btn square btn-default'),
-            set::icon('import'),
-            set::text($lang->import)
-        ),
-        set::items($importItems),
-        set::placement('bottom-end')
-    ) : null,
     hasPriv('task', 'export') ? item(set(array
     (
         'icon'        => 'export',
         'text'        => $lang->export,
         'class'       => 'ghost',
         'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type=tree"),
-        'data-toggle' => 'modal'
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
     ))) : null,
-    hasPriv('task', 'create') ? item(set(array
+    !empty($importItems) ? dropdown(
+        btn(
+            setClass('ghost btn btn-default'),
+            set::icon('import'),
+            set::text($lang->import)
+        ),
+        set::items($importItems),
+        set::placement('bottom-end')
+    ) : null,
+    $canCreateTask ? item(set(array
     (
         'icon' => 'plus',
         'text' => $lang->task->create,
         'class' => 'primary create-execution-btn',
-        'url'   => createLink('task', 'create', "execution={$executionID}" . ($app->tab == 'project' ? '#app=project' : ''))
+        'url'   => createLink('task', 'create', "execution={$executionID}") . ($app->tab == 'project' ? '#app=project' : '')
     ))) : null
 );
 
@@ -90,11 +93,11 @@ if(empty($tree))
             setClass('text-gray'),
             $lang->task->noTask
         ),
-        common::hasPriv('task', 'create', $checkObject) ? btn
+        $canCreateTask ? btn
         (
             set::text($lang->task->create),
             set::icon('plus'),
-            set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '' . ($app->tab == 'project' ? '#app=project' : '')))),
+            set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '')) . ($app->tab == 'project' ? '#app=project' : '')),
             setClass('btn primary-pale border-primary ml-2')
         ) : null
     );

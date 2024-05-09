@@ -2,15 +2,15 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/personnel.class.php';
+include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 
-zdTable('acl')->gen(100);
-zdTable('project')->config('project')->gen(120);
-zdTable('product')->gen(50);
-zdTable('userview')->gen(50);
-zdTable('user')->gen(20);
-zdTable('group')->gen(0);
-zdTable('usergroup')->gen(0);
+zenData('acl')->gen(100);
+zenData('project')->loadYaml('project')->gen(120);
+zenData('product')->gen(50);
+zenData('userview')->gen(50);
+zenData('user')->gen(20);
+zenData('group')->gen(0);
+zenData('usergroup')->gen(0);
 
 /**
 

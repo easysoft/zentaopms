@@ -415,7 +415,7 @@ $config->product->all->dtable->fieldList['bugFixedRate']['group']    = 'g8';
 
 $config->product->all->dtable->fieldList['releases']['name']     = 'releases';
 $config->product->all->dtable->fieldList['releases']['title']    = $lang->product->release;
-$config->product->all->dtable->fieldList['releases']['width']    = 120;
+$config->product->all->dtable->fieldList['releases']['width']    = 95;
 $config->product->all->dtable->fieldList['releases']['type']     = 'number';
 $config->product->all->dtable->fieldList['releases']['show']     = true;
 $config->product->all->dtable->fieldList['releases']['sortType'] = true;

@@ -49,36 +49,34 @@ $(function()
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
-
-        /* Reload current page when click dropmeu. */
-        $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-tree .dropmenu-item', function()
-        {
-            var branchOrTag = $(this).find('.listitem').data('value');
-            var url         = $(this).find('.listitem').data('url');
-
-            if(url != 'javascript:;') return;
-
-            if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag, {expires:config.cookieLife, path:config.webRoot});
-
-            openUrl(currentLink, {app: appTab});
-        })
-
-        $('.repoDropDownMenu').on('click', function()
-        {
-            var url            = $(this).data('link');
-            var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
-            if(url.indexOf('blame') >=0 && url.indexOf('download') == -1)
-            {
-                openUrl(url.replace('{path}', activeFilePath), {app: appTab});
-            }
-            else
-            {
-                window.open(url.replace('{path}', activeFilePath), '_self');
-            }
-            return;
-        })
     }, 200);
 });
+
+/* Reload current page when click dropmeu. */
+$('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-tree .dropmenu-item', function()
+{
+    const branchOrTag = $(this).find('.listitem').data('value');
+    const url         = $(this).find('.listitem').data('url');
+    if(url != 'javascript:;') return;
+
+    if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag, {expires:config.cookieLife, path:config.webRoot});
+    openUrl(currentLink, {app: appTab});
+})
+
+$('.repoDropDownMenu').on('click', function()
+{
+    const url  = $(this).data('link');
+    const file = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
+    if(url.indexOf('blame') >=0 && url.indexOf('download') == -1)
+    {
+        openUrl(url.replace('{path}', file), {app: appTab});
+    }
+    else
+    {
+        window.open(url.replace('{path}', file), '_self');
+    }
+    return;
+})
 
 /**
  * 点击左侧菜单打开详情tab。

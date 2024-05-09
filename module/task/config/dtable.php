@@ -189,6 +189,12 @@ $config->task->dtable->fieldList['mailto']['sortType']  = true;
 $config->task->dtable->fieldList['mailto']['group']     = 9;
 $config->task->dtable->fieldList['mailto']['delimiter'] = ',';
 
+if($config->edition == 'max')
+{
+    $config->task->dtable->fieldList['design']['title'] = $lang->task->design;
+    $config->task->dtable->fieldList['design']['type']  = 'text';
+}
+
 $config->task->dtable->fieldList['actions']['type']     = 'actions';
 $config->task->dtable->fieldList['actions']['width']    = '160px';
 $config->task->dtable->fieldList['actions']['list']     = $config->task->actionList;
@@ -299,7 +305,7 @@ $config->task->dtable->importTask->fieldList['deadline']['type']     = 'date';
 $config->task->dtable->importTask->fieldList['deadline']['sortType'] = true;
 $config->task->dtable->importTask->fieldList['deadline']['group']    = 2;
 
-$config->task->dtable->importTask->fieldList['execution']['title']    = $lang->task->stage;
+$config->task->dtable->importTask->fieldList['execution']['title']    = $lang->task->execution;
 $config->task->dtable->importTask->fieldList['execution']['name']     = 'execution';
 $config->task->dtable->importTask->fieldList['execution']['type']     = 'desc';
 $config->task->dtable->importTask->fieldList['execution']['sortType'] = false;

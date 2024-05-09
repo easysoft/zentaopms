@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->status->range('wait,doing,suspend,closed');
 $project->gen(15);
 

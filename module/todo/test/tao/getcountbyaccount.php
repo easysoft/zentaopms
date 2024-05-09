@@ -5,7 +5,7 @@ su('admin');
 
 function initData()
 {
-    zdTable('todo')->config('getcountbyaccount')->gen(20);
+    zenData('todo')->loadYaml('getcountbyaccount')->gen(20);
 }
 
 /**

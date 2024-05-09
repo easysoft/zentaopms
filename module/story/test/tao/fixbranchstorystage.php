@@ -1,44 +1,46 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
 
-$product = zdTable('product');
+/**
+
+title=测试 storyModel->fixBranchStoryStage();
+cid=0
+
+- 不传入任何项目。 @0
+- 传入需求，检查结果。 @1
+
+*/
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+
+$product = zenData('product');
 $product->type->range('normal,branch');
 $product->gen(2);
 
-$projectproduct = zdTable('projectproduct');
+$projectproduct = zenData('projectproduct');
 $projectproduct->project->range('1-5');
 $projectproduct->product->range('1-2');
 $projectproduct->branch->range('0,1,2');
 $projectproduct->gen(3);
 
-$projectstory = zdTable('projectstory');
+$projectstory = zenData('projectstory');
 $projectstory->product->range('1-2');
 $projectstory->story->range('1-50');
 $projectstory->project->range('1-5');
 $projectstory->branch->range('0{25},1{25}');
 $projectstory->gen(50);
 
-$storystage = zdTable('storystage');
+$storystage = zenData('storystage');
 $storystage->story->range('1-25{2}');
 $storystage->branch->range('0,1');
 $storystage->gen(50);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1');
 $story->type->range('story');
 $story->stage->range('wait,planned,projected,developing,developed,testing,tested,verified,released,closed');
 $story->branch->range('0{25},1{25}');
 $story->gen(50);
-
-/**
-
-title=测试 storyModel->fixBranchStoryStage();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

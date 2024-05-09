@@ -5,3 +5,8 @@
 .label-closed {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-gray-500-rgb),var(--tw-ring-opacity));}
 
 #table-productplan-browse .dtable-nested-toggle.is-no-child {display: none}
+
+#featureBar .nav-dropdown .statistic-plan {width: 120px; justify-content: flex-start;}
+#featureBar .nav-dropdown .statistic-plan > .text {overflow: hidden;}
+#featureBar .nav-dropdown .statistic-plan > .caret {position: absolute; right: 5px;}
+#featureBar .statistic-plan > .icon {color: unset;}

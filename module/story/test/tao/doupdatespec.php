@@ -1,10 +1,46 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->doUpdateSpec();
+cid=0
+
+- 执行storyTest模块的doUpdateSpecTest方法，参数是1, $data, $oldData
+ - 属性title @teststory
+ - 属性spec @testspec
+ - 属性verify @testverify
+- 执行storyTest模块的doUpdateSpecTest方法，参数是1, $data, $oldData
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+- 执行storyTest模块的doUpdateSpecTest方法，参数是2, $data, $oldData
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @~~
+- 执行storyTest模块的doUpdateSpecTest方法，参数是3, $data, $oldData, $addedFiles
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @8,9,2
+- 执行storyTest模块的doUpdateSpecTest方法，参数是4, $data, $oldData, $addedFiles
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @8,9
+- 执行$storySpec
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @8,9
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-100');
 $story->title->range('teststory');
 $story->product->range('1');
@@ -12,7 +48,7 @@ $story->twins->range('``{3},5,4');
 $story->version->range('1');
 $story->gen(5);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-100');
 $storySpec->title->range('teststory');
 $storySpec->spec->range('testspec');
@@ -20,14 +56,6 @@ $storySpec->verify->range('testverify');
 $storySpec->files->range('``,1-10');
 $storySpec->version->range('1');
 $storySpec->gen(5);
-
-/**
-
-title=测试 storyModel->doUpdateSpec();
-cid=1
-pid=1
-
-*/
 
 $storyTest = new storyTest();
 

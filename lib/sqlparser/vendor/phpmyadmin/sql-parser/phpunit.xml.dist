@@ -11,7 +11,9 @@
          processIsolation="false"
          stopOnFailure="false">
     <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml" />
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-xml" target="build/logs/coverage-xml"/>
+        <log type="junit" target="build/logs/junit.xml"/>
     </logging>
     <testsuites>
         <testsuite name="Builder">
@@ -31,6 +33,11 @@
         </testsuite>
         <testsuite name="Utils">
             <directory suffix=".php">./tests/Utils</directory>
+        </testsuite>
+        <testsuite name="Tools">
+            <directory suffix=".php">./tests/Tools</directory>
+            <exclude>./tests/Tools/templates/</exclude>
+            <exclude>./tests/Tools/contexts/</exclude>
         </testsuite>
     </testsuites>
     <filter>

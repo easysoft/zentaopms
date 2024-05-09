@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -7,7 +9,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class SelectStatementTest extends TestCase
 {
-    public function testSelectOptions()
+    public function testSelectOptions(): void
     {
         $data = $this->getData('parser/parseSelect');
         $parser = new Parser($data['query']);
@@ -17,77 +19,92 @@ class SelectStatementTest extends TestCase
 
     /**
      * @dataProvider selectProvider
-     *
-     * @param mixed $test
      */
-    public function testSelect($test)
+    public function testSelect(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function selectProvider()
+    /**
+     * @return string[][]
+     */
+    public function selectProvider(): array
     {
-        return array(
-            array('parser/parseSelect2'),
-            array('parser/parseSelect3'),
-            array('parser/parseSelect4'),
-            array('parser/parseSelect5'),
-            array('parser/parseSelect6'),
-            array('parser/parseSelect7'),
-            array('parser/parseSelect8'),
-            array('parser/parseSelect9'),
-            array('parser/parseSelect10'),
-            array('parser/parseSelect11'),
-            array('parser/parseSelectErr1'),
-            array('parser/parseSelectErr2'),
-            array('parser/parseSelectNested'),
-            array('parser/parseSelectCase1'),
-            array('parser/parseSelectCase2'),
-            array('parser/parseSelectCase3'),
-            array('parser/parseSelectCase4'),
-            array('parser/parseSelectCase5'),
-            array('parser/parseSelectCaseErr1'),
-            array('parser/parseSelectCaseErr2'),
-            array('parser/parseSelectCaseErr3'),
-            array('parser/parseSelectCaseErr4'),
-            array('parser/parseSelectCaseErr5'),
-            array('parser/parseSelectCaseAlias1'),
-            array('parser/parseSelectCaseAlias2'),
-            array('parser/parseSelectCaseAlias3'),
-            array('parser/parseSelectCaseAlias4'),
-            array('parser/parseSelectCaseAlias5'),
-            array('parser/parseSelectCaseAlias6'),
-            array('parser/parseSelectCaseAliasErr1'),
-            array('parser/parseSelectCaseAliasErr2'),
-            array('parser/parseSelectCaseAliasErr3'),
-            array('parser/parseSelectCaseAliasErr4'),
-            array('parser/parseSelectExists'),
-            array('parser/parseSelectIntoOptions1'),
-            array('parser/parseSelectIntoOptions2'),
-            array('parser/parseSelectIntoOptions3'),
-            array('parser/parseSelectJoinCross'),
-            array('parser/parseSelectJoinNatural'),
-            array('parser/parseSelectJoinNaturalLeft'),
-            array('parser/parseSelectJoinNaturalRight'),
-            array('parser/parseSelectJoinNaturalLeftOuter'),
-            array('parser/parseSelectJoinNaturalRightOuter'),
-            array('parser/parseSelectJoinMultiple'),
-            array('parser/parseSelectJoinMultiple2'),
-            array('parser/parseSelectWrongOrder'),
-            array('parser/parseSelectWrongOrder2'),
-            array('parser/parseSelectEndOptions1'),
-            array('parser/parseSelectEndOptions2'),
-            array('parser/parseSelectEndOptionsErr'),
-            array('parser/parseSelectUnion'),
-            array('parser/parseSelectUnion2'),
-            array('parser/parseSelectIndexHint1'),
-            array('parser/parseSelectIndexHint2'),
-            array('parser/parseSelectIndexHintErr1'),
-            array('parser/parseSelectIndexHintErr2'),
-            array('parser/parseSelectIndexHintErr3'),
-            array('parser/parseSelectIndexHintErr4'),
-            array('parser/parseSelectWithParenthesis'),
-            array('parser/parseSelectOrderByComment')
-        );
+        return [
+            ['parser/parseSelect2'],
+            ['parser/parseSelect3'],
+            ['parser/parseSelect4'],
+            ['parser/parseSelect5'],
+            ['parser/parseSelect6'],
+            ['parser/parseSelect7'],
+            ['parser/parseSelect8'],
+            ['parser/parseSelect9'],
+            ['parser/parseSelect10'],
+            ['parser/parseSelect11'],
+            ['parser/parseSelect12'],
+            ['parser/parseSelect13'],
+            ['parser/parseSelect14'],
+            ['parser/parseSelect15'],
+            ['parser/parseSelect16'],
+            ['parser/parseSelectAggregateWithPartitionAndAlias'],
+            ['parser/parseSelectErr1'],
+            ['parser/parseSelectErr2'],
+            ['parser/parseSelectNested'],
+            ['parser/parseSelectCase1'],
+            ['parser/parseSelectCase2'],
+            ['parser/parseSelectCase3'],
+            ['parser/parseSelectCase4'],
+            ['parser/parseSelectCase5'],
+            ['parser/parseSelectCaseErr1'],
+            ['parser/parseSelectCaseErr2'],
+            ['parser/parseSelectCaseErr3'],
+            ['parser/parseSelectCaseErr4'],
+            ['parser/parseSelectCaseErr5'],
+            ['parser/parseSelectCaseAlias1'],
+            ['parser/parseSelectCaseAlias2'],
+            ['parser/parseSelectCaseAlias3'],
+            ['parser/parseSelectCaseAlias4'],
+            ['parser/parseSelectCaseAlias5'],
+            ['parser/parseSelectCaseAlias6'],
+            ['parser/parseSelectCaseAliasErr1'],
+            ['parser/parseSelectCaseAliasErr2'],
+            ['parser/parseSelectCaseAliasErr3'],
+            ['parser/parseSelectCaseAliasErr4'],
+            ['parser/parseSelectExists'],
+            ['parser/parseSelectIntoOptions1'],
+            ['parser/parseSelectIntoOptions2'],
+            ['parser/parseSelectIntoOptions3'],
+            ['parser/parseSelectJoinCross'],
+            ['parser/parseSelectJoinNatural'],
+            ['parser/parseSelectJoinNaturalLeft'],
+            ['parser/parseSelectJoinNaturalRight'],
+            ['parser/parseSelectJoinNaturalLeftOuter'],
+            ['parser/parseSelectJoinNaturalRightOuter'],
+            ['parser/parseSelectJoinMultiple'],
+            ['parser/parseSelectJoinMultiple2'],
+            ['parser/parseSelectWrongOrder'],
+            ['parser/parseSelectWrongOrder2'],
+            ['parser/parseSelectEndOptions1'],
+            ['parser/parseSelectEndOptions2'],
+            ['parser/parseSelectEndOptionsErr'],
+            ['parser/parseSelectUnion'],
+            ['parser/parseSelectUnion2'],
+            ['parser/parseSelectWhere'],
+            ['parser/parseSelectWhereCollate'],
+            ['parser/parseSelectIndexHint1'],
+            ['parser/parseSelectIndexHint2'],
+            ['parser/parseSelectOrderByIsNull'],
+            ['parser/parseSelectIndexHintErr1'],
+            ['parser/parseSelectIndexHintErr2'],
+            ['parser/parseSelectIndexHintErr3'],
+            ['parser/parseSelectIndexHintErr4'],
+            ['parser/parseSelectWithParenthesis'],
+            ['parser/parseSelectOrderByComment'],
+            ['parser/parseSelectOverAlias_mariadb_100600'],
+            ['parser/parseSelectGroupBy'],
+            ['parser/parseSelectGroupByErr'],
+            ['parser/parseSelectGroupByWithComments'],
+            ['parser/parseTable1'],
+        ];
     }
 }

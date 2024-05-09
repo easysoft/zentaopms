@@ -22,6 +22,7 @@ class chartModel extends model
     {
         parent::__construct($appName);
         $this->loadBIDAO();
+        $this->loadModel('bi');
     }
 
     /**
@@ -199,16 +200,72 @@ class chartModel extends model
     {
         $settings = current($chart->settings);
         $type     = $settings['type'];
+        $options  = array();
 
         $filterFormat = $this->getFilterFormat($chart->filters);
 
-        if($type == 'pie')   return $this->genPie($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
-        if($type == 'radar') return $this->genRadar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
-        if($type == 'line')  return $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
-        if($type == 'cluBarX'    || $type == 'cluBarY')     return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs);
-        if($type == 'stackedBar' || $type == 'stackedBarY') return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
+        if($type == 'pie')   $options = $this->genPie($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
+        if($type == 'radar') $options = $this->genRadar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
+        if($type == 'line')  $options = $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
+        if($type == 'cluBarX'    || $type == 'cluBarY')     $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs);
+        if($type == 'stackedBar' || $type == 'stackedBarY') $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
+        if($type == 'waterpolo') $options = $this->bi->genWaterpolo($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
 
-        return array();
+        if(empty($options)) return array();
+
+        $options = $this->addFormatter4Echart($options, $type);
+        $options = $this->addRotate4Echart($options, $settings, $type);
+
+        return $options;
+    }
+
+    /**
+     * 为 echart options 添加 formatter。
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function addFormatter4Echart(array $options, string $type): array
+    {
+        if($type == 'waterpolo')
+        {
+            $formatter = "RAWJS<(params) => (params.value * 100).toFixed(2) + '%'>RAWJS";
+            $options['series'][0]['label']['formatter'] = $formatter;
+            $options['tooltip']['formatter'] = $formatter;
+        }
+        elseif(in_array($type, $this->config->chart->canLabelRotate))
+        {
+            $labelMaxLength = $this->config->chart->labelMaxLength;
+            $labelFormatter = "RAWJS<(value) => {value = value.toString(); return value.length <= $labelMaxLength ? value : value.substring(0, $labelMaxLength) + '...'}>RAWJS";
+
+            if(!isset($options['xAxis']['axisLabel'])) $options['xAxis']['axisLabel'] = array();
+            if(!isset($options['yAxis']['axisLabel'])) $options['yAxis']['axisLabel'] = array();
+            $options['xAxis']['axisLabel']['formatter'] = $labelFormatter;
+            $options['yAxis']['axisLabel']['formatter'] = $labelFormatter;
+        }
+
+        return $options;
+    }
+
+    /**
+     * 为 echart options 添加 rotate。
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function addRotate4Echart(array $options, array $settings, string $type): array
+    {
+        if(in_array($type, $this->config->chart->canLabelRotate))
+        {
+            if(isset($settings['rotateX']) and $settings['rotateX'] == 'use') $options['xAxis']['axisLabel']['rotate'] = 30;
+            if(isset($settings['rotateY']) and $settings['rotateY'] == 'use') $options['yAxis']['axisLabel']['rotate'] = 30;
+        }
+
+        return $options;
     }
 
     /**
@@ -254,14 +311,14 @@ class chartModel extends model
         }
 
         $indicator  = array();
-        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $xLabel)
         {
             $labelName = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
             $indicator[] = array('name' => $labelName, 'max' => $max);
         }
 
-        return array('series' => $series, 'radar' => array('indicator' => $indicator), 'tooltip' => array('trigger' => 'item'));
+        return array('series' => $series, 'radar' => array('indicator' => $indicator, 'center' => array('50%', '55%')), 'tooltip' => array('trigger' => 'item'));
     }
 
     /**
@@ -288,12 +345,16 @@ class chartModel extends model
 
         /* 若查询结果大于50条，将50条之后的结果归于其他。*/
         /* If the query results are greater than 50, the results after 50 will be classified as other. */
-        $otherSum = array_sum(array_splice($stat, 50));
-        $stat[$this->lang->chart->other] = $otherSum;
-        if(empty($date)) arsort($stat);
+        $maxCount = 50;
+        if(count($stat) > $maxCount)
+        {
+            $other = array_sum(array_slice($stat, $maxCount));
+            $stat  = array_slice($stat, 0, $maxCount);
+            $stat[$this->lang->chart->other] = $other;
+        }
 
         $seriesData = array();
-        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($stat as $name => $value)
         {
             if(empty($value)) continue;
@@ -305,12 +366,13 @@ class chartModel extends model
         }
 
         $label    = array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%');
-        $series[] = array('data' => $seriesData, 'type' => 'pie', 'label' => $label);
+        $series[] = array('data' => $seriesData, 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => $label);
 
         $legend = new stdclass();
         $legend->type   = 'scroll';
-        $legend->orient = 'vertical';
-        $legend->right  = 0;
+        $legend->orient = 'horizontal';
+        $legend->left  = 'center';
+        $legend->top   = 'top';
 
         return array('series' => $series, 'legend' => $legend, 'tooltip' => array('trigger' => 'item', 'formatter' => "{b}<br/> {c} ({d}%)"));
     }
@@ -345,7 +407,7 @@ class chartModel extends model
             }
         }
 
-        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
         $series = array();
@@ -388,31 +450,51 @@ class chartModel extends model
             $yDatas[] = $data;
         }
 
-        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
+
+
+        $position = 'top';
+        if($settings['type'] == 'stackedBar' or $settings['type'] == 'stackedBarY')  $position = 'inside';
+        if($settings['type'] == 'cluBarY') $position = 'right';
+        $label = array('show' => true, 'position' => $position, 'formatter' => '{c}');
 
         $series = array();
         foreach($yDatas as $index => $yData)
         {
             $fieldName  = $this->chartTao->switchFieldName($fields, $langs, $metrics, $index);
             $seriesName = $fieldName . '(' . $this->lang->chart->aggList[$aggs[$index]] . ')';
-            $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack);
+            $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack, 'label' => $label);
         }
 
-        $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
-
-        /* Cluster bar X graphs and cluster bar Y graphs are really just x and y axes switched, so cluster bar Y $xaixs and $yaxis are swapped so that the method can be reused. */
-        /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
-        $isY   = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
+        $grid  = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
         $xaxis = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true));
         $yaxis = array('type' => 'value');
+
+        /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
+        $isY   = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
         if($isY) list($xaxis, $yaxis) = array($yaxis, $xaxis);
+        $options = array('series' => $series, 'grid' => $grid, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
 
-        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
-        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
-        $dataZoom  = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
+        if(is_array($xLabels) and count($xLabels) > 10)
+        {
+            $sliderConfig = $this->config->chart->dataZoom->slider;
+            $axisIndex    = $isY ? 'yAxisIndex' : 'xAxisIndex';
 
-        return array('series' => $series, 'grid' => $grid, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'dataZoom' => $dataZoom, 'tooltip' => array('trigger' => 'axis'));
+            $dataZoomCommon = $this->config->chart->dataZoom->common;
+            $dataZoomCommon->inside->$axisIndex = array(0);
+            $dataZoomCommon->slider->$axisIndex = array(0);
+            $dataZoomCommon->slider->width  = $sliderConfig->{$isY ? 'width' : 'height'};
+            $dataZoomCommon->slider->height = $sliderConfig->{$isY ? 'height' : 'width'};
+            $dataZoomCommon->slider->{$isY ? 'top' : 'bottom'} = $sliderConfig->{$isY ? 'top' : 'bottom'};
+            $dataZoomCommon->slider->{$isY ? 'right' : 'left'} = $sliderConfig->{$isY ? 'right' : 'left'};
+
+            $dataZoom = array($dataZoomCommon->inside, $dataZoomCommon->slider);
+
+            $options['dataZoom'] = $dataZoom;
+        }
+
+        return $options;
     }
 
     /**
@@ -482,6 +564,7 @@ class chartModel extends model
         $denominatorWheres = array();
         foreach($settings['conditions'] as $condition)
         {
+            $condition = (array)$condition;
             $where = "{$condition['field']} {$this->config->chart->conditionList[$condition['condition']]} '{$condition['value']}'";
             $moleculeWheres[]    = $where;
         }
@@ -520,61 +603,41 @@ class chartModel extends model
      * @param  string $object
      * @param  string $field
      * @param  string $sql
+     * @param  string $saveAs
      * @access public
      * @return array
      */
-    public function getFieldOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
+    public function getSysOptions(string $type, string $object = '', string $field = '', string $sql = '', string $saveAs = ''): array
     {
+        if(in_array($type, array('user', 'product', 'project', 'execution', 'dept'))) return $this->bi->getScopeOptions($type);
+        if(!$field) return array();
+
         $options = array();
         switch($type)
         {
-            case 'user':
-                $options = $this->loadModel('user')->getPairs();
-                break;
-            case 'product':
-                $options = $this->loadModel('product')->getPairs();
-                break;
-            case 'project':
-                $options = $this->loadModel('project')->getPairsByProgram();
-                break;
-            case 'execution':
-                $options = $this->loadModel('execution')->getPairs();
-                break;
-            case 'dept':
-                $options = $this->loadModel('dept')->getOptionMenu(0);
-                break;
             case 'option':
-                if($field)
-                {
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(is_file($path))
-                    {
-                        include $path;
-                        $options = $schema->fields[$field]['options'];
-                    }
-                }
+                $options = $this->bi->getDataviewOptions($object, $field);
                 break;
             case 'object':
-                if($field)
-                {
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
-                }
+                $options = $this->bi->getObjectOptions($object, $field);
                 break;
-            default:
-                if($field and $sql)
+            case 'string':
+            case 'number':
+                if($sql)
                 {
-                    $cols = $this->dbh->query($sql)->fetchAll();
-                    foreach($cols as $col)
-                    {
-                        $data = $col->$field;
-                        $options[$data] = $data;
-                    }
+                    $keyField   = $field;
+                    $valueField = $saveAs ? $saveAs : $field;
+                    $options = $this->bi->getOptionsFromSql($sql, $keyField, $valueField);
                 }
                 break;
         }
 
-        return $options;
+        if($sql and $saveAs and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'option', 'object')))
+        {
+            $options = $this->bi->getOptionsFromSql($sql, $field, $saveAs);
+        }
+
+        return array_filter($options);
     }
 
     /**
@@ -588,8 +651,26 @@ class chartModel extends model
      */
     public static function isClickable(object $chart, string $action): bool
     {
-        if($chart->builtin) return false;
-        return true;
+        $builtinCharts = array();
+        $builtinCharts[] = array(1001,  1110);
+        $builtinCharts[] = array(10000, 10119);
+        $builtinCharts[] = array(10201, 10220);
+        $builtinCharts[] = array(20002, 20015);
+
+        $found = false; // 标记ID是否在范围内
+
+        foreach ($builtinCharts as $range) {
+            $minId = $range[0];
+            $maxId = $range[1];
+
+            if ($chart->id >= $minId && $chart->id <= $maxId) {
+                $found = true;
+                break;
+            }
+        }
+
+        return !$found && !$chart->builtin;
+
     }
 
     /**
@@ -628,6 +709,9 @@ class chartModel extends model
                     $end   = $default['end'];
 
                     if(empty($begin) or empty($end)) break;
+
+                    $begin = date('Y-m-d 00:00:00', strtotime($begin));
+                    $end   = date('Y-m-d 23:59:59', strtotime($end));
 
                     $value = "'$begin' and '$end'";
                     $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => $value);
@@ -724,5 +808,27 @@ class chartModel extends model
         }
 
         return $sql;
+    }
+
+    /**
+     * 在sql中将变量解析为空字符串。
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function isChartHaveData(array $options, string $type): bool
+    {
+        if($type == 'waterpolo') return true;
+
+        $data = array();
+        if($type == 'pie')   $data = $options['series'][0]['data'];
+        if($type == 'line')  $data = $options['xAxis']['data'];
+        if($type == 'radar') $data = $options['radar']['indicator'];
+        if($type == 'cluBarY' or $type == 'stackedBarY') $data = $options['yAxis']['data'];
+        if($type == 'cluBarX' or $type == 'stackedBar')  $data = $options['xAxis']['data'];
+
+        return count($data) ? true : false;
     }
 }

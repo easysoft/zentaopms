@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/transfer.class.php';
-zdTable('project')->gen(15);
-zdTable('bug')->gen(10);
-zdTable('case')->gen(10);
-zdTable('story')->gen(10);
+include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+zenData('project')->gen(15);
+zenData('bug')->gen(10);
+zenData('case')->gen(10);
+zenData('story')->gen(10);
 su('admin');
 
 /**
@@ -24,9 +24,9 @@ cid=1
 $transfer = new transferTest();
 
 $result1 = $transfer->setListValueTest('bug');
-$result1['typeList'] = explode(',', $result1['typeList']);
 
-r($result1)        && p('typeList:1')     && e('代码错误');    // 测试导出bug类型字段的下拉值
+r($result1) && p('typeList:codeerror') && e('代码错误'); // 测试导出bug类型字段的下拉值
+
 r(count($result1['projectList'])) && p('') && e('5');  // 测试导出bug项目字段的下拉数量
 r(count($result1['listStyle']))   && p('') && e('10'); // 测试导出bug时下拉字段的数量
 

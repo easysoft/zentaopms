@@ -21,7 +21,6 @@ window.clickSubmit = function()
         $.get(link, function(diffBranchesTip)
         {
             const formUrl  = $('#createPlanPanel form').attr('action');
-            console.log($("#createPlanPanel form"));
             const formData = new FormData($("#createPlanPanel form")[0]);
             if(diffBranchesTip != '')
             {

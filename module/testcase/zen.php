@@ -147,7 +147,7 @@ class testcaseZen extends testcase
      */
     protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID, int $projectID): void
     {
-        $this->config->testcase->search['onMenuBar'] = 'yes';
+        if($this->app->rawModule == 'testcase') $this->config->testcase->search['onMenuBar'] = 'yes';
 
         $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
         $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
@@ -307,7 +307,7 @@ class testcaseZen extends testcase
         /* Set menu. */
         $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
+        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->newScene;
         $this->view->modules  = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
         $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
         $this->view->moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
@@ -355,7 +355,7 @@ class testcaseZen extends testcase
         $scenes = $this->testcase->getSceneMenu($productID, $moduleID, $branchID, 0, $oldScene->id);
         if(!isset($scenes[$parentID])) $scenes += $this->testcase->getScenesName((array)$parentID);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
+        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->editScene;
         $this->view->products = $this->products;
         $this->view->product  = $product;
         $this->view->branches = $branches;
@@ -393,7 +393,6 @@ class testcaseZen extends testcase
             $storyModuleID   = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
             $modules         = $this->tree->getStoryModule($storyModuleID);
             $modules         = $this->tree->getAllChildID($modules);
-            $currentModuleID = $storyModuleID;
         }
 
         /* 获取未关闭的需求。 */
@@ -579,7 +578,7 @@ class testcaseZen extends testcase
         $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
         $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->projectID   = $projectID;
         $this->view->projectType = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
         $this->view->browseType  = $browseType;
@@ -654,12 +653,11 @@ class testcaseZen extends testcase
             ->join('linkCase', ',')
             ->cleanInt('story,product,branch,module')
             ->skipSpecial('script')
-            ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
             ->remove('files,labels,scriptFile,scriptName')
             ->removeIF($formData->data->auto == 'auto' && !$formData->data->script, 'script')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
+        return $case;
     }
 
     /**
@@ -675,15 +673,35 @@ class testcaseZen extends testcase
         $cases = array();
         foreach($scenes as $scene)
         {
-            $scene->hasCase = !empty($scene->cases);
+            $scene->hasCase = false;
 
-            $cases[] = $scene;
+            if(!empty($scene->children))
+            {
+                $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->children));
+                foreach($scene->children as $child)
+                {
+                    /*
+                     * 如果子场景有用例，那么父场景也有用例。
+                     * If the child scene has a use case, the parent scene also has a use case.
+                     */
+                    if($child->hasCase)
+                    {
+                        $scene->hasCase = true;
+                        break;
+                    }
+                }
+            }
+            if(!empty($scene->cases))
+            {
+                $cases = array_merge($cases, $scene->cases);
 
-            if(!empty($scene->children)) $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->children));
-            if(!empty($scene->cases))    $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->cases));
+                $scene->hasCase = true;
+            }
 
             unset($scene->children);
             unset($scene->cases);
+
+            $cases[] = $scene;
         }
         return $cases;
     }
@@ -817,7 +835,7 @@ class testcaseZen extends testcase
         $product = $this->product->getByID($case->product);
         if(!isset($this->products[$case->product])) $this->products[$case->product] = $product->name;
 
-        $this->view->title     = $this->products[$case->product] . $this->lang->colon . $this->lang->testcase->edit;
+        $this->view->title     = $this->products[$case->product] . $this->lang->hyphen . $this->lang->testcase->edit;
         $this->view->isLibCase = false;
         $this->view->product   = $product;
         $this->view->products  = $this->products;
@@ -1045,7 +1063,7 @@ class testcaseZen extends testcase
             /* Set caselib menu. */
             $this->caselib->setLibMenu($libraries, $libID);
 
-            $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
+            $this->view->title = $libraries[$libID] . $this->lang->hyphen . $this->lang->testcase->batchEdit;
         }
         /* 指派测试用例。 */
         /* Assign test cases. */
@@ -1056,7 +1074,7 @@ class testcaseZen extends testcase
 
             $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
 
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+            $this->view->title = $product->name . $this->lang->hyphen . $this->lang->testcase->batchEdit;
         }
         /* 指派地盘标签下的用例。 */
         /* Assign cases of my tab. */
@@ -1337,15 +1355,24 @@ class testcaseZen extends testcase
     {
         $status = $this->getStatusForCreate();
 
-        return form::data($this->config->testcase->form->create)
+        $case = form::data($this->config->testcase->form->create)
             ->add('status', $status)
             ->setIF($from == 'bug', 'fromBug', $param)
+            ->setIF($from == 'project' && $param, 'project', $param)
+            ->setIF($from == 'execution' && $param, 'execution', $param)
+            ->setIF($from != 'project' && $this->app->tab == 'project',   'project',   $this->session->project)
+            ->setIF($from != 'execution' && $this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->auto, 'auto', 'auto')
             ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
-            ->setIF($this->app->tab == 'project',   'project',   $this->session->project)
-            ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->get();
+
+        if(!empty($case->project))
+        {
+            $project = $this->loadModel('project')->fetchByID($case->project);
+            if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
+        }
+        return $case;
     }
 
     /**
@@ -1417,10 +1444,11 @@ class testcaseZen extends testcase
      * 构建导入用例的数据。
      * Build cases for showing imported.
      *
+     * @param  int       $productID
      * @access protected
      * @return array
      */
-    protected function buildCasesForShowImport(): array
+    protected function buildCasesForShowImport(int $productID): array
     {
         /* 初始化变量。 */
         /* Initialize variables. */
@@ -1444,6 +1472,7 @@ class testcaseZen extends testcase
                 $stepChanged = $this->buildUpdateCaseForShowImport($case, $oldCase, zget($oldSteps, $case->rawID, array()), $forceNotReview);
 
                 $case->id             = $case->rawID;
+                $case->product        = $productID;
                 $case->lastEditedBy   = $account;
                 $case->lastEditedDate = $now;
                 if($case->story != $oldCase->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
@@ -1455,6 +1484,7 @@ class testcaseZen extends testcase
             /* Build inserted case. */
             else
             {
+                $case->product        = $productID;
                 $case->version    = 1;
                 $case->openedBy   = $this->app->user->account;
                 $case->openedDate = $now;
@@ -1486,7 +1516,7 @@ class testcaseZen extends testcase
         /* 处理模块。 */
         /* Process modules. */
         $preModule = 0;
-        $modules   = $this->post->module;
+        $modules   = $this->post->module ? $this->post->module : array();
         foreach($modules as $caseID => $module)
         {
             if($module != 'ditto') $preModule = $module;
@@ -1773,7 +1803,7 @@ class testcaseZen extends testcase
     {
         if($this->config->edition != 'open')
         {
-            $extendFields = $this->getFlowExtendFields();
+            $extendFields = $this->testcase->getFlowExtendFields();
             $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
             foreach($extendFields as $extendField)
@@ -1983,6 +2013,7 @@ class testcaseZen extends testcase
     protected function importCases(array $cases): void
     {
         $this->loadModel('action');
+        $daoErrors = array();
         foreach($cases as $case)
         {
             if(isset($case->id))
@@ -2001,9 +2032,10 @@ class testcaseZen extends testcase
             else
             {
                 $caseID = $this->testcase->create($case);
-                $this->testcase->syncCase2Project($case, $caseID);
+                dao::isError() ? $daoErrors = array_merge($daoErrors, dao::getError()) : $this->testcase->syncCase2Project($case, $caseID);
             }
         }
+        if(!empty($daoErrors)) dao::$errors = $daoErrors;
     }
 
     /**
@@ -2071,6 +2103,19 @@ class testcaseZen extends testcase
         foreach($reverseSteps as $step)
         {
             if(empty($step->id)) continue;
+
+            if($step->type != 'group')
+            {
+                $descItem = array();
+                $descItem['id']      = 'desc_' . $step->id;
+                $descItem['text']    = $step->expect;
+                $descItem['type']    = 'node';
+                $descItem['parent']  = $step->id;
+                $descItem['subSide'] = 'right';
+
+                $parentSteps[$step->id][] = $descItem;
+            }
+
             $stepItem = array();
             $stepItem['id']      = $step->id;
             $stepItem['text']    = $step->step;
@@ -2205,9 +2250,9 @@ class testcaseZen extends testcase
      *
      * @param  int       $caseID
      * @access protected
-     * @return array
+     * @return array|int
      */
-    protected function responseAfterCreate(int $caseID): array
+    protected function responseAfterCreate(int $caseID): array|int
     {
         $message = $this->executeHooks($caseID);
         if(!$message) $message = $this->lang->saveSuccess;
@@ -2265,8 +2310,8 @@ class testcaseZen extends testcase
 
         if($this->post->isEndPage)
         {
-            if(file_exists($_SESSION['fileImport'])) unlink($tmpFile);
-            unset($_SESSION['fileImport']);
+            if(!empty($_SESSION['fileImport']) && file_exists($_SESSION['fileImport'])) unlink($tmpFile);
+            if(!empty($_SESSION['fileImport'])) unset($_SESSION['fileImport']);
             $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}&productID={$productID}") : inlink('browse', "productID={$productID}");
         }
         else
@@ -2375,12 +2420,14 @@ class testcaseZen extends testcase
         if($this->app->tab == 'project' && !$productID)
         {
             $productList = $products;
+            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($projectID, 0, 'all', $moduleID, 'full', 'active');
         }
         else
         {
             $productList = array();
             $productList['all'] = $this->lang->all;
             if(isset($products[$productID])) $productList[$productID] = $products[$productID];
+            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         }
 
         /* 获取模块列表。*/
@@ -2773,28 +2820,39 @@ class testcaseZen extends testcase
 
         if(isset($relatedSteps[$case->id]))
         {
-            $i = $childID = 0;
+            $preGrade      = 1;
+            $parentSteps   = array();
+            $key           = array(0, 0, 0);
             foreach($relatedSteps[$case->id] as $step)
             {
-                $stepID = 0;
-                if($step->type == 'group' || $step->type == 'step')
+                $grade = 1;
+                $parentSteps[$step->id] = $step->parent;
+                if(isset($parentSteps[$step->parent])) $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
+
+                if($grade > $preGrade)
                 {
-                    $i ++;
-                    $childID = 0;
-                    $stepID  = $i;
+                    $key[$grade - 1] = 1;
                 }
                 else
                 {
-                    $stepID = $i . '.' . $childID;
+                    if($grade < $preGrade)
+                    {
+                        if($grade < 2) $key[1] = 0;
+                        if($grade < 3) $key[2] = 0;
+                    }
+                    $key[$grade - 1] ++;
                 }
 
-                if($step->version != $case->version) continue;
+                $stepID = implode('.', $key);
+                $stepID = str_replace('.0', '', $stepID);
+                $stepID = str_replace('.0', '', $stepID);
 
                 $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
                 $case->stepDesc   .= $stepID . ". " . htmlspecialchars_decode($step->desc) . $sign;
                 $case->stepExpect .= $stepID . ". " . htmlspecialchars_decode($step->expect) . $sign;
                 $case->real       .= $stepID . ". " . (isset($result[$step->id]) ? $result[$step->id]['real'] : '') . $sign;
-                $childID ++;
+
+                $preGrade = $grade;
             }
         }
         $case->stepDesc   = trim($case->stepDesc);
@@ -3097,7 +3155,7 @@ class testcaseZen extends testcase
         $fileName = $this->app->user->id . '-xmind';
         $filePath = $importDir . '/' . $fileName;
         $tmpFile  = $filePath . 'tmp';
-        if(!move_uploaded_file($_FILES['file']['tmp_name'], $tmpFile)) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
+        if(!move_uploaded_file($_FILES['file']['tmp_name'][0], $tmpFile)) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         /* 删掉已经存在的当前用户的导入目录。*/
         /* Remove the file path. */
@@ -3113,10 +3171,15 @@ class testcaseZen extends testcase
         /* Get the content list from the zip file. */
         $files      = $zip->listContent();
         $removePath = $files[0]['filename'];
-        if($zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_REMOVE_PATH, $removePath) === 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
+
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array('content.xml', 'content.json');
+        if($zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $this->classFile->removeFile($tmpFile);
 
+        $this->classXmind = $this->app->loadClass('xmind');
         if(file_exists($filePath . '/content.json'))
         {
             $fetchResult = $this->fetchByJSON($filePath, $productID, $branch);
@@ -3146,7 +3209,7 @@ class testcaseZen extends testcase
     {
         $file    = $filePath . '/content.xml';
         $xmlNode = simplexml_load_file($file);
-        $title   = $xmlNode->sheet->topic->title;
+        $title   = (string)$xmlNode->sheet->topic->title;
         if(!is_string($title) || strlen($title) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $pID = $productID;
@@ -3155,7 +3218,7 @@ class testcaseZen extends testcase
             $tmpID = $this->classXmind->getBetween($title, '[', ']');
             if(!empty($tmpID))
             {
-                $product = $this->loadModel('product')->getByID($tmpID);
+                $product = $this->loadModel('product')->getByID((int)$tmpID);
                 if(!$product || $product->deleted) return array('result' => 'fail', 'message' => $this->lang->testcase->errorImportBadProduct);
 
                 $pID = $tmpID;
@@ -3184,7 +3247,6 @@ class testcaseZen extends testcase
         if(strlen($title) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $pID = $productID;
-        $this->classXmind = $this->app->loadClass('xmind');
         if($this->classXmind->endsWith($title, ']'))
         {
             $tmpID = $this->classXmind->getBetween($title, '[', ']');

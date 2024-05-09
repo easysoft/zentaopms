@@ -53,9 +53,8 @@ $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID")),
     set('data-app', $app->tab),
-    $repo->name
+    h::span('/', setStyle('margin', '0 5px'))
 );
-$breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 
 $paths    = explode('/', $path);
 $fileName = array_pop($paths);
@@ -103,6 +102,7 @@ $refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' 
 
 $createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"), 'data-app' => $app->tab);
 
+$config->repo->repoDtable->fieldList['revision']['link'] = inLink('revision', "repoID={$repo->id}&objectID={$objectID}&revision={revision}");
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
 $downloadWg = div
@@ -196,7 +196,6 @@ $downloadWg = div
             )
         )
     ) : null,
-
     div
     (
         setStyle(array('margin-top' => '20px')),
@@ -211,11 +210,12 @@ $downloadWg = div
 
 toolbar
 (
-    span(
+    a(
         set::className('last-sync-time'),
+        set::href($lastRevision->link),
         $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
     ),
-    $repo->SCM != 'Gitlab' ? item(set($refreshItem)) : null,
+    !in_array($repo->SCM, $config->repo->notSyncSCM) ? item(set($refreshItem)) : null,
     dropdown
     (
         set::staticMenu(true),
@@ -265,7 +265,7 @@ jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTota
 /* Disbale check all checkbox of table header */
 $config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
 
-if($repo->SCM == 'Gitlab') unset($config->repo->commentDtable->fieldList['commit']);
+if(in_array($repo->SCM, $config->repo->notSyncSCM)) unset($config->repo->commentDtable->fieldList['commit']);
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&type=$logType");
@@ -293,5 +293,3 @@ sidebar
         set::showToolbarOnChecked(false)
     )
 );
-
-render();

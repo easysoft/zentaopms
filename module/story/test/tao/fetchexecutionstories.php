@@ -1,34 +1,40 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
 
-zdTable('product')->gen(10);
-$project = zdTable('project');
+/**
+
+title=测试 storyModel->fetchExecutionStories();
+cid=0
+
+- 不传入执行，也不传入产品。 @0
+- 传入执行，不传入产品。 @50
+- 传入产品，不传入执行。 @0
+- 传入产品，传入执行。 @25
+- 传入产品，传入执行，设置SESSION。 @5
+- 分页获取需求。 @5
+
+*/
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+
+zenData('product')->gen(10);
+$project = zenData('project');
 $project->type->range('sprint');
 $project->gen(50);
 
-$projectstory = zdTable('projectstory');
+$projectstory = zenData('projectstory');
 $projectstory->product->range('1-2');
 $projectstory->story->range('1-50');
 $projectstory->project->range('11');
 $projectstory->branch->range('0{30},1{10},2{10}');
 $projectstory->gen(50);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1-2');
 $story->type->range('story');
 $story->branch->range('0{30},1{10},2{10}');
 $story->status->range('draft,reviewing,active,closed,changing');
 $story->gen(50);
-
-/**
-
-title=测试 storyModel->fetchExecutionStories();
-cid=1
-pid=1
-
-*/
 
 $storyTest = new storyTest();
 

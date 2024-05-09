@@ -1,20 +1,20 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/compile.class.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 
-zdTable('compile')->gen(1);
-zdTable('job')->config('job')->gen(1);
+zenData('compile')->gen(1);
+zenData('job')->loadYaml('job')->gen(1);
 su('admin');
 
 /**
 
 title=测试 compileModel->getByID();
+timeout=0
 cid=1
-pid=1
 
-检查当id存在的时候是否能拿到数据 >> 构建1
-检查当id不存在的时候返回的结果 >> 0
+- 检查当id存在的时候是否能拿到数据属性name @构建1
+- 检查当id不存在的时候返回的结果属性name @0
 
 */
 

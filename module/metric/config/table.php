@@ -59,7 +59,7 @@ $config->metric->dtable->definition->fieldList['desc']['required'] = true;
 $config->metric->dtable->definition->fieldList['desc']['group']    = 4;
 
 $config->metric->dtable->definition->fieldList['createdBy']['title']    = $lang->metric->createdBy;
-$config->metric->dtable->definition->fieldList['createdBy']['type']     = 'text';
+$config->metric->dtable->definition->fieldList['createdBy']['type']     = 'user';
 $config->metric->dtable->definition->fieldList['createdBy']['minWidth'] = '100';
 $config->metric->dtable->definition->fieldList['createdBy']['required'] = true;
 $config->metric->dtable->definition->fieldList['createdBy']['group']    = 4;
@@ -70,4 +70,4 @@ $config->metric->dtable->definition->fieldList['actions']['type']     = 'actions
 $config->metric->dtable->definition->fieldList['actions']['sortType'] = false;
 $config->metric->dtable->definition->fieldList['actions']['list']     = $config->metric->actionList;
 $config->metric->dtable->definition->fieldList['actions']['fixed']    = 'right';
-$config->metric->dtable->definition->fieldList['actions']['menu']     = array('edit', 'implement', 'delist', 'delete');
+$config->metric->dtable->definition->fieldList['actions']['menu']     = array('edit', 'implement', 'delist', 'delete', 'recalculate');

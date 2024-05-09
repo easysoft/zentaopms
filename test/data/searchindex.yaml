@@ -40,17 +40,11 @@ fields:
     format: ""
   - field: addedDate
     note: "添加日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: editedDate
     note: "编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

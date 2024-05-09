@@ -71,7 +71,7 @@ class job extends control
 
         $jobList = $this->jobZen->getJobList($repoID, $orderBy, $pager);
 
-        $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
+        $this->view->title   = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->browse;
         $this->view->repoID  = $repoID;
         $this->view->jobList = $jobList;
         $this->view->orderBy = $orderBy;
@@ -83,22 +83,26 @@ class job extends control
     /**
      * Create a job.
      *
+     * @param  string $repoID
      * @access public
      * @return void
      */
-    public function create()
+    public function create(int $repoID = 0)
     {
         if($_POST)
         {
+            if($this->post->engine == 'gitfox') $this->config->job->form->create['gitfoxpipeline']['required'] = true;
+            if($this->post->useZentao == '1')   $this->config->job->form->create['triggerType']['required']    = true;
             $job = form::data($this->config->job->form->create)
-                ->setIF($this->post->triggerType != 'commit', 'comment', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
-                ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->setIF($this->post->useZentao != '1', 'triggerType', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atDay', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atTime', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
+                ->add('createdBy', $this->app->user->account)
                 ->get();
-            if(dao::isError()) return $this->sendError(dao::getError());
 
             $jobID = $this->job->create($job);
             if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'created');
@@ -109,12 +113,10 @@ class job extends control
         $this->loadModel('ci');
         $this->app->loadLang('action');
 
-        list($repoPairs, $gitlabRepos, $repoTypes) = $this->jobZen->getRepoList($this->projectID);
-
-        $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->repoPairs           = $repoPairs;
-        $this->view->gitlabRepos         = $gitlabRepos;
-        $this->view->repoTypes           = $repoTypes;
+        $this->view->title               = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->create;
+        $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
+        $this->view->repoID              = $repoID;
+        $this->view->repo                = $repoID ? $this->repo->getByID($repoID) : null;
         $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
         $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
@@ -134,27 +136,30 @@ class job extends control
         $job = $this->job->getByID($jobID);
         if($_POST)
         {
+            if($job->engine == 'gitfox')      $this->config->job->form->edit['gitfoxpipeline']['required'] = true;
+            if($this->post->useZentao == '1') $this->config->job->form->edit['triggerType']['required']    = true;
             $job = form::data($this->config->job->form->edit)
-                ->setIF($this->post->triggerType != 'commit', 'comment', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
-                ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->setIF($this->post->useZentao != '1', 'triggerType', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atDay', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atTime', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
+                ->add('editedBy', $this->app->user->account)
                 ->get();
+
             $this->job->update($jobID, $job);
             if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'edited');
 
             return $this->send($this->jobZen->reponseAfterCreateEdit($job->repo));
         }
 
-        $this->loadModel('ci');
-        $this->view->repo = $repo = $this->loadModel('repo')->getByID($job->repo);
+        $repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
+        if($repo->SCM != 'Gitlab') $this->view->refList = $this->repo->getBranches($repo, true);
         $this->jobZen->getSubversionDir($repo, $job->triggerType);
-
-        list($repoPairs, $gitlabRepos, $repoTypes) = $this->jobZen->getRepoList($this->projectID, $repo);
 
         $products = $this->repo->getProductsByRepo($job->repo);
         if(!isset($products[$job->product]))
@@ -168,16 +173,14 @@ class job extends control
             $this->view->sonarqubeProjectPairs = $this->loadModel('sonarqube')->getProjectPairs($job->sonarqubeServer, $job->projectKey);
         }
 
-        $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->repoPairs           = $repoPairs;
-        $this->view->gitlabRepos         = $gitlabRepos;
-        $this->view->repoTypes           = $repoTypes;
-        $this->view->repoType            = zget($repoTypes, $job->repo, 'Git');
+        $this->view->title               = $this->lang->job->pipeline . $this->lang->hyphen . $this->lang->job->edit;
+        $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
         $this->view->job                 = $job;
+        $this->view->repo                = $repo;
         $this->view->products            = $products;
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
         $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
-        $this->view->pipelines           = $this->loadModel('jenkins')->getTasks($job->server);
+        $this->view->pipelines           = $repo->SCM == 'GitFox' ? $this->ajaxGetPipelines($job->repo, false) : array();
 
         $this->display();
     }
@@ -222,7 +225,7 @@ class job extends control
 
         if($compile && $compile->testtask) $this->jobZen->getCompileData($compile);
 
-        $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
+        $this->view->title   = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->browse;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->job     = $job;
         $this->view->compile = $compile;
@@ -242,8 +245,6 @@ class job extends control
      */
     public function exec(int $jobID)
     {
-        $job = $this->job->getByID($jobID);
-
         $compile = $this->job->exec($jobID);
         if(dao::isError())
         {
@@ -386,5 +387,30 @@ class job extends control
             $this->send(array('result' => 'fail', 'message' => $message));
         }
         $this->send(array('result' => 'success', 'message' => ''));
+    }
+
+    /**
+     * Ajax方式获取项目流水线信息。
+     * Get pipelines by ajax.
+     *
+     * @param  int    $repoID
+     * @param  bool   $isAjax
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPipelines(int $repoID, bool $isAjax = true)
+    {
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        if(!$repo) return print(array());
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $pipelines = $scm->pipelines();
+
+        $options = array();
+        foreach($pipelines as $pipeline) $options[] = array('text' => $pipeline->uid, 'value' => $pipeline->uid);
+
+        if($isAjax) return $this->send(array('result' => 'success', 'data' => $options));
+        return $options;
     }
 }

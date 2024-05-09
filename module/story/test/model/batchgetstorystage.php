@@ -1,22 +1,23 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-$storystage = zdTable('storystage');
-$storystage->branch->range('0-100');
-$storystage->gen(20);
 
 /**
 
 title=测试 storyModel->batchGetStoryStage();
-cid=1
-pid=1
+cid=0
 
-
+- 执行$stage[1]第0条的stage属性 @wait
+- 执行$stage[2]第1条的stage属性 @planned
+- 执行$stage[3]第2条的stage属性 @projected
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+$storystage = zenData('storystage');
+$storystage->branch->range('0-100');
+$storystage->gen(20);
 
 global $tester;
 $tester->loadModel('story');

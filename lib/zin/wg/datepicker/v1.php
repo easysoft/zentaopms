@@ -45,6 +45,7 @@ class datePicker extends wg
         'required?: boolean',               // 是否必选（不允许空值，不可以被清除）。
         'placeholder?: string',             // 选择框上的占位文本。
         'format?: string',                  // 日期格式，默认 yyyy-MM-dd。
+        'display?: string|function',        // 日期显示格式，指定回调函数设置显示的格式。
         'icon?: string|array="calendar"',   // 在输入框右侧显示的图标。
         'weekNames?: string[]',             // 星期名称，索引为 0 表示周日。
         'monthNames?: string[]',            // 月份名称，索引为 0 表示一月份。

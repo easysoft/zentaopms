@@ -56,7 +56,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('name'),
-        set::label($lang->execution->name),
+        set::label($app->tab == 'execution' ? $lang->execution->execName : $lang->execution->name),
         set::width('240px'),
         set::required(true)
     ),
@@ -72,14 +72,14 @@ formBatchPanel
     $setCode ? formBatchItem
     (
         set::name('code'),
-        set::label($lang->execution->code),
+        set::label($app->tab == 'execution' ? $lang->execution->execCode : $lang->execution->code),
         set::width('136px'),
         set::required(strpos(",{$config->execution->edit->requiredFields},", ',code,') !== false)
     ) : null,
     formBatchItem
     (
         set::name('PM'),
-        set::label($lang->execution->PM),
+        set::label($app->tab == 'execution' ? $lang->execution->execPM : $lang->execution->PM),
         set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
@@ -123,9 +123,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('lifetime'),
-        set::label(
-            $lang->execution->type
-        ),
+        set::label($app->tab == 'execution' ? $lang->execution->execType : $lang->execution->type),
         set::control('picker'),
         set::items($lang->execution->lifeTimeList),
         set::width('120px'),
@@ -171,7 +169,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('desc'),
-        set::label($lang->execution->desc),
+        set::label($app->tab == 'execution' ? $lang->execution->execDesc : $lang->execution->desc),
         set::control('textarea'),
         set::width('160px'),
         set::hidden(strpos("{$showFields}", 'desc') === false)

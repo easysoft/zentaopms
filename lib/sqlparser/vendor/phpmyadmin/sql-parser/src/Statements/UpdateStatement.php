@@ -1,13 +1,12 @@
 <?php
 
-/**
- * `UPDATE` statement.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
 use PhpMyAdmin\SqlParser\Components\Condition;
 use PhpMyAdmin\SqlParser\Components\Expression;
+use PhpMyAdmin\SqlParser\Components\JoinKeyword;
 use PhpMyAdmin\SqlParser\Components\Limit;
 use PhpMyAdmin\SqlParser\Components\OrderKeyword;
 use PhpMyAdmin\SqlParser\Components\SetOperation;
@@ -17,6 +16,7 @@ use PhpMyAdmin\SqlParser\Statement;
  * `UPDATE` statement.
  *
  * UPDATE [LOW_PRIORITY] [IGNORE] table_reference
+ *     [INNER JOIN | LEFT JOIN | JOIN] T1 ON T1.C1 = T2.C1
  *     SET col_name1={expr1|DEFAULT} [, col_name2={expr2|DEFAULT}] ...
  *     [WHERE where_condition]
  *     [ORDER BY ...]
@@ -27,95 +27,112 @@ use PhpMyAdmin\SqlParser\Statement;
  * UPDATE [LOW_PRIORITY] [IGNORE] table_references
  *     SET col_name1={expr1|DEFAULT} [, col_name2={expr2|DEFAULT}] ...
  *     [WHERE where_condition]
- *
- * @category   Statements
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class UpdateStatement extends Statement
 {
     /**
      * Options for `UPDATE` statements and their slot ID.
      *
-     * @var array
+     * @var array<string, int|array<int, int|string>>
+     * @psalm-var array<string, (positive-int|array{positive-int, ('var'|'var='|'expr'|'expr=')})>
      */
-    public static $OPTIONS = array(
+    public static $OPTIONS = [
         'LOW_PRIORITY' => 1,
-        'IGNORE' => 2
-    );
+        'IGNORE' => 2,
+    ];
 
     /**
      * The clauses of this statement, in order.
      *
      * @see Statement::$CLAUSES
      *
-     * @var array
+     * @var array<string, array<int, int|string>>
+     * @psalm-var array<string, array{non-empty-string, (1|2|3)}>
      */
-    public static $CLAUSES = array(
-        'UPDATE' => array(
+    public static $CLAUSES = [
+        'UPDATE' => [
             'UPDATE',
             2,
-        ),
+        ],
         // Used for options.
-        '_OPTIONS' => array(
+        '_OPTIONS' => [
             '_OPTIONS',
             1,
-        ),
+        ],
         // Used for updated tables.
-        '_UPDATE' => array(
+        '_UPDATE' => [
             'UPDATE',
             1,
-        ),
-        'SET' => array(
+        ],
+        'JOIN' => [
+            'JOIN',
+            1,
+        ],
+        'LEFT JOIN' => [
+            'LEFT JOIN',
+            1,
+        ],
+        'INNER JOIN' => [
+            'INNER JOIN',
+            1,
+        ],
+        'SET' => [
             'SET',
             3,
-        ),
-        'WHERE' => array(
+        ],
+        'WHERE' => [
             'WHERE',
             3,
-        ),
-        'ORDER BY' => array(
+        ],
+        'ORDER BY' => [
             'ORDER BY',
             3,
-        ),
-        'LIMIT' => array(
+        ],
+        'LIMIT' => [
             'LIMIT',
             3,
-        )
-    );
+        ],
+    ];
 
     /**
      * Tables used as sources for this statement.
      *
-     * @var Expression[]
+     * @var Expression[]|null
      */
     public $tables;
 
     /**
      * The updated values.
      *
-     * @var SetOperation[]
+     * @var SetOperation[]|null
      */
     public $set;
 
     /**
      * Conditions used for filtering each row of the result set.
      *
-     * @var Condition[]
+     * @var Condition[]|null
      */
     public $where;
 
     /**
      * Specifies the order of the rows in the result set.
      *
-     * @var OrderKeyword[]
+     * @var OrderKeyword[]|null
      */
     public $order;
 
     /**
      * Conditions used for limiting the size of the result set.
      *
-     * @var Limit
+     * @var Limit|null
      */
     public $limit;
+
+    /**
+     * Joins.
+     *
+     * @var JoinKeyword[]|null
+     */
+    public $join;
 }

@@ -7,10 +7,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
-zdTable('team')->gen(5);
-zdTable('project')->config('program')->gen(40);
+zenData('team')->gen(5);
+zenData('project')->loadYaml('program')->gen(40);
 su('admin');
 
 $tester = new programTest();

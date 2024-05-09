@@ -12,6 +12,7 @@ class fileList extends wg
         'method?:string="view"',
         'showDelete?:bool=true',
         'showEdit?:bool=true',
+        'extra?:string=""',
         'object?:object',
         'padding?:bool=true'
     );
@@ -34,11 +35,13 @@ class fileList extends wg
         $method       = $this->prop('method');
         $showDelete   = $this->prop('showDelete');
         $showEdit     = $this->prop('showEdit');
+        $extra        = $this->prop('extra');
         $object       = (object)$this->prop('object');
         $fileListView = h::ul(setClass('files-list col relative'));
 
         foreach($files as $file)
         {
+            if($file->extra != $extra) continue;
             $fileItemView = html($app->loadTarget('file')->printFile($file, $method, $showDelete, $showEdit, $object));
 
             $fileListView->add($fileItemView);

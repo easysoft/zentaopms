@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 storyModel->activate();
-cid=1
-pid=1
+cid=0
 
 - 查看激活之前的需求状态属性status @draft
 - 查看激活之前的需求状态属性status @active
@@ -18,10 +18,10 @@ pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('story')->gen(10);
-zdTable('storyreview')->gen(0);
-zdTable('action')->gen(0);
-zdTable('storyspec')->gen(30);
+zenData('story')->gen(10);
+zenData('storyreview')->gen(0);
+zenData('action')->gen(0);
+zenData('storyspec')->gen(30);
 
 su('admin');
 

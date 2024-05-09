@@ -17,8 +17,6 @@ else
 $scoreNotice = '';
 if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
 
-$shouldShowAIChat = hasPriv('ai', 'chat') && $this->loadModel('ai')->hasModelsAvailable();
-
 jsVar('scoreNotice', $scoreNotice);
 jsVar('edition',     $config->edition);
 jsVar('vision',      $config->vision);
@@ -28,7 +26,7 @@ jsVar('appsItems',   $appsItems);
 jsVar('defaultOpen', !empty($open) ? $open : '');
 jsVar('manualText',  $lang->manual);
 jsVar('manualUrl',   ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
-jsVar('lang',        array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
+jsVar('langData',     array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
 jsVar('browserMessage', $browserMessage);
 jsVar('pollTime',    (!empty($config->message->browser->turnon) && isset($config->message->browser->pollTime)) ? $config->message->browser->pollTime : 600);
 jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
@@ -55,6 +53,7 @@ div
             (
                 a
                 (
+                    setID('menuMoreBtn'),
                     set::title($lang->more),
                     set::href('#menuMoreList'),
                     icon('more-circle'),
@@ -74,10 +73,11 @@ div
             li
             (
                 setID('menuToggleMenu'),
+                setClass('hint-right'),
+                setData(array('collapse-text' => $lang->collapseMenu, 'hint' => $lang->unfoldMenu)),
                 a
                 (
                     setClass('menu-toggle justify-center cursor-pointer'),
-                    toggle::tooltip(array('placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu)),
                     icon('menu-arrow-left icon-sm')
                 )
             )
@@ -93,17 +93,13 @@ div
 (
     setID('appsBar'),
     div(setID('visionSwitcher'), visionSwitcher()),
-    ul
-    (
-        setID('appTabs'),
-        setClass('nav')
-    ),
+    ul(setID('appTabs'), setClass('nav')),
     toolbar
     (
         setID('appsToolbar'),
         setClass('space-x-1'),
         hasPriv('search', 'index') ? globalSearch() : null,
-        $shouldShowAIChat ? chatBtn() : null,
+        chatBtn(),
         item
         (
             setClass('ghost btn-zentao px-1'),

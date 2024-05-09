@@ -3,12 +3,12 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('product')->gen(100);
-zdTable('project')->gen(100);
-zdTable('project')->config('execution')->gen(300, false);
-zdTable('projectproduct')->gen(100);
-zdTable('build')->gen(500);
-zdTable('testtask')->gen(500);
+zenData('product')->gen(100);
+zenData('project')->gen(100);
+zenData('project')->loadYaml('execution')->gen(300, false);
+zenData('projectproduct')->gen(100);
+zenData('build')->gen(500);
+zenData('testtask')->gen(500);
 
 /**
 

@@ -40,7 +40,7 @@ class pasteDialog extends wg
                     btn
                     (
                         setClass('btn btn-wide primary'),
-                        on::click("importLines(target, '$field')"),
+                        on::click("window.importLines(target, '$field')"),
                         $lang->save
                     )
                 )

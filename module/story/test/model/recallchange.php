@@ -1,9 +1,29 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->recallChange();
+cid=0
+
+- 执行$storyList[28]
+ - 属性title @用户需求版本二89
+ - 属性status @active
+ - 属性version @2
+- 执行$storyList[30]
+ - 属性title @用户需求版本二89
+ - 属性status @active
+ - 属性version @2
+- 执行$storySpecList[28][3] @0
+- 执行$storySpecList[30][3] @0
+- 执行$storyReviewList[28][3] @0
+- 执行$storyReviewList[30][3] @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range(1);
 $story->plan->range('0,1,0{100}');
 $story->duplicateStory->range('0,4,0{100}');
@@ -15,24 +35,16 @@ $story->twins->range('``{27},30,``,28');
 $story->version->range('3');
 $story->gen(30);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-30{3}');
 $storySpec->version->range('1-3');
 $storySpec->gen(90);
 
-$storyReview = zdTable('storyreview');
+$storyReview = zenData('storyreview');
 $storyReview->story->range('1-30');
 $storyReview->reviewer->range('admin');
 $storyReview->version->range('3');
 $storyReview->gen(30);
-
-/**
-
-title=测试 storyModel->recallChange();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

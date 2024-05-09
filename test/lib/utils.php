@@ -26,8 +26,6 @@ include LIB_ROOT . 'init.php';
  */
 function getVersionType($version)
 {
-    global $config;
-
     if(strpos($version, 'max') !== false) return 'max';
     if(strpos($version, 'biz') !== false) return 'biz';
     if(strpos($version, 'pro') !== false) return 'pro';
@@ -97,7 +95,7 @@ function ztfExtract($dir)
  * Get to the directory of test cases.
  *
  * @access public
- * @return void
+ * @return array
  */
 function getCaseModelDir()
 {
@@ -132,7 +130,7 @@ function zdRun($isDev = false)
     if($isDev === true)
     {
         if(isset($config->db->devDbName)) $dao->exec("set global sql_mode = ''; set global max_allowed_packet = 1000000000; set global net_buffer_length = 10000000;  use {$config->db->devDbName};");
-        $zdRoot = dirname(dirname(__FILE__)) . "/devdata/";
+        $zdRoot = dirname(dirname(__FILE__)) . "/data/dev/";
     }
 
     $zdPath = RUNTIME_ROOT . 'zd';

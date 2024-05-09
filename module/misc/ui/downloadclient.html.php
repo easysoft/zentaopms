@@ -29,7 +29,7 @@ formPanel
             set::id('os'),
             set::name('os'),
             set::items($lang->misc->client->osList),
-            set::value($config->xuanxuan->version)
+            set::value($os)
         )
     ) : null,
     $action == 'selectPackage' ? div(set::className('center'), btn(set::className('primary btn-wide'), set('data-on', 'click'), set('data-call', 'clickSubmit'), $lang->save)) : null,

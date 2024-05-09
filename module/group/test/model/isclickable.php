@@ -12,7 +12,7 @@ cid=1
 - 受限用户不能维护项目管理员 @0
 - 受限用户不能复制分组 @0
 - 项目管理员可以维护项目管理员 @1
-- 项目管理员可以复制分组 @1
+- 项目管理员可以复制分组 @0
 
 */
 
@@ -29,4 +29,4 @@ r(groupModel::isClickable($limitedGroup, 'manageView'))              && p() && e
 r(groupModel::isClickable($limitedGroup, 'manageprojectadmin'))      && p() && e('0'); // 受限用户不能维护项目管理员
 r(groupModel::isClickable($limitedGroup, 'copy'))                    && p() && e('0'); // 受限用户不能复制分组
 r(groupModel::isClickable($projectAdminGroup, 'manageprojectadmin')) && p() && e('1'); // 项目管理员可以维护项目管理员
-r(groupModel::isClickable($projectAdminGroup, 'copy'))               && p() && e('1'); // 项目管理员可以复制分组
+r(groupModel::isClickable($projectAdminGroup, 'copy'))               && p() && e('0'); // 项目管理员可以复制分组

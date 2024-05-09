@@ -63,11 +63,13 @@ function changeAssignedTo()
     {
         $('#private').prop('disabled', true);
         $('#private').closest('.checkbox-primary').addClass('disabled');
+        $('#private')[0].value = '0';
     }
     else
     {
         $('#private').prop('disabled', false);
         $('#private').closest('.checkbox-primary').removeClass('disabled');
+        $('#private')[0].value = 'on';
     }
 }
 

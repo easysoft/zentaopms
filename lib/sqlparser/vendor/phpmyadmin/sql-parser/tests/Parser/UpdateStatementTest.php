@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -8,21 +10,26 @@ class UpdateStatementTest extends TestCase
 {
     /**
      * @dataProvider updateProvider
-     *
-     * @param mixed $test
      */
-    public function testUpdate($test)
+    public function testUpdate(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function updateProvider()
+    /**
+     * @return string[][]
+     */
+    public function updateProvider(): array
     {
-        return array(
-            array('parser/parseUpdate'),
-            array('parser/parseUpdate2'),
-            array('parser/parseUpdate3'),
-            array('parser/parseUpdateErr')
-        );
+        return [
+            ['parser/parseUpdate1'],
+            ['parser/parseUpdate2'],
+            ['parser/parseUpdate3'],
+            ['parser/parseUpdate4'],
+            ['parser/parseUpdate5'],
+            ['parser/parseUpdate6'],
+            ['parser/parseUpdate7'],
+            ['parser/parseUpdateErr'],
+        ];
     }
 }

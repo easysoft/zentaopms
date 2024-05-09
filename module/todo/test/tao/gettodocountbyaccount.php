@@ -13,7 +13,7 @@ cid=1
 
 function initData ()
 {
-    zdTable('todo')->config('gettodocountbyaccount')->gen(5);
+    zenData('todo')->loadYaml('gettodocountbyaccount')->gen(5);
 }
 
 initData();

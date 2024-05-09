@@ -87,6 +87,7 @@ detailBody
     (
         section
         (
+            set::required(true),
             set::title($lang->story->title),
             inputControl
             (
@@ -112,8 +113,9 @@ detailBody
         ),
         $canEditContent ? section
         (
+            set::required(true),
             set::title($lang->story->reviewers),
-            formRow
+            inputGroup
             (
                 picker
                 (
@@ -196,11 +198,12 @@ detailBody
     history(set::objectID($story->id)),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             setClass('mt-5'),
             set::title($lang->story->legendBasicInfo),
-            item
+            !$product->shadow ? item
             (
                 set::trClass(zget($fields['product'], 'className', '')),
                 set::name($lang->story->product),
@@ -228,7 +231,7 @@ detailBody
                         ) : null
                     )
                 )
-            ),
+            ) : null,
             $story->parent > 0 && $product->type != 'normal' ? item
             (
                 set::name(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
@@ -244,9 +247,9 @@ detailBody
                     set::manageLink(createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}"))
                 )
             ),
-            ($story->parent >= 0 && $app->tab == 'product' && ($showGrade || $story->type != 'epic')) ? item
+            ($story->parent >= 0 && ($showGrade || $story->type != 'epic')) ? item
             (
-                set::trClass(zget($fields['parent'], 'className', '')),
+                set::trClass($app->tab == 'product' ? zget($fields['parent'], 'className', '') : 'hidden'),
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
             ) : null,

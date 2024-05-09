@@ -39,6 +39,8 @@ class todoModel extends model
     {
         $this->loadModel('action');
         $this->loadModel('score');
+
+        $todoIdList = array();
         foreach($todos as $todo)
         {
             $todoID = $this->todoTao->insert($todo);

@@ -42,7 +42,11 @@ formPanel
         (
             set::name('token'),
             set::label($lang->gogs->token),
-            set::value($gogs->token)
+            set::value($gogs->token),
+            set::control(array(
+                'type' => 'textarea',
+                'rows' => 4
+            ))
         )
     )
 );

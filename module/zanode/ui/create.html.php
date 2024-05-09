@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('linuxList', $config->zanode->linuxList);
 jsVar('windowsList', $config->zanode->windowsList);
+jsVar('hostID', $hostID);
 
 formPanel
 (
@@ -26,10 +27,10 @@ formPanel
             (
                 array
                 (
-                    'toggle' => 'tooltip',
-                    'placement' => 'right',
-                    'title' => $lang->zanode->tips,
-                    'type' => 'white',
+                    'toggle'     => 'tooltip',
+                    'placement'  => 'right',
+                    'title'      => $lang->zanode->tips,
+                    'type'       => 'white',
                     'class-name' => 'text-gray border border-light'
                 )
             ),
@@ -181,5 +182,3 @@ formPanel
         set::control('editor')
     )
 );
-
-render();

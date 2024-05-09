@@ -26,6 +26,19 @@ class count_of_assigned_case_in_user extends baseCalc
 
     public $result = array();
 
+    public $supportSingleQuery = true;
+
+    public function singleQuery()
+    {
+        $select = "`assignedTo` as `user`, count(`assignedTo`) as `value`";
+        return $this->dao->select($select)->from($this->getSingleSql())
+            ->where('`status`')->ne('done')
+            ->andWhere('`assignedTo` IS NOT NULL')
+            ->andWhere('`assignedTo`')->ne('closed')
+            ->groupBy('`user`')
+            ->fetchAll();
+    }
+
     public function calculate($row)
     {
         $assignedTo = $row->assignedTo;

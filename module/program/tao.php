@@ -271,10 +271,11 @@ class programTao extends programModel
         $summary = $this->setNoTaskExecution($projectIdList);
         /* 2. Get summary of executions to be refreshed. */
         $tasks = $this->dao->select('t1.id, execution, t1.estimate, t1.consumed, t1.`left`, t1.status')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->ge(0) // Ignore parent task.
-            ->beginIF(!empty($projectIdList))->andWhere('t1.project')->in($projectIdList)->fi()
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF(!empty($projectIdList))->andWhere('t2.project')->in($projectIdList)->fi()
             ->fetchAll('id');
 
         foreach($tasks as $task)
@@ -335,11 +336,12 @@ class programTao extends programModel
      */
     protected function setNoTaskExecution(array $projectIdList): array
     {
-        $summary = array();
+        $summary        = array();
+        $executionGroup = $this->dao->select('id, project')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq(0)->fetchGroup('project', 'id');
         foreach($projectIdList as $projectID)
         {
-            $executions = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs();
-            foreach($executions as $executionID)
+            $executions = zget($executionGroup, $projectID, array());
+            foreach($executions as $executionID => $execution)
             {
                 $taskCount = $this->dao->select('id')->from(TABLE_TASK)
                     ->where('deleted')->eq(0)
@@ -365,7 +367,7 @@ class programTao extends programModel
      * @access protected
      * @return bool
      */
-    protected function updateProcess(): bool
+    protected function updateProgress(): bool
     {
         $projectList = $this->dao->select('id,progress,path,consumed,`left`')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -389,8 +391,8 @@ class programTao extends programModel
 
         foreach($programProgress as $programID => $hours)
         {
-            $progress = ($hours['consumed'] + $hours['left']) ? floor($hours['consumed'] / ($hours['consumed'] + $hours['left']) * 1000) / 1000 * 100 : 0;
-            $this->dao->update(TABLE_PROJECT)->set('progress')->eq($progress)->where('id')->eq($programID)->exec();
+            $hours['progress'] = ($hours['consumed'] + $hours['left']) ? floor($hours['consumed'] / ($hours['consumed'] + $hours['left']) * 1000) / 1000 * 100 : 0;
+            $this->dao->update(TABLE_PROJECT)->data($hours)->where('id')->eq($programID)->exec();
         }
 
         return !dao::isError();

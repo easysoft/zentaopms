@@ -12,15 +12,15 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 su('admin');
 
-zdTable('bug')->config('bug_getbugassign')->gen(10);
-zdTable('product')->gen(10);
-zdTable('project')->gen(1);
-zdTable('project')->config('project')->gen(10, false, false);
-zdTable('projectproduct')->gen(5);
-zdTable('user')->gen(2);
+zenData('bug')->loadYaml('bug_getbugassign')->gen(10);
+zenData('product')->gen(10);
+zenData('project')->gen(1);
+zenData('project')->loadYaml('project')->gen(10, false, false);
+zenData('projectproduct')->gen(5);
+zenData('user')->gen(2);
 
 
 $pivot = new pivotTest();
@@ -28,7 +28,7 @@ $pivot = new pivotTest();
 $result = $pivot->getBugAssign();
 r($result) && p('0:product,assignedTo,total;9:product,assignedTo,total') && e('1,admin,10;10,admin,10');    //判断已分配的bug数据获取是否正确。
 
-foreach($result as $row) 
+foreach($result as $row)
 {
     $productName = $row->productName;
     $row->isProductNameHtml = false;
@@ -45,7 +45,7 @@ r($condition1 && $condition2) && p('') && e('1');  //1.用户有此产品的权�
 su('user1');
 
 $result = $pivot->getBugAssign();
-foreach($result as $row) 
+foreach($result as $row)
 {
     $productName = $row->productName;
     $row->isProductNameHtml = false;

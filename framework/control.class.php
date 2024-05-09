@@ -236,7 +236,7 @@ class control extends baseControl
         if(!class_exists($extensionClass)) return false;
 
         /* 实例化扩展类。Create an instance of the extension class and return it. */
-        $extensionObject = new $extensionClass;
+        $extensionObject = new $extensionClass();
         if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         $this->$extensionClass->view = $this->view;
@@ -482,10 +482,149 @@ class control extends baseControl
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
         $methodName = $methodName ?: $this->app->getMethodName();
-        $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
-        if(!$print) return $fields;
 
-        echo $fields;
+        $this->loadModel('flow');
+        if($type == 'html')
+        {
+            parse_str($extras, $result);
+            $html  = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
+            $html .= $this->appendExtendCssAndJS($moduleName, $methodName);
+        }
+        else
+        {
+            ob_start();
+            $this->flow->printFields($moduleName, $methodName, $object, $type, $extras);
+            $html = ob_get_contents();
+            ob_end_clean();
+        }
+
+        if(!$print) return $html;
+        echo $html;
+    }
+
+    /**
+     * 追加工作流新增的字段，给formGridPanel组件使用。
+     * append workflow fields to form.
+     *
+     * @param  zin\fieldList $fields
+     * @param  string        $moduleName
+     * @param  string        $methodName
+     * @access public
+     * @return zin\fieldList
+     */
+    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = ''): zin\fieldList
+    {
+        if($this->config->edition == 'open') return $fields;
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return $fields;
+
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action || $action->extensionType != 'extend') return $fields;
+
+        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+        return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
+    }
+
+    /**
+     * 追加工作流配置的js和css到页面上。
+     * append workflow js and css to form.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return string
+     */
+    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = ''): string
+    {
+        if($this->config->edition == 'open') return '';
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $methodName : $this->app->getMethodName();
+
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return '';
+
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action || $action->extensionType != 'extend') return '';
+
+        $fieldList = $this->workflowaction->getFields($flow->module, !empty($action->action) ? $action->action: '');
+
+        $html = '';
+        if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
+        if(!empty($action->css)) $html .= "<style>$action->css</style>";
+
+        $html .= $this->loadModel('flow')->getFormulaScript($moduleName, $action, $fieldList);
+        if(!empty($action->linkages)) $html .= $this->flow->getLinkageScript($action, $fieldList);
+        if(!empty($flow->js))         $html .= "<script>$flow->js</script>";
+        if(!empty($action->js))       $html .= "<script>$action->js</script>";
+
+        return $html;
+    }
+
+    /**
+     * 追加工作流新增的字段，给非formGridPanel组件使用。
+     * append workflow field to form.
+     *
+     * @param  string $position   info|basic
+     * @param  object $object
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return array
+     */
+    public function appendExtendForm(string $position = 'info', object $object = null, string $moduleName = '', string $methodName = ''): array
+    {
+        if($this->config->edition == 'open') return array();
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+
+        if(!$object) $object = new stdclass();
+
+        $this->loadModel('flow');
+        $this->loadModel('workflowfield');
+
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return array();
+
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action || $action->extensionType != 'extend') return array();
+
+        $wrapControl  = array('textarea', 'richtext', 'file');
+        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+        if($layouts)
+        {
+            $allFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->fetchAll('field');
+            foreach($fieldList as $fieldName => $field)
+            {
+                if(isset($allFields[$fieldName])) $field->default = $allFields[$fieldName]->default;
+            }
+
+            foreach($fieldList as $key => $field)
+            {
+                if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
+
+                if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
+                if(empty($object->{$field->field})) $object->{$field->field} = $field->defaultValue;
+                if(in_array($field->type, $this->config->workflowfield->numberTypes)) $field = $this->workflowfield->processNumberField($field);
+
+                $field->required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
+                $field->control  = $this->flow->buildFormControl($field);
+                $field->items    = $field->options ? array_filter($field->options) : null;
+                $field->value    = !empty($object) ? zget($object, $field->field, '') : $defaultValue;
+                $field->width    = $field->width != 'auto' ? $field->width : 'full';
+            }
+
+            return $fieldList;
+        }
+        return array();
     }
 
     /**
@@ -512,6 +651,10 @@ class control extends baseControl
     public function printViewFile(string $viewFile): bool|string
     {
         if(!file_exists($viewFile)) return false;
+        if(substr($viewFile, -4) != '.php') return false;
+        if(strpos($viewFile, '..') !== false) return false;
+        if(strpos($viewFile, '/view/') === false) return false;
+        if(strpos($viewFile, $this->app->getModuleRoot()) !== 0 && strpos($viewFile, $this->app->getExtensionRoot()) !== 0) return false;
 
         $currentPWD = getcwd();
         chdir(dirname($viewFile));

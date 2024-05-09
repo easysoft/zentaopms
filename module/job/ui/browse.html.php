@@ -27,8 +27,7 @@ featureBar
 
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('job', 'create');
-$createLink = $this->createLink('job', 'create');
-$createItem = array('text' => $lang->job->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
+$createItem = array('text' => $lang->job->create, 'url' => inLink('create', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus');
 
 $tableData = initTableData($jobList, $config->job->dtable->fieldList, $this->job);
 

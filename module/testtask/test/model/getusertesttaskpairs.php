@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testtask.class.php';
+include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 su('admin');
 
-zdTable('testtask')->config('testtask')->gen(10);
-zdTable('project')->config('project')->gen(2);
-zdTable('product')->config('product')->gen(2);
+zenData('testtask')->loadYaml('testtask')->gen(10);
+zenData('project')->loadYaml('project')->gen(2);
+zenData('product')->loadYaml('product')->gen(2);
 
 /**
 

@@ -84,8 +84,9 @@ if(!empty($kanbanList))
             }
             elseif($action == 'delete')
             {
-                $actionItem['text'] = $lang->delete;
-                $actionItem['hint'] = $lang->delete;
+                $actionItem['text']       = $lang->delete;
+                $actionItem['hint']       = $lang->delete;
+                $actionItem['innerClass'] = $actionItem['className'];
             }
 
             $actionItems[] = $actionItem;

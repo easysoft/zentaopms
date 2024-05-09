@@ -24,7 +24,7 @@ class repoZen extends repo
     {
         if($this->config->inContainer || $this->config->inQuickon)
         {
-            $formData->data->client = $_POST['client'] = $this->post->SCM == 'Subversion' ? 'svn' : 'git';
+            $formData->data->client = $this->post->client = $this->post->SCM == 'Subversion' ? 'svn' : 'git';
         }
         else
         {
@@ -199,7 +199,7 @@ class repoZen extends repo
      */
     protected function checkClient(): bool
     {
-        if($this->post->SCM == 'Gitlab') return true;
+        if(in_array($this->post->SCM, $this->config->repo->notSyncSCM)) return true;
         if(!$this->config->features->checkClient) return true;
 
         if(!$this->post->client)
@@ -242,7 +242,7 @@ class repoZen extends repo
         $client   = $this->post->client;
         $account  = $this->post->account;
         $password = $this->post->password;
-        $encoding = strtoupper($this->post->encoding);
+        $encoding = strtoupper($this->post->encoding ?: 'UTF-8');
         $path     = $this->post->path;
         if($encoding != 'UTF8' and $encoding != 'UTF-8') $path = helper::convertEncoding($path, 'utf-8', $encoding);
 
@@ -366,19 +366,19 @@ class repoZen extends repo
         $this->repo->saveState(0, $objectID);
 
         $this->app->loadLang('action');
-
+        $this->loadModel('product');
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $products = $this->loadModel('product')->getProductPairsByProject($objectID);
-            if(empty($products)) return $this->sendError($this->lang->repo->error->noProduct, true);
+            $products = $this->loadModel('project')->getBranchesByProject($objectID);
+            $products = $this->product->getProducts($objectID, 'all', '', false, array_keys($products));
         }
         else
         {
-            $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $products = $this->product->getPairs('', 0, '', 'all');
         }
 
-        $projects = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $projects = $this->product->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
@@ -413,17 +413,19 @@ class repoZen extends repo
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
 
-        $serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $gitlabHosts  = $this->loadModel('gitlab')->getPairs();
+        $gitfoxHosts  = $this->loadModel('gitfox')->getPairs();
+        $serviceHosts = $gitfoxHosts + $gitlabHosts;
+
         $repoGroups   = array();
 
         if(!empty($serviceHosts))
         {
             $serverID   = array_keys($serviceHosts)[0];
             $repoGroups = $this->repo->getGroups($serverID);
-            $server     = $this->loadModel('pipeline')->getByID($serverID);
         }
 
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
@@ -432,7 +434,6 @@ class repoZen extends repo
         $this->view->serviceHosts    = $serviceHosts;
         $this->view->repoGroups      = $repoGroups;
         $this->view->objectID        = $objectID;
-        $this->view->server          = $server;
 
         $this->display();
     }
@@ -455,16 +456,17 @@ class repoZen extends repo
         if(in_array($scm, $this->config->repo->gitServiceList))
         {
             $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
-            $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
-            $options   = array();
-            foreach($projects as $project)
+            $projectID = in_array($repo->SCM, $this->config->repo->notSyncSCM) ? (int)$repo->serviceProject : $repo->serviceProject;
+            if($scm == 'gitfox')
             {
-                if($scm == 'gitlab') $options[$project->id] = $project->name_with_namespace;
-                if($scm == 'gitea')  $options[$project->full_name] = $project->full_name;
-                if($scm == 'gogs')   $options[$project->full_name] = $project->full_name;
+                $project  = $this->loadModel($scm)->apiGetSingleRepo($serviceID, $projectID);
+            }
+            else
+            {
+                $project  = $this->loadModel($scm)->apiGetSingleProject($serviceID, $projectID);
             }
 
-            $this->view->projects = $options;
+            $this->view->project = $project;
         }
 
         $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
@@ -472,7 +474,7 @@ class repoZen extends repo
         $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
         $products           = $products + $linkedProductPairs;
 
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->edit;
         $this->view->repo            = $repo;
         $this->view->repoID          = $repoID;
         $this->view->objectID        = $objectID;
@@ -503,10 +505,14 @@ class repoZen extends repo
         {
             $products = array_filter($this->post->product[$i]);
             if(empty($products)) continue;
-            if($this->post->name[$i] == '') dao::$errors['name_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+            if(isset($this->post->name[$i]) && $this->post->name[$i] == '') dao::$errors['name_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+            if(isset($this->post->identifier[$i]) && $this->post->identifier[$i] == '') dao::$errors['identifier_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
             if(dao::isError()) continue;
 
-            $data[] = array('serviceProject' => $project, 'product' => implode(',', $this->post->product[$i]), 'name' => $this->post->name[$i], 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
+            $nameList = isset($this->post->name[$i]) ? array('name' => $this->post->name[$i]) : array('identifier' => $this->post->identifier[$i]);
+            $data[] = $nameList + array('serviceProject' => $project,
+                'product' => implode(',', $this->post->product[$i]),
+                'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
         }
         if(dao::isError()) return false;
 
@@ -514,27 +520,61 @@ class repoZen extends repo
     }
 
     /**
-     * 获取gitlab还没存在禅道的项目列表。
-     * Get gitlab not exist repos.
+     * 获取还没存在禅道的项目列表。
+     * Get not exist repos.
      *
      * @param  object    $gitlab
      * @access protected
      * @return array
      */
-    protected function getGitlabNotExistRepos(object $gitlab): array
+    protected function getNotExistRepos(object $server): array
     {
         $repoList = array();
-        if(!empty($gitlab))
+        if(!empty($server))
         {
-            $repoList      = $this->loadModel('gitlab')->apiGetProjects($gitlab->id);
+            $repoList      = $server->type == 'gitlab' ? $this->getGitlabProjectsByApi($server) : $this->loadModel('gitfox')->apiGetRepos($server->id);
+            $type = $server->type == 'gitlab' ? 'Gitlab' : 'GitFox';
             $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
-                ->where('SCM')->eq(ucfirst($gitlab->type))
-                ->andWhere('serviceHost')->eq($gitlab->id)
+                ->where('SCM')->eq($type)
+                ->andWhere('serviceHost')->eq($server->id)
                 ->fetchPairs();
             foreach($repoList as $key => $repo)
             {
                 if(isset($existRepoList[$repo->id])) unset($repoList[$key]);
             }
+        }
+        return $repoList;
+    }
+
+    /**
+     * 通过Graphql获取GitLab项目列表。
+     * Get GitLab projects by Graphql.
+     *
+     * @param  object $server
+     * @access public
+     * @return array
+     */
+    protected function getGitlabProjectsByApi(object $server): array
+    {
+        $repoList    = array();
+        $endCursor   = '';
+        $hasNextPage = true;
+        $url = rtrim($server->url, '/') . '/api/graphql' . "?private_token={$server->token}";
+        while($hasNextPage)
+        {
+            $query    = 'query { projects(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {nameWithNamespace id name}}}';
+            $response = json_decode(commonModel::http($url, array('query' => $query), array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
+            if(!$endCursor && !isset($response->data->projects->nodes)) return array();
+
+            foreach($response->data->projects->nodes as $project)
+            {
+                preg_match('/\d+/', $project->id, $projectID);
+                $project->id                  = $projectID ? $projectID[0] : $project->id;
+                $project->name_with_namespace = $project->nameWithNamespace;
+                $repoList[]  = $project;
+            }
+            $hasNextPage = $response->data->projects->pageInfo->hasNextPage;
+            $endCursor   = $response->data->projects->pageInfo->endCursor;
         }
         return $repoList;
     }
@@ -553,6 +593,8 @@ class repoZen extends repo
      */
     protected function getFilesInfo(object $repo, string $path, string $branchID, string $base64BranchID, int $objectID): array
     {
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
         if($repo->SCM == 'Gitlab')
         {
             $_COOKIE['repoBranch'] = $branchID ? $branchID : $this->cookie->repoBranch;
@@ -565,6 +607,10 @@ class repoZen extends repo
                 $file->date     = '';
             }
         }
+        elseif($repo->SCM == 'GitFox')
+        {
+            $infos = $scm->ls($path);
+        }
         else
         {
             $infos = $this->repo->getFileCommits($repo, $branchID, $path);
@@ -573,8 +619,6 @@ class repoZen extends repo
         $filePath = $path;
         if($repo->SCM == 'Subversion')
         {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
             $info = $scm->info('');
             if(!empty($info->root))
             {
@@ -974,6 +1018,9 @@ class repoZen extends repo
         $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
         $this->config->product->search['params']['product']['values'] = helper::arrayColumn($products, 'name', 'id');
 
+        unset($this->config->product->search['fields']['roadmap']);
+        unset($this->config->product->search['params']['roadmap']);
+
         $productBranches = $this->getLinkBranches($products);
         if(empty($productBranches))
         {
@@ -982,6 +1029,7 @@ class repoZen extends repo
         }
         else
         {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->product->search['params']['branch']['values'] = $productBranches;
         }
@@ -1086,6 +1134,7 @@ class repoZen extends repo
         }
         else
         {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->bug->search['params']['branch']['values'] = $productBranches;
         }
@@ -1188,7 +1237,7 @@ class repoZen extends repo
         {
             foreach($allTasks as $key => $task)
             {
-                if($task->children)
+                if(!empty($task->children))
                 {
                     $allTasks = array_merge($task->children, $allTasks);
                     unset($task->children);
@@ -1262,8 +1311,20 @@ class repoZen extends repo
             ->where('extra')->eq($repoID)
             ->andWhere('AType')->eq('design')
             ->fetch();
-        $error      = $relationID ? $this->lang->repo->error->deleted : '';
+        $error = $relationID ? $this->lang->repo->error->deleted : '';
 
+        $linkBranchs = $this->repo->getLinkedBranch(0, '', $repoID);
+        if(!empty($linkBranchs))
+        {
+            $error .= $error ? '\n' : '';
+            $linkType = array_unique(array_column($linkBranchs, 'AType'));
+            foreach($linkType as $type) $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common) . '\n';
+        }
+
+        $relationID = $this->dao->select('id')->from(TABLE_RELATION)
+            ->where('extra')->eq($repoID)
+            ->andWhere('AType')->eq('design')
+            ->fetch();
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
 
@@ -1359,7 +1420,7 @@ class repoZen extends repo
                 elseif($this->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
                 {
                     $logContent = file_get_contents($logFile);
-                    if($this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
+                    if($this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
                     {
                         @unlink($logFile);
                     }
@@ -1397,7 +1458,9 @@ class repoZen extends repo
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $branches = $this->scm->branch();
-            $tags     = $this->scm->tags('');
+            if(empty($branches)) return $this->sendError($this->lang->repo->error->empty, $this->createLink('repo', 'maintain'));
+
+            $tags = $this->scm->tags('');
             foreach($tags as $tag) $branches[$tag] = $tag;
 
             if($branches)
@@ -1454,7 +1517,7 @@ class repoZen extends repo
                 if($branchID) $this->repo->fixCommit($repo->id);
             }
 
-            if(empty($branchID) || $repo->SCM == 'Gitlab')
+            if(empty($branchID) || in_array($repo->SCM, $this->config->repo->notSyncSCM))
             {
                 helper::setcookie("syncBranch", '');
 
@@ -1562,7 +1625,7 @@ class repoZen extends repo
     {
         if($repo->SCM == 'Gitlab') return $this->repo->getGitlabFilesByPath($repo, '', (string)$this->cookie->repoBranch);
 
-        if($repo->SCM != 'Subversion') return $this->repo->getFileTree($repo);
+        if($repo->SCM != 'Subversion' && $repo->SCM != 'GitFox') return $this->repo->getFileTree($repo);
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -1579,5 +1642,46 @@ class repoZen extends repo
         }
 
         return $tree;
+    }
+
+    /**
+     * 检查代码库是否能正常访问。
+     * Check repo connected.
+     *
+     * @param  object    $repo
+     * @access protected
+     * @return bool
+     */
+    protected function checkRepoInternet(object $repo): bool
+    {
+        if(!$repo) return false;
+
+        $repoUrl = '';
+        if(empty($repoUrl) && isset($repo->path)    && substr($repo->path, 0, 4) == 'http')    $repoUrl = $repo->path;
+        if(empty($repoUrl) && isset($repo->client)  && substr($repo->client, 0, 4) == 'http')  $repoUrl = $repo->client;
+        if(empty($repoUrl) && isset($repo->apiPath) && substr($repo->apiPath, 0, 4) == 'http') $repoUrl = $repo->apiPath;
+        return $repoUrl && !$this->loadModel('admin')->checkInternet($repoUrl, 3);
+    }
+
+    /**
+     * 翻译API返回错误信息。
+     * Parse api log to client lang.
+     *
+     * @param  string $message
+     * @access protected
+     * @return string
+     */
+    protected function parseErrorContent(string $message): string
+    {
+        foreach($this->lang->repo->apiError as $key => $pattern)
+        {
+            if(preg_match("/$pattern/i", $message))
+            {
+                $message = zget($this->lang->repo->errorLang, $key);
+                break;
+            }
+        }
+
+        return $message;
     }
 }

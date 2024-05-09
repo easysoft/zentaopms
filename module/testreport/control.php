@@ -115,7 +115,7 @@ class testreport extends control
             foreach(explode(',', $report->tasks) as $taskID) $tasks[$taskID] = $taskID;
         }
 
-        $this->view->title        = ($extra ? $task->name : $object->name) . $this->lang->colon . $this->lang->testreport->common;
+        $this->view->title        = ($extra ? $task->name : $object->name) . $this->lang->hyphen . $this->lang->testreport->common;
         $this->view->reports      = $reports;
         $this->view->orderBy      = $orderBy;
         $this->view->objectID     = $objectID;

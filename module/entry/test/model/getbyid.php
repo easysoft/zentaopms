@@ -8,10 +8,10 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
+include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
 
-zdTable('entry')->gen(100);
-zdTable('user')->gen(5);
+zenData('entry')->gen(100);
+zenData('user')->gen(5);
 su('admin');
 
 global $tester;

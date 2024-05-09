@@ -193,6 +193,7 @@ formBatchPanel
         set::label($lang->task->type),
         set::control('picker'),
         set::items($lang->task->typeList),
+        set::value('devel'),
         set::width('160px'),
         set::ditto(true)
     ),
@@ -209,9 +210,8 @@ formBatchPanel
     (
         set::name('pri'),
         set::label($lang->task->pri),
-        set::control('priPicker'),
+        set::control(array('control' => 'priPicker', 'required' => true)),
         set::value(3),
-        set::required(true),
         set::items($lang->task->priList),
         set::width('80px')
     ),

@@ -1,8 +1,6 @@
 <?php
 
-/**
- * `VALUES` keyword parser.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -12,25 +10,26 @@ use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 use PhpMyAdmin\SqlParser\Translator;
 
+use function count;
+use function sprintf;
+
 /**
  * `VALUES` keyword parser.
  *
- * @category   Keywords
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
+ * @final
  */
 class Array2d extends Component
 {
     /**
-     * @param Parser     $parser  the parser that serves as context
-     * @param TokensList $list    the list of tokens that are being parsed
-     * @param array      $options parameters for parsing
+     * @param Parser               $parser  the parser that serves as context
+     * @param TokensList           $list    the list of tokens that are being parsed
+     * @param array<string, mixed> $options parameters for parsing
      *
      * @return ArrayObj[]
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = array())
+    public static function parse(Parser $parser, TokensList $list, array $options = [])
     {
-        $ret = array();
+        $ret = [];
 
         /**
          * The number of values in each set.
@@ -56,8 +55,6 @@ class Array2d extends Component
         for (; $list->idx < $list->count; ++$list->idx) {
             /**
              * Token parsed at this moment.
-             *
-             * @var Token
              */
             $token = $list->tokens[$list->idx];
 
@@ -77,40 +74,38 @@ class Array2d extends Component
             }
 
             if ($state === 0) {
-                if ($token->value === '(') {
-                    $arr = ArrayObj::parse($parser, $list, $options);
-                    $arrCount = count($arr->values);
-                    if ($count === -1) {
-                        $count = $arrCount;
-                    } elseif ($arrCount !== $count) {
-                        $parser->error(
-                            sprintf(
-                                Translator::gettext('%1$d values were expected, but found %2$d.'),
-                                $count,
-                                $arrCount
-                            ),
-                            $token
-                        );
-                    }
-                    $ret[] = $arr;
-                    $state = 1;
-                } else {
+                if ($token->value !== '(') {
                     break;
                 }
+
+                $arr = ArrayObj::parse($parser, $list, $options);
+                $arrCount = count($arr->values);
+                if ($count === -1) {
+                    $count = $arrCount;
+                } elseif ($arrCount !== $count) {
+                    $parser->error(
+                        sprintf(
+                            Translator::gettext('%1$d values were expected, but found %2$d.'),
+                            $count,
+                            $arrCount
+                        ),
+                        $token
+                    );
+                }
+
+                $ret[] = $arr;
+                $state = 1;
             } elseif ($state === 1) {
-                if ($token->value === ',') {
-                    $state = 0;
-                } else {
+                if ($token->value !== ',') {
                     break;
                 }
+
+                $state = 0;
             }
         }
 
         if ($state === 0) {
-            $parser->error(
-                'An opening bracket followed by a set of values was expected.',
-                $list->tokens[$list->idx]
-            );
+            $parser->error('An opening bracket followed by a set of values was expected.', $list->tokens[$list->idx]);
         }
 
         --$list->idx;
@@ -119,12 +114,12 @@ class Array2d extends Component
     }
 
     /**
-     * @param ArrayObj[] $component the component to be built
-     * @param array      $options   parameters for building
+     * @param ArrayObj[]           $component the component to be built
+     * @param array<string, mixed> $options   parameters for building
      *
      * @return string
      */
-    public static function build($component, array $options = array())
+    public static function build($component, array $options = [])
     {
         return ArrayObj::build($component);
     }

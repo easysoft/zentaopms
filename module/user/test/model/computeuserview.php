@@ -21,20 +21,20 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
 dao::$cache = array();
-zdTable('user')->gen(10);
-zdTable('userview')->config('userview')->gen(10);
-zdTable('team')->config('team')->gen(200);
-zdTable('acl')->config('acl')->gen(100);
-zdTable('stakeholder')->config('stakeholder')->gen(100);
+zenData('user')->gen(10);
+zenData('userview')->loadYaml('userview')->gen(10);
+zenData('team')->loadYaml('team')->gen(200);
+zenData('acl')->loadYaml('acl')->gen(100);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(100);
 
-zdTable('product')->gen(20);
-zdTable('project')->gen(0);
-zdTable('project')->gen(20);
-zdTable('project')->config('execution')->gen(20, false);
-zdTable('projectadmin')->config('projectadmin')->gen(30);
+zenData('product')->gen(20);
+zenData('project')->gen(0);
+zenData('project')->gen(20);
+zenData('project')->loadYaml('execution')->gen(20, false);
+zenData('projectadmin')->loadYaml('projectadmin')->gen(30);
 
 $user = new userTest();
 r($user->computeUserViewTest('test1', false))  && p('programs', '-') && e(',3');                              //计算并获取test1账户的可查看项目集列表。

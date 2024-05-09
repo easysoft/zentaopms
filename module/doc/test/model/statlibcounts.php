@@ -14,12 +14,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('module')->config('module')->gen(3);
-zdTable('doclib')->config('doclib')->gen(30);
-zdTable('doc')->config('doc')->gen(50);
-zdTable('user')->gen(5);
+zenData('module')->loadYaml('module')->gen(3);
+zenData('doclib')->loadYaml('doclib')->gen(30);
+zenData('doc')->loadYaml('doc')->gen(50);
+zenData('user')->gen(5);
 
 $libIds[0] = array();
 $libIds[1] = range(1, 30);

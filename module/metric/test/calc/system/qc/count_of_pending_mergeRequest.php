@@ -12,10 +12,10 @@ cid=1
 */
 
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
-zdTable('repo')->config('repo', true, 4)->gen(10);
-zdTable('mr')->config('mr', true, 4)->gen(1000);
+zendata('repo')->loadYaml('repo', true, 4)->gen(10);
+zendata('mr')->loadYaml('mr', true, 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

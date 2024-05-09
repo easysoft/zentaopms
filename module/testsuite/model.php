@@ -232,12 +232,13 @@ class testsuiteModel extends model
      * Get unlinked cases for suite.
      *
      * @param  object $suite
+     * @param  string $browseType
      * @param  int    $param
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getUnlinkedCases(object $suite, int $param = 0, object $pager = null): array
+    public function getUnlinkedCases(object $suite, string $browseType = 'all', int $param = 0, object $pager = null): array
     {
         if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
         if($param)
@@ -250,7 +251,7 @@ class testsuiteModel extends model
             }
         }
 
-        $query = $this->session->testsuiteQuery;
+        $query = $browseType == 'bySearch' ? $this->session->testsuiteQuery : ' 1 = 1';
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false) $query .= " AND `product` = {$suite->product}";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
@@ -268,21 +269,6 @@ class testsuiteModel extends model
     }
 
     /**
-     * 删除套件和所有的关联用例。
-     * Delete suite and all assiociated use cases.
-     *
-     * @param  int    $suiteID
-     * @access public
-     * @return bool
-     */
-    public function deleteSuiteByID(int $suiteID): bool
-    {
-        parent::delete(TABLE_TESTSUITE, $suiteID);
-        $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
-        return !dao::isError();
-    }
-
-    /**
      * 判断操作是否可以点击。
      * Judge an action is clickable or not.
      *
@@ -293,7 +279,7 @@ class testsuiteModel extends model
      */
     public function isClickable(object $report, string $action): bool
     {
-        return true;
+        return common::hasPriv('testsuite', $action);
     }
 
     /**

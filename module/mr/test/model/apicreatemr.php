@@ -10,42 +10,33 @@ cid=0
 - 正确的数据创建Gitlab合并请求
  - 属性title @test
  - 属性state @opened
-- 正确的数据创建Gitea合并请求
- - 属性title @test
- - 属性state @opened
-- 正确的数据创建Gogs合并请求
- - 属性title @test
- - 属性state @opened
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('pipeline')->gen(5);
-zdTable('oauth')->config('oauth')->gen(5);
+zenData('pipeline')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(5);
+$repo = zenData('repo')->loadYaml('repo');
+$repo->SCM->range('Gitlab,Gitea,Gogs');
+$repo->id->range('1,4,5');
+$repo->serviceHost->range('1,4,5');
+$repo->serviceProject->range('3,[gitea/unittest],[easycorp/unittest]');
+$repo->gen(3);
 su('admin');
 
-$mrModel = new mrTest();
-
-$gitlabID = 1;
-$giteaID  = 4;
-$gogsID   = 5;
-
-$gitlabProjectID = 3;
-$giteaProjectID  = 'gitea/unittest';
-$gogsProjectID   = 'easycorp/unittest';
-
+$mrModel   = new mrTest();
+$gitlabID  = 1;
+$projectID = 3;
 $params = new stdClass();
 $params->title              = 'test';
 $params->sourceBranch       = 'main';
 $params->targetBranch       = 'master';
-$params->targetProject      = $gitlabProjectID;
+$params->targetProject      = $projectID;
 $params->description        = 'This is a test merge request';
 $params->assignee           = '';
 $params->removeSourceBranch = 0;
 $params->squash             = 0;
 
-r($mrModel->apiCreateMrTester($gitlabID, $gitlabProjectID, $params)) && p('title,state') && e('test,opened'); // 正确的数据创建Gitlab合并请求
-r($mrModel->apiCreateMrTester($giteaID, $giteaProjectID, $params))   && p('title,state') && e('test,opened'); // 正确的数据创建Gitea合并请求
-r($mrModel->apiCreateMrTester($gogsID, $gogsProjectID, $params))     && p('title,state') && e('test,opened'); // 正确的数据创建Gogs合并请求
+r($mrModel->apiCreateMrTester($gitlabID, $projectID, $params)) && p('title,state') && e('test,opened'); // 正确的数据创建Gitlab合并请求

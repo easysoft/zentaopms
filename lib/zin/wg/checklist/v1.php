@@ -40,7 +40,7 @@ class checkList extends wg
         }
 
         $props = $this->props->pick(array('primary', 'type', 'name', 'disabled'));
-        if(!empty($props['name']) && !empty($item['value'])) $props['id'] = $props['name'] . $item['value'];
+        if(!empty($props['name']) && !empty($item['value'])) $props['id'] = str_replace('[]', '', $props['name']) . $item['value'];
         return $this->buildItem(array_merge($props, $item));
     }
 

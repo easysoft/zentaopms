@@ -2,11 +2,14 @@
 $config->transfer = new stdclass();
 
 $config->transfer->fieldList['title']      = '';
+$config->transfer->fieldList['name']       = '';
+$config->transfer->fieldList['label']      = '';
 $config->transfer->fieldList['width']      = '';
 $config->transfer->fieldList['required']   = 'no';
 $config->transfer->fieldList['fixed']      = '';
 $config->transfer->fieldList['control']    = 'input';
 $config->transfer->fieldList['values']     = '';
+$config->transfer->fieldList['items']      = array();
 $config->transfer->fieldList['class']      = '';
 $config->transfer->fieldList['sort']       = '';
 $config->transfer->fieldList['dataSource'] = array('module' => '', 'method' => '', 'params' => '', 'pairs' => '', 'lang' => '');
@@ -30,6 +33,10 @@ $config->transfer->actionModule   = array('task');
 $config->transfer->lazyLoading     = false;
 $config->transfer->showImportCount = 20;
 
-$config->transfer->convertInt['branch']['getPairs']['productID']      = true;
-$config->transfer->convertInt['tree']['getOptionMenu']['rootID']      = true;
-$config->transfer->convertInt['productplan']['getPairs']['productID'] = true;
+$config->transfer->convertInt['branch']['getPairs']['productID']                = true;
+$config->transfer->convertInt['tree']['getOptionMenu']['libID']                 = true;
+$config->transfer->convertInt['tree']['getOptionMenu']['rootID']                = true;
+$config->transfer->convertInt['tree']['getOptionMenu']['caselib']               = true;
+$config->transfer->convertInt['tree']['getTaskOptionMenu']['rootID']            = true;
+$config->transfer->convertInt['story']['getExecutionStoryPairs']['executionID'] = true;
+$config->transfer->convertInt['productplan']['getPairs']['productID']           = true;

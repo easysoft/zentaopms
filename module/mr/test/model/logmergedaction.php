@@ -19,15 +19,15 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 su('admin');
-zdTable('action')->gen(0);
-zdTable('pipeline')->gen(5);
-zdTable('product')->gen(5);
-zdTable('repo')->config('repo')->gen(5);
-zdTable('relation')->config('relation')->gen(5);
-zdTable('mr')->config('mr')->gen(5);
+zenData('action')->gen(0);
+zenData('pipeline')->gen(5);
+zenData('product')->gen(5);
+zenData('repo')->loadYaml('repo')->gen(5);
+zenData('relation')->loadYaml('relation')->gen(5);
+zenData('mr')->loadYaml('mr')->gen(5);
 
 $mrModel = new mrTest();
 

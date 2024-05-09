@@ -57,9 +57,9 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-zdTable('product')->gen('90');
+zenData('product')->gen('90');
 
 global $tester, $config;
 $tester->loadModel('testcase');

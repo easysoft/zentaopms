@@ -39,7 +39,7 @@ $colspan = count($visibleFields) + 3;
   <div class="main-header clearfix">
     <h2 class="pull-left">
       <?php if($parent):?>
-      <span class='pull-left'><?php echo $parentTitle . $this->lang->colon;?></span>
+      <span class='pull-left'><?php echo $parentTitle . $this->lang->hyphen;?></span>
       <?php echo $lang->task->batchCreateChildren;?>
       <?php else:?>
       <?php echo $lang->task->batchCreate;?>

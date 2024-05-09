@@ -533,58 +533,13 @@ class baseHTML
     {
         if(helper::inOnlyBodyMode()) return false;
 
-        global $lang, $app, $config;
-        if(empty($label)) $label = $lang->goback;
-
-        $gobackLink   = "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";
-        $tab          = $_COOKIE['tab'] ?? '';
-        $referer      = $_SERVER['HTTP_REFERER'] ?? '';
-        $refererParts = parse_url((string) $referer);
-
-        if($config->requestType == 'PATH_INFO' and empty($refererParts)) return $gobackLink;
-        if($config->requestType == 'GET' and !isset($refererParts['query'])) return $gobackLink;
-
-        $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
-        $currentModule = $app->getModuleName();
-        $currentMethod = $app->getMethodName();
-        $gobackList    = isset($_COOKIE['goback']) ? json_decode((string) $_COOKIE['goback'], true) : array();
-        $gobackLink    = $gobackList[$tab] ?? '';
-
-        /* Make sure href is opened in the same tab. */
-        if(!str_contains($misc, 'data-app='))
+        if(empty($label))
         {
-            $module  = $app->rawModule;
-            $dataApp = (isset($lang->navGroup->$module) and $lang->navGroup->$module != $app->tab) ? "data-app='{$app->tab}'" : '';
-            $misc   .= ' ' . $dataApp;
+            global $lang;
+            $label = $lang->goback;
         }
 
-        /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
-        if(preg_match("/(?:m=|\/)([a-zA-Z0-9]+)(?:(&f=)|(-?))([a-zA-Z0-9]+)?(?:&|-|\.)?/", strtolower($refererLink), $matches))
-        {
-            if(!isset($matches[4])) $matches[4] = $config->default->method;
-            if(!in_array($matches[1], array($config->default->module, 'search')) or !in_array($matches[4], array($config->default->method, 'buildquery')))
-            {
-                if($matches[1] != 'index' and ($matches[1] != $currentModule or $matches[4] != $currentMethod))
-                {
-                    $gobackList[$tab] = $referer;
-                    $gobackLink       = $referer;
-                    setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
-                }
-            }
-        }
-
-        $button = "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
-
-        $app->loadClass('purifier', true);
-        $purifierConfig   = HTMLPurifier_Config::createDefault();
-        $purifierConfig->set('Cache.DefinitionImpl', null);
-
-        /* 设置a标签允许的特殊属性，应用于高亮左侧导航。 */
-        $purifierConfig->getHTMLDefinition(true)->addAttribute('a', 'data-app', 'CDATA');
-
-        $purifier = new HTMLPurifier($purifierConfig);
-
-        return $purifier->purify($button);
+        return "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";
     }
 
     /**

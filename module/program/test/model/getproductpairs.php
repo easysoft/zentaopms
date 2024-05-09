@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 su('admin');
 
 /* Create program data. */
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1');
 $program->name->range('项目集1');
 $program->type->range('program');
@@ -16,7 +16,7 @@ $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD
 $program->gen(1);
 
 /* Create product data. */
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-10');
 $product->name->range('1-10')->prefix('产品');
 $product->program->range('1');

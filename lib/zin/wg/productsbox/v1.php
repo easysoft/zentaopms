@@ -24,7 +24,9 @@ class productsBox extends wg
         'isStage?: bool',               // 是否是阶段类型。
         'hasNewProduct?: bool=false',   // 是否有新产品。
         'errorSameProducts?: string',   // 选择同一个产品的提示。
-        'required?: bool=false'         // 是否是必填。
+        'required?: bool=false',        // 是否是必填。
+        'from?: string=project',        // 来源类型。
+        'selectTip?: string=""'         // 产品下拉提示。
     );
 
     public static function getPageCSS(): ?string
@@ -48,7 +50,7 @@ class productsBox extends wg
         }
         elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->model, array('waterfall', 'kanban', 'waterfallplus')))
         {
-            $productsBox = $this->buildOnlyLinkPlans($productItems);
+            $productsBox = $this->buildOnlyLinkPlans($linkedProducts);
         }
         else
         {
@@ -105,6 +107,7 @@ class productsBox extends wg
                     set::name('products[0]'),
                     set::items($productItems),
                     !empty($project) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
+                    set::placeholder($this->prop('selectTip'))
                 ),
             ),
             formGroup
@@ -163,13 +166,13 @@ class productsBox extends wg
     protected function buildOnlyLinkPlans(array $productItems): array
     {
         global $lang;
-        list($currentPlan, $productPlans, $project) = $this->prop(array('currentPlan', 'productPlans', 'project'));
+        list($currentPlan, $productPlans, $from) = $this->prop(array('currentPlan', 'productPlans', 'from'));
 
         $planProductID = current(array_keys($productItems));
         $productsBox   = array();
-        $productsBox[] = !empty($project->hasProduct) ? div
+        $productsBox[] = $from == 'execution' ? div
         (
-            set::className('productBox'),
+            set::className('productBox noProductBox'),
             formGroup
             (
                 set::width('1/2'),
@@ -184,7 +187,9 @@ class productsBox extends wg
                     formHidden("products[{$planProductID}]", $planProductID),
                     formHidden("branch[{$planProductID}][0]", 0)
                 )
-            )
+            ),
+            formHidden("products[{$planProductID}]", $planProductID),
+            formHidden("branch[{$planProductID}][0]", 0)
         ) : div
         (
             set::className('productBox'),
@@ -211,7 +216,7 @@ class productsBox extends wg
             $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
             $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
 
-            $disabledProduct = !empty($project) && (in_array($product->id, $unmodifiableProducts) || ($isStage && $project->stageBy == 'product'));
+            $disabledProduct = !empty($project) && (in_array($product->id, $unmodifiableProducts) || $isStage);
 
             $branchIdList = '';
             if(isset($product->branches))             $branchIdList = $product->branches;
@@ -258,6 +263,7 @@ class productsBox extends wg
                                 set::items($productItems),
                                 set::last($product->id),
                                 set::disabled($disabledProduct),
+                                $i === 0 ? set::placeholder($this->prop('selectTip')) : null,
                                 $hasBranch ? set::lastBranch(empty($product->branches) ? 0 : implode(',', $product->branches)) : null,
                                 $disabledProduct ? formHidden("products[$i]", $product->id) : null
                             )

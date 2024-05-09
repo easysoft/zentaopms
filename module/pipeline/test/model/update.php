@@ -32,10 +32,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pipeline.class.php';
+include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('pipeline')->config('pipeline')->gen(6);
+zenData('user')->gen(5);
+zenData('pipeline')->loadYaml('pipeline')->gen(6);
 
 $names     = array('', 'gitLab', '修改名称1', '修改名称2', '修改名称3', '修改名称4', '修改名称5', '修改名称6', '修改名称7');
 $tokens    = array('', '123456');

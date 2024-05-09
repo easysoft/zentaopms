@@ -17,6 +17,7 @@ jsVar('childrenAB', $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
 jsVar('oldShowGrades', $showGrades);
 jsVar('gradeGroup', $gradeGroup);
+jsVar('hasProduct', $execution->hasProduct);
 
 /* Show feature bar. */
 featureBar
@@ -81,12 +82,13 @@ if(!$product)
     $product->id = 0;
 }
 $canModifyProduct                     = common::canModify('product', $product);
-$canOpreate['create']                 = $canModifyProduct && hasPriv('story', 'create');
-$canOpreate['batchCreate']            = $canModifyProduct && hasPriv('story', 'batchCreate');
-$canOpreate['createEpic']             = $canModifyProduct && hasPriv('epic', 'create');
-$canOpreate['batchCreateEpic']        = $canModifyProduct && hasPriv('epic', 'batchCreate');
-$canOpreate['createRequirement']      = $canModifyProduct && hasPriv('requirement', 'create');
-$canOpreate['batchCreateRequirement'] = $canModifyProduct && hasPriv('requirement', 'batchCreate');
+$canModifyExecution                   = common::canModify('execution', $execution);
+$canOpreate['create']                 = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');
+$canOpreate['batchCreate']            = $canModifyProduct && $canModifyExecution && hasPriv('story', 'batchCreate');
+$canOpreate['createEpic']             = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'create');
+$canOpreate['batchCreateEpic']        = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'batchCreate');
+$canOpreate['createRequirement']      = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'create');
+$canOpreate['batchCreateRequirement'] = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'batchCreate');
 
 $createLink                 = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
 $batchCreateLink            = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
@@ -113,9 +115,9 @@ if(in_array($execution->attribute, array('request', 'design')))
     if($canOpreate['batchCreateRequirement']) $createItem[] = array('text' => $lang->requirement->batchCreate . $lang->URCommon, 'url' => $batchCreateRequirementLink);
 }
 
-$canLinkStory     = $execution->hasProduct && $canModifyProduct && hasPriv('execution', 'linkStory');
-$canlinkPlanStory = $execution->hasProduct && $canModifyProduct && hasPriv('execution', 'importPlanStories');
-$linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}");
+$canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'linkStory');
+$canlinkPlanStory = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'importPlanStories') && $storyType == 'story';
+$linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=&storyType=$storyType");
 
 if(commonModel::isTutorialMode())
 {
@@ -124,7 +126,7 @@ if(commonModel::isTutorialMode())
     $canlinkPlanStory = false;
 }
 
-$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl);
+$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab);
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
@@ -155,6 +157,24 @@ elseif(count($createItem) == 1)
 
 $product ? toolbar
 (
+    common::hasPriv('execution', 'storykanban') && $storyType == 'story' ? btnGroup
+    (
+        btn
+        (
+            setClass('text-primary font-bold shadow-inner bg-canvas'),
+            set::icon('format-list-bulleted'),
+            set::hint($lang->execution->list),
+            set::url(inlink('story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=all")),
+            setData('app', $app->tab)
+        ),
+        btn
+        (
+            set::icon('kanban'),
+            set::hint($lang->execution->kanban),
+            set::url($this->createLink('execution', 'storykanban', "executionID={$execution->id}")),
+            setData('app', $app->tab)
+        ),
+    ) : null,
     hasPriv('story', 'report') ? item(set(array
     (
         'text'  => $lang->story->report->common,
@@ -164,7 +184,7 @@ $product ? toolbar
     ))) : null,
     hasPriv('story', 'export') ? item(set(array
     (
-        'text'        => $lang->story->export,
+        'text'        => $lang->export,
         'icon'        => 'export',
         'class'       => 'ghost',
         'url'         => createLink('story', 'export', "productID={$product->id}&orderBy=$orderBy&executionID=$execution->id&browseType=$type&storyType=$storyType"),
@@ -200,7 +220,8 @@ sidebar
         'modules'     => $moduleTree,
         'activeKey'   => $param,
         'settingLink' => !$execution->hasProduct && !$execution->multiple ? createLink('tree', 'browse', "rootID={$product->id}&viewType=story") : null,
-        'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0")
+        'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0"),
+        'app'         => !$execution->hasProduct && !$execution->multiple ? 'project' : ''
     )))
 );
 
@@ -292,7 +313,7 @@ $checkObject->execution = $execution->id;
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
-$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
+$canBatchUnlink      = ($execution->hasProduct || $app->tab == 'execution') && common::hasPriv('execution', 'batchUnlinkStory');
 $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
 $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
@@ -397,8 +418,9 @@ if($canBatchAction)
 
 /* DataTable columns. */
 $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
-$setting = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
 $cols    = array();
+$setting = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
+if(!$canModifyExecution) $setting['actions']['actionsMap'] = array();
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 foreach($setting as $col)
 {
@@ -411,24 +433,28 @@ foreach($setting as $col)
 }
 
 /* DataTable data. */
-$data = array();
+$data        = array();
 $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'unlink');
 if(empty($execution->hasProduct) && empty($execution->multiple))
 {
     $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close');
     if($storyType == 'requirement') $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'edit', 'divider', 'batchCreate', 'close');
 }
+if(!$canModifyExecution) $actionMenus = array();
 
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus, 'branches' => $branchPairs);
 foreach($stories as $story)
 {
     $story->moduleID = $story->module;
+    $story->from     = 'execution';
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
+    if(!isset($story->children)) continue;
 }
 
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);
 jsVar('checkedSummary', $lang->product->checkedAllSummary);
+jsVar('storyType', $storyType);
 dtable
 (
     setClass('shadow rounded'),

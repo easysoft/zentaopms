@@ -13,7 +13,7 @@ $config->bug->resolve->requiredFields = 'resolution';
 
 $config->bug->actions = new stdclass();
 $config->bug->actions->view = array();
-$config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'resolve', 'close', 'activate', 'toStory', 'toTask', 'createCase');
+$config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'createBranch', 'resolve', 'close', 'activate', 'toStory', 'toTask', 'createCase');
 $config->bug->actions->view['suffixActions'] = array('edit', 'copy', 'delete');
 
 $config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'needconfirm', 'bysearch');
@@ -57,7 +57,7 @@ $config->bug->excludeCheckFields = ',severities,oses,browsers,lanes,regions,exec
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create   = array('id' => 'steps', 'tools' => 'bugTools');
-$config->bug->editor->edit     = array('id' => 'steps,comment', 'tools' => 'bugTools');
+$config->bug->editor->edit     = array('id' => 'steps', 'tools' => 'bugTools');
 $config->bug->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'bugTools');
 $config->bug->editor->confirm  = array('id' => 'comment', 'tools' => 'bugTools');
 $config->bug->editor->assignto = array('id' => 'comment', 'tools' => 'bugTools');
@@ -157,3 +157,10 @@ $config->bug->actionList['delete']['hint']         = $lang->bug->delete;
 $config->bug->actionList['delete']['url']          = array('module' => 'bug', 'method' => 'delete', 'params' => 'bugID={id}');
 $config->bug->actionList['delete']['className']    = 'ajax-submit';
 $config->bug->actionList['delete']['data-confirm'] = array('message' => $lang->bug->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->bug->actionList['delete']['notInModal']   = true;
+
+$config->bug->actionList['createBranch']['icon']        = 'treemap';
+$config->bug->actionList['createBranch']['hint']        = $lang->bug->codeBranch;
+$config->bug->actionList['createBranch']['text']        = $lang->bug->codeBranch;
+$config->bug->actionList['createBranch']['url']         = helper::createLink('bug', 'createBranch', 'bugID={id}');
+$config->bug->actionList['createBranch']['data-toggle'] = 'modal';

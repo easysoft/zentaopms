@@ -67,6 +67,7 @@ $lang->custom->limitTaskDateAction  = 'Set start and end date required';
 $lang->custom->closeGrade           = 'Close Story Grade';
 $lang->custom->activateGrade        = 'Activate Story Grade';
 $lang->custom->deleteGrade          = 'Delete Story Grade';
+$lang->custom->closeSetting         = 'Close Setting';
 
 $lang->custom->gradeRuleList['stepwise'] = 'Restriction level-by-level subdivision';
 $lang->custom->gradeRuleList['cross']    = 'Allow cross-level segmentation';

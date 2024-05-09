@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 su('admin');
-zdTable('bug')->config('fetchbuginfo_bug')->gen(5);
-zdTable('project')->config('execution')->gen(5);
-zdTable('story')->gen(5);
-zdTable('task')->gen(5);
-zdTable('productplan')->config('productplan')->gen(5);
+zenData('bug')->loadYaml('fetchbuginfo_bug')->gen(5);
+zenData('project')->loadYaml('execution')->gen(5);
+zenData('story')->gen(5);
+zenData('task')->gen(5);
+zenData('productplan')->loadYaml('productplan')->gen(5);
 
 
 

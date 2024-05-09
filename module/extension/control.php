@@ -388,7 +388,7 @@ class extension extends control
      */
     public function safe(string $statusFile)
     {
-        $statusFile = str_replace('\\', '/', $statusFile);
+        $statusFile = str_replace('\\', '/', helper::safe64Decode($statusFile));
         $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
         $this->view->title = $this->lang->extension->browse;
         $this->display();

@@ -30,11 +30,11 @@ class xuanxuanIm extends imModel
         $libID       = isset($libIdList[0])  ? $libIdList[0]  : 1;
 
         $actions = new stdclass();
-        if(common::hasPriv('bug',   'create'))  $actions->createBug   = array('title' => $this->lang->im->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "1200px");
-        if(common::hasPriv('story', 'create'))  $actions->createStory = array('title' => $this->lang->im->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "1200px");
-        if(common::hasPriv('task',  'create'))  $actions->createTask  = array('title' => $this->lang->im->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "execution=$executionID", 'xhtml')), 'height' => "600px", 'width' => "1200px");
-        if(common::hasPriv('doc',   'create'))  $actions->createDoc   = array('title' => $this->lang->im->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "objectType=&objectID=0&libID=0", 'xhtml')), 'height' => "600px", 'width' => "1200px");
-        if(common::hasPriv('todo',  'create'))  $actions->createTodo  = array('title' => $this->lang->im->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('bug',   'create'))  $actions->createBug   = array('title' => $this->lang->im->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "productID=$productID", 'html')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('story', 'create'))  $actions->createStory = array('title' => $this->lang->im->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "productID=$productID", 'html')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('task',  'create'))  $actions->createTask  = array('title' => $this->lang->im->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "executionID=$executionID", 'html')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('doc',   'create'))  $actions->createDoc   = array('title' => $this->lang->im->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "objectType=mine&objectID=0&libID=0", 'html')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('todo',  'create'))  $actions->createTodo  = array('title' => $this->lang->im->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'html')), 'height' => "600px", 'width' => "1200px");
         $urls = array();
         foreach($this->config->im->cards as $moduleName => $methods)
         {
@@ -280,5 +280,29 @@ class xuanxuanIm extends imModel
         }
 
         return $notificationData;
+    }
+
+    public function getAiChatLatestContext($moduleId, $userId)
+    {
+        // use the last broadcast message as the divider
+        $lastDivider = $this->dao->select('*')->from(TABLE_IM_MESSAGE)
+            ->where('cgid')->eq("$userId&ai-{$moduleId}")
+            ->andWhere('type')->eq('broadcast')
+            ->orderBy('id desc')
+            ->limit(1)
+            ->fetch();
+        if($lastDivider)
+        {
+            $messages = $this->dao->select('*')->from(TABLE_IM_MESSAGE)
+                ->where('cgid')->eq("$userId&ai-{$moduleId}")
+                ->andWhere('id')->gt($lastDivider->id)
+                ->orderBy('id asc')
+                ->fetchAll();
+        } else {
+            $messages = $this->dao->select('*')->from(TABLE_IM_MESSAGE)
+                ->where('cgid')->eq("$userId&ai-{$moduleId}")
+                ->fetchAll();
+        }
+        return $messages;
     }
 }

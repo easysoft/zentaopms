@@ -62,6 +62,6 @@ else
     (
         set::key('kanban'),
         set::items($kanbanList),
-        set::height('calc(100vh - 120px)')
+        set::height('calc(100vh - 60px)')
     );
 }

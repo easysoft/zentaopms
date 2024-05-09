@@ -133,4 +133,22 @@ class miscModel extends model
 
         return $weakSites;
     }
+
+    /**
+     * 获取升级提示的通知。
+     * Get upgrade remind.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getUpgradeRemind(): bool
+    {
+        $remind = false;
+        if(empty($this->config->global->showUpgradeGuide))
+        {
+            $remind = true;
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showUpgradeGuide", 1);
+        }
+        return $remind;
+    }
 }

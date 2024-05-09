@@ -3,3 +3,4 @@
 #planInfo table caption {font-size: 1rem; font-weight: bold;}
 #planInfo .history {padding: 16px 0px;}
 #mainContent .entity-label {flex: initial !important;}
+#mainContent .tab-actions {z-index: 10;}

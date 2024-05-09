@@ -47,6 +47,8 @@ div
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($bugs)),
+        set::priList($lang->bug->priList),
+        set::severityList($lang->bug->severityList),
         set::orderBy($orderBy),
         set::sortLink(inlink('bug', "userID={$user->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footPager(usePager())

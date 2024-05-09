@@ -18,7 +18,7 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->gen(5);
+zenData('pipeline')->gen(5);
 su('admin');
 
 global $tester;
@@ -32,12 +32,12 @@ $hostID = array
 );
 
 $projectID = 'gitea/unittest';
-$mrID      = 28;
+$mrID      = 3;
 
 r($mrModel->apiGetDiffs($hostID['error'], $projectID, $mrID)) && p() && e('0'); // 不存在的主机
 r($mrModel->apiGetDiffs($hostID['gitlab'], $projectID, $mrID)) && p() && e('0'); // GitLab 服务器
 
-$result = $mrModel->apiGetDiffs($hostID['gitea'], $projectID, $mrID);
+$result = $mrModel->apiGetDiffs($hostID['gitea'], $projectID, 29);
 r(strpos($result, 'unittest')) && p() && e('116'); // 正确的数据
 
 $mrID = 10000;

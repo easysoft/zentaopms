@@ -15,26 +15,26 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/search.class.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 su('admin');
 
-zdTable('bug')->gen(2);
+zenData('bug')->gen(2);
 
-$action = zdTable('action');
+$action = zenData('action');
 $action->objectType->range('bug');
 $action->objectID->range('1,2');
 $action->actor->range('admin');
 $action->action->range('opened');
-$action->date->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-DD hh::mm::ss');
+$action->date->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
 $action->comment->prefix('创建bug')->range('1,2');
 $action->gen(2);
 
-$file = zdTable('file');
+$file = zenData('file');
 $file->objectType->range('bug');
 $file->objectID->range('1,2');
 $file->gen(2);
 
-$caseStep = zdTable('casestep');
+$caseStep = zenData('casestep');
 $caseStep->case->range('1,2');
 $caseStep->gen(2);
 

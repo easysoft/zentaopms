@@ -111,7 +111,7 @@ class featureBar extends wg
                     'type'   => 'dropdown',
                     'caret'  => 'down',
                     'items'  => $subItems,
-                    'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
+                    'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
                     'props'  => array('data-id' => $item->name)
                 );
 
@@ -123,7 +123,7 @@ class featureBar extends wg
                 'text'   => $item->text,
                 'active' => $isActive,
                 'url'    => str_replace('{key}', strval($item->name), $link),
-                'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm rounded-full white') : null,
+                'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
                 'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab)
             );
         }
@@ -137,6 +137,7 @@ class featureBar extends wg
         if(!empty($nav) && $nav[0] instanceof nav) return $nav;
         return new nav
         (
+            set::compact(),
             set::className('nav-feature'),
             set::items($this->getItems()),
             divorce($this->children())

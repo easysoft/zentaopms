@@ -2,12 +2,12 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/personnel.class.php';
+include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 
-zdTable('project')->config('program')->gen(3);
-zdTable('user')->config('user')->gen(3);
-zdTable('group')->config('group')->gen(3);
-zdTable('usergroup')->config('usergroup')->gen(3);
+zenData('project')->loadYaml('program')->gen(3);
+zenData('user')->loadYaml('user')->gen(3);
+zenData('group')->loadYaml('group')->gen(3);
+zenData('usergroup')->loadYaml('usergroup')->gen(3);
 
 /**
 

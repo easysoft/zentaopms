@@ -45,11 +45,12 @@ if(is_writable($configRoot) && @file_put_contents($myConfigFile, $configContent)
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
-        setClass('px-1 mt-2'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
             set::title($lang->install->saveConfig),
@@ -76,6 +77,7 @@ div
                         set::name('hidden'),
                         set::type('hidden')
                     ),
+                    contactUs(),
                     formGroup
                     (
                         setClass('justify-center'),

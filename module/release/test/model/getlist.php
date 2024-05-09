@@ -9,12 +9,12 @@ cid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('product')->config('product')->gen(10);
-zdTable('build')->config('build')->gen(10);
-zdTable('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('build')->loadYaml('build')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
-$release = zdTable('release')->config('release');
+$release = zenData('release')->loadYaml('release');
 $release->status->range('normal,terminate');
 $release->gen(10);
 

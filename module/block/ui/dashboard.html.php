@@ -15,7 +15,6 @@ foreach($blocks as $block)
 {
     $block->color = isset($block->params->color) ? $block->params->color : null;
     $block->fetch = $block->blockLink;
-    unset($block->title);
 }
 
 $blocks = json_decode(json_encode($blocks), true);
@@ -25,16 +24,18 @@ $blockMenuItems[] = array('text' => $lang->block->refresh, 'className' => 'not-o
 if($this->app->user->account != 'guest')
 {
     $blockMenuItems[] = array('text' => $lang->edit, 'className' => 'not-open-url', 'data' => array('type' => 'edit', 'url' => createLink('block', 'edit', "blockID={id}"), 'size' => 'sm'));
-    $blockMenuItems[] = array('text' => $lang->block->hidden, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'delete', "blockID={id}"), 'confirm' => $lang->block->confirmRemoveBlock));
-    if($this->app->user->admin) $blockMenuItems[] = array('text' => $lang->block->closeForever, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'close', "blockID={id}"), 'confirm' => $lang->block->confirmClose));
+    if(count($blocks) > 1) $blockMenuItems[] = array('text' => $lang->block->hidden, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'delete', "blockID={id}"), 'confirm' => $lang->block->confirmRemoveBlock));
+    if($this->app->user->admin && count($blocks) > 1) $blockMenuItems[] = array('text' => $lang->block->closeForever, 'className' => 'not-open-url', 'data' => array('type' => 'delete', 'url' => createLink('block', 'close', "blockID={id}"), 'confirm' => $lang->block->confirmClose));
 }
 $blockMenuItems[] = array('text' => $lang->block->createBlock, 'className' => 'not-open-url', 'data' => array('type' => 'create', 'url' => createLink('block', 'create', "dashboard=$dashboard"), 'toggle' => 'modal', 'size' => 'sm'));
 $blockMenuItems[] = array('text' => $lang->block->reset, 'className' => 'not-open-url', 'data' => array('type' => 'reset', 'url' => createLink('block', 'reset', "dashboard=$dashboard"), 'confirm' => $lang->block->confirmReset));
 
 dashboard
 (
+    set::onlyLoadVisible(false),
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),
+    set::emptyBlockContent(array('html' => '<div class="panel rounded bg-canvas panel-block shadow"><div class="panel-heading border-b h-12"></div></div>')),
     set::onClickMenu(jsRaw('handleClickBlockMenu')),
     set::onLayoutChange(jsRaw('handleLayoutChange'))
 );
@@ -42,17 +43,103 @@ dashboard
 $remind = $this->loadModel('misc')->getPluginRemind();
 $remind ? modal
 (
-    set::id('expiredModal'),
+    setID('expiredModal'),
     set::title($lang->misc->expiredTipsTitle),
     html($remind)
 ) : null;
 
-$remind = $this->misc->getRemind();
-$remind ? modal
+$upgradeRemind = $this->misc->getUpgradeRemind();
+if($upgradeRemind)
+{
+    $clientLang = common::checkNotCN() ? 'en' : 'cn';
+    $version    = $config->edition == 'open' ? '20_0' : '10_0';
+    $imagePath  = $config->edition == 'open' ? 'static/svg/' : 'static/svg/biz/';
+}
+$upgradeRemind ? modal
 (
-    set::id('annualModal'),
-    set::title($lang->misc->remind),
-    html($remind)
+    setID('upgradeModal'),
+    div
+    (
+        setClass('page-block pageOne'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide1_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('primary'),
+                on::click("togglePage('pageTwo')"),
+                $lang->block->nextPage
+            )
+        )
+    ),
+    div
+    (
+        setClass('page-block pageTwo hidden'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide2_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('mr-4'),
+                on::click("togglePage('pageOne')"),
+                $lang->block->prevPage
+            ),
+            btn
+            (
+                setClass('primary'),
+                on::click("togglePage('pageThree')"),
+                $lang->block->nextPage
+            )
+        )
+    ),
+    div
+    (
+        setClass('page-block pageThree hidden'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide3_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('mr-4'),
+                on::click("togglePage('pageTwo')"),
+                $lang->block->prevPage
+            ),
+            btn
+            (
+                setClass('primary'),
+                on::click("togglePage('pageFour')"),
+                $lang->block->nextPage
+            )
+        )
+    ),
+    div
+    (
+        setClass('page-block pageFour hidden'),
+        img(set::src("{$imagePath}{$clientLang}_upgrade_guide4_{$version}.svg")),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div
+        (
+            setClass('my-6 text-center'),
+            btn
+            (
+                setClass('mr-4'),
+                on::click("togglePage('pageThree')"),
+                $lang->block->prevPage
+            ),
+            btn
+            (
+                setClass('primary'),
+                setData('dismiss', 'modal'),
+                $lang->block->experience
+            )
+        )
+    )
 ) : null;
 
 render();

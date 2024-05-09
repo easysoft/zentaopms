@@ -21,31 +21,31 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$file = zdTable('file');
+$file = zenData('file');
 $file->objectType->range('task,story,release,doc,bug');
 $file->objectID->range('1');
 $file->gen(50);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->execution->range('1');
 $task->gen(1);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1');
 $story->gen(1);
 
-$release = zdTable('release');
+$release = zenData('release');
 $release->product->range('1');
 $release->project->range('0');
 $release->gen(1);
 
-zdTable('project')->gen(0);
-zdTable('product')->gen(0);
-zdTable('bug')->gen(0);
-zdTable('doc')->gen(1);
-zdTable('user')->gen(5);
-zdTable('userview')->gen(0);
-zdTable('usergroup')->gen(0);
+zenData('project')->gen(0);
+zenData('product')->gen(0);
+zenData('bug')->gen(0);
+zenData('doc')->gen(1);
+zenData('user')->gen(5);
+zenData('userview')->gen(0);
+zenData('usergroup')->gen(0);
 
 su('admin');
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -30,7 +30,7 @@ cid=1
  - 第2条的resolution属性 @fixed
 
 */
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-10');
 $execution->name->range('项目集1,项目1,项目2,项目3,迭代1,迭代2,阶段1,阶段2,看板1,看板2');
 $execution->type->range('program,project,sprint{2},stage{2},kanban{2}');
@@ -44,19 +44,24 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(10);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->execution->range('3');
 $task->gen(10);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->execution->range('0');
 $bug->gen(10);
 
-zdTable('repo')->config('repo')->gen(4);
+zenData('product')->gen(20);
+zenData('user')->gen(20);
+zenData('repo')->loadYaml('repo')->gen(4);
 
 global $app;
 $app->rawModule = 'repo';
 $app->rawMethod = 'browse';
+
+include($app->getModuleRoot() . '/repo/control.php');
+$app->control = new repo();
 
 $repoID   = 1;
 $repoRoot = '';

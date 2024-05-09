@@ -13,13 +13,13 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(5);
-zdTable('project')->config('stage')->gen(5, $isClear = false);
+zenData('project')->loadYaml('project')->gen(5);
+zenData('project')->loadYaml('stage')->gen(5, $isClear = false);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->execution->range('1-5');
 $task->gen(10);
 

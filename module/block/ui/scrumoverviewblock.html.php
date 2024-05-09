@@ -36,9 +36,9 @@ foreach($config->block->projectstatistic->items as $module => $items)
                         array
                         (
                             'title'     => $lang->block->tooltips[$field],
-                            'placement' => 'bottom',
+                            'placement' => 'bottom-end',
                             'type'      => 'white',
-                            'className' => 'text-dark border border-light leading-5'
+                            'className' => 'text-dark border border-light leading-5 w-60'
                         )
                     ),
                     'help',

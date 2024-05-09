@@ -53,10 +53,14 @@ window.setStatistics = function(element, checkedIdList)
 
     let checkedEstimate = 0;
     let checkedCase     = 0;
+    let SRTotal         = 0;
+    let total           = 0;
 
     let rateCount = 0;
     checkedIdList.forEach((rowID) => {
         const story = element.getRowInfo(rowID);
+        if(storyType == 'requirement' && story.data.type == 'story') SRTotal += 1;
+        if(storyType == story.data.type) total += 1;
         if(story)
         {
             checkedEstimate += parseFloat(story.data.estimate);

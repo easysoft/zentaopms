@@ -43,6 +43,20 @@ class formBatchPanel extends formPanel
         'onRenderRowCol?: function'     // 渲染列时的回调函数。
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        .panel-form-batch {margin: 0 auto; padding-bottom: 0}
+        .panel-form-batch > .panel-heading {padding-left: 0; padding-right: 0}
+        .panel-form-batch > .panel-body {position: relative; padding: 0; margin: 0 -16px}
+        .panel-form-batch .form {gap: 0}
+        .panel-form-batch .form-batch-container {max-height: calc(100vh - 214px); padding: 0 16px 16px; flex: auto; min-height: 0; overflow: auto}
+        .modal-body .panel-form-batch .form-batch-container {max-height: unset;}
+        .panel-form-batch .form-actions {left: 0; position: static; flex: none; padding: 24px 0; border-top: 1px solid var(--color-border)}
+        CSS;
+    }
+
+
     /**
      * Define default properties.
      *
@@ -50,29 +64,31 @@ class formBatchPanel extends formPanel
      * @access protected
      */
     protected static array $defaultProps = array(
+        'class'        => 'panel-form panel-form-batch',
         'uploadParams' => false,
         'pasteField'   => false,
         'customFields' => array(),
-        'batch'        => true
+        'batch'        => true,
+        'shadow'       => true
     );
 
     protected function buildHeadingActions(): ?node
     {
+        global $lang;
+
         $headingActions = $this->prop('headingActions');
         if(!$headingActions) $headingActions = array();
 
         $uploadImage  = $this->prop('uploadParams') && hasPriv('file', 'uploadImages');
         $pasteField   = $this->prop('pasteField');
 
-        global $lang;
-
         /* Upload images. */
-        if($uploadImage) $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale bd-primary mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
+        if($uploadImage) $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
 
         /* Multi-input. */
         if($pasteField)
         {
-            $headingActions[] = array('class' => 'btn primary-pale bd-primary', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
+            $headingActions[] = array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
 
             $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
         }

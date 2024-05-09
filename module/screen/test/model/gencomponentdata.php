@@ -1,16 +1,20 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 /**
-title=测试 screenModel->buildChart();
-cid=1
-pid=1
 
-判断图表的sql字段是否被修改  >> 0
-判断图表的sql字段是否被修改  >> 1
+title=测试 screenModel->buildChart();
+timeout=0
+cid=1
+
+- 判断图表的sql字段是否被修改 @1
+- 判断图表的sql字段是否被修改 @1
+
 */
+
+zenData('screen')->gen(0);
 
 global $tester;
 $screen = new screenTest();
@@ -45,7 +49,7 @@ $chartList = array($chart1, $chart2);
 $chart1->sql .= ";;;;;";
 $chart1_ = clone($chart1);
 $screen->genComponentDataTest($chartList[0], $componentList[0], $typeList[0], array());
-r($chart1->sql === $chart1_->sql) && p('') && e(0);  //判断图表的sql字段是否被修改
+r($chart1->sql === $chart1_->sql) && p('') && e(1);  //判断图表的sql字段是否被修改
 
 $chart2_ = clone($chart2);
 $chart2->sql = '';

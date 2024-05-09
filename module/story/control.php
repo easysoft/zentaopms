@@ -95,12 +95,12 @@ class story extends control
                 return $this->send($response);
             }
 
-            $response['load'] = $this->storyZen->getAfterCreateLocation((int)$productID, $branch, $objectID, $storyID, $storyType);
+            $response['load'] = $this->storyZen->getAfterCreateLocation((int)$productID, $branch, $objectID, $storyID, $storyType, $extra);
             return $this->send($response);
         }
 
         /* Init vars. */
-        $initStory = $this->storyZen->initStoryForCreate($planID, $copyStoryID, $bugID, $todoID);
+        $initStory = $this->storyZen->initStoryForCreate($planID, $copyStoryID, $bugID, $todoID, $extra);
 
         /* Get form fields. */
         $this->storyZen->setViewVarsForKanban($objectID, $this->story->parseExtra($extra));
@@ -108,7 +108,7 @@ class story extends control
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
 
-        $this->view->title   = $this->view->product->name . $this->lang->colon . $this->lang->story->create;
+        $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->story->create;
         $this->view->fields  = $fields;
         $this->view->blockID = $this->storyZen->getAssignMeBlockID();
         $this->view->type    = $storyType;
@@ -203,7 +203,7 @@ class story extends control
             if($storyType != $story->type && !$this->story->checkCanSplit($story)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorCannotSplit)));
         }
 
-        $this->view->title         = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
+        $this->view->title         = $product->name . $this->lang->hyphen . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $showFields;
         $this->view->product       = $product;
@@ -214,6 +214,7 @@ class story extends control
         $this->view->executionID   = $executionID;
         $this->view->type          = $storyType;
         $this->view->fields        = $fields;
+        $this->view->planID        = $plan;
         $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
         $this->view->stories       = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
         $this->view->storyTitle    = isset($story->title) ? $story->title : '';
@@ -258,10 +259,21 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
+        $product = $this->product->getByID($story->product);
+
+        if($product->shadow)
+        {
+            $products = $this->product->getPairs('', 0, '', 'all');
+        }
+        else
+        {
+            $products = $this->product->getPairs();
+        }
+
         /* Assign. */
-        $this->view->product          = $this->product->getByID($story->product);
+        $this->view->product          = $product;
         $this->view->productID        = $this->view->product->id;
-        $this->view->products         = $this->product->getPairs();
+        $this->view->products         = $products;
         $this->view->story            = $story;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, (string)$story->branch);
         $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, 0, '', true);
@@ -311,7 +323,7 @@ class story extends control
         $fields = $this->storyZen->getFormFieldsForEdit($storyID);
         $fields = $this->storyZen->hiddenFormFieldsForEdit($fields);
 
-        $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->hyphen . $this->view->story->title;
         $this->view->story        = $story;
         $this->view->showGrade    = $this->story->showGrade($story->type);
         $this->view->twins        = empty($story->twins) ? array() : $this->story->getByList($story->twins);
@@ -417,11 +429,10 @@ class story extends control
 
         $this->commonAction($storyID);
         $story = $this->view->story;
-        if($story->status != 'active') return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         $this->story->getAffectedScope($story);
 
         /* Assign. */
-        $this->view->title        = $this->lang->story->change . "STORY" . $this->lang->colon . $story->title;
+        $this->view->title        = $this->lang->story->change . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->users        = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
         $this->view->fields       = $this->storyZen->getFormFieldsForChange($storyID);
         $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
@@ -473,7 +484,7 @@ class story extends control
         $this->commonAction($storyID);
 
         /* Assign. */
-        $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->hyphen . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->closedBy);
         $this->display();
     }
@@ -496,7 +507,7 @@ class story extends control
         $product = $this->product->getByID((int)$story->product);
 
         if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
-        if(!$story) return $this->send(array('result' => 'success', 'message' => $this->lang->notFound, 'load' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'all')));
+        if(!$story) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'index'))));
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return $this->send(array('result' => 'success', 'message' => $this->lang->product->accessDenied, 'load' => array('back' => true)));
 
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
@@ -516,14 +527,26 @@ class story extends control
         if($this->app->tab == 'project')
         {
             $projectID = $param ? $param : $this->session->project;
-            $this->loadModel('project')->setMenu((int)$projectID);
+            $project   = $this->loadModel('project')->fetchByID($projectID);
             $this->view->projectID = $projectID;
+            $this->view->project   = $project;
+            if(!$project->multiple)
+            {
+                $this->project->setMenu((int)$project->project);
+                $this->view->executionID = $projectID;
+                $this->view->execution   = $project;
+            }
+            else
+            {
+                $this->project->setMenu((int)$projectID);
+            }
         }
         elseif($this->app->tab == 'execution')
         {
             $executionID = $param ? $param : $this->session->execution;
             $this->loadModel('execution')->setMenu($executionID);
             $this->view->executionID = $executionID;
+            $this->view->execution   = $this->execution->fetchByID($executionID);
         }
         elseif($this->app->tab == 'qa')
         {
@@ -538,7 +561,6 @@ class story extends control
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->project       = $this->project->fetchByID($param);
         $this->view->version       = $version;
         $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
@@ -633,7 +655,7 @@ class story extends control
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->story->getAffectedScope($story);
 
-        $this->view->title     = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
+        $this->view->title     = $this->lang->story->review . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->fields    = $this->storyZen->getFormFieldsForReview($storyID);
         $this->view->reviewers = $reviewers;
         $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) <= 1;
@@ -654,8 +676,7 @@ class story extends control
     {
         if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $message = $this->story->batchReview($storyIdList, $result, $reason);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->loadModel('score')->create('ajax', 'batchOther');
@@ -663,7 +684,7 @@ class story extends control
         $response = array();
         $response['result'] = 'success';
         $response['load']   = false;
-        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if($message) $response['callback'] = "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$message}'}).then((res) => {loadCurrentPage()});";
         if(empty($message)) $response['load'] = true;
         return $this->send($response);
     }
@@ -714,9 +735,10 @@ class story extends control
                 $params = "storyID=$storyID";
             }
             $locateLink = $this->createLink($module, $method, $params);
+            if(strpos(',qa,doc,', ",{$this->app->tab},") !== false) $locateLink = true;
         }
 
-        return $this->send(array('result' => 'success', 'load' => $locateLink));
+        return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));
     }
 
     /**
@@ -849,7 +871,7 @@ class story extends control
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
         if(isset($productStories[$storyID])) unset($productStories[$storyID]);
 
-        $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
+        $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->product        = $product;
         $this->view->story          = $story;
         $this->view->productStories = $productStories;
@@ -873,8 +895,7 @@ class story extends control
     public function batchClose(int $productID = 0, int $executionID = 0, string $storyType = 'story', string $from = '')
     {
         if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
 
         $this->story->replaceURLang($storyType);
 
@@ -948,7 +969,7 @@ class story extends control
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($this->post->storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $allChanges  = $this->story->batchChangeModule($storyIdList, $moduleID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1037,7 +1058,7 @@ class story extends control
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($this->post->storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $allChanges  = $this->story->batchChangePlan($storyIdList, $planID, $oldPlanID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1066,8 +1087,9 @@ class story extends control
 
         if(!empty($_POST['storyIdList'])) $storyIdList = $this->post->storyIdList;
         if(is_string($storyIdList))       $storyIdList = array_filter(explode(',', $storyIdList));
-        $storyIdList = array_unique($storyIdList);
-        $plans       = $this->loadModel('productplan')->getPlansByStories($storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($storyIdList);
+
+        $plans = $this->loadModel('productplan')->getPlansByStories($storyIdList);
         if(empty($confirm))
         {
             $stories             = $this->story->getByList($storyIdList);
@@ -1148,7 +1170,7 @@ class story extends control
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($this->post->storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $message     = $this->story->batchChangeStage($storyIdList, $stage);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->loadModel('score')->create('ajax', 'batchOther');
@@ -1156,7 +1178,7 @@ class story extends control
         $response = array();
         $response['result'] = 'success';
         $response['load']   = false;
-        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if($message) $response['callback'] = "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$message}'}).then((res) => {loadCurrentPage()});";
         if(empty($message)) $response['load'] = true;
         return $this->send($response);
     }
@@ -1213,7 +1235,7 @@ class story extends control
         $product = $this->product->getByID($story->product);
         $users   = $this->config->vision == 'lite' ? $this->user->getTeamMemberPairs($this->session->project) : $this->user->getPairs('nodeleted|noclosed|pofirst|noletter');
 
-        $this->view->title     = zget($product, 'name', $story->title) . $this->lang->colon . $this->lang->story->assign;
+        $this->view->title     = zget($product, 'name', $story->title) . $this->lang->hyphen . $this->lang->story->assign;
         $this->view->story     = $story;
         $this->view->actions   = $this->action->getList('story', $storyID);
         $this->view->users     = $users;
@@ -1232,17 +1254,9 @@ class story extends control
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
         if(empty($assignedTo)) $assignedTo = $this->post->assignedTo;
-        $storyIdList = array_unique($this->post->storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $oldStories  = $this->story->getByList($storyIdList);
-
-        $allChanges = $this->story->batchAssignTo($storyIdList, $assignedTo);
+        $allChanges  = $this->story->batchAssignTo($storyIdList, $assignedTo);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $ignoreStories = array();
@@ -1388,16 +1402,13 @@ class story extends control
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, 'all', (string)$story->branch);
 
         /* Get stories to link. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager);
+        $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type);
 
         /* Assign. */
+        $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->hyphen .$this->lang->story->linkStory;
+        $this->view->type         = $type;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager        = $pager;
-        $this->view->story        = $story;
 
         $this->display();
     }
@@ -1700,10 +1711,12 @@ class story extends control
             {
                 $this->loadModel('project')->setMenu($projectID);
                 if($project and $project->model == 'waterfall') unset($this->lang->story->report->charts['storiesPerPlan']);
+                $this->view->projectID = $projectID;
             }
             else
             {
                 $this->loadModel('execution')->setMenu($projectID);
+                $this->view->executionID = $projectID;
             }
 
             if(!$project->hasProduct)
@@ -1718,7 +1731,7 @@ class story extends control
             $this->product->setMenu($productID, $branchID);
         }
 
-        $this->view->title         = $product->name . $this->lang->colon . $this->lang->story->reportChart;
+        $this->view->title         = $product->name . $this->lang->hyphen . $this->lang->story->reportChart;
         $this->view->productID     = $productID;
         $this->view->branchID      = $branchID;
         $this->view->browseType    = $browseType;
@@ -1770,6 +1783,8 @@ class story extends control
             $this->fetch('transfer', 'export', "model=$storyType");
         }
 
+        $this->story->replaceURLang($storyType);
+
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
         $project  = null;
         if($executionID)
@@ -1815,7 +1830,6 @@ class story extends control
             if($product->type != 'normal') $hasBranch = true;
         }
         if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
-
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;
@@ -1997,5 +2011,31 @@ class story extends control
             $items[] = array('text' => $storyTitle, 'value' => $storyID, 'keys' => $storyTitle);
         }
         return print(json_encode($items));
+    }
+
+    /**
+     * 创建代码分支。
+     * Create repo branch.
+     *
+     * @param  int    $storyID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createBranch(int $storyID, int $repoID = 0)
+    {
+        return print($this->fetch('repo', 'createBranch', array('objectID' => $storyID, 'repoID' => $repoID)));
+    }
+
+    /**
+     * 取消代码分支的关联。
+     * Unlink code branch.
+     *
+     * @access public
+     * @return void
+     */
+    public function unlinkBranch()
+    {
+        return print($this->fetch('repo', 'unlinkBranch'));
     }
 }

@@ -22,7 +22,7 @@ toolbar
 (
     hasPriv('bug', 'export') ? item(set(array
     (
-        'text'  => $lang->bug->export,
+        'text'  => $lang->export,
         'icon'  => 'export',
         'class' => 'ghost',
         'url'   => createLink('bug', 'export', "productID={$productID}&browseType=&projectID={$project->id}"),
@@ -75,7 +75,10 @@ $footToolbar = array();
 if($canBatchAssignTo)
 {
     $assignedToItems = array();
-    foreach ($memberPairs as $key => $value) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
+    foreach ($memberPairs as $key => $value)
+    {
+        if(!empty($key)) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
+    }
 
     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => 'btn btn-caret size-sm secondary', 'items' => $assignedToItems, 'type' => 'dropdown', 'data-placement' => 'top');
 }
@@ -88,6 +91,8 @@ dtable
     set::cols($cols),
     set::data(array_values($bugs)),
     set::userMap($users),
+    set::priList($lang->bug->priList),
+    set::severityList($lang->bug->severityList),
     set::customCols(true),
     set::checkable($canBatchAssignTo),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),

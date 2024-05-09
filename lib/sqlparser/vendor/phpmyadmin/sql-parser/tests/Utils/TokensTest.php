@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Utils;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -9,108 +11,112 @@ use PhpMyAdmin\SqlParser\Utils\Tokens;
 class TokensTest extends TestCase
 {
     /**
-     * @dataProvider replaceTokensProvider
+     * @param array<string, string>[] $find
+     * @param Token[]                 $replace
      *
-     * @param mixed $list
-     * @param mixed $find
-     * @param mixed $replace
-     * @param mixed $expected
+     * @dataProvider replaceTokensProvider
      */
-    public function testReplaceTokens($list, $find, $replace, $expected)
+    public function testReplaceTokens(string $list, array $find, array $replace, string $expected): void
     {
         $this->assertEquals($expected, Tokens::replaceTokens($list, $find, $replace));
     }
 
-    public function replaceTokensProvider()
+    /**
+     * @return array<int, array<int, string|array<string, string>[]|Token[]>>
+     * @psalm-return list<array{string, list<array<string, string>>, Token[], string}>
+     */
+    public function replaceTokensProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'SELECT * FROM /*x*/a/*c*/.b',
-                array(
-                    array('value_str' => 'a'),
-                    array('token' => '.'),
-                ),
-                array(
+                [
+                    ['value_str' => 'a'],
+                    ['token' => '.'],
+                ],
+                [
                     new Token('c'),
                     new Token('.'),
-                ),
+                ],
                 'SELECT * FROM /*x*/c.b',
-            )
-        );
+            ],
+        ];
     }
 
     /**
-     * @dataProvider matchProvider
+     * @param array<string, int|string> $pattern
      *
-     * @param mixed $token
-     * @param mixed $pattern
-     * @param mixed $expected
+     * @dataProvider matchProvider
      */
-    public function testMatch($token, $pattern, $expected)
+    public function testMatch(Token $token, array $pattern, bool $expected): void
     {
-        $this->assertEquals($expected, Tokens::match($token, $pattern));
+        $this->assertSame($expected, Tokens::match($token, $pattern));
     }
 
-    public function matchProvider()
+    /**
+     * @return array<int, array<int, Token|bool|array<string, int|string>>>
+     * @psalm-return list<array{Token, array<string, (int|string)>, bool}>
+     */
+    public function matchProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 new Token(''),
-                array(),
+                [],
                 true,
-            ),
+            ],
 
-            array(
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('token' => '"abc"'),
+                ['token' => '"abc"'],
                 true,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('value' => 'abc'),
+                ['value' => 'abc'],
                 true,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('value_str' => 'ABC'),
+                ['value_str' => 'ABC'],
                 true,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('type' => Token::TYPE_STRING),
+                ['type' => Token::TYPE_STRING],
                 true,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('flags' => Token::FLAG_STRING_DOUBLE_QUOTES),
+                ['flags' => Token::FLAG_STRING_DOUBLE_QUOTES],
                 true,
-            ),
+            ],
 
-            array(
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('token' => '"abcd"'),
+                ['token' => '"abcd"'],
                 false,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('value' => 'abcd'),
+                ['value' => 'abcd'],
                 false,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('value_str' => 'ABCd'),
+                ['value_str' => 'ABCd'],
                 false,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('type' => Token::TYPE_NUMBER),
+                ['type' => Token::TYPE_NUMBER],
                 false,
-            ),
-            array(
+            ],
+            [
                 new Token('"abc"', Token::TYPE_STRING, Token::FLAG_STRING_DOUBLE_QUOTES),
-                array('flags' => Token::FLAG_STRING_SINGLE_QUOTES),
+                ['flags' => Token::FLAG_STRING_SINGLE_QUOTES],
                 false,
-            )
-        );
+            ],
+        ];
     }
 }

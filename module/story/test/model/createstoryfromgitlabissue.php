@@ -1,20 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-zdTable('story')->gen(0);
-zdTable('storyspec')->gen(0);
-zdTable('projectstory')->gen(0);
 
 /**
 
 title=测试 storyModel->createStoryFromGitlabIssue();
-cid=1
-pid=1
+cid=0
+
+- 创建正常的需求，获取创建后的id、title、stage、product
+ - 属性id @1
+ - 属性title @测试需求1
+ - 属性stage @projected
+ - 属性product @1
+- 需求名称为空，给出提示 @1
+- 创建正常的需求，获取创建后的id、title、stage、product
+ - 属性id @2
+ - 属性title @测试需求3
+ - 属性stage @projected
+ - 属性product @2
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+su('admin');
+
+zenData('story')->gen(0);
+zenData('storyspec')->gen(0);
+zenData('projectstory')->gen(0);
 
 $story = new storyTest();
 $story1               = new stdclass();

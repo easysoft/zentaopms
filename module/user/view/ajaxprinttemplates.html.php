@@ -121,7 +121,7 @@ $(function()
         var content     = editor['<?php echo $link;?>'].html();
         var isPublic    = ($publicBox.size() > 0 && $publicBox.prop('checked')) ? $publicBox.val() : 0;
         if(!title || !content) return;
-        saveTemplateLink = <?php echo json_encode($this->createLink('user', 'ajaxSaveTemplate', "type=$type"));?>;
+        saveTemplateLink = <?php echo json_encode($this->createLink('user', 'ajaxSaveOldTemplate', "type=$type"));?>;
         $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
         {
             $('#tplBox').html(data);

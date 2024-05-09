@@ -162,10 +162,16 @@ $config->testsuite->linkcase->dtable->fieldList['type']   = $config->testcase->d
 $config->testsuite->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 
 $config->testsuite->linkcase->dtable->fieldList['id']['name'] = 'id';
+$config->testsuite->linkcase->dtable->fieldList['id']['sort'] = true;
 
 $config->testsuite->linkcase->dtable->fieldList['title']['link']['params'] = 'caseID={id}';
 $config->testsuite->linkcase->dtable->fieldList['title']['data-toggle']    = 'modal';
 $config->testsuite->linkcase->dtable->fieldList['title']['data-size']      = 'lg';
+$config->testsuite->linkcase->dtable->fieldList['title']['sort']           = true;
+
+$config->testsuite->linkcase->dtable->fieldList['pri']['sort']    = true;
+$config->testsuite->linkcase->dtable->fieldList['type']['sort']   = true;
+$config->testsuite->linkcase->dtable->fieldList['status']['sort'] = true;
 
 $config->testsuite->linkcase->dtable->fieldList['version']['name']         = 'version';
 $config->testsuite->linkcase->dtable->fieldList['version']['title']        = $lang->testsuite->linkVersion;
@@ -173,6 +179,9 @@ $config->testsuite->linkcase->dtable->fieldList['version']['type']         = 'co
 $config->testsuite->linkcase->dtable->fieldList['version']['control']      = 'picker';
 $config->testsuite->linkcase->dtable->fieldList['version']['group']        = 'version';
 $config->testsuite->linkcase->dtable->fieldList['version']['controlItems'] = array(1 => 1);
+$config->testsuite->linkcase->dtable->fieldList['version']['sort']         = true;
 
 $config->testsuite->linkcase->dtable->fieldList['openedBy'] = $config->testcase->dtable->fieldList['openedBy'];
+$config->testsuite->linkcase->dtable->fieldList['openedBy']['sort'] = true;
+
 unset($config->testsuite->linkcase->dtable->fieldList['title']['nestedToggle']);

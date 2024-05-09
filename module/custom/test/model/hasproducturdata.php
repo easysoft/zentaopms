@@ -9,16 +9,16 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
-zdTable('story')->gen(0);
-zdTable('user')->gen(5);
+zenData('story')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $customTester = new customTest();
 r($customTester->hasProductURDataTest()) && p() && e('0'); // 测试系统中无用户需求数据
 
-$storyTable = zdTable('story');
+$storyTable = zenData('story');
 $storyTable->type->range('requirement');
 $storyTable->deleted->range('0');
 $storyTable->gen(5);

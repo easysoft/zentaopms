@@ -38,6 +38,10 @@ $lang->repo->descPlaceholder = 'One sentence description';
 $lang->repo->namespace       = 'Namespace';
 $lang->repo->branchName      = 'Branch Name';
 $lang->repo->branchFrom      = 'Create from';
+$lang->repo->codeBranch      = 'Code branch';
+$lang->repo->createdBranch   = 'Created branch';
+$lang->repo->unlink          = 'Unlink';
+$lang->repo->visit           = 'Visit';
 
 $lang->repo->createBranchAction = 'Create Branch';
 $lang->repo->browseAction       = 'Browse Repo';
@@ -59,10 +63,13 @@ $lang->repo->importAction       = 'Import Repo';
 $lang->repo->import             = 'Import';
 $lang->repo->importName         = 'Name after import';
 $lang->repo->importServer       = 'Please select a server';
+$lang->repo->hide               = 'hide';
+$lang->repo->show               = 'show';
+$lang->repo->showHidden         = 'Show hidden repositories';
 $lang->repo->gitlabList         = 'Gitlab Repo';
 $lang->repo->batchCreate        = 'Batch link repo';
 
-$lang->repo->createRepoAction = 'Create repository';
+$lang->repo->createRepoAction = 'Create origin repository';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
@@ -114,9 +121,8 @@ $lang->repo->diff               = 'Diff';
 $lang->repo->diffAB             = 'Diff';
 $lang->repo->diffAll            = 'Diff All';
 $lang->repo->viewDiff           = 'View diff';
-$lang->repo->allLog             = 'All Commits';
-$lang->repo->location           = 'Location';
-$lang->repo->file               = 'File';
+$lang->repo->allLog             = 'Commits';
+$lang->repo->codeLocation       = 'Code Location';
 $lang->repo->action             = 'Action';
 $lang->repo->code               = 'Code';
 $lang->repo->review             = 'Repo Review';
@@ -141,7 +147,6 @@ $lang->repo->openedBy   = 'CreatedBy';
 $lang->repo->assignedTo = 'AssignedTo';
 $lang->repo->openedDate = 'CreatedDate';
 
-$lang->repo->latestRevision = 'Latest Revision';
 $lang->repo->actionInfo     = "Add by %s in %s";
 $lang->repo->changes        = "Change Log";
 $lang->repo->reviewLocation = "File: %s@%s, Line: %s - %s";
@@ -172,11 +177,15 @@ $lang->repo->logStyles['D'] = 'Delete';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Gitlab']     = 'GitLab';
-$lang->repo->scmList['Gogs']       = 'Gogs';
-if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
-$lang->repo->scmList['Git']        = 'Git';
-$lang->repo->scmList['Subversion'] = 'SVN';
+$lang->repo->scmList['GitFox'] = 'GitFox';
+$lang->repo->scmList['Gitlab'] = 'GitLab';
+if(!$config->inQuickon)
+{
+    $lang->repo->scmList['Gitea']      = 'Gitea';
+    $lang->repo->scmList['Gogs']       = 'Gogs';
+    $lang->repo->scmList['Git']        = 'Git';
+    $lang->repo->scmList['Subversion'] = 'SVN';
+}
 
 $lang->repo->aclList['private'] = 'Private(The product and related project personnel can access it)';
 $lang->repo->aclList['open']    = 'Open(Users with privileges to DevOps can access it)';
@@ -204,6 +213,9 @@ $lang->repo->notice->deleteReview   = 'Do you want to delete this review?';
 $lang->repo->notice->deleteBug      = 'Do you want to delete this bug?';
 $lang->repo->notice->deleteComment  = 'Do you want to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';
+$lang->repo->notice->unlinkBranch   = 'Are you sure to disassociate the branch from %s?';
+$lang->repo->notice->noRepoLeft     = 'All repositories has been associated to ZenTaoPMS, please choose another server.';
+$lang->repo->notice->noChanges      = 'No Changes';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "Comment Example";
@@ -226,12 +238,14 @@ $lang->repo->error->comment           = 'Please enter content!';
 $lang->repo->error->title             = 'Please enter title!';
 $lang->repo->error->accessDenied      = 'You do not have the privilege to access the repository.';
 $lang->repo->error->noFound           = 'The repo is not found.';
+$lang->repo->error->empty             = 'Repo is empty, cannot sync logs.';
 $lang->repo->error->noFile            = '%s does not exist.';
 $lang->repo->error->noPriv            = 'The program does not have the privilege  to switch to %s';
 $lang->repo->error->output            = "The command is: %s\nThe error is(%s): %s\n";
 $lang->repo->error->clientVersion     = "Client version is too low, please upgrade or change SVN client";
 $lang->repo->error->encoding          = "The encoding might be wrong. Please change the encoding and try again.";
 $lang->repo->error->deleted           = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
+$lang->repo->error->linkedBranch      = "Deletion of the repository failed. The current repository has a branch associated with %s.";
 $lang->repo->error->linkedJob         = "Deletion of the repository failed. The current repository has associated with the Compile.";
 $lang->repo->error->clientPath        = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound          = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
@@ -239,12 +253,10 @@ $lang->repo->error->noWritable        = '%s is not writable! Please check the pr
 $lang->repo->error->noCloneAddr       = 'The repository clone address was not found';
 $lang->repo->error->differentVersions = 'The criterion and contrast cannot be the same';
 $lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.';
-$lang->repo->error->emptyVersion      = 'Version cannot be empty';
-$lang->repo->error->versionError      = 'Wrong version format!';
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->repo->error->repoNameInvalid   = 'The name should contain only alphanumeric numbers, dashes, underscores, and dots.';
 $lang->repo->error->createdFail       = 'Create failed';
-$lang->repo->error->noProduct         = 'Please associate the product corresponding to the project before starting to associate the code repository.';
+$lang->repo->error->noProduct         = 'Please associate the product before starting to associate the code repository.';
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips     = "The encodings of comments can be comma separated values, e.g. utf-8.";
@@ -267,3 +279,17 @@ $lang->repo->typeList['redundancy']  = 'Redundancy';
 $lang->repo->typeList['logicError']  = 'Logic Error';
 
 $lang->repo->featureBar['maintain']['all'] = 'All';
+
+$lang->repo->errorLang[0] = "Can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->errorLang[1] = 'Branch is exists';
+$lang->repo->errorLang[2] = 'Branch already exists';
+$lang->repo->errorLang[3] = 'Forbidden';
+$lang->repo->errorLang[4] = 'Cannot have ASCII control characters';
+$lang->repo->errorLang[5] = 'Created fail';
+
+$lang->repo->apiError[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->apiError[1] = 'Branch is exists';
+$lang->repo->apiError[2] = 'branch.* already exists';
+$lang->repo->apiError[3] = 'Forbidden';
+$lang->repo->apiError[4] = 'cannot have ASCII control characters';
+$lang->repo->apiError[5] = 'Created fail';

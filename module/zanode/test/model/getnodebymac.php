@@ -5,6 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 zanodemodel->getNodeByMac().
+timeout=0
 cid=1
 
 - 测试获取 mac 地址 mac1 的节点
@@ -30,10 +31,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('user')->gen(10);
-zdTable('host')->config('host')->gen(12);
+zenData('user')->gen(10);
+zenData('host')->loadYaml('host')->gen(12);
 
 su('admin');
 

@@ -17,10 +17,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/score.class.php';
+include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('task')->config('task')->gen(10);
+zenData('user')->gen(5);
+zenData('task')->loadYaml('task')->gen(10);
 
 $taskIds = array(0, 1, 7, 11);
 $methods = array('finish', 'close');

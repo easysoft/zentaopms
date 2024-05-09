@@ -34,7 +34,7 @@ $fields->field('scene')
     ->value(data('currentSceneID'));
 
 $fields->field('type')
-    ->checkbox(array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto'))
+    ->checkbox(array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto' || data('onlyAutoCase')))
     ->items($lang->testcase->typeList)
     ->value(data('case.type'));
 
@@ -48,7 +48,7 @@ $fields->field('scriptFile')
     ->width('full')
     ->label($lang->testcase->autoScript)
     ->className('autoScript')
-    ->hidden(data('case.auto') != 'auto')
+    ->hidden(data('case.auto') != 'auto' && !data('onlyAutoCase'))
     ->control('fileSelector', array('accept' => $config->testcase->scriptAcceptFileTypes, 'multiple' => false, 'maxFileCount' => 1, 'onAdd' => jsRaw('window.readScriptContent'), 'onRemove' => jsRaw('window.showUploadScriptBtn')));
 
 $fields->field('script')
@@ -57,6 +57,7 @@ $fields->field('script')
 
 $fields->field('title')
     ->width('5/6')
+    ->value(data('case.title'))
     ->control('colorInput', array('colorValue' => data('case.color')))
     ->checkbox(data('needReview') ? array('name' => 'needReview', 'text' => $lang->testcase->forceReview) : null);
 

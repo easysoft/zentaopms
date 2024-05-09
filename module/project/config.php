@@ -61,7 +61,7 @@ $config->project->maxCheckList->waterfallplus = $config->project->maxCheckList->
 $config->project->maxCheckList->ipd           = $config->project->maxCheckList->waterfall;
 
 $config->project->scrumList     = array('scrum', 'agileplus');
-$config->project->waterfallList = array('waterfall', 'waterfallplus');
+$config->project->waterfallList = array('waterfall', 'waterfallplus', 'ipd');
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;
@@ -365,9 +365,10 @@ $config->project->actionList['delete']['icon'] = 'trash';
 $config->project->actionList['delete']['hint'] = $lang->project->delete;
 $config->project->actionList['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
 
-$config->project->view = new stdclass();
-$config->project->view->operateList['main']   = array('start', 'activate', 'suspend', 'close');
-$config->project->view->operateList['common'] = array('edit', 'delete');
+$config->project->actions = new stdclass();
+$config->project->actions->view = array();
+$config->project->actions->view['mainActions']   = array('start', 'activate', 'suspend', 'close');
+$config->project->actions->view['suffixActions'] = array('edit', 'delete');
 
 $config->project->statusLabelList['wait']      = 'wait lighter';
 $config->project->statusLabelList['doing']     = 'doing primary-pale';

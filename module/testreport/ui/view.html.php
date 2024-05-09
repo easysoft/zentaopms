@@ -15,7 +15,7 @@ jsVar('legacyBugTip',    $lang->testreport->legacyBugTip);
 jsVar('activatedBugTip', $lang->testreport->activatedBugTip);
 jsVar('fromCaseBugTip',  $lang->testreport->fromCaseBugTip);
 
-detailHeader
+$this->session->notHead ? null : detailHeader
 (
     to::title
     (
@@ -65,7 +65,10 @@ foreach($charts as $chartType => $chartOption)
                 div(set::className('center text-base font-bold py-2'), $lang->testtask->report->charts[$chartType]),
                 echarts
                 (
+                    set::_id('chart-' . $chartType),
                     set::color($colorList),
+                    set::width('100%'),
+                    set::height('300px'),
                     set::series
                     (
                         array
@@ -77,7 +80,7 @@ foreach($charts as $chartType => $chartOption)
                             )
                         )
                     )
-                )->size('100%', 300)
+                )
             ),
             cell
             (
@@ -134,7 +137,10 @@ $bugStageChart = div
             div(set::className('center text-base font-bold py-2'), $lang->testreport->bugStageGroups),
             echarts
             (
+                set::_id('chart-bugStageGroups'),
                 set::color($colorList),
+                set::width('100%'),
+                set::height('300px'),
                 set::xAxis
                 (
                     array
@@ -145,7 +151,7 @@ $bugStageChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300)
+            )
         ),
         cell
         (
@@ -211,7 +217,10 @@ $bugHandleChart = div
             div(set::className('center text-base font-bold py-2'), $lang->testreport->bugHandleGroups),
             echarts
             (
+                set::_id('chart-bugHandleGroups'),
                 set::color(array('#FF9800', '#2098EE', '#009688')),
+                set::width('100%'),
+                set::height('300px'),
                 set::xAxis
                 (
                     array
@@ -222,7 +231,7 @@ $bugHandleChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300)
+            )
         ),
         cell
         (
@@ -292,7 +301,10 @@ foreach($bugInfo as $infoKey => $infoValue)
                 div(set::className('center text-base font-bold py-2'), $lang->testreport->{$infoKey}),
                 echarts
                 (
+                    set::_id('chart-' . $infoKey),
                     set::color($colorList),
+                    set::width('100%'),
+                    set::height('300px'),
                     set::series
                     (
                         array
@@ -304,7 +316,7 @@ foreach($bugInfo as $infoKey => $infoValue)
                             )
                         )
                     )
-                )->size('100%', 300)
+                )
             ),
             cell
             (
@@ -325,10 +337,11 @@ foreach($bugInfo as $infoKey => $infoValue)
     );
 }
 
-$mainActions = array();
-if(hasPriv('testreport', 'create')) $mainActions[] = array('icon' => 'refresh', 'url' => inlink('create', "objectID={$report->objectID}&objectType={$report->objectType}" . ($report->objectType == 'execution' ? "&extra=$report->tasks" : '')));
-if(hasPriv('testreport', 'edit'))   $mainActions[] = array('icon' => 'edit', 'url' => inlink('edit', "objectID={$report->id}"));
-if(hasPriv('testreport', 'delete')) $mainActions[] = array('icon' => 'trash', 'className' => 'ajax-submit', 'data-confirm' => $lang->testreport->confirmDelete, 'url' => inlink('delete', "objectID={$report->id}"));
+$mainActions  = array();
+$canBeChanged = common::canBeChanged('testreport', $report);
+if($canBeChanged && hasPriv('testreport', 'create')) $mainActions[] = array('icon' => 'refresh', 'hint' => $lang->testreport->recreate, 'url' => inlink('create', "objectID={$report->objectID}&objectType={$report->objectType}" . ($report->objectType == 'execution' ? "&extra=$report->tasks" : '')));
+if($canBeChanged && hasPriv('testreport', 'edit'))   $mainActions[] = array('icon' => 'edit',    'hint' => $lang->testreport->edit,     'url' => inlink('edit', "objectID={$report->id}"));
+if($canBeChanged && hasPriv('testreport', 'delete')) $mainActions[] = array('icon' => 'trash',   'hint' => $lang->testreport->delete,   'url' => inlink('delete', "objectID={$report->id}"), 'className' => 'ajax-submit', 'data-confirm' => $lang->testreport->confirmDelete, 'url' => inlink('delete', "objectID={$report->id}"));
 
 detailBody
 (
@@ -391,7 +404,7 @@ detailBody
                         )
                     ) : null
                 ),
-                history(set::objectID($report->id))
+                $this->session->notHead ? null : history(set::objectID($report->id))
             ),
             tabPane
             (
@@ -473,7 +486,7 @@ detailBody
                 $bugHandleChart,
                 $bugCharts
             ),
-            tabPane
+            $this->session->notHead ? null : tabPane
             (
                 set::key('legendMore'),
                 set::title($lang->testreport->legendMore),
@@ -484,7 +497,7 @@ detailBody
             )
         )
     ),
-    floatToolbar
+    $this->session->notHead ? null : floatToolbar
     (
         set::object($report),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback)),

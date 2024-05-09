@@ -24,10 +24,10 @@ function onChangeType()
     }
 }
 
-function onHostChange(event)
+function onHostChange(host)
 {
-    var hostID = $(event.target).val();
-    var link   = $.createLink('zanode', 'ajaxGetImages', 'hostID=' + hostID);
+    const hostID = typeof host == 'object' ? $('[name=parent]').val() : host;
+    var link = $.createLink('zanode', 'ajaxGetImages', 'hostID=' + hostID);
     $.get(link, function(data)
     {
         if(data)
@@ -106,3 +106,8 @@ function onChangeSystem(event)
     $osPicker.render({items: osItems});
     $osPicker.$.clear();
 }
+
+$(function()
+{
+    if(hostID) onHostChange(hostID);
+});

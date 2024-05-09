@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -8,26 +10,30 @@ class SetStatementTest extends TestCase
 {
     /**
      * @dataProvider setProvider
-     *
-     * @param mixed $test
      */
-    public function testSet($test)
+    public function testSet(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function setProvider()
+    /**
+     * @return string[][]
+     */
+    public function setProvider(): array
     {
-        return array(
-            array('parser/parseSetCharset'),
-            array('parser/parseSetCharsetError'),
-            array('parser/parseSetCharacterSet'),
-            array('parser/parseSetCharacterSetError'),
-            array('parser/parseAlterTableSetAutoIncrementError'),
-            array('parser/parseSetNames'),
-            array('parser/parseSetNamesError'),
-            array('parser/parseSetError1'),
-            array('parser/parseInsertIntoSet')
-        );
+        return [
+            ['parser/parseSetCharset'],
+            ['parser/parseSetCharsetError'],
+            ['parser/parseSetCharacterSet'],
+            ['parser/parseSetCharacterSetError'],
+            ['parser/parseAlterTableSetAutoIncrementError'],
+            ['parser/parseSetNames'],
+            ['parser/parseSetNamesError'],
+            ['parser/parseSetError1'],
+            ['parser/parseInsertIntoSet'],
+            ['parser/parseSetVariable'],
+            ['parser/parseSetVariable2'],
+            ['parser/parseSetGlobalVariable'],
+        ];
     }
 }

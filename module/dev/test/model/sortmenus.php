@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/dev.class.php';
-$ztLang = zdTable('lang');
+include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+$ztLang = zenData('lang');
 $ztLang->id->range('1');
 $ztLang->gen(0);
 

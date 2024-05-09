@@ -1,1 +1,122 @@
-a:4:{s:5:"query";s:25:"DROP USER 'testtest'@'%';";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:25:"DROP USER 'testtest'@'%';";s:3:"len";i:25;s:4:"last";i:25;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:7:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:4:"DROP";s:5:"value";s:4:"DROP";s:7:"keyword";s:4:"DROP";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:4;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:4:"USER";s:5:"value";s:4:"USER";s:7:"keyword";s:4:"USER";s:4:"type";i:1;s:5:"flags";i:33;s:8:"position";i:5;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:9;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:14:"'testtest'@'%'";s:5:"value";s:10:"testtest@%";s:7:"keyword";N;s:4:"type";i:8;s:5:"flags";i:4;s:8:"position";i:10;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:";";s:5:"value";s:1:";";s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";i:24;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:7;s:3:"idx";i:7;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:45:"PhpMyAdmin\SqlParser\Statements\DropStatement":5:{s:6:"fields";a:1:{i:0;O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";s:10:"testtest@%";s:6:"column";N;s:4:"expr";s:14:"'testtest'@'%'";s:5:"alias";N;s:8:"function";N;s:8:"subquery";N;}}s:5:"table";N;s:7:"options";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:1:{i:1;s:4:"USER";}}s:5:"first";i:0;s:4:"last";i:4;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:0:{}}}
+{
+    "query": "DROP USER 'testtest'@'%';",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "DROP USER 'testtest'@'%';",
+        "len": 25,
+        "last": 25,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "DROP",
+                    "value": "DROP",
+                    "keyword": "DROP",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 4
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "USER",
+                    "value": "USER",
+                    "keyword": "USER",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 5
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 9
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'testtest'@'%'",
+                    "value": "testtest@%",
+                    "keyword": null,
+                    "type": 8,
+                    "flags": 4,
+                    "position": 10
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ";",
+                    "value": ";",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 24
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 7,
+            "idx": 7
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\DropStatement",
+                "fields": [
+                    {
+                        "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                        "database": null,
+                        "table": "testtest@%",
+                        "column": null,
+                        "expr": "'testtest'@'%'",
+                        "alias": null,
+                        "function": null,
+                        "subquery": null
+                    }
+                ],
+                "table": null,
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": {
+                        "1": "USER"
+                    }
+                },
+                "first": 0,
+                "last": 4
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": []
+    }
+}

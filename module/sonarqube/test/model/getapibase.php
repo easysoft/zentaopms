@@ -11,10 +11,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/sonarqube.class.php';
+include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
 su('admin');
 
-zdTable('pipeline')->gen(5);
+zenData('pipeline')->gen(5);
 
 $sonarqubeID = 2;
 

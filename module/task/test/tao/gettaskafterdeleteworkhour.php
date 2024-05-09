@@ -1,17 +1,17 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->estimate->range('2,2');
 $task->consumed->range('1,2');
 $task->left->range('1,0');
 $task->status->range('doing,done');
 $task->gen(2);
 
-$effort = zdTable('effort');
+$effort = zenData('effort');
 $effort->objectType->range('task');
 $effort->objectID->range('1,2{2}');
 $effort->consumed->range('1,1,1');

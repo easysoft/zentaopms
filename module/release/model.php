@@ -421,6 +421,7 @@ class releaseModel extends model
             }
             elseif(($notify == 'ET' || $notify == 'PT') && !empty($release->build))
             {
+                $type    = $notify == 'ET' ? 'execution' : 'project';
                 $table   = $notify == 'ET' ? TABLE_BUILD : TABLE_RELEASE;
                 $members = $this->dao->select('t2.account')->from($table)->alias('t1')
                     ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root")
@@ -997,7 +998,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
             ->where('t1.id')->in($storyIdList)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!empty($storyIdList))->groupBy('t1.id')->fi()
+            ->beginIF(!empty($storyIdList))->groupBy('t1.id, t2.id, t2.name, t1.`pri`')->fi()
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->page($pager, 't1.id')
             ->fetchAll('id');

@@ -9,16 +9,17 @@ class monaco extends wg
         'action?:string',
         'options?:array',
         'diffContent?:array',
+        'selectedLines?:string',
         'onMouseDown?:string',
-        'onMouseMouse?:string'
+        'onMouseMove?:string'
     );
 
     protected static array $defaultProps = array(
-        'action'  => 'create',
-        'options' => array(),
+        'action'      => 'create',
+        'options'     => array(),
         'diffContent' => array(),
         'onMouseDown' => '',
-        'onMouseMouse' => ''
+        'onMouseMove' => ''
     );
     public static function getPageJS(): ?string
     {
@@ -28,12 +29,13 @@ class monaco extends wg
     protected function build()
     {
         global $app;
-        $vsPath      = $app->getWebRoot() . 'js/monaco-editor/min/vs';
-        $clientLang  = $app->clientLang;
-        $id          = $this->prop('id');
-        $action      = $this->prop('action');
-        $options     = $this->prop('options');
-        $diffContent = $this->prop('diffContent');
+        $vsPath        = $app->getWebRoot() . 'js/monaco-editor/min/vs';
+        $clientLang    = $app->clientLang;
+        $id            = $this->prop('id');
+        $action        = $this->prop('action');
+        $options       = $this->prop('options');
+        $diffContent   = $this->prop('diffContent');
+        $selectedLines = $this->prop('selectedLines');
         $onMouseDown = $this->prop('onMouseDown');
         $onMouseMove = $this->prop('onMouseMove');
 
@@ -48,8 +50,9 @@ class monaco extends wg
             jsVar('onMouseMove', $onMouseMove),
             jsVar('vsPath', $vsPath),
             jsVar('clientLang', $clientLang),
+            jsVar('selectedLines', $selectedLines),
             h::import($app->getWebRoot() . 'js/monaco-editor/min/vs/loader.js'),
-            setId($id)
+            setID($id)
         );
     }
 }

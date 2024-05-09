@@ -26,6 +26,18 @@ class count_of_daily_fixed_bug_in_user extends baseCalc
 
     public $result = array();
 
+    public $supportSingleQuery = true;
+
+    public function singleQuery()
+    {
+        $select = "`resolvedBy` as `user`, YEAR(`resolvedDate`) as `year`, MONTH(`resolvedDate`) as `month`, DAY(`resolvedDate`) as `day`, COUNT(`resolvedBy`) as `value`";
+        return $this->dao->select($select)->from($this->getSingleSql())
+            ->where('`resolvedBy`')->ne('')
+            ->andWhere('`resolvedBy` IS NOT NULL')
+            ->groupBy("`user`, `year`, `month`, `day`")
+            ->fetchAll();
+    }
+
     public function calculate($row)
     {
         $resolvedDate = $row->resolvedDate;

@@ -13,6 +13,7 @@ namespace zin;
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
+jsVar('dragModalMessage', $lang->testcase->dragModalMessage);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -91,7 +92,7 @@ $footToolbar = $canBatchAction ? array('items' => array
     $canImportToLib ? array('text' => $lang->testcase->importToLib, 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
-$footToolbar['items'] = array_values(array_filter($footToolbar['items']));
+$footToolbar['items'] = $canBatchAction ? array_values(array_filter($footToolbar['items'])) : array();
 
 $cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
@@ -101,7 +102,7 @@ if(!empty($cols['actions']['list']))
     {
         if(!isset($methodParams['url'])) continue;
 
-        $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
+        $cols['actions']['list'][$method]['url'] = str_replace(array('%executionID%', '{runID}'), array((string)$executionID, '0'), $methodParams['url']);
     }
 }
 
@@ -109,6 +110,7 @@ if(isset($cols['title']))  $cols['title']['nestedToggle'] = $topSceneCount > 0;
 if(isset($cols['branch'])) $cols['branch']['map']         = $branchTagOption;
 if(isset($cols['story']))  $cols['story']['map']          = $stories;
 if(isset($cols['scene']))  $cols['scene']['map']          = $iscenes;
+if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->story->changed;
 
 foreach($cases as $case)
 {
@@ -118,6 +120,7 @@ foreach($cases as $case)
     $cols['actions']['menu'] = $config->$actionType->menu;
     if($actionType == 'testcase' && !$this->config->testcase->needReview) unset($cols['actions']['menu'][1][0]);
     if($actionType == 'scene') $case->bugs = $case->results = $case->stepNumber = $case->version = '';
+    if(!empty($case->needconfirm)) $case->status = 'changed';
 
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
@@ -130,6 +133,10 @@ div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
     dtable
     (
+        set::plugins(array('sortable')),
+        set::sortable(strpos($orderBy, 'sort_asc') !== false),
+        set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
+        set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
         set::customCols(!$isOnlyScene),
         set::userMap($users),
         set::cols($cols),
@@ -143,9 +150,9 @@ div(
         set::nested(true),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
-        set::emptyTip($lang->testcase->noCase),
-        set::createTip($lang->testcase->create),
-        set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', 'productID=' . zget($product, 'id', 0) . "&branch={$branch}&moduleID={$moduleID}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
+        set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
+        set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
+        set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
         set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
     )
 );

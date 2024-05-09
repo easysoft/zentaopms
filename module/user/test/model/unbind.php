@@ -11,13 +11,13 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
-zdTable('user')->gen(10);
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+zenData('user')->gen(10);
 su('admin');
 
 $now = date('Y-m-d H:i:s');
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->id->range('1-10');
 $user->account->range('admin,user1,user2,user3,user4,user5,user6,user7,user8,user9');
 $user->password->range('a0933c1218a4e745bacdcf572b10eba7');

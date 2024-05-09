@@ -19,14 +19,14 @@ foreach($projects as $projectID => $project)
 
     $cards[] = cell
     (
-        setClass('p-2', $longBlock ? 'w-1/3' : 'w-full h-40'),
+        setClass('p-2', $longBlock ? 'w-1/3' : 'w-full h-50'),
         div
         (
-            setClass('border rounded-sm h-full px-4 hover:shadow hover:border-primary cursor-pointer open-url group', $longBlock ? 'py-4' : 'py-2'),
+            setClass('border rounded-sm h-full px-4 hover:shadow hover:border-primary cursor-pointer open-url group', $longBlock ? 'py-3' : 'py-2'),
             setData('url', $viewLink),
             div
             (
-                setClass('mb-4'),
+                setClass('mb-2'),
                 a
                 (
                     setClass('font-bold text-fore text-md group-hover:text-primary'),
@@ -37,27 +37,6 @@ foreach($projects as $projectID => $project)
             div
             (
                 setClass('space-y-3'),
-                ($project->multiple && $execution) ? array
-                (
-                    div
-                    (
-                        span
-                        (
-                            setClass('text-gray mr-1'),
-                            $execution->type == 'kanban' ? $lang->project->lastKanban : $lang->block->zentaoapp->latestExecution . ': '
-                        ),
-                        a
-                        (
-                            set('href', createLink('execution', 'task', "executionID={$execution->id}")),
-                            $execution->name
-                        ),
-                        label
-                        (
-                            setClass('label warning-pale circle ml-2'),
-                            $lang->execution->statusList[$execution->status]
-                        )
-                    ),
-                ) : null,
                 div
                 (
                     span
@@ -75,6 +54,40 @@ foreach($projects as $projectID => $project)
                         $lang->project->end . ': '
                     ),
                     $project->end == LONG_TIME ? $lang->program->longTime : $project->end
+                ),
+                div
+                (
+                    $project->multiple && $execution ? div
+                    (
+                        span
+                        (
+                            setClass('text-gray mr-1'),
+                            $execution->type == 'kanban' ? $lang->project->lastKanban : $lang->block->zentaoapp->latestExecution . ': '
+                        ),
+                        a
+                        (
+                            set('href', createLink('execution', 'task', "executionID={$execution->id}")),
+                            $execution->name
+                        ),
+                        label
+                        (
+                            setClass('label warning-pale circle ml-2'),
+                            $lang->execution->statusList[$execution->status]
+                        )
+                    ) : div(setClass('h-5'))
+                ),
+                div
+                (
+                    setClass('flex items-center'),
+                    span(setClass('num mr-1'), round((float)$project->progress) . '%'),
+                    progressBar
+                    (
+                        setClass('progress flex-auto'),
+                        set::height(8),
+                        set::percent(round((float)$project->progress)),
+                        set::color('var(--color-primary-300)'),
+                        set::background('rgba(0,0,0,0.02)')
+                    )
                 )
             )
         )

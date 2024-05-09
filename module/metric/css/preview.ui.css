@@ -4,8 +4,8 @@
 #mainContent .side {overflow-x: hidden; padding-right: 4px;}
 #mainContent .main {overflow-x: hidden;}
 
-#featureBar .nav-feature li:last-child {padding-left: 4px;}
-#featureBar .nav-feature li:nth-last-child(2):before {content: ""; position: absolute; left: 2px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-gray-300);}
+#featureBar .nav-feature li.divider-before {padding-left: 4px;}
+#featureBar .nav-feature li.divider-before:before {content: ""; position: absolute; left: -1px; top: 5px; bottom: 5px; width: 1px; background-color: var(--color-gray-300);}
 
 .filter-btn {padding-left: 0.625rem !important; padding-right: 0.625rem !important;}
 
@@ -101,6 +101,6 @@ i.star {color: var(--color-warning-300);}
 .query-inline {padding-left: 8px !important;}
 .query-inline:first-child {padding-left: 0px !important;}
 .query-inline>label {justify-content: flex-start !important;}
-.query-btn {padding-left: 20px !important;}
+.query-btn {padding-left: 16px !important;}
 .picker-nowrap .picker-multi-selections {flex-wrap: nowrap !important; overflow: hidden !important;}
 .query-date .selected,.query-calc-date .selected {background-color: var(--color-primary-50); color: var(--color-primary-600);}

@@ -11,6 +11,11 @@ declare(strict_types=1);
 namespace zin;
 
 modalHeader(set::titleClass('icon icon-bar-chart'));
+foreach($config->story->caseTable->fieldList as $key => $field)
+{
+    $config->story->caseTable->fieldList[$key]['sort'] = true;
+    unset($config->story->caseTable->fieldList[$key]['sortType']);
+}
 
 $tableData = initTableData($cases, $config->story->caseTable->fieldList, $this->story);
 

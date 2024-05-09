@@ -16,7 +16,7 @@ cid=1
 
 */
 
-zdTable('pipeline')->gen(5);
+zenData('pipeline')->gen(5);
 
 $gitlab = $tester->loadModel('gitlab');
 $gitlab->app->moduleName = 'gitlab';

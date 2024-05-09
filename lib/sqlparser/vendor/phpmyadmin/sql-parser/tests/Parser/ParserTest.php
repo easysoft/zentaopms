@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Exceptions\ParserException;
@@ -8,28 +10,31 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
+use function sprintf;
+
 class ParserTest extends TestCase
 {
     /**
      * @dataProvider parseProvider
-     *
-     * @param mixed $test
      */
-    public function testParse($test)
+    public function testParse(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function parseProvider()
+    /**
+     * @return string[][]
+     */
+    public function parseProvider(): array
     {
-        return array(
-            array('parser/parse'),
-            array('parser/parse2'),
-            array('parser/parseDelimiter')
-        );
+        return [
+            ['parser/parse'],
+            ['parser/parse2'],
+            ['parser/parseDelimiter'],
+        ];
     }
 
-    public function testUnrecognizedStatement()
+    public function testUnrecognizedStatement(): void
     {
         $parser = new Parser('SELECT 1; FROM');
         $this->assertEquals(
@@ -38,7 +43,7 @@ class ParserTest extends TestCase
         );
     }
 
-    public function testUnrecognizedKeyword()
+    public function testUnrecognizedKeyword(): void
     {
         $parser = new Parser('SELECT 1 FROM foo PARTITION(bar, baz) AS');
         $this->assertEquals(
@@ -51,7 +56,7 @@ class ParserTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
-    public function testError()
+    public function testError(): void
     {
         $parser = new Parser(new TokensList());
 
@@ -60,20 +65,18 @@ class ParserTest extends TestCase
 
         $this->assertEquals(
             $parser->errors,
-            array(
+            [
                 new ParserException('error #1', new Token('foo'), 1),
                 new ParserException('error #2', new Token('bar'), 2),
-            )
+            ]
         );
     }
 
-    /**
-     * @expectedException \PhpMyAdmin\SqlParser\Exceptions\ParserException
-     * @expectedExceptionMessage strict error
-     * @expectedExceptionCode 3
-     */
-    public function testErrorStrict()
+    public function testErrorStrict(): void
     {
+        $this->expectExceptionCode(3);
+        $this->expectExceptionMessage('strict error');
+        $this->expectException(ParserException::class);
         $parser = new Parser(new TokensList());
         $parser->strict = true;
 

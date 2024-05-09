@@ -73,6 +73,7 @@ $config->bug->dtable->fieldList['plan']['title']    = $lang->bug->plan;
 $config->bug->dtable->fieldList['plan']['width']    = 120;
 $config->bug->dtable->fieldList['plan']['group']    = 3;
 $config->bug->dtable->fieldList['plan']['sortType'] = true;
+$config->bug->dtable->fieldList['plan']['hint']     = true;
 
 $config->bug->dtable->fieldList['openedBuild']['title']      = $lang->bug->openedBuild;
 $config->bug->dtable->fieldList['openedBuild']['type']       = 'text';
@@ -160,6 +161,20 @@ $config->bug->dtable->fieldList['browser']['map']      = $lang->bug->browserList
 $config->bug->dtable->fieldList['browser']['group']    = 7;
 $config->bug->dtable->fieldList['browser']['control']  = 'multiple';
 $config->bug->dtable->fieldList['browser']['sortType'] = true;
+
+if($config->edition == 'max')
+{
+    $config->bug->dtable->fieldList['injection']['title']      = $lang->bug->injection;
+    $config->bug->dtable->fieldList['injection']['control']    = 'picker';
+    $config->bug->dtable->fieldList['injection']['type']       = 'text';
+    $config->bug->dtable->fieldList['injection']['dataSource'] = array('module' => 'review', 'method' => 'getPairs', 'params' => ['projectID' => 0, 'productID' => (int)'$productID', 'withVersion' => true]);
+
+    $config->bug->dtable->fieldList['identify']['title']      = $lang->bug->identify;
+    $config->bug->dtable->fieldList['identify']['type']       = 'text';
+    $config->bug->dtable->fieldList['identify']['control']    = 'picker';
+    $config->bug->dtable->fieldList['identify']['dataSource'] = array('module' => 'review', 'method' => 'getPairs', 'params' => ['projectID' => 0, 'productID' => (int)'$productID', 'withVersion' => true]);
+
+}
 
 $config->bug->dtable->fieldList['activatedCount']['title']    = $lang->bug->abbr->activatedCount;
 $config->bug->dtable->fieldList['activatedCount']['type']     = 'count';

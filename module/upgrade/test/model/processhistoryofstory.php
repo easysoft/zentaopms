@@ -12,11 +12,11 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
-zdTable('action')->config('action')->gen(10);
-zdTable('story')->gen(10);
-zdTable('product')->gen(10);
-zdTable('release')->gen(10);
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+zenData('action')->loadYaml('action')->gen(10);
+zenData('story')->gen(10);
+zenData('product')->gen(10);
+zenData('release')->gen(10);
 
 $upgrade = new upgradeTest();
 
@@ -29,4 +29,4 @@ $storys = $tester->dao->select('releasedDate')->from(TABLE_STORY)->where('id')->
 
 $condition1 = ($date1 - strtotime($storys[0]->releasedDate)) < 10;
 $condition2 = ($date2 - strtotime($storys[7]->releasedDate)) < 10;
-r($condition1 && $condition2) && p('') && e(1);     //判断需求的releasedDate是否更新成功,差值在10秒内
+r($condition1 && $condition2) && p() && e(1);     //判断需求的releasedDate是否更新成功,差值在10秒内

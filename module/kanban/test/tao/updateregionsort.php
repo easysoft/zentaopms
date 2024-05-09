@@ -30,7 +30,7 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('kanbanregion')->gen(5);
+zenData('kanbanregion')->gen(5);
 
 global $tester;
 $tester->loadModel('kanban');

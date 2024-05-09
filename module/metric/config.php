@@ -1,10 +1,10 @@
 <?php
 $config->metric = new stdclass();
-$config->metric->scopeList     = array('program', 'project', 'product', 'execution', 'dept', 'user', 'system');
-$config->metric->objectList    = array('program', 'line', 'product', 'project', 'productplan', 'execution', 'release', 'story', 'requirement', 'task', 'bug', 'case', 'user', 'effort', 'doc', 'feedback', 'risk', 'issue', 'review');
+$config->metric->scopeList     = array('program', 'project', 'product', 'execution', 'user', 'system');
+$config->metric->objectList    = array('program', 'line', 'product', 'project', 'productplan', 'execution', 'release', 'story', 'requirement', 'task', 'bug', 'case', 'user', 'effort', 'doc', 'feedback', 'ticket', 'risk', 'issue', 'review');
 $config->metric->purposeList   = array('scale', 'qc', 'hour', 'cost', 'rate', 'time');
 $config->metric->dateList      = array('year', 'month', 'week', 'day');
-$config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user', 'dept');
+$config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user');
 
 $config->metric->maxSelectNum = 10;
 
@@ -25,13 +25,18 @@ $config->metric->actionList['implement']['url']         = helper::createLink('me
 $config->metric->actionList['delist']['icon'] = 'ban-circle';
 $config->metric->actionList['delist']['text'] = $lang->metric->delist;
 $config->metric->actionList['delist']['hint'] = $lang->metric->delist;
-$config->metric->actionList['delist']['url']  = 'javascript:confirmDelist("{id}", "{name}")';
+$config->metric->actionList['delist']['url']  = 'javascript:confirmDelist("{id}", "{name}", {isUsed})';
 
 $config->metric->actionList['delete']['icon']         = 'trash';
 $config->metric->actionList['delete']['hint']         = $lang->delete;
 $config->metric->actionList['delete']['url']          = helper::createLink('metric', 'delete', 'metricID={id}');
 $config->metric->actionList['delete']['class']        = 'ajax-submit';
 $config->metric->actionList['delete']['data-confirm'] = $lang->metric->confirmDelete;
+
+$config->metric->actionList['recalculate']['icon'] = 'refresh';
+$config->metric->actionList['recalculate']['text'] = $lang->metric->recalculate;
+$config->metric->actionList['recalculate']['hint'] = $lang->metric->recalculateBtnText;
+$config->metric->actionList['recalculate']['url']  = 'javascript:confirmRecalculate("single", "{code}")';
 
 $config->metric->necessaryMethodList = array('getStatement', 'calculate', 'getResult');
 

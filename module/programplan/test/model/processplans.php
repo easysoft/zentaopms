@@ -29,12 +29,12 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(6);
-zdTable('projectproduct')->config('projectproduct')->gen(6);
-zdTable('product')->config('product')->gen(2);
+zenData('project')->loadYaml('project')->gen(6);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(6);
+zenData('product')->loadYaml('product')->gen(2);
 $planIDList = array(array(1, 2), array(3, 4), array(5, 6, 7));
 
 $programplan = new programplanTest();

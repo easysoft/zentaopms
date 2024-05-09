@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
 /**
 
@@ -20,8 +20,8 @@ cid=1
 
 */
 
-zdTable('file')->gen(45);
-zdTable('user')->gen(5);
+zenData('file')->gen(45);
+zenData('user')->gen(5);
 su('admin');
 
 $docTester = new docTest();

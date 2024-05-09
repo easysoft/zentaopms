@@ -13,14 +13,14 @@ $config->project->form->manageProducts = array();
 
 $config->project->form->create['parent']     = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->project->form->create['name']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
-$config->project->form->create['multiple']   = array('type' => 'int',    'required' => false, 'default' => 1);
+$config->project->form->create['multiple']   = array('type' => 'string', 'required' => false);
 $config->project->form->create['hasProduct'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['stageBy']    = array('type' => 'string', 'required' => false, 'default' => 'product');
 $config->project->form->create['PM']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budget']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budgetUnit'] = array('type' => 'string', 'required' => false, 'default' => 'CNY');
 $config->project->form->create['begin']      = array('type' => 'date',   'required' => true);
-$config->project->form->create['end']        = array('type' => 'date',   'required' => true,  'default' => null);
+$config->project->form->create['end']        = array('type' => 'date',   'required' => false, 'default' => null);
 $config->project->form->create['days']       = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->project->form->create['desc']       = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->project->form->create['acl']        = array('type' => 'string', 'required' => false, 'default' => '');

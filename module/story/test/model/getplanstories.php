@@ -1,34 +1,37 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getPlanStories();
+cid=0
+
+- 获取计划1下的需求数量，每页10条 @10
+- 获取计划1下的需求数量，不分页 @20
+- 获取计划1下，按照模块排序的需求数量，不分页 @20
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('product')->gen(100);
-$projectstory = zdTable('projectstory');
+zenData('product')->gen(100);
+$projectstory = zenData('projectstory');
 $projectstory->project->range('11{50},36{50}');
 $projectstory->product->range('1');
 $projectstory->story->range('1-50');
 $projectstory->gen(100);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1');
 $story->gen(50);
 
-$planstory = zdTable('planstory');
+$planstory = zenData('planstory');
 $planstory->plan->range('1{20},2{20},3{20}');
 $planstory->gen(50);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('project{25},sprint{25}');
 $project->gen(50);
-
-/**
-
-title=测试 storyModel->getPlanStories();
-cid=1
-pid=1
-
-*/
 
 global $tester, $app;
 $app->methodName = 'getPlanStories';

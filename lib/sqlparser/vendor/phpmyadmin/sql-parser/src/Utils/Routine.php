@@ -1,8 +1,6 @@
 <?php
 
-/**
- * Routine utilities.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Utils;
 
@@ -12,12 +10,11 @@ use PhpMyAdmin\SqlParser\Lexer;
 use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Statements\CreateStatement;
 
+use function implode;
+use function is_string;
+
 /**
  * Routine utilities.
- *
- * @category   Routines
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class Routine
 {
@@ -26,7 +23,7 @@ class Routine
      *
      * @param string $param parameter's definition
      *
-     * @return array
+     * @return string[]
      */
     public static function getReturnType($param)
     {
@@ -36,27 +33,27 @@ class Routine
         $type = DataType::parse(new Parser(), $lexer->list);
 
         if ($type === null) {
-            return array(
+            return [
                 '',
                 '',
                 '',
                 '',
-                ''
-            );
+                '',
+            ];
         }
 
-        $options = array();
+        $options = [];
         foreach ($type->options->options as $opt) {
             $options[] = is_string($opt) ? $opt : $opt['value'];
         }
 
-        return array(
+        return [
             '',
             '',
             $type->name,
             implode(',', $type->parameters),
-            implode(' ', $options)
-        );
+            implode(' ', $options),
+        ];
     }
 
     /**
@@ -64,7 +61,7 @@ class Routine
      *
      * @param string $param parameter's definition
      *
-     * @return array
+     * @return string[]
      */
     public static function getParameter($param)
     {
@@ -74,29 +71,29 @@ class Routine
         $param = ParameterDefinition::parse(new Parser(), $lexer->list);
 
         if (empty($param[0])) {
-            return array(
+            return [
                 '',
                 '',
                 '',
                 '',
-                ''
-            );
+                '',
+            ];
         }
 
         $param = $param[0];
 
-        $options = array();
+        $options = [];
         foreach ($param->type->options->options as $opt) {
             $options[] = is_string($opt) ? $opt : $opt['value'];
         }
 
-        return array(
+        return [
             empty($param->inOut) ? '' : $param->inOut,
             $param->name,
             $param->type->name,
             implode(',', $param->type->parameters),
-            implode(' ', $options)
-        );
+            implode(' ', $options),
+        ];
     }
 
     /**
@@ -104,19 +101,19 @@ class Routine
      *
      * @param CreateStatement $statement the statement to be processed
      *
-     * @return array
+     * @return array<string, int|array<int, mixed[]|string|null>>
      */
     public static function getParameters($statement)
     {
-        $retval = array(
+        $retval = [
             'num' => 0,
-            'dir' => array(),
-            'name' => array(),
-            'type' => array(),
-            'length' => array(),
-            'length_arr' => array(),
-            'opts' => array()
-        );
+            'dir' => [],
+            'name' => [],
+            'type' => [],
+            'length' => [],
+            'length_arr' => [],
+            'opts' => [],
+        ];
 
         if (! empty($statement->parameters)) {
             $idx = 0;
@@ -126,11 +123,12 @@ class Routine
                 $retval['type'][$idx] = $param->type->name;
                 $retval['length'][$idx] = implode(',', $param->type->parameters);
                 $retval['length_arr'][$idx] = $param->type->parameters;
-                $retval['opts'][$idx] = array();
+                $retval['opts'][$idx] = [];
                 foreach ($param->type->options->options as $opt) {
                     $retval['opts'][$idx][] = is_string($opt) ?
                         $opt : $opt['value'];
                 }
+
                 $retval['opts'][$idx] = implode(' ', $retval['opts'][$idx]);
                 ++$idx;
             }

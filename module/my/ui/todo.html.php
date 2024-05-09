@@ -70,6 +70,9 @@ toolbar
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('todo', 'batchCreate')),
+            setData('toggle', 'modal'),
+            setData('size', 'lg'),
+            setData('class-name', 'batchCreateTodoModal'),
             $lang->todo->batchCreate
         ),
         $canCreate && $canBatchCreate ? dropdown
@@ -78,7 +81,7 @@ toolbar
             set::items(array
             (
                 array('text' => $lang->todo->create, 'url' => helper::createLink('todo', 'create'), 'data-toggle' => 'modal'),
-                array('text' => $lang->todo->batchCreate, 'url' => helper::createLink('todo', 'batchCreate'), 'data-toggle' => 'modal', 'data-size' => 'lg')
+                array('text' => $lang->todo->batchCreate, 'url' => helper::createLink('todo', 'batchCreate'), 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-class-name' => 'batchCreateTodoModal')
             )),
             set::placement('bottom-end')
         ) : null
@@ -107,6 +110,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::userMap($users),
+    set::priList($lang->todo->priList),
     set::fixedLeftWidth('44%'),
     set::checkable(true),
     set::defaultSummary(array('html' => $defaultSummary)),
@@ -117,6 +121,7 @@ dtable
     set::emptyTip($lang->my->noTodo),
     set::createTip($lang->todo->create),
     set::createLink($canCreate ? createLink('todo', 'create') : ''),
+    set::createAttr('data-toggle="modal"'),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $type != 'today' ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager'))

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
 /**
@@ -12,7 +12,7 @@ cid=1
 
 */
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('2-5');
 $project->project->range('2-5');
 $project->name->prefix("项目")->range('2-5');

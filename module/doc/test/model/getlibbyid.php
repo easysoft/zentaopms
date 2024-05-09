@@ -17,10 +17,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('doclib')->config('doclib')->gen(5);
-zdTable('user')->gen(5);
+zenData('doclib')->loadYaml('doclib')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $idList = array(0, 1, 4);

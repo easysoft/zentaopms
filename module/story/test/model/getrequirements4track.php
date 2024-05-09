@@ -1,36 +1,51 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getRequirements4Track();
+cid=0
+
+- 执行storyModel模块的getRequirements4Track方法，参数是0, '', 0, $pager  @0
+- 执行$tracks[1]->track[11] @1
+- 执行$tracks[1]->track[11] @1
+- 执行$tracks[1]->track[11] @1
+- 执行storyModel模块的getRequirements4Track方法，参数是1, 0, 1, $pager  @0
+- 执行$tracks[1]->track[11] @1
+- 执行storyModel模块的getRequirements4Track方法，参数是1, 0, 1, $pager  @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('product')->gen(2);
-$story = zdTable('story');
+zenData('product')->gen(2);
+$story = zenData('story');
 $story->product->range(1);
 $story->type->range('requirement{10},story{10}');
 $story->gen(20);
 
-$projectstory = zdTable('projectstory');
+$projectstory = zenData('projectstory');
 $projectstory->project->range(1);
 $projectstory->product->range(1);
 $projectstory->story->range('1-18');
 $projectstory->gen(18);
 
-$case = zdTable('case');
+$case = zenData('case');
 $case->story->range(11);
 $case->gen(5);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->story->range(11);
 $bug->gen(5);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->story->range(11);
 $task->gen(5);
 
-$design = zdTable('design');
+$design = zenData('design');
 $design->story->range(11);
 $design->gen(10);
 
-$relation = zdTable('relation');
+$relation = zenData('relation');
 $relation->product->range(1);
 $relation->AID->range('1,11,1,2,12,2,3,13,3,4,14,4,5,15,5,6,16,6,7,17,7,8,18,8');
 $relation->BID->range('11,1,1,12,2,2,13,3,3,14,4,4,15,5,5,16,6,6,17,7,7,18,8,8');
@@ -39,15 +54,7 @@ $relation->BType->range('story,requirement,commit');
 $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
 
-zdTable('repohistory')->gen(10);
-
-/**
-
-title=测试 storyModel->getRequirements4Track();
-cid=1
-pid=1
-
-*/
+zenData('repohistory')->gen(10);
 
 global $tester;
 $storyModel = $tester->loadModel('story');

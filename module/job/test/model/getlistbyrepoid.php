@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/job.class.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 su('admin');
 
 /**
@@ -15,7 +15,7 @@ cid=1
 - 获取repo为100001的name第100001条的name属性 @0
 
 */
-zdTable('job')->gen('1');
+zenData('job')->gen('1');
 
 $job = new jobTest();
 

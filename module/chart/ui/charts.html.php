@@ -29,7 +29,7 @@ $generateCharts = function() use($charts, $lang)
             if($type == 'select' && !isset($options[$field]))
             {
                 $fieldSetting = $chart->fieldSettings[$field];
-                $options[$field] = $this->chart->getFieldOptions($fieldSetting['type'], $fieldSetting['object'], $fieldSetting['field'], $chart->sql);
+                $options[$field] = $this->chart->getSysOptions($fieldSetting['type'], $fieldSetting['object'], $fieldSetting['field'], $chart->sql, zget($filter, 'saveAs', ''));
             }
             $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
         }
@@ -42,6 +42,7 @@ $generateCharts = function() use($charts, $lang)
             setID('chartPanel_' . $chartID),
             set::title($chart->name),
             set::shadow(false),
+            set::headingClass('h-14'),
             set::bodyClass('pt-0'),
             $filters ? div
             (
@@ -62,7 +63,24 @@ $generateCharts = function() use($charts, $lang)
             div
             (
                 setID('chart_' . $chartID),
-                echarts(set($chartOptions))->size('100%', 400)
+                setClass('echart-content'),
+                set('data-group', $chart->currentGroup),
+                set('data-id', $chart->id),
+                $this->chart->isChartHaveData($chartOptions, $chart->type) ? echarts
+                (
+                    set($chartOptions),
+                    set::width('100%'),
+                    set::height(400),
+                    $chart->type == 'waterpolo' ? set::exts('liquidfill') : null,
+                ) : div
+                (
+                    setClass('no-data'),
+                    div
+                    (
+                        setClass('no-data-dom'),
+                        span(setClass('text-muted'), $this->lang->chart->noData)
+                    )
+                )
             )
         );
     }

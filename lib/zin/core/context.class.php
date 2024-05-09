@@ -32,6 +32,10 @@ class context extends \zin\utils\dataset
 
     public array $data = array();
 
+    public array $debugData = array();
+
+    public ?\control $control = null;
+
     public bool $rendered = false;
 
     public bool $rawContentCalled = false;
@@ -64,6 +68,8 @@ class context extends \zin\utils\dataset
 
     public array $eventBindings = array();
 
+    public array $renderWgMap = array('page' => 'page', 'modal' => 'modalDialog', 'fragment' => 'fragment');
+
     public function __construct(string $name)
     {
         parent::__construct();
@@ -79,7 +85,7 @@ class context extends \zin\utils\dataset
             'globalRenderList'    => $this->globalRenderList,
             'globalRenderLevel'   => $this->globalRenderLevel,
             'rendered'            => $this->rendered,
-            'rawContentCalled'    => $this->rawContentCalled,
+            'rawContentCalled'    => $this->rawContentCalled
         ), $this->storedData);
     }
 
@@ -117,7 +123,10 @@ class context extends \zin\utils\dataset
 
         if($item instanceof node)
         {
-            if($item->parent || $item->type() === 'wg') return false;
+            if($item->parent) return false;
+
+            $type = $item->type();
+            if($type === 'wg' || $type === 'node') return false;
 
             if(!isset($this->globalRenderList[$item->gid])) $this->globalRenderList[$item->gid] = $item;
             return true;
@@ -273,6 +282,42 @@ class context extends \zin\utils\dataset
         return $js;
     }
 
+    public function addDebugData(string $name, mixed ...$values)
+    {
+        $e         = new \Exception();
+        $trace     = $e->getTraceAsString();
+        $trace     = str_replace($this->control->app->basePath, '', $trace);
+        $stack     = explode("\n", $trace);
+        if(str_contains($stack[0], 'lib/zin/core/context.func.php')) array_shift($stack);
+
+        $finalName = $name;
+        if(empty($finalName))
+        {
+            $statement = $stack[0];
+            if(str_contains($stack[0], '): zin\d('))
+            {
+                $statement = explode('): zin\d(', $statement)[1];
+                if(str_contains($statement, ',')) $finalName = explode(',', $statement)[0];
+                else                              $finalName = explode(')', $statement)[0];
+            }
+            else
+            {
+                $finalName = 'dump';
+            }
+        }
+
+        $isJson = $name[0] !== '$';
+        $data   = $values;
+        if($isJson)
+        {
+            $data = json_encode($values);
+            if($data === false) $isJson = false;
+            else                $data = jsRaw($data);
+        }
+        if(!$isJson) $data = array_map(function($value) {return var_export($value, true);}, $values);
+        $this->debugData[] = array('name' => $finalName, 'data' => $data, 'type' => $isJson ? 'json' : 'var', 'trace' => $stack);
+    }
+
     public function getDebugData() : ?array
     {
         global $app;
@@ -283,6 +328,7 @@ class context extends \zin\utils\dataset
             if(is_array($zinDebug))
             {
                 $zinDebug['basePath'] = $app->getBasePath();
+                $zinDebug['debug']    = $this->debugData;
                 if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
             }
         }
@@ -330,14 +376,15 @@ class context extends \zin\utils\dataset
 
         $hookCode   = $this->includeHooks();
         $rawContent = $this->getRawContent();
-        $zinDebug   = $this->getDebugData();
 
         $node->prebuild(true);
         $this->applyQueries($node);
 
-        $js     = $this->getJS();
-        $css    = $this->getCSS();
-        $result = $renderer->render();
+        $js       = $this->getJS();
+        $css      = $this->getCSS();
+        $result   = $renderer->render();
+        $zinDebug = $this->getDebugData();
+
 
         if(is_object($result)) // renderType = json
         {
@@ -410,6 +457,7 @@ class context extends \zin\utils\dataset
             $result = call_user_func("\zin\command::{$method}", $queryNodes, ...$args);
             if(is_array($result))  $queryNodes = $result;
             if(empty($queryNodes)) break;
+            prebuild($queryNodes);
         }
     }
 
@@ -475,6 +523,26 @@ class context extends \zin\utils\dataset
     public function onRender(callable|\Closure $callback)
     {
         $this->onRenderCallbacks[] = $callback;
+    }
+
+    public function setRenderWgMap(string|array $mapOrName, ?string $wgName = null)
+    {
+        if(is_array($mapOrName))
+        {
+            $this->renderWgMap = array_merge($this->renderWgMap, $mapOrName);
+        }
+        else
+        {
+            $this->renderWgMap[$mapOrName] = $wgName;
+        }
+    }
+
+    public function getRenderWgName()
+    {
+        if(isset($this->renderWgMap['all']))         return $this->renderWgMap['all'];
+        if(isAjaxRequest('modal'))                   return $this->renderWgMap['modal'];
+        if(isAjaxRequest() && !isAjaxRequest('zin')) return $this->renderWgMap['fragment'];
+        return 'page';
     }
 
     public static array $stack = array();

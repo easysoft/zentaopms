@@ -1,44 +1,10 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-
-zdTable('product')->gen(10);
-
-$projectstory = zdTable('projectstory');
-$projectstory->project->range('11');
-$projectstory->product->range('1');
-$projectstory->story->range('1-18');
-$projectstory->gen(18);
-
-$story = zdTable('story');
-$story->product->range(1);
-$story->version->range(1);
-$story->gen(20);
-
-$storyreview = zdTable('storyreview');
-$storyreview->result = 'revert{10},pass{10}';
-$storyreview->gen(20);
-
-$action = zdTable('action');
-$action->product->range('`,1,`');
-$action->action->range('reviewed');
-$action->objectType->range('story');
-$action->execution->range('0');
-$action->objectID->range('1-3');
-$action->extra->range('Revert');
-$action->gen(10);
-
-$userquery = zdTable('userquery');
-$userquery->sql->range('(1 = 1 AND `id` = 2)');
-$userquery->form->range('``');
-$userquery->gen(1);
 
 /**
 
 title=测试 storyTest->getExecutionStoriesBySearch();
-timeout=0
-cid=1
+cid=0
 
 - 不传入数据。 @0
 - 只传入产品。 @0
@@ -56,6 +22,39 @@ cid=1
 - 搜索条件中有 result = revert 数据，传入执行 ID，传入产品 ID。 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+
+zenData('product')->gen(10);
+
+$projectstory = zenData('projectstory');
+$projectstory->project->range('11');
+$projectstory->product->range('1');
+$projectstory->story->range('1-18');
+$projectstory->gen(18);
+
+$story = zenData('story');
+$story->product->range(1);
+$story->version->range(1);
+$story->gen(20);
+
+$storyreview = zenData('storyreview');
+$storyreview->result = 'revert{10},pass{10}';
+$storyreview->gen(20);
+
+$action = zenData('action');
+$action->product->range('`,1,`');
+$action->action->range('reviewed');
+$action->objectType->range('story');
+$action->execution->range('0');
+$action->objectID->range('1-3');
+$action->extra->range('Revert');
+$action->gen(10);
+
+$userquery = zenData('userquery');
+$userquery->sql->range('(1 = 1 AND `id` = 2)');
+$userquery->form->range('``');
+$userquery->gen(1);
 
 $storyTest = new storyTest();
 

@@ -26,7 +26,6 @@ cid=1
 - 查看关联后的需求详情 @1|3|5|7
 
 */
-
 global $tester;
 $tester->loadModel('story');
 

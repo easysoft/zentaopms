@@ -30,7 +30,7 @@ class fileSelector extends wg
         'renameBtn?: bool|string|array|callback=true', // 重命名按钮。
         'removeBtn?: bool|string|array|callback=true', // 删除按钮。
         'removeConfirm?: string|array',                // 删除确认提示。
-        'maxFileSize?: int|string="100MB";',           // 限制文件大小。
+        'maxFileSize?: int|string',                    // 限制文件大小。
         'maxFileCount?: int=0',                        // 限制文件数目，如果设置为非大于 `0` 的数则不限制。
         'totalFileSize?: int|string',                  // 限制总文件大小，如果设置为非大于 `0` 的数则不限制。
         'allowSameName?: bool;',                       // 是否允许同名文件。
@@ -50,6 +50,14 @@ class fileSelector extends wg
 
     protected function created()
     {
+        if(!$this->hasProp('maxFileSize'))
+        {
+            $maxFileSize  = ini_get('upload_max_filesize');
+            $lastChar     = substr($maxFileSize, -1);
+            $fileSizeUnit = array('K', 'M', 'G', 'T');
+            if(in_array($lastChar, $fileSizeUnit)) $maxFileSize .= 'B';
+            $this->setProp('maxFileSize', $maxFileSize);
+        }
         if(!$this->hasProp('tip'))
         {
             global $lang;
@@ -61,6 +69,13 @@ class fileSelector extends wg
             $app->loadLang('file');
             $this->setProp('exceededCountHint', sprintf($lang->file->errorFileCount, '{maxCount}'));
         }
+        if(!$this->hasProp('exceededSizeTip'))
+        {
+            global $app, $lang;
+            $app->loadLang('file');
+            $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
+            $this->setProp('exceededSizeTip', sprintf($lang->file->errorFileSize, $maxUploadSize));
+        }
 
         /* Auto prepend suffix "[]" to multiple mode. */
         $name = $this->prop('name');
@@ -68,6 +83,58 @@ class fileSelector extends wg
         {
             $this->setProp('name', $name . '[]');
         }
+
+        /* Check file type. */
+        $acceptFileTypes = $this->prop('accept') ? ',' . str_replace('.', '', $this->prop('accept')) . ',' : '';
+        $checkFiles = jsCallback('file')
+            ->const('dangerFileTypes', ",{$app->config->file->dangers},")
+            ->const('dangerFile', $lang->file->dangerFile)
+            ->const('acceptFileTypes', $acceptFileTypes)
+            ->do(<<<'JS'
+        const typeIndex = file.name.lastIndexOf(".");
+        const fileType  = file.name.slice(typeIndex + 1);
+        if(acceptFileTypes)
+        {
+            if(acceptFileTypes.indexOf(fileType) == -1)
+            {
+                zui.Modal.alert(dangerFile);
+                return false;
+            }
+        }
+        else if(dangerFileTypes.indexOf(fileType) > -1)
+        {
+            zui.Modal.alert(dangerFile);
+            return false;
+        }
+        JS);
+
+        /* Get onAdd function.*/
+        $onAdd = $this->prop('onAdd');
+        if($onAdd)
+        {
+            if(is_object($onAdd))
+            {
+                /*
+                 * 获取在 ui 界面上通过 jsCallback 和 js 定义的 onAdd 函数。
+                 * eg: 1. $onAdd = jsCallbakc()..;
+                 *         fileSelector(set::onAdd($onAdd));
+                 *     2. $onAdd = js()..;
+                 *         fileSelector(set::onAdd($onAdd));
+                 */
+                $objectClass = get_class($onAdd);
+                if($objectClass == 'zin\js')         $onAdd = $onAdd->toJS();
+                if($objectClass == 'zin\jsCallback') $onAdd = $onAdd->buildBody();
+                if(!is_object($onAdd)) $checkFiles = $checkFiles->do($onAdd);
+            }
+            else
+            {
+                /* 获取在 ui 界面上通过 jsRaw 定义的 onAdd 函数。 eg: fileSelector(set::onAdd(jsRaw('window.onAdd'))); */
+                $onAdd      = js::value($onAdd);
+                $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
+            }
+        }
+        $checkFiles = $checkFiles->do('return file');
+        $this->setProp('onAdd', $checkFiles);
     }
 
     /**

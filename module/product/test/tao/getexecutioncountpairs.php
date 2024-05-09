@@ -11,12 +11,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/product.class.php';
+include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
 function initData()
 {
-    zdTable('projectproduct')->config('projectproduct')->gen(100);
-    zdTable('project')->config('project')->gen(100);
+    zenData('projectproduct')->loadYaml('projectproduct')->gen(100);
+    zenData('project')->loadYaml('project')->gen(100);
 }
 initData();
 

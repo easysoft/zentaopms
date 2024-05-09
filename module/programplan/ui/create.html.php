@@ -14,7 +14,20 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
-$fields = $this->config->programplan->form->create;
+$fields         = $this->config->programplan->form->create;
+$enabledPoints  = isset($enabledPoints)  ? $enabledPoints  : new stdclass();
+$reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
+$canParallel    = isset($canParallel)    ? $canParallel    : false;
+$customKey      = 'createFields';
+$section        = 'custom';
+
+/* Generate custom config key by project model. */
+if(in_array($project->model, array('waterfallplus', 'ipd', 'waterfall'))) $customKey = 'create' . ucfirst($project->model) . 'Fields';
+if($executionType == 'agileplus')
+{
+    $section   = 'customAgilePlus';
+    $customKey = 'createFields';
+}
 
 /* Generate title that is tailored to specific situation. */
 $title = $lang->programplan->create;
@@ -42,11 +55,35 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
 };
 
 /* Generate checkboxes for sub-stage management. */
-$fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType)
+$fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType, $canParallel)
 {
-    if(empty($planID) || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
+    if((empty($planID) && $project->model != 'ipd') || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
 
-    $typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->programplan->typeList;
+    if(empty($planID) && $project->model == 'ipd')
+    {
+        foreach($lang->programplan->parallelList as $key => $value)
+        {
+            $items[] = div(setClass('px-1'), checkbox
+            (
+                set::type('radio'),
+                set::name('parallel'),
+                set::text($value),
+                set::value($key),
+                set::checked($key == $project->parallel),
+                set::disabled($canParallel),
+                on::change('window.onChangeParallel')
+            ));
+        }
+
+        return div
+        (
+            setClass('flex w-1/2 items-center'),
+            div(setClass('font-bold'), $lang->programplan->parallel . ':'),
+            $items
+        );
+    }
+
+    $typeList = $lang->programplan->typeList;
 
     $items = array();
     if(count($typeList) > 1)
@@ -97,7 +134,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project)
 {
     $items   = array();
-    $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
+    $items[] = $project->model == 'ipd' ? null : array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
 
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
     if(isset($requiredFields['code'])) $fields['code']['required'] = true;
@@ -140,6 +177,8 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
             $field['items']  = $lang->execution->typeList;
         }
         if($name == 'milestone') $field['width'] = '100px';
+        if($name == 'enabled')   $field['width'] = '80px';
+        if($name == 'point')     $field['width'] = '200px';
 
         $items[] = $field;
     }
@@ -148,7 +187,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
 };
 
 /* Generate default rendering data. */
-$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType)
+$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $enabledPoints)
 {
     $items = array();
 
@@ -157,14 +196,17 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     {
         foreach($stages as $stage)
         {
-            $item = new stdClass();
+            $points = !empty($enabledPoints->{$stage->type}) ? $enabledPoints->{$stage->type} : array();
 
+            $item            = new stdClass();
             $item->name      = $stage->name;
             $item->code      = isset($stage->code) ? $stage->code : '';
             $item->percent   = $stage->percent;
             $item->attribute = $stage->type;
             $item->acl       = 'open';
             $item->milestone = 0;
+            $item->point     = implode(',', $points);
+            $item->parallel  = 0;
 
             $items[] = $item;
         }
@@ -175,14 +217,17 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     /* Create stages for exist project. */
     foreach($plans as $plan)
     {
-        $item = new stdClass();
+        $points = !empty($enabledPoints->{$plan->attribute}) ? $enabledPoints->{$plan->attribute} : array();
 
+        $item               = new stdClass();
         $item->disabled     = !isset($plan->setMilestone);
+        $item->enabled      = $plan->enabled;
         $item->id           = $plan->id;
         $item->type         = $plan->type;
         $item->name         = $plan->name;
         $item->code         = $plan->code;
         $item->PM           = $plan->PM;
+        $item->status       = $plan->status;
         $item->percent      = $plan->percent;
         $item->attribute    = $plan->attribute;
         $item->acl          = $plan->acl;
@@ -194,11 +239,12 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->desc         = $plan->desc;
         $item->setMilestone = isset($plan->setMilestone) ? $plan->setMilestone : false;
         $item->order        = $plan->order;
+        $item->parallel     = $plan->parallel;
+        $item->point        = implode(',', $points);
         if(in_array($config->edition, array('max', 'ipd')) && $executionType == 'stage')
         {
             $item->output = empty($plan->output) ? 0 : explode(',', $plan->output);
         }
-
         $items[] = $item;
     }
 
@@ -206,10 +252,17 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 };
 
 /* ZIN: layout. */
-jsVar('projectID', $project->id);
-jsVar('productID', $productID);
-jsVar('planID',    $planID);
-jsVar('type',      $executionType);
+jsVar('projectID',        $project->id);
+jsVar('productID',        $productID);
+jsVar('planID',           $planID);
+jsVar('type',             $executionType);
+jsVar('project',          $project);
+jsVar('plans',            $plans);
+jsVar('cropStageTip',     $lang->programplan->cropStageTip);
+jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
+jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
+jsvar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
+jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
 
 featureBar(li
 (
@@ -233,6 +286,10 @@ formBatchPanel
     set::onRenderRow(jsRaw('window.onRenderRow')),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
+    set::customUrlParams("module=programplan&section=$section&key=$customKey"),
     set::items($fnGenerateFields()),
-    set::data($fnGenerateDefaultData())
+    set::data($fnGenerateDefaultData()),
+    $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,
+    on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
+    ($project->model == 'ipd' && !$planID) ? set::maxRows(count($fnGenerateDefaultData())) : null,
 );

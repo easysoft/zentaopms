@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 su('admin');
 
-zdTable('project')->gen(50);
-zdTable('story')->gen(20);
-zdTable('bug')->gen(20);
+zenData('project')->gen(50);
+zenData('story')->gen(20);
+zenData('bug')->gen(20);
 
 /**
 
@@ -14,8 +14,8 @@ title=测试 screenModel->getchartoption();
 timeout=0
 cid=1
 
-- 测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。 @0
-- 测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。 @1
+- 测试type为pie的图表是否显示正确，生成的指标项是否正确和数据项是否正确。。 @1
+- 测试type为pie的图表是否显示正确，生成的数据项是否正确。 @1
 
 */
 

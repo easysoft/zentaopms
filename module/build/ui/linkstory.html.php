@@ -16,6 +16,8 @@ foreach($config->build->defaultFields['linkStory'] as $field) $cols[$field] = zg
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}&version=0&param={objectID}");
 $cols['title']['nestedToggle'] = false;
+$cols['title']['data-toggle']  = 'modal';
+$cols['title']['data-size']    = 'lg';
 $cols['assignedTo']['type']    = 'user';
 
 foreach($allStories as $story)

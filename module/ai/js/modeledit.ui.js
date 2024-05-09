@@ -36,6 +36,7 @@ const handleModelTypeChange = () =>
     $('select[name="vendor"]').trigger('chosen:updated');
     $('select[name="vendor"]').trigger('change');
 };
+handleModelTypeChange();
 
 const handleVendorChange = () =>
 {

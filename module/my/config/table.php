@@ -221,7 +221,7 @@ if($config->vision != 'lite')
 {
     $config->my->task->actionList['batchCreate']['icon']          = 'split';
     $config->my->task->actionList['batchCreate']['text']          = $lang->task->batchCreate;
-    $config->my->task->actionList['batchCreate']['hint']          = $lang->task->batchCreate;
+    $config->my->task->actionList['batchCreate']['hint']          = $lang->task->children;
     $config->my->task->actionList['batchCreate']['url']           = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'executionID={execution}&storyID={story}&moduleID={module}&taskID={id}iframe=true');
     $config->my->task->actionList['batchCreate']['data-toggle']   = 'modal';
     $config->my->task->actionList['batchCreate']['data-size']     = 'lg';
@@ -240,12 +240,14 @@ $config->my->task->dtable->fieldList['name']['type']         = 'title';
 $config->my->task->dtable->fieldList['name']['nestedToggle'] = true;
 $config->my->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'), 'data-app' => 'execution');
 $config->my->task->dtable->fieldList['name']['fixed']        = 'left';
+$config->my->task->dtable->fieldList['name']['data-toggle']  = 'modal';
+$config->my->task->dtable->fieldList['name']['data-size']    = 'lg';
 $config->my->task->dtable->fieldList['name']['sortType']     = true;
 
 $config->my->task->dtable->fieldList['pri']['name']     = 'pri';
 $config->my->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->my->task->dtable->fieldList['pri']['type']     = 'pri';
-$config->my->task->dtable->fieldList['pri']['map']      = $lang->task->priList;
+$config->my->task->dtable->fieldList['pri']['priList']  = $lang->task->priList;
 $config->my->task->dtable->fieldList['pri']['group']    = 'pri';
 $config->my->task->dtable->fieldList['pri']['sortType'] = true;
 
@@ -339,10 +341,11 @@ $config->my->requirement->actionList['review']['hint']        = $lang->story->re
 $config->my->requirement->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}&from=product&storyType=requirement');
 $config->my->requirement->actionList['review']['data-toggle'] = 'modal';
 
-$config->my->requirement->actionList['recall']['icon'] = 'undo';
-$config->my->requirement->actionList['recall']['text'] = $lang->story->recall;
-$config->my->requirement->actionList['recall']['hint'] = $lang->story->recall;
-$config->my->requirement->actionList['recall']['url']  = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}&from=list&confirm=no&storyType=requirement');
+$config->my->requirement->actionList['recall']['icon']      = 'undo';
+$config->my->requirement->actionList['recall']['text']      = $lang->story->recall;
+$config->my->requirement->actionList['recall']['hint']      = $lang->story->recall;
+$config->my->requirement->actionList['recall']['url']       = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}&from=list&confirm=no&storyType=requirement');
+$config->my->requirement->actionList['recall']['className'] = 'ajax-submit';
 
 $config->my->requirement->actionList['edit']['icon']        = 'edit';
 $config->my->requirement->actionList['edit']['text']        = $lang->story->edit;
@@ -427,10 +430,11 @@ $config->my->story->actionList['review']['hint']        = $lang->story->review;
 $config->my->story->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}');
 $config->my->story->actionList['review']['data-toggle'] = 'modal';
 
-$config->my->story->actionList['recall']['icon'] = 'undo';
-$config->my->story->actionList['recall']['text'] = $lang->story->recall;
-$config->my->story->actionList['recall']['hint'] = $lang->story->recall;
-$config->my->story->actionList['recall']['url']  = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}');
+$config->my->story->actionList['recall']['icon']      = 'undo';
+$config->my->story->actionList['recall']['text']      = $lang->story->recall;
+$config->my->story->actionList['recall']['hint']      = $lang->story->recall;
+$config->my->story->actionList['recall']['url']       = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}');
+$config->my->story->actionList['recall']['className'] = 'ajax-submit';
 
 $config->my->story->actionList['edit']['icon']        = 'edit';
 $config->my->story->actionList['edit']['text']        = $lang->story->edit;
@@ -793,6 +797,7 @@ $config->my->testtask->dtable->fieldList['title']['type']     = 'title';
 $config->my->testtask->dtable->fieldList['title']['link']     = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->my->testtask->dtable->fieldList['title']['fixed']    = 'left';
 $config->my->testtask->dtable->fieldList['title']['sortType'] = true;
+$config->my->testtask->dtable->fieldList['title']['data-app'] = 'qa';
 
 $config->my->testtask->dtable->fieldList['build']['name']     = 'buildName';
 $config->my->testtask->dtable->fieldList['build']['title']    = $lang->testtask->build;

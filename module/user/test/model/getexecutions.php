@@ -38,15 +38,15 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(3);
-zdTable('company')->gen(1);
+zenData('user')->gen(3);
+zenData('company')->gen(1);
 
 $yesterday = date('Y-m-d', strtotime('yesterday'));
 $tomorrow  = date('Y-m-d', strtotime('tomorrow'));
 
-$projectTable = zdTable('project');
+$projectTable = zenData('project');
 $projectTable->project->range('0-3{3}');
 $projectTable->type->range('project{3},sprint{3},stage{3},kanban{3}');
 $projectTable->name->range('项目1,项目2,项目3,执行1,执行2,执行3,阶段1,阶段2,阶段3,看板1,看板2,看板3');
@@ -55,13 +55,13 @@ $projectTable->status->range('wait{2},doing,suspended,closed');
 $projectTable->deleted->range('0');
 $projectTable->gen(10);
 
-$teamTable = zdTable('team');
+$teamTable = zenData('team');
 $teamTable->root->range('1-12');
 $teamTable->type->range('project{5},execution{20}');
 $teamTable->account->range('admin{12},user1{6}');
 $teamTable->gen(10);
 
-$table = zdTable('task');
+$table = zenData('task');
 $table->execution->range('4-10{5}');
 $table->parent->range('1,0{6}');
 $table->assignedTo->range('admin{2},user1{4}');

@@ -20,12 +20,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('project')->config('execution')->gen(1);
-zdTable('task')->config('task')->gen(5);
-zdTable('story')->gen(10);
-zdTable('projectproduct')->gen(20);
+zenData('project')->loadYaml('execution')->gen(1);
+zenData('task')->loadYaml('task')->gen(5);
+zenData('story')->gen(10);
+zenData('projectproduct')->gen(20);
 
 $actionTest = new actionTest();
 

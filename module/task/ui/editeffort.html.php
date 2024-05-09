@@ -12,11 +12,15 @@ declare(strict_types=1);
 namespace zin;
 
 $readonly = !$effort->isLast || (!empty($task->team) && $effort->left == 0);
+jsVar('isReadonly', $readonly);
+jsVar('finishTaskTip', $lang->task->confirmRecord);
 
 modalHeader(set::title($lang->task->editEffort));
 formPanel
 (
+    setID('editEffortForm'),
     set::shadow(!isAjaxRequest('modal')),
+    set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
     formGroup
     (
         set::width('1/3'),

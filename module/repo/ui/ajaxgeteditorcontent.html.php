@@ -67,7 +67,6 @@ elseif($suffix == 'binary')
 else
 {
     $options = array(
-        'value'                => $content,
         'language'             => $lang,
         'readOnly'             => true,
         'autoIndent'           => true,
@@ -75,15 +74,8 @@ else
         'automaticLayout'      => true,
         'EditorMinimapOptions' => array('enabled' => false)
     );
-    if($type == 'diff') $options = array(
-        'language'             => $lang,
-        'readOnly'             => true,
-        'autoIndent'           => true,
-        'contextmenu'          => true,
-        'automaticLayout'      => true,
-        'renderSideBySide'     => false,
-        'EditorMinimapOptions' => array('enabled' => false)
-    );
+    if($type == 'diff') $options['EditorMinimapOptions'] = array('enabled' => false);
+    if($type != 'diff') $options['value'] = $content;
     $wg = monaco
     (
         set::id('codeContainer'),
@@ -135,6 +127,7 @@ $relatedWg = div
         tabs
         (
             set::id('relationTabs'),
+            setClass('mt-1 ml-2'),
             tabPane
             (
                 set::key('tab1'),

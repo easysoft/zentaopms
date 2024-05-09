@@ -12,6 +12,15 @@ class searchToggle extends wg
         'searchUrl?: string'
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        .nav-item + li > .search-form-toggle {margin-left: 0.5rem}
+        .search-form-toggle.active,
+        .show-search-form #featureBar .search-form-toggle {--skin-text: var(--color-primary-500); --skin-ring: var(--color-primary-500)}
+        CSS;
+    }
+
     protected function checkErrors()
     {
         if($this->hasProp('formName')) trigger_error('[ZIN] The property "formName" is not supported in the "searchToggle()"', E_USER_WARNING);
@@ -27,18 +36,18 @@ class searchToggle extends wg
 
         if(isset($config->zin->mode) && $config->zin->mode == 'compatible')
         {
-            if(is_null($url))       $url       = createLink('search', 'buildZinForm', 'module=' . $this->prop('module'));
+            if(is_null($url))       $url       = createLink('search', 'buildZinForm', 'module=' . $module);
             if(is_null($searchUrl)) $searchUrl = createLink('search', 'buildZinQuery');
         }
 
         return btn
         (
-            set::className('ghost search-form-toggle'),
+            set::className('search-form-toggle rounded-full gray-300-outline size-sm'),
             set::icon('search'),
             set::active($open),
             set::text($lang->searchAB),
             toggle::searchform(array('module' => $module, 'target' => $target, 'url' => $url, 'searchUrl' => $searchUrl)),
-            $open ? on::inited()->call('zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => $open, 'url' => $url, 'searchUrl' => $searchUrl)) : null
+            $open ? on::init()->call('zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => $open, 'url' => $url, 'searchUrl' => $searchUrl)) : on::init()->do('$element.closest(".show-search-form").removeClass("show-search-form").find(".search-form[data-module=' . $module . ']").remove()')
         );
     }
 }

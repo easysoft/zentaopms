@@ -3,7 +3,15 @@ $(document).off('click', '#showTask').on('click', '#showTask', function()
     const show = $(this).is(':checked') ? 1 : 0;
     $.cookie.set('showTask', show, {expires:config.cookieLife, path:config.webRoot});
 
-    loadCurrentPage();
+    reloadPage();
+});
+
+$(document).off('click', '#showStage').on('click', '#showStage', function()
+{
+    const show = $(this).is(':checked') ? 1 : 0;
+    $.cookie.set('showStage', show, {expires:config.cookieLife, path:config.webRoot});
+
+    reloadPage();
 });
 
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
@@ -26,23 +34,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     }
 });
 
-/**
- * 提示并删除执行。
- * Delete execution with tips.
- *
- * @param  int    executionID
- * @param  string executionName
- * @access public
- * @return void
- */
-window.confirmDeleteExecution = function(executionID, confirmDeleteTip)
-{
-    zui.Modal.confirm({message: confirmDeleteTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
-    {
-        if(res) $.ajaxSubmit({url: $.createLink('execution', 'delete', 'executionID=' + executionID + '&comfirm=yes')});
-    });
-}
-
 const today = zui.formatDate(new Date(), 'yyyy-MM-dd');
 window.onRenderCell = function(result, {col, row})
 {
@@ -51,12 +42,14 @@ window.onRenderCell = function(result, {col, row})
         const executionLink = $.createLink('execution', 'task', `executionID=${row.data.rawID}`);
         const executionType = typeList[row.data.type];
         let executionName   = '';
+        if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale flex-none'>${executionType}</span> `;
 
-        if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale'>${executionType}</span> `;
-        executionName += (!row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
-        executionName += (row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1">${delayed}</span>` : '';
+        executionName += '<div class="ml-1 clip" style="width: max-content;">';
+        executionName += (executionType !== undefined && !row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
+        executionName += '</div>';
+        executionName += (row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1 flex-none">${delayed}</span>` : '';
 
-        result[result.length] = {html: executionName};
+        result.push({html: executionName, className: 'w-full flex items-center'});
         return result;
     }
     if(col.name == 'rawID' && row.data.parent) result[0] = '';
