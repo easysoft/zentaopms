@@ -1375,7 +1375,7 @@
             bodyWidth = $('body').width();
             maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
         }
-        if(!maxHeight) maxHeight = $(top.window).height();
+        if(!maxHeight) maxHeight = top.window.innerHeight;
 
         setTimeout(function()
         {
