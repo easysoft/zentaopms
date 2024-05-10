@@ -16,6 +16,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
+zenData('user')->gen(5);
 zenData('notify')->gen(0);
 
 $mail = new mailTest();
