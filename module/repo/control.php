@@ -1049,7 +1049,6 @@ class repo extends control
         $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
         $this->view->servers     = $serverList;
         $this->view->products    = $products;
-        $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
         $this->view->server      = $server;
         $this->view->repoList    = array_values($repoList);
         $this->view->hiddenRepos = explode(',', $hiddenRepos);
