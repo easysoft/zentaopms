@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'thinkradiolist' . DS . 'v1.php';
 class thinkRun extends wg
 {
     protected static array $defineProps = array(
@@ -23,8 +24,22 @@ class thinkRun extends wg
         $options = json_decode($item->options);
         $answer  = json_decode($item->answer);
 
-        // TODO: if($options->questionType == 'xxx')
-        
+        if($options->questionType == 'radio')
+        {
+            $fields     = explode(', ', $options->fields);
+            $showFields = array();
+            foreach($fields as $field) $showFields[] = array('text' => $field, 'value' => $field);
+
+            if($options->enableOther) $showFields[] = array('text' => $lang->thinkwizard->step->other, 'value' => isset($answer->other) ? $answer->other : '', 'isOther' => '1');
+
+            return new thinkRadioList
+            (
+                setClass('mt-6'),
+                set::items($showFields),
+                set::name('result'),
+                set::value(isset($answer->value) ? $answer->value : ''),
+            );
+        }
         return array();
     }
 
