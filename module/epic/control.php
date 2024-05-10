@@ -139,6 +139,56 @@ class epic extends control
     }
 
     /**
+     * 导入需求数据。
+     * Import the data of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function import($productID, $branch = 0, $storyType = 'epic', $projectID = 0)
+    {
+        echo $this->fetch('story', 'import', "productID=$productID&branch=$branch&storyType=epic&projectID=$projectID");
+    }
+
+    /**
+     * 显示导入需求数据的页面。
+     * Show the page of importing the data of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
+     * @param  int    $projectID
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @param  string $insert
+     * @access public
+     * @return void
+     */
+    public function showImport($productID, $branch = 0, $type = 'epic', $projectID = 0, $pagerID = 1, $maxImport = 0, $insert = '')
+    {
+        echo $this->fetch('story', 'showImport', "productID=$productID&branch=$branch&type=epic&projectID=$projectID&pagerID=$pagerID&maxImport=$maxImport&insert=$insert");
+    }
+
+    /**
+     * 导出需求模板。
+     * Export the template of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function exportTemplate($productID, $branch = 0, $storyType = 'epic')
+    {
+        echo $this->fetch('story', 'exportTemplate', "productID=$productID&branch=$branch&storyType=epic");
+    }
+
+    /**
      * Delete a epic.
      *
      * @param  int    $storyID

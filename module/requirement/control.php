@@ -118,6 +118,56 @@ class requirement extends control
     }
 
     /**
+     * 导入需求数据。
+     * Import the data of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function import($productID, $branch = 0, $storyType = 'requirement', $projectID = 0)
+    {
+        echo $this->fetch('story', 'import', "productID=$productID&branch=$branch&storyType=requirement&projectID=$projectID");
+    }
+
+    /**
+     * 显示导入需求数据的页面。
+     * Show the page of importing the data of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
+     * @param  int    $projectID
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @param  string $insert
+     * @access public
+     * @return void
+     */
+    public function showImport($productID, $branch = 0, $type = 'requirement', $projectID = 0, $pagerID = 1, $maxImport = 0, $insert = '')
+    {
+        echo $this->fetch('story', 'showImport', "productID=$productID&branch=$branch&type=requirement&projectID=$projectID&pagerID=$pagerID&maxImport=$maxImport&insert=$insert");
+    }
+
+    /**
+     * 导出需求模板。
+     * Export the template of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function exportTemplate($productID, $branch = 0, $storyType = 'requirement')
+    {
+        echo $this->fetch('story', 'exportTemplate', "productID=$productID&branch=$branch&storyType=requirement");
+    }
+
+    /**
      * Delete a requirement.
      *
      * @param  int    $storyID
