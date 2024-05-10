@@ -10,33 +10,42 @@ class thinkNode  extends wg
         'addType?: string',
     );
 
+    protected function buildQuestionBody(): array|wg
+    {
+        $item = $this->prop('item');
+        if(property_exists($item, 'questionType') && $item->questionType === 'input') return thinkInputDetail
+        (
+            set::item($item),
+            set::required($item->required)
+        );
+        if(property_exists($item, 'questionType') && $item->questionType === 'tableInput') return thinkTableInputDetail
+        (
+            set::item($item),
+            set::required($item->required),
+            set::rowsTitle(explode(', ', $item->fields)),
+        );
+        if(property_exists($item, 'questionType') && ($item->questionType === 'radio' || $item->questionType === 'checkbox')) return thinkOptionsDetail
+        (
+            set::item($item),
+            set::required($item->required),
+            set::enableOther($item->enableOther),
+            set::data(explode(', ', $item->fields)),
+        );
+        return array();
+
+    }
+
     protected function buildBody(): wg|array
     {
         list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
 
         if($action == 'detail')
         {
-            if(property_exists($item, 'questionType') && $item->questionType === 'input') return thinkInputDetail
-            (
-                set::item($item),
-                set::required($item->required)
-            );
-            if(property_exists($item, 'questionType') && $item->questionType === 'tableInput') return thinkTableInputDetail
-            (
-                set::item($item),
-                set::required($item->required),
-                set::rowsTitle(explode(', ', $item->fields)),
-            );
-            if(property_exists($item, 'questionType') && ($item->questionType === 'radio' || $item->questionType === 'checkbox')) return thinkOptionsDetail
-            (
-                set::item($item),
-                set::required($item->required),
-                set::enableOther($item->enableOther),
-                set::data(explode(', ', $item->fields)),
-            );
+
             return thinkStepDetail
             (
                 set::item($item),
+                $this->buildQuestionBody()
             );
         }
         else
@@ -107,7 +116,7 @@ class thinkNode  extends wg
         return array(
             div
             (
-                setClass('relative'),
+                setClass($action == 'detail' ? 'relative pt-6 px-8 mx-4' : 'relative'),
                 $action !== 'detail' ? array(
                     div
                     (
