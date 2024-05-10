@@ -44,13 +44,13 @@ class thinkNodeMenu extends wg
             $item = array(
                 'key'         => $setting->id,
                 'text'        => $setting->title,
-                'hint'        => $setting->type == 'question' && !$setting->answer ? $this->lang->thinkrun->error->unanswered :$setting->title,
-                'url'         => $setting->url,
+                'hint'        => $setting->type != 'node' && json_decode($setting->answer) == null ? $this->lang->thinkrun->error->unanswered :$setting->title,
+                'url'         => $setting->type != 'node' && json_decode($setting->answer) == null ? '' : $setting->url,
                 'data-id'     => $setting->id,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
                 'selected'    => $setting->id == $activeKey,
-                'disabled'    => $setting->type == 'question' && !$setting->answer,
+                'disabled'    => $setting->type != 'node' && json_decode($setting->answer) == null,
                 'actions'     => $this->prop('showAction') ? $this->getActions($setting) : null,
                 'data-wizard' => $setting->wizard,
             );
@@ -232,7 +232,7 @@ class thinkNodeMenu extends wg
                         )
                     ),
                     h::js("$('#mainContainer').addClass('has-sidebar');$('#mainContainer .sidebar').addClass('relative');")
-                ) : null,
+                ) : null
             ),
         );
     }
