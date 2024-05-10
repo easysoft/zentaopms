@@ -3539,6 +3539,7 @@ class commonModel extends model
         if(isonlybody()) return false;
 
         $moduleName = ($app->getModuleName() == 'story' and $app->tab == 'project') ? 'projectstory' : $app->getModuleName();
+        $methodName = $app->getMethodName();
         echo "<nav class='container'>";
         if(isset($preAndNext->pre) and $preAndNext->pre)
         {
@@ -3547,7 +3548,7 @@ class commonModel extends model
             $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
 
             $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->pre->type}" : '';
-            $link   = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}" . $params);
+            $link   = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, $methodName, "ID={$preAndNext->pre->$id}" . $params);
             $link  .= '#app=' . $app->tab;
             if(isset($preAndNext->pre->objectType) and $preAndNext->pre->objectType == 'doc')
             {
@@ -3564,7 +3565,7 @@ class commonModel extends model
             $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
             $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
             $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->next->type}" : '';
-            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}" . $params);
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, $methodName, "ID={$preAndNext->next->$id}" . $params);
             $link .= '#app=' . $app->tab;
             if(isset($preAndNext->next->objectType) and $preAndNext->next->objectType == 'doc')
             {
