@@ -260,7 +260,7 @@ class repo extends control
         $this->view->allRepos       = $this->repo->getRepoPairs('repo', 0, false);
         $this->view->repoID         = $repoID;
         $this->view->objectID       = $objectID;
-        $this->view->branches       = $this->scm->branch();
+        $this->view->fromList       = $this->repoZen->getBranchAndTagOptions($this->scm);
         $this->view->objectType     = $objectType;
         $this->view->canCreate      = $canCreate;
         $this->display();
