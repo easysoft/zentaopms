@@ -21,7 +21,7 @@ class thinkStepDetail extends wg
         (
             div
             (
-                setClass('flex items-start justify-between pt-6 pb-2 px-8 mx-4'),
+                setClass('flex items-start justify-between pb-2'),
                 div
                 (
                     setClass('text-md leading-6 font-medium text-current'),
@@ -60,12 +60,12 @@ class thinkStepDetail extends wg
             ),
             div
             (
-                setClass('text-sm leading-6 py-0 px-8 mx-4 text-opacity-60 text-fore text-sm'),
+                setClass('text-sm leading-6 py-0 text-opacity-60 text-fore text-sm'),
                 setStyle(array('margin-top' => '-30px')),
                 section
                 (
                     setClass('break-words'),
-                    set::content($item->desc),
+                    set::content(htmlspecialchars_decode($item->desc)),
                     set::useHtml(true)
                 )
             )
