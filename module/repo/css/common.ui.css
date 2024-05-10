@@ -57,3 +57,5 @@
 #mainMenu + #mainContent > .repo-sidebar {margin-top: 0;}
 #monacoTabs .menu-item > a, #monacoEditor .menu-item > a {justify-content: start;}
 .codicon-light-bulb.lightbulb-glyph {display: none;}
+
+span.menu-toggle.nested-toggle-icon.is-empty {width: 0.1rem;}
