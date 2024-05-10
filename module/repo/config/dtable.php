@@ -247,6 +247,7 @@ $config->repo->reviewDtable->fieldList['fileLocation']['width'] = '300';
 $config->repo->reviewDtable->fieldList['revisionA']['name']  = 'revisionA';
 $config->repo->reviewDtable->fieldList['revisionA']['width'] = '100';
 $config->repo->reviewDtable->fieldList['revisionA']['hint']  = true;
+$config->repo->reviewDtable->fieldList['revisionA']['link']  = array('module' => 'repo', 'method' => 'revision', 'params' => 'repoID={repo}&objectID=0&revision={v2}');
 
 $config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
 $config->repo->reviewDtable->fieldList['type']['name'] = 'repoType';
