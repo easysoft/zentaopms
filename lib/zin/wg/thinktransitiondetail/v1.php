@@ -11,6 +11,14 @@ class thinkTransitionDetail extends wg
     protected static array $defineProps = array(
         'item: object',
     );
+
+    public static function getPageCSS(): ?string
+    {
+        return <<<CSS
+        .run-desc * {font-size: 16px !important;}
+        CSS;
+    }
+
     protected function build()
     {
         global $lang;
@@ -29,7 +37,7 @@ class thinkTransitionDetail extends wg
                     setStyle(array('min-width' => '643px')),
                     div
                     (
-                        setClass('text-xl'),
+                        setClass('text-xl mb-3'),
                         !empty($options->required) ? span(setClass('text-danger mr-0.5'), '*') : null,
                         $item->title,
                         isset($options->questionType) && !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
@@ -41,7 +49,7 @@ class thinkTransitionDetail extends wg
                 ),
                 div
                 (
-                    setClass('text-lg'),
+                    setClass('text-lg run-desc'),
                     setStyle(array('margin-top' => '-18px')),
                     section
                     (
