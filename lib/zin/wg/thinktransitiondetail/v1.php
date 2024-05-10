@@ -40,7 +40,13 @@ class thinkTransitionDetail extends wg
                         setClass('text-xl mb-3'),
                         !empty($options->required) ? span(setClass('text-danger mr-0.5'), '*') : null,
                         $item->title,
-                        isset($options->questionType) && !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
+                        !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
+                        !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
+                        (
+                            setClass('run-error-msg inline-block text-canvas text-md px-2 ml-0.5 rounded-md hidden'),
+                            setStyle('background', 'var(--color-danger-600)'),
+                            $lang->thinkrun->error->requiredType[$options->questionType]
+                        ) : null,
                     ),
                 ) : div
                 (
