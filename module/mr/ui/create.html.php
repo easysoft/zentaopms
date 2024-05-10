@@ -41,7 +41,9 @@ formPanel
 (
     set::title($lang->mr->create),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
-    count($repoPairs) > 1 ? to::titleSuffix(
+    count($repoPairs) > 1 ? formGroup(
+        set::label($lang->repo->common),
+        set::width('1/2'),
         picker
         (
             setClass('font-normal w-36'),
