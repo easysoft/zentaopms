@@ -30,7 +30,7 @@ class thinkRun extends wg
             $showFields = array();
             foreach($fields as $field) $showFields[] = array('text' => $field, 'value' => $field);
 
-            if($options->enableOther) $showFields[] = array('text' => $lang->thinkwizard->step->other, 'value' => isset($answer->other) ? $answer->other : '', 'isOther' => '1');
+            if($options->enableOther) $showFields[] = array('text' => $lang->thinkwizard->step->other, 'value' => 'other', 'isOther' => '1', 'showText' => isset($answer->other) ? $answer->other : '');
 
             return new thinkRadioList
             (

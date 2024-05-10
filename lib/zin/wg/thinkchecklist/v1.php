@@ -73,7 +73,7 @@ class thinkCheckList extends wg
                         set(array(
                             'rows'     => 1,
                             'disabled' => !isset($item['checked']) || !$item['checked'],
-                            'name'     => isset($item['value']) ? $item['value'] : 'other',
+                            'name'     => 'other',
                             'value'    => isset($item['showText']) ? $item['showText'] : ''
                         )),
                         on::input('inputOther'),
