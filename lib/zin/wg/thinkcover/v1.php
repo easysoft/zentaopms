@@ -71,7 +71,7 @@ class thinkCover extends wg
 
         return div
         (
-            setClass('py-3 fixed bottom-0 flex justify-center bg-white toolbar-btn'),
+            setClass('py-3 fixed bottom-0 flex justify-center bg-white toolbar-btn border-t border-gray-100'),
             a
             (
                 setClass('btn primary px-8 py-2'),
