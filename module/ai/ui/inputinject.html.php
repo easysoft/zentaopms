@@ -95,7 +95,7 @@ $auditInject = function() use($module, $method)
         const publishButton = document.getElementById('promptPublish');
         if(publishButton)
         {
-            publishButton.addEventListener('click', e =>
+            $(document).off('click', '#promptPublish').on('click', '#promptPublish', function(e)
             {
                 e.preventDefault();
 
@@ -108,13 +108,13 @@ $auditInject = function() use($module, $method)
                 publishLink.click();
 
                 /* TODO: find a way to close app. */
-                // if($.appCode !== 'admin') $.apps.close($.appCode);
+                if($.apps.currentCode != 'admin') $.apps.closeApp($.apps.currentCode);
             });
         }
         const auditExitButton = document.getElementById('promptAuditExit');
         if(auditExitButton)
         {
-            auditExitButton.addEventListener('click', e =>
+            $(document).off('click', '#promptAuditExit').on('click', '#promptAuditExit', function(e)
             {
                 e.preventDefault();
 
