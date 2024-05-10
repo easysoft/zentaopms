@@ -878,7 +878,7 @@ class userModel extends model
         $user = $this->identifyUser($account, $password);
         if(!$user) return false;
 
-        $ip   = substr(helper::getRemoteIp(), 0, 15);
+        $ip   = helper::getRemoteIp();
         $last = $this->server->request_time;
         $user = $this->checkNeedModifyPassword($user, $passwordStrength);
 
