@@ -415,4 +415,16 @@ class job extends control
         if($isAjax) return $this->send(array('result' => 'success', 'data' => $options));
         return $options;
     }
+
+    /**
+     * AJAX: Import the pipeline from Pipeline Server into ZenTaoPMS
+     *
+     * @param  string|int $repoID
+     * @return void
+     */
+    public function ajaxImportJobs(string|int $repoID)
+    {
+        if($this->job->import($repoID)) $this->sendSuccess();
+        $this->sendError('fail');
+    }
 }
