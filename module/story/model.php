@@ -4189,7 +4189,7 @@ class storyModel extends model
 
         /* Get related objects title or names. */
         $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-        $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($storyIdList)->fetchPairs('id', 'title');
+        $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($storyIdList)->andWhere('deleted')->eq('0')->fetchPairs('id', 'title');
 
         $fileIdList = array();
         foreach($relatedSpecs as $relatedSpec)
@@ -4244,7 +4244,7 @@ class storyModel extends model
             {
                 $tmpChildStories = array();
                 $childStoriesIdList = explode(',', $story->childStories);
-                foreach($childStoriesIdList as $childStoryID) $tmpChildStories[] = zget($relatedStories, trim($childStoryID));
+                foreach($childStoriesIdList as $childStoryID) $tmpChildStories[] = zget($relatedStories, trim($childStoryID), '');
                 $story->childStories = implode("; \n", array_filter($tmpChildStories));
             }
 
