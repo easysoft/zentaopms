@@ -320,12 +320,6 @@ class router extends baseRouter
         $lang->SRCommon = '';
         if($this->dbh and !empty($this->config->db->name))
         {
-            $productProject = $this->dbQuery('SELECT `value` FROM ' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
-            if(is_string($productProject))
-            {
-                list($productCommon, $projectCommon) = explode('_', $productProject);
-                $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
-            }
             if(!$this->upgrading)
             {
                 /* Get story concept in project and product. */
