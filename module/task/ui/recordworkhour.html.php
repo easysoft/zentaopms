@@ -147,7 +147,7 @@ if(!$this->task->canOperateEffort($task))
     }
     elseif($task->assignedTo != $app->user->account and $task->mode == 'linear')
     {
-        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts));
+        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . zget($users, $task->assignedTo, '') . '</strong>', $lang->task->logEfforts));
     }
 
     div
