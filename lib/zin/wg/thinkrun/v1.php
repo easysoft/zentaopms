@@ -8,6 +8,13 @@ class thinkRun extends wg
         'item: object', // 模型信息
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<CSS
+        .think-run-form, .think-run-form .panel-body, .think-run-form.size-lg .panel-body {padding: 0;}
+        CSS;
+    }
+
     protected function buildQuestion():array|wg
     {
         global $lang;
@@ -29,7 +36,12 @@ class thinkRun extends wg
             thinktransitiondetail
             (
                 set::item($item),
-                $item->type == 'question' ? $this->buildQuestion() : null
+                formPanel
+                (
+                    setClass('think-run-form'),
+                    set::actions(array()),
+                    $item->type == 'question' ? $this->buildQuestion() : null
+                )
             ),
             $this->children()
         );
