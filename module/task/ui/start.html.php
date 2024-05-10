@@ -19,7 +19,14 @@ if($task->mode == 'linear')
 {
     $assignedToControl = inputGroup(
         set::className('no-background'),
-        zget($members, $assignedTo),
+        picker
+        (
+            set::name('assignedTo'),
+            set::items($users),
+            set::value($assignedTo),
+            set::required(true),
+            set::disabled(true)
+        ),
         input
         (
             set::className('hidden'),
@@ -44,7 +51,7 @@ if(!$canRecordEffort)
 {
     if($task->assignedTo != $app->user->account && $task->mode == 'linear')
     {
-        $deniedNotice = sprintf($lang->task->deniedNotice, $task->assignedToRealName, $lang->task->start);
+        $deniedNotice = sprintf($lang->task->deniedNotice, zget($users, $task->assignedTo), $lang->task->start);
     }
     else
     {
