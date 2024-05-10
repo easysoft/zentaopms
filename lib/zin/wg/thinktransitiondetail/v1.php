@@ -43,7 +43,7 @@ class thinkTransitionDetail extends wg
                         !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
                         !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
                         (
-                            setClass('run-error-msg inline-block text-canvas text-md px-2 ml-0.5 rounded-md hidden'),
+                            setClass('run-error-msg h-5 inline-block text-canvas text-md px-2 ml-0.5 rounded-md hidden'),
                             setStyle('background', 'var(--color-danger-600)'),
                             $lang->thinkrun->error->requiredType[$options->questionType]
                         ) : null,
