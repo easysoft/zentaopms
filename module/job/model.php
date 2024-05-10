@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package     job
  * @version     $Id$
  * @link        https://www.zentao.net
+ * @property    jobTao $jobTao
  */
 class jobModel extends model
 {
@@ -577,5 +578,51 @@ class jobModel extends model
     public function updateLastTag(int $jobID, string $lastTag): void
     {
         $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($jobID)->exec();
+    }
+
+    /**
+     * 通过代码库ID导入该代码库的流水线。
+     * Import the pipeline of the repository with the repoID.
+     *
+     * @param  mixed $repoID
+     * @return bool
+     */
+    public function import(string|int $repoID)
+    {
+        $repo = $this->loadModel('repo')->getByID((int)$repoID);
+        if(!in_array($repo->SCM, array('Gitlab', 'GitFox'))) return false;
+
+        $pipelines = $this->loadModel(strtolower($repo->SCM))->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
+        if(!is_array($pipelines) or empty($pipelines)) return false;
+
+        $job = new stdclass;
+        $job->name      = $repo->name;
+        $job->repo      = $repoID;
+        $job->product   = $repo->product;
+        $job->engine    = strtolower($repo->SCM);
+        $job->server    = $repo->serviceHost;
+        $job->createdBy = $this->app->user->account;
+
+        $addedPipelines = array();
+        foreach($pipelines as $pipeline)
+        {
+            if(!empty($pipeline->disabled)) continue;
+
+            $job->pipeline = json_encode(array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch));
+
+            $hash = md5($job->pipeline);
+            if(isset($addedPipelines[$hash])) continue;
+            $addedPipelines[] = $hash;
+
+            $this->dao->insert(TABLE_JOB)->data($job)
+            ->batchCheck($this->config->job->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+            if(dao::isError()) return false;
+
+            $this->loadModel('action')->create('job', $this->dao->lastInsertId(), 'imported');
+        }
+
+        return true;
     }
 }
