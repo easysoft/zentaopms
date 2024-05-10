@@ -448,9 +448,13 @@ class dom
         $tips = array();
         foreach($this->element as $element)
         {
+            $text = $element->getText();
+            if(!$text) continue;
+
             $id = $element->getAttribute('id');
+            $tips[$id] = $text;
+
             $value = $element->getAttribute('value');
-            $tips[$id] = $element->getText();
             if($value) $tips[$id] .= '|' . $value;
         }
 
