@@ -119,7 +119,7 @@ class mail extends control
             if($mailConfig->turnon)
             {
                 $mailExist = !empty($this->mail->mailExist());
-                return $this->sendSuccess(array('callback' => "window.mailTips({$mailExist})"));
+                return $this->send(array('result' => 'success', 'callback' => "window.mailTips({$mailExist})"));
             }
         }
         return $this->sendSuccess(array('load' => inLink('detect')));
