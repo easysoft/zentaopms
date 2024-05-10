@@ -64,7 +64,7 @@ formPanel
     (
         set::width('1/2'),
         set::readonly(true),
-        set::label($lang->mr->sourceProject),
+        set::label($lang->repo->common),
         set::name('sourceProject'),
         set::id('sourceProject'),
         set::items($projectItem),
