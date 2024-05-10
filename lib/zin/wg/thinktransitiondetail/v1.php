@@ -13,7 +13,10 @@ class thinkTransitionDetail extends wg
     );
     protected function build()
     {
-        $item = $this->prop('item');
+        global $lang;
+
+        $item    = $this->prop('item');
+        $options = json_decode($item->options);
         return div
         (
             setClass('flex bg-white px-8 w-full items-center w-full justify-center pt-10 pb-10 mb-4'),
@@ -21,8 +24,17 @@ class thinkTransitionDetail extends wg
             (
                 setClass('px-4 mt-10'),
                 setStyle(array('max-width' => '878px')),
-                $item->type == 'question' ? setStyle(array('min-width' => '643px')) : null,
-                div
+                $item->type == 'question' ? array
+                (
+                    setStyle(array('min-width' => '643px')),
+                    div
+                    (
+                        setClass('text-xl'),
+                        !empty($options->required) ? span(setClass('text-danger mr-0.5'), '*') : null,
+                        $item->title,
+                        isset($options->questionType) && !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
+                    ),
+                ) : div
                 (
                     setClass('text-2xl'),
                     $item->title
