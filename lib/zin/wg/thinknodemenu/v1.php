@@ -43,7 +43,7 @@ class thinkNodeMenu extends wg
         {
             if(!is_object($setting)) continue;
 
-            $unClickable = $toggleNonNodeShow && $setting->type != 'node' && json_decode($setting->answer) == null;
+            $unClickable = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
             $item        = array(
                 'key'         => $setting->id,
                 'text'        => $setting->title,
