@@ -516,7 +516,7 @@ class productplan extends control
         /* Update the story order according to the plan. */
         $this->loadModel('story')->sortStoriesOfPlan($planID, $storyIdList, $this->post->orderBy, $this->post->pageID, $this->post->recPerPage);
 
-        return $this->sendSuccess();
+        return $this->send(array('result' => 'success'));
     }
 
     /**
