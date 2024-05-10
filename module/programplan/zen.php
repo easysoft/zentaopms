@@ -187,6 +187,7 @@ class programplanZen extends programplan
             }
         }
 
+        if(dao::isError()) return false;
         /* 如果是调研阶段，设置默认值。*/
         /* If it is research stage, set default value. */
         if($project->model == 'research')

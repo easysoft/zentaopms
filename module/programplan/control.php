@@ -175,6 +175,9 @@ class programplan extends control
                 if($parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;
             }
 
+            if(empty($plan->realBegan)) $plan->realBegan = null;
+            if(empty($plan->realEnd))   $plan->realEnd   = null;
+
             $plan = $this->programplanZen->prepareEditPlan($planID, $projectID, $plan, isset($parentStage) ? $parentStage : null);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
