@@ -70,6 +70,7 @@ class bugTao extends bugModel
             ->beginIF($browseType == 'toclosed')->andWhere('status')->eq('resolved')->fi()
             ->beginIF($browseType == 'postponedbugs')->andWhere('resolution')->eq('postponed')->fi()
             ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+            ->beginIF($browseType == 'feedback')->andWhere('feedback')->ne('0')->fi()
 
             ->beginIF($browseType == 'longlifebugs')
             ->andWhere('lastEditedDate')->lt($lastEditedDate)
