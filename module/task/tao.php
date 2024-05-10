@@ -814,8 +814,7 @@ class taskTao extends taskModel
             if($change['field'] == 'status' && $change['new'] == 'done')
             {
                 $confirmURL = helper::createLink('bug', 'view', "id={$task->fromBug}");
-                $cancelURL  = helper::createLink('task', 'view', "taskID={$task->id}");
-                return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->remindBug, $task->fromBug), 'confirmed' => $confirmURL, 'canceled' => $cancelURL), 'closeModal' => true);
+                return array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "').then((res) => {if(res) loadModal('{$confirmURL}')});", 'closeModal' => true);
             }
         }
 

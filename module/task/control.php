@@ -604,7 +604,7 @@ class task extends control
 
             /* Update other data related to the task after it is started. */
             $result = $this->task->afterStart($task, $changes, 0, $output);
-            if(is_array($result)) $this->send($result);
+            if(is_array($result)) return $this->send($result);
 
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
