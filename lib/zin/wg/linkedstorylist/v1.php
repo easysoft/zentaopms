@@ -10,7 +10,6 @@ class linkedStoryList extends storyList
     protected static array $defineProps = array
     (
         'story'          => '?object',      // 被关联的需求。
-        'relationType'   => '?string',      // 关联类型。
         'unlinkBtn'      => '?array|bool',  // 取消关联按钮。
         'unlinkStoryTip' => '?string',      // 取消关联提示信息。
         'unlinkUrl'      => '?string',      // 取消关联需求链接
@@ -42,20 +41,11 @@ class linkedStoryList extends storyList
 
     protected null|array|bool $unlinkBtn = null;
 
-    protected ?string $relationType = null;
-
     protected function beforeBuild()
     {
         $story = $this->prop('story');
         if(!$story) $story = data('story');
         if(!$story) return;
-
-        $relationType = $this->prop('relationType');
-        if(!$relationType) $relationType = $story->type == 'story' ? 'requirement' : 'story';
-
-        $viewUrl = $this->prop('viewUrl');
-        if($viewUrl === null) $viewUrl = hasPriv($relationType, 'view', null, "storyType=$relationType");
-        if($viewUrl === true) $viewUrl = createLink('story', 'view', "id={id}&version=0&param=0&storyType=$relationType");
 
         $unlinkUrl = $this->prop('unlinkUrl');
         if($unlinkUrl === null) $unlinkUrl = createLink('story', 'linkStory', "storyID={$story->id}&type=remove&linkedID={id}&browseType=&queryID=0&storyType=$story->type");
@@ -64,11 +54,9 @@ class linkedStoryList extends storyList
         $unlinkBtn = $this->prop('unlinkBtn');
         if($unlinkBtn === null)  $unlinkBtn = $canLink;
 
-        $this->story        = $story;
-        $this->relationType = $relationType;
-        $this->viewUrl      = $viewUrl;
-        $this->unlinkUrl    = $unlinkUrl;
-        $this->unlinkBtn    = $unlinkBtn;
+        $this->story     = $story;
+        $this->unlinkUrl = $unlinkUrl;
+        $this->unlinkBtn = $unlinkBtn;
     }
 
     protected function getItem(object $story): array
@@ -90,7 +78,7 @@ class linkedStoryList extends storyList
                 'data-url'    => str_replace('{id}', "$story->id", $this->unlinkUrl),
                 'data-params' => 'event',
                 'data-call'   => 'unlinkStory',
-                'hint'        => $story->type == 'requirement' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory
+                'hint'        => $lang->story->unlink
             );
 
             if(is_array($unlinkBtn)) $btn = array_merge($btn, $unlinkBtn);

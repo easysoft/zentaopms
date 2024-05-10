@@ -44,10 +44,7 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        /* Get relation story ID.*/
-        $story->relationStoryID = $this->getRelationStoryID($story->id, $story->type);
-
-        $storyIdList = $storyID . ($story->relationStoryID ? "," . trim($story->relationStoryID, ',') : '') . ($story->twins ? "," . trim($story->twins, ',') : '');
+        $storyIdList = $storyID . ($story->twins ? "," . trim($story->twins, ',') : '');
         $story->executions = $this->dao->select('t1.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
@@ -84,22 +81,6 @@ class storyModel extends model
 
         $extraStories = array_unique($extraStories);
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
-
-        $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
-        if($story->{$linkStoryField})
-        {
-            $multiBranches = $this->loadModel('branch')->getAllPairs('noproductname');
-            $multiProducts = $this->loadModel('product')->getMultiBranchPairs();
-            $linkStoryList = $this->dao->select('id,title,product,branch,status')->from(TABLE_STORY)->where('id')->in($story->{$linkStoryField})->fetchAll('id');
-            $linkStoryTitles = array();
-            foreach($linkStoryList as $linkStory)
-            {
-                $linkStoryTitles[$linkStory->id] = $linkStory->title;
-                if(isset($multiProducts[$linkStory->product]) && isset($multiBranches[$linkStory->branch])) $linkStory->branchName = $multiBranches[$linkStory->branch];
-            }
-            $story->linkStoryList   = $linkStoryList;
-            $story->linkStoryTitles = $linkStoryTitles;
-        }
 
         $story->openedDate     = helper::isZeroDate($story->openedDate)     ? '' : substr($story->openedDate,     0, 19);
         $story->assignedDate   = helper::isZeroDate($story->assignedDate)   ? '' : substr($story->assignedDate,   0, 19);
@@ -224,24 +205,6 @@ class storyModel extends model
         }
 
         return $story;
-    }
-
-    /**
-     * 获取用户需求细分的软件需求。
-     * Get relation story ID.
-     *
-     * @param  int    $storyID
-     * @param  string $storyType
-     * @access public
-     * @return string
-     */
-    public function getRelationStoryID(int $storyID, string $storyType = 'requirement'): string
-    {
-        $relationStoryIdList = array();
-        $relationStoryList   = $this->getStoryRelation($storyID, $storyType);
-        foreach($relationStoryList as $relationStory) $relationStoryIdList[$relationStory->id] = $relationStory->id;
-
-        return implode(',', $relationStoryIdList);
     }
 
     /**

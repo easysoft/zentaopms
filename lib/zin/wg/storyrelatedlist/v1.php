@@ -35,7 +35,6 @@ class storyRelatedList extends relatedList
         $cases         = $this->prop('cases', data('cases'));
         $builds        = $this->prop('builds', data('builds'));
         $releases      = $this->prop('releases', data('releases'));
-        $storyProducts = $this->prop('storyProducts', data('storyProducts'));
         $linkedMRs     = $this->prop('linkedMRs', data('linkedMRs'));
         $linkedCommits = $this->prop('linkedCommits', data('linkedCommits'));
         $data          = array();
@@ -89,26 +88,6 @@ class storyRelatedList extends relatedList
                 'props' => array('data-app' => $tab)
             );
         }
-
-        $data['story'] = array
-        (
-            'title'      => $lang->story->linkStories,
-            'items'      => isset($story->linkStoryList) ? $story->linkStoryList : array(),
-            'url'        => false,
-            'statusList' => $lang->story->statusList,
-            'onRender' => function($item, $linkedStory) use($storyProducts, $story, $app)
-            {
-                $storyID = $linkedStory->id;
-                $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$story->id]},"));
-                $item['url'] = $hasPriv ? createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type") : false;
-                if($hasPriv)
-                {
-                    $item['data-toggle'] = 'modal';
-                    $item['data-size']   = 'lg';
-                }
-                return $item;
-            }
-        );
 
         if($isStoryType && helper::hasFeature('devops'))
         {
