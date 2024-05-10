@@ -26,7 +26,7 @@ class thinkRun extends wg
 
         if($options->questionType == 'radio')
         {
-            $fields     = explode(', ', $options->fields);
+            $fields     = $options->fields ? explode(', ', $options->fields) : array();
             $showFields = array();
             foreach($fields as $field) $showFields[] = array('text' => $field, 'value' => $field);
 
@@ -37,7 +37,7 @@ class thinkRun extends wg
                 setClass('mt-6'),
                 set::items($showFields),
                 set::name('result'),
-                set::value(isset($answer->value) ? $answer->value : ''),
+                set::value(isset($answer->result) ? $answer->result : ''),
             );
         }
         return array();
