@@ -16,7 +16,7 @@ class thinkTransitionDetail extends wg
         $item = $this->prop('item');
         return div
         (
-            setClass('flex bg-white px-8 w-full items-center w-full justify-center pt-10 pb-6'),
+            setClass('flex bg-white px-8 w-full items-center w-full justify-center pt-10 pb-10 mb-4'),
             div
             (
                 setClass('px-4 mt-10'),
@@ -34,7 +34,7 @@ class thinkTransitionDetail extends wg
                     section
                     (
                         setClass('break-words'),
-                        set::content($item->desc),
+                        set::content(htmlspecialchars_decode($item->desc)),
                         set::useHtml(true)
                     )
                 ),
