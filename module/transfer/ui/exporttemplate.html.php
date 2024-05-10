@@ -24,6 +24,15 @@ form
         set::type('number'),
         set::value(10)
     ),
+    !empty($isProjectStory) ? formGroup
+    (
+        set::label($lang->story->type),
+        set::name('storyType'),
+        set::required(true),
+        set::control('picker'),
+        set::value('story'),
+        set::items($typeList)
+    ) : null,
     formGroup
     (
         set::label($lang->file->extension),
