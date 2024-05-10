@@ -165,7 +165,7 @@ class repo extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link, 'callback' => "importJob($repoID)"));
         }
 
         $this->commonAction(0, $objectID);
