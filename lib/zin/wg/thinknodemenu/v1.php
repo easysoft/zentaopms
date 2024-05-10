@@ -13,6 +13,7 @@ class thinkNodeMenu extends wg
         'activeKey?: int',
         'hover?: bool=true',
         'showAction?: bool=true',
+        'toggleNonNodeShow?: bool=false',
         'checkbox?: bool',
         'preserve?: string|bool',
         'checkOnClick?: bool|string',
@@ -35,22 +36,24 @@ class thinkNodeMenu extends wg
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
-        $activeKey   = $this->prop('activeKey');
-        $parentItems = array();
+        $activeKey         = $this->prop('activeKey');
+        $toggleNonNodeShow = $this->prop('toggleNonNodeShow');
+        $parentItems       = array();
         foreach($items as $setting)
         {
             if(!is_object($setting)) continue;
 
-            $item = array(
+            $unClickable = $toggleNonNodeShow && $setting->type != 'node' && json_decode($setting->answer) == null;
+            $item        = array(
                 'key'         => $setting->id,
                 'text'        => $setting->title,
-                'hint'        => $setting->type != 'node' && json_decode($setting->answer) == null ? $this->lang->thinkrun->error->unanswered :$setting->title,
-                'url'         => $setting->type != 'node' && json_decode($setting->answer) == null ? '' : $setting->url,
+                'hint'        => $unClickable ? $this->lang->thinkrun->error->unanswered :$setting->title,
+                'url'         => $unClickable ? '' : $setting->url,
                 'data-id'     => $setting->id,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
                 'selected'    => $setting->id == $activeKey,
-                'disabled'    => $setting->type != 'node' && json_decode($setting->answer) == null,
+                'disabled'    => $unClickable,
                 'actions'     => $this->prop('showAction') ? $this->getActions($setting) : null,
                 'data-wizard' => $setting->wizard,
             );
@@ -217,7 +220,6 @@ class thinkNodeMenu extends wg
                 ),
                 $isInSidebar ? array
                 (
-
                     $this->buildActions(),
                     row
                     (
