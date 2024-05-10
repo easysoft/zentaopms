@@ -159,8 +159,6 @@ class programplan extends control
             if(!empty($this->config->setCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false) $this->config->programplan->form->edit['code']['required'] = true;
 
             $plan = form::data()->get();
-            if(empty($plan->realBegan)) $plan->realBegan = null;
-            if(empty($plan->realEnd))   $plan->realEnd   = null;
 
             /* 设置计划和真实起始日期间隔时间。 */
             /* Set planDuration and realDuration. */
@@ -177,10 +175,10 @@ class programplan extends control
                 if($parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;
             }
 
-            $this->programplanZen->prepareEditPlan($planID, $projectID, $plan, isset($parentStage) ? $parentStage : null);
+            $plan = $this->programplanZen->prepareEditPlan($planID, $projectID, $plan, isset($parentStage) ? $parentStage : null);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $changes = $this->programplan->update($planID, $projectID, $plan);
+            $this->programplan->update($planID, $projectID, $plan);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newPlan = $this->programplan->fetchByID($planID);
@@ -189,6 +187,8 @@ class programplan extends control
                 $this->programplan->computeProgress($planID, 'edit');
                 $this->programplan->computeProgress($plan->parent, 'edit', true);
             }
+
+            if($this->app->rawModule == 'marketresearch') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->marketstageList));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage', 'closeModal' => true));
         }
 

@@ -146,14 +146,14 @@ class programplanZen extends programplan
      * 处理编辑阶段的请求数据。
      * Processing edit request data.
      *
-     * @param  int         $planID
-     * @param  int         $projectID
-     * @param  object      $plan
-     * @param  object|null $parentStage
+     * @param  int          $planID
+     * @param  int          $projectID
+     * @param  object       $plan
+     * @param  object|null  $parentStage
      * @access protected
-     * @return bool
+     * @return object|false
      */
-    protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): bool
+    protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): object|false 
     {
         if($plan->parent)
         {
@@ -166,9 +166,10 @@ class programplanZen extends programplan
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
         if(dao::isError()) return false;
 
+        $project = $this->loadModel('project')->getById($projectID);
+        $oldPlan = $this->programplan->getByID($planID);
         if(!empty($this->config->setPercent))
         {
-            $oldPlan = $this->programplan->getByID($planID);
             if($plan->parent > 0)
             {
                 $childrenTotalPercent = $this->programplan->getTotalPercent($parentStage, true);
@@ -186,7 +187,16 @@ class programplanZen extends programplan
             }
         }
 
-        return !dao::isError();
+        /* 如果是调研阶段，设置默认值。*/
+        /* If it is research stage, set default value. */
+        if($project->model == 'research')
+        {
+            $plan->acl       = $oldPlan->acl;
+            $plan->attribute = $oldPlan->attribute;
+            $plan->milestone = $oldPlan->milestone;
+        }
+
+        return $plan;
     }
 
     /**
@@ -209,7 +219,7 @@ class programplanZen extends programplan
         $this->view->isCreateTask       = $this->programplan->isCreateTask($plan->id);
         $this->view->plan               = $plan;
         $this->view->project            = $this->project->getByID($plan->project);
-        $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $plan->id, $plan->product);
+        $this->view->parentStageList    = $this->programplan->getParentStageList($plan->project, $plan->id, $plan->product);
         $this->view->enableOptionalAttr = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
         $this->view->isTopStage         = $this->programplan->isTopStage($plan->id);
         $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);

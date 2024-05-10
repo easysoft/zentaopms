@@ -74,7 +74,7 @@ formPanel
             set::value($plan->PM),
         )
     ),
-    isset($config->setPercent) && $config->setPercent == 1 ? formGroup
+    isset($config->setPercent) && $config->setPercent == 1 && $project->model != 'research' ? formGroup
     (
         set::label($lang->programplan->percent),
         set::width('2/3'),
@@ -85,7 +85,7 @@ formPanel
             set::suffixWidth('lg')
         )
     ): null,
-    formRow
+    $project->model != 'research' ? formRow
     (
         formGroup
         (
@@ -115,7 +115,7 @@ formPanel
                 setClass('ghost ml-1')
             )
         )
-    ),
+    ): null,
     formGroup
     (
         set::label($lang->programplan->planDateRange),
@@ -139,7 +139,7 @@ formPanel
             datepicker(set::name('realEnd'), set::value($plan->realEnd))
         )
     ),
-    formGroup
+    $project->model != 'research' ? formGroup
     (
         set::label($lang->project->acl),
         set::width('2/3'),
@@ -151,8 +151,8 @@ formPanel
             set::disabled($plan->grade == 2 ? 'disabled' : ''),
             set::required(true)
         )
-    ),
-    $plan->setMilestone ? formGroup
+    ) : null,
+    $plan->setMilestone && $project->model != 'research' ? formGroup
     (
         set::label($lang->programplan->milestone),
         set::width('2/3'),

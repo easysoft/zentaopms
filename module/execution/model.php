@@ -1247,8 +1247,8 @@ class executionModel extends model
         }
         if(dao::isError()) return;
 
-        if($begin < ($project->realBegan ? $project->realBegan : $project->begin)) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
-        if($end > ($project->realEnd ? $project->realEnd : $project->end))         dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
+        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
+        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /**
