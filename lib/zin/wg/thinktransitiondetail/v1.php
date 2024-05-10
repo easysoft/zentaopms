@@ -21,6 +21,7 @@ class thinkTransitionDetail extends wg
             (
                 setClass('px-4 mt-10'),
                 setStyle(array('max-width' => '878px')),
+                $item->type == 'question' ? setStyle(array('min-width' => '643px')) : null,
                 div
                 (
                     setClass('text-2xl'),
@@ -36,7 +37,8 @@ class thinkTransitionDetail extends wg
                         set::content($item->desc),
                         set::useHtml(true)
                     )
-                )
+                ),
+                $this->children()
             )
         );
     }
