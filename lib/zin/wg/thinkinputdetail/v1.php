@@ -13,11 +13,12 @@ class thinkInputDetail extends wg
     protected static array $defineProps = array(
         'required?: bool',                      // 是否必填
         'isRequiredName?: string="required"',   // 是否必填对应的name
+        'isRequiredValue?: string'              // 是否必填的值
     );
     protected function detailInputControl()
     {
         global $lang;
-        list($required, $isRequiredName) = $this->prop(array('required', 'isRequiredName'));
+        list($required, $isRequiredName, $isRequiredValue) = $this->prop(array('required', 'isRequiredName', 'isRequiredValue'));
 
         return div
         (
@@ -31,6 +32,7 @@ class thinkInputDetail extends wg
                 set::rows('3'),
                 set::name($isRequiredName),
                 set::required($required),
+                set::value($isRequiredValue),
                 set::placeholder($lang->thinkwizard->step->pleaseInput)
             )
         );
