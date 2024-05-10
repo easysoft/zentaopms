@@ -1069,7 +1069,7 @@ class dom
             $trIndex = floor($key / 2) + 1;
             list($field, $operator, $value) = explode(',', $value);
 
-            $fieldXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[2]/div" : $leftSearchGroup . "/tr[$trIndex]/td[2]/div";
+            $fieldXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[2]/div/input" : $leftSearchGroup . "/tr[$trIndex]/td[2]/div/input";
             $operatorXpath = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[3]/div" : $leftSearchGroup . "/tr[$trIndex]/td[3]/div";
             $valueXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[4]" : $leftSearchGroup . "/tr[$trIndex]/td[4]";
 
@@ -1081,9 +1081,7 @@ class dom
             $this->getElement("//*[@id='pick-pop-$operatorID']/menu/menu//*[contains(text(), '$operator')]")->click();
             sleep(1);
 
-            $this->getElement($valueXpath . '/*[1]')->getTagName();
-            $valueTage = $this->element->getTagName();
-
+            $valueTage = $this->driver->findElement(WebDriverBy::xpath($valueXpath . '/*[1]'))->getTagName();
             if($valueTage == 'input')
             {
                 $this->getElement("$valueXpath/input")->setValue($value);
