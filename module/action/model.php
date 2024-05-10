@@ -476,7 +476,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function renderAction(object $action, string $desc = '')
+    public function renderAction(object $action, string|array $desc = '')
     {
         if(!isset($action->objectType) || !isset($action->action)) return false;
 
@@ -741,7 +741,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printAction(object $action, string $desc = '')
+    public function printAction(object $action, string|array $desc = '')
     {
         $content = $this->renderAction($action, $desc);
         if(is_string($content)) echo $content;
