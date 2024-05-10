@@ -342,4 +342,116 @@ class biModel extends model
 
         return $stat;
     }
+
+    /**
+     * 获取数据库表。
+     * Get database tables.
+     *
+     * @param  int    $db
+     * @param  string $orderBy
+     * @access protected
+     * @return void
+     */
+    public function getDatabaseTables($db = null, $orderBy = 'table_name')
+    {
+        $tablePrefix = $this->config->db->prefix;
+        if(empty($db)) $db = $this->config->db->name;
+
+        $tables = $this->dao->select("table_name as tableName, TABLE_ROWS AS rowCount")->from('information_schema.tables')
+            ->where('table_type')->eq('BASE TABLE')
+            ->andWhere('table_schema')->eq($db)
+            ->andWhere('table_name')->like("$tablePrefix%")
+            ->orderBy($orderBy)
+            ->fetchAll();
+
+        return array_map(function($table){return $table->tableName;}, $tables);
+    }
+
+    /**
+     * 获取DuckDB的可执行文件路径。
+     * Get DcukDB path.
+     *
+     * @access public
+     * @return object|false
+     */
+    public function getDuckDBPath()
+    {
+        $binPath   = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
+        $file      = $binPath . 'duckdb';
+        $extension = $binPath . 'mysql_scanner.duckdb_extension';
+
+        if(!file_exists($file) && !file_exists($extension) && !is_executable($file)) return false;
+
+        return (object)array('bin' => $file, 'extension' => $extension);
+    }
+
+    /**
+     * 获取DuckDB临时目录。
+     * Get DuckDB temp directory.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function getDuckDBTmpDir()
+    {
+        $duckdbTmpPath = $this->app->getTmpRoot() . 'duckdb';
+        if(!is_dir($duckdbTmpPath) && !mkdir($duckdbTmpPath, 0755, true)) return false;
+
+        return $duckdbTmpPath;
+    }
+
+    /**
+     * 准备同步数据库所需的复制SQL。
+     * Prepare copy SQL for sync.
+     *
+     * @param  array    $tables
+     * @param  string    $duckdbTmpPath
+     * @access public
+     * @return string
+     */
+    public function prepareCopySQL($tables, $duckdbTmpPath)
+    {
+        if(empty($tables)) return '';
+
+        $copySQL  = '';
+        foreach($tables as $table)
+        {
+            $tablePath = $duckdbTmpPath . DS . $table;
+            $copySQL .= "COPY $table TO '$tablePath.parquet';\n";
+        }
+
+        return $copySQL;
+    }
+
+    /**
+     * 准备同步命令。
+     * Prepare sync command.
+     *
+     * @param  string    $binPath
+     * @param  string    $extensionPath
+     * @param  string    $copySQL
+     * @access public
+     * @return string
+     */
+    public function prepareSyncCommand($binPath, $extensionPath, $copySQL)
+    {
+        $sqlContent = $this->config->bi->duckSQLTemp;
+        $dbConfig   = $this->config->db;
+        $variables  = array(
+            '{EXTENSIONPATH}' => $extensionPath,
+            '{DATABASE}'      => $dbConfig->name,
+            '{USER}'          => $dbConfig->user,
+            '{PASSWORD}'      => $dbConfig->password,
+            '{HOST}'          => $dbConfig->host,
+            '{PORT}'          => $dbConfig->port,
+            '{COPYSQL}'       => $copySQL
+        );
+
+        foreach($variables as $key => $value)
+        {
+            $sqlContent = str_replace($key, $value, $sqlContent);
+        }
+
+        return "$binPath :memory: \"$sqlContent\" 2>&1";
+    }
 }

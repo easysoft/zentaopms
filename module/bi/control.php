@@ -19,56 +19,34 @@ class bi extends control
      * @access public
      * @return void
      */
-    public function genParquetFile()
+    public function syncParquetFile()
     {
-        /* 检查 duckdb 可执行文件是否存在 */
-        $duckFile = $this->app->getBasePath() . 'bin' . DS . 'duck' . DS . 'duckdb';
-        if(!file_exists($duckFile)) return;
-        if(is_executable($duckFile) && chmod($duckFile, 0777)) return;
-
-        /* 检查 duckdb 存放 parquet 文件的文件夹是否存在 */
-        $duckTmpPath = $this->app->getTmpRoot() . 'duckdb';
-        if(!is_dir($duckTmpPath) && !mkdir($duckTmpPath)) return;
-
-        $tables = $this->dao->query('SHOW TABLES')->fetchAll();
-        if($tables) $tables = array_map(function($obj) { return $obj->Tables_in_maxmaster; }, $tables);
-
-        $copySQL  = '';
-        foreach($tables as $table)
+        $duckdb = $this->bi->getDuckDBPath();
+        if(!$duckdb)
         {
-            $tablePath = $duckTmpPath . DS . $table;
-            $copySQL .= "COPY $table TO '$tablePath.parquet';\n";
-        }
-
-        $sqlContent = $this->config->bi->duckSQLTemp;
-        $dbConfig   = $this->config->db;
-        $variables  = array(
-            '{DATABASE}' => $dbConfig->name,
-            '{USER}'     => $dbConfig->user,
-            '{PASSWORD}' => $dbConfig->password,
-            '{HOST}'     => $dbConfig->host,
-            '{PORT}'     => $dbConfig->port,
-            '{COPYSQL}'  => $copySQL
-        );
-
-        foreach($variables as $key => $value)
-        {
-            $sqlContent = str_replace($key, $value, $sqlContent);
-        }
-
-        $runSQLPath = $this->app->getTmpRoot() . 'duckdb' . DS . 'run.sql';
-        $result = file_put_contents($runSQLPath, $sqlContent);
-        if($result === false) return;
-
-        $exec = "$duckFile :memory: < $runSQLPath 2>&1";
-        $output = shell_exec($exec);
-
-        if(empty($output))
-        {
-            a('success');
+            echo("DuckDB bin path not exists.");
             return;
         }
 
-        a($output);
+        $duckdbTmpPath = $this->bi->getDuckDBTmpDir();
+        if(!$duckdbTmpPath)
+        {
+            echo("Create DuckDB tmp dir permission denied.");
+            return;
+        }
+
+        $tables  = $this->bi->getDatabaseTables();
+        $copySQL = $this->bi->prepareCopySQL($tables, $duckdbTmpPath);
+        $command = $this->bi->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
+
+        $output = shell_exec($command);
+
+        if(empty($output))
+        {
+            echo('success');
+            return;
+        }
+
+        echo($output);
     }
 }

@@ -1,8 +1,7 @@
 <?php
 $config->bi = new stdclass();
 $config->bi->duckSQLTemp = <<<EOT
-INSTALL mysql;
-LOAD mysql;
+LOAD '{EXTENSIONPATH}';
 ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);
 USE mysqldb;
 {COPYSQL}
