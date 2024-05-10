@@ -807,8 +807,8 @@ $config->group->package->importRequirement->order  = 20;
 $config->group->package->importRequirement->subset = 'requirement';
 $config->group->package->importRequirement->privs  = array();
 $config->group->package->importRequirement->privs['requirement-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 20, 'depend' => array('product-requirement'), 'recommend' => array());
-$config->group->package->importRequirement->privs['requirement-import']         = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 115, 'depend' => array('product-requirement', 'requirement-exportTemplate'), 'recommend' => array());
-$config->group->package->importRequirement->privs['requirement-exportTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 120, 'depend' => array('product-requirement'), 'recommend' => array());
+$config->group->package->importRequirement->privs['requirement-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 115, 'depend' => array('product-requirement', 'requirement-exportTemplate'), 'recommend' => array());
+$config->group->package->importRequirement->privs['requirement-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 120, 'depend' => array('product-requirement'), 'recommend' => array());
 
 $config->group->package->reviewRequirement = new stdclass();
 $config->group->package->reviewRequirement->order  = 15;
@@ -855,8 +855,8 @@ $config->group->package->importEpic->order  = 20;
 $config->group->package->importEpic->subset = 'epic';
 $config->group->package->importEpic->privs  = array();
 $config->group->package->importEpic->privs['epic-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 20, 'depend' => array('product-epic'), 'recommend' => array());
-$config->group->package->importEpic->privs['epic-import']         = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 115, 'depend' => array('product-epic', 'epic-exportTemplate'), 'recommend' => array());
-$config->group->package->importEpic->privs['epic-exportTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 120, 'depend' => array('product-epic'), 'recommend' => array());
+$config->group->package->importEpic->privs['epic-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 115, 'depend' => array('product-epic', 'epic-exportTemplate'), 'recommend' => array());
+$config->group->package->importEpic->privs['epic-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 120, 'depend' => array('product-epic'), 'recommend' => array());
 
 $config->group->package->reviewEpic = new stdclass();
 $config->group->package->reviewEpic->order  = 15;
