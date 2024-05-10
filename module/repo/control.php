@@ -1442,7 +1442,7 @@ class repo extends control
             if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
-        return print(json_encode($options));
+        return $options;
     }
 
     /**
@@ -1466,7 +1466,7 @@ class repo extends control
             if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
-        return print(json_encode($options));
+        return $options;
     }
 
     /**

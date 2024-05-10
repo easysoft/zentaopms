@@ -1752,7 +1752,7 @@ class repoZen extends repo
                 if($children)
                 {
                     $treeList[$key]['items'] = $children;
-                    $treeList[$key]['type']  = 'parent';
+                    $treeList[$key]['type']  = 'project';
                     $repoName[$key]          = '';
                     $pathName[$key]          = $path['path'];
                 }

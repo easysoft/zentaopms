@@ -25,6 +25,7 @@ $json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
 $json['link']       = array('repo' => '###');
 $json['itemType']   = 'repo';
+$json['labelMap']   = array('project' => true);
 
 /**
  * 渲染 JSON 字符串并发送到客户端。
