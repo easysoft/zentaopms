@@ -2690,7 +2690,7 @@ class metricModel extends model
             ->limit(1)
             ->fetch('value');
 
-        if(!empty($installedDate) && substr($installedDate, 0 ,4) == '0000') return $installedDate;
+        if(!empty($installedDate) && substr($installedDate, 0 ,4) != '0000') return $installedDate;
 
         return $this->dao->select('date')->from(TABLE_ACTION)
             ->orderBy('date_asc')
