@@ -5,25 +5,33 @@ namespace zin;
 class thinkRun extends wg
 {
     protected static array $defineProps = array(
-        'item: object',      // 模型信息
+        'item: object', // 模型信息
     );
 
-    protected function buildBody(): wg|array
+    protected function buildQuestion():array|wg
+    {
+        global $lang;
+
+        $item    = $this->prop('item');
+        $options = json_decode($item->options);
+        $answer  = json_decode($item->answer);
+
+        // TODO: if($options->questionType == 'xxx')
+        
+        return array();
+    }
+
+    protected function build(): array
     {
         $item = $this->prop('item');
 
-        return thinktransitiondetail
-        (
-            set::item($item)
-        );
-    }
-
-
-    protected function build():array
-    {
-        return array
-        (
-            $this->buildBody(),
+        return array(
+            thinktransitiondetail
+            (
+                set::item($item),
+                $item->type == 'question' ? $this->buildQuestion() : null
+            ),
+            $this->children()
         );
     }
 }
