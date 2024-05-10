@@ -1826,9 +1826,9 @@ class commonModel extends model
      * @param  bool                $log       Save to log or not
      * @static
      * @access public
-     * @return string|array
+     * @return string|array|bool
      */
-    public static function http(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array
+    public static function http(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
     {
         global $lang, $app;
 
