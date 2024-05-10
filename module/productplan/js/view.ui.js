@@ -143,4 +143,5 @@ window.onSortEnd = function(from, to, type)
     form.append('recPerPage',  storyRecPerPage);
 
     $.ajaxSubmit({url, data:form});
+    return true;
 }
