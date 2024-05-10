@@ -611,7 +611,7 @@ class jobModel extends model
             $job->pipeline = json_encode(array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch));
 
             $hash = md5($job->pipeline);
-            if(isset($addedPipelines[$hash])) continue;
+            if(array_key_exists($hash, array_flip($addedPipelines))) continue;
             $addedPipelines[] = $hash;
 
             $this->dao->insert(TABLE_JOB)->data($job)
