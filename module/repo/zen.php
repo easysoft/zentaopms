@@ -1764,4 +1764,27 @@ class repoZen extends repo
         array_multisort($pathName, SORT_ASC, $repoName, SORT_ASC, $treeList);
         return $treeList;
     }
+
+    /**
+     * 获取分支和标签列表的picker数据。
+     * Get branch and tag picker data.
+     *
+     * @param  object    $scm
+     * @access protected
+     * @return array
+     */
+    protected function getBranchAndTagOptions(object $scm): array
+    {
+        $options = array(
+            array('text' => $this->lang->repo->branch, 'items' => array()),
+            array('text' => $this->lang->repo->tag,    'items' => array())
+        );
+
+        $branches = $scm->branch();
+        foreach($branches as $branch) $options[0]['items'][] = array('text' => $branch, 'value' => $branch, 'key' => $branch);
+
+        $tags = $scm->tags();
+        foreach($tags as $tag) $options[1]['items'][] = array('text' => $tag, 'value' => $tag, 'key' => $tag);
+        return $options;
+    }
 }
