@@ -21,6 +21,7 @@ su('admin');
 
 $story = zenData('story');
 $story->estimate->range('1-4');
+$story->product->range('1-100{4}');
 $story->gen(20);
 
 global $tester;
