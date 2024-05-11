@@ -4710,7 +4710,6 @@ class storyModel extends model
                 if(isset($stories[$story->parent]))
                 {
                     $children[$story->parent][$story->id] = $story;
-                    unset($stories[$story->id]);
                 }
             }
         }
