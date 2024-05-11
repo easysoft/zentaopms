@@ -958,16 +958,18 @@ $config->group->package->manageProjectStory->privs['projectstory-importFromLib']
 $config->group->package->manageProjectStory->privs['projectstory-batchReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 50, 'depend' => array('projectstory-story'), 'recommend' => array());
 $config->group->package->manageProjectStory->privs['projectstory-batchClose']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 60, 'depend' => array('projectstory-story'), 'recommend' => array());
 $config->group->package->manageProjectStory->privs['projectstory-batchChangePlan']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 70, 'depend' => array('projectstory-story'), 'recommend' => array());
-$config->group->package->manageProjectStory->privs['projectstory-batchAssign']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 80, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->manageProjectStory->privs['projectstory-batchAssignTo']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 80, 'depend' => array('projectstory-story'), 'recommend' => array());
 $config->group->package->manageProjectStory->privs['projectstory-batchEdit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 90, 'depend' => array('projectstory-story'), 'recommend' => array());
 
 $config->group->package->importProjectStory = new stdclass();
 $config->group->package->importProjectStory->order  = 15;
 $config->group->package->importProjectStory->subset = 'projectstory';
 $config->group->package->importProjectStory->privs  = array();
-$config->group->package->importProjectStory->privs['projectstory-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('projectstory-story'), 'recommend' => array());
-$config->group->package->importProjectStory->privs['projectstory-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 10, 'depend' => array('projectstory-story'), 'recommend' => array());
-$config->group->package->importProjectStory->privs['projectstory-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 20, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->importProjectStory->privs['projectstory-export']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->importProjectStory->privs['projectstory-import']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 10, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->importProjectStory->privs['projectstory-exportTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 20, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->importProjectStory->privs['projectstory-importToLib']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('story-view'), 'recommend' => array('story-batchImportToLib'));
+$config->group->package->importProjectStory->privs['projectstory-batchImportToLib'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('product-browse'), 'recommend' => array('story-importToLib'));
 
 $config->group->package->browseProject = new stdclass();
 $config->group->package->browseProject->order  = 5;
@@ -2942,13 +2944,6 @@ $config->group->package->docTemplate->privs['baseline-editTemplate']   = array('
 $config->group->package->docTemplate->privs['baseline-editBook']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editTemplate', 'baseline-manageBook'));
 $config->group->package->docTemplate->privs['baseline-manageBook']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editBook', 'baseline-editTemplate'));
 $config->group->package->docTemplate->privs['baseline-delete']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate'));
-
-$config->group->package->importStoryLib = new stdclass();
-$config->group->package->importStoryLib->order  = 30;
-$config->group->package->importStoryLib->subset = 'projectstory';
-$config->group->package->importStoryLib->privs  = array();
-$config->group->package->importStoryLib->privs['story-importToLib']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 165, 'depend' => array('story-view'), 'recommend' => array('story-batchImportToLib'));
-$config->group->package->importStoryLib->privs['story-batchImportToLib'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 170, 'depend' => array('product-browse'), 'recommend' => array('story-importToLib'));
 
 $config->group->package->projectStakeholder = new stdclass();
 $config->group->package->projectStakeholder->order  = 5;
