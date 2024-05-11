@@ -10,7 +10,7 @@ $lang->projectstory->storyCommon = $lang->projectCommon . '需求';
 $lang->projectstory->storyList   = $lang->projectCommon . '需求列表';
 $lang->projectstory->storyView   = $lang->projectCommon . '需求详情';
 
-$lang->projectstory->common            = "{$lang->projectCommon}{$lang->SRCommon}";
+$lang->projectstory->common            = "{$lang->projectCommon}需求";
 $lang->projectstory->index             = "{$lang->SRCommon}主页";
 $lang->projectstory->view              = "{$lang->SRCommon}详情";
 $lang->projectstory->story             = "{$lang->SRCommon}列表";

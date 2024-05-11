@@ -10,7 +10,7 @@ $lang->projectstory->storyCommon = $lang->projectCommon . ' Story';
 $lang->projectstory->storyList   = $lang->projectCommon . ' Story List';
 $lang->projectstory->storyView   = $lang->projectCommon . ' Story Detail';
 
-$lang->projectstory->common            = "{$lang->projectCommon} {$lang->SRCommon}";
+$lang->projectstory->common            = "{$lang->projectCommon} Requirement";
 $lang->projectstory->index             = "{$lang->SRCommon} Home";
 $lang->projectstory->view              = "{$lang->SRCommon} Detail";
 $lang->projectstory->story             = "{$lang->SRCommon} List";
