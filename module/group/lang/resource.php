@@ -19,7 +19,8 @@ $lang->moduleOrder[15]  = 'program';
 $lang->moduleOrder[20]  = 'personnel';
 $lang->moduleOrder[25]  = 'product';
 $lang->moduleOrder[30]  = 'story';
-$lang->moduleOrder[31]  = 'requirement';
+$lang->moduleOrder[32]  = 'requirement';
+$lang->moduleOrder[33]  = 'epic';
 $lang->moduleOrder[35]  = 'productplan';
 $lang->moduleOrder[40]  = 'release';
 

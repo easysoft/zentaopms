@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * The zen file of project module of ZenTaoPMS.
  *
@@ -723,7 +724,6 @@ class projectZen extends project
     {
         if($project->hasProduct)
         {
-            if($this->config->URAndSR) unset($this->lang->resource->requirement);
             unset($this->lang->resource->productplan);
             unset($this->lang->resource->tree);
         }
@@ -739,8 +739,6 @@ class projectZen extends project
             unset($this->lang->resource->projectstory->unlinkStory);
             unset($this->lang->resource->projectstory->batchUnlinkStory);
             unset($this->lang->resource->story->view);
-            if($this->config->URAndSR) unset($this->lang->resource->requirement->view);
-            if($this->config->URAndSR) unset($this->lang->resource->requirement->batchChangeBranch);
             unset($this->lang->resource->tree->browseTask);
             unset($this->lang->resource->tree->browsehost);
             unset($this->lang->resource->tree->editHost);
