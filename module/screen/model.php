@@ -189,7 +189,7 @@ class screenModel extends model
      */
     public function mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filters)
     {
-        $filterFormat = '';
+        $filterFormat = array();
         $chartOrPivotFilters = json_decode($chartOrPivot->filters, true);
         $mergeFilters = array();
 
@@ -253,7 +253,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
+    public function genComponentData($chart, $type = 'chart', $component = null, $filters = array())
     {
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
