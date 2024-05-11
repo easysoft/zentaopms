@@ -40,7 +40,7 @@ class thinkRun extends wg
                 set::item($item),
                 set::required($options->required),
                 set::isRequiredName('result'),
-                set::isRequiredValue(isset($answer) ?? $answer->result)
+                set::isRequiredValue(isset($answer) ? $answer->result : '')
             );
         }
 
