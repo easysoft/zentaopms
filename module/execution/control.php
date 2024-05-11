@@ -2289,7 +2289,7 @@ class execution extends control
         $queryID      = ($browseType == 'bySearch') ? (int)$param : 0;
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
-        if($browseType == 'bySearch') $allStories = $this->story->getBySearch(implode(',', array_keys($products)), '', $queryID, $orderBy, $objectID, $storyType);
+        if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
         if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', $storyType, $orderBy, false, '', null);
         $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
 
