@@ -29,7 +29,7 @@ formPanel
     (
         set::className('items-center'),
         set::label($lang->productplan->product),
-        $product->name
+        span($product->name)
     ) : null,
     $plan->parent == '-1' ? formHidden('parent', $plan->parent) : formGroup
     (
