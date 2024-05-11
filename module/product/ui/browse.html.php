@@ -225,17 +225,29 @@ foreach($stories as $story)
 $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $gradePairs)
 {
     /* Flag variables of permissions. */
-    $canBeChanged         = common::canModify('product', $product);
-    $canBatchEdit         = $canBeChanged && hasPriv($storyType, 'batchEdit');
-    $canBatchClose        = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
-    $canBatchReview       = $canBeChanged && hasPriv($storyType, 'batchReview');
+    $canBeChanged = common::canModify('product', $product);
+    if($isProjectStory)
+    {
+        $canBatchClose      = hasPriv('projectstory', 'batchClose') && strtolower($browseType) != 'closedbyme';
+        $canBatchEdit       = hasPriv('projectstory', 'batchEdit');
+        $canBatchReview     = hasPriv('projectstory', 'batchReview');
+        $canBatchAssignTo   = hasPriv('projectstory', 'batchAssignTo');
+        $canBatchChangePlan = hasPriv('projectstory', 'batchChangePlan') && $productID && $product;
+    }
+    else
+    {
+        $canBatchEdit       = $canBeChanged && hasPriv($storyType, 'batchEdit');
+        $canBatchClose      = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
+        $canBatchReview     = $canBeChanged && hasPriv($storyType, 'batchReview');
+        $canBatchAssignTo   = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
+        $canBatchChangePlan = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
+    }
+
     $canBatchChangeGrade  = $canBeChanged && hasPriv($storyType, 'batchChangeGrade');
     $canBatchChangeStage  = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
     $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
-    $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && $storyType == 'story' && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
     $canBatchChangeParent = $canBeChanged && hasPriv($storyType, 'batchChangeParent');
-    $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
     $canBatchUnlink       = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib  = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
     $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
@@ -248,12 +260,12 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     /* Generate dropdown menu items for the DataTable footer toolbar.*/
     $planItems  = $planItems ?? array();
     $gradeItems = array();
-    foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=$key"));
-    foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeGrade', "result=$key"));
-    foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
-    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
-    foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
-    foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangePlan', "planID=$planID"));
+    foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=$key"));
+    foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeGrade', "result=$key"));
+    foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=reject&reason=$key"));
+    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"));
+    foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeModule', "moduleID=$moduleID"));
+    foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangePlan', "planID=$planID"));
     foreach($lang->story->stageList as $key => $stageName)
     {
         if(!str_contains('|tested|verified|rejected|pending|released|closed|', "|$key|")) continue;

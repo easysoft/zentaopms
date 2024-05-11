@@ -275,7 +275,7 @@ $lang->resource->projectstory->export            = 'export';
 $lang->resource->projectstory->batchReview       = 'batchReview';
 $lang->resource->projectstory->batchClose        = 'batchClose';
 $lang->resource->projectstory->batchChangePlan   = 'batchChangePlan';
-$lang->resource->projectstory->batchAssign       = 'batchAssign';
+$lang->resource->projectstory->batchAssignTo     = 'batchAssignTo';
 $lang->resource->projectstory->batchEdit         = 'batchEdit';
 
 $lang->projectstory->methodOrder[5]  = 'story';
@@ -289,7 +289,7 @@ $lang->projectstory->methodOrder[35] = 'export';
 $lang->projectstory->methodOrder[40] = 'batchReview';
 $lang->projectstory->methodOrder[45] = 'batchClose';
 $lang->projectstory->methodOrder[50] = 'batchChangePlan';
-$lang->projectstory->methodOrder[55] = 'batchAssign';
+$lang->projectstory->methodOrder[55] = 'batchAssignTo';
 $lang->projectstory->methodOrder[60] = 'batchEdit';
 
 /* Release. */

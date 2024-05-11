@@ -233,5 +233,128 @@ class projectStory extends control
     {
         echo $this->fetch('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$browseType&storyType=$storyType");
     }
+
+    /**
+     * Batch review stories.
+     *
+     * @param  string $result
+     * @param  string $reason
+     * @param  string $storyType story|requirement
+     * @access public
+     * @return void
+     */
+    public function batchReview(string $result, string $reason = '', string $storyType = 'story')
+    {
+        echo $this->fetch('story', 'batchReview', "result=$result&reason=$reason&storyType=$storyType");
+    }
+
+    /**
+     * 批量关闭需求。
+     * Batch close the stories.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @param  string $storyType   story|requirement
+     * @param  string $from        contribute|work
+     * @access public
+     * @return void
+     */
+    public function batchClose(int $productID = 0, int $executionID = 0, string $storyType = 'story', string $from = '')
+    {
+        echo $this->fetch('story', 'batchClose', "productID=$productID&executionID=$executionID&storyType=$storyType&from=$from");
+    }
+
+
+    /**
+     * Batch change the plan of story.
+     *
+     * @param  int    $planID
+     * @param  int    $oldPlanID
+     * @access public
+     * @return void
+     */
+    public function batchChangePlan(int $planID, int $oldPlanID = 0)
+    {
+        echo $this->fetch('story', 'batchChangePlan', "planID=$planID&oldPlanID=$oldPlanID");
+    }
+
+    /**
+     * Batch assign to.
+     *
+     * @param  string $storyType story|requirement
+     * @access public
+     * @return void
+     */
+    public function batchAssignTo(string $storyType = 'story', string $assignedTo = '')
+    {
+        echo $this->fetch('story', 'batchAssignTo', "storyType=$storyType&assignedTo=$assignedTo");
+    }
+
+
+    /**
+     * Batch edit story.
+     *
+     * @param  int    $productID
+     * @param  int    $executionID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @param  string $from
+     * @access public
+     * @return void
+     */
+    public function batchEdit(int $productID = 0, int $executionID = 0, string $branch = '', string $storyType = 'story', string $from = '')
+    {
+        echo $this->fetch('story', 'batchEdit', "productID=$productID&executionID=$executionID&branch=$branch&storyType=$storyType&from=$from");
+    }
+
+    /**
+     * 导入需求数据。
+     * Import the data of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function import($productID, $branch = 0, $storyType = 'story', $projectID = 0)
+    {
+        echo $this->fetch('story', 'import', "productID=$productID&branch=$branch&storyType=$storyType&projectID=$projectID");
+    }
+
+    /**
+     * 显示导入需求数据的页面。
+     * Show the page of importing the data of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
+     * @param  int    $projectID
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @param  string $insert
+     * @access public
+     * @return void
+     */
+    public function showImport($productID, $branch = 0, $type = 'story', $projectID = 0, $pagerID = 1, $maxImport = 0, $insert = '')
+    {
+        echo $this->fetch('story', 'showImport', "productID=$productID&branch=$branch&type=$type&projectID=$projectID&pagerID=$pagerID&maxImport=$maxImport&insert=$insert");
+    }
+
+    /**
+     * 导出需求模板。
+     * Export the template of the requiremens.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function exportTemplate($productID, $branch = 0, $storyType = 'story')
+    {
+        echo $this->fetch('story', 'exportTemplate', "productID=$productID&branch=$branch&storyType=$storyType");
+    }
 }
 
