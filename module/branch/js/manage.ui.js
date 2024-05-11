@@ -115,3 +115,45 @@ window.checkedChange = function()
 
     $('#mergeBranch').toggleClass('hidden', checkedList.includes('0'));
 }
+
+
+/**
+ * 拖拽的分支是否允许放下。
+ * Is it allowed to drop the dragged branch.
+ *
+ * @param  from   被拿起的元素
+ * @param  to     放下时的目标元素
+ * @access public
+ * @return bool
+ */
+window.canSortTo = function(from, to)
+{
+    if(!from || !to) return false;
+    if(from.id == '0' || to.id == '0') return false;
+
+    return true;
+}
+
+/**
+ * 拖拽分支。
+ * Drag branch.
+ *
+ * @param  from   被拿起的元素
+ * @param  to     放下时的目标元素
+ * @param  type   放在目标元素的上方还是下方
+ * @access public
+ * @return bool
+ */
+window.onSortEnd = function(from, to, type)
+{
+    if(!from || !to) return false;
+    if(!canSortTo(from, to)) return false;
+
+    const url  = $.createLink('branch', 'sort');
+    const form = new FormData();
+    form.append('orderBy', orderBy);
+    form.append('branches', JSON.stringify(this.state.rowOrders));
+    $.ajaxSubmit({url, data: form});
+
+    return true;
+}

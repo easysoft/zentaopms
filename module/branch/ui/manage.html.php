@@ -30,6 +30,7 @@ jsVar('confirmclose',    $lang->branch->confirmClose);
 jsVar('confirmactivate', $lang->branch->confirmActivate);
 jsVar('confirmMerge',    $lang->branch->confirmMerge);
 jsVar('branchNamePairs', array_flip($branchPairs));
+jsVar('orderBy',         $orderBy);
 
 modal
 (
@@ -143,12 +144,17 @@ if($canMerge && $browseType != 'closed')
     );
 }
 
+$canSort = (common::hasPriv('branch', 'sort') && strpos($orderBy, 'order') !== false);
 dtable
 (
     set::cols($config->branch->dtable->fieldList),
     set::data($tableData),
+    set::plugins(array('sortable')),
     set::checkable(count($tableData) > 1 ? true : false),
     set::onCheckChange(jsRaw('checkedChange')),
+    set::sortable($canSort),
+    set::onSortEnd($canSort ? jsRaw('window.onSortEnd') : null),
+    set::canSortTo($canSort ? jsRaw('window.canSortTo') : null),
     set::orderBy($orderBy),
     set::sortLink(createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::footToolbar($footToolbar),
