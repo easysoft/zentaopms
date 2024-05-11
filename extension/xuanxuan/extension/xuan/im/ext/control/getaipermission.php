@@ -24,7 +24,7 @@ class myIm extends im {
 
                 $chat = new stdclass();
                 $chat->gid = "$userID&ai-{$model->id}";
-                $chat->name = $model->name;
+                $chat->name = empty($model->name) ? $this->lang->ai->models->typeList[$model->type] : $model->name;
 
                 $chats[] = $chat;
             }
