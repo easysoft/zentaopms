@@ -107,6 +107,8 @@ class installModel extends model
             $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
             $tables = explode(';', file_get_contents($dbFile));
 
+
+
             foreach($tables as $table)
             {
                 $table = trim($table);
@@ -368,6 +370,44 @@ class installModel extends model
         $config->key     = 'showDemoUsers';
         $config->value   = '1';
         $this->dao->replace(TABLE_CONFIG)->data($config)->exec();
+
+        return true;
+    }
+
+    /**
+     * 导入BI内置数据。
+     * Import BI data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function importBIData()
+    {
+        $this->loadModel('bi');
+
+        /* Prepare built-in sqls of bi. */
+        $chartSQLs = $this->bi->prepareBuiltinChartSQL();
+        $pivotSQLs = $this->bi->prepareBuiltinPivotSQL();
+
+        $insertTables = array_merge($chartSQLs, $pivotSQLs);
+
+        try
+        {
+        foreach($insertTables as $table)
+        {
+            $table = trim($table);
+            if(empty($table)) continue;
+
+            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+            $table = str_replace('zt_', $this->config->db->prefix, $table);
+            if(!$this->dbh->query($table)) return false;
+        }
+        }
+        catch(Error $e)
+        {
+            a($e->getMessage());
+            die;
+        }
 
         return true;
     }
