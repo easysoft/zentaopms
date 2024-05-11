@@ -592,7 +592,7 @@ class jobModel extends model
         $repo = $this->loadModel('repo')->getByID((int)$repoID);
         if(!in_array($repo->SCM, array('Gitlab', 'GitFox'))) return false;
 
-        $pipelines = $this->loadModel(strtolower($repo->SCM))->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
+        $pipelines = $this->loadModel(strtolower($repo->SCM))->apiGetPipeline((int)$repo->serviceHost, (int)$repo->serviceProject, '');
         if(!is_array($pipelines) or empty($pipelines)) return false;
 
         $job = new stdclass;
