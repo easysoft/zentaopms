@@ -1,5 +1,6 @@
 <?php
 $config->bi = new stdclass();
+$config->bi->builtin = new stdclass();
 $config->bi->duckSQLTemp = <<<EOT
 LOAD '{EXTENSIONPATH}';
 ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);
