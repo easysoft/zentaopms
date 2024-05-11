@@ -24,3 +24,6 @@ INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, 
 ('scale', 'product', 'feedback', 'released', 'php', '按产品统计的待处理的反馈数', 'count_of_wait_feedback_in_product', '待处理反馈数', 'count', '按产品统计的待处理的反馈数表示产品中状态为待处理的反馈数量之和。该度量项可能暗示产品团队的反馈处理效率，待处理反馈数越多，可能会导致客户满意度降低', '产品中所有反馈个数求和\r\n状态为待处理\r\n过滤已删除的反馈\r\n过滤已删除的产品', 'realtime', 'system', '2024-05-07 08:00:00', '1', '0', 'nodate'),
 ('scale', 'product', 'feedback', 'released', 'php', '按产品统计的追问中的反馈数', 'count_of_asked_feedback_in_product', '追问中反馈数', 'count', '按产品统计的追问中的反馈数表示产品中状态为追问中的反馈数量之和。该度量项可能暗示着反馈的复杂性或对处理方案的疑惑，追问中的反馈数量越多，可能意味着团队需要更多时间和资源来回复并解决这些问题', '产品中所有反馈个数求和\r\n状态为追问中\r\n过滤已删除的反馈\r\n过滤已删除的产品', 'realtime', 'system', '2024-05-07 08:00:00', '1', '0', 'nodate'),
 ('scale', 'product', 'feedback', 'released', 'php', '按产品统计的未关闭的反馈数', 'count_of_unclosed_feedback_in_product', '未关闭反馈数', 'count', '按产品统计的未关闭的反馈数表示产品中状态为未关闭的反馈数量之和。这个度量项可以一定程度反映产品团队响应用户反馈的效率和及时处理用户问题的能力', '产品中所有反馈个数求和\r\n过滤状态为已关闭的反馈\r\n过滤已删除的反馈\r\n过滤已删除的产品', 'realtime', 'system', '2024-05-07 08:00:00', '1', '0', 'nodate');
+
+ALTER TABLE `zt_chart` ADD `code` varchar(255) not NULL default '' AFTER `name`;
+ALTER TABLE `zt_pivot` ADD `code` varchar(255) not NULL default '' AFTER `group`;
