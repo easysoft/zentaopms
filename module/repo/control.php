@@ -1417,8 +1417,7 @@ class repo extends control
 
         $repos = $this->$getProjectFunc($serverID);
 
-        $this->view->repos = $this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'));
-        $this->display();
+        return print(json_encode($this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'))));
     }
 
     /**

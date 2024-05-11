@@ -46,7 +46,7 @@ formPanel
 (
     on::change('#SCM', 'onScmChange'),
     on::change('#serviceHost', 'onHostChange'),
-    on::change('#repoDropMenu', 'onProjectChange'),
+    on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->createAction),
     set::back('GLOBAL'),
     formRow
@@ -88,8 +88,10 @@ formPanel
         (
             set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
+            set::required(true),
             set::width('1/2'),
-            set::control(array('type' => 'dropmenu', 'id' => 'repoDropMenu', 'url' => createLink('repo', 'ajaxGetProjects'))),
+            set::control('picker'),
+            set::items(array())
         )
     ),
     formGroup
