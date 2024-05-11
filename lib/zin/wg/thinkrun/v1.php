@@ -30,7 +30,7 @@ class thinkRun extends wg
                 set::type($options->questionType),
                 setClass('mt-6'),
                 set::items($showFields),
-                set::name('result'),
+                set::name($options->questionType == 'radio' ? 'result' : 'result[]'),
                 set::value(isset($answer->result) ? $answer->result : ''),
             );
         }
