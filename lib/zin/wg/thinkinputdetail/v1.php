@@ -23,7 +23,7 @@ class thinkInputDetail extends wg
         return div
         (
             $required ? span(
-                setClass('text-xl absolute top-6 text-danger left-5'),
+                setClass('text-xl absolute top-6 text-danger left-5 question-required'),
                 '*'
             ) : null,
             setClass('mt-3 mb-2'),
