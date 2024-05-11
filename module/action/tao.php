@@ -810,7 +810,7 @@ class actionTao extends actionModel
         }
 
          $action->objectLink = isset($method) ? helper::createLink('assetlib', $method, sprintf($vars, $action->objectID)) : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-        if(isset($method)) $action->isLibDoc = true;
+        if(isset($method)) $action->isLibObject = true;
     }
 
     /**
