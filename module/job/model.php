@@ -615,9 +615,9 @@ class jobModel extends model
             $addedPipelines[] = $hash;
 
             $this->dao->insert(TABLE_JOB)->data($job)
-            ->batchCheck($this->config->job->create->requiredFields, 'notempty')
-            ->autoCheck()
-            ->exec();
+                ->batchCheck($this->config->job->create->requiredFields, 'notempty')
+                ->autoCheck()
+                ->exec();
             if(dao::isError()) return false;
 
             $this->loadModel('action')->create('job', $this->dao->lastInsertId(), 'imported');
