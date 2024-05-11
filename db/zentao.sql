@@ -490,6 +490,7 @@ CREATE UNIQUE INDEX `execution_type_name_date` ON `zt_cfd`(`execution`,`type`,`n
 CREATE TABLE IF NOT EXISTS `zt_chart` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
+  `code` varchar(255) NOT NULL DEFAULT '',
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
   `group` varchar(255) NOT NULL DEFAULT '',
@@ -15074,6 +15075,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `group` varchar(255) NOT NULL DEFAULT '',
+  `code` varchar(255) NOT NULL DEFAULT '',
   `name` text NULL,
   `desc` text NULL,
   `sql` mediumtext NULL,
