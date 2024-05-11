@@ -29,8 +29,8 @@ $(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParen
 
 $(document).off('click', '.switchButton').on('click', '.switchButton', function()
 {
-    var viewType = $(this).attr('data-type');
-    $.cookie.set('viewType', viewType, {expires:config.cookieLife, path:config.webRoot});
+    var storyViewType = $(this).attr('data-type');
+    $.cookie.set('storyViewType', storyViewType, {expires:config.cookieLife, path:config.webRoot});
     loadCurrentPage();
 });
 
