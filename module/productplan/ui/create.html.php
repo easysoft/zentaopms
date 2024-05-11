@@ -41,7 +41,7 @@ formPanel
     (
         set::className('items-center'),
         set::label($lang->productplan->product),
-        span($product->name)
+        $product->name
     ) : null,
     !$parent ? formGroup
     (
