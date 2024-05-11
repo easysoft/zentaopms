@@ -164,7 +164,7 @@ class screen extends control
             $table = $this->config->objectTables[$type];
             $chartOrPivot = $this->dao->select('*')->from($table)->where('id')->eq($sourceID)->fetch();
 
-            $filterFormat = '';
+            $filterFormat = array();
             if($queryType == 'filter') list($chartOrPivot, $filterFormat) = $this->screen->mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filterParams);
 
             $component = $this->screen->genComponentData($chartOrPivot, $type, $component, $filterFormat);
