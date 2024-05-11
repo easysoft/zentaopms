@@ -296,4 +296,86 @@ class biModel extends model
 
         return $stat;
     }
+
+    /**
+     * 准备内置的图表sql语句。
+     * Prepare builtin chart sql.
+     *
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinChartSQL()
+    {
+        $charts = $this->config->bi->builtin->charts;
+
+        $chartSQLs = array();
+        foreach($charts as $chart)
+        {
+            $chart = (object)$chart;
+            $chart->settings = $this->jsonEncode($chart->settings);
+            $chart->filters  = $this->jsonEncode($chart->filters);
+            $chart->fields   = $this->jsonEncode($chart->fields);
+            $chart->langs    = $this->jsonEncode($chart->langs);
+
+            $chart->createdBy   = 'system';
+            $chart->createdDate = helper::now();
+
+            $stmt = $this->dao->insert(TABLE_CHART)->data($chart)
+                ->autoCheck();
+
+            $chartSQLs[] = $stmt->get();
+        }
+
+        return $chartSQLs;
+    }
+
+    /**
+     * 准备内置的透视表sql语句。
+     * Prepare builtin pivot sql.
+     *
+     * @param  bool    $exec
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinPivotSQL()
+    {
+        $pivots = $this->config->bi->builtin->pivots;
+
+        $pivotSQLs = array();
+        foreach($pivots as $pivot)
+        {
+            $pivot = (object)$pivot;
+            $pivot->name     = $this->jsonEncode($pivot->name);
+            $pivot->desc     = $this->jsonEncode($pivot->desc);
+            $pivot->settings = $this->jsonEncode($pivot->settings);
+            $pivot->filters  = $this->jsonEncode($pivot->filters);
+            $pivot->fields   = $this->jsonEncode($pivot->fields);
+            $pivot->langs    = $this->jsonEncode($pivot->langs);
+            $pivot->vars     = $this->jsonEncode($pivot->vars);
+
+            $pivot->createdBy   = 'system';
+            $pivot->createdDate = helper::now();
+
+            $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot)
+                ->autoCheck();
+
+            $pivotSQLs[] = $stmt->get();
+        }
+
+        return $pivotSQLs;
+    }
+
+    /**
+     * Encode json.
+     *
+     * @param  object|array  $object
+     * @access private
+     * @return string|null
+     */
+    private function jsonEncode($object)
+    {
+        if(empty($object)) return null;
+        if(is_scalar($object)) return $object;
+        return json_encode($object);
+    }
 }
