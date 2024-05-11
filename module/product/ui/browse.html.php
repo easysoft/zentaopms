@@ -360,10 +360,14 @@ featureBar
     li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module'])))
 );
 
+$canExport = $isProjectStory ? hasPriv('projectstory', 'export') : hasPriv($storyType, 'export');
+$canReport = $isProjectStory ? hasPriv('projectstory', 'report') : hasPriv($storyType, 'report');
+$reportUrl = $isProjectStory ? helper::createLink('projectstory', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") : helper::createLink($storyType, 'report', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");
+$exportUrl = $isProjectStory ? helper::createLink('projectstory', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType") : helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");
 toolbar
 (
-    (!hasPriv($storyType, 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink($storyType, 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") . ($app->tab == 'project' ? '#app=project' : '')))),
-    !hasPriv($storyType, 'export') ? null : item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType"), 'data-toggle' => 'modal'))),
+    (!$canReport || !$productID) ? null : item(set(array('id' => 'reportBtn', 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => $reportUrl))),
+    !$canExport ? null : item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost', 'url' => $exportUrl, 'data-toggle' => 'modal'))),
     $fnBuildCreateStoryButton(),
     $fnBuildLinkStoryButton()
 );

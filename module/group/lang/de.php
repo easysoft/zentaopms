@@ -255,6 +255,7 @@ $lang->group->package->deleteRelease         = 'Delete Release';
 $lang->group->package->releaseNotify         = 'Release Notify';
 $lang->group->package->projectPlan           = 'Project Plan';
 $lang->group->package->manageProjectStory    = 'Manage Project Story';
+$lang->group->package->importProjectStory    = 'Import Project Story';
 $lang->group->package->browseProject         = 'Browse Project';
 $lang->group->package->manageProject         = 'Manage Project';
 $lang->group->package->importProject         = 'Import Project';

@@ -955,6 +955,19 @@ $config->group->package->manageProjectStory->privs['projectstory-importplanstori
 $config->group->package->manageProjectStory->privs['projectstory-unlinkStory']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 30, 'depend' => array('projectstory-story'), 'recommend' => array('projectstory-batchUnlinkStory', 'projectstory-importFromLib', 'projectstory-importplanstories', 'projectstory-linkStory', 'story-batchToTask'));
 $config->group->package->manageProjectStory->privs['projectstory-batchUnlinkStory']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 35, 'depend' => array('projectstory-story'), 'recommend' => array('projectstory-unlinkStory'));
 $config->group->package->manageProjectStory->privs['projectstory-importFromLib']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('projectstory-story'), 'recommend' => array('assetlib-story', 'assetlib-storylib', 'projectstory-batchUnlinkStory', 'projectstory-importplanstories', 'projectstory-linkStory', 'projectstory-unlinkStory', 'story-batchToTask'));
+$config->group->package->manageProjectStory->privs['projectstory-batchReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 50, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->manageProjectStory->privs['projectstory-batchClose']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 60, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->manageProjectStory->privs['projectstory-batchChangePlan']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 70, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->manageProjectStory->privs['projectstory-batchAssign']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 80, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->manageProjectStory->privs['projectstory-batchEdit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 90, 'depend' => array('projectstory-story'), 'recommend' => array());
+
+$config->group->package->importProjectStory = new stdclass();
+$config->group->package->importProjectStory->order  = 15;
+$config->group->package->importProjectStory->subset = 'projectstory';
+$config->group->package->importProjectStory->privs  = array();
+$config->group->package->importProjectStory->privs['projectstory-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->importProjectStory->privs['projectstory-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 10, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->importProjectStory->privs['projectstory-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 20, 'depend' => array('projectstory-story'), 'recommend' => array());
 
 $config->group->package->browseProject = new stdclass();
 $config->group->package->browseProject->order  = 5;
@@ -3388,8 +3401,9 @@ $config->group->package->browseProjectStory = new stdclass();
 $config->group->package->browseProjectStory->order  = 5;
 $config->group->package->browseProjectStory->subset = 'projectstory';
 $config->group->package->browseProjectStory->privs  = array();
-$config->group->package->browseProjectStory->privs['projectstory-story'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('project-index'), 'recommend' => array('projectstory-view'));
-$config->group->package->browseProjectStory->privs['projectstory-view']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 15, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->browseProjectStory->privs['projectstory-story']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5,  'depend' => array('project-index'), 'recommend' => array('projectstory-view'));
+$config->group->package->browseProjectStory->privs['projectstory-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 15, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->browseProjectStory->privs['projectstory-report'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 25, 'depend' => array('projectstory-story'), 'recommend' => array());
 
 $config->group->package->chckAuditPlan = new stdclass();
 $config->group->package->chckAuditPlan->order  = 15;

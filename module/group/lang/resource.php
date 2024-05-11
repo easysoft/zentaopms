@@ -270,6 +270,13 @@ $lang->resource->projectstory->linkStory         = 'linkStory';
 $lang->resource->projectstory->unlinkStory       = 'unlinkStory';
 $lang->resource->projectstory->batchUnlinkStory  = 'batchUnlinkStory';
 $lang->resource->projectstory->importplanstories = 'importplanstories';
+$lang->resource->projectstory->report            = 'report';
+$lang->resource->projectstory->export            = 'export';
+$lang->resource->projectstory->batchReview       = 'batchReview';
+$lang->resource->projectstory->batchClose        = 'batchClose';
+$lang->resource->projectstory->batchChangePlan   = 'batchChangePlan';
+$lang->resource->projectstory->batchAssign       = 'batchAssign';
+$lang->resource->projectstory->batchEdit         = 'batchEdit';
 
 $lang->projectstory->methodOrder[5]  = 'story';
 $lang->projectstory->methodOrder[10] = 'track';
@@ -277,6 +284,13 @@ $lang->projectstory->methodOrder[15] = 'view';
 $lang->projectstory->methodOrder[20] = 'linkStory';
 $lang->projectstory->methodOrder[25] = 'unlinkStory';
 $lang->projectstory->methodOrder[23] = 'importplanstories';
+$lang->projectstory->methodOrder[30] = 'report';
+$lang->projectstory->methodOrder[35] = 'export';
+$lang->projectstory->methodOrder[40] = 'batchReview';
+$lang->projectstory->methodOrder[45] = 'batchClose';
+$lang->projectstory->methodOrder[50] = 'batchChangePlan';
+$lang->projectstory->methodOrder[55] = 'batchAssign';
+$lang->projectstory->methodOrder[60] = 'batchEdit';
 
 /* Release. */
 $lang->resource->projectrelease = new stdclass();

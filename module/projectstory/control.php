@@ -197,5 +197,41 @@ class projectStory extends control
     {
         echo $this->fetch('execution', 'importPlanStories', "projectID=$projectID&planID=$planID&productID=$productID");
     }
+
+    /**
+     * 查看需求的报告。
+     * The report page.
+     *
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  string $storyType
+     * @param  string $browseType
+     * @param  int    $moduleID
+     * @param  string $chartType
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function report(int $productID, int $branchID, string $storyType = 'story', string $browseType = 'unclosed', int $moduleID = 0, string $chartType = 'pie', int $projectID = 0)
+    {
+        echo $this->fetch('story', 'report', "productID=$productID&branchID=$branchID&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=$chartType&projectID=$projectID");
+    }
+
+    /**
+     * 导出需求数据。
+     * Get the data of the stories to export.
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $storyType   requirement|story
+     * @access public
+     * @return void
+     */
+    public function export(int $productID, string $orderBy, int $executionID = 0, string $browseType = '', string $storyType = 'story')
+    {
+        echo $this->fetch('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$browseType&storyType=$storyType");
+    }
 }
 
