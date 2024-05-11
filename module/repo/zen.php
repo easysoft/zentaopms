@@ -1776,8 +1776,8 @@ class repoZen extends repo
     protected function getBranchAndTagOptions(object $scm): array
     {
         $options = array(
-            array('text' => $this->lang->repo->branch, 'items' => array()),
-            array('text' => $this->lang->repo->tag,    'items' => array())
+            array('text' => $this->lang->repo->branch, 'items' => array(), 'disabled' => true),
+            array('text' => $this->lang->repo->tag,    'items' => array(), 'disabled' => true)
         );
 
         $branches = $scm->branch();
