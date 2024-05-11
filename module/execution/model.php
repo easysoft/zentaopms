@@ -1251,7 +1251,7 @@ class executionModel extends model
         $project->end   = !empty($project->realEnd)   ? $project->realEnd   : $project->end;
 
         if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
-        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
+        if(!helper::isZeroDate($project->end) && $end > $project->end) dao::$errors['end'] = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /**
