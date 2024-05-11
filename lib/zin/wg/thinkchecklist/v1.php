@@ -38,6 +38,8 @@ class thinkCheckList extends wg
 
     public function onBuildItem($item): wg|node
     {
+        global $lang;
+
         if($item instanceof item) $item = $item->props->toJSON();
 
         if(!isset($item['checked']))
@@ -71,10 +73,11 @@ class thinkCheckList extends wg
                     new textarea
                     (
                         set(array(
-                            'rows'     => 1,
-                            'disabled' => !isset($item['checked']) || !$item['checked'],
-                            'name'     => 'other',
-                            'value'    => isset($item['showText']) ? $item['showText'] : ''
+                            'rows'        => 1,
+                            'class'       => 'hidden',
+                            'name'        => 'other',
+                            'value'       => isset($item['showText']) ? $item['showText'] : '',
+                            'placeholder' => $lang->thinkrun->placeholder->otherOption
                         )),
                         on::input('inputOther'),
                         on::click('stopPropagation')
