@@ -126,7 +126,7 @@ toolbar
 );
 
 $canBatchEdit   = hasPriv('product', 'batchEdit');
-$canUpdateOrder = hasPriv('product', 'updateOrder')  && strpos($orderBy, 'order') !== false;
+$canUpdateOrder = hasPriv('product', 'updateOrder')  && $orderBy == 'order_asc';
 dtable
 (
     set::id('products'),

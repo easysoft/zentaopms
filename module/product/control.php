@@ -533,9 +533,8 @@ class product extends control
      */
     public function updateOrder()
     {
-        /* Can only be order by program sorting. */
-        $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'order') === false) return false;
+        /* Can only be order by order sorting. */
+        if($this->post->orderBy != 'order_asc') return false;
 
         /* Get sorted id list. */
         $products = json_decode($this->post->products, true);
