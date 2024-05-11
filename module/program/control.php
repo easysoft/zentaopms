@@ -650,7 +650,7 @@ class program extends control
             if($order != $oldOrders[$programID]) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($programID)->exec();
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        return $this->send(array('result' => 'success'));
     }
 
     /*
