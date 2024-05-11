@@ -28,12 +28,8 @@ jsVar('scmList', $lang->repo->scmList);
 
 formPanel
 (
-    on::change('#product', 'onProductChange'),
-    on::change('#SCM', 'onScmChange'),
     on::change('#serviceHost', 'onHostChange'),
-    on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->createRepoAction),
-    set::back('GLOBAL'),
     formRow
     (
         setClass('service hide'),
