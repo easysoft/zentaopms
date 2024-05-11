@@ -356,5 +356,29 @@ class projectStory extends control
     {
         echo $this->fetch('story', 'exportTemplate', "productID=$productID&branch=$branch&storyType=$storyType");
     }
-}
 
+    /**
+     * 批量导入需求到需求库。
+     * Batch import the data of the requiremens to the library.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchImportToLib()
+    {
+        echo $this->fetch('story', 'batchImportToLib');
+    }
+
+    /**
+     * 导入需求到需求库。
+     * Import the data of the requiremens to the library.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function importToLib($storyID)
+    {
+        echo $this->fetch('story', 'importToLib', "storyID=$storyID");
+    }
+}
