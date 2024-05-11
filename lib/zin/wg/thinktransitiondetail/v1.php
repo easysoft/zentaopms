@@ -37,8 +37,8 @@ class thinkTransitionDetail extends wg
                     setStyle(array('min-width' => '643px')),
                     div
                     (
-                        setClass('text-xl mb-3'),
-                        !empty($options->required) ? span(setClass('text-danger mr-0.5'), '*') : null,
+                        setClass('text-xl mb-3 flex items-center'),
+                        !empty($options->required) ? div(setClass('text-danger mr-0.5 h-5'), '*') : null,
                         $item->title,
                         !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
                         !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
