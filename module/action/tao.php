@@ -809,8 +809,8 @@ class actionTao extends actionModel
             $method = $this->config->action->assetViewMethod[$action->objectType];
         }
 
-         $action->objectLink = isset($method) ? helper::createLink('assetlib', $method, sprintf($vars, $action->objectID)) : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-        if(isset($method)) $action->isLibObject = true;
+        $action->objectLink = isset($method) ? helper::createLink('assetlib', $method, sprintf($vars, $action->objectID)) : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+        $action->hasLink    = true;
     }
 
     /**
