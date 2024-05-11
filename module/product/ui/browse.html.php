@@ -22,6 +22,7 @@ jsVar('storyType', $storyType);
 jsVar('tab', $app->tab);
 jsVar('vision', $config->vision);
 
+$viewType          = $this->cookie->viewType ? $this->cookie->viewType : 'tree';
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
 $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
@@ -206,6 +207,7 @@ if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
 if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 if($storyType == 'story' && $config->edition == 'ipd') unset($setting['roadmap']);
+if($viewType == 'tiled') $setting['title']['nestedToggle'] = false;
 $cols = array_values($setting);
 
 /* DataTable data. */
@@ -378,6 +380,23 @@ $reportUrl = $isProjectStory ? helper::createLink('projectstory', 'report', "pro
 $exportUrl = $isProjectStory ? helper::createLink('projectstory', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType") : helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");
 toolbar
 (
+    item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(array
+        (
+            'icon'      => 'list',
+            'class'     => 'btn-icon switchButton' . ($viewType == 'tiled' ? ' text-primary' : ''),
+            'data-type' => 'tiled',
+            'hint'      => $lang->story->viewTypeList['tiled']
+        ), array
+        (
+            'icon'      => 'tree',
+            'class'     => 'switchButton btn-icon' . ($viewType == 'tree' ? ' text-primary' : ''),
+            'data-type' => 'tree',
+            'hint'      => $lang->story->viewTypeList['tree']
+        ))
+    ))),
     (!$canReport || !$productID) ? null : item(set(array('id' => 'reportBtn', 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => $reportUrl))),
     !$canExport ? null : item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost', 'url' => $exportUrl, 'data-toggle' => 'modal'))),
     $fnBuildCreateStoryButton(),

@@ -271,6 +271,7 @@ $filter->product->browse->cookie['productStoryOrder'] = 'reg::orderBy';
 $filter->product->browse->cookie['storyModule']       = 'int';
 $filter->product->browse->cookie['storyBranch']       = 'int';
 $filter->product->browse->cookie['treeBranch']        = 'reg::word';
+$filter->product->browse->cookie['viewType']          = 'code';
 $filter->product->all->cookie['showProductBatchEdit'] = 'int';
 $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
@@ -321,6 +322,7 @@ $filter->project->testcase->cookie['onlyScene']          = 'code';
 
 $filter->projectstory->story->cookie['storyModuleParam']   = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';
+$filter->projectstory->story->cookie['viewType']           = 'code';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'reg::word';

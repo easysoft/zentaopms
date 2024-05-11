@@ -27,6 +27,13 @@ $(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParen
     $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
 });
 
+$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+{
+    var viewType = $(this).attr('data-type');
+    $.cookie.set('viewType', viewType, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+});
+
 $(document).off('click','#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
 {
     var planID = $('[name=plan]').val();

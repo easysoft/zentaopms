@@ -221,6 +221,9 @@ $lang->story->estimateUnit     = "(Unit: {$lang->story->hour})";
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";
 
+$lang->story->viewTypeList['tiled'] = 'Tiled';
+$lang->story->viewTypeList['tree']  = 'Tree';
+
 if($config->enableER) $lang->story->typeList['epic']        = $lang->ERCommon;
 if($config->URAndSR)  $lang->story->typeList['requirement'] = $lang->URCommon;
 $lang->story->typeList['story'] = $lang->SRCommon;
