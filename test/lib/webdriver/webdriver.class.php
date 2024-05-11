@@ -324,6 +324,18 @@ class webdriver
         return $this;
     }
 
+    /**
+     * Scroll page, default distance is 100 px.
+     *
+     * @param  int    $scrollDistance
+     * @access public
+     * @return void
+     */
+    public function scroll($scrollDistance = 100)
+    {
+        $this->driver->executeScript("window.scrollBy(0, $scrollDistance);");
+        return $this;
+    }
 }
 
 class dom
