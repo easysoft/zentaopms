@@ -74,7 +74,7 @@ class thinkCheckList extends wg
                     (
                         set(array(
                             'rows'        => 1,
-                            'class'       => 'hidden',
+                            'class'       => isset($item['checked']) && $item['checked'] ? '' : 'hidden',
                             'name'        => 'other',
                             'value'       => isset($item['showText']) ? $item['showText'] : '',
                             'placeholder' => $lang->thinkrun->placeholder->otherOption

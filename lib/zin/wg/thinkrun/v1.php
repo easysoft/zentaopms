@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'thinkradiolist' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'thinkchecklist' . DS . 'v1.php';
 class thinkRun extends wg
 {
     protected static array $defineProps = array(
@@ -17,7 +17,7 @@ class thinkRun extends wg
         $options = json_decode($item->options);
         $answer  = json_decode($item->answer);
 
-        if($options->questionType == 'radio')
+        if($options->questionType == 'radio' || $options->questionType == 'checkbox')
         {
             $fields     = $options->fields ? explode(', ', $options->fields) : array();
             $showFields = array();
@@ -25,8 +25,9 @@ class thinkRun extends wg
 
             if($options->enableOther) $showFields[] = array('text' => $lang->thinkwizard->step->other, 'value' => 'other', 'isOther' => '1', 'showText' => isset($answer->other) ? $answer->other : '');
 
-            return new thinkRadioList
+            return new thinkCheckList
             (
+                set::type($options->questionType),
                 setClass('mt-6'),
                 set::items($showFields),
                 set::name('result'),
