@@ -30,10 +30,11 @@ class thinkTransitionDetail extends wg
             setClass('flex bg-white px-8 w-full items-center w-full justify-center pt-10 pb-10 mb-4'),
             div
             (
-                setClass('px-4 mt-10'),
+                setClass('px-4 mt-6'),
                 setStyle(array('max-width' => '878px')),
                 $item->type == 'question' ? array
                 (
+                    setClass('pb-10'),
                     setStyle(array('min-width' => '643px')),
                     div
                     (
