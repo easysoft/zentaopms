@@ -75,12 +75,11 @@ class storyModel extends model
             }
         }
 
-        $extraStories = array();
-        if($story->duplicateStory) $extraStories = array($story->duplicateStory);
-        if($story->linkStories)    $extraStories = array_merge($extraStories, explode(',', $story->linkStories));
-
-        $extraStories = array_unique($extraStories);
+        $extraStories = $story->duplicateStory ? array($story->duplicateStory) : array();
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
+
+        $story->hasOtherTypeChild = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->ne($story->type)->andWhere('deleted')->eq('0')->fetch('id');
+        $story->hasSameTypeChild  = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->eq($story->type)->andWhere('deleted')->eq('0')->fetch('id');
 
         $story->openedDate     = helper::isZeroDate($story->openedDate)     ? '' : substr($story->openedDate,     0, 19);
         $story->assignedDate   = helper::isZeroDate($story->assignedDate)   ? '' : substr($story->assignedDate,   0, 19);

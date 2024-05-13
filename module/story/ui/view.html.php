@@ -195,6 +195,29 @@ foreach($actions as $key => $action)
         continue;
     }
 
+    if(isset($action['icon']) && $action['icon'] == 'split')
+    {
+        $canBatchCreateStory = $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+        $objectID = $app->tab == 'project' ? $projectID : $executionID;
+        if($canBatchCreateStory)
+        {
+            $action['url'] = createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+        }
+        elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+        {
+            $action['url'] = createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+        }
+        elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+        {
+            $action['url'] = createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+        }
+        else
+        {
+            unset($actions[$key]);
+            continue;
+        }
+    }
+
     if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, isset($projectID) ? $projectID : 0), $action['url']);
     if(isset($action['items']))
     {

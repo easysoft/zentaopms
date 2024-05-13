@@ -1656,7 +1656,7 @@ class storyZen extends story
      */
     protected function getAfterEditLocation(int $storyID, string $storyType)
     {
-        $module = 'story';
+        $module = $storyType;
         $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
         $method = 'view';
         if($this->app->tab == 'project')
