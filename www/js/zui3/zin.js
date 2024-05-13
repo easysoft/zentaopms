@@ -652,9 +652,11 @@
                     const frame = window.frameElement;
                     frame.classList.remove('loading');
                     frame.classList.add('in');
-                    $page.find('iframe').removeClass('invisible');
+                    const $iframe = $page.find('iframe').removeClass('invisible');
                     $page.removeClass('loading').find('iframe').addClass('in');
                     $(document).trigger('pageload.app');
+                    const iframeWindow = $iframe[0].contentWindow;
+                    iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
                 });
         }
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
