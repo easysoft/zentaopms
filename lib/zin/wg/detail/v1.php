@@ -356,7 +356,7 @@ CSS;
     {
         return div
         (
-            setClass('detail-main flex-auto col gap-1 min-w-0'),
+            setClass('detail-main flex-auto col gap-2 min-w-0'),
             div
             (
                 setClass('detail-sections canvas shadow rounded px-6 py-4'),
@@ -435,7 +435,7 @@ CSS;
     {
         return div
         (
-            setClass('detail-body row gap-1 items-start'),
+            setClass('detail-body row gap-2 items-start'),
             $this->buildMain(),
             $this->buildSide()
         );
