@@ -1416,8 +1416,6 @@ class repo extends control
         $getProjectFunc = 'ajaxGet' . $server->type . 'Projects';
 
         $repos = $this->$getProjectFunc($serverID);
-        if(empty($repos)) return print(json_encode(array()));
-
         return print(json_encode($this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'))));
     }
 
@@ -1483,7 +1481,7 @@ class repo extends control
     {
         $projects = $this->repo->getGitlabProjects($gitlabID, $filter);
 
-        if(!$projects) return print('[]');
+        if(!$projects) return array();
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
 
         $options = array();
