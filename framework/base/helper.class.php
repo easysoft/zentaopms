@@ -762,6 +762,10 @@ class baseHelper
             register_shutdown_function('session_write_close');
         }
         session_start();
+
+        global $app;
+        if(isset($_SESSION['user']))  $app->user = $_SESSION['user'];
+        if(!isset($_SESSION['user'])) unset($app->user);
     }
 
     /**

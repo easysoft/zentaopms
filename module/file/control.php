@@ -132,7 +132,6 @@ class file extends control
      */
     public function download($fileID, $mouse = '')
     {
-        if(session_id() != $this->app->sessionID) helper::restartSession($this->app->sessionID);
         $file = $this->file->getById($fileID);
         if(empty($file))
         {

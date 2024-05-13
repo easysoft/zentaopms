@@ -74,4 +74,6 @@ if(!$app->setParams()) return;
 $common->checkPriv();
 $common->checkIframe();
 
+if(session_id() != $app->sessionID) helper::restartSession($app->sessionID);
+
 echo $app->outputPage();
