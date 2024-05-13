@@ -65,8 +65,8 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
     if(!common::canModify('product', $product)) return null;
 
     global $app;
-    $createLink      = createLink('story', 'create', "product=" . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
-    $batchCreateLink = createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
+    $createLink      = createLink($storyType, 'create', "product=" . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
+    $batchCreateLink = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
 
     $createBtnLink  = '';
     $createBtnTitle = '';
@@ -167,8 +167,6 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
             'url'  => createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams")
         )));
     }
-
-    if($storyType == 'requirement') $lang->execution->linkStory = str_replace($lang->SRCommon, $lang->URCommon, $lang->execution->linkStory);
 
     $canLinkStory     = common::hasPriv('projectstory', 'linkStory');
     $canlinkPlanStory = !empty($product) && common::hasPriv('projectstory', 'importPlanStories') && $storyType == 'story' && !$project->charter;
