@@ -461,7 +461,7 @@ class jobModel extends model
         $params       = array('branch' => zget($pipeline, 'reference', ''));
         $apiRoot      = $this->loadModel('gitfox')->getApiRoot($job->server);
         $pipeline     = json_decode(common::http(sprintf($apiRoot->url, "/repos/{$pipeline->project}/pipelines/{$pipelineName}/executions"), $params, array(), $apiRoot->header));
-        if(!empty($pipeline->message))
+        if(!empty($pipeline->message) && !in_array(!empty($pipeline->status) ? $pipeline->status : null, array('pending', 'success')))
         {
             dao::$errors[] = $pipeline->message;
             $compile->status = 'create_fail';
