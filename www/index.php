@@ -74,6 +74,8 @@ try
     $common->checkPriv();
     if(!$common->checkIframe()) helper::end();
 
+    if(session_id() != $app->sessionID) helper::restartSession($app->sessionID);
+
     $app->loadModule();
 }
 catch (EndResponseException $endResponseException)

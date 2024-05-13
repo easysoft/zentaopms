@@ -128,8 +128,6 @@ class file extends control
      */
     public function download(int $fileID, string $mouse = '')
     {
-        if(session_id() != $this->app->sessionID) helper::restartSession($this->app->sessionID);
-
         $file = $this->file->getById($fileID);
         if(empty($file) || !$this->file->fileExists($file))
         {
