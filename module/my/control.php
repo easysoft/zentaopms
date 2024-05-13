@@ -279,6 +279,7 @@ class my extends control
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         $this->loadModel('story');
+        $this->loadModel('requirement');
         if($type == 'assignedBy')
         {
             $stories = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'requirement');
