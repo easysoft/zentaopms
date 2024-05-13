@@ -18,8 +18,7 @@ jsVar('orderBy', $orderBy);
 if(str_contains($orderBy, 'line')) $orderBy = str_replace('line', 'productLine', $orderBy);
 $fnGetTableFieldList = function() use ($config)
 {
-    $fieldList = $this->loadModel('datatable') ->getSetting('product');
-
+    $fieldList = $this->loadModel('datatable')->getSetting('product');
     $extendFieldList = $this->product->getFlowExtendFields();
     foreach($extendFieldList as $field => $name)
     {
