@@ -997,4 +997,22 @@ class doc extends control
 
         $this->display();
     }
+
+    /**
+     * 目录排序
+     * Catalog sorting.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortCatalog()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            foreach($_POST['orders'] as $id => $order) $this->doc->updateOrder($id, (int)$order);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
+    }
 }

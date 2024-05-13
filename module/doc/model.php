@@ -2790,4 +2790,20 @@ class docModel extends model
 
         return $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
     }
+
+    /**
+     * 更新目录顺序。
+     * Update catalog order.
+     *
+     * @param  int    $catalogID
+     * @param  int    $order
+     * @access public
+     * @return bool
+     */
+    public function updateOrder(int $catalogID, int $order): bool
+    {
+        $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($catalogID)->andWhere('type')->eq('doc')->exec();
+
+        return !dao::isError();
+    }
 }
