@@ -159,6 +159,7 @@ class upgradeModel extends model
             $this->importBuildinModules();
             $this->importLiteModules();
             $this->addSubStatus();
+            $this->processDataset();
         }
 
         $this->loadModel('program')->refreshStats(true);
