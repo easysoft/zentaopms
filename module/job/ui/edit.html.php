@@ -350,7 +350,7 @@ formPanel
         formGroup
         (
             set::label($lang->job->customParam),
-            $customParam,
+            !empty($job->customParam) ? $customParam : null,
             set::width('2/3'),
             inputGroup
             (
