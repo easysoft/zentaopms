@@ -42,6 +42,15 @@ foreach($results as $i => $result)
 {
     $class     = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
     $fileCount = count($result->files);
+    $isChinese = strpos($app->getClientLang(), 'zh-') !== false;
+    if($result->node == 0 && $result->task > 0)
+    {
+        $taskResult = $isChinese ? sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''), zget($builds, $result->build, '')) : sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''), zget($users, $result->lastRunner), zget($builds, $result->build, ''));
+    }
+    elseif(!$isChinese)
+    {
+        $taskResult = ' by <strong>' . zget($users, $result->lastRunner) . '</strong>';
+    }
     if($class != 'success') $failCount ++;
     $trs[] = h::tr
     (
@@ -55,10 +64,9 @@ foreach($results as $i => $result)
             width('120px'),
             $result->date,
             $result->node > 0 ? sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, $lang->testtask->runCase) : '',
-            $result->node == 0 && $result->task > 0 ? html(sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''))) : '',
             $result->node == 0 || !empty($result->ZTFResult) ? html
             (
-                sprintf($lang->testtask->runCaseResult, zget($users, $result->lastRunner), zget($builds, $result->build, ''), $class, $lang->testcase->resultList[$result->caseResult])
+                $isChinese ? sprintf($lang->testtask->runCaseResult, zget($users, $result->lastRunner), $taskResult, $class, $lang->testcase->resultList[$result->caseResult]) : sprintf($lang->testtask->runCaseResult, $taskResult, $class, $lang->testcase->resultList[$result->caseResult])
             ) : h::strong
             (
                 setClass('text-waring'),

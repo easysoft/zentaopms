@@ -147,8 +147,8 @@ $lang->testtask->pass          = '通过';
 $lang->testtask->fail          = '失败';
 $lang->testtask->showResult    = '共执行<label class="label primary-pale rounded-full h-3 px-1.5 mx-1">%s</label>次';
 $lang->testtask->showFail      = '失败<label class="label danger-pale rounded-full h-3 px-1.5 mx-1">%s</label>次';
-$lang->testtask->runInTask     = '，在 <strong>%s</strong> 中';
-$lang->testtask->runCaseResult = '，由 <strong>%s</strong> 执行  <strong>%s</strong>，结果为 <span class="text-%s font-bold">%s</span>。';
+$lang->testtask->runInTask     = ' <strong>%s</strong>，提测版本为 <strong>%s</strong> ';
+$lang->testtask->runCaseResult = '，由 <strong>%s</strong> 执行 %s，结果为 <span class="text-%s font-bold">%s</span>。';
 
 $lang->testtask->confirmDelete     = '您确认要删除该测试单吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';

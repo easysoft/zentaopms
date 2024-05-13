@@ -147,8 +147,8 @@ $lang->testtask->pass          = 'Erfolgreich';
 $lang->testtask->fail          = 'Fehlgeschlagen';
 $lang->testtask->showResult    = 'Ausführungen <label class="label primary-pale rounded-full h-3 px-1.5 mx-1">%s</label>';
 $lang->testtask->showFail      = 'Fehlgeschlagen <label class="label danger-pale rounded-full h-3 px-1.5 mx-1">%s</label>';
-$lang->testtask->runInTask     = ', in <strong>%s</strong> ';
-$lang->testtask->runCaseResult = ', executed <strong>%s</strong> by <strong>%s</strong> , the results is <span class="text-%s font-bold">%s</span>.';
+$lang->testtask->runInTask     = ' <strong>%s</strong> by <strong>%s</strong>, the build is <strong>%s</strong> ';
+$lang->testtask->runCaseResult = ', executed %s, the results is <span class="text-%s font-bold">%s</span>.';
 
 $lang->testtask->confirmDelete     = 'Möchten Sie dieses Build löschen?';
 $lang->testtask->confirmUnlinkCase = 'Möchten Sie die Verknüpfung zu dem Fall aufheben?';
