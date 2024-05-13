@@ -57,6 +57,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('name'),
+        set::required(true),
         set::label($lang->project->name),
     ),
     $setCode ? formBatchItem
@@ -79,6 +80,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('begin'),
+        set::required(true),
         set::label($lang->project->begin),
         set::control('date'),
         set::width('120px')
@@ -86,6 +88,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('end'),
+        set::required(true),
         set::label($lang->project->end),
         set::width('120px'),
         set::control(array
