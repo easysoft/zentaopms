@@ -51,10 +51,10 @@ $burn = div
         set::color(array('#2B80FF', '#D2D6E5')),
         set::width('100%'),
         set::height(140),
-        set::grid(array('left' => '30px', 'top' => '30px', 'right' => '10px', 'bottom' => '0',  'containLabel' => true)),
+        set::grid(array('left' => '2px', 'top' => '30px', 'right' => '10px', 'bottom' => '0',  'containLabel' => true)),
         set::legend(array('show' => true, 'right' => '0')),
         set::xAxis(array('type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'), 'axisLabel' => array('rotate' => 45))),
-        set::yAxis(array('type' => 'value', 'name' => 'H', 'minInterval' => $chartData['baseLine'][0], 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
+        set::yAxis(array('type' => 'value', 'name' => 'h', 'minInterval' => $chartData['baseLine'][0], 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
         set::series
         (
             array
