@@ -608,7 +608,14 @@ class jobModel extends model
         {
             if(!empty($pipeline->disabled)) continue;
 
-            $job->pipeline = json_encode(array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch));
+            $pipelineMeta = array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch);
+            if($repo->SCM == 'GitFox')
+            {
+                $pipelineMeta['identifier'] = $pipeline ->identifier;
+                $pipelineMeta['name']       = $pipeline ->identifier;
+            }
+
+            $job->pipeline = json_encode($pipelineMeta);
 
             $hash = md5($job->pipeline);
             if(array_key_exists($hash, array_flip($addedPipelines))) continue;
