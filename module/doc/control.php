@@ -475,7 +475,7 @@ class doc extends control
         }
 
         if($this->viewType == 'json') $this->send(array('status' => $action ? 'no' : 'yes'));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'status' => $action ? 'no' : 'yes'));
+        return $this->send(array('result' => 'success', 'message' => $action ? $this->lang->doc->cancelCollection : $this->lang->doc->collectSuccess, 'load' => true, 'status' => $action ? 'no' : 'yes'));
     }
 
     /**

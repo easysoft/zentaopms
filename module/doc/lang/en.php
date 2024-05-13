@@ -185,6 +185,7 @@ $lang->doc->addType          = 'Add';
 $lang->doc->childType        = 'Directory';
 $lang->doc->catalogName      = 'Name';
 $lang->doc->collect          = 'Add Favorite';
+$lang->doc->collectSuccess   = 'Add Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Delete File';
 $lang->doc->menuTitle        = 'Direcotory';

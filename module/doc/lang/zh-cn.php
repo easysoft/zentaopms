@@ -185,6 +185,7 @@ $lang->doc->addType          = '增加目录';
 $lang->doc->childType        = '子目录';
 $lang->doc->catalogName      = '目录名称';
 $lang->doc->collect          = '收藏';
+$lang->doc->collectSuccess   = '收藏成功';
 $lang->doc->cancelCollection = '取消收藏';
 $lang->doc->deleteFile       = '删除附件';
 $lang->doc->menuTitle        = '目录';
