@@ -16,31 +16,11 @@ dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
 foreach($MRList as $MR)
 {
-    $MR->canEdit   = '';
-    $MR->canDelete = ($app->user->admin or (isset($openIDList[$MR->hostID]) and isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
-    if(in_array($repo->SCM, array('Gitlab', 'GitFox')))
-    {
-        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->isDeveloper) and $projects[$MR->hostID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
-    }
-    elseif($repo->SCM == 'Gitea')
-    {
-        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits) and $projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits == true) ? '' : 'disabled';
-    }
-    elseif($repo->SCM == 'Gogs')
-    {
-        $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->permissions->push) and $projects[$MR->hostID][$MR->sourceProject]->permissions->push) ? '' : 'disabled';
-    }
+    /* The user whether has the permission of delete and edit does not require the judge of the permission from the project of the server. */
+    $MR->canDelete = hasPriv('mr', 'delete') ? '' : 'disabled';
+    $MR->canEdit   = hasPriv('mr', 'edit')   ? '' : 'disabled';
 
-    if($repo->SCM == 'Gitlab')
-    {
-        $MR->sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch;
-        $MR->targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch;
-    }
-    else
-    {
-        $MR->sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->full_name . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch;
-        $MR->targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->full_name . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch;
-    }
+    $MR->sourceProject = $MR->targetProject = $repo->name;
 
     $MR->mergeStatus = ($MR->status == 'closed' || $MR->status == 'merged') ? zget($lang->mr->statusList, $MR->status) : zget($lang->mr->mergeStatusList, $MR->mergeStatus);
 
