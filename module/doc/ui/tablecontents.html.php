@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('exportMethod', $exportMethod);
 $createLibButton = common::hasPriv('doc', 'createLib') ? btn
 (
     setClass('secondary'),
@@ -85,6 +86,7 @@ toolbar
         'class'       => 'ghost export',
         'text'        => $lang->export,
         'url'         => $exportLink,
+        'data-size'   => 'sm',
         'data-toggle' => 'modal'
     ))) : null,
     $createLibButton,
