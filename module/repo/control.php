@@ -1425,9 +1425,9 @@ class repo extends control
      *
      * @param  int $giteaID
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGiteaProjects(int $giteaID)
+    public function ajaxGetGiteaProjects(int $giteaID): array
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
 
@@ -1449,9 +1449,9 @@ class repo extends control
      *
      * @param  int    $gogsID
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGogsProjects(int $gogsID)
+    public function ajaxGetGogsProjects(int $gogsID): array
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
 
@@ -1475,9 +1475,9 @@ class repo extends control
      * @param  string $projectIdList
      * @param  string $filter
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = '')
+    public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = ''): array
     {
         $projects = $this->repo->getGitlabProjects($gitlabID, $filter);
 
@@ -1503,13 +1503,13 @@ class repo extends control
      * @param  string $projectIdList
      * @param  string $filter
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = '')
+    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = ''): array
     {
         $projects = $this->repo->getGitfoxProjects($gitfoxID, $filter);
 
-        if(!$projects) return print('[]');
+        if(!$projects) return array();
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
 
         $options = array();
