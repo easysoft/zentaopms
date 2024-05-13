@@ -1720,7 +1720,7 @@ class storyTao extends storyModel
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
         $canBatchCreateStory = $this->isClickable($story, 'batchcreate');
-        if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
+        if($this->app->rawModule != 'projectstory' || $story->type == 'requirement' || $this->config->vision == 'lite' || $shadow)
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
 
