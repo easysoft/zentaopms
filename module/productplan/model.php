@@ -133,7 +133,7 @@ class productplanModel extends model
 
             $bugCount = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
             $plan->bugs     = zget($plan, 'bugs', 0)    + $bugCount;
-            $plan->hour     = zget($plan, 'hour', 0)    + array_sum($storyPairs);
+            $plan->hour     = zget($plan, 'hour', 0)    + round(array_sum($storyPairs), 1);
             $plan->stories  = zget($plan, 'stories', 0) + count($storyPairs);
             $plan->projects = zget($planProjects, $plan->id, '');
             $plan->expired  = $plan->end < helper::today();
