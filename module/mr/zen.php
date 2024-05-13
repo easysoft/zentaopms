@@ -16,26 +16,13 @@ class mrZen extends mr
      * Get the code base project information of the merge request.
      *
      * @param  object    $repo
-     * @param  array     $MRList
      * @access protected
      * @return array
      */
-    protected function getAllProjects(object $repo, array $MRList): array
+    protected function getAllProjects(object $repo): array
     {
-        $projectIdList = array();
-        if($repo->SCM == 'Gitlab')
-        {
-            foreach($MRList as $MR)
-            {
-                if($repo->id != $MR->repoID) continue;
-
-                $projectIdList[$MR->sourceProject] = $MR->sourceProject;
-                $projectIdList[$MR->targetProject] = $MR->targetProject;
-            }
-        }
-
         $methodName = 'get' . ucfirst($repo->SCM) . 'Projects';
-        return $this->mr->{$methodName}((int)$repo->serviceHost, $projectIdList);
+        return $this->mr->{$methodName}((int)$repo->serviceHost, array($repo->serviceProject => $repo->serviceProject));
     }
 
     /**

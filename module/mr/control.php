@@ -99,7 +99,7 @@ class mr extends control
 
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => $repo->serviceProject);
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
-        $projects       = $this->mrZen->getAllProjects($repo, $MRList);
+        $projects       = $this->mrZen->getAllProjects($repo);
 
         $this->view->title      = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
