@@ -102,8 +102,7 @@ class pipelineModel extends model
      */
     public function create(object $server): int|false
     {
-        $type = $server->appType;
-        $server->type = $type;
+        $server->type = !empty($server->type) ? $server->type : $server->appType;
         unset($server->appType);
         $server->url = rtrim($server->url, '/');
 
@@ -113,9 +112,9 @@ class pipelineModel extends model
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
             ->check('name', 'unique', "`type` = '$type'")
-            ->checkIF($type == 'jenkins', 'account', 'notempty')
-            ->checkIF($type == 'jenkins' && !$server->token, 'password', 'notempty')
-            ->checkIF($type == 'jenkins' && !$server->password, 'token', 'notempty')
+            ->checkIF($server->type == 'jenkins', 'account', 'notempty')
+            ->checkIF($server->type == 'jenkins' && !$server->token, 'password', 'notempty')
+            ->checkIF($server->type == 'jenkins' && !$server->password, 'token', 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;

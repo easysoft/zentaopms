@@ -16,11 +16,10 @@ class instanceZen extends instance
      * Show instance view.
      *
      * @param  int    $id
-     * @param  string $tab
      * @access public
      * @return void
      */
-    protected function storeView(int $id, string $tab = 'baseinfo')
+    protected function storeView(int $id)
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
 
