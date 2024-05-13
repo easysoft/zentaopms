@@ -62,6 +62,7 @@ foreach($results as $i => $result)
         (
             span(setClass('toggle-icon circle inline-block align-middle mr-2')),
             width('120px'),
+            label(setClass('mx-2 gray-pale'), "#{$result->id}"),
             $result->date,
             $result->node > 0 ? sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, $lang->testtask->runCase) : '',
             $result->node == 0 || !empty($result->ZTFResult) ? html
