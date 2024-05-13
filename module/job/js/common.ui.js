@@ -110,6 +110,8 @@ window.setPipeline = function()
         if(result.data.length > 0) pipelines = result.data;
 
         $pipeline.render({items: pipelines});
+        const pipeline = JSON.parse(job.pipeline).name;
+        if(repoID == job.repo && pipeline) $pipeline.$.setValue(pipeline);
         $('.gitfox-pipeline').removeClass('hidden');
     })
 }
