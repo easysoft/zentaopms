@@ -102,7 +102,7 @@ class pipelineModel extends model
      */
     public function create(object $server): int|false
     {
-        $server->type = !empty($server->type) ? $server->type : $server->appType;
+        if(!empty($server->appType)) $server->type = $server->appType;
         unset($server->appType);
         $server->url = rtrim($server->url, '/');
 
