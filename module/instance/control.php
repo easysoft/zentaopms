@@ -327,14 +327,14 @@ class instance extends control
                 $cloudApp->app_version = $customData->app_version;
             }
 
-            $sharedDB = new stdclass;
+            $sharedDB = new stdclass();
             if(isset($cloudApp->dependencies->mysql) && $customData->dbType == 'sharedDB')
             {
-                $sharedDB = zget($mysqlList, $customData->dbService);
+                $sharedDB = zget($mysqlList, $customData->dbService, $sharedDB);
             }
             elseif(isset($cloudApp->dependencies->postgresql) && $customData->dbType == 'sharedDB')
             {
-                $sharedDB = zget($pgList, $customData->dbService);
+                $sharedDB = zget($pgList, $customData->dbService, $sharedDB);
             }
             $instance = $this->instance->install($cloudApp, $sharedDB, $customData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
