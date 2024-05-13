@@ -128,7 +128,7 @@ $contentDom = div
     setID('docPanel'),
     div
     (
-        setClass('panel-heading'),
+        setClass('panel-heading pl-0'),
         div
         (
             setClass('flex-1 w-0'),
@@ -197,9 +197,9 @@ $contentDom = div
     div
     (
         setClass('info mb-4'),
-        span
+        div
         (
-            setClass('user-time text-gray mr-2'),
+            setClass('user-time text-gray mr-2 inline-flex items-center'),
             icon
             (
                 'contacts',
@@ -207,19 +207,19 @@ $contentDom = div
             ),
             $createInfo
         ),
-        span
+        div
         (
-            setClass('user-time text-gray mr-2'),
+            setClass('user-time text-gray mr-2 inline-flex items-center'),
             icon
             (
-                'star',
+                'star-empty',
                 setClass('mr-2')
             ),
             $doc->collects ? $doc->collects : 0
         ),
-        span
+        div
         (
-            setClass('user-time text-gray'),
+            setClass('user-time text-gray inline-flex items-center'),
             icon
             (
                 'eye',
