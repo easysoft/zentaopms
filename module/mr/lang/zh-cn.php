@@ -50,6 +50,8 @@ $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = '版本库';
 $lang->mr->jobID       = '流水线任务';
 $lang->mr->commitLogs  = '提交记录';
+$lang->mr->execJob     = '执行';
+$lang->mr->execJobTip  = '手动执行流水线任务';
 
 $lang->mr->canMerge  = "可合并";
 $lang->mr->cantMerge = "不可合并";
