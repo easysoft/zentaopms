@@ -1,0 +1,4676 @@
+{
+    "id": 6,
+    "dimension": "2",
+    "name": "年度完成项目过程数据大屏",
+    "desc": "了解已完成项目的生产效率",
+    "cover": "static\/images\/screen1.png",
+    "builtin": "1",
+    "scheme": {
+        "editCanvasConfig": {
+            "projectName": "2",
+            "width": 1366,
+            "height": "3600",
+            "size": 0,
+            "lockScale": false,
+            "filterShow": false,
+            "hueRotate": 0,
+            "saturate": 1,
+            "contrast": 1,
+            "brightness": 1,
+            "opacity": 1,
+            "rotateZ": 0,
+            "rotateX": 0,
+            "rotateY": 0,
+            "skewX": 0,
+            "skewY": 0,
+            "blendMode": "normal",
+            "selectColor": true,
+            "chartThemeColor": "3wvajowr6l8000",
+            "chartThemeSetting": {},
+            "previewScaleType": "scrollY",
+            "globalFilter": [],
+            "chartCustomThemeColorInfo": []
+        },
+        "componentList": [
+            {
+                "id": "owvo5wyad9c00",
+                "isGroup": false,
+                "attr": {
+                    "x": 1142,
+                    "y": 320,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3as8najk6hg00",
+                "isGroup": false,
+                "attr": {
+                    "x": 1142,
+                    "y": 208,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5d6bo6dfzf4000",
+                "isGroup": false,
+                "attr": {
+                    "x": 962,
+                    "y": 320,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "26hlsg2c15vk00",
+                "isGroup": false,
+                "attr": {
+                    "x": 962,
+                    "y": 208,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5niqhm817gw000",
+                "isGroup": false,
+                "attr": {
+                    "x": 782,
+                    "y": 320,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5rjfkvfw4i8000",
+                "isGroup": false,
+                "attr": {
+                    "x": 782,
+                    "y": 208,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "ffvurro4h4w00",
+                "isGroup": false,
+                "attr": {
+                    "x": 603,
+                    "y": 320,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "51idc736a5s000",
+                "isGroup": false,
+                "attr": {
+                    "x": 602,
+                    "y": 208,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "rdnf6i797pc00",
+                "isGroup": false,
+                "attr": {
+                    "x": 421,
+                    "y": 320,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089ff12"
+                }
+            },
+            {
+                "id": "2klk0oo8kj8000",
+                "isGroup": false,
+                "attr": {
+                    "x": 421,
+                    "y": 208,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "48zdrnjvl0c000",
+                "isGroup": false,
+                "attr": {
+                    "x": 242,
+                    "y": 320,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "4q65e0gqmlg000",
+                "isGroup": false,
+                "attr": {
+                    "x": 61,
+                    "y": 320,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "17bvssn39zuk00",
+                "isGroup": false,
+                "attr": {
+                    "x": 242,
+                    "y": 208,
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5irrkthvdhc000",
+                "isGroup": false,
+                "attr": {
+                    "x": 61,
+                    "y": "208",
+                    "w": 156,
+                    "h": 88,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "vgfp0juvuf400",
+                "isGroup": false,
+                "attr": {
+                    "x": 416,
+                    "y": 339,
+                    "w": 161,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "延期完成执行数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 20,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#E1E5EA00"
+                }
+            },
+            {
+                "id": "2uqxi3e1y3u000",
+                "isGroup": false,
+                "attr": {
+                    "x": 424,
+                    "y": 303,
+                    "w": 144,
+                    "h": 81,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-延期完成执行数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "1326",
+                    "sourceID": "10009"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "1326",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 57,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10009",
+                "title": "延期完成执行数",
+                "type": "card"
+            },
+            {
+                "id": "5nyrxc5w010000",
+                "isGroup": false,
+                "attr": {
+                    "x": 18,
+                    "y": 726,
+                    "w": 653,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "2uws0ytah1s000",
+                "isGroup": false,
+                "attr": {
+                    "x": 693,
+                    "y": 726,
+                    "w": 653,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3mnttqgyc4o000",
+                "isGroup": false,
+                "attr": {
+                    "x": 253,
+                    "y": 46,
+                    "w": 860,
+                    "h": 32,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1089FF42",
+                        "#1089FF00"
+                    ],
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "4nir9d6n138000",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 106,
+                    "w": 1326,
+                    "h": 600,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3sdxo2ffqi0000",
+                "isGroup": false,
+                "attr": {
+                    "x": 50,
+                    "y": 228,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": " 完成项目数 ",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 37,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 4,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "4nyo2dxv5yi000",
+                "isGroup": false,
+                "attr": {
+                    "x": 50,
+                    "y": 194,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成项目数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "91",
+                    "sourceID": "10000"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "91",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10000",
+                "title": "完成项目数",
+                "type": "card"
+            },
+            {
+                "id": "2ev27p00xbpc00",
+                "isGroup": false,
+                "attr": {
+                    "x": 230,
+                    "y": 228,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "按时完成项目数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 20,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "lzaj0yorolc00",
+                "isGroup": false,
+                "attr": {
+                    "x": 410,
+                    "y": 228,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "延期完成项目数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 20,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "4jogna07yk8000",
+                "isGroup": false,
+                "attr": {
+                    "x": 771,
+                    "y": 229,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成需求规模数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 20,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "15j805dkq4ik00",
+                "isGroup": false,
+                "attr": {
+                    "x": 951,
+                    "y": 228,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成发布数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 36,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "4q15hg06540000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1131,
+                    "y": 228,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "解决bug数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 36,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "4l83s1sqlek000",
+                "isGroup": false,
+                "attr": {
+                    "x": 591,
+                    "y": 228,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成需求条目数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 20,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "5f6dr2y034w000",
+                "isGroup": false,
+                "attr": {
+                    "x": 231,
+                    "y": 194,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-按时完成项目数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "3",
+                    "sourceID": "10001"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "3",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10001",
+                "title": "按时完成项目数",
+                "type": "card"
+            },
+            {
+                "id": "1gw11ho3ev4w00",
+                "isGroup": false,
+                "attr": {
+                    "x": 410,
+                    "y": 194,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-延期完成项目数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "88",
+                    "sourceID": "10002"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "88",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10002",
+                "title": "延期完成项目数",
+                "type": "card"
+            },
+            {
+                "id": "4ljohxdlzfs000",
+                "isGroup": false,
+                "attr": {
+                    "x": 591,
+                    "y": 194,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成需求条目数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "17954",
+                    "sourceID": "10003"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "17954",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10003",
+                "title": "完成需求条目数",
+                "type": "card"
+            },
+            {
+                "id": "2dsxvobrqdes00",
+                "isGroup": false,
+                "attr": {
+                    "x": 771,
+                    "y": 194,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成需求规模数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "57370",
+                    "sourceID": "10004"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "57370",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10004",
+                "title": "完成需求规模数",
+                "type": "card"
+            },
+            {
+                "id": "25j01jdzmrts00",
+                "isGroup": false,
+                "attr": {
+                    "x": 951,
+                    "y": 194,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成发布数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "602",
+                    "sourceID": "10005"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "602",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10005",
+                "title": "完成发布数",
+                "type": "card"
+            },
+            {
+                "id": "poh8lbo2qc000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1131,
+                    "y": 194,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-解决bug数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "13886",
+                    "sourceID": "10006"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "13886",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10006",
+                "title": "解决bug数",
+                "type": "card"
+            },
+            {
+                "id": "4nkffa1hzc0000",
+                "isGroup": false,
+                "attr": {
+                    "x": 50,
+                    "y": 338,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成执行数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 34,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "43q8d7h9nlk000",
+                "isGroup": false,
+                "attr": {
+                    "x": 50,
+                    "y": 304,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成执行数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "1567",
+                    "sourceID": "10007"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "1567",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10007",
+                "title": "完成执行数",
+                "type": "card"
+            },
+            {
+                "id": "5jexl1ycymg000",
+                "isGroup": false,
+                "attr": {
+                    "x": 230,
+                    "y": 338,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "按时完成执行数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 20,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "3362s9jdoko000",
+                "isGroup": false,
+                "attr": {
+                    "x": 605,
+                    "y": 338,
+                    "w": 166,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成任务条目数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 20,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "5l9fr10ck94000",
+                "isGroup": false,
+                "attr": {
+                    "x": 772,
+                    "y": 338,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成任务预计工时数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 8,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 4,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "1zxjse36amv400",
+                "isGroup": false,
+                "attr": {
+                    "x": 952,
+                    "y": 338,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成任务消耗工时数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 8,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 4,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "29iw7qg73bbw00",
+                "isGroup": false,
+                "attr": {
+                    "x": 1131,
+                    "y": 338,
+                    "w": 180,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "投入的总人天",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 28,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "1r8qfow1e45c00",
+                "isGroup": false,
+                "attr": {
+                    "x": 230,
+                    "y": 304,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-按时完成执行数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "241",
+                    "sourceID": "10008"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "241",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 57,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10008",
+                "title": "按时完成执行数",
+                "type": "card"
+            },
+            {
+                "id": "2bnzdjpcesg000",
+                "isGroup": false,
+                "attr": {
+                    "x": 591,
+                    "y": 304,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成任务条目数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "38661",
+                    "sourceID": "10010"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "38661",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 57,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10010",
+                "title": "完成任务条目数",
+                "type": "card"
+            },
+            {
+                "id": "5rwyxojtmnw000",
+                "isGroup": false,
+                "attr": {
+                    "x": 772,
+                    "y": 304,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成任务预计工时数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "109341",
+                    "sourceID": "10011"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "109341",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 57,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10011",
+                "title": "完成任务预计工时数",
+                "type": "card"
+            },
+            {
+                "id": "1ook02lf4ns000",
+                "isGroup": false,
+                "attr": {
+                    "x": 951,
+                    "y": 304,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-完成任务消耗工时数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "101601",
+                    "sourceID": "10012"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "101601",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 57,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10012",
+                "title": "完成任务消耗工时数",
+                "type": "card"
+            },
+            {
+                "id": "3c1qy9alml2000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1131,
+                    "y": 304,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "项目过程-投入的总人天",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "12339",
+                    "sourceID": "10013"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "12339",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 57,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10013",
+                "title": "投入的总人天",
+                "type": "card"
+            },
+            {
+                "id": "4v411wy0jam000",
+                "isGroup": false,
+                "attr": {
+                    "x": 68,
+                    "y": 439,
+                    "w": 332,
+                    "h": 200,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCVWaterPolo",
+                    "title": "项目过程-项目按期完成率",
+                    "category": "WaterPolo",
+                    "categoryName": "水球图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "water_WaterPolo.png",
+                    "sourceID": "10014",
+                    "dataset": 0
+                },
+                "option": {
+                    "dataset": 0.6667,
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "80%",
+                            "data": [
+                                0.67
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10014",
+                "title": "项目过程-项目按期完成率",
+                "type": "WaterPolo"
+            },
+            {
+                "id": "455e6v96m36000",
+                "isGroup": false,
+                "attr": {
+                    "x": 347,
+                    "y": 440,
+                    "w": 332,
+                    "h": 200,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCWaterPolo",
+                    "title": "项目过程-执行按期完成率",
+                    "category": "WaterPolo",
+                    "categoryName": "水球图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "water_WaterPolo.png",
+                    "sourceID": "10015",
+                    "dataset": 0
+                },
+                "option": {
+                    "dataset": 0.6667,
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "80%",
+                            "data": [
+                                0.67
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10015",
+                "title": "项目过程-执行按期完成率",
+                "type": "water_WaterPolo.png"
+            },
+            {
+                "id": "1357hi74tghs00",
+                "isGroup": false,
+                "attr": {
+                    "x": 680,
+                    "y": 439,
+                    "w": 332,
+                    "h": 200,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCWaterPolo",
+                    "title": "项目过程-项目延期率",
+                    "category": "WaterPolo",
+                    "categoryName": "水球图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "water_WaterPolo.png",
+                    "sourceID": "10016",
+                    "dataset": 0
+                },
+                "option": {
+                    "dataset": 0.6667,
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "80%",
+                            "data": [
+                                0.67
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10016",
+                "title": "项目过程-项目延期率",
+                "type": "WaterPolo"
+            },
+            {
+                "id": "5czvzl4a3qs000",
+                "isGroup": false,
+                "attr": {
+                    "x": 959,
+                    "y": 439,
+                    "w": 332,
+                    "h": 200,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCWaterPolo",
+                    "title": "项目过程-执行延期率",
+                    "category": "WaterPolo",
+                    "categoryName": "水球图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "water_WaterPolo.png",
+                    "sourceID": "10017",
+                    "dataset": 0
+                },
+                "option": {
+                    "dataset": 0.6667,
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "80%",
+                            "data": [
+                                0.67
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10017",
+                "title": "项目过程-执行延期率",
+                "type": "WaterPolo"
+            },
+            {
+                "id": "3rrf13x8aig000",
+                "isGroup": false,
+                "attr": {
+                    "x": 68,
+                    "y": 626,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "项目按期完成率",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "2fj8shp4iww000",
+                "isGroup": false,
+                "attr": {
+                    "x": 349,
+                    "y": 626,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "执行按期完成率",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "7c0kw504pfo00",
+                "isGroup": false,
+                "attr": {
+                    "x": 680,
+                    "y": 626,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "项目延期率",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "3tdqudx15lm000",
+                "isGroup": false,
+                "attr": {
+                    "x": 959,
+                    "y": 626,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "执行延期率",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "15v07f9mllz400",
+                "isGroup": false,
+                "attr": {
+                    "x": "27",
+                    "y": 120,
+                    "w": 242,
+                    "h": "58",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "年度完成项目数据盘点",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "5rscm33a7a0000",
+                "isGroup": false,
+                "attr": {
+                    "x": 916,
+                    "y": 8,
+                    "w": 450,
+                    "h": 75,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates04",
+                "chartConfig": {
+                    "key": "Decorates04",
+                    "chartKey": "VDecorates04",
+                    "conKey": "VCDecorates04",
+                    "title": "装饰-04",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates04.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1dc1f5",
+                        "#1dc1f5"
+                    ],
+                    "reverse": false
+                }
+            },
+            {
+                "id": "48vgwd3xywc000",
+                "isGroup": false,
+                "attr": {
+                    "x": 2,
+                    "y": 8,
+                    "w": 450,
+                    "h": 75,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates04",
+                "chartConfig": {
+                    "key": "Decorates04",
+                    "chartKey": "VDecorates04",
+                    "conKey": "VCDecorates04",
+                    "title": "装饰-04",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates04.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1dc1f5",
+                        "#1dc1f5"
+                    ],
+                    "reverse": true
+                }
+            },
+            {
+                "id": "34gsoca72ak000",
+                "isGroup": false,
+                "attr": {
+                    "x": 450,
+                    "y": 55,
+                    "w": 466,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates05",
+                "chartConfig": {
+                    "key": "Decorates05",
+                    "chartKey": "VDecorates05",
+                    "conKey": "VCDecorates05",
+                    "title": "装饰-05",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates05.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00c2ff",
+                        "#00c2ff4d"
+                    ],
+                    "dur": 3
+                }
+            },
+            {
+                "id": "5emz0hdi03k000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1,
+                    "y": -2,
+                    "w": 1365,
+                    "h": 48,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1089FF42",
+                        "#1089FF00"
+                    ],
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "afw1xcxn3ug00",
+                "isGroup": false,
+                "attr": {
+                    "x": 433,
+                    "y": 7,
+                    "w": 500,
+                    "h": 64,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "年度完成项目过程数据大屏",
+                    "fontSize": 28,
+                    "fontColor": "#b2d5e5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "2v5j91if94k000",
+                "isGroup": false,
+                "attr": {
+                    "x": 18,
+                    "y": 1236,
+                    "w": 1326,
+                    "h": 528,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3h6cqs958r6000",
+                "isGroup": false,
+                "attr": {
+                    "x": "272",
+                    "y": "1240",
+                    "w": "1040",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "4p2d6bkzx2m000",
+                "isGroup": false,
+                "attr": {
+                    "x": "40",
+                    "y": "1240",
+                    "w": "240",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目工期透视表",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "53verjpnwh8000",
+                "isGroup": false,
+                "attr": {
+                    "x": 22,
+                    "y": 2347,
+                    "w": 653,
+                    "h": 619,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5rg2qtyfzno000",
+                "isGroup": false,
+                "attr": {
+                    "x": 691,
+                    "y": 2347,
+                    "w": 653,
+                    "h": 617,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "4gf68m6chq4000",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 2991,
+                    "w": 1326,
+                    "h": 580,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "1t16zb563uzk00",
+                "isGroup": false,
+                "attr": {
+                    "x": 53,
+                    "y": 1312,
+                    "w": 1263,
+                    "h": 420,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TableMergeCell",
+                "chartConfig": {
+                    "key": "TableMergeCell",
+                    "chartKey": "VTableMergeCell",
+                    "conKey": "VCTableMergeCell",
+                    "title": "完成项目工期透视表",
+                    "category": "Tables",
+                    "categoryName": "列表",
+                    "package": "Tables",
+                    "chartFrame": "common",
+                    "image": "table_scrollboard.png",
+                    "sourceID": "1000"
+                },
+                "option": {
+                    "dataset": [],
+                    "header": [],
+                    "align": [
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center"
+                    ],
+                    "columnWidth": [],
+                    "rowspan": [],
+                    "colspan": [],
+                    "evenRowBGC": "#FFFFFF00",
+                    "oddRowBGC": "#1089FF1A",
+                    "headerBGC": "#4498EC85"
+                },
+                "sourceID": "1000",
+                "title": "完成项目工期透视表",
+                "type": "table"
+            },
+            {
+                "id": "12km9ka7t40g00",
+                "isGroup": false,
+                "attr": {
+                    "x": 18,
+                    "y": 1788,
+                    "w": 1326,
+                    "h": 528,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "4wxuogwx6he000",
+                "isGroup": false,
+                "attr": {
+                    "x": 236,
+                    "y": 726,
+                    "w": 242,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "项目完成分布图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "5n8bpai3kcw000",
+                "isGroup": false,
+                "attr": {
+                    "x": "60",
+                    "y": "2440",
+                    "w": "580",
+                    "h": "500",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "BarCrossrange",
+                "chartConfig": {
+                    "key": "BarCrossrange",
+                    "chartKey": "VBarCrossrange",
+                    "conKey": "VCBarCrossrange",
+                    "title": "项目过程-完成项目工期偏差条形图",
+                    "category": "Bars",
+                    "categoryName": "柱状图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "bar_y.png",
+                    "sourceID": "10018"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 70,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "项目过程-完成项目工期偏差条形图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "show": true,
+                            "type": "shadow"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "bar",
+                            "label": {
+                                "show": true,
+                                "position": "right",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 0
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10018",
+                "title": "完成项目工期偏差条形图",
+                "type": "cluBarY"
+            },
+            {
+                "id": "5q7zvaotgyo000",
+                "isGroup": false,
+                "attr": {
+                    "x": 724,
+                    "y": "2440",
+                    "w": "580",
+                    "h": "500",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "BarCrossrange",
+                "chartConfig": {
+                    "key": "BarCrossrange",
+                    "chartKey": "VBarCrossrange",
+                    "conKey": "VCBarCrossrange",
+                    "title": "项目过程-完成项目工期偏差条形图",
+                    "category": "Bars",
+                    "categoryName": "柱状图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "bar_y.png",
+                    "sourceID": "10022"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 70,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "项目过程-完成项目工期偏差条形图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "show": true,
+                            "type": "shadow"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "bar",
+                            "label": {
+                                "show": true,
+                                "position": "right",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 0
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10022",
+                "title": "完成项目工期偏差条形图",
+                "type": "cluBarY"
+            },
+            {
+                "id": "37kkzy05o6u000",
+                "isGroup": false,
+                "attr": {
+                    "x": "48",
+                    "y": "3100",
+                    "w": 1265,
+                    "h": "420",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "BarCommon",
+                "chartConfig": {
+                    "key": "BarCommon",
+                    "chartKey": "VBarCommon",
+                    "conKey": "VCBarCommon",
+                    "title": "项目过程-单位工时交付需求规模数对比图",
+                    "category": "Bars",
+                    "categoryName": "柱状图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "bar_x.png",
+                    "sourceID": "10019"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 90,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "项目过程-单位工时交付需求规模数对比图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "show": true,
+                            "type": "shadow"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "bar",
+                            "barWidth": 15,
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 2
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10019",
+                "title": "单位工时交付需求规模数对比图",
+                "type": "cluBarX"
+            },
+            {
+                "id": "58diyfly21g000",
+                "isGroup": false,
+                "attr": {
+                    "x": 900,
+                    "y": 726,
+                    "w": 242,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "执行完成分布图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "4y4a1x55hh4000",
+                "isGroup": false,
+                "attr": {
+                    "x": "60",
+                    "y": "734",
+                    "w": "182",
+                    "h": "40",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "5txcqlq213g000",
+                "isGroup": false,
+                "attr": {
+                    "x": "460",
+                    "y": "734",
+                    "w": "182",
+                    "h": "40",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "5oxxiekui1c000",
+                "isGroup": false,
+                "attr": {
+                    "x": "724",
+                    "y": "734",
+                    "w": "182",
+                    "h": "33",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "3u3w3sejwiu000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1134,
+                    "y": "734",
+                    "w": 182,
+                    "h": "40",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "579d65hwr6c00",
+                "isGroup": false,
+                "attr": {
+                    "x": "64",
+                    "y": "790",
+                    "w": "560",
+                    "h": 400,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "PieCommon",
+                "chartConfig": {
+                    "key": "PieCommon",
+                    "chartKey": "VPieCommon",
+                    "conKey": "VCPieCommon",
+                    "title": "项目过程-项目完成分布图",
+                    "category": "Pies",
+                    "categoryName": "饼图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "pie.png",
+                    "sourceID": "10020"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 30,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "title": {
+                        "text": "项目过程-项目完成分布图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "type": "nomal",
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "item"
+                    },
+                    "grid": {
+                        "top": 70
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "pie",
+                            "radius": "70%",
+                            "center": [
+                                "50%",
+                                "60%"
+                            ],
+                            "label": {
+                                "show": true,
+                                "formatter": "{b} {d}%",
+                                "fontSize": 12,
+                                "color": "#fff",
+                                "shadowColor": "transparent"
+                            },
+                            "roseType": false
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10020",
+                "title": "项目完成分布图",
+                "type": "pie"
+            },
+            {
+                "id": "1ei55qri4gu800",
+                "isGroup": false,
+                "attr": {
+                    "x": "736",
+                    "y": "790",
+                    "w": "560",
+                    "h": "400",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "PieCommon",
+                "chartConfig": {
+                    "key": "PieCommon",
+                    "chartKey": "VPieCommon",
+                    "conKey": "VCPieCommon",
+                    "title": "项目过程-执行完成分布图",
+                    "category": "Pies",
+                    "categoryName": "饼图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "pie.png",
+                    "sourceID": "10021"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 30,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "title": {
+                        "text": "项目过程-执行完成分布图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "type": "nomal",
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "item"
+                    },
+                    "grid": {
+                        "top": 70
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "pie",
+                            "radius": "70%",
+                            "center": [
+                                "50%",
+                                "60%"
+                            ],
+                            "label": {
+                                "show": true,
+                                "formatter": "{b} {d}%",
+                                "fontSize": 12,
+                                "color": "#fff",
+                                "shadowColor": "transparent"
+                            },
+                            "roseType": false
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10021",
+                "title": "执行完成分布图",
+                "type": "pie"
+            },
+            {
+                "id": "2flxymehju8000",
+                "isGroup": false,
+                "attr": {
+                    "x": "272",
+                    "y": "1794",
+                    "w": "1036",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "5scfjzqsbzo000",
+                "isGroup": true,
+                "attr": {
+                    "w": 300,
+                    "h": 120,
+                    "x": 277,
+                    "y": 133,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "zIndex": -1,
+                    "lockScale": false
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "chartConfig": {
+                    "key": "group",
+                    "chartKey": "group",
+                    "conKey": "group",
+                    "category": "group",
+                    "categoryName": "group",
+                    "package": "group",
+                    "chartFrame": "common",
+                    "title": "u6807u9898",
+                    "image": ""
+                },
+                "groupList": [
+                    {
+                        "id": "2xjom2cw2b2000",
+                        "isGroup": false,
+                        "attr": {
+                            "x": 0,
+                            "y": 0,
+                            "w": 100,
+                            "h": 120,
+                            "offsetX": 0,
+                            "offsetY": 0,
+                            "lockScale": false,
+                            "zIndex": -1
+                        },
+                        "preview": {
+                            "overFlowHidden": false
+                        },
+                        "key": "Select",
+                        "chartConfig": {
+                            "key": "Select",
+                            "chartKey": "VSelect",
+                            "conKey": "VCSelect",
+                            "title": "u9009u62e9",
+                            "category": "Mores",
+                            "categoryName": "u66f4u591a",
+                            "package": "Informations",
+                            "chartFrame": "common",
+                            "image": "static\/png\/select-c616737a.png"
+                        },
+                        "option": {
+                            "dataset": [
+                                {
+                                    "label": "2023",
+                                    "value": "2023"
+                                },
+                                {
+                                    "label": 2022,
+                                    "value": 2022
+                                },
+                                {
+                                    "label": 2021,
+                                    "value": 2021
+                                },
+                                {
+                                    "label": 2020,
+                                    "value": 2020
+                                },
+                                {
+                                    "label": 2019,
+                                    "value": 2019
+                                },
+                                {
+                                    "label": 2018,
+                                    "value": 2018
+                                },
+                                {
+                                    "label": 2017,
+                                    "value": 2017
+                                },
+                                {
+                                    "label": 2016,
+                                    "value": 2016
+                                },
+                                {
+                                    "label": 2015,
+                                    "value": 2015
+                                },
+                                {
+                                    "label": 2014,
+                                    "value": 2014
+                                },
+                                {
+                                    "label": 2013,
+                                    "value": 2013
+                                },
+                                {
+                                    "label": 2012,
+                                    "value": 2012
+                                },
+                                {
+                                    "label": 2011,
+                                    "value": 2011
+                                },
+                                {
+                                    "label": 2010,
+                                    "value": 2010
+                                },
+                                {
+                                    "label": 2009,
+                                    "value": 2009
+                                }
+                            ],
+                            "value": "",
+                            "borderWidth": 1,
+                            "borderStyle": "solid",
+                            "borderColor": "#1a77a5",
+                            "background": "none",
+                            "borderRadius": 6,
+                            "color": "#ffffff",
+                            "textAlign": "center",
+                            "fontWeight": "normal",
+                            "backgroundColor": "transparent",
+                            "fontSize": 20
+                        },
+                        "type": "year",
+                        "filterCharts": [
+                            {
+                                "chart": 10000,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10001,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10002,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10003,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10004,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10005,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10006,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10007,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10008,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10009,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10010,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10011,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10012,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10013,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10014,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10015,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10016,
+                                "field": "t1.`year`"
+                            },
+                            {
+                                "chart": 10017,
+                                "field": "t1.`year`"
+                            }
+                        ]
+                    }
+                ],
+                "key": "group",
+                "option": []
+            },
+            {
+                "id": "12pr64gobork00",
+                "isGroup": false,
+                "attr": {
+                    "x": 424,
+                    "y": 120,
+                    "w": 882,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "436oj64jvca000",
+                "isGroup": false,
+                "attr": {
+                    "x": "32",
+                    "y": 2362,
+                    "w": "240",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目工期偏差",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "1ahevk1yw0tc00",
+                "isGroup": false,
+                "attr": {
+                    "x": "268",
+                    "y": "2362",
+                    "w": "376",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "4kcpsj6i5q8000",
+                "isGroup": false,
+                "attr": {
+                    "x": 698,
+                    "y": "2362",
+                    "w": "240",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目工时偏差",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "5dijh3989bg000",
+                "isGroup": false,
+                "attr": {
+                    "x": "940",
+                    "y": "2362",
+                    "w": "376",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "17o4abp7p68w00",
+                "isGroup": false,
+                "attr": {
+                    "x": "32",
+                    "y": 3014,
+                    "w": "460",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目单位工时交付需求规模数对比",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "4f1dpys6drq000",
+                "isGroup": false,
+                "attr": {
+                    "x": "500",
+                    "y": "3014",
+                    "w": "820",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png"
+                },
+                "option": {
+                    "colors": [
+                        "#ffffff4d",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "4dhr11orgts000",
+                "isGroup": false,
+                "attr": {
+                    "x": "40",
+                    "y": "1794",
+                    "w": "240",
+                    "h": "60",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目工时透视表",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "3j6atjdm7co000",
+                "isGroup": false,
+                "attr": {
+                    "x": 50,
+                    "y": 1861,
+                    "w": 1257,
+                    "h": 428,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TableMergeCell",
+                "chartConfig": {
+                    "key": "TableMergeCell",
+                    "chartKey": "VTableMergeCell",
+                    "conKey": "VCTableMergeCell",
+                    "title": "完成项目工时透视表",
+                    "category": "Tables",
+                    "categoryName": "列表",
+                    "package": "Tables",
+                    "chartFrame": "common",
+                    "image": "table_scrollboard.png",
+                    "sourceID": "1001"
+                },
+                "option": {
+                    "dataset": [],
+                    "header": [],
+                    "align": [
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center"
+                    ],
+                    "columnWidth": [],
+                    "rowspan": [],
+                    "colspan": [],
+                    "oddRowBGC": "#1089FF1A",
+                    "headerBGC": "#4498EC85",
+                    "evenRowBGC": "#00000000"
+                },
+                "sourceID": "1001",
+                "title": "完成项目工时透视表",
+                "type": "table"
+            }
+        ]
+    }
+}
