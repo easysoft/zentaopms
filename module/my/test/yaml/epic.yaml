@@ -1,0 +1,9 @@
+title: zt_story
+desc: epic data.
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: assignedTo
+    range: admin,user1
+  - field: type
+    range: story{5},requirement{5},epic{5}
