@@ -910,11 +910,12 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getExecutableMetric()
+    public function getExecutableMetric($includes = 'all')
     {
         $metricList = $this->dao->select('id,code,time')
             ->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
+            ->beginIF(is_array($includes))->andWhere('code')->in($includes)->fi()
             ->fetchAll();
 
         $excutableMetrics = array();
@@ -1054,7 +1055,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getExecutableCalcList()
+    public function getExecutableCalcList($includes = 'all')
     {
         $funcRoot = $this->getCalcRoot();
 
@@ -1070,7 +1071,7 @@ class metricModel extends model
         }
 
         $calcList = array();
-        $excutableMetric = $this->getExecutableMetric();
+        $excutableMetric = $this->getExecutableMetric($includes);
         foreach($fileList as $file)
         {
             $code = rtrim(basename($file), '.php');
@@ -1093,9 +1094,9 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getCalcInstanceList()
+    public function getCalcInstanceList($includes = 'all')
     {
-        $calcList = $this->getExecutableCalcList();
+        $calcList = $this->getExecutableCalcList($includes);
 
         include_once $this->getBaseCalcPath();
         $calcInstances = array();
