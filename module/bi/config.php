@@ -8,6 +8,76 @@ USE mysqldb;
 {COPYSQL}
 EOT;
 
+$config->bi->driverNames = array('mysql', 'duckdb');
+
+$config->bi->columnTypes = new stdclass();
+$config->bi->columnTypes->mysql['TINY']       = 'number';
+$config->bi->columnTypes->mysql['SHORT']      = 'number';
+$config->bi->columnTypes->mysql['LONG']       = 'number';
+$config->bi->columnTypes->mysql['FLOAT']      = 'number';
+$config->bi->columnTypes->mysql['DOUBLE']     = 'number';
+$config->bi->columnTypes->mysql['TIMESTAMP']  = 'string';
+$config->bi->columnTypes->mysql['LONGLONG']   = 'string';
+$config->bi->columnTypes->mysql['INT24']      = 'number';
+$config->bi->columnTypes->mysql['DATE']       = 'date';
+$config->bi->columnTypes->mysql['TIME']       = 'string';
+$config->bi->columnTypes->mysql['DATETIME']   = 'date';
+$config->bi->columnTypes->mysql['YEAR']       = 'date';
+$config->bi->columnTypes->mysql['ENUM']       = 'string';
+$config->bi->columnTypes->mysql['SET']        = 'string';
+$config->bi->columnTypes->mysql['TINYBLOB']   = 'string';
+$config->bi->columnTypes->mysql['MEDIUMBLOB'] = 'string';
+$config->bi->columnTypes->mysql['LONG_BLOB']  = 'string';
+$config->bi->columnTypes->mysql['BLOB']       = 'string';
+$config->bi->columnTypes->mysql['VAR_STRING'] = 'string';
+$config->bi->columnTypes->mysql['STRING']     = 'string';
+$config->bi->columnTypes->mysql['NULL']       = 'null';
+$config->bi->columnTypes->mysql['NEWDATE']    = 'date';
+$config->bi->columnTypes->mysql['INTERVAL']   = 'string';
+$config->bi->columnTypes->mysql['GEOMETRY']   = 'string';
+$config->bi->columnTypes->mysql['NEWDECIMAL'] = 'number';
+
+/* Dameng native_type. */
+$config->bi->columnTypes->mysql['int']       = 'number';
+$config->bi->columnTypes->mysql['varchar']   = 'string';
+$config->bi->columnTypes->mysql['text']      = 'string';
+$config->bi->columnTypes->mysql['timestamp'] = 'string';
+$config->bi->columnTypes->mysql['date']      = 'date';
+$config->bi->columnTypes->mysql['time']      = 'string';
+$config->bi->columnTypes->mysql['double']    = 'number';
+$config->bi->columnTypes->mysql['number']    = 'number';
+$config->bi->columnTypes->mysql['bigint']    = 'number';
+
+/* DuckDB native_type. */
+$config->bi->columnTypes->duckdb['BIGINT']    = 'number';
+$config->bi->columnTypes->duckdb['UBIGINT']   = 'number';
+$config->bi->columnTypes->duckdb['HUGEINT']   = 'number';
+$config->bi->columnTypes->duckdb['UHUGEINT']  = 'number';
+$config->bi->columnTypes->duckdb['INTEGER']   = 'number';
+$config->bi->columnTypes->duckdb['UINTEGER']  = 'number';
+$config->bi->columnTypes->duckdb['SMALLINT']  = 'number';
+$config->bi->columnTypes->duckdb['USMALLINT'] = 'number';
+$config->bi->columnTypes->duckdb['TINYINT']   = 'number';
+$config->bi->columnTypes->duckdb['UTINYINT']  = 'number';
+$config->bi->columnTypes->duckdb['REAL']      = 'number';
+$config->bi->columnTypes->duckdb['DOUBLE']    = 'number';
+$config->bi->columnTypes->duckdb['BOOLEAN']   = 'number';
+$config->bi->columnTypes->duckdb['BLOB']      = 'string';
+$config->bi->columnTypes->duckdb['VARCHAR']   = 'string';
+$config->bi->columnTypes->duckdb['DATE']      = 'date';
+$config->bi->columnTypes->duckdb['TIMESTAMP'] = 'date';
+$config->bi->columnTypes->duckdb['TIME']      = 'date';
+
+$config->bi->columnTypes->INTEGER   = 'number';
+$config->bi->columnTypes->UINTEGER  = 'number';
+$config->bi->columnTypes->UTINYINT  = 'number';
+$config->bi->columnTypes->SMALLINT  = 'number';
+$config->bi->columnTypes->FLOAT     = 'number';
+$config->bi->columnTypes->BOOLEAN   = 'number';
+$config->bi->columnTypes->VARCHAR   = 'string';
+$config->bi->columnTypes->TIMESTAMP = 'date';
+$config->bi->columnTypes->DATE      = 'date';
+
 $config->bi->duckdb = new stdclass();
 $config->bi->duckdb->tables = array();
 $config->bi->duckdb->tables['action'] = <<<EOT

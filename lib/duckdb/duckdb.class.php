@@ -122,7 +122,7 @@ class duckdb
      * @access public
      * @return this.
      */
-    public function query($sql = '')
+    public function query($sql = '', $func = '')
     {
         /* $0全量匹配以 prefix 开头的表，替换为对应的 parquet 文件。 */
         $pattern     = "/{$this->prefix}\S+/";
@@ -130,7 +130,32 @@ class duckdb
 
         $this->sql = preg_replace($pattern, $replacement, $sql);
 
+        if($func && method_exists($this, $func) && in_array($func, array('explain', 'desc'))) $this->$func();
         return $this;
+    }
+
+    /**
+     * 设置前缀，获取一个查询的执行计划。
+     * Explain analysis sql.
+     *
+     * @access public
+     * @return this.
+     */
+    private function explain()
+    {
+        $this->sql = 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE ' . $this->sql;
+    }
+
+    /**
+     * 设置前缀，获取一个查询的执行计划。
+     * Explain analysis sql.
+     *
+     * @access public
+     * @return this.
+     */
+    private function desc()
+    {
+        $this->sql = 'DESCRIBE ' . $this->sql;
     }
 
     /**
@@ -145,6 +170,7 @@ class duckdb
         $exec   = "$this->binPath :memory: \"$this->sql\" -json 2>&1";
         $output = shell_exec($exec);
 
+        a($this->sql);die;
         $rows = json_decode($output);
         /* 有内容但是 json 解析失败，说明是报错。*/
         if($output and !$rows)
@@ -156,6 +182,8 @@ class duckdb
             return $rows ? $rows : array();
         }
     }
+
+    //-------------------- Fetch相关方法(Fetch related methods) -------------------//
 
     /**
      * 获取一个记录。
@@ -173,7 +201,7 @@ class duckdb
     /**
      * 获取所有记录。
      * Fetch all records.
-     *
+     *7dbf3798764
      * @access public
      * @return array
      */

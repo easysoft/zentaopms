@@ -202,7 +202,7 @@ class pivotModel extends model
         $stmt = $this->dbh->query($querySQL);
         if(!$stmt) return;
 
-        $columns      = $this->loadModel('dataview')->getColumns($querySQL);
+        $columns      = $this->bi->getColumnsType($querySQL);
         $columnFields = array();
         foreach(array_keys(get_object_vars($columns)) as $type) $columnFields[$type] = $type;
 

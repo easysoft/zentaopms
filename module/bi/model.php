@@ -49,6 +49,70 @@ class biModel extends model
     }
 
     /**
+     * Get sql result columns.
+     *
+     * @param  string     $sql
+     * @param  string     $driverName mysql|duckdb
+     * @access public
+     * @return array|false
+     */
+    public function getColumns(string $sql, $driverName = 'mysql'): array|false
+    {
+        if(!in_array($driverName, $this->config->bi->driverNames)) return false;
+
+        if($driverName == 'mysql')
+        {
+            $columns = $this->dao->getColumns($sql);
+        }
+        else
+        {
+            $dbh     = $this->app->loadDriver('duckdb');
+            $columns = $dbh->query("$sql", 'desc')->fetchAll();
+        }
+
+        $result = array();
+        foreach($columns as $column)
+        {
+            $column = (array)$column;
+
+            $name       = $driverName == 'mysql' ? $column['name']        : $column['column_name'];
+            $nativeType = $driverName == 'mysql' ? $column['native_type'] : $column['column_type'];
+
+            $result[$name] = array('name' => $name, 'native_type' => $nativeType);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取表的字段类型。
+     * Get table data.
+     *
+     * @param  string $sql
+     * @param  string $driverName mysql|duckdb
+     * @param  array  $columns
+     * @access public
+     * @return object
+     */
+    public function getColumnsType(string $sql, string $driverName = 'mysql', array $columns = array()): object
+    {
+        if(empty($columns)) $columns = $this->getColumns($sql, $driverName);
+
+        $columnTypes = new stdclass();
+        foreach($columns as $column)
+        {
+            $field      = $column['name'];
+            $nativeType = $column['native_type'];
+            $type       = $this->config->bi->columnTypes->$driverName[$nativeType];
+
+            if(isset($columnTypes->$field)) $field = $column['table'] . $field;
+            $columnTypes->$field = $type;
+        }
+
+        return $columnTypes;
+    }
+
+    /**
      * Get object options.
      *
      * @param  string $type user|product|project|execution|dept

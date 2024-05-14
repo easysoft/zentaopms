@@ -475,7 +475,8 @@ class router extends baseRouter
         {
             $this->loadClass('duckdb');
             $duckdb = new duckdb();
-            return $dudkdb;
+
+            return $duckdb;
         }
     }
 

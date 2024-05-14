@@ -7821,10 +7821,11 @@ class upgradeModel extends model
     {
         if(!$sql) return array();
 
+        $this->loadModel('bi');
         $this->loadModel('dataview');
         $this->loadModel('chart');
 
-        $columns      = $this->dataview->getColumns($sql);
+        $columns      = $this->bi->getColumnsType($sql);
         $columnFields = array();
         foreach($columns as $column => $type) $columnFields[$column] = $column;
 
