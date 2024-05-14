@@ -47,9 +47,9 @@ foreach($results as $i => $result)
     {
         $taskResult = $isChinese ? sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''), zget($builds, $result->build, '')) : sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''), zget($users, $result->lastRunner), zget($builds, $result->build, ''));
     }
-    elseif(!$isChinese)
+    else
     {
-        $taskResult = ' by <strong>' . zget($users, $result->lastRunner) . '</strong>';
+        $taskResult = !$isChinese ? ' by <strong>' . zget($users, $result->lastRunner) . '</strong>' : '';
     }
     if($class != 'success') $failCount ++;
     $trs[] = h::tr
