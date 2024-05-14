@@ -13,9 +13,14 @@ namespace zin;
 
 data('activeMenuID', $storyType);
 jsVar('executionID', $execution->id);
-jsVar('childrenAB', $lang->story->childrenAB);
+jsVar('childrenAB',  $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
-jsVar('hasProduct', $execution->hasProduct);
+jsVar('hasProduct',  $execution->hasProduct);
+jsVar('linkedTaskStories',  $linkedTaskStories);
+jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
+jsVar('typeNotEmpty',       sprintf($this->lang->error->notempty, $this->lang->task->type));
+jsVar('hourPointNotEmpty',  sprintf($this->lang->error->notempty, $this->lang->story->convertRelations));
+jsVar('hourPointNotError', sprintf($this->lang->story->float, $this->lang->story->convertRelations));
 
 /* Show feature bar. */
 featureBar
@@ -258,8 +263,7 @@ modal
             (
                 set::text($lang->execution->next),
                 set::btnType('submit'),
-                set::type('primary'),
-                setData(array('dismiss' => 'modal'))
+                set::type('primary')
             )
         )
     )

@@ -263,19 +263,20 @@ class executionZen extends execution
         $this->assignModuleForStory($type, $param, $storyType, $execution, $productID);
 
         /* Assign. */
-        $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->story;
-        $this->view->storyType    = $storyType;
-        $this->view->param        = $param;
-        $this->view->type         = $this->session->executionStoryBrowseType;
-        $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
-        $this->view->product      = $this->product->getById($productID);
-        $this->view->allPlans     = $allPlans;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->multiBranch  = $multiBranch;
-        $this->view->execution    = $execution;
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->branchPairs  = $this->loadModel('branch')->getPairs($productID, 'withClosed');
+        $this->view->title             = $execution->name . $this->lang->hyphen . $this->lang->execution->story;
+        $this->view->storyType         = $storyType;
+        $this->view->param             = $param;
+        $this->view->type              = $this->session->executionStoryBrowseType;
+        $this->view->orderBy           = $orderBy;
+        $this->view->pager             = $pager;
+        $this->view->product           = $this->product->getById($productID);
+        $this->view->allPlans          = $allPlans;
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
+        $this->view->multiBranch       = $multiBranch;
+        $this->view->execution         = $execution;
+        $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->branchPairs       = $this->loadModel('branch')->getPairs($productID, 'withClosed');
+        $this->view->linkedTaskStories = $this->loadModel('story')->getIdListWithTask($execution->id);
     }
 
     /**
