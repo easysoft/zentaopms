@@ -711,10 +711,22 @@ class metricModel extends model
      */
     public function getResultByCodeWithArray($code, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
     {
-        $records = $this->getResultByCode($code, $options, $type, $pager, $vision);
+        $metric     = $this->metricTao->fetchMetricByCode($code);
+        $dataFields = $this->getMetricRecordDateField($metric);
+
+        $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
+        if($metric->dateType == 'nodate')
+        {
+            $record = current($records);
+            $record->value = (float)$record->value;
+
+            return array((array)$record);
+        }
+
         $result = array();
         foreach($records as $record)
         {
+            $record->value = (float)$record->value;
             $result[] = (array)$record;
         }
 

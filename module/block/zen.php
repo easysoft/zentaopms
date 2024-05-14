@@ -3313,11 +3313,11 @@ class blockZen extends block
         if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
 
         /* 瀑布项目的统计信息。 */
-        $SVGroup           = $this->metric->getResultByCodeWithArray('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $PVGroup           = $this->metric->getResultByCodeWithArray('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $EVGroup           = $this->metric->getResultByCodeWithArray('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $CVGroup           = $this->metric->getResultByCodeWithArray('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $ACGroup           = $this->metric->getResultByCodeWithArray('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $SVGroup           = $this->metric->getResultByCodeWithArray('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+        $PVGroup           = $this->metric->getResultByCodeWithArray('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+        $EVGroup           = $this->metric->getResultByCodeWithArray('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+        $CVGroup           = $this->metric->getResultByCodeWithArray('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+        $ACGroup           = $this->metric->getResultByCodeWithArray('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
         $taskProgressGroup = $this->metric->getResultByCodeWithArray('progress_of_task_in_project',             array('project' => join(',', $projectIdList)), 'cron', null, $vision);
         if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
         if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
