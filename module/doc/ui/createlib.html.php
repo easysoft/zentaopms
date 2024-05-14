@@ -52,7 +52,7 @@ formPanel
             set::name('execution'),
             set::items($executionPairs),
             set::placeholder($lang->doclib->tip->selectExecution),
-            set::disabled(!$project->multiple)
+            set::disabled(empty($project->multiple))
         ),
         formGroup
         (
