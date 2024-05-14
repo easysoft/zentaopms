@@ -452,11 +452,13 @@ class mr extends control
         $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
 
         $MR = $this->mr->fetchByID($MRID);
-        $this->view->title = $this->lang->mr->viewDiff;
-        $this->view->MR    = $MR;
+        $this->view->title   = $this->lang->mr->viewDiff;
+        $this->view->MR      = $MR;
+        $this->view->compile = $this->loadModel('compile')->getById($MR->compileID);
         if($MR->synced)
         {
             $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
+            $this->view->rawMR = $rawMR;
             if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
         }
 
