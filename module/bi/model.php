@@ -304,7 +304,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function prepareBuiltinChartSQL()
+    public function prepareBuiltinChartSQL($operate = 'insert')
     {
         $charts = $this->config->bi->builtin->charts;
 
@@ -317,13 +317,25 @@ class biModel extends model
             $chart->fields   = $this->jsonEncode($chart->fields);
             $chart->langs    = $this->jsonEncode($chart->langs);
 
-            $chart->createdBy   = 'system';
-            $chart->createdDate = helper::now();
-
             $stmt = $this->dao->insert(TABLE_CHART)->data($chart)
                 ->autoCheck();
 
-            $chartSQLs[] = $stmt->get();
+            $stmt = null;
+            if($operate == 'insert')
+            {
+                $chart->createdBy   = 'system';
+                $chart->createdDate = helper::now();
+                $stmt = $this->dao->insert(TABLE_CHART)->data($chart)->autoCheck();
+            }
+            if($operate == 'update')
+            {
+                $id = $chart->id;
+                unset($chart->group);
+                unset($chart->id);
+                $stmt = $this->dao->update(TABLE_CHART)->data($chart)->where('id')->eq($id)->autoCheck();
+            }
+
+            if(!empty($stmt)) $chartSQLs[] = $stmt->get();
         }
 
         return $chartSQLs;
@@ -337,7 +349,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function prepareBuiltinPivotSQL()
+    public function prepareBuiltinPivotSQL($operate = 'insert')
     {
         $pivots = $this->config->bi->builtin->pivots;
 
@@ -353,19 +365,28 @@ class biModel extends model
             $pivot->langs    = $this->jsonEncode($pivot->langs);
             $pivot->vars     = $this->jsonEncode($pivot->vars);
 
-            $pivot->createdBy   = 'system';
-            $pivot->createdDate = helper::now();
+            $stmt = null;
+            if($operate == 'insert')
+            {
+                $pivot->createdBy   = 'system';
+                $pivot->createdDate = helper::now();
+                $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck();
+            }
+            if($operate == 'update')
+            {
+                $id = $pivot->id;
+                unset($pivot->group);
+                unset($pivot->id);
+                $stmt = $this->dao->update(TABLE_PIVOT)->data($pivot)->where('id')->eq($id)->autoCheck();
+            }
 
-            $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot)
-                ->autoCheck();
-
-            $pivotSQLs[] = $stmt->get();
+            if(!empty($stmt)) $pivotSQLs[] = $stmt->get();
         }
 
         return $pivotSQLs;
     }
 
-    public function prepareBuiltinScreenSQL()
+    public function prepareBuiltinScreenSQL($operate = 'insert')
     {
         $screens = $this->config->bi->builtin->screens;
 
@@ -376,13 +397,23 @@ class biModel extends model
             $screen = json_decode($screenJson);
             if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme);
 
-            $screen->status      = 'published';
-            $screen->createdBy   = 'system';
-            $screen->createdDate = helper::now();
+            $screen->status = 'published';
 
-            $stmt = $this->dao->insert(TABLE_SCREEN)->data($screen)
-                ->autoCheck();
-            $screenSQLs[] = $stmt->get();
+            $stmt = null;
+            if($operate == 'insert')
+            {
+                $screen->createdBy   = 'system';
+                $screen->createdDate = helper::now();
+                $stmt = $this->dao->insert(TABLE_SCREEN)->data($screen)->autoCheck();
+            }
+            if($operate == 'update')
+            {
+                $id = $screen->id;
+                unset($screen->id);
+                $stmt = $this->dao->update(TABLE_SCREEN)->data($screen)->where('id')->eq($id)->autoCheck();
+            }
+
+            if(!empty($stmt)) $screenSQLs[] = $stmt->get();
         }
 
         return $screenSQLs;
