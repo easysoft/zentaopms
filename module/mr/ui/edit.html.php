@@ -80,6 +80,7 @@ formPanel
     ),
     formGroup
     (
+        set::disabled($noEditBranch),
         set::width('1/2'),
         set::required(true),
         set::name('assignee'),
@@ -88,34 +89,61 @@ formPanel
         set::items($users),
         set::value($MR->assignee)
     ),
+    $noEditBranch ? input
+    (
+        set::type('hidden'),
+        set::name('assignee'),
+        set::value($MR->assignee)
+    ) : null,
     formRow
     (
         formGroup
         (
+            set::disabled($noEditBranch),
             set::label($lang->mr->submitType),
             set::name('needCI'),
             set::width('270px'),
             set::control(array('control' => 'checkbox', 'text' => $lang->mr->needCI, 'value' => '1', 'checked' => $MR->needCI == '1')),
             on::change('onNeedCiChange')
         ),
+        $noEditBranch ? input
+        (
+            set::type('hidden'),
+            set::name('needCI'),
+            set::value($MR->needCI)
+        ) : null,
         formGroup
         (
             set::name('removeSourceBranch'),
             set::width('150px'),
             set::control(array('control' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1', 'checked' => $MR->canDeleteBranch && $MR->removeSourceBranch == '1')),
-            set::disabled(!$MR->canDeleteBranch)
+            set::disabled(!$MR->canDeleteBranch || $noEditBranch)
         ),
+        $noEditBranch ? input
+        (
+            set::type('hidden'),
+            set::name('removeSourceBranch'),
+            set::value($MR->removeSourceBranch)
+        ) : null,
         formGroup
         (
+            set::disabled($noEditBranch),
             set::name('squash'),
             set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1'))
-        )
+        ),
+        $noEditBranch ? input
+        (
+            set::type('hidden'),
+            set::name('squash'),
+            set::value($MR->squash)
+        ) : null
     ),
     formRow
     (
         $MR->needCI == '1' ? null : setClass('hidden'),
         formGroup
         (
+            set::disabled($noEditBranch),
             set::width('1/2'),
             set::required(true),
             set::name('jobID'),
@@ -123,7 +151,13 @@ formPanel
             set::control('picker'),
             set::items($jobList),
             set::value($MR->jobID)
-        )
+        ),
+        $noEditBranch ? input
+        (
+            set::type('hidden'),
+            set::name('jobID'),
+            set::value($MR->jobID)
+        ) : null
     ),
     formGroup
     (
