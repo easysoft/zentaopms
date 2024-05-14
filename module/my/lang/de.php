@@ -41,6 +41,7 @@ $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
 $lang->my->hours           = "Hours/day";
 $lang->my->uploadAvatar    = 'Upload Avatar';
+$lang->my->epic            = "My {$lang->ERCommon}";
 $lang->my->requirement     = "My {$lang->URCommon}";
 $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
@@ -178,6 +179,9 @@ $lang->my->featureBar['dynamic']['lastMonth'] = 'Last Month';
 $lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testtask']['assignedTo'] = 'Test task';
+
+$lang->my->featureBar['work']['epic'] = $lang->my->featureBar['work']['task'];
+$lang->my->featureBar['work']['epic']['reviewBy'] = 'ReviewByMe';
 
 $lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
 $lang->my->featureBar['work']['requirement']['reviewBy'] = 'ReviewByMe';

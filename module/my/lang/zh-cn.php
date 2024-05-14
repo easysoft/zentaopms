@@ -41,6 +41,7 @@ $lang->my->noData          = "暂时没有%s。";
 $lang->my->storyChanged    = "需求变更";
 $lang->my->hours           = '工时/天';
 $lang->my->uploadAvatar    = '更换头像';
+$lang->my->epic            = "我的{$lang->ERCommon}";
 $lang->my->requirement     = "我的{$lang->URCommon}";
 $lang->my->testtask        = '我的测试单';
 $lang->my->testcase        = '我的用例';
@@ -178,6 +179,9 @@ $lang->my->featureBar['dynamic']['lastMonth'] = '上月';
 $lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testtask']['assignedTo'] = '由我负责';
+
+$lang->my->featureBar['work']['epic'] = $lang->my->featureBar['work']['task'];
+$lang->my->featureBar['work']['epic']['reviewBy'] = '待我评审';
 
 $lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
 $lang->my->featureBar['work']['requirement']['reviewBy'] = '待我评审';
