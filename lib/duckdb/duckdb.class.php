@@ -20,26 +20,35 @@
 class duckdb
 {
     /**
-     * 全局对象$app
-     * The global app object.
+     * 全局变量$baseRoot
+     * The global basePath variable.
      *
      * @var object
      * @access public
      */
-    public $app;
+    public $baseRoot;
 
     /**
-     * 全局对象$config
-     * The global config object.
+     * 全局变量$tmpRoot
+     * The global tmpRoot variable.
      *
      * @var object
      * @access public
      */
-    public $config;
+    public $tmpRoot;
 
     /**
-     * 全局对象$sql
-     * The global config object.
+     * 全局变量$prefix
+     * The global prefix variable.
+     *
+     * @var object
+     * @access public
+     */
+    public $prefix;
+
+    /**
+     * 全局变量$sql
+     * The global sql variable.
      *
      * @var object
      * @access public
@@ -47,8 +56,8 @@ class duckdb
     public $sql;
 
     /**
-     * 全局对象$binPath
-     * The global config object.
+     * 全局变量$binPath
+     * The global binPath variable.
      *
      * @var object
      * @access public
@@ -56,8 +65,8 @@ class duckdb
     public $binPath;
 
     /**
-     * 全局对象$tmpPath
-     * The global config object.
+     * 全局变量$tmpPath
+     * The global tmpPath variable.
      *
      * @var object
      * @access public
@@ -74,8 +83,9 @@ class duckdb
     public function __construct()
     {
         global $app, $config;
-        $this->app     = $app;
-        $this->config  = $config;
+        $this->prefix   = $config->db->prefix;
+        $this->baseRoot = $app->getBasePath();
+        $this->tmpRoot  = $app->getTmpRoot();
 
         $this->setBinPath();
         $this->setTmpPath();
@@ -90,7 +100,7 @@ class duckdb
      */
     public function setBinPath()
     {
-        $this->binPath = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS . 'duckdb';
+        $this->binPath = $this->baseRoot . 'bin' . DS . 'duckdb' . DS . 'duckdb';
     }
 
     /**
@@ -102,7 +112,7 @@ class duckdb
      */
     public function setTmpPath($module = 'bi')
     {
-        $this->tmpPath = $this->app->getTmpRoot() . 'duckdb' . DS . $module . DS;
+        $this->tmpPath = $this->tmpRoot . 'duckdb' . DS . $module . DS;
     }
 
     /**
@@ -115,7 +125,7 @@ class duckdb
     public function query($sql = '')
     {
         /* $0全量匹配以 prefix 开头的表，替换为对应的 parquet 文件。 */
-        $pattern     = "/{$this->config->db->prefix}\S+/";
+        $pattern     = "/{$this->prefix}\S+/";
         $replacement = "'" . $this->tmpPath . "$0" . '.parquet' . "'";
 
         $this->sql = preg_replace($pattern, $replacement, $sql);
