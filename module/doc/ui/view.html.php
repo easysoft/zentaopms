@@ -214,7 +214,7 @@ $contentDom = div
             icon
             (
                 'star-empty',
-                setClass('mr-2')
+                setClass('mr-1')
             ),
             $doc->collects ? $doc->collects : 0
         ),
@@ -224,7 +224,7 @@ $contentDom = div
             icon
             (
                 'eye',
-                setClass('mr-2')
+                setClass('mr-1')
             ),
             $doc->views
         ),
