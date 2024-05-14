@@ -59,8 +59,8 @@ if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition =
     $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
     $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
-    if($canImportToPracticeLib)  $items[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal');
-    if($canImportToComponentLib) $items[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal');
+    if($canImportToPracticeLib)  $items[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal', 'data-size' => 'sm');
+    if($canImportToComponentLib) $items[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
     $importLibBtn = $items ? dropdown
     (
@@ -288,5 +288,69 @@ panel
         $treeDom,
         $toggleTreeBtn,
         $historyDom
+    )
+);
+
+modal
+(
+    setID('importToPracticeLib'),
+    formPanel
+    (
+        set::title($lang->doc->importToPracticeLib),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->export),
+        set::url(createLink('doc', 'importToPracticeLib', "doc={$doc->id}")),
+        set::formClass('mt-6'),
+        formGroup
+        (
+            set::label($lang->doc->practiceLib),
+            setID('practiceLib'),
+            set::name('lib'),
+            set::items($practiceLibs),
+            set::required(true)
+        ),
+        !common::hasPriv('assetlib', 'approvePractice') && !common::hasPriv('assetlib', 'batchApprovePractice') ? formGroup
+        (
+            set::label($lang->doc->approver),
+            picker
+            (
+                setID('practiceApprover'),
+                set::name('assignedTo'),
+                set::items($practiceApprovers),
+                set::required(true)
+            )
+        ) : null
+    )
+);
+
+modal
+(
+    setID('importToComponentLib'),
+    formPanel
+    (
+        set::title($lang->doc->importToComponentLib),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->export),
+        set::url(createLink('doc', 'importToComponentLib', "doc={$doc->id}")),
+        set::formClass('mt-6'),
+        formGroup
+        (
+            set::label($lang->doc->componentLib),
+            setID('componentLib'),
+            set::name('lib'),
+            set::items($componentLibs),
+            set::required(true)
+        ),
+        !common::hasPriv('assetlib', 'approveComponent') && !common::hasPriv('assetlib', 'batchApproveComponent') ? formGroup
+        (
+            set::label($lang->doc->approver),
+            picker
+            (
+                setID('componentApprover'),
+                set::name('assignedTo'),
+                set::items($componentApprovers),
+                set::required(true)
+            )
+        ) : null
     )
 );
