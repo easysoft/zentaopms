@@ -187,7 +187,7 @@ class storyZen extends story
             $this->loadModel('my');
             if($from == 'work' || $from == 'contribute')
             {
-                $this->lang->my->menu->{$from}['subModule'] = 'story';
+                $this->lang->my->menu->{$from}['subModule'] = $storyType;
                 $this->lang->my->menu->{$from}['subMenu']->{$storyType}['subModule'] = 'story';
             }
             return;
@@ -251,7 +251,7 @@ class storyZen extends story
         {
             if($from == 'work' || $from == 'contribute')
             {
-                $this->lang->my->menu->{$from}['subModule'] = 'story';
+                $this->lang->my->menu->{$from}['subModule'] = $storyType;
                 $this->lang->my->menu->{$from}['subMenu']->{$storyType}['subModule'] = 'story';
             }
 
