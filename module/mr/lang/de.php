@@ -46,6 +46,8 @@ $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Pipeline job';
 $lang->mr->commitLogs  = 'Commit Logs';
+$lang->mr->execJob     = 'Execute';
+$lang->mr->execJobTip  = 'Execute the pipeline job manually';
 
 $lang->mr->canMerge  = "Can be merged";
 $lang->mr->cantMerge = "Can not be merged";
