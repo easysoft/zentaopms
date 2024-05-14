@@ -168,6 +168,55 @@ class myTao extends myModel
     }
 
     /**
+     * 通过搜索查找业务需求。
+     * Fetch epics by search.
+     *
+     * @param  string    $myEpicQuery
+     * @param  string    $type
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  array     $epicIDList
+     * @access protected
+     * @return array
+     */
+    protected function fetchEpicsBySearch(string $myEpicQuery, string $type, string $orderBy, object $pager = null, array $epicIDList = array()): array
+    {
+         if($type == 'contribute')
+         {
+            $epics = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
+                ->where($myEpicQuery)
+                ->andWhere('t1.type')->eq('epic')
+                ->andWhere('t1.openedBy',1)->eq($this->app->user->account)
+                ->orWhere('t1.closedBy')->eq($this->app->user->account)
+                ->orWhere('t3.reviewer')->eq($this->app->user->account)
+                ->orWhere('t1.id')->in($epicIDList)
+                ->markRight(1)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+         }
+         else
+         {
+             $epics = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
+                ->where($myEpicQuery)
+                ->andWhere('t1.type')->eq('epic')
+                ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
+                ->orWhere('t3.reviewer')->eq($this->app->user->account)
+                ->markRight(1)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+         }
+         return $epics;
+    }
+
+    /**
      * 通过搜索查找用户需求。
      * Fetch requirements by search.
      *
