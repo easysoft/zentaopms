@@ -251,7 +251,7 @@ panel
             (
                 setClass('text-lg font-bold'),
                 $lang->mr->jobID,
-                !empty($compileJob->id) ? btn
+                !empty($compileJob->id) && hasPriv('job', 'exec') ? btn
                 (
                     setClass('btn ghost text-primary size-sm pull-right ajax-submit'),
                     set::url(helper::createLink('job', 'exec', "jobID={$compileJob->id}")),
