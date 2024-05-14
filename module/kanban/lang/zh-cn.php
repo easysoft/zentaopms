@@ -424,9 +424,9 @@ $lang->kanbancard->priList[3] = 3;
 $lang->kanbancard->priList[4] = 4;
 
 $lang->kanbancard->colorList['#fff']    = '默认';
-$lang->kanbancard->colorList['#b10b0b'] = '阻塞';
-$lang->kanbancard->colorList['#cfa227'] = '警告';
-$lang->kanbancard->colorList['#2a5f29'] = '加急';
+$lang->kanbancard->colorList['#937c5a'] = '阻塞';
+$lang->kanbancard->colorList['#fc5959'] = '警告';
+$lang->kanbancard->colorList['#ff9f46'] = '加急';
 
 $lang->kanbancard->error = new stdclass();
 $lang->kanbancard->error->recordMinus     = '预计不能为负数!';

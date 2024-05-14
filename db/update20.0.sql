@@ -34,3 +34,7 @@ INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, 
 
 ALTER TABLE `zt_chart` ADD `code` varchar(255) not NULL default '' AFTER `name`;
 ALTER TABLE `zt_pivot` ADD `code` varchar(255) not NULL default '' AFTER `group`;
+
+UPDATE `zt_kanbancard` SET `color` = '#937c5a' WHERE `color` = '#b10b0b';
+UPDATE `zt_kanbancard` SET `color` = '#fc5959' WHERE `color` = '#cfa227';
+UPDATE `zt_kanbancard` SET `color` = '#ff9f46' WHERE `color` = '#2a5f29';
