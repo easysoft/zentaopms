@@ -443,6 +443,8 @@ CSS;
 
     protected function buildPrevAndNext()
     {
+        if($this->prop('layout') === 'simple') return null;
+
         list($linkCreator, $prevBtn, $nextBtn, $objectType) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn', 'objectType'));
         $preAndNext = data('preAndNext');
 
