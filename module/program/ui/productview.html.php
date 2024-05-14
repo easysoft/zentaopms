@@ -47,7 +47,7 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
 /* Closure for generating program row data. */
 $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
 {
-    if(!isset($program['programName']) || $config->systemMode != 'ALM') return null;
+    if(!isset($program['programName']) || strpos(',ALM,PLM,', ",{$config->systemMode},") === false) return null;
 
     /* ALM mode with more data. */
     $totalStories = $program['totalStories'];
