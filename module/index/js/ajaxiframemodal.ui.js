@@ -34,7 +34,7 @@ $(function()
     {
         const $modal = $('body>.modal-dialog>.modal-content,.modal-body').first();
         const height = $modal.outerHeight();
-        $modal.closest('body').height(height);
+        $modal.closest('body').height(height || 1);
     }
 
     $.ajax(
@@ -47,7 +47,7 @@ $(function()
             $body.html(data);
             const resizeOb = new ResizeObserver(resizeModal);
             resizeOb.observe($('body>.modal-dialog>.modal-content>.modal-body,.modal-body')[0]);
-            resizeModal();
+            requestAnimationFrame(resizeModal);
             $body.zuiInit().removeClass('invisible');
 
             if(parent.$('iframe[name="' + window.frameElement.name + '"]').closest('.modal-dialog').find('.modal-header>.close').length) $('body>.modal-dialog>.modal-content>.modal-actions>[data-dismiss="modal"]').hide();
