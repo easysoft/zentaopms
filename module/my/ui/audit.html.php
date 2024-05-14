@@ -43,9 +43,20 @@ foreach($reviewList as $review)
     $review->module = $type;
 
     if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-    if($type == 'story')                      $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
     if($review->type == 'projectreview')      $typeName = $lang->project->common;
     if(isset($flows[$review->type]))          $typeName = $flows[$review->type];
+    if($type == 'story')
+    {
+        $typeName = $lang->SRCommon;
+        if($review->storyType == 'epic')
+        {
+            $typeName = $lang->ERCommon;
+        }
+        elseif($review->storyType == 'requirement')
+        {
+            $typeName = $lang->ERCommon;
+        }
+    }
 
     $statusList = array();
     if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
