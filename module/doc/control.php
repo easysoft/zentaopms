@@ -360,7 +360,7 @@ class doc extends control
         $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         if(!$libID && !empty($libs)) $libID = key($libs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
-        if($this->app->edition != 'open') $this->loadModel('file');
+        if($this->config->edition != 'open') $this->loadModel('file');
 
         $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
