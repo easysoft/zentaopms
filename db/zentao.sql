@@ -16476,6 +16476,7 @@ INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `
 ('scale', 'user', 'requirement', 'released', 'php', '按人员统计的待处理用户需求数', 'count_of_assigned_requirement_in_user', '待处理用需数', 'count', '按人员统计的待处理用户需求数表示每个人待处理的用户需求数量之和。反映了每个人员需要处理的用户需求数量的规模。该数值越大，说明需要投入越多的时间处理用户需求。', '所有用户需求个数求和\r\n指派给为某人\r\n过滤已删除的用户需求\r\n过滤已删除产品的用户需求', 'realtime', 'system', '2024-05-07 08:00:00', '1', '0', 'nodate');
 
 INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NUll);
+INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NUll);
 
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());

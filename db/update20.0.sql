@@ -38,3 +38,5 @@ ALTER TABLE `zt_pivot` ADD `code` varchar(255) not NULL default '' AFTER `group`
 UPDATE `zt_kanbancard` SET `color` = '#937c5a' WHERE `color` = '#b10b0b';
 UPDATE `zt_kanbancard` SET `color` = '#fc5959' WHERE `color` = '#cfa227';
 UPDATE `zt_kanbancard` SET `color` = '#ff9f46' WHERE `color` = '#2a5f29';
+
+INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NUll);
