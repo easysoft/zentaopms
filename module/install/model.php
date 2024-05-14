@@ -386,22 +386,23 @@ class installModel extends model
         $this->loadModel('bi');
 
         /* Prepare built-in sqls of bi. */
-        $chartSQLs = $this->bi->prepareBuiltinChartSQL();
-        $pivotSQLs = $this->bi->prepareBuiltinPivotSQL();
+        $chartSQLs  = $this->bi->prepareBuiltinChartSQL();
+        $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL();
+        $screenSQLs = $this->bi->prepareBuiltinScreenSQL();
 
-        $insertTables = array_merge($chartSQLs, $pivotSQLs);
+        $insertTables = array_merge($chartSQLs, $pivotSQLs, $screenSQLs);
 
         try
         {
-        foreach($insertTables as $table)
-        {
-            $table = trim($table);
-            if(empty($table)) continue;
+            foreach($insertTables as $table)
+            {
+                $table = trim($table);
+                if(empty($table)) continue;
 
-            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
-            if(!$this->dbh->query($table)) return false;
-        }
+                $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+                $table = str_replace('zt_', $this->config->db->prefix, $table);
+                if(!$this->dbh->query($table)) return false;
+            }
         }
         catch(Error $e)
         {
