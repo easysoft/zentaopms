@@ -2,7 +2,6 @@
 
 class biModel extends model
 {
-
     /**
      * 获取sql中的表、字段。
      * Get tables and fields form sql.
@@ -49,6 +48,33 @@ class biModel extends model
     }
 
     /**
+     * Try to explain sql.
+     *
+     * @param  string     $sql
+     * @param  string     $driverName mysql|duckdb
+     * @access public
+     * @return array
+     */
+    public function explainSQL($sql, $driverName = 'mysql')
+    {
+        $dbh = $this->app->loadDriver($driverName);
+
+        $prefixSQL = $driverName == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
+        try
+        {
+            $rows = $dbh->query("$prefixSQL $sql")->fetchAll();
+        }
+        catch(Exception $e)
+        {
+            $message = preg_replace("/\r|\n/", "", $e->getMessage());
+            $message = strip_tags($message);
+            return array('result' => 'fail', 'message' => $message);
+        }
+
+        return array('result' => 'success', 'message' => $rows);
+    }
+
+    /**
      * Get sql result columns.
      *
      * @param  string     $sql
@@ -67,7 +93,7 @@ class biModel extends model
         else
         {
             $dbh     = $this->app->loadDriver('duckdb');
-            $columns = $dbh->query("$sql", 'desc')->fetchAll();
+            $columns = $dbh->query("DESCRIBE $sql")->fetchAll();
         }
 
         $result = array();
