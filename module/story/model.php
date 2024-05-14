@@ -3237,10 +3237,13 @@ class storyModel extends model
         if($action == 'close')        return $story->status != 'closed';
         if($action == 'activate')     return $story->status == 'closed';
         if($action == 'assignto')     return $story->status != 'closed';
-        if($action == 'batchcreate'  && $story->parent > 0)    return false;
-        if($action == 'batchcreate'  && !empty($story->twins)) return false;
+        if($action == 'batchcreate')
+        {
+            if($config->vision == 'or') return false;
+            if($story->parent > 0 || !empty($story->twins)) return false;
+            if($story->type == 'requirement' && strpos('draft,reviewing,changing', $story->status) !== false) return false;
+        }
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
-        if($action == 'batchcreate'  && $story->type == 'requirement' && $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
 
         if($action == 'createtask')
