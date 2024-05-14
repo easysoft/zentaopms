@@ -304,6 +304,7 @@ function su($account, $initRights = true)
     $user      = $userModel->getByID($account);
     if(!$user) return false;
 
+    common::$userPrivs = array();
     if($initRights) return $userModel->login($user);
 
     global $app;
