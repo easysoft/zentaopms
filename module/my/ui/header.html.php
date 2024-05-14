@@ -17,6 +17,7 @@ $badgesOptions['isIPD']           = $isIPD;
 $badgesOptions['isMax']           = $isMax;
 $badgesOptions['isBiz']           = $isBiz;
 $badgesOptions['isOpenedURAndSR'] = $isOpenedURAndSR;
+$badgesOptions['enableER']        = $this->config->enableER;
 $badgesOptions['rawMethod']       = $app->rawMethod;
 
 query('#featureBar')->append(on::init()->const('badgesOptions', $badgesOptions)->do('setTimeout(() => {updateMainNavbarBadges(badgesOptions)}, 500)'));
