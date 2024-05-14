@@ -424,7 +424,7 @@ class project extends control
             }
             else
             {
-                if($model == 'waterfall' or $model == 'waterfallplus')
+                if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
                     $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
