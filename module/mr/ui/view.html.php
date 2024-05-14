@@ -21,42 +21,7 @@ dropmenu
 
 $hasNoConflict     = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
 $sourceDisabled    = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
-$compileNotSuccess = !empty($compile->id) && $compile->status != 'success';
 $branchPath        = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
-
-$mainActions   = array();
-$suffixActions = array();
-foreach($config->mr->view->operateList as $operate)
-{
-    if(!common::hasPriv('mr', $operate == 'reject' ? 'approval' : $operate)) continue;
-    if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
-
-    $action = $config->mr->actionList[$operate];
-    if($operate === 'edit' || $operate === 'delete')
-    {
-        $suffixActions[] = $action;
-        continue;
-    }
-
-    if($operate == 'accept' && ($MR->approvalStatus != 'approved' || $compileNotSuccess)) $action['disabled'] = true;
-    if($operate == 'accept' && ($rawMR->state != 'opened' || $rawMR->has_conflicts)) $action['disabled'] = true;
-
-    if(in_array($operate, array('approval', 'reject', 'close', 'edit')))
-    {
-        if(!$MR->synced || $rawMR->state != 'opened') continue;
-        if($operate == 'reject' && $MR->approvalStatus == 'rejected') $action['disabled'] = true;
-
-        if($operate == 'approval')
-        {
-            if($rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved') $action['disabled'] = true;
-        }
-    }
-
-    if($operate == 'delete' && !$projectOwner && !$this->app->user->admin) $action['disabled'] = true;
-    if($operate == 'edit' && !$projectEdit && !$this->app->user->admin) $action['disabled'] = true;
-
-    $mainActions[] = $action;
-}
 
 if($MR->compileID)
 {
@@ -202,111 +167,101 @@ panel
         )
     ),
     div
+    (
+        setClass('flex items-center mt-4'),
+        cell
         (
-            setClass('flex items-center mt-4'),
+            setClass('mr-4'),
+            set::grow(1),
+            set::align('flex-start'),
             cell
             (
-                setClass('mr-4'),
-                set::grow(1),
-                set::align('flex-start'),
-                cell
+                setClass('cell mb-2'),
+                h::span
                 (
-                    setClass('cell mb-2'),
-                    h::span
+                    setClass('font-bold mt-2 mb-2 inline-block'),
+                    $lang->mr->from,
+                    h::a
                     (
-                        setClass('font-bold mt-2 mb-2 inline-block'),
-                        $lang->mr->from,
-                        h::a
-                        (
-                            setClass('font-normal ml-2 mr-2'),
-                            set::href($sourceBranch),
-                            set::target('_blank'),
-                            set::disabled($sourceDisabled),
-                            $sourceProject->name_with_namespace . ':' . $MR->sourceBranch
-                        ),
-                        $lang->mr->to,
-                        h::a
-                        (
-                            setClass('font-normal ml-2 mr-2'),
-                            set::href($targetBranch),
-                            set::target('_blank'),
-                            $targetProject->name_with_namespace . ':' . $MR->targetBranch
-                        )
+                        setClass('font-normal ml-2 mr-2'),
+                        set::href($sourceBranch),
+                        set::target('_blank'),
+                        set::disabled($sourceDisabled),
+                        $sourceProject->name_with_namespace . ':' . $MR->sourceBranch
                     ),
-                    tableData
+                    $lang->mr->to,
+                    h::a
                     (
-                        item
-                        (
-                            set::name($lang->mr->status),
-                            (!empty($MR->syncError) && $MR->synced === '0') ? h::span
-                            (
-                                setClass('danger'),
-                                $MR->status
-                            ) : zget($lang->mr->statusList, (string)$MR->status)
-                        ),
-                        item
-                        (
-                            set::name($lang->mr->mergeStatus),
-                            ($MR->synced && empty($rawMR->changes_count)) ? span($lang->mr->cantMerge, h::code($lang->mr->noChanges)
-                            ) : zget($lang->mr->mergeStatusList, !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus)
-                        ),
-                        item
-                        (
-                            set::name($lang->mr->MRHasConflicts),
-                            $hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict
-                        ),
-                        item
-                        (
-                            set::name($lang->mr->description),
-                            !empty($MR->description) ? html(nl2br($MR->description)) : $lang->noData
-                        )
+                        setClass('font-normal ml-2 mr-2'),
+                        set::href($targetBranch),
+                        set::target('_blank'),
+                        $targetProject->name_with_namespace . ':' . $MR->targetBranch
                     )
                 ),
-                cell
+                tableData
                 (
-                    setClass('cell mb-2'),
-                    html(sprintf($lang->mr->commandDocument, $sourceProject->http_url_to_repo, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch))
-                ),
-                cell
-                (
-                    setClass('cell cell-history'),
-                    history
+                    item
                     (
-                        set::objectID($MR->id),
-                        set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id)))
+                        set::name($lang->mr->status),
+                        (!empty($MR->syncError) && $MR->synced === '0') ? h::span
+                        (
+                            setClass('danger'),
+                            $MR->status
+                        ) : zget($lang->mr->statusList, (string)$MR->status)
+                    ),
+                    item
+                    (
+                        set::name($lang->mr->mergeStatus),
+                        ($MR->synced && empty($rawMR->changes_count)) ? span($lang->mr->cantMerge, h::code($lang->mr->noChanges)
+                        ) : zget($lang->mr->mergeStatusList, !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus)
+                    ),
+                    item
+                    (
+                        set::name($lang->mr->MRHasConflicts),
+                        $hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict
+                    ),
+                    item
+                    (
+                        set::name($lang->mr->description),
+                        !empty($MR->description) ? html(nl2br($MR->description)) : $lang->noData
                     )
                 )
             ),
+            ($MR->synced && $rawMR->state == 'opened' && $hasNoConflict) ? cell
+            (
+                setClass('cell mb-2'),
+                html(sprintf($lang->mr->commandDocument, $sourceProject->http_url_to_repo, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch))
+            ) : null,
             cell
             (
-                setClass('cell'),
-                set::width('30%'),
-                set::align('baseline'),
-                div
+                setClass('cell cell-history'),
+                history
                 (
-                    setClass('text-lg font-bold'),
-                    $lang->mr->jobID,
-                    !empty($compileJob->id) ? btn
-                    (
-                        setClass('btn ghost text-primary size-sm pull-right ajax-submit'),
-                        set::url(helper::createLink('job', 'exec', "jobID={$compileJob->id}")),
-                        set::hint($lang->mr->execJobTip),
-                        $lang->mr->execJob
-                    ) : null
-                ),
-                $job
+                    set::objectID($MR->id),
+                    set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id)))
+                )
             )
+        ),
+        cell
+        (
+            setClass('cell'),
+            set::width('30%'),
+            set::align('baseline'),
+            div
+            (
+                setClass('text-lg font-bold'),
+                $lang->mr->jobID,
+                !empty($compileJob->id) ? btn
+                (
+                    setClass('btn ghost text-primary size-sm pull-right ajax-submit'),
+                    set::url(helper::createLink('job', 'exec', "jobID={$compileJob->id}")),
+                    set::hint($lang->mr->execJobTip),
+                    $lang->mr->execJob
+                ) : null
+            ),
+            $job
         )
-);
-
-div
-(
-    setClass('detail-actions center sticky mt-4 bottom-4 z-10'),
-    floatToolbar
-    (
-        set::object($MR),
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        set::main($mainActions),
-        set::suffix($suffixActions)
     )
 );
+
+include 'actions.html.php';

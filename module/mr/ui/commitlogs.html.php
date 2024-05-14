@@ -124,4 +124,4 @@ panel
     )
 );
 
-render();
+include 'actions.html.php';

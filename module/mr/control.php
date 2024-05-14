@@ -814,11 +814,13 @@ class mr extends control
     public function commitLogs(int $MRID)
     {
         $MR = $this->mr->fetchByID($MRID);
-        $this->view->title = $this->lang->mr->commitLogs;
-        $this->view->MR    = $MR;
+        $this->view->title   = $this->lang->mr->commitLogs;
+        $this->view->MR      = $MR;
+        $this->view->compile = $this->loadModel('compile')->getById($MR->compileID);
         if($MR->synced)
         {
             $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
+            $this->view->rawMR = $rawMR;
             if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
         }
 
