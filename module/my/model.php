@@ -821,7 +821,7 @@ class myModel extends model
      * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
      * @return array
      */

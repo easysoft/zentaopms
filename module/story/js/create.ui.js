@@ -101,10 +101,9 @@ window.loadGrade = function(e)
 {
     const parent = e.target.value;
     const link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + storyType);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
         const $grade = $('[name=grade]').zui('picker');
-        data = JSON.parse(data);
         $grade.render({items: data.items});
         $grade.$.setValue(data.default);
     })
