@@ -181,6 +181,15 @@ class myZen extends my
             $count['requirement']     = $assignedRequirementCount + $reviewByRequirementCount;
         }
 
+        if($this->config->enableER)
+        {
+            $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'epic', false, 'all');
+            $assignedEpicCount = $pager->recTotal;
+            $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'epic', false, 'all');
+            $reviewByEpicCount = $pager->recTotal;
+            $count['epic']     = $assignedEpicCount + $reviewByEpicCount;
+        }
+
         /* Get the number of bugs assigned to me. */
         $this->loadModel('bug')->getUserBugs($this->app->user->account, 'assignedTo', 'id_desc', 0, $pager);
         $count['bug'] = $pager->recTotal;
