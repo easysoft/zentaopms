@@ -87,16 +87,17 @@ class testcaseZen extends testcase
      * @param  string|bool $branch
      * @param  int         $projectID
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function setBrowseMenu(int $productID, string|bool $branch, int $projectID): void
+    protected function setBrowseMenu(int $productID, string|bool $branch, int $projectID): array
     {
         /* 在不同的应用中，设置不同的导航。 */
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
             $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
-            $this->products = array('0' => $this->lang->product->all) + $linkedProducts;
+            $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
+            $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
 
             $hasProduct = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('hasProduct');
             if(!$hasProduct) unset($this->config->testcase->search['fields']['product']);
@@ -111,6 +112,8 @@ class testcaseZen extends testcase
         {
             $this->qa->setMenu($productID, $branch);
         }
+
+        return array($productID, $branch);
     }
 
     /**
