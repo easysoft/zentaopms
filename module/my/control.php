@@ -250,6 +250,72 @@ class my extends control
     }
 
     /**
+     * 业务需求列表。
+     * My epics.
+     *
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function epic(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        /* Save session. */
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* Append id for second sort. */
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+
+        $this->loadModel('story');
+        $this->loadModel('epic');
+        if($type == 'assignedBy')
+        {
+            $stories = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'epic');
+        }
+        elseif($type == 'bysearch')
+        {
+            $stories = $this->my->getEpicsBySearch($queryID, $this->app->rawMethod, $sort, $pager);
+        }
+        else
+        {
+            $stories = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'epic', false, 'all');
+        }
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
+        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
+
+         /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=epic&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->my->buildEpicSearchForm($queryID, $actionURL, $currentMethod);
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
+        /* Assign. */
+        $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
+        $this->view->stories  = $stories;
+        $this->view->users    = $this->user->getPairs('noletter');
+        $this->view->type     = $type;
+        $this->view->param    = $param;
+        $this->view->mode     = 'epic';
+        $this->view->pager    = $pager;
+        $this->view->orderBy  = $orderBy;
+        $this->display();
+    }
+
+    /**
      * 用户需求列表。
      * My requirements.
      *
