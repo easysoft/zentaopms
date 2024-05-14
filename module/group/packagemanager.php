@@ -3864,7 +3864,7 @@ $config->group->package->aiAssistant->privs['ai-assistantCreate']   = array('edi
 $config->group->package->aiAssistant->privs['ai-assistantEdit']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-assistants'), 'recommend' => array('ai-assistantView', 'ai-assistantPublish', 'ai-assistantWithdraw'));
 $config->group->package->aiAssistant->privs['ai-assistantPublish']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('admin-index', 'ai-assistants', 'ai-assistantCreate', 'ai-assistantEdit'), 'recommend' => array('ai-assistantView', 'ai-assistantWithdraw'));
 $config->group->package->aiAssistant->privs['ai-assistantWithdraw'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-assistants'), 'recommend' => array('ai-assistantView', 'ai-assistantEdit', 'ai-assistantPublish'));
-$config->group->package->aiAssistant->privs['ai-assistantDelete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('admin-index', 'ai-assistantView'), 'recommend' => array('ai-assistantCreate', 'ai-assistantEdit', 'ai-assistantPublish', 'ai-assistantWithdraw'));
+$config->group->package->aiAssistant->privs['ai-assistantDelete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('admin-index', 'ai-assistants', 'ai-assistantView'), 'recommend' => array('ai-assistantCreate', 'ai-assistantEdit', 'ai-assistantPublish', 'ai-assistantWithdraw'));
 
 $config->group->package->resource = new stdclass();
 $config->group->package->resource->order  = 2200;
