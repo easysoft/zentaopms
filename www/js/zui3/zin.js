@@ -1381,10 +1381,10 @@
 
         setTimeout(function()
         {
-            maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
+            let maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
             if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
             $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
-            if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + window.config.expand + " <i class='icon-angle-down'></i></a>");
+            if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage row items-center justify-center h-7 secondary absolute bottom-0 w-full opacity-70 hover:opacity-100' onclick='showMoreImage(this)'>" + window.config.expand + " <i class='icon-angle-down'></i></a>");
         }, 50);
     }
 
