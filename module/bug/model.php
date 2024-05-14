@@ -1824,6 +1824,8 @@ class bugModel extends model
      */
     public static function isClickable(object $object, string $action, string $module = 'bug'): bool
     {
+        global $config;
+
         $action = strtolower($action);
 
         /* 如果bug状态是激活，没有确认过，这个bug可以被确认。 */
@@ -1844,6 +1846,9 @@ class bugModel extends model
         /* 如果bug是激活状态，这个bug可以被转为需求。 */
         /* If the status is active, the bug can be toStory. */
         if($module == 'bug' && $action == 'tostory')  return $object->status == 'active';
+        /* 判断反馈转bug操作按钮的权限。 */
+        /* check feedback toStory priv. */
+        if($module == 'bug' && $action == 'create')   return ($config->global->flow == 'full' || $config->global->flow == 'onlyTest') && strpos('closed|clarify|noreview', $object->status) === false;
 
         return true;
     }
