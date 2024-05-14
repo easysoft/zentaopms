@@ -365,6 +365,29 @@ class biModel extends model
         return $pivotSQLs;
     }
 
+    public function prepareBuiltinScreenSQL()
+    {
+        $screens = $this->config->bi->builtin->screens;
+
+        $screenSQLs = array();
+        foreach($screens as $screenID)
+        {
+            $screenJson = file_get_contents(__DIR__ . DS . 'json' . DS . "screen{$screenID}.json");
+            $screen = json_decode($screenJson);
+            if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme);
+
+            $screen->status      = 'published';
+            $screen->createdBy   = 'system';
+            $screen->createdDate = helper::now();
+
+            $stmt = $this->dao->insert(TABLE_SCREEN)->data($screen)
+                ->autoCheck();
+            $screenSQLs[] = $stmt->get();
+        }
+
+        return $screenSQLs;
+    }
+
     /**
      * Encode json.
      *
