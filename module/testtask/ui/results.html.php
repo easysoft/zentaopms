@@ -60,7 +60,7 @@ foreach($results as $i => $result)
         set('data-status', $result->node > 0 && empty($result->ZTFResult) ? 'running': 'ready'),
         h::td
         (
-            span(setClass('toggle-icon circle inline-block align-middle mr-2')),
+            span(setClass('toggle-icon inline-block align-middle mr-2')),
             width('120px'),
             label(setClass('mx-2 gray-pale'), "#{$result->id}"),
             $result->date,
