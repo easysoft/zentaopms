@@ -6,6 +6,7 @@ window.updateMainNavbarBadges = function(options)
     const isMax           = options.isMax;
     const isBiz           = options.isBiz;
     const isOpenedURAndSR = options.isOpenedURAndSR;
+    const enableER        = options.enableER;
     const todoCount       = options.todoCount;
 
     if(typeof mode !== 'string') return;
@@ -15,7 +16,8 @@ window.updateMainNavbarBadges = function(options)
     if(rawMethod == 'work')
     {
         const countMap = {task: 'task', story: 'story', bug: 'bug', testcase: 'case', testtask: 'testtask'};
-        if(isOpenedURAndSR !== 0)      $.extend(countMap, {requirement: 'requirement'});
+        if(isOpenedURAndSR !== 0)                     $.extend(countMap, {requirement: 'requirement'});
+        if(enableER !== 0)                            $.extend(countMap, {epic: 'epic'});
         if(isBiz !== 0 || isMax !== 0 || isIPD !== 0) $.extend(countMap, {feedback: 'feedback', ticket: 'ticket'});
         if(isMax !== 0 || isIPD !== 0)                $.extend(countMap, {issue: 'issue', risk: 'risk', nc: 'qa', myMeeting: 'meeting'});
         if(isIPD !== 0)                               $.extend(countMap, {demand: 'demand'});
