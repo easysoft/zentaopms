@@ -21,6 +21,7 @@ $config->todo->create->form['objectID']     = array('required' => false, 'type' 
 $config->todo->create->form['desc']         = array('required' => false, 'type' => 'string',  'default' => '');
 $config->todo->create->form['cycle']        = array('required' => false, 'type' => 'int',     'default' => 0);
 $config->todo->create->form['config']       = array('required' => false, 'type' => 'array',   'default' => array());
+$config->todo->create->form['demand']       = array('required' => false, 'type' => 'array',   'default' => array());
 
 $config->todo->batchCreate = new stdclass();
 $config->todo->batchCreate->form = array();
