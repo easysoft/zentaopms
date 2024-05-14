@@ -170,7 +170,6 @@ class duckdb
         $exec   = "$this->binPath :memory: \"$this->sql\" -json 2>&1";
         $output = shell_exec($exec);
 
-        a($this->sql);die;
         $rows = json_decode($output);
         /* 有内容但是 json 解析失败，说明是报错。*/
         if($output and !$rows)
@@ -201,7 +200,7 @@ class duckdb
     /**
      * 获取所有记录。
      * Fetch all records.
-     *7dbf3798764
+     *
      * @access public
      * @return array
      */
