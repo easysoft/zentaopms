@@ -431,7 +431,7 @@ class blockZen extends block
         $yesterday = strtotime("-1 day");
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
-        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'realtime', null, $this->config->vision);
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCodeWithArray('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'realtime', null, $this->config->vision);
         if(!empty($finishTaskGroup))
         {
             $finishTaskGroup = reset($finishTaskGroup);
@@ -440,7 +440,7 @@ class blockZen extends block
 
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
-        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
+        $fixBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
         if(!empty($fixBugGroup))
         {
             $fixBugGroup = reset($fixBugGroup);
@@ -468,7 +468,7 @@ class blockZen extends block
             if($field == 'testcase') $code = "assigned_case";
 
             /* 查询当前指派给当前用户的不同数据。 */
-            $assignedGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account), 'realtime', null, $field != 'feedback' ? $this->config->vision : '');
+            $assignedGroup = $this->metric->getResultByCodeWithArray("count_of_{$code}_in_user", array('user' => $this->app->user->account), 'realtime', null, $field != 'feedback' ? $this->config->vision : '');
             $count = 0;
             if(!empty($assignedGroup))
             {
@@ -749,12 +749,12 @@ class blockZen extends block
         }
 
         /* 从度量项获取所有产品的月度发布次数的数据。 */
-        $monthRelease = $this->loadModel('metric')->getResultByCode('count_of_monthly_created_release', array('year' => join(',', $years), 'month' => join(',', $months)));
+        $monthRelease = $this->loadModel('metric')->getResultByCodeWithArray('count_of_monthly_created_release', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron');
 
         /* 获取各个产品的年度(今年)发布次数。 */
         $products      = $this->loadModel('product')->getOrderedProducts('all');
         $productIdList = array_keys($products);
-        $releaseGroup  = $this->metric->getResultByCode('count_of_annual_created_release_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
+        $releaseGroup  = $this->metric->getResultByCodeWithArray('count_of_annual_created_release_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')), 'cron');
 
         foreach($dates as $date)
         {
@@ -870,7 +870,7 @@ class blockZen extends block
 
         /* 通过度量项获取项目总量数据。 */
         $projectCount = 0;
-        $projectCountGroup = $this->metric->getResultByCode('count_of_project');
+        $projectCountGroup = $this->metric->getResultByCodeWithArray('count_of_project', array(), 'cron');
         if(!empty($projectCountGroup))
         {
             $projectCountGroup = reset($projectCountGroup);
@@ -885,7 +885,7 @@ class blockZen extends block
             $i --;
             $years[$year] = date('Y', strtotime("first day of -{$i} year"));
         }
-        $finishedProjectGroup = $this->metric->getResultByCode('count_of_annual_finished_project', array('year' => join(',', $years)));
+        $finishedProjectGroup = $this->metric->getResultByCodeWithArray('count_of_annual_finished_project', array('year' => join(',', $years)), 'cron');
         if($finishedProjectGroup) $finishedProjectGroup = array_column($finishedProjectGroup, null, 'year');
 
         /* 组装前台所需的cards数组。 */
@@ -987,16 +987,16 @@ class blockZen extends block
 
         $this->loadModel('metric');
         /* 按照产品分组获取产品需求交付率度量项。 */
-        $storyDeliveryRate = $this->metric->getResultByCode('rate_of_delivery_story_in_product',   array('product' => join(',', $productIdList)));
+        $storyDeliveryRate = $this->metric->getResultByCodeWithArray('rate_of_delivery_story_in_product',   array('product' => join(',', $productIdList)), 'cron');
 
         /* 按照产品分组获取产品有效需求数度量项。 */
-        $totalStories      = $this->metric->getResultByCode('count_of_valid_story_in_product',     array('product' => join(',', $productIdList)));
+        $totalStories      = $this->metric->getResultByCodeWithArray('count_of_valid_story_in_product',     array('product' => join(',', $productIdList)), 'cron');
 
         /* 按照产品分组获取产品已交付需求数度量项。 */
-        $closedStories     = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)));
+        $closedStories     = $this->metric->getResultByCodeWithArray('count_of_delivered_story_in_product', array('product' => join(',', $productIdList)), 'cron');
 
         /* 按照产品分组获取产品未关闭需求数度量项。 */
-        $unclosedStories   = $this->metric->getResultByCode('count_of_unclosed_story_in_product',  array('product' => join(',', $productIdList)));
+        $unclosedStories   = $this->metric->getResultByCodeWithArray('count_of_unclosed_story_in_product',  array('product' => join(',', $productIdList)), 'cron');
 
         if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
         if(!empty($totalStories))      $totalStories      = array_column($totalStories,      null, 'product');
@@ -1013,8 +1013,8 @@ class blockZen extends block
             $months[] = date('m',   strtotime("first day of -{$i} month"));
             $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
-        $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
-        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
+        $monthFinish  = $this->metric->getResultByCodeWithArray('count_of_monthly_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron');
+        $monthCreated = $this->metric->getResultByCodeWithArray('count_of_monthly_created_story_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron');
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
         /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
@@ -1119,15 +1119,15 @@ class blockZen extends block
         $execution   = $executions[$executionID];
 
         $this->loadModel('metric');
-        $estimateGroup       = $this->metric->getResultByCode('estimate_of_task_in_execution', array('execution' => $executionID));         // 从度量项获取执行的预计工时。
-        $consumeGroup        = $this->metric->getResultByCode('consume_of_task_in_execution',  array('execution' => $executionID));         // 从度量项获取执行的消耗工时。
-        $leftGroup           = $this->metric->getResultByCode('left_of_task_in_execution',     array('execution' => $executionID));         // 从度量项获取执行的剩余工时。
-        $developedStoryGroup = $this->metric->getResultByCode('count_of_developed_story_in_execution', array('execution' => $executionID)); // 从度量项获取执行的已完成需求。
-        $totalStoryGroup     = $this->metric->getResultByCode('count_of_story_in_execution',           array('execution' => $executionID)); // 从度量项获取执行的总需求数量。
+        $estimateGroup       = $this->metric->getResultByCodeWithArray('estimate_of_task_in_execution',         array('execution' => $executionID), 'cron');         // 从度量项获取执行的预计工时。
+        $consumeGroup        = $this->metric->getResultByCodeWithArray('consume_of_task_in_execution',          array('execution' => $executionID), 'cron');         // 从度量项获取执行的消耗工时。
+        $leftGroup           = $this->metric->getResultByCodeWithArray('left_of_task_in_execution',             array('execution' => $executionID), 'cron');         // 从度量项获取执行的剩余工时。
+        $developedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_developed_story_in_execution', array('execution' => $executionID), 'cron'); // 从度量项获取执行的已完成需求。
+        $totalStoryGroup     = $this->metric->getResultByCodeWithArray('count_of_story_in_execution',           array('execution' => $executionID), 'cron'); // 从度量项获取执行的总需求数量。
         $yesterday           = strtotime("-1 day");
-        $totalTaskGroup      = $this->metric->getResultByCode('count_of_task_in_execution',            array('execution' => $executionID)); // 从度量项获取执行的任务总数。
-        $unfinishedTaskGroup = $this->metric->getResultByCode('count_of_unfinished_task_in_execution', array('execution' => $executionID)); // 从度量项获取执行的未完成任务。
-        $dailyFinishedGroup  = $this->metric->getResultByCode('count_of_daily_finished_task ',         array('execution' => $executionID, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday))); // 从度量项获取执行的昨日完成任务数。
+        $totalTaskGroup      = $this->metric->getResultByCodeWithArray('count_of_task_in_execution',            array('execution' => $executionID), 'cron'); // 从度量项获取执行的任务总数。
+        $unfinishedTaskGroup = $this->metric->getResultByCodeWithArray('count_of_unfinished_task_in_execution', array('execution' => $executionID), 'cron'); // 从度量项获取执行的未完成任务。
+        $dailyFinishedGroup  = $this->metric->getResultByCodeWithArray('count_of_daily_finished_task ',         array('execution' => $executionID, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron'); // 从度量项获取执行的昨日完成任务数。
 
         if(!empty($estimateGroup))       $estimateGroup       = array_column($estimateGroup,       null, 'execution');
         if(!empty($consumeGroup))        $consumeGroup        = array_column($consumeGroup,        null, 'execution');
@@ -1241,7 +1241,7 @@ class blockZen extends block
         /* Get program plans. */
         $plans         = $this->loadModel('programplan')->getStage($this->session->project, $productID, 'all', 'order');
         $plans         = $this->programplan->initGanttPlans($plans);
-        $plansProgress = $this->loadModel('metric')->getResultByCode('progress_of_task_in_execution', array('execution' => implode(',', $plans['planIdList']))); // Get plan progress by metric.
+        $plansProgress = $this->loadModel('metric')->getResultByCodeWithArray('progress_of_task_in_execution', array('execution' => implode(',', $plans['planIdList'])), 'cron'); // Get plan progress by metric.
         $plans         = $plans['datas']['data'];
         /* Set progress from metric. */
         foreach($plansProgress as $metric)
@@ -1597,13 +1597,13 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
-        $createdBugGroup  = $this->metric->getResultByCode('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日新增的Bug数。
-        $resolvedBugGroup = $this->metric->getResultByCode('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日解决的Bug数。
-        $closedBugGroup   = $this->metric->getResultByCode('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months))); // 获取昨日和今日关闭的Bug数。
-        $bugFixRate       = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList))); // 获取Bug修复率。
-        $effectiveBug     = $this->metric->getResultByCode('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList))); // 获取有效Bug总数。
-        $fixedBug         = $this->metric->getResultByCode('count_of_fixed_bug_in_product',          array('product' => join(',', $productIdList))); // 获取Bug修复数。
-        $activatedBug     = $this->metric->getResultByCode('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList))); // 获取Bug激活数。
+        $createdBugGroup  = $this->metric->getResultByCodeWithArray('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日新增的Bug数。
+        $resolvedBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日解决的Bug数。
+        $closedBugGroup   = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日关闭的Bug数。
+        $bugFixRate       = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList)), 'cron'); // 获取Bug修复率。
+        $effectiveBug     = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList)), 'cron'); // 获取有效Bug总数。
+        $fixedBug         = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_product',          array('product' => join(',', $productIdList)), 'cron'); // 获取Bug修复数。
+        $activatedBug     = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList)), 'cron'); // 获取Bug激活数。
 
         if(!empty($bugFixRate))   $bugFixRate   = array_column($bugFixRate,   null, 'product');
         if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
@@ -1700,7 +1700,7 @@ class blockZen extends block
         $this->loadModel('metric');
 
         /* 从度量项获取产品总数量。 */
-        $productCount = $this->metric->getResultByCode('count_of_product');
+        $productCount = $this->metric->getResultByCodeWithArray('count_of_product', array(), 'cron');
         if(!empty($productCount))
         {
             $productCount = reset($productCount);
@@ -1708,7 +1708,7 @@ class blockZen extends block
         }
 
         /* 从度量项获取发布次数。 */
-        $releaseCount = $this->metric->getResultByCode('count_of_annual_created_release', array('year' => date('Y')));
+        $releaseCount = $this->metric->getResultByCodeWithArray('count_of_annual_created_release', array('year' => date('Y')), 'cron');
         if(!empty($releaseCount))
         {
             $releaseCount = reset($releaseCount);
@@ -1716,7 +1716,7 @@ class blockZen extends block
         }
 
         /* 从度量项获取发布里程碑数。 */
-        $milestoneCount = $this->metric->getResultByCode('count_of_marker_release');
+        $milestoneCount = $this->metric->getResultByCodeWithArray('count_of_marker_release', array(), 'cron');
         if(!empty($milestoneCount))
         {
             $milestoneCount = reset($milestoneCount);
@@ -1753,44 +1753,44 @@ class blockZen extends block
         $data->finishedStoryPoint['week']   = 0;
 
         $this->loadModel('metric');
-        $productLineCount = $this->metric->getResultByCode('count_of_line'); // 产品线总量。
+        $productLineCount = $this->metric->getResultByCodeWithArray('count_of_line', array(), 'cron'); // 产品线总量。
         if(!empty($productLineCount))
         {
             $productLineCount = reset($productLineCount);
             $data->productLineCount = zget($productLineCount, 'value', 0);
         }
 
-        $productCount = $this->metric->getResultByCode('count_of_product'); // 产品总量。
+        $productCount = $this->metric->getResultByCodeWithArray('count_of_product', array(), 'cron'); // 产品总量。
         if(!empty($productCount))
         {
             $productCount = reset($productCount);
             $data->productCount = zget($productCount, 'value', 0);
         }
 
-        $unfinishedPlanCount = $this->metric->getResultByCode('count_of_unfinished_productplan'); // 未完成计划数。
+        $unfinishedPlanCount = $this->metric->getResultByCodeWithArray('count_of_unfinished_productplan', array(), 'cron'); // 未完成计划数。
         if(!empty($unfinishedPlanCount))
         {
             $unfinishedPlanCount = reset($unfinishedPlanCount);
             $data->unfinishedPlanCount = zget($unfinishedPlanCount, 'value', 0);
         }
 
-        $unclosedStoryCount = $this->metric->getResultByCode('count_of_unclosed_story'); // 未关闭需求数。
+        $unclosedStoryCount = $this->metric->getResultByCodeWithArray('count_of_unclosed_story', array(), 'cron'); // 未关闭需求数。
         if(!empty($unclosedStoryCount))
         {
             $unclosedStoryCount = reset($unclosedStoryCount);
             $data->unclosedStoryCount = zget($unclosedStoryCount, 'value', 0);
         }
 
-        $activeBugCount = $this->metric->getResultByCode('count_of_activated_bug'); // 激活Bug数。
+        $activeBugCount = $this->metric->getResultByCodeWithArray('count_of_activated_bug', array(), 'cron'); // 激活Bug数。
         if(!empty($activeBugCount))
         {
             $activeBugCount = reset($activeBugCount);
             $data->activeBugCount = zget($activeBugCount, 'value', 0);
         }
 
-        $createdReleaseGroup = $this->metric->getResultByCode('count_of_annual_created_release'); // 已完成发布数。
-        $finishedStoryGroup  = $this->metric->getResultByCode('count_of_annual_finished_story');  // 已完成需求数。
-        $storyScaleGroup     = $this->metric->getResultByCode('scale_of_annual_finished_story');  // 已完成需求规模。
+        $createdReleaseGroup = $this->metric->getResultByCodeWithArray('count_of_annual_created_release', array(), 'cron'); // 已完成发布数。
+        $finishedStoryGroup  = $this->metric->getResultByCodeWithArray('count_of_annual_finished_story', array(), 'cron');  // 已完成需求数。
+        $storyScaleGroup     = $this->metric->getResultByCodeWithArray('scale_of_annual_finished_story', array(), 'cron');  // 已完成需求规模。
 
         if($createdReleaseGroup) $createdReleaseGroup = array_column($createdReleaseGroup, null, 'year');
         if($finishedStoryGroup)  $finishedStoryGroup  = array_column($finishedStoryGroup,  null, 'year');
@@ -1829,7 +1829,7 @@ class blockZen extends block
 
         /* 通过度量项获取迭代总量。 */
         $executionCount = 0;
-        $executionCountGroup = $project ? $this->metric->getResultByCode('count_of_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_execution');
+        $executionCountGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_execution_in_project', array('project' => $project)) : $this->metric->getResultByCodeWithArray('count_of_execution', array(), 'cron');
         if(!empty($executionCountGroup))
         {
             $executionCountGroup = reset($executionCountGroup);
@@ -1838,7 +1838,7 @@ class blockZen extends block
 
         /* 通过度量项获取今年完成的迭代数量。 */
         $finishedExecution      = 0;
-        $finishedExecutionGroup = $project ? $this->metric->getResultByCode('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_finished_execution', array('year' => date('Y')));
+        $finishedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y')), 'cron') : $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution', array('year' => date('Y')), 'cron');
         if(!empty($finishedExecutionGroup))
         {
             $finishedExecutionGroup = reset($finishedExecutionGroup);
@@ -1847,7 +1847,7 @@ class blockZen extends block
 
         /* 通过度量项获取未开始的迭代数量。 */
         $waitExecution = 0;
-        $waitExecutionGroup = $project ? $this->metric->getResultByCode('count_wait_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_wait_execution');
+        $waitExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_wait_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_wait_execution', array(), 'cron');
         if(!empty($waitExecutionGroup))
         {
             $waitExecutionGroup = reset($waitExecutionGroup);
@@ -1856,7 +1856,7 @@ class blockZen extends block
 
         /* 通过度量项获取进行中的迭代数量。 */
         $doingExecution = 0;
-        $doingExecutionGroup = $project ? $this->metric->getResultByCode('count_of_doing_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_doing_execution');
+        $doingExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_doing_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_doing_execution', array(), 'cron');
         if(!empty($doingExecutionGroup))
         {
             $doingExecutionGroup = reset($doingExecutionGroup);
@@ -1865,7 +1865,7 @@ class blockZen extends block
 
         /* 通过度量项获取已挂起的迭代数量。 */
         $suspendedExecution = 0;
-        $suspendedExecutionGroup = $project ? $this->metric->getResultByCode('count_of_suspended_execution_in_project', array('project' => $project)) : $this->metric->getResultByCode('count_of_suspended_execution');
+        $suspendedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_suspended_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_suspended_execution', array(), 'cron');
         if(!empty($suspendedExecutionGroup))
         {
             $suspendedExecutionGroup = reset($suspendedExecutionGroup);
@@ -2520,11 +2520,11 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
-        $monthFinishedScale = $this->metric->getResultByCode('scale_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度完成需求规模数。
-        $monthCreatedStory  = $this->metric->getResultByCode('count_of_monthly_created_story',  array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度新增需求数。
-        $monthFinishedStory = $this->metric->getResultByCode('count_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度完成需求数。
-        $monthCreatedBug    = $this->metric->getResultByCode('count_of_monthly_created_bug',    array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度新增Bug数。
-        $monthFinishedBug   = $this->metric->getResultByCode('count_of_monthly_fixed_bug',      array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度解决Bug数。
+        $monthFinishedScale = $this->metric->getResultByCodeWithArray('scale_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取月度完成需求规模数。
+        $monthCreatedStory  = $this->metric->getResultByCodeWithArray('count_of_monthly_created_story',  array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取月度新增需求数。
+        $monthFinishedStory = $this->metric->getResultByCodeWithArray('count_of_monthly_finished_story', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取月度完成需求数。
+        $monthCreatedBug    = $this->metric->getResultByCodeWithArray('count_of_monthly_created_bug',    array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取月度新增Bug数。
+        $monthFinishedBug   = $this->metric->getResultByCodeWithArray('count_of_monthly_fixed_bug',      array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取月度解决Bug数。
 
         /* 重新组装度量项数据为年月和数据的数组。 */
         foreach($dates as $date)
@@ -2597,9 +2597,9 @@ class blockZen extends block
         $productIdList = array_keys($products);
 
         $this->loadModel('metric');
-        $finishEstimateGroup = $this->metric->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品完成的需求规模数。
-        $doneStoryGroup      = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品完成的需求数。
-        $resolvedBugGroup    = $this->metric->getResultByCode('count_of_annual_fixed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品修复的Bug数。
+        $finishEstimateGroup = $this->metric->getResultByCodeWithArray('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')), 'cron'); // 从度量项获取今年各产品完成的需求规模数。
+        $doneStoryGroup      = $this->metric->getResultByCodeWithArray('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')), 'cron'); // 从度量项获取今年各产品完成的需求数。
+        $resolvedBugGroup    = $this->metric->getResultByCodeWithArray('count_of_annual_fixed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => date('Y')), 'cron'); // 从度量项获取今年各产品修复的Bug数。
 
         if(!empty($finishEstimateGroup)) $finishEstimateGroup = array_column($finishEstimateGroup, null, 'product');
         if(!empty($doneStoryGroup))      $doneStoryGroup      = array_column($doneStoryGroup,      null, 'product');
@@ -2652,10 +2652,10 @@ class blockZen extends block
         if(empty($productID)) $productID = 0;
 
         $this->loadModel('metric');
-        $bugFixedRate      = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',      array('product' => $productID)); // 从度量项获取各个产品的Bug修复率。
-        $effectiveBugGroup = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的有效Bug数。
-        $fixedBugGroup     = $this->metric->getResultByCode('count_of_fixed_bug_in_product',     array('product' => $productID)); // 从度量项获取各个产品的Bug修复数。
-        $activatedBugGroup = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的Bug激活数。
+        $bugFixedRate      = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_product',      array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug修复率。
+        $effectiveBugGroup = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的有效Bug数。
+        $fixedBugGroup     = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_product',     array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug修复数。
+        $activatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug激活数。
 
         if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
         if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
@@ -2673,8 +2673,8 @@ class blockZen extends block
             $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
-        $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
-        $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+        $monthCreatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的激活Bug数。
+        $monthClosedBugGroup  = $this->metric->getResultByCodeWithArray('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的关闭Bug数。
 
         /* 组装页面所需的度量项数组。 */
         $closedBugs     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
@@ -2734,11 +2734,11 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
-        $finishedTaskGroup = $this->metric->getResultByCode('count_of_daily_finished_task', array('year' => join(',', $years), 'month' => join(',', $months))); // 完成任务数。
-        $createdStoryGroup = $this->metric->getResultByCode('count_of_daily_created_story', array('year' => join(',', $years), 'month' => join(',', $months))); // 创建需求数。
-        $closedBugGroup    = $this->metric->getResultByCode('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months))); // 关闭Bug数。
-        $runCaseGroup      = $this->metric->getResultByCode('count_of_daily_run_case',      array('year' => join(',', $years), 'month' => join(',', $months))); // 执行用例数。
-        $consumedGroup     = $this->metric->getResultByCode('hour_of_daily_effort',         array('year' => join(',', $years), 'month' => join(',', $months))); // 消耗工时。
+        $finishedTaskGroup = $this->metric->getResultByCodeWithArray('count_of_daily_finished_task', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 完成任务数。
+        $createdStoryGroup = $this->metric->getResultByCodeWithArray('count_of_daily_created_story', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 创建需求数。
+        $closedBugGroup    = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 关闭Bug数。
+        $runCaseGroup      = $this->metric->getResultByCodeWithArray('count_of_daily_run_case',      array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 执行用例数。
+        $consumedGroup     = $this->metric->getResultByCodeWithArray('hour_of_daily_effort',         array('year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 消耗工时。
 
         /* 获取今日完成任务数和昨日完成任务数。 */
         $finishedTasks  = 0;
@@ -2834,10 +2834,10 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->loadModel('metric');
-        $storyDeliveryRate = $this->metric->getResultByCode('rate_of_delivery_story_in_product',   array('product' => $productID));
-        $totalStories      = $this->metric->getResultByCode('count_of_valid_story_in_product',     array('product' => $productID));
-        $closedStories     = $this->metric->getResultByCode('count_of_delivered_story_in_product', array('product' => $productID));
-        $unclosedStories   = $this->metric->getResultByCode('count_of_unclosed_story_in_product',  array('product' => $productID));
+        $storyDeliveryRate = $this->metric->getResultByCodeWithArray('rate_of_delivery_story_in_product',   array('product' => $productID), 'cron');
+        $totalStories      = $this->metric->getResultByCodeWithArray('count_of_valid_story_in_product',     array('product' => $productID), 'cron');
+        $closedStories     = $this->metric->getResultByCodeWithArray('count_of_delivered_story_in_product', array('product' => $productID), 'cron');
+        $unclosedStories   = $this->metric->getResultByCodeWithArray('count_of_unclosed_story_in_product',  array('product' => $productID), 'cron');
 
         if(!empty($storyDeliveryRate)) $storyDeliveryRate = array_column($storyDeliveryRate, null, 'product');
         if(!empty($totalStories))      $totalStories      = array_column($totalStories,      null, 'product');
@@ -2854,8 +2854,8 @@ class blockZen extends block
             $months[] = date('m',   strtotime("first day of -{$i} month"));
             $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
-        $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
-        $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
+        $monthFinish  = $this->metric->getResultByCodeWithArray('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron');
+        $monthCreated = $this->metric->getResultByCodeWithArray('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron');
 
         /* 根据产品列表获取预计开始日期距离现在最近且预计开始日期大于当前日期的未开始状态计划。 */
         /* Obtain an unstarted status plan based on the product list, with an expected start date closest to the current date and an expected start date greater than the current date. */
@@ -2939,10 +2939,10 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->loadModel('metric');
-        $bugFixedRate      = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',      array('product' => $productID)); // 从度量项获取各个产品的Bug修复率。
-        $effectiveBugGroup = $this->metric->getResultByCode('count_of_effective_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的有效Bug数。
-        $fixedBugGroup     = $this->metric->getResultByCode('count_of_fixed_bug_in_product',     array('product' => $productID)); // 从度量项获取各个产品的Bug修复数。
-        $activatedBugGroup = $this->metric->getResultByCode('count_of_activated_bug_in_product', array('product' => $productID)); // 从度量项获取各个产品的Bug激活数。
+        $bugFixedRate      = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_product',      array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug修复率。
+        $effectiveBugGroup = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的有效Bug数。
+        $fixedBugGroup     = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_product',     array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug修复数。
+        $activatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug激活数。
 
         if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
         if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
@@ -2960,8 +2960,8 @@ class blockZen extends block
             $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
-        $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
-        $monthClosedBugGroup  = $this->metric->getResultByCode('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的关闭Bug数。
+        $monthCreatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的激活Bug数。
+        $monthClosedBugGroup  = $this->metric->getResultByCodeWithArray('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的关闭Bug数。
 
         /* 组装页面所需的度量项数组。 */
         $activateBugs   = array();
@@ -3117,12 +3117,12 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
-        $monthStroyScaleGroup     = $this->metric->getResultByCode('scale_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的完成需求数。
-        $monthCreatedStroyGroup   = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的新增需求数。
-        $monthFinishedStoryGroup  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的完成需求数。
-        $monthCreatedBugGroup     = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product',     array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的新增Bug数。
-        $monthFixedBugGroup       = $this->metric->getResultByCode('count_of_monthly_fixed_bug_in_product',       array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的修复Bug数。
-        $monthCreatedReleaseGroup = $this->metric->getResultByCode('count_of_monthly_created_release_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的发布数。
+        $monthStroyScaleGroup     = $this->metric->getResultByCodeWithArray('scale_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的完成需求数。
+        $monthCreatedStroyGroup   = $this->metric->getResultByCodeWithArray('count_of_monthly_created_story_in_product',   array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的新增需求数。
+        $monthFinishedStoryGroup  = $this->metric->getResultByCodeWithArray('count_of_monthly_finished_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的完成需求数。
+        $monthCreatedBugGroup     = $this->metric->getResultByCodeWithArray('count_of_monthly_created_bug_in_product',     array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的新增Bug数。
+        $monthFixedBugGroup       = $this->metric->getResultByCodeWithArray('count_of_monthly_fixed_bug_in_product',       array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的修复Bug数。
+        $monthCreatedReleaseGroup = $this->metric->getResultByCodeWithArray('count_of_monthly_created_release_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的发布数。
 
         $months            = array();
         $doneStoryEstimate = array();
@@ -3281,24 +3281,24 @@ class blockZen extends block
     {
         $vision = $this->config->vision;
         /* 敏捷和瀑布相关目的统计信息。 */
-        $riskCountGroup  = $this->loadModel('metric')->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $riskCountGroup  = $this->loadModel('metric')->getResultByCodeWithArray('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $issueCountGroup = $this->metric->getResultByCodeWithArray('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
         if($riskCountGroup)    $riskCountGroup    = array_column($riskCountGroup,    null, 'project');
         if($issueCountGroup)   $issueCountGroup   = array_column($issueCountGroup,   null, 'project');
 
         /* 敏捷项目的统计信息。 */
-        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $investedGroup      = $this->metric->getResultByCodeWithArray('day_of_invested_in_project',         array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $consumeTaskGroup   = $this->metric->getResultByCodeWithArray('consume_of_task_in_project',         array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $leftTaskGroup      = $this->metric->getResultByCodeWithArray('left_of_task_in_project',            array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $countStoryGroup    = $this->metric->getResultByCodeWithArray('scale_of_story_in_project',          array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $finishedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $unclosedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $countTaskGroup     = $this->metric->getResultByCodeWithArray('count_of_task_in_project',           array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $waitTaskGroup      = $this->metric->getResultByCodeWithArray('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $doingTaskGroup     = $this->metric->getResultByCodeWithArray('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $countBugGroup      = $this->metric->getResultByCodeWithArray('count_of_bug_in_project',            array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $closedBugGroup     = $this->metric->getResultByCodeWithArray('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $activatedBugGroup  = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
         if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
         if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
         if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
@@ -3313,12 +3313,12 @@ class blockZen extends block
         if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
 
         /* 瀑布项目的统计信息。 */
-        $SVGroup           = $this->metric->getResultByCode('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $PVGroup           = $this->metric->getResultByCode('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $EVGroup           = $this->metric->getResultByCode('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $CVGroup           = $this->metric->getResultByCode('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $ACGroup           = $this->metric->getResultByCode('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $SVGroup           = $this->metric->getResultByCodeWithArray('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $PVGroup           = $this->metric->getResultByCodeWithArray('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $EVGroup           = $this->metric->getResultByCodeWithArray('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $CVGroup           = $this->metric->getResultByCodeWithArray('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $ACGroup           = $this->metric->getResultByCodeWithArray('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+        $taskProgressGroup = $this->metric->getResultByCodeWithArray('progress_of_task_in_project',             array('project' => join(',', $projectIdList)), 'cron', null, $vision);
         if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
         if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
         if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
