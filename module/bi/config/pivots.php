@@ -1440,7 +1440,7 @@ select t1.id,t1.name,t2.stories,(t2.stories-t2.undone) as doneStory,t3.bugs,t3.r
 left join ztv_productstories as t2 on t1.id=t2.product 
 left join ztv_productbugs as t3 on t1.id=t3.product 
 left join zt_project as t4 on t1.program=t4.id 
-where t1.deleted='0'
+where t1.deleted='0' and t1.vision like '%rnd%'
 order by t4.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array
