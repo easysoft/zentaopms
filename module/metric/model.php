@@ -698,6 +698,30 @@ class metricModel extends model
     }
 
     /**
+     * 获取数组格式的度量项结果。
+     * Get result by code with array format.
+     *
+     * @param  int    $code
+     * @param  array  $options
+     * @param  string $type
+     * @param  int    $pager
+     * @param  string $vision
+     * @access public
+     * @return void
+     */
+    public function getResultByCodeWithArray($code, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
+    {
+        $records = $this->getResultByCode($code, $options, $type, $pager, $vision);
+        $result = array();
+        foreach($records as $record)
+        {
+            $result[] = (array)$record;
+        }
+
+        return $result;
+    }
+
+    /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *
