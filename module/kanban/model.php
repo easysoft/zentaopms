@@ -1157,7 +1157,6 @@ class kanbanModel extends model
             $item['name']   = $column->id;
             $item['id']     = $column->id;
             $item['type']   = $column->type;
-            $item['color']  = $column->color;
             $item['limit']  = $column->limit;
             $item['region'] = $column->region;
             $item['group']  = $column->group;
@@ -1339,7 +1338,6 @@ class kanbanModel extends model
                 $item['name']   = $column->id;
                 $item['id']     = $column->id;
                 $item['type']   = $column->type;
-                $item['color']  = $column->color;
                 $item['limit']  = $column->limit;
                 $item['region'] = $column->region;
                 $item['group']  = $column->group;
