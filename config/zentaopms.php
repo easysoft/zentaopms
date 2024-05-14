@@ -184,7 +184,7 @@ $config->charsets['es']['GBK']      = 'GBK';
 $config->charsets['pt']['utf-8']    = 'UTF-8';
 $config->charsets['pt']['GBK']      = 'GBK';
 
-$config->openMethods = array();
+if(!isset($config->openMethods)) $config->openMethods = array();
 $config->openMethods[] = 'index.app';
 $config->openMethods[] = 'gitlab.webhook';
 $config->openMethods[] = 'upgrade.ajaxupdatefile';
