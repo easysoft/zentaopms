@@ -849,7 +849,7 @@ class baseHelper
         session_start();
 
         global $app;
-        if(isset($_SESSION['user']))  $app->user = $_SESSION['user'];
+        if($app && isset($_SESSION['user']))  $app->user = $_SESSION['user'];
         if(!isset($_SESSION['user'])) unset($app->user);
     }
 
