@@ -170,6 +170,7 @@ $lang->mr->mergeFailed    = "Unable to merge request, please check the merge req
 $lang->mr->mergeSuccess   = "Merge Request Successfully";
 
 $lang->mr->todomessage = "project was assigned to you";
+$lang->mr->squashHelp  = 'Corresponding git parameters: --squash';
 
 /**
  * Merge Command Document.
