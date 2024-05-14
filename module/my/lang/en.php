@@ -195,6 +195,11 @@ $lang->my->featureBar['contribute']['task']['closedBy']   = 'ClosedByMe';
 $lang->my->featureBar['contribute']['task']['canceledBy'] = 'CancelledByMe';
 $lang->my->featureBar['contribute']['task']['assignedBy'] = 'AssignedByMe';
 
+$lang->my->featureBar['contribute']['epic']['openedBy']   = 'CreatedByMe';
+$lang->my->featureBar['contribute']['epic']['reviewedBy'] = 'ReviewedByMe';
+$lang->my->featureBar['contribute']['epic']['closedBy']   = 'ClosedByMe';
+$lang->my->featureBar['contribute']['epic']['assignedBy'] = 'AssignedByMe';
+
 $lang->my->featureBar['contribute']['requirement']['openedBy']   = 'CreatedByMe';
 $lang->my->featureBar['contribute']['requirement']['reviewedBy'] = 'ReviewedByMe';
 $lang->my->featureBar['contribute']['requirement']['closedBy']   = 'ClosedByMe';

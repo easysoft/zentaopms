@@ -195,6 +195,11 @@ $lang->my->featureBar['contribute']['task']['closedBy']   = '由我关闭';
 $lang->my->featureBar['contribute']['task']['canceledBy'] = '由我取消';
 $lang->my->featureBar['contribute']['task']['assignedBy'] = '由我指派';
 
+$lang->my->featureBar['contribute']['epic']['openedBy']   = '由我创建';
+$lang->my->featureBar['contribute']['epic']['reviewedBy'] = '我评审过';
+$lang->my->featureBar['contribute']['epic']['closedBy']   = '由我关闭';
+$lang->my->featureBar['contribute']['epic']['assignedBy'] = '由我指派';
+
 $lang->my->featureBar['contribute']['requirement']['openedBy']   = '由我创建';
 $lang->my->featureBar['contribute']['requirement']['reviewedBy'] = '我评审过';
 $lang->my->featureBar['contribute']['requirement']['closedBy']   = '由我关闭';
