@@ -350,13 +350,11 @@ $lang->pivot->typeOptions['project']   = '项目';
 $lang->pivot->typeOptions['execution'] = '执行';
 $lang->pivot->typeOptions['dept']      = '部门';
 
-$lang->pivot->numNames = array(1 => '一', 2 => '二', 3 => '三', 4 => '四', 5 => '五');
-
 $lang->pivot->step2 = new stdclass();
 $lang->pivot->step2->group       = '行分组';
 $lang->pivot->step2->summary     = '汇总设置';
 $lang->pivot->step2->column      = '列设置';
-$lang->pivot->step2->groupTip    = '第s%分组字段';
+$lang->pivot->step2->groupTip    = '选择字段';
 $lang->pivot->step2->groupNum    = array('一', '二', '三');
 $lang->pivot->step2->selectField = '选择字段';
 $lang->pivot->step2->selectStat  = '选择统计方式';

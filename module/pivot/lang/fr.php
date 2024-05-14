@@ -350,13 +350,11 @@ $lang->pivot->typeOptions['project']   = 'Project';
 $lang->pivot->typeOptions['execution'] = 'Execution';
 $lang->pivot->typeOptions['dept']      = 'Dept';
 
-$lang->pivot->numNames = array(1 => 'First', 2 => 'Second', 3 => 'Third', 4 => 'fourth', 5 => 'Fifth');
-
 $lang->pivot->step2 = new stdclass();
 $lang->pivot->step2->group       = 'Row Grouping';
 $lang->pivot->step2->summary     = 'Summary Setting';
 $lang->pivot->step2->column      = 'Column Settings';
-$lang->pivot->step2->groupTip    = 's% Group Field';
+$lang->pivot->step2->groupTip    = 'Select Field';
 $lang->pivot->step2->groupNum    = array('One', 'Two', 'Three');
 $lang->pivot->step2->selectField = 'Select field';
 $lang->pivot->step2->selectStat  = 'Selective statistical method';
