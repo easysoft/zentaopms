@@ -165,6 +165,7 @@ class upgradeModel extends model
         $this->loadModel('program')->refreshStats(true);
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
+        $this->upgradeBIData();
     }
 
     /**
@@ -8755,6 +8756,45 @@ class upgradeModel extends model
 
         /* 删除旧的config。*/
         $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('programplan')->andWhere('section')->eq('custom')->andWhere('`key`')->eq('createFields')->exec();
+        return true;
+    }
+
+    /**
+     * 更新升级BI内置数据。
+     * Import BI data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeBIData()
+    {
+        $this->loadModel('bi');
+
+        /* Prepare built-in sqls of bi. */
+        $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
+        $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL('update');
+        $screenSQLs = $this->bi->prepareBuiltinScreenSQL('update');
+
+        $upgradeTables = array_merge($chartSQLs, $pivotSQLs, $screenSQLs);
+
+        try
+        {
+            foreach($upgradeTables as $table)
+            {
+                $table = trim($table);
+                if(empty($table)) continue;
+
+                $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+                $table = str_replace('zt_', $this->config->db->prefix, $table);
+                if(!$this->dbh->query($table)) return false;
+            }
+        }
+        catch(Error $e)
+        {
+            a($e->getMessage());
+            die;
+        }
+
         return true;
     }
 }
