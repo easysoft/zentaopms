@@ -443,7 +443,9 @@ $lang->searchAB   = 'Search';
 /* Object list in search form. */
 $lang->searchObjects['all']         = 'All';
 $lang->searchObjects['bug']         = 'Bug';
-$lang->searchObjects['story']       = 'Story';
+$lang->searchObjects['story']       = $lang->SRCommon;
+if($config->enableER) $lang->searchObjects['epic']        = $lang->ERCommon;
+if($config->URAndSR)  $lang->searchObjects['requirement'] = $lang->URCommon;
 $lang->searchObjects['task']        = 'Aufgaben';
 $lang->searchObjects['testcase']    = 'Fall';
 $lang->searchObjects['product']     = $lang->productCommon;

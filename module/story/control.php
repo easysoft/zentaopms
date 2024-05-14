@@ -507,7 +507,7 @@ class story extends control
         $product = $this->product->getByID((int)$story->product);
 
         if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
-        if(!$story) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'index'))));
+        if(!$story || (isset($story->type) && $story->type != $storyType)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'index'))));
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return $this->send(array('result' => 'success', 'message' => $this->lang->product->accessDenied, 'load' => array('back' => true)));
 
         $this->session->set('productList', $uri . "#app={$tab}", 'product');

@@ -443,7 +443,9 @@ $lang->searchAB   = '搜索';
 /* 查询中可以选择的对象列表。*/
 $lang->searchObjects['all']         = '全部';
 $lang->searchObjects['bug']         = 'Bug';
-$lang->searchObjects['story']       = '需求';
+$lang->searchObjects['story']       = $lang->SRCommon;
+if($config->enableER) $lang->searchObjects['epic']        = $lang->ERCommon;
+if($config->URAndSR)  $lang->searchObjects['requirement'] = $lang->URCommon;
 $lang->searchObjects['task']        = '任务';
 $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['product']     = $lang->productCommon;
