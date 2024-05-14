@@ -44,6 +44,8 @@ jsVar('storyID', $story->id);
 jsVar('storyStatus', $story->status);
 jsVar('isParent', $story->isParent);
 jsVar('oldProductID', $story->product);
+jsVar('oldGrade', $story->grade);
+jsVar('oldParent', $story->parent);
 jsVar('lastReviewer', explode(',', $lastReviewer));
 jsVar('storyReviewers', $storyReviewers);
 jsVar('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);

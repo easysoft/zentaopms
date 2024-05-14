@@ -785,11 +785,6 @@ class storyModel extends model
             $oldStory->twins = '';
         }
 
-        if($story->grade > $oldStory->grade)
-        {
-            if(!$this->checkGrade($story, $oldStory)) return false;
-        }
-
         $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,finalResult')
             ->autoCheck()
