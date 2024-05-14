@@ -202,6 +202,7 @@ package:
 	mkdir zentaopms/misc; cp misc/cn2tw.php zentaopms/misc; cd zentaopms/misc; php cn2tw.php
 	#rm -r zentaopms/module/misc/ext
 	rm -rf zentaopms/misc
+	rm -rf extension/xuanxuan
 	find zentaopms/module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +
 pms:
 	make common
