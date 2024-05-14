@@ -598,7 +598,7 @@ class jobModel extends model
         $job = new stdclass;
         $job->name      = $repo->name;
         $job->repo      = $repoID;
-        $job->product   = $repo->product;
+        $job->product   = is_numeric($repo->product) ? $repo->product : explode(',', $repo->product)[0];
         $job->engine    = strtolower($repo->SCM);
         $job->server    = $repo->serviceHost;
         $job->createdBy = $this->app->user->account;
