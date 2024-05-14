@@ -129,7 +129,20 @@ formPanel
         (
             set::disabled($noEditBranch),
             set::name('squash'),
-            set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1'))
+            set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1')),
+            icon
+            (
+                'help',
+                setClass('pl-2 pt-2'),
+                setData
+                (
+                    array
+                    (
+                        'toggle' => 'tooltip',
+                        'title'  => $lang->mr->squashHelp
+                    )
+                )
+            )
         ),
         $noEditBranch ? input
         (

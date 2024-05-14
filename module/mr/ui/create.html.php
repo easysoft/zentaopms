@@ -134,7 +134,20 @@ formPanel
         formGroup
         (
             set::name('squash'),
-            set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1'))
+            set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1')),
+            icon
+            (
+                'help',
+                setClass('pl-2 pt-2'),
+                setData
+                (
+                    array
+                    (
+                        'toggle' => 'tooltip',
+                        'title'  => $lang->mr->squashHelp
+                    )
+                )
+            )
         )
     ),
     formGroup
