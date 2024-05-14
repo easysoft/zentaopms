@@ -710,6 +710,44 @@ class myModel extends model
     }
 
     /**
+     * 构建业务需求搜索表单。
+     * Build epic search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildEpicSearchForm(int $queryID, string $actionURL): void
+    {
+        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+
+        $productIdList = array_keys($products);
+        $queryName     = $this->app->rawMethod . 'Epic';
+        $this->app->loadConfig('product');
+        $this->config->product->search['module']                      = $queryName;
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['actionURL']                   = $actionURL;
+        $this->config->product->search['params']['product']['values'] = $products;
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList);
+
+        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $this->lang->story->title);
+        $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $this->lang->story->create);
+        $this->config->product->search['fields']['title'] = $this->lang->story->title;
+
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['fields']['stage']);
+        unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['fields']['branch']);
+
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
+
+    /**
      * 构建用户需求搜索表单。
      * Build Requirement search form.
      *
@@ -774,6 +812,48 @@ class myModel extends model
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
 
         return true;
+    }
+
+    /**
+     * 通过搜索获取业务需求。
+     * Get epics by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getEpicsBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    {
+        $queryName = $type == 'contribute' ? 'contributeEpicQuery' : 'workEpicQuery';
+        $queryForm = $type == 'contribute' ? 'contributeEpicForm' : 'workEpicForm';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $myEpicQuery = $this->session->{$queryName};
+        $myEpicQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myEpicQuery);
+
+        $epicsAssignedByMe = $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'epic') : array();
+        $epicIdList        = array_keys($epicsAssignedByMe);
+
+        return $this->myTao->fetchEpicsBySearch($myEpicQuery, $type, $orderBy, $pager, $epicIdList, 'epic');
     }
 
     /**
