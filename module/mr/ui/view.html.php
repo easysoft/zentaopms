@@ -285,7 +285,14 @@ panel
                 div
                 (
                     setClass('text-lg font-bold'),
-                    $lang->mr->jobID
+                    $lang->mr->jobID,
+                    !empty($compileJob->id) ? btn
+                    (
+                        setClass('btn ghost text-primary size-sm pull-right ajax-submit'),
+                        set::url(helper::createLink('job', 'exec', "jobID={$compileJob->id}")),
+                        set::hint($lang->mr->execJobTip),
+                        $lang->mr->execJob
+                    ) : null
                 ),
                 $job
             )
