@@ -1225,41 +1225,42 @@ class metricModel extends model
             'suffix' => array()
         );
 
+        if($metric->builtin === '0')
+        {
+            $stage = $metric->stage;
+
+            if($stage == 'wait' and common::haspriv('metric', 'edit'))
+            {
+                $editAction = $this->config->metric->actionList['edit'];
+                $editAction['data-toggle'] = 'modal';
+                $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}&viewType=view");
+
+                $menuList['suffix']['edit'] = $editAction;
+            }
+
+            if($stage == 'wait' and common::haspriv('metric', 'implement') and !$this->isOldMetric($metric))
+            {
+                $menuList['main']['implement'] = $this->config->metric->actionList['implement'];
+            }
+
+            if($stage != 'wait' and common::haspriv('metric', 'delist'))
+            {
+                $menuList['main']['delist'] = $this->config->metric->actionList['delist'];
+            }
+
+            if(common::haspriv('metric', 'delete'))
+            {
+                $deleteAction = $this->config->metric->actionList['delete'];
+                if(isset($metric->isUsed) && $metric->isUsed) $deleteAction['data-confirm'] = $this->lang->metric->confirmDeleteInUsed;
+                $menuList['suffix']['delete'] = $deleteAction;
+            }
+        }
+
         if($metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate' && common::haspriv('metric', 'recalculate'))
         {
             $menuList['main']['recalculate'] = $this->config->metric->actionList['recalculate'];
             $menuList['main']['recalculate']['text'] = $this->lang->metric->recalculateBtnText;
             $menuList['main']['recalculate']['hint'] = $this->lang->metric->recalculateBtnText;
-        }
-
-        if($metric->builtin === '1') return $menuList;
-
-        $stage = $metric->stage;
-
-        if($stage == 'wait' and common::haspriv('metric', 'edit'))
-        {
-            $editAction = $this->config->metric->actionList['edit'];
-            $editAction['data-toggle'] = 'modal';
-            $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}&viewType=view");
-
-            $menuList['suffix']['edit'] = $editAction;
-        }
-
-        if($stage == 'wait' and common::haspriv('metric', 'implement') and !$this->isOldMetric($metric))
-        {
-            $menuList['main']['implement'] = $this->config->metric->actionList['implement'];
-        }
-
-        if($stage != 'wait' and common::haspriv('metric', 'delist'))
-        {
-            $menuList['main']['delist'] = $this->config->metric->actionList['delist'];
-        }
-
-        if(common::haspriv('metric', 'delete'))
-        {
-            $deleteAction = $this->config->metric->actionList['delete'];
-            if(isset($metric->isUsed) && $metric->isUsed) $deleteAction['data-confirm'] = $this->lang->metric->confirmDeleteInUsed;
-            $menuList['suffix']['delete'] = $deleteAction;
         }
 
         return $menuList;
