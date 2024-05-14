@@ -312,10 +312,10 @@ class biModel extends model
         foreach($charts as $chart)
         {
             $chart = (object)$chart;
-            $chart->settings = $this->jsonEncode($chart->settings);
-            $chart->filters  = $this->jsonEncode($chart->filters);
-            $chart->fields   = $this->jsonEncode($chart->fields);
-            $chart->langs    = $this->jsonEncode($chart->langs);
+            if(isset($chart->settings)) $chart->settings = $this->jsonEncode($chart->settings);
+            if(isset($chart->filters))  $chart->filters  = $this->jsonEncode($chart->filters);
+            if(isset($chart->fields))   $chart->fields   = $this->jsonEncode($chart->fields);
+            if(isset($chart->langs))    $chart->langs    = $this->jsonEncode($chart->langs);
 
             $stmt = $this->dao->insert(TABLE_CHART)->data($chart)
                 ->autoCheck();
@@ -359,11 +359,11 @@ class biModel extends model
             $pivot = (object)$pivot;
             $pivot->name     = $this->jsonEncode($pivot->name);
             $pivot->desc     = $this->jsonEncode($pivot->desc);
-            $pivot->settings = $this->jsonEncode($pivot->settings);
-            $pivot->filters  = $this->jsonEncode($pivot->filters);
-            $pivot->fields   = $this->jsonEncode($pivot->fields);
-            $pivot->langs    = $this->jsonEncode($pivot->langs);
-            $pivot->vars     = $this->jsonEncode($pivot->vars);
+            if(isset($pivot->settings)) $pivot->settings = $this->jsonEncode($pivot->settings);
+            if(isset($pivot->filters))  $pivot->filters  = $this->jsonEncode($pivot->filters);
+            if(isset($pivot->fields))   $pivot->fields   = $this->jsonEncode($pivot->fields);
+            if(isset($pivot->langs))    $pivot->langs    = $this->jsonEncode($pivot->langs);
+            if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
 
             $stmt = null;
             if($operate == 'insert')
