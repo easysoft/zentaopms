@@ -1164,7 +1164,9 @@ class blockZen extends block
         $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
         foreach($burnData as $data) $execution->burns[] = $data->value;
 
-        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $execution->end, 'noweekend', 0, 'Y-m-d', $execution->end);
+        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+        $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $deadline, 'noweekend', 0, 'Y-m-d', $execution->end);
 
         $this->view->chartData        = $this->execution->buildBurnData($executionID, $dateList, 'left', $execution->end);
         $this->view->executions       = $executions;
