@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zenData('kanban')->gen(2);
+zenData('user')->gen(5);
 
 /**
 
@@ -11,7 +12,7 @@ timeout=0
 cid=1
 
 - 查看普通用户获取操作按钮的长度 @161
-- 查看管理员获取操作按钮的长度 @1282
+- 查看管理员获取操作按钮的长度 @1286
 
 */
 global $tester;
@@ -25,4 +26,4 @@ su('admin');
 $toolbar2 = $tester->kanban->getPageToolBar($kanban2);
 
 r(strlen($toolbar1)) && p('') && e('161');  // 查看普通用户获取操作按钮的字符长度
-r(strlen($toolbar2)) && p('') && e('1282'); // 查看管理员获取操作按钮的字符长度
+r(strlen($toolbar2)) && p('') && e('1286'); // 查看管理员获取操作按钮的字符长度
