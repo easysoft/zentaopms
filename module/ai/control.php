@@ -906,6 +906,7 @@ class ai extends control
      */
     public function promptUnpublish($id)
     {
+        if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'load' => $this->inlink('models') . '#app=admin'));
         $this->ai->togglePromptStatus($id, 'draft');
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
