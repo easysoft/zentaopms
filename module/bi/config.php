@@ -9,110 +9,115 @@ USE mysqldb;
 EOT;
 
 $config->bi->duckdb = new stdclass();
-$config->bi->duckdb->ignoreFields = array();
-$config->bi->duckdb->ignoreFields['account'] = array('extra');
-$config->bi->duckdb->ignoreFields['action'] = array('comment', 'extra');
-$config->bi->duckdb->ignoreFields['actionrecent'] = array('comment', 'extra');
-$config->bi->duckdb->ignoreFields['approvalrole'] = array('desc');
-$config->bi->duckdb->ignoreFields['attend'] = array('desc');
-$config->bi->duckdb->ignoreFields['auditplan'] = array('config');
-$config->bi->duckdb->ignoreFields['auditresult'] = array('comment');
-$config->bi->duckdb->ignoreFields['block'] = array('params');
-$config->bi->duckdb->ignoreFields['bug'] = array('entry');
-$config->bi->duckdb->ignoreFields['build'] = array('stories', 'bugs');
-$config->bi->duckdb->ignoreFields['case'] = array('precondition');
-$config->bi->duckdb->ignoreFields['casestep'] = array('desc', 'expect');
-$config->bi->duckdb->ignoreFields['chart'] = array('desc', 'langs', 'sql');
-$config->bi->duckdb->ignoreFields['charter'] = array('charterFiles');
-$config->bi->duckdb->ignoreFields['chart_back'] = array('desc', 'sql');
-$config->bi->duckdb->ignoreFields['cmcl'] = array('contents');
-$config->bi->duckdb->ignoreFields['compile'] = array('logs');
-$config->bi->duckdb->ignoreFields['cron'] = array('command');
-$config->bi->duckdb->ignoreFields['custom'] = array('value');
-$config->bi->duckdb->ignoreFields['dataset'] = array('sql');
-$config->bi->duckdb->ignoreFields['dataview'] = array('sql', 'langs');
-$config->bi->duckdb->ignoreFields['delivery'] = array('desc');
-$config->bi->duckdb->ignoreFields['demandspec'] = array('files');
-$config->bi->duckdb->ignoreFields['deploy'] = array('members', 'notify', 'cases');
-$config->bi->duckdb->ignoreFields['deployscope'] = array('hosts', 'remove', 'add');
-$config->bi->duckdb->ignoreFields['deploystep'] = array('content');
-$config->bi->duckdb->ignoreFields['design'] = array('commit');
-$config->bi->duckdb->ignoreFields['dimension'] = array('desc');
-$config->bi->duckdb->ignoreFields['doc'] = array('editingDate', 'users', 'editedList');
-$config->bi->duckdb->ignoreFields['doccontent'] = array('files');
-$config->bi->duckdb->ignoreFields['doclib'] = array('users', 'collector');
-$config->bi->duckdb->ignoreFields['effort'] = array('product', 'work', 'extra');
-$config->bi->duckdb->ignoreFields['expect'] = array('expect', 'progress');
-$config->bi->duckdb->ignoreFields['extension'] = array('license');
-$config->bi->duckdb->ignoreFields['faq'] = array('answer');
-$config->bi->duckdb->ignoreFields['feedback'] = array('desc', 'likes');
-$config->bi->duckdb->ignoreFields['flow_followrecord'] = array('followdesc');
-$config->bi->duckdb->ignoreFields['flow_investigation'] = array('objective', 'team', 'method', 'outline', 'report');
-$config->bi->duckdb->ignoreFields['flow_investigationreport'] = array('content');
-$config->bi->duckdb->ignoreFields['flow_keyproject'] = array('team', 'riskone', 'solutionone', 'situation', 'desc', 'description');
-$config->bi->duckdb->ignoreFields['flow_library'] = array('category', 'labels', 'summary');
-$config->bi->duckdb->ignoreFields['flow_metting'] = array('participant', 'log', 'notes');
-$config->bi->duckdb->ignoreFields['flow_question'] = array('risk', 'solution');
-$config->bi->duckdb->ignoreFields['group'] = array('acl');
-$config->bi->duckdb->ignoreFields['history'] = array('old', 'new');
-$config->bi->duckdb->ignoreFields['host'] = array('desc');
-$config->bi->duckdb->ignoreFields['image'] = array('desc');
-$config->bi->duckdb->ignoreFields['instance'] = array('desc', 'ldapSettings', 'dbSettings', 'env');
-$config->bi->duckdb->ignoreFields['intervention'] = array('partake');
-$config->bi->duckdb->ignoreFields['issue'] = array('resolutionComment');
-$config->bi->duckdb->ignoreFields['job'] = array('customParam');
-$config->bi->duckdb->ignoreFields['kanban'] = array('team', 'whitelist');
-$config->bi->duckdb->ignoreFields['kanbancard'] = array('assignedTo', 'whitelist');
-$config->bi->duckdb->ignoreFields['kanbancell'] = array('cards');
-$config->bi->duckdb->ignoreFields['kanbanspace'] = array('team', 'whitelist');
-$config->bi->duckdb->ignoreFields['lang'] = array('value');
-$config->bi->duckdb->ignoreFields['leave'] = array('desc', 'reviewers', 'backReviewers');
-$config->bi->duckdb->ignoreFields['lieu'] = array('desc', 'reviewers');
-$config->bi->duckdb->ignoreFields['log'] = array('data', 'result');
-$config->bi->duckdb->ignoreFields['mailqueue'] = array('body', 'failReason');
-$config->bi->duckdb->ignoreFields['meeting'] = array('participant', 'minutes');
-$config->bi->duckdb->ignoreFields['bi'] = array('collector', 'desc', 'definition');
-$config->bi->duckdb->ignoreFields['module'] = array('collector');
-$config->bi->duckdb->ignoreFields['mr'] = array('description');
-$config->bi->duckdb->ignoreFields['mrapproval'] = array('comment');
-$config->bi->duckdb->ignoreFields['notify'] = array('ccList', 'data', 'failReason', 'toList', 'subject');
-$config->bi->duckdb->ignoreFields['object'] = array('range');
-$config->bi->duckdb->ignoreFields['overtime'] = array('desc', 'reviewers');
-$config->bi->duckdb->ignoreFields['pivot'] = array('name', 'desc');
-$config->bi->duckdb->ignoreFields['practice'] = array('content');
-$config->bi->duckdb->ignoreFields['privlang'] = array('desc');
-$config->bi->duckdb->ignoreFields['programactivity'] = array('content');
-$config->bi->duckdb->ignoreFields['programoutput'] = array('content');
-$config->bi->duckdb->ignoreFields['programprocess'] = array('desc');
-$config->bi->duckdb->ignoreFields['programreport'] = array('params', 'content');
-$config->bi->duckdb->ignoreFields['project'] = array('output');
-$config->bi->duckdb->ignoreFields['prompt'] = array('desc', 'source', 'purpose', 'elaboration');
-$config->bi->duckdb->ignoreFields['promptrole'] = array('desc');
-$config->bi->duckdb->ignoreFields['queue'] = array('command');
-$config->bi->duckdb->ignoreFields['reply'] = array('content');
-$config->bi->duckdb->ignoreFields['repo'] = array('desc');
-$config->bi->duckdb->ignoreFields['repohistory'] = array('comment');
-$config->bi->duckdb->ignoreFields['report'] = array('name', 'sql', 'vars', 'langs', 'params', 'desc');
-$config->bi->duckdb->ignoreFields['reviewissue'] = array('opinion');
-$config->bi->duckdb->ignoreFields['reviewresult'] = array('opinion');
-$config->bi->duckdb->ignoreFields['searchindex'] = array('title', 'content');
-$config->bi->duckdb->ignoreFields['service'] = array('hosts');
-$config->bi->duckdb->ignoreFields['solution'] = array('desc', 'components');
-$config->bi->duckdb->ignoreFields['solutions'] = array('contents', 'support', 'measures');
-$config->bi->duckdb->ignoreFields['sqlite_queue'] = array('sql');
-$config->bi->duckdb->ignoreFields['sqlview'] = array('sql', 'desc');
-$config->bi->duckdb->ignoreFields['storyspec'] = array('files');
-$config->bi->duckdb->ignoreFields['testresult'] = array('stepResults', 'ZTFResult', 'xml');
-$config->bi->duckdb->ignoreFields['thread'] = array('content');
-$config->bi->duckdb->ignoreFields['ticket'] = array('desc', 'resolution');
-$config->bi->duckdb->ignoreFields['trainbook'] = array('skill', 'summary', 'category2', 'labels', 'location');
-$config->bi->duckdb->ignoreFields['traincontents'] = array('desc');
-$config->bi->duckdb->ignoreFields['trainexamdata'] = array('answer');
-$config->bi->duckdb->ignoreFields['trainexamuser'] = array('desc');
-$config->bi->duckdb->ignoreFields['trainplan'] = array('trainee');
-$config->bi->duckdb->ignoreFields['trip'] = array('desc');
-$config->bi->duckdb->ignoreFields['user'] = array('avatar', 'nature', 'analysis', 'strategy');
-$config->bi->duckdb->ignoreFields['userquery'] = array('form', 'sql');
-$config->bi->duckdb->ignoreFields['usertpl'] = array('content');
-$config->bi->duckdb->ignoreFields['webapp'] = array('desc');
-$config->bi->duckdb->ignoreFields['webhook'] = array('desc');
+$config->bi->duckdb->tables = array();
+$config->bi->duckdb->tables['action'] = <<<EOT
+SELECT * FROM zt_action
+EOT;
+$config->bi->duckdb->tables['account'] = <<<EOT
+SELECT * FROM zt_account
+EOT;
+$config->bi->duckdb->tables['bug'] = <<<EOT
+SELECT * FROM zt_bug
+EOT;
+$config->bi->duckdb->tables['build'] = <<<EOT
+SELECT * FROM zt_build
+EOT;
+$config->bi->duckdb->tables['case'] = <<<EOT
+SELECT * FROM zt_case
+EOT;
+$config->bi->duckdb->tables['config'] = <<<EOT
+SELECT * FROM zt_config
+EOT;
+$config->bi->duckdb->tables['demand'] = <<<EOT
+SELECT * FROM zt_demand
+EOT;
+$config->bi->duckdb->tables['dept'] = <<<EOT
+SELECT * FROM zt_dept
+EOT;
+$config->bi->duckdb->tables['doc'] = <<<EOT
+SELECT * FROM zt_doc
+EOT;
+$config->bi->duckdb->tables['effort'] = <<<EOT
+SELECT * FROM zt_effort
+EOT;
+$config->bi->duckdb->tables['feedback'] = <<<EOT
+SELECT * FROM zt_feedback
+EOT;
+$config->bi->duckdb->tables['file'] = <<<EOT
+SELECT * FROM zt_file
+EOT;
+$config->bi->duckdb->tables['group'] = <<<EOT
+SELECT * FROM zt_group
+EOT;
+$config->bi->duckdb->tables['history'] = <<<EOT
+SELECT * FROM zt_history
+EOT;
+$config->bi->duckdb->tables['issue'] = <<<EOT
+SELECT * FROM zt_issue
+EOT;
+$config->bi->duckdb->tables['meeting'] = <<<EOT
+SELECT * FROM zt_meeting
+EOT;
+$config->bi->duckdb->tables['metric'] = <<<EOT
+SELECT * FROM zt_metric
+EOT;
+$config->bi->duckdb->tables['metriclib'] = <<<EOT
+SELECT * FROM zt_metriclib
+EOT;
+$config->bi->duckdb->tables['module'] = <<<EOT
+SELECT * FROM zt_module
+EOT;
+$config->bi->duckdb->tables['opportunity'] = <<<EOT
+SELECT * FROM zt_opportunity
+EOT;
+$config->bi->duckdb->tables['pivot'] = <<<EOT
+SELECT * FROM zt_pivot
+EOT;
+$config->bi->duckdb->tables['product'] = <<<EOT
+SELECT * FROM zt_product
+EOT;
+$config->bi->duckdb->tables['productplan'] = <<<EOT
+SELECT * FROM zt_productplan
+EOT;
+$config->bi->duckdb->tables['project'] = <<<EOT
+SELECT * FROM zt_project
+EOT;
+$config->bi->duckdb->tables['projectcase'] = <<<EOT
+SELECT * FROM zt_projectcase
+EOT;
+$config->bi->duckdb->tables['projectproduct'] = <<<EOT
+SELECT * FROM zt_projectproduct
+EOT;
+$config->bi->duckdb->tables['projectstory'] = <<<EOT
+SELECT * FROM zt_projectstory
+EOT;
+$config->bi->duckdb->tables['release'] = <<<EOT
+SELECT * FROM zt_release
+EOT;
+$config->bi->duckdb->tables['risk'] = <<<EOT
+SELECT * FROM zt_risk
+EOT;
+$config->bi->duckdb->tables['story'] = <<<EOT
+SELECT * FROM zt_story
+EOT;
+$config->bi->duckdb->tables['task'] = <<<EOT
+SELECT * FROM zt_task
+EOT;
+$config->bi->duckdb->tables['team'] = <<<EOT
+SELECT * FROM zt_team
+EOT;
+$config->bi->duckdb->tables['testreport'] = <<<EOT
+SELECT * FROM zt_testreport
+EOT;
+$config->bi->duckdb->tables['testresult'] = <<<EOT
+SELECT * FROM zt_testresult
+EOT;
+$config->bi->duckdb->tables['ticket'] = <<<EOT
+SELECT * FROM zt_ticket
+EOT;
+$config->bi->duckdb->tables['todo'] = <<<EOT
+SELECT * FROM zt_todo
+EOT;
+$config->bi->duckdb->tables['user'] = <<<EOT
+SELECT * FROM zt_user
+EOT;

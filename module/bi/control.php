@@ -35,8 +35,7 @@ class bi extends control
             return;
         }
 
-        $tables  = $this->bi->getDatabaseTables();
-        $copySQL = $this->bi->prepareCopySQL($tables, $duckdbTmpPath);
+        $copySQL = $this->bi->prepareCopySQL($duckdbTmpPath);
         $command = $this->bi->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
 
         $output = shell_exec($command);

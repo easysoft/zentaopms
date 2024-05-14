@@ -412,30 +412,6 @@ class biModel extends model
     }
 
     /**
-     * 获取数据库表。
-     * Get database tables.
-     *
-     * @param  int    $db
-     * @param  string $orderBy
-     * @access protected
-     * @return void
-     */
-    public function getDatabaseTables($db = null, $orderBy = 'table_name')
-    {
-        $tablePrefix = $this->config->db->prefix;
-        if(empty($db)) $db = $this->config->db->name;
-
-        $tables = $this->dao->select("table_name as tableName, TABLE_ROWS AS rowCount")->from('information_schema.tables')
-            ->where('table_type')->eq('BASE TABLE')
-            ->andWhere('table_schema')->eq($db)
-            ->andWhere('table_name')->like("$tablePrefix%")
-            ->orderBy($orderBy)
-            ->fetchAll();
-
-        return array_map(function($table){return $table->tableName;}, $tables);
-    }
-
-    /**
      * 获取DuckDB的可执行文件路径。
      * Get DcukDB path.
      *
@@ -462,7 +438,7 @@ class biModel extends model
      */
     public function getDuckDBTmpDir()
     {
-        $duckdbTmpPath = $this->app->getTmpRoot() . 'duckdb';
+        $duckdbTmpPath = $this->app->getTmpRoot() . 'duckdb' . DS . 'bi' . DS;
         if(!is_dir($duckdbTmpPath) && !mkdir($duckdbTmpPath, 0755, true)) return false;
 
         return $duckdbTmpPath;
@@ -472,20 +448,25 @@ class biModel extends model
      * 准备同步数据库所需的复制SQL。
      * Prepare copy SQL for sync.
      *
-     * @param  array    $tables
-     * @param  string    $duckdbTmpPath
+     * @param  string $duckdbTmpPath
      * @access public
      * @return string
      */
-    public function prepareCopySQL($tables, $duckdbTmpPath)
+    public function prepareCopySQL($duckdbTmpPath)
     {
+        $tables = $this->config->bi->duckdb->tables;
         if(empty($tables)) return '';
 
+        $tablePrefix = $this->config->db->prefix;
+
         $copySQL  = '';
-        foreach($tables as $table)
+        foreach($tables as $table => $sql)
         {
-            $tablePath = $duckdbTmpPath . DS . $table;
-            $copySQL .= "COPY $table TO '$tablePath.parquet';\n";
+            $table = $tablePrefix . $table;
+            $sql   = str_replace('zt_', $tablePrefix, $sql);
+
+            $tablePath = $duckdbTmpPath . $table;
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
         }
 
         return $copySQL;
