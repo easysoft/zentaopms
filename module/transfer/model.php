@@ -385,7 +385,6 @@ class transferModel extends model
             /* 调用对应模块getPairs方法获取id => name 关联数据。 */
             /* Call getPairs method of corresponding module to get id => name related data. */
             $dataList[$field] = $this->loadModel($field)->getPairs();
-            if(!isset($dataList[$field][0])) $dataList[$field][0] = '';
 
             ksort($dataList[$field]);
 
