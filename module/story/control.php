@@ -1612,7 +1612,30 @@ class story extends control
         $items = array();
         foreach($gradeOptions as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
 
-        return $this->send(array('items' => array_values($items), 'default' => current($gradeOptions)));
+        return $this->send(array('items' => array_values($items), 'default' => key($gradeOptions)));
+    }
+
+    /**
+     * 检查需求的等级是否超出系统设置。
+     * AJAX: check the grade of a story.
+     *
+     * @param  int    $storyID
+     * @param  int    $newGrade
+     * @access public
+     * @return bool
+     */
+    public function ajaxCheckGrade(int $storyID, int $newGrade)
+    {
+        $oldStory     = $this->story->fetchByID($storyID);
+        $story        = clone $oldStory;
+        $story->grade = $newGrade;
+
+        if($story->grade > $oldStory->grade)
+        {
+            if(!$this->story->checkGrade($story, $oldStory)) return print(json_encode(array('result' => false, 'message' => dao::getError())));
+        }
+
+        return print(json_encode(array('result' => true)));
     }
 
     /**
