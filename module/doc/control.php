@@ -1007,7 +1007,7 @@ class doc extends control
      */
     public function sortCatalog()
     {
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        if($_POST)
         {
             foreach($_POST['orders'] as $id => $order) $this->doc->updateOrder($id, (int)$order);
 
