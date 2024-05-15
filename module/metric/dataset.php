@@ -314,6 +314,24 @@ class dataset
     }
 
     /**
+     * 获取所有需求数据，不区分类型。
+     * Get all story list.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllStories($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0);
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取执行的研发需求数据。
      * Get story list, with execution and type is story.
      *
