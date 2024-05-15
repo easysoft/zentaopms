@@ -169,6 +169,7 @@ $items[] = array
 $items[] = array
 (
     'name'     => 'precondition',
+    'control'  => 'textarea',
     'label'    => $lang->testcase->precondition,
     'hidden'   => zget($visibleFields, 'precondition', true, false),
     'width'    => '200px',
