@@ -9,7 +9,7 @@ function loadStory(e)
 {
     const productID = $(e.target).val();
     const storyID   = $('input[name=story]').val();
-    const link      = $.createLink('design', 'ajaxGetProductStories', 'productID=' + productID + '&projectID=' + projectID + '&status=active&hasParent=false');
+    const link      = $.createLink('design', 'ajaxGetProductStories', 'productID=' + productID + '&projectID=' + projectID + '&status=active&hasParent=true');
     $.getJSON(link, function(data)
     {
         const $storyPicker = $('input[name=story]').zui('picker');
