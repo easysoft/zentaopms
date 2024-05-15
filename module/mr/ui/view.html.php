@@ -19,9 +19,10 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-$hasNoConflict     = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
-$sourceDisabled    = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
-$branchPath        = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
+$hasNoConflict  = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
+$sourceDisabled = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
+$branchPath     = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
+$mergeStatus    = !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus;
 
 if($MR->compileID)
 {
@@ -207,13 +208,25 @@ panel
                         (
                             setClass('danger'),
                             $MR->status
-                        ) : zget($lang->mr->statusList, (string)$MR->status)
+                        ) : span
+                        (
+                            setClass("status-{$MR->status}"),
+                            zget($lang->mr->statusList, (string)$MR->status)
+                        )
                     ),
                     item
                     (
                         set::name($lang->mr->mergeStatus),
-                        ($MR->synced && empty($rawMR->changes_count)) ? span($lang->mr->cantMerge, h::code($lang->mr->noChanges)
-                        ) : zget($lang->mr->mergeStatusList, !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus)
+                        $MR->synced && empty($rawMR->changes_count) ? span
+                        (
+                            setClass('status-cannot_be_merged'),
+                            $lang->mr->cantMerge,
+                            h::code($lang->mr->noChanges)
+                        ) : span
+                        (
+                            setClass("status-{$mergeStatus}"),
+                            zget($lang->mr->mergeStatusList, $mergeStatus)
+                        )
                     ),
                     item
                     (
