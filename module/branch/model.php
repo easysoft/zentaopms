@@ -557,22 +557,18 @@ class branchModel extends model
      * 分支排序。
      * Sort branch.
      *
-     * @param  object $data
+     * @param  array  $branchOrderList
      * @access public
      * @return bool
      */
-    public function sort(object $data): bool
+    public function sort($branchOrderList): bool
     {
-        $orderBy      = $data->orderBy;
-        $branchIDList = explode(',', trim($data->branches, ','));
+        $branchIdList = array_keys($branchOrderList);
 
-        if(strpos($orderBy, 'order') === false) return false;
-        if(in_array(BRANCH_MAIN, $branchIDList)) unset($branchIDList[array_search(BRANCH_MAIN, $branchIDList)]);
-
-        $branches = $this->dao->select('id,`order`')->from(TABLE_BRANCH)->where('id')->in($branchIDList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        $branches = $this->dao->select('id,`order`')->from(TABLE_BRANCH)->where('id')->in($branchIdList)->orderBy('order_asc')->fetchPairs('order', 'id');
         foreach($branches as $order => $id)
         {
-            $newID = array_shift($branchIDList);
+            $newID = array_shift($branchIdList);
             if($id == $newID) continue;
             $this->dao->update(TABLE_BRANCH)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
         }

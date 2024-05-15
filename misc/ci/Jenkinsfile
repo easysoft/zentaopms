@@ -1,5 +1,5 @@
 library 'z-common@feat-231130'
-library 'z-zentaopms@feat-240417'
+library 'z-zentaopms@feat-240509'
 
 pipeline {
   agent {
@@ -111,9 +111,6 @@ pipeline {
             script {
               def j = job.newJob()
               j.SaveHeadReport('./.head.md')
-
-              // update custom envoronment here
-              env.ZT_MAIN_VER = "20"
 
               // send start msg
               def mdPath = "start.md"
@@ -324,18 +321,12 @@ pipeline {
 
                   stage("upload zip") {
                     steps {
-                      sh 'mkdir ${OUTPUT_PKG_PATH}/${PMS_VERSION}'
-                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
-                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.tar.xz'
+                      sh 'mkdir ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}'
+                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
+                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.tar.xz'
 
                       script {
                         buildPkg.uploadPMS(env.PHPVERSION)
-                        // copy php7.2 as php8.0
-                        // if (env.PHPVERSION=="php7.2_7.4") {
-                        //   buildPkg.uploadPMS('php8.0')
-                        //   sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.zip'
-                        //   sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.tar.xz'
-                        // }
                         buildPkg.uploadExt()
                       }
 
@@ -441,11 +432,11 @@ pipeline {
 
                       steps {
                         container('docker') {
-                          sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
-                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
-                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
-                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
+                          sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_BIZ_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
                         }
                         script {
                           if (env.PUBLISH_ENGLISH=="true") {
@@ -495,11 +486,11 @@ pipeline {
 
                       steps {
                         container('docker') {
-                          sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$PMS_VERSION"
-                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$BIZ_VERSION"
-                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$MAX_VERSION"
-                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$IPD_VERSION"
+                          sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_BIZ_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
                         }
                         script {
                           if (env.PUBLISH_ENGLISH=="true") {

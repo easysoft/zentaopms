@@ -195,6 +195,8 @@ function contactUs(): contactUs {return createWg('contactUs', func_get_args());}
 function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
 function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
+function thinkQuestion(): thinkQuestion {return createWg('thinkQuestion', func_get_args());}
+function thinkNodeBase(): thinkNodeBase {return createWg('thinkNodeBase', func_get_args());}
 function thinkTransition(): thinkTransition {return createWg('thinkTransition', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
 function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
@@ -207,6 +209,11 @@ function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkT
 function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptionsDetail', func_get_args());}
 function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
 function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', func_get_args());}
-function thinkRadioList(): thinkRadioList {return createWg('thinkRadioList', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
 function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}
+function thinkRun(): thinkRun {return createWg('thinkRun', func_get_args());}
+
+if(is_dir(__DIR__ . DS . 'wg' . DS . 'boardeditor'))
+{
+    function boardEditor(): boardEditor {return createWg('boardeditor', func_get_args());}
+}

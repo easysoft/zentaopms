@@ -652,9 +652,11 @@
                     const frame = window.frameElement;
                     frame.classList.remove('loading');
                     frame.classList.add('in');
-                    $page.find('iframe').removeClass('invisible');
+                    const $iframe = $page.find('iframe').removeClass('invisible');
                     $page.removeClass('loading').find('iframe').addClass('in');
                     $(document).trigger('pageload.app');
+                    const iframeWindow = $iframe[0].contentWindow;
+                    iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
                 });
         }
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
@@ -778,7 +780,7 @@
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         let selector = `dtable/${target}:component`;
-        options
+        options = options || {};
         if(options.selector && options.selector !== 'dtable') selector = options.selector;
         const isInModal = $(target).closest('.modal').length;
         if(!isInModal && !options.selector)
@@ -1375,14 +1377,14 @@
             bodyWidth = $('body').width();
             maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
         }
-        if(!maxHeight) maxHeight = $(top.window).height();
+        if(!maxHeight) maxHeight = top.window.innerHeight;
 
         setTimeout(function()
         {
-            maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
+            let maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
             if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
             $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
-            if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + window.config.expand + " <i class='icon-angle-down'></i></a>");
+            if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage row items-center justify-center h-7 secondary absolute bottom-0 w-full opacity-70 hover:opacity-100' onclick='showMoreImage(this)'>" + window.config.expand + " <i class='icon-angle-down'></i></a>");
         }, 50);
     }
 
@@ -1402,8 +1404,10 @@
         if(e.defaultPrevented) return;
         if(isInAppTab) window.parent.$('body').trigger('click');
 
-        const $link = $(e.target).closest('a,.open-url');
-        if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('data-on') || $link.hasClass('show-in-app') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
+        const $target = $(e.target);
+        if($target.closest('.not-open-url').length) return;
+        const $link = $target.closest('a,.open-url');
+        if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('download') || $link.attr('data-on') || $link.hasClass('show-in-app') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const href = $link.attr('href');
         if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app')) return;
@@ -1569,7 +1573,7 @@
                 updatePerfInfo({id: 'page'}, 'renderEnd', {id: 'page', perf: {requestBegin: Math.max(0, requestBegin), requestEnd: startTime, renderBegin: startTime}});
                 showZinDebugInfo(window.zinDebug, {id: 'page'});
             }
-            if(!isInAppTab && !zui.store.get('Zinbar:hidden') && $('#navbar').length) loadCurrentPage();
+            if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
         }
     });
 }());

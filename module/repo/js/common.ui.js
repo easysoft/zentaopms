@@ -1,6 +1,7 @@
 $(function()
 {
     $('#log').on('click', '.btn-close', closeRelation);
+    window.onScmChange();
 });
 
 /**
@@ -13,7 +14,7 @@ $(function()
  * @access public
  * @return void
  */
-function switchRepo(repoID, module, method)
+window.switchRepo = function(repoID, module, method)
 {
     if(typeof(eventKeyCode) == 'undefined') eventKeyCode = 0;
     if(eventKeyCode > 0 && eventKeyCode != 13) return false;
@@ -38,7 +39,7 @@ function switchRepo(repoID, module, method)
  * @access public
  * @return void
  */
-function switchBranch(branchID)
+window.switchBranch = function(branchID)
 {
     $.cookie.set('repoBranch', branchID, {expires:config.cookieLife, path:config.webRoot});
     $.cookie.set('repoRefresh', 1, {expires:config.cookieLife, path:config.webRoot});
@@ -57,7 +58,7 @@ var distance = 0;
  * @access public
  * @return void
  */
-function arrowTabs(domID, shift, hideRightBtn)
+window.arrowTabs = function(domID, shift, hideRightBtn)
 {
     if($('#' + domID).html() == '') return;
 
@@ -108,7 +109,7 @@ function arrowTabs(domID, shift, hideRightBtn)
  * @access public
  * @return void
  */
-function closeRelation()
+window.closeRelation = function()
 {
     $('#relationTabs ul li').remove();
     $('#relationTabs .tab-content .tab-pane').remove();
@@ -127,7 +128,7 @@ function closeRelation()
  * @access public
  * @return void
  */
-function getIframeHeight()
+window.getIframeHeight = function()
 {
     if(iframeHeight) return iframeHeight;
 
@@ -156,7 +157,7 @@ function getIframeHeight()
  * @access public
  * @return void
  */
-function getSidebarHeight()
+window.getSidebarHeight = function()
 {
     if(sidebarHeight) return sidebarHeight;
 
@@ -187,7 +188,7 @@ function getSidebarHeight()
  * @access public
  * @return string
  */
-function findItemInTreeItems(list, key, level) {
+window.findItemInTreeItems = function(list, key, level) {
     for (const item of list) {
         if(level === 0)
         {
@@ -215,10 +216,132 @@ function findItemInTreeItems(list, key, level) {
  * @access public
  * @return void
  */
-function expandTree()
+window.expandTree = function()
 {
     const treeObj = $('#monacoTree').parent().data('zui.Tree');
     if(treeObj == undefined || treeObj.$ == undefined) return;
 
     for (const key of parentTree) treeObj.$.expand(key);
+}
+
+window.onHostChange = function()
+{
+    const host = $('[name=serviceHost]').val();
+    if(!host) return false;
+
+    toggleLoading('#serviceProject', true);
+    const $picker = $('#serviceProject').zui('picker');
+    $picker.$.clear();
+
+    $.getJSON($.createLink('repo', 'ajaxGetProjects', "host=" + host), function(items)
+    {
+        $picker.render({items: items});
+
+        toggleLoading('#serviceProject', false);
+    });
+}
+
+window.onProjectChange = function()
+{
+    const $picker    = $('#serviceProject').zui('picker');
+    const selections = $picker.$.state.selections;
+    const serviceProject = selections.length > 0 ? selections[0].text : '';
+    if(!serviceProject)
+    {
+        $('#name').val('');
+        return;
+    }
+    else
+    {
+        $('#name').val(serviceProject);
+    }
+}
+
+/**
+ * Changed SCM.
+ *
+ * @param  string $scm
+ * @access public
+ * @return void
+ */
+window.onScmChange = function()
+{
+    if(typeof scmList == 'undefined' || !scmList) return;
+
+    var scm = $('[name=SCM]').val();
+    if(!scm)
+    {
+        for(i in scmList)
+        {
+            scm = i;
+            break;
+        }
+    }
+
+    (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
+
+    if(scm != 'Subversion')
+    {
+        $('.account-fields').addClass('hidden');
+        $('#path').attr('placeholder', pathGitTip);
+        $('#client').attr('placeholder', clientGitTip);
+        $('#client').val('/usr/bin/git');
+    }
+    else
+    {
+        $('.account-fields').removeClass('hidden');
+        $('#path').attr('placeholder', pathSvnTip);
+        $('#client').attr('placeholder', clientSvnTip);
+        $('#client').val('/usr/bin/svn');
+    }
+
+    if(scm == 'Git' || scm == 'Subversion')
+    {
+        $('.service').toggle(false);
+        $('.hide-service').toggle(true);
+    }
+    else
+    {
+        $('.service').toggle(true);
+        if(scm == 'Gitea' || scm == 'Gogs')
+        {
+            $('.hide-service').each(function()
+            {
+                if(!$(this).hasClass('hide-git')) $(this).toggle(true);
+            });
+            $('.hide-git').toggle(false);
+        }
+        else
+        {
+            $('.hide-service').toggle(false);
+        }
+
+        var url = $.createLink('repo', 'ajaxGetHosts', "scm=" + scm);
+        $.getJSON(url, function(data)
+        {
+            const $hostPicker = $('#serviceHost').zui('picker');
+            $hostPicker.render({items: data});
+            $hostPicker.$.clear();
+        });
+    }
+}
+
+/**
+ * On acl change event.
+ *
+ * @param  event $event
+ * @access public
+ * @return void
+ */
+window.onAclChange = function(event)
+{
+    const acl = $(event.target).val();
+    if(acl == 'private' || acl == 'custom')
+    {
+        $('#whitelist').removeClass('hidden');
+    }
+    else
+    {
+        $('#whitelist').addClass('hidden');
+    }
 }

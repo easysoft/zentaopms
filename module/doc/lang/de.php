@@ -185,6 +185,7 @@ $lang->doc->addType          = 'Hinzufügen';
 $lang->doc->childType        = 'Child';
 $lang->doc->catalogName      = 'Catalog Name';
 $lang->doc->collect          = 'Favorit hinzufügen';
+$lang->doc->collectSuccess   = 'Add Favorite';
 $lang->doc->cancelCollection = 'Favorit entfernen';
 $lang->doc->deleteFile       = 'Delete File';
 $lang->doc->menuTitle        = 'Menu';

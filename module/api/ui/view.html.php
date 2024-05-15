@@ -182,6 +182,7 @@ toolbar
         'class'       => 'ghost export',
         'text'        => $lang->export,
         'url'         => createLink('api', 'export', "libID={$libID}&version={$version}&release={$release}&moduleID={$moduleID}"),
+        'data-size'   => 'sm',
         'data-toggle' => 'modal'
     ))) : null,
     common::hasPriv('api', 'createLib') ? item(set(array

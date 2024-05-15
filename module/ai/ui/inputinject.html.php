@@ -70,7 +70,7 @@ $auditInject = function() use($module, $method)
         JAVASCRIPT;
 
         $regenButton = html::linkButton('<i class="icon icon-refresh muted"></i> ' . $this->lang->ai->audit->regenerate, helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), 'self', "id='promptRegenerate'", 'btn ghost');
-        $auditButton = html::commonButton($this->lang->ai->audit->designPrompt, 'data-toggle="modal" data-type="iframe" data-url="' . helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId") . '"', 'btn btn-info iframe');
+        $auditButton = html::commonButton($this->lang->ai->audit->designPrompt, 'id="promptAudit" data-toggle="modal" data-type="iframe" data-url="' . helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId") . '"', 'btn btn-info iframe');
         $targetContainer = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->targetContainer;
         $injectMethod    = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->injectMethod;
         $buttonHTML = $isAudit ? "$regenButton $auditButton" : $regenButton;
@@ -81,6 +81,7 @@ $auditInject = function() use($module, $method)
         $toolbarContainerStyles = empty($this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->containerStyles) ? '{}' : $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->containerStyles;
         $auditScript .= "$(`$targetContainer`).first().$injectMethod(buttonHTML);";
         $auditScript .= <<< JAVASCRIPT
+            $('#promptAudit').attr('data-size', '{"height": 600}');
             const toolbarContainerStyles = JSON.parse('$toolbarContainerStyles');
             $(`$targetContainer`).css(toolbarContainerStyles);
         };
@@ -94,7 +95,7 @@ $auditInject = function() use($module, $method)
         const publishButton = document.getElementById('promptPublish');
         if(publishButton)
         {
-            publishButton.addEventListener('click', e =>
+            $(document).off('click', '#promptPublish').on('click', '#promptPublish', function(e)
             {
                 e.preventDefault();
 
@@ -107,13 +108,13 @@ $auditInject = function() use($module, $method)
                 publishLink.click();
 
                 /* TODO: find a way to close app. */
-                // if($.appCode !== 'admin') $.apps.close($.appCode);
+                if($.apps.currentCode != 'admin') $.apps.closeApp($.apps.currentCode);
             });
         }
         const auditExitButton = document.getElementById('promptAuditExit');
         if(auditExitButton)
         {
-            auditExitButton.addEventListener('click', e =>
+            $(document).off('click', '#promptAuditExit').on('click', '#promptAuditExit', function(e)
             {
                 e.preventDefault();
 

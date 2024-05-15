@@ -323,7 +323,7 @@ class testcaseTao extends testcaseModel
     {
         return $this->dao->select('DISTINCT t2.id, t2.parent, t2.`case`, t2.version, t2.type, t2.`desc`, t2.expect')
             ->from(TABLE_CASE)->alias('t1')
-            ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.version = t2.version')
+            ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.`case` and t1.version = t2.version')
             ->where('t1.id')->in($caseIdList)
             ->orderBy('t2.id')
             ->fetchGroup('case', 'id');

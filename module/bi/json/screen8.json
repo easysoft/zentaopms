@@ -1,0 +1,5032 @@
+{
+    "id": 8,
+    "dimension": "3",
+    "name": "公司质量数据盘点大屏",
+    "desc": "关于公司质量数据的大屏,整体把握公司生产质量",
+    "cover": "static\/images\/screen6.png",
+    "builtin": "1",
+    "scheme": {
+        "editCanvasConfig": {
+            "projectName": "2",
+            "width": 1366,
+            "height": 3740,
+            "size": 0,
+            "lockScale": false,
+            "filterShow": false,
+            "hueRotate": 0,
+            "saturate": 1,
+            "contrast": 1,
+            "brightness": 1,
+            "opacity": 1,
+            "rotateZ": 0,
+            "rotateX": 0,
+            "rotateY": 0,
+            "skewX": 0,
+            "skewY": 0,
+            "blendMode": "normal",
+            "background": "#0B0F18FF",
+            "selectColor": true,
+            "chartThemeColor": "3wvajowr6l8000",
+            "chartThemeSetting": {},
+            "previewScaleType": "scrollY",
+            "globalFilter": [],
+            "chartCustomThemeColorInfo": []
+        },
+        "componentList": [
+            {
+                "id": "55ojhdng6xc00",
+                "isGroup": false,
+                "attr": {
+                    "x": 1128,
+                    "y": "202",
+                    "w": 180,
+                    "h": 102,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3frl1vyqmta000",
+                "isGroup": false,
+                "attr": {
+                    "x": 932,
+                    "y": "202",
+                    "w": 180,
+                    "h": 102,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "2ags77k2ww7w00",
+                "isGroup": false,
+                "attr": {
+                    "x": 734,
+                    "y": "202",
+                    "w": 180,
+                    "h": 102,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "50nt2l84n38000",
+                "isGroup": false,
+                "attr": {
+                    "x": 516,
+                    "y": 202,
+                    "w": 180,
+                    "h": 102,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5mc1lzqkgtg00",
+                "isGroup": false,
+                "attr": {
+                    "x": 284,
+                    "y": 202,
+                    "w": 180,
+                    "h": 102,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "1i58n5kxophc00",
+                "isGroup": false,
+                "attr": {
+                    "x": 60,
+                    "y": 202,
+                    "w": 180,
+                    "h": 102,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border03",
+                "chartConfig": {
+                    "key": "Border03",
+                    "chartKey": "VBorder03",
+                    "conKey": "VCBorder03",
+                    "title": "边框-03",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border03.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00AAFF82",
+                        "#2CF7FE00"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3mnttqgyc4o000",
+                "isGroup": false,
+                "attr": {
+                    "x": 253,
+                    "y": 46,
+                    "w": 860,
+                    "h": 32,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1089FF42",
+                        "#1089FF00"
+                    ],
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "4nir9d6n138000",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 106,
+                    "w": 1326,
+                    "h": 500,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3sdxo2ffqi0000",
+                "isGroup": false,
+                "attr": {
+                    "x": 50,
+                    "y": 226,
+                    "w": 200,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "研发完成需求数 ",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 34,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 4,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "4nyo2dxv5yi000",
+                "isGroup": false,
+                "attr": {
+                    "x": 60,
+                    "y": 192,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "质量数据-研发完成需求数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "19033",
+                    "sourceID": "10201"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "19033",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10201",
+                "title": "质量数据-研发完成需求数",
+                "type": "card"
+            },
+            {
+                "id": "2ev27p00xbpc00",
+                "isGroup": false,
+                "attr": {
+                    "x": 274,
+                    "y": 226,
+                    "w": 200,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "研发完成需求规模数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 12,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "lzaj0yorolc00",
+                "isGroup": false,
+                "attr": {
+                    "x": 506,
+                    "y": 226,
+                    "w": 200,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "研发完成需求用例数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 12,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "4jogna07yk8000",
+                "isGroup": false,
+                "attr": {
+                    "x": 922,
+                    "y": 226,
+                    "w": 200,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "有效Bug数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 40,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "15j805dkq4ik00",
+                "isGroup": false,
+                "attr": {
+                    "x": 1118,
+                    "y": 226,
+                    "w": 200,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "修复Bug数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 48,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "ltddmmh5kkw00",
+                "isGroup": false,
+                "attr": {
+                    "x": -1232,
+                    "y": 613,
+                    "w": 153,
+                    "h": 84,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目数",
+                    "fontSize": 12,
+                    "fontColor": "#ffffff",
+                    "paddingX": 20,
+                    "paddingY": 20,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "6p4ckgbvmx400",
+                "isGroup": false,
+                "attr": {
+                    "x": -1232,
+                    "y": 613,
+                    "w": 153,
+                    "h": 84,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目数",
+                    "fontSize": 12,
+                    "fontColor": "#ffffff",
+                    "paddingX": 20,
+                    "paddingY": 20,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5nkv71g8l9o000",
+                "isGroup": false,
+                "attr": {
+                    "x": -1232,
+                    "y": 613,
+                    "w": 153,
+                    "h": 84,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "完成项目数",
+                    "fontSize": 12,
+                    "fontColor": "#ffffff",
+                    "paddingX": 20,
+                    "paddingY": 20,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "4l83s1sqlek000",
+                "isGroup": false,
+                "attr": {
+                    "x": 724,
+                    "y": 226,
+                    "w": 200,
+                    "h": 100,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug总数",
+                    "fontSize": 12,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 54,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                }
+            },
+            {
+                "id": "5f6dr2y034w000",
+                "isGroup": false,
+                "attr": {
+                    "x": 284,
+                    "y": 192,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "质量数据-研发完成需求规模数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "62482",
+                    "sourceID": "10202"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "62482",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10202",
+                "title": "质量数据-研发完成需求规模数",
+                "type": "card"
+            },
+            {
+                "id": "1gw11ho3ev4w00",
+                "isGroup": false,
+                "attr": {
+                    "x": 516,
+                    "y": 192,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "质量数据-研发完成需求用例数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "2208",
+                    "sourceID": "10203"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "2208",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10203",
+                "title": "质量数据-研发完成需求用例数",
+                "type": "card"
+            },
+            {
+                "id": "4ljohxdlzfs000",
+                "isGroup": false,
+                "attr": {
+                    "x": 734,
+                    "y": 192,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "质量数据-Bug总数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "19799",
+                    "sourceID": "10204"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "19799",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10204",
+                "title": "质量数据-Bug总数",
+                "type": "card"
+            },
+            {
+                "id": "2dsxvobrqdes00",
+                "isGroup": false,
+                "attr": {
+                    "x": 931,
+                    "y": 191,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "质量数据-有效Bug数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "17341",
+                    "sourceID": "10205"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "17341",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10205",
+                "title": "质量数据-有效Bug数",
+                "type": "card"
+            },
+            {
+                "id": "25j01jdzmrts00",
+                "isGroup": false,
+                "attr": {
+                    "x": 1128,
+                    "y": 192,
+                    "w": 180,
+                    "h": 80,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "质量数据-修复Bug数",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common",
+                    "dataset": "13886",
+                    "sourceID": "10206"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "13886",
+                    "fontSize": 18,
+                    "fontColor": "#ffffff",
+                    "paddingX": 56,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 0,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#1089FF00"
+                },
+                "sourceID": "10206",
+                "title": "质量数据-修复Bug数",
+                "type": "card"
+            },
+            {
+                "id": "3rrf13x8aig000",
+                "isGroup": false,
+                "attr": {
+                    "x": 58,
+                    "y": 528,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "研发完成需求用例覆盖率",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "2fj8shp4iww000",
+                "isGroup": false,
+                "attr": {
+                    "x": 352,
+                    "y": 528,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "研发完成需求用例密度",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "7c0kw504pfo00",
+                "isGroup": false,
+                "attr": {
+                    "x": 660,
+                    "y": 528,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug密度",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "3tdqudx15lm000",
+                "isGroup": false,
+                "attr": {
+                    "x": 972,
+                    "y": 528,
+                    "w": 332,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug修复率",
+                    "fontSize": 16,
+                    "fontColor": "#ffffff",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "15v07f9mllz400",
+                "isGroup": false,
+                "attr": {
+                    "x": "23",
+                    "y": 120,
+                    "w": 201,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "质量数据盘点",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "12pr64gobork00",
+                "isGroup": false,
+                "attr": {
+                    "x": "232",
+                    "y": 120,
+                    "w": 1075,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "5rscm33a7a0000",
+                "isGroup": false,
+                "attr": {
+                    "x": 916,
+                    "y": 8,
+                    "w": 450,
+                    "h": 75,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates04",
+                "chartConfig": {
+                    "key": "Decorates04",
+                    "chartKey": "VDecorates04",
+                    "conKey": "VCDecorates04",
+                    "title": "装饰-04",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates04.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1dc1f5",
+                        "#1dc1f5"
+                    ],
+                    "reverse": false
+                }
+            },
+            {
+                "id": "48vgwd3xywc000",
+                "isGroup": false,
+                "attr": {
+                    "x": 2,
+                    "y": 8,
+                    "w": 450,
+                    "h": 75,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates04",
+                "chartConfig": {
+                    "key": "Decorates04",
+                    "chartKey": "VDecorates04",
+                    "conKey": "VCDecorates04",
+                    "title": "装饰-04",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates04.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1dc1f5",
+                        "#1dc1f5"
+                    ],
+                    "reverse": true
+                }
+            },
+            {
+                "id": "34gsoca72ak000",
+                "isGroup": false,
+                "attr": {
+                    "x": 450,
+                    "y": 55,
+                    "w": 466,
+                    "h": 50,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates05",
+                "chartConfig": {
+                    "key": "Decorates05",
+                    "chartKey": "VDecorates05",
+                    "conKey": "VCDecorates05",
+                    "title": "装饰-05",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates05.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#00c2ff",
+                        "#00c2ff4d"
+                    ],
+                    "dur": 3
+                }
+            },
+            {
+                "id": "5emz0hdi03k000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1,
+                    "y": 1,
+                    "w": 1365,
+                    "h": 45,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#1089FF42",
+                        "#1089FF00"
+                    ],
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "afw1xcxn3ug00",
+                "isGroup": false,
+                "attr": {
+                    "x": 456,
+                    "y": 4,
+                    "w": 454,
+                    "h": 64,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "公司质量数据盘点大屏",
+                    "fontSize": 28,
+                    "fontColor": "#b2d5e5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 5,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "58c9hdcwi5s000",
+                "isGroup": false,
+                "attr": {
+                    "x": 660,
+                    "y": 348,
+                    "w": 332,
+                    "h": 180,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCWaterPolo",
+                    "title": "质量数据-Bug密度",
+                    "category": "Mores",
+                    "categoryName": "更多",
+                    "package": "Charts",
+                    "chartFrame": "common",
+                    "image": "water_WaterPolo.png",
+                    "dataset": "0.04",
+                    "sourceID": "10209"
+                },
+                "option": {
+                    "dataset": "0.04",
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "90%",
+                            "data": [
+                                0.04
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10209",
+                "title": "质量数据-Bug密度",
+                "type": "waterpolo"
+            },
+            {
+                "id": "172yoxa90vb400",
+                "isGroup": false,
+                "attr": {
+                    "x": 972,
+                    "y": 348,
+                    "w": 332,
+                    "h": 180,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCWaterPolo",
+                    "title": "质量数据-Bug修复率",
+                    "category": "Mores",
+                    "categoryName": "更多",
+                    "package": "Charts",
+                    "chartFrame": "common",
+                    "image": "water_WaterPolo.png",
+                    "dataset": "0.10",
+                    "sourceID": "10210"
+                },
+                "option": {
+                    "dataset": "0.10",
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "90%",
+                            "data": [
+                                0.1
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10210",
+                "title": "质量数据-Bug修复率",
+                "type": "waterpolo"
+            },
+            {
+                "id": "3w4daidjqdi000",
+                "isGroup": false,
+                "attr": {
+                    "x": 58,
+                    "y": 348,
+                    "w": 332,
+                    "h": 180,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCWaterPolo",
+                    "title": "质量数据-研发完成需求用例覆盖率",
+                    "category": "Mores",
+                    "categoryName": "更多",
+                    "package": "Charts",
+                    "chartFrame": "common",
+                    "image": "water_WaterPolo.png",
+                    "dataset": "0.309625",
+                    "sourceID": "10207"
+                },
+                "option": {
+                    "dataset": "0.309625",
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "90%",
+                            "data": [
+                                0.31
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10207",
+                "title": "质量数据-研发完成需求用例覆盖率",
+                "type": "waterpolo"
+            },
+            {
+                "id": "4bn4v0qaocw000",
+                "isGroup": false,
+                "attr": {
+                    "x": 352,
+                    "y": 348,
+                    "w": 332,
+                    "h": 180,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "WaterPolo",
+                "chartConfig": {
+                    "key": "WaterPolo",
+                    "chartKey": "VWaterPolo",
+                    "conKey": "VCWaterPolo",
+                    "title": "质量数据-研发完成需求用例密度",
+                    "category": "Mores",
+                    "categoryName": "更多",
+                    "package": "Charts",
+                    "chartFrame": "common",
+                    "image": "water_WaterPolo.png",
+                    "dataset": "0.7013",
+                    "sourceID": "10208"
+                },
+                "option": {
+                    "dataset": "0.7013",
+                    "series": [
+                        {
+                            "type": "liquidFill",
+                            "shape": "circle",
+                            "radius": "90%",
+                            "data": [
+                                0.7
+                            ],
+                            "center": [
+                                "50%",
+                                "50%"
+                            ],
+                            "color": [
+                                {
+                                    "type": "linear",
+                                    "x": 0,
+                                    "y": 0,
+                                    "x2": 0,
+                                    "y2": 1,
+                                    "colorStops": [
+                                        {
+                                            "offset": 0,
+                                            "color": "#4992ff"
+                                        },
+                                        {
+                                            "offset": 1,
+                                            "color": "#7cffb2"
+                                        }
+                                    ],
+                                    "globalCoord": false
+                                }
+                            ],
+                            "backgroundStyle": {
+                                "borderWidth": 1,
+                                "color": "rgba(68, 181, 226, 0.3)"
+                            },
+                            "label": {
+                                "normal": {
+                                    "textStyle": {
+                                        "fontSize": 32,
+                                        "color": "#fff"
+                                    }
+                                }
+                            },
+                            "outline": {
+                                "show": false,
+                                "borderDistance": 10,
+                                "itemStyle": {
+                                    "borderWidth": 2,
+                                    "borderColor": "#112165"
+                                }
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10208",
+                "title": "质量数据-研发完成需求用例密度",
+                "type": "waterpolo"
+            },
+            {
+                "id": "27f0de7xfqfw00",
+                "isGroup": false,
+                "attr": {
+                    "x": 510,
+                    "y": 1646,
+                    "w": 833,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "kp909j6ffg000",
+                "isGroup": false,
+                "attr": {
+                    "x": 18,
+                    "y": 1645,
+                    "w": 477,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3vsciuh0hrs000",
+                "isGroup": false,
+                "attr": {
+                    "x": "154",
+                    "y": "1648",
+                    "w": 200,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug类型分布图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "2mqp7xv959400",
+                "isGroup": false,
+                "attr": {
+                    "x": "354",
+                    "y": "1648",
+                    "w": "120",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "4n4yq7lcev4000",
+                "isGroup": false,
+                "attr": {
+                    "x": "32",
+                    "y": "1648",
+                    "w": "120",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "1d271h0v8mqo00",
+                "isGroup": false,
+                "attr": {
+                    "x": "782",
+                    "y": "1648",
+                    "w": 280,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug严重程度堆积图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "5mrgc6eqt90000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1057,
+                    "y": "1648",
+                    "w": 260,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "254g36lcv2io00",
+                "isGroup": false,
+                "attr": {
+                    "x": 539,
+                    "y": "1648",
+                    "w": 254,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "5ip3xc3pes0000",
+                "isGroup": false,
+                "attr": {
+                    "x": 511,
+                    "y": 2156,
+                    "w": 835,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "p5v6om0y7gg00",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 2156,
+                    "w": 472,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "ktbwgyibuz400",
+                "isGroup": false,
+                "attr": {
+                    "x": "136",
+                    "y": "2160",
+                    "w": 240,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug解决方案分布图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "517812ddp18000",
+                "isGroup": false,
+                "attr": {
+                    "x": "374",
+                    "y": "2160",
+                    "w": "102",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "2ubeu8arz66000",
+                "isGroup": false,
+                "attr": {
+                    "x": "40",
+                    "y": "2160",
+                    "w": "102",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "dwud1obtioo00",
+                "isGroup": false,
+                "attr": {
+                    "x": "778",
+                    "y": "2160",
+                    "w": 280,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug密度年度趋势图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "2zef39rtski000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1048,
+                    "y": "2160",
+                    "w": 266,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "44fwuqancr0000",
+                "isGroup": false,
+                "attr": {
+                    "x": 533,
+                    "y": "2160",
+                    "w": 260,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "2uws0ytah1s000",
+                "isGroup": false,
+                "attr": {
+                    "x": 512,
+                    "y": 626,
+                    "w": 834,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5nyrxc5w010000",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 626,
+                    "w": 475,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5jlquwudqjc000",
+                "isGroup": false,
+                "attr": {
+                    "x": "154",
+                    "y": "632",
+                    "w": 200,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug状态分布图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "gpiyfioye2800",
+                "isGroup": false,
+                "attr": {
+                    "x": "354",
+                    "y": "632",
+                    "w": "120",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "54c0xx57r24000",
+                "isGroup": false,
+                "attr": {
+                    "x": "32",
+                    "y": "632",
+                    "w": "120",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "2sphsycadhc000",
+                "isGroup": false,
+                "attr": {
+                    "x": "664",
+                    "y": "632",
+                    "w": 512,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug总数、有效Bug数与修复Bug数近30天统计图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "1k6hl6r7tygw00",
+                "isGroup": false,
+                "attr": {
+                    "x": 1188,
+                    "y": "632",
+                    "w": "120",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "4hnhyvnfq5g000",
+                "isGroup": false,
+                "attr": {
+                    "x": 536,
+                    "y": "632",
+                    "w": 120,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "1jeaitz0lrr400",
+                "isGroup": false,
+                "attr": {
+                    "x": 512,
+                    "y": 1136,
+                    "w": 834,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "1hwn0jcj6uio00",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 1136,
+                    "w": 475,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "pw93bwp425c00",
+                "isGroup": false,
+                "attr": {
+                    "x": "136",
+                    "y": "1140",
+                    "w": 240,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "Bug严重程度分布图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "4zzvvpybfdc000",
+                "isGroup": false,
+                "attr": {
+                    "x": "374",
+                    "y": "1140",
+                    "w": "102",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "2my1y33oe22000",
+                "isGroup": false,
+                "attr": {
+                    "x": 40,
+                    "y": "1140",
+                    "w": "102",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "53axbaefjh8000",
+                "isGroup": false,
+                "attr": {
+                    "x": "784",
+                    "y": "1140",
+                    "w": 280,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "有效Bug率年度趋势图",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "3dn99i3ync4000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1062,
+                    "y": "1140",
+                    "w": "260",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "4nwwxcg1bt4000",
+                "isGroup": false,
+                "attr": {
+                    "x": 533,
+                    "y": "1140",
+                    "w": 260,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "4ogg3298z1q000",
+                "isGroup": false,
+                "attr": {
+                    "x": "528",
+                    "y": "708",
+                    "w": 798,
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "BarCommon",
+                "chartConfig": {
+                    "key": "BarCommon",
+                    "chartKey": "VBarCommon",
+                    "conKey": "VCBarCommon",
+                    "title": "Bug总数、有效Bug与解决Bug数近30天统计柱形图",
+                    "category": "Bars",
+                    "categoryName": "柱状图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "bar_x.png",
+                    "sourceID": "10211"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 90,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "Bug总数、有效Bug与解决Bug数近30天统计柱形图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "show": true,
+                            "type": "shadow"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "bar",
+                            "barWidth": 15,
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 2
+                            }
+                        },
+                        {
+                            "type": "bar",
+                            "barWidth": 15,
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 2
+                            }
+                        },
+                        {
+                            "type": "bar",
+                            "barWidth": 15,
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 2
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10211",
+                "title": "Bug总数、有效Bug与解决Bug数近30天统计柱形图",
+                "type": "cluBarX"
+            },
+            {
+                "id": "3g6xki3tayi000",
+                "isGroup": false,
+                "attr": {
+                    "x": "528",
+                    "y": "1216",
+                    "w": "798",
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "LineCommon",
+                "chartConfig": {
+                    "key": "LineCommon",
+                    "chartKey": "VLineCommon",
+                    "conKey": "VCLineCommon",
+                    "title": "有效Bug率年度趋势图",
+                    "category": "Lines",
+                    "categoryName": "折线图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "line.png",
+                    "sourceID": "10212"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 90,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "有效Bug率年度趋势图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "type": "line"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "line",
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "symbolSize": 5,
+                            "itemStyle": {
+                                "borderRadius": 0
+                            },
+                            "lineStyle": {
+                                "type": "solid",
+                                "width": 3
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10212",
+                "title": "有效Bug率年度趋势图",
+                "type": "line"
+            },
+            {
+                "id": "1lk7rgc6je5c00",
+                "isGroup": false,
+                "attr": {
+                    "x": "528",
+                    "y": "1720",
+                    "w": "798",
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "BarStacked",
+                "chartConfig": {
+                    "key": "BarStacked",
+                    "chartKey": "VBarStacked",
+                    "conKey": "VCBarStacked",
+                    "title": "Bug严重程度堆积柱状图",
+                    "category": "Bars",
+                    "categoryName": "柱状图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "bar_stacked_x.png",
+                    "sourceID": "10214"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 90,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "Bug严重程度堆积柱状图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "show": true,
+                            "type": "shadow"
+                        }
+                    },
+                    "series": [
+                        {
+                            "type": "bar",
+                            "stack": "total",
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 0
+                            }
+                        },
+                        {
+                            "type": "bar",
+                            "stack": "total",
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 0
+                            }
+                        },
+                        {
+                            "type": "bar",
+                            "stack": "total",
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 0
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)",
+                    "dataset": []
+                },
+                "sourceID": "10214",
+                "title": "Bug严重程度堆积柱状图",
+                "type": "stackedBar"
+            },
+            {
+                "id": "25mmk8o5duo000",
+                "isGroup": false,
+                "attr": {
+                    "x": "528",
+                    "y": "2236",
+                    "w": "798",
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "LineCommon",
+                "chartConfig": {
+                    "key": "LineCommon",
+                    "chartKey": "VLineCommon",
+                    "conKey": "VCLineCommon",
+                    "title": "Bug密度年度趋势图",
+                    "category": "Lines",
+                    "categoryName": "折线图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "line.png",
+                    "sourceID": "10213"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 90,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "Bug密度年度趋势图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "type": "line"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "line",
+                            "label": {
+                                "show": true,
+                                "position": "top",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "symbolSize": 5,
+                            "itemStyle": {
+                                "borderRadius": 0
+                            },
+                            "lineStyle": {
+                                "type": "solid",
+                                "width": 3
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10213",
+                "title": "Bug密度年度趋势图",
+                "type": "line"
+            },
+            {
+                "id": "53verjpnwh8000",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 3214,
+                    "w": 653,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "5rg2qtyfzno000",
+                "isGroup": false,
+                "attr": {
+                    "x": 693,
+                    "y": 3216,
+                    "w": 653,
+                    "h": 490,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "1j96xfpflgw000",
+                "isGroup": false,
+                "attr": {
+                    "x": 1152,
+                    "y": "3230",
+                    "w": "160",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "d47gaf5trhk00",
+                "isGroup": false,
+                "attr": {
+                    "x": 734,
+                    "y": "3230",
+                    "w": "160",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "50iv7knqqtk000",
+                "isGroup": false,
+                "attr": {
+                    "x": "920",
+                    "y": "3230",
+                    "w": 200,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "产品Bug数量统计",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "4xtycre64bw000",
+                "isGroup": false,
+                "attr": {
+                    "x": "220",
+                    "y": "3230",
+                    "w": 240,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "产品用例数量统计",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "2o3vh7bn0k6000",
+                "isGroup": false,
+                "attr": {
+                    "x": 465,
+                    "y": "3230",
+                    "w": 160,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "gkc4fwuus2o0",
+                "isGroup": false,
+                "attr": {
+                    "x": 60,
+                    "y": "3230",
+                    "w": 160,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "penzroyxpao00",
+                "isGroup": false,
+                "attr": {
+                    "x": 20,
+                    "y": 2666,
+                    "w": 1326,
+                    "h": 528,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Border06",
+                "chartConfig": {
+                    "key": "Border06",
+                    "chartKey": "VBorder06",
+                    "conKey": "VCBorder06",
+                    "title": "边框-06",
+                    "category": "Borders",
+                    "categoryName": "边框",
+                    "package": "Decorates",
+                    "image": "border06.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#3140AD00",
+                        "#1089FF12"
+                    ],
+                    "backgroundColor": "#1089FF12"
+                }
+            },
+            {
+                "id": "3kx9bltlzts000",
+                "isGroup": false,
+                "attr": {
+                    "x": "2800",
+                    "y": "26800",
+                    "w": 1023,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "1igpxgk2mv6o00",
+                "isGroup": false,
+                "attr": {
+                    "x": "32",
+                    "y": "2680",
+                    "w": 242,
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TextCommon",
+                "chartConfig": {
+                    "key": "TextCommon",
+                    "chartKey": "VTextCommon",
+                    "conKey": "VCTextCommon",
+                    "title": "文字",
+                    "category": "Texts",
+                    "categoryName": "文本",
+                    "package": "Informations",
+                    "image": "text_static.png",
+                    "chartFrame": "common"
+                },
+                "option": {
+                    "link": "",
+                    "linkHead": "http:\/\/",
+                    "dataset": "产品缺陷数据汇总表",
+                    "fontSize": 20,
+                    "fontColor": "#B2D5E5FF",
+                    "paddingX": 10,
+                    "paddingY": 10,
+                    "textAlign": "center",
+                    "fontWeight": "normal",
+                    "borderWidth": 0,
+                    "borderColor": "#ffffff",
+                    "borderRadius": 5,
+                    "letterSpacing": 2,
+                    "writingMode": "horizontal-tb",
+                    "backgroundColor": "#00000000"
+                }
+            },
+            {
+                "id": "3oqvmqrcqfg000",
+                "isGroup": false,
+                "attr": {
+                    "x": 50,
+                    "y": 2750,
+                    "w": 1262,
+                    "h": 413,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "TableMergeCell",
+                "chartConfig": {
+                    "key": "TableMergeCell",
+                    "chartKey": "VTableMergeCell",
+                    "conKey": "VCTableMergeCell",
+                    "title": "产品缺陷数据汇总表",
+                    "category": "Tables",
+                    "categoryName": "列表",
+                    "package": "Tables",
+                    "chartFrame": "common",
+                    "image": "table_scrollboard.png",
+                    "sourceID": "1002"
+                },
+                "option": {
+                    "header": [],
+                    "dataset": [],
+                    "index": true,
+                    "columnWidth": [],
+                    "align": [
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center",
+                        "center"
+                    ],
+                    "rowNum": 5,
+                    "waitTime": 2,
+                    "headerHeight": 35,
+                    "carousel": "single",
+                    "headerBGC": "#4498EC85",
+                    "oddRowBGC": "#1089FF1A",
+                    "evenRowBGC": "#FFFFFF00",
+                    "rowspan": [],
+                    "colspan": []
+                },
+                "sourceID": "1002",
+                "title": "产品缺陷数据汇总表",
+                "type": "table"
+            },
+            {
+                "id": "23hxn88hrwm800",
+                "isGroup": false,
+                "attr": {
+                    "x": 56,
+                    "y": "3300",
+                    "w": 574,
+                    "h": "380",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "BarCrossrange",
+                "chartConfig": {
+                    "key": "BarCrossrange",
+                    "chartKey": "VBarCrossrange",
+                    "conKey": "VCBarCrossrange",
+                    "title": "产品用例数量统计条形图",
+                    "category": "Bars",
+                    "categoryName": "柱状图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "bar_y.png",
+                    "sourceID": "10215"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 70,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "产品用例数量统计条形图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "show": true,
+                            "type": "shadow"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "bar",
+                            "label": {
+                                "show": true,
+                                "position": "right",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 0
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10215",
+                "title": "产品用例数量统计条形图",
+                "type": "cluBarY"
+            },
+            {
+                "id": "zu2vtfsd1z400",
+                "isGroup": false,
+                "attr": {
+                    "x": "732",
+                    "y": "3300",
+                    "w": "574",
+                    "h": "380",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "BarCrossrange",
+                "chartConfig": {
+                    "key": "BarCrossrange",
+                    "chartKey": "VBarCrossrange",
+                    "conKey": "VCBarCrossrange",
+                    "title": "产品Bug数量统计条形图",
+                    "category": "Bars",
+                    "categoryName": "柱状图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "bar_y.png",
+                    "sourceID": "10216"
+                },
+                "option": {
+                    "legend": {
+                        "show": true,
+                        "top": 40,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "xAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "bottom",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": false,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "value"
+                    },
+                    "yAxis": {
+                        "show": true,
+                        "name": "",
+                        "nameGap": 15,
+                        "nameTextStyle": {
+                            "color": "#B9B8CE",
+                            "fontSize": 12
+                        },
+                        "inverse": false,
+                        "axisLabel": {
+                            "show": true,
+                            "fontSize": 12,
+                            "color": "#B9B8CE",
+                            "rotate": 0
+                        },
+                        "position": "left",
+                        "axisLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#B9B8CE",
+                                "width": 1
+                            },
+                            "onZero": true
+                        },
+                        "axisTick": {
+                            "show": true,
+                            "length": 5
+                        },
+                        "splitLine": {
+                            "show": true,
+                            "lineStyle": {
+                                "color": "#484753",
+                                "width": 1,
+                                "type": "solid"
+                            }
+                        },
+                        "type": "category"
+                    },
+                    "grid": {
+                        "show": false,
+                        "left": "10%",
+                        "top": 70,
+                        "right": "10%",
+                        "bottom": "60"
+                    },
+                    "title": {
+                        "text": "产品Bug数量统计条形图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "axis",
+                        "axisPointer": {
+                            "show": true,
+                            "type": "shadow"
+                        }
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "bar",
+                            "label": {
+                                "show": true,
+                                "position": "right",
+                                "color": "#fff",
+                                "fontSize": 12
+                            },
+                            "itemStyle": {
+                                "borderRadius": 0
+                            }
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10216",
+                "title": "产品Bug数量统计条形图",
+                "type": "cluBarY"
+            },
+            {
+                "id": "38a8owutx4m000",
+                "isGroup": false,
+                "attr": {
+                    "x": "280",
+                    "y": 2680,
+                    "w": "1030",
+                    "h": 60,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "Decorates02",
+                "chartConfig": {
+                    "key": "Decorates02",
+                    "chartKey": "VDecorates02",
+                    "conKey": "VCDecorates02",
+                    "title": "装饰-02",
+                    "category": "Decorates",
+                    "categoryName": "装饰",
+                    "package": "Decorates",
+                    "image": "decorates02.png",
+                    "chartFrame": "static"
+                },
+                "option": {
+                    "colors": [
+                        "#A9CDF3FF",
+                        "#1DC1F5FF"
+                    ],
+                    "dur": 3,
+                    "lineHeight": 3
+                }
+            },
+            {
+                "id": "p8d55xj3za800",
+                "isGroup": false,
+                "attr": {
+                    "x": "34",
+                    "y": "708",
+                    "w": "446",
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "PieCommon",
+                "chartConfig": {
+                    "key": "PieCommon",
+                    "chartKey": "VPieCommon",
+                    "conKey": "VCPieCommon",
+                    "title": "Bug状态分布图",
+                    "category": "Pies",
+                    "categoryName": "饼图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "pie.png",
+                    "sourceID": "10217"
+                },
+                "option": {
+                    "legend": {
+                        "show": false,
+                        "top": 30,
+                        "textStyle": {
+                            "color": "#B9B8CE"
+                        },
+                        "left": "center"
+                    },
+                    "title": {
+                        "text": "Bug状态分布图",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "type": "nomal",
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "item",
+                        "formatter": "{b} {d}%"
+                    },
+                    "grid": {
+                        "top": 70
+                    },
+                    "dataset": [],
+                    "series": [
+                        {
+                            "type": "pie",
+                            "radius": "70%",
+                            "center": [
+                                "50%",
+                                "60%"
+                            ],
+                            "label": {
+                                "show": true,
+                                "formatter": "{b} {d}%",
+                                "fontSize": 12,
+                                "color": "#fff",
+                                "shadowColor": "transparent"
+                            },
+                            "roseType": false
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)"
+                },
+                "sourceID": "10217",
+                "title": "Bug状态分布图",
+                "type": "pie"
+            },
+            {
+                "id": "11322hw5hcf40",
+                "isGroup": false,
+                "attr": {
+                    "x": "34",
+                    "y": "1216",
+                    "w": "446",
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "PieCommon",
+                "chartConfig": {
+                    "key": "PieCommon",
+                    "chartKey": "VPieCommon",
+                    "conKey": "VCPieCommon",
+                    "title": "Bug严重程度分布",
+                    "category": "Pies",
+                    "categoryName": "饼图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "pie.png",
+                    "sourceID": "10219"
+                },
+                "option": {
+                    "legend": {
+                        "show": false,
+                        "top": 30,
+                        "textStyle": {
+                            "color": "#fff"
+                        },
+                        "left": "center",
+                        "type": "scroll"
+                    },
+                    "title": {
+                        "text": "Bug严重程度分布",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "type": "nomal",
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "item",
+                        "formatter": "{b} {d}%"
+                    },
+                    "grid": {
+                        "top": 70
+                    },
+                    "series": [
+                        {
+                            "type": "pie",
+                            "label": {
+                                "show": true,
+                                "formatter": "{b} {d}%",
+                                "fontSize": 12,
+                                "color": "#fff",
+                                "shadowColor": "transparent"
+                            },
+                            "radius": "70%",
+                            "roseType": false
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)",
+                    "dataset": []
+                },
+                "sourceID": "10219",
+                "title": "Bug严重程度分布",
+                "type": "pie"
+            },
+            {
+                "id": "1bw4mu8kjfi800",
+                "isGroup": false,
+                "attr": {
+                    "x": "34",
+                    "y": "1720",
+                    "w": "446",
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "PieCommon",
+                "chartConfig": {
+                    "key": "PieCommon",
+                    "chartKey": "VPieCommon",
+                    "conKey": "VCPieCommon",
+                    "title": "Bug类型分布",
+                    "category": "Pies",
+                    "categoryName": "饼图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "pie.png",
+                    "sourceID": "10218"
+                },
+                "option": {
+                    "legend": {
+                        "show": false,
+                        "top": 30,
+                        "textStyle": {
+                            "color": "#fff"
+                        },
+                        "left": "center",
+                        "type": "scroll"
+                    },
+                    "title": {
+                        "text": "Bug类型分布",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "type": "nomal",
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "item",
+                        "formatter": "{b} {d}%"
+                    },
+                    "grid": {
+                        "top": 70
+                    },
+                    "series": [
+                        {
+                            "type": "pie",
+                            "label": {
+                                "show": true,
+                                "formatter": "{b} {d}%",
+                                "fontSize": 12,
+                                "color": "#fff",
+                                "shadowColor": "transparent"
+                            },
+                            "radius": "70%",
+                            "roseType": false
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)",
+                    "dataset": []
+                },
+                "sourceID": "10218",
+                "title": "Bug类型分布",
+                "type": "pie"
+            },
+            {
+                "id": "14ns3t0es7k000",
+                "isGroup": false,
+                "attr": {
+                    "x": "34",
+                    "y": "2236",
+                    "w": "446",
+                    "h": "392",
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "lockScale": false,
+                    "zIndex": -1
+                },
+                "preview": {
+                    "overFlowHidden": false
+                },
+                "key": "PieCommon",
+                "chartConfig": {
+                    "key": "PieCommon",
+                    "chartKey": "VPieCommon",
+                    "conKey": "VCPieCommon",
+                    "title": "Bug解决方案分布",
+                    "category": "Pies",
+                    "categoryName": "饼图",
+                    "package": "Charts",
+                    "chartFrame": "echarts",
+                    "image": "pie.png",
+                    "sourceID": "10220"
+                },
+                "option": {
+                    "legend": {
+                        "show": false,
+                        "top": 30,
+                        "textStyle": {
+                            "color": "#fff"
+                        },
+                        "left": "center",
+                        "type": "scroll"
+                    },
+                    "title": {
+                        "text": "Bug解决方案分布",
+                        "show": false,
+                        "textStyle": {
+                            "color": "#BFBFBF",
+                            "fontSize": 18
+                        },
+                        "subtextStyle": {
+                            "color": "#A2A2A2",
+                            "fontSize": 14
+                        },
+                        "top": 10,
+                        "x": "center"
+                    },
+                    "type": "nomal",
+                    "tooltip": {
+                        "show": true,
+                        "trigger": "item",
+                        "formatter": "{b} {d}%"
+                    },
+                    "grid": {
+                        "top": 70
+                    },
+                    "series": [
+                        {
+                            "type": "pie",
+                            "label": {
+                                "show": true,
+                                "formatter": "{b} {d}%",
+                                "fontSize": 12,
+                                "color": "#fff",
+                                "shadowColor": "transparent"
+                            },
+                            "radius": "70%",
+                            "roseType": false
+                        }
+                    ],
+                    "backgroundColor": "rgba(0,0,0,0)",
+                    "dataset": []
+                },
+                "sourceID": "10220",
+                "title": "Bug解决方案分布",
+                "type": "pie"
+            }
+        ]
+    }
+}

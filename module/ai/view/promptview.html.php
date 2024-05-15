@@ -184,8 +184,7 @@
       {
         $.getJSON($(this).attr('href'), function(resp)
         {
-          if(resp.result != 'success') $.zui.messager.danger(resp.message);
-          return location.reload();
+          if(resp.result != 'success') bootbox.alert(resp.message, function() {return location.reload();});
         });
       }
       return false;

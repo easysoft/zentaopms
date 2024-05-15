@@ -78,7 +78,6 @@ window.renderCommentCell = function(result, {col, row})
 {
     if(col.name === 'revision')
     {
-        console.log(row.data);
         result[0] = {html:'<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.revision + '</a>', style:{flexDirection:"column"}};
 
         return result;

@@ -698,6 +698,43 @@ class metricModel extends model
     }
 
     /**
+     * 获取数组格式的度量项结果。
+     * Get result by code with array format.
+     *
+     * @param  int    $code
+     * @param  array  $options
+     * @param  string $type
+     * @param  int    $pager
+     * @param  string $vision
+     * @access public
+     * @return void
+     */
+    public function getResultByCodeWithArray($code, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
+    {
+        $metric     = $this->metricTao->fetchMetricByCode($code);
+        $dataFields = $this->getMetricRecordDateField($metric);
+
+        $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
+        if(empty($records)) return array();
+        if($metric->dateType == 'nodate')
+        {
+            $record = current($records);
+            $record->value = (float)$record->value;
+
+            return array((array)$record);
+        }
+
+        $result = array();
+        foreach($records as $record)
+        {
+            $record->value = (float)$record->value;
+            $result[] = (array)$record;
+        }
+
+        return $result;
+    }
+
+    /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *
@@ -886,11 +923,12 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getExecutableMetric()
+    public function getExecutableMetric($includes = 'all')
     {
         $metricList = $this->dao->select('id,code,time')
             ->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
+            ->beginIF(is_array($includes))->andWhere('code')->in($includes)->fi()
             ->fetchAll();
 
         $excutableMetrics = array();
@@ -1030,7 +1068,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getExecutableCalcList()
+    public function getExecutableCalcList($includes = 'all')
     {
         $funcRoot = $this->getCalcRoot();
 
@@ -1046,7 +1084,7 @@ class metricModel extends model
         }
 
         $calcList = array();
-        $excutableMetric = $this->getExecutableMetric();
+        $excutableMetric = $this->getExecutableMetric($includes);
         foreach($fileList as $file)
         {
             $code = rtrim(basename($file), '.php');
@@ -1069,9 +1107,9 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getCalcInstanceList()
+    public function getCalcInstanceList($includes = 'all')
     {
-        $calcList = $this->getExecutableCalcList();
+        $calcList = $this->getExecutableCalcList($includes);
 
         include_once $this->getBaseCalcPath();
         $calcInstances = array();
@@ -1201,41 +1239,42 @@ class metricModel extends model
             'suffix' => array()
         );
 
+        if($metric->builtin === '0')
+        {
+            $stage = $metric->stage;
+
+            if($stage == 'wait' and common::haspriv('metric', 'edit'))
+            {
+                $editAction = $this->config->metric->actionList['edit'];
+                $editAction['data-toggle'] = 'modal';
+                $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}&viewType=view");
+
+                $menuList['suffix']['edit'] = $editAction;
+            }
+
+            if($stage == 'wait' and common::haspriv('metric', 'implement') and !$this->isOldMetric($metric))
+            {
+                $menuList['main']['implement'] = $this->config->metric->actionList['implement'];
+            }
+
+            if($stage != 'wait' and common::haspriv('metric', 'delist'))
+            {
+                $menuList['main']['delist'] = $this->config->metric->actionList['delist'];
+            }
+
+            if(common::haspriv('metric', 'delete'))
+            {
+                $deleteAction = $this->config->metric->actionList['delete'];
+                if(isset($metric->isUsed) && $metric->isUsed) $deleteAction['data-confirm'] = $this->lang->metric->confirmDeleteInUsed;
+                $menuList['suffix']['delete'] = $deleteAction;
+            }
+        }
+
         if($metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate' && common::haspriv('metric', 'recalculate'))
         {
             $menuList['main']['recalculate'] = $this->config->metric->actionList['recalculate'];
             $menuList['main']['recalculate']['text'] = $this->lang->metric->recalculateBtnText;
             $menuList['main']['recalculate']['hint'] = $this->lang->metric->recalculateBtnText;
-        }
-
-        if($metric->builtin === '1') return $menuList;
-
-        $stage = $metric->stage;
-
-        if($stage == 'wait' and common::haspriv('metric', 'edit'))
-        {
-            $editAction = $this->config->metric->actionList['edit'];
-            $editAction['data-toggle'] = 'modal';
-            $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}&viewType=view");
-
-            $menuList['suffix']['edit'] = $editAction;
-        }
-
-        if($stage == 'wait' and common::haspriv('metric', 'implement') and !$this->isOldMetric($metric))
-        {
-            $menuList['main']['implement'] = $this->config->metric->actionList['implement'];
-        }
-
-        if($stage != 'wait' and common::haspriv('metric', 'delist'))
-        {
-            $menuList['main']['delist'] = $this->config->metric->actionList['delist'];
-        }
-
-        if(common::haspriv('metric', 'delete'))
-        {
-            $deleteAction = $this->config->metric->actionList['delete'];
-            if(isset($metric->isUsed) && $metric->isUsed) $deleteAction['data-confirm'] = $this->lang->metric->confirmDeleteInUsed;
-            $menuList['suffix']['delete'] = $deleteAction;
         }
 
         return $menuList;
@@ -2690,7 +2729,7 @@ class metricModel extends model
             ->limit(1)
             ->fetch('value');
 
-        if(!empty($installedDate) && substr($installedDate, 0 ,4) == '0000') return $installedDate;
+        if(!empty($installedDate) && substr($installedDate, 0 ,4) != '0000') return $installedDate;
 
         return $this->dao->select('date')->from(TABLE_ACTION)
             ->orderBy('date_asc')

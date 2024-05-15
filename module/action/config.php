@@ -16,6 +16,8 @@ $config->action->objectNameFields['case']         = 'title';
 $config->action->objectNameFields['testtask']     = 'name';
 $config->action->objectNameFields['user']         = 'account';
 $config->action->objectNameFields['api']          = 'title';
+$config->action->objectNameFields['board']        = 'name';
+$config->action->objectNameFields['boardspace']   = 'name';
 $config->action->objectNameFields['doc']          = 'title';
 $config->action->objectNameFields['doclib']       = 'name';
 $config->action->objectNameFields['todo']         = 'name';
@@ -84,7 +86,7 @@ $config->action->majorList['doc']       = array('releaseddoc');
 
 $config->action->needGetProjectType       = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
 $config->action->needGetRelateField       = ',branch,story,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,review,';
-$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,';
+$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,';
 $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolumn';
 $config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr';
 
@@ -93,8 +95,8 @@ $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastW
 $config->action->preferredTypeNum = 10;
 
 $config->action->preferredType = new stdclass();
-$config->action->preferredType->ALM   = array('user', 'story', 'task', 'bug', 'case', 'doc', 'program', 'product', 'project', 'execution');
-$config->action->preferredType->light = array('user', 'story', 'task', 'bug', 'case', 'doc', 'product', 'project', 'execution');
+$config->action->preferredType->ALM   = array('user', 'story', 'task', 'bug', 'case', 'board', 'boardspace', 'doc', 'program', 'product', 'project', 'execution');
+$config->action->preferredType->light = array('user', 'story', 'task', 'bug', 'case', 'board', 'boardspace', 'doc', 'product', 'project', 'execution');
 
 global $app, $lang;
 $app->loadLang('action');
@@ -111,5 +113,5 @@ $config->trash->search['params']['objectID']   = array('operator' => 'include', 
 $config->trash->search['params']['actor']      = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'date',  'values' => '');
 
-$config->action->newPageModule  = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins', 'nexus');
+$config->action->newPageModule  = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins', 'nexus', 'board');
 $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth');

@@ -99,7 +99,7 @@ class mr extends control
 
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => $repo->serviceProject);
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
-        $projects       = $this->mrZen->getAllProjects($repo, $MRList);
+        $projects       = $this->mrZen->getAllProjects($repo);
 
         $this->view->title      = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
@@ -283,7 +283,7 @@ class mr extends control
             $groups      = $this->loadModel($scm)->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
 
-            $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+            $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject);
             $isDeveloper   = $this->$scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
 
             if(!isset($gitUsers[$this->app->user->account]) || !$isDeveloper) return $this->sendError($this->lang->mr->errorLang[3], $this->createLink('mr', 'browse'));

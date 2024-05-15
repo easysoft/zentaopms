@@ -115,6 +115,6 @@ $config->kanban->taskColumnStatusList['closed']     = 'closed';
 
 $config->kanban->laneColorList   = array('#3C4353', '#838A9D', '#476BDA', '#A65BD4', '#449C9D', '#D75557', '#CE814C', '#E7D057', '#73BE60', '#F6998A', '#8DA8ED', '#93DAF6', '#B9E78C', '#E58CE7', '#EDE590', '#CFB5FA');
 $config->kanban->columnColorList = array('#333', '#2b519c', '#e48610', '#d2313d', '#2a9f23', '#777', '#d2691e', '#2e8b8b', '#2f8b58', '#4168e0', '#4b0082', '#f58072', '#ba55d3', '#6a8e22');
-$config->kanban->cardColorList   = array('#fff', '#b10b0b', '#cfa227', '#2a5f29');
+$config->kanban->cardColorList   = array('#fff', '#937c5a', '#fc5959', '#ff9f46');
 
 $config->kanban->batchCreate   = 10;

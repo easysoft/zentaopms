@@ -51,7 +51,7 @@ window.renderCell = function(result, info)
         let html = "<select name='version[" + testcase.id + "]' id='version" + testcase.id + "' class='form-control' style='width:60px'>";
         for(i = testcase.version; i >= 1; i --)
         {
-            html += "<option value='" + i + "'>" + i + "</option>";
+            html += "<option value='" + i + "'>#" + i + "</option>";
         }
         html += "</select>";
         result[0] = {html};

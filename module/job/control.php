@@ -8,6 +8,8 @@ declare(strict_types=1);
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     job
  * @version     $Id$
+ * @property    jobZen   $jobZen
+ * @property    jobModel $job
  * @link        https://www.zentao.net
  */
 class job extends control
@@ -412,5 +414,17 @@ class job extends control
 
         if($isAjax) return $this->send(array('result' => 'success', 'data' => $options));
         return $options;
+    }
+
+    /**
+     * AJAX: Import the pipeline from Pipeline Server into ZenTaoPMS
+     *
+     * @param  string|int $repoID
+     * @return void
+     */
+    public function ajaxImportJobs(string|int $repoID)
+    {
+        if($this->job->import($repoID)) $this->sendSuccess();
+        $this->sendError('fail');
     }
 }

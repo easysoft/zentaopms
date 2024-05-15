@@ -270,6 +270,7 @@ $lang->store->common        = 'Store';
 $lang->instance->common     = 'Instance';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
+$lang->board->common        = 'Board';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
@@ -369,6 +370,12 @@ $lang->project->kanban = $lang->projectCommon . ' Kanban';
 
 $lang->execution->executionKanban = "{$lang->execution->common} Kanban";
 $lang->execution->all             = "{$lang->execution->common} List";
+
+$lang->board->template     = 'Template';
+$lang->board->myBoard      = 'My Board';
+$lang->board->productBoard = 'Product Board';
+$lang->board->projectBoard = 'Project Board';
+$lang->board->teamBoard    = 'Team Board';
 
 $lang->doc->recent        = 'Recent';
 $lang->doc->my            = 'My';

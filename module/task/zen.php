@@ -1688,9 +1688,11 @@ class taskZen extends task
 
         $link = $this->createLink('execution', 'task', "executionID={$execution->id}");
         if($this->app->tab == 'my') $link = $this->createLink('my', 'work', 'mode=task');
-        if($this->app->tab == 'project' && $execution->multiple) $link = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
-        $response['load'] = $link;
 
+        if($this->app->tab == 'project' && $execution->multiple && $this->config->vision != 'lite') $link = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
+        if($this->app->tab == 'project' && $execution->multiple && $this->config->vision == 'lite') $link = $this->createLink('execution', 'task', "kanbanID={$execution->id}");
+
+        $response['load'] = $link;
         return $response;
     }
 

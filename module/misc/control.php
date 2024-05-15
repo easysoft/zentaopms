@@ -59,6 +59,8 @@ class misc extends control
      */
     public function checkUpdate(string $sn = '', string $force = '')
     {
+        session_write_close();
+
         /* 检查服务端是否联网。 */
         $hasInternet = $this->session->hasInternet;
         if(empty($hasInternet))

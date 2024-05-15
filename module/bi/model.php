@@ -296,4 +296,140 @@ class biModel extends model
 
         return $stat;
     }
+
+    /**
+     * 准备内置的图表sql语句。
+     * Prepare builtin chart sql.
+     *
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinChartSQL($operate = 'insert')
+    {
+        $charts = $this->config->bi->builtin->charts;
+
+        $chartSQLs = array();
+        foreach($charts as $chart)
+        {
+            $chart = (object)$chart;
+            if(isset($chart->settings)) $chart->settings = $this->jsonEncode($chart->settings);
+            if(isset($chart->filters))  $chart->filters  = $this->jsonEncode($chart->filters);
+            if(isset($chart->fields))   $chart->fields   = $this->jsonEncode($chart->fields);
+            if(isset($chart->langs))    $chart->langs    = $this->jsonEncode($chart->langs);
+
+            $stmt = $this->dao->insert(TABLE_CHART)->data($chart)
+                ->autoCheck();
+
+            $stmt = null;
+            if($operate == 'insert')
+            {
+                $chart->createdBy   = 'system';
+                $chart->createdDate = helper::now();
+                $stmt = $this->dao->insert(TABLE_CHART)->data($chart)->autoCheck();
+            }
+            if($operate == 'update')
+            {
+                $id = $chart->id;
+                unset($chart->group);
+                unset($chart->id);
+                $stmt = $this->dao->update(TABLE_CHART)->data($chart)->where('id')->eq($id)->autoCheck();
+            }
+
+            if(!empty($stmt)) $chartSQLs[] = $stmt->get();
+        }
+
+        return $chartSQLs;
+    }
+
+    /**
+     * 准备内置的透视表sql语句。
+     * Prepare builtin pivot sql.
+     *
+     * @param  bool    $exec
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinPivotSQL($operate = 'insert')
+    {
+        $pivots = $this->config->bi->builtin->pivots;
+
+        $pivotSQLs = array();
+        foreach($pivots as $pivot)
+        {
+            $pivot = (object)$pivot;
+            $pivot->name     = $this->jsonEncode($pivot->name);
+            $pivot->desc     = $this->jsonEncode($pivot->desc);
+            if(isset($pivot->settings)) $pivot->settings = $this->jsonEncode($pivot->settings);
+            if(isset($pivot->filters))  $pivot->filters  = $this->jsonEncode($pivot->filters);
+            if(isset($pivot->fields))   $pivot->fields   = $this->jsonEncode($pivot->fields);
+            if(isset($pivot->langs))    $pivot->langs    = $this->jsonEncode($pivot->langs);
+            if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
+
+            $stmt = null;
+            if($operate == 'insert')
+            {
+                $pivot->createdBy   = 'system';
+                $pivot->createdDate = helper::now();
+                $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck();
+            }
+            if($operate == 'update')
+            {
+                $id = $pivot->id;
+                unset($pivot->group);
+                unset($pivot->id);
+                $stmt = $this->dao->update(TABLE_PIVOT)->data($pivot)->where('id')->eq($id)->autoCheck();
+            }
+
+            if(!empty($stmt)) $pivotSQLs[] = $stmt->get();
+        }
+
+        return $pivotSQLs;
+    }
+
+    public function prepareBuiltinScreenSQL($operate = 'insert')
+    {
+        $screens = $this->config->bi->builtin->screens;
+
+        $screenSQLs = array();
+        foreach($screens as $screenID)
+        {
+            $screenJson = file_get_contents(__DIR__ . DS . 'json' . DS . "screen{$screenID}.json");
+            $screen = json_decode($screenJson);
+            if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme);
+
+            $screen->status = 'published';
+
+            $stmt = null;
+            if($operate == 'insert')
+            {
+                $screen->createdBy   = 'system';
+                $screen->createdDate = helper::now();
+                $stmt = $this->dao->insert(TABLE_SCREEN)->data($screen)->autoCheck();
+            }
+            if($operate == 'update')
+            {
+                $id = $screen->id;
+                unset($screen->id);
+                $stmt = $this->dao->update(TABLE_SCREEN)->data($screen)->where('id')->eq($id)->autoCheck();
+            }
+
+            if(!empty($stmt)) $screenSQLs[] = $stmt->get();
+        }
+
+        return $screenSQLs;
+    }
+
+    /**
+     * Encode json.
+     *
+     * @param  object|array  $object
+     * @access private
+     * @return string|null
+     */
+    private function jsonEncode($object)
+    {
+        if(empty($object)) return null;
+        if(is_scalar($object)) return $object;
+        return json_encode($object);
+    }
 }

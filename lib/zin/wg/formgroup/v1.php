@@ -62,8 +62,18 @@ class formGroup extends wg
         $required = $this->prop('required');
         if($required === 'auto')
         {
-            if($this->hasProp('name')) $required = isFieldRequired($this->prop('name'), $this->prop('requiredFields'));
-            else                       $required = false;
+            $children       = $this->children();
+            $requiredFields = $this->prop('requiredFields');
+            if($this->hasProp('name')) $required = isFieldRequired($this->prop('name'), $requiredFields);
+            else if($children)
+            {
+                $required = false;
+                foreach($children as $child)
+                {
+                    if($child instanceof node && $child->hasProp('name') && isFieldRequired($child->prop('name'), $requiredFields)) $required = true;
+                }
+            }
+            else                $required = false;
             $this->setProp('required', $required);
         }
     }

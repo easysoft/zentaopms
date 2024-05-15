@@ -17,7 +17,7 @@ jsVar('pageRepoID', $repoID);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
 
-$engine = '';
+$engine = 'gitlab';
 if($repo)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));

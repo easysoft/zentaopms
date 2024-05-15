@@ -103,7 +103,7 @@ $config->testtask->linkcase->dtable->fieldList['type']   = $config->testcase->dt
 $config->testtask->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 
 $config->testtask->linkcase->dtable->fieldList['version']['name']  = 'version';
-$config->testtask->linkcase->dtable->fieldList['version']['title'] = $lang->testtask->linkVersion;
+$config->testtask->linkcase->dtable->fieldList['version']['title'] = $lang->testcase->version;
 $config->testtask->linkcase->dtable->fieldList['version']['type']  = 'text';
 $config->testtask->linkcase->dtable->fieldList['version']['group'] = 'version';
 

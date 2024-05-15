@@ -178,6 +178,38 @@ class metricZen extends metric
         return $scopeList;
     }
 
+    protected function calculateMetric($classifiedCalcGroup )
+    {
+        foreach($classifiedCalcGroup as $calcGroup)
+        {
+            if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks'))) continue;
+            if($this->config->edition == 'biz' and in_array($calcGroup->dataset, array('getIssues', 'getRisks'))) continue;
+
+            try
+            {
+                $statement = $this->prepareDataset($calcGroup);
+
+                $rows = !empty($statement) ? $statement->fetchAll() : array();
+                $this->calcMetric($rows, $calcGroup->calcList);
+
+                $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
+                $this->metric->insertMetricLib($recordWithCode);
+            }
+            catch(Exception $e)
+            {
+                a($this->formatException($e));
+            }
+            catch(Error $e)
+            {
+                a($this->formatException($e));
+            }
+        }
+
+        $metrics = $this->metric->getExecutableMetric();
+        foreach($metrics as $code) $this->metric->deduplication($code);
+        $this->metric->rebuildPrimaryKey();
+    }
+
     /**
      * 根据度量项计算的结果，构建可插入表的度量数据。
      * Build measurements that can be inserted into tables based on the results of the measurements computed.

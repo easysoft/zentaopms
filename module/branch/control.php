@@ -198,8 +198,14 @@ class branch extends control
      */
     public function sort()
     {
-        $postData = form::data()->get();
-        $this->branch->sort($postData);
+        $orderBy = $this->post->orderBy;
+        if(strpos($orderBy, 'order') === false) return false;
+
+        $branchOrderList = json_decode($this->post->branches, true);
+        if(isset($branchOrderList[BRANCH_MAIN])) unset($branchOrderList[BRANCH_MAIN]);
+        asort($branchOrderList);
+
+        $this->branch->sort($branchOrderList);
     }
 
     /**

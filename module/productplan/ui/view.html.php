@@ -51,6 +51,7 @@ foreach($config->productplan->defaultFields['story'] as $field)
         $storyCols['sort']['fixed'] = 'left';
         $storyCols['sort']['align'] = 'center';
         $storyCols['sort']['group'] = 1;
+        $storyCols['sort']['width'] = 60;
     }
 }
 if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;

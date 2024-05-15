@@ -1,111 +1,136 @@
 <?php
 declare(strict_types=1);
-/**
- * The thinkStep widget class file of zin module of ZenTaoPMS.
- *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Yu Zhang<zhangyu@easycorp.ltd>
- * @package     zin
- * @link        http://www.zentao.net
- */
-
 namespace zin;
 
-/**
- * 思引师基础表单。
- * thinmory basic forms.
- */
-
-class thinkStep extends wg
+class thinkStep  extends wg
 {
     protected static array $defineProps = array(
-        'type?: string="transition"', // 节点或者题型类型
-        'title?: string',             // 标题
-        'titleName?: string="title"', // 标题对应的name
-        'desc?: string',              // 描述
-        'descName?: string="desc"',   // 描述对应的name
-    );
-    protected static array $defineBlocks = array(
-        'fields' => array(),
+        'item: object',
+        'action?: string="detail"',
+        'addType?: string',
     );
 
-    public static function getPageCSS(): ?string
+    protected function buildQuestionBody(): array|wg
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
-    private function buildNamePanel(): wg
-    {
-        global $lang;
-        list($title, $titleName) = $this->prop(array('title', 'titleName'));
-        return formRow
-            (
-            formGroup
-            (
-                set::width('full'),
-                set::label($lang->thinkwizard->step->label->title),
-                set::labelClass('required'),
-                input
-                (
-                    setClass('is-required'),
-                    set::value($title ? $title : ''),
-                    set::name($titleName),
-                    set::placeholder($lang->thinkwizard->step->inputContent),
-                )
-            )
-        );
-    }
-
-    private function buildDescControl(): wg
-    {
-        global $lang;
-        list($desc, $descName) = $this->prop(array('desc', 'descName'));
-        return formRow
+        $item = $this->prop('item');
+        if(property_exists($item, 'questionType') && $item->questionType === 'input') return thinkInputDetail
         (
-            formGroup
-            (
-                set::width('full'),
-                set::label($lang->thinkwizard->step->label->desc),
-                editor
-                (
-                    setClass('desc'),
-                    set::name($descName),
-                    set::placeholder($lang->thinkwizard->step->pleaseInput),
-                    html($desc ?? ''),
-                    set::rows(3)
-                )
-            ),
-            formHidden('type', $this->prop('type')),
+            set::item($item),
+            set::required($item->required)
         );
+        if(property_exists($item, 'questionType') && $item->questionType === 'tableInput') return thinkTableInputDetail
+        (
+            set::item($item),
+            set::required($item->required),
+            set::rowsTitle(explode(', ', $item->fields)),
+        );
+        if(property_exists($item, 'questionType') && ($item->questionType === 'radio' || $item->questionType === 'checkbox')) return thinkOptionsDetail
+        (
+            set::item($item),
+            set::required($item->required),
+            set::enableOther($item->enableOther),
+            set::data(explode(', ', $item->fields)),
+        );
+        return array();
+
     }
 
-    protected function buildBody(): array
+    protected function buildBody(): wg|array
     {
+        list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
+
+        if($action == 'detail')
+        {
+            return thinkStepDetail
+            (
+                set::item($item),
+                $this->buildQuestionBody()
+            );
+        }
+        else
+        {
+            $item->options = null;
+            $isEdit = $action === 'edit' ? true : false;
+
+
+            if($addType === 'transition' || $isEdit && $item->type === 'transition') return thinkTransition
+            (
+                set::title($isEdit ? $item->title : ''),
+                set::desc($isEdit ? $item->desc: ''),
+            );
+            if($isEdit && $item->type === 'question' || $addType)
+            {
+                if($addType === 'radio' || ($isEdit && $item->questionType === 'radio')) return thinkRadio
+                (
+                    set::data(!$isEdit ? null : explode(', ', $item->fields)),
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : 0),
+                    set::enableOther($isEdit ? $item->enableOther : false),
+                );
+                if($addType === 'checkbox' || ($isEdit && $item->questionType === 'checkbox')) return thinkCheckbox
+                (
+                    set::data(!$isEdit ? null : explode(', ', $item->fields)),
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : 0),
+                    set::enableOther($isEdit ? $item->enableOther : false),
+                    set::minCount($isEdit && isset($item->minCount) ? $item->minCount : ''),
+                    set::maxCount($isEdit && isset($item->maxCount) ? $item->maxCount : ''),
+                );
+                if($addType === 'input' || ($isEdit && $item->questionType === 'input')) return thinkInput(
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : false),
+                    set::type('question')
+                );
+                if($addType === 'tableInput' || ($isEdit && $item->questionType === 'tableInput'))  return thinkTableInput(
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : false),
+                    set::type('question'),
+                    set::requiredRows($isEdit ? $item->requiredRows : 1),
+                    set::isSupportAdd($isEdit ? $item->isSupportAdd : false),
+                    set::canAddRows($isEdit ? $item->canAddRows : 1),
+                    set::rowsTitle(!$isEdit ? null : explode(', ', $item->fields))
+                );
+            }
+            if($isEdit) return thinkNode
+            (
+                set::type($item->type),
+                set::title($item->title),
+                set::desc($item->desc),
+            );
+        }
+    }
+
+    protected function build(): wg|array
+    {
+        global $lang;
+        list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
+        if(!$item) return array();
+
+        $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->questionType] : $lang->thinkwizard->step->editTitle[$item->type]) : $lang->thinkwizard->step->addTitle[$addType];
+
         return array(
-            $this->buildNamePanel(),
-            $this->buildDescControl(),
-            $this->block('fields')
-        );
-    }
-
-    protected function build(): wg
-    {
-        global $lang;
-        $actions = array(array(
-            'text'    => $lang->thinkmodel->save,
-            'btnType' => 'submit',
-            'class'   => 'primary h-7 ring-0 submit-btn px-4',
-            'style'   => array('min-width' => '0')
-        ));
-
-        return formPanel
-        (
-            setClass('think-step-panel py-4 px-8 mx-4'),
-            set::formClass('form-watched gap-3'),
-            set::bodyClass('think-step-form'),
-            set::actions($actions),
-            $this->buildBody()
+            div
+            (
+                setClass($action == 'detail' ? 'relative pt-6 px-8 mx-4' : 'relative'),
+                $action !== 'detail' ? array(
+                    div
+                    (
+                        setClass('flex items-center text-gray-950 h-12 py-0 px-8 mx-4'),
+                        div
+                        (
+                            setClass('font-medium'),
+                            $title
+                        )
+                    ),
+                    h::hr()
+                ) : null,
+                $this->buildBody(),
+                $this->children()
+            )
         );
     }
 }

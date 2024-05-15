@@ -1,0 +1,8 @@
+{
+    "id": 3,
+    "dimension": "1",
+    "name": "年度总结大屏",
+    "desc": "从年份、部门、个人的角度快速了解年度工作总结的情况",
+    "cover": "static\/images\/screen3.png",
+    "builtin": "1"
+}

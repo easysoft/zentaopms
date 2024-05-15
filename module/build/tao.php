@@ -15,7 +15,7 @@ class buildTao extends buildModel
      * 根据条件获取版本列表信息。
      * Get build list inormation by condition.
      *
-     * @param  array     $productIdList
+     * @param  array|int $productIdList
      * @param  string    $params        hasdeleted|hasproject|singled
      * @param  int       $objectID
      * @param  string    $objectType
@@ -49,11 +49,11 @@ class buildTao extends buildModel
      * 获取项目、执行关联的版本信息。
      * Get the builds that the project,execution has been linked.
      *
-     * @param  array     $productIdList
+     * @param  string    $buildIdList
+     * @param  array|int $productIdList
      * @param  string    $params        hasdeleted
      * @param  int       $objectID
      * @param  string    $objectType
-     * @param  string    $buildIdList
      * @access protected
      * @return array
      */

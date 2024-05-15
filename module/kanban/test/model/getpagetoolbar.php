@@ -3,6 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zenData('kanban')->gen(2);
+zenData('user')->gen(5);
 
 /**
 

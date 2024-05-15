@@ -131,12 +131,14 @@ $config->bug->actionList['toTask']['data-url']    = array('module' => 'task', 'm
 $config->bug->actionList['toTask']['data-target'] = '#toTask';
 $config->bug->actionList['toTask']['data-toggle'] = 'modal';
 $config->bug->actionList['toTask']['data-size']   = 'sm';
+$config->bug->actionList['toTask']['notInModal']  = true;
 
-$config->bug->actionList['createCase']['icon'] = 'sitemap';
-$config->bug->actionList['createCase']['id']   = 'createCase';
-$config->bug->actionList['createCase']['text'] = $lang->bug->createCase;
-$config->bug->actionList['createCase']['hint'] = $lang->bug->createCase;
-$config->bug->actionList['createCase']['url']  = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID=0&from=bug&bugID={id}');
+$config->bug->actionList['createCase']['icon']       = 'sitemap';
+$config->bug->actionList['createCase']['id']         = 'createCase';
+$config->bug->actionList['createCase']['text']       = $lang->bug->createCase;
+$config->bug->actionList['createCase']['hint']       = $lang->bug->createCase;
+$config->bug->actionList['createCase']['url']        = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID=0&from=bug&bugID={id}');
+$config->bug->actionList['createCase']['notInModal'] = true;
 
 global $app;
 $config->bug->actionList['edit']['icon']     = 'edit';
@@ -145,11 +147,12 @@ $config->bug->actionList['edit']['hint']     = $lang->bug->edit;
 $config->bug->actionList['edit']['url']      = array('module' => 'bug', 'method' => 'edit', 'params' => 'bugID={id}');
 $config->bug->actionList['edit']['data-app'] = $app->tab;
 
-$config->bug->actionList['copy']['icon']     = 'copy';
-$config->bug->actionList['copy']['text']     = $lang->bug->copy;
-$config->bug->actionList['copy']['hint']     = $lang->bug->copy;
-$config->bug->actionList['copy']['url']      = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id},projectID={project},executionID={execution}');
-$config->bug->actionList['copy']['data-app'] = $app->tab;
+$config->bug->actionList['copy']['icon']       = 'copy';
+$config->bug->actionList['copy']['text']       = $lang->bug->copy;
+$config->bug->actionList['copy']['hint']       = $lang->bug->copy;
+$config->bug->actionList['copy']['url']        = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id},projectID={project},executionID={execution}');
+$config->bug->actionList['copy']['notInModal'] = true;
+$config->bug->actionList['copy']['data-app']   = $app->tab;
 
 $config->bug->actionList['delete']['icon']         = 'trash';
 $config->bug->actionList['delete']['text']         = $lang->bug->delete;

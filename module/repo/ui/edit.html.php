@@ -19,10 +19,6 @@ jsVar('repoSCM', $repo->SCM);
 
 formPanel
 (
-    on::change('#product', 'onProductChange'),
-    on::change('#SCM', 'onScmChange'),
-    on::change('#serviceHost', 'onHostChange'),
-    on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->edit),
     set::back('repo-maintain'),
     formRow
@@ -35,11 +31,11 @@ formPanel
             set::value(zget($lang->repo->scmList, $repo->SCM, ''))
         ),
         formHidden('SCM', $repo->SCM),
-        h::span
+        $repo->SCM == 'Git' ? h::span
         (
             setClass('tips-git leading-8 ml-2'),
             html($lang->repo->syncTips)
-        )
+        ) : null
     ),
     formRow
     (
@@ -209,5 +205,3 @@ formPanel
         )
     )
 );
-
-render();

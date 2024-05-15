@@ -237,7 +237,7 @@ class buildModel extends model
      * 通过条件获取版本id:name的键值对。
      * Get build pairs by condition.
      *
-     * @param  array      $productIdList
+     * @param  array|int  $productIdList
      * @param  string|int $branch
      * @param  string     $params       noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|noreleased|releasedtag, can be a set of them
      * @param  int        $objectID

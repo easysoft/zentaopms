@@ -8,39 +8,38 @@ require_once dirname(__DIR__) . DS . 'thinkstepdetail' . DS . 'v1.php';
  * thinmory input detail widget class.
  */
 
-class thinkInputDetail extends thinkStepDetail
+class thinkInputDetail extends wg
 {
     protected static array $defineProps = array(
         'required?: bool',                      // 是否必填
         'isRequiredName?: string="required"',   // 是否必填对应的name
+        'isRequiredValue?: string'              // 是否必填的值
     );
     protected function detailInputControl()
     {
         global $lang;
-        list($required, $isRequiredName) = $this->prop(array('required', 'isRequiredName'));
+        list($required, $isRequiredName, $isRequiredValue) = $this->prop(array('required', 'isRequiredName', 'isRequiredValue'));
 
         return div
         (
             $required ? span(
-                setClass('text-xl absolute top-6 text-danger'),
-                setStyle(array('left' => '36px')),
+                setClass('text-xl absolute top-6 text-danger left-5 question-required'),
                 '*'
             ) : null,
-            setStyle(array('margin' => '13px 48px 8px')),
+            setClass('mt-3 mb-2'),
             textarea
             (
                 set::rows('3'),
                 set::name($isRequiredName),
                 set::required($required),
+                set::value($isRequiredValue),
                 set::placeholder($lang->thinkwizard->step->pleaseInput)
             )
         );
     }
 
-    protected function buildBody(): array
+    protected function build()
     {
-        $items   = parent::buildBody();
-        $items[] = $this->detailInputControl();
-        return $items;
+        return $this->detailInputControl();
     }
 }

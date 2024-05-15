@@ -35,7 +35,7 @@ formPanel
     (
         set::className('items-center'),
         set::label($lang->productplan->parent),
-        $parentPlan->title
+        span($parentPlan->title)
     ) : null,
     !$parent && !$product->shadow ? formGroup
     (

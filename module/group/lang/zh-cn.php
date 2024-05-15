@@ -600,5 +600,9 @@ $lang->group->package->deleteArtifactrepo    = '删除制品库';
 $lang->group->package->browseApplication     = '浏览应用';
 $lang->group->package->mangeApplication      = '管理应用';
 $lang->group->package->trainPracticeLib      = '实践库';
+$lang->group->package->boardAction           = '创建与维护白板';
+$lang->group->package->boardSpace            = '白板空间';
+$lang->group->package->deleteBoard           = '删除白板';
+$lang->group->package->viewBoard             = '浏览白板';
 
 include (dirname(__FILE__) . '/resource.php');

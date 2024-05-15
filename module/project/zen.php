@@ -1305,19 +1305,19 @@ class projectZen extends project
     {
         $userList = $this->dao->select('id,account,realname,avatar')->from(TABLE_USER)->fetchAll('account');
 
-        $this->loadModel('story');
-        $this->loadModel('execution');
+        $storyGroup     = $this->loadModel('story')->fetchStoriesByProjectIdList(array_keys($projectList));
+        $executionGroup = $this->loadModel('execution')->fetchExecutionsByProjectIdList(array_keys($projectList));
         foreach($projectList as $project)
         {
             $project = $this->project->formatDataForList($project, $userList);
 
-            $projectStories = $this->story->getExecutionStories($project->id);
+            $projectStories = zget($storyGroup, $project->id, array());
             $project->storyCount  = count($projectStories);
             $project->storyPoints = 0;
             foreach($projectStories as $story) $project->storyPoints += $story->estimate;
             $project->storyPoints .= ' ' . $this->config->hourUnit;
 
-            $executions = $this->execution->getStatData($project->id, 'all', 0, 0, false, 'skipParent');
+            $executions = zget($executionGroup, $project->id, array());
             $project->executionCount = count($executions);
 
             $project->from    = 'project';

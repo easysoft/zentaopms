@@ -175,35 +175,8 @@ class metric extends control
 
         $calcList = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
+        $this->metricZen->calculateMetric($classifiedCalcGroup);
 
-        foreach($classifiedCalcGroup as $calcGroup)
-        {
-            if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getIssues', 'getRisks'))) continue;
-            if($this->config->edition == 'biz' and in_array($calcGroup->dataset, array('getIssues', 'getRisks'))) continue;
-
-            try
-            {
-                $statement = $this->metricZen->prepareDataset($calcGroup);
-
-                $rows = !empty($statement) ? $statement->fetchAll() : array();
-                $this->metricZen->calcMetric($rows, $calcGroup->calcList);
-
-                $recordWithCode = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
-                $this->metric->insertMetricLib($recordWithCode);
-            }
-            catch(Exception $e)
-            {
-                a($this->metricZen->formatException($e));
-            }
-            catch(Error $e)
-            {
-                a($this->metricZen->formatException($e));
-            }
-        }
-
-        $metrics = $this->metric->getExecutableMetric();
-        foreach($metrics as $code) $this->metric->deduplication($code);
-        $this->metric->rebuildPrimaryKey();
 
         // 恢复之前的调试状态
         $this->config->debug = $originalDebug;
@@ -214,6 +187,32 @@ class metric extends control
             return false;
         }
         echo 'success';
+    }
+
+    public function updateDashboardMetricLib()
+    {
+        // 保存当前的错误报告级别和显示错误的设置
+        $originalDebug = $this->config->debug;
+
+        // 开启调试模式
+        $this->config->debug = 2;
+
+        $dashboards = array_keys($this->config->metric->dashboard);
+
+        $calcList = $this->metric->getCalcInstanceList($dashboards);
+        $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
+        $this->metricZen->calculateMetric($classifiedCalcGroup);
+
+        // 恢复之前的调试状态
+        $this->config->debug = $originalDebug;
+
+        if(dao::isError())
+        {
+            echo dao::getError();
+            return false;
+        }
+        echo 'success';
+
     }
 
     /**

@@ -600,5 +600,9 @@ $lang->group->package->deleteArtifactrepo    = 'Delete Artifact Repo';
 $lang->group->package->browseApplication     = 'Application List';
 $lang->group->package->mangeApplication      = 'Manage Application';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
+$lang->group->package->boardAction           = 'Create and Manage Board';
+$lang->group->package->boardSpace            = 'Board Space';
+$lang->group->package->deleteBoard           = 'Delete Board';
+$lang->group->package->viewBoard             = 'Browse Board';
 
 include (dirname(__FILE__) . '/resource.php');

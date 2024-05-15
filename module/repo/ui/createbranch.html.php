@@ -128,7 +128,8 @@ $canCreate ? formPanel
             set::name('branchFrom'),
             set::required(true),
             set::popPlacement('bottom'),
-            set::items($branches)
+            set::items($fromList),
+            set::value(!empty($fromList[0]['items']) ? $fromList[0]['items'][0]['value'] : '')
         )
     ),
     formGroup

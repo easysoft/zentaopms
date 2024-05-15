@@ -21,8 +21,6 @@ window.showHistory = function()
 
 $(function()
 {
-    if($.cookie.get('isFullScreen') == 1) fullScreen();
-
     $('#history').append('<a id="closeBtn" href="###" class="btn btn-link hidden"><i class="icon icon-close"></i></a>');
 
     if($.cookie.get('hiddenOutline') == 'true') toggleOutline();

@@ -1482,14 +1482,17 @@ class productModel extends model
      */
     public function formatDataForList(object $product, array $users): object
     {
-         $product->type                    = 'product';
-         $product->productLine             = $product->lineName;
-         $product->PO                      = !empty($product->PO) ? zget($users, $product->PO) : '';
-         $product->testCaseCoverage        = $product->coverage;
-         $product->epicCompleteRate        = $product->totalEpics == 0 ? 0 : round($product->finishedEpics / $product->totalEpics, 3) * 100;
-         $product->requirementCompleteRate = $product->totalRequirements == 0 ? 0 : round($product->finishedRequirements / $product->totalRequirements, 3) * 100;
-         $product->storyCompleteRate       = $product->totalStories == 0 ? 0 : round($product->finishedStories / $product->totalStories, 3) * 100;
-         $product->bugFixedRate            = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
+        $product->type        = 'product';
+        $product->productLine = $product->lineName;
+        $product->PO          = !empty($product->PO) ? zget($users, $product->PO) : '';
+
+        if($this->config->vision == 'or') return $product;
+
+        $product->testCaseCoverage        = $product->coverage;
+        $product->epicCompleteRate        = $product->totalEpics == 0 ? 0 : round($product->finishedEpics / $product->totalEpics, 3) * 100;
+        $product->requirementCompleteRate = $product->totalRequirements == 0 ? 0 : round($product->finishedRequirements / $product->totalRequirements, 3) * 100;
+        $product->storyCompleteRate       = $product->totalStories == 0 ? 0 : round($product->finishedStories / $product->totalStories, 3) * 100;
+        $product->bugFixedRate            = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
 
         return $product;
     }
@@ -1995,7 +1998,7 @@ class productModel extends model
         if($module == 'testtask'   && $method == 'browseunits') return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
         if($module == 'testtask'   && $method == 'unitcases')   return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
 
-        if(($module == 'story' && in_array($method, array('create', 'batchcreate'))) || ($module == 'product' && $method == 'browse'))  return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}&browseType=unclosed&param=0&storyType={$params[0]}");
+        if(($module == 'story' && in_array($method, array('create', 'batchcreate'))) || ($module == 'product' && $method == 'browse'))  return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}&browseType=" . ($this->config->vision == 'or' ? 'assignedtome' : 'unclosed') . "&param=0&storyType={$params[0]}");
         if($module == 'story' && $method == 'view') return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}");
 
         if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");

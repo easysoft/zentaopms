@@ -16,16 +16,16 @@
 .guide-block .flowchart .flow-item-arrow {background-image: url('static/svg/arrow-white.svg');}
 .guide-block .flowchart .flow-item-display {overflow: hidden; white-space:nowrap; text-overflow: clip; font-size: 12px;}
 
-.guide-block .theme-switch div.theme-default    {color: #3785ff;}
-.guide-block .theme-switch div.theme-blue       {color: #2b80ff;}
-.guide-block .theme-switch div.theme-green      {color: #248f83;}
-.guide-block .theme-switch div.theme-red        {color: #f34a5a;}
-.guide-block .theme-switch div.theme-pink       {color: #f7889c;}
-.guide-block .theme-switch div.theme-blackberry {color: #304269;}
-.guide-block .theme-switch div.theme-classic    {color: #114f8e;}
-.guide-block .theme-switch div.theme-purple     {color: #9958dc;}
-.guide-block .theme-switch .block.active i.icon-check-circle  {display: inline!important;}
-.guide-block .theme-switch img {height: 120px; margin: auto; object-fit: cover;}
+.guide-block .theme-switch div.theme-default    {background-color: #3785ff;}
+.guide-block .theme-switch div.theme-blue       {background-color: #2b80ff;}
+.guide-block .theme-switch div.theme-green      {background-color: #248f83;}
+.guide-block .theme-switch div.theme-red        {background-color: #f34a5a;}
+.guide-block .theme-switch div.theme-pink       {background-color: #f7889c;}
+.guide-block .theme-switch div.theme-blackberry {background-color: #304269;}
+.guide-block .theme-switch div.theme-classic    {background-color: #114f8e;}
+.guide-block .theme-switch div.theme-purple     {background-color: #9958dc;}
+.guide-block .theme-switch .block.active i.icon-check-circle  {display: inline!important; position: absolute; left: 45px; bottom: 8px;}
+.guide-block .theme-switch img {height: 68px; margin: auto; object-fit: cover;}
 
 .guide-block .download-client .avatar > img {object-fit: revert;}
 

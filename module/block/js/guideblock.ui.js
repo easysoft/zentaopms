@@ -29,9 +29,9 @@ $('.vision-switch .block.state').on('click', '.vision-block', function()
     switchVision(vision);
 })
 
-$('.theme-switch .block').on('click', '.theme-block', function()
+$('.theme-switch .block').off('click').on('click', '.theme-block', function()
 {
     $('.block').removeClass('active');
     selectTheme($(this).attr('data-theme'));
-    $(this).parent().addClass('active');
+    $(this).closest('.block').addClass('active');
 })

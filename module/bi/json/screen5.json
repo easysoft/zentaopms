@@ -1,0 +1,8 @@
+{
+    "id": 5,
+    "dimension": "1",
+    "name": "迭代燃尽图大屏",
+    "desc": "快速查看公司全部未关闭迭代的燃尽图",
+    "cover": "static\/images\/screen5.png",
+    "builtin": "1"
+}

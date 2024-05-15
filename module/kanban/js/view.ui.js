@@ -402,7 +402,7 @@ window.buildColorItems = function(card)
     for (let index in colorList)
     {
         let color = colorList[index];
-        let icon  = (card.color == color) || (!card.color && color == '#fff') ? "<i class='icon icon-check' style='position: relative; right: 3px'></i>" : '';
+        let icon  = (card.color == color) || (!card.color && color == '#fff') ? "<i class='icon icon-check ml-1' style='position: relative; right: 3px'></i>" : '';
         items.push({text: {html: `<div class="colorbox" onclick="changCardColor('${card.id}', '${color}');"><div class='cardcolor' style='background:${color}'></div>` + cardLang.colorList[color] + ' ' + icon + '</div>'}});
     }
 

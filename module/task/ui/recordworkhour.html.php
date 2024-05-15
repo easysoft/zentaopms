@@ -147,7 +147,7 @@ if(!$this->task->canOperateEffort($task))
     }
     elseif($task->assignedTo != $app->user->account and $task->mode == 'linear')
     {
-        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts));
+        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . zget($users, $task->assignedTo) . '</strong>', $lang->task->logEfforts));
     }
 
     div
@@ -168,6 +168,7 @@ else
         set::title($lang->task->addEffort),
         set::shadow(!isAjaxRequest('modal')),
         set::actions(array('submit')),
+        set::actionsClass('btn-actions'),
         set::maxRows(3),
         formBatchItem
         (
@@ -190,7 +191,8 @@ else
             set::name('work'),
             set::label($lang->task->work),
             set::width('auto'),
-            set::control('textarea')
+            set::control('textarea'),
+            set::required($config->edition != 'open')
         ),
         formBatchItem
         (

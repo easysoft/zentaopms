@@ -8,7 +8,7 @@ require_once dirname(__DIR__) . DS . 'thinkstepdetail' . DS . 'v1.php';
  * thinmory tableInput detail widget class.
  */
 
-class thinkTableInputDetail extends thinkStepDetail
+class thinkTableInputDetail extends wg
 {
     protected static array $defineProps = array(
         'required?: bool',                  // 是否必填
@@ -32,19 +32,16 @@ class thinkTableInputDetail extends thinkStepDetail
 
         return div(
             $required ? span(
-                setClass('text-xl absolute top-6 text-danger'),
-                setStyle(array('left' => '36px')),
+                setClass('text-xl absolute top-6 text-danger left-5'),
                 '*'
             ) : null,
-            setStyle(array('margin' => '13px 48px 8px')),
+            setClass('mt-3 mb-2'),
             $tableInputItems
         );
     }
 
-    protected function buildBody(): array
+    protected function build()
     {
-        $items   = parent::buildBody();
-        $items[] = $this->detailInputControl();
-        return $items;
+        return $this->detailInputControl();
     }
 }

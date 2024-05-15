@@ -122,12 +122,15 @@ class mrModel extends model
         $MR = $this->dao->select('min(sourceProject + 0) as minSource, MAX(sourceProject + 0) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->andWhere('hostID')->eq($hostID)
+            ->beginIF($projectIdList)->andWhere('sourceProject', true)->in($projectIdList)
+            ->orWhere('targetProject')->in($projectIdList)
+            ->markRight(1)
+            ->fi()
             ->fetch();
-        if($MR)
-        {
-            $minProject = min($MR->minSource, $MR->minTarget);
-            $maxProject = max($MR->maxSource, $MR->maxTarget);
-        }
+        if(empty($MR->minSource) && empty($MR->minTarget)) return array();
+
+        $minProject = min($MR->minSource, $MR->minTarget);
+        $maxProject = max($MR->maxSource, $MR->maxTarget);
 
         /* If not an administrator, need to obtain group member information. */
         $groupIDList = array(0 => 0);

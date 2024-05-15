@@ -26,12 +26,10 @@ class taskEffortInfo extends wg
             round($task->consumed, 2) . ' ' . $lang->task->suffixHour;
         $items[$lang->task->left] =
             $task->left . ' ' . $lang->task->suffixHour;
-        $items[$lang->task->estStarted] =
-            helper::isZeroDate($task->estStarted) ? '' : $task->estStarted;
+        $items[$lang->task->estStarted] = array('content' => helper::isZeroDate($task->estStarted) ? '' : $task->estStarted, 'contentClass' => 'estStarted-text');
         $items[$lang->task->realStarted] =
             helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19);
-        $items[$lang->task->deadline]['content'] =
-            helper::isZeroDate($task->deadline) ? '' : $task->deadline;
+        $items[$lang->task->deadline] = array('content' => helper::isZeroDate($task->deadline) ? '' : $task->deadline, 'contentClass' => 'deadline-text');
         if(isset($task->delay)) $items[$lang->task->deadline]['children'] = label(html(sprintf($lang->task->delayWarning, $task->delay)), setClass('danger-pale circle'));
 
         return $items;

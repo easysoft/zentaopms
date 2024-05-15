@@ -377,15 +377,12 @@ class repoZen extends repo
             $products = $this->product->getPairs('', 0, '', 'all');
         }
 
-        $projects = $this->product->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
-        $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products        = $products;
-        $this->view->projects        = $projects;
-        $this->view->relatedProjects = (in_array($this->app->tab, array('project', 'execution')) && isset($projects[$objectID])) ? array($objectID) : array();
-        $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
-        $this->view->objectID        = $objectID;
+        $this->view->title        = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products     = $products;
+        $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->objectID     = $objectID;
 
         $this->display();
     }
@@ -425,15 +422,13 @@ class repoZen extends repo
             $repoGroups = $this->repo->getGroups($serverID);
         }
 
-        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
-        $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $this->view->products        = $products;
-        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
-        $this->view->serviceHosts    = $serviceHosts;
-        $this->view->repoGroups      = $repoGroups;
-        $this->view->objectID        = $objectID;
+        $this->view->title        = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products     = $products;
+        $this->view->serviceHosts = $serviceHosts;
+        $this->view->repoGroups   = $repoGroups;
+        $this->view->objectID     = $objectID;
 
         $this->display();
     }
@@ -1683,5 +1678,110 @@ class repoZen extends repo
         }
 
         return $message;
+    }
+
+    /**
+     * 构建代码库路径。
+     * Build repo paths.
+     *
+     * @param  array $repos
+     * @access protected
+     * @return array
+     */
+    protected function buildRepoPaths(array $repos): array
+    {
+        $pathList = array();
+        foreach($repos as $repoID => $path)
+        {
+            $paths  = explode('/', $path);
+            $parent = '';
+            foreach($paths as $path)
+            {
+                $path = trim($path);
+                if($path === '') continue;
+
+                $parentID = $parent == '' ? '0' : $pathList[$parent]['path'];
+                $parent  .= $parent == '' ? $path : '/' . $path;
+                if(!isset($pathList[$parent]))
+                {
+                    $pathList[$parent] = array(
+                        'value'  => $repoID,
+                        'parent' => $parentID,
+                        'path'   => $parent,
+                        'text'   => $path,
+                    );
+                }
+            }
+        }
+
+        ksort($pathList);
+        return $this->buildRepoTree($pathList, '0');
+    }
+
+    /**
+     * 组装代码库生成父子结构。
+     * Assemble repo path to generate parent-child structure.
+     *
+     * @param  array $pathList
+     * @param  string $parent
+     * @access protected
+     * @return array
+     */
+    protected function buildRepoTree(array $pathList = array(), string $parent = '0'): array
+    {
+        $treeList = array();
+        $key      = 0;
+        $pathName = array();
+        $repoName = array();
+
+        foreach($pathList as $path)
+        {
+            if ($path['parent'] == $parent)
+            {
+                $treeList[$key] = $path;
+                $repoName[$key] = $path['text'];
+                /* Default value is '~', because his ascii code is large in string. */
+                $pathName[$key] = '~';
+
+                $children = $this->buildRepoTree($pathList, $path['path']);
+
+                if($children)
+                {
+                    unset($treeList[$key]['value']);
+                    $treeList[$key]['disabled'] = true;
+                    $treeList[$key]['items'] = $children;
+                    $repoName[$key]          = '';
+                    $pathName[$key]          = $path['path'];
+                }
+            }
+
+            $key++;
+        }
+
+        array_multisort($pathName, SORT_ASC, $repoName, SORT_ASC, $treeList);
+        return $treeList;
+    }
+
+    /**
+     * 获取分支和标签列表的picker数据。
+     * Get branch and tag picker data.
+     *
+     * @param  object    $scm
+     * @access protected
+     * @return array
+     */
+    protected function getBranchAndTagOptions(object $scm): array
+    {
+        $options = array(
+            array('text' => $this->lang->repo->branch, 'items' => array(), 'disabled' => true),
+            array('text' => $this->lang->repo->tag,    'items' => array(), 'disabled' => true)
+        );
+
+        $branches = $scm->branch();
+        foreach($branches as $branch) $options[0]['items'][] = array('text' => $branch, 'value' => $branch, 'key' => $branch);
+
+        $tags = $scm->tags();
+        foreach($tags as $tag) $options[1]['items'][] = array('text' => $tag, 'value' => $tag, 'key' => $tag);
+        return $options;
     }
 }

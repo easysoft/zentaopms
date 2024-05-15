@@ -87,7 +87,7 @@ else
         'name'    => 'branch',
         'label'   => $lang->testcase->branch,
         'width'   => '180px',
-        'control' => 'picker',
+        'control' => array('control' => 'picker', 'required' => true),
         'items'   => zget($branchTagOption, $productID, array()),
         'hidden'  => !$branchProduct
     );

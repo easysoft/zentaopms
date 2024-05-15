@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'thinkstep' . DS . 'v1.php';
+requireWg('thinkNode');
 
 /**
  * 单选题型部件类
  * The thinkRadio widget class
  */
-class thinkRadio extends thinkStep
+class thinkRadio extends thinkNode
 {
     protected static array $defineProps = array
     (

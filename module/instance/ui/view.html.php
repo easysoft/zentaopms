@@ -178,7 +178,7 @@ div
                                 setData('reload', in_array($instance->status, array('creating', 'initializing', 'pulling', 'startup', 'starting', 'suspending', 'installing', 'uninstalling', 'stopping', 'destroying', 'upgrading'))),
                                 span
                                 (
-                                    setClass('label label-dot mr-1 ' . zget($this->lang->instance->htmlStatusesClass, $instance->status, ''))
+                                    setClass('label label-dot mx-1 ' . zget($this->lang->instance->htmlStatusesClass, $instance->status, ''))
                                 ),
                                 zget($this->lang->instance->statusList, $instance->status, ''), setClass('text-' . zget($this->lang->instance->htmlStatusesClass, $instance->status, ''))
                             ),

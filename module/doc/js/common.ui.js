@@ -236,3 +236,11 @@ $(document).on('mousedown', '.ajaxCollect', function (event)
     }, 'json');
     return false;
 });
+
+window.updateOrder = function(event, orders)
+{
+    let sortedIdList = {};
+    for(let i in orders) sortedIdList['orders[' + orders[i] + ']'] = i;
+
+    $.post($.createLink('doc', 'sortCatalog'), sortedIdList);
+}

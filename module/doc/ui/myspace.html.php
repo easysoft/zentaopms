@@ -33,6 +33,7 @@ toolbar
         'class'       => 'ghost export',
         'text'        => $lang->export,
         'url'         => createLink('doc', 'mine2export', "libID={$libID}&moduleID={$moduleID}"),
+        'data-size'   => 'sm',
         'data-toggle' => 'modal'
     ))) : null,
     common::hasPriv('doc', 'createLib') ? item(set(array

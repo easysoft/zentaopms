@@ -85,7 +85,7 @@ class gitfox extends control
     public function delete(int $gitfoxID)
     {
         $oldGitFox = $this->gitfox->fetchByID($gitfoxID);
-        $actionID  = $this->pipeline->deleteByObject($gitfoxID, 'gitfox');
+        $actionID  = $this->loadModel('pipeline')->deleteByObject($gitfoxID, 'gitfox');
         if(!$actionID)
         {
             $response['result']   = 'fail';

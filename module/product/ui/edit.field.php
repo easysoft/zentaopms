@@ -5,6 +5,7 @@ global $lang, $config;
 $fields = defineFieldList('product.edit', 'product');
 
 $fields->field('status')
+    ->disabled($config->vision == 'or')
     ->control('picker', array('required' => true))
     ->items(data('fields.status.options'))
     ->value(data('fields.status.default'));

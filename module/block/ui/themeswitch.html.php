@@ -25,23 +25,21 @@ function printThemeSwitch()
         $image = $config->webRoot . "theme/default/images/guide/theme_{$themeKey}.png";
         $themes[] = cell
         (
-            set('width', '25%'),
-            set('class', 'pt-2 px-2'),
+            set::width('172px'),
+            setClass("p-1 pb-0 rounded-md block theme-{$themeKey}", $app->cookie->theme == $themeKey ? 'active' : ''),
             div
             (
-                set('class', 'block ' . ($app->cookie->theme == $themeKey ? 'active' : '')),
                 div
                 (
-                    set('class', 'w-full theme-block state'),
+                    setClass('w-full theme-block state'),
                     set('data-theme', $themeKey),
                     img
                     (
-                        set('class', 'p-2'),
                         set('src', $image)
                     ),
                     div
                     (
-                        set('class', "px-2 pb-1 text-center theme-{$themeKey}"),
+                        setClass("px-2 py-1 text-center text-white"),
                         span
                         (
                             icon('check-circle mr-2 hidden'),
@@ -55,12 +53,12 @@ function printThemeSwitch()
 
     return div
     (
-        set('class', 'theme-switch'),
+        setClass('theme-switch'),
         div
         (
             div
             (
-                set('class','flex flex-wrap'),
+                setClass('flex flex-wrap gap-7 px-10 pt-6'),
                 $themes
             )
         )

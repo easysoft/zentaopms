@@ -72,6 +72,7 @@ $lang->action->hasChangedAttr     = "After recovery, the phase type will be adju
 $lang->action->whetherToRestore   = 'Confirm to restore?';
 $lang->action->undeleteModuleTip  = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized, would you like to proceed with restoring the directory?';
 $lang->action->undeleteTaskTip    = 'The execution associated with this task has been removed. If you choose to restore it, the task will no longer be visible. Would you like to proceed with restoring the task?';
+$lang->action->undeleteBoardTip   = 'Before restoring the board, please restore its affiliated space first.';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "Only subtypes of {$lang->executionCommon} / Kanban types can be created at this parent stage, so the current stage cannot be restored.";
@@ -186,6 +187,8 @@ $lang->action->objectTypes['prompt']           = 'Prompt';
 $lang->action->objectTypes['miniprogram']      = 'Mini Program';
 $lang->action->objectTypes['metric']           = 'Metric';
 $lang->action->objectTypes['projectbuild']     = 'Build';
+$lang->action->objectTypes['board']            = 'Board';
+$lang->action->objectTypes['boardspace']       = 'Board Space';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

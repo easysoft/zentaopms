@@ -424,10 +424,12 @@ class project extends control
             }
             else
             {
-                if($model == 'waterfall' or $model == 'waterfallplus')
+                if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
                 {
                     $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $this->session->set('projectPlanList', $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID), 'project');
+                    $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
+                    if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "status=undone&projectID=$projectID", '', false);
+                    $this->session->set('projectPlanList', $session, 'project');
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', false, $projectID)));
                 }
 
@@ -1547,25 +1549,28 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  string $mode
-     * @param  string $type all|sprint|stage|kanban
+     * @param  string $type      all|sprint|stage|kanban
+     * @param  string $pageType  old
      *
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions(int $projectID, string $mode = '', string $type = 'all')
+    public function ajaxGetExecutions(int $projectID, string $mode = '', string $type = 'all', string $pageType = '')
     {
         $executions = array();
         if($projectID) $executions = (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
 
         $project = $this->project->getByID($projectID);
+        if($pageType == 'old')
+        {
+            $disabled = empty($project->multiple) ? 'disabled' : '';
+            return print(html::select('execution', $executions, '', "class='form-control $disabled' $disabled"));
+        }
 
         $data             = array();
         $data['items']    = array();
         $data['multiple'] = empty($project->multiple) ? false : true;
-        foreach($executions as $id => $name)
-        {
-            $data['items'][] = array('text' => $name, 'value' => $id, 'keys' => $name);
-        }
+        foreach($executions as $id => $name) $data['items'][] = array('text' => $name, 'value' => $id, 'keys' => $name);
 
         echo json_encode($data);
     }

@@ -165,7 +165,7 @@ class repo extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link, 'callback' => "importJob($repoID)"));
         }
 
         $this->commonAction(0, $objectID);
@@ -260,7 +260,7 @@ class repo extends control
         $this->view->allRepos       = $this->repo->getRepoPairs('repo', 0, false);
         $this->view->repoID         = $repoID;
         $this->view->objectID       = $objectID;
-        $this->view->branches       = $this->scm->branch();
+        $this->view->fromList       = $this->repoZen->getBranchAndTagOptions($this->scm);
         $this->view->objectType     = $objectType;
         $this->view->canCreate      = $canCreate;
         $this->display();
@@ -1049,7 +1049,6 @@ class repo extends control
         $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
         $this->view->servers     = $serverList;
         $this->view->products    = $products;
-        $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
         $this->view->server      = $server;
         $this->view->repoList    = array_values($repoList);
         $this->view->hiddenRepos = explode(',', $hiddenRepos);
@@ -1416,7 +1415,8 @@ class repo extends control
         $server         = $this->loadModel('pipeline')->getByID($serverID);
         $getProjectFunc = 'ajaxGet' . $server->type . 'Projects';
 
-        $this->$getProjectFunc($serverID);
+        $repos = $this->$getProjectFunc($serverID);
+        return print(json_encode($this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'))));
     }
 
     /**
@@ -1425,9 +1425,9 @@ class repo extends control
      *
      * @param  int $giteaID
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGiteaProjects(int $giteaID)
+    public function ajaxGetGiteaProjects(int $giteaID): array
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
 
@@ -1440,7 +1440,7 @@ class repo extends control
             if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
-        return print(json_encode($options));
+        return $options;
     }
 
     /**
@@ -1449,9 +1449,9 @@ class repo extends control
      *
      * @param  int    $gogsID
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGogsProjects(int $gogsID)
+    public function ajaxGetGogsProjects(int $gogsID): array
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
 
@@ -1464,7 +1464,7 @@ class repo extends control
             if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
-        return print(json_encode($options));
+        return $options;
     }
 
     /**
@@ -1475,13 +1475,13 @@ class repo extends control
      * @param  string $projectIdList
      * @param  string $filter
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = '')
+    public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = ''): array
     {
         $projects = $this->repo->getGitlabProjects($gitlabID, $filter);
 
-        if(!$projects) return print('[]');
+        if(!$projects) return array();
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
 
         $options = array();
@@ -1491,7 +1491,8 @@ class repo extends control
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
         }
-        return print(json_encode($options));
+
+        return $options;
     }
 
     /**
@@ -1502,13 +1503,13 @@ class repo extends control
      * @param  string $projectIdList
      * @param  string $filter
      * @access public
-     * @return void
+     * @return array
      */
-    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = '')
+    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = ''): array
     {
         $projects = $this->repo->getGitfoxProjects($gitfoxID, $filter);
 
-        if(!$projects) return print('[]');
+        if(!$projects) return array();
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
 
         $options = array();
@@ -1518,7 +1519,8 @@ class repo extends control
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->path, 'value' => $project->id);
         }
-        return print(json_encode($options));
+
+        return $options;
     }
 
     /**

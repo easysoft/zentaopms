@@ -1245,8 +1245,11 @@ class executionModel extends model
         }
         if(dao::isError()) return;
 
-        if($begin < ($project->realBegan ? $project->realBegan : $project->begin)) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
-        if($end > ($project->realEnd ? $project->realEnd : $project->end))         dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
+        $project->begin = !empty($project->realBegan) ? $project->realBegan : $project->begin;
+        $project->end   = !empty($project->realEnd)   ? $project->realEnd   : $project->end;
+
+        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
+        if(!helper::isZeroDate($project->end) && $end > $project->end) dao::$errors['end'] = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /**
@@ -1573,6 +1576,26 @@ class executionModel extends model
             ->beginIF($filterMulti)->andWhere('multiple')->eq('1')->fi()
             ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->fetchPairs();
+    }
+
+    /**
+     * 批量查询关联传入项目的执行，并按照项目分组。
+     * Fetch executions of linked project by project id list.
+     *
+     * @param  array   $projectIdList
+     * @access public
+     * @return array
+     */
+    public function fetchExecutionsByProjectIdList(array $projectIdList = array()): array
+    {
+        return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.multiple')->eq('1')
+            ->andWhere('t1.project')->in($projectIdList)
+            ->fetchGroup('project', 'id');
     }
 
     /**
@@ -3838,7 +3861,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed' && (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
+        if($action == 'close')    return $execution->status != 'closed' && (!empty($execution->isIpdStage) || (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent)));
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';

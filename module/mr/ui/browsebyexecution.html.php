@@ -25,8 +25,8 @@ foreach($MRList as $index => $MR)
     $repo = $repoList[$MR->repoID];
 
     /* The user whether has the permission of delete and edit does not require the judge of the permission from the project of the server. */
-    $MR->canDelete = ''; /* The value can be '' or 'disabled', 'disabled' means that user can NOT do this. */
-    $MR->canEdit   = '';
+    $MR->canDelete = hasPriv('mr', 'delete') ? '' : 'disabled'; /* The value can be '' or 'disabled', 'disabled' means that user can NOT do this. */
+    $MR->canEdit   = hasPriv('mr', 'edit')   ? '' : 'disabled';
 
     $MR->sourceProject = $MR->targetProject = $repo->name;
 

@@ -538,9 +538,8 @@ class product extends control
      */
     public function updateOrder()
     {
-        /* Can only be order by program sorting. */
-        $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'order') === false) return false;
+        /* Can only be order by order sorting. */
+        if($this->post->orderBy != 'order_asc') return false;
 
         /* Get sorted id list. */
         $products = json_decode($this->post->products, true);
@@ -888,13 +887,15 @@ class product extends control
      * @param  int    $productID
      * @param  string $branch    ''|'all'|int
      * @param  int    $projectID
+     * @param  string $pageType  old
      * @access public
      * @return void
      */
-    public function ajaxGetProjects(int $productID, string $branch = '', int $projectID = 0)
+    public function ajaxGetProjects(int $productID, string $branch = '', int $projectID = 0, string $pageType = '')
     {
         $projects = $this->product->getProjectPairsByProduct($productID, $branch);
         if($this->app->getViewType() == 'json') return print(json_encode($projects));
+        if($pageType == 'old') return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));;
 
         $items = array();
         foreach($projects as $projectID => $projectName) $items[] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
@@ -947,6 +948,11 @@ class product extends control
         $mode .= !$projectID ? ',multiple' : '';
         $executions = $this->product->getExecutionPairsByProduct($productID, $branch, $projectID, $from == 'showImport' ? '' : $mode);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
+        if($pageType == 'old')
+        {
+            $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
+            return print(html::select('execution', $executions, $executionID, "class='form-control' $datamultiple"));
+        }
 
         $executionList = array();
         if($pageType == 'batch')

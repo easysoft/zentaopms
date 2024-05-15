@@ -24,6 +24,8 @@ class docMenu extends wg
         'objectType?: string',
         'objectID?: int=0',
         'hover?: bool=true',
+        'sortable?: array',
+        'onSort?: function'
     );
 
     public static function getPageCSS(): ?string
@@ -111,7 +113,8 @@ class docMenu extends wg
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
-        $activeKey   = $this->prop('activeKey');
+        $activeKey = $this->prop('activeKey');
+        $sortTree  = $this->prop('sortable') || $this->prop('onSort');
         $parentItems = array();
         foreach($items as $setting)
         {
@@ -140,6 +143,8 @@ class docMenu extends wg
                 'selected'    => zget($setting, 'active', $selected),
                 'actions'     => $this->getActions($setting)
             );
+
+            if($sortTree && $setting->type == 'module') $item['trailingIcon'] = 'move muted cursor-move';
 
             $children = zget($setting, 'children', array());
             if(!empty($children))
@@ -214,6 +219,7 @@ class docMenu extends wg
     private function getActions($item): array|null
     {
         $versionBtn = array();
+        $sortTree   = $this->prop('sortable') || $this->prop('onSort');
         if(isset($item->versions) && $item->versions)
         {
             global $lang;
@@ -428,7 +434,7 @@ class docMenu extends wg
         $title     = $this->getTitle();
         $menuLink  = $this->prop('menuLink', '');
         $objectID  = $this->prop('objectID', 0);
-        $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover', 'sortable', 'onSort'));
         $preserve  = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
 
         $isInSidebar = $this->parent instanceof sidebar;
@@ -442,6 +448,8 @@ class docMenu extends wg
                 $title
             )
         );
+
+        $treeType = (!empty($treeProps['onSort']) || !empty($treeProps['sortable'])) ? 'sortableTree' : 'tree';
         return array
         (
             $isInSidebar && !$menuLink ? $header : null,
@@ -463,12 +471,12 @@ class docMenu extends wg
                         setClass($menuLink ? 'pt-3' : ''),
                         setClass('col scrollbar-thin scrollbar-hover  flex-auto overflow-y-auto overflow-x-hidden pl-2 pr-1 py-1'),
                         setStyle('--menu-selected-bg', 'none'),
-                        zui::tree
+                        zui::$treeType
                         (
                             set::_tag('menu'),
                             set::lines(),
                             set::preserve($preserve),
-                            $treeProps
+                            set($treeProps)
                         )
                     ),
                     $this->buildBtns()

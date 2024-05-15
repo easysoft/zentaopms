@@ -77,6 +77,7 @@ class screenModel extends model
         if(!$screen) return false;
 
         if(empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
+
         if($withChartData) $screen->chartData = $this->genChartData($screen, $year, $month, $dept, $account);
 
         return $screen;
@@ -103,10 +104,10 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
+        $scheme = json_decode($screen->scheme);
+
         if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen))
         {
-            $scheme = json_decode($screen->scheme);
-
             foreach($scheme->componentList as $component)
             {
                 if(!empty($component->isGroup))
@@ -114,37 +115,22 @@ class screenModel extends model
                     foreach($component->groupList as $key => $groupComponent)
                     {
                         if(isset($groupComponent->key) and $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
+                        $this->setComponentDefaults($groupComponent);
                     }
                 }
                 else
                 {
                     if(isset($component->key) and $component->key === 'Select') $component = $this->buildSelect($component);
+                    $this->setComponentDefaults($component);
                 }
             }
 
             return $scheme;
         }
 
-        $editCanvasConfig = $this->config->screen->editCanvasConfig;
+        $scheme->componentList = $this->buildComponentList($scheme->componentList);
 
-        $componentList = json_decode($screen->scheme);
-        if(empty($componentList)) $componentList = array();
-
-        /* Reset height of canvas. */
-        foreach($componentList as $component)
-        {
-            if(!isset($component->attr)) continue;
-
-            $height = $component->attr->y + $component->attr->h;
-            if($height > $editCanvasConfig->height) $editCanvasConfig->height = $height;
-        }
-        $editCanvasConfig->height += 50;
-
-        $chartData = new stdclass();
-        $chartData->editCanvasConfig = $editCanvasConfig;
-        $chartData->componentList    = $this->buildComponentList($componentList);
-
-        return $chartData;
+        return $scheme;
     }
 
     /**
@@ -189,7 +175,7 @@ class screenModel extends model
      */
     public function mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filters)
     {
-        $filterFormat = '';
+        $filterFormat = array();
         $chartOrPivotFilters = json_decode($chartOrPivot->filters, true);
         $mergeFilters = array();
 
@@ -253,7 +239,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
+    public function genComponentData($chart, $type = 'chart', $component = null, $filters = array())
     {
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
@@ -1400,9 +1386,11 @@ class screenModel extends model
      */
     public function setComponentDefaults($component)
     {
-        if(!isset($component->styles))  $component->styles  = json_decode('{"filterShow": false, "hueRotate": 0, "saturate": 1, "contrast": 1, "brightness": 1, "opacity": 1, "rotateZ": 0, "rotateX": 0, "rotateY": 0, "skewX": 0, "skewY": 0, "blendMode": "normal", "animations": []}');
-        if(!isset($component->status))  $component->status  = json_decode('{"lock": false, "hide": false}');
-        if(!isset($component->request)) $component->request = json_decode('{ "requestDataType": 0, "requestHttpType": "get", "requestUrl": "", "requestIntervalUnit": "second", "requestContentType": 0, "requestParamsBodyType": "none", "requestSQLContent": { "sql": "select * from  where" }, "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
+        $this->loadModel('bi');
+        if(!isset($component->styles))  $component->styles  = $this->config->bi->default->styles;
+        if(!isset($component->status))  $component->status  = $this->config->bi->default->status;
+        if(!isset($component->request)) $component->request = $this->config->bi->default->request;
+        if(!isset($component->events))  $component->events  = $this->config->bi->default->events;
 
         return $component;
     }

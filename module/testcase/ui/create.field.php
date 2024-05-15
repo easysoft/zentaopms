@@ -59,7 +59,7 @@ $fields->field('title')
     ->width('5/6')
     ->value(data('case.title'))
     ->control('colorInput', array('colorValue' => data('case.color')))
-    ->checkbox(data('needReview') ? array('name' => 'needReview', 'text' => $lang->testcase->forceReview) : null);
+    ->checkbox(data('needReview') ? array('name' => 'needReview', 'text' => $lang->testcase->forceReview, 'checked' => true) : null);
 
 $fields->field('pri')
     ->width('1/6')

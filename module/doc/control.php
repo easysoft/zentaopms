@@ -288,12 +288,20 @@ class doc extends control
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-            $docData = form::data($this->config->doc->create)->get();
+            if($_POST['type'] == 'attachment' && empty($_FILES['files']['name'][0]))
+            {
+                $this->config->doc->form->create['title']['required'] = false;
+                $this->config->doc->form->create['title']['skipRequired'] = true;
+            }
+
+            $docData = form::data($this->config->doc->form->create)
+                ->setDefault('addedBy', $this->app->user->account)
+                ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->post->uploadFormat == 'combinedDocs')
             {
-                $docResult = $this->doc->create($docData, $this->post->labels);
+                $docResult = $this->doc->create($docData);
             }
             else
             {
@@ -352,6 +360,7 @@ class doc extends control
         $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         if(!$libID && !empty($libs)) $libID = key($libs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
+        if($this->config->edition != 'open') $this->loadModel('file');
 
         $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
@@ -466,7 +475,7 @@ class doc extends control
         }
 
         if($this->viewType == 'json') $this->send(array('status' => $action ? 'no' : 'yes'));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'status' => $action ? 'no' : 'yes'));
+        return $this->send(array('result' => 'success', 'message' => $action ? $this->lang->doc->cancelCollection : $this->lang->doc->collectSuccess, 'load' => true, 'status' => $action ? 'no' : 'yes'));
     }
 
     /**
@@ -987,5 +996,23 @@ class doc extends control
         $this->view->showDoc = $showDoc === '0' ? '0' : '1';
 
         $this->display();
+    }
+
+    /**
+     * 目录排序
+     * Catalog sorting.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortCatalog()
+    {
+        if($_POST)
+        {
+            foreach($_POST['orders'] as $id => $order) $this->doc->updateOrder($id, (int)$order);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
     }
 }

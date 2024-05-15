@@ -339,6 +339,34 @@ class metricTao extends metricModel
         return $stmt->fetchAll();
     }
 
+    protected function fetchMetricRecordsWithOption($code, $fieldList, $options = array(), $pager = null)
+    {
+        $metric = $this->fetchMetricByID($code);
+        $scopeKey = $metric->scope;
+
+        $fieldList = array_merge($fieldList, array('id', 'value', 'date', 'calcType', 'calculatedBy'));
+        $wrapFields = array_map(function ($value) {
+            return "`$value`";
+        }, $fieldList);
+        $dataFieldStr = implode(',', $wrapFields);
+
+        $stmt = $this->dao->select($dataFieldStr)->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code);
+
+        if(!empty($options))
+        {
+            foreach($options as $key => $option)
+            {
+                $stmt = $stmt->andWhere($key)->in($option);
+            }
+        }
+
+        $stmt = $stmt->orderBy("date desc");
+
+        if($scopeKey == 'system') $stmt = $stmt->page($pager); // beginIF not work with page()
+        return $stmt->fetchAll();
+    }
+
     /**
      * 请求最新的度量数据。
      * Fetch latest metric data.
@@ -418,20 +446,16 @@ class metricTao extends metricModel
      */
     protected function getRecordFields($code)
     {
-        $record = $this->dao->select('*')
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->limit(1)
-            ->fetch();
+        $metric   = $this->fetchMetricByCode($code);
+        $dateType = $metric->dateType;
+        $fields   = array($metric->scope);
 
-        if(!$record) return array();
+        if($dateType == 'nodate') return $fields;
 
-        $fields = array();
-        foreach(array_keys((array)$record) as $field)
-        {
-            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date', 'calcType', 'calculatedBy'))) continue;
-            if(!empty($record->$field)) $fields[] = $field;
-        }
+        $fields[] = 'year';
+        if($dateType == 'month' || $dateType == 'day') $feilds[] = 'month';
+        if($dateType == 'week') $fields[] = 'week';
+        if($dateType == 'day') $fields[] = 'day';
 
         return $fields;
     }

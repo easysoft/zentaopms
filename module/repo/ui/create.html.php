@@ -44,7 +44,6 @@ foreach($this->lang->repo->scmList as $scm => $scmName)
 
 formPanel
 (
-    on::change('#product', 'onProductChange'),
     on::change('#SCM', 'onScmChange'),
     on::change('#serviceHost', 'onHostChange'),
     on::change('#serviceProject', 'onProjectChange'),
@@ -87,11 +86,12 @@ formPanel
         setClass('service hide service-project'),
         formGroup
         (
-            set::width('1/2'),
             set::name("serviceProject"),
-            set::items(array()),
             set::label($lang->repo->serviceProject),
-            set::control("picker")
+            set::required(true),
+            set::width('1/2'),
+            set::control('picker'),
+            set::items(array())
         )
     ),
     formGroup

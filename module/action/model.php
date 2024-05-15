@@ -476,7 +476,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function renderAction(object $action, string $desc = '')
+    public function renderAction(object $action, string|array $desc = '')
     {
         if(!isset($action->objectType) || !isset($action->action)) return false;
 
@@ -675,6 +675,17 @@ class actionModel extends model
             $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 'all', '');
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
+
+        if($action->objectType == 'board')
+        {
+            if($action->action == 'importstory')
+            {
+                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
+                $link .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+                $actionDesc = str_replace('$extra', html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'"), $desc['main']);
+            }
+        }
         return $actionDesc;
     }
 
@@ -753,7 +764,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printAction(object $action, string $desc = '')
+    public function printAction(object $action, string|array $desc = '')
     {
         $content = $this->renderAction($action, $desc);
         if(is_string($content)) echo $content;
@@ -1145,7 +1156,7 @@ class actionModel extends model
         if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
 
-        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
+        if(empty($action->hasLink)) $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
 
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';

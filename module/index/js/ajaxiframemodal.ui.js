@@ -2,6 +2,7 @@ $.fn.triggerHandler = $.fn.trigger;
 ['registerRender', 'fetchContent', 'loadTable', 'loadPage', 'postAndLoadPage', 'loadCurrentPage', 'parseSelector', 'toggleLoading', 'openUrl', 'openPage', 'goBack', 'registerTimer', 'loadModal', 'loadTarget', 'loadComponent', 'loadPartial', 'reloadPage', 'selectLang', 'selectTheme', 'selectVision', changeAppLang, 'changeAppTheme', 'setImageSize', 'showMoreImage', 'autoLoad', 'loadForm'].forEach(function(name){window[name] = parent.parent[name];});
 
 const zuiHideModal = zui.Modal.hide;
+const $frame = parent.$('iframe[name="' + window.frameElement.name + '"]');
 zui.Modal.hide = function(selector)
 {
     if(!selector) return parent.$.closeModal();
@@ -16,12 +17,12 @@ $(document).off('locate.zt').on('locate.zt', function(e, data)
 
 $(document).on('shown', '.modal', function()
 {
-    if($(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.frameElement.name + '"]').closest('.modal-dialog').find('.modal-header>.close').hide();
+    if($(this).find('.modal-actions>[data-dismiss="modal"]').length) $frame.closest('.modal-dialog').find('.modal-header>.close').hide();
 }).on('hidden', '.modal', function()
 {
     setTimeout(function()
     {
-        if(!$(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.frameElement.name + '"]').closest('.modal-dialog').find('.modal-header>.close').show();
+        if(!$(this).find('.modal-actions>[data-dismiss="modal"]').length) $frame.closest('.modal-dialog').find('.modal-header>.close').show();
     }, 500);
 });
 $('body').on('click', '.modal [data-dismiss="modal"]', function(e){e.stopPropagation();});
@@ -34,7 +35,8 @@ $(function()
     {
         const $modal = $('body>.modal-dialog>.modal-content,.modal-body').first();
         const height = $modal.outerHeight();
-        $modal.closest('body').height(height);
+        $modal.closest('body').height(height || 1);
+        if(height && !$frame.closest('.modal-body').height()) $frame.closest('.modal-body').height(height);
     }
 
     $.ajax(
@@ -47,10 +49,10 @@ $(function()
             $body.html(data);
             const resizeOb = new ResizeObserver(resizeModal);
             resizeOb.observe($('body>.modal-dialog>.modal-content>.modal-body,.modal-body')[0]);
-            resizeModal();
+            requestAnimationFrame(resizeModal);
             $body.zuiInit().removeClass('invisible');
 
-            if(parent.$('iframe[name="' + window.frameElement.name + '"]').closest('.modal-dialog').find('.modal-header>.close').length) $('body>.modal-dialog>.modal-content>.modal-actions>[data-dismiss="modal"]').hide();
+            if($frame.closest('.modal-dialog').find('.modal-header>.close').length) $('body>.modal-dialog>.modal-content>.modal-actions>[data-dismiss="modal"]').hide();
         }
     });
 

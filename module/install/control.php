@@ -382,6 +382,8 @@ class install extends control
             /* Update created date of metrics. */
             $this->loadModel('metric')->updateMetricDate();
 
+            $this->install->importBIData();
+
             $skipApp = (string)getenv('ZT_SKIP_DEVOPS_INIT');
             $link = ($this->config->inQuickon && (!$skipApp || $skipApp == 'false')) ? inlink('app') : inlink('step6');
             return $this->send(array('result' => 'success', 'load' => $link));

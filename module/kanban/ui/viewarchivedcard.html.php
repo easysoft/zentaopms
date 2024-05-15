@@ -71,9 +71,10 @@ foreach($cards as $card)
         $beginAndEnd = date("m-d", strtotime($card->begin)) . ' ~ ' . date("m-d", strtotime($card->end));
     }
 
+    $color = str_replace('#', '', $card->color);
     $cardItems[] = div
     (
-        setClass('card-list flex'),
+        setClass("card-list flex color-{$color}"),
         div
         (
             setClass('card'),

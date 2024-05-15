@@ -1,0 +1,2 @@
+.toolbar-btn {width: calc(100% - 2rem); max-width: calc(1720px - 5rem);}
+@media (min-width: 1400px){.toolbar-btn {width: calc(100% - 5rem)}}

@@ -18,8 +18,64 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     }
 }).on('click', '#taskModal button[type="submit"]', function()
 {
+    const taskType = $('[name=type]').val();
+    if(taskType.length == 0)
+    {
+        zui.Modal.alert(typeNotEmpty);
+        return false;
+    }
+
+    const hourPoint = $('[name=hourPointValue]').val();
+    if(typeof(hourPoint) === undefined) hourPoint = 0;
+
+    if(hourPoint == 0)
+    {
+        zui.Modal.alert(hourPointNotEmpty);
+        return false;
+    }
+
+    if(typeof(hourPoint) != 'undefined' && (isNaN(hourPoint) || hourPoint < 0))
+    {
+        zui.Modal.alert(hourPointNotError);
+        return false;
+    }
+
+    const checkedIdList  = $('#storyIdList').val().split(',');
+    let linkedTaskIdList = '';
+    let unlinkTaskIdList = '';
+    checkedIdList.forEach(function(storyID)
+    {
+        if(linkedTaskStories[storyID])
+        {
+            linkedTaskIdList += '[' + storyID +']';
+        }
+        else
+        {
+            unlinkTaskIdList += storyID + ',';
+        }
+    });
+
+    if(linkedTaskIdList)
+    {
+        confirmStoryToTaskTip = confirmStoryToTask.replace('%s', linkedTaskIdList);
+
+        if(confirm(confirmStoryToTaskTip))
+        {
+            $('#storyIdList').val(checkedIdList);
+        }
+        else
+        {
+            if(!unlinkTaskIdList) return false;
+
+            $('#storyIdList').val(unlinkTaskIdList);
+        }
+    }
+
+    zui.Modal.hide('#taskModal');
+
     const formData = new FormData($("#toTaskForm")[0]);
     postAndLoadPage($('#toTaskForm').attr('action'), formData);
+
 
     return false;
 });

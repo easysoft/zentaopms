@@ -1412,4 +1412,21 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $editors;
     }
+
+    /**
+     * 更新目录顺序。
+     * Update catalog order.
+     *
+     * @param  int       $catalogID
+     * @param  int       $order
+     * @access public
+     * @return int|false
+     */
+    public function updateOrderTest(int $catalogID, int $order): int|false
+    {
+        $this->objectModel->updateOrder($catalogID, $order);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('`order`')->from(TABLE_MODULE)->where('id')->eq($catalogID)->fetch('order');
+    }
 }

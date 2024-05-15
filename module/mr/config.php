@@ -121,3 +121,8 @@ $config->mr->actionList['unlinkBug']['url']  = 'javascript: unlinkObject("bug", 
 
 $config->mr->view = new stdclass();
 $config->mr->view->operateList = array('accept', 'approval', 'reject', 'close', 'edit', 'reopen', 'delete');
+
+$config->mr->groupPrivs = array();
+$config->mr->groupPrivs['commitlogs'] = 'view';
+$config->mr->groupPrivs['diff']       = 'view';
+$config->mr->groupPrivs['link']       = 'view';

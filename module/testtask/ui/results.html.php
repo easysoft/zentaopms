@@ -28,7 +28,7 @@ div
     ),
     div
     (
-        setClass('leading-6 h-6 my-2'),
+        setClass('leading-6 my-2', empty($case->precondition) ? 'h-6' : ''),
         nl2br($case->precondition)
     )
 );
@@ -42,6 +42,15 @@ foreach($results as $i => $result)
 {
     $class     = ($result->caseResult == 'pass' ? 'success' : ($result->caseResult == 'fail' ? 'danger' : ($result->caseResult == 'blocked' ? 'warning' : '')));
     $fileCount = count($result->files);
+    $isChinese = strpos($app->getClientLang(), 'zh-') !== false;
+    if($result->node == 0 && $result->task > 0)
+    {
+        $taskResult = $isChinese ? sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''), zget($builds, $result->build, '')) : sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''), zget($users, $result->lastRunner), zget($builds, $result->build, ''));
+    }
+    else
+    {
+        $taskResult = !$isChinese ? ' by <strong>' . zget($users, $result->lastRunner) . '</strong>' : '';
+    }
     if($class != 'success') $failCount ++;
     $trs[] = h::tr
     (
@@ -51,14 +60,14 @@ foreach($results as $i => $result)
         set('data-status', $result->node > 0 && empty($result->ZTFResult) ? 'running': 'ready'),
         h::td
         (
-            span(setClass('toggle-icon circle inline-block align-middle mr-2')),
+            span(setClass('toggle-icon inline-block align-middle mr-2')),
             width('120px'),
+            label(setClass('mx-2 gray-pale'), "#{$result->id}"),
             $result->date,
             $result->node > 0 ? sprintf($lang->testtask->runNode, zget($users, $result->lastRunner), $result->nodeName, $lang->testtask->runCase) : '',
-            $result->node == 0 && $result->task > 0 ? html(sprintf($lang->testtask->runInTask, zget($testtasks, $result->task, ''))) : '',
             $result->node == 0 || !empty($result->ZTFResult) ? html
             (
-                sprintf($lang->testtask->runCaseResult, zget($users, $result->lastRunner), zget($builds, $result->build, ''), $class, $lang->testcase->resultList[$result->caseResult])
+                $isChinese ? sprintf($lang->testtask->runCaseResult, zget($users, $result->lastRunner), $taskResult, $class, $lang->testcase->resultList[$result->caseResult]) : sprintf($lang->testtask->runCaseResult, $taskResult, $class, $lang->testcase->resultList[$result->caseResult])
             ) : h::strong
             (
                 setClass('text-waring'),
@@ -89,6 +98,12 @@ foreach($results as $i => $result)
             setClass('text-left flex border-r'),
             width('calc(25% + 2px)'),
             isset($stepResult['expect']) ? html(nl2br($stepResult['expect'])) : ''
+        );
+        $itemTds[] = div
+        (
+            setClass('text-left flex border-r text-gray'),
+            width('80px'),
+            isset($stepResult['version']) ? "#{$stepResult['version']}" : ''
         );
         $itemTds[] = !empty($stepResult['result']) ? div
         (
@@ -138,7 +153,7 @@ foreach($results as $i => $result)
             div
             (
                 setClass('step-id flex border-r check-item'),
-                width('calc(75% - 378px)'),
+                width('calc(75% - 292px)'),
                 $result->caseResult == 'fail' ? checkbox
                 (
                     on::click('toggleCheckChildItem'),
@@ -193,7 +208,7 @@ foreach($results as $i => $result)
                         setClass('steps-header flex border-b'),
                         div
                         (
-                            width('calc(75% - 376px)'),
+                            width('calc(75% - 296px)'),
                             setClass('text-left desc border-r'),
                             $lang->testcase->stepDesc
                         ),
@@ -202,6 +217,12 @@ foreach($results as $i => $result)
                             width('calc(25%)'),
                             setClass('text-left border-r'),
                             $lang->testcase->stepExpect
+                        ),
+                        div
+                        (
+                            width('80px'),
+                            setClass('text-center border-r'),
+                            $lang->testcase->version
                         ),
                         div
                         (

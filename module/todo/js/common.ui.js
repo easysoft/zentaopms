@@ -251,12 +251,11 @@ function changeDate(event)
  * 验证间隔天数是否为空。
  * Verify if the sapceDay value is empty.
  *
- * @param  object spaceDay
  * @return void
  */
-function verifySpaceDay(event)
+function verifySpaceDay()
 {
-    if(typeof event.target.value != 'undefined' && !event.target.value) $(event.target).closest('.input-control').addClass('has-error');
+    if($('#spaceDay').length > 0 && !$('#spaceDay').val()) $(this).closest('.input-control').addClass('has-error');
 }
 
 /**

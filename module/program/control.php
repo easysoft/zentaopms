@@ -160,7 +160,7 @@ class program extends control
 
             $this->loadModel('action')->create('program', $programID, 'opened');
             $locateLink = $this->session->programList ? $this->session->programList : $this->createLink('program', 'browse');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => $locateLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'load' => $locateLink));
         }
 
         $originExtra = $extra;
@@ -650,7 +650,7 @@ class program extends control
             if($order != $oldOrders[$programID]) $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($order)->where('id')->eq($programID)->exec();
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /*

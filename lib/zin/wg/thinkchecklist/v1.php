@@ -38,6 +38,8 @@ class thinkCheckList extends wg
 
     public function onBuildItem($item): wg|node
     {
+        global $lang;
+
         if($item instanceof item) $item = $item->props->toJSON();
 
         if(!isset($item['checked']))
@@ -45,7 +47,7 @@ class thinkCheckList extends wg
             $value     = isset($item['value']) ? $item['value'] : '';
             $valueList = $this->getValueList();
 
-            $item['checked']  = in_array($value, $valueList);
+            $item['checked']  = !empty($value) && in_array($value, $valueList);
             $item['disabled'] = $this->prop('disabled');
         }
 
@@ -55,6 +57,8 @@ class thinkCheckList extends wg
         $itemClass = $this->prop('type') === 'checkbox' ? 'gap-4 px-4' : 'gap-3 px-3';
         $text      = $item['text'];
         unset($item['text']);
+        if(isset($item['checked']) && $item['checked']) $itemClass .= ' is-checked';
+
         if(!empty($item['isOther']))
         {
             return div
@@ -65,14 +69,15 @@ class thinkCheckList extends wg
                 div
                 (
                     setClass('flex items-start text-lg gap-1.5 flex-1'),
-                    div(setStyle(array('min-width' => '60px')), $text),
+                    div(setStyle(array('min-width' => '60px')), setClass('mt-1'), $text),
                     new textarea
                     (
                         set(array(
-                            'rows'     => 1,
-                            'disabled' => !isset($item['checked']) || !$item['checked'],
-                            'name'     => isset($item['value']) ? $item['value'] : 'other',
-                            'value'    => isset($item['showText']) ? $item['showText'] : ''
+                            'rows'        => 1,
+                            'class'       => isset($item['checked']) && $item['checked'] ? '' : 'hidden',
+                            'name'        => 'other',
+                            'value'       => isset($item['showText']) ? $item['showText'] : '',
+                            'placeholder' => $lang->thinkrun->placeholder->otherOption
                         )),
                         on::input('inputOther'),
                         on::click('stopPropagation')
@@ -122,7 +127,7 @@ class thinkCheckList extends wg
                 } while ($index >= 0);
 
                 if(!is_array($item))         $item = array('text' => ($text . '. ' . $item), 'value' => $key);
-                if(!isset($item['checked'])) $item['checked'] = in_array($item['value'], $valueList);
+                if(!isset($item['checked'])) $item['checked'] = !empty($item['value']) && in_array($item['value'], $valueList);
                 $item['text'] = $text . '. ' . $item['text'];
                 $items[$key]  = $this->onBuildItem($item);
             }

@@ -597,6 +597,33 @@ class gitfoxModel extends model
     }
 
     /**
+     * 通过API获取版本库的流水线列表。
+     * Get the pipelines list of the repo by API.
+     *
+     * @param  int|string $gitfoxID
+     * @param  int|string $projectID
+     * @param  string     $branch
+     * @return object|array|null
+     */
+    public function apiGetPipeline(int|string $gitfoxID, int|string $projectID, $branch = ''): object|array|null
+    {
+        $apiRoot = $this->getApiRoot((int)$gitfoxID, false);
+
+        $url = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines");
+        $pipelines = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+
+        $filteredPipelines = array();
+        foreach($pipelines as $pipeline)
+        {
+            $pipeline->ref = $pipeline->default_branch;
+
+            if($branch == $pipeline->ref) $filteredPipelines[] = $pipeline;
+        }
+
+        return empty($branch) ? $pipelines : $filteredPipelines;
+    }
+
+    /**
      * 通过api获取一个流水线日志。
      * Get single pipeline logs by api.
      *

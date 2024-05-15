@@ -112,7 +112,7 @@ class detail extends wg
         .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: 0; z-index: 2}
         .detail-section.panel .panel-heading {z-index: 1}
         .detail-section .detail-section .detail-section-title {z-index: 0}
-        .detail-side > * + * {margin-top: 4px}
+        .detail-side > * + * {margin-top: 8px}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0;}
         .detail-side .tab-pane {padding: 0}
@@ -356,7 +356,7 @@ CSS;
     {
         return div
         (
-            setClass('detail-main flex-auto col gap-1 min-w-0'),
+            setClass('detail-main flex-auto col gap-2 min-w-0'),
             div
             (
                 setClass('detail-sections canvas shadow rounded px-6 py-4'),
@@ -435,7 +435,7 @@ CSS;
     {
         return div
         (
-            setClass('detail-body row gap-1 items-start'),
+            setClass('detail-body row gap-2 items-start'),
             $this->buildMain(),
             $this->buildSide()
         );
@@ -443,6 +443,8 @@ CSS;
 
     protected function buildPrevAndNext()
     {
+        if($this->prop('layout') === 'simple') return null;
+
         list($linkCreator, $prevBtn, $nextBtn, $objectType) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn', 'objectType'));
         $preAndNext = data('preAndNext');
 

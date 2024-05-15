@@ -324,6 +324,18 @@ class webdriver
         return $this;
     }
 
+    /**
+     * Scroll page, default distance is 100 px.
+     *
+     * @param  int    $scrollDistance
+     * @access public
+     * @return void
+     */
+    public function scroll($scrollDistance = 100)
+    {
+        $this->driver->executeScript("window.scrollBy(0, $scrollDistance);");
+        return $this;
+    }
 }
 
 class dom
@@ -448,9 +460,13 @@ class dom
         $tips = array();
         foreach($this->element as $element)
         {
+            $text = $element->getText();
+            if(!$text) continue;
+
             $id = $element->getAttribute('id');
+            $tips[$id] = $text;
+
             $value = $element->findElement(WebDriverBy::xpath('../input'))->getAttribute('value');
-            $tips[$id] = $element->getText();
             if($value) $tips[$id] .= '|' . $value;
         }
 
@@ -1065,7 +1081,7 @@ class dom
             $trIndex = floor($key / 2) + 1;
             list($field, $operator, $value) = explode(',', $value);
 
-            $fieldXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[2]/div" : $leftSearchGroup . "/tr[$trIndex]/td[2]/div";
+            $fieldXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[2]/div/input" : $leftSearchGroup . "/tr[$trIndex]/td[2]/div/input";
             $operatorXpath = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[3]/div" : $leftSearchGroup . "/tr[$trIndex]/td[3]/div";
             $valueXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[4]" : $leftSearchGroup . "/tr[$trIndex]/td[4]";
 
@@ -1077,9 +1093,7 @@ class dom
             $this->getElement("//*[@id='pick-pop-$operatorID']/menu/menu//*[contains(text(), '$operator')]")->click();
             sleep(1);
 
-            $this->getElement($valueXpath . '/*[1]')->getTagName();
-            $valueTage = $this->element->getTagName();
-
+            $valueTage = $this->driver->findElement(WebDriverBy::xpath($valueXpath . '/*[1]'))->getTagName();
             if($valueTage == 'input')
             {
                 $this->getElement("$valueXpath/input")->setValue($value);

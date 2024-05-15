@@ -29,6 +29,7 @@ toolbar
         'class'       => 'ghost export',
         'text'        => $lang->export,
         'url'         => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}"),
+        'data-size'   => 'sm',
         'data-toggle' => 'modal'
     ))) : null,
     common::hasPriv('doc', 'createLib') ? item(set(array
@@ -58,8 +59,8 @@ if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition =
     $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
     $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
-    if($canImportToPracticeLib)  $items[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal');
-    if($canImportToComponentLib) $items[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal');
+    if($canImportToPracticeLib)  $items[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal', 'data-size' => 'sm');
+    if($canImportToComponentLib) $items[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
     $importLibBtn = $items ? dropdown
     (
@@ -128,7 +129,7 @@ $contentDom = div
     setID('docPanel'),
     div
     (
-        setClass('panel-heading'),
+        setClass('panel-heading pl-0'),
         div
         (
             setClass('flex-1 w-0'),
@@ -152,6 +153,7 @@ $contentDom = div
         div
         (
             setClass('panel-actions flex'),
+            $editorGroup ? setClass('hasEditor') : null,
             div
             (
                 setClass('toolbar'),
@@ -166,6 +168,7 @@ $contentDom = div
                 common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
                 (
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
+                    $doc->type != 'text' ? setData('toggle', 'modal') : null,
                     setClass('btn ghost'),
                     icon('edit')
                 ) : null,
@@ -195,9 +198,9 @@ $contentDom = div
     div
     (
         setClass('info mb-4'),
-        span
+        div
         (
-            setClass('user-time text-gray mr-2'),
+            setClass('user-time text-gray mr-2 inline-flex items-center'),
             icon
             (
                 'contacts',
@@ -205,23 +208,23 @@ $contentDom = div
             ),
             $createInfo
         ),
-        span
+        div
         (
-            setClass('user-time text-gray mr-2'),
+            setClass('user-time text-gray mr-2 inline-flex items-center'),
             icon
             (
-                'star',
-                setClass('mr-2')
+                'star-empty',
+                setClass('mr-1')
             ),
             $doc->collects ? $doc->collects : 0
         ),
-        span
+        div
         (
-            setClass('user-time text-gray'),
+            setClass('user-time text-gray inline-flex items-center'),
             icon
             (
                 'eye',
-                setClass('mr-2')
+                setClass('mr-1')
             ),
             $doc->views
         ),
@@ -285,5 +288,69 @@ panel
         $treeDom,
         $toggleTreeBtn,
         $historyDom
+    )
+);
+
+modal
+(
+    setID('importToPracticeLib'),
+    formPanel
+    (
+        set::title($lang->doc->importToPracticeLib),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->export),
+        set::url(createLink('doc', 'importToPracticeLib', "doc={$doc->id}")),
+        set::formClass('mt-6'),
+        formGroup
+        (
+            set::label($lang->doc->practiceLib),
+            setID('practiceLib'),
+            set::name('lib'),
+            set::items($practiceLibs),
+            set::required(true)
+        ),
+        !common::hasPriv('assetlib', 'approvePractice') && !common::hasPriv('assetlib', 'batchApprovePractice') ? formGroup
+        (
+            set::label($lang->doc->approver),
+            picker
+            (
+                setID('practiceApprover'),
+                set::name('assignedTo'),
+                set::items($practiceApprovers),
+                set::required(true)
+            )
+        ) : null
+    )
+);
+
+modal
+(
+    setID('importToComponentLib'),
+    formPanel
+    (
+        set::title($lang->doc->importToComponentLib),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->export),
+        set::url(createLink('doc', 'importToComponentLib', "doc={$doc->id}")),
+        set::formClass('mt-6'),
+        formGroup
+        (
+            set::label($lang->doc->componentLib),
+            setID('componentLib'),
+            set::name('lib'),
+            set::items($componentLibs),
+            set::required(true)
+        ),
+        !common::hasPriv('assetlib', 'approveComponent') && !common::hasPriv('assetlib', 'batchApproveComponent') ? formGroup
+        (
+            set::label($lang->doc->approver),
+            picker
+            (
+                setID('componentApprover'),
+                set::name('assignedTo'),
+                set::items($componentApprovers),
+                set::required(true)
+            )
+        ) : null
     )
 );

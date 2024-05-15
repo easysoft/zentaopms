@@ -47,7 +47,7 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
 /* Closure for generating program row data. */
 $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
 {
-    if(!isset($program['programName']) || $config->systemMode != 'ALM') return null;
+    if(!isset($program['programName']) || strpos(',ALM,PLM,', ",{$config->systemMode},") === false) return null;
 
     /* ALM mode with more data. */
     $totalStories = $program['totalStories'];
@@ -256,6 +256,7 @@ featureBar
 );
 toolbar($fnGenerateCreateProgramBtns());
 
+$canSort = common::hasPriv('program', 'updateOrder') && strpos(',program_asc,order_asc,', ",$orderBy,") !== false;
 dtable
 (
     setID('productviews'),
@@ -270,6 +271,10 @@ dtable
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'product';}")),
     set::onRenderCell(jsRaw('window.renderCellProductView')),
     set::orderBy($orderBy),
+    set::plugins(array('sortable')),
+    set::sortable($canSort),
+    set::onSortEnd($canSort ? jsRaw('window.onSortEnd') : null),
+    set::canSortTo($canSort ? jsRaw('window.canSortTo') : null),
     set::sortLink(createLink('program', 'productview', "browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar(array
     (

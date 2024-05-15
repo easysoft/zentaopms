@@ -73,7 +73,7 @@ class echarts extends wg
             set::responsive($responsive),
             set::theme($theme),
             set::_style(array('width' => is_int($width) ? "{$width}px" : $width, 'height' => is_int($height) ? "{$height}px" : $height)),
-            set::_call("~((name,selector,options) => $.getLib({src: $files, root: false}, () => zui.create(name,selector,options)))"),
+            set::_call("~((name,selector,options) => $.getLib({check: 'echarts', src: $files, root: false}, () => zui.create(name,selector,options)))"),
             set($this->getRestProps()),
             $this->children()
         );

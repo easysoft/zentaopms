@@ -34,7 +34,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->mr->sourceProject),
+            set::label($lang->repo->common),
             set::value($sourceProject),
             set::control('static')
         ),

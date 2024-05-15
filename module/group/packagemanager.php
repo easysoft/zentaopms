@@ -169,6 +169,10 @@ $config->group->subset->executionkanban = new stdclass();
 $config->group->subset->executionkanban->order = 580;
 $config->group->subset->executionkanban->nav   = 'execution';
 
+$config->group->subset->board = new stdclass();
+$config->group->subset->board->order = 655;
+$config->group->subset->board->nav   = 'board';
+
 $config->group->subset->executionburn = new stdclass();
 $config->group->subset->executionburn->order = 590;
 $config->group->subset->executionburn->nav   = 'execution';
@@ -2784,23 +2788,20 @@ $config->group->package->browseMR = new stdclass();
 $config->group->package->browseMR->order  = 5;
 $config->group->package->browseMR->subset = 'mr';
 $config->group->package->browseMR->privs  = array();
-$config->group->package->browseMR->privs['mr-browse']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('mr-addReview', 'mr-approval', 'mr-close', 'mr-create', 'mr-diff', 'mr-edit', 'mr-link', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask', 'mr-reopen', 'mr-unlink', 'mr-view', 'mr-commitLogs'));
-$config->group->package->browseMR->privs['mr-view']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('mr-browse'), 'recommend' => array('mr-diff', 'mr-link'));
-$config->group->package->browseMR->privs['mr-commitLogs'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('mr-view', 'mr-browse'), 'recommend' => array('mr-diff'));
-$config->group->package->browseMR->privs['mr-diff']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('mr-browse'), 'recommend' => array('mr-link', 'mr-view'));
-$config->group->package->browseMR->privs['mr-link']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('mr-browse'), 'recommend' => array('mr-diff', 'mr-view'));
+$config->group->package->browseMR->privs['mr-browse']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('mr-addReview', 'mr-approval', 'mr-close', 'mr-create', 'mr-edit', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask', 'mr-reopen', 'mr-unlink', 'mr-view'));
+$config->group->package->browseMR->privs['mr-view']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('mr-browse'), 'recommend' => array());
 
 $config->group->package->manageMR = new stdclass();
 $config->group->package->manageMR->order  = 10;
 $config->group->package->manageMR->subset = 'mr';
 $config->group->package->manageMR->privs  = array();
-$config->group->package->manageMR->privs['mr-create']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('mr-browse'), 'recommend' => array('mr-edit'));
+$config->group->package->manageMR->privs['mr-create']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('mr-browse'), 'recommend' => array('mr-edit'));
 $config->group->package->manageMR->privs['mr-edit']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('mr-browse'), 'recommend' => array('mr-create', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask', 'mr-unlink'));
 $config->group->package->manageMR->privs['mr-accept']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-maintain'), 'recommend' => array('mr-browse', 'mr-create', 'mr-edit'));
-$config->group->package->manageMR->privs['mr-linkStory'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('mr-browse', 'mr-link'), 'recommend' => array('mr-approval', 'mr-close', 'mr-diff', 'mr-linkBug', 'mr-linkTask', 'mr-reopen', 'mr-unlink'));
-$config->group->package->manageMR->privs['mr-linkBug']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('mr-browse', 'mr-link'), 'recommend' => array('mr-linkStory', 'mr-linkTask', 'mr-unlink'));
-$config->group->package->manageMR->privs['mr-linkTask']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('mr-browse', 'mr-link'), 'recommend' => array('mr-linkBug', 'mr-linkStory', 'mr-unlink'));
-$config->group->package->manageMR->privs['mr-unlink']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('mr-view'), 'recommend' => array('mr-link', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask'));
+$config->group->package->manageMR->privs['mr-linkStory'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('mr-browse', 'mr-view'), 'recommend' => array('mr-approval', 'mr-close', 'mr-linkBug', 'mr-linkTask', 'mr-reopen', 'mr-unlink'));
+$config->group->package->manageMR->privs['mr-linkBug']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('mr-browse', 'mr-view'), 'recommend' => array('mr-linkStory', 'mr-linkTask', 'mr-unlink'));
+$config->group->package->manageMR->privs['mr-linkTask']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('mr-browse', 'mr-view'), 'recommend' => array('mr-linkBug', 'mr-linkStory', 'mr-unlink'));
+$config->group->package->manageMR->privs['mr-unlink']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('mr-browse', 'mr-view'), 'recommend' => array('mr-linkBug', 'mr-linkStory', 'mr-linkTask'));
 $config->group->package->manageMR->privs['mr-approval']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('mr-browse'), 'recommend' => array('mr-close', 'mr-reopen'));
 $config->group->package->manageMR->privs['mr-close']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('mr-browse'), 'recommend' => array('mr-approval', 'mr-reopen'));
 $config->group->package->manageMR->privs['mr-reopen']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('mr-browse'), 'recommend' => array('mr-approval', 'mr-close'));
@@ -3935,7 +3936,7 @@ $config->group->package->aiAssistant->privs['ai-assistantCreate']   = array('edi
 $config->group->package->aiAssistant->privs['ai-assistantEdit']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-assistants'), 'recommend' => array('ai-assistantView', 'ai-assistantPublish', 'ai-assistantWithdraw'));
 $config->group->package->aiAssistant->privs['ai-assistantPublish']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('admin-index', 'ai-assistants', 'ai-assistantCreate', 'ai-assistantEdit'), 'recommend' => array('ai-assistantView', 'ai-assistantWithdraw'));
 $config->group->package->aiAssistant->privs['ai-assistantWithdraw'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-assistants'), 'recommend' => array('ai-assistantView', 'ai-assistantEdit', 'ai-assistantPublish'));
-$config->group->package->aiAssistant->privs['ai-assistantDelete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('admin-index', 'ai-assistantView'), 'recommend' => array('ai-assistantCreate', 'ai-assistantEdit', 'ai-assistantPublish', 'ai-assistantWithdraw'));
+$config->group->package->aiAssistant->privs['ai-assistantDelete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('admin-index', 'ai-assistants', 'ai-assistantView'), 'recommend' => array('ai-assistantCreate', 'ai-assistantEdit', 'ai-assistantPublish', 'ai-assistantWithdraw'));
 
 $config->group->package->resource = new stdclass();
 $config->group->package->resource->order  = 2200;
@@ -4193,3 +4194,32 @@ $config->group->package->deleteResearchTask = new stdclass();
 $config->group->package->deleteResearchTask->subset = 'researchtask';
 $config->group->package->deleteResearchTask->privs  = array();
 $config->group->package->deleteResearchTask->privs['marketresearch-deleteTask']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishTask', 'marketresearch-closeTask', 'marketresearch-activateTask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
+
+$config->group->package->boardAction = new stdclass();
+$config->group->package->boardAction->subset = 'board';
+$config->group->package->boardAction->privs  = array();
+$config->group->package->boardAction->privs['board-createBoard']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardAction->privs['board-editBoard']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardAction->privs['board-close']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardAction->privs['board-activate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardAction->privs['board-collect']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardAction->privs['board-lock']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardAction->privs['board-unlock']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardAction->privs['board-actions']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 50, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->boardSpace = new stdclass();
+$config->group->package->boardSpace->subset = 'board';
+$config->group->package->boardSpace->privs  = array();
+$config->group->package->boardSpace->privs['board-createSpace'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->boardSpace->privs['board-editSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->deleteBoard = new stdclass();
+$config->group->package->deleteBoard->subset = 'board';
+$config->group->package->deleteBoard->privs  = array();
+$config->group->package->deleteBoard->privs['board-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->deleteBoard->privs['board-deleteSpace'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->viewBoard = new stdclass();
+$config->group->package->viewBoard->subset = 'board';
+$config->group->package->viewBoard->privs  = array();
+$config->group->package->viewBoard->privs['board-teamBoard'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());

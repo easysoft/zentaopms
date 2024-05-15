@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @author      Zenggang <zenggang@easycorp.ltd>
  * @package     job
  * @link        https://www.zentao.net
+ * @property    jobModel $job
  */
 class jobZen extends job
 {

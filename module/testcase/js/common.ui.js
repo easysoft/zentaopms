@@ -20,19 +20,17 @@ window.loadProductStories = function(productID)
 window.loadProductBranches = function(productID)
 {
     const oldBranch = config.currentMethod == 'edit' ? caseBranch : 0;
-    let   param     = 'productID=' + productID + '&oldBranch=' + oldBranch + '&param=' + config.currentMethod == 'create' ? 'active' : 'all';
+    let   param     = 'productID=' + productID + '&oldBranch=' + oldBranch + '&param=' + (config.currentMethod == 'create' ? 'active' : 'all');
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += '&projectID=' + objectID;
 
-    $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
+    $.getJSON($.createLink('branch', 'ajaxGetBranches', param), function(data)
     {
-        $('#branch').toggleClass('hidden', !data);
-        data = JSON.parse(data);
+        $('#branch').toggleClass('hidden', data.length <= 0);
 
         let branch        = $('[name=branch]').val();
         let $branchPicker = $('[name=branch]').zui('picker');
         $branchPicker.render({items: data});
         $branchPicker.$.setValue(branch);
-        $('#branch').removeClass('hidden');
     })
 }
 

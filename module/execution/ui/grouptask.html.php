@@ -225,7 +225,7 @@ $thead = function() use($lang, $groupList, $groupBy, $allCount)
     );
 };
 
-$tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $execution)
+$tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $execution, $members)
 {
     global $app;
 

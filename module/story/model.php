@@ -479,6 +479,23 @@ class storyModel extends model
     }
 
     /**
+     * 批量获取关联传入项目ID的需求，并按照项目分组。
+     * Fetch stories by project id list.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function fetchStoriesByProjectIdList(array $projectIdList = array()): array
+    {
+        return $this->dao->select("t2.*,t1.project")->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->in($projectIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchGroup('project', 'id');
+    }
+
+    /**
      * Create a story.
      *
      * @param  object $story
@@ -3640,6 +3657,7 @@ class storyModel extends model
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
         if($action == 'batchcreate')
         {
+            if($config->vision == 'or')    return false;
             if(!empty($story->twins))      return false;
             if($story->status != 'active') return false;
         }
@@ -4655,7 +4673,7 @@ class storyModel extends model
 
         /* Get related objects title or names. */
         $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-        $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($storyIdList)->fetchPairs('id', 'title');
+        $relatedStories = $this->dao->select('*')->from(TABLE_STORY)->where('`id`')->in($storyIdList)->andWhere('deleted')->eq('0')->fetchPairs('id', 'title');
 
         $fileIdList = array();
         foreach($relatedSpecs as $relatedSpec)

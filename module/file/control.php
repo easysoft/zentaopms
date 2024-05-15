@@ -55,13 +55,18 @@ class file extends control
     /**
      * AJAX: get upload request from the web editor.
      *
-     * @param  string $uid
+     * @param string $uid
+     * @param string $objectType
+     * @param int    $objectID
+     * @param string $extra
+     * @param string $field
+     * @param bool   $api
      * @access public
      * @return void
      */
-    public function ajaxUpload(string $uid = '')
+    public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false)
     {
-        $file = $this->file->getUpload('imgFile');
+        $file = $this->file->getUpload($field);
 
         if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
@@ -79,19 +84,22 @@ class file extends control
                 /* Compress image for jpg and bmp. */
                 $file = $this->file->compressImage($file);
 
-                $file['addedBy']   = $this->app->user->account;
-                $file['addedDate'] = helper::today();
+                $file['addedBy']    = $this->app->user->account;
+                $file['addedDate']  = helper::today();
+                $file['objectType'] = $objectType;
+                $file['objectID']   = $objectID;
+                $file['extra']      = $extra;
                 unset($file['tmpname']);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
                 $fileID = $this->dao->lastInsertID();
                 $url    = $this->createLink('file', 'read', "fileID=$fileID", $file['extension']);
                 if($uid) $_SESSION['album'][$uid][] = $fileID;
-                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                if($api || (defined('RUN_MODE') && RUN_MODE == 'api'))
                 {
                     if($uid) $_SESSION['album']['used'][$uid][$fileID] = $fileID;
                     $_SERVER['SCRIPT_NAME'] = 'index.php';
-                    return $this->send(array('status' => 'success', 'id' => $fileID, 'url' => $url));
+                    return $this->send(array('result' => 'success', 'status' => 'success', 'id' => $fileID, 'url' => $url, 'data' => array('id' => $fileID, 'url' => $url))); // 兼容老的 API 形式。 Compatible with the old API.
                 }
                 return print(json_encode(array('error' => 0, 'url' => $url)));
             }
@@ -128,8 +136,6 @@ class file extends control
      */
     public function download(int $fileID, string $mouse = '')
     {
-        if(session_id() != $this->app->sessionID) helper::restartSession($this->app->sessionID);
-
         $file = $this->file->getById($fileID);
         if(empty($file) || !$this->file->fileExists($file))
         {

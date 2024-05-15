@@ -102,7 +102,7 @@ class testcase extends control
 
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
-        $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
+        list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
         $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
         $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
@@ -673,13 +673,14 @@ class testcase extends control
     }
 
     /**
+     * 批量修改用例的分支。
      * Batch change branch.
      *
      * @param  int    $branchID
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID)
+    public function batchChangeBranch(int $branchID)
     {
         $caseIdList  = zget($_POST, 'caseIdList',  array());
         $sceneIdList = zget($_POST, 'sceneIdList', array());

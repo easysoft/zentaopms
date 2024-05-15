@@ -22,6 +22,3 @@ $config->branch->form->mergebranch['name']               = array('type' => 'stri
 $config->branch->form->mergebranch['createBranch']       = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->branch->form->mergebranch['targetBranch']       = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->branch->form->mergebranch['mergedBranchIDList'] = array('type' => 'string', 'required' => false, 'default' => '');
-
-$config->branch->form->sort['orderBy']  = array('type' => 'string', 'required' => false, 'default' => '');
-$config->branch->form->sort['branches'] = array('type' => 'string', 'required' => false, 'default' => '');
