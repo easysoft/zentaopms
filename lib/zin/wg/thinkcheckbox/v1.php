@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'thinkradio' . DS . 'v1.php';
+requireWg('thinkRadio');
 
 /**
  * 多选题型部件类
@@ -23,21 +23,25 @@ class thinkCheckbox extends thinkRadio
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function buildBody(): array
+    protected function buildFormItem(): array
     {
-        $items = parent::buildBody();
+        global $lang;
+        $formItems = parent::buildFormItem();
 
-        list($minCountName, $minCount, $maxCountName, $maxCount) = $this->prop(array('minCountName', 'minCount', 'maxCountName', 'maxCount'));
-        $items[] = formRow
+        list($step, $minCountName, $minCount, $maxCountName, $maxCount, $required) = $this->prop(array('step', 'minCountName', 'minCount', 'maxCountName', 'maxCount', 'required'));
+        if($step) $required = $step->required;
+        $className = 'selectable-rows' . (empty($required) ? ' hidden' : '');
+
+        $formItems[] = formRow
         (
             setClass('gap-4'),
             formGroup
             (
-                set::label(data('lang.thinkwizard.step.label.minCount')),
-                setClass('selectable-rows hidden'),
+                set::label($lang->thinkwizard->step->label->minCount),
+                setClass($className),
                 input
                 (
-                    set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::placeholder($lang->thinkwizard->step->inputContent),
                     set::type('number'),
                     set::name($minCountName),
                     set::value($minCount),
@@ -45,17 +49,18 @@ class thinkCheckbox extends thinkRadio
             ),
             formGroup
             (
-                set::label(data('lang.thinkwizard.step.label.maxCount')),
-                setClass('selectable-rows hidden'),
+                set::label($lang->thinkwizard->step->label->maxCount),
+                setClass($className),
                 input
                 (
-                    set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::placeholder($lang->thinkwizard->step->inputContent),
                     set::type('number'),
                     set::name($maxCountName),
                     set::value($maxCount)
                 )
             )
         );
-        return $items;
+        $formItems[] = $this->children();
+        return $formItems;
     }
 }

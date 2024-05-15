@@ -45,6 +45,12 @@ class thinkStep  extends wg
             set::mode($action),
         );
 
+        if($addType === 'checkbox' || $item->questionType === 'checkbox') return thinkCheckbox
+        (
+            set::step($item),
+            set::mode($action),
+        );
+
         if($action == 'detail')
         {
             return thinkStepDetail
