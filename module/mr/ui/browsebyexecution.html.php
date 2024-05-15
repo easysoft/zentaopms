@@ -28,12 +28,9 @@ foreach($MRList as $index => $MR)
     $MR->canDelete = hasPriv('mr', 'delete') ? '' : 'disabled'; /* The value can be '' or 'disabled', 'disabled' means that user can NOT do this. */
     $MR->canEdit   = hasPriv('mr', 'edit')   ? '' : 'disabled';
 
-    $MR->sourceProject = $MR->targetProject = $repo->name;
-
-    $MR->mergeStatus = ($MR->status == 'closed' || $MR->status == 'merged') ? zget($lang->mr->statusList, $MR->status) : zget($lang->mr->mergeStatusList, $MR->mergeStatus);
-
-    if($MR->status == 'merged' or $MR->status == 'closed')
+    if($MR->status == 'merged' || $MR->status == 'closed')
     {
+        $MR->mergeStatus    = $MR->status;
         $MR->approvalStatus = '-';
     }
     else

@@ -23,10 +23,12 @@ $config->mr->dtable->fieldList['targetBranch']['name']  = 'targetBranch';
 $config->mr->dtable->fieldList['targetBranch']['title'] = $lang->mr->targetBranch;
 $config->mr->dtable->fieldList['targetBranch']['type']  = 'text';
 
-$config->mr->dtable->fieldList['mergeStatus']['name']     = 'mergeStatus';
-$config->mr->dtable->fieldList['mergeStatus']['title']    = $lang->mr->mergeStatus;
-$config->mr->dtable->fieldList['mergeStatus']['type']     = 'text';
-$config->mr->dtable->fieldList['mergeStatus']['sortType'] = true;
+$config->mr->dtable->fieldList['mergeStatus']['name']      = 'mergeStatus';
+$config->mr->dtable->fieldList['mergeStatus']['title']     = $lang->mr->mergeStatus;
+$config->mr->dtable->fieldList['mergeStatus']['type']      = 'status';
+$config->mr->dtable->fieldList['mergeStatus']['sortType']  = true;
+$config->mr->dtable->fieldList['mergeStatus']['width']     = '120';
+$config->mr->dtable->fieldList['mergeStatus']['statusMap'] = $lang->mr->statusList + $lang->mr->mergeStatusList;
 
 $config->mr->dtable->fieldList['approvalStatus']['name']     = 'approvalStatus';
 $config->mr->dtable->fieldList['approvalStatus']['title']    = $lang->mr->approvalStatus;
