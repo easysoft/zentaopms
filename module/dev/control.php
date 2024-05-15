@@ -201,6 +201,7 @@ class dev extends control
             {
                 $oldValue = json_decode($oldValue);
                 $setting = array(
+                    'ERName' => zget($oldValue, 'defaultERName', $oldValue->ERName),
                     'SRName' => zget($oldValue, 'defaultSRName', $oldValue->SRName),
                     'URName' => zget($oldValue, 'defaultURName', $oldValue->URName)
                 );
