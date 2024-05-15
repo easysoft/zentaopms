@@ -1159,16 +1159,29 @@ class blockZen extends block
 
         $execution->totalHours = $execution->totalLeft + $execution->totalConsumed;
         $execution->progress   = $execution->totalHours ? round($execution->totalConsumed / $execution->totalHours * 100) : 0; // 计算执行的进度， 公式为 [任务消耗工时数 / (任务消耗工时数+任务剩余工时数)]。
-        /* Process the burns. */
-        $execution->burns = array();
-        $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
-        foreach($burnData as $data) $execution->burns[] = $data->value;
+        if($execution->type == 'kanban')
+        {
+            /* Process the cfd. */
+            $this->app->loadClass('date');
+            list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
+            $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
+            $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
+            if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
+            $this->view->chartData = $chartData;
+        }
+        else
+        {
+            /* Process the burns. */
+            $execution->burns = array();
+            $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
+            $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+            $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+            list($dateList, $interval) = $this->execution->getDateList($execution->begin, $deadline, 'noweekend', 0, 'Y-m-d', $execution->end);
 
-        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
-        $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $deadline, 'noweekend', 0, 'Y-m-d', $execution->end);
+            foreach($burnData as $data) $execution->burns[] = $data->value;
+            $this->view->chartData = $this->execution->buildBurnData($executionID, $dateList, 'left', $execution->end);
+        }
 
-        $this->view->chartData        = $this->execution->buildBurnData($executionID, $dateList, 'left', $execution->end);
         $this->view->executions       = $executions;
         $this->view->projects         = $this->project->getPairsByIdList(array_keys($projectIdList));
         $this->view->currentProjectID = $projectID;
