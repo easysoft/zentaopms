@@ -190,6 +190,8 @@ function taskMiscInfo(): taskMiscInfo {return createWg('taskMiscInfo', func_get_
 function caseBasicInfo(): caseBasicInfo {return createWg('caseBasicInfo', func_get_args());}
 function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_args());}
 function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
+function demandBasicInfo(): demandBasicInfo {return createWg('demandBasicInfo', func_get_args());}
+function demandLifeInfo(): demandLifeInfo {return createWg('demandLifeInfo', func_get_args());}
 function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
 function contactUs(): contactUs {return createWg('contactUs', func_get_args());}
 function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
