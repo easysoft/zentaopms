@@ -92,6 +92,12 @@ $sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType
 $cols = array_values($config->my->audit->dtable->fieldList);
 $data = array_values($reviewList);
 
+$data = array_map(function($row)
+{
+    $row->module = isset($row->storyType) ? $row->storyType : $row->module;
+    return $row;
+}, $data);
+
 dtable
 (
     set::cols($cols),
