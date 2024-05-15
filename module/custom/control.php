@@ -418,6 +418,7 @@ class custom extends control
         if($module == 'programplan' && $section == 'custom') $key = 'createFields';
         $customFields = $this->config->$module->list->{'custom' . ucfirst($key)};
         $showFields   = $this->config->$module->custom->$key;
+        if($module == 'marketresearch') return print(js::reload('parent'));
         return $this->send(array('result' => 'success', 'key' => $key, 'callback' => 'loadCurrentPage', 'customFields' => $customFields, 'showFields' => $showFields));
     }
 
