@@ -110,8 +110,8 @@ if(commonModel::isTutorialMode())
     $canBatchCreate = false;
 }
 
-if($canOpreate['create'])      $createItem[] = array('text' => $lang->story->create,      'url' => $createLink);
-if($canOpreate['batchCreate']) $createItem[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+if($canOpreate['create'])      $createItem[] = array('text' => $lang->story->create, 'url' => $createLink);
+if($canOpreate['batchCreate']) $createItem[] = array('text' => $lang->story->batchCreate . $lang->SRCommon, 'url' => $batchCreateLink);
 if(in_array($execution->attribute, array('mix', 'request', 'design')))
 {
     if($canOpreate['createEpic'])             $createItem[] = array('text' => $lang->epic->create,                               'url' => $createEpicLink);
