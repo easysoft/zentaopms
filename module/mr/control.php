@@ -357,6 +357,7 @@ class mr extends control
         $this->view->MR            = $MR;
         $this->view->repoID        = $MR->repoID;
         $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
+        $this->view->reviewer      = $this->loadModel('user')->getById($MR->assignee);
         $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->compile       = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->compileJob    = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;

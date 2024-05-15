@@ -216,6 +216,11 @@ panel
                     ),
                     item
                     (
+                        set::name($lang->mr->reviewer),
+                        $reviewer ? zget($reviewer, 'realname', $MR->assignee) : $MR->assignee
+                    ),
+                    item
+                    (
                         set::name($lang->mr->mergeStatus),
                         $MR->synced && empty($rawMR->changes_count) ? span
                         (
