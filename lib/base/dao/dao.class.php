@@ -1002,37 +1002,21 @@ class baseDAO
      */
     public function fetchAll($keyField = '')
     {
-        $sql   = $this->processSQL();
-        $table = $this->table;
-        $key   = 'fetchAll-' . md5($sql . $keyField);
-        if(isset(dao::$cache[$table][$key]))
+        $sql = $this->processSQL();
+        $key = 'fetchAll-' . md5($sql);
+
+        $rows = $this->getCache($key, $sql);
+        if($rows === false)
         {
-            $rows   = dao::$cache[$table][$key];
-            $result = array();
-            foreach($rows as $i => $row) $result[$i] = $this->getRow($row);
-            return $result;
+            $rows = $this->query($sql)->fetchAll();
+            $this->setCache($key, $rows);
         }
 
-        $stmt = $this->query($sql);
-        dao::$cache[$table][$key] = array();
-        if(empty($keyField))
-        {
-            $rows   = $stmt->fetchAll();
-            $result = array();
-            if(!$rows) $rows = array();
-            dao::$cache[$table][$key] = $rows;
-            foreach($rows as $i => $row) $result[$i] = $this->getRow($row);
-            return $result;
-        }
+        if(empty($keyField)) return $rows;
 
-        $rows = array();
-        while($row = $stmt->fetch())
-        {
-            dao::$cache[$table][$key][$row->$keyField] = $row;
-            $rows[$row->$keyField] = $this->getRow($row);
-        }
-
-        return $rows;
+        $result = array();
+        foreach($rows as $i => $row) $result[$row->$keyField] = $row;
+        return $result;
     }
 
     /**
