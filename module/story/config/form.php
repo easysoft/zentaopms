@@ -81,10 +81,10 @@ $config->story->form->batchCreate['region']     = array('ditto' => false, 'type'
 $config->story->form->batchCreate['lane']       = array('ditto' => false, 'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '136px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['title']      = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => true,  'width' => '240px', 'default' => '', 'filter'  => 'trim', 'base' => true);
 $config->story->form->batchCreate['color']      = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => false,                     'default' => '', 'filter'  => 'trim');
-$config->story->form->batchCreate['spec']       = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => false, 'width' => '240px', 'default' => '');
+$config->story->form->batchCreate['spec']       = array('ditto' => false, 'type' => 'string', 'control' => 'textarea',  'required' => false, 'width' => '240px', 'default' => '');
 $config->story->form->batchCreate['source']     = array('ditto' => true,  'type' => 'string', 'control' => 'select',    'required' => false, 'width' => '200px', 'default' => '', 'options' => $lang->story->sourceList);
 $config->story->form->batchCreate['sourceNote'] = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => false, 'width' => '200px', 'default' => '', 'filter'  => 'trim');
-$config->story->form->batchCreate['verify']     = array('ditto' => false, 'type' => 'string', 'control' => 'text',      'required' => false, 'width' => '200px', 'default' => '');
+$config->story->form->batchCreate['verify']     = array('ditto' => false, 'type' => 'string', 'control' => 'textarea',  'required' => false, 'width' => '200px', 'default' => '');
 $config->story->form->batchCreate['category']   = array('ditto' => true,  'type' => 'string', 'control' => 'select',    'required' => false, 'width' => '160px', 'default' => 'feature', 'options' => $lang->story->categoryList);
 $config->story->form->batchCreate['pri']        = array('ditto' => false, 'type' => 'int',    'control' => 'priPicker', 'required' => false, 'width' => '92px',  'default' => $config->story->defaultPriority, 'options' => $lang->story->priList);
 $config->story->form->batchCreate['estimate']   = array('ditto' => false, 'type' => 'float',  'control' => 'text',      'required' => false, 'width' => '76px',  'default' => 0);
