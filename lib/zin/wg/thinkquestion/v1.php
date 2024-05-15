@@ -23,4 +23,9 @@ class thinkQuestion extends thinkNodeBase
     protected static array $defineProps = array(
         'required?: int=1', // 是否必填
     );
+
+    protected static array $defaultProps = array
+    (
+        'type' => 'question'
+    );
 }
