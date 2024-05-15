@@ -1186,6 +1186,8 @@ EOT;
         $jsConfig->themeRoot      = $themeRoot;
         $jsConfig->currentModule  = $moduleName;
         $jsConfig->currentMethod  = $methodName;
+        $jsConfig->rawModule      = $app->rawModule;
+        $jsConfig->rawMethod      = $app->rawMethod;
         $jsConfig->clientLang     = $clientLang;
         $jsConfig->requiredFields = $requiredFields;
         $jsConfig->router         = $app->server->SCRIPT_NAME;
