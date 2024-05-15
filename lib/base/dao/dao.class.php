@@ -325,6 +325,20 @@ class baseDAO
     }
 
     /**
+     * 设置缓存。
+     * Set the cache.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @access public
+     * @return void
+     */
+    public function setCache($key, $value)
+    {
+        if(!empty($this->cache)) $this->cache->set($key, array(microtime(true), $value));
+    }
+
+    /**
      * 开始事务。
      * Begin Transaction
      *
