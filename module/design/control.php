@@ -444,6 +444,7 @@ class design extends control
      */
     public function ajaxGetProductStories(int $productID, int $projectID, string $status = 'all', string $hasParent = 'true')
     {
+        $hasParent     = $hasParent == 'true' ? true : false;
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'full', $hasParent);
