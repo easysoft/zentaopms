@@ -152,6 +152,13 @@ $config->search->fields->aiapp->content    = 'desc';
 $config->search->fields->aiapp->addedDate  = 'createdDate';
 $config->search->fields->aiapp->editedDate = 'editedDate';
 
+$config->search->fields->board = new stdclass();
+$config->search->fields->board->id         = 'id';
+$config->search->fields->board->title      = 'name';
+$config->search->fields->board->content    = 'lib,status,createdBy,owner,collaborator,players';
+$config->search->fields->board->addedDate  = 'createdDate';
+$config->search->fields->board->editedDate = 'editedDate';
+
 /* Set the recPerPage of search. */
 $config->search->recPerPage = 10;
 

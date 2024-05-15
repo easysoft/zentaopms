@@ -1292,6 +1292,7 @@ class commonModel extends model
         if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($app->user)) return false;
         list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
+        list($module, $method) = commonTao::getBoardModuleAndMethod($module, $method, $params);
 
         /* Compatible with old search. */
         if($module == 'search' && $method == 'buildoldform')  $method = 'buildform';

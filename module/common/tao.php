@@ -388,6 +388,26 @@ class commonTao extends commonModel
     }
 
     /**
+     * 获取白板模块下，真实请求的模块和方法。
+     * Get the real module and method of the request under the board module.
+     *
+     * @param string $module
+     * @param string $method
+     * @param array $params
+     * @access protected
+     * @return string[]
+     */
+    protected static function getBoardModuleAndMethod(string $module, string $method, array $params): array
+    {
+        if($module != 'board') return array($module, $method);
+
+        if(strpos(',view,open,bind,canvas,autoupdate,quit,importstory,', ",{$method},") !== false) $method = 'actions';
+        if($method == 'createbytemplate') $method = 'createboard';
+
+        return array($module, $method);
+    }
+
+    /**
      * Check and update webRoot config in DB.
      *
      * @param  object    $dbConfig

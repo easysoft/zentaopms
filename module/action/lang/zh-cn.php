@@ -72,6 +72,7 @@ $lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类�
 $lang->action->whetherToRestore   = '是否恢复？';
 $lang->action->undeleteModuleTip  = '子目录恢复后，会同步恢复他的上级目录，确认要恢复吗？';
 $lang->action->undeleteTaskTip    = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
+$lang->action->undeleteBoardTip   = '还原白板之前，请先还原该白板的所属空间。';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创建{$lang->executionCommon}/看板类型的子级,故无法恢复当前阶段。";
@@ -185,6 +186,8 @@ $lang->action->objectTypes['prompt']           = '提词';
 $lang->action->objectTypes['miniprogram']      = '小程序';
 $lang->action->objectTypes['metric']           = '度量';
 $lang->action->objectTypes['projectbuild']     = '版本';
+$lang->action->objectTypes['board']            = '白板';
+$lang->action->objectTypes['boardspace']       = '白板空间';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

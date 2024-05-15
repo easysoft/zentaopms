@@ -199,6 +199,13 @@ class action extends control
             $url       = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
             if($isDeleted) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteTaskTip}'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
         }
+        elseif($oldAction->objectType == 'board')
+        {
+            $board     = $this->loadModel('board')->getCanvas($oldAction->objectID);
+            $isDeleted = $this->dao->select('deleted')->from(TABLE_BOARD_LIB)->where('id')->eq($board->lib)->fetch('deleted');
+            $url       = $this->createLink('action', 'trash', "browseType=boardspace");
+            if($isDeleted) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteBoardTip}'}).then((res) => {if(res) loadPage('{$url}');});"));
+        }
 
         $result = $this->action->undelete($actionID);
         if(true !== $result) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $result)));

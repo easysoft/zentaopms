@@ -663,6 +663,17 @@ class actionModel extends model
             $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 'all', '');
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
+
+        if($action->objectType == 'board')
+        {
+            if($action->action == 'importstory')
+            {
+                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
+                $link .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+                $actionDesc = str_replace('$extra', html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'"), $desc['main']);
+            }
+        }
         return $actionDesc;
     }
 
