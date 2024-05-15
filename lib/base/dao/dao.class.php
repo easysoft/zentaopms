@@ -1112,20 +1112,6 @@ class baseDAO
         return $lastInsertID !== false ? (int)$lastInsertID : false;
     }
 
-    /**
-     * 重新生成数据。
-     * Get row by data.
-     *
-     * @param  array/object    $data
-     * @access public
-     * @return array/object
-     */
-    public function getRow($data)
-    {
-        if(!is_object($data)) return $data;
-        return clone $data;
-    }
-
     //-------------------- 魔术方法(Magic methods) --------------------//
 
     /**
