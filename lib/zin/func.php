@@ -209,7 +209,6 @@ function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args()
 function thinkStepDetail(): thinkStepDetail {return createWg('thinkStepDetail', func_get_args());}
 function thinkInputDetail(): thinkInputDetail {return createWg('thinkInputDetail', func_get_args());}
 function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkTableInputDetail', func_get_args());}
-function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptionsDetail', func_get_args());}
 function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
 function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}

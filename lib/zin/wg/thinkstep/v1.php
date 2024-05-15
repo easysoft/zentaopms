@@ -24,13 +24,6 @@ class thinkStep  extends wg
             set::required($item->required),
             set::rowsTitle(explode(', ', $item->fields)),
         );
-        if(property_exists($item, 'questionType') && ($item->questionType === 'radio' || $item->questionType === 'checkbox')) return thinkOptionsDetail
-        (
-            set::item($item),
-            set::required($item->required),
-            set::enableOther($item->enableOther),
-            set::data(explode(', ', $item->fields)),
-        );
         return array();
 
     }
