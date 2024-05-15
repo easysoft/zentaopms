@@ -157,12 +157,6 @@ class projectZen extends project
             }
         }
 
-        /* Judge products not empty. */
-        if($project->parent && $project->hasProduct && empty($linkedProductsCount) && !isset($rawdata->newProduct))
-        {
-            dao::$errors['products[0]'] = $this->lang->project->error->productNotEmpty;
-        }
-
         return !dao::isError();
     }
 
