@@ -31,3 +31,8 @@ $config->cacheKeys->execution->ajaxGetDropMenuExecutions = 'ajaxDropMenuExecutio
 
 $config->cacheKeys->bug = new stdclass();
 $config->cacheKeys->bug->browse = 'bugBrowse%s';
+
+$config->cache->dao = new stdClass();
+$config->cache->dao->enable   = true; // 是否开启 dao 缓存。Enable full dao cache or not.
+$config->cache->dao->lifetime = 5 * 60;
+$config->cache->dao->driver   = 'Apcu';
