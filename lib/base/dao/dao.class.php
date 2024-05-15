@@ -189,6 +189,12 @@ class baseDAO
         $this->dbh       = $dbh;
         $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
 
+        if($config->cache->dao->enable)
+        {
+            $app->loadClass('cache', true);
+            $this->cache = new cache($config->cache->dao->driver, 'dao', $config->cache->dao->lifetime);
+        }
+
         $this->reset();
     }
 
