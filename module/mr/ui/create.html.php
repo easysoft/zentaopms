@@ -157,7 +157,7 @@ formPanel
         set::width('1/2'),
         set::required(true),
         set::name('jobID'),
-        set::label($lang->job->common),
+        set::label($lang->mr->pipeline),
         set::items($jobPairs)
     ),
     formGroup
