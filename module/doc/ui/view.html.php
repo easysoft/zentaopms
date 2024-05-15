@@ -291,66 +291,69 @@ panel
     )
 );
 
-modal
-(
-    setID('importToPracticeLib'),
-    formPanel
+if($config->edition == 'max')
+{
+    modal
     (
-        set::title($lang->doc->importToPracticeLib),
-        set::actions(array('submit')),
-        set::submitBtnText($lang->export),
-        set::url(createLink('doc', 'importToPracticeLib', "doc={$doc->id}")),
-        set::formClass('mt-6'),
-        formGroup
+        setID('importToPracticeLib'),
+        formPanel
         (
-            set::label($lang->doc->practiceLib),
-            setID('practiceLib'),
-            set::name('lib'),
-            set::items($practiceLibs),
-            set::required(true)
-        ),
-        !common::hasPriv('assetlib', 'approvePractice') && !common::hasPriv('assetlib', 'batchApprovePractice') ? formGroup
-        (
-            set::label($lang->doc->approver),
-            picker
+            set::title($lang->doc->importToPracticeLib),
+            set::actions(array('submit')),
+            set::submitBtnText($lang->export),
+            set::url(createLink('doc', 'importToPracticeLib', "doc={$doc->id}")),
+            set::formClass('mt-6'),
+            formGroup
             (
-                setID('practiceApprover'),
-                set::name('assignedTo'),
-                set::items($practiceApprovers),
+                set::label($lang->doc->practiceLib),
+                setID('practiceLib'),
+                set::name('lib'),
+                set::items($practiceLibs),
                 set::required(true)
-            )
-        ) : null
-    )
-);
+            ),
+            !common::hasPriv('assetlib', 'approvePractice') && !common::hasPriv('assetlib', 'batchApprovePractice') ? formGroup
+            (
+                set::label($lang->doc->approver),
+                picker
+                (
+                    setID('practiceApprover'),
+                    set::name('assignedTo'),
+                    set::items($practiceApprovers),
+                    set::required(true)
+                )
+            ) : null
+        )
+    );
 
-modal
-(
-    setID('importToComponentLib'),
-    formPanel
+    modal
     (
-        set::title($lang->doc->importToComponentLib),
-        set::actions(array('submit')),
-        set::submitBtnText($lang->export),
-        set::url(createLink('doc', 'importToComponentLib', "doc={$doc->id}")),
-        set::formClass('mt-6'),
-        formGroup
+        setID('importToComponentLib'),
+        formPanel
         (
-            set::label($lang->doc->componentLib),
-            setID('componentLib'),
-            set::name('lib'),
-            set::items($componentLibs),
-            set::required(true)
-        ),
-        !common::hasPriv('assetlib', 'approveComponent') && !common::hasPriv('assetlib', 'batchApproveComponent') ? formGroup
-        (
-            set::label($lang->doc->approver),
-            picker
+            set::title($lang->doc->importToComponentLib),
+            set::actions(array('submit')),
+            set::submitBtnText($lang->export),
+            set::url(createLink('doc', 'importToComponentLib', "doc={$doc->id}")),
+            set::formClass('mt-6'),
+            formGroup
             (
-                setID('componentApprover'),
-                set::name('assignedTo'),
-                set::items($componentApprovers),
+                set::label($lang->doc->componentLib),
+                setID('componentLib'),
+                set::name('lib'),
+                set::items($componentLibs),
                 set::required(true)
-            )
-        ) : null
-    )
-);
+            ),
+            !common::hasPriv('assetlib', 'approveComponent') && !common::hasPriv('assetlib', 'batchApproveComponent') ? formGroup
+            (
+                set::label($lang->doc->approver),
+                picker
+                (
+                    setID('componentApprover'),
+                    set::name('assignedTo'),
+                    set::items($componentApprovers),
+                    set::required(true)
+                )
+            ) : null
+        )
+    );
+}
