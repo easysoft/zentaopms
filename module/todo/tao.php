@@ -181,7 +181,7 @@ class todoTao extends todoModel
         $newTodo->account    = $todo->account;
         $newTodo->begin      = $todo->begin;
         $newTodo->end        = $todo->end;
-        $newTodo->type       = 'cycle';
+        $newTodo->type       = 'custom';
         $newTodo->objectID   = $todo->id;
         $newTodo->pri        = $todo->pri;
         $newTodo->name       = $todo->name;

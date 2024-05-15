@@ -154,7 +154,7 @@ formPanel
                 (
                     setID('spaceDay'),
                     set::name('config[day]'),
-                    on::blur('verifySpaceDay(this)')
+                    on::blur('verifySpaceDay')
                 )
             )
         )
