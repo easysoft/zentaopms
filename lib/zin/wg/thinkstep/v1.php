@@ -13,11 +13,6 @@ class thinkStep  extends wg
     protected function buildQuestionBody(): array|wg
     {
         $item = $this->prop('item');
-        if(property_exists($item, 'questionType') && $item->questionType === 'input') return thinkInputDetail
-        (
-            set::item($item),
-            set::required($item->required)
-        );
         if(property_exists($item, 'questionType') && $item->questionType === 'tableInput') return thinkTableInputDetail
         (
             set::item($item),
@@ -31,6 +26,12 @@ class thinkStep  extends wg
     protected function buildBody(): wg|array
     {
         list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
+
+        if($addType === 'input' || $item->questionType === 'input') return thinkInput
+        (
+            set::step($item),
+            set::mode($action),
+        );
 
         if($addType === 'radio' || $item->questionType === 'radio') return thinkRadio
         (

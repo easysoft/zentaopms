@@ -2,25 +2,44 @@
 declare(strict_types=1);
 namespace zin;
 
-requireWg('thinkNode');
+requireWg('thinkQuestion');
 
 /**
  * 思引师填空部件类。
  * thinmory Input widget class.
  */
-class thinkInput extends thinkNode
+class thinkInput extends thinkQuestion
 {
     protected static array $defineProps = array(
-        'required?: bool',                      // 是否必填
         'isRequiredName?: string="required"',   // 是否必填对应的name
+        'isRequiredValue?: string'              // 是否必填的值
     );
 
-    private function buildRequiredControl(): wg
+    protected function buildDeatil(): array
     {
         global $lang;
-        list($required, $isRequiredName) = $this->prop(array('required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
-        return formRow
+        $detailWg = parent::buildDeatil();
+        list($step, $required, $isRequiredName, $isRequiredValue) = $this->prop(array('step', 'required', 'isRequiredName', 'isRequiredValue'));
+        if($step) $required = $step->required;
+        $detailWg[] = textarea
         (
+            set::rows('3'),
+            set::name($isRequiredName),
+            set::required($required),
+            set::value($isRequiredValue),
+            set::placeholder($lang->thinkwizard->step->pleaseInput)
+        );
+        return $detailWg;
+    }
+
+    protected function buildFormItem(): array
+    {
+        global $lang;
+        $formItems = parent::buildFormItem();
+
+        list($step, $required, $isRequiredName) = $this->prop(array('step', 'required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
+
+        $formItems[] = array(
             formGroup
             (
                 setClass('w-1/2'),
@@ -31,16 +50,11 @@ class thinkInput extends thinkNode
                     set::name($isRequiredName),
                     set::inline(true),
                     set::items($lang->thinkwizard->step->requiredList),
-                    set::value($required ? $required : 0),
+                    set::value($required),
                 )
             ),
+            $this->children()
         );
-    }
-
-    protected function buildBody(): array
-    {
-        $items = parent::buildBody();
-        $items[] = $this->buildRequiredControl();
-        return $items;
+        return $formItems;
     }
 }
