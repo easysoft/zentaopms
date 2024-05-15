@@ -379,13 +379,16 @@ class mrModel extends model
     public function update(int $MRID, object $MR): array
     {
         $oldMR = $this->fetchByID($MRID);
+        $diff  = array_diff_assoc((array)$oldMR, (array)$MR);
+
         if(!$oldMR) return array('result' => 'fail', 'message' => $this->lang->mr->notFound);
 
         $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         /* Exec Job */
-        if(isset($MR->jobID) && $MR->jobID)
+        $needExecJob = isset($diff['targetBranch']) || isset($diff['jobID']) ? true : false;
+        if($needExecJob && isset($MR->jobID) && $MR->jobID)
         {
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
             if(!empty($pipeline->queue))
