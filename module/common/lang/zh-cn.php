@@ -51,7 +51,7 @@ $lang->preference     = '个性化设置';
 $lang->tutorialAB     = '新手引导';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
-$lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> 艾体验设计</a>";
+$lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux listitem item-inner menu-item-inner state' target='_blank'><i class='icon icon-aiux item-icon'></i><div class='item-content text'>艾体验设计</div></a>";
 $lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
 $lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">更多精彩，尽在企业版！</a>';
 
