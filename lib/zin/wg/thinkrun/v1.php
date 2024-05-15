@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'thinkchecklist' . DS . 'v1.php';
+requireWg('thinkBaseCheckbox');
 class thinkRun extends wg
 {
     protected static array $defineProps = array(
@@ -25,7 +25,7 @@ class thinkRun extends wg
 
             if($options->enableOther) $showFields[] = array('text' => $lang->thinkwizard->step->other, 'value' => 'other', 'isOther' => '1', 'showText' => isset($answer->other) ? $answer->other : '');
 
-            return new thinkCheckList
+            return new thinkBaseCheckbox
             (
                 set::type($options->questionType),
                 setClass('mt-6'),

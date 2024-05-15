@@ -200,6 +200,7 @@ function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
 function thinkQuestion(): thinkQuestion {return createWg('thinkQuestion', func_get_args());}
 function thinkNodeBase(): thinkNodeBase {return createWg('thinkNodeBase', func_get_args());}
 function thinkTransition(): thinkTransition {return createWg('thinkTransition', func_get_args());}
+function thinkBaseCheckbox(): thinkBaseCheckbox {return createWg('thinkBaseCheckbox', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
 function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
 function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
@@ -210,7 +211,6 @@ function thinkInputDetail(): thinkInputDetail {return createWg('thinkInputDetail
 function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkTableInputDetail', func_get_args());}
 function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptionsDetail', func_get_args());}
 function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
-function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
 function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}
 function thinkRun(): thinkRun {return createWg('thinkRun', func_get_args());}

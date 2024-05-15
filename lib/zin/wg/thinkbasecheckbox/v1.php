@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
+requireWg('textarea');
+requireWg('checkbox');
 
-class thinkCheckList extends wg
+class thinkBaseCheckbox extends wg
 {
     protected static array $defineProps = array(
         'primary: bool=true',
@@ -17,9 +17,18 @@ class thinkCheckList extends wg
         'disabled?: bool'
     );
 
-    public static function getPageCSS(): string
+    public static function getPageCSS(): ?string
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+        return <<<CSS
+        .think-check-list .item-control.is-checked {border: 1px solid var(--color-primary-500); color: var(--color-primary-500);}
+        .think-check-list .item-control:hover {border: 1px solid var(--color-primary-500);}
+        .think-check-list .checkbox-primary {--checkbox-size: 16px; width: 16px;}
+        .think-check-list .checkbox-primary>input[type=checkbox]:checked+label:after {left: 1px; --tw-content: "\\e5ca"; color: var(--color-primary-500); font-weight: 600;}
+        .think-check-list .checkbox-primary.checked>label:before, .think-check-list .checkbox-primary>input[type=checkbox]:checked+label:before {background-color: unset; border-color: var(--color-primary-500); color: var(--color-primary-500);}
+        .think-check-list .checkbox-primary.checked>label, .think-check-list .radio-primary>label {font-family: ZentaoIcon !important;}
+        .think-check-list .radio-primary>label:before, .think-check-list .radio-primary.checked>label:before, .think-check-list .radio-primary>input[type=radio]:checked+label:before {display: none;}
+        .think-check-list .radio-primary>label:after {--tw-content: "\\e5ca"; color: var(--color-primary-500); font-size: 16px; background-color: unset; top: -2px; left: 2px; font-weight: 600;}
+        CSS;
     }
 
     public static function getPageJS(): string
@@ -80,14 +89,14 @@ class thinkCheckList extends wg
                             'placeholder' => $lang->thinkrun->placeholder->otherOption
                         )),
                         on::input('inputOther'),
-                        on::click('stopPropagation')
+                        on::click('e.stopPropagation()')
                     ),
                 ),
                 new checkbox
                 (
                     set($props),
                     set($item),
-                    $this->prop('type') == 'radio' ? on::click('stopPropagation') : null,
+                    $this->prop('type') == 'radio' ? on::click('e.stopPropagation()') : null,
                     isset($item['checked']) && $item['checked'] ? set::rootClass('checked') : null
                 )
             );
@@ -102,7 +111,7 @@ class thinkCheckList extends wg
             (
                 set($props),
                 set($item),
-                $this->prop('type') == 'radio' ? on::click('stopPropagation') : null,
+                $this->prop('type') == 'radio' ? on::click('e.stopPropagation()') : null,
                 isset($item['checked']) && $item['checked'] ? set::rootClass('checked') : null
             )
         );

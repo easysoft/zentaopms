@@ -37,7 +37,7 @@ class thinkRadio extends thinkQuestion
         foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
         if($options->enableOther) $items[] = array('text' => $lang->thinkwizard->step->other, 'value' => 'other', 'isOther' => '1', 'showText' => isset($answer->other) ? $answer->other : '');
 
-        $detailWg[] = thinkCheckList
+        $detailWg[] = thinkBaseCheckbox
         (
             set::type($options->questionType),
             set::items($items),
