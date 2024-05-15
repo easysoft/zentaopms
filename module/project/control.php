@@ -1563,7 +1563,7 @@ class project extends control
         $project = $this->project->getByID($projectID);
         if($pageType == 'old')
         {
-            $disabled = !empty($project->multiple) ? 'disabled' : '';
+            $disabled = empty($project->multiple) ? 'disabled' : '';
             return print(html::select('execution', $executions, '', "class='form-control $disabled' $disabled"));
         }
 
