@@ -20,7 +20,7 @@
  */
 class count_of_developed_story_in_execution extends baseCalc
 {
-    public $dataset = 'getDevStoriesWithExecution';
+    public $dataset = 'getAllStoriesWithExecution';
 
     public $fieldList = array('t3.project', 't1.stage', 't1.closedReason');
 
