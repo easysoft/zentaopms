@@ -211,3 +211,8 @@ function thinkRadioList(): thinkRadioList {return createWg('thinkRadioList', fun
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
 function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}
 function thinkRun(): thinkRun {return createWg('thinkRun', func_get_args());}
+
+if(is_dir(__DIR__ . DS . 'wg' . DS . 'boardeditor'))
+{
+    function boardEditor(): boardEditor {return createWg('boardeditor', func_get_args());}
+}
