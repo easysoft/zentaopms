@@ -164,15 +164,6 @@ class baseDAO
     static public $errors = array();
 
     /**
-     * 缓存。
-     * The cache.
-     *
-     * @var array
-     * @access public
-     */
-    static public $cache = array();
-
-    /**
      * 实时记录日志设置，并设置记录文件。
      * Open real time log and set real time file.
      *
