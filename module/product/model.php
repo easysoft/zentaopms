@@ -1212,12 +1212,12 @@ class productModel extends model
             if($story->type == 'requirement') $URTotal += 1;
             if($story->type == 'epic')        $ERTotal += 1;
 
-            /* 仅统计叶子需求的规模。
-               如果是用需、业需列表，则追加统计子需求类型和父需求不一样的父需求规模。
-               如果是项目需求列表，则只统计叶子软件需求的规模。
+            /* 产品软需列表仅统计叶子需求的规模。
+               如果是产品用需、业需列表，则追加统计子需求类型和父需求不一样的父需求规模。
+               如果是项目需求列表，则只统计叶子需求的规模。
             */
             $isLeafStory = !isset($childTypes[$story->id]) || (isset($childTypes[$story->id]) && !isset($childTypes[$story->id][$story->type]));
-            if((($storyType == $story->type) || ($storyType == 'all' && $story->type == 'story')) && $isLeafStory)
+            if(($storyType == $story->type && $isLeafStory) || ($storyType == 'all' && $story->isParent == '0'))
             {
                 $totalEstimate += $story->estimate;
                 $story->needSummaryEstimate = true;
