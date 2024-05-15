@@ -34,4 +34,29 @@ class storyList extends entitylist
 
         return $item;
     }
+
+    protected function getItems()
+    {
+        global $lang;
+        $items = $this->prop('items', array());
+        $list  = array();
+
+        foreach($items as $key => $entity)
+        {
+            if(is_object($entity))
+            {
+                $list[] = $this->getItem($entity);
+            }
+            elseif(is_array($entity))
+            {
+                $list[] = array('id' => $key, 'title' => $lang->story->typeList[$key]);
+                foreach($entity as $subEntity)
+                {
+                    $list[] = $this->getItem($subEntity);
+                }
+            }
+        }
+
+        return $list;
+    }
 }
