@@ -15,12 +15,12 @@ class thinkInput extends thinkQuestion
         'isRequiredValue?: string'              // 是否必填的值
     );
 
-    protected function buildDeatil(): array
+    protected function buildDetail(): array
     {
         global $lang;
-        $detailWg = parent::buildDeatil();
+        $detailWg = parent::buildDetail();
         list($step, $required, $isRequiredName, $isRequiredValue) = $this->prop(array('step', 'required', 'isRequiredName', 'isRequiredValue'));
-        if($step) $required = $step->required;
+        
         $detailWg[] = textarea
         (
             set::rows('3'),
@@ -38,7 +38,7 @@ class thinkInput extends thinkQuestion
         $formItems = parent::buildFormItem();
 
         list($step, $required, $isRequiredName) = $this->prop(array('step', 'required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
-
+        if($step) $required = $step->required;
         $formItems[] = array(
             formGroup
             (

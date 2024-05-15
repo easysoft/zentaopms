@@ -24,7 +24,7 @@ class thinkNodeBase extends wg
         'desc?: string',              // 描述
         'descName?: string="desc"',   // 描述对应的name
         'isRun?: bool=false',         // 是否是分析活动
-        'step: object',               // 整个步骤的对象
+        'step?: object',               // 整个步骤的对象
         'mode?: string="detail"',     // detail|create|edit
         'type?: string="node"',       // node|transition/question
     );
@@ -40,7 +40,7 @@ class thinkNodeBase extends wg
         CSS;
     }
 
-    protected function buildDeatil(): array
+    protected function buildDetail(): array
     {
         global $lang, $app;
         $app->loadLang('thinkrun');
@@ -189,8 +189,8 @@ class thinkNodeBase extends wg
             div
             (
                 setStyle($step->type == 'question' ? array('max-width' => '878px', 'min-width' => '643px') : array('max-width' => '878px')),
-                $this->buildDeatil()
+                $this->buildDetail()
             )
-        ) : $this->buildDeatil()): $this->buildForm();
+        ) : $this->buildDetail()): $this->buildForm();
     }
 }

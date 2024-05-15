@@ -25,10 +25,10 @@ class thinkRadio extends thinkQuestion
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function buildDeatil(): array
+    protected function buildDetail(): array
     {
         global $lang;
-        $detailWg = parent::buildDeatil();
+        $detailWg = parent::buildDetail();
         $step     = $this->prop('step');
         $options  = json_decode($step->options);
         $answer   = json_decode($step->answer);

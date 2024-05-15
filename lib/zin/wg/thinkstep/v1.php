@@ -27,21 +27,21 @@ class thinkStep  extends wg
     {
         list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
 
-        if($addType === 'input' || $item->questionType === 'input') return thinkInput
+        if($addType === 'input' || !$addType && $item->questionType === 'input') return thinkInput
         (
-            set::step($item),
+            set::step($addType ? null : $item),
             set::mode($action),
         );
 
-        if($addType === 'radio' || $item->questionType === 'radio') return thinkRadio
+        if($addType === 'radio' || !$addType && $item->questionType === 'radio') return thinkRadio
         (
-            set::step($item),
+            set::step($addType ? null : $item),
             set::mode($action),
         );
 
-        if($addType === 'checkbox' || $item->questionType === 'checkbox') return thinkCheckbox
+        if($addType === 'checkbox' || !$addType && $item->questionType === 'checkbox') return thinkCheckbox
         (
-            set::step($item),
+            set::step($addType ? null : $item),
             set::mode($action),
         );
 
