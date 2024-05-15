@@ -32,7 +32,12 @@ class thinkStep extends wg
 
     public static function getPageCSS(): ?string
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+        return <<<CSS
+        .think-step-panel .panel-body, .think-step-panel .form-horz .form-group {padding: 0;}
+        .think-step-panel .form-horz .form-label {justify-content: unset; position: relative; padding: 0;}
+        .think-step-form .toolbar.form-actions.form-group {position: absolute; top: 10px; right: 23px; height: 28px;}
+        .think-step-panel .form-horz .form-group {display: block;}
+        CSS;
     }
 
     private function buildNamePanel(): wg
