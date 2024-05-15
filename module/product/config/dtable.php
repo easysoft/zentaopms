@@ -150,7 +150,7 @@ $config->product->all->dtable->fieldList['name']['type']         = 'title';
 $config->product->all->dtable->fieldList['name']['show']         = true;
 $config->product->all->dtable->fieldList['name']['nestedToggle'] = false;
 $config->product->all->dtable->fieldList['name']['checkbox']     = true;
-$config->product->all->dtable->fieldList['name']['link']         = helper::createLink('product', 'browse', "productID={id}");
+$config->product->all->dtable->fieldList['name']['link']         = array('module' => 'product', 'method' => 'browse', 'params' => "productID={id}");
 $config->product->all->dtable->fieldList['name']['sortType']     = true;
 $config->product->all->dtable->fieldList['name']['group']        = 'g1';
 
