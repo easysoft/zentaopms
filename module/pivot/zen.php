@@ -259,7 +259,8 @@ class pivotZen extends pivot
                 /* Defind row data of the data table. */
                 $rows[$rowKey][$field] = $value;
 
-                $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
+                $value = is_null($value) ? null : mb_strlen($value);
+                $columnMaxLen[$field] = max($columnMaxLen[$field], $value);
 
                 /* 定义数据表格合并单元格的配置。*/
                 /* Define configuration to merge cell of the data table. */

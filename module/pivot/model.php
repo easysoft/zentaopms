@@ -1322,7 +1322,7 @@ class pivotModel extends model
         $sql = $this->appendWhereFilterToSql($sql, $filters);
 
         $driverName = 'duckdb';
-        $driverName = 'mysql';
+        //$driverName = 'mysql';
         $dbh     = $this->app->loadDriver($driverName);
         $records = $dbh->query($sql)->fetchAll();
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql);
@@ -2308,11 +2308,13 @@ class pivotModel extends model
      * @return array
      *
      */
-    public function getFieldsOptions(array $fieldSettings, string $sql): array
+    public function getFieldsOptions(array $fieldSettings, string $sql, string $driverName = 'mysql'): array
     {
         $options = array();
 
-        $sqlRecords = $this->dbh->query($sql)->fetchAll();
+        $driverName = 'duckdb';
+        $dbh        = $this->app->loadDriver($driverName);
+        $sqlRecords = $dbh->query($sql)->fetchAll();
 
         foreach($fieldSettings as $key => $fieldSetting)
         {
