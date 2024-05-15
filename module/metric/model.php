@@ -715,6 +715,7 @@ class metricModel extends model
         $dataFields = $this->getMetricRecordDateField($metric);
 
         $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
+        if(empty($records)) return array();
         if($metric->dateType == 'nodate')
         {
             $record = current($records);
