@@ -280,7 +280,11 @@ class transferModel extends model
         /* If empty items put system datas. */
         if(empty($items))
         {
-            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'})) return $this->moduleLang->{$field.'List'};
+            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'}))
+            {
+                if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
+                return $this->moduleLang->{$field.'List'};
+            }
             if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
         }
 
