@@ -843,6 +843,7 @@ $.apps = $.extend(apps,
     changeAppsTheme:   changeAppsTheme,
     updateUserToolbar: updateUserToolbar,
     closeApp:          closeApp,
+    toggleMenu:        toggleMenu
 });
 
 window.notifyMessage = function(data)
