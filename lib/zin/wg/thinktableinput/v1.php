@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'thinkstep' . DS . 'v1.php';
-
+requireWg('thinkNode');
 /**
  * 思引师表格填空部件类。
  * thinmory tableInput widget class.
  */
-class thinkTableInput extends thinkStep
+class thinkTableInput extends thinkNode
 {
     protected static array $defineProps = array(
         'required?: bool',                          // 是否必填
