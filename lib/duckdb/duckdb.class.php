@@ -124,11 +124,16 @@ class duckdb
      */
     public function query($sql = '')
     {
+        $sql = str_replace(array('`'), array('"'), $sql);
+
         /* $0全量匹配以 prefix 开头的表，替换为对应的 parquet 文件。 */
-        $pattern     = "/{$this->prefix}\S+/";
+        $ztpattern   = "/{$this->prefix}\S+/";
+        $ztvpattern  = "/ztv_\S+/";
         $replacement = "'" . $this->tmpPath . "$0" . '.parquet' . "'";
 
-        $this->sql = preg_replace($pattern, $replacement, $sql);
+        $sql = preg_replace($ztpattern, $replacement, $sql);
+        $sql = preg_replace($ztvpattern, $replacement, $sql);
+        $this->sql = $sql;
 
         return $this;
     }
