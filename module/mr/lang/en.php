@@ -76,6 +76,7 @@ $lang->mr->needApproved       = 'This MR should be approved before merge';
 $lang->mr->needCI             = 'Merge only after passing pipeline';
 $lang->mr->removeSourceBranch = 'Delete source branch after merge';
 $lang->mr->squash             = 'Squash commits';
+$lang->mr->triggeredCI        = 'The pipeline job is triggered due to the target branch or pipeline job changed.';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 
