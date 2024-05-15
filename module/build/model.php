@@ -237,17 +237,17 @@ class buildModel extends model
      * 通过条件获取版本id:name的键值对。
      * Get build pairs by condition.
      *
-     * @param  array      $productIdList
-     * @param  string|int $branch
-     * @param  string     $params       noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|noreleased|releasedtag, can be a set of them
-     * @param  int        $objectID
-     * @param  string     $objectType
-     * @param  string     $buildIdList
-     * @param  bool       $replace
+     * @param  array|int|string $productIdList
+     * @param  string|int       $branch
+     * @param  string           $params       noempty|notrunk|noterminate|withbranch|hasproject|noDeleted|singled|noreleased|releasedtag, can be a set of them
+     * @param  int              $objectID
+     * @param  string           $objectType
+     * @param  string           $buildIdList
+     * @param  bool             $replace
      * @access public
      * @return array
      */
-    public function getBuildPairs(array|int $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string $buildIdList = '', bool $replace = true): array
+    public function getBuildPairs(array|int|string $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string $buildIdList = '', bool $replace = true): array
     {
         $sysBuilds = array();
         if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
