@@ -505,4 +505,4 @@ detailBody
     )
 );
 
-render();
+$this->session->notHead ? render('fragment') : render();
