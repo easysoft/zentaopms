@@ -143,5 +143,6 @@ window.onSortEnd = function(from, to, type)
     form.append('recPerPage',  storyRecPerPage);
 
     $.ajaxSubmit({url, data:form});
+    $.apps.updateAppUrl($.createLink('productplan', 'view', `planID=${planID}&type=story&orderBy=order_desc`));
     return true;
 }
