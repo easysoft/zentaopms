@@ -107,7 +107,7 @@ if(commonModel::isTutorialMode())
 
 if($canOpreate['create'])      $createItem[] = array('text' => $lang->story->create,      'url' => $createLink);
 if($canOpreate['batchCreate']) $createItem[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
-if(in_array($execution->attribute, array('request', 'design')))
+if(in_array($execution->attribute, array('mix', 'request', 'design')))
 {
     if($canOpreate['createEpic'])             $createItem[] = array('text' => $lang->epic->create,                               'url' => $createEpicLink);
     if($canOpreate['batchCreateEpic'])        $createItem[] = array('text' => $lang->epic->batchCreate . $lang->ERCommon,        'url' => $batchCreateEpicLink);
