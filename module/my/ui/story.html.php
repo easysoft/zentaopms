@@ -14,6 +14,7 @@ include 'header.html.php';
 
 jsVar('children',   $lang->story->children);
 jsVar('childrenAB', $lang->story->childrenAB);
+jsVar('window.globalSearchType', 'story');
 
 featureBar
 (
