@@ -1119,15 +1119,15 @@ class blockZen extends block
         $execution   = $executions[$executionID];
 
         $this->loadModel('metric');
-        $estimateGroup       = $this->metric->getResultByCodeWithArray('estimate_of_task_in_execution',         array('execution' => $executionID), 'cron');         // 从度量项获取执行的预计工时。
-        $consumeGroup        = $this->metric->getResultByCodeWithArray('consume_of_task_in_execution',          array('execution' => $executionID), 'cron');         // 从度量项获取执行的消耗工时。
-        $leftGroup           = $this->metric->getResultByCodeWithArray('left_of_task_in_execution',             array('execution' => $executionID), 'cron');         // 从度量项获取执行的剩余工时。
-        $developedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_developed_story_in_execution', array('execution' => $executionID), 'cron'); // 从度量项获取执行的已完成需求。
-        $totalStoryGroup     = $this->metric->getResultByCodeWithArray('count_of_story_in_execution',           array('execution' => $executionID), 'cron'); // 从度量项获取执行的总需求数量。
+        $estimateGroup       = $this->metric->getResultByCodeWithArray('estimate_of_task_in_execution',              array('execution' => $executionID), 'cron');         // 从度量项获取执行的预计工时。
+        $consumeGroup        = $this->metric->getResultByCodeWithArray('consume_of_task_in_execution',               array('execution' => $executionID), 'cron');         // 从度量项获取执行的消耗工时。
+        $leftGroup           = $this->metric->getResultByCodeWithArray('left_of_task_in_execution',                  array('execution' => $executionID), 'cron');         // 从度量项获取执行的剩余工时。
+        $developedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_developed_story_in_execution',      array('execution' => $executionID), 'cron'); // 从度量项获取执行的已完成需求。
+        $totalStoryGroup     = $this->metric->getResultByCodeWithArray('count_of_story_in_execution',                array('execution' => $executionID), 'cron'); // 从度量项获取执行的总需求数量。
         $yesterday           = strtotime("-1 day");
-        $totalTaskGroup      = $this->metric->getResultByCodeWithArray('count_of_task_in_execution',            array('execution' => $executionID), 'cron'); // 从度量项获取执行的任务总数。
-        $unfinishedTaskGroup = $this->metric->getResultByCodeWithArray('count_of_unfinished_task_in_execution', array('execution' => $executionID), 'cron'); // 从度量项获取执行的未完成任务。
-        $dailyFinishedGroup  = $this->metric->getResultByCodeWithArray('count_of_daily_finished_task ',         array('execution' => $executionID, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron'); // 从度量项获取执行的昨日完成任务数。
+        $totalTaskGroup      = $this->metric->getResultByCodeWithArray('count_of_task_in_execution',                 array('execution' => $executionID), 'cron'); // 从度量项获取执行的任务总数。
+        $unfinishedTaskGroup = $this->metric->getResultByCodeWithArray('count_of_unfinished_task_in_execution',      array('execution' => $executionID), 'cron'); // 从度量项获取执行的未完成任务。
+        $dailyFinishedGroup  = $this->metric->getResultByCodeWithArray('count_of_daily_finished_task_in_execution ', array('execution' => $executionID, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron'); // 从度量项获取执行的昨日完成任务数。
 
         if(!empty($estimateGroup))       $estimateGroup       = array_column($estimateGroup,       null, 'execution');
         if(!empty($consumeGroup))        $consumeGroup        = array_column($consumeGroup,        null, 'execution');
