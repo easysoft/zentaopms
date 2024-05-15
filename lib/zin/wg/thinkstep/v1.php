@@ -39,6 +39,12 @@ class thinkStep  extends wg
     {
         list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
 
+        if($addType === 'radio' || $item->questionType === 'radio') return thinkRadio
+        (
+            set::step($item),
+            set::mode($action),
+        );
+
         if($action == 'detail')
         {
             return thinkStepDetail
