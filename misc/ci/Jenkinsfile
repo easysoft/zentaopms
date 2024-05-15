@@ -545,6 +545,7 @@ pipeline {
               ).trim()}"""
             INSTALL_GOSS_TOOLS="true"
             DEBUG="0" // set to int for dgoss
+            CNE_API_TOKEN = credentials('demo-zentaopass-cne-token')
           }
 
           steps {
@@ -582,6 +583,12 @@ pipeline {
 
                   sh 'make markdown-render > ./report.md'
                 }
+              }
+            }
+            script {
+              if (env.DEPLOY_ZENTAOPAAS=='true') {
+                deploy.upgradePaas(env.ZENTAOPAAS_SERVER, env.CNE_API_TOKEN)
+                    ximNotify(title: "禅道平台版DEMO部署成功", content: "访问地址 ["+env.ZENTAOPAAS_SERVER+"]("+env.ZENTAOPAAS_SERVER+")")
               }
             }
             script {
