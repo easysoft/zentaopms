@@ -37,11 +37,13 @@ $lang->projectstory->confirm           = '确定';
 $lang->projectstory->whyNoStories   = "看起来没有需求可以关联。请检查下{$lang->projectCommon}关联的{$lang->productCommon}中有没有需求，而且要确保它们已经审核通过。";
 $lang->projectstory->batchUnlinkTip = "其他需求已经移除，如下需求已与该{$lang->projectCommon}下执行相关联，请从执行中移除后再操作。";
 
-$lang->projectstory->featureBar['story']['allstory']          = '全部';
-$lang->projectstory->featureBar['story']['unclosed']          = '未关闭';
-$lang->projectstory->featureBar['story']['draft']             = '草稿';
-$lang->projectstory->featureBar['story']['reviewing']         = '评审中';
-$lang->projectstory->featureBar['story']['changing']          = '变更中';
-$lang->projectstory->featureBar['story']['closed']            = '已关闭';
-$lang->projectstory->featureBar['story']['linkedexecution']   = '已关联' . $lang->execution->common;
-$lang->projectstory->featureBar['story']['unlinkedexecution'] = '未关联' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['allstory']  = '全部';
+$lang->projectstory->featureBar['story']['unclosed']  = '未关闭';
+$lang->projectstory->featureBar['story']['draft']     = '草稿';
+$lang->projectstory->featureBar['story']['reviewing'] = '评审中';
+$lang->projectstory->featureBar['story']['changing']  = '变更中';
+$lang->projectstory->featureBar['story']['more']      = $lang->more;
+
+$lang->projectstory->moreSelects['story']['more']['closed']            = '已关闭';
+$lang->projectstory->moreSelects['story']['more']['linkedexecution']   = '已关联' . $lang->execution->common;
+$lang->projectstory->moreSelects['story']['more']['unlinkedexecution'] = '未关联' . $lang->execution->common;

@@ -37,11 +37,13 @@ $lang->projectstory->confirm           = 'Confirm';
 $lang->projectstory->whyNoStories   = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 $lang->projectstory->batchUnlinkTip = "Other requirements are removed. The following requirements are linked to the execution of this {$lang->projectCommon}. Please remove them from the execution first.";
 
-$lang->projectstory->featureBar['story']['allstory']          = 'All';
-$lang->projectstory->featureBar['story']['unclosed']          = 'Open';
-$lang->projectstory->featureBar['story']['draft']             = 'Draft';
-$lang->projectstory->featureBar['story']['reviewing']         = 'Reviewing';
-$lang->projectstory->featureBar['story']['changing']          = 'Changing';
-$lang->projectstory->featureBar['story']['closed']            = 'Closed';
-$lang->projectstory->featureBar['story']['linkedexecution']   = 'Linked ' . $lang->execution->common;
-$lang->projectstory->featureBar['story']['unlinkedexecution'] = 'Unlinked ' . $lang->execution->common;
+$lang->projectstory->featureBar['story']['allstory']  = 'All';
+$lang->projectstory->featureBar['story']['unclosed']  = 'Open';
+$lang->projectstory->featureBar['story']['draft']     = 'Draft';
+$lang->projectstory->featureBar['story']['reviewing'] = 'Reviewing';
+$lang->projectstory->featureBar['story']['changing']  = 'Changing';
+$lang->projectstory->featureBar['story']['more']      = $lang->more;
+
+$lang->projectstory->moreSelects['story']['more']['closed']            = 'Closed';
+$lang->projectstory->moreSelects['story']['more']['linkedexecution']   = 'Linked'   . $lang->execution->common;
+$lang->projectstory->moreSelects['story']['more']['unlinkedexecution'] = 'Unlinked' . $lang->execution->common;
