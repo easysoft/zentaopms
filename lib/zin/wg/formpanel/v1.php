@@ -180,7 +180,9 @@ class formPanel extends panel
         $layout = $this->prop('layout');
         if($layout == 'grid') return null;
 
-        $data      = data($app->getModuleName());
+        $moduleName = $app->getModuleName();
+        if($moduleName == 'caselib') $moduleName = 'lib';
+        $data      = data($moduleName);
         $fields    = $app->control->appendExtendForm('info', $data);
         $extraMain = array();
         foreach($fields as $field)

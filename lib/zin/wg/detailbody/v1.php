@@ -36,7 +36,7 @@ class detailBody extends wg
         $extraMain = array();
         foreach($fields as $field)
         {
-            $fieldControl = $field->control;
+            $fieldValue = !$isForm ? $app->control->flow->getFieldValue($field, $object) : null;
             $extraMain[] = section
             (
                 $field->control == 'file' && $object->files ? fileList
@@ -49,7 +49,7 @@ class detailBody extends wg
                 ) : null,
                 set::title($field->name),
                 set::required($field->required),
-                !$isForm ? div($app->control->flow->getFieldValue($field, $object)) : formGroup
+                !$isForm ? (div(!empty($field->control['control']) && $field->control['control'] == 'editor' ? html($fieldValue) : $fieldValue)) : formGroup
                 (
                     set::id($field->field),
                     set::name($field->field),
