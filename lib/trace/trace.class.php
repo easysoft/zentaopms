@@ -44,7 +44,7 @@ class trace
             'timeUsed' => round(getTime() - $this->app->startTime, 4) * 1000,
             'memory'   => round(memory_get_peak_usage() / 1024, 1),
             'querys'   => count(dao::$querys),
-            'caches'   => count(dao::$cache),
+            'caches'   => 0,
             'files'    => count(get_included_files()),
             'session'  => session_id()
         );
