@@ -10,6 +10,7 @@
 .color-ff9f46 > .card { background-color: #ff9f46 !important; color: #fff !important}
 .color-fc5959 > .card { background-color: #fc5959 !important; color: #fff !important}
 .color-937c5a > .card a, .color-ff9f46 > .card a, .color-fc5959 > .card a { color: inherit !important }
+.color-937c5a > .card span, .color-ff9f46 > .card span, .color-fc5959 > .card span { color: inherit !important }
 .progress {height: 0.5rem !important}
 .kanban-header-title .as-subtitle {font-weight: 700;}
 .kanban-header-title .text-danger {color:rgb(255, 93, 93); opacity: 1;}
