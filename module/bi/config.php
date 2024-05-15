@@ -81,10 +81,13 @@ $config->bi->columnTypes->DATE      = 'date';
 $config->bi->duckdb = new stdclass();
 $config->bi->duckdb->tables = array();
 $config->bi->duckdb->tables['action'] = <<<EOT
-SELECT * FROM zt_action
+SELECT id,objectType,objectID,product,project,execution,actor,action,date,read,vision,efforted FROM zt_action
 EOT;
 $config->bi->duckdb->tables['account'] = <<<EOT
 SELECT * FROM zt_account
+EOT;
+$config->bi->duckdb->tables['attend'] = <<<EOT
+SELECT * FROM zt_attend
 EOT;
 $config->bi->duckdb->tables['bug'] = <<<EOT
 SELECT * FROM zt_bug
@@ -92,8 +95,14 @@ EOT;
 $config->bi->duckdb->tables['build'] = <<<EOT
 SELECT * FROM zt_build
 EOT;
+$config->bi->duckdb->tables['burn'] = <<<EOT
+SELECT * FROM zt_burn
+EOT;
 $config->bi->duckdb->tables['case'] = <<<EOT
 SELECT * FROM zt_case
+EOT;
+$config->bi->duckdb->tables['casestep'] = <<<EOT
+SELECT * FROM zt_casestep
 EOT;
 $config->bi->duckdb->tables['config'] = <<<EOT
 SELECT * FROM zt_config
@@ -120,7 +129,7 @@ $config->bi->duckdb->tables['group'] = <<<EOT
 SELECT * FROM zt_group
 EOT;
 $config->bi->duckdb->tables['history'] = <<<EOT
-SELECT * FROM zt_history
+SELECT id,action,field FROM zt_history
 EOT;
 $config->bi->duckdb->tables['issue'] = <<<EOT
 SELECT * FROM zt_issue
@@ -148,6 +157,9 @@ SELECT * FROM zt_product
 EOT;
 $config->bi->duckdb->tables['productplan'] = <<<EOT
 SELECT * FROM zt_productplan
+EOT;
+$config->bi->duckdb->tables['planstory'] = <<<EOT
+SELECT * FROM zt_planstory
 EOT;
 $config->bi->duckdb->tables['project'] = <<<EOT
 SELECT * FROM zt_project
@@ -190,4 +202,41 @@ SELECT * FROM zt_todo
 EOT;
 $config->bi->duckdb->tables['user'] = <<<EOT
 SELECT * FROM zt_user
+EOT;
+
+$config->bi->duckdb->ztvtables['dayactions'] = <<<EOT
+SELECT * FROM ztv_dayactions
+EOT;
+$config->bi->duckdb->ztvtables['dayuserlogin'] = <<<EOT
+SELECT * FROM ztv_dayuserlogin
+EOT;
+$config->bi->duckdb->ztvtables['dayeffort'] = <<<EOT
+SELECT * FROM ztv_dayeffort
+EOT;
+$config->bi->duckdb->ztvtables['daystoryopen'] = <<<EOT
+SELECT * FROM ztv_daystoryopen
+EOT;
+$config->bi->duckdb->ztvtables['daystoryclose'] = <<<EOT
+SELECT * FROM ztv_daystoryclose
+EOT;
+$config->bi->duckdb->ztvtables['daytaskopen'] = <<<EOT
+SELECT * FROM ztv_daytaskopen
+EOT;
+$config->bi->duckdb->ztvtables['daytaskfinish'] = <<<EOT
+SELECT * FROM ztv_daytaskfinish
+EOT;
+$config->bi->duckdb->ztvtables['daybugopen'] = <<<EOT
+SELECT * FROM ztv_daybugopen
+EOT;
+$config->bi->duckdb->ztvtables['daybugresolve'] = <<<EOT
+SELECT * FROM ztv_daybugresolve
+EOT;
+$config->bi->duckdb->ztvtables['productstories'] = <<<EOT
+SELECT * FROM ztv_productstories
+EOT;
+$config->bi->duckdb->ztvtables['productbugs'] = <<<EOT
+SELECT * FROM ztv_productbugs
+EOT;
+$config->bi->duckdb->ztvtables['projectsummary'] = <<<EOT
+SELECT * FROM ztv_projectsummary
 EOT;

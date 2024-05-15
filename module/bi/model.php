@@ -71,7 +71,43 @@ class biModel extends model
             return array('result' => 'fail', 'message' => $message);
         }
 
-        return array('result' => 'success', 'message' => $rows);
+        return array('result' => 'success');
+    }
+
+    /**
+     * Try to explain sql.
+     *
+     * @param  string     $sql
+     * @param  string     $limitSql
+     * @param  string     $driverName mysql|duckdb
+     * @access public
+     * @return array
+     */
+    public function querySQL($sql, $limitSql, $driverName = 'mysql')
+    {
+        $dbh = $this->app->loadDriver($driverName);
+
+        try
+        {
+            if($driverName == 'mysql')
+            {
+                $rows = $dbh->query($limitSql)->fetchAll();
+                $rowsCount = $dbh->query("SELECT FOUND_ROWS() as count")->fetch();
+            }
+            elseif($driverName == 'duckdb')
+            {
+                $rows = $dbh->query($sql)->fetchAll();
+                $rowsCount = count($rows);
+            }
+        }
+        catch(Exception $e)
+        {
+            $message = preg_replace("/\r|\n/", "", $e->getMessage());
+            $message = strip_tags($message);
+            return array('result' => 'fail', 'message' => $message);
+        }
+
+        return array('result' => 'success', 'rows' => $rows, 'rowCount' => $rowCount);
     }
 
     /**
@@ -544,16 +580,26 @@ class biModel extends model
      */
     public function prepareCopySQL($duckdbTmpPath)
     {
-        $tables = $this->config->bi->duckdb->tables;
+        $tables    = $this->config->bi->duckdb->tables;
+        $ztvtables = $this->config->bi->duckdb->ztvtables;
         if(empty($tables)) return '';
 
         $tablePrefix = $this->config->db->prefix;
+        $ztvPrefix   = 'ztv_';
 
         $copySQL  = '';
         foreach($tables as $table => $sql)
         {
             $table = $tablePrefix . $table;
             $sql   = str_replace('zt_', $tablePrefix, $sql);
+
+            $tablePath = $duckdbTmpPath . $table;
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
+        }
+
+        foreach($ztvtables as $table => $sql)
+        {
+            $table = $ztvPrefix . $table;
 
             $tablePath = $duckdbTmpPath . $table;
             $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";

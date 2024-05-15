@@ -188,6 +188,7 @@ class pivotModel extends model
      */
     public function processFieldSettings(object $pivot): void
     {
+        $this->loadModel('dataview');
         $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
         if(empty($fieldSettings)) return;
 
@@ -787,7 +788,7 @@ class pivotModel extends model
             $connectSQL .= " where $whereStr";
         }
 
-        $sql = "select * from ($sql) tt" . $connectSQL;
+        $sql = "select * from ( $sql ) tt" . $connectSQL;
 
         return $sql;
     }
@@ -1320,7 +1321,10 @@ class pivotModel extends model
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters);
 
-        $records = $this->dao->query($sql)->fetchAll();
+        $driverName = 'duckdb';
+        $driverName = 'mysql';
+        $dbh     = $this->app->loadDriver($driverName);
+        $records = $dbh->query($sql)->fetchAll();
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql);
 
         $showColTotal = zget($settings, 'columnTotal', 'noShow');

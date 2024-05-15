@@ -21,6 +21,7 @@ class bi extends control
      */
     public function syncParquetFile()
     {
+        $startTime = microtime(true);
         $duckdb = $this->bi->getDuckDBPath();
         if(!$duckdb)
         {
@@ -39,6 +40,9 @@ class bi extends control
         $command = $this->bi->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
 
         $output = shell_exec($command);
+        $endTime = microtime(true);
+        $runTime = $endTime - $startTime;
+        echo "$runTime \n";
 
         if(empty($output))
         {
