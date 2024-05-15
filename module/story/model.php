@@ -3669,7 +3669,7 @@ class storyModel extends model
                 global $dao;
                 $project = $dao->findByID($_SESSION['project'])->from(TABLE_PROJECT)->fetch();
             }
-            return ($app->tab == 'execution' || (!empty($project) && $project->multiple == '0')) && $story->status == 'active' && $story->type == 'story';
+            return ($app->tab == 'execution' || (!empty($project) && $project->multiple == '0')) && $story->status == 'active' && $story->type == 'story' && $story->isParent == '0';
         }
 
         $disabledFeatures = ",{$config->disabledFeatures},";
