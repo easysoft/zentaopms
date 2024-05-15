@@ -90,10 +90,10 @@ $canModifyProduct                     = common::canModify('product', $product);
 $canModifyExecution                   = common::canModify('execution', $execution);
 $canOpreate['create']                 = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');
 $canOpreate['batchCreate']            = $canModifyProduct && $canModifyExecution && hasPriv('story', 'batchCreate');
-$canOpreate['createEpic']             = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'create');
-$canOpreate['batchCreateEpic']        = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'batchCreate');
-$canOpreate['createRequirement']      = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'create');
-$canOpreate['batchCreateRequirement'] = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'batchCreate');
+$canOpreate['createEpic']             = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'create') && strpos($project->storyType, 'epic') !== false;
+$canOpreate['batchCreateEpic']        = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'batchCreate') && strpos($project->storyType, 'epic') !== false;
+$canOpreate['createRequirement']      = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'create') && strpos($project->storyType, 'requirement') !== false;
+$canOpreate['batchCreateRequirement'] = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'batchCreate') && strpos($project->storyType, 'requirement') !== false;
 
 $createLink                 = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
 $batchCreateLink            = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
