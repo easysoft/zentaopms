@@ -1032,26 +1032,21 @@ class baseDAO
     {
         $sql   = $this->processSQL();
         $table = $this->table;
-        $key   = 'fetchGroup-' . md5($sql . $groupField . $keyField);
-        if(isset(dao::$cache[$table][$key]))
+        $key   = 'fetchGroup-' . md5($sql);
+
+        $rows = $this->getCache($key, $sql);
+        if($rows === false)
         {
-            $result    = array();
-            $groupRows = dao::$cache[$table][$key];
-            foreach($groupRows as $groupField => $rows)
-            {
-                foreach($rows as $keyField => $row) $result[$groupField][$keyField] = $this->getRow($row);
-            }
-            return $result;
+            $rows = $this->query($sql)->fetchAll();
+            $this->setCache($key, $rows);
         }
 
-        $stmt = $this->query($sql);
-        $rows = array();
-        while($row = $stmt->fetch())
+        $result = array();
+        foreach($rows as $i => $row)
         {
-            empty($keyField) ? $rows[$row->$groupField][] = $row : $rows[$row->$groupField][$row->$keyField] = $this->getRow($row);
+            empty($keyField) ? $result[$row->$groupField][] = $row : $result[$row->$groupField][$row->$keyField] = $row;
         }
-        dao::$cache[$table][$key] = $rows;
-        return $rows;
+        return $result;
     }
 
     /**
