@@ -448,11 +448,7 @@ class design extends control
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'full', $hasParent);
 
-        $items = array();
-        foreach($stories as $storyID => $storyTitle)
-        {
-            $items[] = array('value' => $storyID, 'text' => $storyTitle, 'keys' => $storyTitle);
-        }
+        $items = $this->story->addGradeLabel($stories);
         return print(json_encode($items));
     }
 
