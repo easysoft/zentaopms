@@ -431,7 +431,7 @@ class blockZen extends block
         $yesterday = strtotime("-1 day");
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
-        $finishTaskGroup = $this->loadModel('metric')->getResultByCodeWithArray('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'realtime', null, $this->config->vision);
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'realtime', null, $this->config->vision);
         if(!empty($finishTaskGroup))
         {
             $finishTaskGroup = reset($finishTaskGroup);
@@ -440,7 +440,7 @@ class blockZen extends block
 
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
-        $fixBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
+        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
         if(!empty($fixBugGroup))
         {
             $fixBugGroup = reset($fixBugGroup);
@@ -468,7 +468,7 @@ class blockZen extends block
             if($field == 'testcase') $code = "assigned_case";
 
             /* 查询当前指派给当前用户的不同数据。 */
-            $assignedGroup = $this->metric->getResultByCodeWithArray("count_of_{$code}_in_user", array('user' => $this->app->user->account), 'realtime', null, $field != 'feedback' ? $this->config->vision : '');
+            $assignedGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account), 'realtime', null, $field != 'feedback' ? $this->config->vision : '');
             $count = 0;
             if(!empty($assignedGroup))
             {
@@ -3283,8 +3283,8 @@ class blockZen extends block
         /* 敏捷和瀑布相关目的统计信息。 */
         $riskCountGroup  = $this->loadModel('metric')->getResultByCodeWithArray('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
         $issueCountGroup = $this->metric->getResultByCodeWithArray('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        if($riskCountGroup)    $riskCountGroup    = array_column($riskCountGroup,    null, 'project');
-        if($issueCountGroup)   $issueCountGroup   = array_column($issueCountGroup,   null, 'project');
+        if($riskCountGroup)  $riskCountGroup  = array_column($riskCountGroup,  null, 'project');
+        if($issueCountGroup) $issueCountGroup = array_column($issueCountGroup, null, 'project');
 
         /* 敏捷项目的统计信息。 */
         $investedGroup      = $this->metric->getResultByCodeWithArray('day_of_invested_in_project',         array('project' => join(',', $projectIdList)), 'cron', null, $vision);
