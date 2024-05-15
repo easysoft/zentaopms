@@ -946,7 +946,10 @@ class baseDAO
         {
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
-            if($this->table) unset(dao::$cache[$this->table]);
+            if($this->table)
+            {
+                $this->setCache(str_replace(array('`', '"'), '', $this->table), microtime(true));
+            }
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
