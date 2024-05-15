@@ -15,15 +15,15 @@ class buildTao extends buildModel
      * 根据条件获取版本列表信息。
      * Get build list inormation by condition.
      *
-     * @param  array     $productIdList
-     * @param  string    $params        hasdeleted|hasproject|singled
-     * @param  int       $objectID
-     * @param  string    $objectType
-     * @param  array     $shadows
+     * @param  array|int|string $productIdList
+     * @param  string           $params        hasdeleted|hasproject|singled
+     * @param  int              $objectID
+     * @param  string           $objectType
+     * @param  array            $shadows
      * @access protected
      * @return array
      */
-    protected function fetchBuilds(array|int $productIdList, string $params = '', int $objectID = 0, string $objectType = '', array $shadows = array()): array
+    protected function fetchBuilds(array|int|string $productIdList, string $params = '', int $objectID = 0, string $objectType = '', array $shadows = array()): array
     {
         $fieldList = 't1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t3.status as releaseStatus, t3.id as releaseID, t4.type as productType';
         if($objectType == 'execution' || $objectType == 'project') $fieldList .= ', t2.status as objectStatus';
