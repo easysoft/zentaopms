@@ -36,6 +36,7 @@ class thinkNodeBase extends wg
         .think-step-panel .form-horz .form-label {justify-content: unset; position: relative; padding: 0;}
         .think-step-form .toolbar.form-actions.form-group {position: absolute; top: 10px; right: 23px; height: 28px;}
         .think-step-panel .form-horz .form-group {display: block;}
+        .run-desc * {font-size: 16px !important;}
         CSS;
     }
 
@@ -50,12 +51,13 @@ class thinkNodeBase extends wg
         (
             div
             (
-                setClass('flex items-start justify-between pb-2'),
+                setClass('h-10 flex items-start justify-between mb-2'),
                 $step->type == 'question' ? array
                 (
                     div
                     (
-                        setClass('text-xl mb-3 flex items-center'),
+                        setStyle(array('font-size' => '1.25rem')),
+                        setClass('mb-3 flex items-center'),
                         !empty($options->required) ? div(setClass('text-danger mr-0.5 h-5'), '*') : null,
                         $step->title,
                         !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
@@ -104,8 +106,8 @@ class thinkNodeBase extends wg
             ),
             div
             (
-                setClass('text-sm leading-6 py-0 text-opacity-60 text-fore text-sm'),
-                setStyle(array('margin-top' => '-30px')),
+                setClass('run-desc mb-2.5'),
+                setStyle(array('margin-top' => '-28px')),
                 section
                 (
                     setClass('break-words'),
