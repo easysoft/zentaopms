@@ -780,7 +780,7 @@
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         let selector = `dtable/${target}:component`;
-        options
+        options = options || {};
         if(options.selector && options.selector !== 'dtable') selector = options.selector;
         const isInModal = $(target).closest('.modal').length;
         if(!isInModal && !options.selector)
