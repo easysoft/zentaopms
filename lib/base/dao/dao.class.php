@@ -1063,19 +1063,24 @@ class baseDAO
      */
     public function fetchPairs($keyField = '', $valueField = '')
     {
+        $sql = $this->processSQL();
+        $key = 'fetchPairs-' . md5($sql);
+
+        $rows = $this->getCache($key, $sql);
+        if($rows === false)
+        {
+            $rows = $this->query($sql)->fetchAll();
+            $this->setCache($key, $rows);
+        }
+
+        $ready      = false;
         $keyField   = trim($keyField, '`');
         $valueField = trim($valueField, '`');
 
-        $sql   = $this->processSQL();
-        $table = $this->table;
-        $key   = 'fetchPairs-' . md5($sql . $keyField . $valueField);
-        if(isset(dao::$cache[$table][$key])) return dao::$cache[$table][$key];
-
-        $pairs = array();
-        $ready = false;
-        $stmt  = $this->query($sql);
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        $result = array();
+        foreach($rows as $row)
         {
+            $row = (array)$row;
             if(!$ready)
             {
                 if(empty($keyField)) $keyField = key($row);
@@ -1087,11 +1092,10 @@ class baseDAO
                 $ready = true;
             }
 
-            $pairs[$row[$keyField]] = $row[$valueField];
+            $result[$row[$keyField]] = $row[$valueField];
         }
 
-        dao::$cache[$table][$key] = $pairs;
-        return $pairs;
+        return $result;
     }
 
     /**
