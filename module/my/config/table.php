@@ -455,7 +455,7 @@ $config->my->epic->dtable->fieldList['id']['type']     = 'id';
 $config->my->epic->dtable->fieldList['id']['sortType'] = true;
 
 $config->my->epic->dtable->fieldList['title']['name']     = 'title';
-$config->my->epic->dtable->fieldList['title']['title']    = common::checkNotCN() ? $lang->URCommon . ' ' . $lang->my->name : $lang->URCommon . $lang->my->name;
+$config->my->epic->dtable->fieldList['title']['title']    = $lang->ERCommon . $lang->my->name;
 $config->my->epic->dtable->fieldList['title']['type']     = 'title';
 $config->my->epic->dtable->fieldList['title']['link']     = array('module' => 'epic', 'method' => 'view', 'params' => 'id={id}&version=0&param=0&storyType=epic');
 $config->my->epic->dtable->fieldList['title']['fixed']    = 'left';
