@@ -722,10 +722,13 @@ class productModel extends model
 
         if($projectID)
         {
+            $project    = $this->loadModel('project')->fetchById($projectID);
             $gradePairs = array();
             $gradeList  = $this->loadModel('story')->getGradeList('');
+            $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
             foreach($gradeList as $grade)
             {
+                if(strpos($storyTypes, $grade->type) === false) continue;
                 $key = (string)$grade->type . (string)$grade->grade;
                 $gradePairs[$key] = $grade->name;
             }

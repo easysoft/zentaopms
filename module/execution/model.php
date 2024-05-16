@@ -2320,15 +2320,6 @@ class executionModel extends model
         }
 
         /* Build search form. */
-        $gradePairs = array();
-        $gradeList  = $this->loadModel('story')->getGradeList('');
-        foreach($gradeList as $grade)
-        {
-            $key = (string)$grade->type . (string)$grade->grade;
-            $gradePairs[$key] = $grade->name;
-        }
-        asort($gradePairs);
-
         if($type == 'executionStory') $this->config->product->search['module'] = 'executionStory';
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
@@ -2337,7 +2328,6 @@ class executionModel extends model
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values']    = $planPairs;
         $this->config->product->search['params']['module']['values']  = $modules;
-        $this->config->product->search['params']['grade']['values']   = $gradePairs;
         $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
         $this->config->product->search['params']['stage']['values']   = array('' => '') + $this->lang->story->stageList;
         if($productType == 'normal')
@@ -2363,6 +2353,19 @@ class executionModel extends model
                 unset($this->config->product->search['params']['plan']);
             }
         }
+
+        $gradePairs = array();
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
+        foreach($gradeList as $grade)
+        {
+            if(strpos($storyTypes, $grade->type) === false) continue;
+            $key = (string)$grade->type . (string)$grade->grade;
+            $gradePairs[$key] = $grade->name;
+        }
+        asort($gradePairs);
+
+        $this->config->product->search['params']['grade']['values'] = $gradePairs;
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
