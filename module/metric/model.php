@@ -711,7 +711,8 @@ class metricModel extends model
      */
     public function getResultByCodeWithArray($code, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
     {
-        $metric     = $this->metricTao->fetchMetricByCode($code);
+        $metric = $this->metricTao->fetchMetricByCode($code);
+        if(!$metric) return array();
         $dataFields = $this->getMetricRecordDateField($metric);
 
         $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
