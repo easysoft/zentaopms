@@ -16,11 +16,6 @@ class thinkRadio extends thinkQuestion
         'fields?: array',
     );
 
-    public static function getPageJS(): string
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function buildDetail(): array
     {
         global $lang;
