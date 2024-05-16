@@ -153,8 +153,9 @@ class dropmenu extends wg
             $objectID       = $currentMenuKey;
         }
 
-        if($tab == 'caselib')  $objectID = data('libID');
-        if($tab == 'feedback') $objectID = data('productID');
+        if($tab == 'caselib')    $objectID = data('libID');
+        if($tab == 'feedback')   $objectID = data('productID');
+        if($tab == 'demandpool') $objectID = data('poolID');
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab) && !empty($objectID))
