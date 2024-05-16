@@ -318,7 +318,9 @@ class baseDAO
         foreach($tables[1] as $table)
         {
             $time = $this->cache->get($table);
-            if($time > $result[0]) return false;
+            if($time === null) continue;
+
+            if($time[0] > $result[0]) return false;
         }
 
         return $result[1];
