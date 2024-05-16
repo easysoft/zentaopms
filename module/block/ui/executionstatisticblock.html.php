@@ -81,11 +81,11 @@ if($execution->type == 'kanban')
                     'formatter'   => "RAWJS<function(rowDatas){return window.randTipInfo(rowDatas);}>RAWJS"
                 )),
                 set::legend(array(
-                    'data' => array_keys(array_reverse($chartData['line']))
+                    'data' => !empty($chartData['line']) ? array_keys(array_reverse($chartData['line'])) : null
                 )),
                 set::grid(array(
-                    'top'         => '80px',
-                    'left'         => '2px',
+                    'top'          => !empty($chartData['lines']) ? '80px' : '40px',
+                    'left'         => !empty($chartData['lines']) ? '2px' : '15px',
                     'right'        => '2px',
                     'bottom'       => '2px',
                     'containLabel' => true
@@ -93,7 +93,7 @@ if($execution->type == 'kanban')
                 set::xAxis(array(array(
                     'type' => 'category',
                     'boundaryGap' => false,
-                    'data' => $chartData['labels'],
+                    'data' => !empty($chartData['labels']) ? $chartData['labels'] : null,
                     'name' => $lang->execution->burnXUnit,
                     'axisLine' => array('show' => true, 'lineStyle' =>array('color' => '#999', 'width' =>1))
                 ))),
