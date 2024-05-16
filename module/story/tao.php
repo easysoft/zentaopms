@@ -704,6 +704,7 @@ class storyTao extends storyModel
     protected function doCreateStory(object $story): int|false
     {
         $module = $this->app->rawModule;
+        $module = in_array($module, array('story', 'epic', 'requirement')) ? $module : 'story';
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,region,lane,branches,plans,modules,uploadImage')
             ->autoCheck()
             ->checkIF(!empty($story->notifyEmail), 'notifyEmail', 'email')
