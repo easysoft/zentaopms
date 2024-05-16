@@ -662,7 +662,7 @@
         }
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
         const $iframe = $page.find('iframe').removeClass('in').addClass('invisible');
-        if($iframe.attr('src') === url) $iframe[0].contentWindow.location.reload();
+        if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
         currentAppUrl = url;
     }
