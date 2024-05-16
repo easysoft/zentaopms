@@ -16,11 +16,11 @@ window.getItem = function(info)
         info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
     }
     if(info.item.status == 'doing') info.item.prefix = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
-    if(info.item.type == 'execution' && privs.canViewExecution)
+    if(info.item.cardType == 'execution' && privs.canViewExecution)
     {
         info.item.titleUrl = $.createLink('execution', 'task', `id=${info.item.id}`);
     }
-    else if(info.item.type == 'project' && privs.canViewProject)
+    else if(info.item.cardType == 'project' && privs.canViewProject)
     {
         info.item.titleUrl = $.createLink('project', 'index', `id=${info.item.id}`);
     }
@@ -37,7 +37,7 @@ window.canDrop = function(dragInfo, dropInfo)
 
     if(dropInfo.type == 'item') return false;
     if(dragInfo.item.lane != lane.name)   return false;
-    if(dragInfo.item.type == 'execution') return false;
+    if(dragInfo.item.cardType == 'execution') return false;
     if(dragInfo.item.status == 'wait'   && dropInfo.col == 'doingProjects')  return privs.canStartProject;
     if(dragInfo.item.status == 'wait'   && dropInfo.col == 'closed')         return privs.canCloseProject;
     if(dragInfo.item.status == 'doing'  && dropInfo.col == 'closed')         return privs.canCloseProject;
