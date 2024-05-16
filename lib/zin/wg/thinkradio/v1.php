@@ -12,13 +12,9 @@ class thinkRadio extends thinkQuestion
 {
     protected static array $defineProps = array
     (
-        'requiredName?: string="required"',
-        'optionName?: string="fields"',
-        'otherName?: string="enableOther"',
         'enableOther?: bool',
         'fields?: array',
     );
-
 
     public static function getPageJS(): string
     {
@@ -30,18 +26,19 @@ class thinkRadio extends thinkQuestion
         global $lang;
         $detailWg = parent::buildDetail();
         $step     = $this->prop('step');
-        $options  = json_decode($step->options);
-        $answer   = json_decode($step->answer);
-        $fields   = $options->fields ? explode(', ', $options->fields) : array();
-        $items    = array();
+        $answer   = $step->answer;
+        if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
+
+        $fields = $step->options->fields ?? array();
+        $items  = array();
         foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
-        if($options->enableOther) $items[] = array('text' => $lang->thinkwizard->step->other, 'value' => 'other', 'isOther' => '1', 'showText' => isset($answer->other) ? $answer->other : '');
+        if($step->options->enableOther) $items[] = array('text' => $lang->thinkwizard->step->other, 'value' => 'other', 'isOther' => '1', 'showText' => isset($answer->other) ? $answer->other : '');
 
         $detailWg[] = thinkBaseCheckbox
         (
-            set::type($options->questionType),
+            set::type($step->options->questionType),
             set::items($items),
-            set::name($options->questionType == 'radio' ? 'result' : 'result[]'),
+            set::name($step->options->questionType == 'radio' ? 'result' : 'result[]'),
             set::value(isset($answer->result) ? $answer->result : ''),
         );
         return $detailWg;
@@ -52,24 +49,26 @@ class thinkRadio extends thinkQuestion
         global $lang;
         $formItems = parent::buildFormItem();
 
-        list($step, $requiredName, $optionName, $otherName, $required, $enableOther, $fields) = $this->prop(array('step', 'requiredName', 'optionName', 'otherName', 'required', 'enableOther', 'fields'));
+        list($step, $question, $required, $enableOther, $fields) = $this->prop(array('step', 'question', 'required', 'enableOther', 'fields'));
         $requiredItems = $lang->thinkwizard->step->requiredList;
         if($step)
         {
-            $enableOther = $step->enableOther;
-            $required    = $step->required;
-            $fields      = explode(', ', $step->fields);
+            $step->options->fields = (array)$step->options->fields;
+            $enableOther = $step->options->enableOther;
+            $required    = $step->options->required;
+            $fields      = $step->options->fields ? array_values($step->options->fields) : array();
         }
 
         $formItems[] = array(
+            formHidden('options[questionType]', $question),
             formGroup
             (
                 set::label($lang->thinkwizard->step->label->option),
                 thinkOptions
                 (
-                    set::name($optionName),
+                    set::name('options[fields]'),
                     set::data($fields),
-                    set::otherName($otherName),
+                    set::otherName('options[enableOther]'),
                     set::enableOther($enableOther)
                 )
             ),
@@ -79,7 +78,7 @@ class thinkRadio extends thinkQuestion
                 set::label($lang->thinkwizard->step->label->required),
                 radioList
                 (
-                    set::name($requiredName),
+                    set::name('options[required]'),
                     set::inline(true),
                     set::value($required),
                     set::items($requiredItems),
