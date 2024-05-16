@@ -412,6 +412,22 @@ class baseRouter
     public $throwError = false;
 
     /**
+     * 是否使用客户端缓存。
+     * Whether to use client cache.
+     *
+     * @var bool
+     */
+    public $useClientCache = true;
+
+    /**
+     * 客户端缓存时间。
+     * The client cache time.
+     *
+     * @var int
+     */
+    public $clientCacheTime = 0;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
