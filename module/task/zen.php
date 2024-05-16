@@ -1639,7 +1639,7 @@ class taskZen extends task
         if(helper::isAjaxRequest('modal') || isonlybody())
         {
             /* If it is Kanban execution, refresh the Kanban statically through callback. */
-            if($this->app->tab == 'execution' && $execution == 'kanban' || $this->config->vision == 'lite')
+            if($this->app->tab == 'execution' && $execution->type == 'kanban' || $this->config->vision == 'lite')
             {
                 $response['closeModal'] = true;
                 $response['callback']   = 'refreshKanban()';
