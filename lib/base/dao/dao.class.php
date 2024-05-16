@@ -323,6 +323,8 @@ class baseDAO
             if($time[0] > $result[0]) return false;
         }
 
+        $this->app->useClientCache = $this->app->clientCacheTime > $result[0];
+
         return $result[1];
     }
 
@@ -337,6 +339,8 @@ class baseDAO
      */
     public function setCache($key, $value)
     {
+        $this->app->useClientCache = false;
+
         if(!empty($this->cache)) $this->cache->set($key, array(microtime(true), $value));
     }
 
