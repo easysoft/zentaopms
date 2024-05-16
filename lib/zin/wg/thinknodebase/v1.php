@@ -24,7 +24,7 @@ class thinkNodeBase extends wg
         'desc?: string',              // 描述
         'descName?: string="desc"',   // 描述对应的name
         'isRun?: bool=false',         // 是否是分析活动
-        'step?: object',               // 整个步骤的对象
+        'step?: object',              // 整个步骤的对象
         'mode?: string="detail"',     // detail|create|edit
         'type?: string="node"',       // node|transition/question
     );
@@ -46,7 +46,7 @@ class thinkNodeBase extends wg
         $app->loadLang('thinkrun');
 
         $step    = $this->prop('step');
-        $options = json_decode($step->options);
+        $options = $step->options;
         return array
         (
             div
@@ -125,7 +125,7 @@ class thinkNodeBase extends wg
         if($step)
         {
             $title = $step->title;
-            $desc  = $step->desc;
+            $desc  = htmlspecialchars_decode($step->desc);
         }
 
         return array(
