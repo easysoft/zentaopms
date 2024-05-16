@@ -11,7 +11,6 @@ requireWg('thinkQuestion');
 class thinkInput extends thinkQuestion
 {
     protected static array $defineProps = array(
-        'isRequiredName?: string="required"',   // 是否必填对应的name
         'isRequiredValue?: string'              // 是否必填的值
     );
 
@@ -19,12 +18,17 @@ class thinkInput extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $required, $isRequiredName, $isRequiredValue) = $this->prop(array('step', 'required', 'isRequiredName', 'isRequiredValue'));
-        
+        list($step, $required, $isRequiredValue) = $this->prop(array('step', 'required', 'isRequiredValue'));
+        if($step)
+        {
+            $required        = $step->options->required;
+            $isRequiredValue = $step->answer->result;
+        }
+
         $detailWg[] = textarea
         (
             set::rows('3'),
-            set::name($isRequiredName),
+            set::name('result'),
             set::required($required),
             set::value($isRequiredValue),
             set::placeholder($lang->thinkwizard->step->pleaseInput)
@@ -37,9 +41,10 @@ class thinkInput extends thinkQuestion
         global $lang;
         $formItems = parent::buildFormItem();
 
-        list($step, $required, $isRequiredName) = $this->prop(array('step', 'required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
+        list($step, $required) = $this->prop(array('step', 'required', 'requiredRows', 'requiredRowsName'));
         if($step) $required = $step->required;
         $formItems[] = array(
+            formHidden('options[questionType]', 'input'),
             formGroup
             (
                 setClass('w-1/2'),
@@ -47,7 +52,7 @@ class thinkInput extends thinkQuestion
                 set::label($lang->thinkwizard->step->label->required),
                 radioList
                 (
-                    set::name($isRequiredName),
+                    set::name('options[required]'),
                     set::inline(true),
                     set::items($lang->thinkwizard->step->requiredList),
                     set::value($required),
