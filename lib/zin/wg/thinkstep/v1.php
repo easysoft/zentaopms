@@ -62,7 +62,7 @@ class thinkStep  extends wg
         list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
         if(!$item) return array();
 
-        $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->questionType] : $lang->thinkwizard->step->editTitle[$item->type]) : $lang->thinkwizard->step->addTitle[$addType];
+        $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->options->questionType] : $lang->thinkwizard->step->editTitle[$item->options->type]) : $lang->thinkwizard->step->addTitle[$addType];
 
         return array(
             div
