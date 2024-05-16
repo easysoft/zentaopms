@@ -3517,15 +3517,27 @@ class storyModel extends model
      */
     public function getDataOfStoriesPerGrade(string $storyType): array
     {
-        $datas = $this->dao->select('grade as name, count(*) as value')->from(TABLE_STORY)
+        $datas = $this->dao->select('type, grade as name, count(*) as count')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
-            ->groupBy('grade')->orderBy('value')
-            ->fetchAll();
+            ->groupBy('type,name')
+            ->fetchGroup('type', 'name');
 
-        $moduleName = $this->app->rawModule;
-        $gradePairs = $this->getGradePairs($moduleName, 'all');
-        foreach($datas as $data) $data->name = zget($gradePairs, $data->name, $this->lang->report->undefined);
-        return $datas;
+        $gradeGroup = $this->getGradeGroup();
+        $summary    = array();
+        foreach($datas as $type => $gradeCount)
+        {
+            $gradePairs = zget($gradeGroup, $type, array());
+            foreach($gradeCount as $gradeValue => $count)
+            {
+                $grade = zget($gradePairs, $gradeValue);
+
+                $data = new stdclass();
+                $data->name  = isset($grade->name) ? $grade->name : $this->lang->report->undefined;
+                $data->value = $count->count;
+                $summary[] = $data;
+            }
+        }
+        return $summary;
     }
 
     /**
