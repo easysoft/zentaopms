@@ -117,26 +117,35 @@ class storyRelatedList extends relatedList
                 'title' => $lang->story->linkMR,
                 'items' => $linkedMRs,
                 'url'   => hasPriv('mr', 'view') ? createLink('mr', 'view', 'MRID={id}') : false,
-                'props' => array('data-app' => 'devops')
+                'props' => array('data-app' => 'devops'),
+                'onRender' => function($item, $mr) use($lang)
+                {
+                    $item['titleClass'] = 'w-0 flex-1';
+                    $statusClass = $mr->status;
+                    if($mr->status == 'opened') $statusClass = 'draft';
+                    if($mr->status == 'merged') $statusClass = 'done';
+                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                    return $item;
+                }
+            );
+
+            $data['commit'] = array
+            (
+                'title'    => $lang->story->linkCommit,
+                'items'    => $linkedCommits,
+                'url'      => false,
+                'onRender' => function($item, $commit)
+                {
+                    $item['text'] = $commit->comment;
+                    if(hasPriv('repo', 'revision'))
+                    {
+                        $item['url'] = createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}");
+                        $item['data-app'] = 'devops';
+                    }
+                    return $item;
+                }
             );
         }
-
-        $data['commit'] = array
-        (
-            'title'    => $lang->story->linkCommit,
-            'items'    => $linkedCommits,
-            'url'      => false,
-            'onRender' => function($item, $commit)
-            {
-                $item['text'] = $commit->comment;
-                if(hasPriv('repo', 'revision'))
-                {
-                    $item['url'] = createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}");
-                    $item['data-app'] = 'devops';
-                }
-                return $item;
-            }
-        );
 
         $this->setProp('data', $data);
     }
