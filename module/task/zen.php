@@ -1636,10 +1636,10 @@ class taskZen extends task
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
 
         /* Processing the return information of pop-up windows. */
-        if(helper::isAjaxRequest('modal'))
+        if(helper::isAjaxRequest('modal') || isonlybody())
         {
             /* If it is Kanban execution, refresh the Kanban statically through callback. */
-            if($this->app->tab == 'execution' || $this->config->vision == 'lite')
+            if($this->app->tab == 'execution' && $execution == 'kanban' || $this->config->vision == 'lite')
             {
                 $response['closeModal'] = true;
                 $response['callback']   = 'refreshKanban()';
