@@ -32,9 +32,7 @@ class thinkOptions extends wg
         'data?: array',                     // 默认值。
         'stepText?: string',                // 步骤文本。
         'sameLevelText?: string',           // 同级文本。
-        'expectDisabledTip?: string',       // 预期输入框禁用提示。
         'deleteStepTip?: string',           // 有子层级禁用删除提示。
-        'dragNestedTip?: string',           // 拖拽超出提示。
         'showOther?: bool=true',            // 是否展示启用其他。
         'enableOther?: bool=false',         // 是否启用其他。
         'otherName?: string="enableOther"', // 启用其他的 name。
@@ -58,10 +56,10 @@ class thinkOptions extends wg
      */
     protected function build()
     {
-        $id                = $this->prop('id') ? $this->prop('id') : $this->gid;
-        $expectDisabledTip = $this->prop('expectDisabledTip', data('lang.testcase.expectDisabledTip'));
-        $deleteStepTip     = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
-        $dragNestedTip     = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $id            = $this->prop('id') ? $this->prop('id') : $this->gid;
+        $deleteStepTip = $this->prop('deleteStepTip', $lang->thinkstep->deleteOptionTip);
 
         list($enableOther, $otherName, $showOther) = $this->prop(array('enableOther', 'otherName', 'showOther'));
 
@@ -76,10 +74,8 @@ class thinkOptions extends wg
             zui::thinkOptions
             (
                 set::_to("#$id"),
-                set::expectDisabledTip($expectDisabledTip),
                 set::deleteStepTip($deleteStepTip),
-                set::dragNestedTip($dragNestedTip),
-                set::enterPlaceholder(data('lang.thinkwizard.step.pleaseInput')),
+                set::enterPlaceholder($lang->thinkwizard->step->pleaseInput),
                 set($this->props->pick(array('name', 'data')))
             ),
             $showOther ? div
@@ -92,19 +88,19 @@ class thinkOptions extends wg
                     div
                     (
                         setClass('w-11'),
-                        data('lang.other')
+                        data($lang->other)
                     ),
                     div
                     (
                         setClass('text-gray-400'),
-                        data('lang.thinkwizard.step.pleaseInput'),
+                        $lang->thinkwizard->step->pleaseInput,
                     ),
                 ),
                 checkbox
                 (
                     set::name($otherName),
                     set::checked($enableOther),
-                    set::text(data('lang.thinkwizard.step.enable'))
+                    set::text($lang->thinkwizard->step->enable)
                 ),
             ) : null
         );
