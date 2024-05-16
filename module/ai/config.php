@@ -240,6 +240,7 @@ $config->ai->menuPrint->locations['projectrelease']['view']->objectVarName = nul
 $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'module'          => 'doc',
     'targetContainer' => '#docPanel > .panel-heading > .panel-actions > .toolbar',
+    'buttonPlacement' => 'bottom-end'
 );
 
 $config->ai->injectAuditButton = new stdclass();
