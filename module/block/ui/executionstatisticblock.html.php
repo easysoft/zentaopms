@@ -84,8 +84,8 @@ if($execution->type == 'kanban')
                     'data' => !empty($chartData['line']) ? array_keys(array_reverse($chartData['line'])) : null
                 )),
                 set::grid(array(
-                    'top'          => !empty($chartData['lines']) ? '80px' : '40px',
-                    'left'         => !empty($chartData['lines']) ? '2px' : '15px',
+                    'top'          => !empty($chartData['labels']) ? '80px' : '40px',
+                    'left'         => !empty($chartData['labels']) ? '2px' : '15px',
                     'right'        => '2px',
                     'bottom'       => '2px',
                     'containLabel' => true
