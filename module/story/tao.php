@@ -1927,15 +1927,15 @@ class storyTao extends storyModel
              */
             if($canBatchCreateStory)
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
             }
             elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
             }
             elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
             }
             elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
             {
@@ -1945,7 +1945,7 @@ class storyTao extends storyModel
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                 if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                 if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
-                $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'tree');
+                $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
             }
         }
 
@@ -1995,15 +1995,15 @@ class storyTao extends storyModel
                     $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
                     if($canBatchCreateStory)
                     {
-                        $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                        $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
                     elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
                     {
-                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
                     elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
                     {
-                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
                     elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
                     {
@@ -2013,7 +2013,7 @@ class storyTao extends storyModel
                         if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                         if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                         if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
-                        $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'tree');
+                        $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
                     }
                 }
 
