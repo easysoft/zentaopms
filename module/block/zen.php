@@ -3299,45 +3299,55 @@ class blockZen extends block
         if($riskCountGroup)  $riskCountGroup  = array_column($riskCountGroup,  null, 'project');
         if($issueCountGroup) $issueCountGroup = array_column($issueCountGroup, null, 'project');
 
-        /* 敏捷项目的统计信息。 */
-        $investedGroup      = $this->metric->getResultByCodeWithArray('day_of_invested_in_project',         array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $consumeTaskGroup   = $this->metric->getResultByCodeWithArray('consume_of_task_in_project',         array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $leftTaskGroup      = $this->metric->getResultByCodeWithArray('left_of_task_in_project',            array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $countStoryGroup    = $this->metric->getResultByCodeWithArray('scale_of_story_in_project',          array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $finishedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $unclosedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $countTaskGroup     = $this->metric->getResultByCodeWithArray('count_of_task_in_project',           array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $waitTaskGroup      = $this->metric->getResultByCodeWithArray('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $doingTaskGroup     = $this->metric->getResultByCodeWithArray('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $countBugGroup      = $this->metric->getResultByCodeWithArray('count_of_bug_in_project',            array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $closedBugGroup     = $this->metric->getResultByCodeWithArray('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        $activatedBugGroup  = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
-        if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
-        if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
-        if($countStoryGroup)    $countStoryGroup    = array_column($countStoryGroup,    null, 'project');
-        if($finishedStoryGroup) $finishedStoryGroup = array_column($finishedStoryGroup, null, 'project');
-        if($unclosedStoryGroup) $unclosedStoryGroup = array_column($unclosedStoryGroup, null, 'project');
-        if($countTaskGroup)     $countTaskGroup     = array_column($countTaskGroup,     null, 'project');
-        if($waitTaskGroup)      $waitTaskGroup      = array_column($waitTaskGroup,      null, 'project');
-        if($doingTaskGroup)     $doingTaskGroup     = array_column($doingTaskGroup,     null, 'project');
-        if($countBugGroup)      $countBugGroup      = array_column($countBugGroup,      null, 'project');
-        if($closedBugGroup)     $closedBugGroup     = array_column($closedBugGroup,     null, 'project');
-        if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
+        $modelType    = $this->block->getModelType4Projects($projectIdList);
+        $getScrum     = in_array($modelType, array('all', 'scrum'));
+        $getWaterfall = in_array($modelType, array('all', 'waterfall'));
 
-        /* 瀑布项目的统计信息。 */
-        $SVGroup           = $this->metric->getResultByCodeWithArray('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
-        $PVGroup           = $this->metric->getResultByCodeWithArray('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
-        $EVGroup           = $this->metric->getResultByCodeWithArray('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
-        $CVGroup           = $this->metric->getResultByCodeWithArray('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
-        $ACGroup           = $this->metric->getResultByCodeWithArray('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
-        $taskProgressGroup = $this->metric->getResultByCodeWithArray('progress_of_task_in_project',             array('project' => join(',', $projectIdList)), 'cron', null, $vision);
-        if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
-        if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
-        if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
-        if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
-        if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
-        if($taskProgressGroup) $taskProgressGroup = array_column($taskProgressGroup, null, 'project');
+        if($getScrum)
+        {
+            /* 敏捷项目的统计信息。 */
+            $investedGroup      = $this->metric->getResultByCodeWithArray('day_of_invested_in_project',         array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $consumeTaskGroup   = $this->metric->getResultByCodeWithArray('consume_of_task_in_project',         array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $leftTaskGroup      = $this->metric->getResultByCodeWithArray('left_of_task_in_project',            array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $countStoryGroup    = $this->metric->getResultByCodeWithArray('scale_of_story_in_project',          array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $finishedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $unclosedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $countTaskGroup     = $this->metric->getResultByCodeWithArray('count_of_task_in_project',           array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $waitTaskGroup      = $this->metric->getResultByCodeWithArray('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $doingTaskGroup     = $this->metric->getResultByCodeWithArray('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $countBugGroup      = $this->metric->getResultByCodeWithArray('count_of_bug_in_project',            array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $closedBugGroup     = $this->metric->getResultByCodeWithArray('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            $activatedBugGroup  = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
+            if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
+            if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
+            if($countStoryGroup)    $countStoryGroup    = array_column($countStoryGroup,    null, 'project');
+            if($finishedStoryGroup) $finishedStoryGroup = array_column($finishedStoryGroup, null, 'project');
+            if($unclosedStoryGroup) $unclosedStoryGroup = array_column($unclosedStoryGroup, null, 'project');
+            if($countTaskGroup)     $countTaskGroup     = array_column($countTaskGroup,     null, 'project');
+            if($waitTaskGroup)      $waitTaskGroup      = array_column($waitTaskGroup,      null, 'project');
+            if($doingTaskGroup)     $doingTaskGroup     = array_column($doingTaskGroup,     null, 'project');
+            if($countBugGroup)      $countBugGroup      = array_column($countBugGroup,      null, 'project');
+            if($closedBugGroup)     $closedBugGroup     = array_column($closedBugGroup,     null, 'project');
+            if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
+        }
+
+        if($getWaterfall)
+        {
+            /* 瀑布项目的统计信息。 */
+            $SVGroup           = $this->metric->getResultByCodeWithArray('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+            $PVGroup           = $this->metric->getResultByCodeWithArray('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+            $EVGroup           = $this->metric->getResultByCodeWithArray('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+            $CVGroup           = $this->metric->getResultByCodeWithArray('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+            $ACGroup           = $this->metric->getResultByCodeWithArray('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
+            $taskProgressGroup = $this->metric->getResultByCodeWithArray('progress_of_task_in_project',             array('project' => join(',', $projectIdList)), 'cron', null, $vision);
+            if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
+            if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
+            if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
+            if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
+            if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
+            if($taskProgressGroup) $taskProgressGroup = array_column($taskProgressGroup, null, 'project');
+        }
 
         return array('riskCountGroup' => $riskCountGroup, 'issueCountGroup' => $issueCountGroup, 'investedGroup' => $investedGroup, 'consumeTaskGroup' => $consumeTaskGroup, 'leftTaskGroup' => $leftTaskGroup, 'countStoryGroup' => $countStoryGroup, 'finishedStoryGroup' => $finishedStoryGroup, 'unclosedStoryGroup' => $unclosedStoryGroup, 'countTaskGroup' => $countTaskGroup, 'waitTaskGroup' => $waitTaskGroup, 'doingTaskGroup' => $doingTaskGroup, 'countBugGroup' => $countBugGroup, 'closedBugGroup' => $closedBugGroup, 'activatedBugGroup' => $activatedBugGroup, 'taskProgressGroup' => $taskProgressGroup, 'SVGroup' => $SVGroup, 'PVGroup' => $PVGroup, 'EVGroup' => $EVGroup, 'CVGroup' => $CVGroup, 'ACGroup' => $ACGroup);
     }

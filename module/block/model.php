@@ -296,4 +296,25 @@ class blockModel extends model
         }
         return true;
     }
+
+    /**
+     * 获取项目列表存在的项目模式类型。
+     * Get project model type from projectIdList.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return string all|scrum|waterfall
+     */
+    public function getModelType4Projects(array $projectIdList)
+    {
+        $models = $this->dao->select('DISTINCT model')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('model');
+        $models = array_flip(array_keys($models));
+
+        $haveScrum = (isset($models['scrum']) || isset($models['kanban']) || isset($models['agileplus']));
+        $haveWater = (isset($models['waterfall']) || isset($models['waterfallplus']));
+
+        if($haveScrum && $haveWater) return 'all';
+        if($haveScrum) return 'scrum';
+        if($haveWater) return 'waterfall';
+    }
 }
