@@ -47,6 +47,11 @@ foreach($actions as $key => $action)
         }
         if($task->parent == 0) unset($actions[$key]);
     }
+    if(isonlybody() && isset($actions[$key]['data-load']))
+    {
+        unset($actions[$key]['data-load']);
+        $actions[$key]['data-toggle'] = 'modal';
+    }
     if(isset($actions[$key]['url']))
     {
         $actions[$key]['url'] = str_replace(array('{story}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
