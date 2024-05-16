@@ -8,6 +8,8 @@ declare(strict_types=1);
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @link        https://www.zentao.net
+ * @property    ciModel $ci
+ * @property    compileModel $compile
  */
 class ci extends control
 {

@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package     compile
  * @version     $Id$
  * @link        https://www.zentao.net
+ * @property    jobModel $job
  */
 class compileModel extends model
 {
