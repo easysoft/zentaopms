@@ -2357,6 +2357,7 @@ class executionModel extends model
         $gradePairs = array();
         $gradeList  = $this->loadModel('story')->getGradeList('');
         $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
+        if(!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design')))) $storyTypes = 'story';
         foreach($gradeList as $grade)
         {
             if(strpos($storyTypes, $grade->type) === false) continue;
