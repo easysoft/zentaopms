@@ -65,7 +65,7 @@ class docMenu extends wg
             $methodName = 'showFiles';
             $linkParams = "type={$objectType}&objectID={$item->objectID}";
         }
-        else if($item->type == 'text')
+        else if(in_array($item->type, array('text', 'word','ppt', 'excel', 'attachment')))
         {
             $methodName = 'view';
             $linkParams = "docID={$item->id}";
