@@ -81,7 +81,8 @@ class thinkRadio extends thinkQuestion
                     set::name('options[required]'),
                     set::inline(true),
                     set::value($required),
-                    set::items($requiredItems)
+                    set::items($requiredItems),
+                    $question == 'checkbox' ? bind::change('changeIsRequired(event)') : null
                 )
             ),
             $this->children()
