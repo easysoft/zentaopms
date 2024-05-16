@@ -736,7 +736,7 @@ class baseControl
         include $viewFile;
         if(isset($hookFiles)) foreach($hookFiles as $hookFile) if(file_exists($hookFile)) include $hookFile;
 
-        $this->useClientCache();
+        $this->setResponseHeader();
 
         $this->output .= ob_get_contents();
         ob_end_clean();
@@ -1036,7 +1036,7 @@ class baseControl
         ob_start();
         include $viewFile;
 
-        $this->useClientCache();
+        $this->setResponseHeader();
 
         if(!$context->rendered) \zin\renderPage();
         $content = ob_get_clean();
@@ -1052,18 +1052,21 @@ class baseControl
     }
 
     /**
-     * 使用客户端缓存。
-     * Use client cache.
+     * 设置响应头。
+     * Set response header.
      *
      * @access public
      * @return void
      */
-    public function useClientCache()
+    public function setResponseHeader()
     {
-        if(!$this->config->cache->client->enable || !$this->app->useClientCache) return;
+        if($this->config->cache->client->enable && $this->app->useClientCache)
+        {
+            helper::setStatus(304);
+            helper::end();
+        }
 
-        helper::setStatus(304);
-        helper::end();
+        helper::header('X-Zin-Cache-Time', strval(time()- 1));
     }
 
     /**
