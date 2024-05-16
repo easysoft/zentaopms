@@ -36,3 +36,6 @@ $config->cache->dao = new stdClass();
 $config->cache->dao->enable   = true; // 是否开启 dao 缓存。Enable dao cache or not.
 $config->cache->dao->lifetime = 5 * 60;
 $config->cache->dao->driver   = 'Apcu';
+
+$config->cache->client = new stdClass();
+$config->cache->client->enable = false; // 是否开启客户端缓存。Enable client cache or not.
