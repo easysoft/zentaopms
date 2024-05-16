@@ -107,8 +107,6 @@ $lang->metric      = new stdclass();
 $lang->ai          = new stdclass();
 $lang->aiapp       = new stdclass();
 
-$lang->board       = new stdclass();
-
 $lang->serverroom         = new stdclass();
 $lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();

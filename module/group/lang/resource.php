@@ -1850,20 +1850,6 @@ $lang->webhook->methodOrder[25] = 'log';
 $lang->webhook->methodOrder[30] = 'bind';
 $lang->webhook->methodOrder[35] = 'chooseDept';
 
-/* Board methods. */
-$lang->resource->board = new stdclass();
-$lang->resource->board->createBoard = 'create';
-$lang->resource->board->editBoard   = 'edit';
-$lang->resource->board->close       = 'close';
-$lang->resource->board->activate    = 'activate';
-$lang->resource->board->delete      = 'delete';
-$lang->resource->board->collect     = 'collect';
-$lang->resource->board->actions     = 'actions';
-$lang->resource->board->teamBoard   = 'teamBoard';
-$lang->resource->board->createSpace = 'createSpace';
-$lang->resource->board->editSpace   = 'editSpace';
-$lang->resource->board->deleteSpace = 'deleteSpace';
-
 /* AI methods. */
 $lang->resource->ai = new stdclass();
 $lang->resource->ai->models                  = 'modelBrowse';

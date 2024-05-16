@@ -269,7 +269,6 @@ $lang->store->common        = '应用市场';
 $lang->instance->common     = '应用';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
-$lang->board->common        = '白板';
 
 $lang->programstakeholder->common = '干系人';
 $lang->featureswitch->common      = '功能开关';
@@ -369,12 +368,6 @@ $lang->project->kanban = $lang->projectCommon . '看板';
 
 $lang->execution->executionKanban = "{$lang->execution->common}看板";
 $lang->execution->all             = "{$lang->execution->common}列表";
-
-$lang->board->template     = '模板广场';
-$lang->board->myBoard      = '我的白板';
-$lang->board->productBoard = '产品白板';
-$lang->board->projectBoard = '项目白板';
-$lang->board->teamBoard    = '团队白板';
 
 $lang->doc->recent        = '最近文档';
 $lang->doc->my            = '我的文档';
