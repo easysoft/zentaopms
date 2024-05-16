@@ -383,6 +383,9 @@ class mrModel extends model
 
         if(!$oldMR) return array('result' => 'fail', 'message' => $this->lang->mr->notFound);
 
+        $result = $this->checkSameOpened($oldMR->hostID, $oldMR->sourceProject, $oldMR->sourceBranch, $oldMR->targetProject, $MR->targetBranch);
+        if($result['result'] == 'fail') return $result;
+
         $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
