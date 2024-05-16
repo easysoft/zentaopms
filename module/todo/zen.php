@@ -488,17 +488,18 @@ class todoZen extends todo
             {
                 $todo->objectID   = $todo->{$todo->type};
                 $todo->name       = '';
+                if(empty($todo->objectID)) dao::$errors["{$todo->type}[{$todoID}]"] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
+            }
+            elseif(empty($todo->name))
+            {
+                dao::$errors["name[{$todoID}]"] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
             }
             unset($todo->story, $todo->task, $todo->bug, $todo->testtask);
 
             $todo->begin = empty($todo->begin) || $this->post->switchTime ? 2400 : $todo->begin;
             $todo->end   = empty($todo->end) || $this->post->switchTime   ? 2400 : $todo->end;
 
-            if($todo->end < $todo->begin)
-            {
-                dao::$errors["begin[{$todoID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-                continue;
-            }
+            if($todo->end < $todo->begin) dao::$errors["begin[{$todoID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
         }
 
         return $todos;

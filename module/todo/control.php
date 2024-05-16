@@ -185,6 +185,7 @@ class todo extends control
         /* Save the todo data for batch edit. */
         if($from == 'todoBatchEdit')
         {
+            $this->config->todo->edit->requiredFields = str_replace(',name,', ',', ",{$this->config->todo->edit->requiredFields},");
             $formData   = form::batchData($this->config->todo->batchEdit->form)->get();
             $todos      = $this->todoZen->beforeBatchEdit($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
