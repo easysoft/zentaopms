@@ -720,7 +720,7 @@ class productModel extends model
 
         $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
 
-        if($storyType == 'all')
+        if($projectID)
         {
             $gradePairs = array();
             $gradeList  = $this->loadModel('story')->getGradeList('');

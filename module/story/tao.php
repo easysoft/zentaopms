@@ -454,6 +454,7 @@ class storyTao extends storyModel
         $storyQuery = $this->replaceAllProductQuery($this->session->executionStoryQuery);
         $storyQuery = $this->replaceRevertQuery($storyQuery, $productID);
         $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
+        $storyQuery = preg_replace_callback("/t2.`grade` (=|!=) '(\w+)(\d+)'/", function($matches){return "t2.`grade` {$matches[1]} '" . $matches[3] . "' AND t2.`type` = '" . $matches[2] . "'";}, $storyQuery);
         if(strpos($storyQuery, 'result') !== false) $storyQuery = str_replace('t2.`result`', 't4.`result`', $storyQuery);
 
         return $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
