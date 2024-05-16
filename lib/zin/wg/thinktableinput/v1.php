@@ -10,16 +10,11 @@ requireWg('thinkNode');
 class thinkTableInput extends thinkNode
 {
     protected static array $defineProps = array(
-        'required?: bool',                          // 是否必填
-        'isRequiredName?: string="required"',       // 是否必填对应的name
-        'requiredRows?: number=1',                  // 必填行数
-        'requiredRowsName?: string="requiredRows"', // 必填行数对应的name
-        'rowsTitle?: array',                        // 行标题
-        'rowsTitleName: string="fields"',           // 行标题对应的name
-        'isSupportAdd?: bool',                      // 是否支持用户添加行
-        'isSupportAddName: string="isSupportAdd"',  // 是否支持用户添加行的name
-        'canAddRows: number=1',                     // 可添加行数
-        'canAddRowsName: string="canAddRows"',      // 可添加行数对应的name
+        'required?: bool',         // 是否必填
+        'requiredRows?: number=1', // 必填行数
+        'rowsTitle?: array',       // 行标题
+        'isSupportAdd?: bool',     // 是否支持用户添加行
+        'canAddRows: number=1',    // 可添加行数
     );
 
     public static function getPageJS(): string
@@ -30,7 +25,7 @@ class thinkTableInput extends thinkNode
     private function buildRequiredControl(): wg
     {
         global $lang;
-        list($isRequired, $isRequiredName, $requiredRows, $requiredRowsName) = $this->prop(array('required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
+        list($isRequired, $requiredRows) = $this->prop(array('required', 'requiredRows'));
         return formRow
         (
             setClass('mb-3'),
@@ -40,7 +35,7 @@ class thinkTableInput extends thinkNode
                 set::label($lang->thinkwizard->step->label->required),
                 radioList
                 (
-                    set::name($isRequiredName),
+                    set::name('options[required]'),
                     set::inline(true),
                     set::items($lang->thinkwizard->step->requiredList),
                     set::value($isRequired ? $isRequired : 0),
@@ -55,7 +50,7 @@ class thinkTableInput extends thinkNode
                 input
                 (
                     set::type('number'),
-                    set::name($requiredRowsName),
+                    set::name('options[requiredRows]'),
                     set::value($requiredRows),
                     set::placeholder($lang->thinkwizard->step->inputContent),
                     set::min(1),
@@ -68,7 +63,7 @@ class thinkTableInput extends thinkNode
     private function buildisSupportAddControl(): wg
     {
         global $lang;
-        list($isSupportAdd, $isSupportAddName, $canAddRows, $canAddRowsName) = $this->prop(array('isSupportAdd', 'isSupportAddName', 'canAddRows', 'canAddRowsName'));
+        list($isSupportAdd, $canAddRows) = $this->prop(array('isSupportAdd', 'canAddRows'));
         return formRow
         (
             setClass('mb-3'),
@@ -78,7 +73,7 @@ class thinkTableInput extends thinkNode
                 set::label($lang->thinkwizard->step->label->isSupportAdd),
                 radioList
                 (
-                    set::name($isSupportAddName),
+                    set::name('options[isSupportAdd]'),
                     set::inline(true),
                     set::items($lang->thinkwizard->step->requiredList),
                     set::value($isSupportAdd ? $isSupportAdd : 0),
@@ -93,7 +88,7 @@ class thinkTableInput extends thinkNode
                 input
                 (
                     set::type('number'),
-                    set::name($canAddRowsName),
+                    set::name('options[canAddRows]'),
                     set::value($canAddRows),
                     set::placeholder($lang->thinkwizard->step->inputContent),
                     set::min(1),
@@ -106,7 +101,6 @@ class thinkTableInput extends thinkNode
     private function buildRowsTitleControl(): wg
     {
         global $lang;
-        list($rowsTitle, $rowsTitleName) = $this->prop(array('rowsTitle', 'rowsTitleName'));
         return formRow
         (
             formGroup
@@ -117,8 +111,8 @@ class thinkTableInput extends thinkNode
                 (
                     set(array(
                         'showOther' => false,
-                        'data'      => $rowsTitle,
-                        'name'      => $rowsTitleName,
+                        'data'      => $this->prop('rowsTitle'),
+                        'name'      => 'options[fields]',
                     ))
                 ),
             )
