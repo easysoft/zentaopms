@@ -1106,13 +1106,13 @@ class mrModel extends model
      */
     public function getLinkedMRPairs(int $objectID, string $objectType = 'story'): array
     {
-        return $this->dao->select("t2.id,t2.title")->from(TABLE_RELATION)->alias('t1')
+        return $this->dao->select("t2.id,t2.title,t2.status")->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_MR)->alias('t2')->on('t1.AID = t2.id')
             ->where('t1.AType')->eq('mr')
             ->andWhere('t1.BType')->eq($objectType)
             ->andWhere('t1.BID')->eq($objectID)
             ->andWhere('t2.id')->ne(0)
-            ->fetchPairs();
+            ->fetchAll('id');
     }
 
     /**
