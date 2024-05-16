@@ -359,11 +359,11 @@ $lang->execution->groupSummaryAB       = "<div>总任务 <strong>%s : </strong><
 $lang->execution->wbs                  = "分解任务";
 $lang->execution->batchWBS             = "批量分解";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？'>帮助 <i class='icon icon-help text-gray'></i></a>";
-$lang->execution->whyNoStories         = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
-$lang->execution->projectNoStories     = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->projectCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
-$lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
-$lang->execution->haveBranchDraft      = "导入完成！有%s条非激活状态或不是{$lang->executionCommon}关联分支的{$lang->SRCommon}无法导入";
-$lang->execution->haveDraft            = "导入完成！有%s条非激活状态的{$lang->SRCommon}无法导入";
+$lang->execution->whyNoStories         = "看起来没有需求可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有需求，而且要确保它们已经审核通过。";
+$lang->execution->projectNoStories     = "看起来没有需求可以关联。请检查下{$lang->projectCommon}中有没有需求，而且要确保它们已经审核通过。";
+$lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}需求的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
+$lang->execution->haveBranchDraft      = "导入完成！有%s条非激活状态或不是{$lang->executionCommon}关联分支的需求无法导入";
+$lang->execution->haveDraft            = "导入完成！有%s条非激活状态的需求无法导入";
 $lang->execution->doneExecutions       = '已结束';
 $lang->execution->selectDept           = '选择部门';
 $lang->execution->selectDeptTitle      = '选择一个部门的成员';
