@@ -272,25 +272,9 @@ class mr extends control
         if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
 
         /* Fetch user list both in Zentao and current GitLab project. */
-        $host     = $this->loadModel('pipeline')->getByID($MR->hostID);
-        $scm      = $host->type;
-        $gitUsers = $this->pipeline->getUserBindedPairs($MR->hostID, $scm);
-
-        /* Check permissions. */
-        if(!$this->app->user->admin && $scm == 'gitlab')
-        {
-            $groupIDList = array(0 => 0);
-            $groups      = $this->loadModel($scm)->apiGetGroups($MR->hostID, 'name_asc', 'developer');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-
-            $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject);
-            $isDeveloper   = $this->$scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
-
-            if(!isset($gitUsers[$this->app->user->account]) || !$isDeveloper) return $this->sendError($this->lang->mr->errorLang[3], $this->createLink('mr', 'browse'));
-        }
-
+        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         $this->view->host = $host;
-        $this->mrZen->assignEditData($MR, $scm);
+        $this->mrZen->assignEditData($MR, $host->type);
     }
 
     /**
