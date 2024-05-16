@@ -131,7 +131,7 @@ $config->task->actionList['edit']['icon']     = 'edit';
 $config->task->actionList['edit']['hint']     = $lang->task->edit;
 $config->task->actionList['edit']['text']     = $lang->task->edit;
 $config->task->actionList['edit']['url']      = helper::createLink('task', 'edit', 'taskID={id}');
-$config->task->actionList['edit']['data-app'] = $app->tab;
+$config->task->actionList['edit']['data-app'] = $app->tab == 'project' ? 'project' : 'execution';
 
 if($config->vision != 'lite')
 {
