@@ -89,6 +89,7 @@ foreach($spaceList as $space)
                 set::className('px-2 pb-4 overflow-hidden'),
                 div
                 (
+                    setID('kanban-' . $kanbanID),
                     set::className('kanban-card border px-4 pb-2 pt-1 open-url'),
                     set('data-url', createLink('kanban', 'view', "kanbanID=$kanbanID")),
                     div
