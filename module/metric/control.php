@@ -284,7 +284,19 @@ class metric extends control
         $checkedList = explode(',', $checkedList);
         $filters = json_decode(base64_decode($filtersBase64), true);
         if(!is_array($filters)) $filters = array();
-        $metrics = $scope == 'collect' ? $this->metric->getListByCollect('released') : $this->metric->getListByFilter($filters, 'released');
+
+        if($scope == 'collect')
+        {
+            $metrics = $this->metric->getListByCollect('released');
+        }
+        elseif(!empty($filters))
+        {
+            $metrics = $this->metric->getListByFilter($filters, 'released');
+        }
+        else
+        {
+            $metrics = $this->metric->getList($scope, 'released');
+        }
 
         $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
         $this->view->checkedList  = $checkedList;
