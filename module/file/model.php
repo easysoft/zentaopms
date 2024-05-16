@@ -885,6 +885,7 @@ class fileModel extends model
         foreach($fields as $field)
         {
             if(empty($field) or empty($data->$field)) continue;
+            if(is_numeric($data->$field)) $data->$field = (string)$data->$field;
             $data->$field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $data->$field);
 
             /* Convert plain text URLs into HTML hyperlinks. */
