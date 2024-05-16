@@ -716,19 +716,25 @@ class metricModel extends model
 
         $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
         if(empty($records)) return array();
-        if($metric->dateType == 'nodate')
-        {
-            $record = current($records);
-            $record->value = (float)$record->value;
 
-            return array((array)$record);
+        $maxDate = null;
+        foreach($records as $index => $record)
+        {
+            $record          = (array)$record;
+            $record['value'] = (float)$record['value'];
+            $records[$index] = $record;
+
+            $date = date('Y-m-d', strtotime($record['date']));
+            if($maxDate < $date) $maxDate = $date;
         }
 
-        $result = array();
-        foreach($records as $record)
+        if($metric->dateType == 'nodate')
         {
-            $record->value = (float)$record->value;
-            $result[] = (array)$record;
+            $result = array_filter($records, function($record) use ($maxDate) { return date('Y-m-d', strtotime($record['date'])) == $maxDate; });
+        }
+        else
+        {
+            $result = $records;
         }
 
         return $result;
