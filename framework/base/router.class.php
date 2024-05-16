@@ -509,6 +509,8 @@ class baseRouter
 
         $this->setOpenApp();
         $this->setSuperVars();
+
+        if(isset($_SERVER['HTTP_X_ZIN_CACHE_TIME'])) $this->clientCacheTime = (int) $_SERVER['HTTP_X_ZIN_CACHE_TIME'];
     }
 
     /**
