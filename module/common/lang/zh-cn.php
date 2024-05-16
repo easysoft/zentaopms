@@ -487,6 +487,7 @@ $lang->createObjects['project']     = $lang->projectCommon;
 $lang->createObjects['product']     = $lang->productCommon;
 $lang->createObjects['program']     = '项目集';
 $lang->createObjects['doc']         = '文档';
+$lang->createObjects['board']       = '白板';
 $lang->createObjects['kanbanspace'] = '空间';
 $lang->createObjects['kanban']      = '看板';
 

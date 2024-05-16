@@ -285,6 +285,7 @@ class header extends wg
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
             if($objectType == 'kanbanspace') $createMethod = 'createSpace';
+            if($objectType == 'board') $createMethod = 'createBoard';
             if(str_contains('|bug|execution|kanbanspace|', "|$objectType|")) $needPrintDivider = true;
 
             if(!common::hasPriv($module, $createMethod)) continue;
@@ -382,6 +383,14 @@ class header extends wg
                     break;
                 case 'kanban':
                     $isOnlyBody          = true;
+                    $item['innerClass']  = $modalClass;
+                    $item['data-toggle'] = 'modal';
+                    $item['data-width']  = '75%';
+                    break;
+                case 'board':
+                    $createMethod = 'createByTemplate';
+                    $params = 'templateID=0';
+                    $isOnlyBody = true;
                     $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';

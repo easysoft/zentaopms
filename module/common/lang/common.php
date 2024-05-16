@@ -238,6 +238,7 @@ $lang->createIcons['story']       = 'lightbulb';
 $lang->createIcons['task']        = 'check-sign';
 $lang->createIcons['testcase']    = 'sitemap';
 $lang->createIcons['doc']         = 'doc';
+$lang->createIcons['board']       = 'board';
 $lang->createIcons['execution']   = 'run';
 $lang->createIcons['project']     = 'project';
 $lang->createIcons['product']     = 'product';
