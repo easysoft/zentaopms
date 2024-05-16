@@ -411,6 +411,28 @@ class dataset
     }
 
     /**
+     * 获取项目的业务需求数据。
+     * Get epic list with project.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getEpicWithProject($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('epic')
+            ->andWhere('t3.type')->eq('project');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取项目的所有需求数据。
      * Get story list, with project story.
      *
