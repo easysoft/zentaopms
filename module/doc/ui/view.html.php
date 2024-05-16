@@ -24,12 +24,12 @@ toolbar
 (
     $canExport ? item(set(array
     (
-        'id'          => $exportMethod,
-        'icon'        => 'export',
-        'target'      => '_blank',
-        'class'       => 'ghost export',
-        'text'        => $lang->export,
-        'url'         => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
+        'id'     => $exportMethod,
+        'icon'   => 'export',
+        'target' => '_self',
+        'class'  => 'ghost export',
+        'text'   => $lang->export,
+        'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
     ))) : null,
     common::hasPriv('doc', 'createLib') ? item(set(array
     (
