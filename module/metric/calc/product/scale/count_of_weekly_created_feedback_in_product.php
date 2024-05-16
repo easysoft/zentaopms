@@ -22,7 +22,7 @@ class count_of_weekly_created_feedback_in_product extends baseCalc
 {
     public $dataset = 'getFeedbacks';
 
-    public $fieldList = array('t1.product, t1.openedDate');
+    public $fieldList = array('t1.product', 't1.openedDate');
 
     public $result = array();
 
