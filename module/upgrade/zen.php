@@ -41,7 +41,7 @@ class upgradeZen extends upgrade
 
         /* 如果是 ipd 版本，设置相关的配置。*/
         /* When the edition is ipd. */
-        if($this->config->edition == 'ipd' && strpos($fromVersion, 'ipd') === false) $this->SetIpdItems();
+        if($this->config->edition == 'ipd') $this->SetIpdItems($openVersion);
 
         if($selectMode)
         {
