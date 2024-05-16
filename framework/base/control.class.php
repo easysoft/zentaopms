@@ -735,6 +735,9 @@ class baseControl
         ob_start();
         include $viewFile;
         if(isset($hookFiles)) foreach($hookFiles as $hookFile) if(file_exists($hookFile)) include $hookFile;
+
+        $this->useClientCache();
+
         $this->output .= ob_get_contents();
         ob_end_clean();
 
@@ -1033,6 +1036,8 @@ class baseControl
         ob_start();
         include $viewFile;
 
+        $this->useClientCache();
+
         if(!$context->rendered) \zin\renderPage();
         $content = ob_get_clean();
 
@@ -1044,6 +1049,21 @@ class baseControl
          * At the end, chang the dir to the previous.
          */
         chdir($currentPWD);
+    }
+
+    /**
+     * 使用客户端缓存。
+     * Use client cache.
+     *
+     * @access public
+     * @return void
+     */
+    public function useClientCache()
+    {
+        if(!$this->config->cache->client->enable || !$this->app->useClientCache) return;
+
+        helper::setStatus(304);
+        helper::end();
     }
 
     /**
