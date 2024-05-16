@@ -12,8 +12,6 @@ class thinkCheckbox extends thinkRadio
 {
     protected static array $defineProps = array
     (
-        'minCountName?: string="minCount"',
-        'maxCountName?: string="maxCount"',
         'minCount?: string',
         'maxCount?: string',
     );
@@ -28,8 +26,13 @@ class thinkCheckbox extends thinkRadio
         global $lang;
         $formItems = parent::buildFormItem();
 
-        list($step, $minCountName, $minCount, $maxCountName, $maxCount, $required) = $this->prop(array('step', 'minCountName', 'minCount', 'maxCountName', 'maxCount', 'required'));
-        if($step) $required = $step->required;
+        list($step, $minCount, $maxCount, $required) = $this->prop(array('step', 'minCount', 'maxCount', 'required'));
+        if($step)
+        {
+            $required = $step->options->required;
+            $minCount = $step->options->minCount;
+            $maxCount = $step->options->maxCount;
+        }
         $className = 'selectable-rows' . (empty($required) ? ' hidden' : '');
 
         $formItems[] = formRow
@@ -43,7 +46,7 @@ class thinkCheckbox extends thinkRadio
                 (
                     set::placeholder($lang->thinkwizard->step->inputContent),
                     set::type('number'),
-                    set::name($minCountName),
+                    set::name('options[minCount]'),
                     set::value($minCount),
                 ),
             ),
@@ -55,7 +58,7 @@ class thinkCheckbox extends thinkRadio
                 (
                     set::placeholder($lang->thinkwizard->step->inputContent),
                     set::type('number'),
-                    set::name($maxCountName),
+                    set::name('options[maxCount]'),
                     set::value($maxCount)
                 )
             )
