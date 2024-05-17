@@ -34,7 +34,7 @@ $config->cacheKeys->bug->browse = 'bugBrowse%s';
 
 $config->cache->dao = new stdClass();
 $config->cache->dao->enable   = false; // 是否开启 dao 缓存。Enable dao cache or not.
-$config->cache->dao->lifetime = 5 * 60;
+$config->cache->dao->lifetime = 60 * 60 * 24 * 30;
 $config->cache->dao->driver   = 'Apcu';
 
 $config->cache->client = new stdClass();
