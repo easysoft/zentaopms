@@ -4283,7 +4283,7 @@ class storyModel extends model
     {
         $storyLang = $this->lang->story;
         $SRCommon  = $this->lang->SRCommon;
-        if($this->app->tab != 'product')
+        if($this->app->tab != 'product' && $this->app->rawMethod == 'report')
         {
             $replacement = $this->lang->common->story;
             $storyLang->report->charts['storiesPerProduct'] = str_replace($SRCommon, $replacement, $storyLang->report->charts['storiesPerProduct']);
