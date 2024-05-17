@@ -19,16 +19,7 @@ class thinkBaseCheckbox extends wg
 
     public static function getPageCSS(): ?string
     {
-        return <<<CSS
-        .think-check-list .item-control.is-checked {border: 1px solid var(--color-primary-500); color: var(--color-primary-500);}
-        .think-check-list .item-control:hover {border: 1px solid var(--color-primary-500);}
-        .think-check-list .checkbox-primary {--checkbox-size: 16px; width: 16px;}
-        .think-check-list .checkbox-primary>input[type=checkbox]:checked+label:after {left: 1px; --tw-content: "\\e5ca"; color: var(--color-primary-500); font-weight: 600;}
-        .think-check-list .checkbox-primary.checked>label:before, .think-check-list .checkbox-primary>input[type=checkbox]:checked+label:before {background-color: unset; border-color: var(--color-primary-500); color: var(--color-primary-500);}
-        .think-check-list .checkbox-primary.checked>label, .think-check-list .radio-primary>label {font-family: ZentaoIcon !important;}
-        .think-check-list .radio-primary>label:before, .think-check-list .radio-primary.checked>label:before, .think-check-list .radio-primary>input[type=radio]:checked+label:before {display: none;}
-        .think-check-list .radio-primary>label:after {--tw-content: "\\e5ca"; color: var(--color-primary-500); font-size: 16px; background-color: unset; top: -2px; left: 2px; font-weight: 600;}
-        CSS;
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
     public static function getPageJS(): string
