@@ -12,12 +12,36 @@ namespace zin;
 
 include 'header.html.php';
 jsVar('window.globalSearchType', 'requirement');
+jsVar('showGrade',  $showGrade);
+jsVar('gradeGroup', $gradeGroup);
 
 featureBar
 (
     set::current($type),
     set::linkParams("mode=requirement&type={key}&param={$param}"),
     li(searchToggle(set::module($this->app->rawMethod . 'Requirement'), set::open($type == 'bysearch')))
+);
+
+$viewType = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';
+toolbar
+(
+    item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(array
+        (
+            'icon'      => 'list',
+            'class'     => 'btn-icon switchButton' . ($viewType == 'tiled' ? ' text-primary' : ''),
+            'data-type' => 'tiled',
+            'hint'      => $lang->story->viewTypeList['tiled']
+        ), array
+        (
+            'icon'      => 'treeview',
+            'class'     => 'switchButton btn-icon' . ($viewType == 'tree' ? ' text-primary' : ''),
+            'data-type' => 'tree',
+            'hint'      => $lang->story->viewTypeList['tree']
+        ))
+    )))
 );
 
 $canBatchEdit     = common::hasPriv('requirement', 'batchEdit');
@@ -71,8 +95,10 @@ $footToolbar = array('items' => array
 if($canBatchAction) $config->my->requirement->dtable->fieldList['id']['type'] = 'checkID';
 
 $stories = initTableData($stories, $config->my->requirement->dtable->fieldList, $this->story);
-$cols    = array_values($config->my->requirement->dtable->fieldList);
-$data    = array_values($stories);
+
+if($viewType == 'tiled') $config->my->requirement->dtable->fieldList['title']['nestedToggle'] = false;
+$cols = array_values($config->my->requirement->dtable->fieldList);
+$data = array_values($stories);
 dtable
 (
     set::cols($cols),
@@ -80,6 +106,7 @@ dtable
     set::userMap($users),
     set::fixedLeftWidth('44%'),
     set::checkable($canBatchAction ? true : false),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
