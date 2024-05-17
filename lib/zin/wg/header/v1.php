@@ -389,8 +389,8 @@ class header extends wg
                     break;
                 case 'board':
                     $createMethod = 'createByTemplate';
-                    $params = 'templateID=0';
-                    $isOnlyBody = true;
+                    $params       = 'templateID=1';
+                    $isOnlyBody   = true;
                     $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';
