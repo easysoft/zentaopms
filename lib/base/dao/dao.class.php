@@ -27,6 +27,15 @@ class baseDAO
     const LIMIT   = 'lImiT';
 
     /**
+     * 缓存未命中标识。
+     * The cache miss flag.
+     *
+     * @var string
+     * @access public
+     */
+    const CACHE_MISS = 'DAO_CAHCE_MISS';
+
+    /**
      * 全局对象$app
      * The global app object.
      *
@@ -314,10 +323,10 @@ class baseDAO
      */
     public function getCache($key, $sql)
     {
-        if(empty($this->cache)) return false;
+        if(empty($this->cache)) return self::CACHE_MISS;
 
         $cache = $this->cache->get($key);
-        if($cache === null) return false;
+        if($cache === null) return self::CACHE_MISS;
 
         /* 解析缓存的更新时间和值到变量中。 */
         /* Parse the cache time and value to variables. */
@@ -326,7 +335,7 @@ class baseDAO
         /* 查找 sql 语句中包含的表名。*/
         /* Find the table names in the sql. */
         preg_match_all("/({$this->config->db->prefix}\w+)[`\" ]/", $sql, $tables);
-        if(!isset($tables[1])) return false;
+        if(!isset($tables[1])) return self::CACHE_MISS;
 
         /* 检查 sql 语句中包含的表的更新时间是否大于缓存的更新时间，如果大于则不使用缓存。*/
         /* Check if the update time of the tables in the sql is greater than the cache time, if greater, don't use the cache. */
@@ -335,7 +344,7 @@ class baseDAO
             $tableCache = $this->cache->get($table);
             if($tableCache === null) continue;
 
-            if($tableCache[0] > $cachedTime) return false;
+            if($tableCache[0] > $cachedTime) return self::CACHE_MISS;
         }
 
         /* 检查是否可以使用客户端缓存。*/
@@ -1010,7 +1019,7 @@ class baseDAO
         $key = 'fetch-' . md5($sql);
 
         $result = $this->getCache($key, $sql);
-        if($result === false)
+        if($result === self::CACHE_MISS)
         {
             $result = $this->query($sql)->fetch(PDO::FETCH_OBJ);
             $this->setCache($key, $result);
@@ -1036,7 +1045,7 @@ class baseDAO
         $key = 'fetchAll-' . md5($sql);
 
         $rows = $this->getCache($key, $sql);
-        if($rows === false)
+        if($rows === self::CACHE_MISS)
         {
             $rows = $this->query($sql)->fetchAll();
             $this->setCache($key, $rows);
@@ -1065,7 +1074,7 @@ class baseDAO
         $key   = 'fetchGroup-' . md5($sql);
 
         $rows = $this->getCache($key, $sql);
-        if($rows === false)
+        if($rows === self::CACHE_MISS)
         {
             $rows = $this->query($sql)->fetchAll();
             $this->setCache($key, $rows);
@@ -1097,7 +1106,7 @@ class baseDAO
         $key = 'fetchPairs-' . md5($sql);
 
         $rows = $this->getCache($key, $sql);
-        if($rows === false)
+        if($rows === self::CACHE_MISS)
         {
             $rows = $this->query($sql)->fetchAll();
             $this->setCache($key, $rows);
