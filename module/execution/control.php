@@ -3050,6 +3050,9 @@ class execution extends control
      */
     public function treeStory(int $storyID, int $version = 0)
     {
+        $this->loadModel('requirement');
+        $this->loadModel('epic');
+
         $story   = $this->loadModel('story')->getById($storyID, $version, true);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, `type`, shadow')->fetch();
 
