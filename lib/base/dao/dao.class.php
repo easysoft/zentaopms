@@ -316,23 +316,33 @@ class baseDAO
     {
         if(empty($this->cache)) return false;
 
-        $result = $this->cache->get($key);
-        if($result === null) return false;
+        $cache = $this->cache->get($key);
+        if($cache === null) return false;
 
+        /* 解析缓存的更新时间和值到变量中。 */
+        /* Parse the cache time and value to variables. */
+        list($cachedTime, $cachedValue) = $cache;
+
+        /* 查找 sql 语句中包含的表名。*/
+        /* Find the table names in the sql. */
         preg_match_all("/({$this->config->db->prefix}\w+)[`\" ]/", $sql, $tables);
         if(!isset($tables[1])) return false;
 
+        /* 检查 sql 语句中包含的表的更新时间是否大于缓存的更新时间，如果大于则不使用缓存。*/
+        /* Check if the update time of the tables in the sql is greater than the cache time, if greater, don't use the cache. */
         foreach($tables[1] as $table)
         {
-            $time = $this->cache->get($table);
-            if($time === null) continue;
+            $tableCache = $this->cache->get($table);
+            if($tableCache === null) continue;
 
-            if($time[0] > $result[0]) return false;
+            if($tableCache[0] > $cachedTime) return false;
         }
 
-        $this->app->useClientCache = $this->app->clientCacheTime > $result[0];
+        /* 检查是否可以使用客户端缓存。*/
+        /* Check if can use the client cache. */
+        $this->app->useClientCache = $this->app->clientCacheTime > $cachedTime;
 
-        return $result[1];
+        return $cachedValue;
     }
 
     /**
