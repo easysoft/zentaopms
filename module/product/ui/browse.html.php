@@ -390,7 +390,7 @@ toolbar
             'hint'      => $lang->story->viewTypeList['tiled']
         ), array
         (
-            'icon'      => 'tree',
+            'icon'      => 'treeview',
             'class'     => 'switchButton btn-icon' . ($viewType == 'tree' ? ' text-primary' : ''),
             'data-type' => 'tree',
             'hint'      => $lang->story->viewTypeList['tree']
