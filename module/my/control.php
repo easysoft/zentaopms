@@ -238,14 +238,16 @@ class my extends control
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
-        $this->view->stories  = $stories;
-        $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->type     = $type;
-        $this->view->param    = $param;
-        $this->view->mode     = 'story';
-        $this->view->pager    = $pager;
-        $this->view->orderBy  = $orderBy;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
+        $this->view->stories    = $stories;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->param      = $param;
+        $this->view->mode       = 'story';
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
+        $this->view->gradeGroup = $this->story->getGradeGroup();
+        $this->view->showGrade  = $this->story->showGrade('story');
         $this->display();
     }
 
@@ -304,14 +306,16 @@ class my extends control
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
-        $this->view->stories  = $stories;
-        $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->type     = $type;
-        $this->view->param    = $param;
-        $this->view->mode     = 'epic';
-        $this->view->pager    = $pager;
-        $this->view->orderBy  = $orderBy;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
+        $this->view->stories    = $stories;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->param      = $param;
+        $this->view->mode       = 'epic';
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
+        $this->view->gradeGroup = $this->story->getGradeGroup();
+        $this->view->showGrade  = $this->story->showGrade('epic');
         $this->display();
     }
 
@@ -370,14 +374,16 @@ class my extends control
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
-        $this->view->stories  = $stories;
-        $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->type     = $type;
-        $this->view->param    = $param;
-        $this->view->mode     = 'requirement';
-        $this->view->pager    = $pager;
-        $this->view->orderBy  = $orderBy;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
+        $this->view->stories    = $stories;
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->type       = $type;
+        $this->view->param      = $param;
+        $this->view->mode       = 'requirement';
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
+        $this->view->gradeGroup = $this->story->getGradeGroup();
+        $this->view->showGrade  = $this->story->showGrade('requirement');
         $this->display();
     }
 
