@@ -258,7 +258,7 @@ class executionZen extends execution
         }
 
         $project = $this->loadModel('project')->fetchByID($execution->project);
-        if(!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design')))) $project->storyType = 'story';
+        if(!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $project->multiple) $project->storyType = 'story';
 
         $productPairs = $this->loadModel('product')->getProductPairsByProject($execution->id); // Get execution's product.
         if(empty($productID)) $productID = (int)key($productPairs);

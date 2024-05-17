@@ -2864,7 +2864,7 @@ class executionModel extends model
             $story   = zget($storyList, $storyID, '');
             if(empty($story)) continue;
             if(strpos($project->storyType, "$story->type") === false) continue;
-            if($execution->type != 'project' && !($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $story->type != 'story') continue;
+            if($execution->type != 'project' && !($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $story->type != 'story' && $execution->multiple) continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
@@ -4888,6 +4888,7 @@ class executionModel extends model
         $executionData->project     = $projectID;
         $executionData->name        = $project->name;
         $executionData->grade       = 1;
+        $executionData->storyType   = $project->storyType;
         $executionData->begin       = $project->begin;
         $executionData->end         = $project->end;
         $executionData->status      = 'wait';
@@ -4947,6 +4948,7 @@ class executionModel extends model
         $postData = new stdclass();
         $postData->project   = $projectID;
         $postData->name      = $project->name;
+        $postData->storyType = $project->storyType;
         $postData->begin     = $project->begin;
         $postData->end       = $project->end;
         $postData->realBegan = $project->realBegan ? $project->realBegan : null;
