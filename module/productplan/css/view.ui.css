@@ -4,3 +4,4 @@
 #planInfo .history {padding: 16px 0px;}
 #mainContent .entity-label {flex: initial !important;}
 #mainContent .tab-actions {z-index: 10;}
+#planInfo .extendBox > .panel-heading {padding-left: 0; font-size: 1rem;}
