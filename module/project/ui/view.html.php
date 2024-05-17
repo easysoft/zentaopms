@@ -232,15 +232,6 @@ row
                     ),
                     span
                     (
-                        setClass('text-gray'),
-                        $lang->common->story
-                    )
-                ),
-                div
-                (
-                    setClass('w-1/3 taskCount'),
-                    div
-                    (
                         setClass('text-md font-bold ml-2 clip'),
                         set::title($project->name),
                         $project->name
