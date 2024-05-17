@@ -216,19 +216,21 @@
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
     }
 
-    function layoutNanavbar(immediate)
+    function layoutNavbar(immediate)
     {
         if(!immediate)
         {
-            if(layoutNanavbar.timer) clearTimeout(layoutNanavbar.timer);
-            layoutNanavbar.timer = setTimeout(() => layoutNanavbar(true), 50);
+            if(layoutNavbar.timer) clearTimeout(layoutNavbar.timer);
+            layoutNavbar.timer = setTimeout(() => layoutNavbar(true), 50);
             return;
         }
 
         const $navbar = $('#navbar');
         if(!$navbar.length) return;
 
-        const $nav        = $navbar.children('.nav');
+        const $nav = $navbar.children('.nav');
+        if(!$nav.length) return;
+
         let layout        = $nav.data('_layout');
         let itemPadding   = 12;
         let dividerMargin = 8;
@@ -272,7 +274,7 @@
         if($newNav.text().trim() !== $navbar.text().trim() || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')) return $navbar.empty().append($newNav);
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
-        layoutNanavbar();
+        layoutNavbar();
     }
 
     function updateFeatureBar(data)
@@ -333,7 +335,7 @@
         {
             $heading.html(data);
         }
-        layoutNanavbar();
+        layoutNavbar();
     }
 
     function activeNav(activeID, nav)
@@ -1397,7 +1399,7 @@
 
     function updatePageLayout()
     {
-        layoutNanavbar();
+        layoutNavbar();
     }
 
     function handleGlobalClick(e)
