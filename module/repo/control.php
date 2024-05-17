@@ -248,7 +248,7 @@ class repo extends control
             $result = $this->scm->createBranch($branch->branchName, $branch->branchFrom);
             if($result['result'] == 'fail') return $this->sendError($this->lang->repo->error->createdFail . ': ' . $this->repoZen->parseErrorContent($result['message']));
 
-            $this->repo->saveBranchRelation($repoID, $branch->branchName, $objectID, $objectType);
+            $this->repo->saveRelation($repoID, $branch->branchName, $objectID, $objectType);
             $this->loadModel('action')->create($objectType, $objectID, 'createRepoBranch', '', $branch->branchName);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
         }

@@ -2987,18 +2987,19 @@ class repoModel extends model
      * @param  string $branch
      * @param  int    $objectID
      * @param  string $objectType
+     * @param  string $relation
      * @access public
      * @return bool
      */
-    public function saveBranchRelation(int $repoID, string $branch, int $objectID, string $objectType): bool
+    public function saveRelation(int $repoID, string $branch, int $objectID, string $objectType, string $relation = 'linkrepobranch'): bool
     {
-        $relation = new stdclass();
-        $relation->AType    = $objectType;
-        $relation->AID      = $objectID;
-        $relation->BType    = $branch;
-        $relation->BID      = $repoID;
-        $relation->relation = 'linkrepobranch';
-        $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        $relate = new stdclass();
+        $relate->AType    = $objectType;
+        $relate->AID      = $objectID;
+        $relate->BType    = $branch;
+        $relate->BID      = $repoID;
+        $relate->relation = $relation;
+        $this->dao->replace(TABLE_RELATION)->data($relate)->exec();
 
         return !dao::isError();
     }
