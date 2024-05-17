@@ -77,6 +77,9 @@ $lang->mr->needCI             = '需要通过流水线才能合并';
 $lang->mr->removeSourceBranch = '合并后删除源分支';
 $lang->mr->squash             = '合并提交记录';
 $lang->mr->triggeredCI        = '目标分支或流水线变动，触发流水线执行。';
+$lang->mr->acceptTip          = '评审通过后才能合并';
+$lang->mr->conflictsTip       = '该合并请求存在冲突，无法审核';
+$lang->mr->compileTip         = '该合并请求流水线构建未成功，无法审核';
 
 $lang->mr->repeatedOperation = '请勿重复操作';
 
