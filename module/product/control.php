@@ -139,7 +139,8 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Generate data. */
-        $productID = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
+        $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
+        $productID = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);
