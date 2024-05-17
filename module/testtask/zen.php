@@ -425,7 +425,7 @@ class testtaskZen extends testtask
         }
 
         $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->edit;
-        $this->view->task         = $task;
+        $this->view->testtask     = $task;
         $this->view->project      = $this->project->getByID($projectID);
         $this->view->productID    = $productID;
         $this->view->executions   = $executions;

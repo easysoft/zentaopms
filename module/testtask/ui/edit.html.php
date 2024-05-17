@@ -27,8 +27,8 @@ formPanel
         set::width('1/2'),
         set::label($lang->testtask->execution),
         set::name('execution'),
-        set::value($task->execution),
-        set::className(((!empty($project) && !$project->multiple) || ($app->tab == 'execution' && $task->execution)) ? 'hidden' : ''),
+        set::value($testtask->execution),
+        set::className(((!empty($project) && !$project->multiple) || ($app->tab == 'execution' && $testtask->execution)) ? 'hidden' : ''),
         set::control('picker'),
         set::items($executions)
     ),
@@ -38,7 +38,7 @@ formPanel
         set::label($lang->testtask->build),
         set::required(true),
         set::name('build'),
-        set::value($task->build),
+        set::value($testtask->build),
         set::control('picker'),
         set::items($builds),
         on::change('setExecutionByBuild')
@@ -48,7 +48,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->testtask->type),
         set::name('type[]'),
-        set::value($task->type),
+        set::value($testtask->type),
         set::control('picker'),
         set::items($lang->testtask->typeList),
         set::multiple(true)
@@ -58,7 +58,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->testtask->owner),
         set::name('owner'),
-        set::value($task->owner),
+        set::value($testtask->owner),
         set::control('picker'),
         set::items($users)
     ),
@@ -71,7 +71,7 @@ formPanel
             setid('members'),
             set::name('members[]'),
             set::items($users),
-            set::value($task->members),
+            set::value($testtask->members),
             set::multiple(true)
         )
     ),
@@ -87,7 +87,7 @@ formPanel
                 set::id('beginDate'),
                 set::name('begin'),
                 set::required(true),
-                set::value($task->begin),
+                set::value($testtask->begin),
                 on::change('suitEndDate')
             ),
             $lang->testtask->end,
@@ -96,7 +96,7 @@ formPanel
                 set::id('endDate'),
                 set::name('end'),
                 set::required(true),
-                set::value($task->end)
+                set::value($testtask->end)
             )
         )
     ),
@@ -106,7 +106,7 @@ formPanel
         set::label($lang->testtask->status),
         set::name('status'),
         set::required(true),
-        set::value($task->status),
+        set::value($testtask->status),
         set::control('picker'),
         set::items($lang->testtask->statusList)
     ),
@@ -115,7 +115,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->testtask->testreport),
         set::name('testreport'),
-        set::value($task->testreport),
+        set::value($testtask->testreport),
         set::control('picker'),
         set::items($testreports)
     ),
@@ -129,7 +129,7 @@ formPanel
             (
                 set::name('name'),
                 set::required(true),
-                set::value($task->name)
+                set::value($testtask->name)
             ),
             $lang->testtask->pri,
             priPicker
@@ -137,7 +137,7 @@ formPanel
                 zui::width('80px'),
                 set::name('pri'),
                 set::items($lang->testtask->priList),
-                set::value($task->pri)
+                set::value($testtask->pri)
             )
         )
     ),
@@ -149,7 +149,7 @@ formPanel
         (
             set::name('desc'),
             set::templateType('testtask'),
-            html($task->desc)
+            html($testtask->desc)
         )
     ),
     formGroup
@@ -165,7 +165,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->mailto),
-        mailto(set::items($users), set::value($task->mailto))
+        mailto(set::items($users), set::value($testtask->mailto))
     )
 );
 
