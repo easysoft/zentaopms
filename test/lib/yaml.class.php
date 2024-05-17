@@ -255,7 +255,6 @@ class yaml
         $this->dao       = isset($tester->dao) ? $tester->dao : $uiTester->dao;
         $this->tableName = $tableName;
         $this->fields    = new fields();
-        dao::$cache      = array();
 
         $yamlFile = dirname(dirname(__FILE__)) . "/data/{$this->tableName}.yaml";
         $this->configFiles[] = $yamlFile;

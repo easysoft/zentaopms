@@ -298,8 +298,6 @@ function zdImport($table, $yaml, $count = 10)
  */
 function su($account, $initRights = true)
 {
-    dao::$cache = array();
-
     $userModel = new userModel();
     $user      = $userModel->getByID($account);
     if(!$user) return false;
