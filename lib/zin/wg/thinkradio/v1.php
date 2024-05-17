@@ -48,10 +48,10 @@ class thinkRadio extends thinkQuestion
         $requiredItems = $lang->thinkwizard->step->requiredList;
         if($step)
         {
-            $step->options->fields = (array)$step->options->fields;
             $enableOther = $step->options->enableOther ?? 0;
             $required    = $step->options->required;
-            $fields      = $step->options->fields ? array_values($step->options->fields) : array();
+            if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
+            $fields = $step->options->fields ?? array();
         }
 
         $formItems[] = array(

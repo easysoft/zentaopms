@@ -30,8 +30,8 @@ class thinkCheckbox extends thinkRadio
         if($step)
         {
             $required = $step->options->required;
-            $minCount = $step->options->minCount;
-            $maxCount = $step->options->maxCount;
+            $minCount = $step->options->minCount ?? null;
+            $maxCount = $step->options->maxCount ?? null;
         }
         $className = 'selectable-rows' . (empty($required) ? ' hidden' : '');
 
