@@ -341,6 +341,8 @@ class jobModel extends model
             ->set('lastStatus')->eq($compile->status)
             ->where('id')->eq($job->id)
             ->exec();
+
+        $compile->id = $compileID;
         return $compile;
     }
 
