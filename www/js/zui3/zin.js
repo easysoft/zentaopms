@@ -427,7 +427,7 @@
         }
     }
 
-    function toggleLoading(target, isLoading, loadingClass)
+    function toggleLoading(target, isLoading, loadingClass, loadingIndicatorDelay)
     {
         var $target = $(target);
 
@@ -440,7 +440,7 @@
 
         if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
         if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
-        $target.toggleClass(loadingClass, isLoading);
+        $target.toggleClass(loadingClass, isLoading).css('--loading-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
     }
 
     /**
@@ -482,7 +482,7 @@
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass);
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, '1s');
                 if(options.before) options.before();
             },
             success(data)
