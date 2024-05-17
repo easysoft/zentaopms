@@ -35,7 +35,7 @@ class thinkRadio extends thinkQuestion
             set::type($step->options->questionType),
             set::items($items),
             set::name('result[]'),
-            set::value($step->options->questionType == 'radio' ? $result[0] : $result),
+            set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
         );
         return $detailWg;
     }

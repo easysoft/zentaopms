@@ -64,9 +64,9 @@ class thinkStep  extends wg
         list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
         if(!$item) return array();
 
-        $titleLang = $action . 'Title';
-        $type  =  $addType ? $addType : ($item->type == 'question' ? $item->options->questionType : $item->type);
-        $title = $action == 'detail' ? $lang->thinkstep->detailTitle[$item->type] : $lang->thinkstep->$titleLang[$type];
+        $typeLang = $action . 'Step';
+        $type     = $addType ? $addType : ($item->type == 'question' ? $item->options->questionType : $item->type);
+        $title    = $action == 'detail' ? $lang->thinkstep->detailTitle[$item->type] : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
 
         return div
         (
