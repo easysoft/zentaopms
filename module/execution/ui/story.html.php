@@ -431,7 +431,11 @@ foreach($setting as $col)
     if(!$execution->hasProduct && $col['name'] == 'branch') continue;
     if(!$execution->hasProduct && !$execution->multiple && $col['name'] == 'plan') continue;
 
-    if($col['name'] == 'title') $col['link'] = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
+    if($col['name'] == 'title')
+    {
+        $col['link']  = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
+        $col['title'] = $this->lang->story->name;
+    }
 
     $cols[] = $col;
 }
