@@ -5032,7 +5032,6 @@ class storyModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->eq($projectID)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($this->config->vision != 'lite')->andWhere('t2.type')->eq('story')->fi()
             ->orderBy('t1.`order`_desc')
             ->fetchAll();
     }
