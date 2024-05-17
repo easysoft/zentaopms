@@ -38,7 +38,7 @@ if(!$hasDivider) unset($actions['type']);
 foreach($actions as $key => $action)
 {
     if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false && empty($hasGitRepo)) unset($actions[$key]);
-    if(isset($action['url']) && strpos($action['url'], 'view') !== false)
+    if(isset($action['url']) && strpos($action['url'], 'view') !== false && strpos($action['url'], 'review') === false)
     {
         if($isInModal)
         {
