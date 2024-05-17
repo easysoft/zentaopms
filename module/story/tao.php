@@ -1929,11 +1929,11 @@ class storyTao extends storyModel
             {
                 $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
             }
-            elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+            elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
             {
                 $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
             }
-            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
             {
                 $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
             }
@@ -1997,11 +1997,11 @@ class storyTao extends storyModel
                     {
                         $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
-                    elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+                    elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
                     {
                         $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
-                    elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+                    elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
                     {
                         $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
