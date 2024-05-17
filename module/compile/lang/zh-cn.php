@@ -25,7 +25,7 @@ $lang->compile->deleted     = '已删除';
 
 $lang->compile->statusList['success']     = '成功';
 $lang->compile->statusList['failure']     = '失败';
-$lang->compile->statusList['created']     = '新建';
+$lang->compile->statusList['created']     = '准备中';
 $lang->compile->statusList['pending']     = '队列中';
 $lang->compile->statusList['running']     = '运行中';
 $lang->compile->statusList['building']    = '构建中';
