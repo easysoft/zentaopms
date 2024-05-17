@@ -21,7 +21,7 @@ t1.realduration,
 t1.realduration-t1.planduration duration_deviation,
 round((t1.realduration-t1.planduration)/t1.planduration,3) rate
 from
-(select 
+(select
 name,
 substr(`path`,2,4) program1,
 begin,
@@ -208,11 +208,11 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '3',
     'group'     => '100',
     'sql'       => <<<EOT
-SELECT 
-  t1.name AS  "产品", 
-  IFNULL(t2.name, '/') AS "一级项目集", 
-  IFNULL(t3.name, '/') AS "产品线", 
-  IFNULL(t6.exfixedstorys, 0) AS "研发完成需求数", 
+SELECT
+  t1.name AS  "产品",
+  IFNULL(t2.name, '/') AS "一级项目集",
+  IFNULL(t3.name, '/') AS "产品线",
+  IFNULL(t6.exfixedstorys, 0) AS "研发完成需求数",
   round(IFNULL(t6.exfixedstorysmate, 0),3) AS "研发完成需求规模数",
   IFNULL(t8.storycases, 0) AS "需求用例数",
   round(storycases/exfixedstorysmate,3) AS "用例密度",
@@ -223,32 +223,32 @@ SELECT
   round(bug/exfixedstorysmate,3) AS "Bug密度",
   IFNULL(t7.fixedbugs, 0) AS "修复Bug数",
   round(t7.fixedbugs/bug,3) "Bug修复率"
-FROM 
-  zt_product AS t1 
-  LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1 
-  LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line' 
+FROM
+  zt_product AS t1
+  LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
+  LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
   LEFT JOIN (
   SELECT
-  product, 
-  count(id) exfixedstorys, 
+  product,
+  count(id) exfixedstorys,
   sum(estimate) exfixedstorysmate
-  FROM zt_story 
+  FROM zt_story
   WHERE deleted = '0'  and (stage in ('developed','testing','verfied','released') or (status='closed' and closedReason='done'))
-  GROUP BY product) AS t6 ON t1.id = t6.product 
+  GROUP BY product) AS t6 ON t1.id = t6.product
   LEFT JOIN (SELECT product, COUNT(id)  AS bug,
-  SUM(case when  resolution in ('fixed','postponed') or status='active' then 1 else 0 end) effbugs, 
+  SUM(case when  resolution in ('fixed','postponed') or status='active' then 1 else 0 end) effbugs,
   SUM(CASE WHEN  resolution='fixed' then 1 else 0 end) fixedbugs,
   SUM(CASE WHEN severity in (1,2) then 1 else 0 end) pri12bugs
-  FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t7 ON t1.id = t7.product 
+  FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t7 ON t1.id = t7.product
   LEFT JOIN (SELECT product, COUNT(id) AS storycases FROM zt_case WHERE deleted='0' GROUP BY product) AS t8 ON t1.id=t8.product
   LEFT JOIN (
-   select 
-   t9.product, 
+   select
+   t9.product,
    count(t9.story) casestorys
    from(
-     SELECT 
-     zt_case.product,zt_case.story 
-     FROM zt_case 
+     SELECT
+     zt_case.product,zt_case.story
+     FROM zt_case
      left join zt_story
      on zt_case.story=zt_story.id
      WHERE zt_case.deleted='0' and zt_case.story !='0' and zt_story.deleted='0' and  (zt_story.stage in ('developed','testing','verfied','released') or (zt_story.status='closed' and zt_story.closedReason='done'))
@@ -311,9 +311,9 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59',
     'sql'       => <<<EOT
-select t1.*,t2.name, (case when t1.status = 'closed' or t1.stage = 'released' then 1 else 0 end) as done, 1 as count from zt_story as t1 
-left join zt_product as t2 on t1.product=t2.id 
-left join zt_project as t3 on t2.program=t3.id 
+select t1.*,t2.name, (case when t1.status = 'closed' or t1.stage = 'released' then 1 else 0 end) as done, 1 as count from zt_story as t1
+left join zt_product as t2 on t1.product=t2.id
+left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
@@ -406,8 +406,8 @@ $config->bi->builtin->pivots[] = array
     'group'     => '59',
     'sql'       => <<<EOT
 select t1.*,t2.name from zt_story as t1
- left join zt_product as t2 on t1.product=t2.id 
-left join zt_project as t3 on t2.program=t3.id 
+ left join zt_product as t2 on t1.product=t2.id
+left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
@@ -492,8 +492,8 @@ $config->bi->builtin->pivots[] = array
     'group'     => '59',
     'sql'       => <<<EOT
 select t1.*,t2.name from zt_story as t1
- left join zt_product as t2 on t1.product=t2.id 
-left join zt_project as t3 on t2.program=t3.id 
+ left join zt_product as t2 on t1.product=t2.id
+left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
@@ -577,9 +577,9 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59',
     'sql'       => <<<EOT
-select t2.name, 1 as releases from zt_release as t1 
-left join zt_product as t2 on t1.product=t2.id 
-left join zt_project as t3 on t2.program=t3.id 
+select t2.name, 1 as releases from zt_release as t1
+left join zt_product as t2 on t1.product=t2.id
+left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
@@ -675,7 +675,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.type,t2.id as taskID, t1.status as projectstatus from zt_project as t1 
+select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.type,t2.id as taskID, t1.status as projectstatus from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
@@ -738,7 +738,7 @@ $config->bi->builtin->pivots[] = array
     'sql'       => <<<EOT
 select t1.id,t4.name as project,IF(t4.multiple="1",t1.name,"") as execution,if(t3.account is not null, t3.account,t2.assignedTo) as assignedTo,t2.id as taskID, t1.status as projectstatus from zt_project as t1
  left join zt_task as t2 on t1.id=t2.execution
- left join zt_team as t3 on t3.type='task' && t3.root=t2.id 
+ left join zt_team as t3 on t3.type='task' && t3.root=t2.id
 left join zt_project as t4 on t1.project=t4.id
 where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t4.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
 EOT,
@@ -794,9 +794,9 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.finishedBy,t2.id as taskID, t1.status as projectstatus from zt_project as t1 
+select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.finishedBy,t2.id as taskID, t1.status as projectstatus from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
-left join zt_project as t3 on t1.project=t3.id 
+left join zt_project as t3 on t1.project=t3.id
 where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and t2.finishedBy!='' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
 EOT,
     'settings'  => array
@@ -851,12 +851,12 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t5.name as project,IF(t5.multiple="1",t1.name,"") as execution,CONCAT(t1.begin,' ~ ',t1.end) as timeLimit,t2.teams,t3.stories,round(t4.consumed,1) as consumed,t4.number, t1.status as projectstatus 
+select t1.id,t5.name as project,IF(t5.multiple="1",t1.name,"") as execution,CONCAT(t1.begin,' ~ ',t1.end) as timeLimit,t2.teams,t3.stories,round(t4.consumed,1) as consumed,t4.number, t1.status as projectstatus
 from zt_project as t1
  left join ztv_projectteams as t2 on t1.id=t2.execution
 left join ztv_projectstories as t3 on t1.id=t3.execution
- left join ztv_executionsummary as t4 on t1.id=t4.execution 
-left join zt_project as t5 on t1.project=t5.id 
+ left join ztv_executionsummary as t4 on t1.id=t4.execution
+left join zt_project as t5 on t1.project=t5.id
 where t1.deleted='0' and t1.type in ('sprint','stage') and if(\$project='',1,t5.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
 EOT,
     'settings'  => array
@@ -922,9 +922,9 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t2.id, t4.name as project,IF(t4.multiple="1",t2.name,"") as execution,t3.status from zt_projectstory as t1 
-left join zt_project as t2 on t1.project=t2.id 
-left join zt_story as t3 on t1.story=t3.id 
+select t2.id, t4.name as project,IF(t4.multiple="1",t2.name,"") as execution,t3.status from zt_projectstory as t1
+left join zt_project as t2 on t1.project=t2.id
+left join zt_story as t3 on t1.story=t3.id
 left join zt_project as t4 on t4.id=t2.project
 where t2.deleted='0' and t2.type in('sprint', 'stage') and if(\$project='',1,t4.id=\$project) and if(\$execution='',1,t2.id=\$execution) and if(\$status='',1,t2.status=\$status)
 EOT,
@@ -977,9 +977,9 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t2.id, t4.name as project,IF(t4.multiple="1",t2.name,"") as execution,t3.stage from zt_projectstory as t1 
-left join zt_project as t2 on t1.project=t2.id 
-left join zt_story as t3 on t1.story=t3.id 
+select t2.id, t4.name as project,IF(t4.multiple="1",t2.name,"") as execution,t3.stage from zt_projectstory as t1
+left join zt_project as t2 on t1.project=t2.id
+left join zt_story as t3 on t1.story=t3.id
 left join zt_project as t4 on t4.id=t2.project
 where t2.deleted='0' and t2.type in('sprint', 'stage') and if(\$project='',1,t4.id=\$project) and if(\$execution='',1,t2.id=\$execution) and if(\$status='',1,t2.status=\$status)
 EOT,
@@ -1034,7 +1034,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.resolution from zt_project as t1 
+select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.resolution from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
  where t1.deleted='0' and t2.deleted='0' and t2.resolution!='' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
@@ -1089,7 +1089,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.status from zt_project as t1 
+select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.status from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' having bugID!=' ' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
@@ -1144,7 +1144,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.openedBy from zt_project as t1 
+select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.openedBy from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
@@ -1199,7 +1199,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.resolvedBy from zt_project as t1 
+select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.resolvedBy from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' and t2.status!='active' and t2.resolvedBy!='' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
@@ -1254,8 +1254,8 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.assignedTo from zt_project as t1 
-left join zt_bug as t2 on t1.id=t2.execution 
+select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.assignedTo from zt_project as t1
+left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
 EOT,
@@ -1309,7 +1309,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id, t5.name as project,IF(t5.multiple="1",t1.name,"") as execution,t2.stories,(t2.stories-t2.undone) as doneStory,t3.number,(t3.number-t3.undone) as doneTask,t4.bugs,t4.resolutions, round(t4.bugs/(t2.stories-t2.undone),2) as bugthanstory,round(t4.bugs/(t3.number-t3.undone),2) as bugthantask,t4.seriousBugs from zt_project as t1 
+select t1.id, t5.name as project,IF(t5.multiple="1",t1.name,"") as execution,t2.stories,(t2.stories-t2.undone) as doneStory,t3.number,(t3.number-t3.undone) as doneTask,t4.bugs,t4.resolutions, round(t4.bugs/(t2.stories-t2.undone),2) as bugthanstory,round(t4.bugs/(t3.number-t3.undone),2) as bugthantask,t4.seriousBugs from zt_project as t1
 left join ztv_projectstories as t2 on t1.id=t2.execution
 left join ztv_executionsummary as t3 on t1.id=t3.execution
 left join ztv_projectbugs as t4 on t1.id=t4.execution
@@ -1391,9 +1391,9 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59,61',
     'sql'       => <<<EOT
-select t1.id,t1.name,t2.id as bugID,t2.type from zt_product as t1 
-left join zt_bug as t2 on t1.id=t2.product 
-left join zt_project as t3 on t1.program=t3.id 
+select t1.id,t1.name,t2.id as bugID,t2.type from zt_product as t1
+left join zt_bug as t2 on t1.id=t2.product
+left join zt_project as t3 on t1.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t1.line desc, t1.`order` asc
 EOT,
@@ -1436,10 +1436,10 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59',
     'sql'       => <<<EOT
-select t1.id,t1.name,t2.stories,(t2.stories-t2.undone) as doneStory,t3.bugs,t3.resolutions,round(t3.bugs/(t2.stories-t2.undone),2) as bugthanstory,t3.seriousBugs from zt_product as t1 
-left join ztv_productstories as t2 on t1.id=t2.product 
-left join ztv_productbugs as t3 on t1.id=t3.product 
-left join zt_project as t4 on t1.program=t4.id 
+select t1.id,t1.name,t2.stories,(t2.stories-t2.undone) as doneStory,t3.bugs,t3.resolutions,round(t3.bugs/(t2.stories-t2.undone),2) as bugthanstory,t3.seriousBugs from zt_product as t1
+left join ztv_productstories as t2 on t1.id=t2.product
+left join ztv_productbugs as t3 on t1.id=t3.product
+left join zt_project as t4 on t1.program=t4.id
 where t1.deleted='0'
 order by t4.`order` asc, t1.line desc, t1.`order` asc
 EOT,
@@ -1596,7 +1596,38 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '62',
     'sql'       => <<<EOT
-select t1.day,t2.userlogin,t3.consumed,t4.storyopen,t5.storyclose,t6.taskopen,t7.taskfinish,t8.bugopen,t9.bugresolve,t1.actions from ztv_dayactions as t1 left join ztv_dayuserlogin as t2 on t1.day=t2.day left join ztv_dayeffort as t3 on t1.day=t3.date left join ztv_daystoryopen as t4 on t1.day=t4.day left join ztv_daystoryclose as t5 on t1.day=t5.day left join ztv_daytaskopen as t6 on t1.day=t6.day left join ztv_daytaskfinish as t7 on t1.day=t7.day left join ztv_daybugopen as t8 on t1.day=t8.day left join ztv_daybugresolve as t9 on t1.day=t9.day where if(\$startDate='',1,t1.day>=\$startDate) and if(\$endDate='',1,t1.day<=\$endDate)
+select
+    day,
+    max(actions) actions,
+    max(userlogin) userlogin,
+    max(consumed) consumed,
+    max(storyopen) storyopen,
+    max(storyclose) storyclose,
+    max(taskopen) taskopen,
+    max(taskfinish) taskfinish,
+    max(bugopen) bugopen,
+    max(bugresolve) bugresolve,
+from
+(select day,actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve from ztv_dayactions
+union all
+select day,null as actions,userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_dayuserlogin
+union all
+select date as day,null as actions,null as userlogin,consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_dayeffort
+union all
+select day,null as actions,null as userlogin,null as consumed,storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_daystoryopen
+union all
+select day,null as actions,null as userlogin,null as consumed,null as storyopen,storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_daystoryclose
+union all
+select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_daytaskopen
+union all
+select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,taskfinish,null as bugopen,null as bugresolve  from ztv_daytaskfinish
+union all
+select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,bugopen,null as bugresolve  from ztv_daybugopen
+union all
+select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,bugresolve from ztv_daybugresolve
+) as uniontable
+where if(\$startDate='',1,day>=\$startDate) and if(\$endDate='',1,day<=\$endDate)
+group by day
 EOT,
     'settings'  => array
     (
@@ -1779,7 +1810,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t4.name as project,IF(t4.multiple="1",t1.name,"") as execution,t1.status,t2.number as tasks,round(t2.consumed,2) as consumed,round(t2.`left`,2) as `left`,t3.stories,t2.undone as undoneTask,t3.undone as undoneStory,t2.totalReal from zt_project as t1 
+select t1.id,t4.name as project,IF(t4.multiple="1",t1.name,"") as execution,t1.status,t2.number as tasks,round(t2.consumed,2) as consumed,round(t2.`left`,2) as `left`,t3.stories,t2.undone as undoneTask,t3.undone as undoneStory,t2.totalReal from zt_project as t1
 left join ztv_executionsummary as t2 on t1.id=t2.execution
 left join ztv_projectstories as t3 on t1.id=t3.execution
 left join zt_project as t4 on t4.id=t1.project
@@ -1853,7 +1884,7 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.id as bugID,t2.type from zt_project as t1 
+select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.id as bugID,t2.type from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
