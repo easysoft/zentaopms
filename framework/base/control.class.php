@@ -220,13 +220,13 @@ class baseControl
             {
                 $uri = helper::createLink('my');
             }
-            elseif(helper::isAjaxRequest())
+            else if(isInModal())
             {
-                helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout)));
+                helper::end(json_encode(array('result' => 'fail', 'load' => true)));
             }
 
             $referer = helper::safe64Encode($uri);
-            helper::end(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout, 'load' => helper::createLink('user', 'login', "referer=$referer"))));
         }
 
         /**
