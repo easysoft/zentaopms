@@ -64,9 +64,10 @@ class thinkStep  extends wg
         list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
         if(!$item) return array();
 
-        $typeLang = $action . 'Step';
-        $type     = $addType ? $addType : ($item->type == 'question' ? $item->options->questionType : $item->type);
-        $title    = $action == 'detail' ? $lang->thinkstep->detailTitle[$item->type] : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
+        $basicType = $item->type;
+        $typeLang  = $action . 'Step';
+        $type      = $addType ? $addType : ($basicType == 'question' ? $item->options->questionType : $basicType);
+        $title     = $action == 'detail' ? ($lang->thinkstep->$basicType . $lang->thinkstep->info) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
 
         return div
         (
@@ -94,7 +95,7 @@ class thinkStep  extends wg
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
                                 setData('url', createLink('thinkstep', 'ajaxDelete', "stepID={$item->id}")),
-                                setData('confirm',  $lang->thinkwizard->step->deleteTips[$item->type])
+                                setData('confirm',  $lang->thinkwizard->step->deleteTips[$basicType])
                             ) : btn
                             (
                                 set(array(
