@@ -114,8 +114,11 @@ class mrModel extends model
      */
     public function getGitlabProjects(int $hostID = 0, array $projectIdList = array()): array
     {
-        $gitlabUsers = $this->loadModel('pipeline')->getProviderPairsByAccount('gitlab');
-        if(!$this->app->user->admin && !isset($gitlabUsers[$hostID])) return array();
+        if(!$this->app->user->admin)
+        {
+            $gitlabUsers = $this->loadModel('pipeline')->getProviderPairsByAccount('gitlab');
+            if(!isset($gitlabUsers[$hostID])) return array();
+        }
 
         $minProject = $maxProject = 0;
         /* Mysql string to int. */
@@ -185,31 +188,6 @@ class mrModel extends model
     }
 
     /**
-     * 创建本地合并请求。
-     * Create a local merge request.
-     *
-     * @param  object $MR
-     * @access public
-     * @return bool
-     */
-    public function createMR(object $MR): bool
-    {
-        /* Exec Job */
-        if(isset($MR->jobID) && $MR->jobID)
-        {
-            $pipeline = $this->loadModel('job')->exec($MR->jobID);
-            if(!empty($pipeline->queue))
-            {
-                $compile = $this->loadModel('compile')->getByQueue((int)$pipeline->queue);
-                $MR->compileID     = $compile->id;
-                $MR->compileStatus = $compile->status;
-            }
-        }
-
-        return $this->mrTao->insertMr($MR);
-    }
-
-    /**
      * 创建合并请求。
      * Create MR function.
      *
@@ -222,11 +200,13 @@ class mrModel extends model
         $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail') return $result;
 
-        $this->createMR($MR);
+        $this->mrTao->insertMr($MR);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         $MRID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
+
+        if($MR->needCI && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
 
         $rawMR = $this->apiCreateMR($MR->hostID, $MR);
 
@@ -252,12 +232,10 @@ class mrModel extends model
         /* Create a todo item for this MR. */
         if(empty($MR->jobID)) $this->apiCreateMRTodo($MR->hostID, $MR->targetProject, $rawMR->iid);
 
-        $newMR = new stdclass;
+        $newMR = new stdclass();
         $newMR->mriid       = $rawMR->iid;
         $newMR->status      = $rawMR->state;
         $newMR->mergeStatus = $rawMR->merge_status;
-
-        /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
 
         /* Link stories,bugs and tasks. */
@@ -268,43 +246,6 @@ class mrModel extends model
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $linkParams));
-    }
-
-    /**
-     * 创建合并请求后的操作。
-     * Create MR after operation.
-     *
-     * @param  int    $MRID
-     * @param  object $MR
-     * @access public
-     * @return bool
-     */
-    public function afterApiCreate(int $MRID, object $MR): bool
-    {
-        if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
-        {
-            $pipeline = $this->loadModel('job')->exec($MR->jobID, array('sourceBranch' => $MR->sourceBranch, 'targetBranch' => $MR->targetBranch));
-            if(!$pipeline) return false;
-
-            $newMR = new stdClass();
-            if(!empty($pipeline->queue))
-            {
-                $compile = $this->loadModel('compile')->getByQueue((int)$pipeline->queue);
-                $newMR->compileID     = $compile->id;
-                $newMR->compileStatus = $compile->status;
-                if($newMR->compileStatus == 'failure') $newMR->status = 'closed';
-            }
-            else
-            {
-                $newMR->compileStatus = $pipeline->status;
-                if($newMR->compileStatus == 'create_fail') $newMR->status = 'closed';
-            }
-
-            /* Update MR in Zentao database. */
-            $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
-            if(dao::isError()) return false;
-        }
-        return true;
     }
 
     /**
@@ -363,7 +304,7 @@ class mrModel extends model
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
         /* Exec Job */
-        $this->afterApiCreate($MRID, $MR);
+        if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
         return $MRID;
     }
 
@@ -391,16 +332,7 @@ class mrModel extends model
 
         /* Exec Job */
         $needExecJob = isset($diff['targetBranch']) || isset($diff['jobID']) ? true : false;
-        if($needExecJob && isset($MR->jobID) && $MR->jobID)
-        {
-            $pipeline = $this->loadModel('job')->exec($MR->jobID);
-            if(!empty($pipeline->queue))
-            {
-                $compile = $this->loadModel('compile')->getByQueue((int)$pipeline->queue);
-                $MR->compileID     = $compile->id;
-                $MR->compileStatus = $compile->status;
-            }
-        }
+        if($needExecJob && isset($MR->jobID) && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR, $MR);
@@ -1390,5 +1322,35 @@ class mrModel extends model
         $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
         $this->createMRLinkedAction($MRID, 'removemr');
         return !dao::isError();
+    }
+
+    /**
+     * 执行合并请求流水线。
+     * Execute MR pipeline.
+     *
+     * @param  int    $MRID
+     * @param  int    $jobID
+     * @access public
+     * @return bool
+     */
+    public function execJob(int $MRID, int $jobID): bool
+    {
+        if(empty($MRID) || empty($jobID)) return false;
+
+        $MR = $this->fetchByID($MRID);
+        if(!$MR) return false;
+
+        $compile = $this->loadModel('job')->exec($jobID, array('sourceBranch' => $MR->sourceBranch, 'targetBranch' => $MR->targetBranch));
+        if(!$compile) return false;
+
+        $newMR = new stdclass();
+        $newMR->compileID     = $compile->id;
+        $newMR->compileStatus = $compile->status;
+        if($newMR->compileStatus == 'failure')     $newMR->status = 'closed';
+        if($newMR->compileStatus == 'create_fail') $newMR->status = 'closed';
+        $this->loadModel('repo')->saveRelation($MRID, 'mr', $compile->id, 'compile', 'mrjob');
+
+        $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
+        return dao::isError();
     }
 }

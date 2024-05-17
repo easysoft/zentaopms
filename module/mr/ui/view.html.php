@@ -272,7 +272,7 @@ panel
                 !empty($compileJob->id) && hasPriv('job', 'exec') ? btn
                 (
                     setClass('btn ghost text-primary size-sm pull-right ajax-submit'),
-                    set::url(helper::createLink('job', 'exec', "jobID={$compileJob->id}")),
+                    set::url(helper::createLink('mr', 'ajaxExecJob', "MRID={$MR->id}&jobID={$compileJob->id}")),
                     set::hint($lang->mr->execJobTip),
                     $lang->mr->execJob
                 ) : null

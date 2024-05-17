@@ -966,4 +966,20 @@ class mr extends control
 
         $this->sendSuccess();
    }
+
+   /**
+    * 执行合并请求的构建。
+    * AJAX exec MR job.
+    *
+    * @param  int    $MRID
+    * @param  int    $jobID
+    * @access public
+    * @return void
+    */
+   public function ajaxExecJob(int $MRID, int $jobID)
+   {
+       $this->mr->execJob($MRID, $jobID);
+
+       return $this->sendSuccess(array('load' => true));
+   }
 }
