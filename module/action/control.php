@@ -358,7 +358,7 @@ class action extends control
             {
                 return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => (int)$action->objectID))));
             }
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => $action->objectID))));
+            return $this->send(array('result' => 'success', 'locate' => 'reload'));
         }
 
         $action = $this->loadModel('file')->replaceImgURL($action, 'comment');
