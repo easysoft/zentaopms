@@ -64,7 +64,7 @@ class thinkStep  extends wg
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
                                 setData('url', createLink('thinkstep', 'ajaxDelete', "stepID={$item->id}")),
-                                setData('confirm',  $lang->thinkwizard->step->deleteTips[$basicType])
+                                setData('confirm',  $lang->thinkstep->deleteTips[$basicType])
                             ) : btn
                             (
                                 set(array(

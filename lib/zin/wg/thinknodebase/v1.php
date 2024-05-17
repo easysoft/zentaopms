@@ -63,7 +63,7 @@ class thinkNodeBase extends wg
                     div
                     (
                         setStyle(array('font-size' => '1.25rem')),
-                        setClass('mb-3 flex items-center'),
+                        setClass('h-full flex items-center text-fore'),
                         !empty($options->required) ? div(setClass('text-danger mr-0.5 h-5'), '*') : null,
                         $step->title,
                         !empty($tips) ? span(setClass('text-gray mx-1'), '(' . $tips . ')') : null,
