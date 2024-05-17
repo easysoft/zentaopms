@@ -174,5 +174,5 @@ $config->story->actionList['createBranch']['data-toggle'] = 'modal';
 
 $config->story->actions = new stdclass();
 $config->story->actions->view = array();
-$config->story->actions->view['mainActions']   = array('change', 'submitReview', 'recall', 'recallChange', 'review', 'subdivide', 'createBranch', 'assignTo', 'close', 'activate', 'importToLib', 'testcase', 'createTask');
+$config->story->actions->view['mainActions']   = array('change', 'submitReview', 'recall', 'review', 'subdivide', 'createBranch', 'assignTo', 'close', 'activate', 'importToLib', 'testcase', 'createTask');
 $config->story->actions->view['suffixActions'] = array('edit', 'copy', 'delete');
