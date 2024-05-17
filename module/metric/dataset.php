@@ -396,15 +396,15 @@ class dataset
      */
     public function getDevStoriesWithProject($fieldList)
     {
-        $stmt = $this->dao->select($fieldList)
-            ->from(TABLE_STORY)->alias('t1')
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.story')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t4.deleted')->eq(0)
+            ->andWhere('t4.deleted')->eq('0')
+            ->andWhere('t1.isParent')->eq('0')
             ->andWhere('t4.type')->eq('project');
 
         return $this->defaultWhere($stmt, 't1');
@@ -465,19 +465,17 @@ class dataset
      */
     public function getDevStories($fieldList)
     {
-        $caseQuery = $this->dao->select('story, count(DISTINCT id) as case_count')
-            ->from(TABLE_CASE)
-            ->groupBy('story')
-            ->get();
+        $caseQuery = $this->dao->select('story, COUNT(DISTINCT id) AS case_count')->from(TABLE_CASE)->groupBy('story')->get();
 
         $stmt = $this->dao->select($fieldList)
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin("($caseQuery)")->alias('t3')->on('t1.id=t3.story')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t2.shadow')->eq(0);
+            ->andWhere('t1.isParent')->eq('0')
+            ->andWhere('t2.shadow')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
     }
@@ -492,12 +490,12 @@ class dataset
      */
     public function getAllDevStories($fieldList)
     {
-        $stmt =  $this->dao->select($fieldList)
-            ->from(TABLE_STORY)->alias('t1')
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.type')->eq('story');
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('story')
+            ->andWhere('t1.isParent')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
     }
