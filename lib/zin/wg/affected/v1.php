@@ -68,7 +68,7 @@ class affected extends wg
                 empty($stories) ? null : tabPane
                 (
                     to::suffix(label(count($stories))),
-                    set::key('affectedBugs'),
+                    set::key('affectedStories'),
                     set::title($lang->story->affectedStories),
                     empty($stories) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
                     (
