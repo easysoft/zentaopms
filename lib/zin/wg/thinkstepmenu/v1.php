@@ -4,7 +4,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'sidebar' . DS . 'v1.php';
-class thinkNodeMenu extends wg
+class thinkStepMenu extends wg
 {
     private array $modules = array();
 
