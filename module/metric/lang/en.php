@@ -265,6 +265,8 @@ $lang->metric->objectList['case']          = "Test Case";
 $lang->metric->objectList['user']          = "User";
 $lang->metric->objectList['effort']        = "Effort";
 $lang->metric->objectList['doc']           = "Document";
+if(in_array($config->edition, array('biz', 'max', 'ipd'))) $lang->metric->objectList['feedback'] = "Feedback";
+$lang->metric->objectList['review']        = "Review";
 $lang->metric->objectList['codebase']      = "Code Base";
 $lang->metric->objectList['pipeline']      = "Pipeline";
 $lang->metric->objectList['artifact']      = "Artufact";
@@ -278,12 +280,7 @@ $lang->metric->objectList['mergeRequest']  = "Merge Request";
 $lang->metric->objectList['code']          = "Code";
 $lang->metric->objectList['vulnerability'] = "Vulnerability";
 $lang->metric->objectList['codeAnalysis']  = "Code Analysis";
-$lang->metric->objectList['review']        = "Review";
-if(in_array($config->edition, array('biz', 'max', 'ipd')))
-{
-    $lang->metric->objectList['feedback'] = "Feedback";
-    $lang->metric->objectList['ticket']   = "Ticket";
-}
+if(in_array($config->edition, array('biz', 'max', 'ipd'))) $lang->metric->objectList['ticket'] = "Ticket";
 if(in_array($config->edition, array('max', 'ipd')))
 {
     $lang->metric->objectList['risk']  = "Risk";
