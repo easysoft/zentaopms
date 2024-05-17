@@ -60,7 +60,7 @@ class thinkNodeBase extends wg
                         setClass('mb-3 flex items-center'),
                         !empty($options->required) ? div(setClass('text-danger mr-0.5 h-5'), '*') : null,
                         $step->title,
-                        !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray'), '（'. $lang->thinkrun->questionType[$options->questionType].'）') : null,
+                        !empty($lang->thinkrun->questionType[$options->questionType]) ? span(setClass('text-gray mx-1'), '(' . $lang->thinkrun->questionType[$options->questionType] . ')') : null,
                         !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
                         (
                             setClass('run-error-msg h-5 inline-block text-canvas text-md px-2 ml-0.5 rounded-md hidden'),
