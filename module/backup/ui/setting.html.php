@@ -25,7 +25,7 @@ else
     formPanel
     (
         set::submitBtnText($lang->save),
-        formGroup
+        !$this->config->inQuickon ? formGroup
         (
             checkList
             (
@@ -33,8 +33,16 @@ else
                 set::items($lang->backup->settingList),
                 set::value(isset($config->backup->setting) ? $config->backup->setting : '')
             )
+        ) : formRow
+        (
+            set::label(''),
+            span
+            (
+                icon('info text-warning mr-2'),
+                $lang->backup->notice->settingsInQuickon
+            )
         ),
-        formGroup
+        !$this->config->inQuickon ? formGroup
         (
             inputGroup
             (
@@ -45,7 +53,7 @@ else
                     set::value(!empty($config->backup->settingDir) ? $config->backup->settingDir : $this->app->getTmpRoot() . 'backup/')
                 )
             )
-        ),
+        ) : null,
         common::hasPriv('backup', 'change') ? formGroup
         (
             inputGroup
