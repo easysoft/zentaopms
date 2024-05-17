@@ -116,8 +116,8 @@ formPanel
         (
             set::name('removeSourceBranch'),
             set::width('150px'),
-            set::control(array('control' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1', 'checked' => $MR->canDeleteBranch && $MR->removeSourceBranch == '1')),
-            set::disabled(!$MR->canDeleteBranch || $noEditBranch)
+            set::control(array('control' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1', 'checked' => $MR->removeSourceBranch == '1')),
+            set::disabled($noEditBranch)
         ),
         $noEditBranch ? input
         (
