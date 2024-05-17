@@ -2864,7 +2864,8 @@ class executionModel extends model
             $story   = zget($storyList, $storyID, '');
             if(empty($story)) continue;
             if(strpos($project->storyType, "$story->type") === false) continue;
-            if($execution->type != 'project' && !($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $story->type != 'story' && $execution->multiple) continue;
+
+            if($execution->multiple && $story->type != 'story' && (!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $execution->type != 'project')) continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
