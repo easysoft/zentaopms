@@ -24,6 +24,7 @@ class moduleMenu extends wg
         'preserve?: string|bool',
         'tree?: array',
         'checkOnClick?: bool|string',
+        'appendSettingItems?: array',
         'onCheck?: function'
     );
 
@@ -144,9 +145,10 @@ class moduleMenu extends wg
 
     private function buildActions(): node|null
     {
-        $settingLink = $this->prop('settingLink');
-        $showDisplay = $this->prop('showDisplay');
-        if(!$settingLink && !$showDisplay) return null;
+        $settingLink        = $this->prop('settingLink');
+        $showDisplay        = $this->prop('showDisplay');
+        $appendSettingItems = $this->prop('appendSettingItems');
+        if(!$settingLink && !$showDisplay && !$appendSettingItems) return null;
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
@@ -202,6 +204,7 @@ class moduleMenu extends wg
                 'data-size'   => 'md'
             );
         }
+        if($appendSettingItems) $items = array_merge($items, $appendSettingItems);
 
         if(empty($items)) return null;
 
@@ -253,6 +256,7 @@ class moduleMenu extends wg
         $preserve      = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
         $isInSidebar   = $this->parent instanceof sidebar;
         $titleShow     = $this->prop('titleShow');
+        if(!is_null($this->prop('filterMap'))) static::$filterMap = $this->prop('filterMap');
 
         $header = $titleShow ? h::header
         (
