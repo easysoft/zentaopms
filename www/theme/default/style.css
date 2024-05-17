@@ -267,10 +267,14 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 /* Unset style for qa qa-automation-menu. */
 .qa-automation-menu > a:focus, .qa-automation-menu > a:hover {background: unset!important; cursor: default;}
 
-#adminMenu.dropdown-menu {min-width: max-content;}
-#adminMenu.dropdown-menu > li {padding: 0;}
-#adminMenu.dropdown-menu > li > a {padding: 6px 29px 6px 20px;}
-#adminMenu.dropdown-menu > li > a > img {padding-bottom: 4px; padding-right: 8px;}
-#adminMenu.dropdown-menu > li.disabled img {filter: grayscale(100%); opacity: .6;}
+#adminMenu {min-width: max-content; margin-top: -7px;}
+#adminMenu > li {padding: 0;}
+#adminMenu > li > a {padding: 6px 8px; margin: 4px 8px; display: flex; flex-direction: row; align-items: center; gap: 8px}
+#adminMenu > li > a > img {display: block;}
+#adminMenu > li.active > a {background-color: var(--color-pale); color: var(--color-primary); font-weight: bold;}
+#adminMenu > li.active > a:hover,
+#adminMenu > li > a:hover {background-color: var(--color-primary); color: #fff}
+#adminMenu > li.disabled {pointer-events: none;}
+#adminMenu > li.disabled img {filter: grayscale(100%); opacity: .6;}
 
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding: 6px;}

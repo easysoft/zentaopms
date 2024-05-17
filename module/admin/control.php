@@ -532,7 +532,7 @@ class admin extends control
             $data[] = array(
                 'id'         => $menuKey,
                 'name'       => $menuKey,
-                'content'    => array('html' => "<div class='flex items-center my-1.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
+                'content'    => array('html' => "<div class='flex items-center my-0.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
                 'text'       => $menuGroup['name'],
                 'titleClass' => 'hidden',
                 'type'       => 'item',
