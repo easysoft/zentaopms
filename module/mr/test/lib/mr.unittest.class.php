@@ -120,21 +120,6 @@ class mrTest
     }
 
     /**
-     * Test createMR method.
-     *
-     * @param  object  $MR
-     * @access public
-     * @return array|object
-     */
-    public function createMrTester(object $MR): array|object
-    {
-        $this->objectModel->createMR($MR);
-        if(dao::isError()) return dao::getError();
-
-        return $this->objectModel->fetchByID($this->objectModel->dao->lastInsertID());
-    }
-
-    /**
      * Test insertMR method.
      *
      * @param  object  $MR
@@ -150,16 +135,16 @@ class mrTest
     }
 
     /**
-     * Test afterApiCreate method.
+     * Test execJob method.
      *
      * @param  int     $MRID
-     * @param  object  $MR
+     * @param  int     $jobID
      * @access public
-     * @return array|object
+     * @return array|object|bool
      */
-    public function afterApiCreateTester(int $MRID, object $MR): array|object
+    public function execJobTester(int $MRID, int $jobID): array|object|bool
     {
-        $this->objectModel->afterApiCreate($MRID, $MR);
+        $this->objectModel->execJob($MRID, $jobID);
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->fetchByID($MRID);
