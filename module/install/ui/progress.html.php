@@ -35,7 +35,7 @@ foreach($components as $category => $cloudApp)
 }
 
 jsVar('shownLogs', array());
-jsVar('startInstall', $install);
+jsVar('startInstall', $startInstall);
 jsVar('solutionID ', $solution->id);
 jsVar('notices', $lang->solution->notices);
 jsVar('installLabel', $lang->solution->install);
