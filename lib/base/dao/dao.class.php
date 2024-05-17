@@ -192,7 +192,14 @@ class baseDAO
         if($config->cache->dao->enable)
         {
             $app->loadClass('cache', true);
-            $this->cache = new cache($config->cache->dao->driver, 'dao', $config->cache->dao->lifetime);
+            try
+            {
+                $this->cache = new cache($config->cache->dao->driver, 'dao', $config->cache->dao->lifetime);
+            }
+            catch (Exception $e)
+            {
+                die($e->getMessage());
+            }
         }
 
         $this->reset();
