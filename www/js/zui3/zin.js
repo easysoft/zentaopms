@@ -532,7 +532,7 @@
                     if(data.autoLoad) autoLoad(data.autoLoad);
                     if(data.result === 'fail')
                     {
-                        if(data.message) zui.Messager.alert(data.message);
+                        if(data.message) zui.Messager.show({content: data.message, type: 'danger', className: 'bg-danger text-canvas gap-2 messager-fail'});
                     }
                     if(data.open)
                     {
