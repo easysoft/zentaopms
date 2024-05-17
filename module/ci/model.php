@@ -263,7 +263,7 @@ class ciModel extends model
 
         $now      = helper::now();
         $pipeline = $this->loadModel('gitfox')->apiGetSinglePipeline($compile->server, $compile->project, $compile->pipeline, $compile->queue);
-        if(!isset($pipeline->number) || isset($pipeline->message)) /* The pipeline is not available. */
+        if(!isset($pipeline->number)) /* The pipeline is not available. */
         {
             $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq('create_fail')->where('id')->eq($compile->job)->exec();
             return false;
@@ -271,7 +271,8 @@ class ciModel extends model
 
         $pipeline->name = $compile->pipeline;
         $logs = $this->gitfox->apiGetPipelineLogs($compile->server, $compile->project, $pipeline);
-        $data = new stdclass;
+
+        $data = new stdclass();
         $data->status     = $pipeline->status;
         $data->updateDate = $now;
         $data->logs       = $this->transformAnsiToHtml($logs);
