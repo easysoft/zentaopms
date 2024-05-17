@@ -27,52 +27,59 @@ $mergeStatus    = !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mer
 if($MR->compileID)
 {
     $job = tableData
+    (
+        item
         (
-            item
+            set::name($lang->job->common),
+            $compile->name
+        ),
+        item
+        (
+            set::name($lang->compile->atTime),
+            $compile->createdDate
+        ),
+        ($compileJob && !empty($compileJob->id)) ?  item
+        (
+            set::name($lang->compile->result),
+            zget($lang->compile->statusList, $compile->status),
+            in_array($compile->status, array('success', 'failure')) ? h::a
             (
-                set::name($lang->job->common),
-                $compile->name
-            ),
-            item
+                setClass('ml-1'),
+                set::href($this->createLink('job', 'view', "jobID={$compileJob->id}&compileID={$compile->id}")),
+                set('data-toggle', 'modal'),
+                icon('search'),
+                $lang->compile->logs
+            ) : h::a
             (
-                set::name($lang->compile->atTime),
-                $compile->createdDate
-            ),
-            ($compileJob && !empty($compileJob->id)) ?  item
-            (
-                set::name($lang->compile->result),
-                zget($lang->compile->statusList, $compile->status),
-                h::a
-                (
-                    setClass('ml-1'),
-                    set::href($this->createLink('job', 'view', "jobID={$compileJob->id}&compileID={$compile->id}")),
-                    set('data-toggle', 'modal'),
-                    icon('search'),
-                    $lang->compile->logs
-                )
-            ) : null
-        );
+                setClass('ml-1 ajax-submit'),
+                set::href(helper::createLink('mr', 'ajaxSyncCompile', "compileID={$compile->id}")),
+                set::hint($lang->refresh),
+                icon('refresh'),
+                $lang->refresh
+            )
+        ) : null
+    );
 }
 elseif($MR->needCI)
 {
     $compileUrl = $this->createLink('job', 'view', "jobID={$MR->jobID}");
     $job = div
+    (
+        h::a
         (
-            h::a
-            (
-                set::href($compileUrl),
-                set::target('_blank'),
-                $lang->compile->statusList[$MR->compileStatus]
-            )
-        );
+            set::href($compileUrl),
+            set::target('_blank'),
+            $lang->compile->statusList[$MR->compileStatus]
+        )
+    );
 }
 else
 {
     $job = div
-        (
-            setClass('text-center'),
-            $lang->mr->noCompileJob
-        );
+    (
+        setClass('text-center'),
+        $lang->mr->noCompileJob
+    );
 }
 
 detailHeader

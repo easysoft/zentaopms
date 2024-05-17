@@ -982,4 +982,18 @@ class mr extends control
 
        return $this->sendSuccess(array('load' => true));
    }
+
+   /**
+    * 同步流水线的构建状态。
+    * AJAX sync compile status.
+    *
+    * @param  int    $compileID
+    * @access public
+    * @return void
+    */
+   public function ajaxSyncCompile(int $compileID)
+   {
+       $this->loadModel('ci')->checkCompileStatus($compileID);
+       return $this->sendSuccess(array('load' => true));
+   }
 }
