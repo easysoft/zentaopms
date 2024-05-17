@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace zin;
 
-requireWg('thinkNodeBase');
+requireWg('thinkStepBase');
 
-class thinkTransition  extends thinkNodeBase
+class thinkTransition  extends thinkStepBase
 {
     protected static array $defaultProps = array
     (

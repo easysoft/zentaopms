@@ -11,14 +11,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
-requireWg('thinkNodeBase');
+requireWg('thinkStepBase');
 
 /**
  * 思引师问题的基础节点。
  * thinmory basic node content.
  */
 
-class thinkQuestion extends thinkNodeBase
+class thinkQuestion extends thinkStepBase
 {
     protected static array $defineProps = array(
         'required?: int=1', // 是否必填

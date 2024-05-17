@@ -198,7 +198,7 @@ function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
 function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
 function thinkQuestion(): thinkQuestion {return createWg('thinkQuestion', func_get_args());}
-function thinkNodeBase(): thinkNodeBase {return createWg('thinkNodeBase', func_get_args());}
+function thinkStepBase(): thinkStepBase {return createWg('thinkStepBase', func_get_args());}
 function thinkTransition(): thinkTransition {return createWg('thinkTransition', func_get_args());}
 function thinkBaseCheckbox(): thinkBaseCheckbox {return createWg('thinkBaseCheckbox', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
