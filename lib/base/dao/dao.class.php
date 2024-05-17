@@ -354,7 +354,7 @@ class baseDAO
      * @access public
      * @return void
      */
-    public function setCache($key, $value)
+    public function setCache($key, $value = null)
     {
         $this->app->useClientCache = false;
 
@@ -971,7 +971,7 @@ class baseDAO
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
             if($this->table)
             {
-                $this->setCache(str_replace(array('`', '"'), '', $this->table), microtime(true));
+                $this->setCache(str_replace(array('`', '"'), '', $this->table));
             }
             $this->reset();
 
