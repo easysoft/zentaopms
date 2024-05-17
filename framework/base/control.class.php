@@ -1101,8 +1101,7 @@ class baseControl
             {
                 if(!is_string($value)) continue;
 
-                /* Retain ["] for json encode when value is jsoned string. */
-                $data[$key] = str_replace('%22', '"', rawurlencode($value));
+                $data[$key] = rawurlencode($value);
             }
 
             if(defined('RUN_MODE') && in_array(RUN_MODE, array('api', 'xuanxuan')))
@@ -1116,7 +1115,7 @@ class baseControl
             // $obLevel = ob_get_level();
             // for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
-            $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
+            $response = helper::removeUTF8Bom(rawurldecode(json_encode($data)));
             $this->app->outputXhprof();
             return helper::end($response);
         }
