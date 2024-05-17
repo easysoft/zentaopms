@@ -413,6 +413,29 @@ class dataset
     }
 
     /**
+     * 获取项目的用户需求数据。
+     * Get requirement list, with project and type is requirement.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getDevRequirementsWithProject($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.story')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('requirement')
+            ->andWhere('t4.deleted')->eq('0')
+            ->andWhere('t4.type')->eq('project');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取所有用户需求数据，不过滤影子产品。
      * Get all requirements, don't filter shadow product.
      *
