@@ -666,10 +666,19 @@ class actionModel extends model
 
         if($action->objectType == 'board')
         {
-            if($action->action == 'importstory')
+            if(in_array($action->action, array('importstory', 'importdemand')))
             {
-                $story = $this->loadModel('story')->getById((int)$action->extra);
-                $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
+                if($action->action == 'importstory')
+                {
+                    $story = $this->loadModel('story')->getById((int)$action->extra);
+                    $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
+                }
+                if($action->action == 'importdemand')
+                {
+                    $story = $this->loadModel('demand')->getByID((int)$action->extra);
+                    $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
+                }
+
                 $link .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
                 $actionDesc = str_replace('$extra', html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'"), $desc['main']);
             }
