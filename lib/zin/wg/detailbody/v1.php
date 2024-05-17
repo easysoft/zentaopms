@@ -5,7 +5,8 @@ namespace zin;
 class detailBody extends wg
 {
     protected static array $defineProps = array(
-        'isForm?: bool=false'
+        'isForm?: bool=false',
+        'hasExtraMain?: bool=true' // 是否展示工作流扩展字段
     );
 
     protected static array $defineBlocks = array(
@@ -68,12 +69,13 @@ class detailBody extends wg
     {
         global $app;
 
-        $main      = $this->block('main');
-        $side      = $this->block('side');
-        $bottom    = $this->block('bottom');
-        $floating  = $this->block('floating');
-        $isForm    = $this->prop('isForm');
-        $extraMain = $this->buildExtraMain();
+        $main         = $this->block('main');
+        $side         = $this->block('side');
+        $bottom       = $this->block('bottom');
+        $floating     = $this->block('floating');
+        $isForm       = $this->prop('isForm');
+        $hasExtraMain = $this->prop('hasExtraMain');
+        $extraMain    = $hasExtraMain ? $this->buildExtraMain() : null;
 
         if(!$isForm)
         {

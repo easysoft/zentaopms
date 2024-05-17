@@ -212,6 +212,7 @@ detailHeader
 
 detailBody
 (
+    set::hasExtraMain(false),
     sectionList
     (
         tabs
