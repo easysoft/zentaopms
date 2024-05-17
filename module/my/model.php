@@ -909,7 +909,9 @@ class myModel extends model
     {
         $typeList = array();
         if($this->config->edition == 'ipd' && $this->getReviewingDemands('id_desc', true)) $typeList[] = 'demand';
-        if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
+        if($this->getReviewingStories('id_desc', true, 'story'))       $typeList[] = 'story';
+        if($this->getReviewingStories('id_desc', true, 'epic'))        $typeList[] = 'epic';
+        if($this->getReviewingStories('id_desc', true, 'requirement')) $typeList[] = 'requirement';
         if($this->config->vision != 'or' && $this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
@@ -944,6 +946,8 @@ class myModel extends model
         $reviewList = array();
         if($browseType == 'all' || $browseType == 'demand')                                              $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' || $browseType == 'story')                                               $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($browseType == 'all' || $browseType == 'epic')                                                $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'epic'));
+        if($browseType == 'all' || $browseType == 'requirement')                                         $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'requirement'));
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase'))                       $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                        $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($browseType == 'all' || $browseType == 'feedback')                                            $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
@@ -1033,7 +1037,7 @@ class myModel extends model
      * @access public
      * @return array|bool
      */
-    public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
+    public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
     {
         if(!common::hasPriv('story', 'review')) return array();
 
@@ -1044,6 +1048,7 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
             ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.type')->eq($type)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.status')->eq('reviewing')
             ->orderBy($orderBy)
