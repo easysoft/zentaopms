@@ -116,16 +116,49 @@ class duckdb
     }
 
     /**
-     * 替换sql语句中的表为 parquet 文件路径。
-     * Replace sql table to parquet file path.
+     * Query 方法。
+     * Query function.
      *
+     * @param  string sql
      * @access public
      * @return this.
      */
     public function query($sql = '')
     {
+        $sql = $this->replaceBackQuote($sql);
+        $sql = $this->replaceTable2Parquet($sql);
+        $sql = $this->standLimit($sql);
+
+        $this->sql = $sql;
+
+        return $this;
+    }
+
+    /**
+     * 将mysql的``替换为duckdb可执行的""。
+     * Replace ` to ".
+     *
+     * @param  string sql
+     * @access public
+     * @return sql.
+     */
+    private function replaceBackQuote($sql)
+    {
         $sql = str_replace(array('`'), array('"'), $sql);
 
+        return $sql;
+    }
+
+    /**
+     * 替换sql语句中的表为parquet文件路径。
+     * Replace sql table to parquet file path.
+     *
+     * @param  string sql
+     * @access public
+     * @return sql.
+     */
+    private function replaceTable2Parquet($sql)
+    {
         /* $0全量匹配以 prefix 开头的表，替换为对应的 parquet 文件。 */
         $ztpattern   = "/{$this->prefix}\S+/";
         $ztvpattern  = "/ztv_\S+/";
@@ -133,9 +166,27 @@ class duckdb
 
         $sql = preg_replace($ztpattern, $replacement, $sql);
         $sql = preg_replace($ztvpattern, $replacement, $sql);
-        $this->sql = $sql;
 
-        return $this;
+        return $sql;
+    }
+
+    /**
+     * 将LIMIT语句替换为duckdb可执行的格式。
+     * Standard LIMIT syntax.
+     *
+     * @param  string sql
+     * @access public
+     * @return sql.
+     */
+    private function standLimit($sql)
+    {
+        // 匹配 "LIMIT x, y" 并替换为 "LIMIT y OFFSET x"
+        $limitpattern = '/LIMIT\s+(\d+)\s*,\s*(\d+)/i';
+        $replacement  = 'LIMIT $2 OFFSET $1';
+
+        $sql = preg_replace($limitpattern, $replacement, $sql);
+
+        return $sql;
     }
 
     /**
