@@ -267,6 +267,7 @@ $lang->metric->objectList['effort']        = "工时";
 $lang->metric->objectList['doc']           = "文档";
 if(in_array($config->edition, array('biz', 'max', 'ipd'))) $lang->metric->objectList['feedback'] = "反馈";
 $lang->metric->objectList['review']        = "评审";
+if($config->edition == 'ipd') $lang->metric->objectList['demand'] = "需求池需求";
 $lang->metric->objectList['codebase']      = "代码库";
 $lang->metric->objectList['pipeline']      = "流水线";
 $lang->metric->objectList['artifact']      = "制品库";

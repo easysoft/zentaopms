@@ -985,4 +985,19 @@ class dataset
 
         return $this->defaultWhere($stmt, 't2');
     }
+
+    /**
+     * 获取需求池中的需求数据。
+     * Get demands.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getDemands($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_DEMAND)
+            ->where('deleted')->eq('0')
+            ->andWhere("vision LIKE '%or%'");
+    }
 }

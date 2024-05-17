@@ -152,8 +152,9 @@ class metricTao extends metricModel
             ->beginIF(!empty($scopes))->andWhere('scope')->in($scopes)->fi()
             ->beginIF(!empty($objects))->andWhere('object')->in($objects)->fi()
             ->beginIF(!empty($purposes))->andWhere('purpose')->in($purposes)->fi()
-            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
-            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk')
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'ipd')->andWhere('object')->notIN('demand')->fi()
             ->fetchAll();
 
         return $metrics;
@@ -173,7 +174,9 @@ class metricTao extends metricModel
             ->where('deleted')->eq('0')
             ->andWhere('collector')->like("%,{$this->app->user->account},%")
             ->beginIF($stage!= 'all')->andWhere('stage')->eq($stage)->fi()
-            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'ipd')->andWhere('object')->notIN('demand')->fi()
             ->fetchAll();
     }
 
@@ -190,7 +193,9 @@ class metricTao extends metricModel
         return $this->dao->select('object, purpose')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->andWhere('scope')->eq($scope)
-            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'ipd')->andWhere('object')->notIN('demand')->fi()
             ->groupBy('object, purpose')
             ->fetchAll();
     }

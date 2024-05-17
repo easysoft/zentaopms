@@ -267,6 +267,7 @@ $lang->metric->objectList['effort']        = "Effort";
 $lang->metric->objectList['doc']           = "Document";
 if(in_array($config->edition, array('biz', 'max', 'ipd'))) $lang->metric->objectList['feedback'] = "Feedback";
 $lang->metric->objectList['review']        = "Review";
+if($config->edition == 'ipd') $lang->metric->objectList['demand'] = "Demand";
 $lang->metric->objectList['codebase']      = "Code Base";
 $lang->metric->objectList['pipeline']      = "Pipeline";
 $lang->metric->objectList['artifact']      = "Artufact";
