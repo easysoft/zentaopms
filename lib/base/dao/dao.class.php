@@ -969,16 +969,23 @@ class baseDAO
         {
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
-            if($this->table)
-            {
-                $this->setCache(str_replace(array('`', '"'), '', $this->table));
-            }
+
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
             $this->slaveDBH = false;
 
-            return $this->dbh->exec($sql);
+            $result = $this->dbh->exec($sql);
+
+            if($this->table)
+            {
+                /* 更新表的缓存时间。*/
+                /* Update the table cache time. */
+                $table = str_replace(array('`', '"'), '', $this->table);
+                $this->setCache($table);
+            }
+
+            return $result;
         }
         catch (PDOException $e)
         {
