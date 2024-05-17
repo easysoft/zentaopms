@@ -370,7 +370,7 @@ class executionTao extends executionModel
         $node->type = 'module';
         $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
 
-        $this->buildStoryTree($stories, $taskGroups, $executionID, $node);
+        $node->children = $this->buildStoryTree($stories, $taskGroups, $executionID, $node);
 
         /* Append for task of no story && node is not root. */
         if($node->id && isset($taskGroups[$node->id][0]))
@@ -395,12 +395,13 @@ class executionTao extends executionModel
      * @access protected
      * @return array
      */
-    protected function buildStoryTree(array $stories, array $taskGroups, int $executionID, object $node, int $parentID = 0)
+    protected function buildStoryTree(array $stories, array $taskGroups, int $executionID, object $node, int $parentID = 0): array
     {
         static $users, $avatarPairs;
         if(empty($users))       $users       = $this->loadModel('user')->getPairs('noletter');
         if(empty($avatarPairs)) $avatarPairs = $this->loadModel('user')->getAvatarPairs();
 
+        $children = array();
         foreach($stories as $story)
         {
             if($story->parent != $parentID) continue;
@@ -431,10 +432,16 @@ class executionTao extends executionModel
                 $storyItem->tasksCount = count($taskItems);
                 $storyItem->children   = $taskItems;
             }
+            else
+            {
+                $storyItemChildren = $this->buildStoryTree($stories, $taskGroups, $executionID, $node, $story->id);
+                if($storyItemChildren) $storyItem->children = $storyItemChildren;
+            }
 
-            $node->children[] = $storyItem;
-            $this->buildStoryTree($stories, $taskGroups, $executionID, $node, $story->id);
+            $children[] = $storyItem;
         }
+
+        return $children;
     }
 
     /**
