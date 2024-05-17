@@ -4653,6 +4653,24 @@ class executionModel extends model
                         'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
+                case 'requirement':
+                    $this->app->loadLang('requirement');
+                    $gradePairs = zget($gradeGroup, $tree->type, array());
+                    $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $treeData[$index]['content'] = array(
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                    );
+                    break;
+                case 'epic':
+                    $this->app->loadLang('epic');
+                    $gradePairs = zget($gradeGroup, $tree->type, array());
+                    $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $treeData[$index]['content'] = array(
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                    );
+                    break;
                 case 'branch':
                     $this->app->loadLang('branch');
                     $treeData[$index]['content'] = array(
