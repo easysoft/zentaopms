@@ -35,8 +35,8 @@ window.renderCell = function(result, info)
         if(story.shadow == 1) result[0].props.href += '#app=project';
 
         let html = '';
-        let gradeLabel = gradeGroup[story.type][story.grade]?.name;
-        if(!showGrade && story.grade < 2) gradeLabel = '';
+        let gradeLabel = '';
+        if(showGrade || story.grade >= 2) gradeLabel = gradeGroup[story.type][story.grade]?.name;
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
