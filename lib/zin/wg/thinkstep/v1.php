@@ -56,28 +56,61 @@ class thinkStep  extends wg
         }
     }
 
-    protected function build(): wg|array
+    protected function build(): wg|node
     {
-        global $lang;
-        list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+
+        list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
         if(!$item) return array();
 
-        $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->options->questionType] : $lang->thinkwizard->step->editTitle[$item->type]) : $lang->thinkwizard->step->addTitle[$addType];
+        $titleLang = $action . 'Title';
+        $type  =  $addType ? $addType : ($item->type == 'question' ? $item->options->questionType : $item->type);
+        $title = $action == 'detail' ? $lang->thinkstep->detailTitle[$item->type] : $lang->thinkstep->$titleLang[$type];
 
-        return array(
-            div
-            (
-                setClass($action == 'detail' ? 'relative pt-6 px-8 mx-4' : 'relative'),
-                $action !== 'detail' ? array(
-                    div
+        return div
+        (
+            setClass('relative'),
+            !$isRun ? array(
+                div
+                (
+                    setClass('flex items-center justify-between text-gray-950 h-12'),
+                    setStyle(array('padding-left' => '48px', 'padding-right' => '48px')),
+                    div(setClass('font-medium'), $title),
+                    ($action != 'detail') ? null : div
                     (
-                        setClass('flex items-center text-gray-950 h-12 py-0 px-8 mx-4'),
-                        div(setClass('font-medium'), $title)
-                    ),
-                    h::hr()
-                ) : null,
-                $this->buildBody()
-            )
+                        setClass('ml-2'),
+                        setStyle(array('min-width' => '48px')),
+                        btnGroup
+                        (
+                            btn
+                            (
+                                setClass('btn ghost text-gray w-5 h-5'),
+                                set::icon('edit'),
+                                set::url(createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=edit")),
+                            ),
+                            !$item->existNotNode ? btn
+                            (
+                                setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
+                                set::icon('trash'),
+                                setData('url', createLink('thinkstep', 'ajaxDelete', "stepID={$item->id}")),
+                                setData('confirm',  $lang->thinkwizard->step->deleteTips[$item->type])
+                            ) : btn
+                            (
+                                set(array(
+                                    'class'          => 'ghost w-5 h-5 text-gray opacity-50 ml-1',
+                                    'icon'           => 'trash',
+                                    'data-toggle'    => 'tooltip',
+                                    'data-title'     => $lang->thinkwizard->step->cannotDeleteNode,
+                                    'data-placement' => 'bottom-start',
+                                ))
+                            )
+                        )
+                    )
+                ),
+                h::hr()
+            ) : null,
+            div(setClass('pt-6 px-8 mx-4'), $this->buildBody())
         );
     }
 }

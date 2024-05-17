@@ -66,36 +66,6 @@ class thinkNodeBase extends wg
                 (
                     setClass('text-2xl'),
                     $step->title
-                ),
-                $this->prop('isRun') ? null : div
-                (
-                    setClass('ml-2'),
-                    setStyle(array('min-width' => '48px')),
-                    btnGroup
-                    (
-                        btn
-                        (
-                            setClass('btn ghost text-gray w-5 h-5'),
-                            set::icon('edit'),
-                            set::url(createLink('thinkwizard', 'design', "wizardID={$step->wizard}&stepID={$step->id}&status=edit")),
-                        ),
-                        !$step->existNotNode ? btn
-                        (
-                            setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
-                            set::icon('trash'),
-                            setData('url', createLink('thinkstep', 'ajaxDelete', "stepID={$step->id}")),
-                            setData('confirm',  $lang->thinkwizard->step->deleteTips[$step->type])
-                        ) : btn
-                        (
-                            set(array(
-                                'class'          => 'ghost w-5 h-5 text-gray opacity-50 ml-1',
-                                'icon'           => 'trash',
-                                'data-toggle'    => 'tooltip',
-                                'data-title'     => $lang->thinkwizard->step->cannotDeleteNode,
-                                'data-placement' => 'bottom-start',
-                            ))
-                        )
-                    )
                 )
             ),
             div
@@ -164,7 +134,7 @@ class thinkNodeBase extends wg
 
         return formPanel
         (
-            setClass('think-step-panel py-4 px-8 mx-4'),
+            setClass('think-step-panel py-4 px-0'),
             set::formClass('form-watched gap-3'),
             set::bodyClass('think-step-form'),
             set::actions($actions),
