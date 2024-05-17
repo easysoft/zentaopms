@@ -224,9 +224,13 @@ class baseControl
             {
                 helper::end(json_encode(array('result' => 'fail', 'load' => true)));
             }
+            else if(helper::isAjaxRequest())
+            {
+                helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout, 'load' => 'login')));
+            }
 
             $referer = helper::safe64Encode($uri);
-            helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout, 'load' => helper::createLink('user', 'login', "referer=$referer"))));
+            $this->locate(helper::createLink('user', 'login', "referer=$referer"));
         }
 
         /**
