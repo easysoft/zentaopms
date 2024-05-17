@@ -115,16 +115,16 @@ if(!$config->systemScore) unset($lang->my->menu->score, $lang->my->menuOrder[45]
 $lang->my->menu->work['subMenu']              = new stdclass();
 $lang->my->menu->work['subMenu']->task        = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task', 'alias' => 'task');
 $lang->my->menu->work['subMenu']->story       = array('link' => "$lang->SRCommon|my|work|mode=story", 'alias' => 'story');
-$lang->my->menu->work['subMenu']->epic        = array('link' => "$lang->ERCommon|my|work|mode=epic", 'alias' => 'epic');
 $lang->my->menu->work['subMenu']->requirement = array('link' => "$lang->URCommon|my|work|mode=requirement", 'alias' => 'requirement');
+$lang->my->menu->work['subMenu']->epic        = array('link' => "$lang->ERCommon|my|work|mode=epic", 'alias' => 'epic');
 $lang->my->menu->work['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|work|mode=bug", 'subModule' => 'bug', 'alias' => 'bug');
 $lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase", 'subModule' => 'testtask,testcase', 'alias' => 'testcase');
 $lang->my->menu->work['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|work|mode=testtask", 'alias' => 'testtask');
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';
 $lang->my->menu->work['menuOrder'][10] = 'story';
-$lang->my->menu->work['menuOrder'][12] = 'epic';
 $lang->my->menu->work['menuOrder'][15] = 'requirement';
+$lang->my->menu->work['menuOrder'][17] = 'epic';
 $lang->my->menu->work['menuOrder'][20] = 'bug';
 $lang->my->menu->work['menuOrder'][25] = 'testcase';
 $lang->my->menu->work['menuOrder'][30] = 'testtask';
@@ -136,8 +136,8 @@ if(!$config->URAndSR)  unset($lang->my->menu->work['subMenu']->requirement, $lan
 $lang->my->menu->contribute['subMenu']              = new stdclass();
 $lang->my->menu->contribute['subMenu']->task        = array('link' => "{$lang->task->common}|my|contribute|mode=task", 'alias' => 'task');
 $lang->my->menu->contribute['subMenu']->story       = array('link' => "$lang->SRCommon|my|contribute|mode=story", 'alias' => 'story');
-$lang->my->menu->contribute['subMenu']->epic        = array('link' => "$lang->ERCommon|my|contribute|mode=epic", 'alias' => 'epic');
 $lang->my->menu->contribute['subMenu']->requirement = array('link' => "$lang->URCommon|my|contribute|mode=requirement", 'alias' => 'requirement');
+$lang->my->menu->contribute['subMenu']->epic        = array('link' => "$lang->ERCommon|my|contribute|mode=epic", 'alias' => 'epic');
 $lang->my->menu->contribute['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|contribute|mode=bug", 'alias' => 'bug');
 $lang->my->menu->contribute['subMenu']->testcase    = array('link' => "{$lang->testcase->shortCommon}|my|contribute|mode=testcase", 'alias' => 'testcase');
 $lang->my->menu->contribute['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|contribute|mode=testtask", 'alias' => 'testtask');
@@ -146,8 +146,8 @@ $lang->my->menu->contribute['subMenu']->doc         = array('link' => "{$lang->d
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';
 $lang->my->menu->contribute['menuOrder'][10] = 'story';
-$lang->my->menu->contribute['menuOrder'][12] = 'epic';
 $lang->my->menu->contribute['menuOrder'][15] = 'requirement';
+$lang->my->menu->contribute['menuOrder'][17] = 'epic';
 $lang->my->menu->contribute['menuOrder'][20] = 'bug';
 $lang->my->menu->contribute['menuOrder'][25] = 'testcase';
 $lang->my->menu->contribute['menuOrder'][30] = 'testtask';
