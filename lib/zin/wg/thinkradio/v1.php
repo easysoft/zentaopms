@@ -42,11 +42,12 @@ class thinkRadio extends thinkQuestion
 
     protected function buildFormItem(): array
     {
-        global $lang;
+        global $lang, $app;
+        $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
         list($step, $question, $required, $enableOther, $fields) = $this->prop(array('step', 'question', 'required', 'enableOther', 'fields'));
-        $requiredItems = $lang->thinkwizard->step->requiredList;
+        $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
             $enableOther = $step->options->enableOther ?? 0;
@@ -59,7 +60,7 @@ class thinkRadio extends thinkQuestion
             formHidden('options[questionType]', $question),
             formGroup
             (
-                set::label($lang->thinkwizard->step->label->option),
+                set::label($lang->thinkstep->label->option),
                 thinkOptions
                 (
                     set::name('options[fields]'),
@@ -71,7 +72,7 @@ class thinkRadio extends thinkQuestion
             formGroup
             (
                 setStyle(array('display' => 'flex')),
-                set::label($lang->thinkwizard->step->label->required),
+                set::label($lang->thinkstep->label->required),
                 radioList
                 (
                     set::name('options[required]'),

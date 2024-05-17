@@ -23,7 +23,8 @@ class thinkCheckbox extends thinkRadio
 
     protected function buildFormItem(): array
     {
-        global $lang;
+        global $lang, $app;
+        $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
         list($step, $minCount, $maxCount, $required) = $this->prop(array('step', 'minCount', 'maxCount', 'required'));
@@ -40,7 +41,7 @@ class thinkCheckbox extends thinkRadio
             setClass('gap-4'),
             formGroup
             (
-                set::label($lang->thinkwizard->step->label->minCount),
+                set::label($lang->thinkstep->label->minCount),
                 setClass($className),
                 input
                 (
@@ -53,7 +54,7 @@ class thinkCheckbox extends thinkRadio
             ),
             formGroup
             (
-                set::label($lang->thinkwizard->step->label->maxCount),
+                set::label($lang->thinkstep->label->maxCount),
                 setClass($className),
                 input
                 (

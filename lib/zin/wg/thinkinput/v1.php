@@ -38,7 +38,8 @@ class thinkInput extends thinkQuestion
 
     protected function buildFormItem(): array
     {
-        global $lang;
+        global $lang, $app;
+        $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
         list($step, $required) = $this->prop(array('step', 'required', 'requiredRows', 'requiredRowsName'));
@@ -49,12 +50,12 @@ class thinkInput extends thinkQuestion
             (
                 setClass('w-1/2'),
                 setStyle(array('display' => 'flex')),
-                set::label($lang->thinkwizard->step->label->required),
+                set::label($lang->thinkstep->label->required),
                 radioList
                 (
                     set::name('options[required]'),
                     set::inline(true),
-                    set::items($lang->thinkwizard->step->requiredList),
+                    set::items($lang->thinkstep->requiredList),
                     set::value($required),
                 )
             ),

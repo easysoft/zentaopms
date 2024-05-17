@@ -42,14 +42,15 @@ class thinkNode extends wg
 
     private function buildNamePanel(): wg
     {
-        global $lang;
+        global $lang, $app;
+        $app->loadLang('thinkstep');
         list($title, $titleName) = $this->prop(array('title', 'titleName'));
         return formRow
             (
             formGroup
             (
                 set::width('full'),
-                set::label($lang->thinkwizard->step->label->title),
+                set::label($lang->thinkstep->label->title),
                 set::labelClass('required'),
                 input
                 (
@@ -71,7 +72,7 @@ class thinkNode extends wg
             formGroup
             (
                 set::width('full'),
-                set::label($lang->thinkwizard->step->label->desc),
+                set::label($lang->thinkstep->label->desc),
                 editor
                 (
                     setClass('desc'),

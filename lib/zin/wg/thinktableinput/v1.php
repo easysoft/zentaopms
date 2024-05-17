@@ -51,7 +51,8 @@ class thinkTableInput extends thinkQuestion
 
     protected function buildFormItem(): array
     {
-        global $lang;
+        global $lang, $app;
+        $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
         list($step, $isRequired, $requiredRows, $isSupportAdd, $canAddRows, $fields) = $this->prop(array('step','required', 'requiredRows', 'isSupportAdd', 'canAddRows', 'fields'));
@@ -71,12 +72,12 @@ class thinkTableInput extends thinkQuestion
                 formGroup
                 (
                     setClass('w-1/2'),
-                    set::label($lang->thinkwizard->step->label->required),
+                    set::label($lang->thinkstep->label->required),
                     radioList
                     (
                         set::name('options[required]'),
                         set::inline(true),
-                        set::items($lang->thinkwizard->step->requiredList),
+                        set::items($lang->thinkstep->requiredList),
                         set::value($isRequired ? $isRequired : 0),
                         bind::change('changeIsRequired(event)')
                     )
@@ -84,7 +85,7 @@ class thinkTableInput extends thinkQuestion
                 formGroup
                 (
                     setClass($isRequired ? 'w-1/2 required-rows': 'w-1/2 required-rows hidden'),
-                    set::label($lang->thinkwizard->step->label->requiredRows),
+                    set::label($lang->thinkstep->label->requiredRows),
                     set::labelClass('required'),
                     input
                     (
@@ -103,12 +104,12 @@ class thinkTableInput extends thinkQuestion
                 formGroup
                 (
                     setClass('w-1/2'),
-                    set::label($lang->thinkwizard->step->label->isSupportAdd),
+                    set::label($lang->thinkstep->label->isSupportAdd),
                     radioList
                     (
                         set::name('options[isSupportAdd]'),
                         set::inline(true),
-                        set::items($lang->thinkwizard->step->requiredList),
+                        set::items($lang->thinkstep->requiredList),
                         set::value($isSupportAdd ? $isSupportAdd : 0),
                         bind::change('changeSupportAdd(event)')
                     )
@@ -116,7 +117,7 @@ class thinkTableInput extends thinkQuestion
                 formGroup
                 (
                     setClass($isSupportAdd ? 'w-1/2 can-add-rows' : 'w-1/2 hidden can-add-rows'),
-                    set::label($lang->thinkwizard->step->label->canAddRows),
+                    set::label($lang->thinkstep->label->canAddRows),
                     set::labelClass('required'),
                     input
                     (
@@ -132,7 +133,7 @@ class thinkTableInput extends thinkQuestion
             formGroup
             (
                 set::width('full'),
-                set::label($lang->thinkwizard->step->label->rowsTitle),
+                set::label($lang->thinkstep->label->rowsTitle),
                 thinkoptions
                 (
                     set(array(

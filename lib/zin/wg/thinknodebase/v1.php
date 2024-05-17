@@ -96,7 +96,8 @@ class thinkNodeBase extends wg
 
     protected function buildFormItem(): array
     {
-        global $lang;
+        global $lang, $app;
+        $app->loadLang('thinkstep');
         list($step, $title, $titleName, $desc, $descName) = $this->prop(array('step', 'title', 'titleName', 'desc', 'descName'));
         if($step)
         {
@@ -108,7 +109,7 @@ class thinkNodeBase extends wg
             formGroup
             (
                 set::width('full'),
-                set::label($lang->thinkwizard->step->label->title),
+                set::label($lang->thinkstep->label->title),
                 set::labelClass('required'),
                 input
                 (
@@ -121,7 +122,7 @@ class thinkNodeBase extends wg
             formGroup
             (
                 set::width('full'),
-                set::label($lang->thinkwizard->step->label->desc),
+                set::label($lang->thinkstep->label->desc),
                 editor
                 (
                     setClass('desc'),
