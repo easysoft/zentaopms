@@ -11,11 +11,16 @@ declare(strict_types=1);
 namespace zin;
 
 $reviewPrivs = array();
-foreach(array_keys($lang->my->featureBar['audit']) as $type) $reviewPrivs[$type] = hasPriv($type, 'review');
+$viewPrivs   = array();
+foreach(array_keys($lang->my->featureBar['audit']) as $type)
+{
+    $reviewPrivs[$type] = hasPriv($type, 'review');
+    $viewPrivs[$type]   = hasPriv($type, 'view');
+}
 
-jsVar('viewLink',   createLink('{module}', 'view',   'id={id}'));
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('reviewPrivs', $reviewPrivs);
+jsVar('viewPrivs', $viewPrivs);
 jsVar('projectPriv', hasPriv('review', 'assess'));
 jsVar('projectReviewLink', createLink('review', 'assess', 'reviewID={id}'));
 
@@ -84,6 +89,8 @@ foreach($reviewList as $review)
 
         $review->result = zget($reviewResultList, $review->result);
     }
+
+    $review->module = isset($review->storyType) ? $review->storyType : $review->module;
 }
 
 $reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);
@@ -91,12 +98,6 @@ $sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType
 
 $cols = array_values($config->my->audit->dtable->fieldList);
 $data = array_values($reviewList);
-
-$data = array_map(function($row)
-{
-    $row->module = isset($row->storyType) ? $row->storyType : $row->module;
-    return $row;
-}, $data);
 
 dtable
 (

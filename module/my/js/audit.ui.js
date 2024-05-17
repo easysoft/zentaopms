@@ -5,7 +5,7 @@ window.onRenderCell = function(result, {row, col})
         if(row.data.module == 'review')
         {
             result[0].props.items[0]['disabled']    = projectPriv ? false: true;
-            result[0].props.items[0]['url']         = projectReviewLink.replace('{id}', row.data.id);  
+            result[0].props.items[0]['url']         = projectReviewLink.replace('{id}', row.data.id);
         }
         else if(reviewPrivs[row.data.module])
         {
@@ -22,9 +22,14 @@ window.onRenderCell = function(result, {row, col})
             delete result[0].props.items[0]['href'];
         }
     }
-    if(result && col.name == 'title' && row.data.module == 'review')
+    if(result && col.name == 'title')
     {
-        result[0].props['data-toggle'] = '';
+        if(row.data.module == 'review') result[0].props['data-toggle'] = '';
+        if(!viewPrivs[row.data.module])
+        {
+            result[0].props['data-toggle'] = '';
+            result[0].props['href'] = '#';
+        }
     }
     return result;
 }
