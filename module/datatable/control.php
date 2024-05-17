@@ -147,8 +147,10 @@ class datatable extends control
             if($extra != 'story')
             {
                 foreach(array('taskCount', 'bugCount', 'caseCount') as $field) unset($cols[$field]);
-                $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+                $cols['title']['title'] = $cols['title']['title'] = $this->lang->story->name;
             }
+
+            if($this->app->tab != 'product') $cols['title']['title'] = $this->lang->story->name;
         }
 
         if(($module == 'productplan' && $method == 'browse') || ($module == 'project' && $method == 'bug'))
