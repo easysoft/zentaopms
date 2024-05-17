@@ -89,16 +89,19 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 #mainHeader {height: 48px;}
 .header-btn {padding: 7px 0;}
 .header-btn > .btn {display: inline-flex; align-items: center; gap: 6px; padding: 0 6px!important; height: 32px;}
-.header-btn+.header-btn:before {top: 15px; left: -14px;}
+.header-btn+.header-btn:before {top: 16px; left: -12px;font-size: 14px;}
+.header-btn+.header-btn {margin-left: 8.5px;}
 .header-btn+.header-btn > .btn {padding-left: 5px!important;}
-#heading {left: 9px;}
+.header-btn .btn>.caret {align-items: center; display: inline-flex; height: 16px; justify-content: center; position: relative; width: 16px; background-color: rgba(255,255,255,.2); opacity: 1; border-radius: 2px; border: none; margin: 0 0 0 -2px}
+.header-btn .btn>.caret::before {display: block; height: 5.59375px; transform-origin: center; width: 5.59375px; border-color: currentColor; border-width: 0 1px 1px 0; transform: translate(0, -1px) rotate(45deg); content: ''; border-style: solid;}
+#heading {left: 9px; top: 0.5px;}
 #toolbar {right: 9px;}
 @media (min-width: 1400px){#heading {left: 33px}#toolbar {right: 34px}}
 #userNav>li>a {padding-top: 9px;}
 
-#userNav > li {height: 48px; display: flex; align-items: center; justify-content: center;}
+#userNav > li {height: 47px; display: flex; align-items: center; justify-content: center;}
 #userNav > li + li {margin-left: 8px;}
-#userNav .avatar {margin: 1px; width: 28px; height: 28px;}
+#userNav .avatar {margin: 1.5px 1px 0.5px; width: 28px; height: 28px;}
 #userNav > li > .dropdown-toggle > .icon {width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 18px; position: relative; margin-top: 1px; color: var(--color-primary)}
 #userNav > li > .dropdown-toggle > .icon::after {content: ' '; display: block; position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: 2px; opacity: .4; border: 1px solid currentColor}
 .theme-default #userNav > li > .dropdown-toggle > .icon {color: #fff;}
@@ -267,9 +270,9 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 /* Unset style for qa qa-automation-menu. */
 .qa-automation-menu > a:focus, .qa-automation-menu > a:hover {background: unset!important; cursor: default;}
 
-#adminMenu {min-width: max-content; margin-top: -7px;}
+#adminMenu {min-width: max-content; margin-top: -6px; left: -2px; width: 139px; border: none; padding: 4px 0}
 #adminMenu > li {padding: 0;}
-#adminMenu > li > a {padding: 6px 8px; margin: 4px 8px; display: flex; flex-direction: row; align-items: center; gap: 8px}
+#adminMenu > li > a {padding: 6px 8px; margin: 4px 6px; display: flex; flex-direction: row; align-items: center; gap: 8px}
 #adminMenu > li > a > img {display: block;}
 #adminMenu > li.active > a {background-color: var(--color-pale); color: var(--color-primary); font-weight: bold;}
 #adminMenu > li.active > a:hover,
