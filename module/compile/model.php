@@ -26,18 +26,6 @@ class compileModel extends model
     }
 
     /**
-     * Get By Queue.
-     *
-     * @param  int    $queue
-     * @access public
-     * @return object|false
-     */
-    public function getByQueue(int $queue): object|false
-    {
-        return $this->dao->select('*')->from(TABLE_COMPILE)->where('queue')->eq($queue)->fetch();
-    }
-
-    /**
      * Get build list.
      *
      * @param  int    $repoID
