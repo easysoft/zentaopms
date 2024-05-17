@@ -16,10 +16,7 @@ window.onRenderCell = function(result, {row, col})
         }
         else
         {
-            result[0].props.items[0]['disabled'] = true;
-            delete result[0].props.items[0]['data-toggle'];
-            delete result[0].props.items[0]['url'];
-            delete result[0].props.items[0]['href'];
+            delete result[0].props.items[0];
         }
     }
     if(result && col.name == 'title')
