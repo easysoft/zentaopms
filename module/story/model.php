@@ -3233,7 +3233,7 @@ class storyModel extends model
         }
 
         if($action == 'recallchange') return $story->status == 'changing';
-        if($action == 'recall')       return $story->status == 'reviewing';
+        if($action == 'recall')       return $story->status == 'reviewing' || $story->status == 'changing';
         if($action == 'close')        return $story->status != 'closed';
         if($action == 'activate')     return $story->status == 'closed';
         if($action == 'assignto')     return $story->status != 'closed';
