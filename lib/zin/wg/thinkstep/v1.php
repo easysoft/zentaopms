@@ -15,15 +15,16 @@ class thinkStep  extends wg
         list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
 
         $step         = $addType ? null : $item;
-        $questionType = $addType ? $addType : $item->options->questionType;
-        if($item->type === 'node') return thinkNodeBase(set::step($step), set::mode($action));
+        $questionType = $addType ? $addType : ($item->options->questionType ?? '');
+        if($addType === 'node' || !$addType && $item->type === 'node') return thinkNodeBase(set::step($step), set::mode($action));
         if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action));
         if($questionType === 'input')    return thinkInput(set::step($step), set::question('input'), set::mode($action));
         if($questionType === 'radio')    return thinkRadio(set::step($step), set::question('radio'), set::mode($action));
         if($questionType === 'checkbox') return thinkCheckbox(set::step($step), set::question('checkbox'), set::mode($action));
 
-        $fields = !empty($item->options->fields) ? explode(', ', $itemi->options->fields) : null;
-        if($action == 'detail' && (property_exists($item->options, 'questionType') && $item->options->questionType === 'tableInput'))
+        $isEdit = $action === 'edit' ? true : false;
+        $fields = !empty($item->options->fields) ? explode(', ', $itemi->options->fields) : array();
+        if($action == 'detail' && $questionType === 'tableInput')
         {
             return thinkStepDetail
             (
@@ -31,25 +32,23 @@ class thinkStep  extends wg
                 thinkTableInputDetail
                 (
                     set::item($item),
-                    set::required($item->required),
+                    set::required($item->options->required ?? 0),
                     set::rowsTitle($fields)
                 )
             );
         }
         else
         {
-            $isEdit = $action === 'edit' ? true : false;
-
-            if($isEdit && $item->type === 'question' && $item->options->questionType === 'tableInput' || $addType == 'tableInput')
+            if($questionType == 'tableInput')
             {
                 return thinkTableInput(
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
-                    set::required($isEdit ? $item->options->required : false),
+                    set::required($isEdit ? ($item->options->required ?? 0) : 0),
                     set::type('question'),
-                    set::requiredRows($isEdit ? $item->options->requiredRows : 1),
-                    set::isSupportAdd($isEdit ? $item->options->isSupportAdd : false),
-                    set::canAddRows($isEdit ? $item->options->canAddRows : 1),
+                    set::requiredRows($isEdit ? ($item->options->requiredRows ?? 1) : 1),
+                    set::isSupportAdd($isEdit ? ($item->options->isSupportAdd ?? false) : false),
+                    set::canAddRows($isEdit ? ($item->options->canAddRows ?? 1) : 1),
                     set::rowsTitle(!$isEdit ? null : $fields)
                 );
             }
@@ -62,7 +61,7 @@ class thinkStep  extends wg
         list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
         if(!$item) return array();
 
-        $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->options->questionType] : $lang->thinkwizard->step->editTitle[$item->options->type]) : $lang->thinkwizard->step->addTitle[$addType];
+        $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->options->questionType] : $lang->thinkwizard->step->editTitle[$item->type]) : $lang->thinkwizard->step->addTitle[$addType];
 
         return array(
             div
@@ -76,8 +75,7 @@ class thinkStep  extends wg
                     ),
                     h::hr()
                 ) : null,
-                $this->buildBody(),
-                $this->children()
+                $this->buildBody()
             )
         );
     }
