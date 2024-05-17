@@ -17,7 +17,7 @@ class thinkStep  extends wg
 
         $step         = $addType ? null : $item;
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
-        if($addType === 'node' || !$addType && $item->type === 'node') return thinkStepBase(set::step($step), set::mode($action), set::isRun($isRun));
+        if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun));
         if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun));
         if($questionType === 'input')      return thinkInput(set::step($step), set::question('input'), set::mode($action), set::isRun($isRun));
         if($questionType === 'radio')      return thinkRadio(set::step($step), set::question('radio'), set::mode($action), set::isRun($isRun));
