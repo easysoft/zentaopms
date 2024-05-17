@@ -206,7 +206,6 @@ function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_g
 function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
 function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', func_get_args());}
 function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
-function thinkStepDetail(): thinkStepDetail {return createWg('thinkStepDetail', func_get_args());}
 function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
 function affected(): affected {return createWg('affected', func_get_args());}
