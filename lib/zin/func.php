@@ -210,6 +210,7 @@ function thinkStepDetail(): thinkStepDetail {return createWg('thinkStepDetail', 
 function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkTableInputDetail', func_get_args());}
 function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
+function affected(): affected {return createWg('affected', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'boardeditor'))
 {
