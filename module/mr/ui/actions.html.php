@@ -26,8 +26,16 @@ foreach($config->mr->view->operateList as $operate)
         continue;
     }
 
-    if($operate == 'accept' && ($MR->approvalStatus != 'approved' || $compileNotSuccess)) $action['disabled'] = true;
-    if($operate == 'accept' && (!$MR->synced || $rawMR->state != 'opened' || $rawMR->has_conflicts)) $action['disabled'] = true;
+    if($operate == 'accept' && ($MR->approvalStatus != 'approved' || $compileNotSuccess))
+    {
+        $action['disabled'] = true;
+        $action['hint']     = $lang->mr->acceptTip;
+    }
+    if($operate == 'accept' && (!$MR->synced || $rawMR->state != 'opened' || $rawMR->has_conflicts))
+    {
+        $action['disabled'] = true;
+        $action['hint']     = $lang->mr->conflictsTip;
+    }
 
     if(in_array($operate, array('approval', 'reject', 'close', 'edit')))
     {
@@ -36,7 +44,12 @@ foreach($config->mr->view->operateList as $operate)
 
         if($operate == 'approval')
         {
-            if(!$MR->synced || $rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved') $action['disabled'] = true;
+            if($rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved')
+            {
+                $action['disabled'] = true;
+                if($rawMR->has_conflicts) $action['hint'] = $lang->mr->conflictsTip;
+                if($compileNotSuccess)    $action['hint'] = $lang->mr->compileTip;
+            }
         }
     }
 
