@@ -58,3 +58,9 @@ $lang->backup->error->restoreFile     = "Echec pour restaurer le fichier. Erreur
 $lang->backup->error->backupFile      = "Echec pour sauvegarder le fichier. Erreur %s.";
 $lang->backup->error->backupCode      = "Echec pour sauvegarder le code. Erreur %s.";
 $lang->backup->error->timeout         = "Backup timeout.";
+
+$lang->backup->notice = new stdclass();
+$lang->backup->notice->higherVersion     = 'The version of the backup is higher than the current version. Please update the Docker image version to %s before restoring.';
+$lang->backup->notice->lowerVersion      = 'The version of the backup is lower than the current version, and the upgrade process will be performed after restoration.';
+$lang->backup->notice->unknownVersion    = 'The version information not found. Do you want to restore this backup anyway?';
+$lang->backup->notice->settingsInQuickon = 'You are currently using ZenTao DevOps Platform Edition, there is no need to set additional options.';

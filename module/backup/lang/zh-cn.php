@@ -60,6 +60,7 @@ $lang->backup->error->backupCode      = "代码备份失败，错误：%s";
 $lang->backup->error->timeout         = "备份超时";
 
 $lang->backup->notice = new stdclass();
-$lang->backup->notice->higherVersion  = '还原的版本高于当前运行版本，请更新镜像版本到%s后再还原。';
-$lang->backup->notice->lowerVersion   = '还原的版本低于当前运行版本，还原后会执行升级流程。';
-$lang->backup->notice->unknownVersion = '未从当前备份中读取到版本信息，是否还原该备份？';
+$lang->backup->notice->higherVersion     = '还原的版本高于当前运行版本，请更新镜像版本到%s后再还原。';
+$lang->backup->notice->lowerVersion      = '还原的版本低于当前运行版本，还原后会执行升级流程。';
+$lang->backup->notice->unknownVersion    = '未从当前备份中读取到版本信息，是否还原该备份？';
+$lang->backup->notice->settingsInQuickon = '您目前使用的是禅道DevOps平台版，无需设置其他选项。';
