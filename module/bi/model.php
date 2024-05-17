@@ -92,12 +92,13 @@ class biModel extends model
             if($driverName == 'mysql')
             {
                 $rows = $dbh->query($limitSql)->fetchAll();
-                $rowsCount = $dbh->query("SELECT FOUND_ROWS() as count")->fetch();
+                $rowsCount = $dbh->query("SELECT FOUND_ROWS() as count")->fetch('count');
             }
             elseif($driverName == 'duckdb')
             {
-                $rows = $dbh->query($sql)->fetchAll();
-                $rowsCount = count($rows);
+                $rows      = $dbh->query($limitSql)->fetchAll();
+                $allRows   = $dbh->query($sql)->fetchAll();
+                $rowsCount = count($allRows);
             }
         }
         catch(Exception $e)
@@ -107,7 +108,7 @@ class biModel extends model
             return array('result' => 'fail', 'message' => $message);
         }
 
-        return array('result' => 'success', 'rows' => $rows, 'rowCount' => $rowCount);
+        return array('result' => 'success', 'rows' => $rows, 'rowsCount' => $rowsCount);
     }
 
     /**

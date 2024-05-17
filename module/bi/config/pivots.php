@@ -1626,7 +1626,8 @@ select day,null as actions,null as userlogin,null as consumed,null as storyopen,
 union all
 select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,bugresolve from ztv_daybugresolve
 ) as uniontable
-where if(\$startDate='',1,day>=\$startDate) and if(\$endDate='',1,day<=\$endDate)
+where (case when \$startDate='' then 1 else day>=\$startDate end)
+and (case when \$endDate='' then 1 else day<=\$endDate end)
 group by day
 EOT,
     'settings'  => array
@@ -1884,10 +1885,18 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.id as bugID,t2.type from zt_project as t1
+select
+    t1.id,
+    t3.name as project,
+    case when t3.multiple = '1' then t1.name else '' end as execution,
+    t2.id as bugID,
+    t2.type from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
-where t1.deleted='0' and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
+where t1.deleted='0'
+and t2.deleted='0'
+and (case when \$project='' then 1 else t3.id=\$project end)
+and (case when \$execution='' then 1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
