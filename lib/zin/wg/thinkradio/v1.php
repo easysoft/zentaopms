@@ -22,6 +22,7 @@ class thinkRadio extends thinkQuestion
         $detailWg = parent::buildDetail();
         $step     = $this->prop('step');
         $answer   = $step->answer;
+        $result   = isset($answer->result) ? $answer->result : array();
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
         $fields = $step->options->fields ?? array();
@@ -33,8 +34,8 @@ class thinkRadio extends thinkQuestion
         (
             set::type($step->options->questionType),
             set::items($items),
-            set::name($step->options->questionType == 'radio' ? 'result' : 'result[]'),
-            set::value(isset($answer->result) ? $answer->result : ''),
+            set::name('result[]'),
+            set::value($step->options->questionType == 'radio' ? $result[0] : $result),
         );
         return $detailWg;
     }
