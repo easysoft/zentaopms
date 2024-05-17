@@ -19,41 +19,10 @@ class thinkStep  extends wg
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
         if($addType === 'node' || !$addType && $item->type === 'node') return thinkNodeBase(set::step($step), set::mode($action), set::isRun($isRun));
         if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun));
-        if($questionType === 'input')    return thinkInput(set::step($step), set::question('input'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'radio')    return thinkRadio(set::step($step), set::question('radio'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'checkbox') return thinkCheckbox(set::step($step), set::question('checkbox'), set::mode($action), set::isRun($isRun));
-
-        $isEdit = $action === 'edit' ? true : false;
-        $fields = !empty($item->options->fields) ? explode(', ', $itemi->options->fields) : array();
-        if($action == 'detail' && $questionType === 'tableInput')
-        {
-            return thinkStepDetail
-            (
-                set::item($item),
-                thinkTableInputDetail
-                (
-                    set::item($item),
-                    set::required($item->options->required ?? 0),
-                    set::rowsTitle($fields)
-                )
-            );
-        }
-        else
-        {
-            if($questionType == 'tableInput')
-            {
-                return thinkTableInput(
-                    set::title($isEdit ? $item->title : ''),
-                    set::desc($isEdit ? $item->desc : ''),
-                    set::required($isEdit ? ($item->options->required ?? 0) : 0),
-                    set::type('question'),
-                    set::requiredRows($isEdit ? ($item->options->requiredRows ?? 1) : 1),
-                    set::isSupportAdd($isEdit ? ($item->options->isSupportAdd ?? false) : false),
-                    set::canAddRows($isEdit ? ($item->options->canAddRows ?? 1) : 1),
-                    set::rowsTitle(!$isEdit ? null : $fields)
-                );
-            }
-        }
+        if($questionType === 'input')      return thinkInput(set::step($step), set::question('input'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'radio')      return thinkRadio(set::step($step), set::question('radio'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::question('checkbox'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::question('tableInput'), set::mode($action));
     }
 
     protected function build(): wg|node
