@@ -11,12 +11,6 @@ cid=0
 - 重新打开并关闭Gitlab合并请求
  - 属性title @test
  - 属性state @closed
-- 重新打开并关闭Gitea合并请求
- - 属性title @test
- - 属性state @closed
-- 重新打开并关闭Gogs合并请求
- - 属性title @test
- - 属性state @closed
 
 */
 
