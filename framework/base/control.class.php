@@ -1102,7 +1102,7 @@ class baseControl
                 if(!is_string($value)) continue;
 
                 /* Retain ["] for json encode when value is jsoned string. */
-                $data[$key] = str_replace('%22', '"', urlencode($value));
+                $data[$key] = str_replace('%22', '"', rawurlencode($value));
             }
 
             if(defined('RUN_MODE') && in_array(RUN_MODE, array('api', 'xuanxuan')))
