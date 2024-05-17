@@ -36,7 +36,7 @@ for($i = $story->version; $i >= 1; $i--)
 }
 
 /* 根据需求类型，设置要激活的导航项。Active navbar item by story type. */
-setPageData('activeMenuID', $story->type);
+if($app->tab == 'product') setPageData('activeMenuID', $story->type);
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
