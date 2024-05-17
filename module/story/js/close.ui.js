@@ -5,4 +5,6 @@ function setStory(event)
     var $duplicateBox = $form.find('#duplicateStoryBox');
 
     $duplicateBox.toggleClass('hidden', closedReason != 'duplicate');
+
+    $('[name=duplicateStory]').zui('picker').render({maxItemsCount: 200});
 }
