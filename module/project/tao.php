@@ -1020,8 +1020,6 @@ class projectTao extends projectModel
 
         if(!$hasProduct && in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
 
-        unset($lang->project->menu->settings['subMenu']->products);
-
         if(!$hasProduct) unset($lang->project->menu->settings['subMenu']->products);
         if(!in_array($model, $this->config->project->scrumList)) unset($lang->project->menu->projectplan);
         return true;
