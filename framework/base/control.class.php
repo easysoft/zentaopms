@@ -735,6 +735,9 @@ class baseControl
         ob_start();
         include $viewFile;
         if(isset($hookFiles)) foreach($hookFiles as $hookFile) if(file_exists($hookFile)) include $hookFile;
+
+        $this->setResponseHeader();
+
         $this->output .= ob_get_contents();
         ob_end_clean();
 
@@ -1033,6 +1036,8 @@ class baseControl
         ob_start();
         include $viewFile;
 
+        $this->setResponseHeader();
+
         if(!$context->rendered) \zin\renderPage();
         $content = ob_get_clean();
 
@@ -1044,6 +1049,24 @@ class baseControl
          * At the end, chang the dir to the previous.
          */
         chdir($currentPWD);
+    }
+
+    /**
+     * 设置响应头。
+     * Set response header.
+     *
+     * @access public
+     * @return void
+     */
+    public function setResponseHeader()
+    {
+        if($this->config->cache->client->enable && $this->app->useClientCache)
+        {
+            helper::setStatus(304);
+            helper::end();
+        }
+
+        helper::header('X-Zin-Cache-Time', strval(time()- 1));
     }
 
     /**
