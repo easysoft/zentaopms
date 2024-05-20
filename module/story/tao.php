@@ -1928,7 +1928,7 @@ class storyTao extends storyModel
             elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
             {
                 $title = $this->lang->story->split;
-                if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
+                if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                 if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
@@ -1996,7 +1996,7 @@ class storyTao extends storyModel
                     elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
                     {
                         $title = $this->lang->story->split;
-                        if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
+                        if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                         if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                         if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                         if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
