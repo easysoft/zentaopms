@@ -19,10 +19,10 @@ class thinkStep  extends wg
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
         if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun));
         if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun));
-        if($questionType === 'input')      return thinkInput(set::step($step), set::question('input'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'radio')      return thinkRadio(set::step($step), set::question('radio'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::question('checkbox'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::question('tableInput'), set::mode($action));
+        if($questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action));
     }
 
     protected function build(): wg|node
