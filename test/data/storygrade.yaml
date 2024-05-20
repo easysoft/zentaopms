@@ -1,0 +1,14 @@
+title: table zt_storygrade
+desc: "需求阶段"
+author: automated export
+version: "1.0"
+fields:
+  - field: type
+    note: "类型"
+    range: "epic{2},requirement{2},story{2}"
+  - field: grade
+    range: "1,2"
+  - field: name
+    range: "BR1,BR2,UR1,UR2,SR1,SR2"
+  - field: status
+    range: "enable"
