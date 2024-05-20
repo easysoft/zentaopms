@@ -129,6 +129,7 @@ $lang->story->gradeName        = 'Grade Name';
 $lang->story->path             = 'Path';
 $lang->story->product          = $lang->productCommon;
 $lang->story->project          = $lang->projectCommon;
+$lang->story->execution        = "Execution";
 $lang->story->branch           = "Branche/Plateforme";
 $lang->story->module           = 'Module';
 $lang->story->moduleAB         = 'Module';

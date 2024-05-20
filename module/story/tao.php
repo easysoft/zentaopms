@@ -2124,4 +2124,56 @@ class storyTao extends storyModel
         foreach(array_values($lastNodes) as $story) $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
         return $lanes;
     }
+
+    /**
+     * 根据需求类型，构建看板列数据。
+     * Build cols data by storyType.
+     *
+     * @param  string  $storyType   epic|requirement|story
+     * @access public
+     * @return array
+     */
+    public function buildTrackCols(string $storyType): array
+    {
+        $storyGrade = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('status')->eq('enable')->orderBy('grade')->fetchGroup('type', 'grade');
+
+        $cols = array();
+        if($storyType == 'epic')  $cols[] = $this->buildTrackCol('epic',        $this->lang->ERCommon, empty($storyGrade['epic'])        ? 0 : -1);
+        if($storyType != 'story') $cols[] = $this->buildTrackCol('requirement', $this->lang->URCommon, empty($storyGrade['requirement']) ? 0 : -1);
+
+        $cols[] = $this->buildTrackCol('story',     $this->lang->SRCommon, empty($storyGrade['story']) ? 0 : -1);
+        $cols[] = $this->buildTrackCol('project',   $this->lang->story->project);
+        $cols[] = $this->buildTrackCol('execution', $this->lang->story->execution);
+        $cols[] = $this->buildTrackCol('design',    $this->lang->story->design);
+        $cols[] = $this->buildTrackCol('commit',    $this->lang->story->repoCommit);
+        $cols[] = $this->buildTrackCol('task',      $this->lang->story->tasks);
+        $cols[] = $this->buildTrackCol('bug',       $this->lang->story->bugs);
+        $cols[] = $this->buildTrackCol('case',      $this->lang->story->cases);
+
+        foreach($storyGrade as $type => $grades)
+        {
+            if($storyType == 'requirement' && $type == 'epic') continue;
+            if($storyType == 'story' && ($type == 'requirement' || $type == 'epic')) continue;
+            foreach($grades as $grade) $cols[] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
+        }
+
+        return $cols;
+    }
+
+    /**
+     * 根据单个看板列数据。
+     * Build single col data.
+     *
+     * @param  string     $name
+     * @param  string     $title
+     * @param  int|string $parent
+     * @access public
+     * @return array
+     */
+    public function buildTrackCol(string $name, string $title, int|string $parent = 0): array
+    {
+        $col = array('name' => $name, 'title' => $title, 'parent' => $parent);
+        if($parent != '0' && $parent != -1) $col['parentName'] = $parent;
+        return $col;
+    }
 }

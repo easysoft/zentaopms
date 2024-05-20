@@ -129,6 +129,7 @@ $lang->story->gradeName        = '层级名称';
 $lang->story->path             = '路径';
 $lang->story->product          = "所属{$lang->productCommon}";
 $lang->story->project          = "所属{$lang->projectCommon}";
+$lang->story->execution        = "所属执行";
 $lang->story->branch           = "平台/分支";
 $lang->story->module           = '所属模块';
 $lang->story->moduleAB         = '模块';
