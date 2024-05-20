@@ -9,6 +9,9 @@ $config->metric->orMetricList  = array('count_of_assigned_demand_in_user');
 
 $config->metric->maxSelectNum = 10;
 
+$config->metric->collapseList = array('codebase', 'pipeline', 'artifact', 'deployment', 'node', 'application', 'cpu', 'memory', 'commit', 'mergeRequest', 'code', 'vulnerability', 'codeAnalysis');
+if(in_array($config->edition, array('max', 'ipd'))) $config->metric->collapseList = array_merge($config->metric->collapseList, array('risk', 'issue'));
+
 global $lang;
 $this->loadLang('metric');
 $config->metric->actionList = array();

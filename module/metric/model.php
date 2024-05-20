@@ -1596,7 +1596,8 @@ class metricModel extends model
         foreach($this->lang->metric->objectList as $value => $text)
         {
             $isChecked = (isset($filters['object']) and in_array($value, $filters['object']));
-            $objectItems[] = array('text' => $text, 'value' => $value, 'onchange' => $onchange, 'checked' => $isChecked);
+            $collapse  = in_array($value, $this->config->metric->collapseList) && !$isChecked;
+            $objectItems[] = array('text' => $text, 'value' => $value, 'onchange' => $onchange, 'checked' => $isChecked, 'data-collapse' => $collapse);
         }
         $filterItems['object'] = array
         (
