@@ -23,6 +23,7 @@ class thinkStep  extends wg
         if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun));
         if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun));
         if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action));
+        return array();
     }
 
     protected function build(): wg|node
