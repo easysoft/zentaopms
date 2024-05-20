@@ -787,13 +787,16 @@ class product extends control
      * @param  int    $productID
      * @param  string $branch
      * @param  int    $projectID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $storyType
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function track(int $productID, string $branch = '', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function track(int $productID, string $branch = '', int $projectID = 0, string $browseType = 'allstory', int $param = 0, string $storyType = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         if(is_bool($branch)) $branch = (string)(int)$branch;
@@ -801,15 +804,24 @@ class product extends control
         /* Set menu. The projectstory module does not execute. */
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
 
+        /* Init storyType param. */
+        if(empty($storyType))
+        {
+            $storyType = 'story';
+            if($this->config->URAndSR)  $storyType = 'requirement';
+            if($this->config->enableER) $storyType = 'epic';
+        }
+
         /* Load pager. */
         $this->app->loadClass('pager', true);
-        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $pager   = new pager($recTotal, $recPerPage, $pageID);
+        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, $storyType, $browseType, 'id_desc', $pager);
+        $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
 
         $this->view->title           = $this->lang->story->track;
-        $this->view->tracks          = $this->loadModel('story')->getTracks($productID, $branch, $projectID, $pager);
+        $this->view->tracks          = $tracks;
         $this->view->pager           = $pager;
         $this->view->productID       = $productID;
-        $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
         $this->view->branch          = $branch;
         $this->view->projectID       = $projectID;
 
