@@ -539,10 +539,12 @@ $lang->block->welcome->reviewList['story']      = 'Story';
 $lang->block->welcome->reviewList['reviewByMe'] = 'Review';
 
 $lang->block->welcome->assignList = array();
-$lang->block->welcome->assignList['task']        = 'Task';
+$lang->block->welcome->assignList['task'] = 'Task';
 if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'Bug';
 if($config->vision != 'or') $lang->block->welcome->assignList['story'] = 'SRStroy';
-$lang->block->welcome->assignList['testcase']    = 'TestCase';
+$lang->block->welcome->assignList['testcase'] = 'TestCase';
+if($config->URAndSR)  $lang->block->welcome->assignList['requirement'] = "{$lang->URCommon}";
+if($config->enableER) $lang->block->welcome->assignList['epic']        = "{$lang->ERCommon}";
 
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = 'There are 2 running modes of ZenTao:  Light Mode and ALM Mode.';
