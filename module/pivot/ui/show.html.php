@@ -94,7 +94,6 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     'class' => 'ghost',
                     'url'   => inlink('edit', "id=$pivot->id", '', true),
                     'data-toggle' => 'modal',
-                    'data-type'   => 'iframe',
                     'data-size'  => 'sm'
                 ))) : null,
                 (hasPriv('pivot', 'delete') and $clickable) ? item(set(array
