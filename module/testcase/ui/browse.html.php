@@ -118,7 +118,7 @@ foreach($cases as $case)
 
     $actionType = $case->isScene ? 'scene' : 'testcase';
     $cols['actions']['menu'] = $config->$actionType->menu;
-    if($actionType == 'testcase' && !$this->config->testcase->needReview) unset($cols['actions']['menu'][1][0]);
+    if($actionType == 'testcase' && !$this->config->testcase->needReview && empty($config->testcase->forceReview)) unset($cols['actions']['menu'][1][0]);
     if($actionType == 'scene') $case->bugs = $case->results = $case->stepNumber = $case->version = '';
     if(!empty($case->needconfirm)) $case->status = 'changed';
 
