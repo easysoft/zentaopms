@@ -27,10 +27,6 @@ su('admin');
 global $tester;
 $tester->loadModel('story');
 
-$tester->story->lang->ERCommon = '业务需求';
-$tester->story->lang->URCommon = '用户需求';
-$tester->story->lang->SRCommon = '研发需求';
-
 $allStoryIdList = array(1,2,3,4,5,6,7,8,9,10,11);
 $stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('1,11')->orderBy('id_desc')->fetchAll('id');
 
