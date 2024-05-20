@@ -715,7 +715,6 @@ class productModel extends model
 
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
-        if($projectID) $this->lang->story->title = $this->lang->story->name;
         $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
         $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
@@ -733,6 +732,11 @@ class productModel extends model
                 $gradePairs[$key] = $grade->name;
             }
             asort($gradePairs);
+            $this->lang->story->title = $this->lang->story->name;
+        }
+        elseif($storyType == 'all')
+        {
+            $this->lang->story->title = $this->lang->story->name;
         }
         elseif($storyType != 'story')
         {
