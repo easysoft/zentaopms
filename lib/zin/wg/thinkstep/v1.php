@@ -27,15 +27,15 @@ class thinkStep  extends wg
         return array();
     }
 
-    protected function build(): wg|node
+    protected function build(): wg|node|array
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
 
         list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
-        if(!$item) return array();
+        if(!$item && !$addType) return array();
 
-        $basicType = $item->type;
+        $basicType = $item->type ?? '';
         $typeLang  = $action . 'Step';
         $type      = $addType ? $addType : ($basicType == 'question' ? $item->options->questionType : $basicType);
         $title     = $action == 'detail' ? ($lang->thinkstep->$basicType . $lang->thinkstep->info) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
