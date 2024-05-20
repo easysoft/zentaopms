@@ -23,11 +23,6 @@ class productRoadmapBox extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): ?string
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function build()
     {
         $productsBox = $this->initProductsBox();
@@ -37,7 +32,7 @@ class productRoadmapBox extends wg
             setClass('productsBox'),
             on::click('.productsBox .addLine', 'window.addNewLine'),
             on::click('.productsBox .removeLine', 'window.removeLine'),
-            on::change('.productsBox [name^=product]', 'window.loadBranches'),
+            //on::change('.productsBox [name^=product]', 'window.loadBranches'),
             $productsBox
         );
     }
@@ -52,7 +47,7 @@ class productRoadmapBox extends wg
         {
             $hasBranch     = !empty($branchGroups[$productID]);
             $branches      = isset($branchGroups[$productID]) ? $branchGroups[$productID] : array();
-            $defaultBranch = !empty($branches) ? current($branches) : 0;
+            $defaultBranch = !empty($branches) ? key($branches) : 0;
 
             $productsBox[] = div
             (
@@ -74,6 +69,7 @@ class productRoadmapBox extends wg
                                 set::value($productID),
                                 set::items($products),
                                 set::last($productID),
+                                on::change('loadProductBranches(e.target)'),
                                 $hasBranch ? set::lastBranch($branches ? 0 : implode(',', $branches)) : null,
                             )
                         ),
@@ -86,7 +82,7 @@ class productRoadmapBox extends wg
                                 set::width('100px'),
                                 set::name("branch[$index]"),
                                 set::items($branches),
-                                set::value(current($branches)),
+                                set::value($defaultBranch),
                                 on::change("")
                             )
                         )
