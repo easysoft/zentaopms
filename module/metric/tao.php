@@ -37,7 +37,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($purpose))->andWhere('purpose')->eq($purpose)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
-            ->beginIF($this->config->vision == 'or')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
+            ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->beginIF($sort)->orderBy($sort)->fi()
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();
@@ -157,7 +157,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($purposes))->andWhere('purpose')->in($purposes)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
-            ->beginIF($this->config->vision == 'or')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
+            ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->fetchAll();
 
         return $metrics;
@@ -179,7 +179,7 @@ class metricTao extends metricModel
             ->beginIF($stage!= 'all')->andWhere('stage')->eq($stage)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
-            ->beginIF($this->config->vision == 'or')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
+            ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->fetchAll();
     }
 
