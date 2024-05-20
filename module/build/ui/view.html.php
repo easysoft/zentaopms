@@ -33,8 +33,8 @@ foreach($actions as $actionType => $typeActions)
         $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$build->id, $action['url']);
         $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
-        if($action['icon'] == 'edit')  $actions[$actionType][$key]['text'] = $lang->edit;
-        if($action['icon'] == 'trash') $actions[$actionType][$key]['text'] = $lang->delete;
+        if(isset($action['action']) && $action['icon'] == 'edit')  $actions[$actionType][$key]['text'] = $lang->edit;
+        if(isset($action['action']) && $action['icon'] == 'trash') $actions[$actionType][$key]['text'] = $lang->delete;
     }
 }
 detailHeader
