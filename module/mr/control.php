@@ -327,7 +327,7 @@ class mr extends control
 
         $projectMethod = $host->type == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
         $sourceProject = $this->loadModel($host->type)->$projectMethod($MR->hostID, $MR->sourceProject);
-        $compile       = $this->loadModel('compile')->getById($MR->compileID);
+        $compile       = $this->loadModel('compile')->getByID($MR->compileID);
 
         $this->view->title         = $this->lang->mr->view;
         $this->view->MR            = $MR;
@@ -336,7 +336,7 @@ class mr extends control
         $this->view->reviewer      = $this->loadModel('user')->getById($MR->assignee);
         $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->compile       = $compile;
-        $this->view->hasNewCommit  = $this->mrZen->checkNewCommit($host->type, $MR->hostID, (string)$MR->targetProject, $MR->mriid, $compile->createdDate);
+        $this->view->hasNewCommit  = $compile ? $this->mrZen->checkNewCommit($host->type, $MR->hostID, (string)$MR->targetProject, $MR->mriid, $compile->createdDate) : false;
         $this->view->sourceProject = $sourceProject;
         $this->view->targetProject = $this->{$host->type}->$projectMethod($MR->hostID, $MR->targetProject);
         $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, $MR->sourceProject, $MR->sourceBranch);
