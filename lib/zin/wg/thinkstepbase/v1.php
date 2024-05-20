@@ -49,6 +49,11 @@ class thinkStepBase extends wg
                 $tips = $lang->thinkrun->requiredTitle[$questionType];
                 $tips = str_replace(array('%min%', '%max%'), array($options->minCount, $options->maxCount), $tips);
             }
+            if($options->required && $questionType == 'tableInput')
+            {
+                if($options->isSupportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count(get_object_vars($options->fields)), $options->requiredRows);
+                if(!$options->isSupportAdd) $tips = sprintf($lang->thinkrun->tableInputTitle->supportAdd, $options->requiredRows);
+            }
         }
 
         return array
