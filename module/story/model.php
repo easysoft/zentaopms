@@ -141,7 +141,7 @@ class storyModel extends model
             ->where('t1.version=t2.version')
             ->andWhere('t1.id')->in($storyIdList)
             ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq('0')->fi()
-            ->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()
+            ->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->in('or')->fi()
             ->fetchAll('id');
     }
 
@@ -155,7 +155,7 @@ class storyModel extends model
      */
     public function getPairsByList(array|string $storyIdList): array
     {
-        $storyPairs = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($storyIdList)->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()->fetchPairs();
+        $storyPairs = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($storyIdList)->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->in('or')->fi()->fetchPairs();
 
         return array(0 => '') + $storyPairs;
     }
