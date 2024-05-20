@@ -2109,4 +2109,19 @@ class storyTao extends storyModel
 
         return $sortLastNodes;
     }
+
+    /**
+     * 根据叶子结点数据，构建看板泳道数据。
+     * Build lanes data by leaf node.
+     *
+     * @param  array    $lastNodes
+     * @access public
+     * @return array
+     */
+    public function buildTrackLanes(array $lastNodes): array
+    {
+        $lanes = array();
+        foreach(array_values($lastNodes) as $story) $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
+        return $lanes;
+    }
 }
