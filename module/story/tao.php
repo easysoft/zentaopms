@@ -1733,19 +1733,21 @@ class storyTao extends storyModel
      */
     protected function getAffectedChildren(object $story, array $users): object
     {
-        if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
-        $this->config->story->affect->children = new stdclass();
-        $this->config->story->affect->children->fields[] = array('name' => 'id',       'title' => $this->lang->idAB, 'type' => 'id', 'sortType' => false);
-        $this->config->story->affect->children->fields[] = array('name' => 'title',    'title' => $this->lang->story->name, 'link' => helper::createLink($story->type, 'view', 'id={id}'), 'type' => 'title', 'sortType' => false, 'data-toggle' => 'modal', 'data-size' => 'lg');
-        $this->config->story->affect->children->fields[] = array('name' => 'pri',      'title' => $this->lang->priAB, 'type' => 'pri', 'sortType' => false);
-        $this->config->story->affect->children->fields[] = array('name' => 'status',   'title' => $this->lang->story->status, 'type' => 'status', 'sortType' => false);
-        $this->config->story->affect->children->fields[] = array('name' => 'openedBy', 'title' => $this->lang->story->openedBy, 'type' => 'user', 'sortType' => false);
-
+        $storyType = $story->type;
         foreach($story->children as $child)
         {
             $child->status   = $this->processStatus('story', $child);
             $child->openedBy = zget($users, $child->openedBy);
+            $storyType       = $child->type;
         }
+
+        if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
+        $this->config->story->affect->children = new stdclass();
+        $this->config->story->affect->children->fields[] = array('name' => 'id',       'title' => $this->lang->idAB, 'type' => 'id', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'title',    'title' => $this->lang->story->name, 'link' => helper::createLink($storyType, 'view', 'id={id}'), 'type' => 'title', 'sortType' => false, 'data-toggle' => 'modal', 'data-size' => 'lg');
+        $this->config->story->affect->children->fields[] = array('name' => 'pri',      'title' => $this->lang->priAB, 'type' => 'pri', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'status',   'title' => $this->lang->story->status, 'type' => 'status', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'openedBy', 'title' => $this->lang->story->openedBy, 'type' => 'user', 'sortType' => false);
 
         return $story;
     }
