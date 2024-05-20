@@ -120,6 +120,25 @@ $config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 
+if(!empty($build->builds))
+{
+    $buildStories = explode(',', $build->stories);
+    $buildStories = array_combine($buildStories, $buildStories);
+    foreach($stories as $index => $story)
+    {
+        if(empty($story->actions)) break;
+        if(!isset($buildStories[$story->id])) $story->actions[0]['disabled'] = true;
+    }
+
+    $buildBugs = explode(',', $build->bugs);
+    $buildBugs = array_combine($buildBugs, $buildBugs);
+    foreach($bugs as $index => $bug)
+    {
+        if(empty($bug->actions)) break;
+        if(!isset($buildBugs[$bug->id])) $bug->actions[0]['disabled'] = true;
+    }
+}
+
 detailBody
 (
     sectionList(
