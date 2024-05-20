@@ -263,7 +263,7 @@ class buildModel extends model
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
         {
-            $releases = $this->getRelatedReleases($productIdList, $buildIdList, $shadows);
+            $releases = $this->getRelatedReleases($productIdList, $buildIdList, $shadows, $objectType, $objectID);
             $builds   = $this->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
         }
 
@@ -394,10 +394,12 @@ class buildModel extends model
      * @param  array|int  $productIdList
      * @param  string     $buildIdList
      * @param  array|bool $shadows
+     * @param  string     $objectType
+     * @param  int        $objectID
      * @access public
      * @return array
      */
-    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false): array
+    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0): array
     {
         $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
@@ -405,6 +407,7 @@ class buildModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
             ->where('t1.product')->in($productIdList)
             ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
+            ->beginIF($objectType === 'project' && $objectID)->andWhere("(FIND_IN_SET('$objectID', t1.project)")->orWhere('t1.project')->eq('0')->markRight(1)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->ne(0)
             ->fetchAll('id');
@@ -417,6 +420,7 @@ class buildModel extends model
                 ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
                 ->where('t1.shadow')->in($shadows)
+                ->beginIF($objectType === 'project' && $objectID)->andWhere("(FIND_IN_SET('$objectID', t1.project)")->orWhere('t1.project')->eq('0')->markRight(1)->fi()
                 ->andWhere('t1.build')->eq(0)
                 ->andWhere('t1.deleted')->eq(0)
                 ->fetchAll('id');
