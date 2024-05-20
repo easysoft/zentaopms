@@ -1947,7 +1947,7 @@ class storyTao extends storyModel
 
                 $canCreateTask      = common::hasPriv('task', 'create') && $story->status == 'active' && $story->isParent == '0' && $story->type == 'story';
                 $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active' && $story->isParent == '0' && $story->type == 'story';
-                $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate');
+                $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate') && $story->type == 'story';
 
                 $actions[] = array('name' => 'createTask',      'url' => $canCreateTask      ? $createTaskLink      : null, 'disabled' => !$canCreateTask, 'className' => 'create-task-btn');
                 $actions[] = array('name' => 'batchCreateTask', 'url' => $canBatchCreateTask ? $batchCreateTaskLink : null, 'disabled' => !$canBatchCreateTask);
