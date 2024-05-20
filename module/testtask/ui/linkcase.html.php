@@ -86,6 +86,7 @@ div
         $lang->testtask->unlinkedCases . "({$pager->recTotal})"
     )
 );
+foreach($config->testtask->linkcase->dtable->fieldList as $field => $fieldConfig) $config->testtask->linkcase->dtable->fieldList[$field]['sortType'] = false;
 
 dtable
 (
