@@ -501,6 +501,26 @@ class dataset
     }
 
     /**
+     * 获取所有业务需求数据，不过滤影子产品。
+     * Get all epics, don't filter shadow product.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllEpics($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('epic');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取所有用户需求数据，不过滤影子产品。
      * Get all requirements, don't filter shadow product.
      *
