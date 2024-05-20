@@ -347,7 +347,9 @@ class metricTao extends metricModel
     protected function fetchMetricRecordsWithOption($code, $fieldList, $options = array(), $pager = null)
     {
         $metric = $this->fetchMetricByID($code);
+
         $scopeKey = $metric->scope;
+        $dateType = $metric->dateType;
 
         $fieldList = array_merge($fieldList, array('id', 'value', 'date', 'calcType', 'calculatedBy'));
         $wrapFields = array_map(function ($value) {
@@ -364,6 +366,11 @@ class metricTao extends metricModel
             {
                 $stmt = $stmt->andWhere($key)->in($option);
             }
+        }
+
+        if($dateType == 'nodate')
+        {
+            $stmt->andWhere('date')->gt(helper::today());
         }
 
         $stmt = $stmt->orderBy("date desc");
