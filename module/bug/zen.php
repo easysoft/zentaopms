@@ -985,11 +985,11 @@ class bugZen extends bug
 
         if($executionID)
         {
-            $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $projectID, 'project');
         }
         else
         {
@@ -2417,12 +2417,7 @@ class bugZen extends bug
         $releases = $this->loadModel('build')->getRelatedReleases(array($productID));
 
         $buildItems = array();
-        foreach($builds as $buildID => $buildName)
-        {
-            $buildItem = array('value' => $buildID, 'text' => $buildName);
-            if(isset($releases[$buildID])) $buildItem['content'] = array('html' => "<div class='flex clip'>{$buildName}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
-            $buildItems[$buildID] = $buildItem;
-        }
+        foreach($builds as $buildID => $buildName) $buildItems[$buildID] = array('value' => $buildID, 'text' => $buildName);
         foreach($releases as $release)
         {
             if(isset($buildItems[$release->shadow])) $buildItems[$release->shadow]['content'] = array('html' => "<div class='flex clip'>{$buildItems[$release->shadow]['text']}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
