@@ -53,7 +53,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             setID('pivotPanel'),
             set::title($pivotName),
             set::shadow(false),
-            set::headingClass('h-14'),
+            set::headingClass('h-12'),
             set::bodyClass('pt-0'),
             $pivot->desc ? to::titleSuffix(
                 icon
@@ -106,17 +106,18 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     'data-confirm' => $lang->pivot->deleteTip,
                 ))) : null) : null
             ),
+            div(setClass('divider')),
             $filters ? div
             (
                 setID('conditions'),
-                setClass('flex justify-between bg-canvas'),
+                setClass('flex justify-between bg-canvas mt-4 mb-2'),
                 div
                 (
                     setClass('flex flex-wrap w-full'),
                     $filters
                 ),
                 button(setClass('btn primary'), on::click('loadCustomPivot'), $lang->pivot->query)
-            ) : null,
+            ) : div(setClass('mb-4')),
             dtable
             (
                 set::striped(true),
