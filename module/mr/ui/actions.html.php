@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $hasNoChange       = $MR->synced && empty($rawMR->changes_count) ? true : false;
-$hasConflict       = $MR->synced === '1' ? $hasConflict : !$MR->hasNoConflict;
+$hasConflict       = $MR->synced === '1' ? $rawMR->has_conflicts : !$MR->hasNoConflict;
 $compileNotSuccess = !empty($compile->id) && $compile->status != 'success';
 
 $mainActions   = array();
