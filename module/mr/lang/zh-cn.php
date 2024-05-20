@@ -54,7 +54,7 @@ $lang->mr->execJob     = '执行';
 $lang->mr->execJobTip  = '手动执行流水线任务';
 
 $lang->mr->canMerge  = "可合并";
-$lang->mr->cantMerge = "不可合并";
+$lang->mr->cantMerge = "不可自动合并";
 
 $lang->mr->approval = '评审';
 $lang->mr->approve  = '通过';
