@@ -46,7 +46,7 @@ class thinkRadio extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $question, $required, $enableOther, $fields) = $this->prop(array('step', 'question', 'required', 'enableOther', 'fields'));
+        list($step, $questionType, $required, $enableOther, $fields) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields'));
         $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
@@ -57,7 +57,7 @@ class thinkRadio extends thinkQuestion
         }
 
         $formItems[] = array(
-            formHidden('options[questionType]', $question),
+            formHidden('options[questionType]', $questionType),
             formGroup
             (
                 set::label($lang->thinkstep->label->option),
@@ -79,7 +79,7 @@ class thinkRadio extends thinkQuestion
                     set::inline(true),
                     set::value($required),
                     set::items($requiredItems),
-                    $question == 'checkbox' ? bind::change('changeIsRequired(event)') : null
+                    $questionType == 'checkbox' ? bind::change('changeIsRequired(event)') : null
                 )
             ),
             $this->children()
