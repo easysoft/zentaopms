@@ -99,7 +99,7 @@ class storyRelatedList extends relatedList
             'onRender' => function($item, $linkedStory) use($storyProducts, $story, $app)
             {
                 $storyID = $linkedStory->id;
-                $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$story->id]},"));
+                $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$storyID]},"));
                 $item['url'] = $hasPriv ? createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type") : false;
                 if($hasPriv)
                 {
