@@ -18,6 +18,7 @@ if($app->tab == 'product') data('activeMenuID', $type);
 data('storyType', $type);
 jsVar('storyType', $type);
 jsVar('productID', $productID);
+jsVar('executionID', $executionID);
 jsVar('branch', $branch);
 jsVar('storyID', $storyID);
 data('gradeRule', $gradeRule);

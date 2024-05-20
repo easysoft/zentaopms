@@ -60,7 +60,7 @@ window.setGrade = function(e)
 window.switchType = function(e)
 {
     const type = e.target.value;
-    const link = $.createLink(type, 'batchCreate', `productID=${productID}&branchID=${branch}&module=0&storyID=${storyID}`);
+    const link = $.createLink(type, 'batchCreate', `productID=${productID}&branchID=${branch}&module=0&storyID=${storyID}&executionID=${executionID}`);
 
     loadPage(link);
 }
