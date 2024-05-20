@@ -2079,4 +2079,34 @@ class storyTao extends storyModel
 
         return $story;
     }
+
+    /**
+     * 获取传入所有需求的叶子结点，并按照根节点顺序返回
+     * Get leaf node by all stories, and sort by base nodes.
+     *
+     * @param  array    $stories
+     * @param  array    $allStoryIdList
+     * @access public
+     * @return array
+     */
+    public function getLastNodes(array $stories, array $allStoryIdList): array
+    {
+        $parent    = array();
+        $lastNodes = array();
+        $stmt      = $this->dao->select('id,parent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('id')->in($allStoryIdList)->andWhere('deleted')->eq(0)->orderBy('grade_desc,id_desc')->query();
+        while($story = $stmt->fetch())
+        {
+            if(isset($parent[$story->id])) continue;
+            $lastNodes[$story->root][$story->id] = $story;
+            $parent[$story->parent] = true;
+        }
+
+        $sortLastNodes = array();
+        foreach($stories as $story)
+        {
+            if(isset($lastNodes[$story->root])) $sortLastNodes += $lastNodes[$story->root];
+        }
+
+        return $sortLastNodes;
+    }
 }
