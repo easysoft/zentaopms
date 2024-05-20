@@ -984,6 +984,6 @@ class mr extends control
    public function ajaxSyncCompile(int $compileID)
    {
        $this->loadModel('ci')->checkCompileStatus($compileID);
-       return $this->sendSuccess(array('load' => true));
+       return $this->sendSuccess(array('message' => $this->lang->mr->refreshSuccess, 'load' => true));
    }
 }
