@@ -254,6 +254,7 @@ $config->openMethods[] = 'search.buildzinform';
 $config->openMethods[] = 'search.buildzinquery';
 $config->openMethods[] = 'search.savezinquery';
 $config->openMethods[] = 'space.createapplication';
+$config->openMethods[] = 'story.storyview';
 $config->openMethods[] = 'ai.adminindex';
 $config->openMethods[] = 'sonarqube.create';
 $config->openMethods[] = 'sonarqube.edit';
