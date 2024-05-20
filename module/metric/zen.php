@@ -184,7 +184,6 @@ class metricZen extends metric
         {
             if($this->config->edition == 'open' && in_array($calcGroup->dataset, array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks', 'getDemands'))) continue;
             if($this->config->edition == 'biz'  && in_array($calcGroup->dataset, array('getIssues', 'getRisks', 'getDemands'))) continue;
-            if($this->config->edition == 'ipd'  && in_array($calcGroup->dataset, array('getDemands'))) continue;
 
             try
             {

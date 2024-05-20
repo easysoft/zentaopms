@@ -154,7 +154,6 @@ class metricTao extends metricModel
             ->beginIF(!empty($purposes))->andWhere('purpose')->in($purposes)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
-            ->beginIF($this->config->edition == 'ipd')->andWhere('object')->notIN('demand')->fi()
             ->fetchAll();
 
         return $metrics;
@@ -176,7 +175,6 @@ class metricTao extends metricModel
             ->beginIF($stage!= 'all')->andWhere('stage')->eq($stage)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
-            ->beginIF($this->config->edition == 'ipd')->andWhere('object')->notIN('demand')->fi()
             ->fetchAll();
     }
 
@@ -195,7 +193,6 @@ class metricTao extends metricModel
             ->andWhere('scope')->eq($scope)
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
-            ->beginIF($this->config->edition == 'ipd')->andWhere('object')->notIN('demand')->fi()
             ->groupBy('object, purpose')
             ->fetchAll();
     }
