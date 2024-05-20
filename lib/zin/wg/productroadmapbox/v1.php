@@ -48,6 +48,7 @@ class productRoadmapBox extends wg
             $hasBranch     = !empty($branchGroups[$productID]);
             $branches      = isset($branchGroups[$productID]) ? $branchGroups[$productID] : array();
             $defaultBranch = !empty($branches) ? key($branches) : 0;
+            $roadmaps      = !empty($roadmapGroups[$productID][$defaultBranch]) ? $roadmapGroups[$productID][$defaultBranch] : array();
 
             $productsBox[] = div
             (
@@ -95,11 +96,31 @@ class productRoadmapBox extends wg
                     set::className('roadmapBox'),
                     inputGroup
                     (
-                        set::id("roadmap{$index}"),
-                        picker
+                        div
                         (
-                            set::name("roadmap[$index]"),
-                            set::items($roadmapGroups[$productID][$defaultBranch])
+                            set::id("roadmap{$index}"),
+                            setClass('grow linkRoadmap'),
+                            picker
+                            (
+                                set::name("roadmap[$index]"),
+                                set::items($roadmaps)
+                            ),
+                            input
+                            (
+                                setClass('hidden'),
+                                set::disabled(true),
+                                set::name("roadmapName[$index]")
+                            )
+                        ),
+                        div
+                        (
+                            setClass('ml-px addRoadmap btn btn-default' . (count($roadmaps) ? ' hidden' : '')),
+                            checkbox
+                            (
+                                set::name("addRoadmap[$index]"),
+                                set::text($lang->demand->addRoadmap),
+                                on::change('addRoadmap')
+                            )
                         )
                     )
                 ),
