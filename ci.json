@@ -15,7 +15,7 @@
     }
   },
   "image": {
-    "phpversion": "8.1.x",
+    "phpversion": "8.1.28",
     "public": {
       "namespace": {
         "release": "app",
