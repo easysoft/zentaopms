@@ -1805,16 +1805,6 @@ class storyTao extends storyModel
 
         $tutorialMode = commonModel::isTutorialMode();
 
-        if($storyType != 'story')
-        {
-            $replacement = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->ERCommon;
-            $this->lang->story->changeTip                = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->changeTip);
-            $this->lang->story->reviewTip['active']      = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->reviewTip['active']);
-            $this->lang->story->reviewTip['notReviewer'] = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->reviewTip['notReviewer']);
-            $this->lang->story->recallTip['actived']     = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->recallTip['actived']);
-            $this->lang->story->subDivideTip['notWait']  = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->subDivideTip['notWait']);
-        }
-
         static $taskGroups = array();
 
         $actSubmitreview = array();
