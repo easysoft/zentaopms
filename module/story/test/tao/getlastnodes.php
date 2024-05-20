@@ -3,13 +3,13 @@
 
 /**
 
-title=测试 storyModel->getLastNodes();
+title=测试 storyModel->getLeafNodes();
 cid=0
 
 - 传入空参数。 @0
 - 只传入 allStoryIdList @0
 - 只传入 stories @0
-- 执行story模块的getLastNodes方法，参数是$stories, $allStoryIdList  @11;10;9;8;7;6;5;4
+- 执行story模块的getLeafNodes方法，参数是$stories, $allStoryIdList  @11;10;9;8;7;6;5;4
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -30,8 +30,8 @@ $tester->loadModel('story');
 $allStoryIdList = array(1,2,3,4,5,6,7,8,9,10,11);
 $stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('1,11')->orderBy('id_desc')->fetchAll('id');
 
-r(count($tester->story->getLastNodes(array(), array())))         && p() && e('0');  //传入空参数。
-r(count($tester->story->getLastNodes(array(), $allStoryIdList))) && p() && e('0');  //只传入 allStoryIdList
-r(count($tester->story->getLastNodes($stories, array())))        && p() && e('0');  //只传入 stories
+r(count($tester->story->getLeafNodes(array(), array())))         && p() && e('0');  //传入空参数。
+r(count($tester->story->getLeafNodes(array(), $allStoryIdList))) && p() && e('0');  //只传入 allStoryIdList
+r(count($tester->story->getLeafNodes($stories, array())))        && p() && e('0');  //只传入 stories
 
-r(implode(';', array_keys($tester->story->getLastNodes($stories, $allStoryIdList)))) && p() && e('11;10;9;8;7;6;5;4');
+r(implode(';', array_keys($tester->story->getLeafNodes($stories, $allStoryIdList)))) && p() && e('11;10;9;8;7;6;5;4');

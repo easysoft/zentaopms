@@ -2089,39 +2089,39 @@ class storyTao extends storyModel
      * @access public
      * @return array
      */
-    public function getLastNodes(array $stories, array $allStoryIdList): array
+    public function getLeafNodes(array $stories, array $allStoryIdList): array
     {
         $parent    = array();
-        $lastNodes = array();
-        $stmt      = $this->dao->select('id,parent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('id')->in($allStoryIdList)->andWhere('deleted')->eq(0)->orderBy('grade_desc,id_desc')->query();
+        $leafNodes = array();
+        $stmt      = $this->dao->select('id,parent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('id')->in($allStoryIdList)->andWhere('deleted')->eq(0)->orderBy('type_desc,grade_desc,id_desc')->query();
         while($story = $stmt->fetch())
         {
             if(isset($parent[$story->id])) continue;
-            $lastNodes[$story->root][$story->id] = $story;
+            $leafNodes[$story->root][$story->id] = $story;
             $parent[$story->parent] = true;
         }
 
-        $sortLastNodes = array();
+        $sortLeafNodes = array();
         foreach($stories as $story)
         {
-            if(isset($lastNodes[$story->root])) $sortLastNodes += $lastNodes[$story->root];
+            if(isset($leafNodes[$story->root])) $sortLeafNodes += $leafNodes[$story->root];
         }
 
-        return $sortLastNodes;
+        return $sortLeafNodes;
     }
 
     /**
      * 根据叶子结点数据，构建看板泳道数据。
      * Build lanes data by leaf node.
      *
-     * @param  array    $lastNodes
+     * @param  array    $leafNodes
      * @access public
      * @return array
      */
-    public function buildTrackLanes(array $lastNodes): array
+    public function buildTrackLanes(array $leafNodes): array
     {
         $lanes = array();
-        foreach(array_values($lastNodes) as $story) $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
+        foreach(array_values($leafNodes) as $story) $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
         return $lanes;
     }
 
@@ -2182,14 +2182,14 @@ class storyTao extends storyModel
      * Build items data by storyType.
      *
      * @param  array  $allStories
-     * @param  array  $lastNodes
+     * @param  array  $leafNodes
      * @param  string $storyType    epic|requirement|story
      * @access public
      * @return array
      */
-    public function buildTrackItems(array $allStories, array $lastNodes, string $storyType): array
+    public function buildTrackItems(array $allStories, array $leafNodes, string $storyType): array
     {
-        $storyIdList  = array_keys($lastNodes);
+        $storyIdList  = array_keys($leafNodes);
         $projectGroup = $this->getProjectsForTrack($storyIdList);
         $designGroup  = $this->getDesignsForTrack($storyIdList);
 
@@ -2203,7 +2203,7 @@ class storyTao extends storyModel
         $storyGrade = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('status')->eq('enable')->orderBy('grade')->fetchGroup('type', 'grade');
 
         $items = array();
-        foreach($lastNodes as $node)
+        foreach($leafNodes as $node)
         {
             foreach(explode(',', trim($node->path, ',')) as $storyID)
             {

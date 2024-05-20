@@ -3973,12 +3973,12 @@ class storyModel extends model
 
         $rootIdList = array_unique(array_column($stories, 'root'));
         $allStories = $this->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
-        $lastNodes  = $this->storyTao->getLastNodes($stories, array_keys($allStories));
+        $leafNodes  = $this->storyTao->getLeafNodes($stories, array_keys($allStories));
 
         $tracks = array();
-        $lanes  = $this->storyTao->buildTrackLanes($lastNodes);
+        $lanes  = $this->storyTao->buildTrackLanes($leafNodes);
         $cols   = $this->storyTao->buildTrackCols($storyType);
-        $items  = $this->storyTao->buildTrackItems($allStories, $lastNodes, $storyType);
+        $items  = $this->storyTao->buildTrackItems($allStories, $leafNodes, $storyType);
 
         return array('lanes' => $lanes, 'cols' => $cols, 'items' => $items);
     }
