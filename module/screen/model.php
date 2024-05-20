@@ -128,11 +128,9 @@ class screenModel extends model
             return $scheme;
         }
 
-        $chartData = new stdclass();
-        $chartData->editCanvasConfig = $this->config->screen->editCanvasConfig;
-        $chartData->componentList    = $this->buildComponentList($scheme);
+        $scheme->componentList = $this->buildComponentList($scheme->componentList);
 
-        return $chartData;
+        return $scheme;
     }
 
     /**
