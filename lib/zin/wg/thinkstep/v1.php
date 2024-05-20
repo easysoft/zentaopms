@@ -8,12 +8,13 @@ class thinkStep  extends wg
         'item: object',
         'action?: string="detail"',
         'addType?: string',
-        'isRun?: bool=false', // 是否是分析活动
+        'isRun?: bool=false',        // 是否是分析活动
+        'defaultFields: array',      // 默认的配置项
     );
 
     protected function buildBody(): wg|array
     {
-        list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
+        list($item, $action, $addType, $isRun, $defaultFields) = $this->prop(array('item', 'action', 'addType', 'isRun', 'defaultFields'));
 
         $step         = $addType ? null : $item;
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
@@ -22,7 +23,7 @@ class thinkStep  extends wg
         if($questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
         if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun));
         if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action));
+        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::defaultFields($defaultFields));
         return array();
     }
 
@@ -41,7 +42,7 @@ class thinkStep  extends wg
 
         return div
         (
-            setClass('relative'),
+            setClass('relative h-full overflow-y-auto scrollbar-thin'),
             !$isRun ? array(
                 div
                 (
@@ -81,7 +82,7 @@ class thinkStep  extends wg
                 ),
                 h::hr()
             ) : null,
-            div(setClass('pt-6 px-8 mx-4'), $this->buildBody())
+            div(setClass('pt-6 px-8 mx-4 pb-2'), $this->buildBody())
         );
     }
 }
