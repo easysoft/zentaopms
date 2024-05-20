@@ -327,6 +327,140 @@ class cneModel extends model
     }
 
     /**
+     * 备份一个应用实例。
+     * Backup a instance with account.
+     *
+     * @param  object $instance
+     * @access public
+     * @return object
+     */
+    public function backup(object $instance, string|null $account = ''): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->username  = $account ?: $this->app->user->account;
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+        $apiParams->channel   = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/backup";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份的进度。
+     * Get the status of backup progress.
+     *
+     * @param  object $instance
+     * @param  object $backup
+     * @access public
+     * @return object
+     */
+    public function getBackupStatus(object $instance, object $backup): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster     = '';
+        $apiParams->namespace   = $instance->spaceData->k8space;
+        $apiParams->name        = $instance->k8name;
+        $apiParams->backup_name = $backup->backupName;
+        $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/backup/status";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份列表。
+     * Get the backup list.
+     *
+     * @param  object $instance
+     * @access public
+     * @return object
+     */
+    public function getBackupList(object $instance): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+        $apiParams->channel   = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/backups";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 删除一个备份.
+     * Delete backup.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return bool
+     */
+    public function deleteBackup(object $instance, string $backupName): bool
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster     = '';
+        $apiParams->namespace   = $instance->spaceData->k8space;
+        $apiParams->name        = $instance->k8name;
+        $apiParams->backup_name = $backupName;
+        $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/backup/remove";
+        $result = $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        if($result && $result->code == 200) return true;
+
+        return false;
+    }
+
+    /**
+     * 恢复一个备份。
+     * Restore from the backup.
+     *
+     * @param  object $instance
+     * @param  object $backupName
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function restore(object $instance, string $backupName, string $account = ''): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->username    = $account;
+        $apiParams->cluster     = '';
+        $apiParams->namespace   = $instance->spaceData->k8space;
+        $apiParams->name        = $instance->k8name;
+        $apiParams->backup_name = $backupName;
+        $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/restore";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份恢复的状态。
+     * Get the status of restore progress.
+     *
+     * @param  object $instance
+     * @param  object $restore
+     * @access public
+     * @return object
+     */
+    public function getRestoreStatus(object $instance, object $restore): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster      = '';
+        $apiParams->namespace    = $instance->spaceData->k8space;
+        $apiParams->name         = $instance->k8name;
+        $apiParams->restore_name = $restore->restoreName;
+        $apiParams->channel      = empty($instance->channel) ? $this->config->cne->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/restore/status";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->cne->api->headers);
+    }
+
+    /**
      * 启动一个应用实例。
      * Start an app instance.
      *
