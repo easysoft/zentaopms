@@ -680,7 +680,8 @@ class actionModel extends model
                 }
 
                 $link .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-                $actionDesc = str_replace('$extra', html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'"), $desc['main']);
+                $replace = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
+                $actionDesc = str_replace('$extra', $replace, $desc['main']);
             }
         }
         return $actionDesc;
