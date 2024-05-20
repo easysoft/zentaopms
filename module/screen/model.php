@@ -104,9 +104,10 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
+        $scheme = json_decode($screen->scheme);
+
         if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen))
         {
-            $scheme = json_decode($screen->scheme);
             foreach($scheme->componentList as $component)
             {
                 if(!empty($component->isGroup))
@@ -127,24 +128,9 @@ class screenModel extends model
             return $scheme;
         }
 
-        $editCanvasConfig = $this->config->screen->editCanvasConfig;
-
-        $componentList = json_decode($screen->scheme);
-        if(empty($componentList)) $componentList = array();
-
-        /* Reset height of canvas. */
-        foreach($componentList as $component)
-        {
-            if(!isset($component->attr)) continue;
-
-            $height = $component->attr->y + $component->attr->h;
-            if($height > $editCanvasConfig->height) $editCanvasConfig->height = $height;
-        }
-        $editCanvasConfig->height += 50;
-
         $chartData = new stdclass();
-        $chartData->editCanvasConfig = $editCanvasConfig;
-        $chartData->componentList    = $this->buildComponentList($componentList);
+        $chartData->editCanvasConfig = $this->config->screen->editCanvasConfig;
+        $chartData->componentList    = $this->buildComponentList($scheme);
 
         return $chartData;
     }
