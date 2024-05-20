@@ -181,6 +181,7 @@ $lang->mr->hasNoConflict  = "可以合并";
 $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
 $lang->mr->mergeSuccess   = "已成功合并";
+$lang->mr->refreshSuccess = '刷新成功';
 
 $lang->mr->todomessage = "项目中指派给你了";
 $lang->mr->squashHelp  = '对应git参数：--squash';
