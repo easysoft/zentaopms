@@ -2176,4 +2176,124 @@ class storyTao extends storyModel
         if($parent != '0' && $parent != -1) $col['parentName'] = $parent;
         return $col;
     }
+
+    /**
+     * 构建看板项数据。
+     * Build items data by storyType.
+     *
+     * @param  array  $allStories
+     * @param  array  $lastNodes
+     * @param  string $storyType    epic|requirement|story
+     * @access public
+     * @return array
+     */
+    public function buildTrackItems(array $allStories, array $lastNodes, string $storyType): array
+    {
+        $storyIdList  = array_keys($lastNodes);
+        $projectGroup = $this->getProjectsForTrack($storyIdList);
+        $designGroup  = $this->getDesignsForTrack($storyIdList);
+
+        $projects   = zget($projectGroup, 'project', array());
+        $executions = zget($projectGroup, 'execution', array());
+        $designs    = zget($designGroup, 'design', array());
+        $commits    = zget($designGroup, 'commit', array());
+        $tasks      = $this->dao->select('id,pri,status,name as title,assignedTo,story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('parent')->fetchGroup('story', 'id');
+        $cases      = $this->dao->select('id,pri,status,title,story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
+        $bugs       = $this->dao->select('id,pri,status,title,story')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
+        $storyGrade = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('status')->eq('enable')->orderBy('grade')->fetchGroup('type', 'grade');
+
+        $items = array();
+        foreach($lastNodes as $node)
+        {
+            foreach(explode(',', trim($node->path, ',')) as $storyID)
+            {
+                if(!isset($allStories[$storyID])) continue;
+                $story = $allStories[$storyID];
+
+                unset($allStories[$storyID]);
+                if($storyType == 'requirement' && $story->type == 'epic') continue;
+                if($storyType == 'story' && ($story->type == 'requirement' || $story->type == 'epic')) continue;
+                if(!isset($storyGrade[$story->type][$story->grade])) continue;
+
+                $colName = "{$story->type}_{$story->grade}";
+                unset($story->type);
+
+                $items["lane_{$node->id}"][$colName][] = $story;
+            }
+            $items["lane_{$node->id}"]['project']   = array_values(zget($projects,   $node->id, array()));
+            $items["lane_{$node->id}"]['execution'] = array_values(zget($executions, $node->id, array()));
+            $items["lane_{$node->id}"]['design']    = array_values(zget($designs,    $node->id, array()));
+            $items["lane_{$node->id}"]['commit']    = array_values(zget($commits,    $node->id, array()));
+            $items["lane_{$node->id}"]['task']      = array_values(zget($tasks,      $node->id, array()));
+            $items["lane_{$node->id}"]['bug']       = array_values(zget($bugs,       $node->id, array()));
+            $items["lane_{$node->id}"]['case']      = array_values(zget($cases,      $node->id, array()));
+        }
+
+        return $items;
+    }
+
+    /**
+     * 根据需求ID列表获取关联的项目和执行
+     * Get linked projects and executions by story id list.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getProjectsForTrack(array $storyIdList): array
+    {
+        $projectStoryList = array();
+        $stmt = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->query();
+        while($projectStory = $stmt->fetch()) $projectStoryList[$projectStory->project][$projectStory->story] = $projectStory->story;
+
+        $projects   = array();
+        $executions = array();
+        $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->query();
+        $today      = helper::today();
+        $storyGroup = array();
+        while($project = $stmt->fetch())
+        {
+            $delay = 0;
+            if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended') $delay = helper::diffDate($today, $project->end);
+
+            $project->delay = $delay > 0;
+            $projectType = $project->projectType == 'project' ? 'project' : 'execution';
+            foreach($projectStoryList[$project->id] as $storyID) $storyGroup[$projectType][$storyID][$project->id] = $project;
+        }
+
+        return $storyGroup;
+    }
+
+    /**
+     * 根据需求ID列表获取关联的设计和提交
+     * Get linked designs and commits by story id list.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getDesignsForTrack(array $storyIdList): array
+    {
+        $storyGroup   = array();
+        $stmt         = $this->dao->select('id,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->query();
+        $commitIdList = '';
+        $commitGroup  = array();
+        while($design = $stmt->fetch())
+        {
+            $storyGroup['design'][$design->story][$design->id] = $design;
+            $commitIdList .= $design->commit ? "{$design->commit}," : '';
+        }
+
+        $commits = $this->dao->select('id,commit,committer,comment as title')->from(TABLE_REPOHISTORY)->where('id')->in(array_unique(explode(',', $commitIdList)))->fetchAll('id');
+        foreach($storyGroup['design'] as $storyID => $designs)
+        {
+            foreach($designs as $designID => $design)
+            {
+                if(empty($design->commit)) continue;
+                foreach(explode(',', $design->commit) as $commitID) $storyGroup['commit'][$storyID][$commitID] = zget($commits, $commitID, '');
+            }
+        }
+
+        return $storyGroup;
+    }
 }
