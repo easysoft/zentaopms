@@ -472,7 +472,11 @@ function goBack(target, url, startState)
             while(state && state.code !== target) state = state.prev;
             if(state && state.code === target)
             {
-                if(state.index === preState.index) return window.history.back();
+                if(state.index === preState.index)
+                {
+                    if(url) return openApp(url, target, false);
+                    return window.history.back();
+                }
                 return openApp(state.url, state.code, false);
             }
         }
@@ -483,7 +487,11 @@ function goBack(target, url, startState)
             while(state && state.path && !pathSet.has(state.path.toLowerCase())) state = state.prev;
             if(state && pathSet.has(state.path.toLowerCase()))
             {
-                if(state.index === preState.index) return window.history.back();
+                if(state.index === preState.index)
+                {
+                    if(url) return openApp(url, target, false);
+                    return window.history.back();
+                }
                 return openApp(state.url, state.code, false);
             }
         }
