@@ -19,14 +19,12 @@ namespace zin;
 class thinkStepBase extends wg
 {
     protected static array $defineProps = array(
-        'title?: string',             // 标题
-        'titleName?: string="title"', // 标题对应的name
-        'desc?: string',              // 描述
-        'descName?: string="desc"',   // 描述对应的name
-        'isRun?: bool=false',         // 是否是分析活动
-        'step?: object',              // 整个步骤的对象
-        'mode?: string="detail"',     // detail|create|edit
-        'type?: string="node"',       // node|transition/question
+        'title?: string',         // 标题
+        'desc?: string',          // 描述
+        'isRun?: bool=false',     // 是否是分析活动
+        'step?: object',          // 整个步骤的对象
+        'mode?: string="detail"', // detail|create|edit
+        'type?: string="node"',   // node|transition/question
     );
 
     public static function getPageCSS(): ?string
@@ -98,7 +96,7 @@ class thinkStepBase extends wg
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        list($step, $title, $titleName, $desc, $descName) = $this->prop(array('step', 'title', 'titleName', 'desc', 'descName'));
+        list($step, $title, $desc) = $this->prop(array('step', 'title', 'desc'));
         if($step)
         {
             $title = $step->title;
@@ -115,7 +113,7 @@ class thinkStepBase extends wg
                 (
                     setClass('is-required'),
                     set::value($title ?? ''),
-                    set::name($titleName),
+                    set::name('title'),
                     set::placeholder($lang->thinkwizard->step->inputContent)
                 )
             ),
@@ -126,7 +124,7 @@ class thinkStepBase extends wg
                 editor
                 (
                     setClass('desc'),
-                    set::name($descName),
+                    set::name('desc'),
                     set::placeholder($lang->thinkwizard->step->pleaseInput),
                     html($desc ?? ''),
                     set::rows(3)
