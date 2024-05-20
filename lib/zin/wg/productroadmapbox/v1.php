@@ -32,7 +32,6 @@ class productRoadmapBox extends wg
             setClass('productsBox'),
             on::click('.productsBox .addLine', 'window.addNewLine'),
             on::click('.productsBox .removeLine', 'window.removeLine'),
-            //on::change('.productsBox [name^=product]', 'window.loadBranches'),
             $productsBox
         );
     }
@@ -56,14 +55,16 @@ class productRoadmapBox extends wg
                 formGroup
                 (
                     set::width('1/2'),
-                    setClass('linkProduct'),
+                    setClass('distributeProduct'),
                     set::required(true),
                     $index == 0 ? set::label($lang->demand->distributeProduct) : null,
+                    count($products) ? null : set::checkbox(array('text' => $lang->demand->addProduct, 'name' => 'addProduct', 'checked' => false)),
+                    on::change('[name=addProduct]', 'addProduct'),
                     inputGroup
                     (
                         div
                         (
-                            setClass('grow'),
+                            setClass('grow linkProduct'),
                             picker
                             (
                                 set::name("product[$index]"),
@@ -72,6 +73,12 @@ class productRoadmapBox extends wg
                                 set::last($productID),
                                 on::change('loadProductBranches(e.target)'),
                                 $hasBranch ? set::lastBranch($branches ? 0 : implode(',', $branches)) : null,
+                            ),
+                            input
+                            (
+                                setClass('hidden'),
+                                set::disabled(true),
+                                set::name("productName")
                             )
                         ),
                         div
@@ -114,7 +121,7 @@ class productRoadmapBox extends wg
                         ),
                         div
                         (
-                            setClass('ml-px addRoadmap btn btn-default' . (count($roadmaps) ? ' hidden' : '')),
+                            setClass('ml-px addRoadmap btn btn-default' . ((count($roadmaps) || empty($products)) ? ' hidden' : '')),
                             checkbox
                             (
                                 set::name("addRoadmap[$index]"),
