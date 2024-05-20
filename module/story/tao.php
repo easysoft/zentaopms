@@ -1735,11 +1735,11 @@ class storyTao extends storyModel
     {
         if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->children = new stdclass();
-        $this->config->story->affect->children->fields[] = array('name' => 'id',           'title' => $this->lang->idAB, 'type' => 'id', 'sortType' => false);
-        $this->config->story->affect->children->fields[] = array('name' => 'title',        'title' => $this->lang->story->name, 'link' => helper::createLink('story', 'view', 'id={id}'), 'type' => 'title', 'sortType' => false, 'data-toggle' => 'modal', 'data-size' => 'lg');
-        $this->config->story->affect->children->fields[] = array('name' => 'pri',          'title' => $this->lang->priAB, 'type' => 'pri', 'sortType' => false);
-        $this->config->story->affect->children->fields[] = array('name' => 'status',       'title' => $this->lang->story->status, 'type' => 'status', 'sortType' => false);
-        $this->config->story->affect->children->fields[] = array('name' => 'openedBy',     'title' => $this->lang->story->openedBy, 'type' => 'user', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'id',       'title' => $this->lang->idAB, 'type' => 'id', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'title',    'title' => $this->lang->story->name, 'link' => helper::createLink($story->type, 'view', 'id={id}'), 'type' => 'title', 'sortType' => false, 'data-toggle' => 'modal', 'data-size' => 'lg');
+        $this->config->story->affect->children->fields[] = array('name' => 'pri',      'title' => $this->lang->priAB, 'type' => 'pri', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'status',   'title' => $this->lang->story->status, 'type' => 'status', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'openedBy', 'title' => $this->lang->story->openedBy, 'type' => 'user', 'sortType' => false);
 
         foreach($story->children as $child)
         {
