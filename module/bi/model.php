@@ -317,8 +317,8 @@ class biModel extends model
             if(isset($chart->fields))   $chart->fields   = $this->jsonEncode($chart->fields);
             if(isset($chart->langs))    $chart->langs    = $this->jsonEncode($chart->langs);
 
-            $stmt = $this->dao->insert(TABLE_CHART)->data($chart)
-                ->autoCheck();
+            $exists = $this->dao->select('id')->from(TABLE_CHART)->where('id')->eq($chart->id)->fetch();
+            if(!$exists) $operate = 'insert';
 
             $stmt = null;
             if($operate == 'insert')
@@ -365,6 +365,9 @@ class biModel extends model
             if(isset($pivot->langs))    $pivot->langs    = $this->jsonEncode($pivot->langs);
             if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
 
+            $exists = $this->dao->select('id')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
+            if(!$exists) $operate = 'insert';
+
             $stmt = null;
             if($operate == 'insert')
             {
@@ -396,6 +399,9 @@ class biModel extends model
             $screenJson = file_get_contents(__DIR__ . DS . 'json' . DS . "screen{$screenID}.json");
             $screen = json_decode($screenJson);
             if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme);
+
+            $exists = $this->dao->select('id')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
+            if(!$exists) $operate = 'insert';
 
             $screen->status = 'published';
 
