@@ -759,7 +759,7 @@ class mrModel extends model
         {
             $rowMR = $this->apiGetSingleMR($MR->repoID, $MR->mriid);
             $url   = sprintf($apiRoot->url, "/repos/$MR->targetProject/pullreq/$MR->mriid/merge");
-            $data  = array('dry_run' => false, 'bypass_rules' => false, 'source_sha' => $rowMR->source_sha, 'method' => $MR->squash == '1' ? 'squash' : 'merege');
+            $data  = array('dry_run' => false, 'bypass_rules' => false, 'source_sha' => $rowMR->source_sha, 'method' => $MR->squash == '1' ? 'squash' : 'merge');
         }
         else
         {
