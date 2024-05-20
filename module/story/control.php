@@ -1817,7 +1817,9 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
-        $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
+        $fileName = $this->lang->SRCommon;
+        if($storyType == 'requirement') $fileName = $this->lang->URCommon;
+        if($storyType == 'epic')        $fileName = $this->lang->ERCommon;
         $project  = null;
         if($executionID)
         {
