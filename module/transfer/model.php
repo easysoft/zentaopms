@@ -69,6 +69,8 @@ class transferModel extends model
     {
         if($module)
         {
+            if(in_array($module, array('epic', 'requirement'))) $module = 'story';
+
             $this->loadModel($module);
             $this->moduleConfig     = $this->config->$module;
             $this->moduleLang       = $this->lang->$module;

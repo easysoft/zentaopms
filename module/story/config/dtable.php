@@ -58,6 +58,7 @@ $config->story->dtable->fieldList['plan']['title']      = $lang->story->planAB;
 $config->story->dtable->fieldList['plan']['sortType']   = true;
 $config->story->dtable->fieldList['plan']['width']      = '136';
 $config->story->dtable->fieldList['plan']['show']       = true;
+$config->story->dtable->fieldList['plan']['control']    = 'multiple';
 $config->story->dtable->fieldList['plan']['group']      = 4;
 $config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 

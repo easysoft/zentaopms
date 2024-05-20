@@ -1795,7 +1795,7 @@ class story extends control
             $this->loadModel('transfer');
             $postData = form::data($this->config->transfer->form->export)->get();
 
-            $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
+            $this->session->set("{$storyType}TransferParams", array('productID' => $productID, 'executionID' => $executionID));
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {

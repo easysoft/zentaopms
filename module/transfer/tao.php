@@ -243,7 +243,6 @@ class transferTao extends transferModel
                 /* 根据name或title获取父数据。*/
                 /* Get parent data by name or title. */
                 if(!empty($data->name)) $data->name = '>' . $data->name;
-                elseif(!empty($data->title)) $data->title = '>' . $data->title;
                 $children[$data->parent][$id] = $data;
                 unset($datas[$id]);
             }
