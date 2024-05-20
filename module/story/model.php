@@ -5133,9 +5133,7 @@ class storyModel extends model
      */
     public function getGradeGroup(): array
     {
-        return $this->dao->select('type, grade, name')->from(TABLE_STORYGRADE)
-            ->where('status')->eq('enable')
-            ->fetchGroup('type', 'grade');
+        return $this->dao->select('type, grade, name')->from(TABLE_STORYGRADE)->fetchGroup('type', 'grade');
     }
 
     /**
