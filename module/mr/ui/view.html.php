@@ -38,14 +38,14 @@ if($MR->compileID)
             set::name($lang->compile->atTime),
             $compile->createdDate
         ),
-        ($compileJob && !empty($compileJob->id)) ?  item
+        !empty($MR->jobID) ?  item
         (
             set::name($lang->compile->result),
             zget($lang->compile->statusList, $compile->status),
             in_array($compile->status, array('success', 'failure')) ? h::a
             (
                 setClass('ml-1'),
-                set::href($this->createLink('job', 'view', "jobID={$compileJob->id}&compileID={$compile->id}")),
+                set::href($this->createLink('job', 'view', "jobID={$MR->jobID}&compileID={$compile->id}")),
                 set('data-toggle', 'modal'),
                 icon('search'),
                 $lang->compile->logs
@@ -274,15 +274,24 @@ panel
             set::align('baseline'),
             div
             (
-                setClass('text-lg font-bold'),
+                setClass('text-lg font-bold flex justify-between'),
                 $lang->mr->jobID,
-                !empty($compileJob->id) && hasPriv('job', 'exec') ? btn
+                div
                 (
-                    setClass('btn ghost text-primary size-sm pull-right ajax-submit'),
-                    set::url(helper::createLink('mr', 'ajaxExecJob', "MRID={$MR->id}&jobID={$compileJob->id}")),
-                    set::hint($lang->mr->execJobTip),
-                    $lang->mr->execJob
-                ) : null
+                    setClass('text-base font-thin'),
+                    $hasNewCommit ? span
+                    (
+                        setClass('mr-2'),
+                        $lang->mr->branchUpdateTip
+                    ) : null,
+                    !empty($MR->jobID) && hasPriv('job', 'exec') ? btn
+                    (
+                        setClass('label primary size-sm ajax-submit'),
+                        set::url(helper::createLink('mr', 'ajaxExecJob', "MRID={$MR->id}&jobID={$MR->jobID}")),
+                        set::hint($lang->mr->execJobTip),
+                        $lang->mr->execJob
+                    ) : null
+                )
             ),
             $job
         )

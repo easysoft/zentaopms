@@ -303,16 +303,14 @@ class mr extends control
      */
     public function view(int $MRID)
     {
-        $MR = $this->mr->fetchByID($MRID);
-        if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
+        $oldMR = $this->mr->fetchByID($MRID);
+        if(!$oldMR) return $this->locate($this->createLink('mr', 'browse'));
 
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
-        if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
+        if(isset($oldMR->hostID)) $rawMR = $this->mr->apiGetSingleMR($oldMR->repoID, $oldMR->mriid);
+        if($oldMR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
 
         /* Sync MR from GitLab to ZenTaoPMS. */
-        $oldMR = $MR;
-        $MR    = $this->mr->apiSyncMR($MR);
-
+        $MR      = $this->mr->apiSyncMR($oldMR);
         $changes = common::createChanges($oldMR, $MR);
         if($changes)
         {
@@ -321,9 +319,7 @@ class mr extends control
         }
 
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-
-        $projectOwner  = false;
-        if(in_array(strtolower($host->type), array('gitlab', 'gitfox')))
+        if(in_array($host->type, array('gitlab', 'gitfox')))
         {
             $MR->sourceProject = (int)$MR->sourceProject;
             $MR->targetProject = (int)$MR->targetProject;
@@ -331,11 +327,7 @@ class mr extends control
 
         $projectMethod = $host->type == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
         $sourceProject = $this->loadModel($host->type)->$projectMethod($MR->hostID, $MR->sourceProject);
-        if(isset($MR->hostID) && !$this->app->user->admin)
-        {
-            $openID = $this->loadModel('pipeline')->getOpenIdByAccount($MR->hostID, $host->type, $this->app->user->account);
-            if(!$projectOwner && isset($sourceProject->owner->id) && $sourceProject->owner->id == $openID) $projectOwner = true;
-        }
+        $compile       = $this->loadModel('compile')->getById($MR->compileID);
 
         $this->view->title         = $this->lang->mr->view;
         $this->view->MR            = $MR;
@@ -343,10 +335,8 @@ class mr extends control
         $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
         $this->view->reviewer      = $this->loadModel('user')->getById($MR->assignee);
         $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
-        $this->view->compile       = $this->loadModel('compile')->getById($MR->compileID);
-        $this->view->compileJob    = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
-        $this->view->projectOwner  = $projectOwner;
-        $this->view->projectEdit   = $this->mrZen->checkProjectEdit($host->type, $sourceProject, $MR);
+        $this->view->compile       = $compile;
+        $this->view->hasNewCommit  = $this->mrZen->checkNewCommit($host->type, $MR->hostID, (string)$MR->targetProject, $MR->mriid, $compile->createdDate);
         $this->view->sourceProject = $sourceProject;
         $this->view->targetProject = $this->{$host->type}->$projectMethod($MR->hostID, $MR->targetProject);
         $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, $MR->sourceProject, $MR->sourceBranch);
@@ -800,10 +790,11 @@ class mr extends control
      */
     public function commitLogs(int $MRID)
     {
-        $MR = $this->mr->fetchByID($MRID);
+        $MR      = $this->mr->fetchByID($MRID);
+        $compile = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->title   = $this->lang->mr->commitLogs;
         $this->view->MR      = $MR;
-        $this->view->compile = $this->loadModel('compile')->getById($MR->compileID);
+        $this->view->compile = $compile;
         if($MR->synced)
         {
             $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
@@ -811,8 +802,7 @@ class mr extends control
             if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
         }
 
-        $repo = $this->loadModel('repo')->getByID($MR->repoID);
-
+        $repo       = $this->loadModel('repo')->getByID($MR->repoID);
         $commitLogs = $this->mr->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
         foreach($commitLogs as $commitLog)
         {
@@ -820,7 +810,7 @@ class mr extends control
             if(strtolower($repo->SCM) == 'gitfox')
             {
                 $commitLog->id = $commitLog->sha;
-                $commitLog->committed_date  = $commitLog->author->when;
+                $commitLog->committed_date  = date('Y-m-d H:i:s', strtotime($commitLog->author->when));
                 $commitLog->committer_name  = $commitLog->author->identity->name;
                 $commitLog->committer_email = $commitLog->author->identity->email;
             }
@@ -836,8 +826,8 @@ class mr extends control
             $commitLog->id = substr($commitLog->id, 0, 10);
         }
 
-        $this->view->commitLogs  = $commitLogs;
-        $this->view->repo        = $repo;
+        $this->view->commitLogs = $commitLogs;
+        $this->view->repo       = $repo;
         $this->display();
     }
 
