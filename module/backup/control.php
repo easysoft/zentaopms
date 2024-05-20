@@ -58,6 +58,37 @@ class backup extends control
         $this->view->title   = $this->lang->backup->common;
         $this->view->backups = $backups;
 
+        if(trim($this->config->visions, ',') == 'lite')
+        {
+            $version     = $this->config->liteVersion;
+            $versionName = $this->lang->liteName . $this->config->liteVersion;
+        }
+        else
+        {
+            $version     = $this->config->version;
+            $versionName = ($this->config->inQuickon ? 'DevOps' : '') . $this->lang->pmsName . $this->config->version;
+        }
+
+        $latestVersionList = array();
+        if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList, true);
+        $latestVersion = $latestVersionList && version_compare(array_reverse(array_keys($latestVersionList))[0], $version, 'gt') ? array_reverse(array_keys($latestVersionList))[0] : $version;
+
+        $this->app->loadLang('install');
+        $this->app->loadLang('instance');
+        $this->app->loadLang('system');
+
+        $systemInfo = new stdclass();
+        $systemInfo->name           = $versionName;
+        $systemInfo->status         = $this->lang->instance->statusList['running'];
+        $systemInfo->currentVersion = $version;
+        $systemInfo->versionHint    = $version;
+        $systemInfo->latestVersion  = $latestVersion;
+        $systemInfo->upgradeable    = $version != $latestVersion;
+        $systemInfo->upgradeHint    = $systemInfo->upgradeable ? $this->lang->system->backup->versionInfo: null;
+        $systemInfo->latestURL      = !empty($latestVersionList[$version]->link) ? $latestVersionList[$version]->link : $this->lang->install->officeDomain;
+
+        $this->view->systemInfo = $systemInfo;
+
         if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
         if(!is_writable($this->app->getTmpRoot())) $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->app->getTmpRoot());
         $this->display();

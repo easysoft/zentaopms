@@ -24,8 +24,8 @@ featureBar
 (
     li
     (
-        set::className('nav-item'),
-        a(set('data-app', $app->tab), $lang->backup->history)
+        set::className('nav-item text-lg'),
+        $lang->backup->common
     ),
     set::current('all')
 );
@@ -58,62 +58,145 @@ if(common::hasPriv('backup', 'setting') and common::hasPriv('backup', 'backup'))
         );
 }
 
-/* DataTable. */
-$cols = $this->loadModel('datatable')->getSetting('backup');
-$data = initTableData($backups, $cols, $this->backup);
-
-$rows = array();
-foreach($data as $key => $row)
-{
-    $isOK  = true;
-    $isPHP = false;
-    foreach($row->files as $file => $attr)
-    {
-        if(!isset($attr['allCount']) || !isset($attr['count']))
-        {
-            unset($row->files[$file]);
-            continue;
-        }
-
-        if(str_ends_with($file, '.php'))        $isPHP = true;
-        if($attr['allCount'] != $attr['count']) $isOk  = false;
-    }
-
-    $first = true;
-    foreach($row->files as $file => $attr)
-    {
-        $fileName = basename($file);
-        $backup   = new stdclass();
-        $backup->file     = $file;
-        $backup->allCount = $attr['allCount'];
-        $backup->count    = $attr['count'];
-        $backup->size     = helper::formatKB($attr['size']);
-        $backup->status   = $attr['allCount'] == $attr['count'] ? $lang->backup->statusList['success'] : $lang->backup->statusList['fail'];
-        $backup->name     = substr($fileName, 0, strpos($fileName, '.'));
-
-        if($first)
-        {
-            $backup->time    = date(DT_DATETIME1, filemtime($file));
-            $backup->rowspan = count($row->files);
-            $backup->actions = $row->actions;
-            if(!$isPHP) $backup->actions[0]['disabled'] = true;
-            if(!$isOK)  $backup->actions[1]['disabled'] = true;
-        }
-
-        $rows[] = $backup;
-        $first  = false;
-    }
-}
-
-dtable
+div
 (
-    set::customCols(false),
-    set::cols($cols),
-    set::data($rows),
-    set::plugins(array('cellspan')),
-    set::getCellSpan(jsRaw('window.getCellSpan')),
-    set::footer(array('html' => $lang->backup->restoreTip . sprintf($lang->backup->holdDays, $config->backup->holdDays), 'className' => 'text-important'))
+    setClass('panel-title'),
+    $lang->system->backup->systemInfo
 );
+
+h::table
+(
+    set::className('table bordered'),
+    h::thead
+    (
+        h::th($lang->system->backup->name),
+        h::th($lang->system->backup->status),
+        h::th($lang->system->backup->currentVersion),
+        h::th($lang->system->backup->latestVersion),
+        h::th($lang->actions),
+    ),
+    h::tbody
+    (
+        setClass('text-center'),
+        h::td($systemInfo->name),
+        h::td($systemInfo->status),
+        h::td($systemInfo->currentVersion),
+        h::td
+        (
+            $systemInfo->latestVersion,
+            $systemInfo->upgradeHint ? a
+            (
+                set::href($systemInfo->latestURL),
+                set::target('_blank'),
+                icon('info pl-2 pt-2', set::title($systemInfo->upgradeHint))
+            ): null
+        ),
+        h::td
+        (
+            set::className('actions-list center'),
+            btnGroup
+            (
+                set::items
+                (
+                    array
+                    (
+                        array('class' => 'btn text-primary ghost', 'icon' => 'refresh', 'text' => $lang->backup->common , 'onclick' => 'backup(this)'),
+                        array('class' => 'btn text-primary ghost', 'icon' => 'arrow-up', 'text' => $lang->system->backup->upgrade, 'onclick' => 'upgrade(this)', 'disabled' => $systemInfo->upgradeable ? true : true),
+                    )
+                )
+            )
+        ),
+    )
+);
+
+div
+(
+    setClass('panel-title mt-6'),
+    $lang->system->backup->history
+);
+
+if($this->config->inQuickon)
+{
+    $this->loadModel('system');
+
+    foreach($backups as $backup)
+    {
+        $backup->backupPerson = isset($backup->sqlSummary['account']) ? $backup->sqlSummary['account'] : '';
+        if(empty($backup->sqlSummary['backupType'])) $backup->sqlSummary['backupType'] = '';
+        $backup->type = $backup->sqlSummary['backupType'];
+    }
+
+    $data = initTableData($backups, $config->system->dtable->backup->fieldList, $this->system);
+
+    dtable
+    (
+        set::customCols(false),
+        set::cols($config->system->dtable->backup->fieldList),
+        set::data($data),
+        set::plugins(array('cellspan')),
+        set::getCellSpan(jsRaw('window.getCellSpan')),
+        set::footer(array('html' => sprintf($lang->backup->holdDays, $config->backup->holdDays), 'className' => 'text-important'))
+    );
+}
+else
+{
+    /* DataTable. */
+    $cols = $this->loadModel('datatable')->getSetting('backup');
+    $data = initTableData($backups, $cols, $this->backup);
+
+    $rows = array();
+    foreach($data as $key => $row)
+    {
+        $isOK  = true;
+        $isPHP = false;
+        foreach($row->files as $file => $attr)
+        {
+            if(!isset($attr['allCount']) || !isset($attr['count']))
+            {
+                unset($row->files[$file]);
+                continue;
+            }
+
+            if(str_ends_with($file, '.php'))        $isPHP = true;
+            if($attr['allCount'] != $attr['count']) $isOk  = false;
+        }
+
+        $first = true;
+        foreach($row->files as $file => $attr)
+        {
+            $fileName = basename($file);
+            $backup   = new stdclass();
+            $backup->file     = $file;
+            $backup->allCount = $attr['allCount'];
+            $backup->count    = $attr['count'];
+            $backup->size     = helper::formatKB($attr['size']);
+            $backup->status   = $attr['allCount'] == $attr['count'] ? $lang->backup->statusList['success'] : $lang->backup->statusList['fail'];
+            $backup->name     = substr($fileName, 0, strpos($fileName, '.'));
+
+            if($first)
+            {
+                $backup->time    = date(DT_DATETIME1, filemtime($file));
+                $backup->rowspan = count($row->files);
+                $backup->actions = $row->actions;
+                if(!$isPHP) $backup->actions[0]['disabled'] = true;
+                if(!$isOK)  $backup->actions[1]['disabled'] = true;
+            }
+
+            $rows[] = $backup;
+            $first  = false;
+        }
+    }
+
+    dtable
+    (
+        set::customCols(false),
+        set::cols($cols),
+        set::data($rows),
+        set::plugins(array('cellspan')),
+        set::getCellSpan(jsRaw('window.getCellSpan')),
+        set::footer(array('html' => $lang->backup->restoreTip . sprintf($lang->backup->holdDays, $config->backup->holdDays), 'className' => 'text-important'))
+    );
+}
 
 modal
 (
