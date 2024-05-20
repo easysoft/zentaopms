@@ -576,6 +576,35 @@ class story extends control
     }
 
     /**
+     * 需求详情，延后鉴权。
+     * View a story, delay auth.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function storyView(int $storyID)
+    {
+        $story = $this->story->fetchByID($storyID);
+        if(common::hasPriv($story->type, 'view'))
+        {
+            echo $this->fetch($story->type, 'view', "storyID=$storyID");
+        }
+        else
+        {
+            $vars = "module={$story->type}&method=view";
+            if(isset($this->server->http_referer))
+            {
+                $referer = helper::safe64Encode($this->server->http_referer);
+                $vars   .= "&referer=$referer";
+            }
+            $denyLink = helper::createLink('user', 'deny', $vars);
+
+            return $this->send(array('result' => 'success', 'load' => $denyLink));
+        }
+    }
+
+    /**
      * Delete a story.
      *
      * @param  int    $storyID
