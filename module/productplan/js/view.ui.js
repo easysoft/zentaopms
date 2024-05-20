@@ -65,23 +65,28 @@ window.onSearchLinks = function(type, result)
  * @access public
  * @return object
  */
-window.setStatistics = function(element, checkedIdList)
+window.setStatistics = function(element, checkedIdList, pageSummary)
 {
+    if(checkedIdList == undefined || checkedIdList.length == 0) return {html: pageSummary};
+
     let checkedEstimate = 0;
     let checkedCase     = 0;
     let total           = 0;
 
-    checkedIdList.forEach((rowID) => {
-        const story = element.getRowInfo(rowID);
-        if(story.data.type == 'story')
+    const rows = element.layout.allRows;
+    rows.forEach((row) => {
+        if(checkedIdList.includes(row.id))
         {
-            total += 1;
-            checkedEstimate += parseFloat(story.data.estimate);
-            if(cases[rowID]) checkedCase += 1;
+            const story = element.getRowInfo(rowID);
+            if(story.data.type == 'story')
+            {
+                total += 1;
+                checkedEstimate += parseFloat(story.data.estimate);
+                if(cases[rowID]) checkedCase += 1;
+            }
         }
-    })
+    });
 
-    if(total == 0) return {html: summary};
     const rate = Math.round(checkedCase / total * 10000) / 100 + '' + '%';
     return {html: checkedSummary.replace('%total%', total)
         .replace('%estimate%', checkedEstimate.toFixed(1))
