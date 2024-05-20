@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$hasNoChange       = $MR->synced && empty($rawMR->changes_count) ? true : false;
+$hasConflict       = $MR->synced === '1' ? $hasConflict : !$MR->hasNoConflict;
 $compileNotSuccess = !empty($compile->id) && $compile->status != 'success';
 
 $mainActions   = array();
@@ -31,7 +33,7 @@ foreach($config->mr->view->operateList as $operate)
         $action['disabled'] = true;
         $action['hint']     = $lang->mr->acceptTip;
     }
-    if($operate == 'accept' && (!$MR->synced || $rawMR->state != 'opened' || $rawMR->has_conflicts))
+    if($operate == 'accept' && (!$MR->synced || $rawMR->state != 'opened' || $hasConflict))
     {
         $action['disabled'] = true;
         $action['hint']     = $lang->mr->conflictsTip;
@@ -44,11 +46,12 @@ foreach($config->mr->view->operateList as $operate)
 
         if($operate == 'approval')
         {
-            if($rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved')
+            if($hasConflict || $compileNotSuccess || $MR->approvalStatus == 'approved')
             {
                 $action['disabled'] = true;
-                if($rawMR->has_conflicts) $action['hint'] = $lang->mr->conflictsTip;
-                if($compileNotSuccess)    $action['hint'] = $lang->mr->compileTip;
+                if($compileNotSuccess) $action['hint'] = $lang->mr->compileTip;
+                if($hasNoChange)       $action['hint'] = $lang->mr->noChangesTip;
+                if($hasConflict)       $action['hint'] = $lang->mr->conflictsTip;
             }
         }
     }

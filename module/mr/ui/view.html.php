@@ -19,7 +19,8 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-$hasNoConflict  = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
+$hasNoChange    = $MR->synced && empty($rawMR->changes_count) ? true : false;
+$hasNoConflict  = $MR->synced === '1' ? $rawMR->has_conflicts : !$MR->hasNoConflict;
 $sourceDisabled = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
 $branchPath     = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
 $mergeStatus    = !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus;
@@ -229,7 +230,7 @@ panel
                     item
                     (
                         set::name($lang->mr->mergeStatus),
-                        $MR->synced && empty($rawMR->changes_count) ? span
+                        $hasNoChange ? span
                         (
                             setClass('status-cannot_be_merged'),
                             $lang->mr->cantMerge,
