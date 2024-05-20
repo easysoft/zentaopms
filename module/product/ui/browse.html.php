@@ -288,7 +288,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         /* AssignedTo button. */
         array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary batchAssignToBtn' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Batch import to lib button .*/
-        !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary batchImportToLibBtn', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib')
+        !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary batchImportToLibBtn', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib', 'data-on' => 'click', 'data-call' => 'importToLib')
     );
 
     return array
@@ -393,5 +393,40 @@ modal
         )
     )
 );
+
+if(isset($libs))
+{
+    modal
+    (
+        setID('batchImportToLib'),
+        set::title($lang->story->importToLib),
+        form
+        (
+            set::action($this->createLink('story', 'batchImportToLib')),
+            formGroup
+            (
+                set::label($lang->story->lib),
+                picker
+                (
+                    set::name('lib'),
+                    set::items($libs),
+                    set::required(true)
+                ),
+                input(set::className('hidden'), set::name('storyIdList'), set::id('storyIdList'))
+            ),
+            (!hasPriv('assetlib', 'approveStory') && !hasPriv('assetlib', 'batchApproveStory')) ? formGroup
+            (
+                set::label($lang->story->approver),
+                picker
+                (
+                    set::name('assignedTo'),
+                    set::items($approvers)
+                )
+            ) : null,
+            set::submitBtnText($lang->import),
+            set::actions(array('submit'))
+        )
+    );
+}
 
 render();
