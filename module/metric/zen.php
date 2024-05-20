@@ -278,7 +278,7 @@ class metricZen extends metric
         $calc->calculate($reuseMetrics);
     }
 
-    protected function getRecordByCodeAndDate($code, $calc, $date)
+    protected function getRecordByCodeAndDate($code, $calc, $date, $type = 'single')
     {
         $now = helper::now();
 
@@ -286,7 +286,7 @@ class metricZen extends metric
         $dateType = $this->metric->getDateTypeByCode($code);
 
         if($dateType == 'nodate') return array();
-        if($this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
+        if($type == 'all' && $this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
 
         $dateConfig   = $this->metric->parseDateStr($date, $dateType);
         $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);
