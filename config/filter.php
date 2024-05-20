@@ -143,6 +143,7 @@ $filter->story->batchchangeparent       = new stdclass();
 $filter->story->batchcreate             = new stdclass();
 $filter->story->track                   = new stdclass();
 $filter->epic->batchchangeparent        = new stdclass();
+$filter->epic->export                   = new stdclass();
 $filter->sso->getbindusers              = new stdclass();
 $filter->sso->gettodolist               = new stdclass();
 $filter->sso->getuserpairs              = new stdclass();
@@ -197,6 +198,7 @@ $filter->group->editmanagepriv          = new stdclass();
 $filter->group->default                 = new stdclass();
 $filter->caselib->default               = new stdclass();
 $filter->requirement->batchchangeparent = new stdclass();
+$filter->requirement->export            = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -338,8 +340,10 @@ $filter->story->track->cookie['preBranch']               = 'reg::word';
 $filter->story->track->cookie['preProductID']            = 'int';
 
 $filter->epic->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
+$filter->epic->export->cookie['checkedItem']            = 'reg::checked';
 
 $filter->requirement->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
+$filter->requirement->export->cookie['checkedItem']            = 'reg::checked';
 
 $filter->productplan->browse->cookie['viewType'] = 'code';
 $filter->projectplan->browse->cookie['viewType'] = 'code';
