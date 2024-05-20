@@ -34,6 +34,12 @@ $fnGenerateFilterBlock = function($code, $filterItem) use($lang)
             set::inline(true),
             set::items($items)
         ),
+        $code == 'object' ? icon
+        (
+            'chevron-double-down',
+            setClass('pull-right collapse-icon'),
+            on::click('collapseFilters')
+        ) : null,
         set::headingActions(array($removeAction))
     );
 };
