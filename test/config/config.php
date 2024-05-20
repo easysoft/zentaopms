@@ -2,7 +2,7 @@
 /** * Config 主文件
  */
 $config->uitest = new stdclass();
-$config->uitest->langClient = getenv('ZT_DEFAULT_LANG');
+$config->uitest->langClient = getenv('ZT_DEFAULT_LANG') ? getenv('ZT_DEFAULT_LANG') : 'zh-cn';
 
 $config->uitest->baseRoot = dirname(__FILE__, 2);
 
