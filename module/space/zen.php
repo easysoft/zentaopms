@@ -45,7 +45,7 @@ class spaceZen extends space
             if($pipeline->createdBy == 'system') unset($pipelines[$key]);
 
             $pipeline->createdAt  = $pipeline->createdDate;
-            $pipeline->appName    = $this->lang->space->appType[$pipeline->type];
+            $pipeline->appName    = zget($this->lang->space->appType, $pipeline->type);
             $pipeline->status     = 'running';
             $pipeline->type       = 'external';
             $pipeline->externalID = $pipeline->id;
