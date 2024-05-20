@@ -227,6 +227,8 @@ class releaseModel extends model
         {
             $shadowBuild = new stdclass();
             $shadowBuild->product      = $release->product;
+            $shadowBuild->branch       = $release->branch;
+            $shadowBuild->project      = $release->project;
             $shadowBuild->builds       = $release->build;
             $shadowBuild->name         = $release->name;
             $shadowBuild->date         = $release->date;
