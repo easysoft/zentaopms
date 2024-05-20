@@ -41,7 +41,6 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-dao::$cache = array();
 zenData('user')->gen(10);
 zenData('group')->loadYaml('group')->gen(100);
 zenData('usergroup')->loadYaml('usergroup')->gen(100);
