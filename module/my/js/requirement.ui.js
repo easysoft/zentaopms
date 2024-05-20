@@ -33,7 +33,7 @@ window.onRenderCell = function(result, {row, col})
     {
         for(index in row.data.actions)
         {
-            if(row.data.actions[index].name == 'recall') row.data.actions[index].hint = (row.data.status == 'changing' ? recallChange : recall
+            if(row.data.actions[index].name == 'recall') row.data.actions[index].hint = row.data.status == 'changing' ? recallChange : recall;
         }
     }
     return result;
