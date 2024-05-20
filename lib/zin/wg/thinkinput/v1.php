@@ -10,19 +10,15 @@ requireWg('thinkQuestion');
  */
 class thinkInput extends thinkQuestion
 {
-    protected static array $defineProps = array(
-        'isRequiredValue?: string'              // 是否必填的值
-    );
-
     protected function buildDetail(): array
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $required, $isRequiredValue) = $this->prop(array('step', 'required', 'isRequiredValue'));
+        list($step, $required, $value) = $this->prop(array('step', 'required', 'value'));
         if($step)
         {
-            $required        = $step->options->required;
-            $isRequiredValue = $step->answer->result;
+            $required = $step->options->required;
+            $value    = $step->answer->result;
         }
 
         $detailWg[] = textarea
@@ -30,7 +26,7 @@ class thinkInput extends thinkQuestion
             set::rows('3'),
             set::name('result'),
             set::required($required),
-            set::value($isRequiredValue),
+            set::value($value),
             set::placeholder($lang->thinkwizard->step->pleaseInput)
         );
         return $detailWg;
@@ -58,8 +54,7 @@ class thinkInput extends thinkQuestion
                     set::items($lang->thinkstep->requiredList),
                     set::value($required),
                 )
-            ),
-            $this->children()
+            )
         );
         return $formItems;
     }
