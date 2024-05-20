@@ -3959,6 +3959,31 @@ class storyModel extends model
     }
 
     /**
+     * 根据传入的需求获取跟踪矩阵，返回看板格式数据。
+     * Get track by stories, return kanban format.
+     *
+     * @param  array   $stories
+     * @param  string  $storyType    epic|requirement|story
+     * @access public
+     * @return array
+     */
+    public function getTracksByStories(array $stories, string $storyType): array
+    {
+        if(empty($stories)) return array();
+
+        $rootIdList = array_unique(array_column($stories, 'root'));
+        $allStories = $this->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
+        $lastNodes  = $this->storyTao->getLastNodes($stories, array_keys($allStories));
+
+        $tracks = array();
+        $lanes  = $this->storyTao->buildTrackLanes($lastNodes);
+        $cols   = $this->storyTao->buildTrackCols($storyType);
+        $items  = $this->storyTao->buildTrackItems($allStories, $lastNodes, $storyType);
+
+        return array('lanes' => $lanes, 'cols' => $cols, 'items' => $items);
+    }
+
+    /**
      * 获取产品或项目关联的用户需求跟踪矩阵。
      * Get requirements track.
      *
