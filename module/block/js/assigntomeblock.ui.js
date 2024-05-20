@@ -17,6 +17,11 @@ window.handleAssignToMeTabShow = function()
     }
 };
 
+window.clickItems = function(event)
+{
+    $(event.target).closest('ul').find('a[data-toggle=dropdown]').toggleClass('active', $(event.target).closest('menu').length);
+}
+
 /**
  * 对部分列进行重定义。
  * Redefine the partial column.

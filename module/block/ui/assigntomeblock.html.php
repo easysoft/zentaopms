@@ -31,7 +31,7 @@ foreach($hasViewPriv as $type => $bool)
     $selected = key($hasViewPriv);
     if(($longBlock && $count > 5 && $index > 5) || (!$longBlock && $count > 1 && $index > 1))
     {
-        $moreMenus[] = array('text' => $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type), 'data-toggle' => 'tab', 'href' => "#assigntome{$type}Tab{$blockNavCode}");
+        $moreMenus[] = array('text' => $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type), 'data-toggle' => 'tab', 'href' => "#assigntome{$type}Tab{$blockNavCode}", 'data-on' => 'click', 'data-call' => 'clickItems', 'data-params' => 'event');
     }
     else
     {
@@ -43,6 +43,9 @@ foreach($hasViewPriv as $type => $bool)
                 setClass($type == $selected ? 'active' : ''),
                 setData(array('toggle' => 'tab')),
                 set('href', "#assigntome{$type}Tab{$blockNavCode}"),
+                set('data-on', 'click'),
+                set('data-call', 'clickItems'),
+                set('data-params', 'event'),
                 $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type)
             )
         );
