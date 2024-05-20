@@ -23,6 +23,11 @@ class productRoadmapBox extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function build()
     {
         $productsBox = $this->initProductsBox();
