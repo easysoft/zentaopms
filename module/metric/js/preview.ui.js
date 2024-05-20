@@ -743,3 +743,16 @@ window.toggleSearchBtn = function(active = null)
         }
     }
 }
+
+window.collapseFilters = function()
+{
+    $('.collapse-icon').toggleClass('icon-chevron-double-up');
+    $('.collapse-icon').toggleClass('icon-chevron-double-down');
+
+    $('[data-collapse=true]').parent('.checkbox-primary').toggleClass('hidden');
+}
+
+$(document).ready(function()
+{
+    $('[data-collapse=true]').parent('.checkbox-primary').addClass('hidden');
+})
