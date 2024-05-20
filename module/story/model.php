@@ -4702,7 +4702,7 @@ class storyModel extends model
             if(!empty($relatedSpec[0]->files)) $fileIdList[] = $relatedSpec[0]->files;
         }
         $fileIdList   = array_unique($fileIdList);
-        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq($storyType)->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $filesInfo    = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
 
         $gradeGroup = $this->getGradeGroup();
