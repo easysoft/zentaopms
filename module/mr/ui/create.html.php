@@ -135,18 +135,14 @@ formPanel
         (
             set::name('squash'),
             set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1')),
-            icon
+            btn
             (
-                'help',
-                setClass('pl-2 pt-2'),
-                setData
-                (
-                    array
-                    (
-                        'toggle' => 'tooltip',
-                        'title'  => $lang->mr->squashHelp
-                    )
-                )
+                icon('help'),
+                setClass('text-gray size-sm mt-1 ghost'),
+                set('data-placement', 'right'),
+                set('data-type', 'white'),
+                set('data-class-name', 'text-gray border border-light'),
+                toggle::tooltip(array('title' => $lang->mr->squashHelp)),
             )
         )
     ),
