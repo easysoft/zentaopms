@@ -719,12 +719,12 @@ class productModel extends model
 
         $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
 
-        if($projectID)
+        if($projectID || $storyType == 'all')
         {
             $project    = $this->loadModel('project')->fetchById($projectID);
             $gradePairs = array();
             $gradeList  = $this->loadModel('story')->getGradeList('');
-            $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
+            $storyTypes = isset($project->storyType) ? $project->storyType : 'epic,story,requirement';
             foreach($gradeList as $grade)
             {
                 if(strpos($storyTypes, $grade->type) === false) continue;
@@ -732,10 +732,6 @@ class productModel extends model
                 $gradePairs[$key] = $grade->name;
             }
             asort($gradePairs);
-            $this->lang->story->title = $this->lang->story->name;
-        }
-        elseif($storyType == 'all')
-        {
             $this->lang->story->title = $this->lang->story->name;
         }
         elseif($storyType != 'story')
