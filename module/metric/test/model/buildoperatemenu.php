@@ -20,7 +20,7 @@ $metric = new metricTest();
 
 $metricByCode = $metric->getByCode('count_of_program');
 $metric1 = $metric->getByID($metricByCode->id);
-$metric1->builtin = 0;
+$metric1->builtin = '0';
 $metric2 = json_decode(json_encode($metric1));
 $metric2->stage = 'wait';
 $metric3 = json_decode(json_encode($metric1));

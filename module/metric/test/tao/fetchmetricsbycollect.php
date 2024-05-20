@@ -19,6 +19,7 @@ include dirname(__FILE__, 2) . '/lib/calc.unittest.class.php';
 
 su('admin');
 $metric = new metricTest();
+$metric->setCollector('10');
 
 r($metric->fetchMetricsByCollect('all')) && p('0:id,purpose,code') && e('10,scale,count_of_annual_closed_top_program'); // 获取我收藏的全部度量项的第一个度量
 r($metric->fetchMetricsByCollect('wait')) && p() && e('0');                                                             // 获取我收藏的未发布度量项

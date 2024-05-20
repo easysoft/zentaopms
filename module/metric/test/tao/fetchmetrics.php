@@ -27,7 +27,7 @@ cid=1
 - 查询项目范围内对象为任务，目的为效率提升的第一个度量项
  - 第0条的id属性 @232
  - 第0条的purpose属性 @rate
- - 第0条的code属性 @cv_in_waterfall
+ - 第0条的code属性 @cv_weekly_in_waterfall
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

@@ -8,12 +8,12 @@ timeout=0
 cid=1
 
 - 测试范围为system的模块树
- - 第0条的object属性 @bug
- - 第0条的purpose属性 @rate
- - 第1条的object属性 @bug
+ - 第0条的object属性 @application
+ - 第0条的purpose属性 @scale
+ - 第1条的object属性 @artifact
  - 第1条的purpose属性 @scale
- - 第2条的object属性 @case
- - 第2条的purpose属性 @scale
+ - 第2条的object属性 @bug
+ - 第2条的purpose属性 @rate
 - 测试范围为project的模块树
  - 第0条的object属性 @bug
  - 第0条的purpose属性 @scale

@@ -17,5 +17,6 @@ include dirname(__FILE__, 2) . '/lib/calc.unittest.class.php';
 
 $metric = new metricTest();
 su('admin');
+$metric->setCollector('10');
 
 r($metric->getListByCollect()) && p('0:id,code') && e('10,count_of_annual_closed_top_program');

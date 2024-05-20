@@ -7,9 +7,9 @@ title=count_of_release
 timeout=0
 cid=1
 
-- 测试839条数据全局发布数。第0条的value属性 @252
-- 测试500条数据全局发布数。第0条的value属性 @150
-- 测试1252条数据全局发布数。第0条的value属性 @376
+- 测试839条数据全局发布数。第0条的value属性 @420
+- 测试500条数据全局发布数。第0条的value属性 @250
+- 测试1252条数据全局发布数。第0条的value属性 @626
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
