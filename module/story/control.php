@@ -592,7 +592,11 @@ class story extends control
 
         if($confirm == 'no')
         {
-            if($story->type == 'requirement') $this->lang->story->confirmDelete = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->confirmDelete);
+            if($story->type != 'story')
+            {
+                $replacement = $story->type == 'requirement' ? $this->lang->URCommon : $this->lang->ERCommon;
+                $this->lang->story->confirmDelete = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->confirmDelete);
+            }
             $confirmURL = $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from&storyType=$storyType");
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->story->confirmDelete}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
