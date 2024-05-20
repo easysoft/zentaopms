@@ -21,8 +21,9 @@ requireWg('thinkStepBase');
 class thinkQuestion extends thinkStepBase
 {
     protected static array $defineProps = array(
-        'required?: int=1',    // 是否必填
-        'questionType: string' // 问题类型
+        'required?: int=1',      // 是否必填
+        'questionType?: string', // 问题类型
+        'value?: string',        // 问题的答案
     );
 
     protected static array $defaultProps = array
