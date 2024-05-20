@@ -80,6 +80,7 @@ $lang->mr->triggeredCI        = 'The pipeline job is triggered due to the target
 $lang->mr->acceptTip          = 'Please approve this MR before merge';
 $lang->mr->conflictsTip       = 'This merge request has conflicts, cannot be merged';
 $lang->mr->compileTip         = 'This merge request pipeline build is not successful, cannot be merged';
+$lang->mr->branchUpdateTip    = 'Branch has been updated, execute pipeline';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 
