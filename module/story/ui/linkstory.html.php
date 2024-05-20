@@ -29,7 +29,7 @@ $cols['title']['flex']         = 1;
 $cols = array_map(function($col){unset($col['sortType']); return $col;}, $cols);
 
 $data = array();
-foreach($stories2Link as $linkStory) $data[] = $this->story->formatStoryForList($linkStory);
+foreach($stories2Link as $linkStory) $data[] = $this->story->formatStoryForList($linkStory, array(), $linkStory->type, $maxGradeGroup);
 
 modalHeader(set::title($lang->story->linkStory));
 

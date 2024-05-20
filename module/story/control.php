@@ -1413,11 +1413,12 @@ class story extends control
         $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager);
 
         /* Assign. */
-        $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->hyphen .$this->lang->story->linkStory;
-        $this->view->type         = $type;
-        $this->view->pager        = $pager;
-        $this->view->stories2Link = $stories2Link;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title         = $this->lang->story->linkStory . "STORY" . $this->lang->hyphen .$this->lang->story->linkStory;
+        $this->view->type          = $type;
+        $this->view->pager         = $pager;
+        $this->view->stories2Link  = $stories2Link;
+        $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
     }
