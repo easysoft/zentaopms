@@ -184,7 +184,7 @@ class ciModel extends model
         $response = common::http($queueUrl, '', array(CURLOPT_USERPWD => $userPWD));
         $result   = '';
 
-        $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
+        if($this->app->rawModule != 'mr') $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
         $this->saveCompile($response, $compile, $userPWD, $jenkinsServer);
 
         if($MRID && in_array($result, array('success', 'failure')))
