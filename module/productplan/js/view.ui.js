@@ -67,25 +67,23 @@ window.onSearchLinks = function(type, result)
  */
 window.setStatistics = function(element, checkedIdList)
 {
-    const checkedTotal = checkedIdList.length;
-    if(checkedTotal == 0) return {html: summary};
-
     let checkedEstimate = 0;
     let checkedCase     = 0;
     let total           = 0;
 
     checkedIdList.forEach((rowID) => {
-        const story  = element.getRowInfo(rowID);
-        total += 1;
-        if(story)
+        const story = element.getRowInfo(rowID);
+        if(story.data.type == 'story')
         {
+            total += 1;
             checkedEstimate += parseFloat(story.data.estimate);
             if(cases[rowID]) checkedCase += 1;
         }
     })
 
-    const rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
-    return {html: checkedSummary.replace('%total%', checkedTotal)
+    if(total == 0) return {html: summary};
+    const rate = Math.round(checkedCase / total * 10000) / 100 + '' + '%';
+    return {html: checkedSummary.replace('%total%', total)
         .replace('%estimate%', checkedEstimate.toFixed(1))
         .replace('%rate%', rate)};
 }
