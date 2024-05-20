@@ -2771,8 +2771,6 @@ class storyModel extends model
                 ->where('deleted')->eq('0')
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
-                ->andWhere('status')->eq('active')
-                ->andWhere('grade')->in(array_keys($URGradePairs))
                 ->beginIF($this->config->requirement->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
                 ->fetchAll('id');
 
@@ -2782,6 +2780,8 @@ class storyModel extends model
             foreach($requirements as $id => $requirement)
             {
                 if(isset($parents[$requirement->id])) unset($requirements[$id]);
+                if(!isset($URGradePairs[$requirement->grade])) unset($requirements[$id]);
+                if($requirement->status != 'active') unset($requirements[$id]);
             }
 
             $childIdList = $this->getAllChildId($storyID);
@@ -2832,7 +2832,6 @@ class storyModel extends model
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('epic')
             ->andWhere('status')->eq('active')
-            ->andWhere('grade')->in(array_keys($ERGradePairs))
             ->beginIF($this->config->epic->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['epic'])->fi()
             ->fetchAll('id');
 
@@ -2842,6 +2841,8 @@ class storyModel extends model
         foreach($epics as $id => $epic)
         {
             if(isset($parents[$epic->id])) unset($epics[$id]);
+            if(!isset($ERGradePairs[$epic->grade])) unset($epics[$id]);
+            if($epic->status != 'active') unset($epics[$id]);
         }
 
         $childIdList     = $this->getAllChildId($storyID);
