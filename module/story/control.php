@@ -1023,6 +1023,7 @@ class story extends control
         foreach($stories as $story)
         {
             if(str_contains(',draft,reviewing,changing,closed,', ",{$story->status},")) continue;
+            if($story->type != 'story') continue;
             if($story->isParent == '1')
             {
                 $hasParent = true;
