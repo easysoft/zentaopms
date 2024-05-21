@@ -388,7 +388,7 @@ class release extends control
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->grades     = $this->loadModel('story')->getGradePairs('story', 'all');
-        $this->view->showGrade  = count($this->view->grades) > 2;
+        $this->view->showGrade  = $this->config->edition == 'ipd';
         $this->view->pager      = $pager;
 
         if($this->app->tab == 'project') $this->view->projectID = $release->project;

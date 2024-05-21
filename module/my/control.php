@@ -247,7 +247,7 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
         $this->view->gradeGroup = $this->story->getGradeGroup();
-        $this->view->showGrade  = $this->story->showGrade('story');
+        $this->view->showGrade  = $this->config->edition == 'ipd';
         $this->display();
     }
 
@@ -315,7 +315,7 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
         $this->view->gradeGroup = $this->story->getGradeGroup();
-        $this->view->showGrade  = $this->story->showGrade('epic');
+        $this->view->showGrade  = $this->config->edition == 'ipd';
         $this->display();
     }
 
@@ -383,7 +383,7 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
         $this->view->gradeGroup = $this->story->getGradeGroup();
-        $this->view->showGrade  = $this->story->showGrade('requirement');
+        $this->view->showGrade  = $this->config->edition == 'ipd';
         $this->display();
     }
 

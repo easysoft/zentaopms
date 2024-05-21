@@ -5274,23 +5274,6 @@ class storyModel extends model
     }
 
     /**
-     * 检查是否展示需求层级。
-     * Check if show grade.
-     *
-     * @param  string $storyType
-     * @access public
-     * @return bool
-     */
-    public function showGrade(string $storyType = 'story'): bool
-    {
-        $grades = $this->getGradePairs($storyType);
-
-        if($this->config->edition != 'ipd') return false;
-
-        return count($grades) > 1;
-    }
-
-    /**
      * 获取需求列表默认展示的层级。
      * Get the default show grades.
      *

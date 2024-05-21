@@ -1397,7 +1397,7 @@ class productZen extends product
         $this->view->project         = $project;
         $this->view->stories         = $stories;
         $this->view->gradeGroup      = $gradeGroup;
-        $this->view->showGrade       = $this->story->showGrade($storyType);
+        $this->view->showGrade       = $this->config->edition == 'ipd';
         $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType, $project);
         $this->view->gradePairs      = $this->story->getGradePairs($storyType);
         $this->view->maxGradeGroup   = $this->story->getMaxGradeGroup();

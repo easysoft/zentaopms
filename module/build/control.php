@@ -187,7 +187,7 @@ class build extends control
         $this->view->link          = $link;
         $this->view->orderBy       = $orderBy;
         $this->view->grades        = $this->loadModel('story')->getGradePairs('story', 'all');
-        $this->view->showGrade     = count($this->view->grades) > 2;
+        $this->view->showGrade     = $this->config->edition == 'ipd';
         $this->view->execution     = $this->loadModel('execution')->getByID((int)$build->execution);
         $this->view->childBuilds   = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
         $this->view->productID     = $build->product;
@@ -473,7 +473,7 @@ class build extends control
         $this->view->param        = $param;
         $this->view->pager        = $pager;
         $this->view->grades       = $this->story->getGradePairs('story', 'all');
-        $this->view->showGrade    = count($this->view->grades) > 2;
+        $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->orderBy      = $orderBy;
         $this->display();
     }

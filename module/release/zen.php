@@ -222,7 +222,7 @@ class releaseZen extends release
         $this->view->type         = $type;
         $this->view->link         = $link;
         $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
-        $this->view->showGrade    = count($this->view->grades) > 2;
+        $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->param        = $param;
         $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
         $this->view->summary      = $this->product->summary($stories);
