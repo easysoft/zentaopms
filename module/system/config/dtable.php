@@ -33,8 +33,8 @@ $config->system->dtable->backup->fieldList['time']['title']       = $lang->backu
 $config->system->dtable->backup->fieldList['time']['type']        = 'datetime';
 $config->system->dtable->backup->fieldList['time']['formatDate']  = 'yyyy-MM-dd hh::mm:ss';
 
-$config->system->dtable->backup->fieldList['backupPerson']['title'] = $lang->system->backup->backupPerson;
-$config->system->dtable->backup->fieldList['backupPerson']['type']  = 'user';
+$config->system->dtable->backup->fieldList['creator']['title'] = $lang->system->backup->creator;
+$config->system->dtable->backup->fieldList['creator']['type']  = 'user';
 
 $config->system->dtable->backup->fieldList['type']['title'] = $lang->system->backup->type;
 $config->system->dtable->backup->fieldList['type']['map']   = $lang->system->backup->typeList;
