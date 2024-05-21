@@ -19,6 +19,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zenData('product')->gen(10);
 $story = zenData('story');
 $story->estimate->range('1-4');
 $story->product->range('1-100{4}');
