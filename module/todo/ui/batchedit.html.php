@@ -11,9 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 $nameItems = array();
+$typeItems = array('story' => 'stories', 'opportunity' => 'opportunities');
 foreach($lang->todo->typeList as $type => $typeName)
 {
-    $itemName = $type == 'story' ? 'stories' : $type . 's';
+    $itemName = zget($typeItems, $type, $type . 's');
     if(empty($$itemName)) continue;
 
     foreach($$itemName as $key => $value) $nameItems[$type][] = array('text' => $value, 'value' => $key);

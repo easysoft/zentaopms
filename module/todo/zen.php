@@ -402,7 +402,7 @@ class todoZen extends todo
         $this->view->type        = $type;
         $this->view->userID      = $userID;
         $this->view->status      = $status;
-        if($this->config->edition != 'open') $this->view->feedback = $feedbacks;
+        if($this->config->edition != 'open') $this->view->feedbacks = $feedbacks;
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->view->issues        = $issues;
@@ -494,7 +494,7 @@ class todoZen extends todo
             {
                 dao::$errors["name[{$todoID}]"] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
             }
-            unset($todo->story, $todo->task, $todo->bug, $todo->testtask);
+            unset($todo->story, $todo->task, $todo->bug, $todo->testtask, $todo->feedback, $todo->issue, $todo->risk, $todo->opportunity, $todo->review);
 
             $todo->begin = empty($todo->begin) || $this->post->switchTime ? 2400 : $todo->begin;
             $todo->end   = empty($todo->end) || $this->post->switchTime   ? 2400 : $todo->end;

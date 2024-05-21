@@ -76,6 +76,14 @@ $config->todo->batchEdit->form['story']      = array('required' => false, 'type'
 $config->todo->batchEdit->form['task']       = array('required' => false, 'type' => 'string', 'default'  => 0);
 $config->todo->batchEdit->form['bug']        = array('required' => false, 'type' => 'string', 'default'  => 0);
 $config->todo->batchEdit->form['testtask']   = array('required' => false, 'type' => 'string', 'default'  => 0);
+if($config->edition != 'open') $config->todo->batchEdit->form['feedback']   = array('required' => false, 'type' => 'string', 'default'  => 0);
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->todo->batchEdit->form['issue']       = array('required' => false, 'type' => 'string', 'default'  => 0);
+    $config->todo->batchEdit->form['risk']        = array('required' => false, 'type' => 'string', 'default'  => 0);
+    $config->todo->batchEdit->form['opportunity'] = array('required' => false, 'type' => 'string', 'default'  => 0);
+    $config->todo->batchEdit->form['review']      = array('required' => false, 'type' => 'string', 'default'  => 0);
+}
 
 $config->todo->batchFinish = new stdclass();
 $config->todo->batchFinish->form = array();
