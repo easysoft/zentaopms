@@ -159,13 +159,13 @@ class upgradeModel extends model
             $this->importBuildinModules();
             $this->importLiteModules();
             $this->addSubStatus();
-            $this->processDataset();
         }
 
         $this->loadModel('program')->refreshStats(true);
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
         $this->upgradeBIData();
+        $this->processDataset();
     }
 
     /**
