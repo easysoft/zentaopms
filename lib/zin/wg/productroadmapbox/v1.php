@@ -125,7 +125,7 @@ class productRoadmapBox extends wg
                         ),
                         div
                         (
-                            setClass('ml-px addRoadmap btn btn-default' . ((count($roadmaps) || empty($products)) ? ' hidden' : '')),
+                            setClass('ml-px addRoadmap btn btn-default' . ((count($roadmaps) || empty($products) || !$productID) ? ' hidden' : '')),
                             checkbox
                             (
                                 set::name("addRoadmap[$index]"),
