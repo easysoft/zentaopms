@@ -798,7 +798,8 @@ class product extends control
      */
     public function track(int $productID, string $branch = '', int $projectID = 0, string $browseType = 'allstory', int $param = 0, string $storyType = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        $browseType = strtolower($browseType);
+        $branch     = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         if(is_bool($branch)) $branch = (string)(int)$branch;
 
         /* Set menu. The projectstory module does not execute. */
@@ -818,12 +819,18 @@ class product extends control
         $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, $storyType, $browseType, 'id_desc', $pager);
         $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
 
+        /* Build search form. */
+        $this->productZen->buildSearchFormForTrack($productID, $branch, $projectID, $browseType, $param, $storyType);
+
         $this->view->title           = $this->lang->story->track;
         $this->view->tracks          = $tracks;
         $this->view->pager           = $pager;
         $this->view->productID       = $productID;
         $this->view->branch          = $branch;
         $this->view->projectID       = $projectID;
+        $this->view->browseType      = $browseType;
+        $this->view->param           = $param;
+        $this->view->storyType       = $storyType;
 
         $this->display();
     }
