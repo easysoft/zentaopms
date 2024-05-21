@@ -385,7 +385,6 @@ class context extends \zin\utils\dataset
         $result   = $renderer->render();
         $zinDebug = $this->getDebugData();
 
-
         if(is_object($result)) // renderType = json
         {
             if($zinDebug && isset($result->zinDebug)) $result->zinDebug = $zinDebug;
