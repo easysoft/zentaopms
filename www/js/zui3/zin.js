@@ -981,7 +981,7 @@
             options = selector;
             selector = null;
         }
-        options = $.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options);
+        options = $.extend({url: url, selector: selector, method: 'POST', data: data, contentType: false}, options);
         if(options.dataMap)
         {
             options.data = zui.createFormData(zui.mapFormData(options.dataMap), options.data);
