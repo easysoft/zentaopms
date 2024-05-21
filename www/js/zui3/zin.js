@@ -482,15 +482,15 @@
         if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
         const cacheKey = options.cache;
         let cache;
-        const renderPageData = (data) =>
+        const renderPageData = (data, onlyZinDebug) =>
         {
-            data = data.map((item, idx) =>
+            renderPage(data.reduce((list, item, idx) =>
             {
                 if(Array.isArray(item)) item = {name: item[0].split(':')[0], data: item[1], type: item[2] || 'data'};
                 item.selector = selectors[idx];
-                return item;
-            });
-            renderPage(data, options);
+                if(!onlyZinDebug || item.name === 'zinDebug') list.push(item);
+                return list;
+            }, []), options);
         };
         const ajax = new zui.Ajax(
         {
@@ -522,7 +522,7 @@
                         return;
                     }
                 }
-                updatePerfInfo(options, 'requestEnd', {dataSize: rawData.length});
+                updatePerfInfo(options, 'requestEnd', {dataSize: rawData.length, perf: {clientCache: cache ? cacheKey : null}});
                 options.result = 'success';
                 let hasFatal = false;
                 let data;
@@ -547,15 +547,17 @@
                         const parts = newCacheData.split(',["zinDebug:<BEGIN>",');
                         if(parts.length > 1) newCacheData = parts[0] + ']';
                     }
-                    if(!newCacheData || !cache || newCacheData !== cache.data.data)
+                    const cacheHit = cache && newCacheData === cache.data.data;
+                    if(!cacheHit)
                     {
                         renderPageData(data);
                     }
                     else if(DEBUG)
                     {
+                        renderPageData(data, true);
                         console.log('%c[APP] Skip render data from cache', 'color:green', cacheKey);
                     }
-                    updatePerfInfo(options, 'renderEnd');
+                    updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
                     $(document).trigger('pagerender.app');
                     if(options.success) options.success(data);
                     if(onFinish) onFinish(null, data);
