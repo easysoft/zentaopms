@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package   system
  * @version   $Id$
  * @link      https://www.zentao.net
+ * @property  systemModel $system
  */
 class system extends control
 {
@@ -215,6 +216,44 @@ class system extends control
         $this->view->cert           = $cert;
 
         $this->display();
+    }
+
+    /**
+     * 恢复一个备份。
+     * Restore the backup.
+     *
+     * @param  mixed $backupName
+     * @return void
+     */
+    public function restoreBackup($backupName)
+    {
+        $this->app->loadConfig('instance');
+        $instance = $this->config->instance->zentaopaas;
+
+        $result = $this->system->restore($instance, $backupName);
+
+        $this->loadModel('action')->create('system', '0', 'restoreBackup', '', $backupName);
+
+        $this->send($result + array('load' => true));
+    }
+
+    /**
+     * 删除一个备份。
+     * Delete the backup.
+     *
+     * @param  mixed $backupName
+     * @return void
+     */
+    public function deleteBackup($backupName)
+    {
+        $this->app->loadConfig('instance');
+        $instance = $this->config->instance->zentaopaas;
+
+        $result = $this->system->deleteBackup($instance, $backupName);
+
+        $this->loadModel('action')->create('system', '0', 'deleteBackup', '', $backupName);
+
+        $this->send($result + array('load' => true));
     }
 
     /**
