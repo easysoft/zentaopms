@@ -12,6 +12,33 @@ declare(strict_types=1);
 
 namespace zin;
 
+$storyTypePairs['epic']        = $lang->story->viewByER;
+$storyTypePairs['requirement'] = $lang->story->viewByUR;
+$storyTypePairs['story']       = $lang->story->viewBySR;
+
+$storyTypeLang = $lang->SRCommon;
+if($storyType == 'requirement') $storyTypeLang = $lang->URCommon;
+if($storyType == 'epic') $storyTypeLang = $lang->ERCommon;
+
+featureBar
+(
+    to::leading
+    (
+        dropdown
+        (
+            to('trigger', btn(setClass('switchBtn'), $storyTypePairs[$storyType])),
+            set::items(array(
+                array('text' => $lang->story->viewByER, 'url' => createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=allstory&param=0&storyType=epic")),
+                array('text' => $lang->story->viewByUR, 'url' => createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=allstory&param=0&storyType=requirement")),
+                array('text' => $lang->story->viewBySR, 'url' => createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=allstory&param=0&storyType=story"))
+            )),
+            set::arrow(14),
+            set::width('145px'),
+        )
+    ),
+    li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module']), set::text($lang->searchAB . $storyTypeLang)))
+);
+
 div
 (
     set::id('track'),

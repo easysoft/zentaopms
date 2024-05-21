@@ -7,3 +7,6 @@
 #mainContent .main-table thead > tr > th {overflow: hidden; border: 1px solid #ddd;}
 #mainContent .table-footer {background: #fff; padding: 5px; margin-bottom: 10px;}
 #mainContent td.empty-tip {padding: 80px;}
+
+.kanban-header-lane-name, .kanban-lane-name {display:none;}
+.switchBtn, .search-form-toggle{background: transparent; box-shadow: none;}
