@@ -402,12 +402,19 @@ class biModel extends model
         $metrics = $this->config->bi->builtin->metrics;
 
         $metricSQLs = array();
+        $this->dao->delete()->from(TABLE_METRIC)
+            ->where('builtin')->eq('1')
+            ->andWhere('code')->notIn(array_column($metrics, 'code'))
+            ->exec();
         foreach($metrics as $metric)
         {
             $metric = (object)$metric;
-            $metric->stage   = 'published';
+            $metric->stage   = 'released';
             $metric->type    = 'php';
             $metric->builtin = '1';
+
+            $exists = $this->dao->select('code')->from(TABLE_METRIC)->where('code')->eq($metric->code)->fetch();
+            if(!$exists) $operate = 'insert';
 
             $stmt = null;
             if($operate == 'insert')
