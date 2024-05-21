@@ -2334,6 +2334,7 @@ class execution extends control
         $this->view->object       = $object;
         $this->view->orderBy      = $orderBy;
         $this->view->gradeGroup   = $gradeGroup;
+        $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->productPairs = $productPairs;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;

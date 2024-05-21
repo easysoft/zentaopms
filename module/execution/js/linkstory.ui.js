@@ -36,7 +36,7 @@ window.onRenderLinkStoryCell = function(result, {row, col})
     if(col.name == 'title')
     {
         const story = row.data;
-        const gradeLabel = gradeGroup[story.type][story.grade];
+        const gradeLabel = (showGrade || story.grade >= 2) ? gradeGroup[story.type][story.grade] : '';
 
         let html = '';
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
