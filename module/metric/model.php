@@ -27,7 +27,7 @@ class metricModel extends model
     public function getViewTableHeader($metric)
     {
         $dataFields = $this->getMetricRecordDateField($metric);
-        $dateType   = $metric->dateType;
+        $dateType   = $this->getDateTypeByCode($metric->code);
 
         $dataFields[] = 'id';
         $dataFields[] = 'value';
