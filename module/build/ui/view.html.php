@@ -127,7 +127,11 @@ if(!empty($build->builds))
     foreach($stories as $index => $story)
     {
         if(empty($story->actions)) break;
-        if(!isset($buildStories[$story->id])) $story->actions[0]['disabled'] = true;
+        if(!isset($buildStories[$story->id]))
+        {
+            $story->noCheckBox = true;
+            $story->actions[0]['disabled'] = true;
+        }
     }
 
     $buildBugs = explode(',', $build->bugs);
@@ -135,7 +139,11 @@ if(!empty($build->builds))
     foreach($bugs as $index => $bug)
     {
         if(empty($bug->actions)) break;
-        if(!isset($buildBugs[$bug->id])) $bug->actions[0]['disabled'] = true;
+        if(!isset($buildBugs[$bug->id]))
+        {
+            $bug->noCheckBox = true;
+            $bug->actions[0]['disabled'] = true;
+        }
     }
 }
 
@@ -210,6 +218,7 @@ detailBody
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
+                    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
