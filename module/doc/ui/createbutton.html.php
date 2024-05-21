@@ -13,14 +13,13 @@ namespace zin;
 $createButton  = $emptyCreateBtn = null;
 $typeID        = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
 $createType    = empty($lib) ? '' : $lib->type;
-$templateParam = ($config->edition == 'max' or $config->edition == 'ipd') ? '&from=template' : '';
 $buttonItems   = array();
 foreach($lang->doc->createList as $typeKey => $typeName)
 {
     $method  = 'create';
     $docType = zget($config->doc->iconList, $typeKey);
     $params  = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
-    if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html&from=template";
+    if($typeKey == 'template' && $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html";
     if($typeKey == 'attachment') $method = 'uploadDocs';
 
     $buttonItems[] = array
@@ -34,14 +33,14 @@ foreach($lang->doc->createList as $typeKey => $typeName)
     if($typeKey == 'template') $buttonItems[] = array('type' => 'divider');
 }
 
-$buildCreateBtn = function($type, $typeID, $libID, $moduleID, $templateParam, $buttonItems) use($app, $lang)
+$buildCreateBtn = function($type, $typeID, $libID, $moduleID, $buttonItems) use($app, $lang)
 {
     return btngroup(
         btn
         (
             setClass('btn primary ml-2'),
             set::icon('plus'),
-            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html{$templateParam}")),
+            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html")),
             set('data-app', $app->tab),
             $lang->doc->create
         ),
@@ -55,4 +54,4 @@ $buildCreateBtn = function($type, $typeID, $libID, $moduleID, $templateParam, $b
     );
 };
 
-$createButton = $buildCreateBtn($type, $typeID, $libID, $moduleID, $templateParam, $buttonItems);
+$createButton = $buildCreateBtn($type, $typeID, $libID, $moduleID, $buttonItems);
