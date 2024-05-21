@@ -1780,6 +1780,9 @@ class repoZen extends repo
 
         $tags = $scm->tags();
         foreach($tags as $tag) $options[1]['items'][] = array('text' => $tag, 'value' => $tag, 'key' => $tag);
+
+        if(empty($tags))     unset($options[1]);
+        if(empty($branches)) unset($options[0]);
         return $options;
     }
 }
