@@ -396,9 +396,9 @@ class cneModel extends model
      * @param  object $instance
      * @param  string $backupName
      * @access public
-     * @return bool
+     * @return object
      */
-    public function deleteBackup(object $instance, string $backupName): bool
+    public function deleteBackup(object $instance, string $backupName): object
     {
         $apiParams = new stdclass;
         $apiParams->cluster     = '';
@@ -408,10 +408,7 @@ class cneModel extends model
         $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
 
         $apiUrl = "/api/cne/app/backup/remove";
-        $result = $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
-        if($result && $result->code == 200) return true;
-
-        return false;
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
@@ -427,7 +424,7 @@ class cneModel extends model
     public function restore(object $instance, string $backupName, string $account = ''): object
     {
         $apiParams = new stdclass;
-        $apiParams->username    = $account;
+        $apiParams->username    = $account ?: $this->app->user->account;
         $apiParams->cluster     = '';
         $apiParams->namespace   = $instance->spaceData->k8space;
         $apiParams->name        = $instance->k8name;
