@@ -60,13 +60,13 @@ if($confirm != 'yes')
                         setClass('step-item-id mr-2'),
                         $step->name
                     ),
-                    div(html(nl2br(zget($step, 'desc', ''))))
+                    div(html(html_entity_decode(nl2br(zget($step, 'desc', '')))))
                 )
             ),
             h::td
             (
                 setClass('text-left border'),
-                html(nl2br(zget($step, 'expect')))
+                html(html_entity_decode(nl2br(zget($step, 'expect'))))
             ),
             h::td
             (
