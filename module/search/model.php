@@ -133,6 +133,7 @@ class searchModel extends model
 
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
+            if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue;
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
             if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
 
@@ -290,6 +291,7 @@ class searchModel extends model
 
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
+            if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue;
             if(empty($field)) continue;
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
             if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
