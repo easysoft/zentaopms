@@ -372,7 +372,7 @@ class metricTao extends metricModel
 
         if($dateType == 'nodate')
         {
-            $stmt->andWhere('date')->gt(helper::today());
+            $stmt->andWhere('date')->ge(helper::today());
         }
 
         $stmt = $stmt->orderBy("date desc");
