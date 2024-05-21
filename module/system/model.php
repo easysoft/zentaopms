@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package   system
  * @version   $Id$
  * @link      https://www.zentao.net
+ * @property  cneModel $cne
  */
 class systemModel extends model
 {
@@ -22,6 +23,7 @@ class systemModel extends model
     {
         parent::__construct();
         $this->loadModel('setting');
+        $this->loadModel('cne');
     }
 
     /**
@@ -122,5 +124,114 @@ class systemModel extends model
         $settings->settings_map->minio->ingress->host    = 's3.' . $sysDomain;
 
         $this->cne->updateConfig($minioInstance, $settings);
+    }
+
+    /**
+     * 创建备份。
+     * Backup the instance.
+     *
+     * @param  object $instance
+     * @return array
+     */
+    public function backup(object $instance): array
+    {
+        $rawResult = $this->cne->backup($instance);
+
+        if(!empty($rawResult->code) && $rawResult->code == 200)
+        {
+            return array('result' => 'success', 'message' => $rawResult->message, 'data' => $rawResult->data);
+        }
+        else
+        {
+            return array('result' => 'fail', 'message' => $rawResult->message);
+        }
+    }
+
+    /**
+     * 获取备份状态。
+     * Get backup status.
+     *
+     * @param  object $instance
+     * @param  object $backup
+     * @return array
+     */
+    public function getBackupStatus(object $instance, object $backup): array
+    {
+        $rawResult = $this->cne->getBackupStatus($instance, $backup);
+
+        if(!empty($rawResult->code) && $rawResult->code == 200)
+        {
+            return array('result' => 'success', 'message' => $rawResult->message, 'data' => $rawResult->data);
+        }
+        else
+        {
+            return array('result' => 'fail', 'message' => $rawResult->message);
+        }
+    }
+
+    /**
+     * 获取备份列表。
+     * Get backup list.
+     *
+     * @param  object $instance
+     * @return array
+     */
+    public function getBackupList(object $instance): array
+    {
+        $rawResult = $this->cne->getBackupList($instance);
+
+        if(!empty($rawResult->code) && $rawResult->code == 200)
+        {
+            return array('result' => 'success', 'message' => $rawResult->message, 'data' => $rawResult->data);
+        }
+        else
+        {
+            return array('result' => 'fail', 'message' => $rawResult->message);
+        }
+    }
+
+    /**
+     * 恢复一个备份。
+     * Restore the backup.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @param  string $account
+     * @return array
+     */
+    public function restore(object $instance, string $backupName, string $account = ''): array
+    {
+        $rawResult = $this->cne->restore($instance, $backupName, $account);
+
+        if(!empty($rawResult->code) && $rawResult->code == 200)
+        {
+            return array('result' => 'success', 'message' => $rawResult->message, 'data' => $rawResult->data);
+        }
+        else
+        {
+            return array('result' => 'fail', 'message' => $rawResult->message);
+        }
+    }
+
+    /**
+     * 删除一个备份。
+     * Delete the backup.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @return array
+     */
+    public function deleteBackup(object $instance, string $backupName): array
+    {
+        $rawResult = $this->cne->deleteBackup($instance, $backupName);
+
+        if(!empty($rawResult->code) && $rawResult->code == 200)
+        {
+            return array('result' => 'success', 'message' => $rawResult->message, 'data' => $rawResult->data);
+        }
+        else
+        {
+            return array('result' => 'fail', 'message' => $rawResult->message);
+        }
     }
 }
