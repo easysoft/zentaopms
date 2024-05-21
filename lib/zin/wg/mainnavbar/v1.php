@@ -24,8 +24,10 @@ class mainNavbar extends nav
 {
     protected static array $defineProps = array
     (
-        'items'     => '?array',
-        'badgeMap'  => '?array',
+        'items'        => '?array',
+        'itemProps'    => '?array',
+        'badgeMap'     => '?array',
+        'onRenderItem' => '?callback'
     );
 
     /**
@@ -79,9 +81,11 @@ class mainNavbar extends nav
         $menu = \customModel::getModuleMenu($activeMenu);
         if($menu)
         {
-            $menu     = json_decode(json_encode($menu), true);
-            $items    = array();
-            $badgeMap = $this->prop('badgeMap');
+            $menu         = json_decode(json_encode($menu), true);
+            $items        = array();
+            $badgeMap     = $this->prop('badgeMap');
+            $onRenderItem = $this->prop('onRenderItem');
+            $itemProps    = $this->prop('itemProps');
 
             foreach($menu as $key => $menuItem)
             {
@@ -110,6 +114,8 @@ class mainNavbar extends nav
                 $item['class'] = $active;
 
                 if($badgeMap && isset($badgeMap[$name])) $item['badge'] = array('text' => $badgeMap[$name], 'class' => 'label rounded gray-pale size-sm');
+                if($itemProps) $item = array_merge($item, $itemProps);
+                if(is_callable($onRenderItem)) $item = $onRenderItem($item, $menuItem);
 
                 $items[] = $item;
             }
