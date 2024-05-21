@@ -238,14 +238,12 @@ class gitlabZen extends gitlab
      * @access protected
      * @return void
      */
-    protected function checkBindedUser(int $gitlabID): void
+    protected function checkBindedUser(int $gitlabID)
     {
+        if($this->app->user->admin) return;
+
         $openID = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
-        if(!$openID)
-        {
-            $this->view->permissionError = $this->lang->gitlab->mustBindUser;
-            $this->view->errorJump       = $this->createLink('space', 'browse');
-        }
+        if(!$openID) return $this->sendError($this->lang->gitlab->mustBindUser, true);
     }
 
     /**

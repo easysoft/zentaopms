@@ -672,10 +672,7 @@ class gitlab extends control
     public function browseProject(int $gitlabID, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $openID = 0;
-        if(!$this->app->user->admin)
-        {
-            $this->gitlabZen->checkBindedUser($gitlabID);
-        }
+        if(!$this->app->user->admin) $this->gitlabZen->checkBindedUser($gitlabID);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
