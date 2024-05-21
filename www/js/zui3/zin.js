@@ -554,8 +554,8 @@
                     }
                     else if(DEBUG)
                     {
+                        console.log('%c[APP] Skip render with effective caching', 'color:green', cacheKey);
                         renderPageData(data, true);
-                        console.log('%c[APP] Skip render data from cache', 'color:green', cacheKey);
                     }
                     updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
                     $(document).trigger('pagerender.app');
@@ -647,16 +647,24 @@
                 if(cache)
                 {
                     ajax.setting.headers['X-Zin-Cache-Time'] = cache.updateTime;
-                    try
+                    if($(document).data('zinCache') !== [cache.key, cache.time].join('#'))
                     {
-                        const data = $.parseRawData(cache.data.data);
-                        if(!cache.data.partial) currentAppUrl = cache.data.url;
-                        renderPageData(data);
-                        $(document).trigger('pagecaheload.app');
+                        try
+                        {
+                            const data = $.parseRawData(cache.data.data);
+                            if(DEBUG) console.log('%c[APP] Render with cache', 'color:green', cacheKey);
+                            if(!cache.data.partial) currentAppUrl = cache.data.url;
+                            renderPageData(data);
+                            $(document).data('zinCache', [cache.key, cache.time].join('#')).trigger('pagecaheload.app');
+                        }
+                        catch(error)
+                        {
+                            if(DEBUG) console.error('[APP] ', 'Parse cache data failed from ' + url, {error: error, cache: cache});
+                        }
                     }
-                    catch(error)
+                    else
                     {
-                        if(DEBUG) console.error('[APP] ', 'Parse cache data failed from ' + url, {error: error, cache: cache});
+                        if(DEBUG) console.log('%c[APP] Skip render data with same cache', 'color:green', cacheKey);
                     }
                 }
                 ajax.send();
