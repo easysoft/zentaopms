@@ -38,32 +38,14 @@ formPanel
             inputGroup
             (
                 set('id', 'moduleBox'),
-                picker
+                modulePicker
                 (
                     set::name('module'),
                     set::items($moduleOptionMenu),
                     set::required(true),
-                    set::value($currentModuleID)
-                ),
-                count($moduleOptionMenu) == 1 ? span
-                (
-                    set('class', 'input-group-addon'),
-                    a
-                    (
-                        setClass('mr-2'),
-                        set::href($this->createLink('tree', 'browse', "rootID={$libID}&view=caselib&currentModuleID=0")),
-                        setData('toggle', 'modal'),
-                        setData('size', 'lg'),
-                        $lang->tree->manage
-                    ),
-                    a
-                    (
-                        set('id', 'refreshModule'),
-                        set('class', 'text-black'),
-                        set('href', 'javascript:void(0)'),
-                        icon('refresh')
-                    )
-                ) : null
+                    set::value($currentModuleID),
+                    set::manageLink($this->createLink('tree', 'browse', "rootID={$libID}&view=caselib&currentModuleID=0"))
+                )
             )
         )
     ),
