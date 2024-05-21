@@ -392,11 +392,11 @@ class context extends \zin\utils\dataset
         }
         elseif(is_array($result)) // renderType = list
         {
-            foreach($result as $item)
+            foreach($result as $index => $item)
             {
                 if($item->name === 'zinDebug' && $zinDebug)
                 {
-                    $item->data = $zinDebug;
+                    $result[$index] = array('zinDebug:<BEGIN>', $zinDebug);
                     continue;
                 }
                 if($item->name === 'hookCode')

@@ -476,23 +476,37 @@
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
-        const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode};
+        const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode, 'X-Zin-Cache-Time': 0};
         if(options.modal) headers['X-Zui-Modal'] = 'true';
-        const ajaxOptions =
+        const requestMethod = (options.method || 'GET').toUpperCase();
+        if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
+        const cacheKey = options.cache;
+        let cache;
+        const renderPageData = (data) =>
+        {
+            data = data.map((item, idx) =>
+            {
+                if(Array.isArray(item)) item = {name: item[0].split(':')[0], data: item[1], type: item[2] || 'data'};
+                item.selector = selectors[idx];
+                return item;
+            });
+            renderPage(data, options);
+        };
+        const ajax = new zui.Ajax(
         {
             url:         url + (url.includes('?') ? '&zin=1' : '?zin=1'),
             headers:     headers,
-            type:        options.method || 'GET',
+            type:        requestMethod,
             data:        options.data,
-            contentType: options.contentType,
+            contentType: (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, '1s');
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, cache ? '6s' : '1s');
                 if(options.before) options.before();
             },
-            success(data)
+            success(rawData)
             {
                 const response = this.response;
                 if(response && response.redirected)
@@ -508,12 +522,13 @@
                         return;
                     }
                 }
-                updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
+                updatePerfInfo(options, 'requestEnd', {dataSize: rawData.length});
                 options.result = 'success';
                 let hasFatal = false;
+                let data;
                 try
                 {
-                    data = $.parseRawData(data);
+                    data = $.parseRawData(rawData);
                 }
                 catch(e)
                 {
@@ -524,14 +539,31 @@
                 }
                 if(Array.isArray(data))
                 {
-                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
-                    data.forEach((item, idx) => item.selector = selectors[idx]);
                     updatePerfInfo(options, 'renderBegin');
-                    renderPage(data, options);
+                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
+                    let newCacheData = cacheKey ? rawData : null;
+                    if(newCacheData && DEBUG)
+                    {
+                        const parts = newCacheData.split(',["zinDebug:<BEGIN>",');
+                        if(parts.length > 1) newCacheData = parts[0] + ']';
+                    }
+                    if(!newCacheData || !cache || newCacheData !== cache.data.data)
+                    {
+                        renderPageData(data);
+                    }
+                    else if(DEBUG)
+                    {
+                        console.log('%c[APP] Skip render data from cache', 'color:green', cacheKey);
+                    }
                     updatePerfInfo(options, 'renderEnd');
                     $(document).trigger('pagerender.app');
                     if(options.success) options.success(data);
                     if(onFinish) onFinish(null, data);
+                    if(cacheKey)
+                    {
+                        const cacheTime = +response.headers.get('X-Zin-Cache-Time');
+                        $.db.setCacheData(cacheKey, {data: newCacheData, url: currentAppUrl, partial: options.partial, selectors: selectors.join(','), clientTime: Date.now()}, cacheTime, 'zinFetch');
+                    }
                 }
                 else
                 {
@@ -603,9 +635,36 @@
                     frameElement.classList.add('in');
                 }
             }
-        };
+        });
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
-        return $.ajax(ajaxOptions);
+        if(cacheKey)
+        {
+            $.db.getCache(cacheKey, 'zinFetch').then(localCache =>
+            {
+                cache = localCache;
+                if(cache)
+                {
+                    ajax.setting.headers['X-Zin-Cache-Time'] = cache.updateTime;
+                    try
+                    {
+                        const data = $.parseRawData(cache.data.data);
+                        if(!cache.data.partial) currentAppUrl = cache.data.url;
+                        renderPageData(data);
+                        $(document).trigger('pagecaheload.app');
+                    }
+                    catch(error)
+                    {
+                        if(DEBUG) console.error('[APP] ', 'Parse cache data failed from ' + url, {error: error, cache: cache});
+                    }
+                }
+                ajax.send();
+            });
+        }
+        else
+        {
+            ajax.send();
+        }
+        return ajax;
     }
 
     function fetchContent(url, selectors, options)
