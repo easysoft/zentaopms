@@ -498,7 +498,7 @@
             headers:     headers,
             type:        requestMethod,
             data:        options.data,
-            contentType: (options.method || 'GET').toUpperCase(),
+            type:        (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
                 updatePerfInfo(options, 'requestBegin');
