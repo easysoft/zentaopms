@@ -436,6 +436,41 @@ $linkStoryByPlanTips = $lang->execution->linkNormalStoryByPlanTips;
 if($product && $product->type != 'normal') $linkStoryByPlanTips = sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
 if($isProjectStory) $linkStoryByPlanTips = str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
 
+if(in_array($this->config->edition, array('max', 'ipd')))
+{
+    modal
+    (
+        setID('batchImportToLib'),
+        set::title($lang->story->importToLib),
+        form
+        (
+            set::action($this->createLink('story', 'batchImportToLib')),
+            formGroup
+            (
+                set::label($lang->story->lib),
+                picker
+                (
+                    set::name('lib'),
+                    set::items($libs),
+                    set::required(true)
+                )
+            ),
+            (!hasPriv('assetlib', 'approveStory') && !hasPriv('assetlib', 'batchApproveStory')) ? formGroup
+            (
+                set::label($lang->story->approver),
+                picker
+                (
+                    set::name('assignedTo'),
+                    set::items($approvers)
+                )
+            ) : null,
+            set::submitBtnText($lang->import),
+            formHidden('storyIdList', ''),
+            set::actions(array('submit'))
+        )
+    );
+}
+
 modal
 (
     setID('linkStoryByPlan'),

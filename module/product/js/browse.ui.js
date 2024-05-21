@@ -18,6 +18,14 @@ $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', f
         $.ajaxSubmit({"url": $this.data('formaction'), "data": postData});
     }
 });
+$(document).off('click', '.batchImportToLibBtn').on('click', '.batchImportToLibBtn', function()
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $("[name='storyIdList'").val(checkedList.join(','));
+});
 
 $(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParentBtn', function(e)
 {
