@@ -494,7 +494,7 @@ function goBack(target, url, startState)
             {
                 if(state.index === preState.index)
                 {
-                    if(url) return openApp(url, target, false);
+                    if(url) return openApp(url, null, false);
                     return window.history.back();
                 }
                 return openApp(state.url, state.code, false);
