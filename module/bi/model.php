@@ -325,17 +325,17 @@ class biModel extends model
             {
                 $chart->createdBy   = 'system';
                 $chart->createdDate = helper::now();
-                $stmt = $this->dao->insert(TABLE_CHART)->data($chart)->autoCheck();
+                $stmt = $this->dao->insert(TABLE_CHART)->data($chart);
             }
             if($operate == 'update')
             {
                 $id = $chart->id;
                 unset($chart->group);
                 unset($chart->id);
-                $stmt = $this->dao->update(TABLE_CHART)->data($chart)->where('id')->eq($id)->autoCheck();
+                $stmt = $this->dao->update(TABLE_CHART)->data($chart)->where('id')->eq($id);
             }
 
-            if(!empty($stmt)) $chartSQLs[] = $stmt->get();
+            if(isset($stmt)) $chartSQLs[] = $stmt->get();
         }
 
         return $chartSQLs;
@@ -345,7 +345,7 @@ class biModel extends model
      * 准备内置的透视表sql语句。
      * Prepare builtin pivot sql.
      *
-     * @param  bool    $exec
+     * @param  string  $operate
      * @access public
      * @return array
      */
@@ -358,7 +358,7 @@ class biModel extends model
         {
             $pivot = (object)$pivot;
             $pivot->name     = $this->jsonEncode($pivot->name);
-            $pivot->desc     = $this->jsonEncode($pivot->desc);
+            if(isset($pivot->desc))     $pivot->desc     = $this->jsonEncode($pivot->desc);
             if(isset($pivot->settings)) $pivot->settings = $this->jsonEncode($pivot->settings);
             if(isset($pivot->filters))  $pivot->filters  = $this->jsonEncode($pivot->filters);
             if(isset($pivot->fields))   $pivot->fields   = $this->jsonEncode($pivot->fields);
@@ -373,22 +373,70 @@ class biModel extends model
             {
                 $pivot->createdBy   = 'system';
                 $pivot->createdDate = helper::now();
-                $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot)->autoCheck();
+                $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot);
             }
             if($operate == 'update')
             {
                 $id = $pivot->id;
                 unset($pivot->group);
                 unset($pivot->id);
-                $stmt = $this->dao->update(TABLE_PIVOT)->data($pivot)->where('id')->eq($id)->autoCheck();
+                $stmt = $this->dao->update(TABLE_PIVOT)->data($pivot)->where('id')->eq($id);
             }
 
-            if(!empty($stmt)) $pivotSQLs[] = $stmt->get();
+            if(isset($stmt)) $pivotSQLs[] = $stmt->get();
         }
 
         return $pivotSQLs;
     }
 
+    /**
+     * 准备内置的度量项sql语句。
+     * Prepare builtin metric sql.
+     *
+     * @param  string  $operate
+     * @access public
+     * @return array
+     */
+    public function prepareBuiltinMetricSQL($operate = 'insert')
+    {
+        $metrics = $this->config->bi->builtin->metrics;
+
+        $metricSQLs = array();
+        foreach($metrics as $metric)
+        {
+            $metric = (object)$metric;
+            $metric->stage   = 'published';
+            $metric->type    = 'php';
+            $metric->builtin = '1';
+
+            $stmt = null;
+            if($operate == 'insert')
+            {
+                $metric->createdBy   = 'system';
+                $metric->createdDate = helper::now();
+                $stmt = $this->dao->insert(TABLE_METRIC)->data($metric);
+            }
+            if($operate == 'update')
+            {
+                $code = $metric->code;
+                unset($metric->code);
+                $stmt = $this->dao->update(TABLE_METRIC)->data($metric)->where('code')->eq($code);
+            }
+
+            if(isset($stmt)) $metricSQLs[] = $stmt->get();
+        }
+
+        return $metricSQLs;
+    }
+
+    /**
+     * 准备内置的大屏sql语句。
+     * Prepare builtin screen sql.
+     *
+     * @param  string  $operate
+     * @access public
+     * @return array
+     */
     public function prepareBuiltinScreenSQL($operate = 'insert')
     {
         $screens = $this->config->bi->builtin->screens;
@@ -401,6 +449,7 @@ class biModel extends model
             if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme);
 
             $exists = $this->dao->select('id')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
+
             if(!$exists) $operate = 'insert';
 
             $screen->status = 'published';
@@ -410,16 +459,16 @@ class biModel extends model
             {
                 $screen->createdBy   = 'system';
                 $screen->createdDate = helper::now();
-                $stmt = $this->dao->insert(TABLE_SCREEN)->data($screen)->autoCheck();
+                $stmt = $this->dao->insert(TABLE_SCREEN)->data($screen);
             }
             if($operate == 'update')
             {
                 $id = $screen->id;
                 unset($screen->id);
-                $stmt = $this->dao->update(TABLE_SCREEN)->data($screen)->where('id')->eq($id)->autoCheck();
+                $stmt = $this->dao->update(TABLE_SCREEN)->data($screen)->where('id')->eq($id);
             }
 
-            if(!empty($stmt)) $screenSQLs[] = $stmt->get();
+            if(isset($stmt)) $screenSQLs[] = $stmt->get();
         }
 
         return $screenSQLs;
