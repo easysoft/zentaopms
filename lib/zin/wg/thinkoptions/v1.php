@@ -77,28 +77,35 @@ class thinkOptions extends wg
             ),
             $showOther ? div
             (
-                setClass('w-full flex justify-between items-center h-8 px-2.5 rounded mt-1 ring-opacity-70 ring-gray-300'),
-                setStyle(array('background' => 'rgba(242, 244, 247, .7)', 'box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
+                setClass('w-full flex justify-between items-center h-8 rounded mt-1 ring-opacity-70 ring-gray-300'),
+                setStyle(array('box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
                 div
                 (
-                    setClass('flex items-center'),
+                    setClass('h-full flex items-center flex-1'),
                     div
                     (
-                        setClass('w-11'),
+                        setClass('h-full flex items-center pl-2.5 opacity-80'),
+                        setStyle(array('width' => '48px', 'background' => 'rgba(var(--color-gray-200-rgb), .6)')),
                         $lang->other
                     ),
                     div
                     (
-                        setClass('text-gray-400'),
+                        setClass('h-full w-full flex items-center text-gray-400 pl-2.5'),
+                        setStyle('background', 'rgba(244, 245, 247, .7)'),
                         $lang->thinkwizard->step->pleaseInput,
                     ),
                 ),
-                checkbox
+                div
                 (
-                    set::name($otherName),
-                    set::checked($enableOther),
-                    set::text($lang->thinkwizard->step->enable)
-                ),
+                    setClass('h-full flex items-center pr-2.5'),
+                    setStyle(array('width' => '60px', 'background' => 'rgba(244, 245, 247, .7)')),
+                    checkbox
+                    (
+                        set::name($otherName),
+                        set::checked($enableOther),
+                        set::text($lang->thinkwizard->step->enable)
+                    ),
+                )
             ) : null
         );
     }
