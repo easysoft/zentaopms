@@ -118,7 +118,7 @@ dtable
 modal
 (
     setID('waiting'),
-    html($lang->backup->waitting),
+    html($lang->backup->waiting),
     set::closeBtn(false),
     div
     (

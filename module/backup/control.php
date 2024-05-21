@@ -73,12 +73,12 @@ class backup extends control
     {
         set_time_limit(0);
         session_write_close();
-        $diskSapce = $this->backup->getDiskSpace($this->backupPath);
-        $diskSapce = explode(',', $diskSapce);
+        $diskSpace = $this->backup->getDiskSpace($this->backupPath);
+        $diskSpace = explode(',', $diskSpace);
 
         $space = new stdclass();
-        $space->freeSpace = intval($diskSapce[0]);
-        $space->needSpace = intval($diskSapce[1]);
+        $space->freeSpace = intval($diskSpace[0]);
+        $space->needSpace = intval($diskSpace[1]);
 
         echo json_encode($space);
     }

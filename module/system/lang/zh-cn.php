@@ -227,8 +227,8 @@ $lang->system->backup->typeList['manual']  = '手动备份';
 $lang->system->backup->typeList['upgrade'] = '升级前自动备份';
 $lang->system->backup->typeList['restore'] = '回滚前自动备份';
 
-$lang->system->backup->waitting        = '备份正在进行中，请稍候...';
-$lang->system->backup->waittingStore   = '正在还原应用数据，请稍候...';
+$lang->system->backup->waiting         = '备份正在进行中，请稍候...';
+$lang->system->backup->waitingStore    = '正在还原应用数据，请稍候...';
 $lang->system->backup->progress        = '备份中，进度（%d/%d）';
 $lang->system->backup->progressStore   = '还原中，进度（%d/%d）';
 $lang->system->backup->progressSQL     = '备份中，已备份%s';

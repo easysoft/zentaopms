@@ -106,11 +106,11 @@
     </h2>
   </div>
 </div>
-<div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="waiting" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog w-400px">
     <div class="modal-content">
       <div class="modal-body">
-        <p><?php echo $lang->backup->waitting?></p>
+        <p><?php echo $lang->backup->waiting?></p>
         <div id='message'><?php echo sprintf($lang->backup->progressSQL, 0);?></div>
       </div>
     </div>

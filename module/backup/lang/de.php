@@ -30,7 +30,7 @@ $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file head
 global $config;
 if($config->inContainer) $lang->backup->settingList['nofile'] = 'Do not back up files.';
 
-$lang->backup->waitting         = '<span id="backupType"></span> In Arbeit. Bitte warten...';
+$lang->backup->waiting          = '<span id="backupType"></span> In Arbeit. Bitte warten...';
 $lang->backup->progressSQL      = '<p>SQL backup: %s is backed up.</p>';
 $lang->backup->progressAttach   = '<p>SQL backup is completed.</p><p>Attachment backing up.</p>';
 $lang->backup->progressCode     = '<p>SQL backup is completed.</p><p>Attachment backup is completed.</p><p>Code backing up.</p>';

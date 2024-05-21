@@ -32,7 +32,7 @@ $lang->system->memUsage        = 'Memory（GB）';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;
-$lang->system->LDAP->info             = 'LDAP infomation';
+$lang->system->LDAP->info             = 'LDAP information';
 $lang->system->LDAP->ldapEnabled      = 'Enable LDAP';
 $lang->system->LDAP->ldapQucheng      = 'Built in Qucheng';
 $lang->system->LDAP->ldapSource       = 'Source';
@@ -227,8 +227,8 @@ $lang->system->backup->typeList['manual']  = 'Manual backup';
 $lang->system->backup->typeList['upgrade'] = 'Automatic backup before upgrade';
 $lang->system->backup->typeList['restore'] = 'Automatic backup before rollback';
 
-$lang->system->backup->waitting        = 'Backup is in progress, please wait...';
-$lang->system->backup->waittingStore   = 'Restoring app data, please wait...';
+$lang->system->backup->waiting         = 'Backup is in progress, please wait...';
+$lang->system->backup->waitingStore    = 'Restoring app data, please wait...';
 $lang->system->backup->progress        = 'Backup in progress（%d/%d）';
 $lang->system->backup->progressStore   = 'Restoring, progress(%d/%d)';
 $lang->system->backup->progressSQL     = 'In backup，%s has been backed up';

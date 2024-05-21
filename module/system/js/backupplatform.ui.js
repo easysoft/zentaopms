@@ -18,7 +18,7 @@ function startBackup()
         {
             if(response.result == 'success')
             {
-                $('.modal-content .panel-body').html(waitting);
+                $('.modal-content .panel-body').html(waiting);
                 backupName = response.name;
                 backupInterval = setInterval(checkBackup, 2000);
             }

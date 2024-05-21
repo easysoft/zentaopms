@@ -30,7 +30,7 @@ $lang->backup->settingList['nosafe'] = 'Ne pas prévenir du téléchargement par
 global $config;
 if($config->inContainer) $lang->backup->settingList['nofile'] = 'Ne pas archiver fichiers';
 
-$lang->backup->waitting         = '<span id="backupType"></span> est en cours. Patientez s´il vous plait...';
+$lang->backup->waiting          = '<span id="backupType"></span> est en cours. Patientez s´il vous plait...';
 $lang->backup->progressSQL      = '<p>SQL backup: %s est sauvegardé.</p>';
 $lang->backup->progressAttach   = '<p>SQL backup est terminé.</p><p>Les fichiers sont en cours de sauvegarde.</p>';
 $lang->backup->progressCode     = '<p>SQL backup est terminé.</p><p>Sauvegarde des fichiers terminée.</p><p>Sauvegarde du code en cours.</p>';

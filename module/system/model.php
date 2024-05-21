@@ -44,7 +44,7 @@ class systemModel extends model
 
     /**
      * 保存自定义的域名设置。
-     * Save customized somain settings.
+     * Save customized domain settings.
      *
      * @param  object $setting
      * @access public
