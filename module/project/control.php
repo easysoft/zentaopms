@@ -1345,7 +1345,7 @@ class project extends control
             $comment = strip_tags((string)$this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterClose($projectID, $changes, $comment);
 
-            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => 'table'));
         }
 
         $this->app->loadLang('build');
