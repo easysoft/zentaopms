@@ -100,8 +100,6 @@ class render
                 $item           = new stdClass();
                 $item->name     = $name;
                 $item->selector = stringifySelectors($selector);
-                $item->selector = $selector;
-                $item->count    = count($nodes);
 
                 if(isset($selector->options['type']) && $selector->options['type'] === 'json')
                 {
