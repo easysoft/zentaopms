@@ -161,8 +161,6 @@ class thinkStepBase extends wg
 
     protected function build(): wg|node|array
     {
-        $step = $this->prop('step');
-
         return $this->prop('mode') == 'detail' ? ($this->prop('isRun') ? div
         (
             setClass('w-full col bg-white items-center py-10 px-8 mb-4'),
