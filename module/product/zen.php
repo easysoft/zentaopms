@@ -1168,6 +1168,35 @@ class productZen extends product
     }
 
     /**
+     * 构建矩阵搜索表单。
+     * Build search form for track.
+     *
+     * @param  int         $productID
+     * @param  string      $branch
+     * @param  int         $projectID
+     * @param  string      $browseType
+     * @param  int         $param
+     * @param  string      $storyType
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchFormForTrack(int &$productID, string $branch, int $projectID, string $browseType, int $param, string $storyType): void
+    {
+        if($this->config->edition == 'ipd' && $storyType == 'story') unset($this->config->product->search['fields']['roadmap']);
+        if($this->config->edition == 'ipd' && $storyType == 'requirement')
+        {
+            $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+        }
+
+        /* Build search form. */
+        $actionURL = $this->createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=bySearch&param=myQueryID&storyType=$storyType");
+
+        if($this->app->rawModule != 'product') $this->config->product->search['module'] = $this->app->rawModule;
+        $queryID = ($browseType == 'bysearch') ? $param : 0;
+        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $projectID);
+    }
+
+    /**
      * 获取需求的ID列表。
      * Get ID list of stories.
      *
