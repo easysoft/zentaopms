@@ -14,7 +14,6 @@ class thinkTableInput extends thinkQuestion
         'fields?: array',             // 行标题
         'isSupportAdd?: bool',        // 是否支持用户添加行
         'canAddRows: number=1',       // 可添加行数
-        'defaultFields: array',       // 默认行标题
     );
 
     public static function getPageJS(): string
@@ -24,7 +23,8 @@ class thinkTableInput extends thinkQuestion
 
     public static function getPageCSS(): ?string
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+        $baseCss = file_get_contents(dirname(__FILE__, 2) . DS . 'thinkstepbase' . DS . 'css' . DS . 'v1.css');
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css') . $baseCss;
     }
 
     protected function buildDetail(): array
@@ -35,12 +35,18 @@ class thinkTableInput extends thinkQuestion
         if($step)
         {
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
+            if(!empty($step->options->customFields)) $step->options->customFields = is_string($step->options->customFields) ? explode(', ', $step->options->customFields) : array_values((array)$step->options->customFields);
+            $customFields = $step->options->customFields ?? array();
             $fields       = $step->options->fields ?? array();
             $isSupportAdd = $step->options->isSupportAdd;
             $canAddRows   = $step->options->canAddRows;
-        }
+            $answer       = $step->answer;
 
+            $result = isset($answer->result) ? $answer->result : array();
+            $result = is_array($result) ? $result : get_object_vars($result);
+        }
         jsVar('canAddRows', $canAddRows);
+        jsVar('fieldsCount', count($fields));
 
         $tableInputItems = array();
         foreach($fields as $index => $item)
@@ -50,7 +56,7 @@ class thinkTableInput extends thinkQuestion
                 setClass('flex items-center'),
                 div
                 (
-                    setClass('text-right mr-2 w-1/5 text-ellipsis line-clamp-2 rows-group'),
+                    setClass('text-right mr-2 w-1/5 text-ellipsis line-clamp-2'),
                     $item
                 ),
                 textarea
@@ -58,6 +64,7 @@ class thinkTableInput extends thinkQuestion
                     set::rows('2'),
                     set::name('result[' . $index . ']'),
                     setClass('mt-2 w-4/5'),
+                    set::value($result[$index]),
                     set::placeholder($lang->thinkrun->pleaseInput)
                 ),
                 div
@@ -75,23 +82,72 @@ class thinkTableInput extends thinkQuestion
             );
         }
 
+        if(!empty($customFields))
+        {
+            foreach($customFields as $index => $item)
+            {
+                $resultIndex = count($fields) + $index;
+                $tableInputItems[] = formGroup
+                (
+                    setClass('flex rows-group flex-nowrap items-center'),
+                    textarea
+                    (
+                        set::rows('2'),
+                        setClass('mt-2 w-1/5'),
+                        setID('customFields'),
+                        set::name('customFields[' . $index + 1 . ']'),
+                        set::value($item),
+                        set::placeholder($lang->thinkrun->pleaseInput)
+                    ),
+                    textarea
+                    (
+                        set::rows('2'),
+                        setClass('mt-2 w-4/5 ml-2'),
+                        setID('result'),
+                        set::name('result[' . $resultIndex .']'),
+                        set::value($result[$resultIndex] ?? ''),
+                        set::placeholder($lang->thinkrun->pleaseInput)
+                    ),
+                    div
+                    (
+                        setClass('flex'),
+                        setStyle(array('min-width' => '40px')),
+                        icon
+                        (
+                            'plus',
+                            setClass('mr-1 ghost btn-add ml-2 text-sm text-primary add-rows'),
+                            on::click('addRow'),
+                            toggle::tooltip(array('placement' => 'bottom-end', 'title' => sprintf($lang->thinkrun->addTips, $canAddRows)))
+                        ),
+                        icon
+                        (
+                            setClass('ghost btn-delete text-sm text-primary ml-1'),
+                            'trash'
+                        )
+                    )
+                );
+            }
+        }
+
         $detailWg[] = array(
             $tableInputItems,
             formGroup
             (
-                setClass('flex rows-group rows-template flex-nowrap items-center hidden'),
+                setClass('flex rows-template rows-group flex-nowrap items-center hidden'),
                 textarea
                 (
                     set::rows('2'),
+                    setID('customFields'),
                     setClass('mt-2 w-1/5'),
-                    set::name('fileds[]'),
+                    set::value(''),
                     set::placeholder($lang->thinkrun->pleaseInput)
                 ),
                 textarea
                 (
                     set::rows('2'),
+                    setID('result'),
                     setClass('mt-2 w-4/5 ml-2'),
-                    set::name('result[]'),
+                    set::value(''),
                     set::placeholder($lang->thinkrun->pleaseInput)
                 ),
                 div
