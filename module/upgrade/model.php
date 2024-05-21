@@ -8774,9 +8774,10 @@ class upgradeModel extends model
         /* Prepare built-in sqls of bi. */
         $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
         $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL('update');
+        $metricSQLs = $this->bi->prepareBuiltinMetricSQL('update');
         $screenSQLs = $this->bi->prepareBuiltinScreenSQL('update');
 
-        $upgradeTables = array_merge($chartSQLs, $pivotSQLs, $screenSQLs);
+        $upgradeTables = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
 
         try
         {
