@@ -1260,6 +1260,7 @@ class commonModel extends model
         if(isset($config->{$module}->groupPrivs[$method]))
         {
             $groupPriv = strtolower($config->{$module}->groupPrivs[$method]);
+            if(strpos($groupPriv, '|') !== false) list($module, $groupPriv) = explode('|', $groupPriv);
             if($groupPriv && $groupPriv != $method) return self::hasPriv($module, $groupPriv, $object, $vars);
         }
 
