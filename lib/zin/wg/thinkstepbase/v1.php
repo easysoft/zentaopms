@@ -119,7 +119,7 @@ class thinkStepBase extends wg
                     setClass('is-required'),
                     set::value($title ?? ''),
                     set::name('title'),
-                    set::placeholder($lang->thinkwizard->step->inputContent)
+                    set::placeholder($lang->thinkstep->inputContent)
                 )
             ),
             formGroup
@@ -130,7 +130,7 @@ class thinkStepBase extends wg
                 (
                     setClass('desc'),
                     set::name('desc'),
-                    set::placeholder($lang->thinkwizard->step->pleaseInput),
+                    set::placeholder($lang->thinkstep->pleaseInput),
                     html($desc ?? ''),
                     set::rows(3)
                 )
