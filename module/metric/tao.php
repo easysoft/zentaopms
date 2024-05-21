@@ -451,30 +451,6 @@ class metricTao extends metricModel
     }
 
     /**
-     * 获取度量数据有效字段。
-     * Get metric record fields.
-     *
-     * @param  string $code
-     * @access protected
-     * @return array|false
-     */
-    protected function getRecordFields($code)
-    {
-        $metric   = $this->fetchMetricByCode($code);
-        $dateType = $metric->dateType;
-        $fields   = array($metric->scope);
-
-        if($dateType == 'nodate') return $fields;
-
-        $fields[] = 'year';
-        if($dateType == 'month' || $dateType == 'day') $feilds[] = 'month';
-        if($dateType == 'week') $fields[] = 'week';
-        if($dateType == 'day') $fields[] = 'day';
-
-        return $fields;
-    }
-
-    /**
      * 创建临时表用于存储最新的非重复度量数据的id。
      * Create temp table for storing distinct metric record id.
      *

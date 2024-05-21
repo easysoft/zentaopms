@@ -944,7 +944,7 @@ class metricModel extends model
     public function deduplication(string $code): bool
     {
         $metric = $this->getByCode($code);
-        $fields = $this->metricTao->getRecordFields($code);
+        $fields = $this->getRecordFields($code);
         if(!in_array($metric->scope, $fields)) $fields[] = $metric->scope;
 
         if(empty($fields)) return false;
@@ -955,6 +955,30 @@ class metricModel extends model
         $this->metricTao->dropDistinctTempTable();
 
         return dao::isError();
+    }
+
+    /**
+     * 获取度量数据有效字段。
+     * Get metric record fields.
+     *
+     * @param  string $code
+     * @access public
+     * @return array|false
+     */
+    public function getRecordFields(string $code): array|false
+    {
+        $metric   = $this->metricTao->fetchMetricByCode($code);
+        $dateType = $this->getDateTypeByCode($code);
+        $fields   = array($metric->scope);
+
+        if($dateType == 'nodate') return $fields;
+
+        $fields[] = 'year';
+        if($dateType == 'month' || $dateType == 'day') $fields[] = 'month';
+        if($dateType == 'week') $fields[] = 'week';
+        if($dateType == 'day') $fields[] = 'day';
+
+        return $fields;
     }
 
     /**
