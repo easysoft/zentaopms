@@ -93,6 +93,9 @@ $lang->story->unlinkBranch       = '解除关联代码分支';
 $lang->story->branchName         = '分支名称';
 $lang->story->branchFrom         = '创建自';
 $lang->story->codeRepo           = '仓库名称';
+$lang->story->viewByER           = "按照{$lang->ERCommon}查看";
+$lang->story->viewByUR           = "按照{$lang->URCommon}查看";
+$lang->story->viewBySR           = "按照{$lang->SRCommon}查看";
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
