@@ -53,6 +53,7 @@ class picker extends wg
         'items: string|array|function',     // 列表项或表项获取方法。
         'pinyinKeys?: bool=false',          // 启用拼音。
         'menu?: array',                     // 附加的菜单选项。
+        'tree?: array|bool',                // 是否启用树形菜单样式。
         'hotkey?: boolean',                 // 是否启用快捷键。
         'search?: boolean|number',          // 是否启用搜索。
         'searchDelay?: number',             // 搜索延迟时间，单位：毫秒。
