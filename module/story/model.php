@@ -3237,12 +3237,6 @@ class storyModel extends model
         if($action == 'close')        return $story->status != 'closed';
         if($action == 'activate')     return $story->status == 'closed';
         if($action == 'assignto')     return $story->status != 'closed';
-        if($action == 'batchcreate')
-        {
-            if($config->vision == 'or') return false;
-            if($story->parent > 0 || !empty($story->twins)) return false;
-            if($story->type == 'requirement' && strpos('draft,reviewing,changing', $story->status) !== false) return false;
-        }
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
 
@@ -3275,9 +3269,13 @@ class storyModel extends model
 
         if($action == 'batchcreate')
         {
+            if($config->vision == 'or') return false;
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
-            if($story->status != 'active' || !empty($story->plan)) return false;
+            if($story->parent > 0 || !empty($story->twins)) return false;
+            if($story->type == 'requirement' && strpos('draft,reviewing,changing', $story->status) !== false) return false;
+
+            if(strpos('active,launched', $story->status) === false || !empty($story->plan)) return false;
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
             if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait') return false;
         }
