@@ -461,12 +461,13 @@ class dom
         foreach($this->element as $element)
         {
             $text = $element->getText();
+            var_dump($text);
             if(!$text) continue;
 
             $id = $element->getAttribute('id');
             $tips[$id] = $text;
 
-            $value = $element->findElement(WebDriverBy::xpath('../input'))->getAttribute('value');
+            $value = $element->findElement(WebDriverBy::xpath('../*'))->getAttribute('value');
             if($value) $tips[$id] .= '|' . $value;
         }
 
