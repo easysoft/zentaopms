@@ -855,6 +855,7 @@
         if(!isInModal && !options.selector)
         {
             selector += ',#mainMenu>*,pageJS/.zin-page-js,hookCode()';
+            if($('#mainNavbar a > .label').length) selector += ',#mainNavbar>*';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
