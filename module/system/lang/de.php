@@ -185,7 +185,7 @@ $lang->system->backup->change       = 'Retention time';
 $lang->system->backup->changeAB     = 'modify';
 $lang->system->backup->rmPHPHeader  = 'Remove security settings';
 $lang->system->backup->setting      = 'Setting';
-$lang->system->backup->backupPerson = 'Backup person';
+$lang->system->backup->creator      = 'Backup creator';
 $lang->system->backup->type         = 'Backup type';
 
 $lang->system->backup->settingAction = 'Backup Settings';
@@ -213,11 +213,11 @@ $lang->system->backup->checkService = 'Check Service:';
 $lang->system->backup->upgrade  = 'Upgrade';
 $lang->system->backup->rollback = 'Rollback';
 $lang->system->backup->restart  = 'Restart';
-$lang->system->backup->delete   = 'Delte';
+$lang->system->backup->delete   = 'Delete';
 
 $lang->system->backup->statusList['pending']    = 'Waiting';
 $lang->system->backup->statusList['inprogress'] = 'In progress';
-$lang->system->backup->statusList['completed']  = 'Compelete';
+$lang->system->backup->statusList['completed']  = 'Complete';
 $lang->system->backup->statusList['failed']     = 'Fail';
 
 $lang->system->backup->restoreProgress['doing'] = 'Doing';
@@ -229,12 +229,12 @@ $lang->system->backup->typeList['restore'] = 'Automatic backup before rollback';
 
 $lang->system->backup->waiting         = 'Backup is in progress, please wait...';
 $lang->system->backup->waitingStore    = 'Restoring app data, please wait...';
-$lang->system->backup->progress        = 'Backup in progress（%d/%d）';
+$lang->system->backup->progress        = 'Backup in progress(%d/%d)';
 $lang->system->backup->progressStore   = 'Restoring, progress(%d/%d)';
 $lang->system->backup->progressSQL     = 'In backup，%s has been backed up';
 $lang->system->backup->progressAttach  = 'There are a total of %s files in the backup, and %s files have already been backed up';
 $lang->system->backup->progressCode    = 'There are a total of %s files in the backup, and %s files have already been backed up';
-$lang->system->backup->confirmDelete   = 'Do you want to delte the backup';
+$lang->system->backup->confirmDelete   = 'Do you want to delete the backup';
 $lang->system->backup->confirmRestore  = 'A restart is required during the platform restore process, which will cause all your current operations to be interrupted and cannot be restored. Are you sure you want to continue?';
 $lang->system->backup->holdDays        = 'Backup has been retained for the last %s days';
 $lang->system->backup->copiedFail      = 'Files that failed to copy:';

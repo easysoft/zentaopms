@@ -185,7 +185,7 @@ $lang->system->backup->change       = '保留时间';
 $lang->system->backup->changeAB     = '修改';
 $lang->system->backup->rmPHPHeader  = '去除安全设置';
 $lang->system->backup->setting      = '设置';
-$lang->system->backup->backupPerson = '备份人';
+$lang->system->backup->creator      = '创建者';
 $lang->system->backup->type         = '备份类型';
 
 $lang->system->backup->settingAction = '备份设置';
