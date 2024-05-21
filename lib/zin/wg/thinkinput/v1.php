@@ -12,7 +12,8 @@ class thinkInput extends thinkQuestion
 {
     protected function buildDetail(): array
     {
-        global $lang;
+        global $lang, $app;
+        $app->loadLang('thinkstep');
         $detailWg = parent::buildDetail();
         list($step, $required, $value) = $this->prop(array('step', 'required', 'value'));
         if($step)
@@ -27,7 +28,7 @@ class thinkInput extends thinkQuestion
             set::name('result'),
             set::required($required),
             set::value($value),
-            set::placeholder($lang->thinkwizard->step->pleaseInput)
+            set::placeholder($lang->thinkstep->pleaseInput)
         );
         return $detailWg;
     }

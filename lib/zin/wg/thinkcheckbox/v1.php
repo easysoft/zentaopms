@@ -45,7 +45,7 @@ class thinkCheckbox extends thinkRadio
                 setClass($className),
                 input
                 (
-                    set::placeholder($lang->thinkwizard->step->inputContent),
+                    set::placeholder($lang->thinkstep->inputContent),
                     set::type('number'),
                     set::min(1),
                     set::name('options[minCount]'),
@@ -58,7 +58,7 @@ class thinkCheckbox extends thinkRadio
                 setClass($className),
                 input
                 (
-                    set::placeholder($lang->thinkwizard->step->inputContent),
+                    set::placeholder($lang->thinkstep->inputContent),
                     set::type('number'),
                     set::min(1),
                     set::name('options[maxCount]'),
