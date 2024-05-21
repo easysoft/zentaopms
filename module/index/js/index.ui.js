@@ -123,7 +123,7 @@ function openApp(url, code, options)
         {
             try
             {
-                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', () => setTimeout(finishLoad, 150));
+                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app pagecaheload.app', finishLoad);
                 setTimeout(finishLoad, 10000);
             }
             catch(e){finishLoad()}
