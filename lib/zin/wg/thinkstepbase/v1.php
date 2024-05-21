@@ -101,7 +101,8 @@ class thinkStepBase extends wg
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        list($step, $title, $desc) = $this->prop(array('step', 'title', 'desc'));
+        list($step, $title, $desc, $type, $mode) = $this->prop(array('step', 'title', 'desc', 'type', 'mode'));
+        if($mode == 'create') $title = $lang->thinkstep->untitled . $lang->thinkstep->$type;
         if($step)
         {
             $title = $step->title;
