@@ -54,20 +54,19 @@ if($confirm != 'yes')
                 setClass('text-left border'),
                 div
                 (
-                    setClass('inputGroup'),
+                    setClass('inputGroup row', 'pl-' . (($step->grade- 1) * 2)),
                     h::span
                     (
                         setClass('step-item-id mr-2'),
-                        setClass('ml-' . (($step->grade- 1) * 2)),
                         $step->name
                     ),
-                    nl2br(zget($step, 'desc', ''))
+                    div(html(nl2br(zget($step, 'desc', ''))))
                 )
             ),
             h::td
             (
                 setClass('text-left border'),
-                nl2br(zget($step, 'expect', ''))
+                html(nl2br(zget($step, 'expect')))
             ),
             h::td
             (

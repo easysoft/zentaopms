@@ -163,14 +163,13 @@ foreach($results as $i => $result)
                 ) : '',
                 div
                 (
-                    setClass('inputGroup flex'),
+                    setClass('inputGroup row', 'pl-' . ((zget($stepResult, 'grade', 1) - 1) * 2)),
                     span
                     (
                         setClass('step-item-id mr-2'),
-                        setClass('ml-' . ((zget($stepResult, 'grade', 1) - 1) * 2)),
                         zget($stepResult, 'name', '')
                     ),
-                    zget($stepResult, 'desc', '')
+                    div(html(nl2br(zget($stepResult, 'desc', ''))))
                 )
             ),
             $itemTds
