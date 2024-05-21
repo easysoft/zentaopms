@@ -53,9 +53,30 @@ class backup extends control
         $this->loadModel('action');
 
         $backups = array();
-        if(empty($this->view->error)) $backups = $this->backupZen->getBackupList();
+
+        if($this->config->inQuickon)
+        {
+            $this->app->loadConfig('instance');
+            $instance = $this->config->instance->zentaopaas;
+
+            $backupResult = $this->loadModel('system')->getBackupList($instance);
+            if($backupResult['result'] == 'success')
+            {
+                $backups = !empty($backupResult['data']) ? $backupResult['data'] : array();
+                foreach($backups as $backup)
+                {
+                    $backup->time         = isset($backup->create_time) ? $backup->create_time : '';
+                    $backup->creator = isset($backup->creator) ? $backup->creator : '';
+                }
+            }
+        }
+        else
+        {
+            if(empty($this->view->error)) $backups = $this->backupZen->getBackupList();
+        }
 
         $this->view->title   = $this->lang->backup->common;
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->backups = $backups;
 
         if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
@@ -95,6 +116,28 @@ class backup extends control
         if($reload == 'yes') session_write_close();
 
         set_time_limit(0);
+
+        if($this->config->inQuickon)
+        {
+            $this->app->loadConfig('instance');
+            $instance = $this->config->instance->zentaopaas;
+
+            $result = $this->loadModel('system')->backup($instance);
+            $this->loadModel('action')->create('system', '0', 'createBackup');
+
+            if($result['result'] == 'fail')
+            {
+                if($reload == 'yes') return print($result['message']);
+                printf($result['message']);
+            }
+            else
+            {
+                if($reload == 'yes') return print($this->lang->backup->success->backup);
+                echo $this->lang->backup->success->backup . "\n";
+            }
+
+            return;
+        }
 
         $fileName = date('YmdHis') . mt_rand(0, 9) . str_replace('.', '_', $this->config->version);
         $result   = $this->backupZen->backupSQL($fileName, $reload);
