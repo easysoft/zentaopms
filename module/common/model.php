@@ -1897,6 +1897,7 @@ class commonModel extends model
         $errors = empty($errno)  ? 0 : curl_error($curl);
         $info   = curl_getinfo($curl);
 
+        if(!$response) $response = '';
         if($httpCode)
         {
             $httpCode     = $info['http_code'] ?? curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -1948,7 +1949,6 @@ class commonModel extends model
 
         if($errors) commonModel::$requestErrors[] = $errors;
 
-        if(!$response) $response = '';
         return $httpCode ? array($response, $httpCode, 'body' => $body, 'header' => $newHeader, 'errno' => $errno, 'info' => $info, 'response' => $response) : $response;
     }
 
