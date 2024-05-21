@@ -52,6 +52,7 @@ class thinkStepMenu extends wg
                 'data-id'     => $setting->id,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
+                'data-level'  => $setting->grade,
                 'selected'    => $setting->id == $activeKey,
                 'disabled'    => $unClickable,
                 'actions'     => $this->prop('showAction') ? $this->getActions($setting) : null,
@@ -75,6 +76,10 @@ class thinkStepMenu extends wg
         global $app, $lang;
         $this->lang    = $lang;
         $this->modules = $this->prop('modules');
+        $app->loadLang('thinkstep');
+
+        $untitledGroup = array('transition' => $lang->thinkstep->untitled . $lang->thinkstep->transition, 'question' => $lang->thinkstep->untitled . $lang->thinkstep->question);
+        jsVar('untitledGroup', $untitledGroup);
 
         $this->setProp('items', $this->buildMenuTree(array(), 0));
     }
@@ -123,7 +128,7 @@ class thinkStepMenu extends wg
             'text'    => $this->lang->thinkstep->actions['childNode'],
             'onClick' => jsRaw("() => addStep({$item->id}, 'child')")
         );
-        $levelType   = $item->type != 'node' ? 'same' : 'child';
+        $parentID    = $item->type != 'node' ? $item->parent : $item->id;
         $confirmTips = $this->lang->thinkstep->deleteTips[$item->type];
 
         $menus = array_merge($menus, array(
@@ -131,7 +136,7 @@ class thinkStepMenu extends wg
                 'key'  => 'editNode',
                 'icon' => 'edit',
                 'text' => $this->lang->thinkstep->actions['edit'],
-                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&action=edit")
+                'url'  => createLink('thinkstep', 'edit', "stepID={$item->id}")
             ),
             !$item->existNotNode ? array(
                 'key'          => 'deleteNode',
@@ -154,35 +159,35 @@ class thinkStepMenu extends wg
                 'key'  => 'transition',
                 'icon' => 'transition',
                 'text' => $this->lang->thinkstep->actions['transition'],
-                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&action=create&addType=transition&levelType=$levelType")
+                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'transition')"),
             ),
         ));
 
         if(($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question') $menus = array_merge($menus, array(
             array('type' => 'divider'),
             array(
-                'key'  => 'radio',
-                'icon' => 'radio',
-                'text' => $this->lang->thinkstep->actions['radio'],
-                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&action=create&addType=radio&levelType=$levelType")
+                'key'     => 'radio',
+                'icon'    => 'radio',
+                'text'    => $this->lang->thinkstep->actions['radio'],
+                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'radio')"),
             ),
             array(
-                'key'  => 'checkbox',
-                'icon' => 'checkbox',
-                'text' => $this->lang->thinkstep->actions['checkbox'],
-                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&action=create&addType=checkbox&levelType=$levelType")
+                'key'     => 'checkbox',
+                'icon'    => 'checkbox',
+                'text'    => $this->lang->thinkstep->actions['checkbox'],
+                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'checkbox')"),
             ),
             array(
-                'key'  => 'input',
-                'icon' => 'input',
-                'text' => $this->lang->thinkstep->actions['input'],
-                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&action=create&addType=input&levelType=$levelType")
+                'key'     => 'input',
+                'icon'    => 'input',
+                'text'    => $this->lang->thinkstep->actions['input'],
+                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'input')"),
             ),
             array(
-                'key'  => 'tableInput',
-                'icon' => 'cell-input',
-                'text' => $this->lang->thinkstep->actions['tableInput'],
-                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&action=create&addType=tableInput&levelType=$levelType")
+                'key'     => 'tableInput',
+                'icon'    => 'cell-input',
+                'text'    => $this->lang->thinkstep->actions['tableInput'],
+                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'tableInput')"),
             ),
         ));
         return $menus;
