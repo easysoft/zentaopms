@@ -165,10 +165,11 @@ class thinkStepBase extends wg
 
         return $this->prop('mode') == 'detail' ? ($this->prop('isRun') ? div
         (
-            setClass('w-full col bg-white items-center py-10 px-8 mt-6 mb-4'),
+            setClass('w-full col bg-white items-center py-10 px-8 mb-4'),
             div
             (
-                setStyle($step->type == 'question' ? array('max-width' => '878px', 'min-width' => '643px') : array('max-width' => '878px')),
+                setStyle(array('max-width' => '878px')),
+                setClass('w-full'),
                 $this->buildDetail()
             )
         ) : $this->buildDetail()): $this->buildForm();
