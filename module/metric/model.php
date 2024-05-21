@@ -62,7 +62,7 @@ class metricModel extends model
         if(empty($result)) return array();
 
         $scope    = $metric->scope;
-        $dateType = $metric->dateType;
+        $dateType = $this->getDateTypeByCode($metric->code);
         if($scope != 'system') $objectPairs = $this->getPairsByScope($scope);
 
         $tableData = array();
@@ -628,7 +628,7 @@ class metricModel extends model
     protected function getMetricRecordDateField(object $metric): array
     {
         $dataFields = array();
-        $dateType   = $metric->dateType;
+        $dateType   = $this->getDateTypeByCode($metric->code);
 
         if($dateType != 'nodate') $dataFields[] = 'year';
         if($dateType == 'month')  $dataFields[] = 'month';
