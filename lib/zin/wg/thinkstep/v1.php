@@ -42,7 +42,7 @@ class thinkStep  extends wg
 
         return div
         (
-            setClass('think-step relative'),
+            setClass('think-step relative h-full overflow-y-auto scrollbar-thin'),
             !$isRun ? array(
                 div
                 (
@@ -73,7 +73,7 @@ class thinkStep  extends wg
                                     'class'          => 'ghost w-5 h-5 text-gray opacity-50 ml-1',
                                     'icon'           => 'trash',
                                     'data-toggle'    => 'tooltip',
-                                    'data-title'     => $lang->thinkwizard->step->cannotDeleteNode,
+                                    'data-title'     => $lang->thinkstep->cannotDeleteNode,
                                     'data-placement' => 'bottom-start',
                                 ))
                             )
