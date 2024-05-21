@@ -180,6 +180,7 @@ detailBody
                     set::cols(array_values($config->build->story->dtable->fieldList)),
                     set::data($stories),
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
+                    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
