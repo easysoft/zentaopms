@@ -42,7 +42,7 @@ class thinkStep  extends wg
 
         return div
         (
-            setClass('relative h-full overflow-y-auto scrollbar-thin'),
+            setClass('think-step relative'),
             !$isRun ? array(
                 div
                 (
@@ -59,7 +59,7 @@ class thinkStep  extends wg
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),
-                                set::url(createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=edit")),
+                                set::url(createLink('thinkstep', 'edit', "stepID={$item->id}")),
                             ),
                             !$item->existNotNode ? btn
                             (
