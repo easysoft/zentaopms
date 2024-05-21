@@ -1785,7 +1785,11 @@ class repo extends control
         $scm->setEngine($repo);
 
         $branches = $scm->branch();
-        $tags     = $scm->tags();
+        $tagList  = $scm->tags();
+
+        $tags = array();
+        foreach($tagList as $tag) $tags[$tag] = $tag;
+
         echo json_encode(array('branches' => $branches, 'tags' => $tags));
     }
 }
