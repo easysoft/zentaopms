@@ -2121,7 +2121,7 @@ class storyTao extends storyModel
     public function buildTrackLanes(array $leafNodes): array
     {
         $lanes = array();
-        foreach(array_values($leafNodes) as $story) $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
+        foreach($leafNodes as $story) $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
         return $lanes;
     }
 
@@ -2135,7 +2135,7 @@ class storyTao extends storyModel
      */
     public function buildTrackCols(string $storyType): array
     {
-        $storyGrade = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('status')->eq('enable')->orderBy('grade')->fetchGroup('type', 'grade');
+        $storyGrade = $this->getGradeGroup();
 
         $cols = array();
         if($storyType == 'epic')  $cols[] = $this->buildTrackCol('epic',        $this->lang->ERCommon, empty($storyGrade['epic'])        ? 0 : -1);
@@ -2200,11 +2200,12 @@ class storyTao extends storyModel
         $tasks      = $this->dao->select('id,pri,status,name as title,assignedTo,story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('parent')->fetchGroup('story', 'id');
         $cases      = $this->dao->select('id,pri,status,title,story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
         $bugs       = $this->dao->select('id,pri,status,title,story')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
-        $storyGrade = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('status')->eq('enable')->orderBy('grade')->fetchGroup('type', 'grade');
+        $storyGrade = $this->getGradeGroup();
 
         $items = array();
         foreach($leafNodes as $node)
         {
+            $laneName = "lane_{$node->id}";
             foreach(explode(',', trim($node->path, ',')) as $storyID)
             {
                 if(!isset($allStories[$storyID])) continue;
@@ -2218,15 +2219,15 @@ class storyTao extends storyModel
                 $colName = "{$story->type}_{$story->grade}";
                 unset($story->type);
 
-                $items["lane_{$node->id}"][$colName][] = $story;
+                $items[$laneName][$colName][] = $story;
             }
-            $items["lane_{$node->id}"]['project']   = array_values(zget($projects,   $node->id, array()));
-            $items["lane_{$node->id}"]['execution'] = array_values(zget($executions, $node->id, array()));
-            $items["lane_{$node->id}"]['design']    = array_values(zget($designs,    $node->id, array()));
-            $items["lane_{$node->id}"]['commit']    = array_values(zget($commits,    $node->id, array()));
-            $items["lane_{$node->id}"]['task']      = array_values(zget($tasks,      $node->id, array()));
-            $items["lane_{$node->id}"]['bug']       = array_values(zget($bugs,       $node->id, array()));
-            $items["lane_{$node->id}"]['case']      = array_values(zget($cases,      $node->id, array()));
+            $items[$laneName]['project']   = array_values(zget($projects,   $node->id, array()));
+            $items[$laneName]['execution'] = array_values(zget($executions, $node->id, array()));
+            $items[$laneName]['design']    = array_values(zget($designs,    $node->id, array()));
+            $items[$laneName]['commit']    = array_values(zget($commits,    $node->id, array()));
+            $items[$laneName]['task']      = array_values(zget($tasks,      $node->id, array()));
+            $items[$laneName]['bug']       = array_values(zget($bugs,       $node->id, array()));
+            $items[$laneName]['case']      = array_values(zget($cases,      $node->id, array()));
         }
 
         return $items;
