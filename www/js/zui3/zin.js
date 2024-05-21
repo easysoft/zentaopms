@@ -440,9 +440,14 @@
         const position = $target.css('position');
         if(!['relative', 'absolute', 'fixed'].includes(position)) $target.css('position', 'relative');
 
-        if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
         if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
-        $target.toggleClass(loadingClass, isLoading).css('--loading-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
+        $target.css('--load-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
+        if(!$target.hasClass('load-indicator'))
+        {
+            $target.addClass('load-indicator');
+            if(isLoading) return setTimeout(() => {$target.addClass(loadingClass);}, 50);
+        }
+        $target.toggleClass(loadingClass, isLoading);
     }
 
     /**
