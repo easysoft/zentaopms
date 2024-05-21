@@ -189,9 +189,9 @@ class pivotZen extends pivot
         $index = 0;
         foreach($headerRow1 as $column)
         {
-            /* 如果 colspan 属性不为空则表示该列包含切片字段。*/
+            /* 如果 colspan 属性不为空则且存在第二行表头表示该列包含切片字段。*/
             /* If the colspan attribute is not empty, it means that the column contains slice fields. */
-            if(!empty($column->colspan) && $column->colspan > 1)
+            if(!empty($column->colspan) && $column->colspan > 1 && !empty($headerRow2))
             {
                 /* 找到实际切片的字段。*/
                 /* Find the actual sliced field. */
@@ -232,6 +232,8 @@ class pivotZen extends pivot
             $columns[$field]['align']    = 'center';
 
             $columnMaxLen[$field] = mb_strlen($column->label);
+
+            if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
 
             // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
 
