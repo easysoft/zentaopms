@@ -351,15 +351,16 @@ jsVar('checkedSummary', $checkedSummary);
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
-    ($showGrade || $storyType != 'story' || $isProjectStory) ? to::leading
+    ($showGrade && ($storyType != 'story' || $isProjectStory)) ? to::leading
     (
         picker
         (
+            set::tree(true),
             set::name('showGrades'),
             set::items($gradeMenu),
             set::search(false),
             set::multiple(true),
-            set::width('145px'),
+            set::width('150px'),
             setStyle('justify-content', 'center'),
             set::display($lang->story->viewAllGrades),
             set::menu(array('checkbox' => true)),
