@@ -4,6 +4,7 @@ $config->bi->builtin->metrics = array();
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的所有层级的项目集总数',
+    'alias'      => '所有层级的项目集总数',
     'code'       => 'count_of_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -17,6 +18,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的所有层级进行中项目集数',
+    'alias'      => '所有层级进行中项目集数',
     'code'       => 'count_of_doing_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -30,6 +32,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的所有层级已关闭项目集数',
+    'alias'      => '所有层级已关闭项目集数',
     'code'       => 'count_of_closed_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -43,6 +46,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的所有层级已挂起项目集数',
+    'alias'      => '所有层级已挂起项目集数',
     'code'       => 'count_of_suspended_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -56,6 +60,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的所有层级未开始项目集数',
+    'alias'      => '所有层级未开始项目集数',
     'code'       => 'count_of_wait_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -69,6 +74,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的一级项目集总数',
+    'alias'      => '一级项目集总数',
     'code'       => 'count_of_top_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -82,6 +88,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已关闭一级项目集数',
+    'alias'      => '已关闭一级项目集数',
     'code'       => 'count_of_closed_top_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -95,6 +102,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未关闭一级项目集数',
+    'alias'      => '未关闭的一级项目集数',
     'code'       => 'count_of_unclosed_top_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -108,6 +116,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增一级项目集数',
+    'alias'      => '新增一级项目集数',
     'code'       => 'count_of_annual_created_top_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -121,6 +130,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭一级项目集数',
+    'alias'      => '关闭一级项目集数',
     'code'       => 'count_of_annual_closed_top_program',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -134,6 +144,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的产品线总数',
+    'alias'      => '产品线总数',
     'code'       => 'count_of_line',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -147,6 +158,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的产品总数',
+    'alias'      => '产品总数',
     'code'       => 'count_of_product',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -160,6 +172,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的正常的产品数',
+    'alias'      => '正常的产品数',
     'code'       => 'count_of_normal_product',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -173,6 +186,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的结束的产品数',
+    'alias'      => '结束的产品数',
     'code'       => 'count_of_closed_product',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -186,6 +200,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增产品数',
+    'alias'      => '新增产品数',
     'code'       => 'count_of_annual_created_product',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -199,6 +214,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度结束产品数',
+    'alias'      => '结束产品数',
     'code'       => 'count_of_annual_closed_product',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -212,6 +228,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的项目总数',
+    'alias'      => '项目总数',
     'code'       => 'count_of_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -225,6 +242,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未开始项目数',
+    'alias'      => '未开始项目数',
     'code'       => 'count_of_wait_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -238,6 +256,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的进行中项目数',
+    'alias'      => '进行中项目数',
     'code'       => 'count_of_doing_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -251,6 +270,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已挂起项目数',
+    'alias'      => '已挂起项目数',
     'code'       => 'count_of_suspended_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -264,6 +284,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已关闭项目数',
+    'alias'      => '已关闭项目数',
     'code'       => 'count_of_closed_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -277,6 +298,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未关闭项目数',
+    'alias'      => '未关闭项目数',
     'code'       => 'count_of_unclosed_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -290,6 +312,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成项目中按期完成项目数',
+    'alias'      => '已完成项目中按期完成项目数',
     'code'       => 'count_of_undelayed_finished_project_which_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -303,6 +326,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成项目中延期完成项目数',
+    'alias'      => '已完成项目中延期完成项目数',
     'code'       => 'count_of_delayed_finished_project_which_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -316,6 +340,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增项目数',
+    'alias'      => '新增项目数',
     'code'       => 'count_of_annual_created_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -329,6 +354,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭项目数',
+    'alias'      => '关闭项目数',
     'code'       => 'count_of_annual_closed_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -342,6 +368,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度启动项目中按期完成项目数',
+    'alias'      => '启动项目中按期完成项目数',
     'code'       => 'count_of_undelayed_finished_project_which_annual_started',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -355,6 +382,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成项目中延期完成项目数',
+    'alias'      => '完成项目中延期完成项目数',
     'code'       => 'count_of_delayed_finished_project_which_annual_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -368,6 +396,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成项目中按期完成项目数',
+    'alias'      => '完成项目中按期完成项目数',
     'code'       => 'count_of_undelayed_finished_project_which_annual_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -381,6 +410,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度新增项目数',
+    'alias'      => '新增项目数',
     'code'       => 'count_of_monthly_created_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -394,6 +424,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度关闭项目数',
+    'alias'      => '关闭项目数',
     'code'       => 'count_of_monthly_closed_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -407,6 +438,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成项目数',
+    'alias'      => '完成项目数',
     'code'       => 'count_of_annual_finished_project',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -420,6 +452,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭项目的任务预计工时数',
+    'alias'      => '关闭项目的任务预计工时数',
     'code'       => 'estimate_of_annual_closed_project',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -433,6 +466,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭项目的任务消耗工时数',
+    'alias'      => '关闭项目的任务消耗工时数',
     'code'       => 'consume_of_annual_closed_project',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -446,6 +480,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度关闭项目的任务消耗工时数',
+    'alias'      => '关闭项目的任务消耗工时数',
     'code'       => 'consume_of_monthly_closed_project',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -459,6 +494,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度已关闭项目投入总人天',
+    'alias'      => '已关闭项目投入总人天',
     'code'       => 'day_of_annual_closed_project',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -472,6 +508,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成项目中项目的按期完成率',
+    'alias'      => '完成项目中项目的按期完成率',
     'code'       => 'rate_of_undelayed_finished_project_which_annual_finished',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -485,6 +522,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成项目中项目的延期完成率',
+    'alias'      => '完成项目中项目的延期完成率',
     'code'       => 'rate_of_delayed_finished_project_which_annual_finished',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -498,6 +536,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的计划总数',
+    'alias'      => '计划总数',
     'code'       => 'count_of_productplan',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -511,6 +550,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增计划数',
+    'alias'      => '新增计划数',
     'code'       => 'count_of_annual_created_productplan',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -524,6 +564,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成计划数',
+    'alias'      => '完成计划数',
     'code'       => 'count_of_annual_finished_productplan',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -537,6 +578,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭计划数',
+    'alias'      => '关闭计划数',
     'code'       => 'count_of_annual_closed_productplan',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -550,6 +592,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成计划数',
+    'alias'      => '已完成计划数',
     'code'       => 'count_of_finished_productplan',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -563,6 +606,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未完成计划数',
+    'alias'      => '未完成计划数',
     'code'       => 'count_of_unfinished_productplan',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -576,6 +620,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的执行总数',
+    'alias'      => '执行总数',
     'code'       => 'count_of_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -589,6 +634,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未开始执行数',
+    'alias'      => '未开始执行数',
     'code'       => 'count_of_wait_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -602,6 +648,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的进行中执行数',
+    'alias'      => '进行中执行数',
     'code'       => 'count_of_doing_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -615,6 +662,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已挂起执行数',
+    'alias'      => '已挂起执行数',
     'code'       => 'count_of_suspended_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -628,6 +676,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已关闭执行数',
+    'alias'      => '已关闭执行数',
     'code'       => 'count_of_closed_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -641,6 +690,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未关闭执行数',
+    'alias'      => '未关闭执行数',
     'code'       => 'count_of_unclosed_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -654,6 +704,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增执行数',
+    'alias'      => '新增执行数',
     'code'       => 'count_of_annual_created_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -667,6 +718,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭执行数',
+    'alias'      => '关闭执行数',
     'code'       => 'count_of_annual_closed_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -679,7 +731,22 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按系统统计的年度完成执行数',
+    'alias'      => '完成执行数',
+    'code'       => 'count_of_annual_finished_execution',
+    'purpose'    => 'scale',
+    'scope'      => 'system',
+    'object'     => 'execution',
+    'unit'       => 'count',
+    'dateType'   => 'year',
+    'desc'       => '按系统统计的年度完成执行数是指在某年度已经完成的执行数。该度量项反映了团队或组织在某年的工作效率和完成能力。较高的年度完成执行数表示团队或组织在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。',
+    'definition' => "所有的执行个数求和\n实际完成日期为某年\n过滤已删除的执行"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按系统统计的月度新增执行数',
+    'alias'      => '新增执行数',
     'code'       => 'count_of_monthly_created_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -693,6 +760,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度关闭执行数',
+    'alias'      => '关闭执行数',
     'code'       => 'count_of_monthly_closed_execution',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -706,6 +774,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成执行中按期完成执行数',
+    'alias'      => '已完成执行中按期完成执行数',
     'code'       => 'count_of_undelayed_finished_execution_which_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -719,6 +788,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成执行中延期完成执行数',
+    'alias'      => '已完成执行中延期完成执行数',
     'code'       => 'count_of_delayed_finished_execution_which_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -732,6 +802,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成执行中按期完成执行数',
+    'alias'      => '完成执行中按期完成执行数',
     'code'       => 'count_of_undelayed_finished_execution_which_annual_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -745,6 +816,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成执行中延期完成执行数',
+    'alias'      => '完成执行中延期完成执行数',
     'code'       => 'count_of_delayed_finished_execution_which_annual_finished',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -758,6 +830,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成执行中执行的按期关闭率',
+    'alias'      => '完成执行中执行的按期关闭率',
     'code'       => 'rate_of_undelayed_closed_execution_which_annual_finished',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -771,6 +844,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成执行中执行的延期关闭率',
+    'alias'      => '完成执行中执行的延期关闭率',
     'code'       => 'rate_of_delayed_closed_execution_which_annual_finished',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -784,6 +858,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的发布总数',
+    'alias'      => '发布总数',
     'code'       => 'count_of_release',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -797,6 +872,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的里程碑发布总数',
+    'alias'      => '里程碑发布总数',
     'code'       => 'count_of_marker_release',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -810,6 +886,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增发布数',
+    'alias'      => '新增发布数',
     'code'       => 'count_of_annual_created_release',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -823,6 +900,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度新增发布数',
+    'alias'      => '新增发布数',
     'code'       => 'count_of_monthly_created_release',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -836,6 +914,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每周新增发布数',
+    'alias'      => '新增发布数',
     'code'       => 'count_of_weekly_created_release',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -849,6 +928,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的研发需求总数',
+    'alias'      => '研发需求总数',
     'code'       => 'count_of_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -862,6 +942,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已关闭研发需求数',
+    'alias'      => '已关闭研发需求数',
     'code'       => 'count_of_closed_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -875,6 +956,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成研发需求数',
+    'alias'      => '已完成研发需求数',
     'code'       => 'count_of_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -888,6 +970,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未关闭研发需求数',
+    'alias'      => '未关闭研发需求数',
     'code'       => 'count_of_unclosed_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -901,6 +984,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的无效研发需求数',
+    'alias'      => '无效研发需求数',
     'code'       => 'count_of_invalid_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -914,6 +998,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的有效研发需求数',
+    'alias'      => '有效研发需求数',
     'code'       => 'count_of_valid_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -927,6 +1012,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已交付研发需求数',
+    'alias'      => '已交付研发需求数',
     'code'       => 'count_of_delivered_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -940,6 +1026,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增研发需求数',
+    'alias'      => '新增研发需求数',
     'code'       => 'count_of_annual_created_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -953,6 +1040,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成研发需求数',
+    'alias'      => '完成研发需求数',
     'code'       => 'count_of_annual_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -966,6 +1054,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度新增研发需求数',
+    'alias'      => '新增研发需求数',
     'code'       => 'count_of_monthly_created_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -979,6 +1068,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度完成研发需求数',
+    'alias'      => '完成研发需求数',
     'code'       => 'count_of_monthly_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -992,6 +1082,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度交付研发需求数',
+    'alias'      => '交付研发需求数',
     'code'       => 'count_of_annual_delivered_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1005,6 +1096,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的研发需求规模总数',
+    'alias'      => '研发需求规模总数',
     'code'       => 'scale_of_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1018,6 +1110,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成研发需求规模数',
+    'alias'      => '已完成研发需求规模数',
     'code'       => 'scale_of_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1031,6 +1124,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的无效研发需求规模数',
+    'alias'      => '无效研发需求规模数',
     'code'       => 'scale_of_invalid_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1044,6 +1138,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的有效研发需求规模数',
+    'alias'      => '有效研发需求规模数',
     'code'       => 'scale_of_valid_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1057,6 +1152,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成研发需求规模数',
+    'alias'      => '完成研发需求规模数',
     'code'       => 'scale_of_annual_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1070,6 +1166,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度交付研发需求规模数',
+    'alias'      => '交付研发需求规模数',
     'code'       => 'scale_of_annual_delivered_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1083,6 +1180,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭研发需求规模数',
+    'alias'      => '关闭研发需求规模数',
     'code'       => 'scale_of_annual_closed_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1096,6 +1194,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度完成研发需求规模数',
+    'alias'      => '完成研发需求规模数',
     'code'       => 'scale_of_monthly_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1109,6 +1208,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度交付研发需求规模数',
+    'alias'      => '交付研发需求规模数',
     'code'       => 'scale_of_monthly_delivered_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1122,6 +1222,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度关闭研发需求规模数',
+    'alias'      => '关闭研发需求规模数',
     'code'       => 'scale_of_monthly_closed_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1135,6 +1236,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每周完成研发需求规模数',
+    'alias'      => '完成研发需求规模数',
     'code'       => 'scale_of_weekly_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1148,6 +1250,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每周完成需求数',
+    'alias'      => '完成需求数',
     'code'       => 'count_of_weekly_finished_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1161,6 +1264,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每日新增研发需求数',
+    'alias'      => '新增研发需求数',
     'code'       => 'count_of_daily_created_story',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1174,6 +1278,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的研发需求完成率',
+    'alias'      => '研发需求完成率',
     'code'       => 'rate_of_finished_story',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -1187,6 +1292,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的研发需求交付率',
+    'alias'      => '研发需求交付率',
     'code'       => 'rate_of_delivered_story',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -1200,6 +1306,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度研发需求完成率',
+    'alias'      => '研发需求完成率',
     'code'       => 'rate_of_annual_finished_story',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -1213,6 +1320,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度研发需求交付率',
+    'alias'      => '研发需求交付率',
     'code'       => 'rate_of_annual_delivered_story',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -1226,6 +1334,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的任务总数',
+    'alias'      => '任务总数',
     'code'       => 'count_of_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1239,6 +1348,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已完成任务数',
+    'alias'      => '已完成任务数',
     'code'       => 'count_of_finished_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1252,6 +1362,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未完成任务数',
+    'alias'      => '未完成任务数',
     'code'       => 'count_of_unfinished_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1265,6 +1376,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已关闭任务数',
+    'alias'      => '已关闭任务数',
     'code'       => 'count_of_closed_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1278,6 +1390,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增任务数',
+    'alias'      => '新增任务数',
     'code'       => 'count_of_annual_created_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1291,6 +1404,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度完成任务数',
+    'alias'      => '完成任务数',
     'code'       => 'count_of_annual_finished_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1304,6 +1418,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度新增任务数',
+    'alias'      => '新增任务数',
     'code'       => 'count_of_monthly_created_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1317,6 +1432,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度完成任务数',
+    'alias'      => '完成任务数',
     'code'       => 'count_of_monthly_finished_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1330,6 +1446,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的任务预计工时数',
+    'alias'      => '任务预计工时数',
     'code'       => 'estimate_of_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1343,6 +1460,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的任务消耗工时数',
+    'alias'      => '任务消耗工时数',
     'code'       => 'consume_of_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1356,6 +1474,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的任务剩余工时数',
+    'alias'      => '任务剩余工时数',
     'code'       => 'left_of_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1369,6 +1488,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每日完成任务数',
+    'alias'      => '完成任务数',
     'code'       => 'count_of_daily_finished_task',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1382,6 +1502,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的Bug总数',
+    'alias'      => 'Bug总数',
     'code'       => 'count_of_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1395,6 +1516,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的激活Bug数',
+    'alias'      => '激活Bug数',
     'code'       => 'count_of_activated_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1408,6 +1530,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已解决Bug数',
+    'alias'      => '已解决Bug数',
     'code'       => 'count_of_resolved_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1421,6 +1544,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已关闭Bug总数',
+    'alias'      => '已关闭Bug数',
     'code'       => 'count_of_closed_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1434,6 +1558,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的未关闭Bug数',
+    'alias'      => '未关闭Bug数',
     'code'       => 'count_of_unclosed_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1447,6 +1572,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已修复Bug数',
+    'alias'      => '已修复Bug数',
     'code'       => 'count_of_fixed_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1460,6 +1586,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的有效Bug数',
+    'alias'      => '有效Bug数',
     'code'       => 'count_of_valid_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1473,6 +1600,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增Bug数',
+    'alias'      => '新增Bug数',
     'code'       => 'count_of_annual_created_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1486,6 +1614,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度修复Bug数',
+    'alias'      => '修复Bug数',
     'code'       => 'count_of_annual_fixed_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1499,6 +1628,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度新增Bug数',
+    'alias'      => '新增Bug数',
     'code'       => 'count_of_monthly_created_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1512,6 +1642,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的月度修复Bug数',
+    'alias'      => '修复Bug数',
     'code'       => 'count_of_monthly_fixed_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1525,6 +1656,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每日关闭Bug数',
+    'alias'      => '关闭Bug数',
     'code'       => 'count_of_daily_closed_bug',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1538,6 +1670,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的Bug修复率',
+    'alias'      => 'Bug修复率',
     'code'       => 'rate_of_fixed_bug',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -1551,6 +1684,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的用例总数',
+    'alias'      => '用例总数',
     'code'       => 'count_of_case',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1564,6 +1698,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增用例数',
+    'alias'      => '新增用例数',
     'code'       => 'count_of_annual_created_case',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1577,6 +1712,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每日执行用例次数',
+    'alias'      => '执行用例次数',
     'code'       => 'count_of_daily_run_case',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1590,6 +1726,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的用户总数',
+    'alias'      => '用户总数',
     'code'       => 'count_of_user',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1603,6 +1740,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度添加用户数',
+    'alias'      => '添加用户数',
     'code'       => 'count_of_annual_created_user',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1616,6 +1754,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度日志记录的工时总数',
+    'alias'      => '日志记录的工时总数',
     'code'       => 'hour_of_annual_effort',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -1629,6 +1768,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度投入总人天',
+    'alias'      => '投入总人天',
     'code'       => 'day_of_annual_effort',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -1642,6 +1782,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每日投入总人天',
+    'alias'      => '投入总人天',
     'code'       => 'day_of_daily_effort',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -1655,6 +1796,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的每日日志记录的工时总数',
+    'alias'      => '日志记录的工时总数',
     'code'       => 'hour_of_daily_effort',
     'purpose'    => 'hour',
     'scope'      => 'system',
@@ -1668,6 +1810,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的文档总数',
+    'alias'      => '文档总数',
     'code'       => 'count_of_doc',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1681,6 +1824,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增文档个数',
+    'alias'      => '新增文档个数',
     'code'       => 'count_of_annual_created_doc',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1694,6 +1838,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的反馈总数',
+    'alias'      => '反馈总数',
     'code'       => 'count_of_feedback',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1707,6 +1852,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的已关闭反馈数',
+    'alias'      => '已关闭反馈数',
     'code'       => 'count_of_closed_feedback',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1720,6 +1866,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度新增反馈数',
+    'alias'      => '新增反馈数',
     'code'       => 'count_of_annual_created_feedback',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1733,6 +1880,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的年度关闭反馈数',
+    'alias'      => '关闭反馈数',
     'code'       => 'count_of_annual_closed_feedback',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1746,6 +1894,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计的代码库总数',
+    'alias'      => '代码库总数',
     'code'       => 'count_of_codebase',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1759,6 +1908,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计流水线总数',
+    'alias'      => '流水线总数',
     'code'       => 'count_of_pipeline',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1772,6 +1922,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计制品库总数',
+    'alias'      => '制品库总数',
     'code'       => 'count_of_artifactrepo',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1785,6 +1936,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计节点总数',
+    'alias'      => '节点总数',
     'code'       => 'count_of_node',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1798,6 +1950,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计应用总数',
+    'alias'      => '应用总数',
     'code'       => 'count_of_application',
     'purpose'    => 'scale',
     'scope'      => 'system',
@@ -1811,6 +1964,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计代码库待处理问题总数',
+    'alias'      => '代码库待处理问题数',
     'code'       => 'count_of_pending_issue',
     'purpose'    => 'qc',
     'scope'      => 'system',
@@ -1824,6 +1978,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计代码库中待处理的合并请求总数',
+    'alias'      => '代码库中待处理的合并请求数',
     'code'       => 'count_of_pending_mergeRequest',
     'purpose'    => 'qc',
     'scope'      => 'system',
@@ -1837,6 +1992,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按系统统计待处理的上线计划总数',
+    'alias'      => '待处理的上线计划数',
     'code'       => 'count_of_pending_deployment',
     'purpose'    => 'rate',
     'scope'      => 'system',
@@ -1850,6 +2006,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的计划总数',
+    'alias'      => '计划总数',
     'code'       => 'count_of_productplan_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1863,6 +2020,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增计划数',
+    'alias'      => '新增计划数',
     'code'       => 'count_of_annual_created_productplan_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1876,6 +2034,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度完成计划数',
+    'alias'      => '完成计划数',
     'code'       => 'count_of_annual_finished_productplan_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1889,6 +2048,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的发布总数',
+    'alias'      => '发布总数',
     'code'       => 'count_of_release_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1902,6 +2062,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增发布数',
+    'alias'      => '新增发布数',
     'code'       => 'count_of_annual_created_release_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1915,6 +2076,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度新增发布数',
+    'alias'      => '新增发布数',
     'code'       => 'count_of_monthly_created_release_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1928,6 +2090,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的研发需求总数',
+    'alias'      => '研发需求总数',
     'code'       => 'count_of_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1941,6 +2104,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的已完成研发需求数',
+    'alias'      => '已完成研发需求数',
     'code'       => 'count_of_finished_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1954,6 +2118,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的已关闭研发需求数',
+    'alias'      => '已关闭研发需求数',
     'code'       => 'count_of_closed_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1967,6 +2132,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的未关闭研发需求数',
+    'alias'      => '未关闭研发需求数',
     'code'       => 'count_of_unclosed_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1980,6 +2146,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的已交付研发需求数',
+    'alias'      => '已交付研发需求数',
     'code'       => 'count_of_delivered_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -1993,6 +2160,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的无效研发需求数',
+    'alias'      => '无效研发需求数',
     'code'       => 'count_of_invalid_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2006,6 +2174,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的有效研发需求数',
+    'alias'      => '有效研发需求数',
     'code'       => 'count_of_valid_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2019,6 +2188,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的研发完毕的研发需求数',
+    'alias'      => '研发完毕的研发需求数',
     'code'       => 'count_of_developed_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2032,6 +2202,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的已立项研发需求的用例覆盖率',
+    'alias'      => '已立项研发需求的用例覆盖率',
     'code'       => 'case_coverage_of_projected_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2045,6 +2216,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增研发需求数',
+    'alias'      => '新增研发需求数',
     'code'       => 'count_of_annual_created_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2058,6 +2230,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度完成研发需求数',
+    'alias'      => '完成研发需求数',
     'code'       => 'count_of_annual_finished_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2071,6 +2244,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度交付研发需求数',
+    'alias'      => '交付研发需求数',
     'code'       => 'count_of_annual_delivered_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2084,6 +2258,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度关闭研发需求数',
+    'alias'      => '关闭研发需求数',
     'code'       => 'count_of_annual_closed_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2097,6 +2272,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度完成研发需求数',
+    'alias'      => '完成研发需求数',
     'code'       => 'count_of_monthly_finished_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2110,6 +2286,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的已立项研发需求数',
+    'alias'      => '已立项研发需求数',
     'code'       => 'count_of_projected_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2123,6 +2300,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度交付研发需求数',
+    'alias'      => '交付研发需求数',
     'code'       => 'count_of_monthly_delivered_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2136,6 +2314,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的有用例的已立项研发需求数',
+    'alias'      => '有用例的已立项研发需求数',
     'code'       => 'count_of_projected_story_with_case_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2149,6 +2328,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度关闭研发需求数',
+    'alias'      => '关闭研发需求数',
     'code'       => 'count_of_monthly_closed_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2162,6 +2342,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度新增研发需求数',
+    'alias'      => '新增研发需求数',
     'code'       => 'count_of_monthly_created_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2175,6 +2356,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的研发需求规模总数',
+    'alias'      => '研发需求规模总数',
     'code'       => 'scale_of_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2188,6 +2370,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度完成研发需求规模数',
+    'alias'      => '完成研发需求规模数',
     'code'       => 'scale_of_annual_finished_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2201,6 +2384,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度交付研发需求规模数',
+    'alias'      => '交付研发需求规模数',
     'code'       => 'scale_of_annual_delivered_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2214,6 +2398,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度关闭研发需求规模数',
+    'alias'      => '关闭研发需求规模数',
     'code'       => 'scale_of_annual_closed_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2227,6 +2412,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度完成研发需求规模数',
+    'alias'      => '完成研发需求规模数',
     'code'       => 'scale_of_monthly_finished_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2240,6 +2426,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的研发需求评审通过率',
+    'alias'      => '研发需求评审通过率',
     'code'       => 'rate_of_approved_story_in_product',
     'purpose'    => 'qc',
     'scope'      => 'product',
@@ -2253,6 +2440,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的研发需求完成率',
+    'alias'      => '研发需求完成率',
     'code'       => 'rate_of_finish_story_in_product',
     'purpose'    => 'rate',
     'scope'      => 'product',
@@ -2266,6 +2454,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的研发需求交付率',
+    'alias'      => '研发需求交付率',
     'code'       => 'rate_of_delivery_story_in_product',
     'purpose'    => 'rate',
     'scope'      => 'product',
@@ -2279,6 +2468,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的用户需求总数',
+    'alias'      => '用户需求总数',
     'code'       => 'count_of_requirement_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2292,6 +2482,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增用户需求数',
+    'alias'      => '新增用户需求数',
     'code'       => 'count_of_annual_created_requirement_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2305,6 +2496,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的研发完毕研需规模的Bug密度',
+    'alias'      => '研发完毕研需规模的Bug密度',
     'code'       => 'bug_concentration_of_developed_story_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2318,6 +2510,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的Bug总数',
+    'alias'      => 'Bug总数',
     'code'       => 'count_of_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2331,6 +2524,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的激活Bug数',
+    'alias'      => '激活Bug数',
     'code'       => 'count_of_activated_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2344,6 +2538,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的有效Bug数',
+    'alias'      => '有效Bug数',
     'code'       => 'count_of_effective_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2357,6 +2552,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的已修复Bug数',
+    'alias'      => '已修复Bug数',
     'code'       => 'count_of_fixed_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2370,6 +2566,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的严重程度为1级的Bug数',
+    'alias'      => '严重程度为1级的Bug数',
     'code'       => 'count_of_severity_1_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2383,6 +2580,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的严重程度为2级的Bug数',
+    'alias'      => '严重程度为2级的Bug数',
     'code'       => 'count_of_severity_2_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2396,6 +2594,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的严重程度为1、2级的Bug数',
+    'alias'      => '严重程度为1、2级的Bug数',
     'code'       => 'count_of_severe_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2409,6 +2608,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增Bug数',
+    'alias'      => '新增Bug数',
     'code'       => 'count_of_annual_created_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2422,6 +2622,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增有效Bug数',
+    'alias'      => '新增有效Bug数',
     'code'       => 'count_of_annual_created_effective_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2435,6 +2636,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度修复Bug数',
+    'alias'      => '修复Bug数',
     'code'       => 'count_of_annual_fixed_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2448,6 +2650,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的每日新增Bug数',
+    'alias'      => '新增Bug数',
     'code'       => 'count_of_daily_created_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2461,6 +2664,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的每日解决Bug数',
+    'alias'      => '解决Bug数',
     'code'       => 'count_of_daily_resolved_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2474,6 +2678,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的每日关闭Bug数',
+    'alias'      => '关闭Bug数',
     'code'       => 'count_of_daily_closed_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2487,6 +2692,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度解决Bug数',
+    'alias'      => '解决Bug数',
     'code'       => 'count_of_monthly_fixed_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2500,6 +2706,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度关闭Bug数',
+    'alias'      => '关闭Bug数',
     'code'       => 'count_of_monthly_closed_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2513,6 +2720,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的月度新增Bug数',
+    'alias'      => '新增Bug数',
     'code'       => 'count_of_monthly_created_bug_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2526,6 +2734,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的Bug修复率',
+    'alias'      => 'Bug修复率',
     'code'       => 'rate_of_fixed_bug_in_product',
     'purpose'    => 'rate',
     'scope'      => 'product',
@@ -2539,6 +2748,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的用例总数',
+    'alias'      => '用例总数',
     'code'       => 'count_of_case_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2552,6 +2762,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增用例数',
+    'alias'      => '新增用例数',
     'code'       => 'count_of_annual_created_case_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2565,6 +2776,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的反馈总数',
+    'alias'      => '反馈总数',
     'code'       => 'count_of_feedback_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2578,6 +2790,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度新增反馈数',
+    'alias'      => '新增反馈数',
     'code'       => 'count_of_annual_created_feedback_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2591,6 +2804,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按产品统计的年度关闭反馈数',
+    'alias'      => '关闭反馈数',
     'code'       => 'count_of_annual_closed_feedback_in_product',
     'purpose'    => 'scale',
     'scope'      => 'product',
@@ -2603,7 +2817,78 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按产品统计的等待的工单数',
+    'alias'      => '等待工单数',
+    'code'       => 'count_of_wait_ticket_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'ticket',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的等待的工单数表示产品中状态为等待的工单数量之和。该数值越大，说明产品团队还有较多工单任务需要处理，可以一定程度反映客户问题的堆积。',
+    'definition' => "产品中所有工单个数求和，状态为等待的工单，过滤已删除的工单，过滤已删除的产品。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的处理中的工单数',
+    'alias'      => '处理中工单数',
+    'code'       => 'count_of_doing_ticket_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'ticket',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的处理中的工单数表示产品中状态为处理中的工单数量之和。该数值越大，说明产品团队正在处理的工单数量较多，可以一定程度上反映团队的工作负载。',
+    'definition' => "产品中所有工单个数求和，状态为处理中，过滤已删除的工单，过滤已删除的产品。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的已处理的工单数',
+    'alias'      => '已处理工单数',
+    'code'       => 'count_of_done_ticket_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'ticket',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的已处理的工单数表示产品中状态为已处理的工单数量之和。该数值越大，说明产品团队完成的工单数量越多，可以一定程度反映团队处理客户问题的效率。',
+    'definition' => "产品中所有工单个数求和，状态为已处理，过滤已删除的工单，过滤已删除的产品。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的未关闭的工单数',
+    'alias'      => '未关闭工单数',
+    'code'       => 'count_of_unclosed_ticket_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'ticket',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的未关闭的工单数表示产品中状态为未关闭的工单数量之和。该数值越大，说明产品团队还有一定工单任务需要进一步完成。',
+    'definition' => "产品中所有工单个数求和，过滤已关闭的工单，过滤已删除的工单，过滤已删除的产品。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的每周新增工单数',
+    'alias'      => '新增工单数',
+    'code'       => 'count_of_weekly_created_ticket_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'ticket',
+    'unit'       => 'count',
+    'dateType'   => 'week',
+    'desc'       => '按产品统计的每周新增工单数表示产品中每周新创建的工单数量之和。较高的每周新增工单数可能暗示着产品近期发布的功能存在较多问题，需要及时处理。',
+    'definition' => "产品中所有工单个数求和，创建时间为某周，过滤已删除的工单，过滤已删除的产品。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按项目统计的计划工期',
+    'alias'      => '计划工期',
     'code'       => 'planned_period_of_project',
     'purpose'    => 'time',
     'scope'      => 'project',
@@ -2617,6 +2902,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的剩余工期',
+    'alias'      => '剩余工期',
     'code'       => 'left_period_of_project',
     'purpose'    => 'time',
     'scope'      => 'project',
@@ -2624,12 +2910,13 @@ $config->bi->builtin->metrics[] = array
     'unit'       => 'day',
     'dateType'   => 'nodate',
     'desc'       => '按项目统计的剩余工期表示项目在当前时间点上还剩下的工作时间。这个度量项可以帮助团队评估项目的剩余工作量和进度。通过比较剩余工期和剩余工时，可以预测项目是否能够按时完成，并采取适当的措施来调整进度，以确保项目的成功交付。',
-    'definition' => "剩余工期=计划截止日期-当前日期\n当剩余工期<0时默认为0\n当项目已关闭时剩余工期默认为0\n过滤已删除的项目"
+    'definition' => "已关闭的项目\n未关闭的项目\n计划截止日期-当前日期\n过滤已删除的项目"
 );
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按项目统计的的实际工期',
+    'name'       => '按项目统计的实际工期',
+    'alias'      => '实际工期',
     'code'       => 'count_of_actual_time_in_project',
     'purpose'    => 'time',
     'scope'      => 'project',
@@ -2643,6 +2930,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的工期偏差',
+    'alias'      => '工期偏差',
     'code'       => 'variance_of_time_in_project',
     'purpose'    => 'time',
     'scope'      => 'project',
@@ -2656,6 +2944,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的已关闭执行数',
+    'alias'      => '已关闭执行数',
     'code'       => 'count_of_closed_execution_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2663,12 +2952,13 @@ $config->bi->builtin->metrics[] = array
     'unit'       => 'count',
     'dateType'   => 'nodate',
     'desc'       => '按项目统计的已关闭执行数表示在项目中已关闭的执行项的数量，可以用来了解已关闭的执行数量。',
-    'definition' => "项目的执行个数求和\n状态为已关闭\n过滤已删除的执行\n过滤已删除的项目"
+    'definition' => "项目的执行个数求和\n过滤已删除的执行\n过滤已删除的项目"
 );
 
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的已挂起执行数',
+    'alias'      => '已挂起执行数',
     'code'       => 'count_of_suspended_execution_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2682,6 +2972,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的进行中执行数',
+    'alias'      => '进行中执行数',
     'code'       => 'count_of_doing_execution_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2695,6 +2986,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的未开始执行数',
+    'alias'      => '未开始执行数',
     'code'       => 'count_wait_execution_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2708,6 +3000,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的年度关闭执行数',
+    'alias'      => '关闭执行数',
     'code'       => 'count_annual_closed_execution_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2720,7 +3013,22 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按项目统计的年度完成执行数',
+    'alias'      => '完成执行数',
+    'code'       => 'count_of_annual_finished_execution_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'execution',
+    'unit'       => 'count',
+    'dateType'   => 'year',
+    'desc'       => '按项目统计的年度完成执行数是指项目在某年度已经完成的执行数。该度量项反映了项目团队在某年的工作效率和完成能力。较高的年度完成执行数表示团队在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。',
+    'definition' => "项目的执行个数求和\n实际完成日期为某年\n过滤已删除的执行\n过滤已删除的项目"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按项目统计的执行总数',
+    'alias'      => '执行总数',
     'code'       => 'count_of_execution_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2734,6 +3042,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的研发需求总数',
+    'alias'      => '研发需求总数',
     'code'       => 'count_of_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2747,6 +3056,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的已关闭研发需求数',
+    'alias'      => '已关闭研发需求数',
     'code'       => 'count_of_closed_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2760,6 +3070,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的未关闭研发需求数',
+    'alias'      => '未关闭研发需求数',
     'code'       => 'count_of_unclosed_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2773,6 +3084,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的已完成研发需求数',
+    'alias'      => '已完成研发需求数',
     'code'       => 'count_of_finished_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2786,6 +3098,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的无效研发需求数',
+    'alias'      => '无效研发需求数',
     'code'       => 'count_of_invalid_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2799,6 +3112,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的有效研发需求数',
+    'alias'      => '有效研发需求数',
     'code'       => 'count_of_valid_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2812,6 +3126,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的所有研发需求规模数',
+    'alias'      => '所有研发需求规模数',
     'code'       => 'scale_of_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2825,6 +3140,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的年度完成研发需求数',
+    'alias'      => '完成研发需求数',
     'code'       => 'count_of_annual_finished_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2838,6 +3154,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的年度完成研发需求规模数',
+    'alias'      => '完成研发需求规模数',
     'code'       => 'scale_of_annual_finished_story_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2851,6 +3168,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的研发需求完成率',
+    'alias'      => '研发需求完成率',
     'code'       => 'rate_of_finished_story_in_project',
     'purpose'    => 'rate',
     'scope'      => 'project',
@@ -2864,6 +3182,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的任务总数',
+    'alias'      => '任务总数',
     'code'       => 'count_of_task_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2877,6 +3196,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的未开始任务数',
+    'alias'      => '未开始任务数',
     'code'       => 'count_of_wait_task_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2890,6 +3210,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的进行中任务数',
+    'alias'      => '进行中任务数',
     'code'       => 'count_of_doing_task_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2903,6 +3224,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的已完成任务数',
+    'alias'      => '已完成任务数',
     'code'       => 'count_of_finished_task_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -2916,6 +3238,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的任务预计工时数',
+    'alias'      => '任务预计工时数',
     'code'       => 'estimate_of_task_in_project',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -2929,6 +3252,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的任务消耗工时数',
+    'alias'      => '任务消耗工时数',
     'code'       => 'consume_of_task_in_project',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -2942,6 +3266,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的任务剩余工时数',
+    'alias'      => '任务剩余工时数',
     'code'       => 'left_of_task_in_project',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -2955,6 +3280,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按瀑布项目统计的截止本周已完成任务工作的预计工时(EV)',
+    'alias'      => '截止本周已完成任务工作的预计工时',
     'code'       => 'ev_of_weekly_finished_task_in_waterfall',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -2968,6 +3294,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按瀑布项目统计的截止本周的任务的计划完成工时(PV)',
+    'alias'      => '截止本周的任务的计划完成工时(PV)',
     'code'       => 'pv_of_weekly_task_in_waterfall',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -2981,6 +3308,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的任务进度',
+    'alias'      => '任务进度',
     'code'       => 'progress_of_task_in_project',
     'purpose'    => 'rate',
     'scope'      => 'project',
@@ -2994,6 +3322,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按瀑布项目统计的截止本周的进度偏差率',
+    'alias'      => '进度偏差率',
     'code'       => 'sv_weekly_in_waterfall',
     'purpose'    => 'rate',
     'scope'      => 'project',
@@ -3007,6 +3336,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按瀑布项目统计的截止本周的成本偏差率',
+    'alias'      => '成本偏差率',
     'code'       => 'cv_weekly_in_waterfall',
     'purpose'    => 'rate',
     'scope'      => 'project',
@@ -3020,6 +3350,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的Bug总数',
+    'alias'      => 'Bug总数',
     'code'       => 'count_of_bug_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -3033,6 +3364,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的激活Bug数',
+    'alias'      => '激活Bug数',
     'code'       => 'count_of_activated_bug_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -3046,6 +3378,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的已关闭Bug数',
+    'alias'      => '已关闭Bug数',
     'code'       => 'count_of_closed_bug_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -3059,6 +3392,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的人员总数',
+    'alias'      => '人员总数',
     'code'       => 'count_of_user_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -3072,6 +3406,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的项目内所有消耗工时数',
+    'alias'      => '所有消耗工时数',
     'code'       => 'consume_of_all_in_project',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -3085,6 +3420,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的已投入人天',
+    'alias'      => '已投入人天',
     'code'       => 'day_of_invested_in_project',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -3098,6 +3434,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按瀑布项目统计截止本周的实际花费工时(AC)',
+    'alias'      => '瀑布项目截止本周实际花费工时',
     'code'       => 'ac_of_weekly_all_in_waterfall',
     'purpose'    => 'hour',
     'scope'      => 'project',
@@ -3111,6 +3448,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的开放的风险数',
+    'alias'      => '开放的风险数',
     'code'       => 'count_of_opened_risk_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -3124,6 +3462,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的开放的问题数',
+    'alias'      => '开放的问题数',
     'code'       => 'count_of_opened_issue_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
@@ -3137,6 +3476,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的研发需求总数',
+    'alias'      => '研发需求总数',
     'code'       => 'count_of_story_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3150,6 +3490,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的已完成研发需求数',
+    'alias'      => '已完成研发需求数',
     'code'       => 'count_of_finished_story_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3163,6 +3504,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的无效研发需求数',
+    'alias'      => '无效研发需求数',
     'code'       => 'count_of_invalid_story_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3176,6 +3518,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的有效研发需求数',
+    'alias'      => '有效研发需求数',
     'code'       => 'count_of_valid_story_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3189,6 +3532,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的研发完成的研发需求数',
+    'alias'      => '研发完成的研发需求数',
     'code'       => 'count_of_developed_story_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3202,6 +3546,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的研发需求完成率',
+    'alias'      => '研发需求完成率',
     'code'       => 'rate_of_finished_story_in_execution',
     'purpose'    => 'rate',
     'scope'      => 'execution',
@@ -3215,6 +3560,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的研发完成需求占比',
+    'alias'      => '研发完成需求占比',
     'code'       => 'rate_of_developed_story_in_execution',
     'purpose'    => 'rate',
     'scope'      => 'execution',
@@ -3228,6 +3574,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的任务总数',
+    'alias'      => '任务总数',
     'code'       => 'count_of_task_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3241,6 +3588,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的已完成任务数',
+    'alias'      => '已完成任务数',
     'code'       => 'count_of_finished_task_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3254,6 +3602,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的未完成任务数',
+    'alias'      => '未完成任务数',
     'code'       => 'count_of_unfinished_task_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3267,6 +3616,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的日完成任务数',
+    'alias'      => '完成任务数',
     'code'       => 'count_of_daily_finished_task_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
@@ -3279,7 +3629,22 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的任务剩余工时数',
+    'alias'      => '任务剩余工时数',
+    'code'       => 'left_of_task_in_execution',
+    'purpose'    => 'hour',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'hour',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的任务剩余工时数是指当前未消耗的工时总和，用于完成所有任务。该度量项反映了任务完成的剩余工作量，可以帮助团队预测任务的完成时间和资源需求。',
+    'definition' => "执行中任务的剩余工时数求和\n过滤已删除的任务\n过滤父任务\n过滤已删除的执行\n过滤已删除的项目"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的任务预计工时数',
+    'alias'      => '任务预计工时数',
     'code'       => 'estimate_of_task_in_execution',
     'purpose'    => 'hour',
     'scope'      => 'execution',
@@ -3293,6 +3658,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的任务消耗工时数',
+    'alias'      => '任务消耗工时数',
     'code'       => 'consume_of_task_in_execution',
     'purpose'    => 'hour',
     'scope'      => 'execution',
@@ -3305,20 +3671,8 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按执行统计的任务剩余工时数',
-    'code'       => 'left_of_task_in_execution',
-    'purpose'    => 'hour',
-    'scope'      => 'execution',
-    'object'     => 'task',
-    'unit'       => 'hour',
-    'dateType'   => 'nodate',
-    'desc'       => '按执行统计的任务剩余工时数是指当前未消耗的工时总和，用于完成所有任务。该度量项反映了任务完成的剩余工作量，可以帮助团队预测任务的完成时间和资源需求。',
-    'definition' => "执行中任务的剩余工时数求和\n过滤已删除的任务\n过滤父任务\n过滤已删除的执行\n过滤已删除的项目"
-);
-
-$config->bi->builtin->metrics[] = array
-(
     'name'       => '按执行统计的任务进度',
+    'alias'      => '任务进度',
     'code'       => 'progress_of_task_in_execution',
     'purpose'    => 'rate',
     'scope'      => 'execution',
@@ -3332,6 +3686,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的待评审研发需求数',
+    'alias'      => '待评审研发需求数',
     'code'       => 'count_of_reviewing_story_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3345,6 +3700,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的每日评审研发需求数',
+    'alias'      => '评审研发需求数',
     'code'       => 'count_of_daily_review_story_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3357,20 +3713,22 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按人员统计的待处理研发需求数',
+    'name'       => '按人员统计的被指派的研发需求数',
+    'alias'      => '被指派的研发需求数',
     'code'       => 'count_of_pending_story_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
     'object'     => 'story',
     'unit'       => 'count',
     'dateType'   => 'nodate',
-    'desc'       => '按人员统计的待处理研发需求数表示每个人待处理的研发需求数量之和。反映了每个人员需要处理的研发需求数量的规模。该数值越大，说明需要投入越多的时间处理研发需求。',
+    'desc'       => '按人员统计的被指派的研发需求数表示每个人被指派的研发需求数量之和，反映了每个人员需要处理的研发需求数量的规模，该数值越大，说明需要投入越多的时间处理研发需求',
     'definition' => "所有研发需求个数求和\n过滤已删除的研发需求\n过滤状态为已关闭的研发需求\n过滤已删除产品下的研发需求\n过滤已删除的无产品项目下的研发需求"
 );
 
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的每日完成任务数',
+    'alias'      => '完成任务数',
     'code'       => 'count_of_daily_finished_task_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3384,6 +3742,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的待处理任务数',
+    'alias'      => '待处理任务数',
     'code'       => 'count_of_assigned_task_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3397,6 +3756,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的日解决Bug数',
+    'alias'      => '解决Bug数',
     'code'       => 'count_of_daily_fixed_bug_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3410,6 +3770,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的待处理Bug数',
+    'alias'      => '待处理Bug数',
     'code'       => 'count_of_assigned_bug_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3423,6 +3784,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的待处理用例数',
+    'alias'      => '待处理用例数',
     'code'       => 'count_of_assigned_case_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3436,6 +3798,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的待处理反馈数',
+    'alias'      => '待处理反馈数',
     'code'       => 'count_of_assigned_feedback_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3449,6 +3812,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的待评审反馈数',
+    'alias'      => '待评审反馈数',
     'code'       => 'count_of_reviewing_feedback_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3462,6 +3826,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按人员统计的每日评审反馈数',
+    'alias'      => '评审反馈数',
     'code'       => 'count_of_daily_review_feedback_in_user',
     'purpose'    => 'scale',
     'scope'      => 'user',
@@ -3475,6 +3840,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按代码库统计代码问题提交次数',
+    'alias'      => '代码问题提交次数',
     'code'       => 'count_of_submitted_code_issues_in_codebase',
     'purpose'    => 'qc',
     'scope'      => 'code',
@@ -3488,6 +3854,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按代码库统计代码问题解决总数',
+    'alias'      => '代码问题解决总数',
     'code'       => 'count_of_resolved_code_issues_in_codebase',
     'purpose'    => 'qc',
     'scope'      => 'code',
@@ -3501,6 +3868,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按代码库统计代码中待处理的问题总数',
+    'alias'      => '待处理问题总数',
     'code'       => 'count_of_pending_issues_in_codebase',
     'purpose'    => 'qc',
     'scope'      => 'code',
@@ -3514,6 +3882,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按代码库统计合并请求合并次数',
+    'alias'      => '合并请求合并次数',
     'code'       => 'count_of_merged_pull_requests_in_codebase',
     'purpose'    => 'rate',
     'scope'      => 'code',
@@ -3527,6 +3896,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按代码库统计代码提交次数',
+    'alias'      => '代码提交次数',
     'code'       => 'count_of_code_commits_in_codebase',
     'purpose'    => 'rate',
     'scope'      => 'code',
@@ -3539,26 +3909,238 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按系统统计的年度完成执行数',
-    'code'       => 'count_of_annual_finished_execution',
+    'name'       => '按产品统计的每周新增反馈数',
+    'alias'      => '新增反馈数',
+    'code'       => 'count_of_weekly_created_feedback_in_product',
     'purpose'    => 'scale',
-    'scope'      => 'system',
-    'object'     => 'execution',
+    'scope'      => 'product',
+    'object'     => 'feedback',
     'unit'       => 'count',
-    'dateType'   => 'year',
-    'desc'       => '按系统统计的年度完成执行数是指在某年度已经完成的执行数。该度量项反映了团队或组织在某年的工作效率和完成能力。较高的年度完成执行数表示团队或组织在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。',
-    'definition' => "所有的执行个数求和\n实际完成日期为某年\n过滤已删除的执行"
+    'dateType'   => 'week',
+    'desc'       => '按产品统计的每周新增反馈数是指在一个周内收集到的用户反馈的数量。这个度量项可以帮助团队了解用户对产品的发展趋势和需求变化，并进行产品策略的调整和优化',
+    'definition' => "产品中创建时间为某个周的反馈的个数求和\n过滤已删除的反馈\n过滤已删除的产品"
 );
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按项目统计的年度完成执行数',
-    'code'       => 'count_of_annual_finished_execution_in_project',
+    'name'       => '按产品统计的处理中的反馈数',
+    'alias'      => '处理中反馈数',
+    'code'       => 'count_of_doing_feedback_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'feedback',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的处理中的反馈数表示产品中状态为处理中的反馈数量之和。该数值越大，说明团队并行处理的反馈越多，可以帮助团队了解当前的工作负载情况',
+    'definition' => "产品中所有反馈个数求和\n状态为处理中\n过滤已删除的反馈\n过滤已删除的产品"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的已处理的反馈数',
+    'alias'      => '已处理反馈数',
+    'code'       => 'count_of_done_feedback_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'feedback',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的已处理的反馈数表示产品中状态为已处理的反馈数量之和。该数值越大，说明团队成员处理的反馈越多，有利于提高用户满意度',
+    'definition' => "产品中所有反馈个数求和\n状态为已处理\n过滤已删除的反馈\n过滤已删除的产品"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的待完善的反馈数',
+    'alias'      => '待完善反馈数',
+    'code'       => 'count_of_clarify_feedback_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'feedback',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的待完善的反馈数表示产品中状态为待完善的反馈数量之和。该数值越大，说明有较多的反馈信息不清晰或比较复杂。需要反馈者更多的澄清和解释',
+    'definition' => "产品中所有反馈个数求和\n状态为待完善\n过滤已删除的反馈\n过滤已删除的产品"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的待处理的反馈数',
+    'alias'      => '待处理反馈数',
+    'code'       => 'count_of_wait_feedback_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'feedback',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的待处理的反馈数表示产品中状态为待处理的反馈数量之和。该度量项可能暗示产品团队的反馈处理效率，待处理反馈数越多，可能会导致客户满意度降低',
+    'definition' => "产品中所有反馈个数求和\n状态为待处理\n过滤已删除的反馈\n过滤已删除的产品"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的追问中的反馈数',
+    'alias'      => '追问中反馈数',
+    'code'       => 'count_of_asked_feedback_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'feedback',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的追问中的反馈数表示产品中状态为追问中的反馈数量之和。该度量项可能暗示着反馈的复杂性或对处理方案的疑惑，追问中的反馈数量越多，可能意味着团队需要更多时间和资源来回复并解决这些问题',
+    'definition' => "产品中所有反馈个数求和\n状态为追问中\n过滤已删除的反馈\n过滤已删除的产品"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按产品统计的未关闭的反馈数',
+    'alias'      => '未关闭反馈数',
+    'code'       => 'count_of_unclosed_feedback_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'feedback',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的未关闭的反馈数表示产品中状态为未关闭的反馈数量之和。这个度量项可以一定程度反映产品团队响应用户反馈的效率和及时处理用户问题的能力',
+    'definition' => "产品中所有反馈个数求和\n过滤状态为已关闭的反馈\n过滤已删除的反馈\n过滤已删除的产品"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的已关闭用户需求数',
+    'alias'      => '已关闭用户需求数',
+    'code'       => 'count_of_closed_requirement_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
-    'object'     => 'execution',
+    'object'     => 'requirement',
     'unit'       => 'count',
-    'dateType'   => 'year',
-    'desc'       => '按项目统计的年度完成执行数是指项目在某年度已经完成的执行数。该度量项反映了项目团队在某年的工作效率和完成能力。较高的年度完成执行数表示团队在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。',
-    'definition' => "项目的执行个数求和\n实际完成日期为某年\n过滤已删除的执行\n过滤已删除的项目"
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的已关闭用户需求数是指项目中状态为已关闭的用户需求的数量，反映了项目团队在满足用户期望和需求方面的已完成任务和计划。已关闭用户需求数量的增加表示项目团队已经成功完成了一定数量的用户需求工作，并取得了一定的成果。',
+    'definition' => "项目中用户需求个数求和\n过滤已删除的用户需求状态为已关闭\n 过滤已删除的项目"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的用户需求总数',
+    'alias'      => '用户需求总数',
+    'code'       => 'count_of_requirement_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'requirement',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的用户需求总数是指项目中创建或关联的所有用户需求的数量，反映了项目的规模和复杂度，提供了关于用户需求管理、进度控制、资源规划、风险评估和质量控制的有用信息。',
+    'definition' => "项目中用户需求个数求和\n过滤已删除的用户需求\n过滤已删除的项目"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的工单数',
+    'alias'      => '被指派的工单数',
+    'code'       => 'count_of_assigned_ticket_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'ticket',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派的工单数表示每个人被指派的工单数量之和，反映了每个人员需要处理的工单数量的规模，该数值越大，说明需要处理的反馈任务越多',
+    'definition' => "所有工单个数求和\n指派给为某人\n过滤已删除的工单\n过滤已删除产品的工单"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的QA数',
+    'alias'      => '被指派的QA数',
+    'code'       => 'count_of_assigned_qa_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'qa',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派的QA数表示每个人被指派的质量保证问题之和，反映了每个人员需要处理的质量保证问题的规模。该数值越大，说明需要处理的质量保证问题越多',
+    'definition' => "所有待处理的QA个数求和（包含：待处理质量保证计划、待处理不符合项）\n指派给为某人\n质量保证计划状态为待检查、不符合项状态为待解决\n过滤已删除的质量保证计划和不符合项\n过滤已删除项目的质量保证计划和不符合项"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的风险数',
+    'alias'      => '被指派的风险数',
+    'code'       => 'count_of_assigned_risk_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'risk',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派的风险数表示每个人被指派的风险数量之和，反映了每个人员需要处理的风险数量的规模。该数值越大，说明需要投入越多的时间处理风险',
+    'definition' => "所有风险个数求和\n指派给为某人\n过滤已删除的风险\n过滤已关闭的风险\n过滤已删除项目的风险"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的问题数',
+    'alias'      => '被指派的问题数',
+    'code'       => 'count_of_assigned_issue_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'issue',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派的问题数表示每个人待处理的问题数量之和。反映了每个人员需要处理的问题数量的规模。该数值越大，项目存在问题越多，需要投入越多的时间处理问题。',
+    'definition' => "所有问题个数求和\n指派给为某人\n过滤已删除的问题\n过滤已删除项目的问题"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的用户需求数',
+    'alias'      => '被指派的用需数',
+    'code'       => 'count_of_assigned_requirement_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'requirement',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派的用户需求数表示每个人待处理的用户需求数量之和。反映了每个人员需要处理的用户需求数量的规模。该数值越大，说明需要投入越多的时间处理用户需求。',
+    'definition' => "所有用户需求个数求和\n指派给为某人\n过滤已删除的用户需求\n过滤已删除产品的用户需求"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的需求池需求数',
+    'alias'      => '待处理需求池需求数',
+    'code'       => 'count_of_assigned_demand_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'demand',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派的需求池需求数表示每个人待处理的需求池需求数量之和。反映了每个人员需要处理的需求池需求数量的规模。该数值越大，说明需要投入越多的时间处理需求池需求',
+    'definition' => "所有需求池需求个数求和\n指派给为某人\n过滤已删除的需求池需求\n过滤状态为已关闭的需求池需求"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的未关闭用户需求数',
+    'alias'      => '未关闭用户需求数',
+    'code'       => 'count_of_unclosed_requirement_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'requirement',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的未关闭用户需求数是指项目中尚未满足或处理的用户需求的数量，反映了项目团队在满足用户期望和需求方面的进行中任务和计划。未关闭用户需求数量的增加表示项目团队尚未完成的用户需求工作较多，需要进一步跟进和处理，以确保项目能够满足用户的期望',
+    'definition' => "复用：\n按项目统计的用户需求总数\n按项目统计的已关闭用户需求数\n公式：\n按项目统计的未关闭用户需求数=按项目统计的用户需求总数-按项目统计的已关闭用户需求数"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的已完成用户需求数',
+    'alias'      => '已完成用户需求数',
+    'code'       => 'count_of_finished_requirement_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'requirement',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的已完成用户需求数是指状态为已关闭且关闭原因为已完成的用户需求的数量。反映了项目团队在满足用户期望和需求方面的已经实现的任务和计划。已完成用户需求数量的增加表示项目团队已经成功完成了一定数量的用户需求工作，并取得了一定的成果',
+    'definition' => "项目中用户需求的个数求和\n状态为已关闭\n关闭原因为已完成\n过滤已删除的用户需求\n过滤已删除的项目"
 );
