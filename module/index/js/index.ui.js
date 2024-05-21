@@ -85,7 +85,6 @@ function openApp(url, code, options)
         forceReload = false;
         apps.openedMap[code] = openedApp;
 
-        const iframeUrl = app.external ? url : $.createLink('index', 'app');
         const $iframe =
         $([
             '<iframe',
@@ -93,7 +92,7 @@ function openApp(url, code, options)
                 'name="app-' + code + '"',
                 'class="fade"',
                 'allowfullscreen="true"',
-                'src="' + iframeUrl + '"',
+                app.external ? 'src="' + url + '"' : '',
                 'frameborder="no"',
                 'allowtransparency="true"',
                 'scrolling="auto"',
@@ -105,17 +104,23 @@ function openApp(url, code, options)
             .append($iframe)
             .appendTo('#apps');
 
-        $iframe.on('ready.app', () =>
+        const finishLoad = () =>
         {
-            openApp(url, code, options);
-        });
+            $iframe.removeClass('loading').addClass('in');
+            setTimeout(() => {openedApp.$app.removeClass('loading');}, 300);
+        };
+        if(app.external)
+        {
+            $iframe.on('ready.app', () =>{openApp(url, code, options);});
+        }
+        else
+        {
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`));
+            iframe.contentWindow.document.close();
+        }
         iframe.onload = iframe.onreadystatechange = function(e)
         {
-            const finishLoad = () =>
-            {
-                openedApp.$app.removeClass('loading');
-                $iframe.removeClass('loading').addClass('in');
-            };
             try
             {
                 iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', () => setTimeout(finishLoad, 150));
