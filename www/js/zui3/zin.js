@@ -620,7 +620,7 @@
         else if(typeof options === 'function') options = {success: options};
 
         selectors = Array.isArray(selectors) ? selectors.join(',') : selectors;
-        const id = options.id || selectors;
+        const id = selectors.includes('pageJS') ? 'page' : (options.id || selectors);
         options = $.extend({}, options, {url: url, selectors: selectors, id: id});
 
         const task = fetchTasks.get(id) || {url: url, selectors: selectors, options: options};
