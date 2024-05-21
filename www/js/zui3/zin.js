@@ -862,7 +862,7 @@
         const isInModal = $(target).closest('.modal').length;
         if(!isInModal && !options.selector)
         {
-            selector += ',#mainMenu>*,pageJS/.zin-page-js,hookCode()';
+            selector = 'pageJS/.zin-page-js,' + selector + ',#mainMenu>*,hookCode()';
             if($('#mainNavbar a > .label').length) selector += ',#mainNavbar>*';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
