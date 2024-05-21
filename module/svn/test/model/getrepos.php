@@ -26,7 +26,6 @@ r(count($repos)) && p() && e('5'); // 获取不到数据时，提示错误信息
 r($repos) && p('1') && e('https://svn.qc.oop.cc/svn/unittest1'); // 获取第一条svn记录的path属性
 
 zenData('repo')->gen(0);
-dao::$cache = array();
 
 ob_start();
 $svn->getRepos();

@@ -47,5 +47,4 @@ $pager = new pager(0, 5, 1);
 r(count($storyModel->getProjectRequirements(1, 1, $pager))) && p() && e('5');
 
 $storyModel->dao->update(TABLE_STORY)->set('deleted')->eq(1)->where('id')->eq(1)->exec();
-$storyModel->dao::$cache = array();
 r(count($storyModel->getProjectRequirements(1, 1))) && p() && e('7');
