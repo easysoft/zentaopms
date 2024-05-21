@@ -37,6 +37,9 @@ class productRoadmapBox extends wg
             setClass('productsBox'),
             on::click('.productsBox .addLine', 'window.addNewLine'),
             on::click('.productsBox .removeLine', 'window.removeLine'),
+            on::change('.linkProduct .pick-value', 'window.refreshPicker(e.target)'),
+            on::change('[name^=branch]', 'window.loadBranch'),
+            on::change('[name^=addRoadmap]', 'window.addRoadmap'),
             $productsBox
         );
     }
@@ -76,7 +79,6 @@ class productRoadmapBox extends wg
                                 set::value($productID),
                                 set::items($products),
                                 set::last($productID),
-                                on::change('loadProductBranches(e.target)'),
                                 $hasBranch ? set::lastBranch($branches ? 0 : implode(',', $branches)) : null,
                             ),
                             input
@@ -92,11 +94,9 @@ class productRoadmapBox extends wg
                             $hasBranch ? null : setClass('hidden'),
                             picker
                             (
-                                set::width('100px'),
                                 set::name("branch[$index]"),
                                 set::items($branches),
                                 set::value($defaultBranch),
-                                on::change('loadBranch')
                             )
                         )
                     )
@@ -110,7 +110,6 @@ class productRoadmapBox extends wg
                     (
                         div
                         (
-                            set::id("roadmap{$index}"),
                             setClass('grow linkRoadmap'),
                             picker
                             (
@@ -130,8 +129,7 @@ class productRoadmapBox extends wg
                             checkbox
                             (
                                 set::name("addRoadmap[$index]"),
-                                set::text($lang->demand->addRoadmap),
-                                on::change('addRoadmap')
+                                set::text($lang->demand->addRoadmap)
                             )
                         )
                     )
