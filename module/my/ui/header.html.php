@@ -36,7 +36,6 @@ if($app->rawMethod == 'work')
 
     mainNavbar
     (
-        set::badgeMap($badgeMap),
-        set::itemProps(array('data-load' => 'table'))
+        set::badgeMap($badgeMap)
     );
 }
