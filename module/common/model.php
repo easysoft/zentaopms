@@ -192,7 +192,7 @@ class commonModel extends model
         }
 
         $project = $this->loadModel('project')->getByID($execution->project);
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($execution->id);
+        if(strpos(',waterfall,waterfallplus,ipd,research,', ",$project->model,") !== false) $this->loadModel('programplan')->computeProgress($execution->id);
 
         return $parentExecution;
     }
