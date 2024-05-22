@@ -584,7 +584,7 @@ class productplan extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing', 'all', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
+            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing,launched', 'all', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
         }
 
         $modules = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');

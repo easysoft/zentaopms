@@ -2290,7 +2290,7 @@ class execution extends control
         $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? $project->storyType : 'story';
 
         if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
-        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', $storyType, $orderBy, true, '', null);
+        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
         $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
         foreach($allStories as $id => $story)
         {
