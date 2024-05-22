@@ -1117,7 +1117,7 @@ class dom
      */
     public function datePicker($value)
     {
-        $name = $this->element->attribute('name');
+        $name = $this->element->getAttribute('name');
         if(!$name) return false;
 
         $this->driver->executeScript("return $('[name={$name}]').zui('datePicker').$.setValue('$value')");

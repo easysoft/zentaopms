@@ -413,7 +413,6 @@ class tester extends result
         {
             if(strpos($tip, '|') !== false) list($tip, $fieldValue) = explode('|', $tip);
             $field = trim(preg_replace('/Tip$/', '', $field), '[]');
-            var_dump($field);
             if(!isset($this->lang->{$module}->{$field})) return false;
 
             $field = $this->lang->{$module}->{$field};
