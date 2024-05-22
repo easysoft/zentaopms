@@ -258,6 +258,58 @@ class system extends control
     }
 
     /**
+     * 获取备份的进度。
+     * AJAX: Get the progress of the backup.
+     *
+     * @access public
+     * @param  string $backupName
+     * @return void
+     */
+    public function ajaxGetBackupProgress($backupName)
+    {
+        session_write_close();
+
+        $result = $this->cne->getBackupStatus($this->config->instance->zentaopaas, $backupName);
+        if($result && $result->code == 200)
+        {
+            $status = $result->data->status;
+            if($status == 'completed') return $this->send(array('result' => 'success', 'message' => $this->lang->system->backup->backupSucceed, 'closeModal' => true, 'load' => helper::createLink('backup', 'index')));
+            if($status == 'pending' || $status == 'inprogress') return $this->send(array('result' => 'progress', 'text' => sprintf($this->lang->system->backup->progress, $result->data->completed, $result->data->total)));
+            if($status == 'failed') return $this->send(array('result' => 'failed', 'message' => $this->lang->system->backup->error->backupFail, 'closeModal' => true));
+        }
+        else
+        {
+            return $this->send(array('result' => 'failed', 'message' => $result->message, 'closeModal' => true));
+        }
+    }
+
+    /**
+     * 获取还原的进度。
+     * AJAX: Get the progress of the restore.
+     *
+     * @access public
+     * @param  string $backupName
+     * @return void
+     */
+    public function ajaxGetRestoreProgress($backupName)
+    {
+        session_write_close();
+
+        $result = $this->cne->getRestoreStatus($this->config->instance->zentaopaas, $backupName);
+        if($result && $result->code == 200)
+        {
+            $status = $result->data->status;
+            if($status == 'completed') return $this->send(array('result' => 'success', 'message' => $this->lang->system->backup->restoreSucceed, 'load' => helper::createLink('backup', 'index')));
+            if($status == 'pending' || $status == 'inprogress') return $this->send(array('result' => 'progress', 'text' => sprintf($this->lang->system->backup->progressStore, $result->data->completed, $result->data->total)));
+            if($status == 'failed') return $this->send(array('result' => 'failed', 'message' => $this->lang->system->backup->error->backupFail, 'load' => helper::createLink('backup', 'index')));
+        }
+        else
+        {
+            return $this->send(array('result' => 'failed', 'message' => $result->message, 'load' => helper::createLink('backup', 'index')));
+        }
+    }
+
+    /**
      * 生成数据库授权链接。
      * Generate database auth parameters and jump to login page.
      *
