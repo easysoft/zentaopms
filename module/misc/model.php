@@ -143,6 +143,8 @@ class miscModel extends model
      */
     public function getUpgradeRemind(): bool
     {
+        if(!empty($this->config->global->hideUpgradeGuide)) return false;
+
         $remind = false;
         if(empty($this->config->global->showUpgradeGuide))
         {
