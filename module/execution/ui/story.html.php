@@ -227,7 +227,8 @@ sidebar
         'activeKey'   => $param,
         'settingLink' => !$execution->hasProduct && !$execution->multiple ? createLink('tree', 'browse', "rootID={$product->id}&viewType=story") : null,
         'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0"),
-        'app'         => !$execution->hasProduct && !$execution->multiple ? 'project' : ''
+        'app'         => !$execution->hasProduct && !$execution->multiple ? 'project' : '',
+        'settingApp'  => !$execution->hasProduct && !$execution->multiple ? 'project' : ''
     )))
 );
 
@@ -447,7 +448,7 @@ $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'drop
 if(empty($execution->hasProduct) && empty($execution->multiple))
 {
     $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close');
-    if($storyType == 'requirement') $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'edit', 'divider', 'batchCreate', 'close');
+    if($storyType == 'requirement') $actionMenus = array('change', 'submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'edit', 'divider', 'batchCreate', 'close');
 }
 if(!$canModifyExecution) $actionMenus = array();
 

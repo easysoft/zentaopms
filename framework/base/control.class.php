@@ -220,13 +220,17 @@ class baseControl
             {
                 $uri = helper::createLink('my');
             }
-            elseif(helper::isAjaxRequest())
+            else if(isInModal())
             {
-                helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout)));
+                helper::end(json_encode(array('result' => 'fail', 'load' => true)));
+            }
+            else if(helper::isAjaxRequest())
+            {
+                helper::end(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout, 'load' => 'login')));
             }
 
             $referer = helper::safe64Encode($uri);
-            helper::end(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            $this->locate(helper::createLink('user', 'login', "referer=$referer"));
         }
 
         /**
@@ -735,6 +739,9 @@ class baseControl
         ob_start();
         include $viewFile;
         if(isset($hookFiles)) foreach($hookFiles as $hookFile) if(file_exists($hookFile)) include $hookFile;
+
+        $this->setResponseHeader();
+
         $this->output .= ob_get_contents();
         ob_end_clean();
 
@@ -1033,6 +1040,8 @@ class baseControl
         ob_start();
         include $viewFile;
 
+        $this->setResponseHeader();
+
         if(!$context->rendered) \zin\renderPage();
         $content = ob_get_clean();
 
@@ -1044,6 +1053,24 @@ class baseControl
          * At the end, chang the dir to the previous.
          */
         chdir($currentPWD);
+    }
+
+    /**
+     * 设置响应头。
+     * Set response header.
+     *
+     * @access public
+     * @return void
+     */
+    public function setResponseHeader()
+    {
+        if($this->config->cache->client->enable && $this->app->useClientCache)
+        {
+            helper::setStatus(304);
+            helper::end();
+        }
+
+        helper::header('X-Zin-Cache-Time', strval(time()- 1));
     }
 
     /**
@@ -1078,8 +1105,7 @@ class baseControl
             {
                 if(!is_string($value)) continue;
 
-                /* Retain ["] for json encode when value is jsoned string. */
-                $data[$key] = str_replace('%22', '"', urlencode($value));
+                $data[$key] = rawurlencode($value);
             }
 
             if(defined('RUN_MODE') && in_array(RUN_MODE, array('api', 'xuanxuan')))
@@ -1093,7 +1119,7 @@ class baseControl
             // $obLevel = ob_get_level();
             // for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
-            $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
+            $response = helper::removeUTF8Bom(rawurldecode(json_encode($data)));
             $this->app->outputXhprof();
             return helper::end($response);
         }

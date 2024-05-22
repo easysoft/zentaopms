@@ -708,6 +708,18 @@ div
 );
 
 $actions = $this->loadModel('common')->buildOperateMenu($execution);
+if($config->systemMode == 'PLM')
+{
+    $canStart = $this->execution->checkStageStatus($execution->id, 'start');
+    $canClose = $this->execution->checkStageStatus($execution->id, 'close');
+
+    foreach($actions['mainActions'] as $key => $action)
+    {
+        if($action['icon'] == 'start' && $canStart['disabled']) unset($actions['mainActions'][$key]);
+        if($action['icon'] == 'off'   && $canClose['disabled']) unset($actions['mainActions'][$key]);
+    }
+}
+
 div
 (
     setClass('w-2/3 center fixed actions-menu'),

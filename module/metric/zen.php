@@ -182,8 +182,8 @@ class metricZen extends metric
     {
         foreach($classifiedCalcGroup as $calcGroup)
         {
-            if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks'))) continue;
-            if($this->config->edition == 'biz' and in_array($calcGroup->dataset, array('getIssues', 'getRisks'))) continue;
+            if($this->config->edition == 'open' && in_array($calcGroup->dataset, array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks', 'getDemands'))) continue;
+            if($this->config->edition == 'biz'  && in_array($calcGroup->dataset, array('getIssues', 'getRisks', 'getDemands'))) continue;
 
             try
             {
@@ -277,7 +277,7 @@ class metricZen extends metric
         $calc->calculate($reuseMetrics);
     }
 
-    protected function getRecordByCodeAndDate($code, $calc, $date)
+    protected function getRecordByCodeAndDate($code, $calc, $date, $type = 'single')
     {
         $now = helper::now();
 
@@ -285,7 +285,7 @@ class metricZen extends metric
         $dateType = $this->metric->getDateTypeByCode($code);
 
         if($dateType == 'nodate') return array();
-        if($this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
+        if($type == 'all' && $this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
 
         $dateConfig   = $this->metric->parseDateStr($date, $dateType);
         $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);

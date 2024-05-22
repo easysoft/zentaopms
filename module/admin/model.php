@@ -437,7 +437,7 @@ class adminModel extends model
         $output     .= "<button class='btn pull-right btn-link' data-toggle='dropdown'>";
         $output     .= "<span class='text'>{$currentMenu['name']}</span> ";
         $output     .= "<span class='caret'></span></button>";
-        $output     .= "<ul class='dropdown-menu menu-hover-primary menu-active-primary' id='adminMenu'>";
+        $output     .= "<ul class='dropdown-menu' id='adminMenu'>";
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
             if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;

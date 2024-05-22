@@ -476,17 +476,17 @@ class install extends control
      * Show installation progress of solution.
      *
      * @param  int    $id
-     * @param  bool   $install
+     * @param  bool   $startInstall
      * @access public
      * @return void
      */
-    public function progress(int $id, bool $install = false)
+    public function progress(int $id, bool $startInstall = false)
     {
         $solution = $this->loadModel('solution')->getByID($id);
 
-        $this->view->title    = $this->lang->solution->progress;
-        $this->view->install  = $install;
-        $this->view->solution = $solution;
+        $this->view->title        = $this->lang->solution->progress;
+        $this->view->solution     = $solution;
+        $this->view->startInstall = $startInstall;
 
         $this->app->loadConfig('message');
         $this->config->message->browser->turnon = 0;

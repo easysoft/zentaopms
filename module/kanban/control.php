@@ -240,7 +240,7 @@ class kanban extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage("#header")'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#header,#kanban-{$kanbanID}')"));
         }
 
         $kanban = $this->kanban->getByID($kanbanID);

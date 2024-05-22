@@ -17,14 +17,15 @@ class tabs extends wg
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
         'collapse?: bool=false',
-        'headerClass?:string=""'
+        'headerClass?:string=""',
+        'titleClass?:string="font-bold text-md"'
     );
 
     public static function getPageCSS(): ?string
     {
         return <<<CSS
         .tabs-header {position: relative; z-index: 1}
-        .tabs-nav>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0; color: var(--color-gray-800);}
+        .tabs-nav>.nav-item>a {padding: 0; padding-right: 0; color: var(--color-gray-800);}
         .tabs-nav>.nav-item>a:after {border-width: 0;}
         .tabs-nav>.nav-item>a:before {background: none;}
         .tabs-nav>.nav-item>a.active {color: var(--color-primary-500);}
@@ -35,7 +36,7 @@ class tabs extends wg
         CSS;
     }
 
-    protected function buildTitleView(tabPane $tabPane): node
+    protected function buildTitleView(tabPane $tabPane, string $titleClass = ""): node
     {
         $key    = $tabPane->prop('key');
         $title  = $tabPane->prop('title');
@@ -51,7 +52,7 @@ class tabs extends wg
             (
                 set('data-toggle', 'tab'),
                 set('data-param', $param),
-                setClass('font-medium', $active ? 'active' : null),
+                setClass('font-medium', $active ? 'active' : null, $titleClass),
                 set::href("#$key"),
                 $prefix,
                 span($title),
@@ -129,6 +130,7 @@ class tabs extends wg
     protected function build()
     {
         $isVertical = $this->prop('direction') === 'v';
+        $titleClass  = $this->prop('titleClass');
 
         $this->filterChildren();
 
@@ -136,7 +138,7 @@ class tabs extends wg
         $tabPanes   = array();
         foreach($this->tabPanes as $tabPane)
         {
-            $titleViews[] = $this->buildTitleView($tabPane);
+            $titleViews[] = $this->buildTitleView($tabPane, $titleClass);
             if($tabPane->prop('divider')) $titleViews[] = div(set::className('divider'));
 
             $tabPanes[] = $tabPane;

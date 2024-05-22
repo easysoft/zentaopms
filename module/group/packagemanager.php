@@ -169,10 +169,6 @@ $config->group->subset->executionkanban = new stdclass();
 $config->group->subset->executionkanban->order = 580;
 $config->group->subset->executionkanban->nav   = 'execution';
 
-$config->group->subset->board = new stdclass();
-$config->group->subset->board->order = 655;
-$config->group->subset->board->nav   = 'board';
-
 $config->group->subset->executionburn = new stdclass();
 $config->group->subset->executionburn->order = 590;
 $config->group->subset->executionburn->nav   = 'execution';
@@ -4194,32 +4190,3 @@ $config->group->package->deleteResearchTask = new stdclass();
 $config->group->package->deleteResearchTask->subset = 'researchtask';
 $config->group->package->deleteResearchTask->privs  = array();
 $config->group->package->deleteResearchTask->privs['marketresearch-deleteTask']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-stage', 'marketresearch-all', 'marketresearch-browse', 'marketresearch-viewTask'), 'recommend' => array('marketresearch-createTask', 'marketresearch-batchCreateTask', 'marketresearch-taskAssignTo', 'marketresearch-editTask', 'marketresearch-startTask', 'marketresearch-finishTask', 'marketresearch-closeTask', 'marketresearch-activateTask', 'marketresearch-cancelTask', 'marketresearch-recordTaskEstimate'));
-
-$config->group->package->boardAction = new stdclass();
-$config->group->package->boardAction->subset = 'board';
-$config->group->package->boardAction->privs  = array();
-$config->group->package->boardAction->privs['board-createBoard']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardAction->privs['board-editBoard']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardAction->privs['board-close']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardAction->privs['board-activate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardAction->privs['board-collect']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardAction->privs['board-lock']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardAction->privs['board-unlock']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardAction->privs['board-actions']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 50, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->boardSpace = new stdclass();
-$config->group->package->boardSpace->subset = 'board';
-$config->group->package->boardSpace->privs  = array();
-$config->group->package->boardSpace->privs['board-createSpace'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->boardSpace->privs['board-editSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->deleteBoard = new stdclass();
-$config->group->package->deleteBoard->subset = 'board';
-$config->group->package->deleteBoard->privs  = array();
-$config->group->package->deleteBoard->privs['board-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->deleteBoard->privs['board-deleteSpace'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->viewBoard = new stdclass();
-$config->group->package->viewBoard->subset = 'board';
-$config->group->package->viewBoard->privs  = array();
-$config->group->package->viewBoard->privs['board-teamBoard'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array(), 'recommend' => array());

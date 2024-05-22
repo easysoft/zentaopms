@@ -127,7 +127,7 @@ class storyModel extends model
             ->where('t1.version=t2.version')
             ->andWhere('t1.id')->in($storyIdList)
             ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq('0')->fi()
-            ->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()
+            ->beginIF($this->config->vision == 'or')->andWhere("FIND_IN_SET('or', t1.vision)")->fi()
             ->fetchAll('id');
     }
 
@@ -141,7 +141,7 @@ class storyModel extends model
      */
     public function getPairsByList(array|string $storyIdList): array
     {
-        $storyPairs = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($storyIdList)->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()->fetchPairs();
+        $storyPairs = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($storyIdList)->beginIF($this->config->vision == 'or')->andWhere("FIND_IN_SET('or', t1.vision)")->fi()->fetchPairs();
 
         return array(0 => '') + $storyPairs;
     }
@@ -3661,18 +3661,12 @@ class storyModel extends model
         }
 
         if($action == 'recallchange') return $story->status == 'changing';
-        if($action == 'recall')       return $story->status == 'reviewing';
+        if($action == 'recall')       return $story->status == 'reviewing' || $story->status == 'changing';
         if($action == 'close')        return $story->status != 'closed';
         if($action == 'activate')     return $story->status == 'closed';
         if($action == 'assignto')     return $story->status != 'closed';
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
-        if($action == 'batchcreate')
-        {
-            if($config->vision == 'or')    return false;
-            if(!empty($story->twins))      return false;
-            if($story->status != 'active') return false;
-        }
 
         if($action == 'createtask')
         {
@@ -3703,8 +3697,11 @@ class storyModel extends model
 
         if($action == 'batchcreate')
         {
+            if($config->vision == 'or') return false;
+            if(!empty($story->twins))   return false;
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
+            if(strpos('active,launched', $story->status) === false || !empty($story->plan)) return false;
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
             if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }

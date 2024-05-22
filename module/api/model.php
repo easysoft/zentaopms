@@ -1037,7 +1037,7 @@ class apiModel extends model
         }
 
         /* Get all struct by libID. */
-        $structs = $this->api->getStructListByLibID($libID);
+        $structs = $this->getStructListByLibID($libID);
         foreach($structs as $struct)
         {
             $typeList[$struct->id] = $struct->name;

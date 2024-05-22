@@ -59,7 +59,7 @@ class node implements \JsonSerializable
 
     public function __construct(mixed ...$args)
     {
-        $this->gid   = 'zin_' . uniqid();
+        $this->gid   = static::nextGid();
         $this->props = new props();
 
         disableGlobalRender();
@@ -678,6 +678,42 @@ class node implements \JsonSerializable
     protected static array $definedPropsMap = array();
 
     protected static array $blockMap = array();
+
+    protected static array $gidMap = array();
+
+    protected static ?string $pageKey = null;
+
+    public static function nextGid($prefix = 'zin_', $type = null): string
+    {
+        if($type === null)
+        {
+            $type = get_called_class();
+            if(str_starts_with($type, 'zin\\')) $type = substr($type, 4);
+        }
+        $lastID = isset(static::$gidMap[$type]) ? static::$gidMap[$type] : -1;
+        $nextID = $lastID + 1;
+        static::$gidMap[$type] = $nextID;
+
+        $key = static::$pageKey;
+        if($key === null)
+        {
+            global $app;
+            $key = $app->rawModule . '_' . $app->rawMethod . '_';
+            $pageDataID = data($app->rawModule . 'ID');
+            if(!$pageDataID)
+            {
+                $pageData = data($app->rawModule);
+                if(is_object($pageData) && isset($pageData->id))      $pageDataID = $pageData->id;
+                elseif(is_array($pageData) && isset($pageData['id'])) $pageDataID = $pageData['id'];
+            }
+            if($pageDataID) $key .= $pageDataID . '_';
+            static::$pageKey = $key;
+        }
+
+        $id = $prefix . $key . $type;
+        if($nextID > 0) $id .= "_$nextID";
+        return $id;
+    }
 
     public static function getBlockMap(): array
     {

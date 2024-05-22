@@ -63,3 +63,12 @@ window.downloadFile = function(fileID, extension, imageWidth)
 
     return false;
 }
+
+$(document).off('click', '#actionBar .btn.export').on('click', '#actionBar .btn.export', function()
+{
+    const dtable = zui.DTable.query($('#table-doc-showfiles'));
+    if(!$('#table-doc-showfiles').length) return;
+
+    const checkedList = dtable.$.getChecks();
+    $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
+});

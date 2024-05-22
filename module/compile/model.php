@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package     compile
  * @version     $Id$
  * @link        https://www.zentao.net
+ * @property    jobModel $job
  */
 class compileModel extends model
 {
@@ -22,18 +23,6 @@ class compileModel extends model
     public function getByID(int $buildID): object|false
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($buildID)->fetch();
-    }
-
-    /**
-     * Get By Queue.
-     *
-     * @param  int    $queue
-     * @access public
-     * @return object|false
-     */
-    public function getByQueue(int $queue): object|false
-    {
-        return $this->dao->select('*')->from(TABLE_COMPILE)->where('queue')->eq($queue)->fetch();
     }
 
     /**

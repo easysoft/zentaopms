@@ -28,7 +28,6 @@ r(count($svn->repos)) && p() && e('5'); // 获取不到数据时，提示错误�
 r($svn->repos) && p('1:name,SCM') && e('svn-1,Subversion'); // 获取第一条svn记录的name和SCM属性
 
 zenData('repo')->gen(0);
-dao::$cache = array();
 
 ob_start();
 $svn->setRepos();

@@ -27,7 +27,7 @@ class metricModel extends model
     public function getViewTableHeader($metric)
     {
         $dataFields = $this->getMetricRecordDateField($metric);
-        $dateType   = $metric->dateType;
+        $dateType   = $this->getDateTypeByCode($metric->code);
 
         $dataFields[] = 'id';
         $dataFields[] = 'value';
@@ -62,7 +62,7 @@ class metricModel extends model
         if(empty($result)) return array();
 
         $scope    = $metric->scope;
-        $dateType = $metric->dateType;
+        $dateType = $this->getDateTypeByCode($metric->code);
         if($scope != 'system') $objectPairs = $this->getPairsByScope($scope);
 
         $tableData = array();
@@ -628,7 +628,7 @@ class metricModel extends model
     protected function getMetricRecordDateField(object $metric): array
     {
         $dataFields = array();
-        $dateType   = $metric->dateType;
+        $dateType   = $this->getDateTypeByCode($metric->code);
 
         if($dateType != 'nodate') $dataFields[] = 'year';
         if($dateType == 'month')  $dataFields[] = 'month';
@@ -711,24 +711,20 @@ class metricModel extends model
      */
     public function getResultByCodeWithArray($code, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
     {
-        $metric     = $this->metricTao->fetchMetricByCode($code);
+        $metric = $this->metricTao->fetchMetricByCode($code);
+        if(!$metric) return array();
         $dataFields = $this->getMetricRecordDateField($metric);
 
         $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
         if(empty($records)) return array();
-        if($metric->dateType == 'nodate')
-        {
-            $record = current($records);
-            $record->value = (float)$record->value;
-
-            return array((array)$record);
-        }
 
         $result = array();
-        foreach($records as $record)
+        foreach($records as $index => $record)
         {
-            $record->value = (float)$record->value;
-            $result[] = (array)$record;
+            $record          = (array)$record;
+            $record['value'] = (float)$record['value'];
+
+            $result[] = $record;
         }
 
         return $result;
@@ -948,7 +944,7 @@ class metricModel extends model
     public function deduplication(string $code): bool
     {
         $metric = $this->getByCode($code);
-        $fields = $this->metricTao->getRecordFields($code);
+        $fields = $this->getRecordFields($code);
         if(!in_array($metric->scope, $fields)) $fields[] = $metric->scope;
 
         if(empty($fields)) return false;
@@ -959,6 +955,30 @@ class metricModel extends model
         $this->metricTao->dropDistinctTempTable();
 
         return dao::isError();
+    }
+
+    /**
+     * 获取度量数据有效字段。
+     * Get metric record fields.
+     *
+     * @param  string $code
+     * @access public
+     * @return array|false
+     */
+    public function getRecordFields(string $code): array|false
+    {
+        $metric   = $this->metricTao->fetchMetricByCode($code);
+        $dateType = $this->getDateTypeByCode($code);
+        $fields   = array($metric->scope);
+
+        if($dateType == 'nodate') return $fields;
+
+        $fields[] = 'year';
+        if($dateType == 'month' || $dateType == 'day') $fields[] = 'month';
+        if($dateType == 'week') $fields[] = 'week';
+        if($dateType == 'day') $fields[] = 'day';
+
+        return $fields;
     }
 
     /**

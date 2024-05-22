@@ -63,6 +63,7 @@ sidebar
         'settingLink' => $settingLink,
         'closeLink'   => $closeLink,
         'showDisplay' => false,
+        'filterMap'   => array(),
         'settingText' => $lang->dept->manage
     )))
 );

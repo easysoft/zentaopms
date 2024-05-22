@@ -12,6 +12,8 @@ namespace zin;
 
 jsVar('module', $objectType);
 jsVar('linkParams', "objectID={$objectID}&repoID=%s");
+jsVar('branchLang', $lang->repo->branch);
+jsVar('tagLang', $lang->repo->tag);
 modalHeader
 (
     set::title($lang->repo->codeBranch),

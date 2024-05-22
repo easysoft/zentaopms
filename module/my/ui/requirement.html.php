@@ -15,6 +15,9 @@ jsVar('window.globalSearchType', 'requirement');
 jsVar('showGrade',  $showGrade);
 jsVar('gradeGroup', $gradeGroup);
 
+jsVar('recall',       $lang->story->recall);
+jsVar('recallChange', $lang->story->recallChange);
+
 featureBar
 (
     set::current($type),

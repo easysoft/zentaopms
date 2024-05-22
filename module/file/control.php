@@ -197,7 +197,7 @@ class file extends control
             }
             if($this->post->kind == 'task' && $this->config->vision != 'lite') $output .= $this->lang->file->childTaskTips;
         }
-        if($this->post->encode != "utf-8") $output = helper::convertEncoding($output, 'utf-8', $this->post->encode . '//TRANSLIT');
+        if(isset($_POST['encode']) && $this->post->encode != "utf-8") $output = helper::convertEncoding($output, 'utf-8', $this->post->encode . '//TRANSLIT');
 
         $this->sendDownHeader($this->post->fileName, 'csv', $output);
     }

@@ -190,28 +190,25 @@ function taskMiscInfo(): taskMiscInfo {return createWg('taskMiscInfo', func_get_
 function caseBasicInfo(): caseBasicInfo {return createWg('caseBasicInfo', func_get_args());}
 function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_args());}
 function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
+function demandBasicInfo(): demandBasicInfo {return createWg('demandBasicInfo', func_get_args());}
+function demandLifeInfo(): demandLifeInfo {return createWg('demandLifeInfo', func_get_args());}
 function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
 function contactUs(): contactUs {return createWg('contactUs', func_get_args());}
 function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
 function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
 function thinkQuestion(): thinkQuestion {return createWg('thinkQuestion', func_get_args());}
-function thinkNodeBase(): thinkNodeBase {return createWg('thinkNodeBase', func_get_args());}
+function thinkStepBase(): thinkStepBase {return createWg('thinkStepBase', func_get_args());}
 function thinkTransition(): thinkTransition {return createWg('thinkTransition', func_get_args());}
+function thinkBaseCheckbox(): thinkBaseCheckbox {return createWg('thinkBaseCheckbox', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
 function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
 function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
 function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', func_get_args());}
 function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
-function thinkStepDetail(): thinkStepDetail {return createWg('thinkStepDetail', func_get_args());}
-function thinkInputDetail(): thinkInputDetail {return createWg('thinkInputDetail', func_get_args());}
-function thinkTableInputDetail(): thinkTableInputDetail {return createWg('thinkTableInputDetail', func_get_args());}
-function thinkOptionsDetail(): thinkOptionsDetail {return createWg('thinkOptionsDetail', func_get_args());}
-function thinkNodeMenu(): thinkNodeMenu {return createWg('thinkNodeMenu', func_get_args());}
-function thinkCheckList(): thinkCheckList {return createWg('thinkCheckList', func_get_args());}
+function thinkStepMenu(): thinkStepMenu {return createWg('thinkStepMenu', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
-function thinkTransitionDetail(): thinkTransitionDetail {return createWg('thinkTransitionDetail', func_get_args());}
-function thinkRun(): thinkRun {return createWg('thinkRun', func_get_args());}
+function affected(): affected {return createWg('affected', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'boardeditor'))
 {

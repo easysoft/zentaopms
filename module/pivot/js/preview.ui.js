@@ -225,7 +225,13 @@ renderCell = function(result, {row, col})
     {
         const values = result.shift();
         result.push({className: 'gap-0 px-0'});
-        values.forEach((value, index) => result.push({html: value ? value : '&nbsp;', className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''), style: 'border-color: var(--dtable-border-color)'}));
+        values.forEach((value, index) =>
+          result.push({
+            html: value || !Number.isNaN(value) ? `${value}` : '&nbsp;',
+            className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
+            style: 'border-color: var(--dtable-border-color)'
+          })
+        );
     }
 
     return result;

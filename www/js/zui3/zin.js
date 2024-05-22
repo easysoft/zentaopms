@@ -55,6 +55,7 @@
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
             return state;
         },
+        updateAppUrl:      function(url, title){return $.apps.updateApp(currentCode, url, title)},
         isOldPage:         () => false,
         reloadApp:         function(_code, url){loadPage(url);},
         openApp:           function(url, options){loadPage(url, options);},
@@ -215,19 +216,21 @@
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
     }
 
-    function layoutNanavbar(immediate)
+    function layoutNavbar(immediate)
     {
         if(!immediate)
         {
-            if(layoutNanavbar.timer) clearTimeout(layoutNanavbar.timer);
-            layoutNanavbar.timer = setTimeout(() => layoutNanavbar(true), 50);
+            if(layoutNavbar.timer) clearTimeout(layoutNavbar.timer);
+            layoutNavbar.timer = setTimeout(() => layoutNavbar(true), 50);
             return;
         }
 
         const $navbar = $('#navbar');
         if(!$navbar.length) return;
 
-        const $nav        = $navbar.children('.nav');
+        const $nav = $navbar.children('.nav');
+        if(!$nav.length) return;
+
         let layout        = $nav.data('_layout');
         let itemPadding   = 12;
         let dividerMargin = 8;
@@ -271,7 +274,7 @@
         if($newNav.text().trim() !== $navbar.text().trim() || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')) return $navbar.empty().append($newNav);
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
-        layoutNanavbar();
+        layoutNavbar();
     }
 
     function updateFeatureBar(data)
@@ -332,7 +335,7 @@
         {
             $heading.html(data);
         }
-        layoutNanavbar();
+        layoutNavbar();
     }
 
     function activeNav(activeID, nav)
@@ -426,7 +429,7 @@
         }
     }
 
-    function toggleLoading(target, isLoading, loadingClass)
+    function toggleLoading(target, isLoading, loadingClass, loadingIndicatorDelay)
     {
         var $target = $(target);
 
@@ -437,8 +440,13 @@
         const position = $target.css('position');
         if(!['relative', 'absolute', 'fixed'].includes(position)) $target.css('position', 'relative');
 
-        if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
         if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
+        $target.css('--load-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
+        if(!$target.hasClass('load-indicator'))
+        {
+            $target.addClass('load-indicator');
+            if(isLoading) return setTimeout(() => {$target.addClass(loadingClass);}, 50);
+        }
         $target.toggleClass(loadingClass, isLoading);
     }
 
@@ -468,23 +476,37 @@
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
-        const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode};
+        const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode, 'X-Zin-Cache-Time': 0};
         if(options.modal) headers['X-Zui-Modal'] = 'true';
-        const ajaxOptions =
+        const requestMethod = (options.method || 'GET').toUpperCase();
+        if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
+        const cacheKey = options.cache;
+        let cache;
+        const renderPageData = (data, onlyZinDebug) =>
+        {
+            renderPage(data.reduce((list, item, idx) =>
+            {
+                if(Array.isArray(item)) item = {name: item[0].split(':')[0], data: item[1], type: item[2] || 'data'};
+                item.selector = selectors[idx];
+                if(!onlyZinDebug || item.name === 'zinDebug') list.push(item);
+                return list;
+            }, []), options);
+        };
+        const ajax = new zui.Ajax(
         {
             url:         url + (url.includes('?') ? '&zin=1' : '?zin=1'),
             headers:     headers,
-            type:        options.method || 'GET',
+            type:        requestMethod,
             data:        options.data,
-            contentType: options.contentType,
+            type:        (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass);
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, cache ? '6s' : '1s');
                 if(options.before) options.before();
             },
-            success(data)
+            success(rawData)
             {
                 const response = this.response;
                 if(response && response.redirected)
@@ -500,12 +522,13 @@
                         return;
                     }
                 }
-                updatePerfInfo(options, 'requestEnd', {dataSize: data.length});
+                updatePerfInfo(options, 'requestEnd', {dataSize: rawData.length, perf: {clientCache: cache ? cacheKey : null}});
                 options.result = 'success';
                 let hasFatal = false;
+                let data;
                 try
                 {
-                    data = $.parseRawData(data);
+                    data = $.parseRawData(rawData);
                 }
                 catch(e)
                 {
@@ -516,14 +539,33 @@
                 }
                 if(Array.isArray(data))
                 {
-                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
-                    data.forEach((item, idx) => item.selector = selectors[idx]);
                     updatePerfInfo(options, 'renderBegin');
-                    renderPage(data, options);
-                    updatePerfInfo(options, 'renderEnd');
+                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
+                    let newCacheData = cacheKey ? rawData : null;
+                    if(newCacheData && DEBUG)
+                    {
+                        const parts = newCacheData.split(',["zinDebug:<BEGIN>",');
+                        if(parts.length > 1) newCacheData = parts[0] + ']';
+                    }
+                    const cacheHit = cache && newCacheData === cache.data.data;
+                    if(!cacheHit)
+                    {
+                        renderPageData(data);
+                    }
+                    else if(DEBUG)
+                    {
+                        console.log('%c[APP] Skip render with effective caching', 'color:green', cacheKey);
+                        renderPageData(data, true);
+                    }
+                    updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
                     $(document).trigger('pagerender.app');
                     if(options.success) options.success(data);
                     if(onFinish) onFinish(null, data);
+                    if(cacheKey)
+                    {
+                        const cacheTime = +response.headers.get('X-Zin-Cache-Time');
+                        $.db.setCacheData(cacheKey, {data: newCacheData, url: currentAppUrl, partial: options.partial, selectors: selectors.join(','), clientTime: Date.now()}, cacheTime, 'zinFetch');
+                    }
                 }
                 else
                 {
@@ -531,7 +573,7 @@
                     if(data.autoLoad) autoLoad(data.autoLoad);
                     if(data.result === 'fail')
                     {
-                        if(data.message) zui.Messager.alert(data.message);
+                        if(data.message) zui.Messager.show({content: data.message, type: 'danger', className: 'bg-danger text-canvas gap-2 messager-fail'});
                     }
                     if(data.open)
                     {
@@ -595,9 +637,44 @@
                     frameElement.classList.add('in');
                 }
             }
-        };
+        });
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
-        return $.ajax(ajaxOptions);
+        if(cacheKey)
+        {
+            $.db.getCache(cacheKey, 'zinFetch').then(localCache =>
+            {
+                cache = localCache;
+                if(cache)
+                {
+                    ajax.setting.headers['X-Zin-Cache-Time'] = cache.updateTime;
+                    if($(document).data('zinCache') !== [cache.key, cache.time].join('#'))
+                    {
+                        try
+                        {
+                            const data = $.parseRawData(cache.data.data);
+                            if(DEBUG) console.log('%c[APP] Render with cache', 'color:green', cacheKey);
+                            if(!cache.data.partial) currentAppUrl = cache.data.url;
+                            renderPageData(data);
+                            $(document).data('zinCache', [cache.key, cache.time].join('#')).trigger('pagecaheload.app');
+                        }
+                        catch(error)
+                        {
+                            if(DEBUG) console.error('[APP] ', 'Parse cache data failed from ' + url, {error: error, cache: cache});
+                        }
+                    }
+                    else
+                    {
+                        if(DEBUG) console.log('%c[APP] Skip render data with same cache', 'color:green', cacheKey);
+                    }
+                }
+                ajax.send();
+            });
+        }
+        else
+        {
+            ajax.send();
+        }
+        return ajax;
     }
 
     function fetchContent(url, selectors, options)
@@ -612,7 +689,7 @@
         else if(typeof options === 'function') options = {success: options};
 
         selectors = Array.isArray(selectors) ? selectors.join(',') : selectors;
-        const id = options.id || selectors;
+        const id = selectors.includes('pageJS') ? 'page' : (options.id || selectors);
         options = $.extend({}, options, {url: url, selectors: selectors, id: id});
 
         const task = fetchTasks.get(id) || {url: url, selectors: selectors, options: options};
@@ -661,7 +738,7 @@
         }
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
         const $iframe = $page.find('iframe').removeClass('in').addClass('invisible');
-        if($iframe.attr('src') === url) $iframe[0].contentWindow.location.reload();
+        if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
         currentAppUrl = url;
     }
@@ -785,7 +862,8 @@
         const isInModal = $(target).closest('.modal').length;
         if(!isInModal && !options.selector)
         {
-            selector += ',#mainMenu>*,pageJS/.zin-page-js,hookCode()';
+            selector = 'pageJS/.zin-page-js,' + selector + ',#mainMenu>*,hookCode()';
+            if($('#mainNavbar a > .label').length) selector += ',#mainNavbar>*';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
@@ -903,7 +981,7 @@
             options = selector;
             selector = null;
         }
-        options = $.extend({url: url, selector: selector, method: 'POST', data, contentType: false}, options);
+        options = $.extend({url: url, selector: selector, method: 'POST', data: data, contentType: false}, options);
         if(options.dataMap)
         {
             options.data = zui.createFormData(zui.mapFormData(options.dataMap), options.data);
@@ -1396,7 +1474,7 @@
 
     function updatePageLayout()
     {
-        layoutNanavbar();
+        layoutNavbar();
     }
 
     function handleGlobalClick(e)

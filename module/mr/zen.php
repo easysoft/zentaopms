@@ -282,4 +282,31 @@ class mrZen extends mr
         $branch = $this->loadModel($host->type)->apiGetSingleBranch($host->id, $projectID, $branch);
         return $branch ? zget($branch, 'web_url', '') : '';
     }
+
+    /**
+     * 检查是否有新的提交。
+     * Check if there are new commits.
+     *
+     * @param  string    $hostType
+     * @param  int       $hostID
+     * @param  string    $projectID
+     * @param  int       $mriid
+     * @param  string    $lastTime
+     * @access protected
+     * @return bool
+     */
+    protected function checkNewCommit(string $hostType, int $hostID, string $projectID, int $mriid, string $lastTime): bool
+    {
+        $commitLogs = $this->mr->apiGetMRCommits($hostID, $projectID, $mriid);
+        if($commitLogs)
+        {
+            $lastCommit = zget($commitLogs[0], 'committed_date', '');
+            if($hostType == 'gitfox') $lastCommit = date('Y-m-d H:i:s', strtotime($commitLogs[0]->author->when));
+            if(in_array($hostType, array('gitea', 'gogs'))) $lastCommit = $commitLogs[0]->author->committer->date;
+
+            if($lastCommit > $lastTime) return true;
+        }
+
+        return false;
+    }
 }

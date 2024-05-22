@@ -65,7 +65,7 @@ row
                         $showCodes ? array
                         (
                             'type'  => 'picker',
-                            'items' => array('') + $codes
+                            'items' => $codes
                         ) : 'input'
                     )
                 )

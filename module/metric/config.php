@@ -5,6 +5,7 @@ $config->metric->objectList    = array('program', 'line', 'product', 'project', 
 $config->metric->purposeList   = array('scale', 'qc', 'hour', 'cost', 'rate', 'time');
 $config->metric->dateList      = array('year', 'month', 'week', 'day');
 $config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user');
+$config->metric->orMetricList  = array('count_of_assigned_demand_in_user');
 
 $config->metric->maxSelectNum = 10;
 

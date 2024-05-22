@@ -50,9 +50,11 @@ $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = '版本库';
 $lang->mr->jobID       = '流水线任务';
 $lang->mr->commitLogs  = '提交记录';
+$lang->mr->execJob     = '执行';
+$lang->mr->execJobTip  = '手动执行流水线任务';
 
 $lang->mr->canMerge  = "可合并";
-$lang->mr->cantMerge = "不可合并";
+$lang->mr->cantMerge = "不可自动合并";
 
 $lang->mr->approval = '评审';
 $lang->mr->approve  = '通过';
@@ -74,6 +76,12 @@ $lang->mr->needApproved       = '需要通过评审才能合并';
 $lang->mr->needCI             = '需要通过流水线才能合并';
 $lang->mr->removeSourceBranch = '合并后删除源分支';
 $lang->mr->squash             = '合并提交记录';
+$lang->mr->triggeredCI        = '目标分支或流水线变动，触发流水线执行。';
+$lang->mr->acceptTip          = '评审通过后才能合并';
+$lang->mr->conflictsTip       = '该合并请求存在冲突，无法评审通过';
+$lang->mr->noChangesTip       = '源分支与目标分支没有变化，无法评审通过';
+$lang->mr->compileTip         = '该合并请求流水线构建未成功，无法评审通过';
+$lang->mr->branchUpdateTip    = '分支有更新，可执行流水线';
 
 $lang->mr->repeatedOperation = '请勿重复操作';
 
@@ -173,8 +181,10 @@ $lang->mr->hasNoConflict  = "可以合并";
 $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
 $lang->mr->mergeSuccess   = "已成功合并";
+$lang->mr->refreshSuccess = '刷新成功';
 
 $lang->mr->todomessage = "项目中指派给你了";
+$lang->mr->squashHelp  = '对应git参数：--squash';
 
 /**
  * Merge Command Document.

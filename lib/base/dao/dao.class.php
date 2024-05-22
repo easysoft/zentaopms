@@ -27,6 +27,15 @@ class baseDAO
     const LIMIT   = 'lImiT';
 
     /**
+     * 缓存未命中标识。
+     * The cache miss flag.
+     *
+     * @var string
+     * @access public
+     */
+    const CACHE_MISS = 'DAO_CAHCE_MISS';
+
+    /**
      * 全局对象$app
      * The global app object.
      *
@@ -164,15 +173,6 @@ class baseDAO
     static public $errors = array();
 
     /**
-     * 缓存。
-     * The cache.
-     *
-     * @var array
-     * @access public
-     */
-    static public $cache = array();
-
-    /**
      * 实时记录日志设置，并设置记录文件。
      * Open real time log and set real time file.
      *
@@ -197,6 +197,19 @@ class baseDAO
         $this->lang      = $lang;
         $this->dbh       = $dbh;
         $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
+
+        if($config->cache->dao->enable)
+        {
+            $app->loadClass('cache', true);
+            try
+            {
+                $this->cache = new cache($config->cache->dao->driver, 'dao-', $config->cache->dao->lifetime);
+            }
+            catch (Exception $e)
+            {
+                die($e->getMessage());
+            }
+        }
 
         $this->reset();
     }
@@ -297,6 +310,64 @@ class baseDAO
     public function setMethod($method = '')
     {
         $this->method = $method;
+    }
+
+    /**
+     * 获取缓存。
+     * Get the cache.
+     *
+     * @param  string $key
+     * @param  string $sql
+     * @access public
+     * @return mixed
+     */
+    public function getCache($key, $sql)
+    {
+        if(empty($this->cache)) return self::CACHE_MISS;
+
+        $cache = $this->cache->get($key);
+        if($cache === null) return self::CACHE_MISS;
+
+        /* 解析缓存的更新时间和值到变量中。 */
+        /* Parse the cache time and value to variables. */
+        list($cachedTime, $cachedValue) = $cache;
+
+        /* 查找 sql 语句中包含的表名。*/
+        /* Find the table names in the sql. */
+        preg_match_all("/({$this->config->db->prefix}\w+)[`\" ]/", $sql, $tables);
+        if(!isset($tables[1])) return self::CACHE_MISS;
+
+        /* 检查 sql 语句中包含的表的更新时间是否大于缓存的更新时间，如果大于则不使用缓存。*/
+        /* Check if the update time of the tables in the sql is greater than the cache time, if greater, don't use the cache. */
+        foreach($tables[1] as $table)
+        {
+            $tableCache = $this->cache->get($table);
+            if($tableCache === null) continue;
+
+            if($tableCache[0] > $cachedTime) return self::CACHE_MISS;
+        }
+
+        /* 检查是否可以使用客户端缓存。*/
+        /* Check if can use the client cache. */
+        $this->app->useClientCache = $this->app->clientCacheTime > $cachedTime;
+
+        return $cachedValue;
+    }
+
+    /**
+     * 设置缓存。
+     * Set the cache.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @access public
+     * @return void
+     */
+    public function setCache($key, $value = null)
+    {
+        $this->app->useClientCache = false;
+
+        if(!empty($this->cache)) $this->cache->set($key, array(microtime(true), $value));
     }
 
     /**
@@ -907,13 +978,23 @@ class baseDAO
         {
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
-            if($this->table) unset(dao::$cache[$this->table]);
+
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
             $this->slaveDBH = false;
 
-            return $this->dbh->exec($sql);
+            $result = $this->dbh->exec($sql);
+
+            if($this->table)
+            {
+                /* 更新表的缓存时间。*/
+                /* Update the table cache time. */
+                $table = str_replace(array('`', '"'), '', $this->table);
+                $this->setCache($table);
+            }
+
+            return $result;
         }
         catch (PDOException $e)
         {
@@ -934,27 +1015,18 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql   = $this->processSQL();
-        $table = $this->table;
-        $key   = 'fetch-' . md5($sql . $field);
-        if(isset(dao::$cache[$table][$key]))
-        {
-            if(empty($field)) return $this->getRow(dao::$cache[$table][$key]);
+        $sql = $this->processSQL();
+        $key = 'fetch-' . md5($sql);
 
-            $result = dao::$cache[$table][$key];
-            return $result ? $result->$field : '';
+        $result = $this->getCache($key, $sql);
+        if($result === self::CACHE_MISS)
+        {
+            $result = $this->query($sql)->fetch(PDO::FETCH_OBJ);
+            $this->setCache($key, $result);
         }
 
-        if(empty($field))
-        {
-            $data = $this->query($sql)->fetch();
-            dao::$cache[$table][$key] = $data;
-            return $this->getRow($data);
-        }
+        if(empty($field)) return $result;
 
-        $this->setFields($field);
-        $result = $this->query($sql)->fetch(PDO::FETCH_OBJ);
-        dao::$cache[$table][$key] = $this->getRow($result);
         return $result ? $result->$field : '';
     }
 
@@ -969,37 +1041,21 @@ class baseDAO
      */
     public function fetchAll($keyField = '')
     {
-        $sql   = $this->processSQL();
-        $table = $this->table;
-        $key   = 'fetchAll-' . md5($sql . $keyField);
-        if(isset(dao::$cache[$table][$key]))
+        $sql = $this->processSQL();
+        $key = 'fetchAll-' . md5($sql);
+
+        $rows = $this->getCache($key, $sql);
+        if($rows === self::CACHE_MISS)
         {
-            $rows   = dao::$cache[$table][$key];
-            $result = array();
-            foreach($rows as $i => $row) $result[$i] = $this->getRow($row);
-            return $result;
+            $rows = $this->query($sql)->fetchAll();
+            $this->setCache($key, $rows);
         }
 
-        $stmt = $this->query($sql);
-        dao::$cache[$table][$key] = array();
-        if(empty($keyField))
-        {
-            $rows   = $stmt->fetchAll();
-            $result = array();
-            if(!$rows) $rows = array();
-            dao::$cache[$table][$key] = $rows;
-            foreach($rows as $i => $row) $result[$i] = $this->getRow($row);
-            return $result;
-        }
+        if(empty($keyField)) return $rows;
 
-        $rows = array();
-        while($row = $stmt->fetch())
-        {
-            dao::$cache[$table][$key][$row->$keyField] = $row;
-            $rows[$row->$keyField] = $this->getRow($row);
-        }
-
-        return $rows;
+        $result = array();
+        foreach($rows as $i => $row) $result[$row->$keyField] = $row;
+        return $result;
     }
 
     /**
@@ -1015,26 +1071,21 @@ class baseDAO
     {
         $sql   = $this->processSQL();
         $table = $this->table;
-        $key   = 'fetchGroup-' . md5($sql . $groupField . $keyField);
-        if(isset(dao::$cache[$table][$key]))
+        $key   = 'fetchGroup-' . md5($sql);
+
+        $rows = $this->getCache($key, $sql);
+        if($rows === self::CACHE_MISS)
         {
-            $result    = array();
-            $groupRows = dao::$cache[$table][$key];
-            foreach($groupRows as $groupField => $rows)
-            {
-                foreach($rows as $keyField => $row) $result[$groupField][$keyField] = $this->getRow($row);
-            }
-            return $result;
+            $rows = $this->query($sql)->fetchAll();
+            $this->setCache($key, $rows);
         }
 
-        $stmt = $this->query($sql);
-        $rows = array();
-        while($row = $stmt->fetch())
+        $result = array();
+        foreach($rows as $i => $row)
         {
-            empty($keyField) ? $rows[$row->$groupField][] = $row : $rows[$row->$groupField][$row->$keyField] = $this->getRow($row);
+            empty($keyField) ? $result[$row->$groupField][] = $row : $result[$row->$groupField][$row->$keyField] = $row;
         }
-        dao::$cache[$table][$key] = $rows;
-        return $rows;
+        return $result;
     }
 
     /**
@@ -1051,19 +1102,24 @@ class baseDAO
      */
     public function fetchPairs($keyField = '', $valueField = '')
     {
+        $sql = $this->processSQL();
+        $key = 'fetchPairs-' . md5($sql);
+
+        $rows = $this->getCache($key, $sql);
+        if($rows === self::CACHE_MISS)
+        {
+            $rows = $this->query($sql)->fetchAll();
+            $this->setCache($key, $rows);
+        }
+
+        $ready      = false;
         $keyField   = trim($keyField, '`');
         $valueField = trim($valueField, '`');
 
-        $sql   = $this->processSQL();
-        $table = $this->table;
-        $key   = 'fetchPairs-' . md5($sql . $keyField . $valueField);
-        if(isset(dao::$cache[$table][$key])) return dao::$cache[$table][$key];
-
-        $pairs = array();
-        $ready = false;
-        $stmt  = $this->query($sql);
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        $result = array();
+        foreach($rows as $row)
         {
+            $row = (array)$row;
             if(!$ready)
             {
                 if(empty($keyField)) $keyField = key($row);
@@ -1075,11 +1131,10 @@ class baseDAO
                 $ready = true;
             }
 
-            $pairs[$row[$keyField]] = $row[$valueField];
+            $result[$row[$keyField]] = $row[$valueField];
         }
 
-        dao::$cache[$table][$key] = $pairs;
-        return $pairs;
+        return $result;
     }
 
     /**
@@ -1094,20 +1149,6 @@ class baseDAO
         /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
         $lastInsertID = $this->dbh->lastInsertID();
         return $lastInsertID !== false ? (int)$lastInsertID : false;
-    }
-
-    /**
-     * 重新生成数据。
-     * Get row by data.
-     *
-     * @param  array/object    $data
-     * @access public
-     * @return array/object
-     */
-    public function getRow($data)
-    {
-        if(!is_object($data)) return $data;
-        return clone $data;
     }
 
     //-------------------- 魔术方法(Magic methods) --------------------//

@@ -704,6 +704,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
     global $app;
     $module = $model->getModuleName();
+    if($module == 'flow') $module = $app->rawModule;
     $method = '';
 
     $isClickable = false;

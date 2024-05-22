@@ -16,19 +16,19 @@ window.getItem = function(info)
         info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
     }
     if(info.item.status == 'doing') info.item.prefix = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
-    if(info.item.type == 'doingExecution' && privs.canViewExecution)
+    if(info.item.cardType == 'doingExecution' && privs.canViewExecution)
     {
         info.item.titleUrl = $.createLink('execution', 'task', `id=${info.item.id}`);
     }
-    else if(info.item.type == 'doingProject' && privs.canViewProject)
+    else if(info.item.cardType == 'doingProject' && privs.canViewProject)
     {
         info.item.titleUrl = $.createLink('project', 'index', `id=${info.item.id}`);
     }
-    else if(info.item.type == 'unexpiredPlan' && privs.canViewPlan)
+    else if(info.item.cardType == 'unexpiredPlan' && privs.canViewPlan)
     {
         info.item.titleUrl = $.createLink('productplan', 'view', `id=${info.item.id}`);
     }
-    else if(info.item.type == 'normalRelease' && privs.canViewRelease)
+    else if(info.item.cardType == 'normalRelease' && privs.canViewRelease)
     {
         info.item.titleUrl = $.createLink('release', 'view', `id=${info.item.id}`);
         if(info.item.marker == '1') info.item.suffix = {html: '<i class="icon icon-flag" style="color: var(--color-danger-500)"></i>'};

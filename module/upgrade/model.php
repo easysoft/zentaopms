@@ -159,13 +159,13 @@ class upgradeModel extends model
             $this->importBuildinModules();
             $this->importLiteModules();
             $this->addSubStatus();
-            $this->processDataset();
         }
 
         $this->loadModel('program')->refreshStats(true);
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
         $this->upgradeBIData();
+        $this->processDataset();
     }
 
     /**
@@ -1408,10 +1408,12 @@ class upgradeModel extends model
      *
      * @param  string $openVersion
      * @access public
-     * @return void
+     * @return bool
      */
-    public function addORPriv($openVersion = ''): void
+    public function addORPriv($openVersion = ''): bool
     {
+        if(version_compare($openVersion, '18_6', '>=')) return false;
+
         /* Get admin users. */
         $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchPairs();
         $admins = explode(',', implode(',', $admins));
@@ -1428,25 +1430,24 @@ class upgradeModel extends model
             }
         }
 
-        if(version_compare($openVersion, '18_6', '<'))
+        include('priv.php');
+        /* Add or groups. */
+        foreach($orData as $role => $name)
         {
-            include('priv.php');
-            /* Add or groups. */
-            foreach($orData as $role => $name)
-            {
-                $group = new stdclass();
-                $group->vision = 'or';
-                $group->name   = $name;
-                $group->role   = $role;
-                $group->desc   = $name;
-                $this->dao->insert(TABLE_GROUP)->data($group)->exec();
-                if(dao::isError()) continue;
+            $group = new stdclass();
+            $group->vision = 'or';
+            $group->name   = $name;
+            $group->role   = $role;
+            $group->desc   = $name;
+            $this->dao->insert(TABLE_GROUP)->data($group)->exec();
+            if(dao::isError()) continue;
 
-                $groupID = (string)$this->dao->lastInsertID();
-                $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
-                $this->dao->exec($sql);
-            }
+            $groupID = (string)$this->dao->lastInsertID();
+            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+            $this->dao->exec($sql);
         }
+
+        return true;
     }
 
     /**
@@ -8981,9 +8982,10 @@ class upgradeModel extends model
         /* Prepare built-in sqls of bi. */
         $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
         $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL('update');
+        $metricSQLs = $this->bi->prepareBuiltinMetricSQL('update');
         $screenSQLs = $this->bi->prepareBuiltinScreenSQL('update');
 
-        $upgradeTables = array_merge($chartSQLs, $pivotSQLs, $screenSQLs);
+        $upgradeTables = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
 
         try
         {

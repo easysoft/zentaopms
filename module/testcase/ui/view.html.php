@@ -86,13 +86,13 @@ if(!empty($case->steps) && $stepsType == 'table')
                     setClass('nowrap pr-2 pl-' . (($step->grade - 1) * 2)),
                     $step->name
                 ),
-                html(nl2br(str_replace(' ', '&nbsp;', $step->desc)))
+                html(html_entity_decode(nl2br(str_replace(' ', '&nbsp;', $step->desc))))
             ),
             cell
             (
                 setClass('text-left flex'),
                 width('1/2'),
-                html(nl2br(str_replace(' ', '&nbsp;', $step->expect)))
+                html(html_entity_decode(nl2br(str_replace(' ', '&nbsp;', $step->expect))))
             )
         );
     }

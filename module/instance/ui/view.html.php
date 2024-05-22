@@ -63,6 +63,13 @@ foreach($dbList as $db)
     );
 }
 
+$hideOperate = !in_array($instance->appName, array('gitlab', 'sonarqube'));
+if($instance->appName == 'gitlab' && !$app->user->admin)
+{
+    $openID = $this->loadModel('pipeline')->getOpenIdByAccount($instance->externalID, 'gitlab', $app->user->account);
+    if(!$openID) $hideOperate = true;
+}
+
 detailHeader(
     to::prefix(''),
     to::title(''),
@@ -156,7 +163,7 @@ div
                     h::table
                     (
                         setStyle('min-width', '700px'),
-                        setClass('table w-auto max-w-full bordered mt-4'),
+                        setClass('table w-auto max-w-full bordered mt-4 text-center'),
                         h::tr
                         (
                             $type !== 'store' ? null : h::th($lang->instance->status),
@@ -168,7 +175,7 @@ div
                             !empty($defaultAccount->username) ? h::th($lang->instance->defaultAccount) : null,
                             !empty($defaultAccount->password) ? h::th($lang->instance->defaultPassword) : null,
                             !empty($defaultAccount->token)    ? h::th($lang->instance->token) : null,
-                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::th($lang->instance->browseProject)
+                            $hideOperate ? null : h::th($lang->instance->browseProject)
                         ),
                         h::tr
                         (
@@ -198,7 +205,7 @@ div
                                 input(set::type('text'), set::value($defaultAccount->token), set::name('token'), setStyle('display', 'none')),
                                 btn(set::className('copy-btn ghost'),set::icon('copy'))
                             ): null,
-                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::td
+                            $hideOperate ? null : h::td
                             (
                                 btn
                                 (
@@ -218,7 +225,7 @@ div
                     h::table
                     (
                         setStyle('min-width', '700px'),
-                        setClass('table w-auto max-w-full bordered mt-4'),
+                        setClass('table w-auto max-w-full bordered mt-4 text-center'),
                         h::tr
                         (
                             h::th($lang->instance->dbName),

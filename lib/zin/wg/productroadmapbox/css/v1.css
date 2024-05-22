@@ -1,0 +1,7 @@
+.productBox {position: relative; padding-top: 5px;}
+.productBox .distributeProduct, .productsBox .addProductBox .form-group{padding-left: 0px;}
+.productBox .roadmapBox{padding-right: 0px;}
+.productBox .c-actions {position: absolute; width: 100px; right: -100px;}
+.productBox .c-actions.first-action {bottom: calc(calc(100% - 64px) / 2);}
+
+.linkBranch {width: 100px}

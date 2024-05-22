@@ -3,3 +3,7 @@
 .dropmenu-btn > .text {max-width: 280px;}
 
 #monacoTabs .menu-item > a {justify-content: start;}
+
+.status-merged, .status-can_be_merged {color: #0dbb7d;}
+.status-cannot_be_merged {color: #ff6f42;}
+.status-opened {color: #8166ee;}

@@ -25,7 +25,7 @@ $lang->compile->deleted     = 'Deleted';
 
 $lang->compile->statusList['success']     = 'Succ鑣';
 $lang->compile->statusList['failure']     = 'Echec';
-$lang->compile->statusList['created']     = 'Cr殚';
+$lang->compile->statusList['created']     = 'Waiting';
 $lang->compile->statusList['pending']     = 'Pending';
 $lang->compile->statusList['running']     = 'Running';
 $lang->compile->statusList['building']    = 'En compilation';

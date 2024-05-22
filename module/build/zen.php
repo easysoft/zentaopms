@@ -188,7 +188,9 @@ class buildZen extends build
         $this->view->bugPager          = $bugPager;
         $this->view->generatedBugPager = $generatedBugPager;
         $this->view->bugs              = $this->build->getBugList($build->allBugs, $type == 'bug' ? $sort : '', $bugPager);
-        $this->view->generatedBugs     = $this->loadModel('bug')->getExecutionBugs((int)$build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, (int)$param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
+
+        $generatedBugs = $this->loadModel('bug')->getExecutionBugs((int)$build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, (int)$param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
+        $this->view->generatedBugs = $this->bug->processBuildForBugs($generatedBugs);
 
         if($this->app->getViewType() == 'json')
         {

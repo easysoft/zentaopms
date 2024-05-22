@@ -51,7 +51,7 @@ $lang->preference     = 'Preference';
 $lang->tutorialAB     = 'Tutorial';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement      = "I have read and agreed to the terms and conditions. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
-$lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> AIUX</a>";
+$lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux listitem item-inner menu-item-inner state' target='_blank'><i class='icon icon-aiux item-icon'></i><div class='item-content text'>AIUX</div></a>";
 $lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">Try ZenTao Biz for more!</a>';
 $lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Biz for more!</a>';
 
@@ -270,7 +270,6 @@ $lang->store->common        = 'Store';
 $lang->instance->common     = 'Instance';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
-$lang->board->common        = 'Board';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
@@ -370,12 +369,6 @@ $lang->project->kanban = $lang->projectCommon . ' Kanban';
 
 $lang->execution->executionKanban = "{$lang->execution->common} Kanban";
 $lang->execution->all             = "{$lang->execution->common} List";
-
-$lang->board->template     = 'Template';
-$lang->board->myBoard      = 'My Board';
-$lang->board->productBoard = 'Product Board';
-$lang->board->projectBoard = 'Project Board';
-$lang->board->teamBoard    = 'Team Board';
 
 $lang->doc->recent        = 'Recent';
 $lang->doc->my            = 'My';
@@ -498,6 +491,7 @@ $lang->createObjects['project']     = $lang->projectCommon;
 $lang->createObjects['product']     = $lang->productCommon;
 $lang->createObjects['program']     = 'Program';
 $lang->createObjects['doc']         = 'Doc';
+$lang->createObjects['board']       = 'Board';
 $lang->createObjects['kanbanspace'] = 'Space';
 $lang->createObjects['kanban']      = 'Kanban';
 

@@ -85,7 +85,6 @@ function openApp(url, code, options)
         forceReload = false;
         apps.openedMap[code] = openedApp;
 
-        const iframeUrl = app.external ? url : $.createLink('index', 'app');
         const $iframe =
         $([
             '<iframe',
@@ -93,7 +92,7 @@ function openApp(url, code, options)
                 'name="app-' + code + '"',
                 'class="fade"',
                 'allowfullscreen="true"',
-                'src="' + iframeUrl + '"',
+                app.external ? 'src="' + url + '"' : '',
                 'frameborder="no"',
                 'allowtransparency="true"',
                 'scrolling="auto"',
@@ -105,20 +104,26 @@ function openApp(url, code, options)
             .append($iframe)
             .appendTo('#apps');
 
-        $iframe.on('ready.app', () =>
+        const finishLoad = () =>
         {
-            openApp(url, code, options);
-        });
+            $iframe.removeClass('loading').addClass('in');
+            setTimeout(() => {openedApp.$app.removeClass('loading');}, 300);
+        };
+        if(app.external)
+        {
+            $iframe.on('ready.app', () =>{openApp(url, code, options);});
+        }
+        else
+        {
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(apps.frameContent.replace('window.defaultAppUrl = ""', `window.defaultAppUrl = "${url}"`));
+            iframe.contentWindow.document.close();
+        }
         iframe.onload = iframe.onreadystatechange = function(e)
         {
-            const finishLoad = () =>
-            {
-                openedApp.$app.removeClass('loading');
-                $iframe.removeClass('loading').addClass('in');
-            };
             try
             {
-                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', () => setTimeout(finishLoad, 150));
+                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app pagecaheload.app', finishLoad);
                 setTimeout(finishLoad, 10000);
             }
             catch(e){finishLoad()}
@@ -472,7 +477,11 @@ function goBack(target, url, startState)
             while(state && state.code !== target) state = state.prev;
             if(state && state.code === target)
             {
-                if(state.index === preState.index) return window.history.back();
+                if(state.index === preState.index)
+                {
+                    if(url) return openApp(url, target, false);
+                    return window.history.back();
+                }
                 return openApp(state.url, state.code, false);
             }
         }
@@ -483,7 +492,11 @@ function goBack(target, url, startState)
             while(state && state.path && !pathSet.has(state.path.toLowerCase())) state = state.prev;
             if(state && pathSet.has(state.path.toLowerCase()))
             {
-                if(state.index === preState.index) return window.history.back();
+                if(state.index === preState.index)
+                {
+                    if(url) return openApp(url, null, false);
+                    return window.history.back();
+                }
                 return openApp(state.url, state.code, false);
             }
         }

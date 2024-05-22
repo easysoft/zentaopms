@@ -22,6 +22,14 @@ require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
  */
 class mainNavbar extends nav
 {
+    protected static array $defineProps = array
+    (
+        'items'        => '?array',
+        'itemProps'    => '?array',
+        'badgeMap'     => '?array',
+        'onRenderItem' => '?callback'
+    );
+
     /**
      * Define the blocks.
      *
@@ -73,8 +81,11 @@ class mainNavbar extends nav
         $menu = \customModel::getModuleMenu($activeMenu);
         if($menu)
         {
-            $menu  = json_decode(json_encode($menu), true);
-            $items = array();
+            $menu         = json_decode(json_encode($menu), true);
+            $items        = array();
+            $badgeMap     = $this->prop('badgeMap');
+            $onRenderItem = $this->prop('onRenderItem');
+            $itemProps    = $this->prop('itemProps');
 
             foreach($menu as $key => $menuItem)
             {
@@ -88,9 +99,10 @@ class mainNavbar extends nav
 
                 $item = array();
                 $link = $menuItem['link'];
+                $name = $menuItem['name'];
                 $item['text']     = $menuItem['text'];
                 $item['url']      = commonModel::createMenuLink((object)$menuItem, $app->tab);
-                $item['data-id']  = $menuItem['name'];
+                $item['data-id']  = $name;
                 $item['data-app'] = $app->tab;
 
                 $active    = '';
@@ -100,6 +112,10 @@ class mainNavbar extends nav
                 if($link['module'] == $currentModule && strpos(",{$menuItem['alias']},", ",{$currentMethod},") !== false) $active = 'active';
                 if(strpos(",{$menuItem['exclude']},", ",{$currentModule}-{$currentMethod},") !== false || strpos(",{$menuItem['exclude']},", ",{$currentModule},") !== false) $active = '';
                 $item['class'] = $active;
+
+                if($badgeMap && isset($badgeMap[$name])) $item['badge'] = array('text' => $badgeMap[$name], 'class' => 'label rounded gray-pale size-sm');
+                if($itemProps) $item = array_merge($item, $itemProps);
+                if(is_callable($onRenderItem)) $item = $onRenderItem($item, $menuItem);
 
                 $items[] = $item;
             }
@@ -121,7 +137,7 @@ class mainNavbar extends nav
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
 
-        if(!$this->prop('items') && !in_array("$moduleName-$methodName", $config->hasMainNavBar)) return wg();
+        if(!$this->prop('items') && !in_array("$moduleName-$methodName", $config->hasMainNavBar)) return null;
 
         $leftBlock  = $this->block('left');
         $rightBlock = $this->block('right');

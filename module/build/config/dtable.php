@@ -152,6 +152,7 @@ $config->build->bug->dtable->fieldList['actions']['list']     = $config->build->
 $config->build->bug->dtable->fieldList['actions']['minWidth'] = '60';
 
 $config->build->generatedBug->dtable = clone $config->build->bug->dtable;
+array_splice($config->build->generatedBug->dtable->fieldList, 5, 0, array('openedBuild' => array('title' => $lang->bug->openedBuild, 'name' => 'openedBuild', 'type' => 'html', 'width' => '200px', 'hint' => true)));
 $config->build->generatedBug->dtable->fieldList['id']['checkbox'] = false;
 unset($config->build->generatedBug->dtable->fieldList['actions']);
 

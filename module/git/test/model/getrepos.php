@@ -27,7 +27,6 @@ r(count($repos)) && p() && e('8'); // 获取git代码库的数量
 r($repos) && p('1') && e('https://gitlabdev.qc.oop.cc/root/unittest11'); // 获取第一条git记录的path属性
 
 zenData('repo')->gen(0);
-dao::$cache = array();
 
 ob_start();
 $git->getRepos();

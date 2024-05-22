@@ -4,8 +4,9 @@ $(document).off('click', '.import-bug-btn').on('click', '.import-bug-btn', funct
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return false;
 
-    const formData = new FormData($("#importForm")[0]);
-    checkedList.forEach((id) => formData.append(`id[${id}]`, id));
+    const importDTable = $('#table-execution-importbug').zui('dtable');
+    const formData     = importDTable.$.getFormData();
+    checkedList.forEach((id) => formData[`id[${id}]`] = id);
 
     $.ajaxSubmit({url: $('#importForm').attr('action'), data: formData, onFail: printError});
 

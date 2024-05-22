@@ -24,6 +24,7 @@ class moduleMenu extends wg
         'preserve?: string|bool',
         'tree?: array',
         'checkOnClick?: bool|string',
+        'appendSettingItems?: array',
         'onCheck?: function'
     );
 
@@ -142,11 +143,12 @@ class moduleMenu extends wg
         return '';
     }
 
-    private function buildActions(): node|null
+    private function buildActions(): node|array|null
     {
-        $settingLink = $this->prop('settingLink');
-        $showDisplay = $this->prop('showDisplay');
-        if(!$settingLink && !$showDisplay) return null;
+        $settingLink        = $this->prop('settingLink');
+        $showDisplay        = $this->prop('showDisplay');
+        $appendSettingItems = $this->prop('appendSettingItems');
+        if(!$settingLink && !$showDisplay && !$appendSettingItems) return null;
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
@@ -159,7 +161,7 @@ class moduleMenu extends wg
 
             if(empty($this->prop('items')))
             {
-                return btn
+                $items[] = btn
                 (
                     setClass('m-4 mt-0'),
                     set::text($settingText),
@@ -168,13 +170,15 @@ class moduleMenu extends wg
                     setData('app', $tab),
                 );
             }
-
-            $items[] = array
-            (
-                'text'      => $settingText,
-                'url'       => $settingLink,
-                'data-app'  => $tab
-            );
+            else
+            {
+                $items[] = array
+                (
+                    'text'      => $settingText,
+                    'url'       => $settingLink,
+                    'data-app'  => $tab
+                );
+            }
         }
         if($showDisplay)
         {
@@ -184,7 +188,7 @@ class moduleMenu extends wg
 
             if(empty($this->prop('items')))
             {
-                return btn
+                $items[] = btn
                 (
                     setClass('m-4 mt-0'),
                     set::text($lang->displaySetting),
@@ -193,17 +197,34 @@ class moduleMenu extends wg
                     setData(array('toggle' => 'modal', 'size' => 'md'))
                 );
             }
-
-            $items[] = array
-            (
-                'text'        => $lang->displaySetting,
-                'url'         => createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod"),
-                'data-toggle' => 'modal',
-                'data-size'   => 'md'
-            );
+            else
+            {
+                $items[] = array
+                (
+                    'text'        => $lang->displaySetting,
+                    'url'         => createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod"),
+                    'data-toggle' => 'modal',
+                    'data-size'   => 'md'
+                );
+            }
+        }
+        if($appendSettingItems)
+        {
+            if(empty($this->prop('items')))
+            {
+                foreach($appendSettingItems as $item)
+                {
+                    $items[] = btn(setClass('m-4 mt-0'), set::type('primary-pale'), set($item));
+                }
+            }
+            else
+            {
+                $items = array_merge($items, $appendSettingItems);
+            }
         }
 
         if(empty($items)) return null;
+        if(empty($this->prop('items'))) return $items;
 
         return dropdown
         (
@@ -253,6 +274,7 @@ class moduleMenu extends wg
         $preserve      = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
         $isInSidebar   = $this->parent instanceof sidebar;
         $titleShow     = $this->prop('titleShow');
+        if(!is_null($this->prop('filterMap'))) static::$filterMap = $this->prop('filterMap');
 
         $header = $titleShow ? h::header
         (
@@ -277,7 +299,7 @@ class moduleMenu extends wg
                 zui::tree
                 (
                     set::_tag('menu'),
-                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
+                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-2'),
                     set::defaultNestedShow(true),
                     set::hover(true),
                     set::lines(true),

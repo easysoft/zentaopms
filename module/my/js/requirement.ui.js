@@ -27,9 +27,9 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
  * @access public
  * @return string|array
  */
-window.renderCell = function(result, info)
+window.renderCell = function(result, {row, col})
 {
-    if(info.col.name == 'title' && result[0])
+    if(col.name == 'title' && result[0])
     {
         const story = info.row.data;
         if(story.shadow == 1) result[0].props.href += '#app=project';
@@ -40,6 +40,14 @@ window.renderCell = function(result, info)
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
+    }
+
+    if(col.name == 'actions')
+    {
+        for(index in row.data.actions)
+        {
+            if(row.data.actions[index].name == 'recall') row.data.actions[index].hint = row.data.status == 'changing' ? recallChange : recall;
+        }
     }
     return result;
 }

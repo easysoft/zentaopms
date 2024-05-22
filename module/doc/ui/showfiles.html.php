@@ -15,16 +15,21 @@ jsVar('sessionString', session_name() . '=' . session_id());
 jsVar('+searchLink', createLink('doc', 'showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&searchTitle=%s"));
 
 $filesBody = null;
+$canExport = $config->edition != 'open' && common::hasPriv('doc', 'exportFiles');
 if(!empty($files))
 {
     $linkTpl = array('linkCreator' => helper::createLink('doc', $app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&searchTitle={$searchTitle}"));
     if($viewType == 'list')
     {
-        $tableData = initTableData($files, $config->doc->showfiles->dtable->fieldList);
+        $fieldList = $config->doc->showfiles->dtable->fieldList;
+        if($canExport) $fieldList['id']['type'] = 'checkID';
+
+        $tableData = initTableData($files, $fieldList);
         $filesBody = dtable
             (
+                set::checkable($canExport),
                 set::userMap($users),
-                set::cols($config->doc->showfiles->dtable->fieldList),
+                set::cols($fieldList),
                 set::data($tableData),
                 set::sortLink(inlink('showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
                 set::orderBy($orderBy),
@@ -142,11 +147,21 @@ featureBar
         )
     )
 );
+
 toolbar
 (
     div
     (
         setClass('flex'),
+        $canExport ? btn
+        (
+            setClass('ghost export mr-2'),
+            set::icon('export'),
+            set::text($lang->export),
+            set::url(createLink('doc', 'exportFiles', "objectID={$objectID}&objectType={$type}")),
+            setData('size', 'sm'),
+            setData('toggle', 'modal')
+        ) : null,
         div
         (
             setClass('btn-group'),

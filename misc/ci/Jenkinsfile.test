@@ -167,6 +167,7 @@ pipeline {
                   stage(mode) {
                     container('zentao') {
                       sh 'rm -f /bin/sh && ln -s /bin/bash /bin/sh'
+                      sh 'rm -rf /apps/zentao/module/*/test/ui'
                       sh '''
                         set +x && . /etc/s6/s6-init/envs && set -x
                         s6-svwait -u -t 30000 /etc/s6/s6-available/mysql && initdb.php > /apps/zentao/unittestdb

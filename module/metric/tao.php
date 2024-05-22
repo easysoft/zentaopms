@@ -35,6 +35,9 @@ class metricTao extends metricModel
             ->beginIF($stage != 'all')->andWhere('stage')->eq($stage)->fi()
             ->beginIF(!empty($object))->andWhere('object')->eq($object)->fi()
             ->beginIF(!empty($purpose))->andWhere('purpose')->eq($purpose)->fi()
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->beginIF($sort)->orderBy($sort)->fi()
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();
@@ -152,8 +155,9 @@ class metricTao extends metricModel
             ->beginIF(!empty($scopes))->andWhere('scope')->in($scopes)->fi()
             ->beginIF(!empty($objects))->andWhere('object')->in($objects)->fi()
             ->beginIF(!empty($purposes))->andWhere('purpose')->in($purposes)->fi()
-            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
-            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk')
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->fetchAll();
 
         return $metrics;
@@ -173,7 +177,9 @@ class metricTao extends metricModel
             ->where('deleted')->eq('0')
             ->andWhere('collector')->like("%,{$this->app->user->account},%")
             ->beginIF($stage!= 'all')->andWhere('stage')->eq($stage)->fi()
-            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->fetchAll();
     }
 
@@ -190,7 +196,8 @@ class metricTao extends metricModel
         return $this->dao->select('object, purpose')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->andWhere('scope')->eq($scope)
-            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->groupBy('object, purpose')
             ->fetchAll();
     }
@@ -342,7 +349,9 @@ class metricTao extends metricModel
     protected function fetchMetricRecordsWithOption($code, $fieldList, $options = array(), $pager = null)
     {
         $metric = $this->fetchMetricByID($code);
+
         $scopeKey = $metric->scope;
+        $dateType = $metric->dateType;
 
         $fieldList = array_merge($fieldList, array('id', 'value', 'date', 'calcType', 'calculatedBy'));
         $wrapFields = array_map(function ($value) {
@@ -359,6 +368,11 @@ class metricTao extends metricModel
             {
                 $stmt = $stmt->andWhere($key)->in($option);
             }
+        }
+
+        if($dateType == 'nodate')
+        {
+            $stmt->andWhere('date')->ge(helper::today());
         }
 
         $stmt = $stmt->orderBy("date desc");
@@ -434,30 +448,6 @@ class metricTao extends metricModel
             ->fetchAll();
 
         return $records;
-    }
-
-    /**
-     * 获取度量数据有效字段。
-     * Get metric record fields.
-     *
-     * @param  string $code
-     * @access protected
-     * @return array|false
-     */
-    protected function getRecordFields($code)
-    {
-        $metric   = $this->fetchMetricByCode($code);
-        $dateType = $metric->dateType;
-        $fields   = array($metric->scope);
-
-        if($dateType == 'nodate') return $fields;
-
-        $fields[] = 'year';
-        if($dateType == 'month' || $dateType == 'day') $feilds[] = 'month';
-        if($dateType == 'week') $fields[] = 'week';
-        if($dateType == 'day') $fields[] = 'day';
-
-        return $fields;
     }
 
     /**

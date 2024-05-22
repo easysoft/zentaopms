@@ -29,7 +29,7 @@ foreach($config->doc->dtable->fieldList as $colName => $col)
 $params        = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
 $tableData     = empty($docs) ? array() : initTableData($docs, $cols);
 $createDocLink = '';
-if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}");
+if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html");
 $docContent = dtable(
     set::module($this->app->moduleName),
     set::userMap($users),

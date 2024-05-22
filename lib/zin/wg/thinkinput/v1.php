@@ -2,45 +2,61 @@
 declare(strict_types=1);
 namespace zin;
 
-requireWg('thinkNode');
+requireWg('thinkQuestion');
 
 /**
  * 思引师填空部件类。
  * thinmory Input widget class.
  */
-class thinkInput extends thinkNode
+class thinkInput extends thinkQuestion
 {
-    protected static array $defineProps = array(
-        'required?: bool',                      // 是否必填
-        'isRequiredName?: string="required"',   // 是否必填对应的name
-    );
-
-    private function buildRequiredControl(): wg
+    protected function buildDetail(): array
     {
-        global $lang;
-        list($required, $isRequiredName) = $this->prop(array('required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
-        return formRow
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $detailWg = parent::buildDetail();
+        list($step, $required, $value) = $this->prop(array('step', 'required', 'value'));
+        if($step)
+        {
+            $required = $step->options->required;
+            $value    = $step->answer->result;
+        }
+
+        $detailWg[] = textarea
         (
+            set::rows('3'),
+            set::name('result'),
+            set::required($required),
+            set::value($value),
+            set::placeholder($lang->thinkstep->pleaseInput)
+        );
+        return $detailWg;
+    }
+
+    protected function buildFormItem(): array
+    {
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $formItems = parent::buildFormItem();
+
+        list($step, $required) = $this->prop(array('step', 'required', 'requiredRows', 'requiredRowsName'));
+        if($step) $required = $step->required;
+        $formItems[] = array(
+            formHidden('options[questionType]', 'input'),
             formGroup
             (
                 setClass('w-1/2'),
                 setStyle(array('display' => 'flex')),
-                set::label($lang->thinkwizard->step->label->required),
+                set::label($lang->thinkstep->label->required),
                 radioList
                 (
-                    set::name($isRequiredName),
+                    set::name('options[required]'),
                     set::inline(true),
-                    set::items($lang->thinkwizard->step->requiredList),
-                    set::value($required ? $required : 0),
+                    set::items($lang->thinkstep->requiredList),
+                    set::value($required),
                 )
-            ),
+            )
         );
-    }
-
-    protected function buildBody(): array
-    {
-        $items = parent::buildBody();
-        $items[] = $this->buildRequiredControl();
-        return $items;
+        return $formItems;
     }
 }

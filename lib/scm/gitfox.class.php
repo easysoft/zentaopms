@@ -830,11 +830,9 @@ class gitfoxRepo
     public function getDownloadUrl($branch = 'master', $savePath = '', $ext = 'zip')
     {
         $params = array();
-        $params['git_ref']       = $branch;
-        $params['format']        = $ext;
-        $params['access_token']  = $this->token;
+        $params['access_token'] = $this->token;
 
-        return "{$this->root}archive" . '?' . http_build_query($params);
+        return "{$this->root}archive/{$this->repo->name}_{$branch}.{$ext}" . '?' . http_build_query($params);
     }
 
     /**

@@ -732,9 +732,9 @@ class repoTest
         return $result;
     }
 
-    public function saveBranchRelationTest(int $repoID, string $branch, int $objectID, string $objectType)
+    public function saveRelationTest(int $repoID, string $branch, int $objectID, string $objectType)
     {
-        $this->objectModel->saveBranchRelation($repoID, $branch, $objectID, $objectType);
+        $this->objectModel->saveRelation($repoID, $branch, $objectID, $objectType);
 
         if(dao::isError()) return dao::getError();
 

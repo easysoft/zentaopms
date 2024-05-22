@@ -1198,6 +1198,7 @@ EOT;
         $jsConfig->pingInterval   = $config->pingInterval ?? '';
         $jsConfig->onlybody       = zget($_GET, 'onlybody', 'no');
         $jsConfig->tabSession     = $config->tabSession;
+        $jsConfig->account        = isset($app->user->account) ? $app->user->account : '';
         if($config->tabSession and helper::isWithTID()) $jsConfig->tid = zget($_GET, 'tid', '');
 
         return $jsConfig;

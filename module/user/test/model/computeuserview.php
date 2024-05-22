@@ -23,7 +23,6 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-dao::$cache = array();
 zenData('user')->gen(10);
 zenData('userview')->loadYaml('userview')->gen(10);
 zenData('team')->loadYaml('team')->gen(200);

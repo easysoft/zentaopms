@@ -294,8 +294,6 @@ class cron extends control
     {
         $this->loadModel('common');
 
-        dao::$cache = array();
-
         $this->cron->updateTime('scheduler', $execId);
 
         /* Get and parse crons. */
@@ -347,8 +345,6 @@ class cron extends control
     {
         while(true)
         {
-            dao::$cache = array();
-
             $this->cron->updateTime('consumer', $execId);
 
             /* Consume. */

@@ -77,8 +77,6 @@ try
 {
     $app->parseRequest();
     if(!$app->setParams()) helper::end();
-    $common->checkPriv();
-    if(!$common->checkIframe()) helper::end();
 
     $app->loadModule();
 }

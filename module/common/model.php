@@ -1897,6 +1897,7 @@ class commonModel extends model
         $errors = empty($errno)  ? 0 : curl_error($curl);
         $info   = curl_getinfo($curl);
 
+        if(!$response) $response = '';
         if($httpCode)
         {
             $httpCode     = $info['http_code'] ?? curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -1948,7 +1949,6 @@ class commonModel extends model
 
         if($errors) commonModel::$requestErrors[] = $errors;
 
-        if(!$response) $response = '';
         return $httpCode ? array($response, $httpCode, 'body' => $body, 'header' => $newHeader, 'errno' => $errno, 'info' => $info, 'response' => $response) : $response;
     }
 
@@ -2418,7 +2418,7 @@ class commonModel extends model
             $method = $actionData['url']['method'];
             $params = $actionData['url']['params'];
             if(!common::hasPriv($module, $method)) return false;
-            $actionData['url'] = helper::createLink($module, $method, $params);
+            $actionData['url'] = helper::createLink($module, $method, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
@@ -2426,7 +2426,7 @@ class commonModel extends model
             $method = $actionData['data-url']['method'];
             $params = $actionData['data-url']['params'];
             if(!common::hasPriv($module, $method)) return false;
-            $actionData['data-url'] = helper::createLink($module, $method, $params);
+            $actionData['data-url'] = helper::createLink($module, $method, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
         }
         else
         {
@@ -2890,6 +2890,7 @@ class commonModel extends model
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
             if($objectType == 'kanbanspace') $createMethod = 'createSpace';
+            if($objectType == 'board') $createMethod = 'createBoard';
             if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
             $hasPriv = common::hasPriv($module, $createMethod);
@@ -2979,6 +2980,12 @@ class commonModel extends model
                 case 'kanban':
                     $isOnlyBody = true;
                     $attr       = "class='iframe' data-width='75%'";
+                    break;
+                case 'board':
+                    $createMethod = 'createByTemplate';
+                    $params       = 'templateID=0';
+                    $isOnlyBody   = true;
+                    $attr         = 'data-toggle="modal"';
                     break;
             }
 

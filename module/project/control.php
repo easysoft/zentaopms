@@ -531,7 +531,7 @@ class project extends control
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
 
         /* Get program list. */
-        $programs           = $this->loadModel('program')->getParentPairs();
+        $programs           = $this->loadModel('program')->getParentPairs('', '');
         $unauthorizedIDList = array();
         foreach($projects as $project)
         {
@@ -1345,7 +1345,7 @@ class project extends control
             $comment = strip_tags((string)$this->post->comment, $this->config->allowedTags);
             $this->projectZen->responseAfterClose($projectID, $changes, $comment);
 
-            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => 'table'));
         }
 
         $this->app->loadLang('build');

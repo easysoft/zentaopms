@@ -49,7 +49,7 @@ $config->story->dtable->fieldList['branch']['name']       = 'branch';
 $config->story->dtable->fieldList['branch']['title']      = $lang->story->branch;
 $config->story->dtable->fieldList['branch']['sortType']   = true;
 $config->story->dtable->fieldList['branch']['width']      = '100';
-$config->story->dtable->fieldList['branch']['group']      = 3;
+$config->story->dtable->fieldList['branch']['group']      = 4;
 $config->story->dtable->fieldList['branch']['control']    = 'select';
 $config->story->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
 
@@ -214,23 +214,17 @@ $config->story->dtable->fieldList['closedBy']['sortType'] = true;
 $config->story->dtable->fieldList['closedBy']['type']     = 'user';
 $config->story->dtable->fieldList['closedBy']['group']    = 8;
 
-$config->story->dtable->fieldList['closedReason']['name']     = 'closedReason';
-$config->story->dtable->fieldList['closedReason']['title']    = $lang->story->closedReason;
-$config->story->dtable->fieldList['closedReason']['sortType'] = true;
-$config->story->dtable->fieldList['closedReason']['width']    = '90';
-$config->story->dtable->fieldList['closedReason']['group']    = 8;
-
 $config->story->dtable->fieldList['closedDate']['name']     = 'closedDate';
 $config->story->dtable->fieldList['closedDate']['title']    = $lang->story->closedDate;
 $config->story->dtable->fieldList['closedDate']['sortType'] = true;
 $config->story->dtable->fieldList['closedDate']['type']     = 'date';
 $config->story->dtable->fieldList['closedDate']['group']    = 8;
 
-$config->story->dtable->fieldList['activatedDate']['name']     = 'activatedDate';
-$config->story->dtable->fieldList['activatedDate']['title']    = $lang->story->activatedDate;
-$config->story->dtable->fieldList['activatedDate']['sortType'] = true;
-$config->story->dtable->fieldList['activatedDate']['type']     = 'date';
-$config->story->dtable->fieldList['activatedDate']['group']    = 8;
+$config->story->dtable->fieldList['closedReason']['name']     = 'closedReason';
+$config->story->dtable->fieldList['closedReason']['title']    = $lang->story->closedReason;
+$config->story->dtable->fieldList['closedReason']['sortType'] = true;
+$config->story->dtable->fieldList['closedReason']['width']    = '90';
+$config->story->dtable->fieldList['closedReason']['group']    = 8;
 
 $config->story->dtable->fieldList['lastEditedBy']['name']     = 'lastEditedBy';
 $config->story->dtable->fieldList['lastEditedBy']['title']    = $lang->story->lastEditedBy;
@@ -268,6 +262,12 @@ $config->story->dtable->fieldList['feedbackBy']['title']    = $lang->story->feed
 $config->story->dtable->fieldList['feedbackBy']['type']     = 'user';
 $config->story->dtable->fieldList['feedbackBy']['sortType'] = true;
 $config->story->dtable->fieldList['feedbackBy']['group']    = 10;
+
+$config->story->dtable->fieldList['activatedDate']['name']     = 'activatedDate';
+$config->story->dtable->fieldList['activatedDate']['title']    = $lang->story->activatedDate;
+$config->story->dtable->fieldList['activatedDate']['sortType'] = true;
+$config->story->dtable->fieldList['activatedDate']['type']     = 'date';
+$config->story->dtable->fieldList['activatedDate']['group']    = 11;
 
 $config->story->dtable->fieldList['notifyEmail']['name']     = 'notifyEmail';
 $config->story->dtable->fieldList['notifyEmail']['title']    = $lang->story->notifyEmail;

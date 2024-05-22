@@ -741,4 +741,17 @@ class upgrade extends control
         if(dao::isError()) echo 'fail';
         echo 'ok';
     }
+
+    /**
+     * 升级BI内置数据。
+     * Upgrade BI built-in data.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeBIData()
+    {
+        $this->upgrade->upgradeBIData();
+        echo 'ok';
+    }
 }

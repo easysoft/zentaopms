@@ -28,7 +28,6 @@ r(count($git->repos)) && p() && e('8'); // 获取不到数据时，提示错误�
 r($git->repos) && p('1:name,SCM') && e('unittest1,Gitlab'); // 获取第一条git记录的name和SCM属性
 
 zenData('repo')->gen(0);
-dao::$cache = array();
 
 ob_start();
 $git->setRepos();

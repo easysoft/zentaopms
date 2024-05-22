@@ -85,7 +85,6 @@ formGridPanel
     on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .picker-box *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
     on::click('[name=multiple]', $toggleLongTime),
-    on::change('[name=parent]')->toggleClass('.productsBox .linkProduct .form-label', 'required', "\$(target).val() > 0"),
     on::change('[name=hasProduct]', 'changeType'),
     on::change('[name=longTime]', $handleLongTimeChange),
     on::change('[name=future]', 'toggleBudget'),

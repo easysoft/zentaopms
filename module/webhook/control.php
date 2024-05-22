@@ -228,7 +228,7 @@ class webhook extends control
 
         if($webhook->type == 'feishuuser') $response = array('result' => 'success', 'data' => array());
 
-        if($response['result'] == 'fail') return $this->send(array('result' => 'fail', 'load' => array('alert' => $response['message'], 'locate' => $this->createLink('webhook', 'browse'))));
+        if($response['result'] == 'fail') return $this->send(array('result' => 'fail', 'load' => array('alert' => is_array($response['message']) ? implode(',', $response['message']) : $response['message'], 'locate' => $this->createLink('webhook', 'browse'))));
 
         if($response['result'] == 'selected')
         {

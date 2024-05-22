@@ -78,7 +78,7 @@ if(isset($executionType) && $executionType == 'kanban')
 $items[] = array('name' => 'deadline', 'label' => $lang->bug->deadline, 'control' => 'date', 'width' => '136px', 'required' => isset($requiredFields['deadline']), 'ditto' => true);
 
 /* Field of steps. */
-$items[] = array('name' => 'steps', 'label' => $lang->bug->steps, 'width' => '240px', 'required' => isset($requiredFields['steps']));
+$items[] = array('name' => 'steps', 'control' => 'textarea', 'label' => $lang->bug->steps, 'width' => '240px', 'required' => isset($requiredFields['steps']));
 
 /* Field of type. */
 $items[] = array('name' => 'type', 'label' => $lang->typeAB, 'control' => 'picker', 'items' => $lang->bug->typeList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['type']), 'ditto' => true);

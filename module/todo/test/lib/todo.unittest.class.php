@@ -401,7 +401,7 @@ class todoTest
     }
 
     /**
-     * 根据周期待办，获取这些待办生成的待办数据。
+     * 获取周期待办列表。
      * Get created cycle list by todo list.
      *
      * @param  bool    $initCycle

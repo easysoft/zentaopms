@@ -51,7 +51,7 @@ $lang->preference     = '个性化设置';
 $lang->tutorialAB     = '新手引导';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
-$lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> 艾体验设计</a>";
+$lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux listitem item-inner menu-item-inner state' target='_blank'><i class='icon icon-aiux item-icon'></i><div class='item-content text'>艾体验设计</div></a>";
 $lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
 $lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">更多精彩，尽在企业版！</a>';
 
@@ -270,7 +270,6 @@ $lang->store->common        = '应用市场';
 $lang->instance->common     = '应用';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
-$lang->board->common        = '白板';
 
 $lang->programstakeholder->common = '干系人';
 $lang->featureswitch->common      = '功能开关';
@@ -370,12 +369,6 @@ $lang->project->kanban = $lang->projectCommon . '看板';
 
 $lang->execution->executionKanban = "{$lang->execution->common}看板";
 $lang->execution->all             = "{$lang->execution->common}列表";
-
-$lang->board->template     = '模板广场';
-$lang->board->myBoard      = '我的白板';
-$lang->board->productBoard = '产品白板';
-$lang->board->projectBoard = '项目白板';
-$lang->board->teamBoard    = '团队白板';
 
 $lang->doc->recent        = '最近文档';
 $lang->doc->my            = '我的文档';
@@ -498,6 +491,7 @@ $lang->createObjects['project']     = $lang->projectCommon;
 $lang->createObjects['product']     = $lang->productCommon;
 $lang->createObjects['program']     = '项目集';
 $lang->createObjects['doc']         = '文档';
+$lang->createObjects['board']       = '白板';
 $lang->createObjects['kanbanspace'] = '空间';
 $lang->createObjects['kanban']      = '看板';
 

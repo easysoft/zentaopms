@@ -134,7 +134,16 @@ formPanel
         formGroup
         (
             set::name('squash'),
-            set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1'))
+            set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1')),
+            btn
+            (
+                icon('help'),
+                setClass('text-gray size-sm mt-1 ghost'),
+                set('data-placement', 'right'),
+                set('data-type', 'white'),
+                set('data-class-name', 'text-gray border border-light'),
+                toggle::tooltip(array('title' => $lang->mr->squashHelp)),
+            )
         )
     ),
     formGroup
@@ -144,7 +153,7 @@ formPanel
         set::width('1/2'),
         set::required(true),
         set::name('jobID'),
-        set::label($lang->job->common),
+        set::label($lang->mr->pipeline),
         set::items($jobPairs)
     ),
     formGroup

@@ -42,41 +42,192 @@ foreach($projects as $projectID => $projectName)
     $projectItems[] = array('value' => $projectID, 'text' => $projectName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 }
 
-/* 燃尽图。Burn chart. */
-$burn = div
-(
-    div(setClass('font-bold mb-2'), $lang->block->executionstatistic->burn),
-    echarts
-    (
-        set::color(array('#2B80FF', '#D2D6E5')),
-        set::width('100%'),
-        set::height(140),
-        set::grid(array('left' => '2px', 'top' => '30px', 'right' => '10px', 'bottom' => '0',  'containLabel' => true)),
-        set::legend(array('show' => true, 'right' => '0')),
-        set::xAxis(array('type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'), 'axisLabel' => array('rotate' => 45))),
-        set::yAxis(array('type' => 'value', 'name' => 'h', 'minInterval' => $chartData['baseLine'][0], 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
-        set::series
+if($execution->type == 'kanban')
+{
+    $index       = 0;
+    $chartColors = array('#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF');
+    $chartSeries = array();
+    if(!empty($chartData['line']))
+    {
+        foreach($chartData['line'] as $label => $set)
+        {
+            $chartSeries[] = array(
+                'name'      => $label,
+                'type'      => 'line',
+                'stack'     => 'Total',
+                'data'      => array_values($set),
+                'color'     => $chartColors[$index],
+                'areaStyle' => array('color' => $chartColors[$index], 'opacity' => 0.2),
+                'itemStyle' => array('normal' => array('lineStyle' => array('width' => 1))),
+                'emphasis'  => array('focus' => 'series')
+            );
+
+            $index ++;
+        }
+    }
+    /* 任务计流图图。CFD chart. */
+    $chart = div
         (
-            array
+            div(setClass('font-bold mb-2'), $lang->block->executionstatistic->cfd),
+            echarts
             (
-                array
+                set::series($chartSeries),
+                set::width('100%'),
+                set::height(200),
+                set::tooltip(array(
+                    'trigger'     => 'axis',
+                    'axisPointer' => array('type' => 'cross', 'label' => array('backgroundColor' => '#6a7985')),
+                    'textStyle'   => array('fontWeight' => 100),
+                    'formatter'   => "RAWJS<function(rowDatas){return window.randTipInfo(rowDatas);}>RAWJS"
+                )),
+                set::legend(array(
+                    'data' => !empty($chartData['line']) ? array_keys(array_reverse($chartData['line'])) : null
+                )),
+                set::grid(array(
+                    'top'          => !empty($chartData['labels']) ? '80px' : '40px',
+                    'left'         => !empty($chartData['labels']) ? '2px' : '15px',
+                    'right'        => '2px',
+                    'bottom'       => '2px',
+                    'containLabel' => true
+                )),
+                set::xAxis(array(array(
+                    'type' => 'category',
+                    'boundaryGap' => false,
+                    'data' => !empty($chartData['labels']) ? $chartData['labels'] : null,
+                    'name' => $lang->execution->burnXUnit,
+                    'axisLine' => array('show' => true, 'lineStyle' =>array('color' => '#999', 'width' =>1))
+                ))),
+                set::yAxis(array(array(
+                    'type'          => 'value',
+                    'name'          => $lang->execution->count,
+                    'minInterval'   => 1,
+                    'nameTextStyle' => array('fontWeight' => 'normal'),
+                    'axisPointer'   => array('label' => array('show' => true, 'precision' => 0)),
+                    'axisLine'      => array('show' => true, 'lineStyle' => array('color' => '#999', 'width' => 1))
+                )))
+            )
+        );
+    $taskStoryInfo = null;
+}
+else
+{
+    /* 燃尽图。Burn chart. */
+    $chart = div
+        (
+            div(setClass('font-bold mb-2'), $lang->block->executionstatistic->burn),
+            echarts
+            (
+                set::color(array('#2B80FF', '#D2D6E5')),
+                set::width('100%'),
+                set::height(140),
+                set::grid(array('left' => '2px', 'top' => '30px', 'right' => '10px', 'bottom' => '0',  'containLabel' => true)),
+                set::legend(array('show' => true, 'right' => '0')),
+                set::xAxis(array('type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'), 'axisLabel' => array('rotate' => 45))),
+                set::yAxis(array('type' => 'value', 'name' => 'h', 'minInterval' => $chartData['baseLine'][0], 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
+                set::series
                 (
-                    'type' => 'line',
-                    'name' => $lang->execution->charts->burn->graph->actuality,
-                    'data' => $chartData['burnLine'],
-                    'emphasis' => array('label' => array('show' => true))
-                ),
-                array
-                (
-                    'type' => 'line',
-                    'name' => $lang->execution->charts->burn->graph->reference,
-                    'data' => $chartData['baseLine'],
-                    'emphasis' => array('label' => array('show' => true))
+                    array
+                    (
+                        array
+                        (
+                            'type'       => 'line',
+                            'name'       => $lang->execution->charts->burn->graph->actuality,
+                            'data'       => $chartData['burnLine'],
+                            'emphasis'   => array('label' => array('show' => true)),
+                            'symbolSize' => 8,
+                            'symbol'     => 'circle'
+                        ),
+                        array
+                        (
+                            'type'       => 'line',
+                            'name'       => $lang->execution->charts->burn->graph->reference,
+                            'data'       => $chartData['baseLine'],
+                            'emphasis'   => array('label' => array('show' => true)),
+                            'symbolSize' => 8,
+                            'symbol'     => 'circle'
+                        ),
+                        array
+                        (
+                            'data'       => empty($chartData['delayLine']) ? array() : $chartData['delayLine'],
+                            'type'       => 'line',
+                            'name'       => $lang->execution->charts->burn->graph->delay,
+                            'symbolSize' => 8,
+                            'symbol'     => 'circle',
+                            'itemStyle'  => array
+                            (
+                                'normal' => array
+                                (
+                                    'color' => '#F00',
+                                    'lineStyle' => array
+                                    (
+                                        'color' => '#F00'
+                                    )
+                                ),
+                                'emphasis' => array
+                                (
+                                    'color' => '#fff',
+                                    'borderColor' => '#F00',
+                                    'borderWidth' => 2
+                                )
+                            ),
+                        )
+                    )
                 )
             )
-        )
-    )
-);
+        );
+
+    /* 任务故事信息。Task story info. */
+    $taskStoryInfo = col
+        (
+            setClass('gap-2'),
+            row
+            (
+                div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->task)),
+                row
+                (
+                    setClass('flex-auto'),
+                    cell
+                    (
+                        setClass('w-1/3'),
+                        span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalTask),
+                        strong(setClass('num ml-2'), $execution->totalTask)
+                    ),
+                    cell
+                    (
+                        setClass('w-1/3'),
+                        span(setClass('text-sm text-gray'), $lang->block->executionstatistic->undoneTask),
+                        strong(setClass('num ml-2'), $execution->undoneTask)
+                    ),
+                    cell
+                    (
+                        setClass('w-1/3'),
+                        span(setClass('text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask),
+                        strong(setClass('num ml-2'), $execution->yesterdayDoneTask)
+                    )
+                )
+            ),
+            row
+            (
+                div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->story)),
+                row
+                (
+                    setClass('flex-auto'),
+                    cell
+                    (
+                        setClass('w-1/3'),
+                        span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalStory),
+                        strong(setClass('num ml-2'), $execution->totalStory)
+                    ),
+                    cell
+                    (
+                        setClass('w-1/3'),
+                        span(setClass('text-sm text-gray'), $lang->block->executionstatistic->doneStory),
+                        strong(setClass('num ml-2'), $execution->doneStory)
+                    )
+                )
+            )
+        );
+}
 
 /* 进度环。Progress circle. */
 $progressCircle = div
@@ -164,58 +315,6 @@ $hoursInfo = row
     )
 );
 
-/* 任务故事信息。Task story info. */
-$taskStoryInfo = col
-(
-    setClass('gap-2'),
-    row
-    (
-        div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->task)),
-        row
-        (
-            setClass('flex-auto'),
-            cell
-            (
-                setClass('w-1/3'),
-                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalTask),
-                strong(setClass('num ml-2'), $execution->totalTask)
-            ),
-            cell
-            (
-                setClass('w-1/3'),
-                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->undoneTask),
-                strong(setClass('num ml-2'), $execution->undoneTask)
-            ),
-            cell
-            (
-                setClass('w-1/3'),
-                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask),
-                strong(setClass('num ml-2'), $execution->yesterdayDoneTask)
-            )
-        )
-    ),
-    row
-    (
-        div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->story)),
-        row
-        (
-            setClass('flex-auto'),
-            cell
-            (
-                setClass('w-1/3'),
-                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalStory),
-                strong(setClass('num ml-2'), $execution->totalStory)
-            ),
-            cell
-            (
-                setClass('w-1/3'),
-                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->doneStory),
-                strong(setClass('num ml-2'), $execution->doneStory)
-            )
-        )
-    )
-);
-
 $blockView = null;
 if($longBlock)
 {
@@ -231,7 +330,7 @@ if($longBlock)
         col
         (
             setClass('gap-0 flex-auto'),
-            $burn,
+            $chart,
             $taskStoryInfo
         )
     );
@@ -252,7 +351,7 @@ else
             cell
             (
                 setClass('flex-auto min-w-0'),
-                $burn
+                $chart
             )
         ),
         $hoursInfo,

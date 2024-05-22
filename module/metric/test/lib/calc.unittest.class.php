@@ -1039,5 +1039,12 @@ class metricTest
     {
         return $this->objectModel->fetchModules($scope);
     }
+
+    public function setCollector($metricID, $user = 'admin')
+    {
+        $metric = new stdclass();
+        $metric->collector = ",{$user},";
+        $this->objectModel->updateMetricFields($metricID, $metric);
+    }
 }
 

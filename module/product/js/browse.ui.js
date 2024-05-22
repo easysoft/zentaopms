@@ -165,3 +165,14 @@ window.setShowGrades = function()
         loadCurrentPage();
     });
 }
+
+window.importToLib = function()
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let storyIdList = '';
+    checkedList.forEach((id) => storyIdList += id + ',');
+    $('#storyIdList').val(storyIdList);
+}

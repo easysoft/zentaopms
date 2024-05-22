@@ -33,8 +33,8 @@ foreach($actions as $actionType => $typeActions)
         $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$build->id, $action['url']);
         $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
-        if($action['icon'] == 'edit')  $actions[$actionType][$key]['text'] = $lang->edit;
-        if($action['icon'] == 'trash') $actions[$actionType][$key]['text'] = $lang->delete;
+        if(isset($action['action']) && $action['icon'] == 'edit')  $actions[$actionType][$key]['text'] = $lang->edit;
+        if(isset($action['action']) && $action['icon'] == 'trash') $actions[$actionType][$key]['text'] = $lang->delete;
     }
 }
 detailHeader
@@ -122,6 +122,33 @@ $config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
 
+if(!empty($build->builds))
+{
+    $buildStories = explode(',', $build->stories);
+    $buildStories = array_combine($buildStories, $buildStories);
+    foreach($stories as $index => $story)
+    {
+        if(empty($story->actions)) break;
+        if(!isset($buildStories[$story->id]))
+        {
+            $story->noCheckBox = true;
+            $story->actions[0]['disabled'] = true;
+        }
+    }
+
+    $buildBugs = explode(',', $build->bugs);
+    $buildBugs = array_combine($buildBugs, $buildBugs);
+    foreach($bugs as $index => $bug)
+    {
+        if(empty($bug->actions)) break;
+        if(!isset($buildBugs[$bug->id]))
+        {
+            $bug->noCheckBox = true;
+            $bug->actions[0]['disabled'] = true;
+        }
+    }
+}
+
 detailBody
 (
     sectionList(
@@ -155,6 +182,7 @@ detailBody
                     set::cols(array_values($config->build->story->dtable->fieldList)),
                     set::data($stories),
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
+                    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
                     set::onRenderCell(jsRaw('window.renderStoryCell')),
@@ -194,6 +222,7 @@ detailBody
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
+                    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),

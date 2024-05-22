@@ -384,7 +384,8 @@ class todoZen extends todo
             $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
             $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
             $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
-            $reviews       = $this->loadModel('review')->getUserReviewPairs($account);
+            $reviewItems   = $this->loadModel('my')->getReviewingList('all');
+            foreach($reviewItems as $review) $reviews[$review->id] = $review->title;
         }
 
         /* Judge whether the edited todos is too large. */
@@ -402,7 +403,7 @@ class todoZen extends todo
         $this->view->type        = $type;
         $this->view->userID      = $userID;
         $this->view->status      = $status;
-        if($this->config->edition != 'open') $this->view->feedback = $feedbacks;
+        if($this->config->edition != 'open') $this->view->feedbacks = $feedbacks;
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->view->issues        = $issues;
@@ -488,17 +489,18 @@ class todoZen extends todo
             {
                 $todo->objectID   = $todo->{$todo->type};
                 $todo->name       = '';
+                if(empty($todo->objectID)) dao::$errors["{$todo->type}[{$todoID}]"] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
             }
-            unset($todo->story, $todo->task, $todo->bug, $todo->testtask);
+            elseif(empty($todo->name))
+            {
+                dao::$errors["name[{$todoID}]"] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
+            }
+            unset($todo->story, $todo->task, $todo->bug, $todo->testtask, $todo->feedback, $todo->issue, $todo->risk, $todo->opportunity, $todo->review);
 
             $todo->begin = empty($todo->begin) || $this->post->switchTime ? 2400 : $todo->begin;
             $todo->end   = empty($todo->end) || $this->post->switchTime   ? 2400 : $todo->end;
 
-            if($todo->end < $todo->begin)
-            {
-                dao::$errors["begin[{$todoID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
-                continue;
-            }
+            if($todo->end < $todo->begin) dao::$errors["begin[{$todoID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
         }
 
         return $todos;

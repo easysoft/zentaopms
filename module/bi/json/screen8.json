@@ -1569,7 +1569,7 @@
                             "label": {
                                 "normal": {
                                     "textStyle": {
-                                        "fontSize": 32,
+                                        "fontSize": 24,
                                         "color": "#fff"
                                     }
                                 }
@@ -1661,7 +1661,7 @@
                             "label": {
                                 "normal": {
                                     "textStyle": {
-                                        "fontSize": 32,
+                                        "fontSize": 24,
                                         "color": "#fff"
                                     }
                                 }
@@ -1753,7 +1753,7 @@
                             "label": {
                                 "normal": {
                                     "textStyle": {
-                                        "fontSize": 32,
+                                        "fontSize": 24,
                                         "color": "#fff"
                                     }
                                 }
@@ -1845,7 +1845,7 @@
                             "label": {
                                 "normal": {
                                     "textStyle": {
-                                        "fontSize": 32,
+                                        "fontSize": 24,
                                         "color": "#fff"
                                     }
                                 }

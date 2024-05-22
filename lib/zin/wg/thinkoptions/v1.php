@@ -32,9 +32,7 @@ class thinkOptions extends wg
         'data?: array',                     // 默认值。
         'stepText?: string',                // 步骤文本。
         'sameLevelText?: string',           // 同级文本。
-        'expectDisabledTip?: string',       // 预期输入框禁用提示。
         'deleteStepTip?: string',           // 有子层级禁用删除提示。
-        'dragNestedTip?: string',           // 拖拽超出提示。
         'showOther?: bool=true',            // 是否展示启用其他。
         'enableOther?: bool=false',         // 是否启用其他。
         'otherName?: string="enableOther"', // 启用其他的 name。
@@ -58,10 +56,10 @@ class thinkOptions extends wg
      */
     protected function build()
     {
-        $id                = $this->prop('id') ? $this->prop('id') : $this->gid;
-        $expectDisabledTip = $this->prop('expectDisabledTip', data('lang.testcase.expectDisabledTip'));
-        $deleteStepTip     = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
-        $dragNestedTip     = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $id            = $this->prop('id') ? $this->prop('id') : $this->gid;
+        $deleteStepTip = $this->prop('deleteStepTip', $lang->thinkstep->deleteOptionTip);
 
         list($enableOther, $otherName, $showOther) = $this->prop(array('enableOther', 'otherName', 'showOther'));
 
@@ -69,43 +67,45 @@ class thinkOptions extends wg
         (
             setID($id),
             setClass('think-options w-full'),
-            div
-            (
-                set::className('think-options-body')
-            ),
+            div(set::className('think-options-body')),
             zui::thinkOptions
             (
                 set::_to("#$id"),
-                set::expectDisabledTip($expectDisabledTip),
                 set::deleteStepTip($deleteStepTip),
-                set::dragNestedTip($dragNestedTip),
-                set::enterPlaceholder(data('lang.thinkwizard.step.pleaseInput')),
+                set::enterPlaceholder($lang->thinkstep->pleaseInput),
                 set($this->props->pick(array('name', 'data')))
             ),
             $showOther ? div
             (
-                setClass('w-full flex justify-between items-center h-8 px-2.5 rounded mt-1 ring-opacity-70 ring-gray-300'),
-                setStyle(array('background' => 'rgba(242, 244, 247, .7)', 'box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
+                setClass('w-full flex justify-between items-center h-8 rounded mt-1 ring-opacity-70 ring-gray-300'),
+                setStyle(array('box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
                 div
                 (
-                    setClass('flex items-center'),
+                    setClass('h-full flex items-center flex-1'),
                     div
                     (
-                        setClass('w-11'),
-                        data('lang.other')
+                        setClass('h-full flex items-center pl-2.5 opacity-80'),
+                        setStyle(array('width' => '48px', 'background' => 'rgba(var(--color-gray-200-rgb), .6)')),
+                        $lang->other
                     ),
                     div
                     (
-                        setClass('text-gray-400'),
-                        data('lang.thinkwizard.step.pleaseInput'),
+                        setClass('h-full w-full flex items-center text-gray-400 pl-2.5'),
+                        setStyle('background', 'rgba(244, 245, 247, .7)'),
+                        $lang->thinkstep->pleaseInput,
                     ),
                 ),
-                checkbox
+                div
                 (
-                    set::name($otherName),
-                    set::checked($enableOther),
-                    set::text(data('lang.thinkwizard.step.enable'))
-                ),
+                    setClass('h-full flex items-center pr-2.5'),
+                    setStyle(array('width' => '60px', 'background' => 'rgba(244, 245, 247, .7)')),
+                    checkbox
+                    (
+                        set::name($otherName),
+                        set::checked($enableOther),
+                        set::text($lang->thinkstep->enable)
+                    ),
+                )
             ) : null
         );
     }

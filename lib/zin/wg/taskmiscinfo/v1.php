@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'datalist' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'relatedlist' . DS . 'v1.php';
 
-class taskMiscInfo extends wg
+class taskMiscInfo extends relatedList
 {
     protected static array $defineProps = array
     (
@@ -13,61 +13,53 @@ class taskMiscInfo extends wg
         'linkCommits'  => '?array'    // 当前任务关联的提交。
     );
 
-    protected function getItems(): array
+    protected function created()
     {
-        global $lang, $app;
+        global $lang;
 
         $task = $this->prop('task', data('task'));
         if(!$task) return array();
 
-        $items        = array();
-        $linkMRTitles = $this->prop('linkMRTitles', data('linkMRTitles'));
-        $mrItems      = array();
-        $canViewMR    = common::hasPriv('mr', 'view');
-        foreach($linkMRTitles as $MRID => $linkMRTitle)
+        /* Linked MR. */
+        if(helper::hasFeature('devops'))
         {
-            $mrItems[] = array
+            $canViewMR  = common::hasPriv('mr', 'view');
+            $linkMRList = $this->prop('linkMRTitles', data('linkMRTitles'));
+            $data['mr'] = array
             (
-                'text'     => "#$MRID $linkMRTitle",
-                'url'      => $canViewMR ? createLink('mr', 'view', "MRID=$MRID") : false,
-                'data-app' => $app->tab
+                'title'    => $lang->task->linkMR,
+                'items'    => $linkMRList,
+                'url'      => $canViewMR ? createLink('mr', 'view', 'MRID={id}') : false,
+                'props'    => array('data-app' => 'devops'),
+                'onRender' => function($item, $mr) use($lang)
+                {
+                    $item['titleClass'] = 'w-0 flex-1';
+                    $statusClass = $mr->status;
+                    if($mr->status == 'opened') $statusClass = 'draft';
+                    if($mr->status == 'merged') $statusClass = 'done';
+                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                    return $item;
+                }
+            );
+
+            $linkedCommits = $this->prop('linkCommits', data('linkCommits'));
+            $data['linkCommit'] = array
+            (
+                'title'    => $lang->task->linkCommit,
+                'items'    => $linkedCommits,
+                'onRender' => function($item, $commit)
+                {
+                    $item['text'] = $commit->comment;
+                    if(hasPriv('repo', 'revision'))
+                    {
+                        $item['url']      = createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}");
+                        $item['data-app'] = 'devops';
+                    }
+                    return $item;
+                }
             );
         }
-        $items[$lang->task->linkMR] = array
-        (
-            'control' => 'list',
-            'items'   => $mrItems
-        );
 
-        $linkCommits = $this->prop('linkCommits', data('linkCommits'));
-        $commitItems = array();
-        $canRevision = hasPriv('repo', 'revision');
-        foreach($linkCommits as $commit)
-        {
-            $revision = substr($commit->revision, 0, 10);
-            $commitItems[] = array
-            (
-                'text'     => "#$revision",
-                'url'      => $canRevision ? createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}") : false,
-                'data-app' => $app->tab
-            );
-        }
-        $items[$lang->task->linkCommit] = array
-        (
-            'control' => 'list',
-            'items'   => $commitItems
-        );
-
-        return $items;
-    }
-
-    protected function build()
-    {
-        return new datalist
-        (
-            set::className('task-effort-info'),
-            set::items($this->getItems()),
-            set::labelWidth(90)
-        );
+        $this->setProp('data', $data);
     }
 }

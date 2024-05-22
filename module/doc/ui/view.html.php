@@ -24,13 +24,12 @@ toolbar
 (
     $canExport ? item(set(array
     (
-        'id'          => $exportMethod,
-        'icon'        => 'export',
-        'class'       => 'ghost export',
-        'text'        => $lang->export,
-        'url'         => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}"),
-        'data-size'   => 'sm',
-        'data-toggle' => 'modal'
+        'id'     => $exportMethod,
+        'icon'   => 'export',
+        'target' => '_self',
+        'class'  => 'ghost export',
+        'text'   => $lang->export,
+        'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
     ))) : null,
     common::hasPriv('doc', 'createLib') ? item(set(array
     (
@@ -54,22 +53,23 @@ $collectLink = $this->createLink('doc', 'collect', "objectID=$doc->id");
 $starBtn     = "<a data-url='$collectLink' title='{$lang->doc->collect}' class='ajax-submit btn btn-link'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
 
 /* 导入资产库的按钮. */
+$importLibItems = array();
 if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project')
 {
     $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
     $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
-    if($canImportToPracticeLib)  $items[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal', 'data-size' => 'sm');
-    if($canImportToComponentLib) $items[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal', 'data-size' => 'sm');
+    if($canImportToPracticeLib)  $importLibItems[] = array('text' => $lang->doc->importToPracticeLib,  'url' => '#importToPracticeLib',  'data-toggle' => 'modal', 'data-size' => 'sm');
+    if($canImportToComponentLib) $importLibItems[] = array('text' => $lang->doc->importToComponentLib, 'url' => '#importToComponentLib', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
-    $importLibBtn = $items ? dropdown
+    $importLibBtn = $importLibItems ? dropdown
     (
         btn
         (
             setClass('ghost btn square btn-default'),
             icon('diamond')
         ),
-        set::items($items)
+        set::items($importLibItems)
     ) : null;
 }
 
@@ -291,66 +291,69 @@ panel
     )
 );
 
-modal
-(
-    setID('importToPracticeLib'),
-    formPanel
+if($importLibItems)
+{
+    modal
     (
-        set::title($lang->doc->importToPracticeLib),
-        set::actions(array('submit')),
-        set::submitBtnText($lang->export),
-        set::url(createLink('doc', 'importToPracticeLib', "doc={$doc->id}")),
-        set::formClass('mt-6'),
-        formGroup
+        setID('importToPracticeLib'),
+        formPanel
         (
-            set::label($lang->doc->practiceLib),
-            setID('practiceLib'),
-            set::name('lib'),
-            set::items($practiceLibs),
-            set::required(true)
-        ),
-        !common::hasPriv('assetlib', 'approvePractice') && !common::hasPriv('assetlib', 'batchApprovePractice') ? formGroup
-        (
-            set::label($lang->doc->approver),
-            picker
+            set::title($lang->doc->importToPracticeLib),
+            set::actions(array('submit')),
+            set::submitBtnText($lang->import),
+            set::url(createLink('doc', 'importToPracticeLib', "doc={$doc->id}")),
+            set::formClass('mt-6'),
+            formGroup
             (
-                setID('practiceApprover'),
-                set::name('assignedTo'),
-                set::items($practiceApprovers),
+                set::label($lang->doc->practiceLib),
+                setID('practiceLib'),
+                set::name('lib'),
+                set::items($practiceLibs),
                 set::required(true)
-            )
-        ) : null
-    )
-);
+            ),
+            !common::hasPriv('assetlib', 'approvePractice') && !common::hasPriv('assetlib', 'batchApprovePractice') ? formGroup
+            (
+                set::label($lang->doc->approver),
+                picker
+                (
+                    setID('practiceApprover'),
+                    set::name('assignedTo'),
+                    set::items($practiceApprovers),
+                    set::required(true)
+                )
+            ) : null
+        )
+    );
 
-modal
-(
-    setID('importToComponentLib'),
-    formPanel
+    modal
     (
-        set::title($lang->doc->importToComponentLib),
-        set::actions(array('submit')),
-        set::submitBtnText($lang->export),
-        set::url(createLink('doc', 'importToComponentLib', "doc={$doc->id}")),
-        set::formClass('mt-6'),
-        formGroup
+        setID('importToComponentLib'),
+        formPanel
         (
-            set::label($lang->doc->componentLib),
-            setID('componentLib'),
-            set::name('lib'),
-            set::items($componentLibs),
-            set::required(true)
-        ),
-        !common::hasPriv('assetlib', 'approveComponent') && !common::hasPriv('assetlib', 'batchApproveComponent') ? formGroup
-        (
-            set::label($lang->doc->approver),
-            picker
+            set::title($lang->doc->importToComponentLib),
+            set::actions(array('submit')),
+            set::submitBtnText($lang->import),
+            set::url(createLink('doc', 'importToComponentLib', "doc={$doc->id}")),
+            set::formClass('mt-6'),
+            formGroup
             (
-                setID('componentApprover'),
-                set::name('assignedTo'),
-                set::items($componentApprovers),
+                set::label($lang->doc->componentLib),
+                setID('componentLib'),
+                set::name('lib'),
+                set::items($componentLibs),
                 set::required(true)
-            )
-        ) : null
-    )
-);
+            ),
+            !common::hasPriv('assetlib', 'approveComponent') && !common::hasPriv('assetlib', 'batchApproveComponent') ? formGroup
+            (
+                set::label($lang->doc->approver),
+                picker
+                (
+                    setID('componentApprover'),
+                    set::name('assignedTo'),
+                    set::items($componentApprovers),
+                    set::required(true)
+                )
+            ) : null
+        )
+    );
+}

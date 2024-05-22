@@ -177,9 +177,10 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
-$hasRepo        = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
-$actions        = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
-$hasDivider     = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
+if($story->status == 'changing') $config->story->actionList['recall']['text'] = $lang->story->recallChange;
+$hasRepo    = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+$actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
+$hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 foreach($actions as $key => $action)
 {

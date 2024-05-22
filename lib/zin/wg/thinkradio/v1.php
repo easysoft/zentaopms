@@ -2,69 +2,88 @@
 declare(strict_types=1);
 namespace zin;
 
-requireWg('thinkNode');
+requireWg('thinkQuestion');
 
 /**
  * 单选题型部件类
  * The thinkRadio widget class
  */
-class thinkRadio extends thinkNode
+class thinkRadio extends thinkQuestion
 {
     protected static array $defineProps = array
     (
-        'requiredName?: string="required"',
-        'optionName?: string',
-        'otherName?: string',
-        'required?: int=1',
         'enableOther?: bool',
-        'data?: array',
+        'fields?: array',
     );
 
-    protected static array $defaultProps = array
-    (
-        'type' => 'question'
-    );
-
-    public static function getPageJS(): string
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
-    protected function buildBody(): array
+    protected function buildDetail(): array
     {
         global $lang;
-        $items = parent::buildBody();
+        $detailWg = parent::buildDetail();
+        $step     = $this->prop('step');
+        $answer   = $step->answer;
+        $result   = isset($answer->result) ? $answer->result : array();
+        if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
-        list($requiredName, $optionName, $otherName, $required, $enableOther, $data) = $this->prop(array('requiredName', 'optionName', 'otherName', 'required', 'enableOther', 'data'));
-        $requiredItems = $lang->thinkwizard->step->requiredList;
+        $fields = $step->options->fields ?? array();
+        $items  = array();
+        foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
+        if(!empty($step->options->enableOther)) $items[] = array('text' => $lang->other, 'value' => 'other', 'isOther' => '1', 'other' => isset($answer->other) ? $answer->other : '');
 
-        $items[] = formGroup
+        $detailWg[] = thinkBaseCheckbox
         (
-            set::label(data('lang.thinkwizard.step.label.option')),
-            thinkOptions
+            set::type($step->options->questionType),
+            set::items($items),
+            set::name('result[]'),
+            set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
+        );
+        return $detailWg;
+    }
+
+    protected function buildFormItem(): array
+    {
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $formItems = parent::buildFormItem();
+
+        list($step, $questionType, $required, $enableOther, $fields) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields'));
+        $requiredItems = $lang->thinkstep->requiredList;
+        if($step)
+        {
+            $enableOther = $step->options->enableOther ?? 0;
+            $required    = $step->options->required;
+            if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
+            $fields = $step->options->fields ?? array();
+        }
+
+        $formItems[] = array(
+            formHidden('options[questionType]', $questionType),
+            formGroup
             (
-                set::name($optionName),
-                set::data($data),
-                set::otherName($otherName),
-                set::enableOther($enableOther),
-                set::otherName('enableOther')
+                set::label($lang->thinkstep->label->option),
+                thinkOptions
+                (
+                    set::name('options[fields]'),
+                    set::data($fields),
+                    set::otherName('options[enableOther]'),
+                    set::enableOther($enableOther)
+                )
             ),
-        );
-
-        $items[] = formGroup
-        (
-            setStyle(array('display' => 'flex')),
-            set::label(data('lang.thinkwizard.step.label.required')),
-            radioList
+            formGroup
             (
-                set::name($requiredName),
-                set::inline(true),
-                set::value($required),
-                set::items($requiredItems),
-                bind::change('changeIsRequired(event)')
-            )
+                setStyle(array('display' => 'flex')),
+                set::label($lang->thinkstep->label->required),
+                radioList
+                (
+                    set::name('options[required]'),
+                    set::inline(true),
+                    set::value($required),
+                    set::items($requiredItems),
+                    $questionType == 'checkbox' ? bind::change('changeIsRequired(event)') : null
+                )
+            ),
+            $this->children()
         );
-        $items[] = $this->children();
-        return $items;
+        return $formItems;
     }
 }

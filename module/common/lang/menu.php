@@ -13,7 +13,6 @@ $lang->navIcons['aiapp']     = "<i class='icon icon-ai'></i>";
 $lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
-$lang->navIcons['board']     = "<i class='icon icon-board'></i>";
 
 $lang->navIconNames              = array();
 $lang->navIconNames['my']        = 'menu-my';
@@ -29,7 +28,6 @@ $lang->navIconNames['kanban']    = 'kanban';
 $lang->navIconNames['doc']       = 'doc';
 $lang->navIconNames['system']    = 'group';
 $lang->navIconNames['admin']     = 'cog-outline';
-$lang->navIconNames['board']     = 'board';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
@@ -61,7 +59,6 @@ $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
 $lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|square|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
-$lang->mainNav->board     = "{$lang->navIcons['board']} {$lang->board->common}|board|teamboard|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
@@ -78,7 +75,6 @@ $lang->mainNav->menuOrder[35] = 'devops';
 $lang->mainNav->menuOrder[40] = 'aiapp';
 $lang->mainNav->menuOrder[45] = 'bi';
 $lang->mainNav->menuOrder[50] = 'kanban';
-$lang->mainNav->menuOrder[53] = 'board';
 $lang->mainNav->menuOrder[55] = 'doc';
 $lang->mainNav->menuOrder[60] = 'system';
 $lang->mainNav->menuOrder[65] = 'admin';
@@ -516,25 +512,6 @@ $lang->devops->menuOrder[30] = 'artifactrepo';
 $lang->devops->menuOrder[35] = 'apps';
 
 $lang->devops->dividerMenu = ',apps,';
-
-/* Board menu. */
-$lang->board->menu = new stdclass();
-//$lang->board->menu->dashboard = array('link' => "{$lang->dashboard}|board|index");
-$lang->board->menu->template  = array('link' => "{$lang->board->template}|board|template", 'alias' => 'myspace');
-$lang->board->menu->my        = array('link' => "{$lang->board->myBoard}|board|myBoard|", 'alias' => 'myboard');
-$lang->board->menu->product   = array('link' => "{$lang->board->productBoard}|board|productBoard|", 'alias' => 'productboard');
-$lang->board->menu->project   = array('link' => "{$lang->board->projectBoard}|board|projectBoard|", 'alias' => 'projectboard');
-$lang->board->menu->team      = array('link' => "{$lang->board->teamBoard}|board|teamBoard|", 'alias' => 'teamboard');
-
-$lang->board->dividerMenu = ',product,';
-
-/* Board menu order. */
-$lang->board->menuOrder[5]  = 'dashboard';
-$lang->board->menuOrder[10] = 'template';
-$lang->board->menuOrder[15] = 'my';
-$lang->board->menuOrder[20] = 'product';
-$lang->board->menuOrder[25] = 'project';
-$lang->board->menuOrder[30] = 'team';
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();

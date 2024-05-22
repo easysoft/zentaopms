@@ -108,8 +108,6 @@ $lang->metric      = new stdclass();
 $lang->ai          = new stdclass();
 $lang->aiapp       = new stdclass();
 
-$lang->board       = new stdclass();
-
 $lang->serverroom         = new stdclass();
 $lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();
@@ -241,6 +239,7 @@ $lang->createIcons['story']       = 'lightbulb';
 $lang->createIcons['task']        = 'check-sign';
 $lang->createIcons['testcase']    = 'sitemap';
 $lang->createIcons['doc']         = 'doc';
+$lang->createIcons['board']       = 'board';
 $lang->createIcons['execution']   = 'run';
 $lang->createIcons['project']     = 'project';
 $lang->createIcons['product']     = 'product';

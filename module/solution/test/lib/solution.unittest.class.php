@@ -43,7 +43,6 @@ class solutionTest
      */
     public function getLastSolutionTest(): object|false
     {
-        dao::$cache = array();
         return $this->objectModel->getLastSolution();
     }
 

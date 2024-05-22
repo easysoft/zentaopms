@@ -31,7 +31,6 @@
 
 .guide-block .block {background: rgba(230, 240, 255, 0.4);}
 .guide-block .block:hover {box-shadow: 0 0 14px rgba(0, 0, 0, 0.12);}
-.guide-block .block.active {box-shadow: 0 0 0 2px #2E7FFF; border-radius: 2px;}
 
 .preference-menu.picker-menu-list {padding: 0.25rem;}
 .preference-menu.picker-menu-list .menu-item {padding: 0.25rem;}

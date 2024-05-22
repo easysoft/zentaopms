@@ -36,13 +36,13 @@ $taskTester = new taskTest();
 $taskTester->objectModel->app->moduleName = 'task';
 $taskTester->objectModel->app->rawMethod  = 'start';
 
-r($taskTester->afterStartTest($taskIDList[0], $waitTask))          && p()               && e('1');                                    // 测试开始任务状态为未开始的任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[1], $doingTask))         && p('load:confirm') && e('该任务为Bug转化得到，是否更新Bug:1 ?'); // 测试开始任务状态为进行中的任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[2], $doneTask))          && p()               && e('1');                                    // 测试开始任务状态为已完成的任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[3], $cancelTask))        && p()               && e('1');                                    // 测试开始任务状态为已取消的任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[4], $closedTask))        && p()               && e('1');                                    // 测试开始任务状态为已关闭的任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[6], $childTask))         && p()               && e('1');                                    // 测试开始任务状态为未开始的子任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[7], $linearTask))        && p()               && e('1');                                    // 测试开始任务状态为未开始的串行任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[8], $multiTask))         && p()               && e('1');                                    // 测试开始任务状态为进行中的并行任务后的数据处理
-r($taskTester->afterStartTest($taskIDList[0], $waitTask))          && p()               && e('1');                                    // 测试给任务增加备注
-r($taskTester->afterStartTest($taskIDList[0], $waitTask, $output)) && p()               && e('1');                                    // 测试更新任务的看板数据
+r($taskTester->afterStartTest($taskIDList[0], $waitTask))          && p()       && e('1'); // 测试开始任务状态为未开始的任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[1], $doingTask))         && p('load') && e('1'); // 测试开始任务状态为进行中的任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[2], $doneTask))          && p()       && e('1'); // 测试开始任务状态为已完成的任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[3], $cancelTask))        && p()       && e('1'); // 测试开始任务状态为已取消的任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[4], $closedTask))        && p()       && e('1'); // 测试开始任务状态为已关闭的任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[6], $childTask))         && p()       && e('1'); // 测试开始任务状态为未开始的子任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[7], $linearTask))        && p()       && e('1'); // 测试开始任务状态为未开始的串行任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[8], $multiTask))         && p()       && e('1'); // 测试开始任务状态为进行中的并行任务后的数据处理
+r($taskTester->afterStartTest($taskIDList[0], $waitTask))          && p()       && e('1'); // 测试给任务增加备注
+r($taskTester->afterStartTest($taskIDList[0], $waitTask, $output)) && p()       && e('1'); // 测试更新任务的看板数据

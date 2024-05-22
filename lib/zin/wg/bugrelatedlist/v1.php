@@ -20,7 +20,7 @@ class bugRelatedList extends relatedList
         if(!$bug) $bug = data('bug');
         if(!$bug) return;
 
-        global $app, $lang;
+        global $lang;
 
         $canViewCase   = common::hasPriv('testcase', 'view');
         $canViewStory  = common::hasPriv('story', 'view');
@@ -109,23 +109,23 @@ class bugRelatedList extends relatedList
 
         /* Linked MR. */
         $linkMRList  = isset($bug->linkMRTitles) ? $bug->linkMRTitles :array();
-        $linkMRItems = array();
-        foreach($linkMRList as $MRID => $linkMRTitle)
-        {
-            $linkMRItem = new stdclass();
-            $linkMRItem->id    = $MRID;
-            $linkMRItem->title = $linkMRTitle;
-
-            $linkMRItems[] = $linkMRItem;
-        }
         if(helper::hasFeature('devops'))
         {
             $data['mr'] = array
             (
                 'title' => $lang->bug->linkMR,
-                'items' => $linkMRItems,
+                'items' => $linkMRList,
                 'url'   => $canViewMR ? createLink('mr', 'view', 'MRID={id}') : false,
-                'props' => array('data-app' => 'devops')
+                'props' => array('data-app' => 'devops'),
+                'onRender' => function($item, $mr) use($lang)
+                {
+                    $item['titleClass'] = 'w-0 flex-1';
+                    $statusClass = $mr->status;
+                    if($mr->status == 'opened') $statusClass = 'draft';
+                    if($mr->status == 'merged') $statusClass = 'done';
+                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                    return $item;
+                }
             );
 
             $data['linkCommit'] = array
@@ -141,6 +141,7 @@ class bugRelatedList extends relatedList
                         $item['url']      = createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}");
                         $item['data-app'] = 'devops';
                     }
+                    return $item;
                 }
             );
         }

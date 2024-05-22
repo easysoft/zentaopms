@@ -10,7 +10,7 @@ cid=1
 - 获取系统范围内的所有度量项第0条的code属性 @count_of_annual_finished_execution
 - 获取系统范围内未发布的度量项 @0
 - 获取系统范围内发布的度量项第1条的code属性 @count_of_pending_deployment
-- 获取项目范围内所有的，以id_desc的度量项第0条的code属性 @ count_of_annual_finished_execution_in_project
+- 获取项目范围内所有的，以id_desc的度量项第0条的code属性 @count_of_annual_finished_execution_in_project
 - 获取项目范围内所有的，以id_asc的度量项第0条的code属性 @planned_period_of_project
 
 */

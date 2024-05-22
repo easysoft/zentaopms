@@ -50,6 +50,8 @@ $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Pipeline job';
 $lang->mr->commitLogs  = 'Commit Logs';
+$lang->mr->execJob     = 'Execute';
+$lang->mr->execJobTip  = 'Execute the pipeline job manually';
 
 $lang->mr->canMerge  = "Can be merged";
 $lang->mr->cantMerge = "Can not be merged";
@@ -74,6 +76,12 @@ $lang->mr->needApproved       = 'This MR should be approved before merge';
 $lang->mr->needCI             = 'Merge only after passing pipeline';
 $lang->mr->removeSourceBranch = 'Delete source branch after merge';
 $lang->mr->squash             = 'Squash commits';
+$lang->mr->triggeredCI        = 'The pipeline job is triggered due to the target branch or pipeline job changed.';
+$lang->mr->acceptTip          = 'Please approve this MR before merge';
+$lang->mr->conflictsTip       = 'This merge request has conflicts, cannot be merged';
+$lang->mr->noChangesTip       = 'Source branch and target branch have no changes, cannot be merged';
+$lang->mr->compileTip         = 'This merge request pipeline build is not successful, cannot be merged';
+$lang->mr->branchUpdateTip    = 'Branch has been updated, execute pipeline';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 
@@ -173,8 +181,10 @@ $lang->mr->hasNoConflict  = "Can merge";
 $lang->mr->acceptMR       = "Accept Merge request ";
 $lang->mr->mergeFailed    = "Unable to merge request, please check the merge request status";
 $lang->mr->mergeSuccess   = "Merge Request Successfully";
+$lang->mr->refreshSuccess = 'Refresh successfully';
 
 $lang->mr->todomessage = "project was assigned to you";
+$lang->mr->squashHelp  = 'Corresponding git parameters: --squash';
 
 /**
  * Merge Command Document.

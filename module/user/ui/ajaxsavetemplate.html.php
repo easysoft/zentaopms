@@ -12,7 +12,7 @@ namespace zin;
 
 modalHeader(set::title($title));
 
-formPanel
+form
 (
     setID('saveTemplate'),
     formGroup

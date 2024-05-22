@@ -1,0 +1,38 @@
+.think-node-menu {max-height: calc(100vh - 105px); min-height: 32px;}
+.think-node-menu .tree-lines .tree:before {top: -18px; bottom: 0;}
+.think-node-menu .tree-lines .tree[data-type="transition"]:before,
+.think-node-menu .tree-lines .tree[data-type="question"]:before {display: none;}
+.think-node-menu .tree-lines .tree-item {--tree-line-indent: 19px;}
+.think-node-menu .tree-item * {white-space: nowrap;}
+.think-node-menu .tree .tree-item {margin-top: calc(1.5*var(--space));}
+.think-node-menu .tree .tree-item .item-content {flex: unset; overflow: clip; }
+.think-node-menu .tree .tree-item .item-content .item-title {overflow: hidden; text-overflow: ellipsis;}
+.think-node-menu .tree-item .listitem {background: #fff;}
+.think-node-menu .tree-item .listitem.selected {background: rgba(var(--color-primary-50-rgb), .8);}
+.think-node-menu .tree-item .listitem.selected .item-content {color: var(--color-primary-500);}
+.think-node-menu .tree .tree-item .toolbar {margin-left: calc(4*var(--space));}
+.think-node-menu .tree.is-nested-root>.tree-item {margin-top: calc(3*var(--space));}
+.think-node-menu .tree.is-nested-root>.tree-item>.listitem>.toolbar {margin-left: 0;}
+.think-node-menu .tree .tree-item .toolbar .btn:not(.with-popover-show) {opacity: 0;}
+.think-node-menu .tree .listitem:hover>.toolbar .btn {opacity: 1;}
+.think-node-menu .tree.is-nested-root>.tree-item:first-child>.tree>.tree-item {margin-top: calc(2*var(--space));}
+.think-node-menu .tree .tree-item .tree-item-inner {gap: 10px; padding-left: calc(3*var(--space));}
+.think-node-menu .tree.is-nested-root>.tree-item>.listitem {border: 1px solid #eee; border-radius: calc(4*var(--space)); width: fit-content; max-width: 100%; padding: 0 calc(3*var(--space)); background: #fff; position: relative; z-index: 2;}
+.think-node-menu .tree.is-nested-root>.tree-item>.listitem.selected {background: rgba(var(--color-primary-50-rgb), .8);}
+.think-node-menu .tree .tree-toggle {display: none;}
+.think-node-menu .tree .listitem>.item-icon {font-size: 16px; z-index: 2;}
+
+.think-node-menu .tree.is-nested-root>.tree-item>.tree::before {left: 20px;}
+.think-node-menu .tree:not(.is-nested-root)>.tree-item:not(.is-nested) .listitem {margin-left: calc((-2)*var(--space));}
+.think-node-menu .tree:not(.is-nested-root) .tree-item.is-nested {padding-left: calc(7*var(--space));}
+.think-node-menu .tree:not(.is-nested-root) .tree-item:not(.is-nested) {padding-left: 42px;}
+.think-node-menu .tree .tree-item .item-content-thinmory {position: relative; min-height: calc(8*var(--space)); margin-right: 2px;}
+.think-node-menu .tree .tree-item .item-content-thinmory>.form-control {position: absolute; top: 0; left: 0; z-index: 2;}
+
+.has-sidebar .think-node-menu>.toggle-btn.is-collapsed .icon:before {content: "\e931";}
+.has-sidebar .sidebar .sidebar-gutter {left: 96%;}
+.has-sidebar .sidebar.is-expanded .gutter-toggle {top: unset; bottom: 12px;}
+.has-sidebar .is-expanded > .think-node-menu ~ .sidebar-gutter > .gutter-toggle {opacity: 0;}
+.has-sidebar .sidebar.is-expanded {--sidebar-left-width: 455px !important;}
+.has-sidebar .sidebar.is-collapsed {--sidebar-left-width: 0 !important;}
+.sidebar-left.is-expanded > .think-node-menu ~ .sidebar-gutter {margin-left: 8px}

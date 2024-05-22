@@ -425,6 +425,6 @@ class job extends control
     public function ajaxImportJobs(string|int $repoID)
     {
         if($this->job->import($repoID)) $this->sendSuccess();
-        $this->sendError('fail');
+        $this->sendError(dao::isError() ? dao::getError() : 'fail');
     }
 }

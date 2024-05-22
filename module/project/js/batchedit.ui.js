@@ -45,6 +45,9 @@ function batchCheckDate()
     if(!begin || !end) return;
 
     const selectedProgramID = $tr.find('[name^=parent]').val();
+    const aclList           = !disabledprograms && selectedProgramID ? programAclList : projectAclList;
+
+    $tr.find('[name^=acl]').zui('picker').render({items: aclList, required: true});
     if(selectedProgramID == 0 || selectedProgramID == undefined)
     {
         $tr.next('tr.dateTip').remove();

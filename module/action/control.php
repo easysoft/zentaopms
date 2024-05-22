@@ -195,7 +195,7 @@ class action extends control
         elseif($oldAction->objectType == 'task' && $confirmChange == 'no')
         {
             $task      = $this->loadModel('task')->getById($oldAction->objectID);
-            $isDeleted = $this->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch();
+            $isDeleted = $this->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('deleted');
             $url       = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
             if($isDeleted) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteTaskTip}'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
         }
@@ -358,7 +358,7 @@ class action extends control
             {
                 return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => (int)$action->objectID))));
             }
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => $action->objectID))));
+            return $this->send(array('result' => 'success', 'locate' => 'reload'));
         }
 
         $action = $this->loadModel('file')->replaceImgURL($action, 'comment');

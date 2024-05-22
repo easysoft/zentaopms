@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'thinkradio' . DS . 'v1.php';
+requireWg('thinkRadio');
 
 /**
  * 多选题型部件类
@@ -12,8 +12,6 @@ class thinkCheckbox extends thinkRadio
 {
     protected static array $defineProps = array
     (
-        'minCountName?: string="minCount"',
-        'maxCountName?: string="maxCount"',
         'minCount?: string',
         'maxCount?: string',
     );
@@ -23,39 +21,52 @@ class thinkCheckbox extends thinkRadio
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function buildBody(): array
+    protected function buildFormItem(): array
     {
-        $items = parent::buildBody();
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $formItems = parent::buildFormItem();
 
-        list($minCountName, $minCount, $maxCountName, $maxCount) = $this->prop(array('minCountName', 'minCount', 'maxCountName', 'maxCount'));
-        $items[] = formRow
+        list($step, $minCount, $maxCount, $required) = $this->prop(array('step', 'minCount', 'maxCount', 'required'));
+        if($step)
+        {
+            $required = $step->options->required;
+            $minCount = $step->options->minCount ?? null;
+            $maxCount = $step->options->maxCount ?? null;
+        }
+        $className = 'selectable-rows' . (empty($required) ? ' hidden' : '');
+
+        $formItems[] = formRow
         (
             setClass('gap-4'),
             formGroup
             (
-                set::label(data('lang.thinkwizard.step.label.minCount')),
-                setClass('selectable-rows hidden'),
+                set::label($lang->thinkstep->label->minCount),
+                setClass($className),
                 input
                 (
-                    set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::placeholder($lang->thinkstep->inputContent),
                     set::type('number'),
-                    set::name($minCountName),
+                    set::min(1),
+                    set::name('options[minCount]'),
                     set::value($minCount),
                 ),
             ),
             formGroup
             (
-                set::label(data('lang.thinkwizard.step.label.maxCount')),
-                setClass('selectable-rows hidden'),
+                set::label($lang->thinkstep->label->maxCount),
+                setClass($className),
                 input
                 (
-                    set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::placeholder($lang->thinkstep->inputContent),
                     set::type('number'),
-                    set::name($maxCountName),
+                    set::min(1),
+                    set::name('options[maxCount]'),
                     set::value($maxCount)
                 )
             )
         );
-        return $items;
+        $formItems[] = $this->children();
+        return $formItems;
     }
 }
