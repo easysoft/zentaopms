@@ -52,6 +52,7 @@ $privs['execution']   = commonModel::hasPriv('execution', 'task');
 $privs['task']        = commonModel::hasPriv('task', 'view');
 $privs['bug']         = commonModel::hasPriv('bug', 'view');
 $privs['case']        = commonModel::hasPriv('case', 'view');
+$privs['design']      = commonModel::hasPriv('design', 'view');
 
 $this->loadModel('project');
 $this->loadModel('task');
