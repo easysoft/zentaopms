@@ -412,7 +412,8 @@ class tester extends result
         foreach($tips as $field => $tip)
         {
             if(strpos($tip, '|') !== false) list($tip, $fieldValue) = explode('|', $tip);
-            $field = preg_replace('/Tip$/', '', $field);
+            $field = trim(preg_replace('/Tip$/', '', $field), '[]');
+            var_dump($field);
             if(!isset($this->lang->{$module}->{$field})) return false;
 
             $field = $this->lang->{$module}->{$field};
