@@ -281,7 +281,7 @@ window.clickChangeOrder = function()
     changeOrder(sourceID, sourceOrder, targetID, targetOrder, type, 'scene');
 }
 
-window.clickCloseModal = function()
+$('#dragModal').on('click', '[data-dismiss=modal]', function()
 {
-    window.reloadPage();
-}
+    loadCurrentPage();
+});
