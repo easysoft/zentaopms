@@ -386,8 +386,9 @@ class installModel extends model
         $this->loadModel('bi');
 
         /* Prepare built-in sqls of bi. */
-        $chartSQLs = $this->bi->prepareBuiltinChartSQL();
+        //$chartSQLs = $this->bi->prepareBuiltinChartSQL();
         $pivotSQLs = $this->bi->prepareBuiltinPivotSQL();
+        $chartSQLs = array();
 
         $insertTables = array_merge($chartSQLs, $pivotSQLs);
 

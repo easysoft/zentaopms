@@ -144,6 +144,8 @@ class duckdb
      */
     private function replaceBackQuote($sql)
     {
+        $sql = trim($sql);
+        $sql = trim($sql, ';');
         $sql = str_replace(array('`'), array('"'), $sql);
 
         return $sql;

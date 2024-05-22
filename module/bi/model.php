@@ -66,7 +66,7 @@ class biModel extends model
         }
         catch(Exception $e)
         {
-            $message = preg_replace("/\r|\n/", "", $e->getMessage());
+            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
             $message = strip_tags($message);
             return array('result' => 'fail', 'message' => $message);
         }
@@ -91,19 +91,20 @@ class biModel extends model
         {
             if($driverName == 'mysql')
             {
-                $rows = $dbh->query($limitSql)->fetchAll();
-                $rowsCount = $dbh->query("SELECT FOUND_ROWS() as count")->fetch('count');
+                $rows      = $dbh->query($limitSql)->fetchAll();
+                $count     = $dbh->query("SELECT FOUND_ROWS() as count")->fetch();
+                $rowsCount = $count->count;
             }
             elseif($driverName == 'duckdb')
             {
                 $rows      = $dbh->query($limitSql)->fetchAll();
-                $allRows   = $dbh->query($sql)->fetchAll();
-                $rowsCount = count($allRows);
+                $allRows   = $dbh->query("SELECT COUNT(1) as count FROM ($sql)")->fetch();
+                $rowsCount = $allRows->count;
             }
         }
         catch(Exception $e)
         {
-            $message = preg_replace("/\r|\n/", "", $e->getMessage());
+            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
             $message = strip_tags($message);
             return array('result' => 'fail', 'message' => $message);
         }

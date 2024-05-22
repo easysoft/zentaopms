@@ -16,6 +16,7 @@ function query(callback) {
         if(!setVarFrom()) return false;
 
         filters = DataStorage.pivot.filters;
+      console.log(JSON.parse(JSON.stringify(filters)));
 
         filters.forEach(function(filter, index)
         {
@@ -36,6 +37,7 @@ function query(callback) {
     $.post(createLink('dataview', 'ajaxQuery'), {sql: $('#sql').val(), filters: filters, recPerPage: DataStorage.recPerPage, pageID: DataStorage.pageID}, function(resp)
     {
         resp = JSON.parse(resp);
+      console.log(resp);
         $('.query').removeClass('disabled');
         $('#querying').addClass('hidden');
         if(resp.result !== 'success')
