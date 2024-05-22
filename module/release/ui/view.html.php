@@ -190,6 +190,7 @@ if($canBeChanged)
 
 detailBody
 (
+    set::hasExtraMain(false),
     setClass('release-view-body'),
     sectionList(
         tabs

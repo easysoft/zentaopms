@@ -1,2 +1,3 @@
 .entity-label .id-label {border: 1px solid var(--color-gray-500) !important;}
 .tab-actions {float:right; margin-top: -45px; z-index: 10; position: relative;}
+#buildInfo .extendBox > .panel-heading {padding-left: 0; font-size: 0.875rem;}
