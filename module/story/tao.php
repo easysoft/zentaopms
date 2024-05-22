@@ -2197,7 +2197,7 @@ class storyTao extends storyModel
         $executions = zget($projectGroup, 'execution', array());
         $designs    = zget($designGroup, 'design', array());
         $commits    = zget($designGroup, 'commit', array());
-        $tasks      = $this->dao->select('id,pri,status,name as title,assignedTo,story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('parent')->fetchGroup('story', 'id');
+        $tasks      = $this->getTasksForTrack($storyIdList);
         $cases      = $this->dao->select('id,pri,status,title,story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
         $bugs       = $this->dao->select('id,pri,status,title,story')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
         $storyGrade = $this->getGradeGroup();
@@ -2296,5 +2296,44 @@ class storyTao extends storyModel
         }
 
         return $storyGroup;
+    }
+
+    /**
+     * 根据需求ID列表获取关联的任务
+     * Get linked tasks by story id list.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getTasksForTrack(array $storyIdList): array
+    {
+        $stmt  = $this->dao->select('id,pri,status,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('parent')->query();
+        $tasks = array();
+        while($task = $stmt->fetch())
+        {
+            $task->progress = 0;
+            if($task->consumed + $task->left) $task->progress = round(($task->consumed / ($task->consumed + $task->left)) * 100, 2);
+
+            if($task->parent > 0 && isset($tasks[$task->parent]))
+            {
+                $tasks[$task->parent]->children[$task->id] = $task;
+            }
+            else
+            {
+                $tasks[$task->id] = $task;
+            }
+        }
+
+        $taskGroup = array();
+        foreach($tasks as $task)
+        {
+            $children = !empty($task->children) ? $task->children : array();
+            unset($task->children);
+
+            $taskGroup[$task->story][$task->id] = $task;
+            foreach($children as $subTask) $taskGroup[$subTask->story][$subTask->id] = $subTask;
+        }
+        return $taskGroup;
     }
 }

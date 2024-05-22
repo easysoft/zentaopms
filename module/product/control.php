@@ -832,6 +832,7 @@ class product extends control
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
         $this->view->storyType       = $storyType;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         $this->display();
     }

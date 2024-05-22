@@ -45,10 +45,15 @@ toolbar
 );
 
 $this->loadModel('project');
-jsVar('langStoryPriList', $lang->story->priList);
-jsVar('langStoryStatusList', $lang->story->statusList);
-jsVar('langStoryStageList', $lang->story->stageList);
+$this->loadModel('task');
+jsVar('langStoryPriList',      $lang->story->priList);
+jsVar('langStoryStatusList',   $lang->story->statusList);
+jsVar('langStoryStageList',    $lang->story->stageList);
 jsVar('langProjectStatusList', $lang->project->statusList);
+jsVar('langTaskPriList',       $lang->task->priList);
+jsVar('langTaskStatusList',    $lang->task->statusList);
+jsVar('langChildren',    $lang->task->childrenAB);
+jsVar('users', $users);
 
 empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass('text-gray'), $lang->noData)) : div
 (
@@ -56,7 +61,7 @@ empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass
     zui::kanbanList
     (
         set::key('kanban'),
-        set::items(array(array('data' => $tracks, 'getItem' => jsRaw('window.getItem'), 'canDrop' => jsRaw('window.canDrop')))),
+        set::items(array(array('data' => $tracks, 'getItem' => jsRaw('window.getItem'), 'itemRender' => jsRaw('window.itemRender'), 'canDrop' => jsRaw('window.canDrop')))),
         set::height('calc(100vh - 130px)')
     ),
     pager(setClass('justify-end'))
