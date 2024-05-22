@@ -69,6 +69,12 @@ function onRender(callable $callback)
     return context::current()->onRender($callback);
 }
 
+function useWg(string $name)
+{
+    $wgClass = requireWg($name);
+    return context::current()->addWgRes($wgClass);
+}
+
 function pageJS()
 {
     call_user_func_array('\zin\context::js', func_get_args());

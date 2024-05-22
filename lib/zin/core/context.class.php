@@ -282,6 +282,16 @@ class context extends \zin\utils\dataset
         return $js;
     }
 
+    public function addWgRes(string $wgClass)
+    {
+        if(isset($this->wgRes[$wgClass])) return;
+
+        $res = array();
+        $res['css'] = $wgClass::getPageCSS();
+        $res['js']  = $wgClass::getPageJS();
+        $this->wgRes[$wgClass] = $res;
+    }
+
     public function addDebugData(string $name, mixed ...$values)
     {
         $e         = new \Exception();
