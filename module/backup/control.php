@@ -109,10 +109,11 @@ class backup extends control
      * Backup.
      *
      * @param  string $reload yes|no
+     * @param  string $mode   |manual|system|upgrade|downgrade
      * @access public
      * @return void
      */
-    public function backup(string $reload = 'no')
+    public function backup(string $reload = 'no', string $mode = 'manual')
     {
         if($reload == 'yes') session_write_close();
 
@@ -123,8 +124,8 @@ class backup extends control
             $this->app->loadConfig('instance');
             $instance = $this->config->instance->zentaopaas;
 
-            $result = $this->loadModel('system')->backup($instance);
-            $this->loadModel('action')->create('system', '0', 'createBackup');
+            $result = $this->loadModel('system')->backup($instance, $mode);
+            $this->loadModel('action')->create('system', 0, 'createBackup');
 
             if($result['result'] == 'fail')
             {
