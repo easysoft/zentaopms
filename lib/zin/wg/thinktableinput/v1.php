@@ -47,6 +47,7 @@ class thinkTableInput extends thinkQuestion
         }
         jsVar('canAddRows', $canAddRows);
         jsVar('fieldsCount', count($fields));
+        jsVar('deleteTip', $lang->thinkrun->deleteTip);
 
         $tableInputItems = array();
         foreach($fields as $index => $item)
