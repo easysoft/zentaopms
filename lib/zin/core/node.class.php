@@ -59,7 +59,7 @@ class node implements \JsonSerializable
 
     public function __construct(mixed ...$args)
     {
-        $this->gid   = static::nextGid();
+        $this->gid   = 'zin_' . uniqid();
         $this->props = new props();
 
         disableGlobalRender();
