@@ -24,3 +24,6 @@ $config->admin->form->log['days'] = array('type' => 'int', 'required' => true, '
 
 $config->admin->form->resetpwdsetting = array();
 $config->admin->form->resetpwdsetting['resetPWDByMail'] = array('type' => 'int', 'required' => false, 'default' => 0);
+
+$config->admin->form->cache = array();
+$config->admin->form->cache['enable'] = array('type' => 'int', 'default' => 0);
