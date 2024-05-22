@@ -388,7 +388,7 @@
                     "key": "TextCommon",
                     "chartKey": "VTextCommon",
                     "conKey": "VCTextCommon",
-                    "title": "质量数据-研发完成需求数",
+                    "title": "研发完成需求数",
                     "category": "Texts",
                     "categoryName": "文本",
                     "package": "Informations",
@@ -415,7 +415,7 @@
                     "backgroundColor": "#1089FF00"
                 },
                 "sourceID": "10201",
-                "title": "质量数据-研发完成需求数",
+                "title": "研发完成需求数",
                 "type": "card"
             },
             {
@@ -807,7 +807,7 @@
                     "key": "TextCommon",
                     "chartKey": "VTextCommon",
                     "conKey": "VCTextCommon",
-                    "title": "质量数据-研发完成需求规模数",
+                    "title": "研发完成需求规模数",
                     "category": "Texts",
                     "categoryName": "文本",
                     "package": "Informations",
@@ -834,7 +834,7 @@
                     "backgroundColor": "#1089FF00"
                 },
                 "sourceID": "10202",
-                "title": "质量数据-研发完成需求规模数",
+                "title": "研发完成需求规模数",
                 "type": "card"
             },
             {
@@ -858,7 +858,7 @@
                     "key": "TextCommon",
                     "chartKey": "VTextCommon",
                     "conKey": "VCTextCommon",
-                    "title": "质量数据-研发完成需求用例数",
+                    "title": "研发完成需求用例数",
                     "category": "Texts",
                     "categoryName": "文本",
                     "package": "Informations",
@@ -885,7 +885,7 @@
                     "backgroundColor": "#1089FF00"
                 },
                 "sourceID": "10203",
-                "title": "质量数据-研发完成需求用例数",
+                "title": "研发完成需求用例数",
                 "type": "card"
             },
             {
@@ -909,7 +909,7 @@
                     "key": "TextCommon",
                     "chartKey": "VTextCommon",
                     "conKey": "VCTextCommon",
-                    "title": "质量数据-Bug总数",
+                    "title": "Bug总数",
                     "category": "Texts",
                     "categoryName": "文本",
                     "package": "Informations",
@@ -936,7 +936,7 @@
                     "backgroundColor": "#1089FF00"
                 },
                 "sourceID": "10204",
-                "title": "质量数据-Bug总数",
+                "title": "Bug总数",
                 "type": "card"
             },
             {
@@ -960,7 +960,7 @@
                     "key": "TextCommon",
                     "chartKey": "VTextCommon",
                     "conKey": "VCTextCommon",
-                    "title": "质量数据-有效Bug数",
+                    "title": "有效Bug数",
                     "category": "Texts",
                     "categoryName": "文本",
                     "package": "Informations",
@@ -987,7 +987,7 @@
                     "backgroundColor": "#1089FF00"
                 },
                 "sourceID": "10205",
-                "title": "质量数据-有效Bug数",
+                "title": "有效Bug数",
                 "type": "card"
             },
             {
@@ -1011,7 +1011,7 @@
                     "key": "TextCommon",
                     "chartKey": "VTextCommon",
                     "conKey": "VCTextCommon",
-                    "title": "质量数据-修复Bug数",
+                    "title": "修复Bug数",
                     "category": "Texts",
                     "categoryName": "文本",
                     "package": "Informations",
@@ -1038,7 +1038,7 @@
                     "backgroundColor": "#1089FF00"
                 },
                 "sourceID": "10206",
-                "title": "质量数据-修复Bug数",
+                "title": "修复Bug数",
                 "type": "card"
             },
             {
@@ -1519,7 +1519,7 @@
                     "key": "WaterPolo",
                     "chartKey": "VWaterPolo",
                     "conKey": "VCWaterPolo",
-                    "title": "质量数据-Bug密度",
+                    "title": "Bug密度",
                     "category": "Mores",
                     "categoryName": "更多",
                     "package": "Charts",
@@ -1530,6 +1530,10 @@
                 },
                 "option": {
                     "dataset": "0.04",
+                    "title": {
+                        "show": false,
+                        "titleShow": false
+                    },
                     "series": [
                         {
                             "type": "liquidFill",
@@ -1587,7 +1591,7 @@
                     "backgroundColor": "rgba(0,0,0,0)"
                 },
                 "sourceID": "10209",
-                "title": "质量数据-Bug密度",
+                "title": "Bug密度",
                 "type": "waterpolo"
             },
             {
@@ -1611,7 +1615,7 @@
                     "key": "WaterPolo",
                     "chartKey": "VWaterPolo",
                     "conKey": "VCWaterPolo",
-                    "title": "质量数据-Bug修复率",
+                    "title": "Bug修复率",
                     "category": "Mores",
                     "categoryName": "更多",
                     "package": "Charts",
@@ -1622,6 +1626,10 @@
                 },
                 "option": {
                     "dataset": "0.10",
+                    "title": {
+                        "show": false,
+                        "titleShow": false
+                    },
                     "series": [
                         {
                             "type": "liquidFill",
@@ -1679,7 +1687,7 @@
                     "backgroundColor": "rgba(0,0,0,0)"
                 },
                 "sourceID": "10210",
-                "title": "质量数据-Bug修复率",
+                "title": "Bug修复率",
                 "type": "waterpolo"
             },
             {
@@ -1703,7 +1711,7 @@
                     "key": "WaterPolo",
                     "chartKey": "VWaterPolo",
                     "conKey": "VCWaterPolo",
-                    "title": "质量数据-研发完成需求用例覆盖率",
+                    "title": "研发完成需求用例覆盖率",
                     "category": "Mores",
                     "categoryName": "更多",
                     "package": "Charts",
@@ -1714,6 +1722,10 @@
                 },
                 "option": {
                     "dataset": "0.309625",
+                    "title": {
+                        "show": false,
+                        "titleShow": false
+                    },
                     "series": [
                         {
                             "type": "liquidFill",
@@ -1771,7 +1783,7 @@
                     "backgroundColor": "rgba(0,0,0,0)"
                 },
                 "sourceID": "10207",
-                "title": "质量数据-研发完成需求用例覆盖率",
+                "title": "研发完成需求用例覆盖率",
                 "type": "waterpolo"
             },
             {
@@ -1795,7 +1807,7 @@
                     "key": "WaterPolo",
                     "chartKey": "VWaterPolo",
                     "conKey": "VCWaterPolo",
-                    "title": "质量数据-研发完成需求用例密度",
+                    "title": "研发完成需求用例密度",
                     "category": "Mores",
                     "categoryName": "更多",
                     "package": "Charts",
@@ -1806,6 +1818,10 @@
                 },
                 "option": {
                     "dataset": "0.7013",
+                    "title": {
+                        "show": false,
+                        "titleShow": false
+                    },
                     "series": [
                         {
                             "type": "liquidFill",
@@ -1863,7 +1879,7 @@
                     "backgroundColor": "rgba(0,0,0,0)"
                 },
                 "sourceID": "10208",
-                "title": "质量数据-研发完成需求用例密度",
+                "title": "研发完成需求用例密度",
                 "type": "waterpolo"
             },
             {
