@@ -16,7 +16,6 @@ function query(callback) {
         if(!setVarFrom()) return false;
 
         filters = DataStorage.pivot.filters;
-      console.log(JSON.parse(JSON.stringify(filters)));
 
         filters.forEach(function(filter, index)
         {

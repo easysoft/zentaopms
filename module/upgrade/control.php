@@ -28,12 +28,6 @@ class upgrade extends control
         $this->locate(inlink('backup'));
     }
 
-    public function importBIData()
-    {
-        $this->loadModel('install')->importBIData();
-    }
-
-
     /**
      * 授权协议页面。
      * Check agree license.
