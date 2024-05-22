@@ -227,7 +227,7 @@ panel
                         set::name($lang->mr->reviewer),
                         $reviewer ? zget($reviewer, 'realname', $MR->assignee) : $MR->assignee
                     ),
-                    item
+                    $MR->status == 'opened' ? item
                     (
                         set::name($lang->mr->mergeStatus),
                         $hasNoChange || $hasConflict ? span
@@ -244,7 +244,7 @@ panel
                             setClass('ml-2'),
                             '(' . ($hasConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoChanges) . ')'
                         ) : null
-                    ),
+                    ) : null,
                     item
                     (
                         set::name($lang->mr->description),
