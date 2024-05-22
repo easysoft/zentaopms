@@ -1,4 +1,5 @@
 .kanban-header-lane-name, .kanban-lane-name {display:none;}
 .switchBtn, .search-form-toggle{background: transparent; box-shadow: none;}
 .card {min-height:80px;}
-.card .card-title{height:40px;}
+.card .card-title{height:40px; width:100%;}
+.card .card-content{flex-direction: row;justify-content: space-between;}

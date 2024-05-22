@@ -44,9 +44,11 @@ toolbar
     formSettingBtn(set::text($lang->settings))
 );
 
+$this->loadModel('project');
 jsVar('langStoryPriList', $lang->story->priList);
 jsVar('langStoryStatusList', $lang->story->statusList);
 jsVar('langStoryStageList', $lang->story->stageList);
+jsVar('langProjectStatusList', $lang->project->statusList);
 
 empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass('text-gray'), $lang->noData)) : div
 (
