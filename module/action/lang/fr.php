@@ -1070,7 +1070,7 @@ $lang->action->dynamicAction->task['gitcommited'] = 'Committer GIT';
 $lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocreated;
 $lang->action->desc->createmr                     = '$extra';
 $lang->action->desc->deletemr                     = '$date, <strong>$actor</strong> unlink <a href="$extra">merge request</a>。';
-$lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
+$lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged code.';
 $lang->action->desc->compilefail                  = '$date, <strong>$actor</strong> compile fail.';
 $lang->action->desc->compilepass                  = '$date, <strong>$actor</strong> compile pass';
 $lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
