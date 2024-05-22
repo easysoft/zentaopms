@@ -56,7 +56,7 @@ class backup extends control
 
         if($this->config->inQuickon)
         {
-            $this->app->loadConfig('instance');
+            $this->loadModel('instance');
             $instance = $this->config->instance->zentaopaas;
 
             $backupResult = $this->loadModel('system')->getBackupList($instance);
@@ -121,7 +121,7 @@ class backup extends control
 
         if($this->config->inQuickon)
         {
-            $this->app->loadConfig('instance');
+            $this->loadModel('instance');
             $instance = $this->config->instance->zentaopaas;
 
             $result = $this->loadModel('system')->backup($instance, $mode);
