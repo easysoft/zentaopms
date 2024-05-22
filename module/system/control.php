@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @version   $Id$
  * @link      https://www.zentao.net
  * @property  systemModel $system
+ * @property  cneModel    $cne
  */
 class system extends control
 {
@@ -26,6 +27,8 @@ class system extends control
 
         $this->loadModel('action');
         $this->loadModel('setting');
+        $this->loadModel('cne');
+        $this->loadModel('instance');
     }
 
     /**
@@ -222,12 +225,11 @@ class system extends control
      * 恢复一个备份。
      * Restore the backup.
      *
-     * @param  mixed $backupName
+     * @param  string $backupName
      * @return void
      */
     public function restoreBackup($backupName)
     {
-        $this->app->loadConfig('instance');
         $instance = $this->config->instance->zentaopaas;
 
         $result = $this->system->restore($instance, $backupName);
@@ -241,12 +243,11 @@ class system extends control
      * 删除一个备份。
      * Delete the backup.
      *
-     * @param  mixed $backupName
+     * @param  string $backupName
      * @return void
      */
     public function deleteBackup($backupName)
     {
-        $this->app->loadConfig('instance');
         $instance = $this->config->instance->zentaopaas;
 
         $result = $this->system->deleteBackup($instance, $backupName);
