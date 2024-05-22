@@ -53,7 +53,7 @@ $config->mr->dtable->fieldList['createdDate']['sortType'] = true;
 $config->mr->dtable->fieldList['actions']['name']  = 'actions';
 $config->mr->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->mr->dtable->fieldList['actions']['type']  = 'actions';
-$config->mr->dtable->fieldList['actions']['menu']  = array('edit', 'diff', 'link', 'delete');
+$config->mr->dtable->fieldList['actions']['menu']  = array('edit', 'delete');
 $config->mr->dtable->fieldList['actions']['list']  = $config->mr->actionList;
 
 $config->mr->taskDtable = new stdclass();
