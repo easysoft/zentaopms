@@ -17,9 +17,9 @@ $fields->field('project')
     ->items(data('allProjects'))
     ->value(data('projectID'));
 
-if(!empty($project->model) and in_array($project->model, array('agileplus', 'ipd', 'waterfallplus')))
+if(!empty($project->model) and $project->model == 'agileplus')
 {
-    if($project->model == 'agileplus' ) unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);
+    unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);
     $fields->field('method')
         ->required()
         ->name('type')
