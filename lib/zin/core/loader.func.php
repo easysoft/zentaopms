@@ -63,9 +63,14 @@ function createWg($name, $args, ?string $fallbackWgName = null): node
 
 function requireWg(string $name, string $wgVer = '')
 {
-    $name = strtolower($name);
+    $name   = strtolower($name);
+    $wgName = "\\zin\\$name";
 
-    if(!$wgVer) $wgVer = getWgVer($name);
+    if(class_exists($wgName)) return;
+
+    $wgVer  = empty($wgVer) ? getWgVer($name) : $wgVer;
 
     require_once dirname(__DIR__) . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
+
+    return $wgName;
 }
