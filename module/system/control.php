@@ -232,7 +232,7 @@ class system extends control
 
         $result = $this->system->restore($instance, $backupName);
 
-        $this->loadModel('action')->create('system', '0', 'restoreBackup', '', $backupName);
+        $this->loadModel('action')->create('system', 0, 'restoreBackup', '', $backupName);
 
         $this->send($result + array('load' => true));
     }
@@ -251,7 +251,7 @@ class system extends control
 
         $result = $this->system->deleteBackup($instance, $backupName);
 
-        $this->loadModel('action')->create('system', '0', 'deleteBackup', '', $backupName);
+        $this->loadModel('action')->create('system', 0, 'deleteBackup', '', $backupName);
 
         $this->send($result + array('load' => true));
     }
