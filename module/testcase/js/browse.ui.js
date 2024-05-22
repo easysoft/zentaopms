@@ -283,5 +283,5 @@ window.clickChangeOrder = function()
 
 $('#dragModal').on('click', '[data-dismiss=modal]', function()
 {
-    loadCurrentPage();
+    loadCurrentPage({cache: false});
 });
