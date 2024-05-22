@@ -81,6 +81,7 @@ $lang->mr->acceptTip          = '评审通过后才能合并';
 $lang->mr->conflictsTip       = '该合并请求存在冲突，无法评审通过';
 $lang->mr->noChangesTip       = '源分支与目标分支没有变化，无法评审通过';
 $lang->mr->compileTip         = '该合并请求流水线构建未成功，无法评审通过';
+$lang->mr->notifyTip          = '存在冲突或分支间没有变化，无法评审通过';
 $lang->mr->branchUpdateTip    = '分支有更新，可执行流水线';
 
 $lang->mr->repeatedOperation = '请勿重复操作';
