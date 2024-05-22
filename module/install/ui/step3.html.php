@@ -35,6 +35,8 @@ $configContent = <<<EOT
 \$config->db->prefix      = '{$myConfig['dbPrefix']}';
 \$config->webRoot         = getWebRoot();
 \$config->default->lang   = '{$myConfig['defaultLang']}';
+
+\$config->cache->dao->enable = true;
 EOT;
 if($customSession) $configContent .= "\n\$config->customSession = true;";
 
