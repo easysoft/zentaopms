@@ -2280,15 +2280,6 @@ class execution extends control
             }
         }
 
-        if($storyType == 'requirement')
-        {
-            $this->app->loadLang('projectstory');
-            $this->lang->story->title               = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
-            $this->lang->projectstory->whyNoStories = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->whyNoStories);
-            $this->lang->execution->linkStory       = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->linkStory);
-            if(isset($this->config->product->search['fields']['stage'])) unset($this->config->product->search['fields']['stage']);
-        }
-
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recPerPage=$recPerPage&pageID=$pageID&extra=$extra&storyType=$storyType");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
@@ -2299,7 +2290,7 @@ class execution extends control
         $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? $project->storyType : 'story';
 
         if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
-        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', $storyType, $orderBy, false, '', null);
+        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', $storyType, $orderBy, true, '', null);
         $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
         foreach($allStories as $id => $story)
         {

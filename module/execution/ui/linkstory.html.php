@@ -30,7 +30,6 @@ $cols = $config->execution->linkStory->dtable->fieldList;
 $cols['module']['map']  = $modules;
 $cols['product']['map'] = $productPairs;
 
-if($storyType == 'requirement') $cols['title']['title'] = str_replace($lang->SRCommon, $lang->URCommon, $lang->story->title);
 if($productType != 'normal')
 {
     $cols['branch']['title'] = $lang->product->branchName[$productType];
@@ -62,7 +61,6 @@ if(!isInModal())
 
 $objectType = $object->type == 'project' ? 'projectstory' : 'execution';
 
-jsVar('childrenAB', $lang->story->childrenAB);
 dtable
 (
     set::groupDivider(true),

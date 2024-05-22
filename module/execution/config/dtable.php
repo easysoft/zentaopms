@@ -250,7 +250,7 @@ $config->execution->linkStory->dtable->fieldList['id']['group']    = 1;
 
 $config->execution->linkStory->dtable->fieldList['title']['title']        = $lang->story->name;
 $config->execution->linkStory->dtable->fieldList['title']['type']         = 'title';
-$config->execution->linkStory->dtable->fieldList['title']['link']         = helper::createLink('story', 'view', 'storyID={id}');
+$config->execution->linkStory->dtable->fieldList['title']['link']         = helper::createLink('story', 'storyview', 'storyID={id}');
 $config->execution->linkStory->dtable->fieldList['title']['sortType']     = true;
 $config->execution->linkStory->dtable->fieldList['title']['fixed']        = 'left';
 $config->execution->linkStory->dtable->fieldList['title']['group']        = 2;
