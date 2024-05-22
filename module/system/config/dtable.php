@@ -32,9 +32,11 @@ $config->system->dtable->backup = new stdclass();
 $config->system->dtable->backup->fieldList['time']['title']       = $lang->backup->time;
 $config->system->dtable->backup->fieldList['time']['type']        = 'datetime';
 $config->system->dtable->backup->fieldList['time']['formatDate']  = 'yyyy-MM-dd hh::mm:ss';
+$config->system->dtable->backup->fieldList['time']['sort']        = false;
 
 $config->system->dtable->backup->fieldList['creator']['title'] = $lang->system->backup->creator;
 $config->system->dtable->backup->fieldList['creator']['type']  = 'user';
+$config->system->dtable->backup->fieldList['creator']['sort']  = false;
 
 $config->system->dtable->backup->fieldList['type']['title'] = $lang->system->backup->type;
 $config->system->dtable->backup->fieldList['type']['map']   = $lang->system->backup->typeList;
