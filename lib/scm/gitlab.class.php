@@ -1037,6 +1037,9 @@ class gitlabRepo
         $this->root = str_replace('repository/', '', $this->root);
 
         $MR = $this->fetch("merge_requests/$MRID");
-        return $MR ? $MR : null;
+        if(empty($MR)) return null;
+
+        if(empty($MR->changes_count)) $MR->has_conflicts = 0;
+        return $MR;
     }
 }
