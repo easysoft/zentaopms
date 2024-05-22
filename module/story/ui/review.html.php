@@ -18,6 +18,8 @@ jsVar('rawModule', $this->app->rawModule);
 jsVar('isMultiple', count($reviewers) > 1);
 jsVar('isLastOne', $isLastOne);
 
+if($story->isParent == '1') $fields['estimate']['readonly'] = true;
+
 $formItems = array();
 foreach($fields as $field => $attr)
 {
@@ -44,7 +46,8 @@ foreach($fields as $field => $attr)
             set::label($attr['title']),
             set::control($control),
             set::value($attr['default']),
-            set::required($attr['required'])
+            set::required($attr['required']),
+            set::readonly(!empty($attr['readonly']))
         )
     );
 }
