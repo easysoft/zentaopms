@@ -102,9 +102,9 @@ $(document).off('click', '#linkStoryByPlan button[type="submit"]').on('click', '
  */
 window.setStatistics = function(element, checkedIdList)
 {
-    const checkedTotal = checkedIdList.length;
-    if(checkedTotal == 0) return {html: summary};
+    if(!checkedIdList) return {html: summary};
 
+    const checkedTotal = checkedIdList.length;
     $('#storyIdList').val(checkedIdList.join(','));
 
     let checkedEstimate = 0;
