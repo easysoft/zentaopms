@@ -384,7 +384,8 @@ class todoZen extends todo
             $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
             $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
             $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
-            $reviews       = $this->loadModel('review')->getUserReviewPairs($account);
+            $reviewItems   = $this->loadModel('my')->getReviewingList('all');
+            foreach($reviewItems as $review) $reviews[$review->id] = $review->title;
         }
 
         /* Judge whether the edited todos is too large. */
