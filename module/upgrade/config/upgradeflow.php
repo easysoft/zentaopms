@@ -154,6 +154,7 @@ $config->upgrade->execFlow['biz5_0_1']     = array('functions' => 'updateWorkflo
 $config->upgrade->execFlow['biz5_2']       = array('functions' => 'addDefaultKanbanPri');
 $config->upgrade->execFlow['biz5_3_1']     = array('functions' => 'processFeedbackField,addFileFields,addReportActions');
 $config->upgrade->execFlow['biz6_4']       = array('functions' => 'importLiteModules');
+$config->upgrade->execFlow['biz9_0']       = array('functions' => 'importBuildinModules', 'params' => array('vision' => 'or'));
 
 if(!empty($config->isINT))
 {
