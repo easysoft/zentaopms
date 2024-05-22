@@ -2286,7 +2286,7 @@ class storyTao extends storyModel
             $commitIdList .= $design->commit ? "{$design->commit}," : '';
         }
 
-        $commits = $this->dao->select('id,commit,committer,comment as title')->from(TABLE_REPOHISTORY)->where('id')->in(array_unique(explode(',', $commitIdList)))->fetchAll('id');
+        $commits = $this->dao->select('id,repo,revision,committer,comment as title')->from(TABLE_REPOHISTORY)->where('id')->in(array_unique(explode(',', $commitIdList)))->fetchAll('id');
         foreach($storyGroup['design'] as $storyID => $designs)
         {
             foreach($designs as $designID => $design)

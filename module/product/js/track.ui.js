@@ -1,58 +1,62 @@
 window.getItem = function(info)
 {
-    const col = info.col;
+    const col   = info.col;
+    const color = info.item.color ? " style='color:" + info.item.color + "'" : '';
+    const title = info.item.title;
+
+    let titleHtml = `<span${color}>${title}</span>`;
     info.item.content = [];
     if(col.indexOf('epic') != -1 || col.indexOf('requirement') != -1 || col.indexOf('story') != -1)
     {
-        titleHtml = "<span" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</span>";
-        if(privs[info.item.storyType]) titleHtml = "<a href='" + $.createLink(info.item.storyType, 'view', 'storyID=' + info.item.id) + "' data-toggle='modal' data-size='lg'" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</a>";
-        info.item.title = {html: "<div class='line-clamp-2'><span class='align-sub pri-" + info.item.pri + "'>" + langStoryPriList[info.item.pri] + "</span> <span class='title' title='" + info.item.title + "'>" + titleHtml + '</span></div>'}
+        if(privs[info.item.storyType]) titleHtml = "<a href='" + $.createLink(info.item.storyType, 'view', `storyID=${info.item.id}`) + "' data-toggle='modal' data-size='lg'" + color + ">" + title + "</a>";
+        info.item.title      = {html: `<div class="line-clamp-2"><span class="align-sub pri-${info.item.pri}">${langStoryPriList[info.item.pri]}</span> ${titleHtml}</div>`}
+        info.item.titleAttrs = {'title' : title};
 
-        info.item.content.push({html: "<div class='status-" + info.item.status + "'>" + langStoryStatusList[info.item.status] + "</div>"});
-        info.item.content.push({html: "<div style='color: var(--color-gray-600);'>" + langStoryStageList[info.item.stage] + '</div>'})
+        info.item.content.push({html: `<div class="status-${info.item.status}">${langStoryStatusList[info.item.status]}</div>`});
+        info.item.content.push({html: `<div style="color:var(--color-gray-600)">${langStoryStageList[info.item.stage]}</div>`})
     }
     else if(col == 'project' || col == 'execution')
     {
         let delayHtml = '';
-        if(info.item.delay > 0) delayHtml = "<span class='label danger-pale nowrap pull-left absolute right-0 bottom-0'>" + langProjectStatusList['delay'] + "</span>";
+        if(info.item.delay > 0) delayHtml = `<span class='label danger-pale nowrap absolute right-0 bottom-0'>${langProjectStatusList['delay']}</span>`;
 
-        let titleHtml = info.item.title;
-        if(col == 'project' && privs['project'])     titleHtml = "<a href='" + $.createLink('project', 'view', 'projectID=' + info.item.id) + "'>" + info.item.title + "</a>";
-        if(col == 'execution' && privs['execution']) titleHtml = "<a href='" + $.createLink('execution', 'task', 'executionID=' + info.item.id) + "'>" + info.item.title + "</a>";
-        info.item.title = {html: "<div class='relative'><span class='title line-clamp-2' title='" + info.item.title + "'>" + titleHtml + '</span>' + delayHtml + '</div>'}
+        if(col == 'project'   && privs['project'])   titleHtml = "<a href='" + $.createLink('project', 'view', `projectID=${info.item.id}`) + "'>" + title + "</a>";
+        if(col == 'execution' && privs['execution']) titleHtml = "<a href='" + $.createLink('execution', 'task', `executionID=${info.item.id}`) + "'>" + title + "</a>";
+        info.item.title      = {html: `<div class="relative"><span class="line-clamp-2">${titleHtml}</span>${delayHtml}</div>`}
+        info.item.titleAttrs = {'title' : title};
 
-        info.item.content.push({html: "<div class='status-" + info.item.status + "'>" + langProjectStatusList[info.item.status] + "</div>"});
+        info.item.content.push({html: `<div class="status-${info.item.status}">${langProjectStatusList[info.item.status]}</div>`});
         info.item.content.push({component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}});
     }
     else if(col == 'task')
     {
-        titleHtml = "<span" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</span>";
-        if(privs['task']) titleHtml = "<a href='" + $.createLink('task', 'view', 'taskID=' + info.item.id) + "' data-toggle='modal' data-size='lg'" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</a>";
-        info.item.title = {html: "<div class='line-clamp-2'><span class='align-sub pri-" + info.item.pri + "'>" + langTaskPriList[info.item.pri] + "</span> <span class='title' title='" + info.item.title + "'>" + titleHtml + '</span></div>'}
+        if(privs['task']) titleHtml = "<a href='" + $.createLink('task', 'view', `taskID=${info.item.id}`) + "' data-toggle='modal' data-size='lg'" + color + ">" + title + "</a>";
+        info.item.title = {html: `<div class='line-clamp-2'><span class="align-sub pri-${info.item.pri}">${langTaskPriList[info.item.pri]}</span> ${titleHtml}</div>`}
+        info.item.titleAttrs = {'title' : title};
 
-        if(info.item.parent == '-1') info.item.content.push({html: "<span class='label cursor-pointer primary rounded-xl is-collapsed' onclick='toggleChildren(this, " + info.item.id + ")'>" + langChildren + " <span class='toggle-icon ml-1'></span></span>"});
-        info.item.content.push({html: "<div class='status-" + info.item.status + "'>" + langTaskStatusList[info.item.status] + "</div>"});
+        if(info.item.parent == '-1') info.item.content.push({html: `<span class="label cursor-pointer primary rounded-xl is-collapsed" onclick="toggleChildren(this, ${info.item.id})">${langChildren} <span class="toggle-icon ml-1"></span></span>`});
+        info.item.content.push({html: `<div class="status-${info.item.status}">${langTaskStatusList[info.item.status]}</div>`});
         if(info.item.assignedTo) info.item.content.push({html: "<i class='icon icon-hand-right'></i> " + (users[info.item.assignedTo] ? users[info.item.assignedTo] : info.item.assignedTo)});
         info.item.content.push({component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}});
     }
     else if(col == 'bug')
     {
-        titleHtml = "<span" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</span>";
-        if(privs['bug']) titleHtml = "<a href='" + $.createLink('bug', 'view', 'bugID=' + info.item.id) + "' data-toggle='modal' data-size='lg'" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</a>";
-        info.item.title = {html: "<div class='line-clamp-2'><span class='align-sub pri-" + info.item.pri + "'>" + langBugPriList[info.item.pri] + "</span> <span class='title' title='" + info.item.title + "'>" + titleHtml + '</span></div>'}
+        if(privs['bug']) titleHtml = "<a href='" + $.createLink('bug', 'view', `bugID=${info.item.id}`) + "' data-toggle='modal' data-size='lg'" + color + ">" + title + "</a>";
+        info.item.title      = {html: `<div class="line-clamp-2"><span class="align-sub pri-${info.item.pri}">${langBugPriList[info.item.pri]}</span> ${titleHtml}</div>`}
+        info.item.titleAttrs = {'title' : title};
 
         severity     = info.item.severity;
-        severityHtml = "<div class='severity' data-severity='" + severity + "'></div>";
-        if(!langBugSeverityList[severity] || langBugSeverityList[severity] != severity) severityHtml = "<div class='severity'>" + severity + "</div>";
+        severityHtml = `<div class="severity" data-severity="${severity}"></div>`;
+        if(!langBugSeverityList[severity] || langBugSeverityList[severity] != severity) severityHtml = `<div class="severity">${severity}</div>`;
 
         info.item.content.push({html: severityHtml});
         if(info.item.assignedTo) info.item.content.push({html: "<i class='icon icon-hand-right'></i> " + (users[info.item.assignedTo] ? users[info.item.assignedTo] : info.item.assignedTo)});
     }
     else if(col == 'case')
     {
-        titleHtml = "<span" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</span>";
-        if(privs['case']) titleHtml = "<a href='" + $.createLink('testcase', 'view', 'caseID=' + info.item.id) + "' data-toggle='modal' data-size='lg'" + (info.item.color ? " style='color:" + info.item.color + "'" : '') + ">" + info.item.title + "</a>";
-        info.item.title = {html: "<div class='line-clamp-2'><span class='align-sub pri-" + info.item.pri + "'>" + langCasePriList[info.item.pri] + "</span> <span class='title' title='" + info.item.title + "'>" + titleHtml + '</span></div>'}
+        if(privs['case']) titleHtml = "<a href='" + $.createLink('testcase', 'view', `caseID=${info.item.id}`) + "' data-toggle='modal' data-size='lg'" + color + ">" + title + "</a>";
+        info.item.title      = {html: `<div class="line-clamp-2"><span class="align-sub pri-${info.item.pri}">${langCasePriList[info.item.pri]}</span> ${titleHtml}</div>`}
+        info.item.titleAttrs = {'title' : title};
 
         info.item.content.push({html: "<div class='status-" + info.item.lastRunResult + "'>" + (langCaseResultList[info.item.lastRunResult] ? langCaseResultList[info.item.lastRunResult] : langUnexecuted) + "</div>"});
         info.item.content.push({html: (users[info.item.lastRunner] ? users[info.item.lastRunner] : info.item.lastRunner)});
@@ -60,7 +64,12 @@ window.getItem = function(info)
     else if(col == 'design')
     {
         if(privs['design']) info.item.titleUrl = $.createLink('design', 'view', `id=${info.item.id}`);
-        info.item.titleAttrs = {'class': 'line-clamp-3', 'title' : info.item.title, 'data-toggle': 'modal', 'data-size': 'lg'};
+        info.item.titleAttrs = {'class': 'line-clamp-3', 'title' : title, 'data-toggle': 'modal', 'data-size': 'lg'};
+    }
+    else if(col == 'commit')
+    {
+        if(privs['commit']) info.item.titleUrl = $.createLink('repo', 'revision', `repoID=${info.item.repo}&objectID=0&revision=${info.item.revision}`);
+        info.item.titleAttrs = {'class': 'line-clamp-3', 'title' : title};
     }
 }
 
