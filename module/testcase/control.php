@@ -1472,13 +1472,13 @@ class testcase extends control
     {
         $sourceID = $this->post->sourceID;
         $sceneID  = $this->post->targetID;
-        if($sourceID == $sceneID) return false;
+        if($sourceID == $sceneID) return $this->send(array('result' => 'success', 'load' => true));
 
         if(strpos($sourceID, 'case_') !== false)
         {
             $caseID  = str_replace('case_', '', $sourceID);
             $oldCase = $this->dao->select('scene')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
-            if($oldCase->scene == $sceneID) return false;
+            if($oldCase->scene == $sceneID) return $this->send(array('result' => 'success', 'load' => true));
 
             $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->eq($caseID)->exec();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1594,10 +1594,10 @@ class testcase extends control
      */
     public function updateOrder()
     {
-        $sourceID    = $this->post->sourceID;
-        $sourceOrder = $this->post->sourceOrder;
-        $targetID    = $this->post->targetID;
-        $targetOrder = $this->post->targetOrder;
+        $sourceID    = (int)$this->post->sourceID;
+        $sourceOrder = (int)$this->post->sourceOrder;
+        $targetID    = (int)$this->post->targetID;
+        $targetOrder = (int)$this->post->targetOrder;
         $type        = $this->post->type;
         $module      = $this->post->module;
 
@@ -1607,7 +1607,7 @@ class testcase extends control
 
         $this->dao->update($table)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**

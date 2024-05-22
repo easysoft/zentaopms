@@ -13,7 +13,6 @@ namespace zin;
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
-jsVar('dragModalMessage', $lang->testcase->dragModalMessage);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -187,6 +186,26 @@ modal
                 set::value('')
             )
         )
+    )
+);
+
+modal
+(
+    setID('dragModal'),
+    set::title($lang->testcase->dragModalTitle),
+    set::size('sm'),
+    divider(),
+    div(setClass('my-4'), $lang->testcase->dragModalDesc),
+    div($lang->testcase->dragModalOrder),
+    div($lang->testcase->dragModalScene),
+    div(setClass('my-4'), $lang->testcase->dragModalAction),
+    divider(),
+    div
+    (
+        setClass('mt-4 pull-right'),
+        btn(setClass('primary mr-2'), $lang->testcase->dragModalChangeScene, set('data-on', 'click'), set('data-call', 'clickChangeScenen')),
+        btn(setClass('primary mr-2'), $lang->testcase->dragModalChangeOrder, set('data-on', 'click'), set('data-call', 'clickChangeOrder')),
+        btn($lang->close, set('data-on', 'click'), set('data-call', 'clickCloseModal'))
     )
 );
 
