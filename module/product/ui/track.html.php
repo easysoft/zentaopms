@@ -46,12 +46,15 @@ toolbar
 
 $this->loadModel('project');
 $this->loadModel('task');
+$this->loadModel('bug');
 jsVar('langStoryPriList',      $lang->story->priList);
 jsVar('langStoryStatusList',   $lang->story->statusList);
 jsVar('langStoryStageList',    $lang->story->stageList);
 jsVar('langProjectStatusList', $lang->project->statusList);
 jsVar('langTaskPriList',       $lang->task->priList);
 jsVar('langTaskStatusList',    $lang->task->statusList);
+jsVar('langBugPriList',        $lang->bug->priList);
+jsVar('langBugSeverityList',   $lang->bug->severityList);
 jsVar('langChildren',    $lang->task->childrenAB);
 jsVar('users', $users);
 

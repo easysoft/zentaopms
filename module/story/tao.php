@@ -2199,7 +2199,7 @@ class storyTao extends storyModel
         $commits    = zget($designGroup, 'commit', array());
         $tasks      = $this->getTasksForTrack($storyIdList);
         $cases      = $this->dao->select('id,pri,status,title,story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
-        $bugs       = $this->dao->select('id,pri,status,title,story')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
+        $bugs       = $this->dao->select('id,pri,status,title,story,assignedTo,severity')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
         $storyGrade = $this->getGradeGroup();
 
         $items = array();
