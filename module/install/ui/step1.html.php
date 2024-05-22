@@ -13,7 +13,7 @@ namespace zin;
 set::zui(true);
 
 $checkTrs    = array();
-$extendItems = array('pdo', 'pdoMySQL', 'json', 'openssl', 'mbstring', 'zlib', 'curl', 'filter', 'iconv');
+$extendItems = array('pdo', 'pdoMySQL', 'json', 'openssl', 'mbstring', 'zlib', 'curl', 'filter', 'iconv', 'apcu');
 $dirItems    = array('tmpRoot', 'dataRoot', 'session');
 foreach($extendItems as $extendItem)
 {

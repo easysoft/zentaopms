@@ -189,6 +189,18 @@ class installZen extends install
     }
 
     /**
+     * 检查是否安装了apcu扩展。
+     * Check apcu extension.
+     *
+     * @access protected
+     * @return string    ok|fail
+     */
+    protected function checkAPCu(): string
+    {
+        return extension_loaded('apcu') ? 'ok' : 'fail';
+    }
+
+    /**
      * 检查tmp目录的完整性和可写性。
      * Check tmpRoot.
      *
