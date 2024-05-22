@@ -380,3 +380,11 @@ function toggleLibType(e)
         $('#acldefault').closest('.radio-primary').hide();
     }
 }
+
+window.updateOrder = function(event, orders)
+{
+    let sortedIdList = {};
+    for(let i in orders) sortedIdList['orders[' + orders[i] + ']'] = i;
+
+    $.post($.createLink('doc', 'sortCatalog'), sortedIdList);
+}
