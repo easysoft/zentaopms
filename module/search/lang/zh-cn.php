@@ -101,10 +101,12 @@ $lang->search->modules['project']     = $lang->projectCommon;
 $lang->search->modules['execution']   = $lang->execution->common;
 $lang->search->modules['story']       = $lang->SRCommon;
 $lang->search->modules['requirement'] = $lang->URCommon;
+$lang->search->modules['epic']        = $lang->ERCommon;
 $lang->search->modules['aiapp']       = 'AI';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
+$lang->search->objectTypeList['epic']             = $lang->ERCommon;
 $lang->search->objectTypeList['stage']            = '阶段';
 $lang->search->objectTypeList['sprint']           = $lang->execution->common;
 $lang->search->objectTypeList['kanban']           = '看板';

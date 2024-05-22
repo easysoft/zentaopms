@@ -768,7 +768,7 @@ class searchTao extends searchModel
             if($module == 'issue')     $fields = ($this->config->edition == 'max' || $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
             if($module == 'project')   $fields = 'id,model';
             if($module == 'execution') $fields = 'id,type,project';
-            if($module == 'story' || $module == 'requirement') $fields = ($this->config->edition == 'max' || $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
+            if(in_array($module, array('story', 'requirement', 'epic'))) $fields = ($this->config->edition == 'max' || $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
             if(($module == 'risk' || $module == 'opportunity') && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) $fields = 'id,lib';
             if($module == 'doc' && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) $fields = 'id,assetLib,assetLibType';
 
@@ -962,7 +962,7 @@ class searchTao extends searchModel
         if($module == 'issue')     return $this->processIssueRecord($record, $objectList);
         if($module == 'project')   return $this->processProjectRecord($record, $objectList);
         if($module == 'execution') return $this->processExecutionRecord($record, $objectList);
-        if($module == 'story' || $module == 'requirement') return $this->processStoryRecord($record, $module, $objectList);
+        if(in_array($module, array('story', 'requirement', 'epic'))) return $this->processStoryRecord($record, $module, $objectList);
         if(($module == 'risk' || $module == 'opportunity') && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) return $this->processRiskRecord($record, $module, $objectList);
         if($module == 'doc' && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) return $this->processDocRecord($record, $objectList);
 
@@ -1045,7 +1045,7 @@ class searchTao extends searchModel
         }
 
         $module = 'story';
-        $method = 'view';
+        $method = 'storyView';
         if(!empty($story->lib))
         {
             $module = 'assetlib';

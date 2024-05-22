@@ -82,6 +82,13 @@ $config->search->fields->requirement->content    = 'keywords,spec,verify';
 $config->search->fields->requirement->addedDate  = 'openedDate';
 $config->search->fields->requirement->editedDate = 'lastEditedDate';
 
+$config->search->fields->epic = new stdclass();
+$config->search->fields->epic->id         = 'id';
+$config->search->fields->epic->title      = 'title';
+$config->search->fields->epic->content    = 'keywords,spec,verify';
+$config->search->fields->epic->addedDate  = 'openedDate';
+$config->search->fields->epic->editedDate = 'lastEditedDate';
+
 $config->search->fields->task = new stdclass();
 $config->search->fields->task->id         = 'id';
 $config->search->fields->task->title      = 'name';
