@@ -292,7 +292,7 @@ $config->story->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->story->dtable->fieldList['actions']['fixed']    = 'right';
 $config->story->dtable->fieldList['actions']['required'] = true;
 $config->story->dtable->fieldList['actions']['width']    = 'auto';
-$config->story->dtable->fieldList['actions']['minWidth'] = $app->tab != 'product' ? 230 : 200;
+$config->story->dtable->fieldList['actions']['minWidth'] = $app->tab != 'product' ? 240 : 200;
 $config->story->dtable->fieldList['actions']['type']     = 'actions';
 
 $config->story->dtable->fieldList['actions']['actionsMap']['assigned']['icon'] = 'hand-right';
