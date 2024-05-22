@@ -53,6 +53,8 @@ common:
 	# combine js and css files.
 	cp -fr misc zentaopms/misc && cd zentaopms/misc/ && php ./minifyfront.php
 	rm -fr zentaopms/misc
+	# delete the cache file.
+	rm -fr zentaopms/www/cache.php
 	# create the restart file for svn.
 	# touch zentaopms/module/svn/restart
 	# delete the unused files.
