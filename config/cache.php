@@ -6,6 +6,8 @@ $config->cache->enable   = false;         // 是否开启缓存。Enable cache o
 $config->cache->lifetime = 5 * 60;        // 缓存生存时间。The lifetime of cache.
 $config->cache->driver   = 'File';        // 缓存驱动。   The driver of cache. can be File|Yac|Apcu.
 
+$config->cache->enableDAO        = false; // 是否开启 dao 缓存。Enable dao cache or not.
+$config->cache->enableClient     = false; // 是否开启客户端缓存。Enable client cache or not.
 $config->cache->enableFullPage   = false; // 是否开启整页缓存。Enable full page cache or not.
 $config->cache->fullPageLifetime = 5 * 60;
 $config->cache->fullPageDriver   = 'File';
@@ -33,9 +35,5 @@ $config->cacheKeys->bug = new stdclass();
 $config->cacheKeys->bug->browse = 'bugBrowse%s';
 
 $config->cache->dao = new stdClass();
-$config->cache->dao->enable   = false;              // 是否开启 dao 缓存。Enable dao cache or not.
 $config->cache->dao->lifetime = 60 * 60 * 24 * 30;  // 缓存生存时间，默认为 30 天。The lifetime of cache, default is 30 days.
 $config->cache->dao->driver   = 'Apcu';             // 缓存驱动，可以为 File|Yac|Apcu。The driver of cache. can be File|Yac|Apcu.
-
-$config->cache->client = new stdClass();
-$config->cache->client->enable = false; // 是否开启客户端缓存。Enable client cache or not.
