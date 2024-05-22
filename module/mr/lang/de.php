@@ -171,7 +171,8 @@ $lang->mr->pipelineStatus['failed']   = "failed";
 $lang->mr->pipelineStatus['canceled'] = "canceled";
 
 $lang->mr->MRHasConflicts = "Merge Request has a conflict";
-$lang->mr->hasConflicts   = "There are merge conflicts or wait for push";
+$lang->mr->hasConflicts   = "There are merge conflicts";
+$lang->mr->hasNoChanges   = "Branch have no changes";
 $lang->mr->hasNoConflict  = "Can merge";
 $lang->mr->acceptMR       = "Accept Merge request ";
 $lang->mr->mergeFailed    = "Unable to merge request, please check the merge request status";
