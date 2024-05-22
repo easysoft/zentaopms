@@ -440,6 +440,24 @@ class actionTao extends actionModel
     }
 
     /**
+     * 处理需求层级。
+     * Process story grade.
+     *
+     * @param  object $action
+     * @access public
+     * @return object
+     */
+    public function processStoryGradeActionExtra($action): object
+    {
+        $action->extra = $this->dao->select('t1.name')->from(TABLE_STORYGRADE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.grade = t2.grade AND t1.type = t2.type')
+            ->where('t2.id')->eq($action->objectID)
+            ->fetch('name');
+
+        return $action;
+    }
+
+    /**
      * 处理属性。
      * Process attribute.
      *
