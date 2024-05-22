@@ -65,7 +65,7 @@ class thinkTableInput extends thinkQuestion
                     set::rows('2'),
                     set::name('result[' . $index . ']'),
                     setClass('mt-2 w-4/5'),
-                    set::value($result[$index]),
+                    set::value(!empty($result) && isset($result[$index]) ? $result[$index] : ''),
                     set::placeholder($lang->thinkrun->pleaseInput)
                 ),
                 div
@@ -98,7 +98,7 @@ class thinkTableInput extends thinkQuestion
                         setID('customFields'),
                         set::name('customFields[' . $index + 1 . ']'),
                         set::value($item),
-                        set::placeholder($lang->thinkrun->pleaseInput)
+                        set::placeholder($lang->thinkrun->placeholder->rowTitle)
                     ),
                     textarea
                     (
@@ -107,7 +107,7 @@ class thinkTableInput extends thinkQuestion
                         setID('result'),
                         set::name('result[' . $resultIndex .']'),
                         set::value($result[$resultIndex] ?? ''),
-                        set::placeholder($lang->thinkrun->pleaseInput)
+                        set::placeholder($lang->thinkrun->placeholder->rowContent)
                     ),
                     div
                     (
@@ -141,7 +141,7 @@ class thinkTableInput extends thinkQuestion
                     setID('customFields'),
                     setClass('mt-2 w-1/5'),
                     set::value(''),
-                    set::placeholder($lang->thinkrun->pleaseInput)
+                    set::placeholder($lang->thinkrun->placeholder->rowTitle)
                 ),
                 textarea
                 (
@@ -149,7 +149,7 @@ class thinkTableInput extends thinkQuestion
                     setID('result'),
                     setClass('mt-2 w-4/5 ml-2'),
                     set::value(''),
-                    set::placeholder($lang->thinkrun->pleaseInput)
+                    set::placeholder($lang->thinkrun->placeholder->rowContent)
                 ),
                 div
                 (
@@ -185,6 +185,9 @@ class thinkTableInput extends thinkQuestion
             $required = $step->options->required;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = $step->options->fields ?? array();
+            $requiredRows = $step->options->requiredRows;
+            $isSupportAdd = $step->options->isSupportAdd;
+            $canAddRows   = $step->options->canAddRows;
 
         }
 
