@@ -47,7 +47,10 @@ class gitfoxRepo
         $param->git_ref        = $revision;
         if(!empty($this->branch)) $param->git_ref = $this->branch;
 
-        $list = $this->fetch($api, $param, true, array(), 'entries');
+        $list = $this->fetch($api, $param);
+        if(empty($list) || !isset($list->content->entries)) return array();
+
+        $list = $list->content->entries;
         if(empty($list)) return array();
 
         $files   = $this->fetch('path-details', array('git_ref' => $param->git_ref), false, array('paths' => array_column($list, 'path')));
