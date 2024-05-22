@@ -2890,6 +2890,7 @@ class commonModel extends model
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
             if($objectType == 'kanbanspace') $createMethod = 'createSpace';
+            if($objectType == 'board') $createMethod = 'createBoard';
             if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
             $hasPriv = common::hasPriv($module, $createMethod);
@@ -2979,6 +2980,12 @@ class commonModel extends model
                 case 'kanban':
                     $isOnlyBody = true;
                     $attr       = "class='iframe' data-width='75%'";
+                    break;
+                case 'board':
+                    $createMethod = 'createByTemplate';
+                    $params       = 'templateID=0';
+                    $isOnlyBody   = true;
+                    $attr         = 'data-toggle="modal"';
                     break;
             }
 
