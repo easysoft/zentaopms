@@ -53,6 +53,8 @@ foreach($config->mr->view->operateList as $operate)
                 if($compileNotSuccess) $action['hint'] = $lang->mr->compileTip;
                 if($hasNoChange)       $action['hint'] = $lang->mr->noChangesTip;
                 if($hasConflict)       $action['hint'] = $lang->mr->conflictsTip;
+
+                if(in_array(strtolower($repo->SCM), array('gogs', 'gitea'))) $action['hint'] = $lang->mr->notifyTip;
             }
         }
     }

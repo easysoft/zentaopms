@@ -77,6 +77,7 @@ $lang->mr->acceptTip          = 'Please approve this MR before merge';
 $lang->mr->conflictsTip       = 'This merge request has conflicts, cannot be merged';
 $lang->mr->noChangesTip       = 'Source branch and target branch have no changes, cannot be merged';
 $lang->mr->compileTip         = 'This merge request pipeline build is not successful, cannot be merged';
+$lang->mr->notifyTip          = 'This merge request has conflicts or no changes, cannot be merged';
 $lang->mr->branchUpdateTip    = 'Branch has been updated, execute pipeline';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
