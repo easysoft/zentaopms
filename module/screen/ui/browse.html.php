@@ -12,6 +12,28 @@ declare(strict_types = 1);
 namespace zin;
 
 jsVar('showGuide', $showGuide);
+$bizGuideLink = common::checkNotCN() ? 'https://www.zentao.pm/page/zentao-pricing.html' : 'https://www.zentao.net/page/enterprise.html';
+
+if($this->config->edition == 'open')
+{
+    div
+    (
+        set::className('clearfix pt-3 pr-2.5'),
+        div
+        (
+            set::className('pull-right'),
+            btn
+            (
+                setClass('text-primary'),
+                set::text($lang->screen->bizGuide),
+                set::trailingIcon('chevron-right'),
+                set::type('ghost'),
+                set::url($bizGuideLink),
+                set::target('blank')
+            )
+        )
+    );
+}
 
 if(empty($screens))
 {
