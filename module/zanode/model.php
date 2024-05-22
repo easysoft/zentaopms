@@ -719,9 +719,9 @@ class zanodemodel extends model
      * @param  int    $caseID
      * @param  int    $testtaskID
      * @access public
-     * @return string
+     * @return string|object
      */
-    public function runZTFScript(int $scriptID = 0, int $caseID = 0, int $testtaskID = 0): string
+    public function runZTFScript(int $scriptID = 0, int $caseID = 0, int $testtaskID = 0): string|object
     {
         $automation = $this->getAutomationByID($scriptID);
         $node       = $this->getNodeByID($automation->node);
@@ -744,6 +744,7 @@ class zanodemodel extends model
             $this->dao->delete()->from(TABLE_TESTRESULT)->where('id')->eq($testtaskID)->exec();
             return dao::$errors = $this->lang->zanode->runTimeout;
         }
+        return $result;
     }
 
     /**
