@@ -527,7 +527,7 @@ class story extends control
         if($this->app->tab == 'project')
         {
             $projectID = $param ? $param : $this->session->project;
-            $project   = $this->loadModel('project')->fetchByID($projectID);
+            $project   = $this->loadModel('project')->fetchByID((int)$projectID);
             $this->view->projectID = $projectID;
             $this->view->project   = $project;
             if(!$project->multiple)
