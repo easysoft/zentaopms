@@ -10,22 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$badgesOptions = array();
-$badgesOptions['mode']            = $mode;
-$badgesOptions['todoCount']       = $todoCount;
-$badgesOptions['isIPD']           = $isIPD;
-$badgesOptions['isMax']           = $isMax;
-$badgesOptions['isBiz']           = $isBiz;
-$badgesOptions['isOpenedURAndSR'] = $isOpenedURAndSR;
-$badgesOptions['enableER']        = $this->config->enableER;
-$badgesOptions['rawMethod']       = $app->rawMethod;
-
 if($app->rawMethod == 'work')
 {
     $badgeMap = array();
     $nameMap = array('task' =>'task', 'story' =>'story', 'bug' =>'bug', 'testcase' =>'case', 'testtask' =>'testtask');
 
     if($isOpenedURAndSR !== 0)                       $nameMap = array_merge($nameMap, array('requirement' => 'requirement'));
+    if($config->enableER)                            $nameMap = array_merge($nameMap, array('epic' => 'epic'));
     if($isBiz !== 0 || $isMax !== 0 || $isIPD !== 0) $nameMap = array_merge($nameMap, array('feedback' => 'feedback', 'ticket' => 'ticket'));
     if($isMax !== 0 || $isIPD !== 0)                 $nameMap = array_merge($nameMap, array('issue' => 'issue', 'risk' => 'risk', 'nc' => 'qa', 'myMeeting' => 'meeting'));
     if($isIPD !== 0)                                 $nameMap = array_merge($nameMap, array('demand' => 'demand'));

@@ -31,7 +31,7 @@ window.renderCell = function(result, {row, col})
 {
     if(col.name == 'title' && result[0])
     {
-        const story = info.row.data;
+        const story = row.data;
         if(story.shadow == 1) result[0].props.href += '#app=project';
 
         let html       = '';
