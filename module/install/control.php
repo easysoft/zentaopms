@@ -94,6 +94,7 @@ class install extends control
         $this->view->curlResult     = $this->installZen->checkCURL();
         $this->view->filterResult   = $this->installZen->checkFilter();
         $this->view->iconvResult    = $this->installZen->checkIconv();
+        $this->view->apcuResult     = $this->installZen->checkAPCu();
         $this->view->tmpRootInfo    = $this->installZen->getTmpRoot();
         $this->view->tmpRootResult  = $this->installZen->checkTmpRoot();
         $this->view->dataRootInfo   = $this->installZen->getDataRoot();
