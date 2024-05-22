@@ -246,6 +246,8 @@ $lang->system->backup->backupTitle     = 'Backing up the channel platform...';
 $lang->system->backup->restoreTitle    = 'Rolling back the channel platform...';
 $lang->system->backup->backingUp       = 'In progress';
 $lang->system->backup->restoring       = 'In progress';
+$lang->system->backup->backupSucceed   = 'Backup succeed';
+$lang->system->backup->restoreSucceed  = 'Restore succeed';
 
 $lang->system->backup->success = new stdclass();
 $lang->system->backup->success->upgrade = 'Upgrade successful!';

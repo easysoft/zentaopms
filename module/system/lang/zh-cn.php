@@ -247,6 +247,8 @@ $lang->system->backup->backupTitle     = '正在备份 渠成平台...';
 $lang->system->backup->restoreTitle    = '正在回滚 渠成平台...';
 $lang->system->backup->backingUp       = '进行中';
 $lang->system->backup->restoring       = '进行中';
+$lang->system->backup->backupSucceed   = '备份成功';
+$lang->system->backup->restoreSucceed  = '还原成功';
 
 $lang->system->backup->success = new stdclass();
 $lang->system->backup->success->upgrade = '升级成功！';
