@@ -457,7 +457,7 @@ class biModel extends model
             $currentOperate = $operate;
             $screenJson = file_get_contents(__DIR__ . DS . 'json' . DS . "screen{$screenID}.json");
             $screen = json_decode($screenJson);
-            if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme);
+            if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme, JSON_UNESCAPED_UNICODE);
 
             $exists = $this->dao->select('id')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
 
