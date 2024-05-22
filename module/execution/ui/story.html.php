@@ -115,10 +115,10 @@ if($canOpreate['create'])      $createItem[] = array('text' => $lang->story->cre
 if($canOpreate['batchCreate']) $createItem[] = array('text' => $lang->story->batchCreate . $lang->SRCommon, 'url' => $batchCreateLink);
 if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execution->multiple)
 {
-    if($canOpreate['createEpic'])             $createItem[] = array('text' => $lang->epic->create,                               'url' => $createEpicLink);
-    if($canOpreate['batchCreateEpic'])        $createItem[] = array('text' => $lang->epic->batchCreate . $lang->ERCommon,        'url' => $batchCreateEpicLink);
     if($canOpreate['createRequirement'])      $createItem[] = array('text' => $lang->requirement->create,                        'url' => $createRequirementLink);
     if($canOpreate['batchCreateRequirement']) $createItem[] = array('text' => $lang->requirement->batchCreate . $lang->URCommon, 'url' => $batchCreateRequirementLink);
+    if($canOpreate['createEpic'])             $createItem[] = array('text' => $lang->epic->create,                               'url' => $createEpicLink);
+    if($canOpreate['batchCreateEpic'])        $createItem[] = array('text' => $lang->epic->batchCreate . $lang->ERCommon,        'url' => $batchCreateEpicLink);
 }
 
 $canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'linkStory');
