@@ -11,6 +11,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+useWg('thinkoptions');
+useWg('editor');
+
 /**
  * 思引师基础节点内容。
  * thinmory basic node content.
