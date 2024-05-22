@@ -54,7 +54,7 @@ $lang->mr->execJob     = '执行';
 $lang->mr->execJobTip  = '手动执行流水线任务';
 
 $lang->mr->canMerge  = "可合并";
-$lang->mr->cantMerge = "不可自动合并";
+$lang->mr->cantMerge = "不可合并";
 
 $lang->mr->approval = '评审';
 $lang->mr->approve  = '通过';
@@ -105,7 +105,7 @@ $lang->mr->mergeStatusList = array();
 $lang->mr->mergeStatusList['unchecked']            = '未检查';
 $lang->mr->mergeStatusList['checking']             = '检查中';
 $lang->mr->mergeStatusList['can_be_merged']        = '可合并';
-$lang->mr->mergeStatusList['cannot_be_merged']     = '不可自动合并';
+$lang->mr->mergeStatusList['cannot_be_merged']     = '不可合并';
 $lang->mr->mergeStatusList['cannot_merge_by_fail'] = '不可合并,检查未通过';
 
 $lang->mr->description       = '描述';
@@ -176,7 +176,8 @@ $lang->mr->pipelineStatus['failed']   = "未通过";
 $lang->mr->pipelineStatus['canceled'] = "已取消";
 
 $lang->mr->MRHasConflicts = "是否存在冲突";
-$lang->mr->hasConflicts   = "存在冲突或等待提交";
+$lang->mr->hasConflicts   = "代码有冲突";
+$lang->mr->hasNoChanges   = "代码无变动";
 $lang->mr->hasNoConflict  = "可以合并";
 $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
