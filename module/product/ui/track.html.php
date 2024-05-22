@@ -47,15 +47,19 @@ toolbar
 $this->loadModel('project');
 $this->loadModel('task');
 $this->loadModel('bug');
+$this->loadModel('testcase');
 jsVar('langStoryPriList',      $lang->story->priList);
 jsVar('langStoryStatusList',   $lang->story->statusList);
 jsVar('langStoryStageList',    $lang->story->stageList);
 jsVar('langProjectStatusList', $lang->project->statusList);
 jsVar('langTaskPriList',       $lang->task->priList);
 jsVar('langTaskStatusList',    $lang->task->statusList);
+jsVar('langChildren',          $lang->task->childrenAB);
 jsVar('langBugPriList',        $lang->bug->priList);
 jsVar('langBugSeverityList',   $lang->bug->severityList);
-jsVar('langChildren',    $lang->task->childrenAB);
+jsVar('langCasePriList',       $lang->testcase->priList);
+jsVar('langCaseResultList',    $lang->testcase->resultList);
+jsVar('langUnexecuted',        $lang->testcase->unexecuted);
 jsVar('users', $users);
 
 empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass('text-gray'), $lang->noData)) : div
