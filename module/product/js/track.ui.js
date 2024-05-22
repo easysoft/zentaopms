@@ -10,9 +10,11 @@ window.getItem = function(info)
     }
     if(col == 'project' || col == 'execution')
     {
-        delayHtml = '';
+        let delayHtml = '';
+        let titleHtml = info.item.title;
         if(info.item.delay > 0) delayHtml = "<span class='label danger-pale nowrap pull-left absolute right-0 bottom-0'>" + langProjectStatusList['delay'] + "</span>";
-        info.item.title   = {html: "<div class='relative'><span class='title line-clamp-2' title='" + info.item.title + "'>" + info.item.title + '</span>' + delayHtml + '</div>'}
+        if(col == 'execution') titleHtml = "<a href='" + $.createLink('execution', 'task', 'executionID=' + info.item.id) + "'>" + info.item.title + "</a>";
+        info.item.title   = {html: "<div class='relative'><span class='title line-clamp-2' title='" + info.item.title + "'>" + titleHtml + '</span>' + delayHtml + '</div>'}
 
         info.item.content = [];
         info.item.content.push({html: "<div class='status-" + info.item.status + "'>" + langProjectStatusList[info.item.status] + "</div>"});
