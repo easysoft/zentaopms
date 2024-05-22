@@ -717,7 +717,7 @@ class storyZen extends story
         if(empty($branches)) unset($fields['branch']);
         if($this->view->hiddenPlan) unset($fields['plan']);
 
-        $hiddenGrade = !$this->story->showGrade($storyType);
+        $hiddenGrade = $this->config->edition != 'ipd';
         if($hiddenGrade && $storyType == 'epic') $fields['parent']['hidden'] = true;
 
         $this->view->branchID    = $branch;
@@ -1042,7 +1042,7 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
-        $hiddenGrade = !$this->story->showGrade($storyType);
+        $hiddenGrade = $this->config->edition != 'ipd';
         if($hiddenGrade && $storyType == 'epic') $hiddenParent = true;
 
         $this->view->hiddenParent = $hiddenParent;
