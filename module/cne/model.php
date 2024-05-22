@@ -356,17 +356,17 @@ class cneModel extends model
      * Get the status of backup progress.
      *
      * @param  object $instance
-     * @param  object $backup
+     * @param  string $backupName
      * @access public
      * @return object
      */
-    public function getBackupStatus(object $instance, object $backup): object
+    public function getBackupStatus(object $instance, string $backupName): object
     {
         $apiParams = new stdclass;
         $apiParams->cluster     = '';
         $apiParams->namespace   = $instance->spaceData->k8space;
         $apiParams->name        = $instance->k8name;
-        $apiParams->backup_name = $backup->backupName;
+        $apiParams->backup_name = $backupName;
         $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
 
         $apiUrl = "/api/cne/app/backup/status";
@@ -444,17 +444,17 @@ class cneModel extends model
      * Get the status of restore progress.
      *
      * @param  object $instance
-     * @param  object $restore
+     * @param  string $backupName
      * @access public
      * @return object
      */
-    public function getRestoreStatus(object $instance, object $restore): object
+    public function getRestoreStatus(object $instance, string $backupName): object
     {
         $apiParams = new stdclass;
         $apiParams->cluster      = '';
         $apiParams->namespace    = $instance->spaceData->k8space;
         $apiParams->name         = $instance->k8name;
-        $apiParams->restore_name = $restore->restoreName;
+        $apiParams->restore_name = $backupName;
         $apiParams->channel      = empty($instance->channel) ? $this->config->cne->api->channel : $instance->channel;
 
         $apiUrl = "/api/cne/app/restore/status";
