@@ -4144,3 +4144,31 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按项目统计的已完成用户需求数是指状态为已关闭且关闭原因为已完成的用户需求的数量。反映了项目团队在满足用户期望和需求方面的已经实现的任务和计划。已完成用户需求数量的增加表示项目团队已经成功完成了一定数量的用户需求工作，并取得了一定的成果',
     'definition' => "项目中用户需求的个数求和\n状态为已关闭\n关闭原因为已完成\n过滤已删除的用户需求\n过滤已删除的项目"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的业务需求数',
+    'alias'      => '被指派的业务需求数',
+    'code'       => 'count_of_assigned_epic_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'epic',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派业务需求数表示每个人待处理的业务需求数量之和。反映了每个人员需要处理的业务需求数量的规模。该数值越大，说明需要投入越多的时间处理业务需求。',
+    'definition' => "所有业务需求个数求和\n指派给为某人\n过滤已删除的业务需求\n过滤已删除产品的业务需求"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按人员统计的被指派的用户需求数',
+    'alias'      => '被指派的用户需求数',
+    'code'       => 'count_of_assigned_requirement_in_user',
+    'purpose'    => 'scale',
+    'scope'      => 'user',
+    'object'     => 'requirement',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按人员统计的被指派用户需求数表示每个人待处理的用户需求数量之和。反映了每个人员需要处理的用户需求数量的规模。该数值越大，说明需要投入越多的时间处理用户需求。',
+    'definition' => "所有用户需求个数求和\n指派给为某人\n过滤已删除的用户需求\n过滤已删除产品的用户需求"
+);
