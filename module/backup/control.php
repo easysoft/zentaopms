@@ -65,8 +65,9 @@ class backup extends control
                 $backups = !empty($backupResult['data']) ? $backupResult['data'] : array();
                 foreach($backups as $backup)
                 {
-                    $backup->time         = isset($backup->create_time) ? $backup->create_time : '';
+                    $backup->time    = isset($backup->create_time) ? $backup->create_time : '';
                     $backup->creator = isset($backup->creator) ? $backup->creator : '';
+                    $backup->type    = isset($backup->mode) ? $backup->mode : '';
                 }
             }
         }
