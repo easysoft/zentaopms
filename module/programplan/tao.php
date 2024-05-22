@@ -82,7 +82,7 @@ class programplanTao extends programplanModel
             ->exec();
 
         /* IPD项目停/启用阶段时，子阶段同样停/启用。*/
-        if(isset($plan->enabled) && $oldPlan->enabled != $plan->enabled) 
+        if(isset($plan->enabled) && $oldPlan->enabled != $plan->enabled)
         {
             $this->dao->update(TABLE_PROJECT)
                 ->set('deleted')->eq($plan->deleted)
