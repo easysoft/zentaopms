@@ -27,15 +27,17 @@ $canBatchChangeStatus = hasPriv('execution', 'batchChangeStatus');
 $canBatchAction       = $canBatchEdit || $canBatchChangeStatus;
 if($canBatchAction)
 {
-    $editClass = $canBatchEdit ? 'batch-btn' : 'disabled';
-    $footToolbar['items'][] = array
-    (
-        'type'  => 'btn-group',
-        'items' => array
+    if($canBatchEdit)
+    {
+        $footToolbar['items'][] = array
         (
-            array('text' => $lang->edit, 'className' => "secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('execution', 'batchEdit')),
-        )
-    );
+            'type'  => 'btn-group',
+            'items' => array
+            (
+                array('text' => $lang->edit, 'className' => "secondary size-sm batch-btn", 'btnType' => 'primary', 'data-url' => createLink('execution', 'batchEdit')),
+            )
+        );
+    }
 
     if($canBatchChangeStatus)
     {
