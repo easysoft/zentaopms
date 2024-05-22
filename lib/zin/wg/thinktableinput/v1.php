@@ -45,7 +45,7 @@ class thinkTableInput extends thinkQuestion
             $result = isset($answer->result) && !empty($answer->result) ? $answer->result : array();
             $result = is_array($result) ? $result : get_object_vars($result);
         }
-        jsVar('canAddRows', $canAddRows);
+        jsVar('canAddRows', (int)$canAddRows);
         jsVar('fieldsCount', count($fields));
         jsVar('deleteTip', $lang->thinkrun->deleteTip);
 
@@ -135,7 +135,7 @@ class thinkTableInput extends thinkQuestion
             $tableInputItems,
             formGroup
             (
-                setClass('flex rows-template rows-group flex-nowrap items-center hidden'),
+                setClass('flex rows-template flex-nowrap items-center hidden'),
                 textarea
                 (
                     set::rows('2'),
