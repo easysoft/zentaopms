@@ -28,7 +28,6 @@
 {
     let config        = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
-
     const DEBUG       = config.debug;
     const currentCode = (window.frameElement ? window.frameElement.name : window.name).split('-')[1];
     const isInAppTab  = parent.window !== window;
@@ -480,6 +479,7 @@
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
         if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
+        options.cache = false; // Disable local cache for 20.1.
         const cacheKey = options.cache;
         let cache;
         const renderPageData = (data, onlyZinDebug) =>
