@@ -39,6 +39,8 @@ class formBatchPanel extends formPanel
         'actionsText?: string',         // 操作列头部文本，如果不指定则使用 `$lang->actions` 的值。
         'addRowIcon?: string|false',    // 添加行的图标，如果设置为 `false` 则不显示图标
         'deleteRowIcon?: string|false', // 删除行的图标，如果设置为 `false` 则不显示图标
+        'sortRowIcon?: string|false',   // 排序行的图标，如果设置为 `false` 则不显示图标
+        'sortable?: boo|array',         // 排序配置，设置为 false 不启用排序，设置为 true 使用默认排序
         'onRenderRow?: function',       // 渲染行时的回调函数。
         'onRenderRowCol?: function'     // 渲染列时的回调函数。
     );
