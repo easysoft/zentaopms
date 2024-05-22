@@ -110,7 +110,7 @@ class navbar extends wg
         $items = $this->prop('items');
         if(!empty($items)) return $items;
 
-        global $app, $lang;
+        global $app, $lang, $config;
         if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
         commonModel::replaceMenuLang();
         commonModel::setMainMenu();
@@ -128,6 +128,7 @@ class navbar extends wg
         $activeMenu   = '';
         $activeMenuID = data('activeMenuID');
         $items        = array();
+        $flows        = in_array($config->edition, array('biz', 'max', 'ipd')) ? $app->control->loadModel('my')->getFlowPairs() : array();
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
@@ -198,7 +199,7 @@ class navbar extends wg
                     $isActive = true;
                 }
 
-                $dataApp = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : null;
+                $dataApp = (isset($lang->navGroup->$module) && $tab != $lang->navGroup->$module) || isset($flows[$module]) ? $tab : null;
                 if($isActive && $activeMenuID) $isActive = $menuItem->name == $activeMenuID;
                 if($isActive && empty($activeMenu)) $activeMenu = $menuItem->name;
                 else $isActive = false;
