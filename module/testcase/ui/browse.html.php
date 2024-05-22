@@ -205,7 +205,7 @@ modal
         setClass('mt-4 pull-right'),
         btn(setClass('primary mr-2'), $lang->testcase->dragModalChangeScene, set('data-on', 'click'), set('data-call', 'clickChangeScenen')),
         btn(setClass('primary mr-2'), $lang->testcase->dragModalChangeOrder, set('data-on', 'click'), set('data-call', 'clickChangeOrder')),
-        btn($lang->close, set('data-on', 'click'), set('data-call', 'clickCloseModal'))
+        btn($lang->close, set('data-dismiss', 'modal'))
     )
 );
 
