@@ -44,6 +44,15 @@ toolbar
     formSettingBtn(set::text($lang->settings))
 );
 
+$privs['epic']        = commonModel::hasPriv('epic', 'view');
+$privs['requirement'] = commonModel::hasPriv('requirement', 'view');
+$privs['story']       = commonModel::hasPriv('story', 'view');
+$privs['project']     = commonModel::hasPriv('project', 'view');
+$privs['execution']   = commonModel::hasPriv('execution', 'task');
+$privs['task']        = commonModel::hasPriv('task', 'view');
+$privs['bug']         = commonModel::hasPriv('bug', 'view');
+$privs['case']        = commonModel::hasPriv('case', 'view');
+
 $this->loadModel('project');
 $this->loadModel('task');
 $this->loadModel('bug');
@@ -61,6 +70,7 @@ jsVar('langCasePriList',       $lang->testcase->priList);
 jsVar('langCaseResultList',    $lang->testcase->resultList);
 jsVar('langUnexecuted',        $lang->testcase->unexecuted);
 jsVar('users', $users);
+jsVar('privs', $privs);
 
 empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass('text-gray'), $lang->noData)) : div
 (

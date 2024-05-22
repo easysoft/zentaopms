@@ -3969,7 +3969,7 @@ class storyModel extends model
         if(empty($stories)) return array();
 
         $rootIdList = array_unique(array_column($stories, 'root'));
-        $allStories = $this->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
+        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
         $leafNodes  = $this->storyTao->getLeafNodes($stories, array_keys($allStories));
 
         $tracks = array();
