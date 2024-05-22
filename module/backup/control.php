@@ -69,6 +69,9 @@ class backup extends control
                     $backup->creator = isset($backup->creator) ? $backup->creator : '';
                     $backup->type    = isset($backup->mode) ? $backup->mode : '';
                 }
+
+                function cmp($left, $right){return $left->create_time < $right->create_time ? 1 : -1;}
+                usort($backups, 'cmp');
             }
         }
         else
