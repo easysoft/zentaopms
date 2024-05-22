@@ -53,6 +53,12 @@ $lang->admin->engineInfo                 = "表<strong>%s</strong>的引擎是<s
 $lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
 $lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
+$lang->admin->daoCache     = 'DAO 缓存';
+$lang->admin->apcuNotFound = '请安装 PHP-APCu 扩展后再开启 DAO 缓存';
+
+$lang->admin->cacheStatusList[1] = '开启';
+$lang->admin->cacheStatusList[0] = '关闭';
+
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';
 $lang->admin->info->links   = '您可以访问以下链接：';
