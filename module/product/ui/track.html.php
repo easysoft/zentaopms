@@ -39,13 +39,23 @@ featureBar
     li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module']), set::text($lang->searchAB . $storyTypeLang)))
 );
 
-div
+toolbar
+(
+    formSettingBtn(set::text($lang->settings))
+);
+
+jsVar('langStoryPriList', $lang->story->priList);
+jsVar('langStoryStatusList', $lang->story->statusList);
+jsVar('langStoryStageList', $lang->story->stageList);
+
+empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass('text-gray'), $lang->noData)) : div
 (
     set::id('track'),
-    zui::kanban
+    zui::kanbanList
     (
         set::key('kanban'),
-        set::data($tracks),
-        set::height('calc(100vh - 120px)')
-    )
+        set::items(array(array('data' => $tracks, 'getItem' => jsRaw('window.getItem'), 'canDrop' => jsRaw('window.canDrop')))),
+        set::height('calc(100vh - 130px)')
+    ),
+    pager(setClass('justify-end'))
 );
