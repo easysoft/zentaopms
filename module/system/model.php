@@ -131,11 +131,12 @@ class systemModel extends model
      * Backup the instance.
      *
      * @param  object $instance
+     * @param  string $mode     |manual|system|upgrade|downgrade
      * @return array
      */
-    public function backup(object $instance): array
+    public function backup(object $instance, string $mode = ''): array
     {
-        $rawResult = $this->cne->backup($instance);
+        $rawResult = $this->cne->backup($instance, $this->app->user->account, $mode);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
         {

@@ -331,10 +331,12 @@ class cneModel extends model
      * Backup a instance with account.
      *
      * @param  object $instance
+     * @param  string $account
+     * @param  string $mode     |manual|system|upgrade|downgrade
      * @access public
      * @return object
      */
-    public function backup(object $instance, string|null $account = ''): object
+    public function backup(object $instance, string|null $account = '', string $mode = ''): object
     {
         $apiParams = new stdclass;
         $apiParams->username  = $account ?: $this->app->user->account;
@@ -342,6 +344,8 @@ class cneModel extends model
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
         $apiParams->channel   = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        if(!empty($mode)) $apiParams->mode = $mode;
 
         $apiUrl = "/api/cne/app/backup";
         return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
