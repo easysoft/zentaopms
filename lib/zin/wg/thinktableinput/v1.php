@@ -42,7 +42,7 @@ class thinkTableInput extends thinkQuestion
             $canAddRows   = $step->options->canAddRows;
             $answer       = $step->answer;
 
-            $result = isset($answer->result) ? $answer->result : array();
+            $result = isset($answer->result) && !empty($answer->result) ? $answer->result : array();
             $result = is_array($result) ? $result : get_object_vars($result);
         }
         jsVar('canAddRows', $canAddRows);
@@ -57,8 +57,9 @@ class thinkTableInput extends thinkQuestion
                 setClass('flex items-center'),
                 div
                 (
-                    setClass('text-right mr-2 w-1/5 text-ellipsis line-clamp-2'),
-                    $item
+                    setClass('text-right mr-2 w-1/5 line-clamp-2'),
+                    $item,
+                    set::title($item)
                 ),
                 textarea
                 (
@@ -75,9 +76,9 @@ class thinkTableInput extends thinkQuestion
                     ($index == count($fields) - 1 && $isSupportAdd) ? icon
                     (
                         'plus',
-                        setClass('mr-1 ghost btn-add ml-2 text-sm text-primary add-rows'),
+                        setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
                         on::click('addRow'),
-                        toggle::tooltip(array('placement' => 'bottom-end', 'title' => sprintf($lang->thinkrun->addTips, $canAddRows)))
+                        set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                     ) : null,
                 )
             );
@@ -116,13 +117,13 @@ class thinkTableInput extends thinkQuestion
                         icon
                         (
                             'plus',
-                            setClass('mr-1 ghost btn-add ml-2 text-sm text-primary add-rows'),
+                            setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
                             on::click('addRow'),
-                            toggle::tooltip(array('placement' => 'bottom-end', 'title' => sprintf($lang->thinkrun->addTips, $canAddRows)))
+                            set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                         ),
                         icon
                         (
-                            setClass('ghost btn-delete text-sm text-primary ml-1'),
+                            setClass('btn-delete text-sm text-primary ml-1'),
                             'trash'
                         )
                     )
@@ -158,13 +159,13 @@ class thinkTableInput extends thinkQuestion
                     icon
                     (
                         'plus',
-                        setClass('mr-1 ghost btn-add ml-2 text-sm text-primary add-rows'),
+                        setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
                         on::click('addRow'),
-                        toggle::tooltip(array('placement' => 'bottom-end', 'title' => sprintf($lang->thinkrun->addTips, $canAddRows)))
+                        set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                     ),
                     icon
                     (
-                        setClass('ghost btn-delete text-sm text-primary ml-1'),
+                        setClass('btn-delete text-sm text-primary ml-1'),
                         'trash'
                     )
                 )
