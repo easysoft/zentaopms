@@ -16187,5 +16187,6 @@ INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`
 INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('0', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NUll);
 
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
+INSERT INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'cache', '{"dao":{"enable":"1"}}');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
 
