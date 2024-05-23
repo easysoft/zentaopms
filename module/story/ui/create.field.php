@@ -55,7 +55,7 @@ if(isset($createFields['URS']))
         ->items($createFields['parent']['options'])
         ->value($createFields['parent']['default']);
 }
-if(isset($createFields['duration'])) 
+if(isset($createFields['duration']))
 {
     $fields->field('duration')
         ->required($createFields['duration']['required'])

@@ -340,7 +340,6 @@ class storyZen extends story
         if(empty($storyID)) return $initStory;
 
         $story = $this->story->getByID($storyID);
-        $initStory->product     = $story->product;
         $initStory->plan        = $story->plan;
         $initStory->module      = $story->module;
         $initStory->source      = $story->source;
