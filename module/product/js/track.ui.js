@@ -20,9 +20,10 @@ window.getItem = function(info)
         let delayHtml = '';
         if(info.item.delay > 0) delayHtml = `<span class='label danger-pale delayed nowrap'>${langProjectStatusList['delay']}</span>`;
 
-        if(col == 'project'   && privs['project'])   titleHtml = "<a href='" + $.createLink('project', 'view', `projectID=${info.item.id}`) + "'>" + title + "</a>";
-        if(col == 'execution' && privs['execution']) titleHtml = "<a href='" + $.createLink('execution', 'task', `executionID=${info.item.id}`) + "'>" + title + "</a>";
-        info.item.title      = {html: `<div class="line-clamp-2">${titleHtml}${delayHtml}</div>`}
+        titleHtml = `<span${color} class="title">${title}</span>`;
+        if(col == 'project'   && privs['project'])   titleHtml = "<a class='title' href='" + $.createLink('project', 'view', `projectID=${info.item.id}`) + "'>" + title + title + title + title + "</a>";
+        if(col == 'execution' && privs['execution']) titleHtml = "<a class='title' href='" + $.createLink('execution', 'task', `executionID=${info.item.id}`) + "'>" + title + "</a>";
+        info.item.title      = {html: `<div class="relative"><div class="line-clamp-2">${titleHtml}${delayHtml}</div></div>`}
         info.item.titleAttrs = {'title' : title};
 
         info.item.content.push({html: `<div class="status-${info.item.status}">${langProjectStatusList[info.item.status]}</div>`});
@@ -102,4 +103,13 @@ window.canDrop = function(){ return false;}
 waitDom('.orderByIcon', function()
 {
     new zui.Dropdown($(this), {menu: {items: orderByItems}});
+})
+
+waitDom('.delayed', function()
+{
+    $('.delayed').each(function()
+    {
+        let $relative = $(this).closest('.relative');
+        if($relative.find('.line-clamp-2').height() < $relative.find('.title').height()) $(this).addClass('absolute bottom-0 right-0');
+    })
 })
