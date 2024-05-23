@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$status = zget($lang->CNE->statusList, $cneMetrics->status, 'unknown');
+$status = zget($cneMetrics, 'status', 'unknown');
 
 $cpuInfo['tip']    = trim(substr($cpuInfo['tip'], strpos($cpuInfo['tip'], '=') + 1));
 $memoryInfo['tip'] = trim(substr($memoryInfo['tip'], strpos($memoryInfo['tip'], '=') + 1));
