@@ -77,12 +77,12 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
     rows.forEach((row) => {
         if(checkedIdList.includes(row.id))
         {
-            const story = element.getRowInfo(rowID);
+            const story = element.getRowInfo(row.id);
             if(story.data.type == 'story')
             {
                 total += 1;
                 checkedEstimate += parseFloat(story.data.estimate);
-                if(cases[rowID]) checkedCase += 1;
+                if(cases[row.id]) checkedCase += 1;
             }
         }
     });
