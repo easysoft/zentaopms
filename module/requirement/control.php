@@ -415,4 +415,19 @@ class requirement extends control
     {
         echo $this->fetch('story', 'linkRequirements', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
+
+    /**
+     * Ajax get the stories of a user.
+     *
+     * @param  int     $userID
+     * @param  string  $id
+     * @param  int     $appendID
+     * @param  string  $storyType
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUserStories(int $userID = 0, string $id = '', int $appendID = 0, $storyType = 'requirement')
+    {
+        echo $this->fetch('story', 'ajaxGetUserStories', "userID=$userID&id=$id&appendID=$appendID&storyType=requirement");
+    }
 }

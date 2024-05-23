@@ -1910,19 +1910,20 @@ class story extends control
      * @param  int    $userID
      * @param  string $id       the id of the select control.
      * @param  int    $appendID
+     * @param  string $storyType
      * @access public
      * @return string
      */
-    public function ajaxGetUserStories(int $userID = 0, string $id = '', int $appendID = 0)
+    public function ajaxGetUserStories(int $userID = 0, string $id = '', int $appendID = 0, $storyType = 'story')
     {
         if(empty($userID)) $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
-        $stories = $this->story->getUserStoryPairs($user->account, 10, 'story', '', $appendID);
+        $stories = $this->story->getUserStoryPairs($user->account, 10, $storyType, '', $appendID);
 
         $items = array();
         foreach($stories as $storyID => $storyTitle) $items[] = array('text' => $storyTitle, 'value' => $storyID);
 
-        $fieldName = $id ? "stories[$id]" : 'story';
+        $fieldName = $id ? "stories[$id]" : $storyType;
         return print(json_encode(array('name' => $fieldName, 'items' => $items)));
     }
 

@@ -33,10 +33,12 @@ $config->todo->custom->batchEditFields   = 'pri,beginAndEnd,status';
 $config->todo->moduleList = array('bug', 'task', 'epic', 'requirement', 'story', 'testtask');
 
 $config->todo->getUserObjectsMethod = array();
-$config->todo->getUserObjectsMethod['bug']      = 'ajaxGetUserBugs';
-$config->todo->getUserObjectsMethod['task']     = 'ajaxGetUserTasks';
-$config->todo->getUserObjectsMethod['story']    = 'ajaxGetUserStories';
-$config->todo->getUserObjectsMethod['testtask'] = 'ajaxGetUserTestTasks';
+$config->todo->getUserObjectsMethod['bug']         = 'ajaxGetUserBugs';
+$config->todo->getUserObjectsMethod['task']        = 'ajaxGetUserTasks';
+$config->todo->getUserObjectsMethod['story']       = 'ajaxGetUserStories';
+$config->todo->getUserObjectsMethod['epic']        = 'ajaxGetUserStories';
+$config->todo->getUserObjectsMethod['requirement'] = 'ajaxGetUserStories';
+$config->todo->getUserObjectsMethod['testtask']    = 'ajaxGetUserTestTasks';
 
 $config->todo->objectList = array();
 $config->todo->objectList['bug']      = 'bugs';
