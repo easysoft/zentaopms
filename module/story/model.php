@@ -2781,7 +2781,7 @@ class storyModel extends model
             {
                 if(isset($parents[$requirement->id])) unset($requirements[$id]);
                 if(!isset($URGradePairs[$requirement->grade])) unset($requirements[$id]);
-                if($requirement->status != 'active') unset($requirements[$id]);
+                if($requirement->status != 'active' && $requirement->status != 'launched') unset($requirements[$id]);
             }
 
             $childIdList = $this->getAllChildId($storyID);
@@ -2856,7 +2856,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('requirement')
-            ->andWhere('status')->eq('active')
+            ->andWhere('status')->in('active,launched')
             ->andWhere('grade')->in(array_keys($URGradePairs))
             ->andWhere('grade')->ne($lastGrade)
             ->andWhere('id')->notIN($allStoryParents)
@@ -3699,9 +3699,9 @@ class storyModel extends model
         {
             if($config->vision == 'or') return false;
             if(!empty($story->twins))   return false;
+            if(strpos('active,launched', $story->status) === false) return false;
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
-            if(strpos('active,launched', $story->status) === false || !empty($story->plan)) return false;
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
             if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }
