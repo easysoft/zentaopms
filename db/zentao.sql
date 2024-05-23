@@ -13043,6 +13043,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (19, 'user', 'testCase'),
 (19, 'user', 'testTask'),
 (19, 'user', 'todo'),
+(20, 'admin', 'cache'),
 (20, 'admin', 'checkWeak'),
 (20, 'admin', 'index'),
 (20, 'admin', 'register'),
