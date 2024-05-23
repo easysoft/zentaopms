@@ -791,13 +791,14 @@ class product extends control
      * @param  string $browseType
      * @param  int    $param
      * @param  string $storyType
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function track(int $productID, string $branch = '', int $projectID = 0, string $browseType = 'allstory', int $param = 0, string $storyType = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function track(int $productID, string $branch = '', int $projectID = 0, string $browseType = 'allstory', int $param = 0, string $storyType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $browseType = strtolower($browseType);
         $branch     = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
@@ -817,7 +818,7 @@ class product extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, $storyType, $browseType, 'id_desc', $pager);
+        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, $storyType, $browseType, $orderBy, $pager);
         $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
 
         /* Build search form. */
@@ -832,6 +833,7 @@ class product extends control
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
         $this->view->storyType       = $storyType;
+        $this->view->orderBy         = $orderBy;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         $this->display();

@@ -573,3 +573,12 @@ $lang->story->notice->branch = "每个分支会建立一个需求，需求间互
 $lang->story->relievedTwinsRelation     = '解除孪生关系';
 $lang->story->relievedTwinsRelationTips = '孪生关系解除后无法恢复，需求的关闭将不再同步。';
 $lang->story->changeRelievedTwinsTips   = '孪生关系解除后无法恢复，孪生需求间内容不再同步。';
+
+$lang->story->trackOrderByList['id']       = '按ID';
+$lang->story->trackOrderByList['pri']      = '按优先级';
+$lang->story->trackOrderByList['status']   = '按状态';
+$lang->story->trackOrderByList['stage']    = '按阶段';
+$lang->story->trackOrderByList['category'] = '按类别';
+
+$lang->story->trackSortList['asc']  = '升序';
+$lang->story->trackSortList['desc'] = '降序';

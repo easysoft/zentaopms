@@ -18,11 +18,11 @@ window.getItem = function(info)
     else if(col == 'project' || col == 'execution')
     {
         let delayHtml = '';
-        if(info.item.delay > 0) delayHtml = `<span class='label danger-pale nowrap absolute right-0 bottom-0'>${langProjectStatusList['delay']}</span>`;
+        if(info.item.delay > 0) delayHtml = `<span class='label danger-pale delayed nowrap'>${langProjectStatusList['delay']}</span>`;
 
         if(col == 'project'   && privs['project'])   titleHtml = "<a href='" + $.createLink('project', 'view', `projectID=${info.item.id}`) + "'>" + title + "</a>";
         if(col == 'execution' && privs['execution']) titleHtml = "<a href='" + $.createLink('execution', 'task', `executionID=${info.item.id}`) + "'>" + title + "</a>";
-        info.item.title      = {html: `<div class="relative"><span class="line-clamp-2">${titleHtml}</span>${delayHtml}</div>`}
+        info.item.title      = {html: `<div class="line-clamp-2">${titleHtml}${delayHtml}</div>`}
         info.item.titleAttrs = {'title' : title};
 
         info.item.content.push({html: `<div class="status-${info.item.status}">${langProjectStatusList[info.item.status]}</div>`});
@@ -73,6 +73,11 @@ window.getItem = function(info)
     }
 }
 
+window.getCol = function(col)
+{
+    if(col.name == storyType) col.subtitle = {html: `<span class="icon ml-1 cursor-pointer orderByIcon icon-swap" title="${orderByTitle}"></span>`};
+}
+
 window.itemRender = function(info)
 {
     if(info.col == 'task' && info.item.parent > '0') info.item.className.push('hidden parent-' + info.item.parent);
@@ -93,3 +98,8 @@ window.toggleChildren = function(obj, parentID)
 }
 
 window.canDrop = function(){ return false;}
+
+waitDom('.orderByIcon', function()
+{
+    new zui.Dropdown($(this), {menu: {items: orderByItems}});
+})

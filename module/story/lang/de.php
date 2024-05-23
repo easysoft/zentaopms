@@ -573,3 +573,12 @@ $lang->story->notice->branch = 'Each branch will establish a requirement. The re
 $lang->story->relievedTwinsRelation     = 'Relieved twins relationship';
 $lang->story->relievedTwinsRelationTips = 'After the twins relationship is terminated, it cannot be restored and the shutdown of the requirement is no longer synchronized.';
 $lang->story->changeRelievedTwinsTips   = 'After the twins relationship is terminated, the twin stories are no longer synchronized.';
+
+$lang->story->trackOrderByList['id']       = 'Order by ID';
+$lang->story->trackOrderByList['pri']      = 'Order by priority';
+$lang->story->trackOrderByList['status']   = 'Order by status';
+$lang->story->trackOrderByList['stage']    = 'Order by stage';
+$lang->story->trackOrderByList['category'] = 'Order by category';
+
+$lang->story->trackSortList['asc']  = ' Ascending';
+$lang->story->trackSortList['desc'] = ' Descending';
