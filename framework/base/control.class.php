@@ -1064,7 +1064,7 @@ class baseControl
      */
     public function setResponseHeader()
     {
-        if($this->config->cache->enableClient && $this->app->useClientCache)
+        if($this->config->cache->client->enable && $this->app->useClientCache)
         {
             helper::setStatus(304);
             helper::end();
