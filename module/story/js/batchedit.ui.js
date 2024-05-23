@@ -74,7 +74,7 @@ window.renderRowData = function($row, index, story)
                 items.push({text: branches[branch], value: branch});
             }
             options.items        = items;
-            options.onChange     = function(){loadBranches(story.product, this)};
+            options.onChange     = function(){loadBranches(story.product, e)};
             options.defaultValue = story.branch;
             options.required     = true;
 
@@ -136,31 +136,32 @@ window.renderRowData = function($row, index, story)
 
 window.loadBranches = function(product, obj)
 {
-    $this  = $(obj);
-    branch = $this.val();
+    $this  = $(obj.target);
+    branch = $this.find('input[name^=branch]').val();
 
-    var index           = $this.closest('tr').data('index');
     var storyID         = $this.closest('tr').find('.form-batch-input[data-name="storyIdList"]').val();
     var $module         = $this.closest('tr').find('.form-batch-control[data-name="module"]');
     var currentModuleID = $module.val();
     var moduleLink      = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=' + storyID + '&extra=nodeleted&currentModuleID=' + currentModuleID);
-    $.get(moduleLink, function(items)
+    $.getJSON(moduleLink, function(items)
     {
-        $picker = $this.closest('tr').find('.picker-box[data-name="module"]').zui('picker');
-        options = $picker.options;
+        let $picker = $this.closest('tr').find('.picker-box[data-name="module"]').zui('picker');
+        let options = $picker.options;
         options.items = items;
-        $this.closest('tr').find('.picker-box[data-name="module"]').render(options);
+        $picker.render(options);
+        $picker.$.setValue(0);
     });
 
     var $plan    = $this.closest('tr').find('.form-batch-control[data-name="plan"]');
     var planID   = $plan.val();
     var planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=false&expired=&param=skipParent');
-    $.get(planLink, function(items)
+    $.getJSON(planLink, function(items)
     {
-        $picker = $this.closest('tr').find('.picker-box[data-name="plan"]').zui('picker');
-        options = $picker.options;
+        let $picker = $this.closest('tr').find('.picker-box[data-name="plan"]').zui('picker');
+        let options = $picker.options;
         options.items = items;
-        $this.closest('tr').find('.picker-box[data-name="plan"]').render(options);
+        $picker.render(options);
+        $picker.$.setValue('');
     });
 }
 
