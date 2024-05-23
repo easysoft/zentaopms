@@ -15,6 +15,14 @@ $mode = empty($lanes) ? 'independent' : 'sameAsOther';
 
 jsVar('regionID', $regionID);
 
+$laneTypeValue = 'story';
+if($config->vision == 'lite')
+{
+    unset($lang->kanban->laneTypeList['story']);
+    unset($lang->kanban->laneTypeList['bug']);
+    $laneTypeValue = 'task';
+}
+
 formPanel
 (
     on::change('[name=mode]', 'changeMode'),
@@ -37,7 +45,7 @@ formPanel
                 set::name('laneType'),
                 set::items($lang->kanban->laneTypeList),
                 set::inline(true),
-                set::value('story'),
+                set::value($laneTypeValue),
                 on::change('changeLaneType')
             )
         )
