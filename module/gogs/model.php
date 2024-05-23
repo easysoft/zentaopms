@@ -75,7 +75,7 @@ class gogsModel extends model
             $user->providerID   = $gogsID;
             $user->providerType = 'gogs';
             $user->account      = $account;
-            $user->openID       = $gogsNames[$openID];
+            $user->openID       = $openID;
             $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
             $this->action->create('gogsuser', $gogsID, 'bind', '', $gogsNames[$openID]);
         }
