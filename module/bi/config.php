@@ -249,3 +249,6 @@ EOT;
 $config->bi->duckdb->ztvtables['projectbugs'] = <<<EOT
 SELECT * FROM ztv_projectbugs
 EOT;
+$config->bi->duckdb->ztvtables['projectteams'] = <<<EOT
+SELECT * FROM ztv_projectteams
+EOT;

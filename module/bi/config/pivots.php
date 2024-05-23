@@ -208,55 +208,72 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '3',
     'group'     => '100',
     'sql'       => <<<EOT
-SELECT
-  t1.name AS  "产品",
-  IFNULL(t2.name, '/') AS "一级项目集",
-  IFNULL(t3.name, '/') AS "产品线",
-  IFNULL(t6.exfixedstorys, 0) AS "研发完成需求数",
-  round(IFNULL(t6.exfixedstorysmate, 0),3) AS "研发完成需求规模数",
-  IFNULL(t8.storycases, 0) AS "需求用例数",
-  round(storycases/exfixedstorysmate,3) AS "用例密度",
-  round(IFNULL(t10.casestorys/t6.exfixedstorys,0),3) AS "用例覆盖率",
-  IFNULL(t7.bug, 0) AS "Bug数",
-  IFNULL(t7.effbugs, 0) AS "有效Bug数",
-  IFNULL(t7.pri12bugs, 0) AS "优先级为1，2的Bug数",
-  round(bug/exfixedstorysmate,3) AS "Bug密度",
-  IFNULL(t7.fixedbugs, 0) AS "修复Bug数",
-  round(t7.fixedbugs/bug,3) "Bug修复率"
-FROM
-  zt_product AS t1
-  LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
-  LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
-  LEFT JOIN (
-  SELECT
-  product,
-  count(id) exfixedstorys,
-  sum(estimate) exfixedstorysmate
-  FROM zt_story
-  WHERE deleted = '0'  and (stage in ('developed','testing','verfied','released') or (status='closed' and closedReason='done'))
-  GROUP BY product) AS t6 ON t1.id = t6.product
-  LEFT JOIN (SELECT product, COUNT(id)  AS bug,
-  SUM(case when  resolution in ('fixed','postponed') or status='active' then 1 else 0 end) effbugs,
-  SUM(CASE WHEN  resolution='fixed' then 1 else 0 end) fixedbugs,
-  SUM(CASE WHEN severity in (1,2) then 1 else 0 end) pri12bugs
-  FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t7 ON t1.id = t7.product
-  LEFT JOIN (SELECT product, COUNT(id) AS storycases FROM zt_case WHERE deleted='0' GROUP BY product) AS t8 ON t1.id=t8.product
-  LEFT JOIN (
-   select
-   t9.product,
-   count(t9.story) casestorys
-   from(
-     SELECT
-     zt_case.product,zt_case.story
-     FROM zt_case
-     left join zt_story
-     on zt_case.story=zt_story.id
-     WHERE zt_case.deleted='0' and zt_case.story !='0' and zt_story.deleted='0' and  (zt_story.stage in ('developed','testing','verfied','released') or (zt_story.status='closed' and zt_story.closedReason='done'))
-     GROUP BY product, story) t9
-     group by product) t10
-     on t1.id=t10.product
-WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0'AND t1.vision = 'rnd'
-ORDER BY t1.order
+select
+    t1.name as product,
+    coalesce(t2.name, '/') as topprogram,
+    coalesce(t3.name, '/') as productline,
+    coalesce(t6.exfixedstorys, 0) as exfixedstorys,
+    round(coalesce(t6.exfixedstorysmate, 0), 3) as exfixedstorysmate,
+    coalesce(t8.storycases, 0) as storycases,
+    round(coalesce(t8.storycases / t6.exfixedstorysmate, 0), 3) as casedensity,
+    round(coalesce(t10.casestorys / t6.exfixedstorys, 0), 3) as casecoveragerate,
+    coalesce(t7.bug, 0) as bugs,
+    coalesce(t7.effbugs, 0) as effectivebugs,
+    coalesce(t7.pri12bugs, 0) as pri12bugs,
+    round(coalesce(t7.bug / t6.exfixedstorysmate, 0), 3) as bugdensity,
+    coalesce(t7.fixedbugs, 0) as fixedbugs,
+    round(coalesce(t7.fixedbugs / t7.bug, 0), 3) as fixedbugsrate
+from zt_product as t1
+    left join zt_project as t2 on t1.program = t2.id
+        and t2.type = 'program'
+        and t2.grade = 1
+    left join zt_module as t3 on t1.line = t3.id and t3.type = 'line'
+    left join (
+        select
+            product,
+            count(id) as exfixedstorys,
+            sum(estimate) as exfixedstorysmate
+        from zt_story
+        where deleted = '0'
+        and (stage in ('developed', 'testing', 'verfied', 'released') or (status = 'closed' and closedReason = 'done'))
+        group by product
+    ) as t6 on t1.id = t6.product
+    left join (
+        select
+            product,
+            count(id) as bug,
+            sum(case when resolution in ('fixed', 'postponed') or status = 'active' then 1 else 0 end) as effbugs,
+            sum(case when resolution = 'fixed' then 1 else 0 end) as fixedbugs,
+            sum(case when severity IN (1, 2) then 1 else 0 end) as pri12bugs
+        from zt_bug
+        where deleted = '0'
+        group by product
+    ) as t7 on t1.id = t7.product
+    left join (
+        select
+            product,
+            COUNT(id) as storycases
+        from zt_case
+        where deleted = '0'
+        group by product
+    ) as t8 on t1.id = t8.product
+    left join (
+        select
+            tcase.product,
+            COUNT(tcase.story) as casestorys
+        from zt_case as tcase
+        left join zt_story as tstory on tcase.story = tstory.id
+        where tcase.deleted = '0'
+        and tcase.story != '0'
+        and tstory.deleted = '0'
+        and (tstory.stage IN ('developed', 'testing', 'verfied', 'released') OR (tstory.status = 'closed' and tstory.closedReason = 'done'))
+        group by tcase.product
+    ) as t10 on t1.id = t10.product
+where t1.deleted = '0'
+and t1.status != 'closed'
+and t1.shadow = '0'
+and t1.vision = 'rnd'
+ORDER BY t1.order;
 EOT,
     'settings'  => array
     (
@@ -283,20 +300,20 @@ EOT,
     'filters'   => array(),
     'fields'    => array
     (
-        '产品'                      => array('name' => '产品', 'object' => 'story', 'field' => '产品', 'type' => 'string'),
-        '一级项目集'             => array('name' => '一级项目集', 'object' => 'story', 'field' => '一级项目集', 'type' => 'string'),
-        '产品线'                   => array('name' => '产品线', 'object' => 'story', 'field' => '产品线', 'type' => 'string'),
-        '研发完成需求数'       => array('name' => '研发完成需求数', 'object' => 'story', 'field' => '研发完成需求数', 'type' => 'string'),
-        '研发完成需求规模数' => array('name' => '研发完成需求规模数', 'object' => 'story', 'field' => '研发完成需求规模数', 'type' => 'number'),
-        '需求用例数'             => array('name' => '需求用例数', 'object' => 'story', 'field' => '需求用例数', 'type' => 'string'),
-        '用例密度'                => array('name' => '用例密度', 'object' => 'story', 'field' => '用例密度', 'type' => 'number'),
-        '用例覆盖率'             => array('name' => '用例覆盖率', 'object' => 'story', 'field' => '用例覆盖率', 'type' => 'number'),
-        'Bug数'                      => array('name' => 'Bug数', 'object' => 'story', 'field' => 'Bug数', 'type' => 'string'),
-        '有效Bug数'                => array('name' => '有效Bug数', 'object' => 'story', 'field' => '有效Bug数', 'type' => 'number'),
-        '优先级为1，2的Bug数'  => array('name' => '优先级为1，2的Bug数', 'object' => 'story', 'field' => '优先级为1，2的Bug数', 'type' => 'number'),
-        'Bug密度'                   => array('name' => 'Bug密度', 'object' => 'story', 'field' => 'Bug密度', 'type' => 'number'),
-        '修复Bug数'                => array('name' => '修复Bug数', 'object' => 'story', 'field' => '修复Bug数', 'type' => 'number'),
-        'Bug修复率'                => array('name' => 'Bug修复率', 'object' => 'story', 'field' => 'Bug修复率', 'type' => 'number')
+        'product'           => array('name' => '产品', 'object' => 'story', 'field' => '产品', 'type' => 'string'),
+        'topprogram'        => array('name' => '一级项目集', 'object' => 'story', 'field' => '一级项目集', 'type' => 'string'),
+        'productline'       => array('name' => '产品线', 'object' => 'story', 'field' => '产品线', 'type' => 'string'),
+        'exfixedstorys'     => array('name' => '研发完成需求数', 'object' => 'story', 'field' => '研发完成需求数', 'type' => 'string'),
+        'exfixedstorysmate' => array('name' => '研发完成需求规模数', 'object' => 'story', 'field' => '研发完成需求规模数', 'type' => 'number'),
+        'storycases'        => array('name' => '需求用例数', 'object' => 'story', 'field' => '需求用例数', 'type' => 'string'),
+        'casedensity'       => array('name' => '用例密度', 'object' => 'story', 'field' => '用例密度', 'type' => 'number'),
+        'casecoveragerate'  => array('name' => '用例覆盖率', 'object' => 'story', 'field' => '用例覆盖率', 'type' => 'number'),
+        'bugs'              => array('name' => 'Bug数', 'object' => 'story', 'field' => 'Bug数', 'type' => 'string'),
+        'effectviebugs'     => array('name' => '有效Bug数', 'object' => 'story', 'field' => '有效Bug数', 'type' => 'number'),
+        'pri12bugs'         => array('name' => '优先级为1，2的Bug数', 'object' => 'story', 'field' => '优先级为1，2的Bug数', 'type' => 'number'),
+        'bugdensity'        => array('name' => 'Bug密度', 'object' => 'story', 'field' => 'Bug密度', 'type' => 'number'),
+        'fixedbugs'         => array('name' => '修复Bug数', 'object' => 'story', 'field' => '修复Bug数', 'type' => 'number'),
+        'fixedbugsrate'     => array('name' => 'Bug修复率', 'object' => 'story', 'field' => 'Bug修复率', 'type' => 'number')
     ),
     'stage'     => 'published',
     'builtin'   => '1'
@@ -311,10 +328,15 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59',
     'sql'       => <<<EOT
-select t1.*,t2.name, (case when t1.status = 'closed' or t1.stage = 'released' then 1 else 0 end) as done, 1 as count from zt_story as t1
+select
+    t1.*,
+    t2.name,
+    (case when t1.status = 'closed' or t1.stage = 'released' then 1 else 0 end) as done,
+    1 as count from zt_story as t1
 left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
-where t1.deleted='0' and t2.deleted='0'
+where t1.deleted='0'
+and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -405,10 +427,14 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59',
     'sql'       => <<<EOT
-select t1.*,t2.name from zt_story as t1
- left join zt_product as t2 on t1.product=t2.id
+select
+    t1.*,
+    t2.name
+from zt_story as t1
+left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
-where t1.deleted='0' and t2.deleted='0'
+where t1.deleted='0'
+and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -491,10 +517,14 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59',
     'sql'       => <<<EOT
-select t1.*,t2.name from zt_story as t1
- left join zt_product as t2 on t1.product=t2.id
+select
+    t1.*,
+    t2.name
+from zt_story as t1
+left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
-where t1.deleted='0' and t2.deleted='0'
+where t1.deleted='0'
+and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -577,10 +607,14 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '59',
     'sql'       => <<<EOT
-select t2.name, 1 as releases from zt_release as t1
+select
+    t2.name,
+    1 as releases
+from zt_release as t1
 left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
-where t1.deleted='0' and t2.deleted='0'
+where t1.deleted='0'
+and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -616,10 +650,30 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t1.name,t2.status,IF(t3.multiple="1",t1.name,"") as execution,t2.id as taskID,  t1.status as projectstatus, (case when t2.deadline < CURDATE() and t2.deadline != '0000-00-00' and t2.status != 'closed' and t2.status != 'done' and t2.status != 'cancel' then 1 else 0 end) as timeout from zt_project as t1
- left join zt_task as t2 on t1.id=t2.execution
- left join zt_project as t3 on t3.id=t1.project
- where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
+select
+    t1.id,
+    t3.name as project,
+    t1.name,
+    t2.status,
+    (case when t3.multiple='1' then t1.name else '' end) as execution,
+    t2.id as taskID,
+    t1.status as projectstatus,
+    (case when t2.deadline < current_date()
+         and t2.deadline is not null
+         and t2.status != 'closed'
+         and t2.status != 'done'
+         and t2.status != 'cancel' then 1 else 0 end
+     ) as timeout
+from zt_project as t1
+left join zt_task as t2 on t1.id=t2.execution
+left join zt_project as t3 on t3.id=t1.project
+where t1.deleted='0'
+and t1.type in ('sprint','stage')
+and t2.deleted='0'
+and (case when $project='' then 1 else t3.id=$project end)
+and (case when $status='' then 1 else t1.status=$status end)
+and (case when $beginDate='' then 1 else t1.begin>=$beginDate end)
+and (case when $endDate='' then 1 else t1.end<=$endDate end)
 EOT,
     'settings'  => array
     (
@@ -675,10 +729,23 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.type,t2.id as taskID, t1.status as projectstatus from zt_project as t1
+select
+    t1.id,
+    t3.name as project,
+    (case when t3.multiple='1' then t1.name else '' end) as execution,
+    t2.type,
+    t2.id as taskID,
+    t1.status as projectstatus
+from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
-where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
+where t1.deleted='0'
+and t1.type in ('sprint','stage')
+and t2.deleted='0'
+and (case when \$project='' then 1 else t3.id=\$project end)
+and (case when \$status='' then 1 else t1.status=\$status end)
+and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
+and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
 EOT,
     'settings'  => array
     (
@@ -736,11 +803,24 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t4.name as project,IF(t4.multiple="1",t1.name,"") as execution,if(t3.account is not null, t3.account,t2.assignedTo) as assignedTo,t2.id as taskID, t1.status as projectstatus from zt_project as t1
- left join zt_task as t2 on t1.id=t2.execution
- left join zt_team as t3 on t3.type='task' && t3.root=t2.id
+select
+    t1.id,
+    t4.name as project,
+    (case when t4.multiple='1' then t1.name else '' end) as execution,
+    (case when t3.account is not null then t3.account else t2.assignedTo end) as assignedTo,
+    t2.id as taskID,
+    t1.status as projectstatus
+from zt_project as t1
+left join zt_task as t2 on t1.id=t2.execution
+left join zt_team as t3 on t3.type='task' and t3.root=t2.id
 left join zt_project as t4 on t1.project=t4.id
-where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t4.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
+where t1.deleted='0'
+and t1.type in ('sprint','stage')
+and t2.deleted='0'
+and (case when \$project='' then 1 else t4.id=\$project end)
+and (case when \$status='' then 1 else t1.status=\$status end)
+and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
+and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
 EOT,
     'settings'  => array
     (
@@ -794,10 +874,24 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.finishedBy,t2.id as taskID, t1.status as projectstatus from zt_project as t1
+select
+    t1.id,
+    t3.name as project,
+    (case when t3.multiple='1' then t1.name else '' end) as execution,
+    t2.finishedBy,
+    t2.id as taskID,
+    t1.status as projectstatus
+from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t1.project=t3.id
-where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and t2.finishedBy!='' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
+where t1.deleted='0'
+and t1.type in ('sprint','stage')
+and t2.deleted='0'
+and t2.finishedBy!=''
+and (case when \$project='' then 1 else t3.id=\$project end)
+and (case when \$status='' then 1 else t1.status=\$status end)
+and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
+and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
 EOT,
     'settings'  => array
     (
@@ -851,13 +945,27 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t1.id,t5.name as project,IF(t5.multiple="1",t1.name,"") as execution,CONCAT(t1.begin,' ~ ',t1.end) as timeLimit,t2.teams,t3.stories,round(t4.consumed,1) as consumed,t4.number, t1.status as projectstatus
+select
+    t1.id,
+    t5.name as project,
+    (case when t5.multiple='1' then t1.name else '' end) as execution,
+    concat(t1.begin,' ~ ',t1.end) as timeLimit,
+    t2.teams,
+    t3.stories,
+    round(t4.consumed,1) as consumed,
+    t4.number,
+    t1.status as projectstatus
 from zt_project as t1
- left join ztv_projectteams as t2 on t1.id=t2.execution
+left join ztv_projectteams as t2 on t1.id=t2.execution
 left join ztv_projectstories as t3 on t1.id=t3.execution
- left join ztv_executionsummary as t4 on t1.id=t4.execution
+left join ztv_executionsummary as t4 on t1.id=t4.execution
 left join zt_project as t5 on t1.project=t5.id
-where t1.deleted='0' and t1.type in ('sprint','stage') and if(\$project='',1,t5.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
+where t1.deleted='0'
+and t1.type in ('sprint','stage')
+and (case when \$project='' then 1 else t5.id=\$project end)
+and (case when \$status='' then 1 else t1.status=\$status end)
+and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
+and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
 EOT,
     'settings'  => array
     (
@@ -922,11 +1030,20 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t2.id, t4.name as project,IF(t4.multiple="1",t2.name,"") as execution,t3.status from zt_projectstory as t1
+select
+    t2.id,
+    t4.name as project,
+    (case when t4.multiple='1' then t2.name else '' end) as execution,
+    t3.status
+from zt_projectstory as t1
 left join zt_project as t2 on t1.project=t2.id
 left join zt_story as t3 on t1.story=t3.id
 left join zt_project as t4 on t4.id=t2.project
-where t2.deleted='0' and t2.type in('sprint', 'stage') and if(\$project='',1,t4.id=\$project) and if(\$execution='',1,t2.id=\$execution) and if(\$status='',1,t2.status=\$status)
+where t2.deleted='0'
+and t2.type in('sprint', 'stage')
+and (case when \$project='' then 1 else t4.id=\$project end)
+and (case when \$execution='' then 1 else t2.id=\$execution end)
+and (case when \$status='' then 1 else t2.status=\$status end)
 EOT,
     'settings'  => array
     (
@@ -977,11 +1094,20 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60',
     'sql'       => <<<EOT
-select t2.id, t4.name as project,IF(t4.multiple="1",t2.name,"") as execution,t3.stage from zt_projectstory as t1
+select
+    t2.id,
+    t4.name as project,
+    (case when t4.multiple='1' then t2.name else '' end) as execution,
+    t3.stage
+from zt_projectstory as t1
 left join zt_project as t2 on t1.project=t2.id
 left join zt_story as t3 on t1.story=t3.id
 left join zt_project as t4 on t4.id=t2.project
-where t2.deleted='0' and t2.type in('sprint', 'stage') and if(\$project='',1,t4.id=\$project) and if(\$execution='',1,t2.id=\$execution) and if(\$status='',1,t2.status=\$status)
+where t2.deleted='0'
+and t2.type in('sprint', 'stage')
+and (case when \$project='' then 1 else t4.id=\$project end)
+and (case when \$execution='' then 1 else t2.id=\$execution end)
+and (case when \$status='' then 1 else t2.status=\$status end)
 EOT,
     'settings'  => array
     (
@@ -1034,10 +1160,21 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.resolution from zt_project as t1
+select
+    t1.id,
+    t3.name as project,
+    t3.id as projectID,
+    (case when t3.multiple='1' then t1.name else '' end) as execution,
+    t2.id as bugID,
+    t2.resolution
+from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
- where t1.deleted='0' and t2.deleted='0' and t2.resolution!='' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
+where t1.deleted='0'
+and t2.deleted='0'
+and t2.resolution!=''
+and (case when \$project='' then 1 else t3.id=\$project end)
+and (case when \$execution='' then 1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -1089,10 +1226,20 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.status from zt_project as t1
+select
+    t1.id,
+    t3.name as project,
+    t3.id as projectID,
+    (case when t3.multiple='1' then t1.name else '' end) as execution,
+    t2.id as bugID,
+    t2.status
+from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
-where t1.deleted='0' and t2.deleted='0' having bugID!=' ' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
+where t1.deleted='0'
+and t2.deleted='0'
+and (case when \$project='' then 1 else t3.id=\$project end)
+and (case when \$execution='' then 1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -1144,10 +1291,20 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '60,61',
     'sql'       => <<<EOT
-select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,"") as execution,t1.id as bugID,t2.openedBy from zt_project as t1
+select
+    t1.id,
+    t3.name as project,
+    t3.id as projectID,
+    (case when t3.multiple='1' then t1.name else '' end) as execution,
+    t2.id as bugID,
+    t2.openedBy
+from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
-where t1.deleted='0' and t2.deleted='0' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
+where t1.deleted='0'
+and t2.deleted='0'
+and (case when \$project='' then 1 else t3.id=\$project end)
+and (case when \$execution='' then 1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
