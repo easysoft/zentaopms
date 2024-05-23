@@ -28,13 +28,12 @@ class zui extends wg
         '_style?: array',
         '_id?: string',
         '_class?: string',
-        '_call?: string',
-        '_initWithShareData?: bool',
+        '_call?: string'
     );
 
     protected function build(): mixed
     {
-        list($name, $target, $tagName, $targetProps, $style, $id, $class, $map, $call, $initWithShareData, $userOptions) = $this->prop(array('_name', '_to', '_tag', '_props', '_style', '_id', '_class', '_map', '_call', '_initWithShareData', '_options'));
+        list($name, $target, $tagName, $targetProps, $style, $id, $class, $map, $call, $userOptions) = $this->prop(array('_name', '_to', '_tag', '_props', '_style', '_id', '_class', '_map', '_call', '_options'));
 
         $options  = $this->getRestProps();
         $children = $this->children();
@@ -49,40 +48,34 @@ class zui extends wg
             }
         }
 
-        if($initWithShareData && empty($call) && empty($target))
+        if(is_array($userOptions)) $options = array_merge($options, $userOptions);
+        if(empty($call)) $call = 'zui.create';
+
+        if($target)
         {
-            if(empty($id)) $id = $this->gid;
-            $optionsName = "_options_$id";
-            $children[] = setData(array('zui' => "$name:$optionsName"));
-            $children[] = h::jsShare($optionsName, $options);
-        }
-        else
-        {
-            if(empty($call)) $call = '~zui.create';
             $selector = $target;
             if(empty($selector))
             {
                 if(empty($id)) $id = $this->gid;
                 $selector = "#$id";
             }
-            if(is_array($userOptions)) $options = array_merge($options, $userOptions);
-            $children[] = h::jsCall($call, $name, $selector, $options);
-        }
-
-        if(empty($target))
-        {
-            return h
+            return array
             (
-                $tagName,
-                setClass($class),
-                setID($id),
-                $style ? setStyle($style) : null,
-                set($targetProps),
-                $children,
+                h::jsCall($call, $name, $selector, $options),
+                $this->children()
             );
         }
 
-        return  $children;
+        return h
+        (
+            $tagName,
+            setClass($class),
+            setID($id),
+            $style ? setStyle($style) : null,
+            set($targetProps),
+            on::init()->call($call, $name, jsRaw('$element'), $options),
+            $children,
+        );
     }
 
     public static function __callStatic($name, $args)
