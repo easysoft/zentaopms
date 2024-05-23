@@ -21,7 +21,7 @@ window.getItem = function(info)
         if(info.item.delay > 0) delayHtml = `<span class='label danger-pale delayed nowrap'>${langProjectStatusList['delay']}</span>`;
 
         titleHtml = `<span${color} class="title">${title}</span>`;
-        if(col == 'project'   && privs['project'])   titleHtml = "<a class='title' href='" + $.createLink('project', 'view', `projectID=${info.item.id}`) + "'>" + title + title + title + title + "</a>";
+        if(col == 'project'   && privs['project'])   titleHtml = "<a class='title' href='" + $.createLink('project', 'view', `projectID=${info.item.id}`) + "'>" + title + "</a>";
         if(col == 'execution' && privs['execution']) titleHtml = "<a class='title' href='" + $.createLink('execution', 'task', `executionID=${info.item.id}`) + "'>" + title + "</a>";
         info.item.title      = {html: `<div class="relative"><div class="line-clamp-2">${titleHtml}${delayHtml}</div></div>`}
         info.item.titleAttrs = {'title' : title};
