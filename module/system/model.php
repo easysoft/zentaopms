@@ -153,12 +153,12 @@ class systemModel extends model
      * Get backup status.
      *
      * @param  object $instance
-     * @param  object $backup
+     * @param  string $backup
      * @return array
      */
-    public function getBackupStatus(object $instance, object $backup): array
+    public function getBackupStatus(object $instance, string $backupName): array
     {
-        $rawResult = $this->cne->getBackupStatus($instance, $backup);
+        $rawResult = $this->cne->getBackupStatus($instance, $backupName);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
         {
