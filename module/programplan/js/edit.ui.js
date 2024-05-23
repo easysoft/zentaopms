@@ -35,29 +35,24 @@ function changeParentStage(event)
  */
 window.editStage = function()
 {
-    var result = true;
-    var currentParent = $('[name=parent]').val();
+    let result        = true;
+    let currentParent = $('[name=parent]').val();
     if(plan.parent != currentParent && currentParent != 0)
     {
         result = false;
         $.get($.createLink('programplan', 'ajaxGetStageAttr', 'stageID=' + currentParent), function(attribute)
         {
-            if(attribute != 'mix' && plan.attribute != attribute) zui.Modal.confirm(changeAttrLang.replace('%s', stageTypeList[attribute])).then((res) =>
+            if(attribute != 'mix' && plan.attribute != attribute)
             {
-                if(res)
+                zui.Modal.confirm(changeAttrLang.replace('%s', stageTypeList[attribute])).then((res) =>
                 {
-                    var $form    = $('#editForm form');
-                    var formUrl  = $form.attr('action');
-                    var formData = new FormData($form[0]);
-                    $.ajaxSubmit({
-                        url: formUrl,
-                        data: formData,
-                        onFail: (error) => {
-                            if(error?.message) showValidateMessage(error.message);
-                        }
-                    });
-                }
-            });
+                    if(res) formSubmit();
+                });
+            }
+            else
+            {
+                formSubmit();
+            }
         });
     }
 
@@ -69,14 +64,30 @@ window.editStage = function()
         result = false;
         zui.Modal.confirm(changeAttrLang.replace('%s', stageTypeList[currentAttribute])).then((res) =>
         {
-            if(res)
-            {
-                var $form    = $('#editForm form');
-                var formUrl  = $form.attr('action');
-                var formData = new FormData($form[0]);
-                $.ajaxSubmit({url: formUrl, data: formData});
-            }
+            if(res) formSubmit();
         });
     }
+
     return result;
+}
+
+/**
+ * 提交表单操作。
+ * Submit form.
+ *
+ * @access public
+ * @return void
+ */
+function formSubmit()
+{
+    let $form    = $('#editForm form');
+    let formUrl  = $form.attr('action');
+    let formData = new FormData($form[0]);
+    $.ajaxSubmit({
+        url: formUrl,
+        data: formData,
+        onFail: (error) => {
+            if(error?.message) showValidateMessage(error.message);
+        }
+    });
 }
