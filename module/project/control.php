@@ -466,6 +466,7 @@ class project extends control
         if($_POST)
         {
             if($this->post->longTime) $this->config->project->form->edit['end']['skipRequired'] = true;
+            if($this->post->delta == '999') $this->config->project->form->edit['end']['skipRequired'] = true;
 
             $postData        = form::data($this->config->project->form->edit);
             $postProductData = !empty($project->hasProduct) ? form::data($this->config->project->form->edit)->get('products,plans,branch') : new stdclass();
