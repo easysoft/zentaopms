@@ -211,7 +211,7 @@ class gitea extends control
             {
                 if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
 
-                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $giteaUser->id) $user->status = 'binded';
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $giteaUser->account) $user->status = 'binded';
             }
 
             if($type != 'all' && $user->status != $type) continue;
