@@ -90,11 +90,15 @@ class pageBase extends wg
         if($config->debug)
         {
             $zinDebugData = array('config' => jsRaw('window.config'));
-            if($config->debug > 5)
+            if($config->debug > 4)
             {
-                $zinDebugData['page']         = $this->toJSON();
-                $zinDebugData['definedProps'] = wg::$definedPropsMap;
-                $zinDebugData['wgBlockMap']   = wg::$blockMap;
+                $zinDebugData['zinTool']      = $config->zinTool;
+                if($config->debug > 5)
+                {
+                    $zinDebugData['page']         = $this->toJSON();
+                    $zinDebugData['definedProps'] = wg::$definedPropsMap;
+                    $zinDebugData['wgBlockMap']   = wg::$blockMap;
+                }
             }
             $js[] = 'window.zin = ' . js::value($zinDebugData) . ';';
             $js[] = 'console.log("[ZIN] ", window.zin);';
