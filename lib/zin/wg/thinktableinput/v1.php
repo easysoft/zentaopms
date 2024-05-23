@@ -206,7 +206,7 @@ class thinkTableInput extends thinkQuestion
                         set::name('options[required]'),
                         set::inline(true),
                         set::items($lang->thinkstep->requiredList),
-                        set::value($required ? $required : 0),
+                        set::value($required),
                         bind::change('changeIsRequired(event)')
                     )
                 ),
