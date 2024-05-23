@@ -59,7 +59,8 @@ class node implements \JsonSerializable
 
     public function __construct(mixed ...$args)
     {
-        $this->gid   = 'zin_' . uniqid();
+        global $config;
+        $this->gid   = (isset($config->zinTool) && $config->zinTool) ? static::nextGid() : 'zin_' . uniqid();
         $this->props = new props();
 
         disableGlobalRender();

@@ -475,7 +475,7 @@
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
         if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
-        options.cache = false; // Disable local cache for 20.1.
+        if(!window.zin || !window.zin.zinTool) options.cache = false;
         const cacheKey = options.cache;
         let cache;
         const renderPageData = (data, onlyZinDebug) =>
