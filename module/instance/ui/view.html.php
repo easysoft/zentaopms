@@ -256,6 +256,8 @@ div
         setClass('w-1/3'),
         history
         (
+            set::objectID($instance->id),
+            set::objectType($type === 'store' ? 'instance' : $instance->type),
             set::commentUrl(createLink('action', 'comment', array('objectType' => $type === 'store' ? 'instance' : $instance->type, 'objectID' => $instance->id)))
         )
     )
