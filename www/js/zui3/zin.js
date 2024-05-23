@@ -99,7 +99,7 @@
 
     function initZinbar()
     {
-        if(!DEBUG || DEBUG < 3 || isIndexPage) return;
+        if(!DEBUG || !window.zin || !window.zin.zinTool || isIndexPage) return;
         let $bar = $('#zinbar');
         if($bar.length) return;
 
