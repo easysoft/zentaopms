@@ -35,11 +35,23 @@ $cols['progress']['sortType'] = false;
 
 $projectStats = initTableData($projectStats, $cols, $this->project);
 
+$waitCount      = 0;
+$doingCount     = 0;
+$suspendedCount = 0;
+$closedCount    = 0;
 $projectIdList  = array_column($projectStats, 'id');
 $storyGroup     = $this->loadModel('story')->fetchStoriesByProjectIdList($projectIdList);
 $executionGroup = $this->loadModel('execution')->fetchExecutionsByProjectIdList($projectIdList);
 foreach($projectStats as $project)
 {
+    if($browseType == 'all')
+    {
+        if($project->status == 'wait')      $waitCount ++;
+        if($project->status == 'doing')     $doingCount ++;
+        if($project->status == 'suspended') $suspendedCount ++;
+        if($project->status == 'closed')    $closedCount ++;
+    }
+
     $projectStories = zget($storyGroup, $project->id, array());
     $project->storyCount  = count($projectStories);
     $project->storyPoints = round(array_sum(array_column($projectStories, 'estimate')), 2) . ' ' . $this->config->hourUnit;
