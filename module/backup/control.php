@@ -130,18 +130,15 @@ class backup extends control
             $result = $this->loadModel('system')->backup($instance, $mode);
             $this->loadModel('action')->create('system', 0, 'createBackup');
 
-            if($result['result'] == 'fail')
+            if($result['result'] == 'success')
             {
-                if($reload == 'yes') return print($result['message']);
-                printf($result['message']);
+                $backupName = $result['data']->backup_name;
+                $this->send($result + array('callback' => "backupInProcess('$backupName')"));
             }
             else
             {
-                if($reload == 'yes') return print($this->lang->backup->success->backup);
-                echo $this->lang->backup->success->backup . "\n";
+                $this->send($result);
             }
-
-            return;
         }
 
         $fileName = date('YmdHis') . mt_rand(0, 9) . str_replace('.', '_', $this->config->version);
