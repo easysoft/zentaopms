@@ -136,7 +136,7 @@ div
                 && $tmpRootResult == 'ok' && $dataRootResult == 'ok' && $sessionResult  == 'ok'
                 && $jsonResult    == 'ok' && $opensslResult  == 'ok' && $mbstringResult == 'ok'
                 && $zlibResult    == 'ok' && $curlResult     == 'ok' && $filterResult   == 'ok'
-                && $iconvResult   == 'ok' ?  btn
+                && $iconvResult   == 'ok' && $apcuResult     == 'ok' ?  btn
                 (
                     setClass('px-6 mx-4'),
                     set::url(inlink('step2')),
