@@ -324,6 +324,30 @@ class system extends control
     }
 
     /**
+     * 获取删除的进度。
+     *  AJAX: Get delete progress.
+     *
+     * @param  string $backupName
+     * @return void
+     */
+    public function ajaxGetDeleteProgress($backupName)
+    {
+        session_write_close();
+
+        if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
+        $rawResult = $this->cne->getBackupList($this->config->instance->zentaopaas);
+        if($rawResult && $rawResult->code == 200)
+        {
+            foreach($rawResult->data as $backup)
+            {
+                if($backup->name == $backupName) return $this->sendSuccess(array('status' => 'inprogress', 'message' => $rawResult->message));
+            }
+            $this->sendSuccess(array('status' => 'completed', 'message' => $rawResult->message));
+        }
+        $this->sendError(isset($rawResult->message) ? $rawResult->message : 'fail');
+    }
+
+    /**
      * 生成数据库授权链接。
      * Generate database auth parameters and jump to login page.
      *
