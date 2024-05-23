@@ -484,6 +484,8 @@ class baseRouter
         $this->setEdition();
 
         $this->setClient();
+
+        $this->loadCacheConfig();
     }
 
     /**
@@ -2772,6 +2774,27 @@ class baseRouter
         $mainConfigFile = $this->configRoot . 'config.php';
         if(!file_exists($mainConfigFile)) $this->triggerError("The main config file $mainConfigFile not found", __FILE__, __LINE__, true);
         include $mainConfigFile;
+    }
+
+    /**
+     * 从数据库加载缓存配置。
+     * Load the cache config from the database.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadCacheConfig()
+    {
+        $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
+        if(!$globalCache) return false;
+
+        $caches = json_decode($globalCache->value);
+        foreach($caches as $cacheKey => $cache)
+        {
+            if(!isset($this->config->cache->$cacheKey)) $this->config->cache->$cacheKey = new stdClass();
+
+            foreach($cache as $key => $value) $this->config->cache->$cacheKey->$key = $value;
+        }
     }
 
     /**
