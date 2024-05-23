@@ -54,7 +54,7 @@ $lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not Inn
 $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
 $lang->admin->daoCache     = 'DAO Cache';
-$lang->admin->apcuNotFound = 'Please install the PHP-APCu extension before enabling DAO caching';
+$lang->admin->apcuNotFound = 'Please enable APCu extension before turning on DAO cache';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'La version actuelle est %s customisée. ';
