@@ -42,6 +42,7 @@ class moduleMenu extends wg
         .module-menu .tree-item * {white-space: nowrap;}
         .module-menu .tree-item .item-content {color: var(--color-gray-700)}
         .module-menu .tree-item > .selected .item-content {color: var(--color-fore)}
+        .module-menu > .tree.has-nested-items {padding-left: calc(2 * var(--space))}
         .has-module-menu-header #mainMenu {padding-left: 180px;}
         .module-menu-header.is-fixed {position: absolute; left: 0; top: -44px; width: 160px; height: 32px; border: 1px solid var(--color-border); justify-content: center; padding: 0 24px; border-right: 0;}
         .module-menu-header.is-fixed::before,
@@ -299,7 +300,7 @@ class moduleMenu extends wg
                 zui::tree
                 (
                     set::_tag('menu'),
-                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-2'),
+                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden pr-2 pl-4'),
                     set::defaultNestedShow(true),
                     set::hover(true),
                     set::lines(true),
