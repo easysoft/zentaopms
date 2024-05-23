@@ -1609,24 +1609,24 @@ select
     sum(t1.actions) as actions
 from (
     select
-        left(`zt_action`.`date`, 10) as day,
-        count(case when `zt_action`.`objectType` = 'user' and `zt_action`.`action` = 'login' then 1 end) as userlogin,
+        cast(t1.date as date) as day,
+        count(case when t1.objectType = 'user' and t1.action = 'login' then 1 end) as userlogin,
         0 as consumed,
-        count(case when `zt_action`.`objectType` = 'story' and `zt_action`.`action` = 'opened' then 1 end) as storyopen,
-        count(case when `zt_action`.`objectType` = 'story' and `zt_action`.`action` = 'closed' then 1 end) as storyclose,
-        count(case when `zt_action`.`objectType` = 'task' and `zt_action`.`action` = 'opened' then 1 end) as taskopen,
-        count(case when `zt_action`.`objectType` = 'task' and `zt_action`.`action` = 'finished' then 1 end) as taskfinish,
-        count(case when `zt_action`.`objectType` = 'bug' and `zt_action`.`action` = 'opened' then 1 end) as bugopen,
-        count(case when `zt_action`.`objectType` = 'bug' and `zt_action`.`action` = 'resolved' then 1 end) as bugresolve,
+        count(case when t1.objectType = 'story' and t1.action = 'opened' then 1 end) as storyopen,
+        count(case when t1.objectType = 'story' and t1.action = 'closed' then 1 end) as storyclose,
+        count(case when t1.objectType = 'task' and t1.action = 'opened' then 1 end) as taskopen,
+        count(case when t1.objectType = 'task' and t1.action = 'finished' then 1 end) as taskfinish,
+        count(case when t1.objectType = 'bug' and t1.action = 'opened' then 1 end) as bugopen,
+        count(case when t1.objectType = 'bug' and t1.action = 'resolved' then 1 end) as bugresolve,
         count(*) as actions
-    from `zt_action`
-    where if(\$startDate='',1,`zt_action`.`date`>=\$startDate) and if(\$endDate='',1,`zt_action`.`date`<=\$endDate)
-    group by left(`zt_action`.`date`, 10)
+    from zt_action t1
+    where if($startDate='',1,t1.date>=$startDate) and if($endDate='',1,t1.date<=$endDate)
+    group by cast(t1.date as date)
     union all
     select
-        `zt_effort`.`date` as day,
+        t2.date as day,
         0 as userlogin,
-        round(sum(`zt_effort`.`consumed`), 1) as consumed,
+        round(sum(t2.`consumed`), 1) as consumed,
         0 as storyopen,
         0 as storyclose,
         0 as taskopen,
@@ -1634,9 +1634,9 @@ from (
         0 as bugopen,
         0 as bugresolve,
         0 as actions
-    from `zt_effort`
-    where if(\$startDate='',1,`zt_effort`.`date`>=\$startDate) and if(\$endDate='',1,`zt_effort`.`date`<=\$endDate)
-    group by `zt_effort`.`date`
+    from zt_effort t2
+    where if($startDate='',1,t2.date>=$startDate) and if($endDate='',1,t2.date<=$endDate)
+    group by t2.date
 ) as t1
 group by t1.day
 EOT,
