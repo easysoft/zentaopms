@@ -281,6 +281,7 @@ class system extends control
     {
         session_write_close();
 
+        if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
         $result = $this->cne->getBackupStatus($this->config->instance->zentaopaas, $backupName);
         if($result && $result->code == 200)
         {
@@ -307,6 +308,7 @@ class system extends control
     {
         session_write_close();
 
+        if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
         $result = $this->cne->getRestoreStatus($this->config->instance->zentaopaas, $backupName);
         if($result && $result->code == 200)
         {
