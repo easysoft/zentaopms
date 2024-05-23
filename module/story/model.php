@@ -5117,7 +5117,7 @@ class storyModel extends model
             $storyTitle = is_string($stories[$story->id]) ? $stories[$story->id] : $story->title;
             if(isset($gradePairs[$story->grade]))
             {
-                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$gradePairs[$story->grade]->name}</span> {$storyTitle}"), 'value' => $story->id);
+                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$gradePairs[$story->grade]->name}</span> {$storyTitle}"), 'value' => $story->id, 'keys' => $storyTitle);
             }
             else
             {
