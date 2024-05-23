@@ -22,6 +22,7 @@ for($i = $case->version; $i >= 1; $i--)
 {
     $versionItem = setting()
         ->text("#{$i}")
+        ->set('data-app', $app->tab)
         ->url(inlink('view', "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}"));
 
     if($isInModal)
