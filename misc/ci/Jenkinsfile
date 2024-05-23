@@ -100,6 +100,7 @@ pipeline {
               ])
 
               zentaopms.setupEnvAfterCheckoutExt()
+              stash includes: 'misc/*.php', name: 'misc'
             }
 
           }
@@ -413,6 +414,7 @@ pipeline {
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                           userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
                         )
+                        unstash 'misc'
                       }
                     }
 
@@ -466,6 +468,7 @@ pipeline {
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                           userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
                         )
+                        unstash 'misc'
                       }
                     }
 
@@ -668,3 +671,4 @@ pipeline {
   }
 
 }
+
