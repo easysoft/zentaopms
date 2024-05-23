@@ -35,7 +35,7 @@ toolbar
             'text' => $lang->bug->create,
             'icon' => 'plus',
             'type' => 'primary',
-            'url'  => createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id}")
+            'url'  => createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id},moduleID={$moduleID}")
         )),
         setData('app', 'project')
     ) : null
@@ -103,7 +103,7 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),
-    set::createLink($canCreate ? createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id}") : '')
+    set::createLink($canCreate ? createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id},moduleID={$moduleID}") : '')
 );
 
 render();
