@@ -55,7 +55,7 @@ $config->task->exportFields = '
 $config->task->list = new stdclass();
 $config->task->list->customCreateFields      = 'module,story,keywords,mailto,files';
 $config->task->list->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
-$config->task->list->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';
+$config->task->list->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline';
 
 $config->task->defaultLoadCount = 50;
 
