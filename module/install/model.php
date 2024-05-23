@@ -207,6 +207,7 @@ class installModel extends model
         if(empty($data->company))  dao::$errors['company'][]  = sprintf($this->lang->error->notempty, $this->lang->install->company);
         if(empty($data->account))  dao::$errors['account'][]  = sprintf($this->lang->error->notempty, $this->lang->install->account);
         if(empty($data->password)) dao::$errors['password'][] = sprintf($this->lang->error->notempty, $this->lang->install->password);
+        if(!validater::checkAccount($data->account)) dao::$errors['account'][] = sprintf($this->lang->error->account, $this->lang->user->account);
         if(dao::isError()) return false;
 
         $this->loadModel('user');
