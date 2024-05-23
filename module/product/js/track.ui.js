@@ -64,8 +64,12 @@ window.getItem = function(info)
     }
     else if(col == 'design')
     {
-        if(privs['design']) info.item.titleUrl = $.createLink('design', 'view', `id=${info.item.id}`);
-        info.item.titleAttrs = {'class': 'line-clamp-3', 'title' : title, 'data-toggle': 'modal', 'data-size': 'lg'};
+        info.item.titleAttrs = {'class': 'line-clamp-3', 'title' : title};
+        if(privs['design'])
+        {
+            info.item.titleUrl = $.createLink('design', 'view', `id=${info.item.id}`);
+            info.item.titleAttrs = {'class': 'line-clamp-3', 'title' : title, 'data-toggle': 'modal', 'data-size': 'lg'};
+        }
     }
     else if(col == 'commit')
     {
