@@ -1465,6 +1465,8 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
+            if($this->config->vision == 'lite') return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+
             $lane     = $this->kanban->getLaneById($laneID);
             $region   = $this->kanban->getRegionByID($lane->region);
             $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
