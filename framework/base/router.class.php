@@ -485,7 +485,7 @@ class baseRouter
 
         $this->setClient();
 
-        if($mode == 'running') $this->loadCacheConfig();
+        $this->loadCacheConfig();
     }
 
     /**
@@ -2785,6 +2785,9 @@ class baseRouter
      */
     public function loadCacheConfig()
     {
+        if(!$this->isServing()) return false;
+        if(!isset($this->config->installed) || !$this->config->installed) return false;
+
         $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
         if(!$globalCache) return false;
 
