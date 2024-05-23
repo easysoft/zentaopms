@@ -90,7 +90,7 @@ class giteaModel extends model
             $user->providerID   = $giteaID;
             $user->providerType = 'gitea';
             $user->account      = $account;
-            $user->openID       = $openID;
+            $user->openID       = $giteaNames[$openID];
             $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
             $this->action->create('giteauser', $giteaID, 'bind', '', $giteaNames[$openID]);
         }
