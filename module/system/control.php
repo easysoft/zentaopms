@@ -236,7 +236,7 @@ class system extends control
 
         $this->loadModel('action')->create('system', 0, 'restoreBackup', '', $backupName);
 
-        $this->send($result + array('load' => true));
+        $this->send($result + array('load' => true, 'callback' => "restoreInProcess('$backupName')"));
     }
 
     /**
@@ -254,7 +254,7 @@ class system extends control
 
         $this->loadModel('action')->create('system', 0, 'deleteBackup', '', $backupName);
 
-        $this->send($result + array('load' => true));
+        $this->send($result + array('load' => true, 'callback' => "deleteInProcess('$backupName')"));
     }
 
     /**
