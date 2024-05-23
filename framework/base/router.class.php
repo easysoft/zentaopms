@@ -485,7 +485,7 @@ class baseRouter
 
         $this->setClient();
 
-        $this->loadCacheConfig();
+        if($mode == 'running') $this->loadCacheConfig();
     }
 
     /**
