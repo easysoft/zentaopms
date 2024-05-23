@@ -17,7 +17,7 @@ if($config->systemMode != 'light')
     $fields->field('line')
         ->control('inputGroup')
         ->items(false)
-        ->item(field('line')->control('picker')->placeholder($lang->product->line)->name('line')->items(data('fields.line.options'))->value(data('fields.line.default')))
+        ->item(field('line')->control('picker')->name('line')->items(data('fields.line.options'))->value(data('fields.line.default')))
         ->item(field('lineName')->control('input')->className('hidden')->name('lineName'));
 
     if(hasPriv('product', 'manageLine')) $fields->field('line')->checkbox(array('text' => $lang->product->newLine, 'name' => 'newLine'));
