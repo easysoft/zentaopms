@@ -118,7 +118,7 @@ class tree extends control
         $products             = $this->loadModel('product')->getProducts($rootID);
         $this->view->products = $products;
 
-        $executions = $this->execution->getPairs($this->session->project);
+        $executions = $this->execution->getPairs((int)$this->session->project);
 
         /* Set menu. */
         $this->execution->setMenu($rootID);
