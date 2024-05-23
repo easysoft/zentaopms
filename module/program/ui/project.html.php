@@ -31,6 +31,7 @@ toolbar
 );
 
 $cols = $this->config->project->dtable->fieldList;
+$cols['actions']['list']['edit']['data-app'] = 'program';
 $cols['progress']['sortType'] = false;
 
 $projectStats = initTableData($projectStats, $cols, $this->project);
