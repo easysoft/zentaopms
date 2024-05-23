@@ -536,6 +536,7 @@ row
     )
 );
 
+$config->project->actionList['edit']['url']['params'] = 'projectID={id}&from=view';
 $actions = $this->loadModel('common')->buildOperateMenu($project);
 div
 (
