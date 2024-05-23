@@ -18,6 +18,7 @@ $items['productIdList'] = array('name' => 'productIdList', 'label' => '', 'contr
 $items['id']            = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px');
 foreach($fields as $fieldName => $field)
 {
+    if($config->systemMode == 'light' && $fieldName == 'line') continue;
     $items[$fieldName] = array('name' => $fieldName, 'label' => $field['title'], 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
     if($items[$fieldName]['control'] == 'select') $items[$fieldName]['control'] = 'picker';
 }
