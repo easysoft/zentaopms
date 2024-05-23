@@ -258,6 +258,18 @@ class system extends control
     }
 
     /**
+     * AJAX: 获取备份列表。
+     * AJAX: Get the backup list.
+     *
+     * @return void
+     */
+    public function ajaxGetBackups()
+    {
+        $result = $this->system->getBackupList($this->config->instance->zentaopaas);
+        $this->send($result);
+    }
+
+    /**
      * 获取备份的进度。
      * AJAX: Get the progress of the backup.
      *
