@@ -50,13 +50,10 @@ $items[] = array
 (
     'name'     => 'stage',
     'label'    => $lang->testcase->stage,
-    'control'  => array(
-        'type'     => 'picker',
-        'items'    => $lang->testcase->stageList,
-        'value'    => '',
-        'multiple' => true,
-        'required' => strpos($config->testcase->create->requiredFields, 'stage') !== false
-    ),
+    'control'  => 'picker',
+    'items'    => $lang->testcase->stageList,
+    'value'    => '',
+    'multiple' => true,
     'required' => strpos($config->testcase->create->requiredFields, 'stage') !== false,
     'width'    => '160px'
 );
