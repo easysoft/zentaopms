@@ -115,7 +115,6 @@ $(document).off('click', '.modal [z-key="confirm"]').on('click', '.modal [z-key=
 
 window.backupInProcess = function(backupName)
 {
-    console.warn('xxxxxxxxxxxxxxxxxxxxxxxx');
     if(!inQuickon) return false;
     let intervalId = setInterval(function()
     {
