@@ -76,7 +76,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     const formData = new FormData($("#toTaskForm")[0]);
     postAndLoadPage($('#toTaskForm').attr('action'), formData);
 
-
     return false;
 });
 
