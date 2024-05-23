@@ -54,7 +54,7 @@ $lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
 $lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
 $lang->admin->daoCache     = 'DAO 缓存';
-$lang->admin->apcuNotFound = '请安装 PHP-APCu 扩展后再开启 DAO 缓存';
+$lang->admin->apcuNotFound = '请启用 APCu 扩展后再开启 DAO 缓存';
 
 $lang->admin->cacheStatusList[1] = '开启';
 $lang->admin->cacheStatusList[0] = '关闭';
