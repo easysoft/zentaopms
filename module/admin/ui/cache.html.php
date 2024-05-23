@@ -17,9 +17,9 @@ formPanel
         set::label($lang->admin->daoCache),
         radioList
         (
-            set::name('enable'),
+            set::name('dao[enable]'),
             set::items($lang->admin->cacheStatusList),
-            set::value($config->cache->enableDAO),
+            set::value($config->cache->dao->enable),
             set::inline(true)
         )
     )
