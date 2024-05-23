@@ -31,7 +31,7 @@ foreach($extendItems as $extendItem)
         h::td
         (
             setClass('text-left'),
-            $result == 'fail' ? $lang->install->{$failItem} : ''
+            $result == 'fail' ? $lang->install->{$failLang} : ''
         )
     );
 }
