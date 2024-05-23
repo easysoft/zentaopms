@@ -16,7 +16,8 @@ class formSettingBtn extends wg
 {
     protected static array $defaultProps = array(
         'customFields' => array(),
-        'urlParams'    => ''
+        'urlParams'    => '',
+        'text'         => ''
     );
 
     public static function getPageCSS(): ?string
@@ -53,6 +54,7 @@ class formSettingBtn extends wg
     protected function build()
     {
         $customFields = $this->prop('customFields', array());
+        $text         = $this->prop('text');
 
         global $lang;
 
@@ -63,7 +65,7 @@ class formSettingBtn extends wg
             set::arrow('false'),
             set::placement('bottom-end'),
             set::id('formSettingBtn'),
-            to::trigger(btn(set::icon('cog-outline'), setClass('ghost'), set::caret(false))),
+            to::trigger(btn(set::icon('cog-outline'), $text, setClass('ghost'), set::caret(false))),
             to::menu(menu
             (
                 setClass('dropdown-menu'),
