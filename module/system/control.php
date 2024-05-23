@@ -285,7 +285,7 @@ class system extends control
         $result = $this->cne->getBackupStatus($this->config->instance->zentaopaas, $backupName);
         if($result && $result->code == 200)
         {
-            $status = $result->data->status;
+            $status = strtolower($result->data->status);
             if($status == 'completed') return $this->send(array('result' => 'success', 'message' => $this->lang->system->backup->backupSucceed, 'closeModal' => true, 'load' => helper::createLink('backup', 'index')));
             if($status == 'pending' || $status == 'inprogress') return $this->send(array('result' => 'progress', 'text' => sprintf($this->lang->system->backup->progress, $result->data->completed, $result->data->total)));
             if($status == 'failed') return $this->send(array('result' => 'failed', 'message' => $this->lang->system->backup->error->backupFail, 'closeModal' => true));
