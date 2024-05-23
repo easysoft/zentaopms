@@ -26,4 +26,4 @@ $config->admin->form->resetpwdsetting = array();
 $config->admin->form->resetpwdsetting['resetPWDByMail'] = array('type' => 'int', 'required' => false, 'default' => 0);
 
 $config->admin->form->cache = array();
-$config->admin->form->cache['enable'] = array('type' => 'int', 'default' => 0);
+$config->admin->form->cache['dao'] = array('type' => 'array', 'default' => array('enable' => 0));
