@@ -385,6 +385,7 @@ window.updateOrder = function(event, orders)
 {
     let sortedIdList = {};
     for(let i in orders) sortedIdList['orders[' + orders[i] + ']'] = i;
+    sortedIdList['type'] = 'api';
 
     $.post($.createLink('doc', 'sortCatalog'), sortedIdList);
 }

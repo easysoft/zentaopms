@@ -1419,12 +1419,13 @@ class docTest
      *
      * @param  int       $catalogID
      * @param  int       $order
+     * @param  string    $type  api|doc
      * @access public
      * @return int|false
      */
-    public function updateOrderTest(int $catalogID, int $order): int|false
+    public function updateOrderTest(int $catalogID, int $order, string $type = 'doc'): int|false
     {
-        $this->objectModel->updateOrder($catalogID, $order);
+        $this->objectModel->updateOrder($catalogID, $order, $type);
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('`order`')->from(TABLE_MODULE)->where('id')->eq($catalogID)->fetch('order');
