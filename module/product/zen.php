@@ -314,28 +314,6 @@ class productZen extends product
     }
 
     /**
-     * 获取批量编辑产品页面的表单配置。
-     * Get form fields config for batch edit page.
-     *
-     * @access private
-     * @return array
-     */
-    private function getFormFields4BatchEdit(): array
-    {
-        /* Init fields. */
-        $fields = $this->setSelectFormOptions(0, $this->config->product->form->batchEdit);
-
-        /* Remove hidden fields. */
-        $shownFields = explode(',', $this->config->product->custom->batchEditFields);
-        foreach($fields as $field => $attr)
-        {
-            if(!in_array($field, $shownFields) and !$attr['required']) unset($fields[$field]);
-        }
-
-        return $fields;
-    }
-
-    /**
      * 获取关闭产品页面的表单配置。
      * Get form fields for close product page.
      *
@@ -547,7 +525,7 @@ class productZen extends product
         $this->view->title          = $this->lang->product->batchEdit;
         $this->view->lines          = $lines;
         $this->view->products       = $products;
-        $this->view->fields         = $this->getFormFields4BatchEdit();
+        $this->view->fields         = $this->setSelectFormOptions(0, $this->config->product->form->batchEdit);
         $this->view->programID      = $programID;
         $this->view->authPrograms   = $authPrograms;
         $this->view->unauthPrograms = $unauthPrograms;
