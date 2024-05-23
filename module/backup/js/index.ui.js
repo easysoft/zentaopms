@@ -112,3 +112,55 @@ $(document).off('click', '.modal [z-key="confirm"]').on('click', '.modal [z-key=
 {
     if(deleting) $('#main').addClass('loading');
 });
+
+window.backupInProcess = function(backupName)
+{
+    console.warn('xxxxxxxxxxxxxxxxxxxxxxxx');
+    if(!inQuickon) return false;
+    let intervalId = setInterval(function()
+    {
+        $.get($.createLink('system', 'ajaxGetBackupProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
+        {
+            if(resp.status == 'success')
+            {
+                $.apps.reloadApp('admin');
+                clearInterval(intervalId);
+            }
+        }, 'json');
+    }, 2000);
+};
+
+window.restoreInProcess = function(backupName)
+{
+    if(!inQuickon) return false;
+    let intervalId = setInterval(function()
+    {
+        $.get($.createLink('system', 'ajaxGetRestoreProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
+        {
+            if(resp.status == 'success')
+            {
+                $.apps.reloadApp('admin');
+                clearInterval(intervalId);
+            }
+        }, 'json');
+
+    }, 2000);
+};
+
+window.deleteInProcess = function(backupName)
+{
+    if(!inQuickon) return false;
+    let intervalId = setInterval(function()
+    {
+
+        $.get($.createLink('system', 'ajaxGetDeleteProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
+        {
+            if(resp.status == 'success')
+            {
+                $.apps.reloadApp('admin');
+                clearInterval(intervalId);
+            }
+        }, 'json');
+
+    }, 2000);
+}
