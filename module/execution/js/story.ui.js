@@ -65,7 +65,11 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
         }
         else
         {
-            if(!unlinkTaskIdList) return false;
+            if(!unlinkTaskIdList)
+            {
+                loadCurrentPage();
+                return false;
+            }
 
             $('#storyIdList').val(unlinkTaskIdList);
         }
