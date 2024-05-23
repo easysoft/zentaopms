@@ -189,7 +189,8 @@ div
                 set::canEdit(common::hasPriv('tree', 'edit') && $canBeChanged),
                 set::canDelete(common::hasPriv('tree', 'delete') && $canBeChanged),
                 set::sortable(array('handle' => '.icon-move')),
-                set::onSort(jsRaw('window.updateOrder'))
+                set::onSort(jsRaw('window.updateOrder')),
+                set::canSortTo(jsRaw('window.canSortTo'))
             )
         )
     ),
