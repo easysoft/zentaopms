@@ -50,6 +50,7 @@ formPanel
             (
                 set::required(true),
                 set::manageLink($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch")),
+                set::value($fields['modules']['default']),
                 set::items($fields['modules']['options'])
             )
         )
