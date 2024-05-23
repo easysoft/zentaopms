@@ -2785,8 +2785,8 @@ class baseRouter
      */
     public function loadCacheConfig()
     {
-        if(!$this->isServing()) return false;
-        if(!isset($this->config->installed) || !$this->config->installed) return false;
+        if(!$this->isServing())      return false;
+        if(!$this->checkInstalled()) return false;
 
         $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
         if(!$globalCache) return false;
@@ -3445,6 +3445,21 @@ class baseRouter
         $filesToLoad = array_merge($filesToLoad, $extFiles);
         if(empty($filesToLoad)) return false;
         return $filesToLoad;
+    }
+
+    /**
+     * 检查是否已安装禅道，主要用于DevOps平台版。
+     * Check zentao is installed.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkInstalled()
+    {
+        if(!isset($this->config->installed) || !$this->config->installed) return false;
+        if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
+
+        return true;
     }
 }
 
