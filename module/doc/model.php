@@ -2797,12 +2797,13 @@ class docModel extends model
      *
      * @param  int    $catalogID
      * @param  int    $order
+     * @param  string $order
      * @access public
      * @return bool
      */
-    public function updateOrder(int $catalogID, int $order): bool
+    public function updateOrder(int $catalogID, int $order, string $type = 'doc'): bool
     {
-        $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($catalogID)->andWhere('type')->eq('doc')->exec();
+        $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($catalogID)->andWhere('type')->eq($type)->exec();
 
         return !dao::isError();
     }
