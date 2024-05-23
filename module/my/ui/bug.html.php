@@ -75,6 +75,7 @@ foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
+    if(!$key) continue;
     $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID=0&type=my"));
 }
 
@@ -83,7 +84,7 @@ $footToolbar = $canBatchAction ? array('items' => array
     array('text' => $lang->edit, 'className' => 'batch-btn ' . ($canBatchEdit ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchEdit')),
     array('text' => $lang->confirm, 'className' => 'batch-btn ajax-btn ' . ($canBatchConfirm ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchConfirm')),
     array('text' => $lang->close, 'className' => 'batch-btn ajax-btn ' . ($canBatchClose ? '' : 'hidden'), 'data-url' => createLink('bug', 'batchClose')),
-    array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'type' => 'dropdown', 'items' => $assignedToItems, 'caret' => 'up', 'data-placement' => 'top-start'),
+    array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'type' => 'dropdown', 'items' => $assignedToItems, 'caret' => 'up', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $cols = $config->my->bug->dtable->fieldList;
