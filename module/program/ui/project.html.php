@@ -62,19 +62,22 @@ foreach($projectStats as $project)
     $project = $this->project->formatDataForList($project, $PMList);
 }
 
-$summary     = $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));
-$footToolbar = hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => $this->createLink('project', 'batchEdit', "from=pgmproject&programID={$programID}")))) : null;
+$canBatchEdit = hasPriv('project', 'batchEdit');
+$summary      = $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));
+$footToolbar  = $canBatchEdit ? array('items' => array(array('text' => $lang->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => $this->createLink('project', 'batchEdit', "from=pgmproject&programID={$programID}")))) : null;
 
 dtable
 (
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($projectStats)),
+    set::checkable($canBatchEdit),
     set::nested(false),
     set::orderBy($orderBy),
     set::sortLink(createLink('program', 'project', "programID={$programID}&&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
+    !$canBatchEdit ? set::footer([jsRaw("function(){return {html: '{$summary}'};}"), 'flex', 'pager']) : null,
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}"))
 );
 

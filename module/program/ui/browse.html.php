@@ -197,11 +197,11 @@ dtable
     set::checkable($canBatchEdit),
     set::nested(true),
     set::className('shadow rounded'),
-    set::footPager(usePager()),
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'project';}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('program', 'browse', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&param={$param}")),
+    set::footPager(usePager()),
     set::footToolbar(array
     (
         'type'  => 'btn-group',
@@ -216,11 +216,11 @@ dtable
             ) : null
         )
     )),
-    set::footer(array($showCheckbox ? 'checkbox' : null, 'toolbar', 'checkedInfo', 'flex', 'pager')),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::emptyTip($lang->program->noProgram),
     set::createTip($lang->program->create),
     set::createLink($canCreateProgram ? createLink('program', 'create') : ''),
+    !$canBatchEdit ? set::footer([jsRaw("function(){return {html: '{$summary}'};}"), 'flex', 'pager']) : null,
     set::customData(array('pageSummary' => $summary, 'checkedSummary' => $lang->program->checkedProjects))
 );
 
