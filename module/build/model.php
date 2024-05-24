@@ -915,8 +915,9 @@ class buildModel extends model
     {
         $releases = $this->getRelatedReleases(array($productID));
 
-        $buildItems = array();
-        foreach($builds as $buildID => $buildName) $buildItems[$buildID] = array('value' => $buildID, 'text' => $buildName);
+        $buildItems   = array();
+        $buildsPinyin = common::convert2Pinyin($builds);
+        foreach($builds as $buildID => $buildName) $buildItems[$buildID] = array('value' => $buildID, 'text' => $buildName, 'keys' => $buildID . $buildName . (!empty($buildsPinyin[$buildID]) ? $buildsPinyin[$buildID] : ''));
         foreach($releases as $release)
         {
             if(isset($buildItems[$release->shadow])) $buildItems[$release->shadow]['content'] = array('html' => "<div class='flex clip'>{$buildItems[$release->shadow]['text']}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
