@@ -756,6 +756,7 @@ class metricModel extends model
         if(!$metric) return false;
 
         $calculator = $this->getCalculator($metric->scope, $metric->purpose, $metric->code);
+        if(!$calculator) return array();
 
         /* 因为是单个度量项的计算，所以需要优先查看是否支持可用的性能优化，如果有的话，使用性能优化方式计算。*/
         /* Because this is a single metric calculation, it is important to first look to see if any performance optimizations are supported and, if so, use them. */
