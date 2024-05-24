@@ -44,121 +44,6 @@ if(empty($features['story']) && $execution->type != 'kanban' && !empty(data('exe
     $fields->fullModeOrders('type,module,storyBox,testStoryBox,assignedToBox', 'desc,files,mailto,keywords');
 }
 
-$teamForm = array();
-if(empty($task->team))
-{
-    for($i = 1; $i <= 3; $i ++)
-    {
-        $teamForm[] = h::tr
-            (
-                h::td
-                (
-                    setClass('team-index'),
-                    span
-                    (
-                        setClass("team-number"),
-                        $i
-                    ),
-                    icon('angle-down')
-                ),
-                h::td
-                (
-                    set::width('240px'),
-                    setClass('team-member'),
-                    picker
-                    (
-                        set::name("team[]"),
-                        set::items($members)
-                    )
-                ),
-                h::td
-                (
-                    set::width('135px'),
-                    inputControl
-                    (
-                        input
-                        (
-                            set::name("teamEstimate[]"),
-                            set::placeholder($lang->task->estimateAB)
-                        ),
-                        to::suffix($lang->task->suffixHour),
-                        set::suffixWidth(20)
-                    )
-                ),
-                h::td
-                (
-                    set::width('100px'),
-                    setClass('center'),
-                    btnGroup
-                    (
-                        set::items(array(
-                            array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
-                            array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
-                        ))
-                    )
-                )
-            );
-    }
-}
-else
-{
-    $i = 0;
-    foreach($task->team as $member)
-    {
-        $i ++;
-        $teamForm[] = h::tr
-            (
-                h::td
-                (
-                    setClass('team-index'),
-                    span
-                    (
-                        setClass("team-number"),
-                        $i
-                    ),
-                    icon('angle-down')
-                ),
-                h::td
-                (
-                    set::width('240px'),
-                    picker
-                    (
-                        set::name("team[]"),
-                        set::items($members),
-                        set::value($member->account)
-                    )
-                ),
-                h::td
-                (
-                    set::width('135px'),
-                    inputControl
-                    (
-                        input
-                        (
-                            set::name("teamEstimate[]"),
-                            set::placeholder($lang->task->estimateAB),
-                            set::value($member->estimate)
-                        ),
-                        to::suffix($lang->task->suffixHour),
-                        set::suffixWidth(20)
-                    )
-                ),
-                h::td
-                (
-                    set::width('100px'),
-                    setClass('center'),
-                    btnGroup
-                    (
-                        set::items(array(
-                            array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
-                            array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
-                        ))
-                    )
-                )
-            );
-    }
-}
-
 formGridPanel
 (
     set::title($lang->task->create),
@@ -181,43 +66,57 @@ formGridPanel
     (
         setID('modalTeam'),
         set::title($lang->task->addMember),
-        h::table
+        div
         (
-            setID('teamTable'),
-            h::tr
+            setClass('flex items-center w-96 mb-4'),
+            span(setClass('mr-4 w-16'), $lang->task->mode),
+            picker
             (
-                h::td
+                set::name("mode"),
+                !empty($task->mode) ? set::value($task->mode) : set::value("linear"),
+                set::items($lang->task->modeList),
+                set::required(true)
+            )
+        ),
+        formBatch
+        (
+            set::tagName('div'),
+            setID('teamTable'),
+            set::mode(empty($task->team) ? 'add' : 'edit'),
+            !empty($task->team) ? set::data($task->team) : null,
+            set::sortable(true),
+            set::size('sm'),
+            set::minRows(3),
+            formBatchItem
+            (
+                set::name('id'),
+                set::label($lang->idAB),
+                set::width('32px'),
+                set::control('index')
+            ),
+            formBatchItem
+            (
+                set::name('team'),
+                set::label($lang->task->teamMember),
+                set::width('240px'),
+                set::control('picker'),
+                set::items($members)
+            ),
+            formBatchItem
+            (
+                set::name('estimateBox'),
+                set::label($lang->task->estimateAB),
+                set::width('135px'),
+                set::control('inputGroup'),
+                set::required(true),
+                inputControl
                 (
-                    width('90px'),
-                    $lang->task->mode
-                ),
-                h::td
-                (
-                    picker
-                    (
-                        set::name("mode"),
-                        set::width('300px'),
-                        !empty($task->mode) ? set::value($task->mode) : set::value("linear"),
-                        set::items($lang->task->modeList),
-                        set::required(true)
-                    )
+                    input(set::name("teamEstimate")),
+                    to::suffix($lang->task->suffixHour),
+                    set::suffixWidth(20)
                 )
             ),
-            setClass('table table-form'),
-            $teamForm,
-            h::tr
-            (
-                h::td
-                (
-                    setClass('team-saveBtn'),
-                    set(array('colspan' => 4)),
-                    btn
-                    (
-                        setClass('toolbar-item btn primary'),
-                        $lang->save
-                    )
-                )
-            )
+            set::actions(array(array('text' => $lang->save, 'class' => 'primary team-saveBtn')))
         )
     )
 );
