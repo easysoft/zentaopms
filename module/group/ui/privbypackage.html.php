@@ -151,7 +151,6 @@ else
         $html = '';
         foreach($privs as $privID => $priv)
         {
-            if(!empty($lang->$moduleName->menus) && ($priv->method == 'browse' or in_array($priv->method, array_keys($lang->$moduleName->menus)))) continue;
             $privMethod = isset($groupPrivs[$priv->module][$priv->method]) ? $priv->method : '';
 
             $checked = $priv->method == $privMethod;
