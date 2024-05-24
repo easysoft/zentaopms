@@ -87,10 +87,10 @@ formGridPanel
             set::sortable(true),
             set::size('sm'),
             set::minRows(3),
+            set::onRenderRow(jsRaw('renderRowData')),
             formBatchItem
             (
                 set::name('id'),
-                set::label($lang->idAB),
                 set::width('32px'),
                 set::control('index')
             ),

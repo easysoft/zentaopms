@@ -607,3 +607,9 @@ window.changeTeamMember = function(e)
 {
     $(e.target).closest('td').next().toggleClass('required', $(e.target).val() != '');
 }
+
+window.renderRowData = function($row, index, row)
+{
+    const mode = $('[name=mode]').val();
+    if(mode == 'linear') $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down'><i/>");
+}
