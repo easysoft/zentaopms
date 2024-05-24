@@ -73,7 +73,7 @@ class zui extends wg
             setID($id),
             $style ? setStyle($style) : null,
             set($targetProps),
-            on::init()->call($call, $name, jsRaw('$element'), $options),
+            on::init()->call('requestAnimationFrame', jsCallback()->call($call, $name, jsRaw('$element'), $options)),
             $children,
         );
     }
