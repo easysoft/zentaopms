@@ -62,7 +62,15 @@ featureBar
 
 toolbar
 (
-    formSettingBtn(set::text($lang->settings))
+    formSettingBtn
+    (
+        set::customFields($customFields),
+        set::canGlobal(commonModel::hasPriv('datatable', 'setGlobal')),
+        set::urlParams("module=product&section=trackFields&key={$storyType}"),
+        set::submitCallback("loadCurrentPage"),
+        set::restoreCallback("loadCurrentPage"),
+        set::text($lang->settings)
+    )
 );
 
 $privs['epic']        = commonModel::hasPriv('epic',        'view');

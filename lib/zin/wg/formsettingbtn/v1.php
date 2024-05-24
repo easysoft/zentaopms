@@ -15,9 +15,12 @@ namespace zin;
 class formSettingBtn extends wg
 {
     protected static array $defaultProps = array(
-        'customFields' => array(),
-        'urlParams'    => '',
-        'text'         => ''
+        'customFields'    => array(),
+        'urlParams'       => '',
+        'canGlobal'       => false,
+        'submitCallBack'  => '',
+        'restoreCallBack' => '',
+        'text'            => ''
     );
 
     public static function getPageCSS(): ?string
@@ -53,13 +56,20 @@ class formSettingBtn extends wg
 
     protected function build()
     {
+        list($urlParams, $text, $submitCallback, $restoreCallback, $canGlobal) = $this->prop(array('urlParams', 'text', 'submitCallback', 'restoreCallback', 'canGlobal'));
         $customFields = $this->prop('customFields', array());
-        $text         = $this->prop('text');
+        $urlParams    = $this->prop('urlParams', '');
 
         global $lang;
 
-        $customLink = createLink('custom', 'ajaxSaveCustomFields', $this->prop('urlParams', ''));
-        $cancelLink = createLink('custom', 'ajaxGetCustomFields', $this->prop('urlParams', ''));
+        if($canGlobal)
+        {
+            global $app;
+            $app->loadLang('datatable'); // Use lang->datatable->setGlobal variable.
+        }
+
+        $customLink = createLink('custom', 'ajaxSaveCustomFields', $urlParams);
+        $cancelLink = createLink('custom', 'ajaxGetCustomFields', $urlParams);
         return dropdown
         (
             set::arrow('false'),
@@ -74,15 +84,19 @@ class formSettingBtn extends wg
                 (
                     setClass('form-setting-btn'),
                     set::title($lang->customField),
+                    $canGlobal ? to::titleSuffix(checkList(set::name('global'), setClass('text-base font-normal ml-2'), set::inline(true), set::items(array(array('text' => $lang->datatable->setGlobal, 'value' => '1'))))) : null,
                     set::url($customLink),
                     set::showExtra(false),
                     set::actions(array
                     (
-                        btn(set::text($lang->save), setClass('primary'), on::click('onSubmitFormtSetting')),
+                        btn(set::text($lang->save), setClass('primary'), on::click('onSubmitFormtSetting'), $submitCallback ? on::click($submitCallback) : null),
                         btn(set::text($lang->cancel), set::btnType('button'), on::click('cancelFormSetting'), set('data-url', $cancelLink)),
-                        btn(set::text($lang->restore), setClass('text-primary ghost'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields'))
+                        btn(set::text($lang->restore), setClass('text-primary ghost'), set('data-url', $customLink), on::click('revertDefaultFields'), $restoreCallback ? on::click($restoreCallback) : null)
                     )),
-                    to::headingActions(array(btn(set::icon('close'), setClass('ghost'), set::size('sm'), on::click('closeCustomPopupMenu')))),
+                    to::headingActions(array
+                    (
+                        btn(set::icon('close'), setClass('ghost'), set::size('sm'), on::click('closeCustomPopupMenu'))
+                    )),
                     $this->buildCustomFields($customFields)
                 )
             ))

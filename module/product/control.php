@@ -821,6 +821,18 @@ class product extends control
         $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, $storyType, $browseType, $orderBy, $pager);
         $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
 
+        $customFields = $this->productZen->getCustomFieldsForTrack($storyType);
+        if(isset($tracks['cols']))
+        {
+            $showFields = $customFields['show'];
+            $cols       = array();
+            foreach($tracks['cols'] as $col)
+            {
+                if(in_array($col['name'], $showFields) || (isset($col['parentName']) && in_array($col['parentName'], $showFields))) $cols[] = $col;
+            }
+            $tracks['cols'] = $cols;
+        }
+
         /* Build search form. */
         $this->productZen->buildSearchFormForTrack($productID, $branch, $projectID, $browseType, $param, $storyType);
 
@@ -834,6 +846,7 @@ class product extends control
         $this->view->param           = $param;
         $this->view->storyType       = $storyType;
         $this->view->orderBy         = $orderBy;
+        $this->view->customFields    = $customFields;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         $this->display();

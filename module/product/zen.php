@@ -1469,4 +1469,32 @@ class productZen extends product
 
         return array_values($projectList);
     }
+
+    /**
+     * 为跟踪矩阵设置自定义列。
+     * Get custom fields for track.
+     *
+     * @param  string    $storyType   epic|requirement|story
+     * @access protected
+     * @return array
+     */
+    public function getCustomFieldsForTrack(string $storyType)
+    {
+        $listFields = array();
+        $listFields['requirement'] = $this->lang->URCommon;
+        $listFields['story']       = $this->lang->SRCommon;
+        $listFields['project']     = $this->lang->story->project;
+        $listFields['execution']   = $this->lang->story->execution;
+        $listFields['design']      = $this->lang->story->design;
+        $listFields['commit']      = $this->lang->story->repoCommit;
+        $listFields['task']        = $this->lang->story->tasks;
+        $listFields['bug']         = $this->lang->story->bug;
+        $listFields['case']        = $this->lang->story->case;
+
+        if($storyType == 'requirement' || $storyType == 'story') unset($listFields['requirement']);
+        if($storyType == 'story') unset($listFields['story']);
+
+        $showFields = !isset($this->config->product->trackFields->{$storyType}) ? array_keys($listFields) : explode(',', $this->config->product->trackFields->{$storyType});
+        return array('list' => $listFields, 'show' => array_merge(array($storyType), $showFields));
+    }
 }

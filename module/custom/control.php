@@ -455,19 +455,25 @@ class custom extends control
         if(!isset($this->config->custom->customFields[$module][$section])) return;
         if(!in_array($key, $this->config->custom->customFields[$module][$section])) return;
 
+        $this->loadModel('setting');
+        $global  = $this->post->global;
+        $action  = $this->post->action;
         $account = $this->app->user->account;
-        if($this->server->request_method == 'POST')
+        if($global) $account = 'system';
+        if($this->server->request_method == 'POST' && $action != 'reset')
         {
             $fields = $this->post->fields;
             if(is_array($fields)) $fields = implode(',', $fields);
             if($module == 'execution' && $section == 'custom' && $key == 'createFields' && strpos(",{$fields},", ',team,') !== false) $fields .= ',teams';
-            $this->loadModel('setting')->setItem("{$account}.{$module}.{$section}.{$key}", $fields);
+
+            $this->setting->setItem("{$account}.{$module}.{$section}.{$key}", $fields);
+
             if(in_array($module, array('story', 'task', 'testcase')) && $section == 'custom' && $key == 'batchCreateFields') return;
             if($module == 'bug' && $section == 'custom' && $key == 'batchCreateFields') return;
         }
         else
         {
-            $this->loadModel('setting')->deleteItems("owner={$account}&module={$module}&section={$section}&key={$key}");
+            $this->setting->deleteItems("owner={$account}&module={$module}&section={$section}&key={$key}");
         }
 
         $this->loadModel('common')->loadConfigFromDB();
@@ -475,8 +481,8 @@ class custom extends control
         $this->app->loadConfig($module);
 
         if($module == 'programplan' && $section == 'custom') $key = 'createFields';
-        $customFields = $this->config->$module->list->{'custom' . ucfirst($key)};
-        $showFields   = $this->config->$module->custom->$key;
+        $customFields = zget(zget($this->config->$module, 'list', array()), $section . ucfirst($key), '');
+        $showFields   = zget(zget($this->config->$module, $section, array()), $key, '');
         if($module == 'marketresearch') return print(js::reload('parent'));
         return $this->send(array('result' => 'success', 'key' => $key, 'callback' => 'loadCurrentPage', 'customFields' => $customFields, 'showFields' => $showFields));
     }
