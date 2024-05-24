@@ -141,6 +141,8 @@ class dtable extends wg
 
         $colConfigs = $this->prop('cols');
         $dataPairs  = $this->prop('userMap', array());
+        $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
 
         foreach($colConfigs as $field => &$config)
         {
@@ -166,15 +168,13 @@ class dtable extends wg
             {
                 if($config['type'] === 'pri' && !isset($config['priList']) && !$this->prop('priList'))
                 {
-                    $moduleName = $app->getModuleName();
                     if(isset($lang->$moduleName->priList))   $this->setProp('priList', $lang->$moduleName->priList);
-                    elseif($app->getMethodName() === 'task') $this->setProp('priList', $lang->task->priList);
+                    elseif($methodName === 'task') $this->setProp('priList', $lang->task->priList);
                 }
                 if($config['type'] === 'severity' && !isset($config['severityList']) && !$this->prop('severityList'))
                 {
-                    $moduleName = $app->getModuleName();
                     if(isset($lang->$moduleName->severityList)) $this->setProp('severityList', $lang->$moduleName->severityList);
-                    elseif($app->getMethodName() === 'bug') $this->setProp('priList', $lang->bug->severityList);
+                    elseif($methodName === 'bug') $this->setProp('priList', $lang->bug->severityList);
                 }
                 if($config['type'] === 'assign' && !isset($config['currentUser']) && isset($app->user) && !$this->prop('currentUser'))
                 {
@@ -204,6 +204,12 @@ class dtable extends wg
                 }
                 unset($config['modifier']);
             }
+        }
+        if($config->edition != 'open')
+        {
+            $extendFields = $app->control->loadModel('workflowaction')->getFields($moduleName, $methodName);
+            $extendCols   = $app->control->loadModel('flow')->buildDtableCols($extendFields);
+            if(!empty($extendCols)) $colConfigs = array_merge($colConfigs, $extendCols);
         }
 
         $this->setProp('cols', array_values($colConfigs));
