@@ -1620,7 +1620,7 @@ from (
         count(case when t1.objectType = 'bug' and t1.action = 'resolved' then 1 end) as bugresolve,
         count(*) as actions
     from zt_action t1
-    where if($startDate='',1,t1.date>=$startDate) and if($endDate='',1,t1.date<=$endDate)
+    where if(\$startDate='',1,t1.date>=\$startDate) and if(\$endDate='',1,t1.date<=\$endDate)
     group by cast(t1.date as date)
     union all
     select
@@ -1635,7 +1635,7 @@ from (
         0 as bugresolve,
         0 as actions
     from zt_effort t2
-    where if($startDate='',1,t2.date>=$startDate) and if($endDate='',1,t2.date<=$endDate)
+    where if(\$startDate='',1,t2.date>=\$startDate) and if(\$endDate='',1,t2.date<=\$endDate)
     group by t2.date
 ) as t1
 group by t1.day
