@@ -64,7 +64,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
         if(confirm(confirmStoryToTaskTip))
         {
-            console.log('ddd');
             $('#storyIdList').val(checkedIdList);
         }
         else
@@ -78,13 +77,10 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
             $('#storyIdList').val(unlinkTaskIdList);
         }
     }
-    console.log('ccc');
 
     zui.Modal.hide('#taskModal');
-    console.log('eee');
 
     const formData = new FormData($("#toTaskForm")[0]);
-    console.log(formData);
     postAndLoadPage($('#toTaskForm').attr('action'), formData);
 
     return false;
