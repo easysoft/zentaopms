@@ -624,7 +624,6 @@ class blockZen extends block
             ->andWhere('t1.auto')->ne('unit')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t1.product = t5.product')
             ->beginIF($block->params->type != 'all')->andWhere('t1.status')->eq($block->params->type)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$block->params->count)->fi()
