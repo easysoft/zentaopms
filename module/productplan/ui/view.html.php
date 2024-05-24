@@ -57,7 +57,7 @@ foreach($config->productplan->defaultFields['story'] as $field)
 if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
 foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
-$storyCols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
+$storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
 $storyCols['title']['title']        = $lang->productplan->storyTitle;
 $storyCols['assignedTo']['type']    = 'user';
 $storyCols['actions']['width']      = 50;

@@ -15,10 +15,6 @@ window.renderStoryCell = function(result, info)
         let gradeLabel = gradeGroup[story.type][story.grade];
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(html) result.unshift({html});
-        if(result.length > 2)
-        {
-            result[1].props.href = $.createLink(story.type, 'view', 'storyID=' + story.id);
-        }
     }
 
     if(info.col.name == 'sort')

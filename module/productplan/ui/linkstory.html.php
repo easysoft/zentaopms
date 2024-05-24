@@ -13,7 +13,7 @@ namespace zin;
 $cols = array();
 foreach($config->productplan->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->story->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
-$cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
+$cols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
 $cols['title']['title']        = $lang->productplan->storyTitle;
 $cols['title']['nestedToggle'] = false;
 $cols['title']['data-toggle']  = 'modal';
