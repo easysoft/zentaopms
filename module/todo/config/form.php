@@ -65,19 +65,21 @@ $config->todo->batchClose->form['todoIdList'] = array('required' => true, 'type'
 
 $config->todo->batchEdit = new stdclass();
 $config->todo->batchEdit->form = array();
-$config->todo->batchEdit->form['id']         = array('required' => true,  'type' => 'int', 'base' => true);
-$config->todo->batchEdit->form['date']       = array('required' => true,  'type' => 'date');
-$config->todo->batchEdit->form['type']       = array('required' => true,  'type' => 'string');
-$config->todo->batchEdit->form['pri']        = array('required' => true,  'type' => 'int');
-$config->todo->batchEdit->form['name']       = array('required' => false, 'type' => 'string', 'default' => '');
-$config->todo->batchEdit->form['assignedTo'] = array('required' => false, 'type' => 'string', 'default' => '');
-$config->todo->batchEdit->form['begin']      = array('required' => false, 'type' => 'string', 'default' => '');
-$config->todo->batchEdit->form['end']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->todo->batchEdit->form['status']     = array('required' => true,  'type' => 'string');
-$config->todo->batchEdit->form['story']      = array('required' => false, 'type' => 'string', 'default'  => 0);
-$config->todo->batchEdit->form['task']       = array('required' => false, 'type' => 'string', 'default'  => 0);
-$config->todo->batchEdit->form['bug']        = array('required' => false, 'type' => 'string', 'default'  => 0);
-$config->todo->batchEdit->form['testtask']   = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['id']          = array('required' => true,  'type' => 'int', 'base' => true);
+$config->todo->batchEdit->form['date']        = array('required' => true,  'type' => 'date');
+$config->todo->batchEdit->form['type']        = array('required' => true,  'type' => 'string');
+$config->todo->batchEdit->form['pri']         = array('required' => true,  'type' => 'int');
+$config->todo->batchEdit->form['name']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['begin']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['end']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->todo->batchEdit->form['status']      = array('required' => true,  'type' => 'string');
+$config->todo->batchEdit->form['story']       = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['epic']        = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['requirement'] = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['task']        = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['bug']         = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->batchEdit->form['testtask']    = array('required' => false, 'type' => 'string', 'default'  => 0);
 if($config->edition != 'open') $config->todo->batchEdit->form['feedback']   = array('required' => false, 'type' => 'string', 'default'  => 0);
 if(in_array($config->edition, array('max', 'ipd')))
 {

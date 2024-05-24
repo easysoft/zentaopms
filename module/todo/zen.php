@@ -174,7 +174,7 @@ class todoZen extends todo
         if($todo->type != 'custom' && !empty($todo->objectID))
         {
             $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID($todo->objectID);
+            $object = $this->loadModel($type)->fetchByID($todo->objectID);
             if(isset($object->name))  $todo->name = $object->name;
             if(isset($object->title)) $todo->name = $object->title;
         }
@@ -303,7 +303,7 @@ class todoZen extends todo
         if(in_array($todo->type, $this->config->todo->moduleList))
         {
             $type   = $todo->type;
-            $object = $this->loadModel($type)->getByID((int)$objectID);
+            $object = $this->loadModel($type)->fetchByID((int)$objectID);
             if(isset($object->name))  $todo->name = $object->name;
             if(isset($object->title)) $todo->name = $object->title;
         }
@@ -373,11 +373,13 @@ class todoZen extends todo
         list($editedTodos, $objectIdList) = $this->getBatchEditInitTodos($todoIdList, $type, $account, $status);
         $editedTodos = array_map(function($item) { $item->begin = str_replace(':', '', $item->begin); $item->end = str_replace(':', '', $item->end); return $item;}, $editedTodos);
 
-        $bugs      = $this->loadModel('bug')->getUserBugPairs($account, true, 0, array(), array(), isset($objectIdList['bug']) ? $objectIdList['bug'] : array());
-        $tasks     = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', array(), isset($objectIdList['task']) ? $objectIdList['task'] : array());
-        $stories   = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : array());
-        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
-        $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
+        $bugs         = $this->loadModel('bug')->getUserBugPairs($account, true, 0, array(), array(), isset($objectIdList['bug']) ? $objectIdList['bug'] : array());
+        $tasks        = $this->loadModel('task')->getUserTaskPairs($account, 'wait,doing', array(), isset($objectIdList['task']) ? $objectIdList['task'] : array());
+        $stories      = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIdList['story']) ? $objectIdList['story'] : array());
+        $epics        = $this->loadModel('story')->getUserStoryPairs($account, 10, 'epic', '', isset($objectIdList['epic']) ? $objectIdList['epic'] : array());
+        $requirements = $this->loadModel('story')->getUserStoryPairs($account, 10, 'requirement', '', isset($objectIdList['requirement']) ? $objectIdList['requirement'] : array());
+        $users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
+        $testtasks    = $this->loadModel('testtask')->getUserTestTaskPairs($account);
         if($this->config->edition != 'open') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -393,16 +395,18 @@ class todoZen extends todo
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
 
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-        $this->view->bugs        = $bugs;
-        $this->view->tasks       = $tasks;
-        $this->view->stories     = $stories;
-        $this->view->reviews     = $reviews;
-        $this->view->testtasks   = $testtasks;
-        $this->view->editedTodos = $editedTodos;
-        $this->view->users       = $users;
-        $this->view->type        = $type;
-        $this->view->userID      = $userID;
-        $this->view->status      = $status;
+        $this->view->bugs         = $bugs;
+        $this->view->tasks        = $tasks;
+        $this->view->stories      = $stories;
+        $this->view->epics        = $epics;
+        $this->view->requirements = $requirements;
+        $this->view->reviews      = $reviews;
+        $this->view->testtasks    = $testtasks;
+        $this->view->editedTodos  = $editedTodos;
+        $this->view->users        = $users;
+        $this->view->type         = $type;
+        $this->view->userID       = $userID;
+        $this->view->status       = $status;
         if($this->config->edition != 'open') $this->view->feedbacks = $feedbacks;
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -495,7 +499,7 @@ class todoZen extends todo
             {
                 dao::$errors["name[{$todoID}]"] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
             }
-            unset($todo->story, $todo->task, $todo->bug, $todo->testtask, $todo->feedback, $todo->issue, $todo->risk, $todo->opportunity, $todo->review);
+            unset($todo->story, $todo->epic, $todo->requirement, $todo->task, $todo->bug, $todo->testtask, $todo->feedback, $todo->issue, $todo->risk, $todo->opportunity, $todo->review);
 
             $todo->begin = empty($todo->begin) || $this->post->switchTime ? 2400 : $todo->begin;
             $todo->end   = empty($todo->end) || $this->post->switchTime   ? 2400 : $todo->end;
@@ -812,6 +816,8 @@ class todoZen extends todo
                 $this->loadModel('user')->getPairs('noletter'),
                 $this->loadModel('bug')->getUserBugPairs($account),
                 $this->loadModel('story')->getUserStoryPairs($account, 100, 'story'),
+                $this->loadModel('story')->getUserStoryPairs($account, 100, 'epic'),
+                $this->loadModel('story')->getUserStoryPairs($account, 100, 'requirement'),
                 $this->loadModel('task')->getUserTaskPairs($account),
                 $this->loadModel('testtask')->getUserTesttaskPairs($account),
             );
@@ -845,10 +851,12 @@ class todoZen extends todo
             $type = $todo->type;
             if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];
 
-            if($type == 'bug')      $todo->name = isset($assemble->bugs[$todo->objectID])      ? $assemble->bugs[$todo->objectID]      . "(#$todo->objectID)" : '';
-            if($type == 'task')     $todo->name = isset($assemble->tasks[$todo->objectID])     ? $assemble->tasks[$todo->objectID]     . "(#$todo->objectID)" : '';
-            if($type == 'story')    $todo->name = isset($assemble->stories[$todo->objectID])   ? $assemble->stories[$todo->objectID]   . "(#$todo->objectID)" : '';
-            if($type == 'testtask') $todo->name = isset($assemble->testTasks[$todo->objectID]) ? $assemble->testTasks[$todo->objectID] . "(#$todo->objectID)" : '';
+            if($type == 'bug')         $todo->name = isset($assemble->bugs[$todo->objectID])         ? $assemble->bugs[$todo->objectID]         . "(#$todo->objectID)" : '';
+            if($type == 'task')        $todo->name = isset($assemble->tasks[$todo->objectID])        ? $assemble->tasks[$todo->objectID]        . "(#$todo->objectID)" : '';
+            if($type == 'story')       $todo->name = isset($assemble->stories[$todo->objectID])      ? $assemble->stories[$todo->objectID]      . "(#$todo->objectID)" : '';
+            if($type == 'epic')        $todo->name = isset($assemble->epics[$todo->objectID])        ? $assemble->epics[$todo->objectID]        . "(#$todo->objectID)" : '';
+            if($type == 'requirement') $todo->name = isset($assemble->requirements[$todo->objectID]) ? $assemble->requirements[$todo->objectID] . "(#$todo->objectID)" : '';
+            if($type == 'testtask')    $todo->name = isset($assemble->testTasks[$todo->objectID])    ? $assemble->testTasks[$todo->objectID]    . "(#$todo->objectID)" : '';
 
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
