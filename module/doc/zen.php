@@ -304,7 +304,7 @@ class docZen extends doc
         $this->action->create('docLib', $libID, 'Created');
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "locateNewLib(\"$type\", \"$objectID\", \"$libID\")"));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array("$type", "$objectID", "$libID"))));
     }
 
     /**
