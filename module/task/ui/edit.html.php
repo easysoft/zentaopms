@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-include './taskteam.html.php';
 
 /* ====== Preparing and processing page data ====== */
 jsVar('oldStoryID', $task->story);
@@ -57,6 +56,28 @@ $closedByOptions        = $users;
 $closedReasonOptions    = $lang->task->reasonList;
 $teamOptions            = $members;
 $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
+
+if(!empty($task->team))
+{
+    foreach($task->team as $member)
+    {
+        $member->team           = $member->account;
+        $member->teamSource     = $member->account;
+        $member->teamEstimate   = (float)$member->estimate;
+        $member->teamConsumed   = (float)$member->consumed;
+        $member->teamLeft       = (float)$member->left;
+        $member->memberDisabled = false;
+        $member->memberStatus   = $member->status;
+        if($member->memberStatus == 'done') $member->memberDisabled = true;
+        if(strpos('|closed|cancel|pause|', $task->status) !== false && $app->rawMethod != 'activate')
+        {
+            $member->memberStatus   = $task->status;
+            $member->memberDisabled = true;
+        }
+
+        $member->hourDisabled = $member->memberDisabled;
+    }
+}
 
 /* ====== Define the page structure with zin widgets ====== */
 
@@ -329,33 +350,78 @@ detailBody
             (
                 setID('modalTeam'),
                 set::title($lang->task->teamMember),
-                h::table
+                formBatch
                 (
+                    set::tagName('div'),
                     setID('teamTable'),
-                    setClass('table table-form'),
-                    h::tr
+                    set::mode('add'),
+                    !empty($task->team) ? set::data(array_values($task->team)) : null,
+                    set::sortable(true),
+                    set::size('sm'),
+                    set::minRows(3),
+                    set::onRenderRow(jsRaw('renderRowData')),
+                    formBatchItem
                     (
-                        setClass('text-left'),
-                        h::th(),
-                        h::th($lang->task->teamMember),
-                        !empty($task->team) ? h::th($lang->task->estimate) : null,
-                        !empty($task->team) ? h::th($lang->task->consumedAB) : null,
-                        h::th($lang->task->left)
+                        set::name('id'),
+                        set::label($lang->idAB),
+                        set::width('32px'),
+                        set::control('index')
                     ),
-                    $teamForm,
-                    h::tr
+                    formBatchItem
                     (
-                        h::td
+                        set::name('team'),
+                        set::label($lang->task->teamMember),
+                        set::width('160px'),
+                        set::control('picker'),
+                        set::items($members)
+                    ),
+                    formBatchItem
+                    (
+                        set::name('estimateBox'),
+                        set::label($lang->task->estimateAB),
+                        set::width('135px'),
+                        set::control('inputGroup'),
+                        inputControl
                         (
-                            setClass('team-saveBtn'),
-                            set(array('colspan' => 6)),
-                            btn
-                            (
-                                setClass('toolbar-item btn primary'),
-                                $lang->save
-                            )
+                            input(set::name("teamEstimate")),
+                            to::suffix($lang->task->suffixHour),
+                            set::suffixWidth(20)
                         )
-                    )
+                    ),
+                    !empty($task->team) ? formBatchItem
+                    (
+                        set::name('consumedBox'),
+                        set::label($lang->task->consumedAB),
+                        set::width('135px'),
+                        set::control('inputGroup'),
+                        inputControl
+                        (
+                            input(set::name("teamConsumed"), set::readonly(true)),
+                            to::suffix($lang->task->suffixHour),
+                            set::suffixWidth(20)
+                        )
+                    ) : null,
+                    !empty($task->team) ? formBatchItem
+                    (
+                        set::name('leftBox'),
+                        set::label($lang->task->left),
+                        set::width('135px'),
+                        set::control('inputGroup'),
+                        set::required(true),
+                        inputControl
+                        (
+                            input(set::name("teamLeft")),
+                            to::suffix($lang->task->suffixHour),
+                            set::suffixWidth(20)
+                        )
+                    ) : null,
+                    formBatchItem
+                    (
+                        set::name('teamSource'),
+                        set::control('input'),
+                        set::hidden(true)
+                    ),
+                    set::actions(array(array('text' => $lang->save, 'class' => 'primary team-saveBtn')))
                 )
             )
         ),

@@ -264,3 +264,25 @@ function updateAssignedTo()
         $('#assignedTo').picker({disabled: true});
     }
 }
+
+window.renderRowData = function($row, index, row)
+{
+    $row.addClass('member member-' + (row ? row.memberStatus : 'wait'));
+    $row.data('estimate', row ? row.teamEstimate : 0);
+    $row.data('consumed', row ? row.teamConsumed : 0);
+    $row.data('left',     row ? row.teamLeft : 0);
+
+    if(row && row.memberDisabled)
+    {
+        $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
+        {
+            const $team = info[0];
+            $team.render({disabled: true});
+        })
+    }
+    if(row && row.hourDisabled)
+    {
+        $row.find('[name^=teamEstimate]').attr('readonly', 'readonly');
+        $row.find('[name^=teamLeft]').attr('readonly', 'readonly');
+    }
+}
