@@ -39,8 +39,8 @@ class thinkInput extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $required) = $this->prop(array('step', 'required', 'requiredRows', 'requiredRowsName'));
-        if($step) $required = $step->required;
+        list($step, $required) = $this->prop(array('step', 'required'));
+        if($step) $required = $step->options->required;
         $formItems[] = array(
             formHidden('options[questionType]', 'input'),
             formGroup
