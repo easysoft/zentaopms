@@ -37,7 +37,14 @@ window.changeKanbanType = function()
 {
     const type = $('[name=type]:checked').val();
     const url  = $.createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + type);
-    loadPartial(url, '#WIPCountBox, #spaceBox, #nameBox, #ownerBox, #teamBox, #fixedColBox, #autoColBox, #archiveBox, #manageProgressBox, #alignmentBox, #descBox, #whitelistBox');
+    loadPartial(url, '#WIPCountBox, #spaceBox, #nameBox, #ownerBox, #teamBox, #fixedColBox, #autoColBox, #archiveBox, #manageProgressBox, #alignmentBox, #descBox, #whitelistBox', {success: function()
+    {
+        waitDom('#spaceBox [name=space]', function()
+        {
+            const copySpaceID = $('#spaceBox input[name=space]').val();
+            $('#spaceBox input[name=space]').zui('picker').$.setValue(copySpaceID);
+        });
+    }});
 }
 
 window.loadAllUsers = function()
