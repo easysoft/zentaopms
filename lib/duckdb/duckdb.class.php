@@ -146,7 +146,7 @@ class duckdb
     {
         $sql = trim($sql);
         $sql = trim($sql, ';');
-        $sql = str_replace(array('`'), array('"'), $sql);
+        $sql = str_replace(array('`', '"'), array('', '\"'), $sql);
 
         return $sql;
     }
