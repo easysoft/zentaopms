@@ -273,9 +273,9 @@ window.clickChangeScenen = function()
 window.clickChangeOrder = function()
 {
     const sourceID    = $('#dragModal').attr('data-sourceID');
-    const sourceOrder = $('#dragModal').attr('data-sourceOrder');
+    const sourceOrder = $('#dragModal').attr('data-sourceSort');
     const targetID    = $('#dragModal').attr('data-targetID');
-    const targetOrder = $('#dragModal').attr('data-targetOrder');
+    const targetOrder = $('#dragModal').attr('data-targetSort');
     const type        = $('#dragModal').attr('data-type');
 
     changeOrder(sourceID, sourceOrder, targetID, targetOrder, type, 'scene');
