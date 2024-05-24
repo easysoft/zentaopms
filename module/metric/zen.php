@@ -341,7 +341,7 @@ class metricZen extends metric
         }
         else
         {
-            if($date == 'now') $date = helper::today();
+            if($date == 'now') $date = helper::now();
 
             $scopeList = $this->metric->getPairsByScopeAndDate($scope, $date);
 
