@@ -39,7 +39,7 @@ function backupData()
     var timeID = null;
     $.ajax(
     {
-        url: $('.backup').attr('data-link'),
+        url: $.createLink('backup', 'backup', 'reload=yes'),
         success: function (data)
         {
             clearInterval(timeID);
