@@ -48,7 +48,7 @@
 #privPackageList .popover .arrow {border-bottom-color: #D9DBE1; top: -10px;}
 #privPackageList .popover .arrow:before {border-bottom-color: #F9FAFB; top: 2px; width: 16px; height: 16px; border: 1px solid #FFF; border-left-color: #D9DBE1; border-top-color: #D9DBE1;}
 #privPackageList .group-item .checkbox-inline label {padding-left: 0}
-#privPackageList .group-item {display: inline-block; width: 158px; margin-bottom: 15px;}
+#privPackageList .group-item {display: inline-block; min-width: 180px; margin-bottom: 15px;}
 #privPackageList .group-item > .checkbox-primary {display: inline-block;}
 #privPackageList .priv-toggle.icon {width: 12px; height: 12px; position: relative; display: inline-block; color: #9EA3B0; margin-left: 4px; line-height: 12px;}
 #privPackageList .priv-toggle.icon:before {content: "\e925"; font-size: 12px; min-width: unset; transform: scale(0.5); font-weight: 900;}
