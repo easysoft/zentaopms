@@ -154,6 +154,10 @@ $lang->serviceAgreement = "服务协议";
 $lang->privacyPolicy    = "隐私政策";
 $lang->needAgreePrivacy = "请先阅读《服务协议》和《隐私政策》";
 $lang->iAgreedPrivacy   = "我已阅读并同意";
+$lang->inMaintenance    = "系统正在维护中！";
+$lang->maintainReason   = "维护原因：%s。";
+$lang->systemMaintainer = "如有疑问请联系管理员。";
+$lang->unknown          = "未知";
 
 $lang->preShortcutKey    = '[快捷键:←]';
 $lang->nextShortcutKey   = '[快捷键:→]';
