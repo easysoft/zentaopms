@@ -749,7 +749,7 @@
 
     function getLoadSelector(selector)
     {
-        if(!selector) return $('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),#configJS,title>*,#heading>*,#navbar>*,#pageToolbar>*' : 'body>*,title>*,#configJS';
+        if(!selector) return $('#main').length ? '#configJS,#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),title>*,#heading>*,#navbar>*,#pageToolbar>*' : '#configJS,body>*,title>*';
         if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
         return selector;
     }
