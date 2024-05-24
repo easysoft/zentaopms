@@ -72,7 +72,7 @@ $canModifyProduct   = common::canModify('product', $product);
 $canModifyExecution = common::canModify('execution', $execution);
 $canCreate          = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');
 $canBatchCreate     = $canModifyProduct && $canModifyExecution && hasPriv('story', 'batchCreate');
-$createLink         = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
+$createLink         = createLink('story', 'create', "product={$product->id}&branch=0&moduleID={$moduleID}&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
 $batchCreateLink    = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
 
 /* Tutorial create link. */
