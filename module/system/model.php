@@ -235,4 +235,22 @@ class systemModel extends model
             return array('result' => 'fail', 'message' => $rawResult->message);
         }
     }
+
+    /**
+     * 设置系统维护信息。
+     * Set maintenance message.
+     *
+     * @param  string $action backup|restore|upgrade
+     * @return bool
+     */
+    public function setMaintenance(string $action): bool
+    {
+        if(empty($action) || !in_array($action, array_keys($this->lang->system->maintenance->reason))) return false;
+
+        $maintenance = new stdclass();
+        $maintenance->action = $action;
+        $maintenance->reason = $this->lang->system->maintenance[$action];
+
+        return $this->loadModel('setting')->setItem('system.system.maintenance', json_encode($maintenance));
+    }
 }
