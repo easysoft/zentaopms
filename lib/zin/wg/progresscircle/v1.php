@@ -37,11 +37,6 @@ class progressCircle extends wg
         'textY?: int'              // 文本 Y 坐标。
     );
 
-    protected function buildCircle()
-    {
-        return zui::progressCircle(set($this->getDefinedProps()));
-    }
-
     /**
      * Build widget.
      *
@@ -55,10 +50,11 @@ class progressCircle extends wg
         $circleProps = $this->getDefinedProps();
         $hasChildren = !empty($children);
 
-        return zui::progressCircle
+        return div
         (
-            set($circleProps),
-            set::_class(array('hide-before-init transition-opacity', $class, $hasChildren ? 'relative center' : '')),
+            set('zui-create', 'progressCircle'),
+            setClass(array('hide-before-init transition-opacity', $class, $hasChildren ? 'relative center' : '')),
+            setData($circleProps),
             $hasChildren ? div
             (
                 setClass('center absolute inset-0 num gap-1'),
