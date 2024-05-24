@@ -363,7 +363,6 @@ detailBody
                     formBatchItem
                     (
                         set::name('id'),
-                        set::label($lang->idAB),
                         set::width('32px'),
                         set::control('index')
                     ),
@@ -396,7 +395,7 @@ detailBody
                         set::control('inputGroup'),
                         inputControl
                         (
-                            input(set::name("teamConsumed"), set::readonly(true)),
+                            input(set::name("teamConsumed")),
                             to::suffix($lang->task->suffixHour),
                             set::suffixWidth(20)
                         )
