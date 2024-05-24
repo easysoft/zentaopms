@@ -1488,11 +1488,10 @@ class bug extends control
      * @access public
      * @return int
      */
-    public function ajaxGetProductBugs(int $productID, int $bugID, string $type = 'html')
+    public function ajaxGetProductBugs(int $productID, int $bugID, string $search = '', string $type = 'html')
     {
         /* 获取除了这个 bugID 的产品 bugs。 */
         /* Get product bugs exclude this bugID. */
-        $search      = (string)$this->get->search;
         $limit       =  $this->get->limit ? $this->get->limit : $this->config->maxCount;
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
