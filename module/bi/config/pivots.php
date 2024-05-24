@@ -1595,7 +1595,7 @@ $config->bi->builtin->pivots[] = array
     'desc'      => array('zh-cn' => '可以指定一个时期，列出相应的数据：1. 每天的登录次数。2. 每天的日志工时量。3. 每天新增的需求数。4. 每天关闭的需求数。5. 每天新增的任务数。6. 每天完成的任务数。7. 每天新增的Bug数。8. 每天解决的Bug数。9. 每天的动态数。', 'zh-tw' => '可以指定一個時期，列出相應的數據：1. 每天的登錄次數。2. 每天的日誌工時量。3. 每天新增的需求數。4. 每天關閉的需求數。5. 每天新增的任務數。6. 每天完成的任務數。7. 每天新增的Bug數。8. 每天解決的Bug數。9. 每天的動態數。', 'en' => 'The summary of company dynamics', 'de' => 'The summary of company dynamics', 'fr' => 'The summary of company dynamics'),
     'dimension' => '1',
     'group'     => '62',
-    'sql'       => <<<EOT
+    'sql'       => <<<'EOT'
 select
     t1.day,
     sum(t1.userlogin) as userlogin,
@@ -1608,19 +1608,67 @@ select
     sum(t1.bugresolve) as bugresolve,
     sum(t1.actions) as actions
 from (
-    select
+	select
         cast(t1.date as date) as day,
         count(case when t1.objectType = 'user' and t1.action = 'login' then 1 end) as userlogin,
         0 as consumed,
-        count(case when t1.objectType = 'story' and t1.action = 'opened' then 1 end) as storyopen,
-        count(case when t1.objectType = 'story' and t1.action = 'closed' then 1 end) as storyclose,
-        count(case when t1.objectType = 'task' and t1.action = 'opened' then 1 end) as taskopen,
-        count(case when t1.objectType = 'task' and t1.action = 'finished' then 1 end) as taskfinish,
-        count(case when t1.objectType = 'bug' and t1.action = 'opened' then 1 end) as bugopen,
-        count(case when t1.objectType = 'bug' and t1.action = 'resolved' then 1 end) as bugresolve,
+        0 as storyopen,
+        0 as storyclose,
+        0 as taskopen,
+        0 as taskfinish,
+        0 as bugopen,
+        0 as bugresolve,
         count(*) as actions
     from zt_action t1
-    where if(\$startDate='',1,t1.date>=\$startDate) and if(\$endDate='',1,t1.date<=\$endDate)
+    where if($startDate='',1,t1.date>=$startDate) and if($endDate='',1,t1.date<=$endDate)
+    group by cast(t1.date as date)
+    union all
+    select
+        cast(t1.date as date) as day,
+        0 as userlogin,
+        0 as consumed,
+        sum(case when t1.action = 'opened' then 1 else 0 end) as storyopen,
+        sum(case when t1.action = 'closed' and t2.status = 'closed' then 1 else 0 end) as storyclose,
+        0 as taskopen,
+        0 as taskfinish,
+        0 as bugopen,
+        0 as bugresolve,
+        0 as actions
+    from zt_action t1
+    left join zt_story t2 on t1.objectID = t2.id
+    where t2.deleted = '0' and t1.objectType = 'story' and t1.action in ('opened', 'closed') and if($startDate='',1,t1.date>=$startDate) and if($endDate='',1,t1.date<=$endDate)
+    group by cast(t1.date as date)
+    union all
+    select
+        cast(t1.date as date) as day,
+        0 as userlogin,
+        0 as consumed,
+        0 as storyopen,
+        0 as storyclose,
+        sum(case when t1.action = 'opened' then 1 else 0 end) as taskopen,
+        sum(case when t1.action = 'finished' and t2.status in ('done', 'closed') then 1 else 0 end) as taskfinish,
+        0 as bugopen,
+        0 as bugresolve,
+        0 as actions
+    from zt_action t1
+    left join zt_task t2 on t1.objectID = t2.id
+    where t2.deleted = '0' and t1.objectType = 'task' and t1.action in ('opened', 'finished') and if($startDate='',1,t1.date>=$startDate) and if($endDate='',1,t1.date<=$endDate)
+    group by cast(t1.date as date)
+    union all
+    select
+        cast(t1.date as date) as day,
+        0 as userlogin,
+        0 as consumed,
+        0 as storyopen,
+        0 as storyclose,
+        0 as taskopen,
+        0 as taskfinish,
+        sum(case when t1.action = 'opened' then 1 else 0 end) as bugopen,
+        sum(case when t1.action = 'resolved' and t2.status in ('resolved', 'closed') then 1 else 0 end) as bugresolve,
+        0 as actions
+    from zt_action t1
+    left join zt_bug t2 on t1.objectID = t2.id
+    where t2.deleted = '0' and t1.objectType = 'bug' and t1.action in ('opened', 'resolved') and if($startDate='',1,t1.date>=$startDate) and if($endDate='',1,t1.date<=$endDate)
     group by cast(t1.date as date)
     union all
     select
@@ -1635,10 +1683,11 @@ from (
         0 as bugresolve,
         0 as actions
     from zt_effort t2
-    where if(\$startDate='',1,t2.date>=\$startDate) and if(\$endDate='',1,t2.date<=\$endDate)
+    where if($startDate='',1,t2.date>=$startDate) and if($endDate='',1,t2.date<=$endDate)
     group by t2.date
 ) as t1
 group by t1.day
+order by t1.day desc limit 99999999
 EOT,
     'settings'  => array
     (
