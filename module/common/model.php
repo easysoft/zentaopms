@@ -254,6 +254,7 @@ class commonModel extends model
             foreach($this->config->CSPs as $CSP) helper::header('Content-Security-Policy', "$CSP;");
         }
 
+        if(!empty($this->config->xFrameOptions)) helper::header('X-Frame-Options', $this->config->xFrameOptions);
         if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
         {
             if(isset($_SERVER["HTTPS"]) and $_SERVER["HTTPS"] == 'on')
@@ -261,10 +262,6 @@ class commonModel extends model
                 $session = $this->config->sessionVar . '=' . session_id();
                 helper::header('Set-Cookie', "$session; SameSite=None; Secure=true", false);
             }
-        }
-        else
-        {
-            if(!empty($this->config->xFrameOptions)) helper::header('X-Frame-Options', $this->config->xFrameOptions);
         }
     }
 
