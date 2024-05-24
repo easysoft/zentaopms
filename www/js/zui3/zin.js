@@ -28,7 +28,6 @@
 {
     let config        = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
-
     const DEBUG       = config.debug;
     const currentCode = (window.frameElement ? window.frameElement.name : window.name).split('-')[1];
     const isInAppTab  = parent.window !== window;
@@ -99,7 +98,7 @@
 
     function initZinbar()
     {
-        if(!DEBUG || DEBUG < 3 || isIndexPage) return;
+        if(!DEBUG || !window.zin || !window.zin.zinTool || isIndexPage) return;
         let $bar = $('#zinbar');
         if($bar.length) return;
 
@@ -442,11 +441,7 @@
 
         if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
         $target.css('--load-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
-        if(!$target.hasClass('load-indicator'))
-        {
-            $target.addClass('load-indicator');
-            if(isLoading) return setTimeout(() => {$target.addClass(loadingClass);}, 50);
-        }
+        if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
         $target.toggleClass(loadingClass, isLoading);
     }
 
@@ -480,6 +475,7 @@
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
         if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
+        if(!window.zin || !window.zin.zinTool) options.cache = false;
         const cacheKey = options.cache;
         let cache;
         const renderPageData = (data, onlyZinDebug) =>
@@ -503,7 +499,7 @@
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, cache ? '6s' : '1s');
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, cache ? '6s' : '2s');
                 if(options.before) options.before();
             },
             success(rawData)

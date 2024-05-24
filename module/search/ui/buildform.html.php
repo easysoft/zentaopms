@@ -73,7 +73,7 @@ if(is_array($queries))
     foreach($queries as $query)
     {
         if(!is_object($query)) continue;
-        $savedQueryList[] = array('id' => $query->id, 'text' => $query->title);
+        $savedQueryList[] = array('id' => $query->id, 'text' => $query->title, 'noDelete' => $query->account != $app->user->account);
     }
 }
 

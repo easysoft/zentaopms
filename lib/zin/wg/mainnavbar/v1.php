@@ -27,6 +27,7 @@ class mainNavbar extends nav
         'items'        => '?array',
         'itemProps'    => '?array',
         'badgeMap'     => '?array',
+        'active'       => '?string',
         'onRenderItem' => '?callback'
     );
 
@@ -86,6 +87,7 @@ class mainNavbar extends nav
             $badgeMap     = $this->prop('badgeMap');
             $onRenderItem = $this->prop('onRenderItem');
             $itemProps    = $this->prop('itemProps');
+            $activeItem   = $this->prop('active');
 
             foreach($menu as $key => $menuItem)
             {
@@ -105,12 +107,19 @@ class mainNavbar extends nav
                 $item['data-id']  = $name;
                 $item['data-app'] = $app->tab;
 
-                $active    = '';
-                $subModule = isset($menuItem['subModule']) ? explode(',', $menuItem['subModule']) : array();
-                if($subModule && in_array($currentModule, $subModule)) $active = 'active';
-                if($link['module'] == $currentModule && $link['method'] == $currentMethod) $active = 'active';
-                if($link['module'] == $currentModule && strpos(",{$menuItem['alias']},", ",{$currentMethod},") !== false) $active = 'active';
-                if(strpos(",{$menuItem['exclude']},", ",{$currentModule}-{$currentMethod},") !== false || strpos(",{$menuItem['exclude']},", ",{$currentModule},") !== false) $active = '';
+                $active = '';
+                if($activeItem && $activeItem == $name)
+                {
+                    $active = 'active';
+                }
+                else
+                {
+                    $subModule = isset($menuItem['subModule']) ? explode(',', $menuItem['subModule']) : array();
+                    if($subModule && in_array($currentModule, $subModule)) $active = 'active';
+                    if($link['module'] == $currentModule && $link['method'] == $currentMethod) $active = 'active';
+                    if($link['module'] == $currentModule && strpos(",{$menuItem['alias']},", ",{$currentMethod},") !== false) $active = 'active';
+                    if(strpos(",{$menuItem['exclude']},", ",{$currentModule}-{$currentMethod},") !== false || strpos(",{$menuItem['exclude']},", ",{$currentModule},") !== false) $active = '';
+                }
                 $item['class'] = $active;
 
                 if($badgeMap && isset($badgeMap[$name])) $item['badge'] = array('text' => $badgeMap[$name], 'class' => 'label rounded gray-pale size-sm');

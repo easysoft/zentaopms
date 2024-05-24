@@ -637,6 +637,8 @@ class upgradeTao extends upgradeModel
 
         foreach($sprintCases as $sprintCase)
         {
+            $sprintCase->case    = (int)$sprintCase->case;
+            $sprintCase->version = (int)$sprintCase->version;
             $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
 
             $sprintCase->order   = $sprintCase->case * 5;

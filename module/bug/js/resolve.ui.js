@@ -1,23 +1,3 @@
-function setDuplicate()
-{
-    var resolution = $(event.target).val();
-    if(resolution == 'duplicate')
-    {
-        $.getJSON($.createLink('bug', 'ajaxGetProductBugs', 'projectID=' + productID + '&bugID=' + bugID),function(bugs)
-        {
-            if(!bugs) return;
-
-            $('[name="duplicateBug"]').zui('picker').render({items: bugs});
-        });
-
-        $('#duplicateBugBox').removeClass('hidden');
-    }
-    else
-    {
-        $('#duplicateBugBox').addClass('hidden');
-    }
-}
-
 $(document).off('change', "[name^='resolution']").on('change', "[name^='resolution']", function()
 {
     if(requiredFields.indexOf('resolvedBuild') == -1)

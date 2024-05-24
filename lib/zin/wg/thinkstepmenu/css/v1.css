@@ -1,4 +1,4 @@
-.think-node-menu {max-height: calc(100vh - 105px); min-height: 32px;}
+.think-node-menu {max-height: calc(100vh - 105px); min-height: 32px; padding: 10px 0 60px;}
 .think-node-menu .tree-lines .tree:before {top: -18px; bottom: 0;}
 .think-node-menu .tree-lines .tree[data-type="transition"]:before,
 .think-node-menu .tree-lines .tree[data-type="question"]:before {display: none;}
@@ -11,7 +11,7 @@
 .think-node-menu .tree-item .listitem.selected {background: rgba(var(--color-primary-50-rgb), .8);}
 .think-node-menu .tree-item .listitem.selected .item-content {color: var(--color-primary-500);}
 .think-node-menu .tree .tree-item .toolbar {margin-left: calc(4*var(--space));}
-.think-node-menu .tree.is-nested-root>.tree-item {margin-top: calc(3*var(--space));}
+.think-node-menu .tree.is-nested-root>.tree-item:not(:first-child) {margin-top: calc(3*var(--space));}
 .think-node-menu .tree.is-nested-root>.tree-item>.listitem>.toolbar {margin-left: 0;}
 .think-node-menu .tree .tree-item .toolbar .btn:not(.with-popover-show) {opacity: 0;}
 .think-node-menu .tree .listitem:hover>.toolbar .btn {opacity: 1;}

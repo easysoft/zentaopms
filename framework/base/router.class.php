@@ -484,6 +484,8 @@ class baseRouter
         $this->setEdition();
 
         $this->setClient();
+
+        $this->loadCacheConfig();
     }
 
     /**
@@ -2775,6 +2777,30 @@ class baseRouter
     }
 
     /**
+     * 从数据库加载缓存配置。
+     * Load the cache config from the database.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadCacheConfig()
+    {
+        if(!$this->isServing())      return false;
+        if(!$this->checkInstalled()) return false;
+
+        $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
+        if(!$globalCache) return false;
+
+        $caches = json_decode($globalCache->value);
+        foreach($caches as $cacheKey => $cache)
+        {
+            if(!isset($this->config->cache->$cacheKey)) $this->config->cache->$cacheKey = new stdClass();
+
+            foreach($cache as $key => $value) $this->config->cache->$cacheKey->$key = $value;
+        }
+    }
+
+    /**
      * 当multiSite功能打开的时候，加载额外的配置文件。
      * When multiSite feature enabled, load extra config file.
      *
@@ -3419,6 +3445,21 @@ class baseRouter
         $filesToLoad = array_merge($filesToLoad, $extFiles);
         if(empty($filesToLoad)) return false;
         return $filesToLoad;
+    }
+
+    /**
+     * 检查是否已安装禅道，主要用于DevOps平台版。
+     * Check zentao is installed.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkInstalled()
+    {
+        if(!isset($this->config->installed) || !$this->config->installed) return false;
+        if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
+
+        return true;
     }
 }
 

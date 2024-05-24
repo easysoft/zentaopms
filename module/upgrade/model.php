@@ -113,7 +113,7 @@ class upgradeModel extends model
             file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
         }
 
-        if(version_compare($fromVersion, '20.0', '>')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+        if(version_compare($fromVersion, '20.0.beta1', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
 
         $fromEdition = $this->getEditionByVersion($fromVersion);
         $this->fromVersion = $fromVersion;

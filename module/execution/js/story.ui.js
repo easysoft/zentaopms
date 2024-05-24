@@ -65,7 +65,11 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
         }
         else
         {
-            if(!unlinkTaskIdList) return false;
+            if(!unlinkTaskIdList)
+            {
+                loadCurrentPage();
+                return false;
+            }
 
             $('#storyIdList').val(unlinkTaskIdList);
         }
@@ -75,7 +79,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
     const formData = new FormData($("#toTaskForm")[0]);
     postAndLoadPage($('#toTaskForm').attr('action'), formData);
-
 
     return false;
 });
@@ -102,9 +105,9 @@ $(document).off('click', '#linkStoryByPlan button[type="submit"]').on('click', '
  */
 window.setStatistics = function(element, checkedIdList)
 {
-    if(!checkedIdList) return {html: summary};
-
     const checkedTotal = checkedIdList.length;
+    if(!checkedTotal) return {html: summary};
+
     $('#storyIdList').val(checkedIdList.join(','));
 
     let checkedEstimate = 0;

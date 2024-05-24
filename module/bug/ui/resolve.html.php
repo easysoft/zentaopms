@@ -47,8 +47,8 @@ formPanel
         (
             set::name('resolution'),
             set::items($lang->bug->resolutionList),
-            on::change('setDuplicate')
-        )
+            on::change()->toggleClass('#duplicateBugBox', 'hidden', 'target.value !== "duplicate"'),
+        ),
     ),
     formRow
     (
@@ -61,9 +61,12 @@ formPanel
             picker
             (
                 set::name('duplicateBug'),
-                set::items(array()),
+                set::items(createLink('bug', 'ajaxGetProductBugs', "projectID=$bug->product&bugID=$bug->id&search={search}")),
                 set::placeholder($lang->bug->placeholder->duplicate),
-                set::value('')
+                set::value(''),
+                set::popWidth('auto'),
+                set::popMaxWidth(600),
+                set::popMinWidth('100%')
             ),
             set::required(true)
         )

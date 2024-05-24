@@ -995,7 +995,7 @@ class bugZen extends bug
         {
             $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
         }
-        $builds = $this->addReleaseLabelForBuilds($productID, $builds);
+        $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
         return $this->updateBug($bug, array('builds' => $builds));
     }
@@ -1196,6 +1196,7 @@ class bugZen extends bug
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+        $openedBuilds = $this->build->addReleaseLabelForBuilds($bug->product, $openedBuilds);
         if(!isset($openedBuilds[$bug->openedBuild]))
         {
             $build = $this->build->getByID((int)$bug->openedBuild);
@@ -1217,7 +1218,7 @@ class bugZen extends bug
         }
 
         $resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
-        $resolvedBuilds = $this->addReleaseLabelForBuilds($bug->product, $resolvedBuilds);
+        $resolvedBuilds = $this->build->addReleaseLabelForBuilds($bug->product, $resolvedBuilds);
 
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
@@ -2418,28 +2419,5 @@ class bugZen extends bug
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
 
         return $chartOption;
-    }
-
-    /**
-     * 给版本中的发布增加标识。
-     * Add label for the release in the builds.
-     *
-     * @param  int       $productID
-     * @param  array     $builds
-     * @access protected
-     * @return array
-     */
-    protected function addReleaseLabelForBuilds(int $productID, array $builds): array
-    {
-        $releases = $this->loadModel('build')->getRelatedReleases(array($productID));
-
-        $buildItems = array();
-        foreach($builds as $buildID => $buildName) $buildItems[$buildID] = array('value' => $buildID, 'text' => $buildName);
-        foreach($releases as $release)
-        {
-            if(isset($buildItems[$release->shadow])) $buildItems[$release->shadow]['content'] = array('html' => "<div class='flex clip'>{$buildItems[$release->shadow]['text']}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
-        }
-
-        return array_values($buildItems);
     }
 }

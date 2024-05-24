@@ -337,8 +337,6 @@ class installZen extends install
 \$config->webRoot       = getWebRoot();
 \$config->default->lang = getenv('ZT_DEFAULT_LANG');
 
-\$config->cache->dao->enable = true;
-
 \$hasSlaveDB = (string)getenv('ENABLE_DB_SLAVE');
 if(\$hasSlaveDB && \$hasSlaveDB != 'false')
 {

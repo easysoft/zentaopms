@@ -1993,7 +1993,7 @@ class productModel extends model
         if($module == 'story'      && $method == 'report')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra=$extra");
         if($module == 'testcase'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}" . ($extra ? "&browseType=$extra" : ''));
         if($module == 'testreport' && $method == 'create')      return helper::createLink($module, $method,       "objectID=&objectType=testtask&extra=%s");
-        if($module == 'testtask'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra={$extra}");
+        if($module == 'testtask'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}");
         if($module == 'testsuite'  && $method != 'create')      return helper::createLink('testsuite', 'browse',  "productID=%s");
         if($module == 'product'    && $method == 'project')     return helper::createLink($module, $method,       "status=all&productID=%s{$branchParam}");
         if($module == 'product'    && $method == 'dynamic')     return helper::createLink($module, $method,       "productID=%s&type=$extra");

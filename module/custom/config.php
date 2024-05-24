@@ -98,6 +98,7 @@ $config->custom->customFields['common']      = array('global' => array('hideVisi
 $config->custom->customFields['doc']         = array('common' => array('docContentType'));
 $config->custom->customFields['bug']         = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
 $config->custom->customFields['caselib']     = array('custom' => array('createFields'));
+$config->custom->customFields['project']     = array('custom' => array('createFields'));
 $config->custom->customFields['execution']   = array('custom' => array('batchEditFields'));
 $config->custom->customFields['product']     = array('custom' => array('createFields', 'batchEditFields'));
 $config->custom->customFields['programplan'] = array('custom' => array('createWaterfallFields', 'createIpdFields', 'createWaterfallplusFields'), 'customAgilePlus' => array('createFields'));

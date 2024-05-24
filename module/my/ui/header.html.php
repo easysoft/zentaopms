@@ -28,6 +28,7 @@ if($app->rawMethod == 'work')
 
     mainNavbar
     (
+        set::active($mode),
         set::badgeMap($badgeMap)
     );
 }

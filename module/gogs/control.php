@@ -208,7 +208,7 @@ class gogs extends control
             {
                 if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
 
-                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gogsUser->id) $user->status = 'binded';
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gogsUser->account) $user->status = 'binded';
             }
 
             if($type != 'all' && $user->status != $type) continue;

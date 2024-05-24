@@ -128,7 +128,7 @@ class navbar extends wg
         $activeMenu   = '';
         $activeMenuID = data('activeMenuID');
         $items        = array();
-        $flows        = in_array($config->edition, array('biz', 'max', 'ipd')) ? $app->control->loadModel('my')->getFlowPairs() : array();
+        $flows        = $config->edition != 'open' ? $app->control->loadModel('my')->getFlowPairs() : array();
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;

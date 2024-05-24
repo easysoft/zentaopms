@@ -53,6 +53,9 @@ $lang->admin->engineInfo                 = "The <strong>%s</strong> table engine
 $lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
 $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
+$lang->admin->daoCache     = 'DAO Cache';
+$lang->admin->apcuNotFound = 'Please enable APCu extension before turning on DAO cache';
+
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';
 $lang->admin->info->links   = 'You can visit links below';

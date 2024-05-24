@@ -62,9 +62,9 @@ class gogsZen extends gogs
         $matchedUsers = array();
         foreach($gogsUsers as $gogsUser)
         {
-            if(isset($bindedUsers[$gogsUser->id]))
+            if(isset($bindedUsers[$gogsUser->account]))
             {
-                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->id];
+                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->account];
                 $matchedUsers[$gogsUser->id] = $gogsUser;
                 continue;
             }

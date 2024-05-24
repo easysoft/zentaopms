@@ -750,21 +750,6 @@ class router extends baseRouter
     }
 
     /**
-     * 检查是否已安装禅道，主要用于DevOps平台版。
-     * Check zentao is installed.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkInstalled()
-    {
-        if(!$this->config->installed) return false;
-        if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
-
-        return true;
-    }
-
-    /**
      * 获取禅道版本在不同语言下的显示名称。
      * Get the display name of the ZenTaoPMS version in different language.
      *

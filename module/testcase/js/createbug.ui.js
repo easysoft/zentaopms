@@ -56,7 +56,7 @@ function createBug(event)
     });
 
     var link = $.createLink('bug', 'create', $form.data('params') + ',stepIdList=' + stepIdList);
-    loadPage(link);
+    openPage(link, 'qa');
 }
 
 /**

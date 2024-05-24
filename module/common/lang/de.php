@@ -431,6 +431,7 @@ $lang->admin->data        = 'Data';
 $lang->admin->cron        = 'Cron';
 $lang->admin->buildIndex  = 'Full Text Search';
 $lang->admin->tableEngine = 'Table Engine';
+$lang->admin->cache       = 'Cache';
 
 $lang->convert->importJira = 'Import Jira';
 

@@ -581,4 +581,26 @@ class admin extends control
 
         echo 'success';
     }
+
+    /**
+     * 设置是否启用缓存。
+     * Set cache enable.
+     *
+     * @access public
+     * @return void
+     */
+    public function cache()
+    {
+        if($_POST)
+        {
+            if(!extension_loaded('apcu')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotFound));
+
+            $cache = form::data()->get();
+            $this->loadModel('setting')->setItem('system.common.global.cache', json_encode($cache));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        }
+
+        $this->view->title = $this->lang->admin->cache;
+        $this->display();
+    }
 }

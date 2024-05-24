@@ -19,7 +19,7 @@ class thinkInput extends thinkQuestion
         if($step)
         {
             $required = $step->options->required;
-            $value    = $step->answer->result;
+            $value    = isset($step->answer->result)? $step->answer->result : '';
         }
 
         $detailWg[] = textarea

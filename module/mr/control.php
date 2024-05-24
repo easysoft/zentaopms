@@ -331,8 +331,8 @@ class mr extends control
 
         $this->view->title         = $this->lang->mr->view;
         $this->view->MR            = $MR;
-        $this->view->repoID        = $MR->repoID;
         $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
+        $this->view->repo          = $this->loadModel('repo')->getByID($MR->repoID);
         $this->view->reviewer      = $this->loadModel('user')->getById($MR->assignee);
         $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->compile       = $compile;

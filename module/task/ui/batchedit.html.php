@@ -25,6 +25,7 @@ formBatchPanel
     set::mode('edit'),
     set::data(array_values($tasks)),
     set::onRenderRow(jsRaw('renderRowData')),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     formBatchItem
     (
         set::name('id'),

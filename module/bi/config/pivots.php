@@ -1596,7 +1596,49 @@ $config->bi->builtin->pivots[] = array
     'dimension' => '1',
     'group'     => '62',
     'sql'       => <<<EOT
-select t1.day,t2.userlogin,t3.consumed,t4.storyopen,t5.storyclose,t6.taskopen,t7.taskfinish,t8.bugopen,t9.bugresolve,t1.actions from ztv_dayactions as t1 left join ztv_dayuserlogin as t2 on t1.day=t2.day left join ztv_dayeffort as t3 on t1.day=t3.date left join ztv_daystoryopen as t4 on t1.day=t4.day left join ztv_daystoryclose as t5 on t1.day=t5.day left join ztv_daytaskopen as t6 on t1.day=t6.day left join ztv_daytaskfinish as t7 on t1.day=t7.day left join ztv_daybugopen as t8 on t1.day=t8.day left join ztv_daybugresolve as t9 on t1.day=t9.day where if(\$startDate='',1,t1.day>=\$startDate) and if(\$endDate='',1,t1.day<=\$endDate)
+select
+    t1.day,
+    sum(t1.userlogin) as userlogin,
+    sum(t1.consumed) as consumed,
+    sum(t1.storyopen) as storyopen,
+    sum(t1.storyclose) as storyclose,
+    sum(t1.taskopen) as taskopen,
+    sum(t1.taskfinish) as taskfinish,
+    sum(t1.bugopen) as bugopen,
+    sum(t1.bugresolve) as bugresolve,
+    sum(t1.actions) as actions
+from (
+    select
+        left(`zt_action`.`date`, 10) as day,
+        count(case when `zt_action`.`objectType` = 'user' and `zt_action`.`action` = 'login' then 1 end) as userlogin,
+        0 as consumed,
+        count(case when `zt_action`.`objectType` = 'story' and `zt_action`.`action` = 'opened' then 1 end) as storyopen,
+        count(case when `zt_action`.`objectType` = 'story' and `zt_action`.`action` = 'closed' then 1 end) as storyclose,
+        count(case when `zt_action`.`objectType` = 'task' and `zt_action`.`action` = 'opened' then 1 end) as taskopen,
+        count(case when `zt_action`.`objectType` = 'task' and `zt_action`.`action` = 'finished' then 1 end) as taskfinish,
+        count(case when `zt_action`.`objectType` = 'bug' and `zt_action`.`action` = 'opened' then 1 end) as bugopen,
+        count(case when `zt_action`.`objectType` = 'bug' and `zt_action`.`action` = 'resolved' then 1 end) as bugresolve,
+        count(*) as actions
+    from `zt_action`
+    where if(\$startDate='',1,`zt_action`.`date`>=\$startDate) and if(\$endDate='',1,`zt_action`.`date`<=\$endDate)
+    group by left(`zt_action`.`date`, 10)
+    union all
+    select
+        `zt_effort`.`date` as day,
+        0 as userlogin,
+        round(sum(`zt_effort`.`consumed`), 1) as consumed,
+        0 as storyopen,
+        0 as storyclose,
+        0 as taskopen,
+        0 as taskfinish,
+        0 as bugopen,
+        0 as bugresolve,
+        0 as actions
+    from `zt_effort`
+    where if(\$startDate='',1,`zt_effort`.`date`>=\$startDate) and if(\$endDate='',1,`zt_effort`.`date`<=\$endDate)
+    group by `zt_effort`.`date`
+) as t1
+group by t1.day
 EOT,
     'settings'  => array
     (

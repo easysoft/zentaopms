@@ -2877,6 +2877,7 @@ $config->group->package->systemSetting = new stdclass();
 $config->group->package->systemSetting->order  = 5;
 $config->group->package->systemSetting->subset = 'systemsetting';
 $config->group->package->systemSetting->privs  = array();
+$config->group->package->systemSetting->privs['admin-cache']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['admin-tableEngine']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['custom-timezone']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['custom-libreoffice'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 100, 'depend' => array(), 'recommend' => array());
