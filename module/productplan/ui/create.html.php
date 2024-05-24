@@ -61,7 +61,6 @@ formPanel
         set::required(true),
         picker
         (
-            setID('branch'),
             set::name('branch[]'),
             set::items($branches),
             set::multiple(true),
