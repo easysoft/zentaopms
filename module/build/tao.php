@@ -62,7 +62,6 @@ class buildTao extends buildModel
         $selectedBuilds = array();
         if($buildIdList)
         {
-            $buildIdList    = str_replace('trunk', '0', $buildIdList);
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
                 ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
