@@ -205,6 +205,8 @@ class dtable extends wg
                 unset($config['modifier']);
             }
         }
+
+        global $config;
         if($config->edition != 'open')
         {
             $extendFields = $app->control->loadModel('workflowaction')->getFields($moduleName, $methodName);
