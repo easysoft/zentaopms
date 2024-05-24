@@ -2588,7 +2588,7 @@ class taskModel extends model
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
         /* Check if field is valid. */
-        $workhour = $this->taskTao->checkWorkhour($task, $workhour);
+        $workhour = $this->checkWorkhour($task, $workhour);
         if(!$workhour || dao::isError()) return array();
 
         /* Add field to workhour. */
@@ -2638,6 +2638,65 @@ class taskModel extends model
         $this->loadModel('program')->refreshProjectStats($task->project);
 
         return $allChanges;
+    }
+
+    /**
+     * 检查录入日志的字段必填性及日志记录人要在多人任务的团队中。
+     * Check that the required fields of the effort must be filled in and the effort recorder must be in the multi-task team.
+     *
+     * @param  object      $task
+     * @param  array       $workhour
+     * @access public
+     * @return false|array
+     */
+    public function checkWorkhour(object $task, array $workhour): false|array
+    {
+        foreach($workhour as $id => $record)
+        {
+            if(!$record->work && !$record->consumed && !$record->left)
+            {
+                unset($workhour[$id]);
+                continue;
+            }
+
+            $date     = $record->date;
+            $consumed = $record->consumed;
+            $left     = $record->left;
+
+            /* Check the date of workhour. */
+            if(helper::isZeroDate($date)) dao::$errors["date[$id]"] = $this->lang->task->error->dateEmpty;
+            if($date > helper::today())   dao::$errors["date[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->date;
+
+            /* Check consumed hours. */
+            if(!$consumed)
+            {
+                dao::$errors["consumed[$id]"] = $this->lang->task->error->consumedThisTime;
+            }
+            elseif(!is_numeric($consumed) && !empty($consumed))
+            {
+                dao::$errors["consumed[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
+            }
+            elseif(is_numeric($consumed) && $consumed <= 0)
+            {
+                dao::$errors["consumed[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->record, '0');
+            }
+            elseif(!$record->work && $this->config->edition != 'open')
+            {
+                dao::$errors["work[$id]"] = sprintf($this->lang->error->notempty, $this->lang->task->work);
+            }
+
+            /* Check left hours. */
+            if($left === '') dao::$errors["left[$id]"] = $this->lang->task->error->left;
+            if(!is_numeric($left)) dao::$errors["left[$id]"] = 'ID #' . $id . ' ' . $this->lang->task->error->leftNumber;
+            if(is_numeric($left) && $left < 0) dao::$errors["left[$id]"] = sprintf($this->lang->error->gt, 'ID #' . $id . ' ' . $this->lang->task->left, '0');
+        }
+
+        if(dao::isError()) return false;
+
+        $inTeam = $this->dao->select('id')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->andWhere('account')->eq($this->app->user->account)->fetch('id');
+        if($task->team && !$inTeam) return false;
+
+        return $workhour;
     }
 
     /**
