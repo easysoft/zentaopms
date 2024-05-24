@@ -45,7 +45,10 @@ class releaseModel extends model
         $this->loadModel('file');
         $release = $this->file->replaceImgURL($release, 'desc');
         $release->files = $this->file->getByObject('release', $releaseID);
-        if(empty($release->files))$release->files = $this->file->getByObject('build', (int)$release->build);
+        if(!empty($release->builds) && is_array($release->builds))
+        {
+            foreach($release->builds as $build) $release->files = array_merge($release->files, $this->file->getByObject('build', (int)$build->id));
+        }
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
 
         return $release;
