@@ -5,6 +5,8 @@ $config->todo->create->form = array();
 $config->todo->create->form['type']         = array('required' => true,  'type' => 'string');
 $config->todo->create->form['name']         = array('required' => true,  'type' => 'string', 'default'  => '');
 $config->todo->create->form['story']        = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->create->form['epic']         = array('required' => false, 'type' => 'string', 'default'  => 0);
+$config->todo->create->form['requirement']  = array('required' => false, 'type' => 'string', 'default'  => 0);
 $config->todo->create->form['task']         = array('required' => false, 'type' => 'string', 'default'  => 0);
 $config->todo->create->form['bug']          = array('required' => false, 'type' => 'string', 'default'  => 0);
 $config->todo->create->form['status']       = array('required' => true,  'type' => 'string');
