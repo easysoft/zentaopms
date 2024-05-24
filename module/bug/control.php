@@ -1496,7 +1496,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit, 'all');
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit, 'single');
 
         unset($productBugs[$bugID]);
         if($type == 'json') return print(helper::jsonEncode($productBugs));
