@@ -35,7 +35,7 @@ formPanel
                 (
                     set::name('pri'),
                     set::items($lang->kanbancard->priList),
-                    set::value('3')
+                    set::value($card->pri)
                 )
             )
         ),
