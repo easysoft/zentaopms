@@ -67,7 +67,7 @@ class thinkOptions extends wg
         (
             setID($id),
             setClass('think-options w-full'),
-            div(set::className('think-options-body')),
+            div(setClass('think-options-body')),
             zui::thinkOptions
             (
                 set::_to("#$id"),

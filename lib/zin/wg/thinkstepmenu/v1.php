@@ -79,8 +79,8 @@ class thinkStepMenu extends wg
         $this->modules = $this->prop('modules');
         $app->loadLang('thinkstep');
 
-        $untitledGroup = array('transition' => $lang->thinkstep->untitled . $lang->thinkstep->transition, 'question' => $lang->thinkstep->untitled . $lang->thinkstep->question);
-        jsVar('untitledGroup', $untitledGroup);
+        $untitledLangs = array('transition' => $lang->thinkstep->untitled . $lang->thinkstep->transition, 'question' => $lang->thinkstep->untitled . $lang->thinkstep->question);
+        jsVar('untitledLangs', $untitledLangs);
 
         $this->setProp('items', $this->buildMenuTree(array(), 0));
     }
