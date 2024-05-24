@@ -250,7 +250,7 @@ class repo extends control
 
             $this->repo->saveRelation($repoID, $branch->branchName, $objectID, $objectType);
             $this->loadModel('action')->create($objectType, $objectID, 'createRepoBranch', '', $branch->branchName);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'loadModal', array($this->createLink($objectType, 'createBranch', "objectID={$objectID}")))));
         }
 
         $canCreate = $object->status == 'active';
