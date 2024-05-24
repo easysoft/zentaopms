@@ -28,10 +28,11 @@ $config->build->search['params']['date']     = array('operator' => '=',       'c
 $config->build->search['params']['builder']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->build->search['params']['desc']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
 
-$config->build->actionList['linkStory']['icon'] = 'link';
-$config->build->actionList['linkStory']['text'] = $lang->build->linkStory;
-$config->build->actionList['linkStory']['hint'] = $lang->build->linkStory;
-$config->build->actionList['linkStory']['url']  = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');
+$config->build->actionList['linkStory']['icon']     = 'link';
+$config->build->actionList['linkStory']['text']     = $lang->build->linkStory;
+$config->build->actionList['linkStory']['hint']     = $lang->build->linkStory;
+$config->build->actionList['linkStory']['url']      = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');
+$config->build->actionList['linkStory']['data-app'] = $app->tab;
 
 $config->build->actionList['linkProjectStory']        = $config->build->actionList['linkStory'];
 $config->build->actionList['linkProjectStory']['url'] = array('module' => 'projectbuild', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');

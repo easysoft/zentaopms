@@ -49,7 +49,7 @@ jsVar('integratedTip', $lang->build->integrated);
 jsVar('deletedTip', $lang->build->deleted);
 
 $fieldList = $config->build->dtable->fieldList;
-if($project->model == 'kanban' && $app->rawModule == 'projectbuild')
+if(($project->model == 'kanban' && $app->rawModule == 'projectbuild') || !$project->multiple)
 {
     unset($fieldList['actions']['list']['createTest']['data-app']);
     $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['projectBugList']['url'];
