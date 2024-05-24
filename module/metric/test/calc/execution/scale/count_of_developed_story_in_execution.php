@@ -8,7 +8,7 @@ timeout=0
 cid=1
 
 - 测试分组数。 @6
-- 测试项目2。第0条的value属性 @1
+- 测试项目2。第0条的value属性 @11
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
@@ -24,4 +24,4 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
 
-r($calc->getResult(array('project' => '4'))) && p('0:value') && e('1');  // 测试项目2。
+r($calc->getResult(array('project' => '4'))) && p('0:value') && e('11');  // 测试项目2。

@@ -34,7 +34,8 @@ class count_of_developed_story_in_execution extends baseCalc
 
         if(!isset($this->result[$execution])) $this->result[$execution] = 0;
 
-        if(!in_array($stage, array('developed', 'testing', 'tested', 'verified', 'released')) && $closedReason == 'done') $this->result[$execution] += 1;
+        if(in_array($stage, array('developed', 'testing', 'tested', 'verified', 'released'))) $this->result[$execution] += 1;
+        if($closedReason) $this->result[$execution] += 1;
     }
 
     public function getResult($options = array())
