@@ -261,3 +261,8 @@ $lang->system->backup->error->upgradeOvertime   = "Upgrade timed out!";
 $lang->system->backup->error->degradeFail       = "Downgrade failed!";
 $lang->system->backup->error->beenLatestVersion = "It is already the latest version, no upgrade required!";
 $lang->system->backup->error->requireVersion    = "Version number must be uploaded!";
+
+$lang->system->maintenance = new stdclass();
+$lang->system->maintenance->reason['backup']  = 'The platform is under backup, please visit later';
+$lang->system->maintenance->reason['restore'] = 'The platform is under restore, please visit later';
+$lang->system->maintenance->reason['upgrade'] = 'The platform is under upgrade, please visit later';

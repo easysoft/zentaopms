@@ -262,3 +262,8 @@ $lang->system->backup->error->upgradeOvertime   = "升级超时!";
 $lang->system->backup->error->degradeFail       = "降级失败!";
 $lang->system->backup->error->beenLatestVersion = "已经是最新版，无需升级!";
 $lang->system->backup->error->requireVersion    = "必须上传版本号!";
+
+$lang->system->maintenance = new stdclass();
+$lang->system->maintenance->reason['backup']  = '平台正在备份中，请稍后访问';
+$lang->system->maintenance->reason['restore'] = '平台正在恢复中，请稍后访问';
+$lang->system->maintenance->reason['upgrade'] = '平台正在升级中，请稍后访问';
