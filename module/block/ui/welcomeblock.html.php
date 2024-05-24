@@ -22,6 +22,7 @@ $getMeasureItem = function($data)
     $items = array();
     foreach($data as $key => $info)
     {
+        if(empty($info['number'])) continue;
         if(count($items) >= 5) break;
         $items[] = cell
         (
@@ -32,6 +33,25 @@ $getMeasureItem = function($data)
             ),
             div(zget($welcomeLabel, $key, ''))
         );
+    }
+    if(count($items) < 5)
+    {
+        foreach($data as $key => $info)
+        {
+            if(count($items) >= 5) break;
+            if(empty($info['number']))
+            {
+                $items[] = cell
+                (
+                    div
+                    (
+                        set('class', 'text-3xl h-10'),
+                        !empty($info['href']) ? a(setClass('text-primary'), set('href', $info['href']), $info['number']) : span($info['number'])
+                    ),
+                    div(zget($welcomeLabel, $key, ''))
+                );
+            }
+        }
     }
     return $items;
 };
