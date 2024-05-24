@@ -371,6 +371,18 @@ class baseDAO
     }
 
     /**
+     * 清除缓存。
+     * Clear the cache.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearCache()
+    {
+        if(!empty($this->cache)) $this->cache->clear();
+    }
+
+    /**
      * 开始事务。
      * Begin Transaction
      *
