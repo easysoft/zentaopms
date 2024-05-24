@@ -737,7 +737,7 @@ class gogsRepo
                 list($action, $entry) = $lineList;
                 $entry = '/' . trim($entry);
                 $pathInfo = array();
-                $pathInfo['action']  = $action;
+                $pathInfo['action']  = substr($action, 0, 1);
                 $pathInfo['kind']    = 'file';
                 $pathInfo['oldPath'] = isset($lineList[2]) ? '/' . trim($lineList[2]) : '';
                 $changes[$entry]     = $pathInfo;
