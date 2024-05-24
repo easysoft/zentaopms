@@ -722,7 +722,7 @@
         {
             $page = $('<div/>')
                 .append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', scrolling: 'auto', style: 'width:100%;height:100%;'}))
-                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0', style: 'z-index:100;'})
+                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0', style: 'z-index:9999;'})
                 .insertAfter('body')
                 .on('oldPageLoad.app', () =>
                 {

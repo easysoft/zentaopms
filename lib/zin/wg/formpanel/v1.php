@@ -278,7 +278,7 @@ class formPanel extends panel
             set::className($this->prop('formClass')),
             set($this->props->pick($formProps)),
             $this->children(),
-            $this->buildExtraMain(),
+            $this->prop('showExtra') ? $this->buildExtraMain() : null,
             $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
         );
     }

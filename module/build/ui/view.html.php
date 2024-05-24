@@ -151,6 +151,7 @@ if(!empty($build->builds))
 
 detailBody
 (
+    set::hasExtraMain(false),
     sectionList(
         tabs
         (
@@ -265,81 +266,84 @@ detailBody
                 set::key('buildInfo'),
                 set::title($lang->build->basicInfo),
                 div(
-                    tableData
-                    (
-                        !$hidden ? item
+                    section(
+                        set::title($lang->build->basicInfo),
+                        tableData
                         (
-                            set::name($lang->build->product),
-                            $build->productName
-                        ) : null,
-                        $build->productType != 'normal' ? item
-                        (
-                            set::name($lang->build->branch),
-                            $branchName
-                        ) : null,
-                        item
-                        (
-                            set::name($lang->build->name),
-                            $build->name
-                        ),
-                        $build->execution ? item
-                        (
-                            set::name($executionTitle),
-                            ltrim($executionName, '/')
-                        ) : item
-                        (
-                            set::name($lang->build->builds),
-                            html(rtrim($builds, $lang->comma))
-                        ),
-                        item
-                        (
-                            set::name($lang->build->builder),
-                            zget($users, $build->builder)
-                        ),
-                        item
-                        (
-                            set::name($lang->build->date),
-                            $build->date
-                        ),
-                        item
-                        (
-                            set::name($lang->build->scmPath),
-                            h::a
+                            !$hidden ? item
                             (
-                                $build->scmPath,
-                                set('href', $build->scmPath),
-                                set('target', '_blank'),
-                                set('rel', 'nooperner noreferrer')
+                                set::name($lang->build->product),
+                                $build->productName
+                            ) : null,
+                            $build->productType != 'normal' ? item
+                            (
+                                set::name($lang->build->branch),
+                                $branchName
+                            ) : null,
+                            item
+                            (
+                                set::name($lang->build->name),
+                                $build->name
+                            ),
+                            $build->execution ? item
+                            (
+                                set::name($executionTitle),
+                                ltrim($executionName, '/')
+                            ) : item
+                            (
+                                set::name($lang->build->builds),
+                                html(rtrim($builds, $lang->comma))
+                            ),
+                            item
+                            (
+                                set::name($lang->build->builder),
+                                zget($users, $build->builder)
+                            ),
+                            item
+                            (
+                                set::name($lang->build->date),
+                                $build->date
+                            ),
+                            item
+                            (
+                                set::name($lang->build->scmPath),
+                                h::a
+                                (
+                                    $build->scmPath,
+                                    set('href', $build->scmPath),
+                                    set('target', '_blank'),
+                                    set('rel', 'nooperner noreferrer')
+                                )
+                            ),
+                            item
+                            (
+                                set::name($lang->build->filePath),
+                                h::a
+                                (
+                                    $build->filePath,
+                                    set('href', $build->filePath),
+                                    set('target', '_blank'),
+                                    set('rel', 'nooperner noreferrer')
+                                )
+                            ),
+                            item
+                            (
+                                set::name($lang->build->desc),
+                                html($build->desc)
                             )
                         ),
-                        item
+                        html($this->printExtendFields($build, 'html', 'position=all', false)),
+                        $build->files ? h::hr(set::className('mt-6')) : null,
+                        section
                         (
-                            set::name($lang->build->filePath),
-                            h::a
+                            $build->files ? fileList
                             (
-                                $build->filePath,
-                                set('href', $build->filePath),
-                                set('target', '_blank'),
-                                set('rel', 'nooperner noreferrer')
-                            )
+                                set::files($build->files)
+                            ) : null
                         ),
-                        item
-                        (
-                            set::name($lang->build->desc),
-                            html($build->desc)
-                        )
-                    ),
-                    html($this->printExtendFields($build, 'html', 'position=all', false)),
-                    $build->files ? h::hr(set::className('mt-6')) : null,
-                    section
-                    (
-                        $build->files ? fileList
-                        (
-                            set::files($build->files)
-                        ) : null
-                    ),
-                    h::hr(set::className('mt-6')),
-                    history(set::objectID($build->id))
+                        h::hr(set::className('mt-6')),
+                        history(set::objectID($build->id))
+                    )
                 )
             )
         )

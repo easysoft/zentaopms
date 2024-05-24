@@ -75,6 +75,7 @@ class formSettingBtn extends wg
                     setClass('form-setting-btn'),
                     set::title($lang->customField),
                     set::url($customLink),
+                    set::showExtra(false),
                     set::actions(array
                     (
                         btn(set::text($lang->save), setClass('primary'), on::click('onSubmitFormtSetting')),

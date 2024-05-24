@@ -53,17 +53,13 @@ window.onSortEnd = function(from, to, type)
     {
         if(from.data.parent == to.data.parent)
         {
-            zui.Modal.confirm({message: dragModalMessage, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((confirmed) =>
-            {
-                if(confirmed)
-                {
-                    changeScene(from.data.id, to.data.id);
-                }
-                else
-                {
-                    changeOrder(from.data.id, from.data.sort, to.data.id, to.data.sort, type, 'scene');
-                }
-            });
+            $('#dragModal').attr('data-sourceID',   from.data.id);
+            $('#dragModal').attr('data-targetID',   to.data.id);
+            $('#dragModal').attr('data-sourceSort', from.data.sort);
+            $('#dragModal').attr('data-targetSort', to.data.sort);
+            $('#dragModal').attr('data-type',       type);
+
+            zui.Modal.open({id: 'dragModal'});
         }
         else
         {
@@ -265,3 +261,27 @@ window.checkZtf = function(e)
         });
     }, 'json');
 }
+
+window.clickChangeScenen = function()
+{
+    const caseID  = $('#dragModal').attr('data-sourceID');
+    const sceneID = $('#dragModal').attr('data-targetID');
+
+    changeScene(caseID, sceneID);
+}
+
+window.clickChangeOrder = function()
+{
+    const sourceID    = $('#dragModal').attr('data-sourceID');
+    const sourceOrder = $('#dragModal').attr('data-sourceOrder');
+    const targetID    = $('#dragModal').attr('data-targetID');
+    const targetOrder = $('#dragModal').attr('data-targetOrder');
+    const type        = $('#dragModal').attr('data-type');
+
+    changeOrder(sourceID, sourceOrder, targetID, targetOrder, type, 'scene');
+}
+
+$('#dragModal').on('click', '[data-dismiss=modal]', function()
+{
+    loadCurrentPage({cache: false});
+});

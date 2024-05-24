@@ -25,7 +25,7 @@ class bugModel extends model
      */
     public function create(object $bug, string $from = ''): int|false
     {
-        $this->dao->insert(TABLE_BUG)->data($bug, 'laneID')
+        $this->dao->insert(TABLE_BUG)->data($bug, 'laneID,uploadImage,imageFile')
             ->autoCheck()
             ->checkIF(!empty($bug->notifyEmail), 'notifyEmail', 'email')
             ->batchCheck($this->config->bug->create->requiredFields, 'notempty')

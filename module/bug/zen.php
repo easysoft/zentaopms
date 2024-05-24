@@ -1280,10 +1280,11 @@ class bugZen extends bug
      *
      * @param  int       $productID
      * @param  string    $branch
+     * @param  array     $bugImagesFile
      * @access protected
      * @return array
      */
-    protected function buildBugsForBatchCreate(int $productID, string $branch): array
+    protected function buildBugsForBatchCreate(int $productID, string $branch, array $bugImagesFile): array
     {
         $bugs = form::batchData($this->config->bug->form->batchCreate)->get();
 
@@ -1293,7 +1294,7 @@ class bugZen extends bug
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
 
         /* Construct data. */
-        foreach($bugs as $bug)
+        foreach($bugs as $index => $bug)
         {
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = helper::now();
@@ -1306,6 +1307,11 @@ class bugZen extends bug
                 $bug->assignedTo   = $moduleOwners[$bug->module];
                 $bug->assignedDate = helper::now();
             }
+
+            $uploadImage      = !empty($this->post->uploadImage[$index]) ? $this->post->uploadImage[$index] : '';
+            $imageFile        = $this->processImageForBatchCreate($bug, $uploadImage, $bugImagesFile);
+            $bug->uploadImage = $uploadImage;
+            $bug->imageFile   = $imageFile;
         }
 
         return $bugs;
@@ -1793,7 +1799,7 @@ class bugZen extends bug
                     $this->loadModel('file')->saveFile($file, 'realpath');
 
                     $fileID = $this->dao->lastInsertID();
-                    $bug->steps .= '<img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
+                    $bug->steps .= '<br><img src="{' . $fileID . '.' . $file['extension'] . '}" alt="" />';
                 }
             }
             else
@@ -1987,12 +1993,10 @@ class bugZen extends bug
      *
      * @param  object    $bug
      * @param  array     $output
-     * @param  string    $uploadImage
-     * @param  array     $file
      * @access protected
      * @return bool
      */
-    protected function afterBatchCreate(object $bug, array $output, string|null $uploadImage, array $file): bool
+    protected function afterBatchCreate(object $bug, array $output): bool
     {
         /* If bug has the execution, update kanban data. */
         if($bug->execution)
@@ -2009,14 +2013,16 @@ class bugZen extends bug
         }
 
         /* When the bug is created by uploading the image, add the image to the file of the bug. */
-        if(!empty($uploadImage) and !empty($file))
+        if(!empty($bug->uploadImage) and !empty($bug->imageFile))
         {
-            $file['objectType'] = 'bug';
-            $file['objectID']   = $bug->id;
-            $file['addedBy']    = $this->app->user->account;
-            $file['addedDate']  = helper::now();
-            $this->dao->insert(TABLE_FILE)->data($file, 'realpath')->exec();
-            unset($file);
+            $bug->imageFile['objectType'] = 'bug';
+            $bug->imageFile['objectID']   = $bug->id;
+            $bug->imageFile['addedBy']    = $this->app->user->account;
+            $bug->imageFile['addedDate']  = helper::now();
+            $this->dao->insert(TABLE_FILE)->data($bug->imageFile, 'realpath')->exec();
+
+            unset($bug->imageFile);
+            unset($bug->uploadImage);
         }
 
         return !dao::isError();
@@ -2183,7 +2189,7 @@ class bugZen extends bug
         helper::setcookie('bugModule', '0', 0);
 
         /* Remove upload image file and session. */
-        if(!empty($this->post->uploadImage) and !empty($this->session->bugImagesFile))
+        if(!empty($_POST['uploadImage']) and !empty($_SESSION['bugImagesFile']))
         {
             $classFile = $this->app->loadClass('zfile');
             $file      = current($_SESSION['bugImagesFile']);

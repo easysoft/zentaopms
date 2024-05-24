@@ -33,6 +33,7 @@ class thinkStepMenu extends wg
 
     private function buildMenuTree(array $items, int $parentID = 0): array
     {
+        jsVar('from', data('from') ?? '');
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 

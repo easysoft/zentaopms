@@ -1076,7 +1076,7 @@ $lang->action->dynamicAction->task['gitcommited'] = 'git提交';
 $lang->action->dynamicAction->bug['repocreated']  = '创建代码评审';
 $lang->action->desc->createmr                     = '$extra';
 $lang->action->desc->deletemr                     = '$date, 由 <strong>$actor</strong> 取消关联了 <a href="$extra">合并请求</a>。';
-$lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了 <a href="$extra">代码</a>。';
+$lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了代码';
 $lang->action->desc->compilefail                  = '$date, 由 <strong>$actor</strong> 构建失败。';
 $lang->action->desc->compilepass                  = '$date, 由 <strong>$actor</strong> 构建成功。';
 $lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 审核通过。';

@@ -1,1 +1,2 @@
-.form-horz .form-group {flex-wrap: nowrap; align-items: center;}
+.form-horz .form-group {align-items: center;}
+textarea.w-4\/5 {width: calc(80% - 52px);}

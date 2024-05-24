@@ -49,12 +49,12 @@ $menuData = array('branch' => $branchMenus, 'tag' => $tagMenus);
 /* Prepare breadcrumb navigation data. */
 $base64BranchID    = helper::safe64Encode(base64_encode($branchID));
 $breadcrumbItems   = array();
-$breadcrumbItems[] = h::a
+$path ? $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID")),
     set('data-app', $app->tab),
     h::span('/', setStyle('margin', '0 5px'))
-);
+) : null;
 
 $paths    = explode('/', $path);
 $fileName = array_pop($paths);

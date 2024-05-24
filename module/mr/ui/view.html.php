@@ -20,7 +20,7 @@ dropmenu
 );
 
 $hasNoChange    = $MR->synced && empty($rawMR->changes_count) ? true : false;
-$hasNoConflict  = $MR->synced === '1' ? $rawMR->has_conflicts : !$MR->hasNoConflict;
+$hasConflict    = $MR->synced === '1' ? $rawMR->has_conflicts : !$MR->hasNoConflict;
 $sourceDisabled = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
 $branchPath     = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
 $mergeStatus    = !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus;
@@ -227,25 +227,24 @@ panel
                         set::name($lang->mr->reviewer),
                         $reviewer ? zget($reviewer, 'realname', $MR->assignee) : $MR->assignee
                     ),
-                    item
+                    $MR->status == 'opened' ? item
                     (
                         set::name($lang->mr->mergeStatus),
-                        $hasNoChange ? span
+                        $hasNoChange || $hasConflict ? span
                         (
                             setClass('status-cannot_be_merged'),
-                            $lang->mr->cantMerge,
-                            h::code($lang->mr->noChanges)
+                            $lang->mr->cantMerge
                         ) : span
                         (
                             setClass("status-{$mergeStatus}"),
                             zget($lang->mr->mergeStatusList, $mergeStatus)
-                        )
-                    ),
-                    item
-                    (
-                        set::name($lang->mr->MRHasConflicts),
-                        $hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict
-                    ),
+                        ),
+                        $hasNoChange || $hasConflict ? span
+                        (
+                            setClass('ml-2'),
+                            '(' . ($hasConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoChanges) . ')'
+                        ) : null
+                    ) : null,
                     item
                     (
                         set::name($lang->mr->description),
@@ -253,7 +252,7 @@ panel
                     )
                 )
             ),
-            ($MR->synced && $rawMR->state == 'opened' && $hasNoConflict) ? cell
+            ($MR->synced && $rawMR->state == 'opened' && $hasConflict) ? cell
             (
                 setClass('cell mb-2'),
                 html(sprintf($lang->mr->commandDocument, $sourceProject->http_url_to_repo, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch))

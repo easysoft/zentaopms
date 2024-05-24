@@ -47,7 +47,7 @@ foreach($config->mr->view->operateList as $operate)
 
         if($operate == 'approval')
         {
-            if($hasConflict || $compileNotSuccess || $MR->approvalStatus == 'approved')
+            if($hasNoChange || $hasConflict || $compileNotSuccess || $MR->approvalStatus == 'approved')
             {
                 $action['disabled'] = true;
                 if($compileNotSuccess) $action['hint'] = $lang->mr->compileTip;

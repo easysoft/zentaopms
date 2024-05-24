@@ -765,15 +765,13 @@ class bug extends control
 
             $message   = '';
             $bugIdList = array();
-            foreach($bugs as $index => $bug)
+            foreach($bugs as $bug)
             {
                 $bug->id = $this->bug->create($bug);
 
                 /* 批量创建后的一些其他操作。*/
                 /* Processing other operations after batch creation. */
-                $uploadImage = !empty($this->post->uploadImage[$index]) ? $this->post->uploadImage[$index] : '';
-                $file        = $this->bugZen->processImageForBatchCreate($bug, $uploadImage, $bugImagesFile);
-                $this->bugZen->afterBatchCreate($bug, $output, $uploadImage, $file);
+                $this->bugZen->afterBatchCreate($bug, $output);
 
                 $message = $this->executeHooks($bug->id);
 

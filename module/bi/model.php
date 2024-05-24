@@ -311,6 +311,7 @@ class biModel extends model
         $chartSQLs = array();
         foreach($charts as $chart)
         {
+            $currentOperate = $operate;
             $chart = (object)$chart;
             if(isset($chart->settings)) $chart->settings = $this->jsonEncode($chart->settings);
             if(isset($chart->filters))  $chart->filters  = $this->jsonEncode($chart->filters);
@@ -318,16 +319,16 @@ class biModel extends model
             if(isset($chart->langs))    $chart->langs    = $this->jsonEncode($chart->langs);
 
             $exists = $this->dao->select('id')->from(TABLE_CHART)->where('id')->eq($chart->id)->fetch();
-            if(!$exists) $operate = 'insert';
+            if(!$exists) $currentOperate = 'insert';
 
             $stmt = null;
-            if($operate == 'insert')
+            if($currentOperate == 'insert')
             {
                 $chart->createdBy   = 'system';
                 $chart->createdDate = helper::now();
                 $stmt = $this->dao->insert(TABLE_CHART)->data($chart);
             }
-            if($operate == 'update')
+            if($currentOperate == 'update')
             {
                 $id = $chart->id;
                 unset($chart->group);
@@ -356,6 +357,7 @@ class biModel extends model
         $pivotSQLs = array();
         foreach($pivots as $pivot)
         {
+            $currentOperate = $operate;
             $pivot = (object)$pivot;
             $pivot->name     = $this->jsonEncode($pivot->name);
             if(isset($pivot->desc))     $pivot->desc     = $this->jsonEncode($pivot->desc);
@@ -366,16 +368,16 @@ class biModel extends model
             if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
 
             $exists = $this->dao->select('id')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
-            if(!$exists) $operate = 'insert';
+            if(!$exists) $currentOperate = 'insert';
 
             $stmt = null;
-            if($operate == 'insert')
+            if($currentOperate == 'insert')
             {
                 $pivot->createdBy   = 'system';
                 $pivot->createdDate = helper::now();
                 $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot);
             }
-            if($operate == 'update')
+            if($currentOperate == 'update')
             {
                 $id = $pivot->id;
                 unset($pivot->group);
@@ -408,22 +410,23 @@ class biModel extends model
             ->exec();
         foreach($metrics as $metric)
         {
+            $currentOperate = $operate;
             $metric = (object)$metric;
             $metric->stage   = 'released';
             $metric->type    = 'php';
             $metric->builtin = '1';
 
             $exists = $this->dao->select('code')->from(TABLE_METRIC)->where('code')->eq($metric->code)->fetch();
-            if(!$exists) $operate = 'insert';
+            if(!$exists) $currentOperate = 'insert';
 
             $stmt = null;
-            if($operate == 'insert')
+            if($currentOperate == 'insert')
             {
                 $metric->createdBy   = 'system';
                 $metric->createdDate = helper::now();
                 $stmt = $this->dao->insert(TABLE_METRIC)->data($metric);
             }
-            if($operate == 'update')
+            if($currentOperate == 'update')
             {
                 $code = $metric->code;
                 unset($metric->code);
@@ -451,24 +454,25 @@ class biModel extends model
         $screenSQLs = array();
         foreach($screens as $screenID)
         {
+            $currentOperate = $operate;
             $screenJson = file_get_contents(__DIR__ . DS . 'json' . DS . "screen{$screenID}.json");
             $screen = json_decode($screenJson);
-            if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme);
+            if(isset($screen->scheme)) $screen->scheme = json_encode($screen->scheme, JSON_UNESCAPED_UNICODE);
 
             $exists = $this->dao->select('id')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
 
-            if(!$exists) $operate = 'insert';
+            if(!$exists) $currentOperate = 'insert';
 
             $screen->status = 'published';
 
             $stmt = null;
-            if($operate == 'insert')
+            if($currentOperate == 'insert')
             {
                 $screen->createdBy   = 'system';
                 $screen->createdDate = helper::now();
                 $stmt = $this->dao->insert(TABLE_SCREEN)->data($screen);
             }
-            if($operate == 'update')
+            if($currentOperate == 'update')
             {
                 $id = $screen->id;
                 unset($screen->id);

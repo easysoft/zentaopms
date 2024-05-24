@@ -13,6 +13,7 @@ class treeEditor extends wg
         'sortable?: array',
         'itemProps?: array',
         'onSort?: function',
+        'canSortTo?: function',
         'selected?: string',
         'canUpdateOrder?: bool=false',
         'canEdit?: bool=false',
@@ -23,7 +24,7 @@ class treeEditor extends wg
     protected function build()
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort', 'canSortTo'));
         $id = $this->prop('id');
 
         if(empty($id))
