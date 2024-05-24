@@ -371,6 +371,18 @@ class baseDAO
     }
 
     /**
+     * 清除缓存。
+     * Clear the cache.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearCache()
+    {
+        if(!empty($this->cache)) $this->cache->clear();
+    }
+
+    /**
      * 开始事务。
      * Begin Transaction
      *
@@ -979,6 +991,8 @@ class baseDAO
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
+            $table = $this->table;
+
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
@@ -986,11 +1000,11 @@ class baseDAO
 
             $result = $this->dbh->exec($sql);
 
-            if($this->table)
+            if($table)
             {
                 /* 更新表的缓存时间。*/
                 /* Update the table cache time. */
-                $table = str_replace(array('`', '"'), '', $this->table);
+                $table = str_replace(array('`', '"'), '', $table);
                 $this->setCache($table);
             }
 

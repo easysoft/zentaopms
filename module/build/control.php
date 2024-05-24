@@ -290,9 +290,8 @@ class build extends control
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
-            $items = array();
-            foreach($builds as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
-            return print(json_encode($items));
+            $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
+            return print(json_encode($builds));
         }
         if($varName == 'resolvedBuild')
         {
@@ -302,9 +301,8 @@ class build extends control
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $projectID, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
-            $items = array();
-            foreach($builds as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
-            return print(json_encode($items));
+            $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
+            return print(json_encode($builds));
         }
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
@@ -312,9 +310,8 @@ class build extends control
         $builds = $this->build->getBuildPairs(array($productID), $branch, $type, $projectID, 'project', $build, false);
         if($isJsonView) return print(json_encode($builds));
 
-        $items = array();
-        foreach($builds as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
-        return print(json_encode($items));
+        $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
+        return print(json_encode($builds));
     }
 
     /**
@@ -342,9 +339,8 @@ class build extends control
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
 
-            $items = array();
-            foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
-            return print(json_encode($items));
+            $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
+            return print(json_encode($builds));
         }
         if($varName == 'openedBuilds')
         {
@@ -369,9 +365,8 @@ class build extends control
             $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,notrunk', $executionID, 'execution', '', false);
             if($isJsonView) return print(json_encode($builds));
 
-            $items = array();
-            foreach($builds as $buildID => $buildName) $items[] = array('text' => $buildName, 'value' => $buildID);
-            return print(json_encode($items));
+            $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
+            return print(json_encode($builds));
         }
         if($varName == 'dropdownList')
         {

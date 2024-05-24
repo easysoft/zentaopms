@@ -56,6 +56,9 @@ $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 $lang->admin->daoCache     = 'DAO Cache';
 $lang->admin->apcuNotFound = 'Please enable APCu extension before turning on DAO cache';
 
+$lang->admin->cacheStatusList[1] = 'On';
+$lang->admin->cacheStatusList[0] = 'Off';
+
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'La version actuelle est %s customisée. ';
 $lang->admin->info->links   = 'Vous pouvez visiter les liens ci-dessous';

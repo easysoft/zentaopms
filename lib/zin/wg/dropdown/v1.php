@@ -133,28 +133,24 @@ class dropdown extends wg
 
                 $menuProps['items'] = $items;
 
-                $dropdownOptions = array_merge(array
+                $menu = zui::dropdown
                 (
-                    'placement'      => $placement,
-                    'strategy'       => $strategy,
-                    'arrow'          => $arrow,
-                    'flip'           => $flip,
-                    'offset'         => $offset,
-                    'target'         => $target,
-                    'className'      => $menuClass,
-                    'hasIcons'       => $hasIcons,
-                    'menu'           => $menuProps
-                ), $this->getRestProps());
-                if($triggerBlock instanceof node)
-                {
-                    $triggerBlock->add(on::init()->call('zui.create', 'dropdown', jsRaw('$element'), $dropdownOptions));
-                }
-                else
-                {
-                    $dropdownOptions['_to']     = "#$triggerID";
-                    $dropdownOptions['trigger'] = $trigger;
-                    $menu = zui::dropdown(set($dropdownOptions));
-                }
+                    set(array
+                    (
+                        '_to'            => "#$triggerID",
+                        'trigger'        => $trigger,
+                        'placement'      => $placement,
+                        'strategy'       => $strategy,
+                        'arrow'          => $arrow,
+                        'flip'           => $flip,
+                        'offset'         => $offset,
+                        'target'         => $target,
+                        'className'      => $menuClass,
+                        'hasIcons'       => $hasIcons,
+                        'menu'           => $menuProps
+                    )),
+                    set($this->getRestProps())
+                );
             }
         }
         elseif(is_array($menu))

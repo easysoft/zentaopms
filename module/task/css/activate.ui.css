@@ -3,4 +3,5 @@
 #teamForm tr td:first-child {width: 40px; position: relative;}
 #teamForm tr td:first-child .icon{position:absolute; top: 40px; right: 19px;display: block; font-size: 8px; color: #9ea3bd;}
 #teamForm tr:nth-last-child(1) td:first-child .icon {display: none;}
+#teamTable .form-label {left: auto; padding-left: 0; padding-right: 0;}
 div.input-control-suffix {height: 2rem;}

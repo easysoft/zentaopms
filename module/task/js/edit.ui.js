@@ -110,7 +110,7 @@ window.loadAllModule = function()
  */
 window.changeMode = function()
 {
-    let mode = $('[name=mode]').val();
+    const mode = $('[name=mode]').val();
     if(mode != 'single')
     {
         if(mode != 'multi')
@@ -263,4 +263,33 @@ function updateAssignedTo()
     {
         $('#assignedTo').picker({disabled: true});
     }
+}
+
+window.renderRowData = function($row, index, row)
+{
+    $row.addClass('member member-' + (row ? row.memberStatus : 'wait'));
+    $row.data('estimate', row ? row.teamEstimate : 0);
+    $row.data('consumed', row ? row.teamConsumed : 0);
+    $row.data('left',     row ? row.teamLeft : 0);
+
+    if(row && row.memberDisabled)
+    {
+        $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
+        {
+            const $team = info[0];
+            $team.render({disabled: true});
+        })
+    }
+    if(row && row.hourDisabled)
+    {
+        $row.find('[name^=teamEstimate]').attr('readonly', 'readonly');
+        $row.find('[name^=teamLeft]').attr('readonly', 'readonly');
+    }
+    if(row)
+    {
+        $row.find('[name^=teamConsumed]').attr('readonly', 'readonly');
+    }
+
+    const mode = $('[name=mode]').val();
+    if(mode == 'linear') $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down'><i/>");
 }

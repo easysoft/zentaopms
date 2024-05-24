@@ -27,10 +27,21 @@ featureBar
     )
 );
 
+$canCreateKanban   = common::hasPriv('kanban', 'create');
+$canCreateSpace    = common::hasPriv('kanban', 'createSpace');
+$canEditSpace      = common::hasPriv('kanban', 'editSpace');
+$canCloseSpace     = common::hasPriv('kanban', 'closeSpace');
+$canActivateSpace  = common::hasPriv('kanban', 'activateSpace');
+$canDeleteSpace    = common::hasPriv('kanban', 'deleteSpace');
+$canEditKanban     = common::hasPriv('kanban','edit');
+$canDeleteKanban   = common::hasPriv('kanban','delete');
+$canCloseKanban    = common::hasPriv('kanban', 'close');
+$canActivateKanban = common::hasPriv('kanban', 'activate');
+
 toolbar
 (
-    !empty($unclosedSpace) && $browseType != 'involved' ? item(set::icon('plus'), set::text($lang->kanban->create), set::className('secondary'), set::url(createLink('kanban', 'create', "spaceID=0&type={$browseType}")), set('data-toggle', 'modal'), set('data-size', 'lg')) : null,
-    $browseType != 'involved' ? item(set::icon('plus'), set::text($lang->kanban->createSpace), set::className('primary'), set::url(createLink('kanban', 'createSpace', "type={$browseType}")), set('data-toggle', 'modal')) : null
+    $canCreateKanban && !empty($unclosedSpace) && $browseType != 'involved' ? item(set::icon('plus'), set::text($lang->kanban->create), set::className('secondary'), set::url(createLink('kanban', 'create', "spaceID=0&type={$browseType}")), set('data-toggle', 'modal'), set('data-size', 'lg')) : null,
+    $canCreateSpace && $browseType != 'involved' ? item(set::icon('plus'), set::text($lang->kanban->createSpace), set::className('primary'), set::url(createLink('kanban', 'createSpace', "type={$browseType}")), set('data-toggle', 'modal')) : null
 );
 
 $blocks = array();
@@ -38,14 +49,14 @@ foreach($spaceList as $space)
 {
     $pattern      = '/<br[^>]*>|<img[^>]*>/';
     $childActions = array();
-    $childActions[] = array('icon' => 'cog-outline', 'url' => createLink('kanban', 'editSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->settingSpace, 'data-toggle' => 'modal');
-    if($space->status != 'closed') $childActions[] = array('icon' => 'off',   'url' => createLink('kanban', 'closeSpace',    "spaceID={$space->id}"), 'text' => $lang->kanban->closeSpace,    'data-toggle' => 'modal');
-    if($space->status == 'closed') $childActions[] = array('icon' => 'magic', 'url' => createLink('kanban', 'activateSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->activateSpace, 'data-toggle' => 'modal');
-    $childActions[] = array('icon' => 'trash', 'url' => createLink('kanban', 'deleteSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->deleteSpace, 'innterClass' => 'ajax-btn', 'data-confirm' => $lang->kanban->confirmDeleteSpace);
+    if($canEditSpace)                                   $childActions[] = array('icon' => 'cog-outline', 'url' => createLink('kanban', 'editSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->settingSpace, 'data-toggle' => 'modal');
+    if($canCloseSpace    && $space->status != 'closed') $childActions[] = array('icon' => 'off',   'url' => createLink('kanban', 'closeSpace',    "spaceID={$space->id}"), 'text' => $lang->kanban->closeSpace,    'data-toggle' => 'modal');
+    if($canActivateSpace && $space->status == 'closed') $childActions[] = array('icon' => 'magic', 'url' => createLink('kanban', 'activateSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->activateSpace, 'data-toggle' => 'modal');
+    if($canDeleteSpace)                                 $childActions[] = array('icon' => 'trash', 'url' => createLink('kanban', 'deleteSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->deleteSpace, 'innterClass' => 'ajax-btn', 'data-confirm' => $lang->kanban->confirmDeleteSpace);
 
     $headingActions = array();
-    if($space->status != 'closed' and $browseType != 'involved') $headingActions[] = array('type' => 'ghost', 'icon' => 'plus', 'url' => createLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}"), 'text' => $lang->kanban->create, 'data-toggle' => 'modal', 'data-size' => 'lg');
-    $headingActions[] = array('type' => 'dropdown', 'btnType' => 'dropdown', 'icon' => 'cog-outline', 'text' => $lang->kanban->setting, 'caret' => true, 'items' => $childActions);
+    if($canCreateKanban && $space->status != 'closed' && $browseType != 'involved') $headingActions[] = array('type' => 'ghost', 'icon' => 'plus', 'url' => createLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}"), 'text' => $lang->kanban->create, 'data-toggle' => 'modal', 'data-size' => 'lg');
+    if(!empty($childActions)) $headingActions[] = array('type' => 'dropdown', 'btnType' => 'dropdown', 'icon' => 'cog-outline', 'text' => $lang->kanban->setting, 'caret' => true, 'items' => $childActions);
 
     $kanbans = array();
     if(!empty($space->kanbans))
@@ -71,14 +82,10 @@ foreach($spaceList as $space)
             }
 
             $cardActions = array();
-            $canEdit     = common::hasPriv('kanban','edit');
-            $canDelete   = common::hasPriv('kanban','delete');
-            $canClose    = (common::hasPriv('kanban', 'close') and $kanban->status == 'active');
-            $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'closed');
-            if($canEdit)     $cardActions[] = array('icon' => 'edit',  'text' => $lang->kanban->edit,     'url' => createLink('kanban', 'edit',     "kanbanID={$kanban->id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
-            if($canClose)    $cardActions[] = array('icon' => 'off',   'text' => $lang->kanban->close,    'url' => createLink('kanban', 'close',    "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
-            if($canActivate) $cardActions[] = array('icon' => 'magic', 'text' => $lang->kanban->activate, 'url' => createLink('kanban', 'activate', "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
-            if($canDelete)   $cardActions[] = array('icon' => 'trash', 'text' => $lang->kanban->delete,   'url' => createLink('kanban', 'delete',   "kanbanID={$kanban->id}"), 'innterClass' => 'ajax-btn', 'data-confirm' => $lang->kanban->confirmDeleteKanban);
+            if($canEditKanban)                                    $cardActions[] = array('icon' => 'edit',  'text' => $lang->kanban->edit,     'url' => createLink('kanban', 'edit',     "kanbanID={$kanban->id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
+            if($canCloseKanban    && $kanban->status == 'active') $cardActions[] = array('icon' => 'off',   'text' => $lang->kanban->close,    'url' => createLink('kanban', 'close',    "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
+            if($canActivateKanban && $kanban->status == 'closed') $cardActions[] = array('icon' => 'magic', 'text' => $lang->kanban->activate, 'url' => createLink('kanban', 'activate', "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
+            if($canDeleteKanban)                                  $cardActions[] = array('icon' => 'trash', 'text' => $lang->kanban->delete,   'url' => createLink('kanban', 'delete',   "kanbanID={$kanban->id}"), 'innterClass' => 'ajax-btn', 'data-confirm' => $lang->kanban->confirmDeleteKanban);
 
             $teamCountLang = ($teamCount > 1) ? $lang->kanban->teamSumCount : str_replace("Pers", "Person", $lang->kanban->teamSumCount);
             $cardsCount    = ($kanban->cardsCount > 1) ? str_replace("Card", "Cards", $lang->kanban->cardsCount) : $lang->kanban->cardsCount;

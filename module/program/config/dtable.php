@@ -322,7 +322,7 @@ $config->program->browse->dtable->fieldList['actions']['actionsMap'] = array
     'project_close'     => array('icon'  => 'icon-off',          'hint' => $lang->project->close,          'url'  => helper::createLink('project', 'close', "projectID={id}"),    'data-toggle' => 'modal'),
     'project_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->project->activate,       'url'  => helper::createLink('project', 'activate', "projectID={id}"), 'data-toggle' => 'modal'),
     'project_other'     => array('caret' => true,                'hint' => $lang->program->other,          'type' => 'dropdown'),
-    'project_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->project->edit,           'url'  => helper::createLink('project', 'edit', "projectID={id}")),
+    'project_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->project->edit,           'url'  => helper::createLink('project', 'edit', "projectID={id}"), 'data-app' => 'program'),
     'project_team'      => array('icon'  => 'icon-groups',       'hint' => $lang->project->manageMembers,  'url'  => helper::createLink('project', 'team', "projectID={id}")),
     'project_group'     => array('icon'  => 'icon-lock',         'hint' => $lang->project->group,          'url'  => helper::createLink('project', 'group', "projectID={id}")),
     'project_more'      => array('icon'  => 'icon-ellipsis-v',   'hint' => $lang->project->moreActions,    'type' => 'dropdown', 'caret' => false),

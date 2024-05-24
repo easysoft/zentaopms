@@ -7701,7 +7701,7 @@ class upgradeModel extends model
             $data->group = implode(',', $groups);
 
             /* Process vars. */
-            $vars = json_decode($report->vars);
+            $vars = json_decode($report->vars, true);
             if($vars)
             {
                 $filters = array();
@@ -8996,7 +8996,6 @@ class upgradeModel extends model
                 $table = trim($table);
                 if(empty($table)) continue;
 
-                $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
                 $table = str_replace('zt_', $this->config->db->prefix, $table);
                 if(!$this->dbh->query($table)) return false;
             }

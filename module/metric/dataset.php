@@ -1108,4 +1108,51 @@ class dataset
             ->where('deleted')->eq('0')
             ->andWhere("vision LIKE '%or%'");
     }
+
+    /**
+     * 获取质量保证计划和不符合项的编号和指派人。
+     * Get id and assigned of auditplan and nc.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getQAs($fieldList)
+    {
+        $fieldList = 't1.id, t1.assignedTo, t2.vision';
+        $auditplanTable = $this->config->objectTables['auditplan'];
+        $ncTable        = $this->config->objectTables['nc'];
+        $userTable      = $this->config->objectTables['user'];
+        $projectTable   = $this->config->objectTables['project'];
+
+        $auditplanSQL = <<<EOT
+    SELECT $fieldList 
+    FROM $auditplanTable AS t1 
+    LEFT JOIN $projectTable AS t2 ON t1.project = t2.id
+    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account 
+    WHERE t1.status = 'wait' 
+    AND   t2.type = 'project' 
+    AND   t1.deleted = '0'
+    AND   t2.deleted = '0'
+    AND   t3.deleted = '0'
+    EOT;
+
+        $ncSQL = <<<EOT
+    SELECT $fieldList 
+    FROM $ncTable AS t1 
+    LEFT JOIN $projectTable AS t2 ON t1.project = t2.id
+    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account 
+    WHERE t1.status = 'active' 
+    AND   t2.type = 'project' 
+    AND   t1.deleted = '0'
+    AND   t2.deleted = '0'
+    AND   t3.deleted = '0'
+    EOT;
+
+        $sql  = "$auditplanSQL UNION ALL $ncSQL";
+        $stmt = $this->dao->select('*')->from("($sql) tt")->where('1=1');
+        $stmt = $this->defaultWhere($stmt, 'tt');
+
+        return $stmt;
+    }
 }

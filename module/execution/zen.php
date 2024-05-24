@@ -321,6 +321,7 @@ class executionZen extends execution
 
         $this->view->moduleTree  = $moduleTree;
         $this->view->modulePairs = $modulePairs;
+        $this->view->moduleID    = $type == 'bymodule' ? $param : 0;
     }
 
     /**

@@ -87,6 +87,7 @@ if(!$product)
     $product = new stdclass();
     $product->id = 0;
 }
+
 $canModifyProduct                     = common::canModify('product', $product);
 $canModifyExecution                   = common::canModify('execution', $execution);
 $canOpreate['create']                 = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');

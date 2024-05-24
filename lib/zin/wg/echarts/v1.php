@@ -70,6 +70,7 @@ class echarts extends wg
         $files = json_encode($files);
         return zui::echarts
         (
+            set::_id('zin_echart_' . uniqid()),
             set::responsive($responsive),
             set::theme($theme),
             set::_style(array('width' => is_int($width) ? "{$width}px" : $width, 'height' => is_int($height) ? "{$height}px" : $height)),

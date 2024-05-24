@@ -252,6 +252,7 @@ class buildModel extends model
         $sysBuilds = array();
         if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
 
+        $buildIdList    = str_replace('trunk', '0', $buildIdList);
         $shadows        = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
         $selectedBuilds = $this->buildTao->selectedBuildPairs($buildIdList, $productIdList, $params, $objectID, $objectType);
         $allBuilds      = $this->buildTao->fetchBuilds($productIdList, $params, $objectID, $objectType, $shadows);
@@ -405,12 +406,14 @@ class buildModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
             ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
-            ->where('(t1.product')->in($productIdList)
+            ->where('t1.product')->in($productIdList)
             ->beginIF($objectType === 'project' && $objectID)->andWhere("(FIND_IN_SET('$objectID', t1.project)")->orWhere('t1.project')->eq('0')->markRight(1)->fi()
-            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($objectType === 'execution' && $objectID)->andWhere('t2.execution')->eq($objectID)->fi()
+            ->andWhere('((t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->ne(0)
             ->markRight(true)
             ->beginIF(!empty($buildIdList))->orWhere('t2.id')->in($buildIdList)->fi()
+            ->markRight(true)
             ->fetchAll('id');
 
         if($shadows === false) $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
@@ -915,8 +918,9 @@ class buildModel extends model
     {
         $releases = $this->getRelatedReleases(array($productID));
 
-        $buildItems = array();
-        foreach($builds as $buildID => $buildName) $buildItems[$buildID] = array('value' => $buildID, 'text' => $buildName);
+        $buildItems   = array();
+        $buildsPinyin = common::convert2Pinyin($builds);
+        foreach($builds as $buildID => $buildName) $buildItems[$buildID] = array('value' => $buildID, 'text' => $buildName, 'keys' => $buildID . $buildName . (!empty($buildsPinyin[$buildID]) ? $buildsPinyin[$buildID] : ''));
         foreach($releases as $release)
         {
             if(isset($buildItems[$release->shadow])) $buildItems[$release->shadow]['content'] = array('html' => "<div class='flex clip'>{$buildItems[$release->shadow]['text']}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');

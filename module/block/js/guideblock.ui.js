@@ -31,7 +31,7 @@ $('.vision-switch .block.state').on('click', '.vision-block', function()
 
 $('.theme-switch .block').off('click').on('click', '.theme-block', function()
 {
-    $('.block').removeClass('active');
+    $(this).closest('.tab-pane').find('.block').removeClass('active');
     selectTheme($(this).attr('data-theme'));
     $(this).closest('.block').addClass('active');
 })

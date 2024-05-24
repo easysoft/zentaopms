@@ -75,11 +75,9 @@ function insert($table, $data)
     $statement->execute();
 }
 
-global $pdo, $file;
+global $pdo;
 $path = $argv[6];
 getPDO($argv);
-
-$file = fopen('charts.sql', 'w');
 
 $config = new stdclass();
 
@@ -146,5 +144,3 @@ foreach($config->bi->builtin->screens as $screenID)
 
     insert('zt_screen', $screen);
 }
-
-

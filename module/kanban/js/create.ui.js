@@ -6,9 +6,17 @@ window.clickCopyCard = function(event)
 
 window.setCopyKanban = function(kanbanID)
 {
-    copyRegion = $('[name=copyRegionInfo]').prop('checked');
+    const copyRegion = $('[name=copyRegionInfo]').prop('checked');
+    const spaceType  = $('[name=type]:checked').val();
     const url = $.createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + spaceType + '&copyKanbanID=' + kanbanID + '&exyra=copyRegion=' + (copyRegion ? '1' : '0'));
-    loadPartial(url, '#WIPCountBox, #spaceBox, #nameBox, #ownerBox, #teamBox, #fixedColBox, #autoColBox, #archiveBox, #manageProgressBox, #alignmentBox, #descBox, #whitelistBox');
+    loadPartial(url, '#WIPCountBox, #spaceBox, #nameBox, #ownerBox, #teamBox, #fixedColBox, #autoColBox, #archiveBox, #manageProgressBox, #alignmentBox, #descBox, #whitelistBox', {success: function()
+    {
+        waitDom('#spaceBox [name=space]', function()
+        {
+            const copySpaceID = $('#spaceBox input[name=space]').val();
+            $('#spaceBox input[name=space]').zui('picker').$.setValue(copySpaceID);
+        });
+    }});
 }
 
 window.toggleImportObjectBox = function(e)

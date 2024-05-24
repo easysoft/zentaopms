@@ -16,7 +16,7 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     {
         postAndLoadPage(url, form);
     }
-}).on('click', '#taskModal button[type="submit"]', function()
+}).off('click', '#taskModal button[type="submit"]').on('click', '#taskModal button[type="submit"]', function()
 {
     const taskType = $('[name=type]').val();
     if(taskType.length == 0)
@@ -25,19 +25,22 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
         return false;
     }
 
-    const hourPoint = $('[name=hourPointValue]').val();
-    if(typeof(hourPoint) === undefined) hourPoint = 0;
-
-    if(hourPoint == 0)
+    if($('[name=hourPointValue]').length)
     {
-        zui.Modal.alert(hourPointNotEmpty);
-        return false;
-    }
+        let hourPoint = $('[name=hourPointValue]').val();
+        if(typeof(hourPoint) == 'undefined') hourPoint = 0;
 
-    if(typeof(hourPoint) != 'undefined' && (isNaN(hourPoint) || hourPoint < 0))
-    {
-        zui.Modal.alert(hourPointNotError);
-        return false;
+        if(hourPoint == 0)
+        {
+            zui.Modal.alert(hourPointNotEmpty);
+            return false;
+        }
+
+        if(typeof(hourPoint) != 'undefined' && (isNaN(hourPoint) || hourPoint < 0))
+        {
+            zui.Modal.alert(hourPointNotError);
+            return false;
+        }
     }
 
     const checkedIdList  = $('#storyIdList').val().split(',');

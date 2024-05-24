@@ -921,16 +921,10 @@ class metricModel extends model
      */
     public function getExecutableMetric($includes = 'all')
     {
-        $metricList = $this->dao->select('id,code,time')
-            ->from(TABLE_METRIC)
+        return $this->dao->select('id, code')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->beginIF(is_array($includes))->andWhere('code')->in($includes)->fi()
-            ->fetchAll();
-
-        $excutableMetrics = array();
-        foreach($metricList as $metric) $excutableMetrics[$metric->id] = $metric->code;
-
-        return $excutableMetrics;
+            ->fetchPairs();
     }
 
     /**
@@ -1132,6 +1126,7 @@ class metricModel extends model
         $calcList = $this->getExecutableCalcList($includes);
 
         include_once $this->getBaseCalcPath();
+
         $calcInstances = array();
         foreach($calcList as $id => $calc)
         {
