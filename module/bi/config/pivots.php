@@ -1628,7 +1628,7 @@ from (
         0 as userlogin,
         0 as consumed,
         sum(case when t1.action = 'opened' then 1 else 0 end) as storyopen,
-        sum(case when t1.action = 'closed' and t2.status = 'closed' then 1 else 0 end) as storyclose,
+        count(distinct case when t1.action = 'closed' and t2.status = 'closed' then t2.id else 0 end) - 1 as storyclose,
         0 as taskopen,
         0 as taskfinish,
         0 as bugopen,
@@ -1646,7 +1646,7 @@ from (
         0 as storyopen,
         0 as storyclose,
         sum(case when t1.action = 'opened' then 1 else 0 end) as taskopen,
-        sum(case when t1.action = 'finished' and t2.status in ('done', 'closed') then 1 else 0 end) as taskfinish,
+        count(distinct case when t1.action = 'finished' and t2.status in ('done', 'closed') then t2.id else 0 end) - 1 as taskfinish,
         0 as bugopen,
         0 as bugresolve,
         0 as actions
@@ -1664,7 +1664,7 @@ from (
         0 as taskopen,
         0 as taskfinish,
         sum(case when t1.action = 'opened' then 1 else 0 end) as bugopen,
-        sum(case when t1.action = 'resolved' and t2.status in ('resolved', 'closed') then 1 else 0 end) as bugresolve,
+        count(distinct case when t1.action = 'resolved' and t2.status in ('resolved', 'closed') then t2.id else 0 end) - 1 as bugresolve,
         0 as actions
     from zt_action t1
     left join zt_bug t2 on t1.objectID = t2.id
