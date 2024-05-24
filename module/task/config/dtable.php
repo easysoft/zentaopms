@@ -154,6 +154,7 @@ $config->task->dtable->fieldList['storyTitle']['show']       = true;
 $config->task->dtable->fieldList['storyTitle']['group']      = 9;
 $config->task->dtable->fieldList['storyTitle']['link']       = array('url' => array('module' => 'story', 'method' => 'view', 'params' => 'id={story}'), 'className' => 'text-inherit');
 $config->task->dtable->fieldList['storyTitle']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => ['executionID' => (int)'$executionID', 'productID' => 0, 'branch' => 'all', 'moduleIdList' => '', 'type' => '', 'status' => 'active']);
+$config->task->dtable->fieldList['storyTitle']['data-app']   = $app->tab;
 
 $config->task->dtable->fieldList['module']['title']      = 'module';
 $config->task->dtable->fieldList['module']['control']    = 'select';
