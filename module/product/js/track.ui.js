@@ -86,6 +86,25 @@ window.getCol = function(col)
 window.itemRender = function(info)
 {
     if(info.col == 'task' && info.item.parent > '0') info.item.className.push('hidden parent-' + info.item.parent);
+    if(info.col == 'project' || info.col == 'execution')
+    {
+        $delayed = $('.kanban-lane-col[z-lane="' + info.lane + '"][z-col="' + info.col + '"] .kanban-item[z-key="' + info.item.id + '"] .delayed');
+        if($delayed.length > 0)
+        {
+            let $relative = $delayed.closest('.relative');
+            if($relative.find('.line-clamp-2').height() < $relative.find('.title').height()) $delayed.addClass('absolute bottom-0 right-0');
+        }
+    }
+}
+
+window.afterRender = function()
+{
+    $orderByIcon = $('.orderByIcon');
+    if($orderByIcon.length > 0 && !$orderByIcon.hasClass('dropdownInited'))
+    {
+        new zui.Dropdown($('.orderByIcon'), {menu: {items: orderByItems}});
+        $orderByIcon.addClass('dropdownInited');
+    }
 }
 
 window.toggleChildren = function(obj, parentID)
@@ -101,19 +120,3 @@ window.toggleChildren = function(obj, parentID)
         $('.parent-' + parentID).removeClass('hidden')
     }
 }
-
-window.canDrop = function(){ return false;}
-
-waitDom('.orderByIcon', function()
-{
-    new zui.Dropdown($(this), {menu: {items: orderByItems}});
-})
-
-waitDom('.delayed', function()
-{
-    $('.delayed').each(function()
-    {
-        let $relative = $(this).closest('.relative');
-        if($relative.find('.line-clamp-2').height() < $relative.find('.title').height()) $(this).addClass('absolute bottom-0 right-0');
-    })
-})
