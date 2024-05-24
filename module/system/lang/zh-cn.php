@@ -226,7 +226,7 @@ $lang->system->backup->restoreProgress['done']  = '完成';
 
 $lang->system->backup->typeList['manual']  = '手动备份';
 $lang->system->backup->typeList['upgrade'] = '升级前自动备份';
-$lang->system->backup->typeList['restore'] = '回滚前自动备份';
+$lang->system->backup->typeList['restore'] = '还原前自动备份';
 
 $lang->system->backup->waiting         = '备份正在进行中，请稍候...';
 $lang->system->backup->waitingStore    = '正在还原应用数据，请稍候...';
