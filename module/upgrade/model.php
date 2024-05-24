@@ -7701,7 +7701,7 @@ class upgradeModel extends model
             $data->group = implode(',', $groups);
 
             /* Process vars. */
-            $vars = json_decode($report->vars);
+            $vars = json_decode($report->vars, true);
             if($vars)
             {
                 $filters = array();
