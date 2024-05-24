@@ -15,8 +15,10 @@ namespace zin;
 data('activeMenuID', 'story');
 jsVar('executionID', $executionID);
 jsVar('langPreview', $lang->preview);
-jsVar('errorParentSplitTask', $lang->story->errorParentSplitTask);
 jsVar('hasParent', $hasParent);
+jsVar('hasERUR', $hasERUR);
+jsVar('errorParentSplitTask', $lang->story->errorParentSplitTask);
+jsVar('errorERURSplitTask', $lang->story->errorERURSplitTask);
 jsVar('copyStoryTitleTip', $lang->task->copyStoryTitle);
 
 $fields = array();

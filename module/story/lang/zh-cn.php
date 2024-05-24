@@ -358,6 +358,7 @@ $lang->story->errorMaxGradeSubdivide = "该需求的层级已经达到系统设�
 $lang->story->errorStepwiseSubdivide = "该需求类型不允许跨层级拆分，后台可以更改此设置。";
 $lang->story->errorCannotSplit       = "该需求已拆分此类型的子需求，不能拆分为其他类型需求。";
 $lang->story->errorParentSplitTask   = "父需求不能转任务，本次操作已过滤。";
+$lang->story->errorERURSplitTask     = "父需求、{$lang->ERCommon}、{$lang->URCommon}不能转任务，本次操作已过滤。";
 $lang->story->errorEmptyReviewedBy   = "『{$lang->story->reviewers}』不能为空。";
 $lang->story->mustChooseResult       = '必须选择评审意见';
 $lang->story->mustChoosePreVersion   = '必须选择回溯的版本';

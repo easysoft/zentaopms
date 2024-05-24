@@ -358,6 +358,7 @@ $lang->story->errorMaxGradeSubdivide = "The current story's grade exceeds the sy
 $lang->story->errorStepwiseSubdivide = "This requirement type does not allow cross-system splitting. This setting can be changed in the admin.";
 $lang->story->errorCannotSplit       = "This requirement has been split into sub-requirements of this type and cannot be split into requirements of other types.";
 $lang->story->errorParentSplitTask   = "Parent requirements cannot be transferred to tasks, this operation has been filtered.";
+$lang->story->errorERURSplitTask     = "Parent requirements,{$lang->ERCommon} and {$lang->URCommon}cannot be transferred to tasks, this operation has been filtered.";
 $lang->story->errorEmptyReviewedBy   = "『{$lang->story->reviewers}』canot be blank.";
 $lang->story->mustChooseResult       = 'Select Result';
 $lang->story->mustChoosePreVersion   = 'Select a version to revert to.';

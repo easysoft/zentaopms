@@ -1049,10 +1049,15 @@ class story extends control
         $activeStories = array();
         $storyPairs    = array();
         $hasParent     = false;
+        $hasERUR       = false;
         foreach($stories as $story)
         {
             if(str_contains(',draft,reviewing,changing,closed,', ",{$story->status},")) continue;
-            if($story->type != 'story') continue;
+            if($story->type != 'story')
+            {
+                $hasERUR = true;
+                continue;
+            }
             if($story->isParent == '1')
             {
                 $hasParent = true;
@@ -1073,6 +1078,7 @@ class story extends control
         $this->view->stories        = $activeStories;
         $this->view->storyPairs     = $storyPairs;
         $this->view->hasParent      = $hasParent;
+        $this->view->hasERUR        = $hasERUR;
         $this->view->modules        = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 'allModule');
         $this->view->members        = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->storyTasks     = $this->loadModel('task')->getStoryTaskCounts(array_keys($stories), $executionID);
