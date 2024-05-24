@@ -1100,17 +1100,9 @@ class baseControl
 
         if(helper::isAjaxRequest() || $this->viewType == 'json')
         {
-            /* Process for zh-cn in json. */
-            foreach($data as $key => $value)
-            {
-                if(!is_string($value)) continue;
-
-                $data[$key] = rawurlencode($value);
-            }
-
             if(defined('RUN_MODE') && in_array(RUN_MODE, array('api', 'xuanxuan')))
             {
-                print(urldecode(json_encode($data)));
+                print(json_encode($data));
                 $response = helper::removeUTF8Bom(ob_get_clean());
                 return print($response);
             }
@@ -1119,7 +1111,7 @@ class baseControl
             // $obLevel = ob_get_level();
             // for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
-            $response = helper::removeUTF8Bom(rawurldecode(json_encode($data)));
+            $response = helper::removeUTF8Bom(json_encode($data));
             $this->app->outputXhprof();
             return helper::end($response);
         }
