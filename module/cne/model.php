@@ -458,7 +458,7 @@ class cneModel extends model
         $apiParams->channel      = empty($instance->channel) ? $this->config->cne->api->channel : $instance->channel;
 
         $apiUrl = "/api/cne/app/restore/status";
-        return $this->apiGet($apiUrl, $apiParams, $this->config->cne->api->headers);
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
