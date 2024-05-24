@@ -120,7 +120,7 @@ window.backupInProcess = function(backupName)
     {
         $.get($.createLink('system', 'ajaxGetBackupProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
         {
-            if(resp.status == 'success')
+            if(resp.status == 'completed')
             {
                 $.apps.reloadApp('admin');
                 clearInterval(intervalId);
@@ -136,7 +136,7 @@ window.restoreInProcess = function(backupName)
     {
         $.get($.createLink('system', 'ajaxGetRestoreProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
         {
-            if(resp.status == 'success')
+            if(resp.status == 'completed')
             {
                 $.apps.reloadApp('admin');
                 clearInterval(intervalId);
@@ -154,7 +154,7 @@ window.deleteInProcess = function(backupName)
 
         $.get($.createLink('system', 'ajaxGetDeleteProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
         {
-            if(resp.status == 'success')
+            if(resp.status == 'completed')
             {
                 $.apps.reloadApp('admin');
                 clearInterval(intervalId);
