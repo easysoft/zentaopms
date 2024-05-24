@@ -68,7 +68,7 @@ if($group->role == 'limited')
                         checkbox
                         (
                             setID('my-limited'),
-                            set::labelClass('priv'),
+                            set::labelClass('priv nowrap'),
                             set::name('actions[my][]'),
                             set::value('limited'),
                             set::checked(isset($groupPrivs['my']['limited'])),
@@ -157,7 +157,7 @@ else
             $checkID = "actions[{$priv->module}]{$priv->method}";
             $html .= "<div class='group-item' data-module='$moduleName' data-package='$packageID' data-divid='{$moduleName}{$packageID}' data-id='$privID'><div class='checkbox-primary'>";
             $html .= "<input type='checkbox' id='$checkID' value='$priv->method' name='actions[{$priv->module}][]' data-id='$privID'". ($checked ? ' checked' : '') . ">";
-            $html .= "<label for='$checkID'>$priv->name</label>";
+            $html .= "<label class='nowrap' for='$checkID'>$priv->name</label>";
             $html .= '</div></div>';
         }
 
