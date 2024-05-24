@@ -10,38 +10,37 @@ $config->bi->builtin->pivots[] = array
     'group'     => '86',
     'sql'       => <<<EOT
 select
-t1.name,
-t2.program1,
-t1.begin,
-t1.end,
-t1.realBegan,
-t1.realEnd,
-t1.closedDate,
-t1.realduration,
-t1.realduration-t1.planduration duration_deviation,
-round((t1.realduration-t1.planduration)/t1.planduration,3) rate
+    t1.name,
+    t2.program1,
+    t1.begin,
+    t1.end,
+    t1.realbegan,
+    t1.realend,
+    t1.closeddate,
+    t1.realduration,
+    t1.realduration - t1.planduration as duration_deviation,
+    round((t1.realduration - t1.planduration) / t1.planduration, 3) as rate
 from
-(select
-name,
-substr(`path`,2,4) program1,
-begin,
-end,
-realBegan,
-realEnd,
-left(closedDate,10) closedDate,
-datediff(`end`,`begin`) planduration,
-ifnull(if(left(`realEnd`,4) != '0000',datediff(`realEnd`,`realBegan`),datediff(`closedDate`,`realBegan`)),0) realduration
-from
-zt_project
-where type='project' and status='closed' and deleted='0') t1
+    (select
+        name,
+        substr(path,2,4) as program1,
+        begin,
+        "end",
+        realbegan,
+        realend,
+        cast(closeddate as date) as closeddate,
+        datediff('day', begin, "end") as planduration,
+        coalesce((case when realEnd is not null then datediff('day',realbegan,realend) else datediff('day',realbegan, closeddate) end),0) as realduration
+    from zt_project
+    where type='project' and status='closed' and deleted='0') t1
 left join
-(select
-id programid,
-name program1
-from
-zt_project
-where type='program' and grade=1) t2
-on t1.program1=t2.programid
+    (select
+        id as programid,
+        name as program1
+    from zt_project
+    where type='program'
+    and grade=1) t2
+on t1.program1=t2.programid;
 EOT,
     'settings'  => array
     (
@@ -56,23 +55,23 @@ EOT,
             array('field' => 'duration_deviation', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
             array('field' => 'rate', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow')
         ),
-        'group3'   => 'program1',
-        'group6'   => 'name',
+        'group1'   => 'program1',
+        'group2'   => 'name',
         'lastStep' => '4'
     ),
     'filters'   => array(),
     'fields'    => array
     (
-        'name'               => array('name' => '项目名称', 'object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'program1'           => array('name' => 'program1', 'object' => 'project', 'field' => 'program1', 'type' => 'string'),
-        'begin'              => array('name' => '计划开始日期', 'object' => 'project', 'field' => 'begin', 'type' => 'date'),
-        'end'                => array('name' => '计划完成日期', 'object' => 'project', 'field' => 'end', 'type' => 'date'),
-        'realBegan'          => array('name' => '实际开始日期', 'object' => 'project', 'field' => 'realBegan', 'type' => 'date'),
-        'realEnd'            => array('name' => '实际完成日期', 'object' => 'project', 'field' => 'realEnd', 'type' => 'date'),
-        'closedDate'         => array('name' => '关闭日期', 'object' => 'project', 'field' => 'closedDate', 'type' => 'date'),
-        'realduration'       => array('name' => 'realduration', 'object' => 'project', 'field' => 'realduration', 'type' => 'number'),
-        'duration_deviation' => array('name' => 'duration_deviation', 'object' => 'project', 'field' => 'duration_deviation', 'type' => 'number'),
-        'rate'               => array('name' => 'rate', 'object' => 'project', 'field' => 'rate', 'type' => 'number')
+        'name'               => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'program1'           => array('object' => 'project', 'field' => 'program1', 'type' => 'string'),
+        'begin'              => array('object' => 'project', 'field' => 'begin', 'type' => 'date'),
+        'end'                => array('object' => 'project', 'field' => 'end', 'type' => 'date'),
+        'realBegan'          => array('object' => 'project', 'field' => 'realBegan', 'type' => 'date'),
+        'realEnd'            => array('object' => 'project', 'field' => 'realEnd', 'type' => 'date'),
+        'closedDate'         => array('object' => 'project', 'field' => 'closedDate', 'type' => 'date'),
+        'realduration'       => array('object' => 'project', 'field' => 'realduration', 'type' => 'number'),
+        'duration_deviation' => array('object' => 'project', 'field' => 'duration_deviation', 'type' => 'number'),
+        'rate'               => array('object' => 'project', 'field' => 'rate', 'type' => 'number')
     ),
     'langs'     => array
     (
@@ -100,84 +99,89 @@ $config->bi->builtin->pivots[] = array
     'group'     => '85',
     'sql'       => <<<EOT
 select
-t1.name "项目名称",
-t4.program1 "一级项目集",
-round(t2.estimate,2) "预计工时",
-round(t2.consumed,2) "消耗工时",
-round(t2.consumed-t2.estimate,2) "工时偏差",
-round((t2.consumed-t2.estimate)/t2.estimate,2) "工时偏差率",
-ifnull(t3.storys,0) "完成需求数",
-ifnull(t3.storyestimate,0) "完成需求规模数",
-round(ifnull(t3.storyestimate,0)/ifnull(t2.consumed,0),2) "单位时间交付需求规模数",
-t1.closedDate closedDate
-from(
-select
-id,
-name,
-substr(`path`,2,4) program1,
-closedDate
+    t1.name as "projectname",
+    t4.program1 as "topprogram",
+    round(t2.estimate, 2) as "estimate",
+    round(t2.consumed, 2) as "consumed",
+    round(t2.consumed - t2.estimate, 2) as "deviation",
+    round((t2.consumed - t2.estimate) / t2.estimate, 2) as "deviationrate",
+    coalesce(t3.storys, 0) as "finishedstorys",
+    coalesce(t3.storyestimate, 0) as "finishedstorysmate",
+    round(coalesce(t3.storyestimate, 0) / coalesce(t2.consumed, 0), 2) as "demandsizesperunittime",
+    t1.closedDate as "closeddate"
 from
-zt_project
-where deleted='0' and type='project' and status='closed') t1
-left join(
-select
-project,
-sum(estimate) estimate,
-sum(consumed) consumed
-from
-zt_task
-where deleted='0' and project !=0
-group by project) t2
-on t1.id=t2.project
-left join (
-select
-tt3.project,
-count(tt3.id) storys,
-sum(estimate) storyestimate
-from(
-select
-tt1.id,
-tt1.estimate,
-tt2.project
-from
-zt_story tt1
-left join
-zt_projectstory tt2
-on tt1.id=tt2.story
-where tt1.deleted='0' and tt1.status='closed' and tt1.closedReason='done') tt3
-group by tt3.project) t3
-on t1.id=t3.project
-left join
-(select
-id programid,
-name program1
-from
-zt_project
-where type='program' and grade=1) t4
-on t1.program1=t4.programid
+    (
+        select
+            id,
+            name,
+            substr(`path`, 2, 4) as program1,
+            closedDate
+        from zt_project
+        where deleted = '0'
+        and type = 'project'
+        and status = 'closed'
+    ) as t1
+    left join (
+        select
+            project,
+            sum(estimate) as estimate,
+            sum(consumed) as consumed
+        from zt_task
+        where deleted = '0'
+        and project != 0
+        group by project
+    ) as t2 on t1.id = t2.project
+    left join (
+        select
+            tt3.project,
+            count(tt3.id) as storys,
+            sum(estimate) as storyestimate
+        from
+            (
+                select
+                    tt1.id,
+                    tt1.estimate,
+                    tt2.project
+                from zt_story tt1
+                    left join zt_projectstory tt2 on tt1.id = tt2.story
+                where tt1.deleted = '0'
+                and tt1.status = 'closed'
+                and tt1.closedReason = 'done'
+            ) tt3
+        group by
+            tt3.project
+    ) t3 on t1.id = t3.project
+    left join (
+        select
+            id as programid,
+            name as program1
+        from zt_project
+        where type = 'program'
+        and grade = 1
+    ) t4 on t1.program1 = t4.programid;
 EOT,
     'settings'  => array
     (
         'columns'     => array
         (
-            array('field' => '预计工时', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '消耗工时', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '工时偏差', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '工时偏差率', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '完成需求数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '完成需求规模数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '单位时间交付需求规模数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow')
+            array('field' => 'estimate', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'consumed', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'deviation', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'deviationrate', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'finishedstorys', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'finishedstorysmate', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'demandsizesperunittime', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow')
         ),
         'columnTotal' => 'noShow',
-        'group1'      => '一级项目集',
-        'group2'      => '项目名称',
+        'group1'      => 'topprogram',
+        'group2'      => 'projectname',
         'lastStep'    => '4'
     ),
     'filters'   => array
     (
         array
         (
-            'field'   => 'closedDate',
+            'field'   => 'closeddate',
             'type'    => 'date',
             'name'    => '关闭日期',
             'default' => array('begin' => '', 'end' => '')
@@ -185,16 +189,29 @@ EOT,
     ),
     'fields'    => array
     (
-        '项目名称'                      => array('name' => '项目名称', 'object' => 'project', 'field' => '项目名称', 'type' => 'string'),
-        '一级项目集'                   => array('name' => '一级项目集', 'object' => 'project', 'field' => '一级项目集', 'type' => 'string'),
-        '预计工时'                      => array('name' => '预计工时', 'object' => 'project', 'field' => '预计工时', 'type' => 'number'),
-        '消耗工时'                      => array('name' => '消耗工时', 'object' => 'project', 'field' => '消耗工时', 'type' => 'number'),
-        '工时偏差'                      => array('name' => '工时偏差', 'object' => 'project', 'field' => '工时偏差', 'type' => 'number'),
-        '工时偏差率'                   => array('name' => '工时偏差率', 'object' => 'project', 'field' => '工时偏差率', 'type' => 'number'),
-        '完成需求数'                   => array('name' => '完成需求数', 'object' => 'project', 'field' => '完成需求数', 'type' => 'string'),
-        '完成需求规模数'             => array('name' => '完成需求规模数', 'object' => 'project', 'field' => '完成需求规模数', 'type' => 'number'),
-        '单位时间交付需求规模数' => array('name' => '单位时间交付需求规模数', 'object' => 'project', 'field' => '单位时间交付需求规模数', 'type' => 'number'),
-        'closedDate'                        => array('name' => '关闭日期', 'object' => 'project', 'field' => 'closedDate', 'type' => 'date')
+        'projectname'            => array('object' => 'project', 'field' => 'projectname', 'type' => 'string'),
+        'topprogram'             => array('object' => 'project', 'field' => 'topprogram', 'type' => 'string'),
+        'estimate'               => array('object' => 'project', 'field' => 'estimate', 'type' => 'number'),
+        'consumed'               => array('object' => 'project', 'field' => 'consumed', 'type' => 'number'),
+        'deviation'              => array('object' => 'project', 'field' => 'deviation', 'type' => 'number'),
+        'deviationrate'          => array('object' => 'project', 'field' => 'deviationrate', 'type' => 'number'),
+        'finishedstorys'         => array('object' => 'project', 'field' => 'deviationrate', 'type' => 'string'),
+        'finishedstorysmate'     => array('object' => 'project', 'field' => 'finishedstorysmate', 'type' => 'number'),
+        'demandsizesperunittime' => array('object' => 'project', 'field' => 'demandsizesperunittime', 'type' => 'number'),
+        'closeddate'             => array('object' => 'project', 'field' => 'closeddate', 'type' => 'date')
+    ),
+    'langs'     => array
+    (
+        'projectname'            => array('zh-cn' => '项目名称', 'zh-tw' => '项目名称', 'en' => 'projectname'),
+        'topprogram'             => array('zh-cn' => '一级项目集', 'zh-tw' => '一级项目集', 'en' => 'topprogram'),
+        'estimate'               => array('zh-cn' => '预计工时', 'zh-tw' => '预计工时', 'en' => 'estimate'),
+        'consumed'               => array('zh-cn' => '消耗工时', 'zh-tw' => '消耗工时', 'en' => 'consumed'),
+        'deviation'              => array('zh-cn' => '工时偏差', 'zh-tw' => '工时偏差', 'en' => 'deviation'),
+        'deviationrate'          => array('zh-cn' => '工时偏差率', 'zh-tw' => '工时偏差率', 'en' => 'deviationrate'),
+        'finishedstorys'         => array('zh-cn' => '完成需求数', 'zh-tw' => '完成需求数', 'en' => 'finishedstorys'),
+        'finishedstorysmate'     => array('zh-cn' => '完成需求规模数', 'zh-tw' => '完成需求规模数', 'en' => 'finishedstorysmate'),
+        'demandsizesperunittime' => array('zh-cn' => '单位时间交付需求规模数', 'zh-tw' => '单位时间交付需求规模数', 'en' => 'demandsizesperunittime'),
+        'closeddate'             => array('zh-cn' => '关闭日期', 'zh-tw' => '关闭日期', 'en' => 'closeddate')
     ),
     'stage'     => 'published',
     'builtin'   => '1'
@@ -279,41 +296,58 @@ EOT,
     (
         'columns'     => array
         (
-            array('field' => '研发完成需求数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '研发完成需求规模数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '需求用例数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '用例密度', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '用例覆盖率', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => 'Bug数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '有效Bug数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '优先级为1，2的Bug数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => 'Bug密度', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => '修复Bug数', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
-            array('field' => 'Bug修复率', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow')
+            array('field' => 'exfixedstorys', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'exfixedstorysmate', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'storycases', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'casedensity', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'casecoveragerate', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'bugs', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'effectivebugs', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'pri12bugs', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'bugdensity', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'fixedbugs', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow'),
+            array('field' => 'fixedbugsrate', 'stat' => 'sum', 'slice' => 'noSlice', 'showMode' => 'default', 'monopolize' => '0', 'showTotal' => 'noShow')
         ),
         'columnTotal' => 'noShow',
-        'group1'      => '一级项目集',
-        'group3'      => '产品线',
-        'group2'      => '产品',
+        'group1'      => 'topprogram',
+        'group2'      => 'productline',
+        'group3'      => 'product',
         'lastStep'    => '4'
     ),
     'filters'   => array(),
     'fields'    => array
     (
-        'product'           => array('name' => '产品', 'object' => 'story', 'field' => '产品', 'type' => 'string'),
-        'topprogram'        => array('name' => '一级项目集', 'object' => 'story', 'field' => '一级项目集', 'type' => 'string'),
-        'productline'       => array('name' => '产品线', 'object' => 'story', 'field' => '产品线', 'type' => 'string'),
-        'exfixedstorys'     => array('name' => '研发完成需求数', 'object' => 'story', 'field' => '研发完成需求数', 'type' => 'string'),
-        'exfixedstorysmate' => array('name' => '研发完成需求规模数', 'object' => 'story', 'field' => '研发完成需求规模数', 'type' => 'number'),
-        'storycases'        => array('name' => '需求用例数', 'object' => 'story', 'field' => '需求用例数', 'type' => 'string'),
-        'casedensity'       => array('name' => '用例密度', 'object' => 'story', 'field' => '用例密度', 'type' => 'number'),
-        'casecoveragerate'  => array('name' => '用例覆盖率', 'object' => 'story', 'field' => '用例覆盖率', 'type' => 'number'),
-        'bugs'              => array('name' => 'Bug数', 'object' => 'story', 'field' => 'Bug数', 'type' => 'string'),
-        'effectviebugs'     => array('name' => '有效Bug数', 'object' => 'story', 'field' => '有效Bug数', 'type' => 'number'),
-        'pri12bugs'         => array('name' => '优先级为1，2的Bug数', 'object' => 'story', 'field' => '优先级为1，2的Bug数', 'type' => 'number'),
-        'bugdensity'        => array('name' => 'Bug密度', 'object' => 'story', 'field' => 'Bug密度', 'type' => 'number'),
-        'fixedbugs'         => array('name' => '修复Bug数', 'object' => 'story', 'field' => '修复Bug数', 'type' => 'number'),
-        'fixedbugsrate'     => array('name' => 'Bug修复率', 'object' => 'story', 'field' => 'Bug修复率', 'type' => 'number')
+        'product'           => array('object' => 'story', 'field' => 'product', 'type' => 'string'),
+        'topprogram'        => array('object' => 'story', 'field' => 'topprogram', 'type' => 'string'),
+        'productline'       => array('object' => 'story', 'field' => 'productline', 'type' => 'string'),
+        'exfixedstorys'     => array('object' => 'story', 'field' => 'exfixedstorys', 'type' => 'string'),
+        'exfixedstorysmate' => array('object' => 'story', 'field' => 'exfixedstorysmate', 'type' => 'number'),
+        'storycases'        => array('object' => 'story', 'field' => 'storycases', 'type' => 'string'),
+        'casedensity'       => array('object' => 'story', 'field' => 'casedensity', 'type' => 'number'),
+        'casecoveragerate'  => array('object' => 'story', 'field' => 'casecoveragerate', 'type' => 'number'),
+        'bugs'              => array('object' => 'story', 'field' => 'bugs', 'type' => 'string'),
+        'effectivebugs'     => array('object' => 'story', 'field' => 'effectviebugs', 'type' => 'number'),
+        'pri12bugs'         => array('object' => 'story', 'field' => 'pri12bugs', 'type' => 'number'),
+        'bugdensity'        => array('object' => 'story', 'field' => 'bugdensity', 'type' => 'number'),
+        'fixedbugs'         => array('object' => 'story', 'field' => 'fixedbugs', 'type' => 'number'),
+        'fixedbugsrate'     => array('object' => 'story', 'field' => 'fixedbugsrate', 'type' => 'number')
+    ),
+    'langs'     => array
+    (
+        'product'           => array('zh-cn' => '产品', 'zh-tw' => '产品', 'en' => 'product'),
+        'topprogram'        => array('zh-cn' => '一级项目集', 'zh-tw' => '一级项目集', 'en' => 'topprogram'),
+        'productline'       => array('zh-cn' => '产品线', 'zh-tw' => '产品线', 'en' => 'productline'),
+        'exfixedstorys'     => array('zh-cn' => '研发完成需求数', 'zh-tw' => '研发完成需求数', 'en' => 'exfixedstorys'),
+        'exfixedstorysmate' => array('zh-cn' => '研发完成需求规模数', 'zh-tw' => '研发完成需求规模数', 'en' => 'exfixedstorysmate'),
+        'storycases'        => array('zh-cn' => '需求用例数', 'zh-tw' => '需求用例数', 'en' => 'storycases'),
+        'casedensity'       => array('zh-cn' => '用例密度', 'zh-tw' => '用例密度', 'en' => 'casedensity'),
+        'casecoveragerate'  => array('zh-cn' => '用例覆盖率', 'zh-tw' => '用例覆盖率', 'en' => 'casecoveragerate'),
+        'bugs'              => array('zh-cn' => 'Bug数', 'zh-tw' => 'Bug数', 'en' => 'bugs'),
+        'effectivebugs'     => array('zh-cn' => '有效Bug数', 'zh-tw' => '有效Bug数', 'en' => 'effectviebugs'),
+        'pri12bugs'         => array('zh-cn' => '优先级为1，2的Bug数', 'zh-tw' => '优先级为1，2的Bug数', 'en' => 'pri12bugs'),
+        'bugdensity'        => array('zh-cn' => 'Bug密度', 'zh-tw' => 'Bug密度', 'en' => 'bugdensity'),
+        'fixedbugs'         => array('zh-cn' => '修复Bug数', 'zh-tw' => '修复Bug数', 'en' => 'fixedbugs'),
+        'fixedbugsrate'     => array('zh-cn' => 'Bug修复率', 'zh-tw' => 'Bug修复率', 'en' => 'fixedbugsrate')
     ),
     'stage'     => 'published',
     'builtin'   => '1'
