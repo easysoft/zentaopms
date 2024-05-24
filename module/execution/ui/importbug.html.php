@@ -52,7 +52,7 @@ formBase
         set::plugins(array('form')),
         set::footToolbar($footToolbar),
         set::footPager(
-            usePager(array('linkCreator' => helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")))
+            usePager(array('linkCreator' => helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}" ) . "#app={$app->tab}"))
         )
     )
 );
