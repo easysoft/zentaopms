@@ -64,6 +64,7 @@ $lang->misc->checkTable  = "Prüfe Datentabellen";
 $lang->misc->needRepair  = "Repariere Datentabellen";
 $lang->misc->repairTable = "Datenbank íst beschädigt. Bitte brüfen und reparieren!";
 $lang->misc->repairFail  = "Reparatur fehlgeschlagen. Bitte wechseln Sie in das Verzeichnis der Datenbank, und versuchen Sie folgenden Befehl <code>myisamchk -r -f %s.MYI</code> zum reparieren der DB.";
+$lang->misc->withoutCmd  = 'Reparatur fehlgeschlagen.';
 $lang->misc->connectFail = "Failed to connect to the database. Error: %s，<br/> Please check the MySQL error log and troubleshoot.";
 $lang->misc->tableName   = "Tabellenname";
 $lang->misc->tableStatus = "Status";
