@@ -9,12 +9,11 @@ class thinkStep  extends wg
         'action?: string="detail"',
         'addType?: string',
         'isRun?: bool=false',        // 是否是分析活动
-        'defaultFields: array',      // 默认的配置项
     );
 
     protected function buildBody(): wg|array
     {
-        list($item, $action, $addType, $isRun, $defaultFields) = $this->prop(array('item', 'action', 'addType', 'isRun', 'defaultFields'));
+        list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
 
         $step         = $addType ? null : $item;
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
@@ -23,7 +22,7 @@ class thinkStep  extends wg
         if($questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
         if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun));
         if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::defaultFields($defaultFields));
+        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun));
         return array();
     }
 
