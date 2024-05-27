@@ -276,6 +276,7 @@ class header extends wg
 
         if($config->edition == 'open')     unset($lang->createIcons['effort']);
         if($config->systemMode == 'light') unset($lang->createIcons['program']);
+        if(empty($config->board))          unset($lang->createIcons['board']);
 
         /* Check whether the creation permission is available, and print create buttons. */
         $items = array();
