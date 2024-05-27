@@ -1861,9 +1861,10 @@ class story extends control
         if($executionID)
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
-            $fileName  = $execution->name . $this->lang->dash . $fileName;
+            $fileName  = $execution->name . $this->lang->dash . $this->lang->common->story;
             $project   = $execution;
             if($execution->type == 'execution') $project = $this->project->getById($execution->project);
+            $this->lang->story->title = $this->lang->story->name;
         }
         else
         {
