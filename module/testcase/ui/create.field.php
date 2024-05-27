@@ -5,7 +5,7 @@ global $lang, $config, $app;
 $fields = defineFieldList('testcase.create');
 
 $fields->field('product')
-    ->hidden($app->tab != 'qa' && data('product.shadow'))
+    ->hidden(data('product.shadow'))
     ->control('inputGroup')
     ->items(false)
     ->itemBegin('product')->control('picker')->items(data('products'))->required(true)->value(empty(data('case.product')) ? data('productID') : data('case.product'))->itemEnd()
