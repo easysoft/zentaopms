@@ -1070,6 +1070,17 @@ class bugZen extends bug
         $bug = $this->gettasksForCreate($bug);
         if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
 
+        $resultFiles = array();
+        if(!empty($resultID) && !empty($stepIdList))
+        {
+            $resultFiles = $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList));
+            foreach($resultFiles as $resultFile)
+            {
+                $resultFile->name = $resultFile->title;
+                $resultFile->url  = $this->createLink('file', 'download', "fileID={$resultFile->id}");
+            }
+        }
+
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->hyphen . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
@@ -1092,7 +1103,7 @@ class bugZen extends bug
         $this->view->allBuilds             = !empty($bug->allBuilds) ? $bug->allBuilds : '';
         $this->view->allUsers              = !empty($bug->allUsers)  ? $bug->allUsers  : '';
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds((int)$bug->productID, (string)$bug->branch);
-        $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
+        $this->view->resultFiles           = array_values($resultFiles);
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
     }

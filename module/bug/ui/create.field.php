@@ -48,6 +48,10 @@ $fields->field('steps')
     ->width('full')
     ->control(array('control' => 'editor', 'templateType' => 'bug'));
 
+$fields->field('files')
+    ->width('full')
+    ->control('fileSelector', array('defaultFiles' => data('resultFiles')));
+
 $fields->field('story')->foldable();
 
 $fields->field('task')->foldable();
