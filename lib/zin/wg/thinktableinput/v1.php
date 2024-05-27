@@ -35,15 +35,14 @@ class thinkTableInput extends thinkQuestion
         if($step)
         {
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
-            if(!empty($step->options->customFields)) $step->options->customFields = is_string($step->options->customFields) ? explode(', ', $step->options->customFields) : array_values((array)$step->options->customFields);
-            $customFields = $step->options->customFields ?? array();
             $fields       = $step->options->fields ?? array();
             $isSupportAdd = $step->options->isSupportAdd;
             $canAddRows   = $step->options->canAddRows;
             $answer       = $step->answer;
 
-            $result = isset($answer->result) && !empty($answer->result) ? $answer->result : array();
-            $result = is_array($result) ? $result : get_object_vars($result);
+            $result       = isset($answer->result) && !empty($answer->result) ? $answer->result : array();
+            $result       = is_array($result) ? $result : get_object_vars($result);
+            $customFields = isset($answer->customFields) && !empty($answer->customFields) ? $answer->customFields : array();
         }
         jsVar('canAddRows', (int)$canAddRows);
         jsVar('fieldsCount', count($fields));
@@ -77,7 +76,7 @@ class thinkTableInput extends thinkQuestion
                     (
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                        on::click('addRow'),
+                        bind::click('addRow'),
                         set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                     ) : null,
                 )
@@ -97,7 +96,7 @@ class thinkTableInput extends thinkQuestion
                         set::rows('2'),
                         setClass('mt-2 w-1/5'),
                         setID('customFields'),
-                        set::name('customFields[' . $index + 1 . ']'),
+                        set::name('customFields[' . $index . ']'),
                         set::value($item),
                         set::placeholder($lang->thinkrun->placeholder->rowTitle)
                     ),
@@ -118,7 +117,7 @@ class thinkTableInput extends thinkQuestion
                         (
                             'plus',
                             setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                            on::click('addRow'),
+                            bind::click('addRow'),
                             set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                         ),
                         icon
@@ -160,7 +159,7 @@ class thinkTableInput extends thinkQuestion
                     (
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                        on::click('addRow'),
+                        bind::click('addRow'),
                         set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                     ),
                     icon
