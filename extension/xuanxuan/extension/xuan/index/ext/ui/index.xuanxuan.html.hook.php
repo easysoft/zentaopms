@@ -68,7 +68,7 @@ function toggleXuanClient()
 /* Handle chat notice change */
 function handleXuanNoticeChange(notice)
 {
-    $('#chatNoticeBadge').toggleClass('show', !!notice.count).text(notice.count);
+    $('#chat-btn .notice-badge').toggleClass('show', !!notice.count).text(notice.count);
 }
 
 /* Handle client route change */
