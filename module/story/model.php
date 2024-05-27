@@ -3702,7 +3702,7 @@ class storyModel extends model
             if(strpos('active,launched', $story->status) === false) return false;
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
-            if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
+            if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]))) return false;
             if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }
 
