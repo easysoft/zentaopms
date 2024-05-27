@@ -1215,7 +1215,8 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story, 'finalResult')->autoCheck()->where('id')->eq($storyID)->exec();
             $this->setStage((int)$storyID);
 
-            $story->id = $storyID;
+            $story->id     = $storyID;
+            $story->result = $result;
             $this->recordReviewAction($oldStories[$storyID], $story, $reason);
 
             /* Sync twins. */
