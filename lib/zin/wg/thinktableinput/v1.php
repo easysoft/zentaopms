@@ -12,7 +12,7 @@ class thinkTableInput extends thinkQuestion
     protected static array $defineProps = array(
         'requiredRows?: number=1',    // 必填行数
         'fields?: array',             // 行标题
-        'isSupportAdd?: bool',        // 是否支持用户添加行
+        'supportAdd?: bool',          // 是否支持用户添加行
         'canAddRows: number=1',       // 可添加行数
     );
 
@@ -31,12 +31,12 @@ class thinkTableInput extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $isSupportAdd, $canAddRows) = $this->prop(array('step', 'fields', 'isSupportAdd', 'canAddRows'));
+        list($step, $fields, $supportAdd, $canAddRows) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows'));
         if($step)
         {
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields       = $step->options->fields ?? array();
-            $isSupportAdd = $step->options->isSupportAdd;
+            $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $step->options->canAddRows;
             $answer       = $step->answer;
 
@@ -72,7 +72,7 @@ class thinkTableInput extends thinkQuestion
                 (
                     setClass('flex'),
                     setStyle(array('min-width' => '40px')),
-                    ($index == count($fields) - 1 && $isSupportAdd) ? icon
+                    ($index == count($fields) - 1 && $supportAdd) ? icon
                     (
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
@@ -179,14 +179,14 @@ class thinkTableInput extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $required, $requiredRows, $isSupportAdd, $canAddRows, $fields) = $this->prop(array('step','required', 'requiredRows', 'isSupportAdd', 'canAddRows', 'fields'));
+        list($step, $required, $requiredRows, $supportAdd, $canAddRows, $fields) = $this->prop(array('step','required', 'requiredRows', 'supportAdd', 'canAddRows', 'fields'));
         if($step)
         {
             $required = $step->options->required;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = $step->options->fields ?? array();
             $requiredRows = $step->options->requiredRows;
-            $isSupportAdd = $step->options->isSupportAdd;
+            $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $step->options->canAddRows;
 
         }
@@ -234,16 +234,16 @@ class thinkTableInput extends thinkQuestion
                     set::label($lang->thinkstep->label->isSupportAdd),
                     radioList
                     (
-                        set::name('options[isSupportAdd]'),
+                        set::name('options[supportAdd]'),
                         set::inline(true),
                         set::items($lang->thinkstep->requiredList),
-                        set::value($isSupportAdd ? $isSupportAdd : 0),
+                        set::value($supportAdd ? $supportAdd : 0),
                         bind::change('changeSupportAdd(event)')
                     )
                 ),
                 formGroup
                 (
-                    setClass('w-1/2 can-add-rows', $isSupportAdd ? '' : 'hidden'),
+                    setClass('w-1/2 can-add-rows', $supportAdd ? '' : 'hidden'),
                     set::label($lang->thinkstep->label->canAddRows),
                     set::labelClass('required'),
                     input
