@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '20.1.0';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '20.1.0';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -25,6 +25,7 @@ $config->webRoot       = '';                   // URL根目录。       The root
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
 $config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
 $config->tabSession    = false;                // 是否开启浏览器新标签独立session.
+$config->clientCache   = false;                // 是否开启客户端缓存。Whether enable client cache or not.
 
 /* 框架路由相关设置。Routing settings. */
 $config->requestType = 'PATH_INFO';               // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
