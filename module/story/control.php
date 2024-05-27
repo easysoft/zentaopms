@@ -1790,6 +1790,14 @@ class story extends control
             $fileName  = $execution->name . $this->lang->dash . $fileName;
             $project   = $execution;
             if($execution->type == 'execution') $project = $this->project->getById($execution->project);
+
+            $products  = $this->loadModel('product')->getProducts($executionID);
+            $hasBranch = false;
+            foreach($products as $product)
+            {
+                if($product->type != 'normal') $hasBranch = true;
+            }
+            if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
         }
         else
         {
@@ -1820,13 +1828,6 @@ class story extends control
             if($project->model != 'scrum') $filterFields[] = ', plan,';
             $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
-        $products  = $this->loadModel('product')->getProducts($executionID);
-        $hasBranch = false;
-        foreach($products as $product)
-        {
-            if($product->type != 'normal') $hasBranch = true;
-        }
-        if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;
