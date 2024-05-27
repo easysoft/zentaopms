@@ -200,7 +200,7 @@ window.loadExecutionStories = function()
     const storyID      = $('input[name="story"]').val();
     const executionID  = $('input[name="execution"]').length == 0 ? window.executionID : $('input[name="execution"]').val();
     const moduleID     = $('input[name="module"]').val();
-    const getStoryLink = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + storyID + '&number=&type=full&status=active');
+    const getStoryLink = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=' + storyID + '&pageType=&type=full&status=active');
     $.get(getStoryLink, function(stories)
     {
         stories = JSON.parse(stories);
