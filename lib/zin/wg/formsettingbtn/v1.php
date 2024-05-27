@@ -20,6 +20,7 @@ class formSettingBtn extends wg
         'canGlobal'       => false,
         'submitCallBack'  => '',
         'restoreCallBack' => '',
+        'noCancel'        => false,
         'text'            => ''
     );
 
@@ -56,7 +57,7 @@ class formSettingBtn extends wg
 
     protected function build()
     {
-        list($urlParams, $text, $submitCallback, $restoreCallback, $canGlobal) = $this->prop(array('urlParams', 'text', 'submitCallback', 'restoreCallback', 'canGlobal'));
+        list($urlParams, $text, $submitCallback, $restoreCallback, $canGlobal, $noCancel) = $this->prop(array('urlParams', 'text', 'submitCallback', 'restoreCallback', 'canGlobal', 'noCancel'));
         $customFields = $this->prop('customFields', array());
         $urlParams    = $this->prop('urlParams', '');
 
@@ -84,13 +85,13 @@ class formSettingBtn extends wg
                 (
                     setClass('form-setting-btn'),
                     set::title($lang->customField),
-                    $canGlobal ? to::titleSuffix(checkList(set::name('global'), setClass('text-base font-normal ml-2'), set::inline(true), set::items(array(array('text' => $lang->datatable->setGlobal, 'value' => '1'))))) : null,
                     set::url($customLink),
                     set::showExtra(false),
                     set::actions(array
                     (
+                        $canGlobal ? checkList(set::name('global'), setClass('whitespace-nowrap'), set::style(array('padding' => 0)), set::inline(true), set::items(array(array('text' => $lang->datatable->setGlobal, 'value' => '1')))) : null,
                         btn(set::text($lang->save), setClass('primary'), on::click('onSubmitFormtSetting'), $submitCallback ? on::click($submitCallback) : null),
-                        btn(set::text($lang->cancel), set::btnType('button'), on::click('cancelFormSetting'), set('data-url', $cancelLink)),
+                        $noCancel ? null : btn(set::text($lang->cancel), set::btnType('button'), on::click('cancelFormSetting'), set('data-url', $cancelLink)),
                         btn(set::text($lang->restore), setClass('text-primary ghost'), set('data-url', $customLink), on::click('revertDefaultFields'), $restoreCallback ? on::click($restoreCallback) : null)
                     )),
                     to::headingActions(array

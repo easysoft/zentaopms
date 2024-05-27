@@ -66,6 +66,7 @@ toolbar
     formSettingBtn
     (
         set::customFields($customFields),
+        set::noCancel(true),
         set::canGlobal(commonModel::hasPriv('datatable', 'setGlobal')),
         set::urlParams("module=product&section=trackFields&key={$storyType}"),
         set::submitCallback("loadCurrentPage"),
