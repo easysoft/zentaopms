@@ -39,7 +39,6 @@ class thinkTableInput extends thinkQuestion
             $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $step->options->canAddRows;
             $answer       = $step->answer;
-
             $result       = isset($answer->result) && !empty($answer->result) ? $answer->result : array();
             $result       = is_array($result) ? $result : get_object_vars($result);
             $customFields = isset($answer->customFields) && !empty($answer->customFields) ? $answer->customFields : array();
