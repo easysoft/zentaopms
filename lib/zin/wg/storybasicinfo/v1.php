@@ -114,7 +114,7 @@ class storyBasicInfo extends wg
                     (
                         'control' => 'link',
                         'url'     => createLink('productplan', 'view', "planID=$planID"),
-                        'text'    => $planTitle
+                        'text'    => $planTitle . ' '
                     ) : $planTitle;
                 }
             }
