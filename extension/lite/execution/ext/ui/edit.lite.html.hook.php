@@ -7,5 +7,5 @@ window.waitDom('input[name=PM]', function(){ $('input[name=PM]').closest('div.fo
 window.waitDom('input[name=PO]', function(){ $('input[name=PO]').closest('div.form-group').hide();})
 window.waitDom('input[name=QD]', function(){ $('input[name=QD]').closest('div.form-group').hide();})
 window.waitDom('input[name=RD]', function(){ $('input[name=RD]').closest('div.form-group').hide();})
-window.waitDom('.form-group.linkProduct', function(){ $('.form-group.linkProduct').closest('div.form-row').hide();})
+window.waitDom('[data-name=productsBox]', function(){ $('[data-name=productsBox]').hide();})
 </script>
