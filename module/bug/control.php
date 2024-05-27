@@ -468,7 +468,7 @@ class bug extends control
         $this->view->users      = $users;
         $this->view->assignedTo = isset($users[$oldBug->openedBy]) ? $oldBug->openedBy : $this->bug->getModuleOwner($oldBug->module, $oldBug->product);
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : '0', (int)$oldBug->project, 'stagefilter');
-        $this->view->builds     = $this->bugZen->addReleaseLabelForBuilds($oldBug->product, $builds);
+        $this->view->builds     = $this->build->addReleaseLabelForBuilds($oldBug->product, $builds);
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
