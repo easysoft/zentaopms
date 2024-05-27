@@ -1,4 +1,3 @@
-.kanban-header-lane-name, .kanban-lane-name {display:none;}
 .switchBtn, .search-form-toggle{background: transparent; box-shadow: none;}
 .orderByIcon.with-popover-show{color: var(--color-primary-500);}
 
@@ -6,6 +5,8 @@
 .card .card-title{height:40px; width:100%;}
 .card .card-content{flex-direction: row;justify-content: space-between;}
 
+.kanban-header-lane-name, .kanban-lane-name {display:none;}
+.kanban-lane-cols, .kanban-header-cols, .kanban-header-sub-cols { gap: calc(var(--kanban-cols-gap) / 2); }
 .lane-col-shrink-with-above { position: relative; }
 .lane-col-shrink-with-above:before {
     background-color: inherit;
