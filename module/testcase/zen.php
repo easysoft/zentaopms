@@ -1370,9 +1370,18 @@ class testcaseZen extends testcase
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->get();
 
+        /* 如果用例产品是影子产品，同步用例到项目中。 */
+        $product = $this->loadModel('product')->getById($case->product);
+        if($product->shadow && empty($case->project))
+        {
+            $project = $this->loadModel('project')->getByShadowProduct($case->product);
+            $case->project = $project->id;
+        }
+
+        /* 如果用例的项目不为空，且不启用迭代，同步用例到影子迭代中。 */
         if(!empty($case->project))
         {
-            $project = $this->loadModel('project')->fetchByID($case->project);
+            if(!isset($project)) $project = $this->loadModel('project')->fetchByID($case->project);
             if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
         }
         return $case;
