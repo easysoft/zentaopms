@@ -51,8 +51,8 @@ class thinkStepBase extends wg
             }
             if($options->required && $questionType == 'tableInput')
             {
-                if($options->isSupportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count(get_object_vars($options->fields)), $options->requiredRows);
-                if(!$options->isSupportAdd) $tips = sprintf($lang->thinkrun->tableInputTitle->supportAdd, $options->requiredRows);
+                if($options->supportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count(get_object_vars($options->fields)), $options->requiredRows);
+                if(!$options->supportAdd) $tips = sprintf($lang->thinkrun->tableInputTitle->supportAdd, $options->requiredRows);
             }
         }
 
@@ -120,7 +120,7 @@ class thinkStepBase extends wg
                     setClass('is-required'),
                     set::value($title ?? ''),
                     set::name('title'),
-                    set::placeholder($lang->thinkstep->inputContent)
+                    set::placeholder($lang->thinkstep->placeholder->inputContent)
                 )
             ),
             formGroup
@@ -131,7 +131,7 @@ class thinkStepBase extends wg
                 (
                     setClass('desc'),
                     set::name('desc'),
-                    set::placeholder($lang->thinkstep->pleaseInput),
+                    set::placeholder($lang->thinkstep->placeholder->pleaseInput),
                     html($desc ?? ''),
                     set::rows(3)
                 )
