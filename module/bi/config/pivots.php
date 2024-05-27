@@ -704,10 +704,10 @@ left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and t2.deleted='0'
-and (case when $project='' then 1 else t3.id=$project end)
-and (case when $status='' then 1 else t1.status=$status end)
-and (case when $beginDate='' then 1 else t1.begin>=$beginDate end)
-and (case when $endDate='' then 1 else t1.end<=$endDate end)
+and (case when \$project='' then 1 else t3.id=\$project end)
+and (case when \$status='' then 1 else t1.status=\$status end)
+and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
+and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
 EOT,
     'settings'  => array
     (
@@ -1526,14 +1526,15 @@ select
     t1.id,
     t5.name as project,
     (case when t5.multiple='1' then t1.name else '' end) as execution,
-    t2.stories,
-    (t2.stories-t2.undone) as doneStory,
-    t3.number,(t3.number-t3.undone) as doneTask,
-    t4.bugs,
-    t4.resolutions,
-    round(t4.bugs/(t2.stories-t2.undone),2) as bugthanstory,
-    round(t4.bugs/(t3.number-t3.undone),2) as bugthantask,
-    t4.seriousBugs
+    ifnull(t2.stories, 0) as stories,
+    ifnull((t2.stories-t2.undone), 0) as doneStory,
+    ifnull(t3.number, 0) as number,
+    ifnull((t3.number-t3.undone), 0) as doneTask,
+    ifnull(t4.bugs, 0) as bugs,
+    ifnull(t4.resolutions, 0) as resolutions,
+    ifnull(round(t4.bugs/(t2.stories-t2.undone),2), 0) as bugthanstory,
+    ifnull(round(t4.bugs/(t3.number-t3.undone),2), 0) as bugthantask,
+    ifnull(t4.seriousBugs, 0) as seriousBugs
 from zt_project as t1
 left join ztv_projectstories as t2 on t1.id=t2.execution
 left join ztv_executionsummary as t3 on t1.id=t3.execution
@@ -1674,12 +1675,12 @@ $config->bi->builtin->pivots[] = array
 select
     t1.id,
     t1.name,
-    t2.stories,
-    (t2.stories-t2.undone) as doneStory,
-    t3.bugs,
-    t3.resolutions,
-    round(t3.bugs/(t2.stories-t2.undone),2) as bugthanstory,
-    t3.seriousBugs
+    ifnull(t2.stories, 0) as stories,
+    ifnull((t2.stories-t2.undone), 0) as doneStory,
+    ifnull(t3.bugs, 0) as bugs,
+    ifnull(t3.resolutions, 0) as resolutions,
+    ifnull(round(t3.bugs/(t2.stories-t2.undone),2), 0) as bugthanstory,
+    ifnull(t3.seriousBugs, 0) as seriousBugs
 from zt_product as t1
 left join ztv_productstories as t2 on t1.id=t2.product
 left join ztv_productbugs as t3 on t1.id=t3.product
@@ -1797,14 +1798,16 @@ select
     t1.account,
     t1.consumed,
     t1.`date`,
-    (case when \$dept='' then 0 else t2.dept end) as dept
+    t2.dept as dept
 from zt_effort as t1
 left join zt_user as t2 on t1.account = t2.account
 left join zt_dept as t3 on t2.dept = t3.id
 where t1.`deleted` = '0'
 and (case when \$startDate='' then 1 else t1.`date` >= cast(\$startDate as date) end)
 and (case when \$endDate='' then 1 else t1.`date` <= cast(\$endDate as date) end)
-and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0)
+and (case when \$dept='' then 1
+else t3.path like concat((select path from zt_dept where id=coalesce(cast(nullif(\$dept, '') as integer), 0)), '%')
+end)
 order by t1.`date` asc
 EOT,
     'settings'  => array
@@ -1861,33 +1864,33 @@ $config->bi->builtin->pivots[] = array
     'sql'       => <<<EOT
 select
     day,
-    max(actions) actions,
-    max(userlogin) userlogin,
-    max(consumed) consumed,
-    max(storyopen) storyopen,
-    max(storyclose) storyclose,
-    max(taskopen) taskopen,
-    max(taskfinish) taskfinish,
-    max(bugopen) bugopen,
-    max(bugresolve) bugresolve,
-from
-(select day,actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve from ztv_dayactions
-union all
-select day,null as actions,userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_dayuserlogin
-union all
-select date as day,null as actions,null as userlogin,consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_dayeffort
-union all
-select day,null as actions,null as userlogin,null as consumed,storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_daystoryopen
-union all
-select day,null as actions,null as userlogin,null as consumed,null as storyopen,storyclose,null as taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_daystoryclose
-union all
-select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,taskopen,null as taskfinish,null as bugopen,null as bugresolve  from ztv_daytaskopen
-union all
-select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,taskfinish,null as bugopen,null as bugresolve  from ztv_daytaskfinish
-union all
-select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,bugopen,null as bugresolve  from ztv_daybugopen
-union all
-select day,null as actions,null as userlogin,null as consumed,null as storyopen,null as storyclose,null as taskopen,null as taskfinish,null as bugopen,bugresolve from ztv_daybugresolve
+    ifnull(max(actions),0) actions,
+    ifnull(max(userlogin),0) userlogin,
+    ifnull(max(consumed),0) consumed,
+    ifnull(max(storyopen),0) storyopen,
+    ifnull(max(storyclose),0) storyclose,
+    ifnull(max(taskopen),0) taskopen,
+    ifnull(max(taskfinish),0) taskfinish,
+    ifnull(max(bugopen),0) bugopen,
+    ifnull(max(bugresolve),0) bugresolve,
+ from
+(select day,actions from ztv_dayactions
+union all by name
+select day,userlogin from ztv_dayuserlogin
+union all by name
+select date as day,consumed from ztv_dayeffort
+union all by name
+select day,storyopen from ztv_daystoryopen
+union all by name
+select day,storyclose from ztv_daystoryclose
+union all by name
+select day,taskopen from ztv_daytaskopen
+union all by name
+select day,taskfinish from ztv_daytaskfinish
+union all by name
+select day,bugopen from ztv_daybugopen
+union all by name
+select day,bugresolve from ztv_daybugresolve
 ) as uniontable
 where (case when \$startDate='' then 1 else day>=\$startDate end)
 and (case when \$endDate='' then 1 else day<=\$endDate end)
@@ -1896,7 +1899,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'day',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -1973,7 +1975,7 @@ and t2.deleted='0'
 and t1.resolution!=''
 and (case when \$startDate='' then 1 else t1.resolvedDate>=cast(\$startDate as date) end)
 and (case when \$endDate='' then 1 else t1.resolvedDate<=cast(\$endDate as date) end)
-having customproduct=\$product
+and (case when \$product = '' then 1 else customproduct=\$product end)
 EOT,
     'settings'  => array
     (
@@ -2087,7 +2089,7 @@ $config->bi->builtin->pivots[] = array
 select
     t1.id,
     t4.name as project,
-    (case when t4.multiple="1" then t1.name else '' end) as execution,
+    (case when t4.multiple='1' then t1.name else '' end) as execution,
     t1.status,
     t2.number as tasks,
     round(t2.consumed,2) as consumed,

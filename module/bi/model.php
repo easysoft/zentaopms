@@ -98,7 +98,7 @@ class biModel extends model
             elseif($driverName == 'duckdb')
             {
                 $rows      = $dbh->query($limitSql)->fetchAll();
-                $allRows   = $dbh->query("SELECT COUNT(1) as count FROM ($sql)")->fetch();
+                $allRows   = $dbh->query("SELECT COUNT(1) as count FROM ( $sql )")->fetch();
                 $rowsCount = $allRows->count;
             }
         }
