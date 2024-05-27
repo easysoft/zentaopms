@@ -23,6 +23,7 @@ if(in_array($model, array('scrum', 'kanban'))) $fields->field('name')->checkbox(
 $fields->field('name')
     ->className($copyProject ? 'has-warning' : '')
     ->tip($copyProject ? $lang->project->copyProject->nameTips : null)
+    ->tipClass($copyProject ? 'text-warning' : null)
     ->value($copyProject ? data('copyProject.name') : '');
 if($copyProject) $fields->field('multiple')->hidden(true)->value(data('copyProject.multiple'));
 
@@ -32,6 +33,7 @@ if($hasCode)
         ->control('input', array('className' => $copyProject ? 'has-warning' : ''))
         ->className($copyProject ? 'has-warning' : '')
         ->tip($copyProject ? $lang->project->copyProject->codeTips : null)
+        ->tipClass($copyProject ? 'text-warning' : null)
         ->value($copyProject ? data('copyProject.code') : '');
 }
 
@@ -43,7 +45,8 @@ if(!$copyProject || data('copyProject.multiple') != '0') $fields->field('begin')
 $fields->field('days')
     ->control('input', array('className' => $copyProject ? 'has-warning' : ''))
     ->className($copyProject ? 'has-warning' : '')
-    ->tip($copyProject ? $lang->project->copyProject->daysTips : null);
+    ->tip($copyProject ? $lang->project->copyProject->daysTips : null)
+    ->tipClass($copyProject ? 'text-warning' : null);
 
 $fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
 

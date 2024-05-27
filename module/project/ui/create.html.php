@@ -81,7 +81,7 @@ formGridPanel
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
-    on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .picker-box *', 'removeTips'),
+    on::click('[name=name], [name=code], [data-name=begin] .pick *, [name=days], [data-name="parent"] .pick *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
     on::click('[name=multiple]', $toggleLongTime),
     on::change('[name=hasProduct]', 'changeType'),
