@@ -2115,13 +2115,19 @@ class storyTao extends storyModel
      * Build lanes data by leaf node.
      *
      * @param  array    $leafNodes
+     * @param  string   $storyType  epic|requirement|story
      * @access public
      * @return array
      */
-    public function buildTrackLanes(array $leafNodes): array
+    public function buildTrackLanes(array $leafNodes, string $storyType): array
     {
         $lanes = array();
-        foreach($leafNodes as $story) $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
+        foreach($leafNodes as $story)
+        {
+            if(($storyType == 'requirement' || $storyType == 'story') && $story->type == 'epic') continue;
+            if($storyType == 'story' && $story->type == 'requirement') continue;
+            $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
+        }
         return $lanes;
     }
 

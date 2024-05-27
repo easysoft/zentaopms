@@ -15,6 +15,8 @@ namespace zin;
 $viewByTypePairs['epic']        = $lang->story->viewByER;
 $viewByTypePairs['requirement'] = $lang->story->viewByUR;
 $viewByTypePairs['story']       = $lang->story->viewBySR;
+if(!$config->enableER) unset($viewByTypePairs['epic']);
+if(!$config->URAndSR)  unset($viewByTypePairs['requirement']);
 
 $storyTypeLang = $lang->SRCommon;
 if($storyType == 'requirement') $storyTypeLang = $lang->URCommon;
@@ -43,6 +45,9 @@ foreach($lang->story->trackOrderByList as $orderByType => $orderByName)
     }
 }
 
+$dropdownItems = array();
+foreach($viewByTypePairs as $type => $typeName) $dropdownItems[] = array('text' => $typeName, 'selected' => $storyType == $type, 'url' => createLink('product', 'track', sprintf($paramTemplate, $type, ($type != 'story' && strpos($orderBy, 'stage') === 0) ? 'id_desc' : $orderBy)));
+
 featureBar
 (
     to::leading
@@ -50,11 +55,7 @@ featureBar
         dropdown
         (
             to('trigger', btn(setClass('switchBtn'), $viewByTypePairs[$storyType])),
-            set::items(array(
-                array('text' => $viewByTypePairs['epic'],        'selected' => $storyType == 'epic',        'url' => createLink('product', 'track', sprintf($paramTemplate, "epic",        strpos($orderBy, 'stage') === 0 ? 'id_desc' : $orderBy))),
-                array('text' => $viewByTypePairs['requirement'], 'selected' => $storyType == 'requirement', 'url' => createLink('product', 'track', sprintf($paramTemplate, "requirement", strpos($orderBy, 'stage') === 0 ? 'id_desc' : $orderBy))),
-                array('text' => $viewByTypePairs['story'],       'selected' => $storyType == 'story',       'url' => createLink('product', 'track', sprintf($paramTemplate, "story",       $orderBy)))
-            )),
+            set::items($dropdownItems),
         )
     ),
     li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module']), set::text($lang->searchAB . $storyTypeLang)))
@@ -101,6 +102,7 @@ jsVar('langCasePriList',       $lang->testcase->priList);
 jsVar('langCaseResultList',    $lang->testcase->resultList);
 jsVar('langUnexecuted',        $lang->testcase->unexecuted);
 
+jsVar('mergeCells',   $mergeCells);
 jsVar('orderByItems', $orderByItems);
 jsVar('orderByTitle', $orderByTitle);
 jsVar('storyType',    $storyType);
@@ -113,7 +115,15 @@ empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass
     zui::kanbanList
     (
         set::key('kanban'),
-        set::items(array(array('data' => $tracks, 'getCol' => jsRaw('window.getCol'), 'getItem' => jsRaw('window.getItem'), 'itemRender' => jsRaw('window.itemRender'), 'afterRender' => jsRaw('window.afterRender'), 'draggable' => false))),
+        set::items(array(array(
+            'data'        => $tracks,
+            'getLaneCol'  => jsRaw('window.getLaneCol'),
+            'getCol'      => jsRaw('window.getCol'),
+            'getItem'     => jsRaw('window.getItem'),
+            'itemRender'  => jsRaw('window.itemRender'),
+            'afterRender' => jsRaw('window.afterRender'),
+            'draggable'   => false
+        ))),
         set::height('calc(100vh - 130px)')
     ),
     pager(setClass('justify-end'))

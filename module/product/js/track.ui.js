@@ -78,6 +78,15 @@ window.getItem = function(info)
     }
 }
 
+window.getLaneCol = function(lane, col)
+{
+    if(mergeCells[lane.name])
+    {
+        if(mergeCells[lane.name][col.name]) return {laneColClass: 'lane-col-join-with-above'};
+        return {laneColClass: 'lane-col-shrink-with-above'};
+    }
+}
+
 window.getCol = function(col)
 {
     if(col.name == storyType) col.subtitle = {html: `<span class="icon ml-1 cursor-pointer orderByIcon icon-swap" title="${orderByTitle}"></span>`};

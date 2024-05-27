@@ -3973,11 +3973,52 @@ class storyModel extends model
         $leafNodes  = $this->storyTao->getLeafNodes($stories, array_keys($allStories));
 
         $tracks = array();
-        $lanes  = $this->storyTao->buildTrackLanes($leafNodes);
+        $lanes  = $this->storyTao->buildTrackLanes($leafNodes, $storyType);
         $cols   = $this->storyTao->buildTrackCols($storyType);
         $items  = $this->storyTao->buildTrackItems($allStories, $leafNodes, $storyType);
 
         return array('lanes' => $lanes, 'cols' => $cols, 'items' => $items);
+    }
+
+    /**
+     * 获取矩阵需要合并的单元格。
+     * Get need merge cells for track.
+     *
+     * @param  array   $tracks
+     * @param  array   $showCols
+     * @access public
+     * @return array
+     */
+    public function getMergeTrackCells(array $tracks, array $showCols): array
+    {
+        $cols = array();
+        foreach($showCols as $colType)
+        {
+            foreach($tracks['cols'] as $col)
+            {
+                $colName = $col['name'];
+                if($col['parent'] == -1) continue;
+                if(str_contains($colName, $colType)) $cols[] = $col;
+            }
+        }
+
+        $firstCol   = zget(reset($cols), 'name', '');
+        $mergeCells = array();
+        foreach($tracks['lanes'] as $lane)
+        {
+            $laneName = $lane['name'];
+            if(!empty($tracks['items'][$laneName][$firstCol])) continue;
+
+            foreach($cols as $col)
+            {
+                $colName = $col['name'];
+                if(!empty($tracks['items'][$laneName][$colName])) break;
+
+                $mergeCells[$laneName][$colName] = true;
+            }
+        }
+
+        return $mergeCells;
     }
 
     /**

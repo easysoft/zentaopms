@@ -5,3 +5,15 @@
 .card {min-height:80px;}
 .card .card-title{height:40px; width:100%;}
 .card .card-content{flex-direction: row;justify-content: space-between;}
+
+.lane-col-shrink-with-above { position: relative; }
+.lane-col-shrink-with-above:before {
+    background-color: inherit;
+    left: 0;
+    position: absolute;
+    right: 0;
+    --tw-content: "";
+    content: var(--tw-content);
+    height: calc(var(--kanban-col-gap-top, var(--kanban-lanes-gap)) - 2px);
+    top: calc(2px - var(--kanban-col-gap-top, var(--kanban-lanes-gap)));
+}
