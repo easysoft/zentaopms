@@ -121,13 +121,13 @@ class thinkStepMenu extends wg
             'key'     => 'addNode',
             'icon'    => 'add-chapter',
             'text'    => $this->lang->thinkstep->actions['sameNode'],
-            'onClick' => jsRaw("() => addStep({$item->id}, 'same')")
+            'onClick' => jsRaw("() => addNode({$item->id}, 'same')")
         );
         if($item->grade != 3 && $item->type == 'node' && $canAddChild) $menus[] = array(
             'key'     => 'addNode',
             'icon'    => 'add-sub-chapter',
             'text'    => $this->lang->thinkstep->actions['childNode'],
-            'onClick' => jsRaw("() => addStep({$item->id}, 'child')")
+            'onClick' => jsRaw("() => addNode({$item->id}, 'child')")
         );
         $parentID    = $item->type != 'node' ? $item->parent : $item->id;
         $confirmTips = $this->lang->thinkstep->deleteTips[$item->type];
