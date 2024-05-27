@@ -243,11 +243,13 @@ detailBody
                             set::url($createStoryLink)
                         ),
                         set::items(array(
-                            array('text' => $lang->story->batchCreate . $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''),
                             array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : ''),
-                            array('text' => $lang->requirement->batchCreate . $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : ''),
                             array('text' => $lang->epic->create, 'url' => $createEpicLink, 'class' => empty($createEpicLink) ? 'disabled' : ''),
-                            array('text' => $lang->epic->batchCreate . $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : ''),
+                            array('text' => $lang->story->batchCreate, 'items' => array(
+                                array('text' => $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''),
+                                array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : ''),
+                                array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : '')
+                            ))
                         )),
                         set::trigger('hover'),
                         set::placement('bottom-end')
