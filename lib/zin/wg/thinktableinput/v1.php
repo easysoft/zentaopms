@@ -76,7 +76,7 @@ class thinkTableInput extends thinkQuestion
                     (
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                        bind::click('addRow'),
+                        bind::click('addRow(event)'),
                         set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                     ) : null,
                 )
@@ -117,7 +117,7 @@ class thinkTableInput extends thinkQuestion
                         (
                             'plus',
                             setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                            bind::click('addRow'),
+                            bind::click('addRow(event)'),
                             set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                         ),
                         icon
@@ -159,7 +159,7 @@ class thinkTableInput extends thinkQuestion
                     (
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                        bind::click('addRow'),
+                        bind::click('addRow(event)'),
                         set::title(sprintf($lang->thinkrun->addTips, $canAddRows)),
                     ),
                     icon
