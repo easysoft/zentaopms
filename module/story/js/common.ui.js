@@ -3,7 +3,7 @@ window.clickSubmit = function(e)
     const status = $(e.submitter).data('status');
     if(status === undefined) return;
 
-    const method = page !== undefined ? page : config.currentMethod;
+    const method = typeof(page) !== 'undefined' ? page : config.currentMethod;
     let storyStatus = status;
     if(status == 'active' && method != 'batchcreate')
     {
