@@ -14,6 +14,7 @@ $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
 $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
 $viewName       = $scope == 'local'? \zget($products, $product->id) : $lang->testtask->all;
 jsVar('condition', "productID=$product->id&branch=$branch&type=$type&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
+jsVar('multipleSprints', $multipleSprints);
 
 $testMenuLink = createLink($this->app->rawModule, $this->app->rawMethod, array('productID' => $product->id, 'branch' => '{branch}', 'type' => '{type}'));
 
@@ -83,6 +84,7 @@ dtable
     set::fixedLeftWidth('20%'),
     set::orderBy($orderBy),
     set::sortLink(createLink('testtask', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&beginTime={$beginTime}&endTime={$endTime}")),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
     set::emptyTip($lang->testtask->noTesttask),
