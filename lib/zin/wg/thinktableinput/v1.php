@@ -87,6 +87,7 @@ class thinkTableInput extends thinkQuestion
         {
             foreach($customFields as $index => $item)
             {
+                /* 结果的索引是后台设置问题数加用户添加问题行的索引。Result index is number of backend setting issues plus custom add problem index.*/
                 $resultIndex = count($fields) + $index;
                 $tableInputItems[] = formGroup
                 (
