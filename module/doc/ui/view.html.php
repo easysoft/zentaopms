@@ -170,7 +170,8 @@ $contentDom = div
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
                     $doc->type != 'text' ? setData('toggle', 'modal') : null,
                     setClass('btn ghost'),
-                    icon('edit')
+                    icon('edit'),
+                    setData('app', $app->tab)
                 ) : null,
                 common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
                 (
