@@ -78,7 +78,7 @@ if(!$task->fromBug && $task->story)
     (
         'control'  => 'detailCard',
         'title'    => $task->storyTitle,
-        'url'      => createLink('story', 'view', "storyID=$task->storyID"),
+        'url'      => createLink('story', 'view', "storyID=$task->storyID") . ($execution->multiple ? '' : '#app=project'),
         'objectID' => $task->storyID,
         'color'    => '',
         'toolbar'  => $task->needConfirm ? array
