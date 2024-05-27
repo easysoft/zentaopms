@@ -16,11 +16,6 @@ class thinkCheckbox extends thinkRadio
         'maxCount?: string',
     );
 
-    public static function getPageJS(): string
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function buildFormItem(): array
     {
         global $lang, $app;
