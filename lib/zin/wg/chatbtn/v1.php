@@ -29,7 +29,7 @@ class chatBtn extends wg
 
         #reload-ai-chat.disabled {cursor: wait; color: #999!important;}
 
-        #chat-btn .notice-badge {position: absolute; bottom: 4px; right: 0; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
+        #chat-btn .notice-badge {position: absolute; bottom: 2px; right: 1px; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
         #chat-btn .notice-badge.show {opacity: 1; transform: scale(1);}
         CSS;
     }
