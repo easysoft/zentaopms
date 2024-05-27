@@ -72,7 +72,7 @@ class thinkOptions extends wg
             (
                 set::_to("#$id"),
                 set::deleteStepTip($deleteStepTip),
-                set::enterPlaceholder($lang->thinkstep->pleaseInput),
+                set::enterPlaceholder($lang->thinkstep->placeholder->pleaseInput),
                 set($this->props->pick(array('name', 'data')))
             ),
             $showOther ? div
@@ -92,7 +92,7 @@ class thinkOptions extends wg
                     (
                         setClass('h-full w-full flex items-center text-gray-400 pl-2.5'),
                         setStyle('background', 'rgba(244, 245, 247, .7)'),
-                        $lang->thinkstep->pleaseInput,
+                        $lang->thinkstep->placeholder->pleaseInput,
                     ),
                 ),
                 div

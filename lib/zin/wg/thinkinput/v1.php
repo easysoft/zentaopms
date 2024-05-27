@@ -28,7 +28,7 @@ class thinkInput extends thinkQuestion
             set::name('result'),
             set::required($required),
             set::value($value),
-            set::placeholder($lang->thinkstep->pleaseInput)
+            set::placeholder($lang->thinkstep->placeholder->pleaseInput)
         );
         return $detailWg;
     }

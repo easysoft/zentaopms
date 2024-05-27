@@ -220,7 +220,7 @@ class thinkTableInput extends thinkQuestion
                         set::type('number'),
                         set::name('options[requiredRows]'),
                         set::value($requiredRows),
-                        set::placeholder($lang->thinkstep->inputContent),
+                        set::placeholder($lang->thinkstep->placeholder->inputContent),
                         set::min(1),
                         on::input('changeInput')
                     )
@@ -252,7 +252,7 @@ class thinkTableInput extends thinkQuestion
                         set::type('number'),
                         set::name('options[canAddRows]'),
                         set::value($canAddRows),
-                        set::placeholder($lang->thinkstep->inputContent),
+                        set::placeholder($lang->thinkstep->placeholder->inputContent),
                         set::min(1),
                         on::input('changeInput')
                     )
