@@ -97,6 +97,7 @@ detailBody
                             $isInModal ? $buildName : a
                             (
                                 set::href(createLink('build', 'view', "buildID=$task->build")),
+                                !empty($execution) && empty($execution->multiple) ? setData('app', 'project') : null,
                                 $buildName
                             )
                         )
