@@ -808,12 +808,8 @@ class product extends control
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
 
         /* Init storyType param. */
-        if(empty($storyType))
-        {
-            $storyType = 'story';
-            if($this->config->URAndSR)  $storyType = 'requirement';
-            if($this->config->enableER) $storyType = 'epic';
-        }
+        $storyTypeList = $this->productZen->getActiveStoryTypeForTrack($projectID, $productID);
+        if(empty($storyType)) $storyType = key($storyTypeList);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -850,6 +846,7 @@ class product extends control
         $this->view->orderBy         = $orderBy;
         $this->view->customFields    = $customFields;
         $this->view->mergeCells      = $mergeCells;
+        $this->view->storyTypeList   = $storyTypeList;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
 

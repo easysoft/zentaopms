@@ -901,7 +901,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getStories(int $projectID, int $productID, string $branchID, int $moduleID, int $param, string $storyType, string $browseType, string $orderBy, object $pager): array
+    protected function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = '', string $browseType = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -1479,7 +1479,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    public function getCustomFieldsForTrack(string $storyType)
+    public function getCustomFieldsForTrack(string $storyType): array
     {
         $listFields = array();
         $listFields['requirement'] = $this->lang->URCommon;
@@ -1497,5 +1497,37 @@ class productZen extends product
 
         $showFields = !isset($this->config->product->trackFields->{$storyType}) ? array_keys($listFields) : explode(',', $this->config->product->trackFields->{$storyType});
         return array('list' => $listFields, 'show' => array_merge(array($storyType), $showFields));
+    }
+
+    /**
+     * 获取根据矩阵可用的需求类型。
+     * Get active storyType list for track.
+     *
+     * @param  array    $stories
+     * @access protected
+     * @return array
+     */
+    public function getActiveStoryTypeForTrack(int $projectID = 0, int $productID = 0): array
+    {
+        $havingType = array();
+        if($this->app->rawModule == 'projectstory' && $projectID)
+        {
+            $stories = $this->getStories($projectID, $productID);
+            foreach($stories as $story) $havingType[$story->type] = $story->type;
+        }
+
+        $storyTypeList = array();
+        $storyTypeList['epic']        = $this->lang->ERCommon;
+        $storyTypeList['requirement'] = $this->lang->URCommon;
+        $storyTypeList['story']       = $this->lang->SRCommon;
+        if(!$config->enableER) unset($storyTypeList['epic']);
+        if(!$config->URAndSR)  unset($storyTypeList['requirement']);
+
+        foreach($storyTypeList as $storyType => $typeName)
+        {
+            if($havingType && !isset($havingType[$storyType])) unset($storyTypeList[$storyType]);
+        }
+
+        return $storyTypeList;
     }
 }

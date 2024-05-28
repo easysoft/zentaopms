@@ -12,31 +12,24 @@ declare(strict_types=1);
 
 namespace zin;
 
-$viewByTypePairs['epic']        = $lang->story->viewByER;
-$viewByTypePairs['requirement'] = $lang->story->viewByUR;
-$viewByTypePairs['story']       = $lang->story->viewBySR;
-if(!$config->enableER) unset($viewByTypePairs['epic']);
-if(!$config->URAndSR)  unset($viewByTypePairs['requirement']);
+$viewByTypePairs = array();
+foreach($storyTypeList as $type => $typeName) $viewByTypePairs[$type] = sprintf($lang->story->viewByType, $typeName);
 
-$storyTypeLang = $lang->SRCommon;
-if($storyType == 'requirement') $storyTypeLang = $lang->URCommon;
-if($storyType == 'epic') $storyTypeLang = $lang->ERCommon;
-
-if($storyType != 'story') unset($lang->story->trackOrderByList['stage']);
-
+$storyTypeLang = $storyTypeList[$storyType];
 $paramTemplate = "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=allstory&param=0&storyType=%s&orderBy=%s";
 if($app->rawModule == 'projectstory') $paramTemplate = "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=allstory&param=0&storyType=%s&orderBy=%s";
 
-$orderByItems  = array();
-$orderByTitle  = '';
+$orderByItems = array();
+$orderByTitle = '';
+if($storyType != 'story') unset($lang->story->trackOrderByList['stage']);
 foreach($lang->story->trackOrderByList as $orderByType => $orderByName)
 {
     $item = array();
     $item['text']     = $orderByName;
     $item['selected'] = strpos($orderBy, $orderByType) === 0;
     $item['items']    = array();
-    $item['items'][]  = array('text' => $lang->story->trackSortList['asc'],  'selected' => $orderBy == "{$orderByType}_asc",  'url' => createLink('product', 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_asc")));
-    $item['items'][]  = array('text' => $lang->story->trackSortList['desc'], 'selected' => $orderBy == "{$orderByType}_desc", 'url' => createLink('product', 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_desc")));
+    $item['items'][]  = array('text' => $lang->story->trackSortList['asc'],  'selected' => $orderBy == "{$orderByType}_asc",  'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_asc")));
+    $item['items'][]  = array('text' => $lang->story->trackSortList['desc'], 'selected' => $orderBy == "{$orderByType}_desc", 'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_desc")));
     $orderByItems[]   = $item;
 
     if($item['selected'])
@@ -48,7 +41,7 @@ foreach($lang->story->trackOrderByList as $orderByType => $orderByName)
 }
 
 $dropdownItems = array();
-foreach($viewByTypePairs as $type => $typeName) $dropdownItems[] = array('text' => $typeName, 'selected' => $storyType == $type, 'url' => createLink('product', 'track', sprintf($paramTemplate, $type, ($type != 'story' && strpos($orderBy, 'stage') === 0) ? 'id_desc' : $orderBy)));
+foreach($viewByTypePairs as $type => $typeName) $dropdownItems[] = array('text' => $typeName, 'selected' => $storyType == $type, 'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $type, ($type != 'story' && strpos($orderBy, 'stage') === 0) ? 'id_desc' : $orderBy)));
 
 featureBar
 (
@@ -64,11 +57,11 @@ featureBar
             on::change('changeProduct'),
             set::width(145)
         ) : null,
-        dropdown
+        count($viewByTypePairs) > 1 ? dropdown
         (
             to('trigger', btn(setClass('switchBtn'), $viewByTypePairs[$storyType])),
             set::items($dropdownItems),
-        )
+        ) : null
     ),
     li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module']), set::text($lang->searchAB . $storyTypeLang)))
 );
@@ -115,6 +108,7 @@ jsVar('langCasePriList',       $lang->testcase->priList);
 jsVar('langCaseResultList',    $lang->testcase->resultList);
 jsVar('langUnexecuted',        $lang->testcase->unexecuted);
 
+jsVar('storyIdList',  $storyIdList);
 jsVar('projectID',    $projectID);
 jsVar('mergeCells',   $mergeCells);
 jsVar('orderByItems', $orderByItems);

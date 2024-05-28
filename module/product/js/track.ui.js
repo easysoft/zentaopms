@@ -94,15 +94,21 @@ window.getCol = function(col)
 
 window.itemRender = function(info)
 {
-    if(info.col == 'task' && info.item.parent > '0') info.item.className.push('hidden parent-' + info.item.parent);
-    if(info.col == 'project' || info.col == 'execution')
+    const col = info.col;
+    if(col == 'task' && info.item.parent > '0') info.item.className.push('hidden parent-' + info.item.parent);
+    if(col == 'project' || col == 'execution')
     {
-        $delayed = $('.kanban-lane-col[z-lane="' + info.lane + '"][z-col="' + info.col + '"] .kanban-item[z-key="' + info.item.id + '"] .delayed');
+        $delayed = $('.kanban-lane-col[z-lane="' + info.lane + '"][z-col="' + col + '"] .kanban-item[z-key="' + info.item.id + '"] .delayed');
         if($delayed.length > 0)
         {
             let $relative = $delayed.closest('.relative');
             if($relative.find('.line-clamp-2').height() < $relative.find('.title').height()) $delayed.addClass('absolute bottom-0 right-0');
         }
+    }
+
+    if(config.rawModule == 'projectstory' && (col.indexOf('epic') != -1 || col.indexOf('requirement') != -1 || col.indexOf('story') != -1))
+    {
+        if(!storyIdList.includes(parseInt(info.item.id))) info.item.className.push('hidden');
     }
 }
 
