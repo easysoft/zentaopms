@@ -1514,8 +1514,8 @@ class productZen extends product
         $storyTypeList['requirement'] = $this->lang->URCommon;
         $storyTypeList['story']       = $this->lang->SRCommon;
 
-        if(!$config->enableER) unset($storyTypeList['epic']);
-        if(!$config->URAndSR)  unset($storyTypeList['requirement']);
+        if(!$this->config->enableER) unset($storyTypeList['epic']);
+        if(!$this->config->URAndSR)  unset($storyTypeList['requirement']);
 
         /* Check story type by linked story's type. */
         if($this->app->rawModule == 'projectstory' && $projectID)
