@@ -2608,6 +2608,7 @@ class repoModel extends model
             $response = $this->gitlab->apiGetByGraphql($repo, $query);
 
             if(!$endCursor && !isset($response->data->project->repository)) return array();
+            if(empty($response->data->project->repository->tree)) break;
 
             $fileList    = array_merge($fileList, $response->data->project->repository->tree->{$type}->nodes);
             $hasNextPage = $response->data->project->repository->tree->{$type}->pageInfo->hasNextPage;

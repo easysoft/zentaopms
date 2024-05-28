@@ -193,7 +193,6 @@ class gitlabRepo
             if(count($branchList) < $params['per_page']) break;
         }
 
-        if(empty($branches) and empty($default)) $branches['master'] = 'master';
         asort($branches);
 
         $branches = $default + $branches;
