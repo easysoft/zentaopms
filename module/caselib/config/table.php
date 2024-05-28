@@ -13,12 +13,11 @@ if($config->testcase->needReview || !empty($config->testcase->forceReview))
     $config->caselib->testcase->actionList['review']['data-toggle'] = 'modal';
 }
 
-$config->caselib->testcase->actionList['edit']['icon']        = 'edit';
-$config->caselib->testcase->actionList['edit']['hint']        = $lang->testcase->edit;
-$config->caselib->testcase->actionList['edit']['text']        = $lang->testcase->edit;
-$config->caselib->testcase->actionList['edit']['url']         = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={id}');
-$config->caselib->testcase->actionList['edit']['order']       = 5;
-$config->caselib->testcase->actionList['edit']['data-toggle'] = 'modal';
+$config->caselib->testcase->actionList['edit']['icon']  = 'edit';
+$config->caselib->testcase->actionList['edit']['hint']  = $lang->testcase->edit;
+$config->caselib->testcase->actionList['edit']['text']  = $lang->testcase->edit;
+$config->caselib->testcase->actionList['edit']['url']   = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={id}');
+$config->caselib->testcase->actionList['edit']['order'] = 5;
 
 $config->caselib->testcase->actionList['delete']['icon']         = 'trash';
 $config->caselib->testcase->actionList['delete']['hint']         = $lang->testcase->delete;
@@ -42,7 +41,6 @@ $config->caselib->dtable->fieldList['id']['name'] = 'id';
 
 $config->caselib->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 $config->caselib->dtable->fieldList['title']['nestedToggle'] = false;
-$config->caselib->dtable->fieldList['title']['data-toggle']  = 'modal';
 
 $config->caselib->dtable->fieldList['type']['show']   = true;
 $config->caselib->dtable->fieldList['status']['show'] = true;
