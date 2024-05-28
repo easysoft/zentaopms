@@ -95,7 +95,7 @@ $config->story->form->batchCreate['keywords']   = array('ditto' => false, 'type'
 $config->story->form->batchCreate['mailto']     = array('ditto' => false, 'type' => 'array',  'control' => 'select',    'required' => false, 'width' => '200px', 'default' => array(''), 'multiple' => true, 'options' => 'users', 'filter' => 'join');
 
 $config->story->form->batchEdit = array();
-$config->story->form->batchEdit['branch']       = array('type' => 'int',    'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => 0, 'options' => array());
+$config->story->form->batchEdit['branch']       = array('type' => 'string', 'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => '', 'options' => array());
 $config->story->form->batchEdit['module']       = array('type' => 'int',    'width' => '200px', 'control' => array('control' => 'picker', 'required' => true), 'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->batchEdit['plan']         = array('type' => 'int',    'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->batchEdit['title']        = array('type' => 'string', 'width' => '240px', 'control' => array('control' => 'colorInput', 'inputClass' => 'filter-none'), 'required' => true,  'filter'  => 'trim', 'base' => true);
