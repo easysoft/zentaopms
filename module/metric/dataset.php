@@ -584,14 +584,9 @@ class dataset
      */
     public function getLines($fieldList)
     {
-        $stmt = $this->dao->select($fieldList)->from(TABLE_MODULE)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
+        return $this->dao->select($fieldList)->from(TABLE_MODULE)->alias('t1')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.type')->eq('line')
-            ->andWhere('t2.type')->eq('program');
-
-        return $this->defaultWhere($stmt, 't2');
+            ->andWhere('t1.type')->eq('line');
     }
 
     /**
