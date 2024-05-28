@@ -67,13 +67,12 @@ window.appendItems = function(treeItems, treeItem, pid)
 
 window.submitSelectedDepts = function()
 {
-    var nodes = $('#deptList').tree('getChecks');
     var selectedDepts = [];
-    for(i in nodes)
+    $('#deptList').find('.item-checkbox.checked').each(function()
     {
-        id = nodes[i].split(':').pop();
+        id = $(this).closest('.tree-item').attr('z-key');
         selectedDepts.push(id);
-    }
+    });
     selectedDepts = selectedDepts.join(',');
 
     var link = $.createLink('webhook', 'bind', "id=" + webhookID);
