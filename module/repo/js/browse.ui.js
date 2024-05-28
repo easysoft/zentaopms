@@ -282,3 +282,8 @@ window.afterPageUpdate = function()
         });
     }, 200);
 };
+
+$(function()
+{
+    if(base64BranchID) $.get($.createLink('repo', 'ajaxSyncBranchCommit', 'repoID=' + repo.id + '&branch=' + base64BranchID));
+});
