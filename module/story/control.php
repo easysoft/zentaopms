@@ -558,6 +558,7 @@ class story extends control
         $this->view->story      = $story;
         $this->view->product    = $product;
         $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->branch     = $story->branch;
 
         $this->display();
     }
@@ -1782,8 +1783,9 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
-        $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
-        $project  = null;
+        $fileName  = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
+        $project   = null;
+        $hasBranch = false;
         if($executionID)
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
@@ -1792,12 +1794,10 @@ class story extends control
             if($execution->type == 'execution') $project = $this->project->getById($execution->project);
 
             $products  = $this->loadModel('product')->getProducts($executionID);
-            $hasBranch = false;
             foreach($products as $product)
             {
                 if($product->type != 'normal') $hasBranch = true;
             }
-            if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
         }
         else
         {
@@ -1808,6 +1808,7 @@ class story extends control
                 $productName = $product->name;
 
                 if($product->shadow) $project = $this->project->getByShadowProduct($productID);
+                if($product->type != 'normal') $hasBranch = true;
             }
             if(isset($this->lang->product->featureBar['browse'][$browseType]))
             {
@@ -1820,6 +1821,9 @@ class story extends control
 
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
         }
+
+        /* Unset branch field.  */
+        if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
 
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)

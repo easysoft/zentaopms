@@ -2190,7 +2190,7 @@ class bugZen extends bug
         helper::setcookie('bugModule', '0', 0);
 
         /* Remove upload image file and session. */
-        if(!empty($_POST['uploadImage']) and !empty($_SESSION['bugImagesFile']))
+        if(!empty($_POST['uploadImage']) && !empty($_SESSION['bugImagesFile']))
         {
             $classFile = $this->app->loadClass('zfile');
             $file      = current($_SESSION['bugImagesFile']);

@@ -14,8 +14,6 @@ use function zin\utils\flat;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-data('branch', $story->branch);
-
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
