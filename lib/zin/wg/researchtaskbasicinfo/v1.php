@@ -33,7 +33,7 @@ class researchtaskBasicInfo extends wg
             $items[$lang->researchtask->execution] = array('control' => 'text', 'text' => $execution->name, 'title' => $execution->name);
         }
 
-        $items[$lang->researchtask->assignedTo] = zget($users, $task->assignedTo, '');
+        $items[$lang->researchtask->assignedTo] = $task->assignedTo ? zget($users, $task->assignedTo) . $lang->at . formatTime($task->assignedDate) : '';
 
         $items[$lang->researchtask->status] = array
         (
