@@ -116,7 +116,7 @@ formBatchPanel
         set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
-        set::items(array()),
+        set::items($rdUsers),
         set::hidden(strpos("{$showFields}", 'RD') === false),
         set::width('180px')
     ),
