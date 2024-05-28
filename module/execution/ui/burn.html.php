@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('workHour', $lang->execution->workHour);
+jsVar('storyPoint', $lang->execution->storyPoint);
+jsVar('burnBy', $burnBy);
 jsVar('+type', str_replace(',', '%2C', $type));
 jsVar('executionID', $executionID);
 jsVar('watermark', $lang->execution->watermark);
