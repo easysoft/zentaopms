@@ -44,12 +44,13 @@ class thinkStepMenu extends wg
         {
             if(!is_object($setting)) continue;
 
+            $canView     = common::hasPriv('thinkstep', 'view');
             $unClickable = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
             $item        = array(
                 'key'         => $setting->id,
                 'text'        => $setting->title,
                 'hint'        => $unClickable ? $this->lang->thinkrun->error->unanswered :$setting->title,
-                'url'         => $unClickable ? '' : $setting->url,
+                'url'         => $unClickable || !$canView ? '' : $setting->url,
                 'data-id'     => $setting->id,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
@@ -87,6 +88,11 @@ class thinkStepMenu extends wg
 
     private function getActions($item): array
     {
+        $canCreate = common::hasPriv('thinkstep', 'create');
+        $canEdit   = common::hasPriv('thinkstep', 'edit');
+        $canDelete = common::hasPriv('thinkstep', 'delete');
+        if(!$canCreate && !$canEdit && !$canDelete) return array();
+
         $actions = array();
         $moreBtn = $this->getOperateItems($item);
         $actions[] = array(
@@ -116,35 +122,51 @@ class thinkStepMenu extends wg
             }
         }
 
-        $menus = array();
-        if($item->type == 'node') $menus[] = array(
-            'key'     => 'addNode',
-            'icon'    => 'add-chapter',
-            'text'    => $this->lang->thinkstep->actions['sameNode'],
-            'onClick' => jsRaw("() => addNode({$item->id}, 'same')")
-        );
-        if($item->grade != 3 && $item->type == 'node' && $canAddChild) $menus[] = array(
-            'key'     => 'addNode',
-            'icon'    => 'add-sub-chapter',
-            'text'    => $this->lang->thinkstep->actions['childNode'],
-            'onClick' => jsRaw("() => addNode({$item->id}, 'child')")
-        );
+        $canCreate   = common::hasPriv('thinkstep', 'create');
+        $canEdit     = common::hasPriv('thinkstep', 'edit');
+        $canDelete   = common::hasPriv('thinkstep', 'delete');
         $parentID    = $item->type != 'node' ? $item->parent : $item->id;
         $confirmTips = $this->lang->thinkstep->deleteTips[$item->type];
 
+        $menus            = array();
+        $transitionAction = array();
+        if($canCreate)
+        {
+            if($item->type == 'node') $menus[] = array(
+                'key'     => 'addNode',
+                'icon'    => 'add-chapter',
+                'text'    => $this->lang->thinkstep->actions['sameNode'],
+                'onClick' => jsRaw("() => addNode({$item->id}, 'same')")
+            );
+            if($item->grade != 3 && $item->type == 'node' && $canAddChild) $menus[] = array(
+                'key'     => 'addNode',
+                'icon'    => 'add-sub-chapter',
+                'text'    => $this->lang->thinkstep->actions['childNode'],
+                'onClick' => jsRaw("() => addNode({$item->id}, 'child')")
+            );
+
+            $transitionAction[] = array('type' => 'divider');
+            $transitionAction[] = array(
+                'key'     => 'transition',
+                'icon'    => 'transition',
+                'text'    => $this->lang->thinkstep->actions['transition'],
+                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'transition')"),
+            );
+        }
+
         $menus = array_merge($menus, array(
-            array(
+            $canEdit ? array(
                 'key'  => 'editNode',
                 'icon' => 'edit',
                 'text' => $this->lang->thinkstep->actions['edit'],
                 'url'  => createLink('thinkstep', 'edit', "stepID={$item->id}")
-            ),
-            !$item->existNotNode ? array(
+            ) : null,
+            $canDelete ? (!$item->existNotNode ? array(
                 'key'          => 'deleteNode',
                 'icon'         => 'trash',
                 'text'         => $this->lang->thinkstep->actions['delete'],
                 'innerClass'   => 'ajax-submit',
-                'data-url'     => createLink('thinkstep', 'ajaxDelete', "stepID={$item->id}"),
+                'data-url'     => createLink('thinkstep', 'delete', "stepID={$item->id}"),
                 'data-confirm' => $confirmTips,
             ) : array(
                 'key'            => 'deleteNode',
@@ -154,17 +176,10 @@ class thinkStepMenu extends wg
                 'data-toggle'    => 'tooltip',
                 'data-title'     => $this->lang->thinkstep->cannotDeleteNode,
                 'data-placement' => 'right',
-            ),
-            array('type' => 'divider'),
-            array(
-                'key'  => 'transition',
-                'icon' => 'transition',
-                'text' => $this->lang->thinkstep->actions['transition'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'transition')"),
-            ),
-        ));
+            )) : null
+        ), $transitionAction);
 
-        if(($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question') $menus = array_merge($menus, array(
+        if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
             array('type' => 'divider'),
             array(
                 'key'     => 'radio',
