@@ -130,8 +130,3 @@ function toggleExecution(multiple)
 {
     $('#executionIdBox').closest('tr').toggleClass('hidden', !multiple);
 }
-
-function createProduct()
-{
-    loadModal($.createLink('product', 'create'), '.m-my-todo');
-}
