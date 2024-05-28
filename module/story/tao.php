@@ -2096,9 +2096,10 @@ class storyTao extends storyModel
         $stmt      = $this->dao->select('id,parent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('id')->in($allStoryIdList)->andWhere('deleted')->eq(0)->orderBy('type_desc,grade_desc,id_desc')->query();
         while($story = $stmt->fetch())
         {
+            $parent[$story->parent] = true;
+
             if(isset($parent[$story->id])) continue;
             $leafNodes[$story->root][$story->id] = $story;
-            $parent[$story->parent] = true;
         }
 
         $sortLeafNodes = array();
