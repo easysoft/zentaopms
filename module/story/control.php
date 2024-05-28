@@ -706,6 +706,8 @@ class story extends control
         $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
         $this->loadModel('action')->create('story', $storyID, $action);
 
+        if($from == 'modal') return $this->send(array('result' => 'success', 'load' => 'modal'));
+
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
         if($from == 'view')
         {
