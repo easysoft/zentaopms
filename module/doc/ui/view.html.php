@@ -238,7 +238,14 @@ $contentDom = div
     div
     (
         setClass('detail-content article'),
-        html($doc->content)
+        $doc->contentType == 'markdown' ? editor
+        (
+            set::size('full'),
+            set::markdown(true),
+            set::readonly(true),
+            set::hideUI(true),
+            html($doc->content)
+        ) : html($doc->content)
     ),
     div
     (
