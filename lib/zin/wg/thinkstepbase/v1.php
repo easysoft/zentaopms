@@ -143,7 +143,7 @@ class thinkStepBase extends wg
     {
         global $lang;
         $actions = array(array(
-            'text'    => $lang->thinkmodel->save,
+            'text'    => $lang->save,
             'btnType' => 'submit',
             'class'   => 'primary h-7 ring-0 submit-btn px-4',
             'style'   => array('min-width' => '0')
