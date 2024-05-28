@@ -99,7 +99,6 @@ class programplanModel extends model
     public function getPairs(int $executionID, int $productID = 0, string $type = 'all'): array
     {
         $plans   = $this->getStage($executionID, $productID, $type);
-        $pairs   = array(0 => '');
         $parents = array();
 
         if(strpos($type, 'leaf') !== false) array_map(function($plan) use(&$parents){$parents[$plan->parent] = true;}, $plans);
