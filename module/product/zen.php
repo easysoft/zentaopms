@@ -1081,8 +1081,7 @@ class productZen extends product
             $this->session->set('storyList',   $uri, 'product');
         }
 
-        /* For getStoriesAndPager. */
-        if($isProjectStory && $storyType == 'story' && !empty($product)) $this->session->set('currentProductType', $product->type);
+        if(!empty($product)) $this->session->set('currentProductType', $product->type);
 
         /* Save browse type into session for buildSearchForm. */
         if($browseType != 'bymodule' && $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
