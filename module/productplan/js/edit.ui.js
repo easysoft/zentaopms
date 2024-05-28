@@ -30,15 +30,16 @@ $(document).on('click', 'button[type=submit]', function()
     const end         = $('input[name=end]').val();
     const parentBegin = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['begin'] : '';
     const parentEnd   = typeof parentList[parentPlan] !== 'undefined' ? parentList[parentPlan]['end'] : '';
-    const errorBegin  = parentBegin && begin < parentBegin;
-    const errorEnd    = parentEnd && end > parentEnd;
+    const errorBegin  = parentBegin && begin && begin < parentBegin;
+    const errorEnd    = parentEnd   && end   && end > parentEnd;
     if(parentPlan > 0 && branches && title && !errorBegin && !errorEnd)
     {
         const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "produtID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
         $.get(link, function(diffBranchesTip)
         {
-            const formUrl  = $('#editForm').attr('action');
-            const formData = new FormData($("#editForm")[0]);
+            const $form    = $('#editForm').find('form');
+            const formUrl  = $form.attr('action');
+            const formData = new FormData($form[0]);
             if(diffBranchesTip != '')
             {
                 zui.Modal.confirm(diffBranchesTip).then((res) => {
