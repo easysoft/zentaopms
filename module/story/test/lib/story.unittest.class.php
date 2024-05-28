@@ -665,7 +665,7 @@ class storyTest
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->objectModel->fetchExecutionStories($storyDAO, $productID, 't2.id_desc', $pager);
+        return $this->objectModel->fetchExecutionStories($storyDAO, $productID, 'byBranch', '', 't2.id_desc', $pager);
     }
 
     /**
