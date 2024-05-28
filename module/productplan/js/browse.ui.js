@@ -132,7 +132,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 
 $(document).on('click', '[data-target="#createExecutionModal"]', function()
 {
-    const planID = $(this).closest('.dtable-cell').data('row');
+    const planID = $(this).data('plan') ? $(this).data('plan') : $(this).closest('.dtable-cell').data('row');
     $('#createExecutionModal [name=planID]').val(planID);
 
     const productID = plans[planID].product;
@@ -331,7 +331,7 @@ window.buildCardActions = function(item)
 {
     let actions = [];
 
-    if(item.actionList.includes('createExecution')) actions.push({text: productplanLang.createExecution, icon: 'plus',    url: '#createExecutionModal', 'data-toggle': 'modal', 'data-on': 'click', 'data-call': 'getPlanID', 'data-params': 'event', 'data-branch': item.branch, 'data-plan': item.id});
+    if(item.actionList.includes('createExecution')) actions.push({text: productplanLang.createExecution, icon: 'plus',    url: '#createExecutionModal', 'data-target': '#createExecutionModal', 'data-toggle': 'modal', 'data-on': 'click', 'data-call': 'getPlanID', 'data-params': 'event', 'data-branch': item.branch, 'data-plan': item.id});
     if(item.actionList.includes('linkStory'))       actions.push({text: productplanLang.linkStory,       icon: 'link',    url: $.createLink(rawModule, 'view', "planID=" + item.id + "&type=story&orderBy=id_desc&link=true")});
     if(item.actionList.includes('linkBug'))         actions.push({text: productplanLang.linkBug,         icon: 'bug',     url: $.createLink(rawModule, 'view', "planID=" + item.id + "&type=bug&orderBy=id_desc&link=true")});
     if(item.actionList.includes('edit'))            actions.push({text: productplanLang.edit,            icon: 'edit',    url: $.createLink(rawModule, 'edit', "planID=" + item.id)});
