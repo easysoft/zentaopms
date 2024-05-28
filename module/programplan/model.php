@@ -533,7 +533,7 @@ class programplanModel extends model
             if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
             if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
         }
-        $parentStage[0] = $this->lang->programplan->emptyParent;
+        if($plan->type == 'stage') $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
 
         return $parentStage;
