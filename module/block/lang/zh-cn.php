@@ -256,9 +256,9 @@ $lang->block->modules['waterfallproject'] = new stdclass();
 $lang->block->modules['waterfallproject']->availableBlocks['waterfallgantt'] = "{$lang->projectCommon}计划";
 $lang->block->modules['waterfallproject']->availableBlocks['projectdynamic'] = '最新动态';
 
-$lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
-$lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
-$lang->block->modules['ipdproject']    = $lang->block->modules['waterfallproject'];
+$lang->block->modules['agileplusproject']     = $lang->block->modules['scrumproject'];
+$lang->block->modules['waterfallplusproject'] = $lang->block->modules['waterfallproject'];
+$lang->block->modules['ipdproject']           = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks['overview']         = "{$lang->productCommon}总览";
