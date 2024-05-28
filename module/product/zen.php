@@ -1509,23 +1509,25 @@ class productZen extends product
      */
     public function getActiveStoryTypeForTrack(int $projectID = 0, int $productID = 0): array
     {
-        $havingType = array();
-        if($this->app->rawModule == 'projectstory' && $projectID)
-        {
-            $stories = $this->getStories($projectID, $productID);
-            foreach($stories as $story) $havingType[$story->type] = $story->type;
-        }
-
         $storyTypeList = array();
         $storyTypeList['epic']        = $this->lang->ERCommon;
         $storyTypeList['requirement'] = $this->lang->URCommon;
         $storyTypeList['story']       = $this->lang->SRCommon;
+
         if(!$config->enableER) unset($storyTypeList['epic']);
         if(!$config->URAndSR)  unset($storyTypeList['requirement']);
 
-        foreach($storyTypeList as $storyType => $typeName)
+        /* Check story type by linked story's type. */
+        if($this->app->rawModule == 'projectstory' && $projectID)
         {
-            if($havingType && !isset($havingType[$storyType])) unset($storyTypeList[$storyType]);
+            $stories = $this->getStories($projectID, $productID);
+            if($stories)
+            {
+                $havingType = array();
+                foreach($stories as $story) $havingType[$story->type] = $story->type;
+                if(!isset($havingType['epic'])) unset($storyTypeList['epic']);
+                if(!isset($havingType['epic']) && !isset($havingType['requirement'])) unset($storyTypeList['requirement']);
+            }
         }
 
         return $storyTypeList;
