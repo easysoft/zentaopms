@@ -129,3 +129,8 @@ window.toggleChildren = function(obj, parentID)
         $('.parent-' + parentID).removeClass('hidden')
     }
 }
+
+window.changeProduct = function(e)
+{
+    if(config.rawModule == 'projectstory') loadPage($.createLink(config.rawModule, config.rawMethod, "projectID=" + projectID + "&productID=" + $(e.target).val()));
+}

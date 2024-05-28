@@ -837,19 +837,21 @@ class product extends control
         /* Build search form. */
         $this->productZen->buildSearchFormForTrack($productID, $branch, $projectID, $browseType, $param, $storyType);
 
-        $this->view->title        = $this->lang->story->track;
-        $this->view->tracks       = $tracks;
-        $this->view->pager        = $pager;
-        $this->view->productID    = $productID;
-        $this->view->branch       = $branch;
-        $this->view->projectID    = $projectID;
-        $this->view->browseType   = $browseType;
-        $this->view->param        = $param;
-        $this->view->storyType    = $storyType;
-        $this->view->orderBy      = $orderBy;
-        $this->view->customFields = $customFields;
-        $this->view->mergeCells   = $mergeCells;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->title           = $this->lang->story->track;
+        $this->view->tracks          = $tracks;
+        $this->view->storyIdList     = array_keys($stories);
+        $this->view->pager           = $pager;
+        $this->view->productID       = $productID;
+        $this->view->branch          = $branch;
+        $this->view->projectID       = $projectID;
+        $this->view->browseType      = $browseType;
+        $this->view->param           = $param;
+        $this->view->storyType       = $storyType;
+        $this->view->orderBy         = $orderBy;
+        $this->view->customFields    = $customFields;
+        $this->view->mergeCells      = $mergeCells;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
 
         $this->display();
     }

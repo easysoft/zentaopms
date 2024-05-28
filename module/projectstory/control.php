@@ -78,15 +78,20 @@ class projectStory extends control
     /**
      * Obtain the tracking matrix through the product.
      *
-     * @param  int   $productID
-     * @param  int   $browseType
-     * @param  int   $recTotal
-     * @param  int   $recPerPage
-     * @param  int   $pageID
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $browseType   allstory|bysearch
+     * @param  int    $param
+     * @param  string $storyType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function track(int $projectID = 0, int $productID = 0, int $branch = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function track(int $projectID = 0, int $productID = 0, string $branch = '', string $browseType = 'allstory', int $param = 0, string $storyType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($productID)) $productID = key($products);
@@ -94,7 +99,7 @@ class projectStory extends control
         $project = $this->loadModel('project')->getByID($projectID);
         $this->session->set('hasProduct', $project->hasProduct);
 
-        echo $this->fetch('product', 'track', "productID=$productID&branch=$branch&projectID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('product', 'track', "productID=$productID&branch=$branch&projectID=$projectID&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

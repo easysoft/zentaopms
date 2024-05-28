@@ -25,6 +25,8 @@ if($storyType == 'epic') $storyTypeLang = $lang->ERCommon;
 if($storyType != 'story') unset($lang->story->trackOrderByList['stage']);
 
 $paramTemplate = "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=allstory&param=0&storyType=%s&orderBy=%s";
+if($app->rawModule == 'projectstory') $paramTemplate = "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=allstory&param=0&storyType=%s&orderBy=%s";
+
 $orderByItems  = array();
 $orderByTitle  = '';
 foreach($lang->story->trackOrderByList as $orderByType => $orderByName)
@@ -52,6 +54,16 @@ featureBar
 (
     to::leading
     (
+        $app->rawModule == 'projectstory' ? picker
+        (
+            setID('switchProduct'),
+            set::name('switchProduct'),
+            set::items($projectProducts),
+            set::value($productID),
+            set::required(true),
+            on::change('changeProduct'),
+            set::width(145)
+        ) : null,
         dropdown
         (
             to('trigger', btn(setClass('switchBtn'), $viewByTypePairs[$storyType])),
@@ -103,6 +115,7 @@ jsVar('langCasePriList',       $lang->testcase->priList);
 jsVar('langCaseResultList',    $lang->testcase->resultList);
 jsVar('langUnexecuted',        $lang->testcase->unexecuted);
 
+jsVar('projectID',    $projectID);
 jsVar('mergeCells',   $mergeCells);
 jsVar('orderByItems', $orderByItems);
 jsVar('orderByTitle', $orderByTitle);
