@@ -27,6 +27,15 @@ jsVar('taskID', $taskID ?? 0);
 jsVar('toTaskList', !empty($task->id));
 jsVar('showFields', $showFields);
 
+if(!empty($task->team))
+{
+    foreach($task->team as $member)
+    {
+        $member->team         = $member->account;
+        $member->teamEstimate = (float)$member->estimate;
+    }
+}
+
 $fields = useFields('task.create');
 $fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
@@ -82,8 +91,8 @@ formGridPanel
         (
             set::tagName('div'),
             setID('teamTable'),
-            set::mode(empty($task->team) ? 'add' : 'edit'),
-            !empty($task->team) ? set::data($task->team) : null,
+            set::mode('add'),
+            !empty($task->team) ? set::data(array_values($task->team)) : null,
             set::sortable(true),
             set::size('sm'),
             set::minRows(3),
