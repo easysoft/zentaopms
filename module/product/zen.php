@@ -901,7 +901,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = '', string $browseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    protected function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -917,7 +917,7 @@ class productZen extends product
             $project        = $this->loadModel('project')->fetchByID($projectID);
 
             if($browseType == 'bybranch') $param = $branchID;
-            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, $project->storyType, '', $pager);
+            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, $storyType, '', $pager);
         }
         else
         {
@@ -1503,19 +1503,14 @@ class productZen extends product
      * 获取根据矩阵可用的需求类型。
      * Get active storyType list for track.
      *
-     * @param  array    $stories
+     * @param  int       $projectID
+     * @param  int       $productID
      * @access protected
      * @return array
      */
     public function getActiveStoryTypeForTrack(int $projectID = 0, int $productID = 0): array
     {
-        $storyTypeList = array();
-        $storyTypeList['epic']        = $this->lang->ERCommon;
-        $storyTypeList['requirement'] = $this->lang->URCommon;
-        $storyTypeList['story']       = $this->lang->SRCommon;
-
-        if(!$this->config->enableER) unset($storyTypeList['epic']);
-        if(!$this->config->URAndSR)  unset($storyTypeList['requirement']);
+        $storyTypeList = $this->lang->story->typeList;
 
         /* Check story type by linked story's type. */
         if($this->app->rawModule == 'projectstory' && $projectID)

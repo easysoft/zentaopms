@@ -286,9 +286,9 @@ class storyModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->where('t1.project')->eq($executionID)
-                ->andWhere('t2.type')->in($storyType)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
+                ->beginIF($storyType != 'all')->andWhere('t2.type')->in($storyType)->fi()
                 ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in($this->storyTao->getUnclosedStatusKeys())->fi()
@@ -3994,7 +3994,7 @@ class storyModel extends model
         $storyCols = array();
         foreach($showCols as $colType)
         {
-            if($colType != 'epic' && $colType != 'requirement' && $colType != 'story') continue;
+            if(!in_array($colType, array('epic', 'requirement', 'story'))) continue;
             foreach($tracks['cols'] as $col)
             {
                 $colName = $col['name'];
