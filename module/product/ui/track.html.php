@@ -54,11 +54,11 @@ featureBar
 (
     to::leading
     (
-        $app->rawModule == 'projectstory' ? picker
+        ($app->rawModule == 'projectstory' && count($projectProducts) > 1) ? picker
         (
             setID('switchProduct'),
             set::name('switchProduct'),
-            set::items($projectProducts),
+            set::items(array(0 => $this->lang->product->all) + $projectProducts),
             set::value($productID),
             set::required(true),
             on::change('changeProduct'),
