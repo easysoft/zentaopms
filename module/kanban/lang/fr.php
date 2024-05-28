@@ -248,9 +248,19 @@ $lang->kanban->defaultColumn['done']   = 'done';
 $lang->kanban->defaultColumn['closed'] = 'close';
 
 $lang->kanban->laneTypeList = array();
-$lang->kanban->laneTypeList['story'] = $lang->SRCommon;
-$lang->kanban->laneTypeList['bug']   = 'Bug';
-$lang->kanban->laneTypeList['task']  = 'Task';
+$lang->kanban->laneTypeList['parentStory'] = "Parent " . $lang->SRCommon;
+$lang->kanban->laneTypeList['epic']        = $lang->ERCommon;
+$lang->kanban->laneTypeList['requirement'] = $lang->URCommon;
+$lang->kanban->laneTypeList['story']       = $lang->SRCommon;
+$lang->kanban->laneTypeList['bug']         = 'Bug';
+$lang->kanban->laneTypeList['task']        = 'Task';
+
+$lang->kanban->URSRColumn = array();
+$lang->kanban->URSRColumn['defining']   = 'Defining';
+$lang->kanban->URSRColumn['planning']   = 'Planning';
+$lang->kanban->URSRColumn['developing'] = 'Developing';
+$lang->kanban->URSRColumn['delivering'] = 'Delivering';
+$lang->kanban->URSRColumn['closed']     = 'Closed';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';

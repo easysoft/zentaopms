@@ -1062,7 +1062,7 @@ class kanbanModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
             ->beginIf($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
-            ->orderBy('order')
+            ->orderBy('order_asc')
             ->fetchAll();
 
         $actions = array('sortLane', 'deleteLane', 'editLaneName', 'editLaneColor');
@@ -2523,11 +2523,20 @@ class kanbanModel extends model
      */
     public function createRDLane(int $executionID, int $regionID)
     {
-        $laneIndex = 0;
+        $execution = $this->loadModel('execution')->fetchByID($executionID);
+        $project   = $this->loadModel('project')->fetchByID($execution->project);
+        $index     = 0;
         foreach($this->lang->kanban->laneTypeList as $type => $name)
         {
-            $groupID = $this->createGroup($executionID, $regionID);
-            if(dao::isError()) return false;
+            if($type == 'epic'       && strpos($project->storyType, 'epic') === false)        continue;
+            if($type == 'requrement' && strpos($project->storyType, 'requirement') === false) continue;
+
+            /* 业务需求、用户需求和父软件需求共用同一个group. */
+            if(!in_array($type, array('epic', 'requirement')))
+            {
+                $groupID = $this->createGroup($executionID, $regionID);
+                if(dao::isError()) return false;
+            }
 
             $lane = new stdclass();
             $lane->execution = $executionID;
@@ -2535,13 +2544,29 @@ class kanbanModel extends model
             $lane->region    = $regionID;
             $lane->group     = $groupID;
             $lane->name      = $name;
-            $lane->color     = $this->config->kanban->laneColorList[$laneIndex];
-            $lane->order     = ++ $laneIndex * 5;
+            $lane->color     = $this->config->kanban->laneColorList[$index];
+            $lane->order     = $this->config->kanban->RDLaneOrder[$type];
 
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->autoCheck()->exec();
             if(dao::isError()) return false;
+            $laneID = $this->dao->lastInsertId();
 
-            $this->createRDColumn($regionID, $groupID, $this->dao->lastInsertId(), $type, $executionID);
+            /* 业务需求、用户需求和父软件需求共用同一套看板列. */
+            if(in_array($type, array('epic', 'requirement')))
+            {
+                $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
+                foreach($columnIDList as $columnID)
+                {
+                    $this->addKanbanCell($executionID, $laneID, $columnID, $lane->type);
+                    if(dao::isError()) return false;
+                }
+            }
+            else
+            {
+                $this->createRDColumn($regionID, $groupID, $laneID, $type, $executionID);
+            }
+
+            $index ++;
         }
     }
 
@@ -2564,6 +2589,8 @@ class kanbanModel extends model
         if($laneType == 'story') $columnList = $this->lang->kanban->storyColumn;
         if($laneType == 'bug')   $columnList = $this->lang->kanban->bugColumn;
         if($laneType == 'task')  $columnList = $this->lang->kanban->taskColumn;
+
+        if(in_array($laneType, array('parentStory', 'epic', 'requirement'))) $columnList = $this->lang->kanban->URSRColumn;
 
         foreach($columnList as $type => $name)
         {
