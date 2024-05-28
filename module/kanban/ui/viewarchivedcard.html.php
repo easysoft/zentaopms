@@ -93,7 +93,7 @@ foreach($cards as $card)
                             'class'       => 'card-title'
                         )
                     ),
-                    $card->name
+                    !empty($card->title) ? $card->title : $card->name
                 )
             ),
             div
