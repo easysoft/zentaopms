@@ -200,6 +200,7 @@ $fields->field('acl')
     ->control(array(
         'type' => 'aclBox',
         'aclItems' => $lang->execution->aclList,
+        'aclValue' => data('execution.acl'),
         'whitelistLabel' => $lang->whitelist,
         'userItems' => data('users')
     ));
