@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('copied', $lang->repo->copied);
+jsVar('base64BranchID', $base64BranchID);
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
@@ -212,7 +213,7 @@ toolbar
 (
     a(
         set::className('last-sync-time'),
-        set::href($lastRevision->link),
+        empty($lastRevision->link) ? null : set::href($lastRevision->link),
         $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
     ),
     !in_array($repo->SCM, $config->repo->notSyncSCM) ? item(set($refreshItem)) : null,
