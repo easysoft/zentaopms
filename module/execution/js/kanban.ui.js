@@ -261,7 +261,7 @@ window.buildBugActions = function(item)
     if(priv.canCopyBug) actions.push({text: bugLang.copy, icon: 'copy', url: $.createLink('bug', 'create', 'productID=' + productID + '&branch=&extras=bugID=' + item.id + ',regionID=' + item.lane + ',laneID=' + item.lane + ',columnID=' + item.column + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canToStoryBug && (item.status != 'closed')) actions.push({text: bugLang.toStory, icon: 'lightbulb', url: $.createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canActivateBug && (item.status == 'fixed' || item.status == 'testing' || item.status == 'tested' || item.status == 'closed')) actions.push({text: bugLang.activate, icon: 'magic', url: $.createLink('bug', 'activate', 'bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canDeleteBug) actions.push({text: bugLang.delete, icon: 'trash', url: $.createLink('bug', 'delete', 'bugID=' + item.id), 'data-confirm': bugLang.confirmDelete, 'innerClass': 'ajax-submit'});
+    if(priv.canDeleteBug) actions.push({text: bugLang.delete, icon: 'trash', url: $.createLink('bug', 'delete', 'bugID=' + item.id + '&from=taskkanban'), 'data-confirm': bugLang.confirmDelete, 'innerClass': 'ajax-submit'});
 
     return actions;
 }
@@ -277,7 +277,7 @@ window.buildTaskActions = function(item)
     if(priv.canActivateTask && (item.status == 'developed' || item.status == 'canceled' || item.status == 'closed')) actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('task', 'activate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCreateTask) actions.push({text: taskLang.copy, icon: 'copy', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCancelTask && (item.status == 'wait' || item.status == 'developing' || item.status == 'pause')) actions.push({text: taskLang.cancel, icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canDeleteTask) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'taskID=' + item.id), 'data-confirm': taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
+    if(priv.canDeleteTask) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'executionID=0&taskID=' + item.id + '&from=taskkanban'), 'data-confirm': taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
 
     return actions;
 }
