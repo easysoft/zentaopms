@@ -26,3 +26,5 @@
 #outlineToggle {display: block; position: absolute; top: 6.5rem; right: 3.5rem; z-index: 100;}
 #docPanel .panel-heading > .panel-actions.hasEditor {min-width: 320px;}
 #docPanel .detail-content {max-width: var(--zt-panel-form-max-width); overflow: hidden;}
+
+.editor-container, .editor-container > .form-control {box-shadow: none!important;}
