@@ -68,7 +68,7 @@ window.addItem = function(obj)
  */
 window.deleteItem = function(obj)
 {
-    if($('#teamForm .table tbody').children().length < 2) return false;
+    if($('#teamForm .table tbody tr').length < 2) return false;
     $(obj).closest('tr').remove();
 }
 
