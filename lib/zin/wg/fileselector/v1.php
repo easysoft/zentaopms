@@ -135,6 +135,16 @@ class fileSelector extends wg
         }
         $checkFiles = $checkFiles->do('return file');
         $this->setProp('onAdd', $checkFiles);
+
+        $removeFile = jsCallback('file')
+            ->do(<<<'JS'
+            if(file.url != undefined && file.file == undefined)
+            {
+                const $form = $(event.target).closest('form');
+                if($form.length > 0) $('<input />').attr('type', 'hidden').attr('name', 'deleteFiles[' + file.id + ']').attr('value', file.id).appendTo($form);
+            }
+        JS)->do('return file;');
+        $this->setProp('onRemove', $removeFile);
     }
 
     /**
