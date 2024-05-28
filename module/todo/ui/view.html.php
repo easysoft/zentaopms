@@ -38,16 +38,12 @@ if(hasPriv('story', 'create') && $config->vision != 'lite')
             span($lang->product->noProduct),
             btn
             (
-                $lang->product->create,
-                set
-                (
-                    array(
-                        'id'    => 'createProductBtn',
-                        'class' => 'secondary-pale',
-                        'icon'  => 'plus'
-                    )
-                ),
-                on::click('createProduct')
+                setID('createProductBtn'),
+                setClass('secondary-pale'),
+                set::icon('plus'),
+                set::url($this->createLink('product', 'create')),
+                setData(array('toggle' => 'modal', 'size' => 'lg')),
+                $lang->product->create
             )
         ) : form
         (
