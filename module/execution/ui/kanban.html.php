@@ -64,10 +64,10 @@ $hasBugButton        = $features['qa'] && ($canCreateBug || $canBatchCreateBug);
 $canCreateStory      = $features['story'] && common::hasPriv('story', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
 $canBatchCreateStory = $features['story'] && common::hasPriv('story', 'batchCreate') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
 
-$canCreateEpic             = $config->enableER  && common::hasPriv('epic', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
-$canBatchCreateStory       = $config->enableER  && common::hasPriv('epic', 'batchCreate') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
-$canCreateRequirement      = $config->URAndSR   && common::hasPriv('requirement', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
-$canBatchCreateRequirement = $config->URAndSR   && common::hasPriv('requirement', 'batchCreate') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canCreateEpic             = strpos($project->storyType, 'epic') !== false && common::hasPriv('epic', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canBatchCreateEpic        = strpos($project->storyType, 'epic') !== false && common::hasPriv('epic', 'batchCreate') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canCreateRequirement      = strpos($project->storyType, 'requirement') !== false && common::hasPriv('requirement', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canBatchCreateRequirement = strpos($project->storyType, 'requirement') !== false && common::hasPriv('requirement', 'batchCreate') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
 
 $canLinkStory        = $features['story'] && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct) && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
 $canLinkStoryByPlan  = $features['story'] && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct) && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
@@ -77,12 +77,18 @@ $hasTaskButton = $canCreateTask || $canBatchCreateTask || $canImportBug;
 
 $createMenu = array();
 $modal      = $productID ? 'modal' : false;
-if($canCreateStory) $createMenu[] = array('text' => $lang->story->create, 'url' => $productID ? helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
-if($canBatchCreateStory) $createMenu[] = array('text' => $lang->story->batchCreate, 'url' => $productID ? (count($productNames) > 1 ? '#batchCreateStory' : helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id")) : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
-if($canLinkStory) $createMenu[] = array('text' => $lang->execution->linkStory, 'url' => $productID ? helper::createLink('execution', 'linkStory', "execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
-if($canLinkStoryByPlan) $createMenu[] = array('text' => $lang->execution->linkStoryByPlan, 'url' => $productID ? "#linkStoryByPlan" : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'sm', 'data-on' => 'click', 'data-call' => 'checkProducts');
+$batchItems = array();
+if($canCreateStory)                   $createMenu[] = array('text' => $lang->story->create, 'url' => $productID ? helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canCreateRequirement)             $createMenu[] = array('text' => $lang->requirement->create, 'url' => $productID ? helper::createLink('requirement', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canCreateEpic)                    $createMenu[] = array('text' => $lang->epic->create, 'url' => $productID ? helper::createLink('epic', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canBatchCreateStory)              $batchItems[] = array('text' => $lang->SRCommon, 'url' => $productID ? (count($productNames) > 1 ? '#batchCreateStory' : helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id")) : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canBatchCreateRequirement)        $batchItems[] = array('text' => $lang->URCommon, 'url' => $productID ? helper::createLink('requirement', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canBatchCreateEpic)               $batchItems[] = array('text' => $lang->ERCommon, 'url' => $productID ? helper::createLink('epic', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($batchItems)                       $createMenu[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+if($canLinkStory)                     $createMenu[] = array('text' => $lang->execution->linkStory, 'url' => $productID ? helper::createLink('execution', 'linkStory', "execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canLinkStoryByPlan)               $createMenu[] = array('text' => $lang->execution->linkStoryByPlan, 'url' => $productID ? "#linkStoryByPlan" : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'sm', 'data-on' => 'click', 'data-call' => 'checkProducts');
 if($hasStoryButton && $hasTaskButton) $createMenu[] = array('type' => 'divider');
-if($canCreateBug) $createMenu[] = array('text' => $lang->bug->create, 'url' => helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
+if($canCreateBug)                     $createMenu[] = array('text' => $lang->bug->create, 'url' => helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
 if($canBatchCreateBug)
 {
     if(count($productNames) > 1)

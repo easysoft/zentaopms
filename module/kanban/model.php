@@ -2528,8 +2528,8 @@ class kanbanModel extends model
         $index     = 0;
         foreach($this->lang->kanban->laneTypeList as $type => $name)
         {
-            if($type == 'epic'       && strpos($project->storyType, 'epic') === false)        continue;
-            if($type == 'requrement' && strpos($project->storyType, 'requirement') === false) continue;
+            if($type == 'epic'        && strpos($project->storyType, 'epic') === false)        continue;
+            if($type == 'requirement' && strpos($project->storyType, 'requirement') === false) continue;
 
             /* 业务需求、用户需求和父软件需求共用同一个group. */
             if(!in_array($type, array('epic', 'requirement')))

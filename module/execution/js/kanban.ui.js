@@ -109,7 +109,7 @@ window.buildColCardActions = function(col)
             action = {text: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'};
             actions.push(action);
         }
-        if(priv.canBatchCreateStory) actions.push({text: storyLang.batchCreate, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canBatchCreateStory) actions.push({text: storyLang.batchCreate, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg', 'innerClass': 'story-batch-btn'});
         if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal', 'data-size': 'sm'});
     }
@@ -117,10 +117,19 @@ window.buildColCardActions = function(col)
     {
         if(priv.canCreateEpic)
         {
-            action = {text: epicLang.create, url: $.createLink('epic', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'};
-            actions.push(action);
+            actions.push({text: epicLang.create, url: $.createLink('epic', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
         }
-        if(priv.canBatchCreateEpic) actions.push({text: storyLang.batchCreate + epicLang.common, url: productCount > 1 ? '#batchCreateStory' : $.createLink('epic', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canCreateRequirement)
+        {
+            actions.push({text: requirementLang.create, url: $.createLink('requirement', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+        }
+        if(priv.canBatchCreateEpic || priv.canBatchCreateRequirement)
+        {
+            let batchCreateItems = [];
+            if(priv.canBatchCreateRequirement) batchCreateItems.push({text: requirementLang.common, url: productCount > 1 ? '#batchCreateStory' : $.createLink('requirement', 'batchCreate', 'productID=' + productID + '&branch=0&executionID=' + executionID + '&module=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg', 'innerClass': 'requirement-batch-btn'});
+            if(priv.canBatchCreateEpic) batchCreateItems.push({text: epicLang.common, url: productCount > 1 ? '#batchCreateStory' : $.createLink('epic', 'batchCreate', 'productID=' + productID + '&branch=0&executionID=' + executionID + '&module=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg', 'innerClass': 'epic-batch-btn'});
+            actions.push({text: storyLang.batchCreate, items: batchCreateItems});
+        }
         if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal', 'data-size': 'sm'});
     }
