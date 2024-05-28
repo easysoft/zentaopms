@@ -19,21 +19,21 @@ class programplanZen extends programplan
      * @access private
      * @return void
      */
-    private function checkLegallyDate(object $plan, object $project, object|null $parent): void
+    private function checkLegallyDate(object $plan, object $project, object|null $parent, int $rowID): void
     {
         $beginIsZeroDate = helper::isZeroDate($plan->begin);
         $endIsZeroDate   = helper::isZeroDate($plan->end);
-        if($beginIsZeroDate) dao::$errors['begin'] = $this->lang->programplan->emptyBegin;
-        if($endIsZeroDate)   dao::$errors['end']   = $this->lang->programplan->emptyEnd;
-        if(!$beginIsZeroDate and !$endIsZeroDate and $plan->end < $plan->begin) dao::$errors['end'] = $this->lang->programplan->error->planFinishSmall;
+        if($beginIsZeroDate) dao::$errors["begin[{$rowID}]"] = $this->lang->programplan->emptyBegin;
+        if($endIsZeroDate)   dao::$errors["end[{$rowID}]"]   = $this->lang->programplan->emptyEnd;
+        if(!$beginIsZeroDate and !$endIsZeroDate and $plan->end < $plan->begin) dao::$errors["end[{$rowID}]"] = $this->lang->programplan->error->planFinishSmall;
 
         if(!empty($parent))
         {
-            if(!$beginIsZeroDate and $plan->begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
-            if(!$endIsZeroDate and $plan->end > $parent->end)       dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
+            if(!$beginIsZeroDate and $plan->begin < $parent->begin) dao::$errors["begin[{$rowID}]"] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
+            if(!$endIsZeroDate and $plan->end > $parent->end)       dao::$errors["end[{$rowID}]"]   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
         }
-        if(!$beginIsZeroDate and $plan->begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->errorBegin, $project->begin);
-        if(!$endIsZeroDate and $plan->end > $project->end)       dao::$errors['end']   = sprintf($this->lang->programplan->errorEnd, $project->end);
+        if(!$beginIsZeroDate and $plan->begin < $project->begin) dao::$errors["begin[{$rowID}]"] = sprintf($this->lang->programplan->errorBegin, $project->begin);
+        if(!$endIsZeroDate and $plan->end > $project->end)       dao::$errors["end[{$rowID}]"]   = sprintf($this->lang->programplan->errorEnd, $project->end);
     }
 
     /**
@@ -95,7 +95,7 @@ class programplanZen extends programplan
             $names[] = $plan->name;
             if(!empty($plan->code)) $codes[] = $plan->code;
 
-            $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null);
+            $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null, $rowID);
         }
         if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentOver;
         return $plans;
