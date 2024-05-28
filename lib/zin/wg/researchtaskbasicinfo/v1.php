@@ -30,22 +30,12 @@ class researchtaskBasicInfo extends wg
         $items = array();
         if($execution->multiple)
         {
-            $items[$lang->marketresearch->execution] = array('control' => 'text', 'text' => $execution->name, 'title' => $execution->name);
-            if(!isInModal())
-            {
-                $items[$lang->marketresearch->execution]['control'] = 'link';
-                $items[$lang->marketresearch->execution]['url']     = createLink('execution', 'view', "executionID=$execution->id");
-            }
+            $items[$lang->researchtask->execution] = array('control' => 'text', 'text' => $execution->name, 'title' => $execution->name);
         }
 
-        if($config->edition == 'max' && $execution->type == 'stage')
-        {
-            $items[$lang->task->design] = array('control' => 'text', 'text' => $task->designName, 'title' => $task->designName, 'control' => 'link', 'url' => createLink('design', 'view', "designID=$task->design"));
-        }
+        $items[$lang->researchtask->assignedTo] = zget($users, $task->assignedTo, '');
 
-        $items[$lang->task->assignedTo] = zget($users, $task->assignedTo, '');
-
-        $items[$lang->task->status] = array
+        $items[$lang->researchtask->status] = array
         (
             'control' => 'status',
             'class'   => 'task-status',
@@ -53,13 +43,13 @@ class researchtaskBasicInfo extends wg
             'text'    => $statusText
         );
 
-        $items[$lang->task->progress] = "$task->progress %";
+        $items[$lang->researchtask->progress] = "$task->progress %";
 
-        $items[$lang->task->pri] = array
+        $items[$lang->researchtask->pri] = array
         (
             'control' => 'pri',
             'pri'     => $task->pri,
-            'text'    => $lang->task->priList
+            'text'    => $lang->researchtask->priList
         );
 
         return $items;
