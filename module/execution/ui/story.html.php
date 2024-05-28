@@ -112,14 +112,25 @@ if(commonModel::isTutorialMode())
     $canBatchCreate = false;
 }
 
-if($canOpreate['create'])      $createItem[] = array('text' => $lang->story->create, 'url' => $createLink);
-if($canOpreate['batchCreate']) $createItem[] = array('text' => $lang->story->batchCreate . $lang->SRCommon, 'url' => $batchCreateLink);
+$createItems = array();
+$batchItems  = array();
+if($canOpreate['batchCreate']) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
 if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execution->multiple)
 {
-    if($canOpreate['createRequirement'])      $createItem[] = array('text' => $lang->requirement->create,                        'url' => $createRequirementLink);
-    if($canOpreate['batchCreateRequirement']) $createItem[] = array('text' => $lang->requirement->batchCreate . $lang->URCommon, 'url' => $batchCreateRequirementLink);
-    if($canOpreate['createEpic'])             $createItem[] = array('text' => $lang->epic->create,                               'url' => $createEpicLink);
-    if($canOpreate['batchCreateEpic'])        $createItem[] = array('text' => $lang->epic->batchCreate . $lang->ERCommon,        'url' => $batchCreateEpicLink);
+    if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink);
+    if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink);
+    if($canOpreate['batchCreateRequirement']) $batchItems[]  = array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink);
+    if($canOpreate['batchCreateEpic'])        $batchItems[]  = array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink);
+}
+
+if(count($batchItems) > 1)
+{
+    $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+}
+else
+{
+    $batchItems[0]['text'] = $lang->story->batchCreate;
+    $createItems = array_merge($createItems, $batchItems);
 }
 
 $canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'linkStory');
@@ -137,7 +148,7 @@ $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl,
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
-if(count($createItem) >= 2)
+if($canOpreate['create'])
 {
     $createBtnGroup = btngroup
     (
@@ -152,14 +163,14 @@ if(count($createItem) >= 2)
         (
             btn(setClass('btn secondary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::items($createItem),
+            set::items($createItems),
             set::placement('bottom-end')
         )
     );
 }
-elseif(count($createItem) == 1)
+elseif(count($createItems) == 1)
 {
-    $createBtnGroup = item(set($createItem[0] + array('class' => 'btn secondary', 'icon' => 'plus')));
+    $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary', 'icon' => 'plus')));
 }
 
 $product ? toolbar
