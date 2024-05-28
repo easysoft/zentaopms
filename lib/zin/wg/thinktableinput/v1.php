@@ -63,7 +63,7 @@ class thinkTableInput extends thinkQuestion
                 (
                     set::rows('2'),
                     set::name('result[' . $index . ']'),
-                    setClass('mt-2 w-4/5'),
+                    setClass('mt-2 result-width'),
                     set::value(!empty($result) && isset($result[$index]) ? $result[$index] : ''),
                     set::placeholder($lang->thinkrun->pleaseInput)
                 ),
@@ -103,7 +103,7 @@ class thinkTableInput extends thinkQuestion
                     textarea
                     (
                         set::rows('2'),
-                        setClass('mt-2 w-4/5 ml-2'),
+                        setClass('mt-2 ml-2 result-width'),
                         setID('result'),
                         set::name('result[' . $resultIndex .']'),
                         set::value($result[$resultIndex] ?? ''),
@@ -147,7 +147,7 @@ class thinkTableInput extends thinkQuestion
                 (
                     set::rows('2'),
                     setID('result'),
-                    setClass('mt-2 w-4/5 ml-2'),
+                    setClass('mt-2 result-width ml-2'),
                     set::value(''),
                     set::placeholder($lang->thinkrun->placeholder->rowContent)
                 ),
