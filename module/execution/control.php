@@ -2936,7 +2936,7 @@ class execution extends control
                 if($this->post->exportType == 'selected')
                 {
                     $checkedItem = $this->cookie->checkedItem;
-                    if(strpos(",$checkedItem,", ",{$execution->id},") === false) unset($executionStats[$i]);
+                    if(strpos(",$checkedItem,", ",pid{$execution->id},") === false) unset($executionStats[$i]);
                 }
             }
 
