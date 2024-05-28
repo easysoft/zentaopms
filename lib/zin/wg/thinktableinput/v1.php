@@ -48,6 +48,7 @@ class thinkTableInput extends thinkQuestion
         jsVar('deleteTip', $lang->thinkrun->tips->delete);
 
         $tableInputItems = array();
+        $disabledAdd = !empty($customFields) && (int)$canAddRows <= count($customFields);
         foreach($fields as $index => $item)
         {
             $tableInputItems[] = formGroup
@@ -74,8 +75,8 @@ class thinkTableInput extends thinkQuestion
                     ($index == count($fields) - 1 && $supportAdd) ? icon
                     (
                         'plus',
-                        setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                        bind::click('addRow(event)'),
+                        setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows', $disabledAdd ? 'disabled' : ''),
+                        on::click('addRow(event)'),
                         set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
                     ) : null,
                 )
@@ -116,8 +117,8 @@ class thinkTableInput extends thinkQuestion
                         icon
                         (
                             'plus',
-                            setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                            bind::click('addRow(event)'),
+                            setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows', $disabledAdd ? 'disabled' : ''),
+                            on::click('addRow(event)'),
                             set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
                         ),
                         icon
@@ -159,7 +160,7 @@ class thinkTableInput extends thinkQuestion
                     (
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows'),
-                        bind::click('addRow(event)'),
+                        on::click('addRow(event)'),
                         set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
                     ),
                     icon
