@@ -21,11 +21,12 @@ foreach($fields as $fieldKey => $fieldConfig)
 }
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($lang, $fields, $config)
+$fnGenerateFields = function() use ($lang, $fields, $stories, $config)
 {
     /* Generate fields with the appropriate properties. */
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
+    if($stories) $items[] = array('name' => 'uploadImage', 'label' => '', 'control' => 'hidden', 'hidden' => true);
 
     $cols = array_merge($items, array_map(function($name, $field)
     {
@@ -51,6 +52,7 @@ formBatchPanel
 (
     set::id('dataform'),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
+    $stories ? set::data($stories) : null,
     set::title($storyID ? $storyTitle . $lang->hyphen . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),
