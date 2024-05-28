@@ -12,6 +12,28 @@ declare(strict_types=1);
 class testcaseZen extends testcase
 {
     /**
+     * 检查是否有产品，如果没有则跳转到创建产品的页面。
+     * Check products.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function checkProducts(): void
+    {
+        $objectID = 0;
+        $tab      = $this->app->tab == 'project' || $this->app->tab == 'execution' ? $this->app->tab : 'qa';
+        if($this->app->tab == 'project')
+        {
+            $objectID = $this->session->project;
+        }
+        elseif($this->app->tab == 'execution')
+        {
+            $objectID = $this->session->execution;
+        }
+        if(empty($this->products) && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch'))) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID"));
+    }
+
+    /**
      * 设置列表页面的 cookie。
      * Set browse cookie.
      *
