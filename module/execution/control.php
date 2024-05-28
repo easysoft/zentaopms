@@ -1658,6 +1658,8 @@ class execution extends control
     public function kanban(int $executionID, string $browseType = 'all', string $orderBy = 'id_asc', string $groupBy = 'default')
     {
         $this->app->loadLang('bug');
+        $this->app->loadLang('epic');
+        $this->app->loadLang('requirement');
         $this->app->loadLang('kanban');
 
         if($this->config->vision != 'lite') $this->lang->execution->menu = new stdclass();

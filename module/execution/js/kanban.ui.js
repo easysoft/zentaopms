@@ -8,6 +8,7 @@ window.getLane = function(lane)
 window.getCol = function(col)
 {
     /* 计算WIP。*/
+    if(URSRColumn.includes(col.type)) return;
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
     const cards = col.cards;
 
@@ -47,7 +48,7 @@ window.getLaneActions = function(lane)
 window.getColActions = function(col)
 {
     let actionList = [];
-    const firstCol = ['backlog', 'unconfirmed', 'wait'];
+    const firstCol = ['defining', 'backlog', 'unconfirmed', 'wait'];
 
     if(firstCol.includes(col.type))
     {
@@ -87,7 +88,7 @@ window.buildColActions = function(col)
     let actions = [];
 
     if(col.actionList && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(col.actionList && col.actionList.includes('setWIP')) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(col.actionList && col.actionList.includes('setWIP') && !URSRColumn.includes(col.type)) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }
@@ -109,6 +110,17 @@ window.buildColCardActions = function(col)
             actions.push(action);
         }
         if(priv.canBatchCreateStory) actions.push({text: storyLang.batchCreate, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal', 'data-size': 'sm'});
+    }
+    else if(col.type == 'defining')
+    {
+        if(priv.canCreateEpic)
+        {
+            action = {text: epicLang.create, url: $.createLink('epic', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'};
+            actions.push(action);
+        }
+        if(priv.canBatchCreateEpic) actions.push({text: storyLang.batchCreate + epicLang.common, url: productCount > 1 ? '#batchCreateStory' : $.createLink('epic', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal', 'data-size': 'sm'});
     }
