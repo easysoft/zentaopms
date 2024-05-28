@@ -52,7 +52,7 @@ window.onRenderCell = function(result, {col, row})
         result.push({html: executionName, className: 'w-full flex items-center'});
         return result;
     }
-    if(col.name == 'rawID' && row.data.parent) result[0] = '';
+    if(col.name == 'rawID' && row.data.parent && !row.data.isExecution) result[0] = '';
     if(['estimate', 'consumed','left'].includes(col.name) && result) result[0] = {html: result[0] + ' h'};
 
     return result;
