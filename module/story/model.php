@@ -3977,7 +3977,7 @@ class storyModel extends model
         $cols   = $this->storyTao->buildTrackCols($storyType);
         $items  = $this->storyTao->buildTrackItems($allStories, $leafNodes, $storyType);
 
-        return array('lanes' => $lanes, 'cols' => $cols, 'items' => $items);
+        return array('lanes' => $lanes, 'cols' => $cols, 'items' => $items, 'leafNodes' => $leafNodes);
     }
 
     /**
@@ -3991,25 +3991,38 @@ class storyModel extends model
      */
     public function getMergeTrackCells(array $tracks, array $showCols): array
     {
-        $cols = array();
+        $storyCols = array();
         foreach($showCols as $colType)
         {
+            if($colType != 'epic' && $colType != 'requirement' && $colType != 'story') continue;
             foreach($tracks['cols'] as $col)
             {
                 $colName = $col['name'];
                 if($col['parent'] == -1) continue;
-                if(str_contains($colName, $colType)) $cols[] = $col;
+                if(str_contains($colName, $colType)) $storyCols[] = $col;
             }
         }
 
-        $firstCol   = zget(reset($cols), 'name', '');
+        $firstCol   = zget(reset($storyCols), 'name', '');
+        $leafNodes  = $tracks['leafNodes'];
         $mergeCells = array();
+        $preRoot    = 0;
         foreach($tracks['lanes'] as $lane)
         {
             $laneName = $lane['name'];
+
+            $storyID  = substr($laneName, 5);
+            $story    = zget($leafNodes, $storyID, '');
+            if(empty($story)) continue;
+
+            if($preRoot != $story->root)
+            {
+                $preRoot = $story->root;
+                continue;
+            }
             if(!empty($tracks['items'][$laneName][$firstCol])) continue;
 
-            foreach($cols as $col)
+            foreach($storyCols as $col)
             {
                 $colName = $col['name'];
                 if(!empty($tracks['items'][$laneName][$colName])) break;
