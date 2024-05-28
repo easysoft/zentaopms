@@ -1103,7 +1103,7 @@ class bugZen extends bug
         $this->view->allBuilds             = !empty($bug->allBuilds) ? $bug->allBuilds : '';
         $this->view->allUsers              = !empty($bug->allUsers)  ? $bug->allUsers  : '';
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds((int)$bug->productID, (string)$bug->branch);
-        $this->view->resultFiles           = array_values($resultFiles);
+        $this->view->resultFiles           = $resultFiles;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
     }
@@ -1822,25 +1822,26 @@ class bugZen extends bug
      */
     private function updateFileAfterCreate(int $bugID): bool
     {
-        if(isset($this->post->resultFiles))
+        $this->loadModel('file');
+        if(!empty($_POST['resultFiles']))
         {
             $resultFiles = $this->post->resultFiles;
-            if(isset($this->post->deleteFiles))
+            if($resultFiles) $resultFiles = json_decode($resultFiles, true);
+            if(!empty($_POST['deleteFiles']))
             {
-                foreach($this->post->deleteFiles as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
+                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($resultFiles[$deletedCaseFileID]);
             }
-            $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
-            foreach($files as $file)
+            foreach($resultFiles as $file)
             {
-                unset($file->id);
-                $file->objectType = 'bug';
-                $file->objectID   = $bugID;
-                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                unset($file['id']);
+                $file['objectType'] = 'bug';
+                $file['objectID']   = $bugID;
+                $this->file->saveFile($file, 'url,deleted,realPath,webPath,name,url,extra');
             }
         }
 
         $uid = $this->post->uid ? $this->post->uid : '';
-        $this->loadModel('file')->updateObjectID($uid, $bugID, 'bug');
+        $this->file->updateObjectID($uid, $bugID, 'bug');
         $this->file->saveUpload('bug', $bugID);
 
         return !dao::isError();

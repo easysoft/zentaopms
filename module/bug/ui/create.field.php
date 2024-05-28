@@ -6,6 +6,8 @@ global $lang, $app;
 $isShadowProduct   = data('product.shadow');
 $noMultipleProject = data('project.multiple') === '0';
 $isOriginalProduct = (int)data('bug.productID') === (int)data('productID');
+$resultFiles       = data('resultFiles');
+$resultFiles       = array_values($resultFiles);
 
 $fields = defineFieldList('bug.create', 'bug');
 
@@ -50,7 +52,7 @@ $fields->field('steps')
 
 $fields->field('files')
     ->width('full')
-    ->control('fileSelector', array('defaultFiles' => data('resultFiles')));
+    ->control('fileSelector', array('defaultFiles' => $resultFiles));
 
 $fields->field('story')->foldable();
 
@@ -71,5 +73,7 @@ $fields->field('keywords')->foldable();
 $fields->field('module')->className($isShadowProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
 
 $fields->field('openedBuild')->className($isShadowProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
+
+$fields->field('resultFiles')->control('hidden')->value(data('resultFiles'));
 
 if($isShadowProduct && !$isOriginalProduct) $fields->moveAfter('module', 'product');
