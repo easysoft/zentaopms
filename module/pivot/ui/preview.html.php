@@ -28,7 +28,14 @@ jsVar('groupID', $groupID);
 $items = array();
 foreach($groups as $id => $name)
 {
-    $items[] = array('text' => $name, 'url' => inlink('preview', "dimension={$dimensionID}&group={$id}"), 'active' => $id == $groupID);
+    $items[] = array
+    (
+        'text' => $name,
+        'value' => $id,
+        'url' => inlink('preview', "dimension={$dimensionID}&group={$id}"),
+        'badge' => $id == $groupID ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
+        'active' => $id == $groupID
+    );
 }
 
 featureBar(set::items($items));
