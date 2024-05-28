@@ -24,11 +24,12 @@ div
     (
         setClass('w-1/5'),
         moduleMenu(set(array(
-            'modules'     => $deptTree,
-            'activeKey'   => $deptID,
-            'closeLink'   => $this->createLink('group', 'manageMember', "groupID={$group->id}"),
-            'showDisplay' => false,
-            'app'         => $app->tab
+            'modules'       => $deptTree,
+            'activeKey'     => $deptID,
+            'closeLink'     => $this->createLink('group', 'manageMember', "groupID={$group->id}"),
+            'showDisplay'   => false,
+            'app'           => $app->tab,
+            'toggleSidebar' => false
         )))
     ),
     cell
