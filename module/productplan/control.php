@@ -834,7 +834,7 @@ class productplan extends control
         $items    = array();
         foreach($branches as $id => $name)
         {
-            if($id == '') continue;
+            if($id === '' && $name != BRANCH_MAIN) continue;
             $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
         return print(json_encode($items));
