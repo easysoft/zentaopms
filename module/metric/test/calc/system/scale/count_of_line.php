@@ -19,4 +19,4 @@ zendata('module')->loadYaml('line', true, 4)->gen(200);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r($calc->getResult()) && p('0:value') && e('80'); // 测试产品线数
+r($calc->getResult()) && p('0:value') && e('100'); // 测试产品线数
