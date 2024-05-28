@@ -366,6 +366,8 @@ class story extends control
 
         $this->storyZen->setFormOptionsForBatchEdit($productID, $executionID, $stories);
 
+        foreach($stories as $story) $story->branch = 'branch' . $story->branch;
+
         $this->view->title       = $this->lang->story->batchEdit;
         $this->view->productID   = $productID;
         $this->view->branch      = $branch;
