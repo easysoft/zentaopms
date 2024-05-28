@@ -468,7 +468,7 @@ class productZen extends product
         $moduleName = $tab == 'program' ? 'program' : $this->moduleName;
         $methodName = $tab == 'program' ? 'product' : 'browse';
         $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
-        $location   = isInModal() ? 'true' : $this->createLink($moduleName, $methodName, $param);
+        $location   = isInModal() ? true : $this->createLink($moduleName, $methodName, $param);
         if($tab == 'doc') $location = $this->createLink('doc', 'productSpace', "objectID=$productID");
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $location, 'closeModal' => true);
