@@ -91,13 +91,15 @@ $privs['case']        = commonModel::hasPriv('case',        'view');
 $privs['design']      = commonModel::hasPriv('design',      'view');
 $privs['commit']      = commonModel::hasPriv('repo',        'revision');
 
+$app->loadLang('epic');
+$app->loadLang('requirement');
 $app->loadLang('project');
 $app->loadLang('task');
 $app->loadLang('bug');
 $app->loadLang('testcase');
-jsVar('langStoryPriList',      $lang->story->priList);
-jsVar('langStoryStatusList',   $lang->story->statusList);
-jsVar('langStoryStageList',    $lang->story->stageList);
+jsVar('langStoryPriList',      array('epic' => $lang->epic->priList,    'requirement' => $lang->requirement->priList,    'story' => $lang->story->priList));
+jsVar('langStoryStatusList',   array('epic' => $lang->epic->statusList, 'requirement' => $lang->requirement->statusList, 'story' => $lang->story->statusList));
+jsVar('langStoryStageList',    array('epic' => $lang->epic->stageList,  'requirement' => $lang->requirement->stageList,  'story' => $lang->story->stageList));
 jsVar('langProjectStatusList', $lang->project->statusList);
 jsVar('langTaskPriList',       $lang->task->priList);
 jsVar('langTaskStatusList',    $lang->task->statusList);
