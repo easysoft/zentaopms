@@ -29,7 +29,7 @@ $fields->field('execution')
 if(common::hasPriv('build', 'create'))
 {
     $fields->field('openedBuild')
-        ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createBuild'))
+        ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createBuild', 'data-size' => 'lg'))
         ->text($lang->build->create)->hint($lang->build->create)
         ->url(createLink('build', 'create', 'executionID=' . data('executionID') . '&productID=' . data('bug.productID') . '&projectID=' . data('projectID')))
         ->className(count(data('builds')) > 1 || !data('executionID') ? 'hidden' : '')
