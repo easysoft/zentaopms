@@ -100,7 +100,7 @@ class detailCard extends wg
 
         return new entityTitle
         (
-            setClass('panel-title'),
+            setClass('panel-title flex-1 w-0'),
             set::id($objectID),
             set::title($title),
             set::color($color),
