@@ -62,6 +62,34 @@ class mailTao extends mailModel
     }
 
     /**
+     * 根据文件 ID 获取图片 url 和物理文件的键值对。
+     * Get key-value pairs of image URL and physical file by file ID.
+     *
+     * @param  array  $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByFileID(array $matches): array
+    {
+        if(!isset($matches[2])) return array();
+
+        $this->loadModel('file');
+
+        $images = array();
+        foreach($matches[2] as $key => $fileID)
+        {
+            if(!$fileID) continue;
+
+            $file = $this->file->getByID((int)$fileID);
+            if(!$file) continue;
+            if(!in_array($file->extension, $this->config->file->imageExtensions)) continue;
+
+            $images[$matches[1][$key]] = $file->webPath;
+        }
+        return $images;
+    }
+
+    /**
      * 根据路径获取图片 url 和物理文件的键值对。
      * Get key-value pairs of image URL and physical file by path.
      *
