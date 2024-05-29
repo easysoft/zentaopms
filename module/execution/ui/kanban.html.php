@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 $laneCount = 0;
-$links     = array();
 foreach($kanbanList as $current => $region)
 {
     foreach($region['items'] as $index => $group)
@@ -43,7 +42,7 @@ foreach($kanbanList as $current => $region)
     }
 
     $laneCount += isset($region['laneCount']) ? $region['laneCount'] : 0;
-    $links      = $region['links'];
+    $links      = isset($region['links']) ? $region['links'] : array();
 }
 
 $operationMenu = array();
