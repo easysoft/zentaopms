@@ -95,6 +95,7 @@ class projectStory extends control
     {
         $project = $this->loadModel('project')->getByID($projectID);
         $this->session->set('hasProduct', $project->hasProduct);
+        $this->config->project->showGrades = null;
 
         echo $this->fetch('product', 'track', "productID=$productID&branch=$branch&projectID=$projectID&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
