@@ -153,7 +153,7 @@ window.getItem = function(info)
     const avatar = renderAvatar(info.item);
 
     info.item.titleAttrs = {};
-    if(info.item.cardType == 'story')
+    if(['story', 'epic', 'requirement', 'parentStory'].includes(info.item.cardType))
     {
         info.item.icon = 'product';
         if(priv.canViewStory)
@@ -222,9 +222,12 @@ window.getItem = function(info)
 window.renderAvatar = function(item)
 {
     let assignLink = '';
-    if(item.cardType == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'bug' && priv.canAssignBug) assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'task' && priv.canAssignTask) assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
+    if(item.cardType == 'epic' && priv.canAssignEpic)               assignLink = $.createLink('epic', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'requirement' && priv.canAssignRequirement) assignLink = $.createLink('requirement', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'parentStory' && priv.canAssignStory)       assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'story' && priv.canAssignStory)             assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'bug' && priv.canAssignBug)                 assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'task' && priv.canAssignTask)               assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
 
     if(item.assignedTo.length == 0)
     {
