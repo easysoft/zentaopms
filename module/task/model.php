@@ -2775,7 +2775,7 @@ class taskModel extends model
             $now = helper::now();
             if($team->status == 'done')
             {
-                $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'next');
+                $task->assignedTo   = $this->getAssignedTo4Multi($oldTask->team, $oldTask, 'current');
                 $task->assignedDate = $now;
             }
 
