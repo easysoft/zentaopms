@@ -18,8 +18,8 @@ $config->api->form->editStruct['desc']      = array('type' => 'string', 'require
 
 $config->api->form->createLib = array();
 $config->api->form->createLib['libType']   = array('type' => 'string', 'required' => true,  'default' => 'nolink');
-$config->api->form->createLib['product']   = array('type' => 'int',    'required' => true,  'default' => 0);
-$config->api->form->createLib['project']   = array('type' => 'int',    'required' => true,  'default' => 0);
+$config->api->form->createLib['product']   = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->api->form->createLib['project']   = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->api->form->createLib['execution'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->api->form->createLib['name']      = array('type' => 'string', 'required' => true,  'default' => '');
 $config->api->form->createLib['baseUrl']   = array('type' => 'string', 'required' => false, 'default' => '');
