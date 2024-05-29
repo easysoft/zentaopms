@@ -70,4 +70,45 @@ class fixer extends baseFixer
 
         return $value;
     }
+
+    /**
+     * 对工作流配置的日期格式字段赋予NULL默认值。
+     * Assign a default value of NULL to the date format field of the workflow configuration.
+     *
+     * @param  string $fieldName
+     * @access public
+     * @return mixed
+     */
+    public function get(string $fields = ''): mixed
+    {
+        global $config, $app;
+
+        if($config->edition != 'open' &&  empty($app->installing))
+        {
+            $moduleName = $moduleName ? $moduleName : $app->getModuleName();
+            $methodName = $methodName ? $moduleName : $app->getMethodName();
+
+            $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
+            if(!$flow) return parent::get($fields);
+
+            $action = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+            if(!$action || $action->extensionType != 'extend') return parent::get($fields);
+
+            $fieldList = $app->control->workflowaction->getFields($flow->module, $action->action);
+            $layouts   = $app->control->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+            if($layouts)
+            {
+                foreach($fieldList as $key => $field)
+                {
+                    if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+
+                    if($field->control == 'date' || $field->control == 'datetime')
+                    {
+                        if(empty($this->data->{$field->field})) $this->data->{$field->field} = NULL;
+                    }
+                }
+            }
+        }
+        return parent::get($fields);
+    }
 }
