@@ -222,9 +222,10 @@ window.renderAvatar = function(item)
 window.getItemActions = function(item)
 {
     let actions = [];
-    if(item.cardType == 'story')     actions = buildStoryActions(item);
-    else if(item.cardType == 'bug')  actions = buildBugActions(item);
-    else if(item.cardType == 'task') actions = buildTaskActions(item);
+    if(item.cardType == 'story')            actions = buildStoryActions(item);
+    else if(item.cardType == 'parentStory') actions = buildParentStoryActions(item);
+    else if(item.cardType == 'bug')         actions = buildBugActions(item);
+    else if(item.cardType == 'task')        actions = buildTaskActions(item);
 
     return [{
         type: 'dropdown',
@@ -232,6 +233,19 @@ window.getItemActions = function(item)
         caret: false,
         items: actions
     }];
+}
+
+window.buildParentStoryActions = function(item)
+{
+    let actions = [];
+
+    if(priv.canEditStory) actions.push({text: storyLang.edit, icon: 'edit', url: $.createLink('story', 'edit', 'storyID=' + item.id + '&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canChangeStory && item.status == 'active') actions.push({text: storyLang.change, icon: 'change', url: $.createLink('story', 'change', 'storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canActivateStory && item.status == 'closed') actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('story', 'activate', 'storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canUnlinkStory) actions.push({text: executionLang.unlinkStory, icon: 'unlink', url: $.createLink('execution', 'unlinkStory', 'executionID=' + executionID + '&storyID=' + item.id + '&confirm=no&from=' + '&laneID=' + item.lane + '&columnID=' + item.column), 'innerClass' : 'ajax-submit'});
+    if(priv.canDeleteStory) actions.push({text: storyLang.delete, icon: 'trash', url: $.createLink('story', 'delete', 'storyID=' + item.id), 'innerClass': 'ajax-submit'});
+
+    return actions;
 }
 
 window.buildStoryActions = function(item)
