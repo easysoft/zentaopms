@@ -1194,7 +1194,10 @@ class commonModel extends model
          * 忽略无请求头 HTTP_SEC_FETCH_DEST 或者 HTTP_SEC_FETCH_DEST 为 iframe 的请求，较新的浏览器在启用 https 的情况下才会正确发送该请求头。
          * Ignore the request without HTTP_SEC_FETCH_DEST or HTTP_SEC_FETCH_DEST is iframe, the latest browser will send this request header correctly when enable https.
          */
-        if(isHttps() && (!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe')) return true;
+        $this->app->loadConfig('index');
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if(in_array("{$module}-{$method}", $this->config->index->oldPages) && (!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe')) return true;
 
         /**
          * 当有 HTTP_REFERER 请求头时，忽略 safari 浏览器，因为 safari 浏览器不会正确发送 HTTP_SEC_FETCH_DEST 请求头。
@@ -1210,14 +1213,12 @@ class commonModel extends model
          * 忽略所有方法名以 ajax 开头的请求。
          * Ignore all requests which it's method name starts with 'ajax'.
          */
-        $method = $this->app->getMethodName();
         if(strpos($method, 'ajax') === 0) return true;
 
         /**
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
-        $module    = $this->app->getModuleName();
         $whitelist = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|';
         $skiplist  = '|cron-index|';
 
