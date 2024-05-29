@@ -10,17 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
+setID('repoRelationInfo');
 $objectID = zget($object, 'id', '');
 if($objectType == 'story')
 {
     $headerTitle = a
     (
-        span
-        (
-            zget($object, 'title', ''),
-            setClass('text-primary text-lg font-bold entity-title')
-        ),
-        set::href(createLink('story', 'view', "storyID={$objectID}")),
+        zget($object, 'title', ''),
+        setClass('text-primary text-lg font-bold entity-title linked-object'),
+        setData(array('link' => createLink('story', 'view', "storyID={$objectID}")))
     );
     $section = sectionList
     (
@@ -42,12 +40,9 @@ elseif($objectType == 'task')
 {
     $headerTitle = a
     (
-        span
-        (
-            zget($object, 'name', ''),
-            setClass('text-primary text-lg font-bold entity-title')
-        ),
-        set::href(createLink('task', 'view', "taskID={$objectID}")),
+        zget($object, 'name', ''),
+        setClass('text-primary text-lg font-bold entity-title linked-object'),
+        setData(array('link' => createLink('task', 'view', "taskID={$objectID}")))
     );
     $section = sectionList
     (
@@ -69,12 +64,9 @@ elseif($objectType == 'bug')
 {
     $headerTitle = a
     (
-        span
-        (
-            zget($object, 'title', ''),
-            setClass('text-primary text-lg font-bold entity-title')
-        ),
-        set::href(createLink('bug', 'view', "bugID={$objectID}")),
+        zget($object, 'title', ''),
+        setClass('text-primary text-lg font-bold entity-title linked-object'),
+        setData(array('link' => createLink('bug', 'view', "bugID={$objectID}")))
     );
     $section = sectionList
     (
