@@ -155,7 +155,6 @@ class feishuapi
         /* Get depts by parent dept. */
         $depts     = array();
         $pageToken = '';
-        $index     = 0;
         while(true)
         {
             $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id={$departmentID}" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=false&page_size=50", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
@@ -163,11 +162,13 @@ class feishuapi
             {
                 foreach($response->data->items as $key => $dept)
                 {
-                    $depts[$index]['id']   = $dept->open_department_id;
-                    $depts[$index]['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
-                    $depts[$index]['name'] = $dept->name;
-                    $depts[$index]['open'] = 1;
-                    $index++;
+                    $data = array();
+                    $data['id']   = $dept->open_department_id;
+                    $data['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
+                    $data['name'] = $dept->name;
+                    $data['open'] = 1;
+
+                    $depts[] = $data;
                 }
             }
 
@@ -199,19 +200,18 @@ class feishuapi
         foreach($departmentIdList as $departmentID) $urls[] = $this->apiUrl . "contact/v3/departments/{$departmentID}";
         $datas = $this->multiRequest($urls);
 
-        foreach($datas as $index => $dept)
+        foreach($datas as $dept)
         {
-            $index += 1;
-            $dept   = json_decode($dept);
+            $dept = json_decode($dept);
+            $data = array();
+            $data['id']   = $dept->data->department->open_department_id;
+            $data['pId']  = empty($dept->data->department->parent_department_id) ? 1 : $dept->data->department->parent_department_id;
+            $data['name'] = $dept->data->department->name;
+            $data['open'] = 1;
 
-            $memberCount = $dept->data->department->member_count;
-            $status      = $dept->data->department->status->is_deleted;
-
-            $depts[$index]['id']   = $dept->data->department->open_department_id;
-            $depts[$index]['pId']  = empty($dept->data->department->parent_department_id) ? 1 : $dept->data->department->parent_department_id;
-            $depts[$index]['name'] = $dept->data->department->name;
-            $depts[$index]['open'] = 1;
+            $depts[] = $data;
         }
+        $depts = array_merge($depts, $this->getNextStepDeptTree($departmentIdList));
 
         return $depts;
     }
@@ -361,6 +361,84 @@ class feishuapi
             }
         }
         return false;
+    }
+
+    /**
+     * 获取传入部门列表的下一级部门树数据
+     * Get next step dept tree by dept id list.
+     *
+     * @param  array    $deptIdList
+     * @access public
+     * @return array
+     */
+    public function getNextStepDeptTree($deptIdList)
+    {
+        if(empty($deptIdList)) return array();
+
+        $nextStepUrls = array();
+        foreach($deptIdList as $deptID) $nextStepUrls[] = $this->apiUrl . "contact/v3/departments?parent_department_id={$deptID}&fetch_child=false&page_size=50";
+
+        return $this->multiGetChildrenData($nextStepUrls);
+    }
+
+    /**
+     * 获取传入部门列表的下一页部门树数据。
+     * Get next page dept tree by dept and page token pairs.
+     *
+     * @param  array    $deptPageTokenPairs
+     * @access public
+     * @return array
+     */
+    public function getNextPageDeptTree($deptPageTokenPairs)
+    {
+        if(empty($deptPageTokenPairs)) return array();
+
+        $nextPageUrls = array();
+        foreach($deptPageTokenPairs as $deptID => $pageToken) $nextPageUrls[] = $this->apiUrl . "contact/v3/departments?parent_department_id={$deptID}&page_token={$pageToken}&fetch_child=false&page_size=50";
+
+        return $this->multiGetChildrenData($nextPageUrls);
+    }
+
+    /**
+     * 根据API链接列表，多路获取子部门数据。
+     * Multi get children data by api url list.
+     *
+     * @param  array    $urlList
+     * @access public
+     * @return array
+     */
+    public function multiGetChildrenData($urlList)
+    {
+        if(empty($urlList)) return array();
+
+        $nextStepParentIdList = array();
+        $nextPageTokenPairs   = array();
+
+        $depts = array();
+        $datas = $this->multiRequest($urlList);
+        foreach($datas as $response)
+        {
+            $response = json_decode($response);
+            if(!isset($response->data->items)) continue;
+
+            foreach($response->data->items as $key => $dept)
+            {
+                $data = array();
+                $data['id']   = $dept->open_department_id;
+                $data['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
+                $data['name'] = $dept->name;
+                $data['open'] = 1;
+
+                $depts[] = $data;
+                $nextStepParentIdList[] = $data['id'];
+            }
+
+            if(!empty($response->data->page_token)) $nextPageTokenPairs[$data['pId']] = $response->data->page_token;
+        }
+
+        $depts = array_merge($depts, $this->getNextStepDeptTree($nextStepParentIdList));
+        $depts = array_merge($depts, $this->getNextPageDeptTree($nextPageTokenPairs));
+        return $depts;
     }
 
     /**
