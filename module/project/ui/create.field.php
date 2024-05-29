@@ -25,7 +25,7 @@ $fields->field('name')
     ->tip($copyProject ? $lang->project->copyProject->nameTips : null)
     ->tipClass($copyProject ? 'text-warning' : null)
     ->value($copyProject ? data('copyProject.name') : '');
-if($copyProject) $fields->field('multiple')->hidden(true)->value(data('copyProject.multiple'));
+if($copyProject) $fields->field('multiple')->hidden(true)->value(in_array($model, array('scrum', 'kanban')) ? data('copyProject.multiple') : 1);
 
 if($hasCode)
 {
