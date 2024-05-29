@@ -135,13 +135,13 @@ class testreport extends control
      *
      * @param  int    $objectID
      * @param  string $objectType
-     * @param  int    $extra
+     * @param  string $extra
      * @param  string $begin
      * @param  string $end
      * @access public
      * @return void
      */
-    public function create(int $objectID = 0, string $objectType = 'testtask', int $extra = 0, string $begin = '', string $end = '')
+    public function create(int $objectID = 0, string $objectType = 'testtask', string $extra = '', string $begin = '', string $end = '')
     {
         if($_POST)
         {

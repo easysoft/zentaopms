@@ -92,13 +92,13 @@ class testreportZen extends testreport
      * Get task pairs for creation.
      *
      * @param  int       $objectID
-     * @param  int       $extra
+     * @param  string    $extra
      * @access protected
      * @return array
      */
-    protected function assignTaskParisForCreate(int $objectID = 0, int $extra = 0): array
+    protected function assignTaskParisForCreate(int $objectID = 0, string $extra = ''): array
     {
-        if(!$objectID && $extra) $productID = $extra;
+        if(!$objectID && $extra) $productID = (int)$extra;
         if($objectID)
         {
             $task      = $this->testtask->getByID($objectID);
@@ -181,14 +181,14 @@ class testreportZen extends testreport
      *
      * @param  int       $objectID
      * @param  string    $objectType
-     * @param  int       $extra
+     * @param  string    $extra
      * @param  string    $begin
      * @param  string    $end
      * @param  int       $executionID
      * @access protected
      * @return array
      */
-    protected function assignProjectReportDataForCreate(int $objectID, string $objectType, int $extra, string $begin = '', string $end = '', int $executionID = 0): array
+    protected function assignProjectReportDataForCreate(int $objectID, string $objectType, string $extra, string $begin = '', string $end = '', int $executionID = 0): array
     {
         $owners        = array();
         $buildIdList   = array();
@@ -208,7 +208,7 @@ class testreportZen extends testreport
             if($task->build != 'trunk') $buildIdList[$task->build] = $task->build;
         }
 
-        $task      = $objectID ? $this->testtask->getByID($extra) : key($tasks);
+        $task      = $objectID ? $this->testtask->getByID((int)$extra) : key($tasks);
         $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : (string)$task->begin;
         $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : (string)$task->end;
         $builds    = $this->build->getByList($buildIdList);
