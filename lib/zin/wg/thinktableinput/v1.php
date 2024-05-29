@@ -40,8 +40,7 @@ class thinkTableInput extends thinkQuestion
             $canAddRows   = $step->options->canAddRows;
             $answer       = $step->answer;
             $result       = isset($answer->result) && !empty($answer->result) ? $answer->result : array();
-            $result       = is_array($result) ? $result : get_object_vars($result);
-            $customFields = isset($answer->customFields) && !empty($answer->customFields) ? $answer->customFields : array();
+            $customFields = !empty($answer->customFields) ? get_object_vars($answer->customFields) : array();
         }
         jsVar('canAddRows', (int)$canAddRows);
         jsVar('fieldsCount', count($fields));
@@ -82,13 +81,10 @@ class thinkTableInput extends thinkQuestion
                 )
             );
         }
-
         if(!empty($customFields))
         {
             foreach($customFields as $index => $item)
             {
-                /* 结果的索引是后台设置问题数加用户添加问题行的索引。Result index is number of backend setting issues plus custom add problem index.*/
-                $resultIndex = count($fields) + $index;
                 $tableInputItems[] = formGroup
                 (
                     setClass('flex rows-group flex-nowrap items-center'),
@@ -106,8 +102,8 @@ class thinkTableInput extends thinkQuestion
                         set::rows('2'),
                         setClass('mt-2 ml-2 result-width'),
                         setID('result'),
-                        set::name('result[' . $resultIndex .']'),
-                        set::value($result[$resultIndex] ?? ''),
+                        set::name('result[' . $index .']'),
+                        set::value($result[$index] ?? ''),
                         set::placeholder($lang->thinkrun->placeholder->rowContent)
                     ),
                     div
