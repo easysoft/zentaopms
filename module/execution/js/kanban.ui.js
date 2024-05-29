@@ -48,7 +48,7 @@ window.getLaneActions = function(lane)
 window.getColActions = function(col)
 {
     let actionList = [];
-    const firstCol = ['defining', 'backlog', 'unconfirmed', 'wait'];
+    const firstCol = ['backlog', 'unconfirmed', 'wait'];
 
     if(firstCol.includes(col.type))
     {
@@ -113,26 +113,6 @@ window.buildColCardActions = function(col)
         if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal', 'data-size': 'sm'});
     }
-    else if(col.type == 'defining')
-    {
-        if(priv.canCreateEpic)
-        {
-            actions.push({text: epicLang.create, url: $.createLink('epic', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-        }
-        if(priv.canCreateRequirement)
-        {
-            actions.push({text: requirementLang.create, url: $.createLink('requirement', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-        }
-        if(priv.canBatchCreateEpic || priv.canBatchCreateRequirement)
-        {
-            let batchCreateItems = [];
-            if(priv.canBatchCreateRequirement) batchCreateItems.push({text: requirementLang.common, url: productCount > 1 ? '#batchCreateStory' : $.createLink('requirement', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=requirement&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg', 'innerClass': 'requirement-batch-btn'});
-            if(priv.canBatchCreateEpic) batchCreateItems.push({text: epicLang.common, url: productCount > 1 ? '#batchCreateStory' : $.createLink('epic', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=epic&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg', 'innerClass': 'epic-batch-btn'});
-            actions.push({text: storyLang.batchCreate, items: batchCreateItems});
-        }
-        if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
-        if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal', 'data-size': 'sm'});
-    }
     else if(col.type == 'unconfirmed')
     {
         if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + col.region + ',groupID=' + col.group + ',laneID=' + 0 + ',columnID=' + col.id + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size' : 'lg'});
@@ -153,7 +133,7 @@ window.getItem = function(info)
     const avatar = renderAvatar(info.item);
 
     info.item.titleAttrs = {};
-    if(['story', 'epic', 'requirement', 'parentStory'].includes(info.item.cardType))
+    if(['story', 'parentStory'].includes(info.item.cardType))
     {
         info.item.icon = 'product';
         if(priv.canViewStory)
@@ -222,8 +202,6 @@ window.getItem = function(info)
 window.renderAvatar = function(item)
 {
     let assignLink = '';
-    if(item.cardType == 'epic' && priv.canAssignEpic)               assignLink = $.createLink('epic', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'requirement' && priv.canAssignRequirement) assignLink = $.createLink('requirement', 'assignTo', "id=" + item.id);
     if(item.cardType == 'parentStory' && priv.canAssignStory)       assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
     if(item.cardType == 'story' && priv.canAssignStory)             assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
     if(item.cardType == 'bug' && priv.canAssignBug)                 assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);

@@ -147,10 +147,11 @@ $lang->kanban->alignmentList['center'] = 'Center';
 $lang->kanban->alignmentList['left']   = 'Left';
 
 $lang->kanban->type = array();
-$lang->kanban->type['all']   = "All KanBan";
-$lang->kanban->type['story'] = "Story KanBan";
-$lang->kanban->type['task']  = "Task KanBan";
-$lang->kanban->type['bug']   = "Bug KanBan";
+$lang->kanban->type['all']         = "All KanBan";
+$lang->kanban->type['parentStory'] = "Parent Story KanBan";
+$lang->kanban->type['story']       = "Story KanBan";
+$lang->kanban->type['task']        = "Task KanBan";
+$lang->kanban->type['bug']         = "Bug KanBan";
 
 $lang->kanban->group = new stdclass();
 
@@ -162,6 +163,8 @@ $lang->kanban->group->story['category']   = "Story Category";
 $lang->kanban->group->story['module']     = "Story Module";
 $lang->kanban->group->story['source']     = "Story Source";
 $lang->kanban->group->story['assignedTo'] = "Assigned To";
+
+$lang->kanban->group->parentStory = $lang->kanban->group->story;
 
 $lang->kanban->group->task = array();
 $lang->kanban->group->task['default']    = "Default Group";

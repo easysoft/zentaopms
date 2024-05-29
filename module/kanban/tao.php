@@ -597,6 +597,7 @@ class kanbanTao extends kanbanModel
         $cardList    = array();
         $avatarPairs = $this->loadModel('user')->getAvatarPairs();
         $users       = $this->loadModel('user')->getPairs('noletter');
+        $module      = $browseType == 'parentStory' ? 'story' : $browseType;
         foreach($lanes as $laneID => $lane)
         {
             $laneData = array();
@@ -604,7 +605,7 @@ class kanbanTao extends kanbanModel
             $laneData['type']   = $browseType;
             $laneData['name']   = $laneData['id'];
             $laneData['region'] = $lane->execution;
-            $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
+            $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$module->$groupBy . ':' . $lane->name : $lane->name;
             $laneData['color']  = $lane->color;
             $laneData['order']  = $lane->order;
 
@@ -739,6 +740,7 @@ class kanbanTao extends kanbanModel
      */
     protected function getObjectPairs(string $groupBy, array $groupByList, string $browseType, string $orderBy): array
     {
+        if($browseType == 'parentStory') $browseType = 'story';
         $objectPairs = array();
         if(in_array($groupBy, array('module', 'story', 'assignedTo')))
         {
