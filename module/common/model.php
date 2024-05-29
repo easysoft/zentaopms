@@ -1217,11 +1217,11 @@ class commonModel extends model
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
-        $module    = $this->app->getModuleName();
-        $whitelist = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|';
-        $skiplist  = '|cron-index|';
+        $module     = $this->app->getModuleName();
+        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|';
+        $iframeList = '|cron-index|';
 
-        if((strpos($whitelist, "|{$module}|") !== false && strpos($skiplist, "|{$module}-{$method}|") === false) || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
+        if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return true;
 
         /**
          * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
