@@ -308,6 +308,10 @@ $config->block->size['scrumproject']['projectdynamic'] = array(1 => 8, 2 => 8);
 $config->block->size['waterfallproject']['waterfallgantt'] = array(2 => 8, 1 => 8);
 $config->block->size['waterfallproject']['projectdynamic'] = array(1 => 8, 2 => 8);
 
+$config->block->size['agileplusproject']     = $config->block->size['scrumproject'];
+$config->block->size['waterfallplusproject'] = $config->block->size['waterfallproject'];
+$config->block->size['ipdproject']           = $config->block->size['waterfallproject'];
+
 $config->block->size['execution']['overview']  = array(1 => 3);
 $config->block->size['execution']['statistic'] = array(2 => 5, 1 => 8);
 $config->block->size['execution']['list']      = array(2 => 6, 1 => 6);
