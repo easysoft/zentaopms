@@ -832,7 +832,8 @@ class user extends control
 
         /* 移除真实路径以确保安全。*/
         /* Remove the real path to ensure security. */
-        $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
+        $filterPath    = (getenv('ZENTAO_ENV') == 'zbox-windows' || getenv('ZENTAO_ENV') == 'zbox-linux') ? dirname($this->app->getBasePath(), 3) . DIRECTORY_SEPARATOR : $this->app->getBasePath();
+        $resetFileName = str_replace($filterPath, '', $resetFileName);
 
         $this->view->title          = $this->lang->user->resetPwdByAdmin;
         $this->view->rand           = updateSessionRandom();

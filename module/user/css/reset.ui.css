@@ -1,4 +1,4 @@
-#mainContent .create-file {max-width: 700px; margin-top: 100px; padding-right: 10px; padding-left:10px; margin-right: auto; margin-left: auto;}
+#mainContent .create-file {max-width: 720px; margin-top: 100px; padding-right: 10px; padding-left:10px; margin-right: auto; margin-left: auto;}
 #mainContent .create-file .alert-info {color: var(--color-secondary-500); background-color: var(--color-secondary-50);}
 #mainContent .create-file .alert-info > h5 {font-weight: 600; margin-bottom: 10px;}
 #mainContent .create-file .alert-info > h5 > span {color: red;}
