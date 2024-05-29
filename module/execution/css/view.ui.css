@@ -8,3 +8,5 @@
 
 .actions-menu {bottom: 12px;}
 #mainContent {margin-bottom: 60px;}
+
+#mainContent .desc-box {max-height: 6rem;}
