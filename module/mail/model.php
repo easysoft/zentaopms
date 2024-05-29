@@ -244,7 +244,9 @@ class mailModel extends model
 
         ob_start();
 
-        $body = $this->mailTao->replaceImageURL($body);
+        $images = $this->mailTao->getImages($body);
+        if($images) $body = $this->mailTao->replaceImageURL($body, $images);
+
         list($toList, $ccList) = $this->mailTao->processToAndCC($toList, $ccList, $includeMe);
         /* Get realname and email of users. */
         if(empty($emails)) $emails = $this->loadModel('user')->getRealNameAndEmails($toList . ',' . $ccList);
