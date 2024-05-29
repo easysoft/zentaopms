@@ -46,7 +46,8 @@ div
 );
 $cols = array();
 foreach($config->release->dtable->defaultFields['linkBug']['bug'] as $field) $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
-$cols['title']['data-toggle'] = '';
+$cols['title']['data-toggle'] = 'modal';
+$cols['title']['data-size']   = 'lg';
 $cols['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}', 'target' => '_blank');
 
 $allBugs = initTableData($allBugs, $cols);

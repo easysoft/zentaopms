@@ -159,7 +159,7 @@ window.getIframeHeight = function()
  */
 window.getSidebarHeight = function()
 {
-    if(sidebarHeight) return sidebarHeight;
+    if(typeof sidebarHeight != 'undefined' && sidebarHeight) return sidebarHeight;
 
     var windowHeight   = $(window).height();
     var headerHeight   = parseInt($('#header').height());
