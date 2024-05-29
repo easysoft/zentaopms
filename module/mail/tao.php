@@ -62,6 +62,34 @@ class mailTao extends mailModel
     }
 
     /**
+     * 获取邮件内容中的图片 url 和物理文件的键值对。
+     * Get key-value pairs of image URL and physical file in mail content.
+     *
+     * @param  string    $body
+     * @access protected
+     * @return array
+     */
+    public function getImages(string $body): array
+    {
+        $images = array();
+
+        /* 匹配形如 src="/file-read-1.jpg" 或 scr="/index.php?m=file&f=read&fileID=1" 的图片。 Match images like src="/file-read-1.jpg" or scr="/index.php?m=file&f=read&fileID=1". */
+        $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
+        preg_match_all('/ src="(' . $readLinkReg . ')" /', $body, $matches);
+        $images += $this->getImagesByFileID($matches);
+
+        /* 匹配形如 src="{1.jpg}" 的图片。 Match images like src="{1.jpg}". */
+        preg_match_all('/ src="({([0-9]+)\.\w+?})" /', $body, $matches);
+        $images += $this->getImagesByFileID($matches);
+
+        /* 匹配形如 src="/data/upload/1.jpg" 的图片。 Match images like src="/data/upload/1.jpg". */
+        preg_match_all('/ src="(\/?data\/upload\/[\/\w+]*)"/', $body, $matches);
+        $images += $this->getImagesByPath($matches);
+
+        return $images;
+    }
+
+    /**
      * 根据文件 ID 获取图片 url 和物理文件的键值对。
      * Get key-value pairs of image URL and physical file by file ID.
      *
