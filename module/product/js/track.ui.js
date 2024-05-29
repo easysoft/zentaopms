@@ -8,12 +8,16 @@ window.getItem = function(info)
     info.item.content = [];
     if(col.indexOf('epic') != -1 || col.indexOf('requirement') != -1 || col.indexOf('story') != -1)
     {
+        let storyPriList    = langStoryPriList[info.item.storyType];
+        let storyStatusList = langStoryStatusList[info.item.storyType];
+        let storyStageList  = langStoryStageList[info.item.storyType];
+
         if(privs[info.item.storyType]) titleHtml = "<a href='" + $.createLink(info.item.storyType, 'view', `storyID=${info.item.id}`) + "' data-toggle='modal' data-size='lg'" + color + ">" + title + "</a>";
-        info.item.title      = {html: `<div class="line-clamp-2"><span class="align-sub pri-${info.item.pri}">${langStoryPriList[info.item.pri]}</span> ${titleHtml}</div>`}
+        info.item.title      = {html: `<div class="line-clamp-2"><span class="align-sub pri-${info.item.pri}">${storyPriList[info.item.pri]}</span> ${titleHtml}</div>`}
         info.item.titleAttrs = {'title' : title};
 
-        info.item.content.push({html: `<div class="status-${info.item.status}">${langStoryStatusList[info.item.status]}</div>`});
-        info.item.content.push({html: `<div style="color:var(--color-gray-600)">${langStoryStageList[info.item.stage]}</div>`})
+        info.item.content.push({html: `<div class="status-${info.item.status}">${storyStatusList[info.item.status]}</div>`});
+        info.item.content.push({html: `<div style="color:var(--color-gray-600)">${storyStageList[info.item.stage]}</div>`})
     }
     else if(col == 'project' || col == 'execution')
     {
