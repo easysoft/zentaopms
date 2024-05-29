@@ -2870,7 +2870,7 @@ class executionModel extends model
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
             if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, $storyType, $storyID);
 
             $data = new stdclass();
             $data->project = $executionID;
@@ -2890,7 +2890,7 @@ class executionModel extends model
             if($storyType == 'requirement' and $execution->model == 'ipd') $this->dao->update(TABLE_STORY)->set('status')->eq('developing')->where('id')->eq($storyID)->exec();
         }
 
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, $storyType);
         return true;
     }
 
