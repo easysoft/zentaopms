@@ -88,7 +88,7 @@ if($repo->SCM != 'Subversion')
         set::text(substr($oldRevision, 0, 10)),
         set::data(array('data' => $menuData, 'tabs' => $tabs))
     );
-    $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
+    $breadcrumbItems[] = span(setClass('label label-exchange mr-2 text-white'), icon('exchange'));
     $breadcrumbItems[] = span($lang->repo->target . ':');
     $breadcrumbItems[] = dropmenu
     (
