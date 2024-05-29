@@ -62,6 +62,28 @@ class mailTao extends mailModel
     }
 
     /**
+     * 根据路径获取图片 url 和物理文件的键值对。
+     * Get key-value pairs of image URL and physical file by path.
+     *
+     * @param  array  $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByPath(array $matches): array
+    {
+        if(!isset($matches[1])) return array();
+
+        $images = array();
+        foreach($matches[1] as $key => $path)
+        {
+            if(!$path) continue;
+
+            $images[$path] = $path;
+        }
+        return $images;
+    }
+
+    /**
      * Replace image URL for mail content.
      *
      * @param  string    $body
