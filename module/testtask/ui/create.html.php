@@ -13,6 +13,8 @@ namespace zin;
 jsVar('projectID', $projectID);
 jsVar('multiple', isset($moMultipleExecutionID) ? false : true);
 
+$buildExecutionID = $executionID ? $executionID : (isset($noMultipleExecutionID) ? $noMultipleExecutionID : 0);
+
 formPanel
 (
     set::title($lang->testtask->create),
@@ -65,22 +67,22 @@ formPanel
             ),
             span
             (
-                set::className('input-group-addon', !empty($executionID) && empty($builds) ? '' : 'hidden'),
+                set::className('input-group-addon', !empty($buildExecutionID) && empty($builds) ? '' : 'hidden'),
                 a
                 (
-                    set('href', createLink('build', 'create', "executionID=$executionID&productID={$product->id}&projectID={$projectID}")),
+                    set('href', createLink('build', 'create', "executionID=$buildExecutionID&productID={$product->id}&projectID={$projectID}")),
                     set('data-toggle', 'modal'),
                     $lang->build->create
                 )
             ),
             span
             (
-                set::className('input-group-addon', !empty($executionID) && empty($builds) ? '' : 'hidden'),
+                set::className('input-group-addon', !empty($buildExecutionID) && empty($builds) ? '' : 'hidden'),
                 a
                 (
                     set('href', 'javascript:void(0)'),
                     set('class', 'refresh'),
-                    on::click("loadExecutionBuilds($executionID)"),
+                    on::click("loadExecutionBuilds($buildExecutionID)"),
                     $lang->refresh
                 )
             )
