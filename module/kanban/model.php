@@ -2531,15 +2531,8 @@ class kanbanModel extends model
         $index     = 0;
         foreach($this->lang->kanban->laneTypeList as $type => $name)
         {
-            if($type == 'epic'        && strpos($project->storyType, 'epic') === false)        continue;
-            if($type == 'requirement' && strpos($project->storyType, 'requirement') === false) continue;
-
-            /* 业务需求、用户需求和父软件需求共用同一个group. */
-            if(!in_array($type, array('epic', 'requirement')))
-            {
-                $groupID = $this->createGroup($executionID, $regionID);
-                if(dao::isError()) return false;
-            }
+            $groupID = $this->createGroup($executionID, $regionID);
+            if(dao::isError()) return false;
 
             $lane = new stdclass();
             $lane->execution = $executionID;
@@ -2554,20 +2547,7 @@ class kanbanModel extends model
             if(dao::isError()) return false;
             $laneID = $this->dao->lastInsertId();
 
-            /* 业务需求、用户需求和父软件需求共用同一套看板列. */
-            if(in_array($type, array('epic', 'requirement')))
-            {
-                $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
-                foreach($columnIDList as $columnID)
-                {
-                    $this->addKanbanCell($executionID, $laneID, $columnID, $lane->type);
-                    if(dao::isError()) return false;
-                }
-            }
-            else
-            {
-                $this->createRDColumn($regionID, $groupID, $laneID, $type, $executionID);
-            }
+            $this->createRDColumn($regionID, $groupID, $laneID, $type, $executionID);
 
             $index ++;
         }
@@ -2589,11 +2569,10 @@ class kanbanModel extends model
     public function createRDColumn(int $regionID, int $groupID, int $laneID, string $laneType, int $executionID)
     {
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
-        if($laneType == 'story') $columnList = $this->lang->kanban->storyColumn;
-        if($laneType == 'bug')   $columnList = $this->lang->kanban->bugColumn;
-        if($laneType == 'task')  $columnList = $this->lang->kanban->taskColumn;
-
-        if(in_array($laneType, array('parentStory', 'epic', 'requirement'))) $columnList = $this->lang->kanban->URSRColumn;
+        if($laneType == 'parentStory')  $columnList = $this->lang->kanban->URSRColumn;
+        if($laneType == 'story')        $columnList = $this->lang->kanban->storyColumn;
+        if($laneType == 'bug')          $columnList = $this->lang->kanban->bugColumn;
+        if($laneType == 'task')         $columnList = $this->lang->kanban->taskColumn;
 
         foreach($columnList as $type => $name)
         {

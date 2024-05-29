@@ -249,8 +249,6 @@ $lang->kanban->defaultColumn['closed'] = 'close';
 
 $lang->kanban->laneTypeList = array();
 $lang->kanban->laneTypeList['parentStory'] = "Parent " . $lang->SRCommon;
-$lang->kanban->laneTypeList['epic']        = $lang->ERCommon;
-$lang->kanban->laneTypeList['requirement'] = $lang->URCommon;
 $lang->kanban->laneTypeList['story']       = $lang->SRCommon;
 $lang->kanban->laneTypeList['bug']         = 'Bug';
 $lang->kanban->laneTypeList['task']        = 'Task';
