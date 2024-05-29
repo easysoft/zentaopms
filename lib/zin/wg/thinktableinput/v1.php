@@ -207,7 +207,7 @@ class thinkTableInput extends thinkQuestion
                         set::inline(true),
                         set::items($lang->thinkstep->requiredList),
                         set::value($required),
-                        bind::change('changeIsRequired(event)')
+                        on::change()->toggleClass('.required-rows', 'hidden', 'target.value == 0')
                     )
                 ),
                 formGroup
@@ -239,7 +239,7 @@ class thinkTableInput extends thinkQuestion
                         set::inline(true),
                         set::items($lang->thinkstep->requiredList),
                         set::value($supportAdd ? $supportAdd : 0),
-                        bind::change('changeSupportAdd(event)')
+                        on::change()->toggleClass('.can-add-rows', 'hidden', 'target.value == 0')
                     )
                 ),
                 formGroup
