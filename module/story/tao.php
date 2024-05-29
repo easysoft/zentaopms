@@ -356,6 +356,8 @@ class storyTao extends storyModel
                 $story->childItemTitle = $childItems[$story->id]['title'];
             }
 
+            $story->originParent = $story->parent;
+
             $story->parent = array();
             foreach(explode(',', trim((string)$story->path, ',')) as $parentID)
             {

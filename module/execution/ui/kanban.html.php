@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $laneCount = 0;
+$links     = array();
 foreach($kanbanList as $current => $region)
 {
     foreach($region['items'] as $index => $group)
@@ -42,6 +43,7 @@ foreach($kanbanList as $current => $region)
     }
 
     $laneCount += isset($region['laneCount']) ? $region['laneCount'] : 0;
+    $links      = $region['links'];
 }
 
 $operationMenu = array();
@@ -292,7 +294,10 @@ div
     (
         set::key('kanban'),
         set::items($kanbanList),
-        set::height('calc(100vh - 120px)')
+        set::height('calc(100vh - 120px)'),
+        set::links($links),
+        set::selectable(true),
+        set::showLinkOnSelected(true)
     )
 );
 

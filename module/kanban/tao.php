@@ -426,17 +426,38 @@ class kanbanTao extends kanbanModel
      */
     protected function buildRDRegionData(array $regionData, array $groups, array $laneGroup, array $columnGroup, array $cardGroup, string $searchValue = '')
     {
-        $laneCount = 0;
-        $groupData = array();
+        $laneCount    = 0;
+        $groupData    = array();
+        $fromKanbanID = '';
         foreach($groups as $group)
         {
             $lanes = zget($laneGroup, $group->id, array());
             if(!$lanes) continue;
 
+            $kanbanID = "group{$group->id}";
+
             $cols  = zget($columnGroup, $group->id, array());
             $items = zget($cardGroup, $group->id, array());
 
             if($searchValue != '' and empty($items)) continue;
+
+            foreach($lanes as $lane)
+            {
+                if($lane['type'] == 'parentStory') $fromKanbanID = $kanbanID;
+                if($lane['type'] == 'story')
+                {
+                    foreach($items as $colGroup)
+                    {
+                        foreach($colGroup as $cards)
+                        {
+                            foreach($cards as $card)
+                            {
+                                $regionData['links'][] = array('fromKanban' => $fromKanbanID, 'toKanban' => $kanbanID, 'from' => $card['parent'], 'to' => $card['id']);
+                            }
+                        }
+                    }
+                }
+            }
 
             /* 计算各个列上的卡片数量。 */
             $columnCount = array();
@@ -463,7 +484,7 @@ class kanbanTao extends kanbanModel
             $laneCount += count($lanes);
 
             $groupData['id']            = $group->id;
-            $groupData['key']           = "group{$group->id}";
+            $groupData['key']           = $kanbanID;
             $groupData['data']['lanes'] = $lanes;
             $groupData['data']['cols']  = $cols;
             $groupData['data']['items'] = $items;
@@ -499,6 +520,7 @@ class kanbanTao extends kanbanModel
         $item['pri']          = $card->pri;
         $item['color']        = $card->color;
         $item['assignedTo']   = $card->assignedTo;
+        $item['parent']       = !empty($card->originParent) ? $card->originParent : 0;
         $item['progress']     = !empty($card->progress) ? $card->progress : 0;
         $item['group']        = !empty($card->group) ? $card->group : '';
         $item['region']       = !empty($card->region) ? $card->region : '';

@@ -202,7 +202,11 @@ window.getItem = function(info)
 window.renderAvatar = function(item)
 {
     let assignLink = '';
-    if(item.cardType == 'parentStory' && priv.canAssignStory)       assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'parentStory')
+    {
+        return '<div class="avatar child-item rounded-full size-xs ml-1" title="' + storyLang.children + '" style="background: #ccc; color: #fff; cursor: pointer;"><i class="icon icon-split"></i></div>';
+    }
+
     if(item.cardType == 'story' && priv.canAssignStory)             assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
     if(item.cardType == 'bug' && priv.canAssignBug)                 assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
     if(item.cardType == 'task' && priv.canAssignTask)               assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
