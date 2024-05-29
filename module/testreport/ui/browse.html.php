@@ -16,7 +16,7 @@ foreach($reports as $report)
 {
     $taskName = '';
     foreach(explode(',', $report->tasks) as $taskID) $taskName .= '#' . $taskID . $tasks[$taskID] . ' ';
-    $report->tasks = $taskName;
+    $report->taskName = $taskName;
 }
 
 $config->testreport->dtable->fieldList['execution']['map'] = $executions;
