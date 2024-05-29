@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 namespace zin;
+
+/**
+ * 思引波特五力模型部件类。
+ * thinmory porter's five forces model widget class.
+ */
 class thinkPffa extends wg
 {
     protected static array $defineProps = array(
