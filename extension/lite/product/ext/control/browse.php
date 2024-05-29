@@ -87,7 +87,7 @@ class product extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', ($browseType != 'bysearch' and $browseType != 'reviewbyme' and $this->app->rawModule != 'projectstory'));
 
         /* Save session. */
-        $this->productZen->saveSession4Browse($product, $storyType, $browseType, $isProjectStory);
+        $this->productZen->saveSession4Browse($product, $browseType);
 
         /* Build search form. */
         $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
