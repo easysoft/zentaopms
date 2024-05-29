@@ -71,10 +71,11 @@ class storyZen extends story
      * @param  string    $branch
      * @param  int       $executionID
      * @param  string    $extra
+     * @param  string    $storyType
      * @access protected
      * @return void
      */
-    protected function setMenuForBatchCreate(int $productID, string $branch = '', int $executionID = 0, string $extra = ''): void
+    protected function setMenuForBatchCreate(int $productID, string $branch = '', int $executionID = 0, string $extra = '', $storyType = 'story'): void
     {
         $this->view->hiddenProduct = false;
         $this->view->hiddenPlan    = false;
@@ -125,7 +126,7 @@ class storyZen extends story
                 $output      = $this->story->parseExtra($extra);
                 $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
                 $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
-                $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, 'story');
+                $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, $storyType);
                 $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
                 $this->view->regionID    = $regionID;
@@ -268,10 +269,11 @@ class storyZen extends story
      *
      * @param  int       $objectID
      * @param  array     $kanbanSetting
+     * @param  string    $storyType
      * @access protected
      * @return void
      */
-    protected function setViewVarsForKanban(int $objectID, array $kanbanSetting): void
+    protected function setViewVarsForKanban(int $objectID, array $kanbanSetting, string $storyType = 'story'): void
     {
         if(empty($objectID)) return;
 
@@ -281,7 +283,7 @@ class storyZen extends story
         /* 如果是看板执行，设置看板的view变量。 */
         $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
         $regionID    = !empty($kanbanSetting['regionID']) ? $kanbanSetting['regionID'] : key($regionPairs);
-        $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, 'story');
+        $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, $storyType);
         $laneID      = !empty($kanbanSetting['laneID']) ? $kanbanSetting['laneID'] : key($lanePairs);
 
         $this->view->executionType = 'kanban';
@@ -1032,7 +1034,7 @@ class storyZen extends story
                 if($project->model !== 'scrum' or !$project->multiple) $hiddenPlan = true;
             }
         }
-        if($storyType != 'story') unset($fields['region'], $fields['lane'], $fields['branches'], $fields['modules'], $fields['plans']);
+        if($storyType != 'story') unset($fields['branches'], $fields['modules'], $fields['plans']);
         if($hiddenPlan) unset($fields['plan']);
         if($hiddenProduct)
         {

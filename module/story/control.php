@@ -103,7 +103,7 @@ class story extends control
         $initStory = $this->storyZen->initStoryForCreate($planID, $copyStoryID, $bugID, $todoID, $extra);
 
         /* Get form fields. */
-        $this->storyZen->setViewVarsForKanban($objectID, $this->story->parseExtra($extra));
+        $this->storyZen->setViewVarsForKanban($objectID, $this->story->parseExtra($extra), $storyType);
         $fields = $this->storyZen->getFormFieldsForCreate($productID, $branch, $objectID, $initStory, $storyType);
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
@@ -168,7 +168,7 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $this->storyZen->setMenuForBatchCreate($productID, $branch, $executionID, $extra);
+        $this->storyZen->setMenuForBatchCreate($productID, $branch, $executionID, $extra, $storyType);
 
         if($productID == 0 && $executionID != 0) return $this->sendError($this->lang->execution->errorNoLinkedProducts, $this->createLink('execution', 'manageproducts', "executionID=$executionID"));
 
