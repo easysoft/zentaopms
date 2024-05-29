@@ -13,3 +13,5 @@
 
 .member-list > .center-y {width: 12.5%}
 .maxh-80{max-height: 20rem;}
+
+#mainContent .desc-box {max-height: 6rem;}
