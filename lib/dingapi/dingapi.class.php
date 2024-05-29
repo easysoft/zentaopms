@@ -194,6 +194,95 @@ class dingapi
     }
 
     /**
+     * 根据open_id列表，获取用户。
+     * Batch get users by open_id list.
+     *
+     * @param  array    $userIdList
+     * @access public
+     * @return array
+     */
+    public function batchGetUsers($userIdList)
+    {
+        $useridPairs = array();
+        $userGroup   = array_chunk($userIdList, 49);
+        foreach($userGroup as $userIdList)
+        {
+            $urls = array();
+            foreach($userIdList as $userID) $urls[] = $this->apiUrl . "topapi/v2/user/get?access_token={$this->token}&userid={$userID}";
+            $datas = $this->multiRequest($urls);
+            foreach($datas as $response)
+            {
+                $response = json_decode($response);
+                if(empty($response->result)) continue;
+
+                $user = $response->result;
+                $useridPairs[$user->userid] = $user->name;
+            }
+        }
+
+        return $useridPairs;
+    }
+
+    /**
+     * Handle the concurrency of requests.
+     *
+     * @param  array    $urls
+     * @access public
+     * @return array
+     */
+    public function multiRequest($urls)
+    {
+        $curl        = curl_multi_init();
+        $urlHandlers = array();
+        $urlData     = array();
+
+        /* Set request header information. */
+        /* Initialize multiple request handles to one. */
+        foreach($urls as $url)
+        {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            if(!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] != 'on')
+            {
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            }
+
+            $urlHandlers[] = $ch;
+            curl_multi_add_handle($curl, $ch);
+        }
+
+        $active = null;
+        do
+        {
+            $mrc = curl_multi_exec($curl, $active);
+        }
+        while($mrc == CURLM_CALL_MULTI_PERFORM);
+
+        while($active and $mrc == CURLM_OK)
+        {
+            usleep(50000);
+            if(curl_multi_select($curl) != -1)
+            {
+                do
+                {
+                    $mrc = curl_multi_exec($curl, $active);
+                }
+                while($mrc == CURLM_CALL_MULTI_PERFORM);
+            }
+        }
+
+        foreach($urlHandlers as $index => $ch)
+        {
+            $urlData[$index] = curl_multi_getcontent($ch);
+            curl_multi_remove_handle($curl, $ch);
+        }
+        curl_multi_close($curl);
+        return $urlData;
+    }
+
+    /**
      * Check for errors.
      *
      * @access public

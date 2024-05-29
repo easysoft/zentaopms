@@ -442,6 +442,36 @@ class feishuapi
     }
 
     /**
+     * 根据open_id列表，获取用户。
+     * Batch get users by open_id list.
+     *
+     * @param  array    $userIdList
+     * @access public
+     * @return array
+     */
+    public function batchGetUsers($userIdList)
+    {
+        $openidPairs = array();
+        $userGroup   = array_chunk($userIdList, 49);
+        foreach($userGroup as $userIdList)
+        {
+            $urls = array();
+            foreach($userIdList as $userID) $urls[] = $this->apiUrl . "contact/v3/users/{$userID}";
+            $datas = $this->multiRequest($urls);
+            foreach($datas as $response)
+            {
+                $response = json_decode($response);
+                if(empty($response->data->user)) continue;
+
+                $user = $response->data->user;
+                $openidPairs[$user->open_id] = $user->name;
+            }
+        }
+
+        return $openidPairs;
+    }
+
+    /**
      * Check for errors.
      *
      * @access public
