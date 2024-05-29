@@ -441,19 +441,21 @@ class kanbanTao extends kanbanModel
 
             if($searchValue != '' and empty($items)) continue;
 
-            foreach($lanes as $lane)
+            $lane = current($lanes);
+            if($lane['type'] == 'parentStory')
             {
-                if($lane['type'] == 'parentStory') $fromKanbanID = $kanbanID;
-                if($lane['type'] == 'story')
+                if(empty($items)) continue;
+                $fromKanbanID = $kanbanID;
+            }
+            elseif($lane['type'] == 'story')
+            {
+                foreach($items as $colGroup)
                 {
-                    foreach($items as $colGroup)
+                    foreach($colGroup as $cards)
                     {
-                        foreach($colGroup as $cards)
+                        foreach($cards as $card)
                         {
-                            foreach($cards as $card)
-                            {
-                                $regionData['links'][] = array('fromKanban' => $fromKanbanID, 'toKanban' => $kanbanID, 'from' => $card['parent'], 'to' => $card['id']);
-                            }
+                            $regionData['links'][] = array('fromKanban' => $fromKanbanID, 'toKanban' => $kanbanID, 'from' => $card['parent'], 'to' => $card['id']);
                         }
                     }
                 }
