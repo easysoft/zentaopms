@@ -358,10 +358,11 @@ if(!window.kanbanDropRules)
         {
             backlog: ['ready', 'backlog'],
             ready: ['backlog', 'ready'],
-            tested: ['verified'],
-            verified: ['tested', 'released'],
+            tested: ['verified', 'rejected'],
+            verified: ['tested', 'pending', 'released'],
+            pending: ['verified', 'released'],
             released: ['verified', 'closed'],
-            closed: ['released'],
+            closed: ['released']
         },
         bug:
         {
