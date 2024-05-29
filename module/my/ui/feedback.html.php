@@ -12,6 +12,9 @@ namespace zin;
 
 include 'header.html.php';
 
+jsVar('errorNoProject',   $lang->feedback->noProject);
+jsVar('errorNoExecution', $lang->feedback->noExecution);
+
 featureBar
 (
     set::current($type),
@@ -74,6 +77,59 @@ dtable
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::footToolbar($footToolbar)
+);
+
+modal
+(
+    setID('toTask'),
+    set::modalProps(array('title' => $lang->feedback->selectProjects)),
+    to::footer
+    (
+        div
+        (
+            setClass('toolbar gap-4 w-full justify-center'),
+            btn($lang->feedback->nextStep, setID('toTaskButton'), setClass('primary'), set('data-on', 'click'), set('data-call', 'toTask')),
+            btn($lang->cancel, setID('cancelButton'), setData(array('dismiss' => 'modal')))
+        )
+    ),
+    formPanel
+    (
+        on::change('#taskProjects', 'changeTaskProjects'),
+        set::actions(''),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->feedback->project),
+                set::required(true),
+                set::control('picker'),
+                set::name('taskProjects'),
+                set::items($projects),
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->feedback->execution),
+                set::required(true),
+                inputGroup
+                (
+                    setID('executionBox'),
+                    picker
+                    (
+                        set::name('executions'),
+                        set::items(array())
+                    ),
+                    input
+                    (
+                        setClass('hidden'),
+                        set::name('feedbackID')
+                    )
+                )
+            )
+        )
+    )
 );
 
 render();
