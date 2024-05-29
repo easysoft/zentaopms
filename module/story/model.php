@@ -329,11 +329,9 @@ class storyModel extends model
         $type = strtolower($type);
         if(is_string($excludeStories))$excludeStories = explode(',', $excludeStories);
         $executions   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($executionIdList)->fetchAll('id');
-        $hasProject   = false;
         $hasExecution = false;
         foreach($executions as $execution)
         {
-            if($execution->type == 'project') $hasProject   = true;
             if($execution->type != 'project') $hasExecution = true;
         }
 
@@ -341,9 +339,7 @@ class storyModel extends model
         $unclosedStatus = $this->lang->story->statusList;
         unset($unclosedStatus['closed']);
 
-        $productParam = '';
-        $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
-        if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
+        $branchParam  = ($type == 'bybranch' and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
 
         $stories = $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -356,12 +352,9 @@ class storyModel extends model
             ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
             ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
-            ->beginIF($hasProject)
             ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
-            ->fi()
             ->beginIF($hasExecution)
-            ->beginIF(!empty($productParam))->andWhere('t1.product')->eq($productParam)->fi()
             ->beginIF($this->session->executionStoryBrowseType and strpos('changing|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
             ->fi()
             ->orderBy($orderBy)
