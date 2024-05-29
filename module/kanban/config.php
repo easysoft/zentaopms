@@ -77,11 +77,15 @@ $config->kanban->default->task->order = '15';
 $config->kanban->storyColumnStageList = array();
 $config->kanban->storyColumnStageList['backlog']    = 'projected';
 $config->kanban->storyColumnStageList['ready']      = 'projected';
+$config->kanban->storyColumnStageList['designing']  = 'designing';
+$config->kanban->storyColumnStageList['designed']   = 'designed';
 $config->kanban->storyColumnStageList['developing'] = 'developing';
 $config->kanban->storyColumnStageList['developed']  = 'developed';
 $config->kanban->storyColumnStageList['testing']    = 'testing';
 $config->kanban->storyColumnStageList['tested']     = 'tested';
 $config->kanban->storyColumnStageList['verified']   = 'verified';
+$config->kanban->storyColumnStageList['rejected']   = 'rejected';
+$config->kanban->storyColumnStageList['pending']    = 'pending';
 $config->kanban->storyColumnStageList['released']   = 'released';
 $config->kanban->storyColumnStageList['closed']     = 'closed';
 

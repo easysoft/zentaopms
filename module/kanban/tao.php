@@ -847,12 +847,13 @@ class kanbanTao extends kanbanModel
         {
             foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
             {
+                if(!isset($cardPairs[$colType])) continue;
                 if($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
                 {
                     $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                 }
 
-                if(strpos(',ready,backlog,develop,test,', $colType) !== false) continue;
+                if(strpos(',ready,backlog,design,develop,test,', $colType) !== false) continue;
 
                 if($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                 {

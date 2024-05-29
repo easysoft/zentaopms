@@ -2334,7 +2334,7 @@ class kanbanModel extends model
      */
     public function createExecutionColumns(int|array $laneID, string $type, int $executionID)
     {
-        $devColumnID = $testColumnID = $resolvingColumnID = 0;
+        $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
 
         $columns = array();
         if($type == 'story') $columns = $this->lang->kanban->storyColumn;
@@ -2350,6 +2350,7 @@ class kanbanModel extends model
             $data->type   = $colType;
             $data->region = 0;
 
+            if(str_contains(',designing,designed,',     ",{$colType},")) $data->parent = $designColumnID;
             if(str_contains(',developing,developed,',   ",{$colType},")) $data->parent = $devColumnID;
             if(str_contains(',testing,tested,',         ",{$colType},")) $data->parent = $testColumnID;
             if(str_contains(',fixing,fixed,',           ",{$colType},")) $data->parent = $resolvingColumnID;
@@ -2358,6 +2359,7 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
 
             $colID = $this->dao->lastInsertId();
+            if($colType == 'design')    $designColumnID    = $colID;
             if($colType == 'develop')   $devColumnID       = $colID;
             if($colType == 'test')      $testColumnID      = $colID;
             if($colType == 'resolving') $resolvingColumnID = $colID;
@@ -2568,7 +2570,7 @@ class kanbanModel extends model
      */
     public function createRDColumn(int $regionID, int $groupID, int $laneID, string $laneType, int $executionID)
     {
-        $devColumnID = $testColumnID = $resolvingColumnID = 0;
+        $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
         if($laneType == 'parentStory')  $columnList = $this->lang->kanban->URSRColumn;
         if($laneType == 'story')        $columnList = $this->lang->kanban->storyColumn;
         if($laneType == 'bug')          $columnList = $this->lang->kanban->bugColumn;
@@ -2583,16 +2585,18 @@ class kanbanModel extends model
             $data->group  = $groupID;
             $data->region = $regionID;
 
+            if(strpos(',designing,designed,', $type) !== false)   $data->parent = $designColumnID;
             if(strpos(',developing,developed,', $type) !== false) $data->parent = $devColumnID;
-            if(strpos(',testing,tested,', $type) !== false) $data->parent = $testColumnID;
-            if(strpos(',fixing,fixed,', $type) !== false) $data->parent = $resolvingColumnID;
-            if(strpos(',develop,test,resolving,', $type) !== false) $data->parent = -1;
+            if(strpos(',testing,tested,', $type) !== false)       $data->parent = $testColumnID;
+            if(strpos(',fixing,fixed,', $type) !== false)         $data->parent = $resolvingColumnID;
+            if(strpos(',design,develop,test,resolving,', $type) !== false) $data->parent = -1;
 
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
             if(dao::isError()) return false;
 
-            if($type == 'develop') $devColumnID  = $this->dao->lastInsertId();
-            if($type == 'test')    $testColumnID = $this->dao->lastInsertId();
+            if($type == 'design')    $designColumnID    = $this->dao->lastInsertId();
+            if($type == 'develop')   $devColumnID       = $this->dao->lastInsertId();
+            if($type == 'test')      $testColumnID      = $this->dao->lastInsertId();
             if($type == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
 
             $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);

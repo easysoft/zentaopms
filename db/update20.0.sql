@@ -74,7 +74,7 @@ ADD `finishedEpics` mediumint NOT NULL DEFAULT '0' AFTER `reviewingEpics`,
 ADD `closedEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `finishedEpics`,
 ADD `totalEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `closedEpics`;
 
-ALTER TABLE `zt_project` ADD `storyType` char(30) NULL DEFAULT '' AFTER `auth`;
+ALTER TABLE `zt_project` ADD `storyType` char(30) NULL DEFAULT 'story' AFTER `auth`;
 UPDATE `zt_project` SET storyType = 'story' WHERE storyType = '';
 
 CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
