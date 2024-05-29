@@ -143,18 +143,17 @@ class mailTao extends mailModel
      * Replace image URL for mail content.
      *
      * @param  string    $body
+     * @param  array     $images
      * @access protected
      * @return string
      */
-    protected function replaceImageURL(string $body): string
+    protected function replaceImageURL(string $body, array $images): string
     {
-        /* Replace full webPath image for mail. */
-        $sysURL      = zget($this->config->mail, 'domain', common::getSysURL());
-        $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
-
-        $body = preg_replace('/ src="(' . $readLinkReg . ')" /', ' src="' . $sysURL . '$1" ', $body);
-        $body = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $sysURL . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $body);
-        $body = preg_replace('/<img (.*)src="\/?data\/upload/', '<img $1 src="' . $sysURL . $this->config->webRoot . 'data/upload', $body);
+        foreach($images as $url => $file)
+        {
+            if(!$file) continue;
+            $body = str_replace($url, 'cid:' . basename($file), $body);
+        }
 
         return $body;
     }
