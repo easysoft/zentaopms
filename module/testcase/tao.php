@@ -510,7 +510,7 @@ class testcaseTao extends testcaseModel
         $this->loadModel('action');
         foreach($testtasks as $taskID => $testtask)
         {
-            if($testtask->branch != $branch && $taskID)
+            if(strpos(",{$testtask->branch},", ",{$branch},") === false && $taskID)
             {
                 $this->dao->delete()->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('`case`')->eq($caseID)->exec();
                 $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
