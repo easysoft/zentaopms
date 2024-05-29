@@ -48,7 +48,7 @@ window.loadExecutionBuilds = function()
         executionID == 0 ? $buildPicker.$.setValue('') : $buildPicker.$.setValue(oldBuild);
         if(data.length == 0 && executionID != 0)
         {
-            $('[name="build"]').closest('.input-group').find('.input-group-addon').removeClass('hidden').find('a').attr('href', $.createLink('build', 'create', "executionID=" + executionID + "&productID=" + productID + "&projectID=" + projectID));
+            $('[name="build"]').closest('.input-group').find('.input-group-addon').removeClass('hidden');
         }
         else
         {
