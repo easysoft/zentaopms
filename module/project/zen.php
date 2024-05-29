@@ -43,7 +43,7 @@ class projectZen extends project
         $copyProject = $this->project->getByID($copyProjectID);
         if($copyProject)
         {
-            $project->multiple   = $copyProject->multiple;
+            if(in_array($this->post->model, array('scrum', 'kanban'))) $project->multiple = $copyProject->multiple;
             $project->hasProduct = $copyProject->hasProduct;
         }
 
