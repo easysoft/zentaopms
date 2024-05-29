@@ -1733,7 +1733,7 @@ class actionModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->fetch();
         }
-        else
+        elseif(in_array($action->objectType, array('program', 'project', 'execution')))
         {
             $sprintProject = isset($object->project) ? $object->project : 0;
             $repeatObject  = $this->dao->select('*')->from(TABLE_PROJECT)
@@ -1748,6 +1748,11 @@ class actionModel extends model
                 ->beginIF($action->objectType == 'execution')->andWhere('type')->in('sprint,stage,kanban')->fi()
                 ->andWhere('deleted')->eq('0')
                 ->fetch();
+        }
+        else
+        {
+            $objectNameFields = $this->config->action->objectNameFields[$action->objectType];
+            $repeatObject     = $this->dao->select('*')->from($table)->where('id')->ne($action->objectID)->andWhere('deleted')->eq('0')->andWhere($objectNameFields)->eq($object->name)->fetch();
         }
 
         return array($repeatObject, $object);
