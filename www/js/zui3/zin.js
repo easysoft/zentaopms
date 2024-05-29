@@ -1629,6 +1629,8 @@
 
     $(() =>
     {
+        if($.apps.theme) changeAppTheme($.apps.theme);
+
         if(isIndexPage) return;
 
         initZinbar();
