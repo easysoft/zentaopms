@@ -2728,6 +2728,7 @@ class kanbanModel extends model
         if(empty($cardPairs)) return;
         $sourceCards = $cardPairs;
 
+        if(in_array($laneType, array('epic', 'requirement', 'parentStory'))) $cardPairs = $this->kanbanTao->refreshURSRCards($cardPairs, $executionID, $otherCardList, $laneType);
         if($laneType == 'story') $cardPairs = $this->kanbanTao->refreshStoryCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'bug')   $cardPairs = $this->kanbanTao->refreshBugCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'task')  $cardPairs = $this->kanbanTao->refreshTaskCards($cardPairs, $executionID, $otherCardList);

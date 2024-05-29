@@ -848,18 +848,7 @@ class storyModel extends model
             if(!empty($story->plan))    $this->action->create('productplan', (int)$story->plan, 'linkstory', '', $storyID);
         }
 
-        if(isset($story->stage) and $oldStory->stage != $story->stage)
-        {
-            $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t1.story')->eq($storyID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->fetchPairs('project', 'project');
-
-            $this->loadModel('kanban');
-            foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, 'story', $storyID);
-        }
+        if(isset($story->stage) and $oldStory->stage != $story->stage) $this->storyTao->updateLane($storyID, $oldStory->type);
 
         unset($oldStory->parent, $story->parent);
         if(in_array($this->config->edition, array('max', 'ipd')) && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
@@ -1445,8 +1434,8 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         /* Update parent story status and stage. */
-        if($oldStory->parent > 0)      $this->updateParentStatus($storyID, $oldStory->parent);
-        if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
+        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+        //if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
         if(!dao::isError())
         {
             $this->setStage($storyID);
@@ -1502,8 +1491,8 @@ class storyModel extends model
             }
 
             /* Update parent story status. */
-            if($oldStory->parent > 0)      $this->updateParentStatus($storyID, $oldStory->parent);
-            if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
+            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+            //if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
             $this->setStage($storyID);
 
             $changes = common::createChanges($oldStory, $story);

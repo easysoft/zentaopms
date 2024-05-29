@@ -771,6 +771,40 @@ class kanbanTao extends kanbanModel
     }
 
     /**
+     * 更新专业研发看板中的用需、业需、父需求泳道上的卡片。
+     * Update card of feature, epic, parent story lane in RD kanban.
+     *
+     * @param  array  $cardPairs
+     * @param  int    $executionID
+     * @param  string $otherCardList
+     * @param  string $laneType
+     * @access public
+     * @return array
+     */
+    protected function refreshURSRCards(array $cardPairs, int $executionID, string $otherCardList, $laneType = 'story'): array
+    {
+        $storyType = $laneType == 'parentStory' ? 'story' : $laneType;
+        $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', $storyType, $otherCardList);
+        foreach($stories as $storyID => $story)
+        {
+            foreach($this->lang->kanban->URSRColumn as $stage => $langItem)
+            {
+                if($story->stage != $stage and strpos($cardPairs[$stage], ",$storyID,") !== false)
+                {
+                    $cardPairs[$stage] = str_replace(",$storyID,", ',', $cardPairs[$stage]);
+                }
+
+                if($story->stage == $stage and strpos($cardPairs[$stage], ",$storyID,") === false)
+                {
+                    $cardPairs[$stage] = empty($cardPairs[$stage]) ? ",$storyID," : ",$storyID" . $cardPairs[$stage];
+                }
+            }
+        }
+
+        return $cardPairs;
+    }
+
+    /**
      * 更新专业研发看板中的需求泳道上的卡片。
      * Update card of story lane in RD kanban.
      *

@@ -878,6 +878,7 @@ class storyTao extends storyModel
             $actionID = $this->action->create('story', $oldStory->parent, 'unLinkChildrenStory', '', $storyID, '', false);
             $changes  = common::createChanges($oldParentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            $this->updateLane($oldParentStory->id, $oldParentStory->type);
         }
 
         if($story->parent > 0)
@@ -899,6 +900,7 @@ class storyTao extends storyModel
             $actionID = $this->action->create('story', $story->parent, 'linkChildStory', '', $storyID, '', false);
             $changes  = common::createChanges($parentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            $this->updateLane($parentStory->id, $parentStory->type);
         }
         else
         {
@@ -1500,6 +1502,28 @@ class storyTao extends storyModel
             }
         }
         return array($branchStatusList, $branchDevelCount, $branchTestCount, $branchDesignCount);
+    }
+
+    /**
+     * 更新关联的看板泳道卡片。
+     * Update linked lane.
+     *
+     * @param  int       $storyID
+     * @param  string    $storyType
+     * @access protected
+     * @return int
+     */
+    protected function updateLane(int $storyID, string $storyType)
+    {
+        $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.story')->eq($storyID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->in('sprint,stage,kanban')
+            ->fetchPairs('project', 'project');
+
+        $this->loadModel('kanban');
+        foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, $storyType, $storyID);
     }
 
     /**
