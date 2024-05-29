@@ -75,7 +75,7 @@ $config->programplan->custom->createFields              = 'PM,attribute,mileston
 $config->programplan->custom->createIpdFields           = 'PM,attribute,milestone';
 $config->programplan->custom->createWaterfallFields     = 'PM,attribute,milestone';
 $config->programplan->custom->createWaterfallplusFields = 'PM,attribute,milestone';
-if(!empty((bool)$config->setPercent)) $config->programplan->list->customCreateFields .= ',percent';
+if(isset($config->setPercent) && !empty((bool)$config->setPercent)) $config->programplan->list->customCreateFields .= ',percent';
 if(!empty($config->setCode))
 {
     $config->programplan->custom->createFields     .= ',code';
