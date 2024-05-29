@@ -50,6 +50,23 @@ foreach($linkedBranches as $branch)
         ) : null
     );
 }
+
+if(!$canCreate)
+{
+    $noticeField = $objectType . 'NotActive';
+    div
+    (
+
+        setClass('alert with-icon mb-4'),
+        icon('exclamation-sign text-warning text-2xl'),
+        div
+        (
+            setClass('content'),
+            $lang->repo->notice->$noticeField
+        )
+    );
+}
+
 empty($linkedBranches) ? null : div
 (
     div
@@ -57,7 +74,6 @@ empty($linkedBranches) ? null : div
         setClass('panel-title text-md'),
         $lang->repo->createdBranch
     ),
-
     h::table
     (
         setClass('table condensed bordered mb-4 mt-2 text-center'),
@@ -82,23 +98,6 @@ empty($linkedBranches) ? null : div
         $branchDom
     )
 );
-
-if(empty($linkedBranches) && !$canCreate)
-{
-    div
-    (
-        setClass('canvas text-center py-2'),
-        p
-        (
-            setClass('py-2 my-2'),
-            span
-            (
-                setClass('text-gray'),
-                $lang->noData
-            )
-        )
-    );
-}
 
 $canCreate ? formPanel
 (

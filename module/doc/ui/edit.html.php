@@ -83,6 +83,7 @@ $doc->type == 'text' ? form
         set::name('content'),
         set::size('full'),
         set::resizable(false),
+        $doc->contentType == 'markdown' ? set::markdown(true) : null,
         html($doc->content)
     ),
     formHidden('status', $doc->status),

@@ -55,6 +55,7 @@ class chart extends control
         $this->view->title       = $this->lang->chart->preview;
         $this->view->groups      = $this->loadModel('tree')->getGroupPairs($dimensionID, 0, 1);
         $this->view->treeMenu    = $this->chart->getTreeMenu($groupID);
+        $this->view->recTotal    = count($this->getMenuItems($this->view->treeMenu));
         $this->view->charts      = $charts;
         $this->view->dimensionID = $dimensionID;
         $this->view->groupID     = $groupID;

@@ -177,7 +177,6 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['GitFox'] = 'GitFox';
 $lang->repo->scmList['Gitlab'] = 'GitLab';
 if(!$config->inQuickon)
 {
@@ -216,6 +215,9 @@ $lang->repo->notice->lastSyncTime   = '最后更新于：';
 $lang->repo->notice->unlinkBranch   = '确认解除分支与%s的关联关系吗？';
 $lang->repo->notice->noRepoLeft     = '该服务器下的所有代码库都已经关联到禅道了，请选择其他服务器。';
 $lang->repo->notice->noChanges      = '没有代码差异';
+$lang->repo->notice->storyNotActive = '需求不是激活状态，不能创建分支。';
+$lang->repo->notice->taskNotActive  = '任务不是未开始或进行中状态，不能创建分支。';
+$lang->repo->notice->bugNotActive   = 'Bug不是激活状态，不能创建分支。';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "注释示例";

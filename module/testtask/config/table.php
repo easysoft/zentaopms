@@ -17,8 +17,8 @@ $config->testtask->dtable->fieldList['title']['fixed'] = 'left';
 $config->testtask->dtable->fieldList['build']['name']     = 'buildName';
 $config->testtask->dtable->fieldList['build']['title']    = $lang->testtask->build;
 $config->testtask->dtable->fieldList['build']['type']     = 'text';
-$config->testtask->dtable->fieldList['build']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}', 'data-app' => 'qa');
-$config->testtask->dtable->fieldList['build']['data-app'] = 'qa';
+$config->testtask->dtable->fieldList['build']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}');
+$config->testtask->dtable->fieldList['build']['data-app'] = 'execution';
 $config->testtask->dtable->fieldList['build']['group']    = 'text';
 
 $config->testtask->dtable->fieldList['product']['name']  = 'productName';

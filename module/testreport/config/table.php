@@ -19,7 +19,7 @@ $config->testreport->actionList['delete']['data-confirm'] = array('message' => $
 $config->testreport->actionList['create']['icon']     = 'refresh';
 $config->testreport->actionList['create']['hint']     = $lang->testreport->recreate;
 $config->testreport->actionList['create']['text']     = $lang->testreport->recreate;
-$config->testreport->actionList['create']['url']      = array('module' => 'testreport', 'method' => 'create', 'params' => 'reportID={id}');
+$config->testreport->actionList['create']['url']      = array('module' => 'testreport', 'method' => 'create', 'params' => 'reportID={objectID}&objectType={objectType}');
 $config->testreport->actionList['create']['data-app'] = $app->tab;
 
 $config->testreport->dtable->fieldList['id']['name']     = 'id';

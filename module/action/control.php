@@ -137,9 +137,9 @@ class action extends control
 
         /* 当对象类型为program、project、execution、product时，需要检查是否有重复的对象。 */
         /* When the object type is program, project, execution, product, you need to check if there are duplicate objects. */
-        if(in_array($oldAction->objectType, array('program', 'project', 'execution', 'product')))
+        if(in_array($oldAction->objectType, array('program', 'project', 'execution', 'product', 'build')))
         {
-            $table = $oldAction->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $table = $this->config->objectTables[$oldAction->objectType];
             list($repeatObject, $object) = $this->action->getRepeatObject($oldAction, $table);
 
             if($repeatObject)

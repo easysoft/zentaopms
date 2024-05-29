@@ -35,12 +35,12 @@ class bugZen extends bug
     {
         if($bug->execution && !$this->loadModel('execution')->checkPriv($bug->execution))
         {
-            if(isInModal())
+            if(isInModal() || !$this->server->http_referer)
             {
                 echo js::alert($this->lang->bug->notice->executionAccessDenied);
 
                 $loginLink = $this->createLink('user', 'login');
-                if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate($this->createLink('bug', 'index', '')));
+                if($this->server->http_referer && strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate($this->createLink('bug', 'index', '')));
 
                 if($this->app->tab == 'my') return print(js::reload('parent'));
 
@@ -50,8 +50,8 @@ class bugZen extends bug
             {
                 $locate    = array('load' => true);
                 $loginLink = $this->createLink('user', 'login');
-                if(strpos($this->server->http_referer, $loginLink) !== false) $locate = $this->createLink('bug', 'index');
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->notice->executionAccessDenied, 'load' => array('alert' => $this->lang->bug->notice->executionAccessDenied, 'locate' => $locate)));
+                if($this->server->http_referer && strpos($this->server->http_referer, $loginLink) !== false) $locate = $this->createLink('bug', 'index');
+                return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->bug->notice->executionAccessDenied, 'locate' => $locate)));
             }
         }
 
@@ -1072,6 +1072,17 @@ class bugZen extends bug
         $bug = $this->gettasksForCreate($bug);
         if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
 
+        $resultFiles = array();
+        if(!empty($resultID) && !empty($stepIdList))
+        {
+            $resultFiles = $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList));
+            foreach($resultFiles as $resultFile)
+            {
+                $resultFile->name = $resultFile->title;
+                $resultFile->url  = $this->createLink('file', 'download', "fileID={$resultFile->id}");
+            }
+        }
+
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->hyphen . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
@@ -1094,7 +1105,7 @@ class bugZen extends bug
         $this->view->allBuilds             = !empty($bug->allBuilds) ? $bug->allBuilds : '';
         $this->view->allUsers              = !empty($bug->allUsers)  ? $bug->allUsers  : '';
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds((int)$bug->productID, (string)$bug->branch);
-        $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
+        $this->view->resultFiles           = $resultFiles;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
     }
@@ -1822,25 +1833,26 @@ class bugZen extends bug
      */
     private function updateFileAfterCreate(int $bugID): bool
     {
-        if(isset($this->post->resultFiles))
+        $this->loadModel('file');
+        if(!empty($_POST['resultFiles']))
         {
             $resultFiles = $this->post->resultFiles;
-            if(isset($this->post->deleteFiles))
+            if($resultFiles) $resultFiles = json_decode($resultFiles, true);
+            if(!empty($_POST['deleteFiles']))
             {
-                foreach($this->post->deleteFiles as $deletedCaseFileID) $resultFiles = trim(str_replace(",$deletedCaseFileID,", ',', ",$resultFiles,"), ',');
+                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($resultFiles[$deletedCaseFileID]);
             }
-            $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($resultFiles)->fetchAll('id');
-            foreach($files as $file)
+            foreach($resultFiles as $file)
             {
-                unset($file->id);
-                $file->objectType = 'bug';
-                $file->objectID   = $bugID;
-                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                unset($file['id']);
+                $file['objectType'] = 'bug';
+                $file['objectID']   = $bugID;
+                $this->file->saveFile($file, 'url,deleted,realPath,webPath,name,url,extra');
             }
         }
 
         $uid = $this->post->uid ? $this->post->uid : '';
-        $this->loadModel('file')->updateObjectID($uid, $bugID, 'bug');
+        $this->file->updateObjectID($uid, $bugID, 'bug');
         $this->file->saveUpload('bug', $bugID);
 
         return !dao::isError();
@@ -2190,7 +2202,7 @@ class bugZen extends bug
         helper::setcookie('bugModule', '0', 0);
 
         /* Remove upload image file and session. */
-        if(!empty($_POST['uploadImage']) and !empty($_SESSION['bugImagesFile']))
+        if(!empty($_POST['uploadImage']) && !empty($_SESSION['bugImagesFile']))
         {
             $classFile = $this->app->loadClass('zfile');
             $file      = current($_SESSION['bugImagesFile']);

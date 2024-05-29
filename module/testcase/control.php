@@ -63,7 +63,6 @@ class testcase extends control
                 $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
                 $products = $this->product->getPairs($mode, 0, '', 'all');
             }
-            if(empty($products) && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch'))) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID"));
         }
         else
         {
@@ -90,6 +89,8 @@ class testcase extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
@@ -126,6 +127,8 @@ class testcase extends control
      */
     public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $projectID = 0, string $caseType = '')
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         /* 设置SESSION和COOKIE，获取产品信息。 */
         /* Set session and cookie, and get product. */
         $productID = $this->product->checkAccess($productID, $this->products);
@@ -172,6 +175,8 @@ class testcase extends control
      */
     public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         /* 设置 session, cookie 和菜单。*/
         /* Set session, cookie and set menu. */
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
@@ -241,6 +246,8 @@ class testcase extends control
      */
     public function create(int $productID, string $branch = '', int $moduleID = 0, string $from = '', int $param = 0, int $storyID = 0, string $extras = '')
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         if(!empty($_POST))
         {
             /* 构建用例。 */
@@ -299,6 +306,8 @@ class testcase extends control
      */
     public function batchCreate(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         if(!empty($_POST))
         {
             $testcases = $this->testcaseZen->buildCasesForBathcCreate($productID);
@@ -356,6 +365,8 @@ class testcase extends control
      */
     public function createBug(int $productID, int $caseID, int $version, int $runID = 0)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         /* 获取用例和用例执行结果。 */
         /* Get case and results. */
         $case = '';
@@ -410,6 +421,7 @@ class testcase extends control
         if(!$case)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            if(!$this->server->http_referer) return print(js::alert($this->lang->notFound) . js::locate($this->createLink('testcase', 'browse', '')));
             return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('testcase', 'browse'))));
         }
 
@@ -436,6 +448,8 @@ class testcase extends control
         /* If testcase isn't in case lib, assign associated variables. */
         else
         {
+            $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
             $productID = $case->product;
             $product   = $this->product->getByID($productID);
             $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
@@ -507,6 +521,7 @@ class testcase extends control
         }
         else
         {
+            $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
             $productID = $case->product;
 
             $this->testcaseZen->setMenuForCaseEdit($case, $executionID);
@@ -529,6 +544,7 @@ class testcase extends control
      */
     public function batchEdit(int $productID = 0, string $branch = '0', string $type = 'case', string $tab = '')
     {
+        if($type == 'case') $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
         if(!$this->post->caseIdList && !$this->post->id) $this->locate($this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$productID}"));
 
         $caseIdList = $this->post->caseIdList ? array_unique($this->post->caseIdList) : array_unique($this->post->id);
@@ -979,6 +995,8 @@ class testcase extends control
      */
     public function export(int $productID, string $orderBy, int $taskID = 0, string $browseType = '')
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         $product = $this->loadModel('product')->getByID($productID);
 
         if($product->shadow)           $this->config->testcase->exportFields = str_replace('product,', '', $this->config->testcase->exportFields);
@@ -1024,6 +1042,8 @@ class testcase extends control
      */
     public function exportTemplate(int $productID)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         if($_POST)
         {
             $num     = (int)$this->post->num;
@@ -1054,6 +1074,8 @@ class testcase extends control
      */
     public function import(int $productID, string $branch = '0')
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         if($_FILES)
         {
             /* 获取上传的文件。 */
@@ -1118,6 +1140,8 @@ class testcase extends control
      */
     public function importFromLib(int $productID, string $branch = '0', int $libID = 0, string $orderBy = 'id_desc', string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         /* 获取用例库，设置用例库 id 和分支。 */
         /* Get libraries, set lib id and branch. */
         $libraries = $this->loadModel('caselib')->getLibraries();
@@ -1196,6 +1220,8 @@ class testcase extends control
      */
     public function showImport(int $productID, string $branch = '0', int $pagerID = 1, int $maxImport = 0, string $insert = '')
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         /* Get file information. */
         $file    = $this->session->fileImport;
         $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
@@ -1320,6 +1346,8 @@ class testcase extends control
      */
     public function automation(int $productID = 0)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         if($_POST)
         {
             /* 设置语言项以便 form 类检查必填项时输出正确的字段名。*/
@@ -1371,6 +1399,8 @@ class testcase extends control
      */
     public function createScene(int $productID, string $branch = '', int $moduleID = 0)
     {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
         if($_POST)
         {
             $this->lang->testcase->title = $this->lang->testcase->sceneTitle;

@@ -226,10 +226,10 @@ class taskTao extends taskModel
     protected function checkEffort(object $effort): bool
     {
         $today = helper::today();
-        if(helper::isZeroDate($effort->date)) dao::$errors[] = $this->lang->task->error->dateEmpty;
-        if($effort->date > $today)            dao::$errors[] = $this->lang->task->error->date;
-        if($effort->consumed <= 0)            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
-        if($effort->left < 0)                 dao::$errors[] = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
+        if(helper::isZeroDate($effort->date)) dao::$errors['date']     = $this->lang->task->error->dateEmpty;
+        if($effort->date > $today)            dao::$errors['date']     = $this->lang->task->error->date;
+        if($effort->consumed <= 0)            dao::$errors['comsumed'] = sprintf($this->lang->error->gt, $this->lang->task->record, '0');
+        if($effort->left < 0)                 dao::$errors['left']     = sprintf($this->lang->error->ge, $this->lang->task->left, '0');
 
         return !dao::isError();
     }

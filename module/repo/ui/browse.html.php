@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('copied', $lang->repo->copied);
+jsVar('base64BranchID', $base64BranchID);
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
@@ -109,7 +110,7 @@ $downloadWg = div
 (
     set::id('modal-downloadCode'),
     set::title($lang->repo->downloadCode),
-    on('click', 'body', array('capture' => true, 'prevent' => true, 'stop' => true)),
+    on('click', '#modal-downloadCode', array('capture' => true, 'prevent' => true, 'stop' => true)),
     !empty($cloneUrl->svn) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->cloneUrl),
@@ -212,7 +213,7 @@ toolbar
 (
     a(
         set::className('last-sync-time'),
-        set::href($lastRevision->link),
+        empty($lastRevision->link) ? null : set::href($lastRevision->link),
         $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
     ),
     !in_array($repo->SCM, $config->repo->notSyncSCM) ? item(set($refreshItem)) : null,

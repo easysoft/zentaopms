@@ -376,6 +376,8 @@ class story extends control
 
         $this->storyZen->setFormOptionsForBatchEdit($productID, $executionID, $stories);
 
+        foreach($stories as $story) $story->branch = 'branch' . $story->branch;
+
         $this->view->title       = $this->lang->story->batchEdit;
         $this->view->productID   = $productID;
         $this->view->branch      = $branch;
@@ -571,6 +573,7 @@ class story extends control
         $this->view->gradePairs    = $this->story->getGradePairs($story->type, 'all');
         $this->view->showGrade     = $this->config->edition == 'ipd';
         $this->view->actions       = $this->action->getList('story', $storyID);
+        $this->view->branch        = $story->branch;
 
         $this->display();
     }
@@ -748,6 +751,8 @@ class story extends control
 
         $action = $story->status == 'changing' ? 'recalledChange' : 'Recalled';
         $this->loadModel('action')->create('story', $storyID, $action);
+
+        if($from == 'modal') return $this->send(array('result' => 'success', 'load' => 'modal'));
 
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
         if($from == 'view')
@@ -1858,6 +1863,7 @@ class story extends control
         if($storyType == 'requirement') $fileName = $this->lang->URCommon;
         if($storyType == 'epic')        $fileName = $this->lang->ERCommon;
         $project  = null;
+        $hasBranch = false;
         if($executionID)
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
@@ -1865,6 +1871,12 @@ class story extends control
             $project   = $execution;
             if($execution->type == 'execution') $project = $this->project->getById($execution->project);
             $this->lang->story->title = $this->lang->story->name;
+
+            $products  = $this->loadModel('product')->getProducts($executionID);
+            foreach($products as $product)
+            {
+                if($product->type != 'normal') $hasBranch = true;
+            }
         }
         else
         {
@@ -1875,6 +1887,7 @@ class story extends control
                 $productName = $product->name;
 
                 if($product->shadow) $project = $this->project->getByShadowProduct($productID);
+                if($product->type != 'normal') $hasBranch = true;
             }
             if(isset($this->lang->product->featureBar['browse'][$browseType]))
             {
@@ -1888,6 +1901,9 @@ class story extends control
             $fileName = $productName . $this->lang->dash . $browseType . $fileName;
         }
 
+        /* Unset branch field.  */
+        if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
+
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)
         {
@@ -1895,13 +1911,6 @@ class story extends control
             if($project->model != 'scrum') $filterFields[] = ', plan,';
             $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
-        $products  = $this->loadModel('product')->getProducts($executionID);
-        $hasBranch = false;
-        foreach($products as $product)
-        {
-            if($product->type != 'normal') $hasBranch = true;
-        }
-        if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;

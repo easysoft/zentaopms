@@ -367,7 +367,10 @@ class api extends control
         if(!empty($_POST))
         {
             /* 组装formData。 */
-            $formData = form::data($this->config->api->form->createLib)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
+            $fields = $this->config->api->form->createLib;
+            if($this->post->libType == 'project') $fields['project']['required'] = true;
+            if($this->post->libType == 'product') $fields['product']['required'] = true;
+            $formData = form::data($fields)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
             $formData->product   = $formData->libType == 'product' && !empty($formData->product)   ? $formData->product   : 0;
             $formData->project   = $formData->libType == 'project' && !empty($formData->project)   ? $formData->project   : 0;
             $formData->execution = $formData->libType == 'project' && !empty($formData->execution) ? $formData->execution : 0;

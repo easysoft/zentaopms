@@ -67,12 +67,12 @@ class thinkOptions extends wg
         (
             setID($id),
             setClass('think-options w-full'),
-            div(set::className('think-options-body')),
+            div(setClass('think-options-body')),
             zui::thinkOptions
             (
                 set::_to("#$id"),
                 set::deleteStepTip($deleteStepTip),
-                set::enterPlaceholder($lang->thinkstep->pleaseInput),
+                set::enterPlaceholder($lang->thinkstep->placeholder->pleaseInput),
                 set($this->props->pick(array('name', 'data')))
             ),
             $showOther ? div
@@ -92,7 +92,7 @@ class thinkOptions extends wg
                     (
                         setClass('h-full w-full flex items-center text-gray-400 pl-2.5'),
                         setStyle('background', 'rgba(244, 245, 247, .7)'),
-                        $lang->thinkstep->pleaseInput,
+                        $lang->thinkstep->placeholder->pleaseInput,
                     ),
                 ),
                 div

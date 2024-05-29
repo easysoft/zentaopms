@@ -192,6 +192,8 @@ class customModel extends model
         $menu = static::buildMenuItems($allMenu, $customMenuMap, $module, $order);
         ksort($menu, SORT_NUMERIC);
 
+        if(!isset($lang->{$tab})) return array();
+
         /* Set divider in main && module menu. */
         if(!isset($lang->{$tab}->menuOrder))
         {

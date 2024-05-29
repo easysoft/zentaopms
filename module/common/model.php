@@ -254,6 +254,7 @@ class commonModel extends model
             foreach($this->config->CSPs as $CSP) helper::header('Content-Security-Policy', "$CSP;");
         }
 
+        if(!empty($this->config->xFrameOptions)) helper::header('X-Frame-Options', $this->config->xFrameOptions);
         if($this->loadModel('setting')->getItem('owner=system&module=sso&key=turnon'))
         {
             if(isset($_SERVER["HTTPS"]) and $_SERVER["HTTPS"] == 'on')
@@ -261,10 +262,6 @@ class commonModel extends model
                 $session = $this->config->sessionVar . '=' . session_id();
                 helper::header('Set-Cookie', "$session; SameSite=None; Secure=true", false);
             }
-        }
-        else
-        {
-            if(!empty($this->config->xFrameOptions)) helper::header('X-Frame-Options', $this->config->xFrameOptions);
         }
     }
 
@@ -1222,8 +1219,9 @@ class commonModel extends model
          */
         $module    = $this->app->getModuleName();
         $whitelist = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|';
+        $skiplist  = '|cron-index|';
 
-        if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
+        if((strpos($whitelist, "|{$module}|") !== false && strpos($skiplist, "|{$module}-{$method}|") === false) || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
         /**
          * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
@@ -2882,6 +2880,7 @@ class commonModel extends model
 
         if($config->edition == 'open')     unset($lang->createIcons['effort']);
         if($config->systemMode == 'light') unset($lang->createIcons['program']);
+        if(empty($config->board))          unset($lang->createIcons['board']);
 
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)

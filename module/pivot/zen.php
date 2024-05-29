@@ -45,6 +45,25 @@ class pivotZen extends pivot
     }
 
     /**
+     * 获取菜单项。
+     * Get menu items.
+     *
+     * @param  array $menus
+     * @access protected
+     * @return array
+     */
+    protected function getMenuItems(array $menus): array
+    {
+        $items = array();
+        foreach($menus as $menu)
+        {
+            if(isset($menu->url)) $items[] = $menu;
+        }
+
+        return $items;
+    }
+
+    /**
      * 获取侧边栏菜单。
      * Get sidebar menus of pivot.
      *

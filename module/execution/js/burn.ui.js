@@ -1,6 +1,6 @@
 window.randTipInfo = function(rowDatas)
 {
-    let tipHtml = `<p>${rowDatas[0].name} ${workHour} /h</p>`;
+    let tipHtml = burnBy == 'storyPoint' ? `<p>${rowDatas[0].name} ${storyPoint} /sp</p>` : `<p>${rowDatas[0].name} ${workHour} /h</p>`;
     rowDatas.forEach(rowData =>
     {
         if(rowData.data == 'null') return;

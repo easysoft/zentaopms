@@ -9,12 +9,11 @@ class thinkStep  extends wg
         'action?: string="detail"',
         'addType?: string',
         'isRun?: bool=false',        // 是否是分析活动
-        'defaultFields: array',      // 默认的配置项
     );
 
     protected function buildBody(): wg|array
     {
-        list($item, $action, $addType, $isRun, $defaultFields) = $this->prop(array('item', 'action', 'addType', 'isRun', 'defaultFields'));
+        list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
 
         $step         = $addType ? null : $item;
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
@@ -23,7 +22,7 @@ class thinkStep  extends wg
         if($questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
         if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun));
         if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::defaultFields($defaultFields));
+        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun));
         return array();
     }
 
@@ -39,6 +38,8 @@ class thinkStep  extends wg
         $typeLang  = $action . 'Step';
         $type      = $addType ? $addType : ($basicType == 'question' ? $item->options->questionType : $basicType);
         $title     = $action == 'detail' ? ($lang->thinkstep->$basicType . $lang->thinkstep->info) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
+        $canEdit   = common::hasPriv('thinkstep', 'edit');
+        $canDelete = common::hasPriv('thinkstep', 'delete');
 
         return div
         (
@@ -55,17 +56,17 @@ class thinkStep  extends wg
                         setStyle(array('min-width' => '48px')),
                         btnGroup
                         (
-                            btn
+                            $canEdit ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),
                                 set::url(createLink('thinkstep', 'edit', "stepID={$item->id}")),
-                            ),
-                            !$item->existNotNode ? btn
+                            ) : null,
+                            $canDelete ? (!$item->existNotNode ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
-                                setData('url', createLink('thinkstep', 'ajaxDelete', "stepID={$item->id}")),
+                                setData('url', createLink('thinkstep', 'delete', "stepID={$item->id}")),
                                 setData('confirm',  $lang->thinkstep->deleteTips[$basicType])
                             ) : btn
                             (
@@ -76,7 +77,7 @@ class thinkStep  extends wg
                                     'data-title'     => $lang->thinkstep->cannotDeleteNode,
                                     'data-placement' => 'bottom-start',
                                 ))
-                            )
+                            )) : null
                         )
                     )
                 ),

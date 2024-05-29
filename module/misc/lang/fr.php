@@ -64,6 +64,7 @@ $lang->misc->checkTable  = "Vérifiez les Données de la Table";
 $lang->misc->needRepair  = "Réparer la Table";
 $lang->misc->repairTable = "La Base de Données est peut-être endommagée. Elle a besoin d'être vérifiée et éventuellement réparée !";
 $lang->misc->repairFail  = "La réparation a échoué. Allez dans le répertoire de données de votre table et essayez d'exécuter <code>myisamchk -r -f %s.MYI</code> pour la réparer. Mais on ne promet rien :-(";
+$lang->misc->withoutCmd  = 'La réparation a échoué.';
 $lang->misc->connectFail = "Echec de connexion à la Base de données. Erreur: %s，<br/>Vérifiez la log des erreurs MySQL et des dysfonctionnements.";
 $lang->misc->tableName   = "Nom de la Table";
 $lang->misc->tableStatus = "Statut";

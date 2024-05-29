@@ -25,7 +25,8 @@ class moduleMenu extends wg
         'tree?: array',
         'checkOnClick?: bool|string',
         'appendSettingItems?: array',
-        'onCheck?: function'
+        'onCheck?: function',
+        'toggleSidebar?: bool=true',
     );
 
     protected static array $defineBlocks = array
@@ -310,7 +311,7 @@ class moduleMenu extends wg
                 ),
                 $this->buildActions(),
                 $this->block('footer'),
-                row
+                $this->prop('toggleSidebar') ? row
                 (
                     setClass('justify-end p-1'),
                     btn
@@ -321,7 +322,7 @@ class moduleMenu extends wg
                         set::hint($app->lang->collapse),
                         on::click()->do('$this.closest(".sidebar").sidebar("toggle");')
                     )
-                ),
+                ) : null,
                 $isInSidebar && !empty($header) ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
             ),
        );

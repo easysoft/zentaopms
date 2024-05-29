@@ -47,4 +47,24 @@ class chartZen extends chart
 
         return $chart;
     }
+
+    /**
+     * 获取菜单项。
+     * Get menu items.
+     *
+     * @param  array $menus
+     * @access protected
+     * @return array
+     */
+    protected function getMenuItems(array $menus): array
+    {
+        $items = array();
+        foreach($menus as $menu)
+        {
+            if($menu->parent == 0) continue;
+            $items[] = $menu;
+        }
+
+        return $items;
+    }
 }

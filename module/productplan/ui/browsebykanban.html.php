@@ -50,6 +50,8 @@ else
     set::items($labelItems)
 ) : null;
 
+jsVar('plans', $plans);
+
 toolbar
 (
     set::className('w-full justify-end'),

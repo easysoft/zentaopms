@@ -124,16 +124,17 @@ class testtask extends control
 
         $this->testtaskZen->prepareSummaryForBrowse($testtasks);
 
-        $this->view->title     = $product->name . $this->lang->hyphen . $this->lang->testtask->common;
-        $this->view->users     = $users;
-        $this->view->tasks     = $testtasks;
-        $this->view->product   = $product;
-        $this->view->branch    = $branch;
-        $this->view->type      = $type;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
-        $this->view->beginTime = $beginTime;
-        $this->view->endTime   = $endTime;
+        $this->view->title           = $product->name . $this->lang->hyphen . $this->lang->testtask->common;
+        $this->view->users           = $users;
+        $this->view->tasks           = $testtasks;
+        $this->view->product         = $product;
+        $this->view->branch          = $branch;
+        $this->view->type            = $type;
+        $this->view->orderBy         = $orderBy;
+        $this->view->pager           = $pager;
+        $this->view->beginTime       = $beginTime;
+        $this->view->endTime         = $endTime;
+        $this->view->multipleSprints = $this->loadModel('execution')->fetchExecutionList(0, 'all', $productID);
         $this->display();
     }
 

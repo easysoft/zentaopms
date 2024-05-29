@@ -80,8 +80,6 @@ window.onRenderRow = function(row, rowIdx, data)
                 $type.render({disabled: true});
             });
         }
-
-        if(data.hasOwnProperty('id')) row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').remove();
     }
 
     if(!data || !data.planIDList) return;

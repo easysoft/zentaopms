@@ -79,7 +79,7 @@ class thinkRadio extends thinkQuestion
                     set::inline(true),
                     set::value($required),
                     set::items($requiredItems),
-                    $questionType == 'checkbox' ? bind::change('changeIsRequired(event)') : null
+                    $questionType == 'checkbox' ? on::change()->toggleClass('.selectable-rows', 'hidden', 'target.value == 0') : null
                 )
             ),
             $this->children()

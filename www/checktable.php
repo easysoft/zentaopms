@@ -63,7 +63,7 @@ $lang = new stdclass();
 $lang->misc = new stdclass();
 $lang->storyCommon     = '';
 $lang->productCommon   = '';
-$lang->executionCommon   = '';
+$lang->executionCommon = '';
 $lang->URCommon        = '';
 $lang->SRCommon        = '';
 $lang->productURCommon = '';
@@ -90,15 +90,15 @@ else
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $tables = array();
-        $stmt = $dbh->query("show full tables");
+        $stmt   = $dbh->query("select * from information_schema.tables where table_schema = '{$config->db->name}'");
         while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {
-            $tableName = $table["Tables_in_{$config->db->name}"];
-            $tableType = strtolower($table['Table_type']);
+            $tableName = $table["TABLE_NAME"];
+            $tableType = strtolower($table['TABLE_TYPE']);
             if($tableType == 'base table')
             {
                 $tableStatus = $dbh->query("$type table $tableName")->fetch();
-                $tables[$tableName] = strtolower($tableStatus->Msg_text);
+                $tables[$tableName] = array('status' => strtolower($tableStatus->Msg_text), 'engine' => strtolower($table['ENGINE']));
             }
         }
         $status = 'check';
@@ -143,12 +143,20 @@ else
         </thead>
         <tbody>
         <?php $needRepair = false;?>
-        <?php foreach($tables as $tableName => $tableStatus):?>
-        <?php if($tableStatus != 'ok') $needRepair = true;?>
+        <?php foreach($tables as $tableName => $tableInfo):?>
+        <?php if($tableInfo['status'] != 'ok') $needRepair = true;?>
           <tr>
             <td><?php echo $tableName;?></td>
-            <td><span style='color:<?php echo $tableStatus == 'ok' ? 'green' : 'red'?>'><?php echo $tableStatus;?></span></td>
-            <td><?php if($type == 'repair' and $tableStatus != 'ok') printf($lang->misc->repairFail, $tableName)?></td>
+            <td><span style='color:<?php echo $tableInfo['status'] == 'ok' ? 'green' : 'red'?>'><?php echo $tableInfo['status'];?></span></td>
+            <td>
+              <?php
+              if($type == 'repair' && $tableInfo['status'] != 'ok')
+              {
+                  if($tableInfo['engine'] == 'myisam') printf($lang->misc->repairFail, $tableName);
+                  if($tableInfo['engine'] == 'innodb') echo $lang->misc->withoutCmd;
+              }
+              ?>
+            </td>
           </tr>
         </tbody>
         <?php endforeach;?>

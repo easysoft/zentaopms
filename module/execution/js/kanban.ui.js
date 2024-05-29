@@ -101,28 +101,31 @@ window.checkProducts = function()
 window.buildColCardActions = function(col)
 {
     let actions = [];
+    let $group  = $(`[z-key=group${col.group}]`);
+    let laneID  = 0;
+    if($group.length) laneID = $group.find('.kanban-lane.is-first').attr('z-lane');
 
     if(col.type == 'backlog')
     {
         if(priv.canCreateStory)
         {
-            action = {text: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'};
+            action = {text: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'};
             actions.push(action);
         }
-        if(priv.canBatchCreateStory) actions.push({text: storyLang.batchCreate, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg', 'innerClass': 'story-batch-btn'});
-        if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=0,columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canBatchCreateStory) actions.push({text: storyLang.batchCreate, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&planID=0&storyType=story&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canLinkStory) actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + `&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=laneID=${laneID},columnID=` + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canLinkStoryByPlan) actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal', 'data-size': 'sm'});
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + col.region + ',groupID=' + col.group + ',laneID=' + 0 + ',columnID=' + col.id + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size' : 'lg'});
-        if(priv.canBatchCreateBug) actions.push({text: bugLang.batchCreate, url: productCount > 1 ? '#batchCreateBug' : $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=all&executionID=' + executionID + '&module=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + col.region + ',groupID=' + col.group + ',laneID=' + laneID + ',columnID=' + col.id + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canBatchCreateBug) actions.push({text: bugLang.batchCreate, url: productCount > 1 ? '#batchCreateBug' : $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=all&executionID=' + executionID + '&module=0&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     }
     else if(col.type == 'wait')
     {
-        if(priv.canCreateTask) actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
-        if(priv.canBatchCreateTask) actions.push({text: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&iframe=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
-        if(priv.canImportBug && vision == 'rnd') actions.push({text: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canCreateTask) actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canBatchCreateTask) actions.push({text: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&iframe=0&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canImportBug && vision == 'rnd') actions.push({text: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
     }
 
     return actions;
@@ -278,7 +281,7 @@ window.buildBugActions = function(item)
     if(priv.canCopyBug) actions.push({text: bugLang.copy, icon: 'copy', url: $.createLink('bug', 'create', 'productID=' + productID + '&branch=&extras=bugID=' + item.id + ',regionID=' + item.lane + ',laneID=' + item.lane + ',columnID=' + item.column + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canToStoryBug && (item.status != 'closed')) actions.push({text: bugLang.toStory, icon: 'lightbulb', url: $.createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canActivateBug && (item.status == 'fixed' || item.status == 'testing' || item.status == 'tested' || item.status == 'closed')) actions.push({text: bugLang.activate, icon: 'magic', url: $.createLink('bug', 'activate', 'bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canDeleteBug) actions.push({text: bugLang.delete, icon: 'trash', url: $.createLink('bug', 'delete', 'bugID=' + item.id), 'data-confirm': bugLang.confirmDelete, 'innerClass': 'ajax-submit'});
+    if(priv.canDeleteBug) actions.push({text: bugLang.delete, icon: 'trash', url: $.createLink('bug', 'delete', 'bugID=' + item.id + '&from=taskkanban'), 'data-confirm': bugLang.confirmDelete, 'innerClass': 'ajax-submit'});
 
     return actions;
 }
@@ -294,7 +297,7 @@ window.buildTaskActions = function(item)
     if(priv.canActivateTask && (item.status == 'developed' || item.status == 'canceled' || item.status == 'closed')) actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('task', 'activate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCreateTask) actions.push({text: taskLang.copy, icon: 'copy', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCancelTask && (item.status == 'wait' || item.status == 'developing' || item.status == 'pause')) actions.push({text: taskLang.cancel, icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canDeleteTask) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'taskID=' + item.id), 'data-confirm': taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
+    if(priv.canDeleteTask) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'executionID=0&taskID=' + item.id + '&from=taskkanban'), 'data-confirm': taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
 
     return actions;
 }

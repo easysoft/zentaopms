@@ -952,10 +952,11 @@ class task extends control
      *
      * @param  int    $executionID
      * @param  int    $taskID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function delete(int $executionID, int $taskID)
+    public function delete(int $executionID, int $taskID, string $from = '')
     {
         $task = $this->task->getByID($taskID);
         if($task->parent == '-1') return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
@@ -970,6 +971,10 @@ class task extends control
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
         $this->executeHooks($taskID);
+
+        /* 在看板中删除任务时的返回。*/
+        /* Respond when delete in kanban. */
+        if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
         $link = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
         return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));

@@ -554,16 +554,19 @@ class storyTao extends storyModel
      *
      * @param  dao         $storyDAO
      * @param  int         $productID
+     * @param  string      $branch
+     * @param  string      $type
      * @param  string      $orderBy
      * @param  object|null $pager
      * @access protected
      * @return int[]
      */
-    protected function fetchExecutionStories(dao $storyDAO, int $productID, string $orderBy, object|null $pager = null): array
+    protected function fetchExecutionStories(dao $storyDAO, int $productID, string $type, string $branch, string $orderBy, object|null $pager = null): array
     {
         $browseType     = $this->session->executionStoryBrowseType;
         $unclosedStatus = $this->getUnclosedStatusKeys();
         return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($type == 'bybranch' && $branch !== '')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF(!empty($browseType) && strpos('draft|reviewing|changing|closed', $browseType) !== false)->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'unclosed')->andWhere('t2.status')->in($unclosedStatus)->fi()
             ->orderBy($orderBy)

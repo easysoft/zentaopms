@@ -28,6 +28,9 @@ class chatBtn extends wg
         #xuan-chat-view .unconfigured {top: 50px;}
 
         #reload-ai-chat.disabled {cursor: wait; color: #999!important;}
+
+        #chat-btn .notice-badge {position: absolute; bottom: 2px; right: 1px; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
+        #chat-btn .notice-badge.show {opacity: 1; transform: scale(1);}
         CSS;
     }
 
@@ -154,7 +157,8 @@ class chatBtn extends wg
                 setClass('ghost px-1'),
                 set('square', false),
                 set::icon(img(set('src', 'static/svg/ai-chat.svg'))),
-                set('onclick', 'window.toggleChatContainer()')
+                set('onclick', 'window.toggleChatContainer()'),
+                span(setClass(array('badge', 'bg-danger', 'text-white', 'notice-badge')))
             )
         );
     }

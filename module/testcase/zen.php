@@ -12,6 +12,28 @@ declare(strict_types=1);
 class testcaseZen extends testcase
 {
     /**
+     * 检查是否有产品，如果没有则跳转到创建产品的页面。
+     * Check products.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function checkProducts(): void
+    {
+        $objectID = 0;
+        $tab      = $this->app->tab == 'project' || $this->app->tab == 'execution' ? $this->app->tab : 'qa';
+        if($this->app->tab == 'project')
+        {
+            $objectID = $this->session->project;
+        }
+        elseif($this->app->tab == 'execution')
+        {
+            $objectID = $this->session->execution;
+        }
+        if(empty($this->products) && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch'))) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID"));
+    }
+
+    /**
      * 设置列表页面的 cookie。
      * Set browse cookie.
      *
@@ -1370,9 +1392,18 @@ class testcaseZen extends testcase
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->get();
 
+        /* 如果用例产品是影子产品，同步用例到项目中。 */
+        $product = $this->loadModel('product')->getById($case->product);
+        if($product->shadow && empty($case->project))
+        {
+            $project = $this->loadModel('project')->getByShadowProduct($case->product);
+            $case->project = $project->id;
+        }
+
+        /* 如果用例的项目不为空，且不启用迭代，同步用例到影子迭代中。 */
         if(!empty($case->project))
         {
-            $project = $this->loadModel('project')->fetchByID($case->project);
+            if(!isset($project)) $project = $this->loadModel('project')->fetchByID($case->project);
             if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
         }
         return $case;

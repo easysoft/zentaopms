@@ -16,11 +16,6 @@ class thinkCheckbox extends thinkRadio
         'maxCount?: string',
     );
 
-    public static function getPageJS(): string
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function buildFormItem(): array
     {
         global $lang, $app;
@@ -45,7 +40,7 @@ class thinkCheckbox extends thinkRadio
                 setClass($className),
                 input
                 (
-                    set::placeholder($lang->thinkstep->inputContent),
+                    set::placeholder($lang->thinkstep->placeholder->inputContent),
                     set::type('number'),
                     set::min(1),
                     set::name('options[minCount]'),
@@ -58,7 +53,7 @@ class thinkCheckbox extends thinkRadio
                 setClass($className),
                 input
                 (
-                    set::placeholder($lang->thinkstep->inputContent),
+                    set::placeholder($lang->thinkstep->placeholder->inputContent),
                     set::type('number'),
                     set::min(1),
                     set::name('options[maxCount]'),

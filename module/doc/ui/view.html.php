@@ -170,7 +170,8 @@ $contentDom = div
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
                     $doc->type != 'text' ? setData('toggle', 'modal') : null,
                     setClass('btn ghost'),
-                    icon('edit')
+                    icon('edit'),
+                    setData('app', $app->tab)
                 ) : null,
                 common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
                 (
@@ -237,7 +238,14 @@ $contentDom = div
     div
     (
         setClass('detail-content article'),
-        html($doc->content)
+        $doc->contentType == 'markdown' ? editor
+        (
+            set::size('full'),
+            set::markdown(true),
+            set::readonly(true),
+            set::hideUI(true),
+            html($doc->content)
+        ) : html($doc->content)
     ),
     div
     (

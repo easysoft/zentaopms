@@ -1,0 +1,56 @@
+title: domain
+author: Yang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: domain
+    fields:
+    - field: domain1
+      range: "域名"
+    - field: domain2
+      range: 1-10
+  - field: adminURI
+    fields:
+    - field: adminURI1
+      prefix: "http://"
+      range: "www.adminURI"
+    - field: adminURI2
+      range: 1-10
+      postfix: ".com"
+  - field: resolverURI
+    fields:
+    - field: resolverURI1
+      prefix: "http://"
+      range: "www.resolverURL"
+    - field: resolverURI2
+      range: 1-10
+      postfix: ".com"
+  - field: register
+    range: 1-10
+    prefix: "register"
+  - field: expiredDate
+    range: "(-3M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: renew
+    range: 'auto,manual'
+  - field: account
+    range: admin
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: "(-3M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: editedBy
+    range: admin
+  - field: editedDate
+    range: "(-3M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: deleted
+    range: 0

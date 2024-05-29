@@ -468,7 +468,7 @@ class bug extends control
         $this->view->users      = $users;
         $this->view->assignedTo = isset($users[$oldBug->openedBy]) ? $oldBug->openedBy : $this->bug->getModuleOwner($oldBug->module, $oldBug->product);
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : '0', (int)$oldBug->project, 'stagefilter');
-        $this->view->builds     = $this->bugZen->addReleaseLabelForBuilds($oldBug->product, $builds);
+        $this->view->builds     = $this->build->addReleaseLabelForBuilds($oldBug->product, $builds);
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
@@ -1496,7 +1496,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit, 'all');
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit, 'single');
 
         unset($productBugs[$bugID]);
         if($type == 'json') return print(helper::jsonEncode($productBugs));

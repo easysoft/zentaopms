@@ -201,6 +201,8 @@ $config->repo->taskDtable->fieldList['name']['required']     = true;
 $config->repo->taskDtable->fieldList['name']['fixed']        = 'left';
 $config->repo->taskDtable->fieldList['name']['type']         = 'nestedTitle';
 $config->repo->taskDtable->fieldList['name']['title']        = $lang->task->name;
+$config->repo->taskDtable->fieldList['name']['data-toggle']  = 'modal';
+$config->repo->taskDtable->fieldList['name']['data-size']    = 'lg';
 $config->repo->taskDtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}', 'target' => '_blank');
 
 $config->repo->taskDtable->fieldList['finishedBy']['title']    = $lang->task->finishedByAB;

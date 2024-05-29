@@ -16,13 +16,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     {
         postAndLoadPage(url, form);
     }
-}).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
-{
-    const dtable = zui.DTable.query($('#table-execution-all'));
-    const checkedList = dtable.$.getChecks();
-    if(!checkedList.length) return;
-
-    $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
 });
 
 const today = zui.formatDate(new Date(), 'yyyy-MM-dd');

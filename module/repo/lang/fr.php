@@ -177,7 +177,6 @@ $lang->repo->logStyles['D'] = 'Suppression';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['GitFox'] = 'GitFox';
 $lang->repo->scmList['Gitlab'] = 'GitLab';
 if(!$config->inQuickon)
 {
@@ -216,6 +215,9 @@ $lang->repo->notice->lastSyncTime   = 'Dern Sync:';
 $lang->repo->notice->unlinkBranch   = 'Are you sure to disassociate the branch from %s?';
 $lang->repo->notice->noRepoLeft     = 'All repositories has been associated to ZenTaoPMS, please choose another server.';
 $lang->repo->notice->noChanges      = 'No Changes';
+$lang->repo->notice->storyNotActive = 'Story is not active, cannot create branch.';
+$lang->repo->notice->taskNotActive  = 'Task is not waiting or doing, cannot create branch.';
+$lang->repo->notice->bugNotActive   = 'Bug is not active, cannot create branch.';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "Comment Exemple";

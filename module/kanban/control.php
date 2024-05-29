@@ -537,7 +537,10 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $from == 'kanban' ? 'all' : 'story');
+        $laneType = $from == 'kanban' ? 'all' : 'story';
+        if($this->config->vision == 'lite') $laneType = 'task';
+
+        $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $laneType);
         $this->view->from     = $from;
         $this->view->regionID = $regionID;
 

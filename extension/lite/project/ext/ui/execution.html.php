@@ -101,7 +101,7 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
                 div(setClass('kanban-desc'), html($kanban->desc)),
                 row
                 (
-                    setClass('kanban-footer'),
+                    setClass('kanban-footer bottom-2'),
                     set::style(array('position' => 'relative')),
                     cell
                     (

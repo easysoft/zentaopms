@@ -460,7 +460,7 @@ class transferModel extends model
         {
             foreach($row as $field => $value)
             {
-                if(isset($fieldList[$field]['from']) and $fieldList[$field]['from'] == 'workflow') continue;
+                if(isset($fieldList[$field]['from']) && $fieldList[$field]['from'] == 'workflow') continue;
                 if(in_array($field, $dataSourceList))
                 {
                     /* 处理下拉框数据。*/
@@ -485,7 +485,7 @@ class transferModel extends model
 
                 /* 处理为空字段的情况。*/
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
-                if(is_string($value) and ($value == '0' or substr($value, 0, 4) == '0000')) $rows[$id]->$field = '';
+                if(is_string($rows[$id]->$field) && ($rows[$id]->$field == '0' || substr($rows[$id]->$field, 0, 4) == '0000')) $rows[$id]->$field = '';
             }
         }
 

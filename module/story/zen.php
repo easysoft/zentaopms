@@ -859,7 +859,7 @@ class storyZen extends story
             {
                 $options = $this->getFormOptionsForSingleProduct($storyProduct->id, $executionID, $storyProduct);
                 if($options['branchProduct'] && !$branchProduct) $branchProduct = true;
-                if($options['branchProduct']) $branchTagOption[$storyProduct->id] = array(BRANCH_MAIN => $this->lang->branch->main) + $options['branchTagOption'][$storyProduct->id];
+                if($options['branchProduct']) $branchTagOption[$storyProduct->id] = $options['branchTagOption'][$storyProduct->id];
                 $modules += $options['modules'];
                 $plans   += $options['plans'];
                 if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
@@ -925,7 +925,7 @@ class storyZen extends story
         if($branchProduct)
         {
             $branches = $this->branch->getList($productID, $executionID, 'all');
-            foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            foreach($branches as $branchInfo) $branchTagOption['branch' . $branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             $branches = array_keys($branches);
         }
 
@@ -1536,6 +1536,7 @@ class storyZen extends story
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->stage          = empty($story->stage) ? $oldStory->stage : $story->stage;
+            $story->branch         = !isset($story->branch) ? $oldStory->branch : str_replace('branch', '', $story->branch);
 
             if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
             if($oldStory->parent < 0) $story->plan = '';

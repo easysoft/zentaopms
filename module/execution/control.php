@@ -1993,6 +1993,7 @@ class execution extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         $stories = array_filter($stories, function($story) {return in_array($story->stage, $this->config->execution->storyKanbanCols);});
+        foreach($stories as $story) unset($story->type);
 
         /* Get execution's product. */
         $productID = 0;
@@ -2937,7 +2938,7 @@ class execution extends control
                 if($this->post->exportType == 'selected')
                 {
                     $checkedItem = $this->cookie->checkedItem;
-                    if(strpos(",$checkedItem,", ",{$execution->id},") === false) unset($executionStats[$i]);
+                    if(strpos(",$checkedItem,", ",pid{$execution->id},") === false) unset($executionStats[$i]);
                 }
             }
 
