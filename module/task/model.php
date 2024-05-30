@@ -2201,7 +2201,7 @@ class taskModel extends model
     public function isNoStoryExecution(object $execution): bool
     {
         if(empty($execution)) return false;
-        return $execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'));
+        return $execution->lifetime == 'ops';
     }
 
     /**

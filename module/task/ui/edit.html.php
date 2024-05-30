@@ -138,7 +138,7 @@ detailBody
                 $task->desc && isHTML($task->desc) ? html($task->desc) : $task->desc
             )
         ),
-        $execution->lifetime != 'ops' && !in_array($execution->attribute, array('request', 'review')) ? section
+        $execution->lifetime != 'ops' ? section
         (
             set::title($lang->task->story),
             formGroup
