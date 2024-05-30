@@ -208,6 +208,7 @@ function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', 
 function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
 function thinkStepMenu(): thinkStepMenu {return createWg('thinkStepMenu', func_get_args());}
 function thinkResult(): thinkResult {return createWg('thinkResult', func_get_args());}
+function thinkSwot(): thinkSwot {return createWg('thinkSwot', func_get_args());}
 function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args());}
 function affected(): affected {return createWg('affected', func_get_args());}
 function thinkPffa(): thinkPffa {return createWg('thinkPffa', func_get_args());}
