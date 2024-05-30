@@ -1168,12 +1168,12 @@ class storyZen extends story
 
         $storyData = form::data($fields)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
-            ->setIF($storyType != 'story', 'stage', 'defining')
             ->setIF($this->post->plan > 0 && $storyType == 'story', 'stage', 'planned')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
+            ->setIF($storyType != 'story', 'stage', 'defining')
             ->get();
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
