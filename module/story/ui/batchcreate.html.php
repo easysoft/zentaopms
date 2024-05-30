@@ -67,6 +67,7 @@ formBatchPanel
 (
     setID('dataform'),
     on::change('[data-name="branch"]', 'setModuleAndPlanByBranch'),
+    on::change('[data-name="region"]', 'changeRegion'),
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->hyphen . $this->lang->story->subdivide : $this->lang->story->batchCreate),
