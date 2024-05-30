@@ -96,6 +96,8 @@ class dropmenu extends wg
 
         if(strpos(',story-create,story-batchcreate,product-browse,', ",$module-$method,") !== false) $extra = data('storyType');
 
+        if($tab == 'dimension' && $module == 'tree' && $method == 'browsegroup') $extra = data('viewType');
+
         $branchMenu = null;
         if(($tab == 'product' || $tab == 'qa') && in_array($module, $app->config->hasBranchMenuModules) && !in_array("{$module}-{$method}", $app->config->excludeBranchMenu))
         {
