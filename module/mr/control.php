@@ -895,6 +895,7 @@ class mr extends control
    }
 
    /**
+    * 从代码托管服务器同步合并请求到禅道。
     * AJAX: sync Merge Requests from API server.
     *
     * @param  int  $repoID
@@ -910,6 +911,7 @@ class mr extends control
 
         $MRs = $this->dao->select('`id`,`sourceProject`,`sourceBranch`,`targetProject`,`targetBranch`,`mriid`')->from(TABLE_MR)->where('repoID')->eq($repoID)->fetchAll();
 
+        $existedMRs  = array();
         $needSyncMRs = $rawMRs;
         foreach($rawMRs as $index => $rawMR)
         {
@@ -925,6 +927,7 @@ class mr extends control
                 && $MR->sourceProject == $rawMR->source_project_id && $MR->sourceBranch  == $rawMR->source_branch
                 && $MR->targetProject == $rawMR->target_project_id && $MR->targetBranch  == $rawMR->target_branch)
                 {
+                    $existedMRs[$MR->id] = $needSyncMRs[$index];
                     unset($needSyncMRs[$index]);
                 }
             }
@@ -944,6 +947,8 @@ class mr extends control
             $MR->createdBy     = $this->app->user->account;
             $MR->createdDate   = helper::now();
             $MR->assignee      = $MR->createdBy;
+            $MR->status        = $needSyncMR->state ?: '';
+            $MR->mergeStatus   = $needSyncMR->merge_status ?: '';
             $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
                 ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
                 ->exec();
@@ -951,6 +956,23 @@ class mr extends control
             {
                 $mrID = $this->dao->lastInsertID();
                 $this->loadModel('action')->create('mr', $mrID, 'imported');
+            }
+        }
+
+        foreach($existedMRs as $mrID => $existedMR)
+        {
+            $MR = $this->mr->fetchByID($mrID);
+
+            $status      = $existedMR->state ?: '';
+            $mergeStatus = $existedMR->merge_status ?: '';
+            if($MR->title != $existedMR->title || $MR->status != $status || $MR->mergeStatus != $mergeStatus)
+            {
+                $newMR = new stdclass();
+                $newMR->title         = $existedMR->title;
+                $newMR->status        = $status;
+                $newMR->mergeStatus   = $mergeStatus;
+                $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($mrID)->exec();
+                if(!dao::isError()) $this->loadModel('action')->create('mr', $mrID, 'synced');
             }
         }
 
