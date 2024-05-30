@@ -42,10 +42,11 @@ window.changeRegion = function(e)
     const $region  = $(e.target);
     const regionID = $region.val();
     const laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lane');
-    $.get(laneLink, function(lane)
+    $.getJSON(laneLink, function(data)
     {
-        $region.closest('tr').find('[name^=lane]').zui('picker').render((JSON.parse(lane)));
-        $region.closest('tr').find('[name^=lane]').zui('picker').$.setValue(0);
+        const laneID = data.items.length > 0 ? data.items[0].value : '';
+        $region.closest('tr').find('[name^=lane]').zui('picker').render(data);
+        $region.closest('tr').find('[name^=lane]').zui('picker').$.setValue(laneID);
     });
 
 }
