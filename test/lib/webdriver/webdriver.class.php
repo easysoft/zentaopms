@@ -461,7 +461,6 @@ class dom
         foreach($this->element as $element)
         {
             $text = $element->getText();
-            var_dump($text);
             if(!$text) continue;
 
             $id = $element->getAttribute('id');
@@ -967,21 +966,38 @@ class dom
         $picker->click();
         sleep(1);
 
-        try
-        {
-            $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-search"]/input'));
-        }
-        catch (Exception $selectionException)
-        {
-            $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-selections"]/input'));
-        }
-        $pickerInput->click();
-        $pickerInput->sendKeys(trim($value));
+        $pickerList = array(
+            'search' => '//*[@class="picker-search"]/input',
+            'selections' => '//*[@class="picker-selections"]/input',
+            'form' =>'//*[@class="form-group-wrapper"]/div[@class="pick pick-pri form-control is-open focus"]',
+        );
 
-        sleep(1);
+        foreach($pickerList as $xpath => $xpathValue)
+        {
+            try
+            {
+                $pickerInput = $picker->findElement(WebDriverBy::xpath($xpathValue));
+                $pickerInput->click();
+                $pickerInput->sendKeys(trim($value));
+                sleep(1);
 
-        $pickerID = substr($picker->getAttribute('id'), 5);
-        $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+                $pickerID = substr($picker->getAttribute('id'), 5);
+
+                if($xpath != 'form')
+                {
+                    $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+                }
+                else 
+                {
+                    $this->driver->findElement(WebDriverBy::xpath("//button[@data-pick-value=$value]"))->click();
+                }
+                break;
+            } 
+            catch (Exception $selectionException)
+            {
+                continue;
+            }
+        }
 
         return $this;
     }
