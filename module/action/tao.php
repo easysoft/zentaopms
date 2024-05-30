@@ -436,7 +436,16 @@ class actionTao extends actionModel
         $object = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
         $condition = common::hasPriv($type, $method);
         if($onlyBody) $condition = $condition && !isonlybody();
-        if($object && $object->{$fields}) $action->extra = $condition ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#{$action->extra} " . $object->{$fields}) : "#{$action->extra} " . $object->{$fields};
+        if($object && $object->{$fields})
+        {
+            $misc = '';
+            if($action->objectType == 'bug' && $action->action == 'converttotask' && $type == 'task')
+            {
+                $isMultipleProject = $this->dao->select('multiple')->from(TABLE_PROJECT)->where('id')->eq($action->project)->fetch('multiple');
+                if($isMultipleProject) $misc = "data-app='execution'";
+            }
+            $action->extra = $condition ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#{$action->extra} " . $object->{$fields}, '', $misc) : "#{$action->extra} " . $object->{$fields};
+        }
     }
 
     /**
