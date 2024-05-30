@@ -43,10 +43,10 @@ if($viewType == 'story' && $allProduct)
             inputGroup
             (
                 setClass('row-module'),
-                picker(set::name("allProduct"), set::items($allProduct), on::change("syncProduct(e.target)")),
-                picker(set::name("productModule"), set::items(array())),
-                btn(setID('copyModule'), on::click("syncModule"), icon('copy'))
-            )
+                picker(setClass('col-module'), set::name("allProduct"), set::items($allProduct), on::change("syncProduct(e.target)"), set::required(true)),
+                picker(setClass('col-short'), set::name("productModule"), set::items($productModules), set::required(true)),
+            ),
+            btn(setID('copyModule'), on::click("syncModule"), icon('copy'), setClass('ghost'))
         )
     );
 }
