@@ -593,7 +593,7 @@ class admin extends control
             $cache = form::data()->get();
             $this->loadModel('setting')->setItem('system.common.global.cache', json_encode($cache));
 
-            $this->dao->clearCache();
+            if($cache->dao['enable'] != $this->config->cache->dao->enable) $this->dao->clearCache();
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
