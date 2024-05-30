@@ -917,7 +917,7 @@ class productZen extends product
             $project        = $this->loadModel('project')->fetchByID($projectID);
 
             if($browseType == 'bybranch') $param = $branchID;
-            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, $storyType, '', $pager);
+            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, 'all', '', $pager);
         }
         else
         {
