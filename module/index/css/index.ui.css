@@ -18,6 +18,7 @@
 #menu .nav > li > a.active {background: var(--zt-menu-active-bg, rgba(var(--color-primary-400-rgb), .7));}
 #menu .nav > li > a > .text {white-space: nowrap;}
 #menu .nav > li > a > .icon {font-size: 18px; display: inline-flex; align-items: center; justify-content: center;}
+@supports not (gap) {#menu .nav > li > a > .icon {margin-right: 4px;}}
 .show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 
 #menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
