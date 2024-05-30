@@ -31,7 +31,7 @@ $lang->install->desc             = <<<EOT
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 EOT;
 $lang->install->links = <<<EOT
-禅道项目管理软件由<strong><a href='https://www.cnezsoft.com' target='_blank' class='text-danger'>禅道软件（青岛）有限公司</a></strong>开发。
+禅道项目管理软件由<strong><a href='https://easycorp.cn' target='_blank' class='text-danger'>禅道软件（青岛）有限公司</a></strong>开发。
 官方网站：<a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
 技术支持：<a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
 新浪微博：<a href='https://weibo.com/easysoft' target='_blank'>https://weibo.com/easysoft</a>
