@@ -217,7 +217,14 @@ window.getItem = function(info)
     if(info.laneInfo.type == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'task' && priv.canAssignTask)   assignLink = $.createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
-    if(assignLink) avatar = "<a href='" + assignLink + "' data-toggle='modal'>" + avatar + "</a>";
+    if(assignLink)
+    {
+        avatar = "<a href='" + assignLink + "' data-toggle='modal'>" + avatar + "</a>";
+    }
+    else if(['parentStory', 'requirement', 'epic'].includes(info.laneInfo.type))
+    {
+        avatar = '<div class="avatar child-item rounded-full size-xs ml-1" title="' + storyLang.children + '" style="background: #ccc; color: #fff; cursor: pointer;"><i class="icon icon-split"></i></div>';
+    }
 
     const content = `
       <div class='flex items-center'>

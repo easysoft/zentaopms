@@ -3,3 +3,4 @@
 .toolbar .kanbanSetting.btn-link .caret{display: none;}
 .dropdown-menu .menu-divider a{display:none;}
 .as-subtitle {opacity: 0.5; text-wrap: nowrap; font-weight: 700;}
+.card.selected .child-item .icon {color: var(--color-primary-500)}
