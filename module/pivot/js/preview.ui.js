@@ -264,17 +264,16 @@ getCellSpan = function(cell)
  * @access public
  * @return int
  */
-getHeight = function(height)
+window.getHeight = function(height = 800)
 {
-    const windowHeight       = $(window).height();
-    const headerHeight       = $('#header').outerHeight();
-    const menuHeight         = $('#mainMenu').outerHeight();
-    const parentHeight       = $('#pivotPanel').parent().outerHeight();
-    const conditionHeight    = $('#conditions').length == 1 ? $('#conditions').outerHeight(true) : 0;
-    const panelHeight        = $('#pivotPanel').outerHeight(true);
-    const panelHeadingHeight = $('#pivotPanel .panel-heading').outerHeight();
-    const panelBodyPaddingY  = $('#pivotPanel .panel-body').innerHeight() - $('#pivotPanel .panel-body').height();
-    const parentGapHeight    = parentHeight - conditionHeight - panelHeight;
+    const windowHeight = $(window).height();
 
-    return Math.min(windowHeight - headerHeight - menuHeight - conditionHeight - parentGapHeight - panelHeadingHeight - panelBodyPaddingY, height);
+    const $panelBody = $('#pivotPanel .panel-body');
+    const styles = $panelBody.length ? window.getComputedStyle($panelBody[0]) : null;
+    const paddingBottom = parseInt(styles?.paddingBottom ?? 0, 10);
+
+    const boundingRect = $panelBody.length ? $panelBody[0].getBoundingClientRect() : null;
+    const offsetTop = boundingRect?.y ?? 0;
+
+    return Math.min(windowHeight - offsetTop - paddingBottom * 2 - 10, height);
 }

@@ -1164,16 +1164,15 @@ $config->my->execution->dtable->fieldList['subStatus']['show']   = false;
 
 $config->my->doc = new stdclass();
 $config->my->doc->actionList = array();
-$config->my->doc->actionList['edit']['icon']        = 'edit';
-$config->my->doc->actionList['edit']['text']        = $lang->edit;
-$config->my->doc->actionList['edit']['hint']        = $lang->edit;
-$config->my->doc->actionList['edit']['url']         = array('module' => 'doc', 'method' => 'edit', 'params' => "docID={id}&comment=false&from={$lang->navGroup->doc}");
-$config->my->doc->actionList['edit']['data-toggle'] = 'modal';
+$config->my->doc->actionList['edit']['icon'] = 'edit';
+$config->my->doc->actionList['edit']['text'] = $lang->edit;
+$config->my->doc->actionList['edit']['hint'] = $lang->edit;
+$config->my->doc->actionList['edit']['url']  = array('module' => 'doc', 'method' => 'edit', 'params' => "docID={id}");
 
 $config->my->doc->actionList['delete']['icon'] = 'trash';
 $config->my->doc->actionList['delete']['text'] = $lang->delete;
 $config->my->doc->actionList['delete']['hint'] = $lang->delete;
-$config->my->doc->actionList['delete']['url']  = array('module' => 'doc', 'method' => 'delete', 'params' => "docID={id}&confirm=no&from={$lang->navGroup->doc}");
+$config->my->doc->actionList['delete']['url']  = array('module' => 'doc', 'method' => 'delete', 'params' => "docID={id}");
 
 $config->my->doc->dtable = new stdclass();
 $config->my->doc->dtable->fieldList['id']['name']  = 'id';

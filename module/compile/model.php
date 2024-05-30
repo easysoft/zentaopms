@@ -146,7 +146,7 @@ class compileModel extends model
             $userPWD = $this->loadModel('jenkins')->getApiUserPWD($jenkins);
 
             $urlPrefix = $this->compileTao->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
-            $infoUrl   = sprintf($urlPrefix . 'api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $compile->queue);
+            $infoUrl   = $urlPrefix . sprintf('api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $compile->queue);
             $result    = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD), array(), 'data', 'POST', 30, true);
 
             /* Check error. */

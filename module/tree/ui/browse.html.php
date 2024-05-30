@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('rootID', $root->id);
 jsVar('viewType', $viewType);
+jsVar('noSubmodule', $lang->tree->noSubmodule);
 
 $manageTitle = $lang->tree->manageChild;
 if(strpos($viewType, 'doc') !== false)
@@ -32,12 +33,31 @@ $maxOrder = 0;
 
 /* Generate module rows. */
 $moduleRows = array();
+if($viewType == 'story' && $allProduct)
+{
+    $moduleRows[] = formRow
+    (
+        setClass('copyBox hidden'),
+        formGroup
+        (
+            inputGroup
+            (
+                setClass('row-module'),
+                picker(setClass('col-module'), set::name("allProduct"), set::items($allProduct), on::change("syncProduct(e.target)"), set::required(true)),
+                picker(setClass('col-short'), set::name("productModule"), set::items($productModules), set::required(true)),
+            ),
+            btn(setID('copyModule'), on::click("syncModule"), icon('copy'), setClass('ghost'))
+        )
+    );
+}
+
 foreach($sons as $son)
 {
     if($son->order > $maxOrder) $maxOrder = $son->order;
 
     $moduleRows[] = formRow
     (
+        setClass('sonModule'),
         formGroup
         (
             inputGroup
@@ -51,9 +71,8 @@ foreach($sons as $son)
                     set::value($son->name),
                     set::placeholder($placeholder)
                 ),
-                picker
+                empty($branches) ? null : picker
                 (
-                    setClass(empty($branches) ? 'hidden' : ''),
                     set::name("branch[id$son->id]"),
                     set::items($branches),
                     set::value($son->branch),
@@ -76,10 +95,7 @@ foreach($sons as $son)
                     set::control('hidden')
                 )
             ),
-            batchActions
-            (
-                set::actionClass('action-group child-hidden')
-            )
+            batchActions(set::actionClass('action-group child-hidden'))
         )
     );
 }
@@ -102,15 +118,14 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                 input
                 (
                     setClass('col-module'),
-                    set::name("modules[$i]"),
+                    set::name("modules[]"),
                     set::type('input'),
                     set::value(''),
                     set::placeholder($placeholder)
                 ),
-                picker
+                empty($branches) ? null : picker
                 (
-                    setClass(empty($branches) ? 'hidden' : ''),
-                    set::name("branch[$i]"),
+                    set::name("branch[]"),
                     set::items($branches),
                     set::value($initBranch),
                     set::required(true)
@@ -118,15 +133,12 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                 input
                 (
                     setClass('col-short'),
-                    set::name("shorts[$i]"),
+                    set::name("shorts[]"),
                     set::type('input'),
                     set::placeholder($lang->tree->short)
                 )
             ),
-            batchActions
-            (
-                set::actionClass('action-group')
-            )
+            batchActions(set::actionClass('action-group'))
         )
     );
 }
@@ -235,6 +247,12 @@ div
         (
             setClass('pb-4'),
             set::title($manageTitle),
+            to::headingActions
+            (
+                ($viewType == 'story'    && $allProduct && $canBeChanged) ? btn(setClass('primary'), set::size('sm'), $lang->tree->syncFromProduct, on::click('toggleCopy')) : null,
+                ($viewType == 'feedback' && common::hasPriv('feedback', 'syncProduct') && !isset($syncConfig[$rootID])) ? btn(setClass('primary'), set::size('sm'), set::url(createLink('feedback', 'syncProduct', "productID=$rootID&module=feedback&parent=$parent")), setData('toggle', 'modal'), $lang->tree->syncProductModule) : null,
+                ($viewType == 'ticket'   && common::hasPriv('ticket', 'syncProduct')   && !isset($syncConfig[$rootID])) ? btn(setClass('primary'), set::size('sm'), set::url(createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent")), setData('toggle', 'modal'), $lang->tree->syncProductModule) : null
+            ),
             div
             (
                 setClass('flex'),

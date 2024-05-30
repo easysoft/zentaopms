@@ -679,9 +679,9 @@ class actionModel extends model
 
         if($action->objectType == 'board')
         {
-            if(in_array($action->action, array('importstory', 'importdemand')))
+            if(in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
             {
-                if($action->action == 'importstory')
+                if($action->action == 'importstory' || $action->action == 'importrequirement')
                 {
                     $story = $this->loadModel('story')->getById((int)$action->extra);
                     $link  = helper::createLink('story', 'view', "storyID={$action->extra}");

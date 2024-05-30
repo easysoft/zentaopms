@@ -14,9 +14,9 @@ use function zin\utils\flat;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-$isInModal   = isInModal();
-$isStoryType = $story->type == 'story';
-if(!isset($executionID)) $executionID = 0;
+$isInModal     = isInModal();
+$isRequirement = $story->type == 'requirement';
+$isStoryType   = $story->type == 'story';
 
 /* 版本列表。Version list. */
 $versions = array();
@@ -238,6 +238,7 @@ foreach($actions as $key => $action)
 
 detail
 (
+    set::urlFormatter(array('{id}' => $story->id, '{type}' => $story->type, '{product}' => $story->product, '{branch}' => $story->branch, '{module}' => $story->module, '{execution}' => isset($executionID) ? $executionID : (isset($projectID) ? $projectID : 0))),
     set::objectType('story'),
     set::toolbar($toolbar),
     set::sections($sections),

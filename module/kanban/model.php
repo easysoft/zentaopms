@@ -186,8 +186,8 @@ class kanbanModel extends model
             $copyLanes     = isset($copyLaneGroup[$copyGroupID]) ? $copyLaneGroup[$copyGroupID] : array();
             $copyColumns   = isset($copyColumnGroup[$copyGroupID]) ? $copyColumnGroup[$copyGroupID] : array();
 
-            $this->copyColumns($copyColumns, $regionID, $newGroupID, $from);
             $lanePairs = $this->copyLanes($kanban, $copyLanes, $regionID, $newGroupID);
+            $this->copyColumns($copyColumns, $regionID, $newGroupID, $from);
             if(dao::isError()) return false;
 
             if($param == 'updateTaskCell')

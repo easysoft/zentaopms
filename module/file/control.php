@@ -190,7 +190,7 @@ class file extends control
                 $output .= '"';
                 foreach($fields as $fieldName => $fieldLabel)
                 {
-                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
+                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }
                 $output .= '"' . "\n";

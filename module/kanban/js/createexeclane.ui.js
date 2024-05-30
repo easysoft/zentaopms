@@ -12,7 +12,9 @@ window.changeLaneType = function(e)
     $.get(link, function(data)
     {
         data = JSON.parse(data);
-        $('[name=otherLane]').zui('picker').$.setValue('');
         $('[name=otherLane]').zui('picker').render(data);
+        $('[name=otherLane]').zui('picker').$.setValue('');
+        $('[name=mode]').val(data.items.length ? 'sameAsOther' : 'independent');
+        changeMode();
     })
 }

@@ -151,7 +151,7 @@ window.buildColCardActions = function(col)
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
+        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateBug)
         {
             if(productNum > 1) actions.push({text: bugLang.batchCreate, url: '#batchCreateBug', 'data-toggle': 'modal', 'data-size': 'lg'});

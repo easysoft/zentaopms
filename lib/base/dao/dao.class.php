@@ -341,6 +341,8 @@ class baseDAO
         /* Check if the update time of the tables in the sql is greater than the cache time, if greater, don't use the cache. */
         foreach($tables[1] as $table)
         {
+            if(strpos($table, 'boardlayer') !== false) return self::CACHE_MISS;
+
             $tableCache = $this->cache->get($table);
             if($tableCache === null) continue;
 

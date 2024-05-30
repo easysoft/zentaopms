@@ -50,6 +50,8 @@ class taskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
+        if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
+
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
         {
@@ -1105,7 +1107,11 @@ class taskModel extends model
         /* Manage the team of task and calculate the team hours. */
         $task->id = $taskID;
         $teams    = $this->manageTaskTeam($task->mode, $task, $teamData);
-        if($teams) $this->computeMultipleHours($task);
+        if($teams)
+        {
+            $this->computeMultipleHours($task);
+            $this->loadModel('program')->refreshProjectStats($task->project);
+        }
 
         return $taskID;
     }
@@ -1136,6 +1142,7 @@ class taskModel extends model
         /* 更新任务、父任务状态、需求阶段。*/
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($effort->objectID)->exec();
 
+        if($task->consumed != $data->consumed || $task->left != $data->left) $this->loadModel('program')->refreshProjectStats($task->project);
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
 
@@ -1172,11 +1179,11 @@ class taskModel extends model
             $task = $this->computeMultipleHours($oldTask, $task);
         }
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()
-            ->where('id')->eq((int)$oldTask->id)
-            ->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
 
         if(dao::isError()) return false;
+
+        if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
         return common::createChanges($oldTask, $task);
@@ -2239,11 +2246,7 @@ class taskModel extends model
             $removedMembers = array_diff($oldMembers, $teams);
             $changeUsers    = array_merge($changeUsers, $removedMembers);
         }
-        if($changeUsers)
-        {
-            $this->taskTao->resetEffortLeft($task->id, $changeUsers);
-            $this->loadModel('program')->refreshProjectStats($task->project);
-        }
+        if($changeUsers) $this->taskTao->resetEffortLeft($task->id, $changeUsers);
 
         return $teams;
     }
@@ -2789,12 +2792,12 @@ class taskModel extends model
             }
         }
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()
-            ->checkFlow()
-            ->where('id')->eq($oldTask->id)
-            ->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($oldTask->id)->exec();
 
         if(dao::isError()) return false;
+
+        if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
+
         return common::createChanges($oldTask, $task);
     }
 
@@ -2811,6 +2814,7 @@ class taskModel extends model
     {
         $taskID  = $task->id;
         $oldTask = $this->getByID($taskID);
+        $task->project = $oldTask->project;
 
         if($task->consumed < $oldTask->consumed)
         {
@@ -2830,6 +2834,8 @@ class taskModel extends model
 
         $this->taskTao->doUpdate($task, $oldTask, $requiredFields);
         if(dao::isError()) return false;
+
+        if($task->estimate != $oldTask->estimate || $task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         $this->afterUpdate($oldTask, $task);
 
@@ -2895,6 +2901,8 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
 
         if(dao::isError()) return false;
+
+        if($task->consumed != $data->consumed || $task->left != $data->left) $this->loadModel('program')->refreshProjectStats($task->project);
 
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)      $this->loadModel('story')->setStage($task->story);
@@ -3231,6 +3239,9 @@ class taskModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        if($task->estimate != $oldTask->estimate || $task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
+
         return common::createChanges($oldTask, $task);
     }
 

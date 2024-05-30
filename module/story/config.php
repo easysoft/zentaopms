@@ -112,17 +112,19 @@ $config->story->actionList['importToLib']['url']         = '#importToLib';
 $config->story->actionList['importToLib']['data-toggle'] = 'modal';
 
 $app->loadLang('testcase');
-$config->story->actionList['createTestcase']['text']        = $lang->testcase->create;
-$config->story->actionList['createTestcase']['hint']        = $lang->testcase->create;
-$config->story->actionList['createTestcase']['url']         = array('module' => 'testcase', 'method' => 'create', 'params' => 'product={product}&branch={branch}&moduleID=0&from=&param=0&storyid={id}');
-$config->story->actionList['createTestcase']['data-size']   = 'lg';
-$config->story->actionList['createTestcase']['data-toggle'] = 'modal';
+$config->story->actionList['createTestcase']['text']              = $lang->testcase->create;
+$config->story->actionList['createTestcase']['hint']              = $lang->testcase->create;
+$config->story->actionList['createTestcase']['url']               = array('module' => 'testcase', 'method' => 'create', 'params' => 'product={product}&branch={branch}&moduleID=0&from=&param=0&storyid={id}');
+$config->story->actionList['createTestcase']['data-size']         = 'lg';
+$config->story->actionList['createTestcase']['data-toggle']       = 'modal';
+$config->story->actionList['createTestcase']['data-close-others'] = true;
 
-$config->story->actionList['batchCreateTestcase']['text']        = $lang->testcase->batchCreate;
-$config->story->actionList['batchCreateTestcase']['hint']        = $lang->testcase->batchCreate;
-$config->story->actionList['batchCreateTestcase']['url']         = array('module' => 'testcase', 'method' => 'batchCreate', 'params' => 'product={product}&branch={branch}&moduleID=0&storyid={id}');
-$config->story->actionList['batchCreateTestcase']['data-size']   = 'lg';
-$config->story->actionList['batchCreateTestcase']['data-toggle'] = 'modal';
+$config->story->actionList['batchCreateTestcase']['text']              = $lang->testcase->batchCreate;
+$config->story->actionList['batchCreateTestcase']['hint']              = $lang->testcase->batchCreate;
+$config->story->actionList['batchCreateTestcase']['url']               = array('module' => 'testcase', 'method' => 'batchCreate', 'params' => 'product={product}&branch={branch}&moduleID=0&storyid={id}');
+$config->story->actionList['batchCreateTestcase']['data-size']         = 'lg';
+$config->story->actionList['batchCreateTestcase']['data-toggle']       = 'modal';
+$config->story->actionList['batchCreateTestcase']['data-close-others'] = true;
 
 $config->story->actionList['testcase']['type']      = 'dropdown';
 $config->story->actionList['testcase']['text']      = $lang->testcase->common;

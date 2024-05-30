@@ -34,7 +34,8 @@ panel
                 $products[$productID]
             ),
             set::items($productItems)
-        )
+        ),
+        span(setClass('text-gray-400 font-normal'), "* {$lang->block->selectProduct}")
     ) : null,
     setID($waterfallGanttID),
     set('headingClass', 'border-b'),
@@ -42,7 +43,7 @@ panel
     div
     (
         set::className('waterfall-gantt'),
-        empty($plans) ? div(setClass('gantt-product-tips'), $lang->block->selectProduct) : div
+        empty($plans) ? div(setClass('h-32 center text-gray'), $lang->error->noData) : div
         (
             setClass('gantt clearfix'),
             div(setClass('gantt-plans pull-left'), setID('ganttPlans')),

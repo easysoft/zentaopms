@@ -72,9 +72,11 @@ window.setLane = function(e)
 {
     const regionID = $(e.target).val();
     const laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lane');
-    $.get(laneLink, function(lane)
+    $.getJSON(laneLink, function(data)
     {
-        $('#myPicker').picker(JSON.parse(lane));
+        const laneID = data.items.length > 0 ? data.items[0].value : '';
+        $('[name=lane]').zui('picker').render(data);
+        $('[name=lane]').zui('picker').$.setValue(laneID);
     });
 };
 

@@ -479,7 +479,7 @@ class repo extends control
         /* Set branch or tag for git. */
         $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
-        if(empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+        if($this->app->tab == 'devops' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;

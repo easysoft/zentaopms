@@ -529,6 +529,7 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->kanban->name = $this->lang->kanbanlane->name;
             $lane = form::data($this->config->kanban->form->createLane)->add('region', $regionID)->get();
             $this->kanban->createLane($kanbanID, $regionID, $lane, 'new');
 
@@ -625,6 +626,7 @@ class kanban extends control
 
         if($_POST)
         {
+            $this->lang->kanban->name = $this->lang->kanbancolumn->name;
             $order  = $position == 'left' ? $fromColumn->order : $fromColumn->order + 1;
             $column = form::data($this->config->kanban->form->createColumn)
                 ->setDefault('order', $order)
@@ -656,6 +658,7 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->kanban->name = $this->lang->kanbancolumn->childName;
             $columns = form::batchData($this->config->kanban->form->splitColumn)->get();
             $this->kanban->splitColumn($columnID, $columns);
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
@@ -739,7 +742,7 @@ class kanban extends control
 
         $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $column->region, array('items' => array(array('key' => 'group' . $column->group, 'data' => array('cols' => array(array('id' => $columnID, 'name' => $columnID, 'deleted' => true))))))))));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
 
     /**
@@ -756,6 +759,8 @@ class kanban extends control
     {
         if($_POST)
         {
+            $this->lang->kanban->name = $this->lang->kanbancard->name;
+
             $card = form::data($this->config->kanban->form->createCard)
                 ->add('kanban', $kanbanID)
                 ->add('region', $regionID)
@@ -826,6 +831,7 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->kanban->name = $this->lang->kanbancard->name;
             $card = form::data($this->config->kanban->form->editCard)
                 ->setDefault('lastEditedBy', $this->app->user->account)
                 ->get();
@@ -1479,9 +1485,8 @@ class kanban extends control
         $lane = $this->kanban->getLaneById($laneID);
         if(!$lane) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'kanban', "executionID=$executionID"))));
 
-        $this->view->lane  = $lane;
-        $this->view->from  = $from;
-
+        $this->view->lane = $lane;
+        $this->view->from = $from;
         $this->display();
     }
 
@@ -1534,6 +1539,7 @@ class kanban extends control
         $column = $this->kanban->getColumnByID($columnID);
         if($_POST)
         {
+            $this->lang->kanban->name = $this->lang->kanbancolumn->name;
             $formData = form::data($this->config->kanban->form->setColumn)->get();
             $changes  = $this->kanban->updateColumn($columnID, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
