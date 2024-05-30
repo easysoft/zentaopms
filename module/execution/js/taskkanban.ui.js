@@ -6,12 +6,13 @@ const kanbanDropRules =
 {
     story:
     {
-        'backlog': ['ready'],
-        'ready': ['backlog'],
-        'tested': ['verified'],
-        'verified': ['tested', 'released'],
-        'released': ['verified', 'closed'],
-        'closed': ['released'],
+        backlog: ['ready', 'backlog'],
+        ready: ['backlog', 'ready'],
+        tested: ['verified', 'rejected'],
+        verified: ['tested', 'pending', 'released'],
+        pending: ['verified', 'released'],
+        released: ['verified', 'closed'],
+        closed: ['released']
     },
     bug:
     {
@@ -101,6 +102,7 @@ window.getLaneActions = function(lane)
 window.getCol = function(col)
 {
     /* 计算WIP。*/
+    if(URSRColumn.includes(col.type)) return;
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
     const cards = col.cards;
 
@@ -174,8 +176,8 @@ window.buildColActions = function(col)
 {
     let actions = [];
 
-    if(priv.canEditName && col.actionList && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(priv.canSetWIP   && col.actionList && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(priv.canEditName && col.actionList && col.actionList.includes('setColumn'))                                actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(priv.canSetWIP   && col.actionList && col.actionList.includes('setWIP') && !URSRColumn.includes(col.type)) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }
