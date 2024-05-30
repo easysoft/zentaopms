@@ -46,6 +46,12 @@ if($viewType == 'story' && $allProduct)
                     set::items($allProduct),
                     set::required(true),
                     set::onchange("syncProductOrProject(this, 'product')")
+                ),
+                picker
+                (
+                    setClass('col-short'),
+                    set::name('productModule'),
+                    set::items($productModules)
                 )
             )
         );
