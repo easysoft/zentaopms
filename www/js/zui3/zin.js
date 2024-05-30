@@ -902,7 +902,12 @@
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
-        if((modal.options.url || '').toLowerCase() === (options.url || '').toLowerCase() && options.loadingClass === undefined) options.loadingClass = '';
+        if(modal.options.url && options.url && options.loadingClass === undefined)
+        {
+            const lastUrl = $.parseLink(modal.options.url);
+            const newUrl  = $.parseLink(options.url);
+            if(lastUrl.moduleName === newUrl.moduleName && lastUrl.methodName === newUrl.methodName) options.loadingClass = '';
+        }
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 
