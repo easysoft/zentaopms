@@ -83,10 +83,10 @@ class fixer extends baseFixer
     {
         global $config, $app;
 
-        if($config->edition != 'open' &&  empty($app->installing))
+        if($config->edition != 'open' && empty($app->installing))
         {
-            $moduleName = $moduleName ? $moduleName : $app->getModuleName();
-            $methodName = $methodName ? $moduleName : $app->getMethodName();
+            $moduleName = $app->getModuleName();
+            $methodName = $app->getMethodName();
 
             $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
             if(!$flow) return parent::get($fields);
