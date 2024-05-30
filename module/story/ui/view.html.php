@@ -196,15 +196,6 @@ foreach($actions as $key => $action)
         continue;
     }
 
-    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, isset($executionID) ? $executionID : (isset($projectID) ? $projectID : 0)), $action['url']);
-    if(isset($action['items']))
-    {
-        foreach($action['items'] as $itemKey => $itemAction)
-        {
-            if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, isset($executionID) ? $executionID : (isset($projectID) ? $projectID : 0)), $itemAction['url']);
-        }
-    }
-
     if($isInModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
     {
         $actions[$key]['data-load'] = 'modal';
@@ -214,6 +205,7 @@ foreach($actions as $key => $action)
 
 detail
 (
+    set::urlFormatter(array('{id}' => $story->id, '{type}' => $story->type, '{product}' => $story->product, '{branch}' => $story->branch, '{module}' => $story->module, '{execution}' => isset($executionID) ? $executionID : (isset($projectID) ? $projectID : 0))),
     set::objectType('story'),
     set::toolbar($toolbar),
     set::sections($sections),
