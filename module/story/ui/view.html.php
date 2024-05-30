@@ -17,7 +17,6 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
-if(!isset($executionID)) $executionID = 0;
 
 /* 版本列表。Version list. */
 $versions = array();
@@ -197,12 +196,12 @@ foreach($actions as $key => $action)
         continue;
     }
 
-    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $app->tab == 'project' ? $projectID : $executionID), $action['url']);
+    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, isset($executionID) ? $executionID : (isset($projectID) ? $projectID : 0)), $action['url']);
     if(isset($action['items']))
     {
         foreach($action['items'] as $itemKey => $itemAction)
         {
-            if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $executionID), $itemAction['url']);
+            if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, isset($executionID) ? $executionID : (isset($projectID) ? $projectID : 0)), $itemAction['url']);
         }
     }
 
