@@ -230,7 +230,10 @@ div
     (
         set::key('kanban'),
         set::items($kanbanGroup),
-        set::height('calc(100vh - 120px)')
+        set::height('calc(100vh - 120px)'),
+        set::links($links),
+        set::selectable(true),
+        set::showLinkOnSelected(true)
     )
 );
 

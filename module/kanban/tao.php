@@ -965,6 +965,38 @@ class kanbanTao extends kanbanModel
     }
 
     /**
+     * 获取父需求类型的卡片操作菜单。
+     * Get menu of story card.
+     *
+     * @param  int    $executionID
+     * @param  array  $objects
+     * @access public
+     * @return array
+     */
+    protected function getURSRCardMenu(int $executionID, array $objects): array
+    {
+        $execution = $this->loadModel('execution')->getByID($executionID);
+
+        $menus = array();
+        $objects = $this->loadModel('story')->mergeReviewer($objects);
+        foreach($objects as $story)
+        {
+            $menu = array();
+
+            if(common::hasPriv($story->type, 'edit') and $this->story->isClickable($story, 'edit'))         $menu[] = array('label' => $this->lang->story->edit, 'icon' => 'edit', 'url' => helper::createLink($story->type, 'edit', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv($story->type, 'change') and $this->story->isClickable($story, 'change'))     $menu[] = array('label' => $this->lang->story->change, 'icon' => 'alter', 'url' => helper::createLink($story->type, 'change', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv($story->type, 'review') and $this->story->isClickable($story, 'review'))     $menu[] = array('label' => $this->lang->story->review, 'icon' => 'search', 'url' => helper::createLink($story->type, 'review', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv($story->type, 'activate') and $this->story->isClickable($story, 'activate')) $menu[] = array('label' => $this->lang->story->activate, 'icon' => 'magic', 'url' => helper::createLink($story->type, 'activate', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct)                       $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no&from=taskkanban"));
+            if(common::hasPriv($story->type, 'delete'))                                                     $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink($story->type, 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
+
+            $menus[$story->id] = $menu;
+        }
+
+        return $menus;
+    }
+
+    /**
      * 获取需求类型的卡片操作菜单。
      * Get menu of story card.
      *

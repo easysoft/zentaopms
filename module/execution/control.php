@@ -1749,11 +1749,11 @@ class execution extends control
 
         /* Get kanban data. */
         $orderBy     = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
-        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
+        list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType);
-            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
+            list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
 
         /* Show lanes of the attribute: no story and bug in request, no bug in design. */
@@ -1769,6 +1769,7 @@ class execution extends control
         $this->view->browseType   = $browseType;
         $this->view->features     = $features;
         $this->view->kanbanGroup  = $kanbanGroup;
+        $this->view->links        = $links;
         $this->view->groupBy      = $groupBy;
 
         $this->display();

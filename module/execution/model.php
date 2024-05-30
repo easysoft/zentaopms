@@ -2891,7 +2891,7 @@ class executionModel extends model
             if($storyType == 'requirement' and $execution->model == 'ipd') $this->dao->update(TABLE_STORY)->set('status')->eq('developing')->where('id')->eq($storyID)->exec();
         }
 
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, $storyType);
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID);
         return true;
     }
 

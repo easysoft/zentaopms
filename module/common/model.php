@@ -2412,7 +2412,7 @@ class commonModel extends model
     {
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $module = $actionData['url']['module'] == 'story' ? $data->type : $actionData['url']['module'];
+            $module = ($actionData['url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['url']['module'];
             $method = $actionData['url']['method'];
             $params = $actionData['url']['params'];
             if(!common::hasPriv($module, $method)) return false;
@@ -2420,7 +2420,7 @@ class commonModel extends model
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
-            $module = $actionData['data-url']['module'] == 'story' ? $data->type : $actionData['data-url']['module'];
+            $module = ($actionData['data-url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['data-url']['module'];
             $method = $actionData['data-url']['method'];
             $params = $actionData['data-url']['params'];
             if(!common::hasPriv($module, $method)) return false;
