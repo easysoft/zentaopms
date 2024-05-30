@@ -441,10 +441,8 @@ function getAppCode(urlOrModuleName, defaultCode)
             if(viewType === 'story') return 'product';
             if(viewType === 'host')  return 'admin';
         }
-        else if(methodLowerCase === 'browsetask')
-        {
-            return 'execution';
-        }
+        if(methodLowerCase === 'browsetask') return 'execution';
+        if(methodLowerCase === 'browsegroup') return 'bi';
     }
     if(moduleName === 'ai')
     {
