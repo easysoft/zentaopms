@@ -5,9 +5,8 @@ namespace zin;
 class thinkSwot extends wg
 {
     protected static array $defineProps = array(
-        'mode?: string',  // 模型展示模式 preview|view
-        'wizard: object', // 模型数据
-        'blocks: array',  // 模型节点
+        'mode?: string', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
+        'blocks: array', // 模型节点
     );
 
     public static function getPageCSS(): ?string
@@ -15,9 +14,9 @@ class thinkSwot extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildItem(int $order, $step): wg|node
+    protected function buildItem(int $order, $blockID): node
     {
-        list($wizard, $mode, $blocks) = $this->prop(array('wizard', 'mode', 'blocks'));
+        list($mode, $blocks) = $this->prop(array('mode', 'blocks'));
         return div
         (
             setClass('relative p-1 bg-canvas border border-gray-200 item-model', "model-$order"),
@@ -25,7 +24,7 @@ class thinkSwot extends wg
             div
             (
                 setClass('h-full'),
-                div(setClass('item-step-title text-center text-sm'), $blocks[$step] ?? ''),
+                div(setClass('item-step-title text-center text-sm'), $blocks[$blockID] ?? ''),
                 div(setClass('item-step-answer h-5/6'))
             )
         );
