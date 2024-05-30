@@ -1603,7 +1603,14 @@ class kanban extends control
 
         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
         $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-        $kanbanGroup     = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $taskSearchValue) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy, $rdSearchValue);
+        if($regionID == 0)
+        {
+            list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $taskSearchValue);
+        }
+        else
+        {
+            $kanbanGroup = $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy, $rdSearchValue);
+        }
         echo json_encode($kanbanGroup);
     }
 
