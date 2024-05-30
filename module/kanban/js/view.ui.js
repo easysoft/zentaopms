@@ -273,7 +273,7 @@ window.renderBuildItem = function(info)
 {
     info.item.icon       = 'ver';
     info.item.titleUrl   = canViewBuild ? $.createLink('build', 'view', `id=${info.item.fromID}`) : '';
-    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title': info.item.title, 'data-app': 'project'};
 
     const date = '<span class="label gray-pale">' + info.item.date + '</span>';
     info.item.content = {html: date}
@@ -282,7 +282,7 @@ window.renderProductplanItem = function(info)
 {
     info.item.icon       = 'delay';
     info.item.titleUrl   = canViewPlan ? $.createLink('productplan', 'view', `id=${info.item.fromID}`) : '';
-    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title': info.item.title};
 
     if(info.item.deleted == '0')
     {
