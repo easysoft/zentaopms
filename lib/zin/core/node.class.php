@@ -59,8 +59,7 @@ class node implements \JsonSerializable
 
     public function __construct(mixed ...$args)
     {
-        global $config;
-        $this->gid   = (isset($config->clientCache) && $config->clientCache) ? static::nextGid() : 'zin_' . uniqid();
+        $this->gid   = 'zin_' . uniqid();
         $this->props = new props();
 
         disableGlobalRender();

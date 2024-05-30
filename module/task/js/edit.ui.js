@@ -268,9 +268,9 @@ function updateAssignedTo()
 window.renderRowData = function($row, index, row)
 {
     $row.addClass('member member-' + (row ? row.memberStatus : 'wait'));
-    $row.data('estimate', row ? row.teamEstimate : 0);
-    $row.data('consumed', row ? row.teamConsumed : 0);
-    $row.data('left',     row ? row.teamLeft : 0);
+    $row.attr('data-estimate', row ? row.teamEstimate : 0);
+    $row.attr('data-consumed', row ? row.teamConsumed : 0);
+    $row.attr('data-left',     row ? row.teamLeft : 0);
 
     if(row && row.memberDisabled)
     {
@@ -291,5 +291,5 @@ window.renderRowData = function($row, index, row)
     }
 
     const mode = $('[name=mode]').val();
-    if(mode == 'linear') $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down'><i/>");
+    $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down " + (mode == 'linear' ? '' : 'hidden') + "'><i/>");
 }

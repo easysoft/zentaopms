@@ -611,5 +611,5 @@ window.changeTeamMember = function(e)
 window.renderRowData = function($row, index, row)
 {
     const mode = $('[name=mode]').val();
-    if(mode == 'linear') $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down'><i/>");
+    $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down " + (mode == 'linear' ? '' : 'hidden') + "'><i/>");
 }

@@ -622,7 +622,7 @@ class repoModel extends model
         {
             $productItem = array();
             $productItem['pid']   = $productID;
-            $productItem['type']  = 'product';
+            $productItem['type']  = $product->shadow ? $this->lang->project->common : 'product';
             $productItem['text']  = $product->name;
             $productItem['items'] = array();
 

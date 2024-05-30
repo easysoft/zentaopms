@@ -195,7 +195,8 @@ div
                 ),
                 div
                 (
-                    set::className('detail-content mt-4'),
+                    set::className('detail-content mt-4 overflow-hidden desc-box'),
+                    set::title(strip_tags($product->desc)),
                     html($product->desc)
                 )
             )

@@ -62,21 +62,98 @@ class mailTao extends mailModel
     }
 
     /**
-     * Replace image URL for mail content.
+     * 获取邮件内容中的图片 url 和物理文件的键值对。
+     * Get key-value pairs of image URL and physical file in mail content.
      *
      * @param  string    $body
      * @access protected
+     * @return array
+     */
+    public function getImages(string $body): array
+    {
+        $images = array();
+
+        /* 匹配形如 src="/file-read-1.jpg" 或 scr="/index.php?m=file&f=read&fileID=1" 的图片。 Match images like src="/file-read-1.jpg" or scr="/index.php?m=file&f=read&fileID=1". */
+        $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
+        preg_match_all('/ src="(' . $readLinkReg . ')" /', $body, $matches);
+        $images += $this->getImagesByFileID($matches);
+
+        /* 匹配形如 src="{1.jpg}" 的图片。 Match images like src="{1.jpg}". */
+        preg_match_all('/ src="({([0-9]+)\.\w+?})" /', $body, $matches);
+        $images += $this->getImagesByFileID($matches);
+
+        /* 匹配形如 src="/data/upload/1.jpg" 的图片。 Match images like src="/data/upload/1.jpg". */
+        preg_match_all('/ src="(\/?data\/upload\/[\/\w+]*)"/', $body, $matches);
+        $images += $this->getImagesByPath($matches);
+
+        return $images;
+    }
+
+    /**
+     * 根据文件 ID 获取图片 url 和物理文件的键值对。
+     * Get key-value pairs of image URL and physical file by file ID.
+     *
+     * @param  array  $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByFileID(array $matches): array
+    {
+        if(!isset($matches[2])) return array();
+
+        $this->loadModel('file');
+
+        $images = array();
+        foreach($matches[2] as $key => $fileID)
+        {
+            if(!$fileID) continue;
+
+            $file = $this->file->getByID((int)$fileID);
+            if(!$file) continue;
+            if(!in_array($file->extension, $this->config->file->imageExtensions)) continue;
+
+            $images[$matches[1][$key]] = $file->webPath;
+        }
+        return $images;
+    }
+
+    /**
+     * 根据路径获取图片 url 和物理文件的键值对。
+     * Get key-value pairs of image URL and physical file by path.
+     *
+     * @param  array  $matches
+     * @access public
+     * @return array
+     */
+    public function getImagesByPath(array $matches): array
+    {
+        if(!isset($matches[1])) return array();
+
+        $images = array();
+        foreach($matches[1] as $key => $path)
+        {
+            if(!$path) continue;
+
+            $images[$path] = $path;
+        }
+        return $images;
+    }
+
+    /**
+     * Replace image URL for mail content.
+     *
+     * @param  string    $body
+     * @param  array     $images
+     * @access protected
      * @return string
      */
-    protected function replaceImageURL(string $body): string
+    protected function replaceImageURL(string $body, array $images): string
     {
-        /* Replace full webPath image for mail. */
-        $sysURL      = zget($this->config->mail, 'domain', common::getSysURL());
-        $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
-
-        $body = preg_replace('/ src="(' . $readLinkReg . ')" /', ' src="' . $sysURL . '$1" ', $body);
-        $body = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $sysURL . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $body);
-        $body = preg_replace('/<img (.*)src="\/?data\/upload/', '<img $1 src="' . $sysURL . $this->config->webRoot . 'data/upload', $body);
+        foreach($images as $url => $file)
+        {
+            if(!$file) continue;
+            $body = str_replace($url, 'cid:' . basename($file), $body);
+        }
 
         return $body;
     }

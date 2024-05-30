@@ -19,7 +19,7 @@ $config->testreport->actionList['delete']['data-confirm'] = array('message' => $
 $config->testreport->actionList['create']['icon']     = 'refresh';
 $config->testreport->actionList['create']['hint']     = $lang->testreport->recreate;
 $config->testreport->actionList['create']['text']     = $lang->testreport->recreate;
-$config->testreport->actionList['create']['url']      = array('module' => 'testreport', 'method' => 'create', 'params' => 'reportID={objectID}&objectType={objectType}');
+$config->testreport->actionList['create']['url']      = array('module' => 'testreport', 'method' => 'create', 'params' => 'reportID={objectID}&objectType={objectType}&extra={tasks}');
 $config->testreport->actionList['create']['data-app'] = $app->tab;
 
 $config->testreport->dtable->fieldList['id']['name']     = 'id';
@@ -43,7 +43,7 @@ $config->testreport->dtable->fieldList['execution']['title']    = $lang->testrep
 $config->testreport->dtable->fieldList['execution']['type']     = 'text';
 $config->testreport->dtable->fieldList['execution']['sortType'] = true;
 
-$config->testreport->dtable->fieldList['tasks']['name']  = 'tasks';
+$config->testreport->dtable->fieldList['tasks']['name']  = 'taskName';
 $config->testreport->dtable->fieldList['tasks']['title'] = $lang->testreport->testtask;
 $config->testreport->dtable->fieldList['tasks']['type']  = 'text';
 

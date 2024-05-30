@@ -1067,13 +1067,11 @@ class productZen extends product
      * Save session variables for browse page.
      *
      * @param  object|null $product
-     * @param  string      $storyType
      * @param  string      $browseType
-     * @param  bool        $isProjectStory
      * @access protected
      * @return void
      */
-    protected function saveSession4Browse(object|null $product, string $storyType, string $browseType, bool $isProjectStory): void
+    protected function saveSession4Browse(object|null $product, string $browseType): void
     {
         $uri = $this->app->getURI(true);
 

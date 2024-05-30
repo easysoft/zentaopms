@@ -244,7 +244,9 @@ class mailModel extends model
 
         ob_start();
 
-        $body = $this->mailTao->replaceImageURL($body);
+        $images = $this->mailTao->getImages($body);
+        if($images) $body = $this->mailTao->replaceImageURL($body, $images);
+
         list($toList, $ccList) = $this->mailTao->processToAndCC($toList, $ccList, $includeMe);
         /* Get realname and email of users. */
         if(empty($emails)) $emails = $this->loadModel('user')->getRealNameAndEmails($toList . ',' . $ccList);
@@ -261,6 +263,7 @@ class mailModel extends model
             $this->setTO(explode(',', $toList), $emails);
             $this->setCC(explode(',', $ccList), $emails);
             $this->setBody($this->convertCharset($body));
+            if($images) $this->setImages($images);
             $this->setErrorLang();
             $this->mta->send();
         }
@@ -350,6 +353,21 @@ class mailModel extends model
     public function setBody(string $body): void
     {
         $this->mta->msgHtml($body);
+    }
+
+    /**
+     * 设置嵌入邮件的图片。
+     * Set embedded images in the email.
+     *
+     * @param  array  $images
+     * @access public
+     * @return void
+     */
+    public function setImages(array $images): void
+    {
+        $wwwRoot = $this->app->getWwwRoot();
+        $images  = array_filter(array_unique($images));
+        foreach($images as $image) $this->mta->AddEmbeddedImage($wwwRoot . $image, basename($image));
     }
 
     /**

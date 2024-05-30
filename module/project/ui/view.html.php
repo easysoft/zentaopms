@@ -274,7 +274,12 @@ row
                     )
                 ),
                 div(setClass('flex mt-4 program'), div(setClass('clip programBox'), $programDom)),
-                div(set::className('detail-content mt-4'), html($project->desc))
+                div
+                (
+                    set::className('detail-content mt-4 overflow-hidden desc-box'),
+                    set::title(strip_tags($project->desc)),
+                    html($project->desc)
+                )
             )
         ),
         div

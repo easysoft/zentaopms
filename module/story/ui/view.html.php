@@ -28,7 +28,7 @@ for($i = $story->version; $i >= 1; $i--)
 
     if($isInModal)
     {
-        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal-content'));
+        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show'));
     }
 
     $versionItem->selected($version == $i);
@@ -220,7 +220,7 @@ foreach($actions as $key => $action)
         }
     }
 
-    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, isset($projectID) ? $projectID : 0), $action['url']);
+    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $app->tab == 'project' ? $projectID : $executionID), $action['url']);
     if(isset($action['items']))
     {
         foreach($action['items'] as $itemKey => $itemAction)

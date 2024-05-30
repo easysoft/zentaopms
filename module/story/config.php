@@ -75,13 +75,6 @@ $config->story->actionList['recall']['url']       = array('module' => 'story', '
 $config->story->actionList['recall']['data-app']  = $app->tab;
 $config->story->actionList['recall']['className'] = 'ajax-submit';
 
-$config->story->actionList['recallChange']['icon']      = 'undo';
-$config->story->actionList['recallChange']['text']      = $lang->story->recallChange;
-$config->story->actionList['recallChange']['hint']      = $lang->story->recallChange;
-$config->story->actionList['recallChange']['url']       = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}&from=view&confirm=no&storyType={type}');
-$config->story->actionList['recallChange']['data-app']  = $app->tab;
-$config->story->actionList['recallChange']['className'] = 'ajax-submit';
-
 $config->story->actionList['review']['icon']     = 'search';
 $config->story->actionList['review']['text']     = $lang->story->review;
 $config->story->actionList['review']['hint']     = $lang->story->review;

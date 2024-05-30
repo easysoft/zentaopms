@@ -97,6 +97,7 @@ class productRoadmapBox extends wg
                                 set::name("branch[$index]"),
                                 set::items($branches),
                                 set::value($defaultBranch),
+                                set::emptyValue('')
                             )
                         )
                     )

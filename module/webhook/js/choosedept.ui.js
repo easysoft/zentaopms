@@ -1,36 +1,10 @@
-loadedDept = [];
-window.loadChildDept = function(event, node)
-{
-    if(typeof(node.parentKey) == 'undefined') return;
-
-    var tree = $('#deptList').zui('tree');
-    var options = tree.options;
-    var departmentID = node.key;
-    if(loadedDept.includes(departmentID)) return;
-
-    $.ajax(
-    {
-        type: "post",
-        url: feishuUrl,
-        data: {departmentID: departmentID},
-        dataType: "json",
-        async: true,
-        success: function(jsonData)
-        {
-            options.items = buildTreeItems(jsonData, options.items);
-            tree.render(options);
-        }
-    });
-    loadedDept.push(departmentID);
-};
-
 window.buildTreeItems = function(deptTree, treeItems)
 {
     if(typeof(treeItems) == 'undefined') treeItems = [];
     for(i in deptTree)
     {
         let dept     = deptTree[i];
-        let treeItem = {key: dept.id, text: dept.name, onClick: loadChildDept};
+        let treeItem = {key: dept.id, text: dept.name};
         treeItems    = appendItems(treeItems, treeItem, dept.pId);
     }
     return treeItems;

@@ -109,7 +109,7 @@ class todoZen extends todo
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = !empty($_POST[$objectType]) ? $_POST[$objectType] : $rawData->objectID;
+        if($hasObject && $objectType) $objectID = zget($form->rawdata, $objectType, $rawData->objectID);
         $rawData->date = !empty($rawData->config['date']) ? $rawData->config['date'] : $rawData->date;
 
         return $form->add('account', $this->app->user->account)
@@ -254,6 +254,14 @@ class todoZen extends todo
                 $todo->end   = '2400';
             }
             if($todo->type != 'custom') $todo->objectID = (int)$todo->name;
+
+            if($todo->type != 'custom' && !empty($todo->objectID))
+            {
+                $type   = $todo->type;
+                $object = $this->loadModel($type)->getByID($todo->objectID);
+                if(isset($object->name))  $todo->name = $object->name;
+                if(isset($object->title)) $todo->name = $object->title;
+            }
 
             unset($todo->switchTime);
         }

@@ -169,7 +169,7 @@ class product extends control
         if($storyType != 'story') $stories = $this->loadModel('story')->appendChildren($productID, $stories, $storyType);
 
         /* Save session. */
-        $this->productZen->saveSession4Browse($product, $storyType, $browseType, $isProjectStory);
+        $this->productZen->saveSession4Browse($product, $browseType);
 
         /* Build search form. */
         $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);

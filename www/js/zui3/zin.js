@@ -6,15 +6,18 @@
     const currentModule = config.currentModule;
     const currentMethod = config.currentMethod;
     const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
+    const moduleMethod  = `${currentModule}-${currentMethod}`;
 
-    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo'.split('|'));
-    const isAllowSelfOpen = isIndexPage
+    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat'.split('|'));
+    const iframeList = new Set(['cron-index']);
+    const isAllowSelfOpen = !iframeList.has(moduleMethod) &&
+        (isIndexPage
         || location.hash === '#_single'
         || /(\?|\&)_single/.test(location.search)
         || currentMethod.startsWith('ajax')
-        || selfOpenList.has(`${currentModule}-${currentMethod}`)
+        || selfOpenList.has(moduleMethod)
         || selfOpenList.has(currentModule)
-        || $('body').hasClass('allow-self-open');
+        || $('body').hasClass('allow-self-open'));
 
     if(parent === window && !isAllowSelfOpen)
     {
@@ -475,7 +478,7 @@
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
         if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
-        if(!window.config || !window.config.clientCache) options.cache = false;
+        options.cache = false; // Disable local cache for 20.1.
         const cacheKey = options.cache;
         let cache;
         const renderPageData = (data, onlyZinDebug) =>
@@ -1626,6 +1629,8 @@
 
     $(() =>
     {
+        if($.apps.theme) changeAppTheme($.apps.theme);
+
         if(isIndexPage) return;
 
         initZinbar();

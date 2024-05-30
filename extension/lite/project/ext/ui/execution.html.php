@@ -116,7 +116,7 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
                     cell
                     (
                         setClass('kanban-acl'),
-                        span(icon($kanban->acl == 'private' ? 'lock' : 'unlock-alt'), zget($lang->project->acls, $kanban->acl, ''))
+                        span(icon($kanban->acl == 'private' ? 'lock' : 'inherit-space', setClass('mr-1')), zget($lang->execution->kanbanAclList, $kanban->acl, ''))
                     )
                 )
             )

@@ -3643,11 +3643,10 @@ class storyModel extends model
             $action = 'batchcreate';
         }
 
-        if($action == 'recallchange') return $story->status == 'changing';
-        if($action == 'recall')       return $story->status == 'reviewing' || $story->status == 'changing';
-        if($action == 'close')        return $story->status != 'closed';
-        if($action == 'activate')     return $story->status == 'closed';
-        if($action == 'assignto')     return $story->status != 'closed';
+        if($action == 'recall')   return $story->status == 'reviewing' || $story->status == 'changing';
+        if($action == 'close')    return $story->status != 'closed';
+        if($action == 'activate') return $story->status == 'closed';
+        if($action == 'assignto') return $story->status != 'closed';
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
 

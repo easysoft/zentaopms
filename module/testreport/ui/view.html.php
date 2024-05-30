@@ -339,7 +339,7 @@ foreach($bugInfo as $infoKey => $infoValue)
 
 $mainActions  = array();
 $canBeChanged = common::canBeChanged('testreport', $report);
-if($canBeChanged && hasPriv('testreport', 'create')) $mainActions[] = array('icon' => 'refresh', 'hint' => $lang->testreport->recreate, 'url' => inlink('create', "objectID={$report->objectID}&objectType={$report->objectType}" . ($report->objectType == 'execution' ? "&extra=$report->tasks" : '')));
+if($canBeChanged && hasPriv('testreport', 'create')) $mainActions[] = array('icon' => 'refresh', 'hint' => $lang->testreport->recreate, 'url' => inlink('create', "objectID={$report->objectID}&objectType={$report->objectType}" . ($report->objectType == 'execution' || $report->objectType == 'project' ? "&extra=$report->tasks" : '')));
 if($canBeChanged && hasPriv('testreport', 'edit'))   $mainActions[] = array('icon' => 'edit',    'hint' => $lang->testreport->edit,     'url' => inlink('edit', "objectID={$report->id}"));
 if($canBeChanged && hasPriv('testreport', 'delete')) $mainActions[] = array('icon' => 'trash',   'hint' => $lang->testreport->delete,   'url' => inlink('delete', "objectID={$report->id}"), 'className' => 'ajax-submit', 'data-confirm' => $lang->testreport->confirmDelete, 'url' => inlink('delete', "objectID={$report->id}"));
 

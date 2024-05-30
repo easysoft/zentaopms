@@ -8,6 +8,7 @@ const apps =
     defaultCode: '',
     zIndex: 10,
     frameContent: null,
+    theme: null,
     oldPages: new Set(oldPages)
 };
 
@@ -741,6 +742,12 @@ function changeAppsTheme(theme)
         {
             app.iframe.contentWindow.changeAppTheme(theme);
         }
+    });
+    apps.theme = theme;
+    $.get($.createLink('index', 'app'), html =>
+    {
+        apps.frameContent = html;
+        apps.theme = null;
     });
 }
 

@@ -280,7 +280,7 @@ window.afterPageUpdate = function()
             title: copied,
             tipClass: 'success',
         });
-    }, 200);
+    }, 1);
 };
 
 $(function()
