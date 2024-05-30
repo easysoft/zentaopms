@@ -1210,6 +1210,7 @@ class commonModel extends model
          * 忽略所有方法名以 ajax 开头的请求。
          * Ignore all requests which it's method name starts with 'ajax'.
          */
+        $method = $this->app->getMethodName();
         if(strpos($method, 'ajax') === 0) return true;
 
         /**
