@@ -1521,7 +1521,7 @@
             if(options.closeModal) zui.Modal.hide(typeof options.closeModal === 'string' ? options.closeModal : $modal);
             let app = options.app;
             if(!options.app) options.app = $.apps.getAppCode(url, currentCode);
-            if(app === currentCode && options.load !== 'modal')
+            if(app === currentCode && options.load !== 'modal' && options.load !== 'table')
             {
                 options.load === 'modal';
                 zui.Modal.query($modal).hide();
