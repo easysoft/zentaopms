@@ -535,7 +535,7 @@ class storyModel extends model
             $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
             $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
 
-            if(in_array($this->config->edition, array('max', 'ipd')))
+            if($this->config->edition != 'open')
             {
                 $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
                 if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
@@ -820,7 +820,7 @@ class storyModel extends model
         }
 
         unset($oldStory->parent, $story->parent);
-        if(in_array($this->config->edition, array('max', 'ipd')) && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+        if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($comment) or !empty($changes))
@@ -913,7 +913,7 @@ class storyModel extends model
                 if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
             }
 
-            if(in_array($this->config->edition, array('max', 'ipd')) && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
+            if($this->config->edition != 'open' && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
         }
         else
         {
@@ -1420,7 +1420,7 @@ class storyModel extends model
             $this->setStage($storyID);
             $this->loadModel('score')->create('story', 'close', $storyID);
 
-            if(in_array($this->config->edition, array('max', 'ipd')) && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
         }
 
         $changes = common::createChanges($oldStory, $story);
