@@ -756,6 +756,8 @@ class kanban extends control
     {
         if($_POST)
         {
+            $this->lang->kanban->name = $this->lang->kanbancard->name;
+
             $card = form::data($this->config->kanban->form->createCard)
                 ->add('kanban', $kanbanID)
                 ->add('region', $regionID)
