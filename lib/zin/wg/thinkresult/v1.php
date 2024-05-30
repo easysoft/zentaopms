@@ -13,7 +13,9 @@ class thinkResult extends wg
 
     protected function buildModel(): wg|node
     {
-        // TODO
+        list($wizard, $mode, $blocks) = $this->prop(array('wizard', 'mode', 'blocks'));
+
+        if($wizard->model == 'swot') return thinkSwot(set::wizard($wizard), set::mode($mode), set::blocks($blocks));
         return div('模型区域');
     }
 
