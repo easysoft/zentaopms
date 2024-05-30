@@ -373,6 +373,7 @@ class executionZen extends execution
         $this->view->allPlans     = $allPlans;
         $this->view->hiddenPlan   = $project->model !== 'scrum';
         $this->view->execution    = $execution;
+        $this->view->project      = $project;
         $this->view->canBeChanged = common::canModify('execution', $execution);
     }
 

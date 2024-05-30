@@ -1722,6 +1722,8 @@ class execution extends control
     {
         if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return $this->execution->accessDenied();
         /* Load model and language. */
+        $this->app->loadLang('epic');
+        $this->app->loadLang('requirement');
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->loadModel('kanban');
@@ -1748,7 +1750,7 @@ class execution extends control
         $this->session->set('execLaneType', $browseType);
 
         /* Get kanban data. */
-        $orderBy     = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
+        $orderBy = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
         list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
@@ -3154,7 +3156,14 @@ class execution extends control
         $enterTime      = date('Y-m-d H:i:s', $enterTime);
         if(in_array(true, array(empty($lastEditedTime), strtotime($lastEditedTime) < 0, $lastEditedTime > $enterTime, $groupBy != 'default', !empty($searchValue))))
         {
-            $kanbanGroup = $from == 'taskkanban' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
+            if($from == 'taskkanban')
+            {
+                list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy);
+            }
+            else
+            {
+                $kanbanGroup = $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
+            }
             return print(json_encode($kanbanGroup));
         }
     }

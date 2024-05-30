@@ -148,6 +148,8 @@ $lang->kanban->alignmentList['left']   = '居左';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']         = "综合看板";
+$lang->kanban->type['epic']        = "{$lang->ERCommon}看板";
+$lang->kanban->type['requirement'] = "{$lang->URCommon}看板";
 $lang->kanban->type['parentStory'] = "父{$lang->SRCommon}看板";
 $lang->kanban->type['story']       = "{$lang->SRCommon}看板";
 $lang->kanban->type['task']        = "任务看板";
@@ -164,6 +166,8 @@ $lang->kanban->group->story['module']     = "需求模块";
 $lang->kanban->group->story['source']     = "需求来源";
 $lang->kanban->group->story['assignedTo'] = "指派人员";
 
+$lang->kanban->group->epic        = $lang->kanban->group->story;
+$lang->kanban->group->requirement = $lang->kanban->group->story;
 $lang->kanban->group->parentStory = $lang->kanban->group->story;
 
 $lang->kanban->group->task = array();

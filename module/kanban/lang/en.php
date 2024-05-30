@@ -148,6 +148,8 @@ $lang->kanban->alignmentList['left']   = 'Left';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']         = "All KanBan";
+$lang->kanban->type['epic']        = "{$lang->ERCommon} KanBan";
+$lang->kanban->type['requirement'] = "{$lang->URCommon} KanBan";
 $lang->kanban->type['parentStory'] = "Parent Story KanBan";
 $lang->kanban->type['story']       = "Story KanBan";
 $lang->kanban->type['task']        = "Task KanBan";
@@ -164,6 +166,8 @@ $lang->kanban->group->story['module']     = "Story Module";
 $lang->kanban->group->story['source']     = "Story Source";
 $lang->kanban->group->story['assignedTo'] = "Assigned To";
 
+$lang->kanban->group->epic        = $lang->kanban->group->story;
+$lang->kanban->group->requirement = $lang->kanban->group->story;
 $lang->kanban->group->parentStory = $lang->kanban->group->story;
 
 $lang->kanban->group->task = array();

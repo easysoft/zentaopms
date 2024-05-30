@@ -1431,7 +1431,7 @@ class kanbanModel extends model
      */
     public function getExecutionKanban(int $executionID, string $browseType = 'all', string $groupBy = 'default', string $searchValue = '', string $orderBy = 'id_asc'): array
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
+        if($groupBy != 'default') return array($this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy), array());
 
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
@@ -1512,13 +1512,17 @@ class kanbanModel extends model
             }
         }
 
-        foreach(array('requirement', 'epic') as $laneType)
+        /* 展示所有泳道的时候，业务、用需与父需求泳道共用看板列。 */
+        if($browseType == 'all')
         {
-            if(!isset($kanbanGroup[$laneType])) continue;
+            foreach(array('requirement', 'epic') as $laneType)
+            {
+                if(!isset($kanbanGroup[$laneType])) continue;
 
-            array_unshift($kanbanGroup['parentStory']['data']['lanes'], $kanbanGroup[$laneType]['data']['lanes'][0]);
-            $kanbanGroup['parentStory']['data']['items'] += $kanbanGroup[$laneType]['data']['items'];
-            unset($kanbanGroup[$laneType]);
+                array_unshift($kanbanGroup['parentStory']['data']['lanes'], $kanbanGroup[$laneType]['data']['lanes'][0]);
+                $kanbanGroup['parentStory']['data']['items'] += $kanbanGroup[$laneType]['data']['items'];
+                unset($kanbanGroup[$laneType]);
+            }
         }
 
         return array(array_values($kanbanGroup), $links);
@@ -1677,8 +1681,11 @@ class kanbanModel extends model
         /* Get card  data. */
         $cardList = array();
         if(in_array($browseType, array('story', 'parentStory'))) $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
+
+        if($browseType == 'epic')        $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', 'epic');
+        if($browseType == 'requirement') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', 'requirement');
+        if($browseType == 'bug')         $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'task')        $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
 
         if($browseType == 'task' && $groupBy == 'assignedTo') $cardList = $this->appendTeamMember($cardList);
 

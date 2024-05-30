@@ -122,13 +122,22 @@ jsVar('teamWords', $lang->execution->teamWords);
 jsVar('canImportBug', $features['qa']);
 
 $canCreateObject = ($canCreateTask or $canBatchCreateTask or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
+if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')))
+{
+    unset($lang->kanban->type['epic'], $lang->kanban->type['requirement']);
+}
+else
+{
+    if(strpos($project->storyType, 'epic') === false)        unset($lang->kanban->type['epic']);
+    if(strpos($project->storyType, 'requirement') === false) unset($lang->kanban->type['requirement']);
+}
 row
 (
     setClass('items-center justify-between mb-3'),
     cell
     (
         setClass('flex'),
-        $features['qa'] ? inputControl
+        inputControl
         (
             setClass('c-type'),
             picker
@@ -140,7 +149,7 @@ row
                 set::required(true),
                 set::onchange('changeBrowseType()')
             )
-        ) : null,
+        ),
         $browseType != 'all' ? inputControl
         (
             setClass('c-group ml-5'),
