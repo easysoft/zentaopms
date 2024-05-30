@@ -177,6 +177,7 @@ $lang->repo->logStyles['D'] = 'Suppression';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
+$lang->repo->scmList['GitFox'] = 'GitFox';
 $lang->repo->scmList['Gitlab'] = 'GitLab';
 if(!$config->inQuickon)
 {
