@@ -32,6 +32,25 @@ $maxOrder = 0;
 
 /* Generate module rows. */
 $moduleRows = array();
+if($viewType == 'story' && $allProduct)
+{
+    $moduleRows[] = formGroup
+        (
+            setClass('copy hidden'),
+            inputGroup
+            (
+                setClass('row-module'),
+                picker
+                (
+                    set::name('allProduct'),
+                    set::items($allProduct),
+                    set::required(true),
+                    set::onchange("syncProductOrProject(this, 'product')")
+                )
+            )
+        );
+}
+
 foreach($sons as $son)
 {
     if($son->order > $maxOrder) $maxOrder = $son->order;
