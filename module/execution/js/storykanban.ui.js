@@ -3,7 +3,7 @@ window.getItem = function(info)
     if(priv.canViewStory)
     {
         info.item.title      = `#${info.item.id} ${info.item.title}`;
-        info.item.titleUrl   = $.createLink('story', 'view', `id=${info.item.id}`);
+        info.item.titleUrl   = $.createLink('execution', 'storyView', `id=${info.item.id}&execution=${executionID}`);
         info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
     }
 
