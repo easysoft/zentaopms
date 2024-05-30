@@ -36,3 +36,16 @@ window.setModuleAndPlanByBranch = function(e)
         if(!$rows.find('td[data-name="plan"][data-ditto="on"]').length) break;
     }
 }
+
+window.changeRegion = function(e)
+{
+    const $region  = $(e.target);
+    const regionID = $region.val();
+    const laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lane');
+    $.get(laneLink, function(lane)
+    {
+        $region.closest('tr').find('[name^=lane]').zui('picker').render((JSON.parse(lane)));
+        $region.closest('tr').find('[name^=lane]').zui('picker').$.setValue(0);
+    });
+
+}

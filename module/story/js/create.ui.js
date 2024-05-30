@@ -74,7 +74,8 @@ window.setLane = function(e)
     const laneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lane');
     $.get(laneLink, function(lane)
     {
-        $('#myPicker').picker(JSON.parse(lane));
+        $('[name=lane]').zui('picker').render((JSON.parse(lane)));
+        $('[name=lane]').zui('picker').$.setValue(0);
     });
 };
 
