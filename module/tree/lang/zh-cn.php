@@ -26,6 +26,7 @@ $lang->tree->manageCase           = '维护用例视图模块';
 $lang->tree->manageCaselib        = '维护用例库模块';
 $lang->tree->manageCustomDoc      = '维护文档库分类';
 $lang->tree->manageApiChild       = '维护接口库目录';
+$lang->tree->manageGroup          = '维护分组';
 $lang->tree->updateOrder          = '更新排序';
 $lang->tree->manageChild          = '维护子模块';
 $lang->tree->manageStoryChild     = '维护子模块';

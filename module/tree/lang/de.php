@@ -26,6 +26,7 @@ $lang->tree->manageCase           = 'Verwalte Fälle';
 $lang->tree->manageCaselib        = 'Verwalte Bibliothek';
 $lang->tree->manageCustomDoc      = 'Verwalte Dokumente';
 $lang->tree->manageApiChild       = 'Manage API Directory';
+$lang->tree->manageGroup          = 'Manage group';
 $lang->tree->updateOrder          = 'Sortierung';
 $lang->tree->manageChild          = 'Verwalte Untermodul';
 $lang->tree->manageStoryChild     = 'Verwalte Untermodul';

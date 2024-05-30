@@ -26,6 +26,7 @@ $lang->tree->manageCase           = 'Manage Case';
 $lang->tree->manageCaselib        = 'Manage Library';
 $lang->tree->manageCustomDoc      = 'Manage Document Library';
 $lang->tree->manageApiChild       = 'Manage API Directory';
+$lang->tree->manageGroup          = 'Manage group';
 $lang->tree->updateOrder          = 'Rank Module';
 $lang->tree->manageChild          = 'Manage Child Modules';
 $lang->tree->manageStoryChild     = 'Manage Child Modules';
