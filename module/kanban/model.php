@@ -2307,6 +2307,8 @@ class kanbanModel extends model
      */
     public function createExecutionLane(int $executionID, string $type = 'all')
     {
+        $URSRLanes         = array();
+        $parentStoryLaneID = 0;
         foreach($this->config->kanban->default as $type => $lane)
         {
             $lane->type      = $type;
@@ -2318,7 +2320,30 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
-            $this->createExecutionColumns($laneID, $type, $executionID);
+            if($type == 'parentStory') $parentStoryLaneID = $laneID;
+
+            if(in_array($type, array('epic', 'requirement')))
+            {
+                $URSRLanes[$type] = $laneID;
+            }
+            else
+            {
+                $this->createExecutionColumns($laneID, $type, $executionID);
+            }
+        }
+
+        if($URSRLanes)
+        {
+            $parentStoryLane = $this->dao->select('*')->from(TABLE_KANBANLANE)->where('id')->eq($parentStoryLaneID)->fetch();
+            $columnIDList    = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($parentStoryLane->group)->fetchPairs();
+            foreach($URSRLanes as $type => $laneID)
+            {
+                foreach($columnIDList as $columnID)
+                {
+                    $this->addKanbanCell($executionID, $laneID, $columnID, $type);
+                    if(dao::isError()) return false;
+                }
+            }
         }
     }
 
@@ -2337,6 +2362,7 @@ class kanbanModel extends model
         $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
 
         $columns = array();
+        if(in_array($type, array('epic', 'requirement', 'parentStory'))) $columns = $this->lang->kanban->URSRColumn;
         if($type == 'story') $columns = $this->lang->kanban->storyColumn;
         if($type == 'bug')   $columns = $this->lang->kanban->bugColumn;
         if($type == 'task')  $columns = $this->lang->kanban->taskColumn;
