@@ -45,7 +45,7 @@ class jobZen extends job
         {
             if($job->engine == 'jenkins')
             {
-                if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
+                if(strpos($job->pipeline, '/job/') === 0) $job->pipeline = trim(substr($job->pipeline, 5), '/');
             }
             else
             {
