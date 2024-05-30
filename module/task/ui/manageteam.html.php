@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-if(!isset($task->members[$app->user->account]))
+if(empty($task->members) && !isset($task->members[$app->user->account]))
 {
     div
     (
