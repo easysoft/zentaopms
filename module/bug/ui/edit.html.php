@@ -571,7 +571,7 @@ detailBody
                         set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array()),
                         set::value($bug->relatedBug)
                     ),
-                    common::hasPriv('bug', 'linkBugs') ? inputGroupAddon
+                    common::hasPriv('bug', 'linkBugs') && !isInModal() ? inputGroupAddon
                     (
                         setClass('p-0'),
                         btn
