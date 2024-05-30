@@ -739,7 +739,7 @@ class kanban extends control
 
         $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $column->region, array('items' => array(array('key' => 'group' . $column->group, 'data' => array('cols' => array(array('id' => $columnID, 'name' => $columnID, 'deleted' => true))))))))));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
     }
 
     /**
