@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('rootID', $root->id);
-jsVar('viewType', $viewType);
+jsVar('+viewType', $viewType);
 
 $manageTitle = $lang->tree->manageChild;
 if(strpos($viewType, 'doc') !== false)
@@ -235,6 +235,16 @@ div
         (
             setClass('pb-4'),
             set::title($manageTitle),
+            $viewType == 'story' && $allProduct && $canBeChanged ? to::headingActions
+            (
+                btn
+                (
+                    set::size('sm'),
+                    set::type('primary'),
+                    set::url('javascript:toggleCopy()'),
+                    $lang->tree->syncFromProduct
+                )
+            ) : null,
             div
             (
                 setClass('flex'),
