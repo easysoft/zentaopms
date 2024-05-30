@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'textarea' . DS . 'v1.php';
 
 class editor extends wg
 {
-    protected static $version = '0.12.0'; // Keep in sync with ZenEditor release.
+    protected static $version = '0.12.1'; // Keep in sync with ZenEditor release.
 
     protected static array $defineProps = array(
         'uploadUrl?: string',                   // 图片上传链接
