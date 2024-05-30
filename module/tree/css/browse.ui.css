@@ -2,4 +2,4 @@
 .flex-auto .tree-item-content .row:not(:first-child) {overflow: hidden;}
 li.tree-item > div.listitem > nav.toolbar {margin-left: 0;}
 
-form .form-group.copy .col-short{min-width: 110px;}
+form .copyBox .col-short{min-width: 110px;}
