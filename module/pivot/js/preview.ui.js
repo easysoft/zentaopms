@@ -266,12 +266,14 @@ getCellSpan = function(cell)
  */
 window.getHeight = function(height = 800)
 {
-    const windowHeight       = $(window).height();
+    const windowHeight = $(window).height();
 
-    const styles = window.getComputedStyle($('#pivotPanel .panel-body')[0]);
-    const paddingBottom = parseInt(styles.paddingBottom, 10);
-    const boundingRect = $('#table-pivot-preview').length ? $('#table-pivot-preview')[0].getBoundingClientRect() : null;
+    const $panelBody = $('#pivotPanel .panel-body');
+    const styles = $panelBody.length ? window.getComputedStyle($panelBody[0]) : null;
+    const paddingBottom = parseInt(styles?.paddingBottom ?? 0, 10);
+
+    const boundingRect = $panelBody.length ? $panelBody[0].getBoundingClientRect() : null;
     const offsetTop = boundingRect?.y ?? 0;
 
-    return Math.min(windowHeight - offsetTop - paddingBottom, height);
+    return Math.min(windowHeight - offsetTop - paddingBottom * 2 - 10, height);
 }
