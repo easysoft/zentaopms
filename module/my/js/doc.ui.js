@@ -34,5 +34,13 @@ window.renderCell = function(result, info)
         const html = "<i class='icon " + icon + "'></i>";
         result.unshift({html});
     }
+    if(info.col.name == 'actions')
+    {
+        if(info.col.setting.list.edit && info.row.data.type != 'text')
+        {
+            result[0]['props']['items'][0]['data-toggle'] = 'modal';
+            return result;
+        }
+    }
     return result;
 }
