@@ -270,7 +270,7 @@ $('.copy-btn').on('click', function()
     }, 2000)
 })
 
-window.afterPageUpdate = function()
+$(function()
 {
     setTimeout(function()
     {
@@ -280,10 +280,6 @@ window.afterPageUpdate = function()
             title: copied,
             tipClass: 'success',
         });
-    }, 200);
-};
-
-$(function()
-{
+    }, 1);
     if(base64BranchID) $.get($.createLink('repo', 'ajaxSyncBranchCommit', 'repoID=' + repo.id + '&branch=' + base64BranchID));
 });
