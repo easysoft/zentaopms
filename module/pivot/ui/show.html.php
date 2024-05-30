@@ -121,6 +121,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             (
                 set::striped(true),
                 set::bordered(true),
+                set::height(jsRaw('window.getHeight')),
                 set::cols($cols),
                 set::data($rows),
                 set::emptyTip($lang->error->noData),
