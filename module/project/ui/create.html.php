@@ -128,7 +128,7 @@ if(!empty($copyProjects))
             setClass('project-block justify-start'),
             setClass($copyProjectID == $id ? 'primary-outline' : ''),
             set('data-id', $id),
-            set('data-pinyin', zget($copyPinyinList, $project->name, '')),
+            set('data-pinyin', zget($copyPinyinList, is_object($project) ? $project->name : $project, '')),
             icon(setClass('text-gray'), !empty($project->model) ? ($project->model == 'scrum' ? 'sprint' : $project->model) : $lang->icons['project']),
             on::click($toggleActiveProject),
             span($project->name, set::title($project->name), setClass('text-left'))
