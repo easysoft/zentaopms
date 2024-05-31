@@ -213,6 +213,8 @@ class gitfoxModel extends model
             $MR->target_project_id = $MR->target_repo_id;
             $MR->work_in_progress  = $MR->is_draft;
             $MR->draft             = $MR->is_draft;
+
+            if($MR->state == 'open') $MR->state = 'opened';
         }
 
         return $MRs;
