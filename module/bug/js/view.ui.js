@@ -1,12 +1,13 @@
 $(document).on('click', '#toStory', function()
 {
-    const message = $(this).data('confirm');
+    const message = $(this).data('confirmtip');
     const url     = $(this).data('url');
-    const tab     = $(this).data('tab');
-    zui.Modal.confirm({message, onResult: function(result)
+    const tab     = $(this).data('app');
+    const load    = $(this).data('load');
+    zui.Modal.confirm({message}).then((result) =>
     {
-        if(result) openPage(url, tab);
-    }});
+        if(result) load == 'modal' ? loadModal(url, null, {code: tab}) : openPage(url, tab);
+    });
 });
 
 $(document).on('click', '#toTaskButton', function()
