@@ -3458,6 +3458,7 @@ class baseRouter
         if(!isset($this->config->installed) || !$this->config->installed) return false;
         if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
 
+        if(!isset($_SESSION['installing'])) $_SESSION['installing'] = true;
         return true;
     }
 }
