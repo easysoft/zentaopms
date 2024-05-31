@@ -38,8 +38,8 @@ class thinkStepBase extends wg
         $app->loadLang('thinkrun');
         $app->loadLang('thinkstep');
 
-        $step         = $this->prop('step');
-        $options      = $step->options;
+        $step    = $this->prop('step');
+        $options = $step->options;
         if($options)
         {
             $questionType = $options->questionType;
@@ -51,7 +51,7 @@ class thinkStepBase extends wg
             }
             if($options->required && $questionType == 'tableInput')
             {
-                if($options->supportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count(get_object_vars($options->fields)), $options->requiredRows);
+                if($options->supportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count($options->fields), $options->requiredRows);
                 if(!$options->supportAdd) $tips = sprintf($lang->thinkrun->tableInputTitle->supportAdd, $options->requiredRows);
             }
         }
