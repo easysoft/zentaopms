@@ -2855,7 +2855,7 @@ class executionModel extends model
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
             if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, (int)$laneID, (int)$columnID, 'story', (string)$storyID);
 
             $data = new stdclass();
             $data->project = $executionID;

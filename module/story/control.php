@@ -151,7 +151,7 @@ class story extends control
                 $products = array();
                 foreach($storyIdList as $i => $newStoryID)
                 {
-                    if(isset($_POST['lanes'])) $lanes[$newStoryID] = $_POST['lanes'][$i];
+                    if(isset($stories[$i]) && !empty($stories[$i]->lane)) $lanes[$newStoryID] = $stories[$i]->lane;
                     $products[$newStoryID] = $productID;
                 }
 
