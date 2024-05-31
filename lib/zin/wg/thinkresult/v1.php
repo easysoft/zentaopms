@@ -10,28 +10,42 @@ class thinkResult extends wg
         'blocks: array',        // 模型节点
     );
 
-    protected function buildModel(): wg|node
+    protected function buildModel(): wg|array
     {
         list($wizard, $mode, $blocks) = $this->prop(array('wizard', 'mode', 'blocks'));
 
         if($wizard->model == 'swot')   return thinkSwot(set::mode($mode), set::blocks($blocks));
         if($wizard->model == 'pffa')   return thinkPffa(set::mode($mode), set::blocks($blocks));
         if($wizard->model == 'pestel') return thinkPestel(set::mode($mode), set::blocks($blocks));
-        return div('模型区域');
+        return array();
     }
 
-    protected function build(): wg|node
+    protected function build(): node
     {
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        $wizard = $this->prop('wizard');
+        list($wizard, $mode) = $this->prop(array('wizard', 'mode'));
         return div
         (
             setClass('think-result-content col items-center px-7 py-6'),
-            div(setClass('w-full h-10 text-center text-md py-2.5 ellipsis overflow-hidden whitespace-nowrap'), $wizard->introduction ? $wizard->introduction : $lang->thinkwizard->introduction),
-            div(setClass('w-full my-4'), setStyle('min-height', '200px'), $this->buildModel()),
-            div(setClass('w-full text-center text-md py-2.5'), html($wizard->suggestion ? htmlspecialchars_decode($wizard->suggestion) : $lang->thinkwizard->suggestion))
+            div
+            (
+                setClass('w-full h-10 text-center text-md py-2.5 ellipsis overflow-hidden whitespace-nowrap'),
+                $wizard->introduction ? $wizard->introduction : ($mode == 'preview' ? $lang->thinkwizard->introduction : '')
+            ),
+            div
+            (
+                setClass('w-full my-4'),
+                setStyle('min-height', '200px'),
+                $this->buildModel(),
+                div(setClass('mt-4 text-center text-lg font-medium text-gray-950'), $lang->thinkwizard->modelTitle[$wizard->model])
+            ),
+            div
+            (
+                setClass('w-full text-center text-md py-2.5'),
+                html($wizard->suggestion ? htmlspecialchars_decode($wizard->suggestion) : ($mode == 'preview' ? $lang->thinkwizard->suggestion : ''))
+            )
         );
     }
 }
