@@ -439,10 +439,11 @@ class actionTao extends actionModel
         if($object && $object->{$fields})
         {
             $misc = '';
-            if($action->objectType == 'bug' && $action->action == 'converttotask' && $type == 'task')
+            if($action->objectType == 'bug' && $action->action == 'converttotask' && $type == 'task' && $method == 'view')
             {
+                $misc = "data-app='execution'";
                 $isMultipleProject = $this->dao->select('multiple')->from(TABLE_PROJECT)->where('id')->eq($action->project)->fetch('multiple');
-                if($isMultipleProject) $misc = "data-app='execution'";
+                if(!$isMultipleProject) $misc = "data-app='project'";
             }
             $action->extra = $condition ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#{$action->extra} " . $object->{$fields}, '', $misc) : "#{$action->extra} " . $object->{$fields};
         }
