@@ -140,7 +140,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
 {
     let memberCount   = '';
     let totalEstimate = 0;
-    let totalConsumed = oldConsumed;
+    let totalConsumed = 0;
     let totalLeft     = 0;
     let error         = false;
     $(this).closest('#teamTable').find('.picker-box').each(function()
