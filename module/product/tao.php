@@ -545,7 +545,7 @@ class productTao extends productModel
                 /* Get releases count. */
                 return $this->dao->select('COUNT(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->fetch('count');
             case TABLE_PROJECTPRODUCT:
-                return $this->dao->select('COUNT(*) AS count')
+                return $this->dao->select('COUNT(DISTINCT(t1.project)) AS count')
                     ->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                     ->where('t2.deleted')->eq('0')
