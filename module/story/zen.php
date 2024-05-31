@@ -1505,7 +1505,7 @@ class storyZen extends story
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->stage          = empty($story->stage) ? $oldStory->stage : $story->stage;
-            $story->branch         = !isset($story->branch) ? $oldStory->branch : str_replace('branch', '', $story->branch);
+            $story->branch         = $story->branch === '' ? $oldStory->branch : str_replace('branch', '', $story->branch);
 
             if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
             if($oldStory->parent < 0) $story->plan = '';
