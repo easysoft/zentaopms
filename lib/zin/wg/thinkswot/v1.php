@@ -63,8 +63,8 @@ class thinkSwot extends wg
         );
         if($mode == 'preview')
         {
-            array_unshift($model, div(setClass('flex justify-between text-gray-400'), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[1]), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[2])));
-            $model[] = div(setClass('flex justify-between text-gray-400'), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[3]), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[4]));
+            array_unshift($model, div(setClass('flex justify-between text-gray-400'), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[0]), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[1])));
+            $model[] = div(setClass('flex justify-between text-gray-400'), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[2]), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[3]));
         }
         return $model;
     }
