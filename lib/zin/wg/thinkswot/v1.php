@@ -21,7 +21,7 @@ class thinkSwot extends wg
 
         list($mode, $blocks) = $this->prop(array('mode', 'blocks'));
         $defaultTitle = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
-        $blockTitle   = $blocks[$blockID] ? $blocks[$blockID] : $defaultTitle;
+        $blockTitle   = !empty($blocks[$blockID]) ? $blocks[$blockID] : $defaultTitle;
         return div
         (
             setClass('relative p-1 bg-canvas border border-gray-200 model-block', "block-$order"),
