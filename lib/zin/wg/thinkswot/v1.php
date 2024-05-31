@@ -16,7 +16,11 @@ class thinkSwot extends wg
 
     protected function buildItem(int $order, $blockID): node
     {
+        global $app, $lang;
+        $app->loadLang('thinkwizard');
+
         list($mode, $blocks) = $this->prop(array('mode', 'blocks'));
+        $title = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
         return div
         (
             setClass('relative p-1 bg-canvas border border-gray-200 model-block', "block-$order"),
@@ -24,7 +28,7 @@ class thinkSwot extends wg
             div
             (
                 setClass('h-full'),
-                div(setClass('item-step-title text-center text-sm'), $blocks[$blockID] ?? ''),
+                div(setClass('item-step-title text-center text-sm'), $blocks[$blockID] ? $blocks[$blockID] : $title),
                 div(setClass('item-step-answer h-5/6'))
             )
         );
@@ -44,7 +48,9 @@ class thinkSwot extends wg
 
     protected function build(): array
     {
-        global $lang;
+        global $app, $lang;
+        $app->loadLang('thinkwizard');
+
         $mode  = $this->prop('mode');
         $model = array(
             div
