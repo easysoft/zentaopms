@@ -313,8 +313,8 @@ class projectZen extends project
         }
 
         /* Get copy projects. */
-        $copyProjects = $this->project->getPairsByModel($model, '', 0, false);
-        $copyProjectPairs = array_combine(array_keys($copyProjects), array_column($copyProjects, 'name'));
+        $copyProjects     = $this->project->getPairsByModel($model, '', 0, false);
+        $copyProjectPairs = !commonModel::isTutorialMode() ? array_combine(array_keys($copyProjects), array_column($copyProjects, 'name')) : $copyProjects;
 
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
