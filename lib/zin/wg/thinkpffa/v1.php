@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace zin;
 
+use block;
+
 /**
  * 思引波特五力模型部件类。
  * thinmory porter's five forces model widget class.
@@ -18,25 +20,23 @@ class thinkPffa extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildCards($cardColor, $questions, $blockIndex)
+    protected function buildCards($questions, $blockIndex)
     {
         global $lang;
-        $blocks = $this->prop('blocks');
-        $cards  = array();
+        $blocks     = $this->prop('blocks');
+        $block      = array_slice($blocks, $blockIndex, 1);
+        $cards      = array();
+        $blockColor = $lang->thinkbackground->blockColor[$blockIndex];
 
         foreach($questions as $item)
         {
-            $cards[] = div(setClass('w-8 h-8 bg-opacity-20 mt-1 mr-2', 'bg-' . $cardColor));
+            $cards[] = div(setClass('w-8 h-8 bg-opacity-20 mt-1 mr-2', 'bg-' . $blockColor));
         }
         return div
         (
             setClass('bg-white w-full px-2 py-2.5 border border-gray-200 h-28 overflow-auto'),
-            span(setClass('text-sm', 'text-' . $cardColor), !empty($blocks[$blockIndex]) ? $blocks[$blockIndex] : $lang->thinkwizard->unAssociated),
-            div
-            (
-                setClass('flex flex-wrap'),
-                $cards
-            ),
+            span(setClass('text-sm item-step-title', 'text-' . $blockColor), !empty($block[0]) ? $block[0] : $lang->thinkwizard->unAssociated),
+            div(setClass('flex flex-wrap'), $cards),
             div(setClass('text-center text-sm leading-tight text-gray-400 mt-1'), $lang->thinkwizard->pffaGroundText[$blockIndex])
         );
     }
@@ -46,7 +46,7 @@ class thinkPffa extends wg
         global $lang;
         $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 2, null);
-        $blockIndex       = 2;
+        $blockIndex       = 1;
 
         return div
         (
@@ -55,7 +55,7 @@ class thinkPffa extends wg
             div
             (
                 setClass('flex items-center mt-1'),
-                $this->buildCards('success', $defaultQuestions, $blockIndex),
+                $this->buildCards($defaultQuestions, $blockIndex),
                 div(setClass('triangle triangle-right'))
             )
         );
@@ -66,7 +66,7 @@ class thinkPffa extends wg
         global $lang;
         $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 4, null);
-        $blockIndex       = 1;
+        $blockIndex       = 0;
 
         return div
         (
@@ -75,7 +75,7 @@ class thinkPffa extends wg
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
-                $this->buildCards('blue', $defaultQuestions, $blockIndex),
+                $this->buildCards($defaultQuestions, $blockIndex),
                 div(setClass('triangle triangle-down'))
             )
         );
@@ -86,7 +86,7 @@ class thinkPffa extends wg
         global $lang;
         $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 4, null);
-        $blockIndex       = 5;
+        $blockIndex       = 4;
 
         return div
         (
@@ -95,7 +95,7 @@ class thinkPffa extends wg
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
-                $this->buildCards('warning', $defaultQuestions, $blockIndex),
+                $this->buildCards($defaultQuestions, $blockIndex),
             )
         );
     }
@@ -105,7 +105,7 @@ class thinkPffa extends wg
         global $lang;
         $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 4, null);
-        $blockIndex       = 4;
+        $blockIndex       = 3;
 
         return div
         (
@@ -115,7 +115,7 @@ class thinkPffa extends wg
             (
                 setClass('flex justify-center flex-wrap mt-1'),
                 div(setClass('triangle triangle-up')),
-                $this->buildCards('important', $defaultQuestions, $blockIndex)
+                $this->buildCards($defaultQuestions, $blockIndex)
             )
         );
     }
@@ -125,7 +125,7 @@ class thinkPffa extends wg
         global $lang;
         $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 2, null);
-        $blockIndex       = 3;
+        $blockIndex       = 2;
 
         return div
         (
@@ -135,27 +135,23 @@ class thinkPffa extends wg
             (
                 setClass('flex items-center mt-1'),
                 div(setClass('triangle triangle-left')),
-                $this->buildCards('special', $defaultQuestions, $blockIndex)
+                $this->buildCards($defaultQuestions, $blockIndex)
             )
         );
     }
     protected function build()
     {
-        global $lang;
         return div
         (
-            div
-            (
-                setClass('flex items-center'),
-                div(setClass('w-2/7'), $this->buildLeftBlock()),
-                div(
-                    setClass('w-3/7'),
-                    $this->buildTopBlock(),
-                    $this->buildCenterBlock(),
-                    $this->buildBottomBlock()
-                ),
-                div(setClass('w-2/7'), $this->buildRightBlock())
-            )
+            setClass('flex items-center'),
+            div(setClass('w-2/7'), $this->buildLeftBlock()),
+            div(
+                setClass('w-3/7'),
+                $this->buildTopBlock(),
+                $this->buildCenterBlock(),
+                $this->buildBottomBlock()
+            ),
+            div(setClass('w-2/7'), $this->buildRightBlock())
         );
     }
 }
