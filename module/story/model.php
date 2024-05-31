@@ -808,6 +808,12 @@ class storyModel extends model
 
         if(isset($story->stage) and $oldStory->stage != $story->stage)
         {
+            list($linkedBranches, $linkedProjects) = $this->storyTao->getLinkedBranchesAndProjects($storyID);
+            foreach($linkedProjects as $linkedProject)
+            {
+                $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($story->stage)->where('story')->eq((int)$storyID)->andWhere('branch')->in($linkedProject->branches)->exec();
+            }
+
             $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.story')->eq($storyID)

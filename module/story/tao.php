@@ -1152,7 +1152,7 @@ class storyTao extends storyModel
     {
         $projects = $this->dao->select('t2.id,t2.model,t2.type,t3.branch')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project && t1.product=t3.product')
             ->where('t1.story')->eq($storyID)
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll();
@@ -1161,11 +1161,18 @@ class storyTao extends storyModel
         $linkedProjects = array();
         foreach($projects as $project)
         {
-            $project->kanban = ($project->model == 'kanban' || $project->type == 'kanban');
-            $project->branches[$project->branch] = $project->branch;
-
-            $linkedProjects[$project->id]     = $project;
             $linkedBranches[$project->branch] = $project->branch;
+            if(!isset($linkedProjects[$project->id]))
+            {
+                $project->kanban = ($project->model == 'kanban' || $project->type == 'kanban');
+                $project->branches[$project->branch] = $project->branch;
+
+                $linkedProjects[$project->id] = $project;
+            }
+            else
+            {
+                $linkedProjects[$project->id]->branches[$project->branch] = $project->branch;
+            }
         }
 
         return array($linkedBranches, $linkedProjects);
