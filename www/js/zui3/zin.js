@@ -593,11 +593,7 @@
                             }
                             else if('confirm' in data.load)
                             {
-                                zui.Modal.confirm({message: data.load.confirm, onResult: function(result)
-                                {
-                                    if(result && data.load.confirmed) loadPage(data.load.confirmed);
-                                    else if(!result && data.load.canceled) loadPage(data.load.canceled);
-                                }});
+                                $(document).trigger('locate.zt', data.load);
                             }
                             else if('alert' in data.load)
                             {
