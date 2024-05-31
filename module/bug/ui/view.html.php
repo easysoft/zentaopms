@@ -19,6 +19,8 @@ jsVar('branchID',         $bug->branch);
 jsVar('errorNoExecution', $lang->bug->noExecution);
 jsVar('errorNoProject',   $lang->bug->noProject);
 jsVar('isInModal',        isInModal());
+jsVar('executions',       $executions);
+jsVar('disableExecution', $lang->project->disableExecution);
 
 $isInModal    = isInModal();
 $canCreateBug = hasPriv('bug', 'create');
