@@ -554,7 +554,6 @@ $(function()
         var iWindow       = getAppWindow();
         var fieldSelector = getFieldSelector(task, iWindow);
         var status        = checkFieldStatusReady(iWindow, fieldSelector);
-        debugger;
         if(status.submitOK)
         {
             setTaskStatus(true, true, true, true);
