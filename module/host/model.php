@@ -81,7 +81,7 @@ class hostModel extends model
             foreach(explode(',', $moduleIdList) as $moduleID)
             {
                 if(empty($moduleID)) continue;
-                $modules += $this->tree->getAllChildId($moduleID);
+                $modules += $this->tree->getAllChildId((int)$moduleID);
             }
         }
 
