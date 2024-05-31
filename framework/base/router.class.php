@@ -3455,11 +3455,13 @@ class baseRouter
      */
     public function checkInstalled()
     {
-        if(!isset($this->config->installed) || !$this->config->installed) return false;
-        if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) return false;
+        $installed = true;
+        if(!isset($this->config->installed) || !$this->config->installed) $installed = false;
+        if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) $installed = false;
 
-        if(!isset($_SESSION['installing'])) $_SESSION['installing'] = true;
-        return true;
+        if(!isset($_SESSION['installing']) && !$installed && !empty($this->installing)) $_SESSION['installing'] = true;
+
+        return $installed;
     }
 }
 
