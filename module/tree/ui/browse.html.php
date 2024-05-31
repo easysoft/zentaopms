@@ -54,6 +54,7 @@ if($viewType == 'story' && $allProduct)
 foreach($sons as $son)
 {
     if($son->order > $maxOrder) $maxOrder = $son->order;
+    $disabled = $son->type != $viewType;
 
     $moduleRows[] = formRow
     (
@@ -69,6 +70,7 @@ foreach($sons as $son)
                     set::name("modules[id$son->id]"),
                     set::type('input'),
                     set::value($son->name),
+                    set::disabled($disabled),
                     set::placeholder($placeholder)
                 ),
                 empty($branches) ? null : picker
@@ -76,7 +78,7 @@ foreach($sons as $son)
                     set::name("branch[id$son->id]"),
                     set::items($branches),
                     set::value($son->branch),
-                    set::disabled(true),
+                    set::disabled($disabled),
                     set::required(true)
                 ),
                 input
@@ -85,12 +87,14 @@ foreach($sons as $son)
                     set::name("shorts[id$son->id]"),
                     set::type('input'),
                     set::value($son->short),
+                    set::disabled($disabled),
                     set::placeholder($lang->tree->short)
                 ),
                 input
                 (
                     setClass('hidden'),
                     set::name("order[id$son->id]"),
+                    set::disabled($disabled),
                     set::value($son->order),
                     set::control('hidden')
                 )
