@@ -535,6 +535,16 @@ class upgrade extends control
         $alterSQL = $this->upgrade->checkConsistency($this->config->version);
         if(!empty($alterSQL)) return $this->displayConsistency($alterSQL);
 
+        /**
+         * 升级完成后清除缓存。
+         * 通过 dao 的 exec 方法更新数据库会自动更新缓存。
+         * 通过 dbh 执行 sql 语句的方式更新数据库不会自动更新缓存，应该在清除缓存之前执行，否则可能导致缓存命中但数据已过期。
+         * Clear the cache after the upgrade is complete.
+         * Update the database through the exec method of dao will automatically update the cache.
+         * Update the database by executing sql statements through dbh will not automatically update the cache, should be executed before clearing the cache, otherwise it may cause cache hits but the data has expired.
+         */
+        $this->dao->clearCache();
+
         /* 如果有扩展文件并且需要移除文件，显示需要移除的文件。*/
         /* If there are extendtion files and need to move them, display them. */
         $extFiles = $this->upgrade->getExtFiles();
