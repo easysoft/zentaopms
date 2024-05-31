@@ -95,7 +95,7 @@ $config->upgrade->execFlow['18_9']        = array('functions' => 'addDefaultTrai
 $config->upgrade->execFlow['18_10_1']     = array('functions' => 'migrateAIModelConfig');
 $config->upgrade->execFlow['20_0_alpha1'] = array('functions' => 'revertStoryCustomFields');
 $config->upgrade->execFlow['20_0_beta1']  = array('functions' => 'hideOA,updateMetricDateType,update18101,migrateAIModelConfig');
-$config->upgrade->execFlow['20_0_beta2']  = array('functions' => 'updateWorkflowFieldDefaultValue,update1811,updateZeroDateToNull,updateProgramplanCustom,importBuildinModules', 'params' => array('importBuildinModules' => array('or')));
+$config->upgrade->execFlow['20_0_beta2']  = array('functions' => 'updateWorkflowFieldDefaultValue,update1811,updateZeroDateToNull,updateProgramplanCustom');
 $config->upgrade->execFlow['20_1_0']      = array('functions' => 'changeCustomStoryStage,processStoryRelation,processLinkStories,addERName');
 
 if(!empty($config->isINT))
@@ -155,6 +155,7 @@ $config->upgrade->execFlow['biz5_0_1']     = array('functions' => 'updateWorkflo
 $config->upgrade->execFlow['biz5_2']       = array('functions' => 'addDefaultKanbanPri');
 $config->upgrade->execFlow['biz5_3_1']     = array('functions' => 'processFeedbackField,addFileFields,addReportActions');
 $config->upgrade->execFlow['biz6_4']       = array('functions' => 'importLiteModules');
+$config->upgrade->execFlow['biz8_12']      = array('functions' => 'importERURModules');
 
 if(!empty($config->isINT))
 {

@@ -119,6 +119,26 @@ $config->executionCommonList['pt'][1] = 'Sprint';
 $config->executionCommonList['pt'][2] = 'Fase';
 
 /* Story common list. */
+$config->storyCommonList['zh-cn']['epic']        = '业务需求';
+$config->storyCommonList['zh-cn']['requirement'] = '用户需求';
+$config->storyCommonList['zh-cn']['story']       = '软件需求';
+
+$config->storyCommonList['zh-tw']['epic']        = '業務需求';
+$config->storyCommonList['zh-tw']['requirement'] = '用戶需求';
+$config->storyCommonList['zh-tw']['story']       = '軟件需求';
+
+$config->storyCommonList['en']['epic']        = 'Epic';
+$config->storyCommonList['en']['requirement'] = 'Requirement';
+$config->storyCommonList['en']['story']       = 'Story';
+
+$config->storyCommonList['de']['epic']        = 'Epic';
+$config->storyCommonList['de']['requirement'] = 'Requirement';
+$config->storyCommonList['de']['story']       = 'Story';
+
+$config->storyCommonList['fr']['epic']        = 'Epic';
+$config->storyCommonList['fr']['requirement'] = 'Requirement';
+$config->storyCommonList['fr']['story']       = 'Story';
+
 $config->hourPointCommonList['zh-cn'][0] = '工时';
 $config->hourPointCommonList['zh-cn'][1] = '故事点';
 $config->hourPointCommonList['zh-cn'][2] = '功能点';
