@@ -198,7 +198,7 @@ class baseDAO
         $this->dbh       = $dbh;
         $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
 
-        if($app->isServing() && $config->cache->dao->enable)
+        if($config->cache->dao->enable)
         {
             $app->loadClass('cache', true);
             try
