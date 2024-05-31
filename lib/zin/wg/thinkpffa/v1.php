@@ -9,7 +9,8 @@ namespace zin;
 class thinkPffa extends wg
 {
     protected static array $defineProps = array(
-        'item: object'
+        'mode?: string', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
+        'blocks: array', // 模型节点
     );
 
     public static function getPageCSS(): ?string
@@ -20,7 +21,9 @@ class thinkPffa extends wg
     protected function buildCards($cardColor, $questions, $blockIndex)
     {
         global $lang;
-        $cards = array();
+        $blocks = $this->prop('blocks');
+        $cards  = array();
+
         foreach($questions as $item)
         {
             $cards[] = div(setClass('w-8 h-8 bg-opacity-20 mt-1 mr-2', 'bg-' . $cardColor));
@@ -28,7 +31,7 @@ class thinkPffa extends wg
         return div
         (
             setClass('bg-white w-full px-2 py-2.5 border border-gray-200 h-28 overflow-auto'),
-            span(setClass('text-sm', 'text-' . $cardColor), $lang->thinkwizard->unAssociated),
+            span(setClass('text-sm', 'text-' . $cardColor), !empty($blocks[$blockIndex]) ? $blocks[$blockIndex] : $lang->thinkwizard->unAssociated),
             div
             (
                 setClass('flex flex-wrap'),
@@ -41,13 +44,14 @@ class thinkPffa extends wg
     protected function buildLeftBlock()
     {
         global $lang;
+        $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 2, null);
         $blockIndex       = 2;
 
         return div
         (
-            setClass('pr-3.5'),
-            span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            setClass('pr-3.5 block-' . $blockIndex),
+            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) :  null,
             div
             (
                 setClass('flex items-center mt-1'),
@@ -60,12 +64,14 @@ class thinkPffa extends wg
     protected function buildTopBlock()
     {
         global $lang;
+        $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 4, null);
         $blockIndex       = 1;
 
         return div
         (
-            span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            setClass('block-' . $blockIndex),
+            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
@@ -78,12 +84,14 @@ class thinkPffa extends wg
     protected function buildCenterBlock()
     {
         global $lang;
+        $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 4, null);
         $blockIndex       = 5;
 
         return div
         (
-            span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            setClass('block-' . $blockIndex),
+            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
@@ -95,13 +103,14 @@ class thinkPffa extends wg
     protected function buildBottomBlock()
     {
         global $lang;
+        $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 4, null);
         $blockIndex       = 4;
 
         return div
         (
-            setClass('relative pt-3.5'),
-            span(setClass('absolute text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            setClass('relative pt-3.5 block-' . $blockIndex),
+            $mode === 'preview' ? span(setClass('absolute text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
@@ -114,13 +123,14 @@ class thinkPffa extends wg
     protected function buildRightBlock()
     {
         global $lang;
+        $mode             = $this->prop('mode');
         $defaultQuestions = array_pad(array(), 2, null);
         $blockIndex       = 3;
 
         return div
         (
-            setClass('pl-3.5'),
-            span(setClass('text-gray-400 text-sm ml-4'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            setClass('pl-3.5 block-' . $blockIndex),
+            $mode === 'preview' ? span(setClass('text-gray-400 text-sm ml-4'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
                 setClass('flex items-center mt-1'),
