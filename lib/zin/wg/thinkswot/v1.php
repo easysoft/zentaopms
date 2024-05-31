@@ -20,7 +20,8 @@ class thinkSwot extends wg
         $app->loadLang('thinkwizard');
 
         list($mode, $blocks) = $this->prop(array('mode', 'blocks'));
-        $title = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
+        $defaultTitle = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
+        $blockTitle   = $blocks[$blockID] ? $blocks[$blockID] : $defaultTitle;
         return div
         (
             setClass('relative p-1 bg-canvas border border-gray-200 model-block', "block-$order"),
@@ -28,7 +29,7 @@ class thinkSwot extends wg
             div
             (
                 setClass('h-full'),
-                div(setClass('item-step-title text-center text-sm'), $blocks[$blockID] ? $blocks[$blockID] : $title),
+                div(setClass('item-step-title text-center text-sm text-clip'), set::title($blockTitle), $blockTitle),
                 div(setClass('item-step-answer h-5/6'))
             )
         );
