@@ -211,13 +211,15 @@ class task extends control
         if($this->post->name)
         {
             /* Batch edit tasks. */
-            $taskData = $this->taskZen->buildTasksForBatchEdit();
+            $taskData = form::batchData()->get();
+            $oldTasks = $taskData ? $this->task->getByIdList(array_keys($taskData)) : array();
+            $taskData = $this->taskZen->buildTasksForBatchEdit($taskData, $oldTasks);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $allChanges = $this->task->batchUpdate($taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->task->afterBatchUpdate($taskData);
+            $this->task->afterBatchUpdate($taskData, $oldTasks);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->taskZen->responseAfterBatchEdit($allChanges);

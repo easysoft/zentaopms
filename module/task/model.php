@@ -126,10 +126,11 @@ class taskModel extends model
      * other data process after task batch edit.
      *
      * @param  object[] $tasks
+     * @param  object[] $oldTasks
      * @access public
      * @return bool
      */
-    public function afterBatchUpdate(array $tasks): bool
+    public function afterBatchUpdate(array $tasks, array $oldTasks = array()): bool
     {
         $this->loadModel('story');
         $this->loadModel('kanban');
@@ -137,13 +138,12 @@ class taskModel extends model
 
         $today          = helper::today();
         $currentAccount = $this->app->user->account;
-        $oldTasks       = $tasks ? $this->getByIdList(array_keys($tasks)) : array();
         foreach($tasks as $taskID => $task)
         {
             $oldTask = zget($oldTasks, $taskID);
 
             /* Record effort. */
-            if(!empty($task->consumed))
+            if(!empty($task->consumed) && $task->consumed != $oldTask->consumed)
             {
                 $record = new stdclass();
                 $record->account  = $currentAccount;
