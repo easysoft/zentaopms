@@ -624,7 +624,7 @@ $(function()
         var appsIframe = $('#iframePage').get(0);
         appsIframe.onload = appsIframe.onreadystatechange = function()
         {
-            appsWindow.$(appsWindow.document).on('reloadapp.apps openapp.apps showapp.apps closeapp.apps hideapp.apps', function()
+            appsWindow.$(appsWindow.document).on('reloadapp.apps loadapp.apps updateapp.apps openapp.apps showapp.apps closeapp.apps hideapp.apps', function(event)
             {
                 appsWindow.$('body').find('.popover').remove();
                 tryCheckTutorialState(1000);
