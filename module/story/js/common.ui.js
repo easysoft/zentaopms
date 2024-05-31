@@ -131,5 +131,6 @@ window.loadBranch = function()
     if(typeof(branch) == 'undefined') branch = 0;
 
     window.loadProductPlans(productID, branch);
+    window.loadBranchModule(productID);
     window.loadURS();
 };
