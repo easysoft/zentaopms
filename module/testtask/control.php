@@ -399,7 +399,7 @@ class testtask extends control
         $this->app->loadClass('pager', $static = true);
         $pager    = pager::init($recTotal, $recPerPage, $pageID);
         $queryID  = ($browseType == 'bysearch' or $browseType == 'bysuite') ? $param : 0;
-        $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ?: 0));
+        $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ((int)$this->cookie->taskCaseModule ?: 0));
         $sort     = common::appendOrder($orderBy, 't2.id');
         $sort     = str_replace('case_', 'id_', $sort);
 
