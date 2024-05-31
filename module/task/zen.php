@@ -1890,22 +1890,28 @@ class taskZen extends task
     protected function setMenu(int $executionID): int
     {
         $execution = $this->execution->getById($executionID);
+        if(!$execution || (!empty($execution) && $execution->multiple))
+        {
+            /* If the admin denied modification of closed executions, only query not closed executions. */
+            $queryMode = $execution && common::canModify('execution', $execution) ? '' : 'noclosed';
 
-        /* If the admin denied modification of closed executions, only query not closed executions. */
-        $queryMode = $execution && common::canModify('execution', $execution) ? 'all' : 'noclosed';
+            /* Get executions the current user can access. */
+            $this->executionPairs = $this->execution->getPairs(0, 'all', $queryMode);
 
-        /* Get executions the current user can access. */
-        $this->executionPairs = $this->execution->getPairs(0, 'all', $queryMode);
+            /* Call checkAccess method to judge the user can access the execution or not, if not return the first one he can access. */
+            $executionID = $this->execution->checkAccess($executionID, $this->executionPairs);
 
-        /* Call checkAccess method to judge the user can access the execution or not, if not return the first one he can access. */
-        $executionID = $this->execution->checkAccess($executionID, $this->executionPairs);
+        }
 
         /* Set Menu. */
-        $this->execution->setMenu($executionID);
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' || (!empty($execution) && !$execution->multiple))
         {
             $this->project->setMenu((int)$execution->project);
             $this->view->projectID = $execution->project;
+        }
+        else
+        {
+            $this->execution->setMenu($executionID);
         }
 
         return $executionID;
