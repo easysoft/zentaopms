@@ -114,7 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['20.1.0']      = '2024-05-22';
+$lang->misc->releaseDate['20.1.0']      = '2024-05-31';
 $lang->misc->releaseDate['20.0']        = '2024-04-30';
 $lang->misc->releaseDate['18.12']       = '2024-04-12';
 $lang->misc->releaseDate['20.0.beta2']  = '2024-03-15';
@@ -228,7 +228,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['20.1.0'][]      = array('title' => '支持APCu 缓存，大幅提升系统性能，细节交互设计优化，修复Bug。', 'desc' => '');
+$lang->misc->feature->all['20.1.0'][]      = array('title' => '支持APCu 缓存，大幅提升系统性能，细节交互设计优化，DevOps细节优化，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['20.0'][]        = array('title' => '重构底层PHP和UI框架，重构核心表单和仪表盘，用户体验全新升级。', 'desc' => '');
 $lang->misc->feature->all['18.12'][]       = array('title' => '禅道新版本中取消非研发用户的信息和相关判断，技术服务临期增加提醒。实现度量项条目化管理、自定义度量项、基础度量库、一键重算历史度量数据。需求池需求矩阵，路标支持移除已立项需求，运营管理界面增加反馈设置功能，需求池需求搜索条件中增加所属需求池搜索条件。', 'desc' => '');
 $lang->misc->feature->all['20.0.beta2'][]  = array('title' => '完善细节功能，解已知Bug。', 'desc' => '');
