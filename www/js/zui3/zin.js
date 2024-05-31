@@ -79,7 +79,7 @@
         configJS:      updateConfigJS,
         activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
-        heading:       updateHeading,
+        heading:       (data, _info, options) => updateHeading(data, options),
         fatal:         showFatalError,
         hookCode:      updateHookCode,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
@@ -294,12 +294,12 @@
         }
     }
 
-    function updateHeading(data)
+    function updateHeading(data, options)
     {
         const $data = $(data);
         const $heading = $('#heading');
         const $toolbar = $heading.children('.toolbar');
-        if($toolbar.length)
+        if($toolbar.length && !options.updateHeading)
         {
             $heading.children('[data-zui-dropmenu]').each(function()
             {
