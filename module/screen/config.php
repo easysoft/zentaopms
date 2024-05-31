@@ -4,6 +4,8 @@ $config->screen->builtinChart  = array(10018, 10019, 10020, 10021, 10022, 10211,
 $config->screen->builtinPivot  = array(1000, 1001, 1002);
 $config->screen->phpChart      = array(20002, 20004, 20007, 20010, 20011, 20012, 20013);
 
+$config->screen->annualRankingChart = array(1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110);
+
 $config->screen->phpScreen = array();
 $config->screen->phpScreen['usageReport'] = 1001;
 
