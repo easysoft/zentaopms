@@ -249,9 +249,7 @@ div
             set::title($manageTitle),
             to::headingActions
             (
-                ($viewType == 'story'    && $allProduct && $canBeChanged) ? btn(setClass('primary'), set::size('sm'), $lang->tree->syncFromProduct, on::click('toggleCopy')) : null,
-                ($viewType == 'feedback' && common::hasPriv('feedback', 'syncProduct') && !isset($syncConfig[$rootID])) ? btn(setClass('primary'), set::size('sm'), set::url(createLink('feedback', 'syncProduct', "productID=$rootID&module=feedback&parent=$parent")), setData('toggle', 'modal'), $lang->tree->syncProductModule) : null,
-                ($viewType == 'ticket'   && common::hasPriv('ticket', 'syncProduct')   && !isset($syncConfig[$rootID])) ? btn(setClass('primary'), set::size('sm'), set::url(createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent")), setData('toggle', 'modal'), $lang->tree->syncProductModule) : null
+                ($viewType == 'story' && $allProduct && $canBeChanged) ? btn(setClass('primary'), set::size('sm'), $lang->tree->syncFromProduct, on::click('toggleCopy')) : null
             ),
             div
             (
