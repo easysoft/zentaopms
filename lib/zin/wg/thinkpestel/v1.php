@@ -8,8 +8,61 @@ namespace zin;
  */
 class thinkPestel extends wg
 {
+    protected static array $defineProps = array(
+        'mode?: string', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
+        'blocks: array', // 模型节点
+    );
+
+    protected function buildItem($questions, $blockIndex): array
+    {
+        global $lang;
+        $cards = array();
+
+        foreach($questions as $item)
+        {
+            $cards[] = div(setClass('h-4 mt-2 w-full bg-opacity-20 rounded-sm bg-' . $lang->thinkbackground->blockColor[$blockIndex]));
+        }
+        return $cards;
+    }
+
+    protected function buildBody(): array
+    {
+        global $lang;
+        $blocks           = $this->prop('blocks');
+        $mode             = $this->prop('mode');
+        $blockIndex       = 0;
+        $modelItems       = array();
+        $defaultQuestions = array_pad(array(), 6, null);
+
+        foreach($blocks as $block)
+        {
+            $blockColor = $lang->thinkbackground->blockColor[$blockIndex];
+            $modelItems[] = div
+            (
+                setClass('h-full w-1/' . count($blocks), 'block-' . $blockIndex),
+                $mode === 'preview' ? div(setClass('w-full text-center text-sm leading-tight text-gray-400'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
+                div
+                (
+                    setClass('border border-opacity-80 rounded-lg bg-white mt-1 mx-1'),
+                    div
+                    (
+                        setClass('bg-opacity-20 h-16 rounded-lg px-2 py-3 w-full flex items-center justify-center bg-' . $blockColor, 'text-' . $blockColor),
+                        span(setClass('item-step-title'), $block ? $block : $lang->thinkwizard->unAssociated)
+                    ),
+                    div(setClass('px-2 pb-2 h-52'), $this->buildItem($defaultQuestions, $blockIndex))
+                ),
+            );
+            $blockIndex ++;
+        }
+        return $modelItems;
+    }
+
     protected function build()
     {
-        return div();
+        return div
+        (
+            setClass('flex'),
+            $this->buildBody()
+        );
     }
 }
