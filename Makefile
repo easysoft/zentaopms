@@ -186,6 +186,7 @@ zentaoxx:
 	mkdir zentaoxx/misc; cp misc/cn2tw.php zentaoxx/misc; cd zentaoxx/misc; php cn2tw.php
 	cp misc/en2other.php zentaoxx/misc; cd zentaoxx/misc; php en2other.php ../
 	rm -rf zentaoxx/misc
+	rm -rf zentaoxx/extension/xuanxuan
 	#zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	#rm -rf xuan.zip xuan zentaoxx
 	rm -rf xuan.zip xuan
