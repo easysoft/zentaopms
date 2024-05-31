@@ -223,7 +223,7 @@ function reloadApp(code, url, options)
     try
     {
         if(app.external) iframe.src = url;
-        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, options);
+        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, $.extend({updateHeading: true}, options));
         else console.error('[APPS]', 'reload: Cannot load page when iframe is not ready.');
     }
     catch(error)
