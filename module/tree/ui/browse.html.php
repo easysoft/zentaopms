@@ -54,6 +54,7 @@ if($viewType == 'story' && $allProduct)
 foreach($sons as $son)
 {
     if($son->order > $maxOrder) $maxOrder = $son->order;
+    $disabled = $son->type != $viewType;
 
     $moduleRows[] = formRow
     (
@@ -69,6 +70,7 @@ foreach($sons as $son)
                     set::name("modules[id$son->id]"),
                     set::type('input'),
                     set::value($son->name),
+                    set::disabled($disabled),
                     set::placeholder($placeholder)
                 ),
                 empty($branches) ? null : picker
@@ -76,7 +78,7 @@ foreach($sons as $son)
                     set::name("branch[id$son->id]"),
                     set::items($branches),
                     set::value($son->branch),
-                    set::disabled(true),
+                    set::disabled($disabled),
                     set::required(true)
                 ),
                 input
@@ -85,12 +87,14 @@ foreach($sons as $son)
                     set::name("shorts[id$son->id]"),
                     set::type('input'),
                     set::value($son->short),
+                    set::disabled($disabled),
                     set::placeholder($lang->tree->short)
                 ),
                 input
                 (
                     setClass('hidden'),
                     set::name("order[id$son->id]"),
+                    set::disabled($disabled),
                     set::value($son->order),
                     set::control('hidden')
                 )
@@ -249,9 +253,7 @@ div
             set::title($manageTitle),
             to::headingActions
             (
-                ($viewType == 'story'    && $allProduct && $canBeChanged) ? btn(setClass('primary'), set::size('sm'), $lang->tree->syncFromProduct, on::click('toggleCopy')) : null,
-                ($viewType == 'feedback' && common::hasPriv('feedback', 'syncProduct') && !isset($syncConfig[$rootID])) ? btn(setClass('primary'), set::size('sm'), set::url(createLink('feedback', 'syncProduct', "productID=$rootID&module=feedback&parent=$parent")), setData('toggle', 'modal'), $lang->tree->syncProductModule) : null,
-                ($viewType == 'ticket'   && common::hasPriv('ticket', 'syncProduct')   && !isset($syncConfig[$rootID])) ? btn(setClass('primary'), set::size('sm'), set::url(createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent")), setData('toggle', 'modal'), $lang->tree->syncProductModule) : null
+                ($viewType == 'story' && $allProduct && $canBeChanged) ? btn(setClass('primary'), set::size('sm'), $lang->tree->syncFromProduct, on::click('toggleCopy')) : null
             ),
             div
             (

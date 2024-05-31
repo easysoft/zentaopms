@@ -234,7 +234,7 @@ class mrModel extends model
 
         $newMR = new stdclass();
         $newMR->mriid       = $rawMR->iid;
-        $newMR->status      = $rawMR->state;
+        $newMR->status      = $rawMR->state == 'open' ? 'opened' : $rawMR->state;
         $newMR->mergeStatus = $rawMR->merge_status;
         $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
 
@@ -539,7 +539,11 @@ class mrModel extends model
         $scm->setEngine($repo);
         $MR = $scm->getSingleMR($MRID);
 
-        if($MR) $MR->gitService = strtolower($repo->SCM);
+        if($MR)
+        {
+            $MR->gitService = strtolower($repo->SCM);
+            if($MR->state == 'open') $MR->state = 'opened';
+        }
         return $MR;
     }
 

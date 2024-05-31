@@ -390,6 +390,7 @@ class todo extends control
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
+            $message     = sprintf($this->lang->todo->{$confirmNote}, $todo->objectID);
 
             $tab = $this->app->tab;
             if($todo->type == 'bug')      $tab = 'qa';
@@ -398,8 +399,7 @@ class todo extends control
             if($todo->type == 'feedback') $tab = 'feedback';
             if(in_array($todo->type, array('issue', 'risk'))) $tab = 'project';
 
-            $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => array('url' => $confirmURL, 'app' => $tab), 'canceled' => array('url' => $cancelURL)), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$tab}');});"));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')

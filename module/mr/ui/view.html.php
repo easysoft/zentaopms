@@ -180,7 +180,7 @@ panel
         setClass('flex items-center mt-4'),
         cell
         (
-            setClass('mr-4'),
+            setClass('mr-4 mr-view-cell'),
             set::grow(1),
             set::align('flex-start'),
             cell
@@ -286,7 +286,7 @@ panel
                     ) : null,
                     !empty($MR->jobID) && hasPriv('job', 'exec') ? btn
                     (
-                        setClass('label primary size-sm ajax-submit'),
+                        setClass('label primary size-lg ajax-submit'),
                         set::url(helper::createLink('mr', 'ajaxExecJob', "MRID={$MR->id}&jobID={$MR->jobID}")),
                         set::hint($lang->mr->execJobTip),
                         $lang->mr->execJob

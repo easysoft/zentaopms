@@ -230,8 +230,8 @@ window.afterPageUpdate = function()
 window.treeClick = function(info)
 {
     if (info.item.items && info.item.items.length > 0) return;
-    $('#' + info.item.id).parent().addClass('selected');
-    openTab(info.item.key, info.item.text);
+    $('li[z-key="' + info.item.id + '"] .listitem').addClass('selected');
+    openTab(info.item.id, info.item.text);
     arrowTabs('monacoTabs', -2);
 }
 

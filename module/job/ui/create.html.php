@@ -17,7 +17,7 @@ jsVar('pageRepoID', $repoID);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
 
-$engine = 'gitlab';
+$engine = key($lang->job->engineList);
 if($repo)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
@@ -29,6 +29,10 @@ if($repo)
     elseif($repo->SCM != 'Gitlab')
     {
         $engine = 'jenkins';
+    }
+    else
+    {
+        $engine = 'gitlab';
     }
 }
 
@@ -154,7 +158,7 @@ formPanel
         set::label($lang->job->useZentao),
         set::control('radioListInline'),
         set::items($lang->job->zentaoTrigger),
-        set::value('1'),
+        set::value('0'),
         set::width('1/2'),
         on::change('window.changeTrigger')
     ),
@@ -162,6 +166,7 @@ formPanel
     (
         set::name('triggerType'),
         set::width('1/2'),
+        setStyle('display', 'none'),
         set::required(true),
         set::label($lang->job->triggerType),
         set::items($lang->job->triggerTypeList),
@@ -252,6 +257,7 @@ formPanel
     formRow
     (
         set::id('paramDiv'),
+        setStyle('display', 'none'),
         formGroup
         (
             set::label($lang->job->customParam),

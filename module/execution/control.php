@@ -1007,7 +1007,7 @@ class execution extends control
         if(empty($projectID)) $projectID = key($allProjects) ? key($allProjects) : 0;
 
         $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
-        if($project) $this->executionZen->correctExecutionCommonLang($project, $execution->type);
+        $project ? $this->executionZen->correctExecutionCommonLang($project, $execution->type) : $project = null;
         $products = $this->executionZen->getLinkedProducts($copyExecutionID, $planID, $project);
         $this->executionZen->setLinkedBranches($products, $copyExecutionID, $planID, $project);
 

@@ -530,7 +530,8 @@ $(function()
             requiredFields = requiredFields.split(',');
             $.each(requiredFields, function(_, requiredId)
             {
-                var $required = $$('[name^=' + requiredId);
+                if(requiredId === '') return true;
+                var $required = $$('input[name="' + requiredId + '"]');
                 var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
                 if($authBlock.length)
                 {
@@ -538,7 +539,8 @@ $(function()
                     if(val === undefined || val === null || val === '' || val === '0')
                     {
                         targetStatus.submitOK = false;
-                        if(!targetStatus.waitField) targetStatus.waitField = $required;
+                        if(task.nav.module == 'program' && task.nav.method == 'create' && requiredId === 'end' && $$('[name="longTime"]').val() == 'on') targetStatus.submitOK = true;
+                        if(!targetStatus.submitOK && !targetStatus.waitField) targetStatus.waitField = $required;
                     }
                 }
             });
@@ -549,9 +551,9 @@ $(function()
 
     var onFormSubmit = function(e)
     {
-        var iWindow = getAppWindow();
+        var iWindow       = getAppWindow();
         var fieldSelector = getFieldSelector(task, iWindow);
-        var status = checkFieldStatusReady(iWindow, fieldSelector);
+        var status        = checkFieldStatusReady(iWindow, fieldSelector);
         if(status.submitOK)
         {
             setTaskStatus(true, true, true, true);
@@ -583,7 +585,7 @@ $(function()
         else if(requiredFields)
         {
             requiredFields = requiredFields.split(',');
-            $.each(requiredFields, function(_, requiredId){ fieldSelector += ',' + '#' + requiredId;});
+            $.each(requiredFields, function(_, requiredId){ fieldSelector += ',' + '[name="' + requiredId + '"]';});
             if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
         }
 
@@ -624,7 +626,7 @@ $(function()
         var appsIframe = $('#iframePage').get(0);
         appsIframe.onload = appsIframe.onreadystatechange = function()
         {
-            appsWindow.$(appsWindow.document).on('reloadapp.apps openapp.apps showapp.apps closeapp.apps hideapp.apps', function()
+            appsWindow.$(appsWindow.document).on('reloadapp.apps loadapp.apps updateapp.apps openapp.apps showapp.apps closeapp.apps hideapp.apps', function(event)
             {
                 appsWindow.$('body').find('.popover').remove();
                 tryCheckTutorialState(1000);

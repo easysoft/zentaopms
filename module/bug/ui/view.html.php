@@ -19,6 +19,8 @@ jsVar('branchID',         $bug->branch);
 jsVar('errorNoExecution', $lang->bug->noExecution);
 jsVar('errorNoProject',   $lang->bug->noProject);
 jsVar('isInModal',        isInModal());
+jsVar('executions',       $executions);
+jsVar('disableExecution', $lang->project->disableExecution);
 
 $isInModal    = isInModal();
 $canCreateBug = hasPriv('bug', 'create');
@@ -59,16 +61,18 @@ if(!$bug->deleted)
             continue;
         }
 
-        if(!empty($project) && empty($project->hasProduct) && isset($action['id']) && $action['id'] == 'toStory')
+        if(isset($action['id']) && $action['id'] == 'toStory')
         {
-            $action['data-app'] = $app->tab == 'execution' ? 'execution' : 'project';
-            $action['data-tab'] = $app->tab == 'execution' ? 'execution' : 'project';
-            $actions[$key] = $action;
-        }
-        if(!empty($project) && $project->type == 'project' && $project->multiple == '0' && isset($action['id']) && $action['id'] == 'toStory')
-        {
-            $action['data-app'] = 'project';
-            $action['data-tab'] = 'project';
+            if(!empty($project))
+            {
+                if(empty($project->hasProduct)) $action['data-app'] = $app->tab == 'execution' ? 'execution' : 'project';
+                if($project->type == 'project' && $project->multiple == '0') $action['data-app'] = 'project';
+                if($isInModal)
+                {
+                    $action['data-load'] = 'modal';
+                    $action['data-size'] = 'lg';
+                }
+            }
             $actions[$key] = $action;
         }
     }

@@ -841,7 +841,24 @@ class storyModel extends model
             if(!empty($story->plan))    $this->action->create('productplan', (int)$story->plan, 'linkstory', '', $storyID);
         }
 
-        if(isset($story->stage) and $oldStory->stage != $story->stage) $this->storyTao->updateLane($storyID, $oldStory->type);
+        if(isset($story->stage) and $oldStory->stage != $story->stage)
+        {
+            list($linkedBranches, $linkedProjects) = $this->storyTao->getLinkedBranchesAndProjects($storyID);
+            foreach($linkedProjects as $linkedProject)
+            {
+                $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($story->stage)->where('story')->eq((int)$storyID)->andWhere('branch')->in($linkedProject->branches)->exec();
+            }
+
+            $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.story')->eq($storyID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->in('sprint,stage,kanban')
+                ->fetchPairs('project', 'project');
+
+            $this->loadModel('kanban');
+            foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, $oldStory->type, $storyID);
+        }
 
         unset($oldStory->parent, $story->parent);
         if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);

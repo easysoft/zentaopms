@@ -200,7 +200,8 @@ class taskZen extends task
         }
 
         /* Check if the request data size exceeds the PHP limit. */
-        $tasks           = $this->task->getByIdList($this->post->taskIdList);
+        $tasks = $this->task->getByIdList($this->post->taskIdList);
+        foreach($tasks as $taskID => $task) $tasks[$taskID]->consumed = 0;
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
@@ -597,14 +598,14 @@ class taskZen extends task
      * 构造批量编辑的任务数据。
      * Build the tasks data to batch edit.
      *
+     * @param  array     $taskData
+     * @param  array     $oldTasks
      * @access protected
      * @return array
      */
-    protected function buildTasksForBatchEdit(): false|array
+    protected function buildTasksForBatchEdit(array $taskData, array $oldTasks): false|array
     {
-        $taskData = form::batchData()->get();
-        $oldTasks = $taskData ? $this->task->getByIdList(array_keys($taskData)) : array();
-        $now      = helper::now();
+        $now = helper::now();
         foreach($taskData as $taskID => $task)
         {
             $oldTask = $oldTasks[$taskID];
@@ -1656,6 +1657,9 @@ class taskZen extends task
             return $response;
         }
 
+        /* If it is Kanban execution, locate the kanban page. */
+        if($afterChoose != 'continueAdding' && $execution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'kanban', "executionID={$execution->id}"));
+
         /* Process the return information for selecting a jump after creation. */
         return $this->generalCreateResponse($task, $execution->id, $afterChoose);
     }
@@ -1890,22 +1894,27 @@ class taskZen extends task
     protected function setMenu(int $executionID): int
     {
         $execution = $this->execution->getById($executionID);
+        if(!$execution || (!empty($execution) && $execution->multiple))
+        {
+            /* If the admin denied modification of closed executions, only query not closed executions. */
+            $queryMode = $execution && common::canModify('execution', $execution) ? '' : 'noclosed';
 
-        /* If the admin denied modification of closed executions, only query not closed executions. */
-        $queryMode = $execution && common::canModify('execution', $execution) ? 'all' : 'noclosed';
+            /* Get executions the current user can access. */
+            $this->executionPairs = $this->execution->getPairs(0, 'all', $queryMode);
 
-        /* Get executions the current user can access. */
-        $this->executionPairs = $this->execution->getPairs(0, 'all', $queryMode);
-
-        /* Call checkAccess method to judge the user can access the execution or not, if not return the first one he can access. */
-        $executionID = $this->execution->checkAccess($executionID, $this->executionPairs);
+            /* Call checkAccess method to judge the user can access the execution or not, if not return the first one he can access. */
+            $executionID = $this->execution->checkAccess($executionID, $this->executionPairs);
+        }
 
         /* Set Menu. */
-        $this->execution->setMenu($executionID);
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' || (!empty($execution) && !$execution->multiple))
         {
             $this->project->setMenu((int)$execution->project);
             $this->view->projectID = $execution->project;
+        }
+        else
+        {
+            $this->execution->setMenu($executionID);
         }
 
         return $executionID;

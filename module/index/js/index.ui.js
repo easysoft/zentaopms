@@ -46,6 +46,11 @@ function isOldPage(url)
  */
 function openApp(url, code, options)
 {
+    if(!apps.frameContent)
+    {
+        setTimeout(() => {openApp(url, code, options);}, 100);
+        return;
+    }
     const loadOptions = {};
     if(typeof code === 'object') $.extend(loadOptions, code);
     else if(code) loadOptions.code = code;
@@ -218,7 +223,7 @@ function reloadApp(code, url, options)
     try
     {
         if(app.external) iframe.src = url;
-        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, options);
+        else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, $.extend({updateHeading: true}, options));
         else console.error('[APPS]', 'reload: Cannot load page when iframe is not ready.');
     }
     catch(error)
@@ -253,6 +258,7 @@ function updateApp(code, url, title, type)
     app.currentUrl = url;
     window.history.pushState(state, title, url);
     zui.store.session.set('lastOpenApp', {code, url});
+    triggerAppEvent(code, 'updateapp', [code, url, title, type]);
     if(debug) console.log('[APPS]', 'update:', {code, url, title, type});
     return state;
 }

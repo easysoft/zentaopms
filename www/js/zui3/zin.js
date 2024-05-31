@@ -79,7 +79,7 @@
         configJS:      updateConfigJS,
         activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
-        heading:       updateHeading,
+        heading:       (data, _info, options) => updateHeading(data, options),
         fatal:         showFatalError,
         hookCode:      updateHookCode,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
@@ -294,12 +294,12 @@
         }
     }
 
-    function updateHeading(data)
+    function updateHeading(data, options)
     {
         const $data = $(data);
         const $heading = $('#heading');
         const $toolbar = $heading.children('.toolbar');
-        if($toolbar.length)
+        if($toolbar.length && !options.updateHeading)
         {
             $heading.children('[data-zui-dropmenu]').each(function()
             {
@@ -593,11 +593,7 @@
                             }
                             else if('confirm' in data.load)
                             {
-                                zui.Modal.confirm({message: data.load.confirm, onResult: function(result)
-                                {
-                                    if(result && data.load.confirmed) loadPage(data.load.confirmed);
-                                    else if(!result && data.load.canceled) loadPage(data.load.canceled);
-                                }});
+                                $(document).trigger('locate.zt', data.load);
                             }
                             else if('alert' in data.load)
                             {
@@ -902,7 +898,12 @@
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
-        if((modal.options.url || '').toLowerCase() === (options.url || '').toLowerCase() && options.loadingClass === undefined) options.loadingClass = '';
+        if(modal.options.url && options.url && options.loadingClass === undefined)
+        {
+            const lastUrl = $.parseLink(modal.options.url);
+            const newUrl  = $.parseLink(options.url);
+            if(lastUrl.moduleName === newUrl.moduleName && lastUrl.methodName === newUrl.methodName) options.loadingClass = '';
+        }
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 

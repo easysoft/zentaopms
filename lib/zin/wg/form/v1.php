@@ -134,7 +134,7 @@ class form extends formBase
     protected function getItemValue(string $name): ?string
     {
         $data = $this->prop('data');
-        if(is_object($data)) return isset($data->$name) ? strval($data->$name) : null;
+        if(is_object($data)) return isset($data->$name) && !is_array($data->$name) && !is_object($data->$name) ? strval($data->$name) : null;
         if(is_array($data))  return isset($data[$name]) ? strval($data[$name]) : null;
         return null;
     }

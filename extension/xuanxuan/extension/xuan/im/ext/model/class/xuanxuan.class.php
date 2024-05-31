@@ -146,6 +146,7 @@ class xuanxuanIm extends imModel
             $userID  = $this->dao->select('id')->from(TABLE_USER)->where('account')->eq($user)->fetch('id');
             $account = $user;
         }
+        if(empty($userID)) return;
 
         $actor   = !empty($account) ? $account : '';
         $extra   = json_encode(array('actorId' => $userID));

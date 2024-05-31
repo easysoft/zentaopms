@@ -89,7 +89,7 @@ window.addItem = function(e)
 
     if($pickerBox)
     {
-        $options = thisRow.find('.picker-box [name^=branch]').zui('picker').options;
+        options = thisRow.find('.picker-box [name^=branch]').zui('picker').options;
         $pickerBox.picker($.extend({'name': 'branch[]'}, options));
     }
 }

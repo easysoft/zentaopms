@@ -756,7 +756,8 @@ class screenModel extends model
             $langs    = json_decode($chart->langs, true);
             $settings = $settings[0];
 
-            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters);
+            $isSort = in_array($chart->id, $this->config->screen->annualRankingChart) ? true : false;
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters, $isSort);
 
             $fields       = json_decode($chart->fields, true);
             $dimensions   = array($settings['xaxis'][0]['field']);

@@ -24,6 +24,10 @@ $lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Req
 $lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>。';
 $lang->mr->submitType   = 'Submit type';
 
+$lang->mr->action = new stdclass();
+$lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
+$lang->mr->action->imported = '$date, <strong>$actor</strong> imported this Merge Request.';
+
 $lang->mr->linkList  = 'Link List of stories,Bugs,tasks';
 $lang->mr->linkStory = 'Link Stories';
 $lang->mr->linkBug   = 'Link Bugs';
@@ -131,6 +135,7 @@ $lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge request
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
+$lang->mr->unsupportedFeature  = "Unsupported feature.";
 
 $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";

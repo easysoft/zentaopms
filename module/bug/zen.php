@@ -287,7 +287,7 @@ class bugZen extends bug
     private function getKanbanVariable(array $output): array
     {
         $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-        if(!empty($this->post->lane)) $laneID = $this->post->lane;
+        if(!empty($_POST['lane'])) $laneID = $this->post->lane;
 
         $columnID = $this->loadModel('kanban')->getColumnIDByLaneID((int)$laneID, 'unconfirmed');
         if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
@@ -1017,7 +1017,7 @@ class bugZen extends bug
 
         if($executionID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'all', 'story', false);
+            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, '', 'full', 'all', 'story', false);
         }
         else
         {

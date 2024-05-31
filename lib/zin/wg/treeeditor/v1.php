@@ -57,7 +57,7 @@ class treeEditor extends wg
         $canSplit  = $this->prop('canSplit');
         $editType  = $this->prop('type');
         $selected  = $this->prop('selected');
-        $typeList  = array('task' => 'T', 'bug' => 'B', 'case' => 'C');
+        $typeList  = array('task' => 'T', 'bug' => 'B', 'case' => 'C', 'feedback' => 'F', 'ticket' => 'T');
         $viewType  = data('viewType') ? data('viewType') : '';
         $sortTree  = $this->prop('sortable') || $this->prop('onSort');
 

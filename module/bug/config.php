@@ -116,13 +116,13 @@ $config->bug->actionList['activate']['hint']        = $lang->bug->activate;
 $config->bug->actionList['activate']['url']         = array('module' => 'bug', 'method' => 'activate', 'params' => 'bugID={id}');
 $config->bug->actionList['activate']['data-toggle'] = 'modal';
 
-$config->bug->actionList['toStory']['icon']         = 'lightbulb';
-$config->bug->actionList['toStory']['id']           = 'toStory';
-$config->bug->actionList['toStory']['text']         = $lang->bug->toStory;
-$config->bug->actionList['toStory']['hint']         = $lang->bug->toStory;
-$config->bug->actionList['toStory']['data-tab']     = 'product';
-$config->bug->actionList['toStory']['data-confirm'] = array('html' => "<strong><i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$lang->bug->notice->confirmToStory}</strong>");
-$config->bug->actionList['toStory']['data-url']     = array('module' => 'story', 'method' => 'create', 'params' => 'product={product}&branch={branch}&module={module}&story=0&execution=0&bugID={id}');
+$config->bug->actionList['toStory']['icon']            = 'lightbulb';
+$config->bug->actionList['toStory']['id']              = 'toStory';
+$config->bug->actionList['toStory']['text']            = $lang->bug->toStory;
+$config->bug->actionList['toStory']['hint']            = $lang->bug->toStory;
+$config->bug->actionList['toStory']['data-tab']        = 'product';
+$config->bug->actionList['toStory']['data-confirmtip'] = array('html' => "<strong><i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$lang->bug->notice->confirmToStory}</strong>");
+$config->bug->actionList['toStory']['data-url']        = array('module' => 'story', 'method' => 'create', 'params' => 'product={product}&branch={branch}&module={module}&story=0&execution=0&bugID={id}');
 
 $config->bug->actionList['toTask']['icon']        = 'check';
 $config->bug->actionList['toTask']['text']        = $lang->bug->toTask;

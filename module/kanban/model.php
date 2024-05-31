@@ -1070,13 +1070,14 @@ class kanbanModel extends model
         foreach($lanes as $lane)
         {
             $item = array();
-            $item['id']     = $lane->id;
-            $item['type']   = $lane->type;
-            $item['name']   = $lane->id;
-            $item['region'] = $lane->region;
-            $item['title']  = htmlspecialchars_decode($lane->name);
-            $item['color']  = $lane->color;
-            $item['order']  = $lane->order;
+            $item['id']        = $lane->id;
+            $item['execution'] = $lane->execution;
+            $item['type']      = $lane->type;
+            $item['name']      = $lane->id;
+            $item['region']    = $lane->region;
+            $item['title']     = htmlspecialchars_decode($lane->name);
+            $item['color']     = $lane->color;
+            $item['order']     = $lane->order;
 
             foreach($actions as $action)
             {

@@ -11,7 +11,7 @@ $config->tutorial->tasksConfig['createAccount']['nav']['module']         = 'user
 $config->tutorial->tasksConfig['createAccount']['nav']['method']         = 'create';
 $config->tutorial->tasksConfig['createAccount']['nav']['menuModule']     = 'company';
 $config->tutorial->tasksConfig['createAccount']['nav']['menu']           = 'browseUser';
-$config->tutorial->tasksConfig['createAccount']['nav']['form']           = '#createUser';
+$config->tutorial->tasksConfig['createAccount']['nav']['form']           = '#mainContent';
 $config->tutorial->tasksConfig['createAccount']['nav']['requiredFields'] = 'account,realname,verifyPassword,password1,password2';
 $config->tutorial->tasksConfig['createAccount']['nav']['submit']         = 'button[type=submit]';
 $config->tutorial->tasksConfig['createAccount']['nav']['target']         = '.create-user-btn';
@@ -27,7 +27,7 @@ $config->tutorial->tasksConfig['createProgram']['nav']['module']         = 'prog
 $config->tutorial->tasksConfig['createProgram']['nav']['method']         = 'create';
 $config->tutorial->tasksConfig['createProgram']['nav']['menuModule']     = 'program';
 $config->tutorial->tasksConfig['createProgram']['nav']['menu']           = '.create-program-btn';
-$config->tutorial->tasksConfig['createProgram']['nav']['form']           = '#createProgram';
+$config->tutorial->tasksConfig['createProgram']['nav']['form']           = '#form-program-create';
 $config->tutorial->tasksConfig['createProgram']['nav']['submit']         = 'button[type=submit]';
 $config->tutorial->tasksConfig['createProgram']['nav']['target']         = '.create-program-btn';
 $config->tutorial->tasksConfig['createProgram']['nav']['targetPageName'] = $lang->tutorial->tasks->createProgram->targetPageName;

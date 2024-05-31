@@ -39,7 +39,7 @@ class password extends wg
                     on::keyup('checkPassword'),
                     set::type('password'),
                     set::name($name),
-                    set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, ''))
+                    set::placeholder(zget($lang->user->placeholder->passwordStrength, isset($config->safe->mode) ? $config->safe->mode : '1', ''))
                 ),
                 span
                 (
