@@ -180,7 +180,7 @@ panel
         setClass('flex items-center mt-4'),
         cell
         (
-            setClass('mr-4'),
+            setClass('mr-4 mr-view-cell'),
             set::grow(1),
             set::align('flex-start'),
             cell
