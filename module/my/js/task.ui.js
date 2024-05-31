@@ -39,9 +39,9 @@ window.setStatistics = function(element, checks)
         if(task.hasChild) return false;
         if(task.status == 'wait')  waitCount ++;
         if(task.status == 'doing') doingCount ++;
-        estimate += task.estimate;
-        consumed += task.consumed;
-        left     += task.left;
+        estimate += parseFloat(task.estimate);
+        consumed += parseFloat(task.consumed);
+        left     += parseFloat(task.left);
     })
     if(checks.length) return {html: element.options.checkedSummary.replaceAll('%total%', `${checks.length}`).replaceAll('%wait%', waitCount).replaceAll('%doing%', doingCount).replaceAll('%estimate%', estimate).replaceAll('%consumed%', consumed).replaceAll('%left%', left)};
     return zui.formatString(element.options.defaultSummary);
