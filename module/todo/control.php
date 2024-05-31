@@ -399,7 +399,7 @@ class todo extends control
             if($todo->type == 'feedback') $tab = 'feedback';
             if(in_array($todo->type, array('issue', 'risk'))) $tab = 'project';
 
-            return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$tab}');});"));
+            return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$tab}'); else loadCurrentPage();});"));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')
