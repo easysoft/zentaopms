@@ -282,7 +282,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function getOptionsFromSql(string $sql, string $keyField, string $valueField, string $driver): array
+    public function getOptionsFromSql(string $sql, $driver, string $keyField, string $valueField): array
     {
         $options = array();
         $dbh     = $this->app->loadDriver($driver);
