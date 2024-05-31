@@ -2785,7 +2785,6 @@ class baseRouter
      */
     public function loadCacheConfig()
     {
-        if(!$this->isServing())      return false;
         if(!$this->checkInstalled()) return false;
 
         $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
