@@ -1118,8 +1118,6 @@ class baseFixer
          * purifier会把&nbsp;替换空格，kindeditor再会把行首的空格去掉。
          * purifier will change &nbsp; to ' ', and kindeditor will remove the header space again.
          **/
-        $data = preg_replace('/<[^>]+</', '<', $data);
-        $data = preg_replace('/>[^<]+>/', '>', $data);
         if($usePurifier) $data = str_replace('&nbsp;', '&spnb;', $data);
         $data = $usePurifier ? $purifier->purify($data) : strip_tags($data, $allowedTags);
         if($usePurifier) $data = str_replace('&amp;spnb;', '&nbsp;', $data);
