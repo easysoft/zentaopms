@@ -598,14 +598,14 @@ class taskZen extends task
      * 构造批量编辑的任务数据。
      * Build the tasks data to batch edit.
      *
+     * @param  array     $taskData
+     * @param  array     $oldTasks
      * @access protected
      * @return array
      */
-    protected function buildTasksForBatchEdit(): false|array
+    protected function buildTasksForBatchEdit(array $taskData, array $oldTasks): false|array
     {
-        $taskData = form::batchData()->get();
-        $oldTasks = $taskData ? $this->task->getByIdList(array_keys($taskData)) : array();
-        $now      = helper::now();
+        $now = helper::now();
         foreach($taskData as $taskID => $task)
         {
             $oldTask = $oldTasks[$taskID];
