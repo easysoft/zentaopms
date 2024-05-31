@@ -13639,7 +13639,9 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
 ('system',      '项目',           'projects',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
 ('system',      '产品线',         'productLines',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getLinePairs\",\"methodDesc\":\"Get line pairs.\",\"params\":[{\"name\":\"useShort\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '需求',           'stories',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\"',    'view_datasource_4',    'id',   'title'),
+('sql',         '软件需求',       'stories',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"story\"',    'view_datasource_4',    'id',   'title'),
+('sql',         '用户需求',       'requirements',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"requirement\"',    'view_datasource_3',    'id',   'title'),
+('sql',         '业务需求',       'epics',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" type=\"epic\"',    'view_datasource_2',    'id',   'title'),
 ('sql',         '任务',           'tasks',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_task where deleted=\"0\" and vision=\"rnd\"',      'view_datasource_5',    'id',   'name'),
 ('sql',         'Bug',            'bugs',                     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_bug where deleted=\"0\"',      'view_datasource_6',    'id',   'title'),
 ('system',      '权限分组',       'groups',                   '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
@@ -13706,6 +13708,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackclosedReason', '', '', ''),
 ('lang',        '任务关闭原因',   'litetaskReason',           '1', 'lite', 'admin', '1970-01-01 00:00:01', 'taskReason',           '', '', '');
 
+DROP VIEW IF EXISTS `view_datasource_2`;
+DROP VIEW IF EXISTS `view_datasource_3`;
 DROP VIEW IF EXISTS `view_datasource_4`;
 DROP VIEW IF EXISTS `view_datasource_5`;
 DROP VIEW IF EXISTS `view_datasource_6`;
@@ -13715,7 +13719,9 @@ DROP VIEW IF EXISTS `view_datasource_12`;
 DROP VIEW IF EXISTS `view_datasource_41`;
 DROP VIEW IF EXISTS `view_datasource_54`;
 
-CREATE VIEW `view_datasource_4`  AS select `id`,`title` from `zt_story` where `deleted` = '0';
+CREATE VIEW `view_datasource_2`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'epic';
+CREATE VIEW `view_datasource_3`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'requirement';
+CREATE VIEW `view_datasource_4`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'story';
 CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'rnd';
 CREATE VIEW `view_datasource_6`  AS select `id`,`title` from `zt_bug` where `deleted` = '0';
 CREATE VIEW `view_datasource_10` AS select `id`,`name` from `zt_build` where `deleted` = '0';

@@ -97,6 +97,20 @@ ALTER TABLE `zt_user` MODIFY `ip` varchar(255) NOT NULL DEFAULT '';
 
 DELETE FROM `zt_config` WHERE `owner`='system' AND `module`='custom' AND `key`='productProject';
 
+DROP VIEW IF EXISTS `view_datasource_2`;
+DROP VIEW IF EXISTS `view_datasource_3`;
+DROP VIEW IF EXISTS `view_datasource_4`;
+
+CREATE VIEW `view_datasource_2` AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'epic';
+CREATE VIEW `view_datasource_3` AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'requirement';
+CREATE VIEW `view_datasource_4` AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'story';
+
+INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
+('sql', '用户需求', 'requirements', '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"requirement\"',    'view_datasource_3',    'id',   'title'),
+('sql', '业务需求', 'epics',        '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" type=\"epic\"',    'view_datasource_2',    'id',   'title');
+
+UPDATE `zt_workflowdatasource` SET `datasource` = 'select id,title from zt_story where deleted=\"0\" and type=\"story\"' WHERE `code` = 'stories';
+
 INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `alias`, `unit`, `desc`, `definition`, `when`, `createdBy`, `createdDate`, `builtin`, `deleted`, `dateType`) VALUES
 ('scale', 'product', 'feedback', 'released', 'php', '按产品统计的每周新增反馈数', 'count_of_weekly_created_feedback_in_product', '新增反馈数', 'count', '按产品统计的每周新增反馈数是指在一个周内收集到的用户反馈的数量。这个度量项可以帮助团队了解用户对产品的发展趋势和需求变化，并进行产品策略的调整和优化', '产品中创建时间为某个周的反馈的个数求和\r\n过滤已删除的反馈\r\n过滤已删除的产品', 'realtime', 'system', '2024-05-07 08:00:00', '1', '0', 'week'),
 ('scale', 'product', 'feedback', 'released', 'php', '按产品统计的处理中的反馈数', 'count_of_doing_feedback_in_product', '处理中反馈数', 'count', '按产品统计的处理中的反馈数表示产品中状态为处理中的反馈数量之和。该数值越大，说明团队并行处理的反馈越多，可以帮助团队了解当前的工作负载情况', '产品中所有反馈个数求和\r\n状态为处理中\r\n过滤已删除的反馈\r\n过滤已删除的产品', 'realtime', 'system', '2024-05-07 08:00:00', '1', '0', 'nodate'),
