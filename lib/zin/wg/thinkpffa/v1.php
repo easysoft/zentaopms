@@ -28,13 +28,13 @@ class thinkPffa extends wg
         return div
         (
             setClass('bg-white w-full px-2 py-2.5 border border-gray-200 h-28 overflow-auto'),
-            span(setClass('text-sm', 'text-' . $cardColor),$lang->thinkwizard->unAssociated),
+            span(setClass('text-sm', 'text-' . $cardColor), $lang->thinkwizard->unAssociated),
             div
             (
                 setClass('flex flex-wrap'),
                 $cards
             ),
-            div(setClass('text-center text-sm leading-tight text-gray-300 mt-1'),$lang->thinkwizard->pffaGroundText[$blockIndex])
+            div(setClass('text-center text-sm leading-tight text-gray-400 mt-1'), $lang->thinkwizard->pffaGroundText[$blockIndex])
         );
     }
 
@@ -47,7 +47,7 @@ class thinkPffa extends wg
         return div
         (
             setClass('pr-3.5'),
-            span(setClass('text-gray-400 text-sm'),$lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
             div
             (
                 setClass('flex items-center mt-1'),
@@ -65,7 +65,7 @@ class thinkPffa extends wg
 
         return div
         (
-            span(setClass('text-gray-400 text-sm'),$lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
@@ -83,7 +83,7 @@ class thinkPffa extends wg
 
         return div
         (
-            span(setClass('text-gray-400 text-sm'),$lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
@@ -101,7 +101,7 @@ class thinkPffa extends wg
         return div
         (
             setClass('relative pt-3.5'),
-            span(setClass('absolute text-gray-400 text-sm'),$lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            span(setClass('absolute text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
             div
             (
                 setClass('flex justify-center flex-wrap mt-1'),
@@ -120,7 +120,7 @@ class thinkPffa extends wg
         return div
         (
             setClass('pl-3.5'),
-            span(setClass('text-gray-400 text-sm ml-4'),$lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
+            span(setClass('text-gray-400 text-sm ml-4'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]),
             div
             (
                 setClass('flex items-center mt-1'),
@@ -134,18 +134,17 @@ class thinkPffa extends wg
         global $lang;
         return div
         (
-            setClass('flex items-center'),
-            div(setClass('w-2/7'),$this->buildLeftBlock()),
-            div(
-                setClass('w-3/7'),
-                $this->buildTopBlock(),
-                $this->buildCenterBlock(),
-                $this->buildBottomBlock(),
-            ),
             div
             (
-                setClass('w-2/7'),
-                $this->buildRightBlock()
+                setClass('flex items-center'),
+                div(setClass('w-2/7'), $this->buildLeftBlock()),
+                div(
+                    setClass('w-3/7'),
+                    $this->buildTopBlock(),
+                    $this->buildCenterBlock(),
+                    $this->buildBottomBlock()
+                ),
+                div(setClass('w-2/7'), $this->buildRightBlock())
             )
         );
     }
