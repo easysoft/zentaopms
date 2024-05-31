@@ -1017,7 +1017,7 @@ class bugZen extends bug
 
         if($executionID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID);
+            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch);
         }
         else
         {
