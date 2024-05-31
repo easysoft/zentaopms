@@ -129,7 +129,7 @@ class router extends baseRouter
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
-        if(isset(self::$loadedModules[$moduleName])) return $lang;
+        if(isset(self::$loadedLangs[$moduleName])) return $lang;
 
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common') $this->setCommonLang();
