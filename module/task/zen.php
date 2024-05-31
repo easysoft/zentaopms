@@ -1904,7 +1904,6 @@ class taskZen extends task
 
             /* Call checkAccess method to judge the user can access the execution or not, if not return the first one he can access. */
             $executionID = $this->execution->checkAccess($executionID, $this->executionPairs);
-
         }
 
         /* Set Menu. */

@@ -25,6 +25,7 @@ class executionModel extends model
      */
     public function checkPriv(int $executionID): bool
     {
+        if(commonModel::isTutorialMode()) return true;
         return !empty($executionID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->sprints},", ",{$executionID},") !== false));
     }
 
