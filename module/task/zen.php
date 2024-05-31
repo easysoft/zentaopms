@@ -1657,6 +1657,9 @@ class taskZen extends task
             return $response;
         }
 
+        /* If it is Kanban execution, locate the kanban page. */
+        if($afterChoose != 'continueAdding' && $execution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'kanban', "executionID={$execution->id}"));
+
         /* Process the return information for selecting a jump after creation. */
         return $this->generalCreateResponse($task, $execution->id, $afterChoose);
     }
