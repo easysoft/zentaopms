@@ -51,15 +51,15 @@ class biModel extends model
      * Try to explain sql.
      *
      * @param  string     $sql
-     * @param  string     $driverName mysql|duckdb
+     * @param  string     $driver mysql|duckdb
      * @access public
      * @return array
      */
-    public function explainSQL($sql, $driverName = 'mysql')
+    public function explainSQL($sql, $driver = 'mysql')
     {
-        $dbh = $this->app->loadDriver($driverName);
+        $dbh = $this->app->loadDriver($driver);
 
-        $prefixSQL = $driverName == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
+        $prefixSQL = $driver == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
         try
         {
             $rows = $dbh->query("$prefixSQL $sql")->fetchAll();
@@ -79,23 +79,23 @@ class biModel extends model
      *
      * @param  string     $sql
      * @param  string     $limitSql
-     * @param  string     $driverName mysql|duckdb
+     * @param  string     $driver mysql|duckdb
      * @access public
      * @return array
      */
-    public function querySQL($sql, $limitSql, $driverName = 'mysql')
+    public function querySQL($sql, $limitSql, $driver = 'mysql')
     {
-        $dbh = $this->app->loadDriver($driverName);
+        $dbh = $this->app->loadDriver($driver);
 
         try
         {
-            if($driverName == 'mysql')
+            if($driver == 'mysql')
             {
                 $rows      = $dbh->query($limitSql)->fetchAll();
                 $count     = $dbh->query("SELECT FOUND_ROWS() as count")->fetch();
                 $rowsCount = $count->count;
             }
-            elseif($driverName == 'duckdb')
+            elseif($driver == 'duckdb')
             {
                 $rows      = $dbh->query($limitSql)->fetchAll();
                 $allRows   = $dbh->query("SELECT COUNT(1) as count FROM ( $sql )")->fetch();
@@ -116,15 +116,15 @@ class biModel extends model
      * Get sql result columns.
      *
      * @param  string     $sql
-     * @param  string     $driverName mysql|duckdb
+     * @param  string     $driver mysql|duckdb
      * @access public
      * @return array|false
      */
-    public function getColumns(string $sql, $driverName = 'mysql'): array|false
+    public function getColumns(string $sql, $driver = 'mysql'): array|false
     {
-        if(!in_array($driverName, $this->config->bi->driverNames)) return false;
+        if(!in_array($driver, $this->config->bi->drivers)) return false;
 
-        if($driverName == 'mysql')
+        if($driver == 'mysql')
         {
             $columns = $this->dao->getColumns($sql);
         }
@@ -139,8 +139,8 @@ class biModel extends model
         {
             $column = (array)$column;
 
-            $name       = $driverName == 'mysql' ? $column['name']        : $column['column_name'];
-            $nativeType = $driverName == 'mysql' ? $column['native_type'] : $column['column_type'];
+            $name       = $driver == 'mysql' ? $column['name']        : $column['column_name'];
+            $nativeType = $driver == 'mysql' ? $column['native_type'] : $column['column_type'];
 
             $result[$name] = array('name' => $name, 'native_type' => $nativeType);
         }
@@ -278,13 +278,15 @@ class biModel extends model
      * @param  string $sql
      * @param  string $keyField
      * @param  string $valueField
+     * @param  string $driver
      * @access public
      * @return array
      */
-    public function getOptionsFromSql(string $sql, string $keyField, string $valueField): array
+    public function getOptionsFromSql(string $sql, string $keyField, string $valueField, string $driver): array
     {
         $options = array();
-        $cols    = $this->dbh->query($sql)->fetchAll();
+        $dbh     = $this->app->loadDriver($driver);
+        $cols    = $dbh->query($sql)->fetchAll();
         $sample  = current($cols);
 
         if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;

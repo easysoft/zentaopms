@@ -607,7 +607,7 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions(string $type, string $object = '', string $field = '', string $sql = '', string $saveAs = ''): array
+    public function getSysOptions(string $type, string $object = '', string $field = '', string $sql = '', string $saveAs = '', $driver = 'mysql'): array
     {
         if(in_array($type, array('user', 'product', 'project', 'execution', 'dept'))) return $this->bi->getScopeOptions($type);
         if(!$field) return array();
@@ -627,14 +627,14 @@ class chartModel extends model
                 {
                     $keyField   = $field;
                     $valueField = $saveAs ? $saveAs : $field;
-                    $options = $this->bi->getOptionsFromSql($sql, $keyField, $valueField);
+                    $options = $this->bi->getOptionsFromSql($sql, $driver, $keyField, $valueField);
                 }
                 break;
         }
 
         if($sql and $saveAs and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'option', 'object')))
         {
-            $options = $this->bi->getOptionsFromSql($sql, $field, $saveAs);
+            $options = $this->bi->getOptionsFromSql($sql, $driver, $field, $saveAs);
         }
 
         return array_filter($options);

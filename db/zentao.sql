@@ -491,6 +491,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
+  `driver` enum('mysql', 'duckdb') not NULL default 'duckdb';
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
   `group` varchar(255) NOT NULL DEFAULT '',
@@ -15076,6 +15077,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `group` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
+  `driver` enum('mysql', 'duckdb') not NULL default 'duckdb';
   `name` text NULL,
   `desc` text NULL,
   `sql` mediumtext NULL,

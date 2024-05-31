@@ -110,16 +110,17 @@ class pivot extends control
         $settings['filterType'] = $filterType;
 
         $sql    = str_replace(';', '', "$post->sql");
+        $driver = $pivot->driver;
         $fields = $post->fieldSettings;
         $langs  = isset($post->langs) ? (is_array($post->langs) ? $post->langs : json_decode($post->langs, true)) : array();
 
         if(isset($settings['summary']) and $settings['summary'] == 'notuse')
         {
-            list($data, $configs) = $this->pivot->genOriginSheet($fields, $settings, $sql, $filterFormat, $langs);
+            list($data, $configs) = $this->pivot->genOriginSheet($fields, $settings, $sql, $filterFormat, $langs, $driver);
         }
         else
         {
-            list($data, $configs) = $this->pivot->genSheet($fields, $settings, $sql, $filterFormat, $langs);
+            list($data, $configs) = $this->pivot->genSheet($fields, $settings, $sql, $filterFormat, $langs, $driver);
         }
 
         $this->pivot->buildPivotTable($data, $configs, $page);

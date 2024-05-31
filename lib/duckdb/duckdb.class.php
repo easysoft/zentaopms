@@ -203,6 +203,7 @@ class duckdb
         $exec   = "$this->binPath :memory: \"$this->sql\" -json 2>&1";
         $output = shell_exec($exec);
 
+        if(empty($output)) $output = '';
         $rows = json_decode($output);
         /* 有内容但是 json 解析失败，说明是报错。*/
         if($output and !$rows)

@@ -8,7 +8,7 @@ USE mysqldb;
 {COPYSQL}
 EOT;
 
-$config->bi->driverNames = array('mysql', 'duckdb');
+$config->bi->drivers = array('mysql', 'duckdb');
 
 $config->bi->columnTypes = new stdclass();
 $config->bi->columnTypes->mysql['TINY']       = 'number';
