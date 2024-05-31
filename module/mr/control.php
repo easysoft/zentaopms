@@ -947,8 +947,9 @@ class mr extends control
             $MR->createdBy     = $this->app->user->account;
             $MR->createdDate   = helper::now();
             $MR->assignee      = $MR->createdBy;
-            $MR->status        = $needSyncMR->state ?: '';
             $MR->mergeStatus   = $needSyncMR->merge_status ?: '';
+            $MR->status        = $needSyncMR->state ?: '';
+            if($MR->status == 'open') $MR->status = 'opened';
             $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
                 ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
                 ->exec();
