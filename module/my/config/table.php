@@ -38,10 +38,11 @@ $config->my->todo->actionList['assignTo']['hint']        = $lang->todo->assigned
 $config->my->todo->actionList['assignTo']['url']         = array('module' => 'todo', 'method' => 'assignTo', 'params' => 'todoID={id}');
 $config->my->todo->actionList['assignTo']['data-toggle'] = 'modal';
 
-$config->my->todo->actionList['finish']['icon'] = 'checked';
-$config->my->todo->actionList['finish']['text'] = $lang->todo->finish;
-$config->my->todo->actionList['finish']['hint'] = $lang->todo->finish;
-$config->my->todo->actionList['finish']['url']  = array('module' => 'todo', 'method' => 'finish', 'params' => 'todoID={id}');
+$config->my->todo->actionList['finish']['icon']      = 'checked';
+$config->my->todo->actionList['finish']['text']      = $lang->todo->finish;
+$config->my->todo->actionList['finish']['hint']      = $lang->todo->finish;
+$config->my->todo->actionList['finish']['url']       = array('module' => 'todo', 'method' => 'finish', 'params' => 'todoID={id}');
+$config->my->todo->actionList['finish']['className'] = 'ajax-submit';
 
 $config->my->todo->actionList['edit']['icon']        = 'edit';
 $config->my->todo->actionList['edit']['text']        = $lang->todo->edit;
