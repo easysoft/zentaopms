@@ -522,9 +522,11 @@ $lang->action->label->createrepobranch        = 'Created branch from';
 $lang->action->label->unlinkrepobranch        = 'Unlinked branch from';
 $lang->action->label->communicate             = 'Communicate';
 $lang->action->label->changedprogram          = 'Changed program';
-$lang->action->label->aiassistant             = 'AI Assistant';
 $lang->action->label->published               = 'publié';
 $lang->action->label->unpublished             = 'inédit';
+$lang->action->label->aiassistant             = 'AI Assistant';
+$lang->action->label->synced                  = 'synced';
+$lang->action->label->imported                = 'imported';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();

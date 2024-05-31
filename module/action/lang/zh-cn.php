@@ -528,6 +528,8 @@ $lang->action->label->changedprogram          = '调整了项目集';
 $lang->action->label->published               = '发布了';
 $lang->action->label->unpublished             = '下架了';
 $lang->action->label->aiassistant             = 'AI 助手';
+$lang->action->label->synced                  = '同步了';
+$lang->action->label->imported                = '导入了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
