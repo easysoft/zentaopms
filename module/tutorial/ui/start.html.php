@@ -25,7 +25,7 @@ div
     h1($lang->tutorial->common),
     p($lang->tutorial->desc),
     a(
-        setClass('btn btn-default btn-start-now btn-lg btn-info'),
+        setClass('btn w-28 canvas size-lg text-primary'),
         set::href($this->inlink('index')),
         set::target('_top'),
         span($lang->tutorial->start)
