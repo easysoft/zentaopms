@@ -323,7 +323,7 @@ class baseDAO
      */
     public function getCache($key, $sql)
     {
-        if(empty($this->cache)) return self::CACHE_MISS;
+        if(!$this->app->isServing() || empty($this->cache)) return self::CACHE_MISS;
 
         $cache = $this->cache->get($key);
         if($cache === null) return self::CACHE_MISS;
@@ -367,9 +367,11 @@ class baseDAO
      */
     public function setCache($key, $value = null)
     {
+        if(!$this->app->isServing() || empty($this->cache)) return false;
+
         $this->app->useClientCache = false;
 
-        if(!empty($this->cache)) $this->cache->set($key, array(microtime(true), $value));
+        $this->cache->set($key, array(microtime(true), $value));
     }
 
     /**
