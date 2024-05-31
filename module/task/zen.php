@@ -200,7 +200,8 @@ class taskZen extends task
         }
 
         /* Check if the request data size exceeds the PHP limit. */
-        $tasks           = $this->task->getByIdList($this->post->taskIdList);
+        $tasks = $this->task->getByIdList($this->post->taskIdList);
+        foreach($tasks as $taskID => $task) $tasks[$taskID]->consumed = 0;
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
