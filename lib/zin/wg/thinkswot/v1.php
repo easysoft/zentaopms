@@ -19,7 +19,7 @@ class thinkSwot extends wg
         list($mode, $blocks) = $this->prop(array('mode', 'blocks'));
         return div
         (
-            setClass('relative p-1 bg-canvas border border-gray-200 item-model', "model-$order"),
+            setClass('relative p-1 bg-canvas border border-gray-200 model-block', "block-$order"),
             setStyle(array('width' => '50%', 'height' => '127px')),
             div
             (
