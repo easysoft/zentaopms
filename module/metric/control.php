@@ -164,17 +164,18 @@ class metric extends control
      *
      * @param  string $code
      * @param  string $date
+     * @param  string $calcType
      * @access public
      * @return void
      */
-    public function ajaxUpdateSingleMetricLib($code, $date)
+    public function ajaxUpdateSingleMetricLib($code, $date, $calcType)
     {
         $date = str_replace('_', '-', $date);
         $dateType = $this->metric->getDateTypeByCode($code);
 
-        $isCalcByCron = $this->metric->isCalcByCron($code, $date, $dateType);
+        if($calcType == 'inference') $isCalcByCron = $this->metric->isCalcByCron($code, $date, $dateType);
 
-        if(!$isCalcByCron)
+        if($calcType == 'all' || !$isCalcByCron)
         {
             $calc   = $this->metric->calculateMetricByCode($code);
             $record = $this->metricZen->getRecordByCodeAndDate($code, $calc, $date);
