@@ -194,6 +194,9 @@ EOT;
 $config->bi->duckdb->tables['testresult'] = <<<EOT
 SELECT * FROM zt_testresult
 EOT;
+$config->bi->duckdb->tables['testtask'] = <<<EOT
+SELECT * FROM zt_testtask
+EOT;
 $config->bi->duckdb->tables['ticket'] = <<<EOT
 SELECT * FROM zt_ticket
 EOT;
