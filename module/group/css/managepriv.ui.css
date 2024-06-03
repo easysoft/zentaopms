@@ -32,17 +32,16 @@
 #privPackageList th.module {width: 142px; min-width: 142px; max-width: 142px; background-color: #EDEEF28C; font-weight: 600; padding-left: 20px; border-color: #FFF;}
 #privPackageList .module label {overflow: visible;}
 #privPackageList td.package-column {padding: 20px 16px; background-color: #FFF;}
-#privPackageList div.package {display: inline-block; width: calc(25% - 5px); padding: 10px 0;}
+#privPackageList div.package {display: inline-flex; width: calc(25% - 5px); padding: 10px 0; align-items: center;}
 #privPackageList .package + .package {padding: 0;}
-#privPackageList .package .check-all {display: inline-block; height: 20px;}
+#privPackageList .package .check-all {height: 20px; max-width: calc(100% - 30px); overflow: hidden;}
 #privPackageList .package input {margin-top: 0px; margin-left: 0px; left: 0px; height: 20px;}
-#privPackageList .package label {display: inline-block;}
+#privPackageList .package label {display: inline-block; white-space: nowrap;}
 #privPackageList .privs, #privPackageList .menus-privs {padding: 20px 20px 0 20px; margin: 10px 0px;border: 1px solid #D9DBE1; background-color: #F9FAFB; position: relative; display: block; max-width: unset; box-shadow: unset; z-index: 1; width: 100%;}
 #privPackageList .privs .popover-content {padding: 0;}
 #privPackageList .menus-privs {margin-top: 35px; border-style: dashed;}
-#privPackageList .priv-toggle.icon {width: 12px; height: 12px; position: relative; display: inline-block; color: #9EA3B0; margin-left: 4px; line-height: 12px; cursor: pointer; top: 2px;}
-#privPackageList .priv-toggle.icon:before {content: "\e925"; font-size: 12px; min-width: unset; transform: scale(0.5); font-weight: 900;}
-#privPackageList .priv-toggle.icon:before {position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; display: inline-block; content: "";}
+#privPackageList .priv-toggle.icon {width: 13px; height: 13px; display: inline-flex; color: #9EA3B0; margin-left: 4px; cursor: pointer; border: 1px solid; border-radius: var(--radius-sm, 2px); align-items: center; justify-content: center;}
+#privPackageList .priv-toggle.icon:before {content: "\e925"; font-size: 12px; min-width: unset; transform: scale(0.65); font-weight: 900;}
 #privPackageList .priv-toggle.icon.open:before {content: "\e926";}
 #privPackageList .popover .popover-content {display: inline-block; padding: 0;}
 #privPackageList .popover .arrow {border-bottom-color: #D9DBE1; top: -10px;}
@@ -50,10 +49,6 @@
 #privPackageList .group-item .checkbox-inline label {padding-left: 0}
 #privPackageList .group-item {display: inline-block; min-width: 180px; margin-bottom: 15px;}
 #privPackageList .group-item > .checkbox-primary {display: inline-block;}
-#privPackageList .priv-toggle.icon {width: 12px; height: 12px; position: relative; display: inline-block; color: #9EA3B0; margin-left: 4px; line-height: 12px;}
-#privPackageList .priv-toggle.icon:before {content: "\e925"; font-size: 12px; min-width: unset; transform: scale(0.5); font-weight: 900;}
-#privPackageList .priv-toggle.icon:after {position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; display: inline-block; content: ""; border: 1px solid; border-radius: 10%;}
-#privPackageList .priv-toggle.icon.open:before {content: "\e926";}
 
 .checkbox-primary > label.checkbox-indeterminate-block:before {--tw-border-opacity: 1; --tw-bg-opacity: 1; background-color: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity)); border-color: rgba(var(--color-primary-500-rgb),var(--tw-border-opacity));}
 .checkbox-primary > label.checkbox-indeterminate-block:after {background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgMjA0OCAyMDQ4Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTUzNiA1MTJ2MTAyNEg1MTJWNTEyaDEwMjR6Ii8+PC9zdmc+); background-size: cover; opacity: 1;}
