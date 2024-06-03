@@ -69,6 +69,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 (
                     setID('origin-query'),
                     setClass('ghost'),
+                    set::icon('exchange'),
                     set::text($lang->pivot->showOrigin),
                     on::click("toggleShowMode('origin')"),
                 ),
@@ -76,6 +77,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 (
                     setID('pivot-query'),
                     setClass('ghost hidden'),
+                    set::icon('exchange'),
                     set::text($lang->pivot->showPivot),
                     on::click("toggleShowMode('group')"),
                 ),
