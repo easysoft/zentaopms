@@ -535,9 +535,10 @@ class my extends control
         $sort    = common::appendOrder($orderBy);
         $queryID = $type == 'bysearch' ? (int)$param : 0;
 
+        $this->loadModel('testcase');
         $cases = array();
-        if($type == 'assigntome') $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip|run', $sort, $pager);
-        if($type == 'openedbyme') $cases = $this->loadModel('testcase')->getByOpenedBy($this->app->user->account, 'skip', $sort, $pager);
+        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, 'skip|run', $sort, $pager);
+        if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, 'skip', $sort, $pager);
         if($type == 'bysearch' && $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
         if($type == 'bysearch' && $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
