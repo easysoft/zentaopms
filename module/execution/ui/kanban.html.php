@@ -102,7 +102,7 @@ jsVar('storyLang', $lang->story);
 jsVar('executionLang', $lang->execution);
 jsVar('laneLang', $lang->kanbanlane);
 jsVar('cardLang', $lang->kanbancard);
-jsVar('URSRColumn', array_keys($lang->kanban->URSRColumn));
+jsVar('ERURColumn', array_keys($lang->kanban->ERURColumn));
 jsVar('bugLang', $lang->bug);
 jsVar('taskLang', $lang->task);
 jsVar('executionID', $execution->id);

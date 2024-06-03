@@ -61,7 +61,7 @@ jsVar('lanePairs', $lanePairs);
 jsVar('colPairs', $colPairs);
 jsVar('vision', $config->vision);
 jsVar('colorList', $config->kanban->cardColorList);
-jsVar('URSRColumn', array_keys($lang->kanban->URSRColumn));
+jsVar('ERURColumn', array_keys($lang->kanban->ERURColumn));
 jsVar('executionID', $executionID);
 jsVar('productID', $productID);
 jsVar('kanbanGroup', $kanbanGroup);
