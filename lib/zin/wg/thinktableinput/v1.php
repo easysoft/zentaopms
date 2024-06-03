@@ -34,12 +34,11 @@ class thinkTableInput extends thinkQuestion
         list($step, $fields, $supportAdd, $canAddRows) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows'));
         if($step)
         {
-            if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
-            $fields       = $step->options->fields ?? array();
+            $fields       = $step->options->fields;
             $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $step->options->canAddRows;
             $answer       = $step->answer;
-            $result       = isset($answer->result) && !empty($answer->result) ? $answer->result : array();
+            $result       = isset($answer->result) && !empty($answer->result) ? (array) $answer->result : array();
             $customFields = !empty($answer->customFields) ? get_object_vars($answer->customFields) : array();
         }
         jsVar('canAddRows', (int)$canAddRows);
@@ -48,7 +47,8 @@ class thinkTableInput extends thinkQuestion
 
         $tableInputItems = array();
         $disabledAdd = !empty($customFields) && (int)$canAddRows <= count($customFields);
-        foreach($fields as $index => $item)
+        $index = 0;
+        foreach($fields as $item)
         {
             $tableInputItems[] = formGroup
             (
@@ -80,10 +80,11 @@ class thinkTableInput extends thinkQuestion
                     ) : null,
                 )
             );
+            $index ++;
         }
         if(!empty($customFields))
         {
-            foreach($customFields as $index => $item)
+            foreach($customFields as $item)
             {
                 $tableInputItems[] = formGroup
                 (
@@ -103,7 +104,7 @@ class thinkTableInput extends thinkQuestion
                         setClass('mt-2 ml-2 result-width'),
                         setID('result'),
                         set::name('result[' . $index .']'),
-                        set::value($result[$index] ?? ''),
+                        set::value(!empty($result) && isset($result[$index]) ? $result[$index] : ''),
                         set::placeholder($lang->thinkrun->placeholder->rowContent)
                     ),
                     div
@@ -124,6 +125,7 @@ class thinkTableInput extends thinkQuestion
                         )
                     )
                 );
+                $index ++;
             }
         }
 

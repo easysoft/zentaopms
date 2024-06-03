@@ -2663,25 +2663,22 @@ class metricModel extends model
      * 获取没有数据时的提示信息。
      * Get no data tip.
      *
-     * @param  string    $code
+     * @param  string $code
      * @access public
      * @return string
      */
     public function getNoDataTip($code)
     {
-        $today = helper::today();
+        $recordOfCode = $this->metricTao->fetchMetricRecordByDate($code, null, 1);
+        $recordOfAll  = $this->metricTao->fetchMetricRecordByDate('all', null, 1);
 
-        $todayData = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
-        $todayDataWithCode = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
-        $dataWithCode = $this->metricTao->fetchMetricRecordByDate($code, null, 1);
+        /* 如果度量库没有任何数据，则说明度量项从来没有被采集过。*/
+        /* If the metric library does not have any data, it means that the metric has never been collected. */
+        if(empty($recordOfAll)) return $this->lang->metric->noDataBeforeCollect;
 
-        /* 度量项定义之后，未到采集时间，可以理解为今天没有任何数据并且该度量项没有任何数据。*/
-        /* After the metric item is defined, it is not time to collect, which can be understood as there is no data today and the metric item has no data. */
-        if(empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataBeforeCollect;
-
-        /* 度量项定义之后，已到采集时间，但是没有采集到数据，可以理解为今天收集到了数据但是该度量项没有任何数据。*/
-        /* After the metric item is defined, it is time to collect, but no data is collected, which can be understood as data is collected today, but the metric item has no data. */
-        if(!empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataAfterCollect;
+        /* 如果度量库有数据但没有该度量项的数据，则可以理解为收集过数据但是该度量项无数据。*/
+        /* If the metric library has data but does not have data for this metric, it means that metric has been collected but there is no data for this metric. */
+        if(!empty($recordOfAll) && empty($recordOfCode)) return $this->lang->metric->noDataAfterCollect;
 
         return $this->lang->metric->noData;
     }

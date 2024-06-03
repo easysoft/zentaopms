@@ -53,8 +53,8 @@ $lang->admin->engineInfo                 = "表<strong>%s</strong>的引擎是<s
 $lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
 $lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
-$lang->admin->daoCache     = 'DAO 缓存';
-$lang->admin->apcuNotFound = '请启用 APCu 扩展后再开启 DAO 缓存';
+$lang->admin->daoCache     = '数据缓存';
+$lang->admin->apcuNotFound = '请启用 APCu 扩展后再开启数据缓存';
 
 $lang->admin->cacheStatusList[1] = '开启';
 $lang->admin->cacheStatusList[0] = '关闭';

@@ -1,32 +1,7 @@
 .w-3\/7 {width: 42.857142%}
 .w-2\/7 {width: 28.571429%}
-.text-blue {color: #2294FB;}
-.bg-blue {background-color: rgba(34, 148, 251, var(--tw-bg-opacity));}
-.triangle {
-  width: 0;
-  height: 0;
-}
-
-.triangle-up {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 16px solid rgba(var(--color-important-500-rgb));;
-}
-
-.triangle-down {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 16px solid #2294FB;
-}
-
-.triangle-left {
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 16px solid rgba(var(--color-special-500-rgb));;
-}
-
-.triangle-right {
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 16px solid rgba(var(--color-success-500-rgb));
-}
+.triangle {width: 0; height: 0;}
+.triangle-up {border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 16px solid rgba(var(--color-important-500-rgb));}
+.triangle-down {border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 16px solid #2294FB;}
+.triangle-left {border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 16px solid rgba(var(--color-special-500-rgb));}
+.triangle-right {border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 16px solid rgba(var(--color-success-500-rgb));}

@@ -93,7 +93,7 @@ class modalDialog extends wg
         $hookContent = $this->prop('hookContent', !context()->hookContentCalled);
         return div
         (
-            setClass('modal-body scrollbar-hover', $this->prop('bodyClass')),
+            setClass('modal-body scrollbar-hover mr-2', $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->children(),
             $rawContent ? rawContent() : null,

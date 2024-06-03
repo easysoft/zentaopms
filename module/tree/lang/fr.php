@@ -26,6 +26,7 @@ $lang->tree->manageCase           = 'Gérer CasTests';
 $lang->tree->manageCaselib        = 'Gérer Librairie de recette';
 $lang->tree->manageCustomDoc      = 'Gérer la librairie de Doc';
 $lang->tree->manageApiChild       = 'Manage API Directory';
+$lang->tree->manageGroup          = 'Manage group';
 $lang->tree->updateOrder          = 'Rang Module';
 $lang->tree->manageChild          = 'Gérer Sous-Module';
 $lang->tree->manageStoryChild     = 'Gérer Sous-Module';

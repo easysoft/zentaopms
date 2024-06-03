@@ -506,6 +506,7 @@ class testcase extends control
             if(!$message) $message = $this->lang->saveSuccess;
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID));
+            if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}")));
         }
 

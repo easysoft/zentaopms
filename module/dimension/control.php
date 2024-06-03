@@ -21,7 +21,7 @@ class dimension extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(int $dimensionID, string $module, string $method)
+    public function ajaxGetDropMenu(int $dimensionID, string $module, string $method, string $viewType)
     {
         $items      = array();
         $dimensions = $this->dimension->getList();
@@ -36,7 +36,13 @@ class dimension extends control
             $items[] = $item;
         }
 
-        $this->view->link        = $this->createLink($module, $method, 'dimensionID={id}');
+        $params = 'dimensionID={id}';
+        if($this->app->tab == 'bi' && $module == 'tree' && $method == 'browsegroup')
+        {
+            $params = "dimensionID={id}&groupID=0&type={$viewType}";
+        }
+
+        $this->view->link        = $this->createLink($module, $method, $params);
         $this->view->items       = $items;
         $this->view->dimensionID = $dimensionID;
         $this->display();

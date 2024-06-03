@@ -83,6 +83,7 @@ $lang->project->storyPoints         = '需求规模';
 $lang->project->invested            = '已投入';
 $lang->project->member              = '成员';
 $lang->project->manage              = '管理';
+$lang->project->market              = '目标市场';
 
 $lang->project->manDay          = '人天';
 $lang->project->day             = '天';

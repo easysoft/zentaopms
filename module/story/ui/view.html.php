@@ -221,15 +221,6 @@ foreach($actions as $key => $action)
         }
     }
 
-    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $app->tab == 'project' ? $projectID : $executionID), $action['url']);
-    if(isset($action['items']))
-    {
-        foreach($action['items'] as $itemKey => $itemAction)
-        {
-            if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $executionID), $itemAction['url']);
-        }
-    }
-
     if($isInModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
     {
         $actions[$key]['data-load'] = 'modal';

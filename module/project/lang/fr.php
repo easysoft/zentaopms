@@ -83,6 +83,7 @@ $lang->project->storyPoints         = 'Story Points';
 $lang->project->invested            = 'Invested';
 $lang->project->member              = 'Member';
 $lang->project->manage              = 'Manage';
+$lang->project->market              = 'Market';
 
 $lang->project->manDay          = 'Man Day';
 $lang->project->day             = 'Day';

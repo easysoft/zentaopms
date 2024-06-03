@@ -76,7 +76,9 @@ class backBtn extends btn
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution',
             'ai'             => 'ai-models',
             'api'            => 'api-index',
-            'demand'         => 'demand-browse,demand-view'
+            'demand'         => 'demand-browse,demand-view',
+            'issue'          => 'issue-browse,issue-view',
+            'risk'           => 'risk-browse,risk-view'
         );
 
         $props  = parent::getProps();

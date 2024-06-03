@@ -96,6 +96,8 @@ class dropmenu extends wg
 
         if(strpos(',story-create,story-batchcreate,product-browse,', ",$module-$method,") !== false) $extra = data('storyType');
 
+        if($tab == 'dimension' && $module == 'tree' && $method == 'browsegroup') $extra = data('viewType');
+
         $branchMenu = null;
         if(($tab == 'product' || $tab == 'qa') && in_array($module, $app->config->hasBranchMenuModules) && !in_array("{$module}-{$method}", $app->config->excludeBranchMenu))
         {
@@ -107,6 +109,11 @@ class dropmenu extends wg
                     $branchID = '';
                     if(!is_null(data('branch')))   $branchID = data('branch');
                     if(!is_null(data('branchID'))) $branchID = data('branchID');
+                    if(strpos((string)$branchID, ',') !== false)
+                    {
+                        $branches = explode(',', $branchID);
+                        $branchID = (!empty($_SESSION['branch']) || $app->session->branch === '0') && in_array($app->session->branch, $branches) ? $app->session->branch : $branches[0];
+                    }
                     $app->control->loadModel('branch');
 
                     /* Get current branch name. */

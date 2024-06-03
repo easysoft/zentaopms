@@ -401,7 +401,7 @@ class commonTao extends commonModel
     {
         if($module != 'board') return array($module, $method);
 
-        if(strpos(',view,open,bind,canvas,autoupdate,quit,importstory,', ",{$method},") !== false) $method = 'actions';
+        if(strpos(',view,open,bind,canvas,autoupdate,quit,importstory,', ",{$method},") !== false) $method = 'creation';
         if($method == 'createbytemplate') $method = 'createboard';
 
         return array($module, $method);

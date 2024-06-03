@@ -2335,6 +2335,10 @@ class treeModel extends model
             {
                 $module->url = helper::createLink('tree', 'browsetask', "rootID=$rootID&productID=0&moduleID=$module->id");
             }
+            else if(in_array($viewType, array('pivot', 'chart')))
+            {
+                $module->url = helper::createLink('tree', 'browsegroup', "dimensionID=$rootID&groupID=$module->id&type=$viewType");
+            }
             else
             {
                 $module->url = helper::createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=$module->id&branchID=$branch");

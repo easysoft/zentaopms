@@ -399,6 +399,7 @@ $buildTodoType = function(object $todo)
 
 formPanel
 (
+    setID('editTodoPanel'),
     set::title(''),
     set::submitBtnText($lang->save),
     div
