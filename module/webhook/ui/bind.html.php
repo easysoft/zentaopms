@@ -18,7 +18,7 @@ $statusLang = $lang->webhook->dingBindStatus;
 if($webhook->type == 'wechatuser') $statusLang = $lang->webhook->wechatBindStatus;
 if($webhook->type == 'feishuuser') $statusLang = $lang->webhook->feishuBindStatus;
 
-$fnBuildTbody = function() use($users, $bindedUsers, $oauthUsers, $useridPairs, $lang)
+$fnBuildTbody = function() use($users, $boundUsers, $oauthUsers, $useridPairs, $boundUseridPairs, $lang)
 {
     $trItems = array();
 
@@ -26,9 +26,9 @@ $fnBuildTbody = function() use($users, $bindedUsers, $oauthUsers, $useridPairs, 
     {
         $userid     = '';
         $bindStatus = 0;
-        if(isset($bindedUsers[$user->account]))
+        if(isset($boundUsers[$user->account]))
         {
-            $userid     = $bindedUsers[$user->account];
+            $userid     = $boundUsers[$user->account];
             $bindStatus = 1;
         }
         elseif(isset($oauthUsers[$user->realname]))
@@ -45,7 +45,7 @@ $fnBuildTbody = function() use($users, $bindedUsers, $oauthUsers, $useridPairs, 
                 div
                 (
                     setClass("username"),
-                    $userid ? span(setClass('label primary-outline circle'), zget($useridPairs, $userid)) : null
+                    $userid ? span(setClass('label primary-outline circle'), \zget($useridPairs, $userid, \zget($boundUseridPairs, $userid))) : null
                 ),
                 formHidden("userid[{$user->account}]", $userid)
             ),

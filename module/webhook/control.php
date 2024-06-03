@@ -194,17 +194,18 @@ class webhook extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $users       = $this->loadModel('user')->getByQuery('inside', '', $pager);
-        $bindedUsers = $this->webhook->getBoundUsers($id);
-        $useridPairs = $this->webhookZen->getUseridPairs($webhook, $users, $bindedUsers, $oauthUsers);
+        $users            = $this->loadModel('user')->getByQuery('inside', '', $pager);
+        $boundUsers       = $this->webhook->getBoundUsers($id);
+        $boundUseridPairs = $this->webhookZen->getBoundUseridPairs($webhook, $users, $boundUsers, $oauthUsers);
 
-        $this->view->title       = $this->lang->webhook->bind;
-        $this->view->webhook     = $webhook;
-        $this->view->oauthUsers  = $oauthUsers;
-        $this->view->useridPairs = $useridPairs;
-        $this->view->users       = $users;
-        $this->view->pager       = $pager;
-        $this->view->bindedUsers = $bindedUsers;
+        $this->view->title            = $this->lang->webhook->bind;
+        $this->view->webhook          = $webhook;
+        $this->view->oauthUsers       = $oauthUsers;
+        $this->view->useridPairs      = array_flip($oauthUsers);
+        $this->view->users            = $users;
+        $this->view->pager            = $pager;
+        $this->view->boundUsers       = $boundUsers;
+        $this->view->boundUseridPairs = $boundUseridPairs;
         $this->display();
     }
 
