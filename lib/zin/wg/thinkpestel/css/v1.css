@@ -1,0 +1,7 @@
+.model-pestel .model-block::after {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--color-gray-400); font-size: 56px; font-weight: 600; opacity: 0.2;}
+.model-pestel .block-0 .model-block::after {content: 'P';}
+.model-pestel .block-1 .model-block::after {content: 'E';}
+.model-pestel .block-2 .model-block::after {content: 'S';}
+.model-pestel .block-3 .model-block::after {content: 'T';}
+.model-pestel .block-4 .model-block::after {content: 'E';}
+.model-pestel .block-5 .model-block::after {content: 'L';}
