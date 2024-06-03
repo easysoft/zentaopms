@@ -25,7 +25,6 @@ class thinkPffa extends wg
         global $lang;
         $blocks       = $this->prop('blocks');
         $mode         = $this->prop('mode');
-        $block        = array_slice($blocks, $blockIndex, 1);
         $cards        = array();
         $blockColor   = $lang->thinkbackground->blockColor[$blockIndex];
         $defaultTitle = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
@@ -40,8 +39,8 @@ class thinkPffa extends wg
             div
             (
                 setClass('text-sm item-step-title text-clip', 'text-' . $blockColor),
-                set::title(!empty($block[0]) ? $block[0] : null),
-                !empty($block[0]) ? $block[0] : $defaultTitle
+                set::title(!empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : null),
+                !empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : $defaultTitle
             ),
             div(setClass('flex flex-wrap'), $cards),
             div(setClass('text-center text-sm leading-tight text-gray-400 mt-1'), $lang->thinkwizard->pffaGroundText[$blockIndex])

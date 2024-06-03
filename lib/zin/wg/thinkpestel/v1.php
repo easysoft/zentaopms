@@ -56,8 +56,8 @@ class thinkPestel extends wg
                         span(
                             setClass('item-step-title overflow-y-hidden'),
                             setStyle(array('max-height' => '40px')),
-                            set::title($block ? $block : null),
-                            $block ? $block : $defaultTitle
+                            set::title($block->text ? $block->text : null),
+                             $block->text ? $block->text : $defaultTitle
                         )
                     ),
                     div(setClass('px-2 pb-2 h-52 model-block relative'), $this->buildItem($defaultQuestions, $blockIndex))
