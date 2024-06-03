@@ -22,7 +22,29 @@ formPanel
             set::value($config->cache->dao->enable),
             set::inline(true)
         )
-    )
+    ),
+    extension_loaded('apcu') ? formRow
+    (
+        formGroup
+        (
+            setClass('w-1/2'),
+            setStyle(array('align-items' => 'center')),
+            set::label($lang->admin->memory),
+            progressBar
+            (
+                set::percent($rate),
+                set::width('100%'),
+                set::color('rgb(var(--color-' . ($rate <= 50 ? 'success' : ($rate <= 80 ? 'warning' : 'danger')) . '-500-rgb))')
+            )
+        ),
+        formGroup
+        (
+            setClass('w-1/2 ml-4 gap-4'),
+            setStyle(array('align-items' => 'center')),
+            span($rate . '%'),
+            span(sprintf($lang->admin->usedMemory, $total, $used))
+        )
+    ) : null
 );
 
 render();
