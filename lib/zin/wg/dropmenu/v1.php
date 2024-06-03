@@ -107,6 +107,7 @@ class dropmenu extends wg
                     $branchID = '';
                     if(!is_null(data('branch')))   $branchID = data('branch');
                     if(!is_null(data('branchID'))) $branchID = data('branchID');
+                    if(strpos((string)$branchID, ',') !== false) $branchID = $app->session->branch;
                     $app->control->loadModel('branch');
 
                     /* Get current branch name. */
