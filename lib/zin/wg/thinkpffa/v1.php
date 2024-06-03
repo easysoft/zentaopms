@@ -23,10 +23,12 @@ class thinkPffa extends wg
     protected function buildCards($questions, $blockIndex)
     {
         global $lang;
-        $blocks     = $this->prop('blocks');
-        $block      = array_slice($blocks, $blockIndex, 1);
-        $cards      = array();
-        $blockColor = $lang->thinkbackground->blockColor[$blockIndex];
+        $blocks       = $this->prop('blocks');
+        $mode         = $this->prop('mode');
+        $block        = array_slice($blocks, $blockIndex, 1);
+        $cards        = array();
+        $blockColor   = $lang->thinkbackground->blockColor[$blockIndex];
+        $defaultTitle = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
 
         foreach($questions as $item)
         {
@@ -35,7 +37,12 @@ class thinkPffa extends wg
         return div
         (
             setClass('bg-white w-full px-2 py-2.5 border border-gray-200 h-28 overflow-auto'),
-            span(setClass('text-sm item-step-title', 'text-' . $blockColor), !empty($block[0]) ? $block[0] : $lang->thinkwizard->unAssociated),
+            div
+            (
+                setClass('text-sm item-step-title text-clip', 'text-' . $blockColor),
+                set::title(!empty($block[0]) ? $block[0] : null),
+                !empty($block[0]) ? $block[0] : $defaultTitle
+            ),
             div(setClass('flex flex-wrap'), $cards),
             div(setClass('text-center text-sm leading-tight text-gray-400 mt-1'), $lang->thinkwizard->pffaGroundText[$blockIndex])
         );
@@ -51,7 +58,7 @@ class thinkPffa extends wg
         return div
         (
             setClass('pr-3.5 block-' . $blockIndex),
-            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) :  null,
+            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
                 setClass('flex items-center mt-1'),
