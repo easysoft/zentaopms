@@ -5238,8 +5238,8 @@ class storyModel extends model
     public function getGradeMenu(string $storyType, object $project = null): array
     {
         $storyTypes      = isset($project->storyType) ? explode(',', $project->storyType) : array();
-        $showEpic        = $storyType == 'epic' || in_array('epic', $storyTypes);
-        $showRequirement = $showEpic || $storyType == 'requirement' || in_array('requirement', $storyTypes);
+        $showEpic        = $storyType == 'epic' || in_array('epic', $storyTypes) || $storyType == 'all';
+        $showRequirement = $showEpic || $storyType == 'requirement' || in_array('requirement', $storyTypes) || $storyType == 'all';
 
         $menu = array();
         if($showEpic)
