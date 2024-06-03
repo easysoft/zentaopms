@@ -938,6 +938,8 @@ class baseRouter
      */
     public function getInstalledVersion()
     {
+        if(!isset($this->config->installed) || !$this->config->installed) return false;
+
         $version = $this->dbQuery("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
         if(!$version && ($this->config->inContainer || $this->config->inQuickon)) return false;
 
