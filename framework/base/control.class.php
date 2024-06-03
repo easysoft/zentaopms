@@ -1144,6 +1144,11 @@ class baseControl
                 foreach($message as $item => $errors) $message[$item] = implode(',', $errors);
                 return helper::end(js::alert(strip_tags(implode('\n', $message))));
             }
+            elseif(!$_SERVER['HTTP_REFERER'] && !empty($data['load']['alert']))
+            {
+                if(empty($data['load']['locate'])) return helper::end(js::alert($data['load']['alert']));
+                return helper::end(js::alert($data['load']['alert']) . js::locate($data['load']['locate']));
+            }
             return helper::end('fail');
         }
     }
