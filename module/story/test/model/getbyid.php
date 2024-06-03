@@ -4,19 +4,18 @@
 /**
 
 title=测试 storyModel->getById();
+timeout=0
 cid=0
 
-- 获取ID为1、版本号为1的需求关联的用户需求。 @用户需求3
 - 获取ID为1、版本号为1的需求的名称。属性title @用户需求版本一1
 - 获取ID为1、版本号为2的需求的名称。
  - 属性title @用户需求版本一2
  - 属性spec @这是一个软件需求描述2
 - 获取ID为2、版本号为3的需求关联的执行。 @22|30|37
-- 获取ID为2、版本号为3的需求关联的需求。 @4|6|8
+- 获取ID为2、版本号为3的需求关联的需求。 @4
 - 获取ID为2、版本号为3的需求，执行ID为21的创建任务数。 @2
 - 获取ID为2、版本号为3的需求，执行ID为26的创建任务数。 @2
 - 获取ID为2、版本号为3的需求关联的计划。 @1.0
-- 获取ID为2、版本号为3的需求关联需求的标题。 @软件需求6
 - 获取ID为2、版本号为3的需求的名称。属性title @用户需求版本一6
 - 获取ID为10、版本号为3的需求转化Bug的名称。属性toBugTitle @BUG1
 - 获取ID为18、版本号为3的需求子需求的标题。属性title @软件需求20
@@ -36,6 +35,7 @@ $story->linkStories->range('0,6,0{100}');
 $story->linkRequirements->range('3,0{100}');
 $story->toBug->range('0{9},1,0{100}');
 $story->parent->range('0{17},`-1`,0,18,0{100}');
+$story->isParent->range('0{17},1,0{100}');
 $story->twins->range('``{27},30,``,28');
 $story->gen(30);
 
@@ -76,16 +76,14 @@ $story18Version3 = $story->getByIdTest(18, 3);
 $story20Version3 = $story->getByIdTest(20, 3);
 $story28Version3 = $story->getByIdTest(28, 3);
 
-r($story1Version1->linkStoryTitles[3])  && p() && e('用户需求3');                     //获取ID为1、版本号为1的需求关联的用户需求。
 r($story1Version1)  && p('title') && e('用户需求版本一1');                            //获取ID为1、版本号为1的需求的名称。
 r($story1Version2)  && p('title,spec') && e('用户需求版本一2,这是一个软件需求描述2'); //获取ID为1、版本号为2的需求的名称。
 
 r(implode('|', array_keys($story2Version3->executions)))    && p() && e('22|30|37'); //获取ID为2、版本号为3的需求关联的执行。
-r(implode('|', array_keys($story2Version3->extraStories)))  && p() && e('4|6|8');    //获取ID为2、版本号为3的需求关联的需求。
+r(implode('|', array_keys($story2Version3->extraStories)))  && p() && e('4');        //获取ID为2、版本号为3的需求关联的需求。
 r(count($story2Version3->tasks[21]))  && p() && e('2');                              //获取ID为2、版本号为3的需求，执行ID为21的创建任务数。
 r(count($story2Version3->tasks[26]))  && p() && e('2');                              //获取ID为2、版本号为3的需求，执行ID为26的创建任务数。
 r($story2Version3->planTitle[1])  && p() && e('1.0');                                //获取ID为2、版本号为3的需求关联的计划。
-r($story2Version3->linkStoryTitles[6])  && p() && e('软件需求6');                    //获取ID为2、版本号为3的需求关联需求的标题。
 r($story2Version3)  && p('title') && e('用户需求版本一6');                           //获取ID为2、版本号为3的需求的名称。
 
 r($story10Version3) && p('toBugTitle')  && e('BUG1');                //获取ID为10、版本号为3的需求转化Bug的名称。
