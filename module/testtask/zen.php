@@ -334,7 +334,7 @@ class testtaskZen extends testtask
         $this->view->param          = $param;
         $this->view->orderBy        = $orderBy;
         $this->view->pager          = $pager;
-        $this->view->branch         = $testtask->branch;
+        $this->view->branch         = strpos((string)$testtask->branch, ',') !== false ? $this->session->branch : $testtask->branch;
         $this->view->modulePairs    = $showModule ? $this->tree->getModulePairs($product->id, 'case', $showModule) : array();
         $this->view->iscenes        = $this->testcase->getSceneMenu($product->id, $moduleID);
     }
