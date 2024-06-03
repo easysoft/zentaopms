@@ -58,6 +58,7 @@ class block extends control
 
         $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
         $this->view->blocks    = $blocks;
+        $this->view->projectID = $projectID;
         $this->view->dashboard = $dashboard;
         $this->display();
     }
