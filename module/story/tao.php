@@ -2293,7 +2293,7 @@ class storyTao extends storyModel
 
         $projects   = array();
         $executions = array();
-        $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->query();
+        $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
         $today      = helper::today();
         $storyGroup = array();
         while($project = $stmt->fetch())
@@ -2320,7 +2320,7 @@ class storyTao extends storyModel
     public function getDesignsForTrack(array $storyIdList): array
     {
         $storyGroup   = array();
-        $stmt         = $this->dao->select('id,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->query();
+        $stmt         = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->query();
         $commitIdList = '';
         $commitGroup  = array();
         while($design = $stmt->fetch())
