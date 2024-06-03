@@ -318,9 +318,9 @@ class router extends baseRouter
              if($setting->key == 'executionLink') $config->executionLink = $setting->value;
         }
 
-        $lang->ERCommon = '';
-        $lang->URCommon = '';
-        $lang->SRCommon = '';
+        $lang->ERCommon = $config->storyCommonList[$this->clientLang]['epic'];
+        $lang->URCommon = $config->storyCommonList[$this->clientLang]['requirement'];
+        $lang->SRCommon = $config->storyCommonList[$this->clientLang]['story'];
         if($this->dbh and !empty($this->config->db->name))
         {
             if(!$this->upgrading)
