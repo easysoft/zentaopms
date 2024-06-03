@@ -112,7 +112,7 @@ class dropmenu extends wg
                     if(strpos((string)$branchID, ',') !== false)
                     {
                         $branches = explode(',', $branchID);
-                        $branchID = isset($_SESSION['branch']) && in_array($app->session->branch, $branches) ? $app->session->branch : $branches[0];
+                        $branchID = (!empty($_SESSION['branch']) || $app->session->branch === '0') && in_array($app->session->branch, $branches) ? $app->session->branch : $branches[0];
                     }
                     $app->control->loadModel('branch');
 
