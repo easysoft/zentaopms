@@ -566,24 +566,6 @@ pipeline {
                   sh 'make build'
                   sh 'make test-open'
 
-                  sh 'make test-biz'
-                  sh 'make build-biz'
-
-                  sh 'make test-biz-k8s'
-                  sh 'make build-biz-k8s'
-
-                  sh 'make test-max'
-                  sh 'make build-max'
-
-                  sh 'make test-max-k8s'
-                  sh 'make build-max-k8s'
-
-                  sh 'make test-ipd'
-                  sh 'make build-ipd'
-
-                  sh 'make test-ipd-k8s'
-                  sh 'make build-ipd-k8s'
-
                   sh 'make markdown-render > ./report.md'
                 }
               }
@@ -598,7 +580,7 @@ pipeline {
               def j = job.newJob()
               j.SaveHeadReport('./.head.md')
               ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: './.head.md')
-              
+
               if (env.DEPLOY_ZENTAOPAAS=='true') {
                 deploy.upgradePaas(env.ZENTAOPAAS_SERVER, env.CNE_API_TOKEN)
                 ximNotify(title: "禅道平台版DEMO部署成功", content: "访问地址 ["+env.ZENTAOPAAS_SERVER+"]("+env.ZENTAOPAAS_SERVER+")")
