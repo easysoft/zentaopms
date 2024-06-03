@@ -110,8 +110,8 @@ class form extends fixer
         global $app, $config;
         if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
 
-        $moduleName = $moduleName ? $moduleName : $app->getModuleName();
-        $methodName = $methodName ? $moduleName : $app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $app->rawModule;
+        $methodName = $methodName ? $moduleName : $app->rawMethod;
 
         $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $configObject;
