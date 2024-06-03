@@ -260,12 +260,12 @@ $lang->kanban->laneTypeList['story']       = $lang->SRCommon;
 $lang->kanban->laneTypeList['bug']         = 'Bug';
 $lang->kanban->laneTypeList['task']        = 'Task';
 
-$lang->kanban->URSRColumn = array();
-$lang->kanban->URSRColumn['defining']   = 'Defining';
-$lang->kanban->URSRColumn['planning']   = 'Planning';
-$lang->kanban->URSRColumn['developing'] = 'Developing';
-$lang->kanban->URSRColumn['delivering'] = 'Delivering';
-$lang->kanban->URSRColumn['closed']     = 'Closed';
+$lang->kanban->ERURColumn = array();
+$lang->kanban->ERURColumn['defining']   = 'Defining';
+$lang->kanban->ERURColumn['planning']   = 'Planning';
+$lang->kanban->ERURColumn['developing'] = 'Developing';
+$lang->kanban->ERURColumn['delivering'] = 'Delivering';
+$lang->kanban->ERURColumn['closed']     = 'Closed';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';

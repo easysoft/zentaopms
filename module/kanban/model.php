@@ -1404,6 +1404,7 @@ class kanbanModel extends model
                     $object   = zget($objects, $cardID, array());
 
                     if(empty($object)) continue;
+                    if($cell->type == 'parentStory' && $object->isParent != '1') continue;
 
                     $cardData = $this->kanbanTao->initCardItem($object, $cell, $order, $avatarPairs, $users);
                     $cardData['acl'] = 'open';
@@ -2359,7 +2360,7 @@ class kanbanModel extends model
      */
     public function createExecutionLane(int $executionID, string $type = 'all')
     {
-        $URSRLanes         = array();
+        $ERURLanes         = array();
         $parentStoryLaneID = 0;
         $execution         = $this->loadModel('execution')->fetchById($executionID);
         foreach($this->config->kanban->default as $type => $lane)
@@ -2380,7 +2381,7 @@ class kanbanModel extends model
 
             if(in_array($type, array('epic', 'requirement')))
             {
-                $URSRLanes[$type] = $laneID;
+                $ERURLanes[$type] = $laneID;
             }
             else
             {
@@ -2388,10 +2389,10 @@ class kanbanModel extends model
             }
         }
 
-        if($URSRLanes)
+        if($ERURLanes)
         {
             $columnIDList = $this->dao->select('`column`')->from(TABLE_KANBANCELL)->where('lane')->eq($parentStoryLaneID)->fetchPairs();
-            foreach($URSRLanes as $type => $laneID)
+            foreach($ERURLanes as $type => $laneID)
             {
                 foreach($columnIDList as $columnID)
                 {
@@ -2417,7 +2418,7 @@ class kanbanModel extends model
         $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
 
         $columns = array();
-        if(in_array($type, array('epic', 'requirement', 'parentStory'))) $columns = $this->lang->kanban->URSRColumn;
+        if(in_array($type, array('epic', 'requirement', 'parentStory'))) $columns = $this->lang->kanban->ERURColumn;
         if($type == 'story') $columns = $this->lang->kanban->storyColumn;
         if($type == 'bug')   $columns = $this->lang->kanban->bugColumn;
         if($type == 'task')  $columns = $this->lang->kanban->taskColumn;
@@ -2652,7 +2653,7 @@ class kanbanModel extends model
     public function createRDColumn(int $regionID, int $groupID, int $laneID, string $laneType, int $executionID)
     {
         $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
-        if($laneType == 'parentStory')  $columnList = $this->lang->kanban->URSRColumn;
+        if($laneType == 'parentStory')  $columnList = $this->lang->kanban->ERURColumn;
         if($laneType == 'story')        $columnList = $this->lang->kanban->storyColumn;
         if($laneType == 'bug')          $columnList = $this->lang->kanban->bugColumn;
         if($laneType == 'task')         $columnList = $this->lang->kanban->taskColumn;
@@ -2795,7 +2796,7 @@ class kanbanModel extends model
         if(empty($cardPairs)) return;
         $sourceCards = $cardPairs;
 
-        if(in_array($laneType, array('epic', 'requirement', 'parentStory'))) $cardPairs = $this->kanbanTao->refreshURSRCards($cardPairs, $executionID, $otherCardList, $laneType);
+        if(in_array($laneType, array('epic', 'requirement', 'parentStory'))) $cardPairs = $this->kanbanTao->refreshERURCards($cardPairs, $executionID, $otherCardList, $laneType);
         if($laneType == 'story') $cardPairs = $this->kanbanTao->refreshStoryCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'bug')   $cardPairs = $this->kanbanTao->refreshBugCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'task')  $cardPairs = $this->kanbanTao->refreshTaskCards($cardPairs, $executionID, $otherCardList);
@@ -3579,13 +3580,13 @@ class kanbanModel extends model
         switch ($objecType)
         {
             case 'epic':
-                $menus = $this->kanbanTao->getURSRCardMenu($executionID, $objects);
+                $menus = $this->kanbanTao->getERURCardMenu($executionID, $objects);
                 break;
             case 'requirement':
-                $menus = $this->kanbanTao->getURSRCardMenu($executionID, $objects);
+                $menus = $this->kanbanTao->getERURCardMenu($executionID, $objects);
                 break;
             case 'parentStory':
-                $menus = $this->kanbanTao->getURSRCardMenu($executionID, $objects);
+                $menus = $this->kanbanTao->getERURCardMenu($executionID, $objects);
                 break;
             case 'story':
                 $menus = $this->kanbanTao->getStoryCardMenu($executionID, $objects);

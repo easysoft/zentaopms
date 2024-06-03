@@ -811,13 +811,14 @@ class kanbanTao extends kanbanModel
      * @access public
      * @return array
      */
-    protected function refreshURSRCards(array $cardPairs, int $executionID, string $otherCardList, $laneType = 'story'): array
+    protected function refreshERURCards(array $cardPairs, int $executionID, string $otherCardList, $laneType = 'story'): array
     {
         $storyType = $laneType == 'parentStory' ? 'story' : $laneType;
         $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', $storyType, $otherCardList);
         foreach($stories as $storyID => $story)
         {
-            foreach($this->lang->kanban->URSRColumn as $stage => $langItem)
+            if($laneType == 'parentStory' && $story->isParent != '1') continue;
+            foreach($this->lang->kanban->ERURColumn as $stage => $langItem)
             {
                 if($story->stage != $stage and strpos($cardPairs[$stage], ",$storyID,") !== false)
                 {
@@ -973,7 +974,7 @@ class kanbanTao extends kanbanModel
      * @access public
      * @return array
      */
-    protected function getURSRCardMenu(int $executionID, array $objects): array
+    protected function getERURCardMenu(int $executionID, array $objects): array
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
 

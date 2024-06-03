@@ -260,12 +260,12 @@ $lang->kanban->laneTypeList['story']       = $lang->SRCommon;
 $lang->kanban->laneTypeList['bug']         = 'Bug';
 $lang->kanban->laneTypeList['task']        = '任务';
 
-$lang->kanban->URSRColumn = array();
-$lang->kanban->URSRColumn['defining']   = '定义中';
-$lang->kanban->URSRColumn['planning']   = '规划中';
-$lang->kanban->URSRColumn['developing'] = '研发中';
-$lang->kanban->URSRColumn['delivering'] = '交付中';
-$lang->kanban->URSRColumn['closed']     = '已关闭';
+$lang->kanban->ERURColumn = array();
+$lang->kanban->ERURColumn['defining']   = '定义中';
+$lang->kanban->ERURColumn['planning']   = '规划中';
+$lang->kanban->ERURColumn['developing'] = '研发中';
+$lang->kanban->ERURColumn['delivering'] = '交付中';
+$lang->kanban->ERURColumn['closed']     = '已关闭';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';
