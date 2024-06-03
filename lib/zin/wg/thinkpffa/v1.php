@@ -31,7 +31,7 @@ class thinkPffa extends wg
 
         foreach($questions as $item)
         {
-            $cards[] = div(setClass('w-8 h-8 bg-opacity-20 mt-1 mr-2', 'bg-' . $blockColor));
+            $cards[] = div(setClass('w-8 h-8 bg-opacity-20 mt-2 mr-2', 'bg-' . $blockColor));
         }
         return div
         (
@@ -43,7 +43,7 @@ class thinkPffa extends wg
                 !empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : $defaultTitle
             ),
             div(setClass('flex flex-wrap'), $cards),
-            div(setClass('text-center text-sm leading-tight text-gray-400 mt-1'), $lang->thinkwizard->pffaGroundText[$blockIndex])
+            div(setClass('text-left text-sm leading-tight text-gray-400 mt-4'), $lang->thinkwizard->pffaGroundText[$blockIndex])
         );
     }
 
