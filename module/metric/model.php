@@ -2672,7 +2672,6 @@ class metricModel extends model
         $today = helper::today();
 
         $todayData = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
-        $todayDataWithCode = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
         $dataWithCode = $this->metricTao->fetchMetricRecordByDate($code, null, 1);
 
         /* 度量项定义之后，未到采集时间，可以理解为今天没有任何数据并且该度量项没有任何数据。*/
