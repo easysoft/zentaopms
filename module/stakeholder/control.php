@@ -54,7 +54,11 @@ class stakeholder extends control
         if($_POST)
         {
             if($this->post->from != 'outside') $this->config->stakeholder->create->requiredFields .= ',user';
-            if($this->post->from == 'outside' && $this->post->newUser) $this->config->stakeholder->create->requiredFields .= ',company';
+            if($this->post->from == 'outside' && $this->post->newUser)
+            {
+                if(!$this->post->newCompany) $this->config->stakeholder->create->requiredFields .= ',company';
+                if($this->post->newCompany) $this->config->stakeholder->create->requiredFields .= ',companyName';
+            }
             $stakeholderData = form::data()->setDefault('objectID', $objectID)->get();
 
             $stakeholderID = $this->stakeholder->create($stakeholderData);

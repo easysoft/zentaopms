@@ -37,6 +37,7 @@ $lang->stakeholder->inside      = '内部干系人';
 $lang->stakeholder->outside     = '外部干系人';
 $lang->stakeholder->from        = '干系人类型';
 $lang->stakeholder->company     = '所属公司';
+$lang->stakeholder->companyName = '所属公司';
 $lang->stakeholder->nature      = '性格特征';
 $lang->stakeholder->analysis    = '影响分析';
 $lang->stakeholder->strategy    = '应对策略';
