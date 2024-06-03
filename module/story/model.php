@@ -720,11 +720,10 @@ class storyModel extends model
      */
     public function change(int $storyID, object $story): array|false
     {
-        $oldStory   = $this->getById($storyID);
-        $moduleName = $this->app->rawModule;
+        $oldStory = $this->getById($storyID);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins,reviewer,reviewerHasChanged')
             ->autoCheck()
-            ->batchCheck($this->config->{$moduleName}->change->requiredFields, 'notempty')
+            ->batchCheck($this->config->{$oldStory->type}->change->requiredFields, 'notempty')
             ->checkFlow()
             ->where('id')->eq($storyID)->exec();
         if(dao::isError()) return false;
