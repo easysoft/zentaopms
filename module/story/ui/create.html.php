@@ -17,7 +17,7 @@ data('storyType', $type);
 data('gradeRule', $gradeRule);
 if($app->tab == 'product') data('activeMenuID', $type);
 
-$forceReview  = $this->story->checkForceReview();
+$forceReview  = $this->story->checkForceReview($type);
 $createFields = useFields('story.create');
 $createFields->field('needNotReview')->value($forceReview ? 0 : 1);
 if(!$forceReview) $createFields->field('reviewer')->hidden(true);

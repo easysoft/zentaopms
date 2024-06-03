@@ -496,17 +496,16 @@ class storyZen extends story
         }
         $branch = str_contains($branch, ',') ? current(explode(',', $branch)) : $branch;
 
-        $moduleName     = $this->app->rawModule;
         $product        = $this->product->getByID($productID);
         $users          = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories        = $this->story->getParentStoryPairs($productID, '', $storyType);
         $grades         = $this->story->getGradePairs($storyType);
         $plans          = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, 'unexpired|noclosed', true);
         $plans          = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
-        $forceReview    = $this->story->checkForceReview();
-        $needReview     = ($account == $product->PO || $objectID > 0 || $this->config->{$moduleName}->needReview == 0 || !$forceReview);
+        $forceReview    = $this->story->checkForceReview($storyType);
+        $needReview     = ($account == $product->PO || $objectID > 0 || $this->config->{$storyType}->needReview == 0 || !$forceReview);
         $reviewers      = $this->story->getProductReviewers($productID);
-        $requiredFields = $this->config->{$moduleName}->create->requiredFields;
+        $requiredFields = $this->config->{$storyType}->create->requiredFields;
 
         /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
@@ -714,7 +713,7 @@ class storyZen extends story
         $fields['mailto']['options']     = $users;
         $fields['parent']['options']     = array_filter($stories);
 
-        if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
+        if($this->story->checkForceReview($storyType)) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
         if($this->view->hiddenPlan) unset($fields['plan']);
 
@@ -758,12 +757,11 @@ class storyZen extends story
         $fields['verify']['default']   = $story->verify;
         $fields['status']['default']   = $story->status;
 
-        $forceReview = $this->story->checkForceReview();
+        $forceReview = $this->story->checkForceReview($story->type);
         if($forceReview) $fields['reviewer']['required'] = true;
 
-        $moduleName = $this->app->rawModule;
         $this->view->forceReview = $forceReview;
-        $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->{$moduleName}->needReview == 0 || !$forceReview) && empty($reviewer);
+        $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->{$story->type}->needReview == 0 || !$forceReview) && empty($reviewer);
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment);
 
@@ -787,8 +785,7 @@ class storyZen extends story
         $story      = $this->view->story;
         $fields     = $this->config->story->form->review;
         $users      = $this->loadModel('user')->getPairs('nodeleted|noclosed', "$story->lastEditedBy,$story->openedBy");
-        $moduleName = $this->app->rawModule;
-        $resultList = $this->lang->{$moduleName}->reviewResultList;
+        $resultList = $this->lang->{$story->type}->reviewResultList;
         if($story->status == 'reviewing')
         {
             if($story->version == 1) unset($resultList['revert']);
@@ -1149,10 +1146,9 @@ class storyZen extends story
      */
     protected function buildStoryForCreate(int $executionID, int $bugID, string $storyType = 'story'): object|false
     {
-        $moduleName   = $this->app->rawModule;
         $fields       = $this->config->story->form->create;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
-        foreach(explode(',', trim($this->config->{$moduleName}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if($this->post->type == 'requirement') $fields['plan']['required'] = false;
         if(!empty($_POST['modules']) && !empty($fields['module']['required']))
         {
@@ -1184,7 +1180,7 @@ class storyZen extends story
         }
 
         /* Need and force review, then set status to reviewing. */
-        if($storyData->status != 'draft' and $this->story->checkForceReview() and !$this->post->needNotReview) $storyData->status = 'reviewing';
+        if($storyData->status != 'draft' and $this->story->checkForceReview($storyType) and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
         /* If in ipd mode, set requirement status = 'launched'. */
         if($this->config->systemMode == 'PLM' and $storyData->type == 'requirement' and $storyData->status == 'active' and $this->config->vision == 'rnd') $storyData->status = 'launched';
@@ -1205,7 +1201,7 @@ class storyZen extends story
         $oldStory  = $this->story->getByID($storyID);
 
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
-        if(strpos('draft,changing', $oldStory->status) !== false and $this->story->checkForceReview() and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
+        if(strpos('draft,changing', $oldStory->status) !== false and $this->story->checkForceReview($oldStory->type) and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
         if(!empty($_POST['plan'])) $storyPlan = is_array($_POST['plan']) ? array_filter($_POST['plan']) : array($_POST['plan']);
         if(count($storyPlan) > 1 && $oldStory->type == 'story')
         {
@@ -1281,12 +1277,11 @@ class storyZen extends story
      */
     protected function buildStoryForChange(int $storyID): object|false
     {
-        $moduleName = $this->app->rawModule;
         $oldStory   = $this->story->getByID($storyID);
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
-        if(strpos($this->config->{$moduleName}->change->requiredFields, 'spec') !== false and !$this->post->spec)       dao::$errors['spec'][]    = sprintf($this->lang->error->notempty, $this->lang->story->spec);
-        if(strpos($this->config->{$moduleName}->change->requiredFields, 'verify') !== false and !$this->post->spec)     dao::$errors['verify'][]  = sprintf($this->lang->error->notempty, $this->lang->story->verify);
-        if(strpos($this->config->{$moduleName}->change->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment']   = sprintf($this->lang->error->notempty, $this->lang->comment);
+        if(strpos($this->config->{$oldStory->type}->change->requiredFields, 'spec') !== false and !$this->post->spec)       dao::$errors['spec'][]    = sprintf($this->lang->error->notempty, $this->lang->story->spec);
+        if(strpos($this->config->{$oldStory->type}->change->requiredFields, 'verify') !== false and !$this->post->spec)     dao::$errors['verify'][]  = sprintf($this->lang->error->notempty, $this->lang->story->verify);
+        if(strpos($this->config->{$oldStory->type}->change->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment']   = sprintf($this->lang->error->notempty, $this->lang->comment);
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
@@ -1420,10 +1415,10 @@ class storyZen extends story
      */
     protected function buildStoryForReview(int $storyID): object|false
     {
+        $oldStory   = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now        = helper::now();
         $fields     = $this->config->story->form->review;
-        $moduleName = $this->app->rawModule;
-        foreach(explode(',', trim($this->config->{$moduleName}->review->requiredFields, ',')) as $field)
+        foreach(explode(',', trim($this->config->{$oldStory->type}->review->requiredFields, ',')) as $field)
         {
             if($field == 'comment' && !$this->post->comment)
             {
@@ -1446,7 +1441,6 @@ class storyZen extends story
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         $result       = $this->post->result;
         $closedReason = $this->post->closedReason;
-        $oldStory     = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $storyData    = form::data($fields)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1475,7 +1469,7 @@ class storyZen extends story
      */
     protected function buildStoriesForBatchCreate(int $productID, string $storyType): array
     {
-        $forceReview = $this->story->checkForceReview();
+        $forceReview = $this->story->checkForceReview($storyType);
         $fields      = $this->config->story->form->batchCreate;
         $account     = $this->app->user->account;
         $now         = helper::now();

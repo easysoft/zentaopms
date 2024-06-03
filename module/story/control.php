@@ -218,7 +218,7 @@ class story extends control
         $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
         $this->view->stories       = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
         $this->view->storyTitle    = isset($story->title) ? $story->title : '';
-        $this->view->forceReview   = $this->story->checkForceReview();
+        $this->view->forceReview   = $this->story->checkForceReview($storyType);
 
         $this->display();
     }
@@ -826,7 +826,7 @@ class story extends control
         $this->view->actions      = $this->action->getList('story', $storyID);
         $this->view->reviewers    = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->users        = $this->user->getPairs('noclosed|noletter');
-        $this->view->needReview   = (($this->app->user->account == $product->PO or $this->config->{$storyType}->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->needReview   = (($this->app->user->account == $product->PO or $this->config->{$storyType}->needReview == 0 or !$this->story->checkForceReview($storyType)) and empty($story->reviewer)) ? "checked='checked'" : "";
         $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();
@@ -1941,43 +1941,6 @@ class story extends control
 
         $fieldName = $id ? "stories[$id]" : $storyType;
         return print(json_encode(array('name' => $fieldName, 'items' => $items)));
-    }
-
-    /**
-     * 通过AJAX方式获取需求的状态。
-     * AJAX: get story status.
-     *
-     * @param  string $method
-     * @param  string $params
-     * @access public
-     * @return void
-     */
-    public function ajaxGetStatus(string $method, string $params = '')
-    {
-        parse_str(str_replace(',', '&', $params), $params);
-        $status = '';
-        if($method == 'create')
-        {
-            $status = 'draft';
-            if(!empty($params['needNotReview'])) $status = 'active';
-            if(!empty($params['project']))       $status = 'active';
-            if($this->story->checkForceReview()) $status = 'draft';
-        }
-        elseif($method == 'change')
-        {
-            $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
-            $status   = $oldStory->status;
-            if($params['changing'] and $oldStory->status == 'active' and empty($params['needNotReview']))  $status = 'changing';
-            if($params['changing'] and $oldStory->status == 'active' and $this->story->checkForceReview()) $status = 'changing';
-            if($params['changing'] and $oldStory->status == 'draft' and $params['needNotReview']) $status = 'active';
-        }
-        elseif($method == 'review')
-        {
-            $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
-            $status   = $oldStory->status;
-            if($params['result'] == 'revert') $status = 'active';
-        }
-        echo $status;
     }
 
     /**

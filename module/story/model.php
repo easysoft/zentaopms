@@ -3863,20 +3863,20 @@ class storyModel extends model
     /**
      * Check force review for user.
      *
+     * @param  string $storyType
      * @access public
      * @return bool
      */
-    public function checkForceReview(): bool
+    public function checkForceReview(string $storyType = 'story'): bool
     {
         $forceReview = false;
-        $moduleName  = $this->app->rawModule;
 
-        $forceField       = $this->config->{$moduleName}->needReview == 0 ? 'forceReview' : 'forceNotReview';
-        $forceReviewRoles = !empty($this->config->{$moduleName}->{$forceField . 'Roles'}) ? $this->config->{$moduleName}->{$forceField . 'Roles'} : '';
-        $forceReviewDepts = !empty($this->config->{$moduleName}->{$forceField . 'Depts'}) ? $this->config->{$moduleName}->{$forceField . 'Depts'} : '';
+        $forceField       = $this->config->{$storyType}->needReview == 0 ? 'forceReview' : 'forceNotReview';
+        $forceReviewRoles = !empty($this->config->{$storyType}->{$forceField . 'Roles'}) ? $this->config->{$storyType}->{$forceField . 'Roles'} : '';
+        $forceReviewDepts = !empty($this->config->{$storyType}->{$forceField . 'Depts'}) ? $this->config->{$storyType}->{$forceField . 'Depts'} : '';
 
         $forceUsers = '';
-        if(!empty($this->config->{$moduleName}->{$forceField})) $forceUsers = $this->config->{$moduleName}->{$forceField};
+        if(!empty($this->config->{$storyType}->{$forceField})) $forceUsers = $this->config->{$storyType}->{$forceField};
 
         if(!empty($forceReviewRoles) or !empty($forceReviewDepts))
         {
@@ -3895,7 +3895,7 @@ class storyModel extends model
             $forceUsers .= "," . implode(',', array_keys($users));
         }
 
-        $forceReview = $this->config->{$moduleName}->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
+        $forceReview = $this->config->{$storyType}->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
 
         return $forceReview;
     }

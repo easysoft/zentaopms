@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace zin;
 
 $canEditContent = str_contains(',draft,changing,', ",{$story->status},");
-$forceReview    = $this->story->checkForceReview();
+$forceReview    = $this->story->checkForceReview($story->type);
 $assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $users;
 
 $planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;

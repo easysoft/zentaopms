@@ -52,7 +52,7 @@ formPanel
                 set::value($story->reviewer),
                 set::multiple(true),
                 set::items($reviewers),
-                set::disabled(!$this->story->checkForceReview() && $needReview)
+                set::disabled(!$this->story->checkForceReview($story->type) && $needReview)
             ),
             $needNotReviewBox
         )
