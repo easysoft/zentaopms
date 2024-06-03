@@ -3457,7 +3457,7 @@ class baseRouter
     {
         $installed = true;
         if(!isset($this->config->installed) || !$this->config->installed) $installed = false;
-        if(($this->config->inContainer || $this->config->inQuickon) && !$this->getInstalledVersion()) $installed = false;
+        if(($this->config->inContainer || $this->config->inQuickon) && $installed && !$this->getInstalledVersion()) $installed = false;
 
         if(!isset($_SESSION['installing']) && !$installed && !empty($this->installing)) $_SESSION['installing'] = true;
 
