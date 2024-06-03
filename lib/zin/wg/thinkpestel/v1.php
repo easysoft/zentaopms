@@ -13,6 +13,11 @@ class thinkPestel extends wg
         'blocks: array', // 模型节点
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function buildItem($questions, $blockIndex): array
     {
         global $lang;
@@ -33,6 +38,7 @@ class thinkPestel extends wg
         $blockIndex       = 0;
         $modelItems       = array();
         $defaultQuestions = array_pad(array(), 6, null);
+        $defaultTitle     = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
 
         foreach($blocks as $block)
         {
@@ -47,9 +53,14 @@ class thinkPestel extends wg
                     div
                     (
                         setClass('bg-opacity-20 h-16 rounded-lg px-2 py-3 w-full flex items-center justify-center bg-' . $blockColor, 'text-' . $blockColor),
-                        span(setClass('item-step-title'), $block ? $block : $lang->thinkwizard->unAssociated)
+                        span(
+                            setClass('item-step-title overflow-y-hidden'),
+                            setStyle(array('max-height' => '40px')),
+                            set::title($block ? $block : null),
+                            $block ? $block : $defaultTitle
+                        )
                     ),
-                    div(setClass('px-2 pb-2 h-52'), $this->buildItem($defaultQuestions, $blockIndex))
+                    div(setClass('px-2 pb-2 h-52 model-block relative'), $this->buildItem($defaultQuestions, $blockIndex))
                 ),
             );
             $blockIndex ++;
@@ -61,7 +72,7 @@ class thinkPestel extends wg
     {
         return div
         (
-            setClass('flex'),
+            setClass('flex model-pestel'),
             $this->buildBody()
         );
     }
