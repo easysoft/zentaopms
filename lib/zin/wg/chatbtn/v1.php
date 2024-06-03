@@ -68,16 +68,24 @@ class chatBtn extends wg
         $xuanDefaultOpener = ($hasAIChatPriv && $isAIConfigured) ? '' : 'if(window.xuan) $(`#chat-switch .chat-switch-item[data-value="chat"]`).trigger("click");';
 
         return <<<JAVASCRIPT
-        window.toggleChatContainer = () => {
+        window.toggleChatContainer = () =>
+        {
             if(window.xuan) window.xuan[window.xuan.shown ? 'expand' : 'show']();
             $('#chat-btn').toggleClass('active');
             $('#chat-container').toggle();
         };
 
         /* Setup xuan web chat. */
-        window.setupXuan = () => {
+        window.setupXuan = () =>
+        {
+            if(!window.xuan)
+            {
+                window.initXuan();
+                return;
+            }
+
             /* Move xuan web client into #xuan-chat-view. */
-            if(window.xuan && !document.querySelector('#xuan-chat-view #xx-embed-container'))
+            if(!document.querySelector('#xuan-chat-view #xx-embed-container'))
             {
                 document.querySelector('#xuan-chat-view').prepend(document.querySelector('#xx-embed-container'));
 
@@ -122,7 +130,8 @@ class chatBtn extends wg
                 }, 200);
             }
         };
-        (() => {
+        (() =>
+        {
             /* Insert chat views. */
             $('body').append(`{$chatContainer}`);
 

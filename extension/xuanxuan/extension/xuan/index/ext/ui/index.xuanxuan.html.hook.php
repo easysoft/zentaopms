@@ -78,30 +78,39 @@ function handleXuanRouteChange(route)
     $('#' + window.xuan.id).toggleClass('has-chat-view', hasShowChatView);
 }
 
-$(function()
+window.initXuan = () =>
 {
+    if(window.xuan) return;
+
     const xuanConfig = <?php echo json_encode($xuanConfig); ?>;
-    if(typeof Xuanxuan !== 'undefined')
+    if(typeof Xuanxuan === 'undefined')
     {
-        /* Set client global options*/
-        Xuanxuan.setGlobalOptions(
-        {
-            position:      'right',
-            width:         280,
-            preload:       true,
-            showHeader:    false,
-            onNotice:      handleXuanNoticeChange,
-            onRouteChange: handleXuanRouteChange,
-            lang:          '<?php echo $app->getClientLang()?>'
-        });
-
-        /* Create client instance */
-        window.xuan = new Xuanxuan(xuanConfig);
-
-        /* Setup xuan web chat, see zin/wg/chatbtn. */
-        window.setupXuan();
+        /* Xuan SDK is not loaded at this moment, lets be patient. */
+        window.xuanInitRetryCount = window.xuanInitRetryCount || 0;
+        if(window.xuanInitRetryCount++ > 10) return;
+        return setTimeout(window.initXuan, 500);
     }
-})
+
+    /* Set client global options*/
+    Xuanxuan.setGlobalOptions(
+    {
+        position:      'right',
+        width:         280,
+        preload:       true,
+        showHeader:    false,
+        onNotice:      handleXuanNoticeChange,
+        onRouteChange: handleXuanRouteChange,
+        lang:          '<?php echo $app->getClientLang()?>'
+    });
+
+    /* Create client instance */
+    window.xuan = new Xuanxuan(xuanConfig);
+
+    /* Setup xuan web chat, see zin/wg/chatbtn. */
+    window.setupXuan();
+};
+
+$(() => window.initXuan());
 </script>
 <?php endif; ?>
 <?php endif; ?>
