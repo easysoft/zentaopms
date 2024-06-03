@@ -122,6 +122,7 @@ formPanel
             set::label($lang->product->branchName['branch']),
             picker
             (
+                set::emptyValue(''),
                 set::name('branch[]'),
                 set::value(key($productBranches)),
                 set::items($branches),
