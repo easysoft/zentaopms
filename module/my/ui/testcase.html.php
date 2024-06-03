@@ -39,7 +39,7 @@ if($type == 'assigntome')
     $config->my->testcase->dtable->fieldList['actions']['list']['runCase']['url']   = array('module' => 'testtask', 'method' => 'runCase',   'params' => 'id={run}');
     $config->my->testcase->dtable->fieldList['actions']['list']['runResult']['url'] = array('module' => 'testtask', 'method' => 'results',   'params' => 'id={run}');
     $config->my->testcase->dtable->fieldList['actions']['list']['createBug']['url'] = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&caseID={case}&version={version}&runID={run}');
-    $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'createBug');
+    $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'edit', 'createBug', 'create');
 }
 foreach($config->my->testcase->dtable->fieldList['actions']['list'] as &$action) $action['url']['params'] = str_replace('{caseID}', "{id}", $action['url']['params']);
 
