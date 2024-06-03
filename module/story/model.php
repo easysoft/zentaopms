@@ -3217,7 +3217,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerProduct(string $storyType): array
+    public function getDataOfStoriesPerProduct(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('product as name, count(product) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3237,7 +3237,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerModule(string $storyType): array
+    public function getDataOfStoriesPerModule(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('module as name, count(module) as value, product, branch')
             ->from(TABLE_STORY)
@@ -3279,7 +3279,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerSource(string $storyType): array
+    public function getDataOfStoriesPerSource(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('source as name, count(source) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3287,9 +3287,8 @@ class storyModel extends model
             ->fetchAll('name');
         if(!$datas) return array();
 
-        $moduleName = $this->app->rawModule;
-        $this->lang->{$moduleName}->sourceList[''] = $this->lang->report->undefined;
-        foreach($datas as $key => $data) $data->name = isset($this->lang->{$moduleName}->sourceList[$key]) ? $this->lang->{$moduleName}->sourceList[$key] : $this->lang->report->undefined;
+        $this->lang->{$storyType}->sourceList[''] = $this->lang->report->undefined;
+        foreach($datas as $key => $data) $data->name = isset($this->lang->{$storyType}->sourceList[$key]) ? $this->lang->{$storyType}->sourceList[$key] : $this->lang->report->undefined;
         return $datas;
     }
 
@@ -3301,7 +3300,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerPlan(string $storyType): array
+    public function getDataOfStoriesPerPlan(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('plan as name, count(plan) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3355,7 +3354,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerStatus(string $storyType): array
+    public function getDataOfStoriesPerStatus(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('status as name, count(status) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3363,8 +3362,7 @@ class storyModel extends model
             ->fetchAll('name');
         if(!$datas) return array();
 
-        $moduleName = $this->app->rawModule;
-        foreach($datas as $status => $data) if(isset($this->lang->{$moduleName}->statusList[$status])) $data->name = $this->lang->{$moduleName}->statusList[$status];
+        foreach($datas as $status => $data) if(isset($this->lang->{$storyType}->statusList[$status])) $data->name = $this->lang->{$storyType}->statusList[$status];
         return $datas;
     }
 
@@ -3376,7 +3374,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerStage(string $storyType): array
+    public function getDataOfStoriesPerStage(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('stage as name, count(stage) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3395,7 +3393,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerPri(string $storyType): array
+    public function getDataOfStoriesPerPri(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('pri as name, count(pri) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3403,11 +3401,10 @@ class storyModel extends model
             ->fetchAll('name');
         if(!$datas) return array();
 
-        $moduleName = $this->app->rawModule;
         foreach($datas as $pri => $data)
         {
-            if(isset($this->lang->{$moduleName}->priList[$pri]) && $this->lang->{$moduleName}->priList[$pri] != '')
-                $data->name = $this->lang->{$moduleName}->priList[$pri];
+            if(isset($this->lang->{$storyType}->priList[$pri]) && $this->lang->{$storyType}->priList[$pri] != '')
+                $data->name = $this->lang->{$storyType}->priList[$pri];
             else
                 $data->name = $this->lang->report->undefined;
         }
@@ -3422,7 +3419,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerEstimate(string $storyType): array
+    public function getDataOfStoriesPerEstimate(string $storyType = 'story'): array
     {
         return $this->dao->select('estimate as name, count(estimate) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3438,7 +3435,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerOpenedBy(string $storyType): array
+    public function getDataOfStoriesPerOpenedBy(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('openedBy as name, count(openedBy) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3458,7 +3455,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerAssignedTo(string $storyType): array
+    public function getDataOfStoriesPerAssignedTo(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3478,7 +3475,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerClosedReason(string $storyType): array
+    public function getDataOfStoriesPerClosedReason(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('closedReason as name, count(closedReason) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3486,8 +3483,7 @@ class storyModel extends model
             ->fetchAll('name');
         if(!$datas) return array();
 
-        $moduleName = $this->app->rawModule;
-        foreach($datas as $reason => $data) $data->name = $this->lang->{$moduleName}->reasonList[$reason] != '' ? $this->lang->{$moduleName}->reasonList[$reason] : $this->lang->report->undefined;
+        foreach($datas as $reason => $data) $data->name = $this->lang->{$storyType}->reasonList[$reason] != '' ? $this->lang->{$storyType}->reasonList[$reason] : $this->lang->report->undefined;
         return $datas;
     }
 
@@ -3499,7 +3495,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerChange(string $storyType): array
+    public function getDataOfStoriesPerChange(string $storyType = 'story'): array
     {
         return $this->dao->select('(version-1) as name, count(*) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
@@ -3515,7 +3511,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerGrade(string $storyType): array
+    public function getDataOfStoriesPerGrade(string $storyType = 'story'): array
     {
         $datas = $this->dao->select('type, grade as name, count(*) as count')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))

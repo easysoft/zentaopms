@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getDataOfStoriesPerPlan();
+timeout=0
 cid=0
 
 - 按照计划分组，获取分组后的需求数量 @5

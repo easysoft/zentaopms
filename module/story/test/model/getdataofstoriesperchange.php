@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getDataOfStoriesPerChange();
+timeout=0
 cid=0
 
 - 按照需求版本号分组，获取分组后的需求数量 @4

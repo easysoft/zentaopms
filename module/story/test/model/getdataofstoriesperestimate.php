@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getDataOfStoriesPerEstimate();
+timeout=0
 cid=0
 
 - 按照需求预计工时分组，获取分组后的需求数量 @4
