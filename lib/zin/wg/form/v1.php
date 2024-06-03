@@ -58,8 +58,8 @@ class form extends formBase
         parent::created();
 
         global $app, $lang;
-        $module = $app->rawModule;
-        $method = $app->rawMethod;
+        $module = $app->getModuleName();
+        $method = $app->getMethodName();
         if(isAjaxRequest('modal'))
         {
             $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method, '');
