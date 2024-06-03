@@ -47,8 +47,8 @@ class webhookZen extends webhook
     }
 
     /**
-     * 获取open_id键值对，并追加未查询出的open_id。
-     * Get open_id and name pairs, and append no fetch oauth users.
+     * 获取已绑定的open_id键值对，并追加未查询出的open_id。
+     * Get bound open_id and name pairs, and append no fetch oauth users.
      *
      * @param  object $webhook
      * @param  array $users
@@ -59,17 +59,18 @@ class webhookZen extends webhook
      */
     public function getBoundUseridPairs(object $webhook, array $users, array $boundUsers, array $oauthUsers): array
     {
-        $useridPairs  = array_flip($oauthUsers);
-        $noFetchOauth = array();
+        $boundUseridPairs = array();
+        $useridPairs      = array_flip($oauthUsers);
+        $noFetchOauth     = array();
         foreach($users as $user)
         {
             if(isset($boundUsers[$user->account]))  $userid = $boundUsers[$user->account];
             if(isset($oauthUsers[$user->realname])) $userid = $oauthUsers[$user->realname];
             if(!isset($userid)) continue;
             if(!isset($useridPairs[$userid])) $noFetchOauth[$userid] = $userid;
+            $boundUseridPairs[$userid] = zget($useridPairs, $userid);
         }
 
-        $boundUseridPairs = array();
         if($noFetchOauth)
         {
             if($webhook->type == 'dinguser')
