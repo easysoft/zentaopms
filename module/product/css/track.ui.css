@@ -2,8 +2,10 @@
 .orderByIcon.with-popover-show{color: var(--color-primary-500);}
 
 .card {min-height:80px;}
+.card .card-heading{color:var(--color-gray-900)}
+.card .card-heading a{color:var(--color-gray-900)}
 .card .card-title{height:40px; width:100%;}
-.card .card-content{flex-direction: row;justify-content: space-between;}
+.card .card-content{flex-direction: row;justify-content: space-between;color:var(--color-gray-800)}
 
 .kanban-header-lane-name, .kanban-lane-name {display:none;}
 .kanban-lane-cols, .kanban-header-cols, .kanban-header-sub-cols { gap: calc(var(--kanban-cols-gap) / 2); }
@@ -18,3 +20,9 @@
     height: calc(var(--kanban-col-gap-top, var(--kanban-lanes-gap)) - 2px);
     top: calc(2px - var(--kanban-col-gap-top, var(--kanban-lanes-gap)));
 }
+
+.kanban-header-col-wrapper{
+  --tw-bg-opacity-60: 0.6;
+  background-color: rgba(var(--color-gray-100-rgb), var(--tw-bg-opacity-60));
+}
+.kanban-lane-col{background-color: rgba(var(--color-gray-100-rgb), var(--tw-bg-opacity));}
