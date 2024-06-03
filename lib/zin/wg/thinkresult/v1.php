@@ -8,6 +8,7 @@ class thinkResult extends wg
         'wizard: object',       // 模型数据
         'mode?: string="view"', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
         'blocks: array',        // 模型节点
+        'models: array',        // 模型列表
     );
 
     protected function buildModel(): wg|array
@@ -25,7 +26,7 @@ class thinkResult extends wg
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        list($wizard, $mode) = $this->prop(array('wizard', 'mode'));
+        list($wizard, $mode, $models) = $this->prop(array('wizard', 'mode', 'models'));
         return div
         (
             setClass('think-result-content col items-center px-7 py-6'),
@@ -39,7 +40,7 @@ class thinkResult extends wg
                 setClass('w-full my-4'),
                 setStyle('min-height', '200px'),
                 $this->buildModel(),
-                div(setClass('mt-4 text-center text-lg font-medium text-gray-950'), $lang->thinkwizard->modelTitle[$wizard->model])
+                div(setClass('mt-4 text-center text-lg font-medium text-gray-950'), $models[$wizard->model])
             ),
             div
             (
