@@ -598,6 +598,13 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
+        if(extension_loaded('apcu'))
+        {
+            $this->view->rate  = $this->adminZen->getAPCuMemory('rate');
+            $this->view->used  = $this->adminZen->getAPCuMemory('used');
+            $this->view->total = $this->adminZen->getAPCuMemory('total');
+        }
+
         $this->view->title = $this->lang->admin->cache;
         $this->display();
     }
