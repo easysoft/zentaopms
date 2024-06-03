@@ -77,7 +77,8 @@ class backBtn extends btn
             'ai'             => 'ai-models',
             'api'            => 'api-index',
             'demand'         => 'demand-browse,demand-view',
-            'issue'          => 'issue-browse'
+            'issue'          => 'issue-browse,issue-view',
+            'issue'          => 'risk-browse,risk-view'
         );
 
         $props  = parent::getProps();
