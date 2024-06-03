@@ -1430,13 +1430,12 @@ class storyModel extends model
             return false;
         }
 
-        if(strpos($this->config->story->close->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment'][] = sprintf($this->lang->error->notempty, $this->lang->comment);
+        if(strpos($this->config->{$oldStory->type}->close->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment'][] = sprintf($this->lang->error->notempty, $this->lang->comment);
 
         $this->lang->story->comment = $this->lang->comment;
-        $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'comment,closeSync')
             ->autoCheck()
-            ->batchCheck($this->config->{$moduleName}->close->requiredFields, 'notempty')
+            ->batchCheck($this->config->{$oldStory->type}->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->checkFlow()
             ->where('id')->eq($storyID)
@@ -1445,7 +1444,6 @@ class storyModel extends model
 
         /* Update parent story status and stage. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-        //if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
         if(!dao::isError())
         {
             $this->setStage($storyID);
@@ -1502,7 +1500,6 @@ class storyModel extends model
 
             /* Update parent story status. */
             if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-            //if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
             $this->setStage($storyID);
 
             $changes = common::createChanges($oldStory, $story);
@@ -2277,29 +2274,6 @@ class storyModel extends model
 
         if(!$stories) return array();
         return $this->formatStories($stories, $type, $limit);
-    }
-
-    /**
-     * 关闭父需求的所有子需求。
-     * Close all children of a story.
-     *
-     * @param  int    $storyID
-     * @param  string closedReason
-     * @access public
-     * @return void
-     */
-    public function closeAllChildren(int $storyID, string $closedReason)
-    {
-        $childIdList = $this->getAllChildId($storyID, false, true);
-        $this->dao->update(TABLE_STORY)
-             ->set('status')->eq('closed')
-             ->set('stage')->eq('closed')
-             ->set('closedReason')->eq($closedReason)
-             ->where('id')->in($childIdList)
-             ->exec();
-
-        $this->loadModel('action');
-        foreach($childIdList as $childID) $this->action->create('story', $childID, 'closedbyparent');
     }
 
     /**

@@ -411,6 +411,9 @@ class storyTest
      */
     public function closeTest(int $storyID, object $postData)
     {
+        global $tester;
+        $tester->loadModel('requirement');
+        $tester->loadModel('epic');
         $this->objectModel->close($storyID, $postData);
 
         if(dao::isError()) return dao::getError();

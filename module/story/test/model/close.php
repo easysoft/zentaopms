@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->close();
+timeout=0
 cid=0
 
 - 关闭一个用户需求，查看状态
@@ -19,7 +20,7 @@ cid=0
 - 关闭一个重复了的需求，但缺少重复的需求的ID，查看状态
  - 属性status @~~
  - 属性closedReason @~~
- - 属性duplicateStory @『重复研发需求』不能为空。
+ - 属性duplicateStory @『重复需求』不能为空。
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -58,7 +59,7 @@ $story2 = $story->closeTest(2, $postData2);
 $story3 = $story->closeTest(3, $postData3);
 $story4 = $story->closeTest(4, $postData4);
 
-r($story1) && p('status,closedReason')                 && e('closed,done');                      // 关闭一个用户需求，查看状态
-r($story2) && p('status,closedReason')                 && e('closed,willnotdo');                 // 关闭一个软件需求，查看状态
-r($story3) && p('status,closedReason,duplicateStory')  && e('closed,duplicate,5');               // 关闭一个重复了的需求，查看状态
-r($story4) && p('status,closedReason,duplicateStory')  && e('~~,~~,『重复研发需求』不能为空。'); // 关闭一个重复了的需求，但缺少重复的需求的ID，查看状态
+r($story1) && p('status,closedReason')                 && e('closed,done');                  // 关闭一个用户需求，查看状态
+r($story2) && p('status,closedReason')                 && e('closed,willnotdo');             // 关闭一个软件需求，查看状态
+r($story3) && p('status,closedReason,duplicateStory')  && e('closed,duplicate,5');           // 关闭一个重复了的需求，查看状态
+r($story4) && p('status,closedReason,duplicateStory')  && e('~~,~~,『重复需求』不能为空。'); // 关闭一个重复了的需求，但缺少重复的需求的ID，查看状态
