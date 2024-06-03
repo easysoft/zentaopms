@@ -37,6 +37,7 @@ $lang->stakeholder->inside      = 'Internal Stakeholder';
 $lang->stakeholder->outside     = 'External Stakeholder';
 $lang->stakeholder->from        = 'Type';
 $lang->stakeholder->company     = 'Company';
+$lang->stakeholder->companyName = 'Company';
 $lang->stakeholder->nature      = 'Personality';
 $lang->stakeholder->analysis    = 'Impact Analysis';
 $lang->stakeholder->strategy    = 'Response';
