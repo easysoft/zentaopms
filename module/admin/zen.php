@@ -302,4 +302,25 @@ class adminZen extends admin
 
         return $data;
     }
+
+    /**
+     * 获取APCu内存使用数据。
+     * Get APCu memory data.
+     *
+     * @param  string $type total|free|used
+     * @access protected
+     * @return string|float
+     */
+    public function getAPCuMemory(string $type = 'total'): string|float
+    {
+        if(!extension_loaded('apcu')) return '';
+
+        $info = apcu_sma_info(true);
+
+        if($type == 'total') return helper::formatKB($info['seg_size']);
+        if($type == 'free')  return helper::formatKB($info['avail_mem']);
+        if($type == 'used')  return helper::formatKB($info['seg_size'] - $info['avail_mem']);
+        if($type == 'rate')  return round(($info['seg_size'] - $info['avail_mem']) / $info['seg_size'] * 100, 2);
+        return '';
+    }
 }
