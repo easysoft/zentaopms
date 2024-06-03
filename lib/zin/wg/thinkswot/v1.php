@@ -14,14 +14,14 @@ class thinkSwot extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildItem(int $order, $blockID): node
+    protected function buildItem(int $order, string $blockTitle): node
     {
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        list($mode, $blocks) = $this->prop(array('mode', 'blocks'));
+        $mode         = $this->prop('mode');
         $defaultTitle = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
-        $blockTitle   = !empty($blocks[$blockID]) ? $blocks[$blockID] : $defaultTitle;
+        $blockTitle   = $blockTitle ?: $defaultTitle;
         return div
         (
             setClass('relative p-1 bg-canvas border border-gray-200 model-block', "block-$order"),
@@ -38,11 +38,10 @@ class thinkSwot extends wg
     protected function buildBody(): array
     {
         $blocks     = $this->prop('blocks');
-        $blocks     = array_keys($blocks);
         $modelItems = array();
-        for($i = 0; $i < 4; $i++)
+        foreach($blocks as $key => $block)
         {
-            $modelItems[] = $this->buildItem($i, $blocks[$i] ?? '');
+            $modelItems[] = $this->buildItem($key, $block->text ?? '');
         }
         return $modelItems;
     }
