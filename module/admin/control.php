@@ -588,7 +588,8 @@ class admin extends control
     {
         if($_POST)
         {
-            if(!helper::isAPCuEnabled()) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotFound));
+            if(!extension_loaded('apcu')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotLoaded));
+            if(!ini_get('apc.enabled')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotEnabled));
 
             $cache = form::data()->get();
             $this->loadModel('setting')->setItem('system.common.global.cache', json_encode($cache));
