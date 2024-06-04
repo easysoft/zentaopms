@@ -4382,16 +4382,17 @@ $config->bi->builtin->charts[] = array
     'id'        => 1103,
     'name'      => '年度排行-产品-新增Bug条目榜',
     'code'      => 'annualRank_productBug_created',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '44',
     'sql'       => <<<EOT
-SELECT YEAR(t2.openedDate) AS `year`, t1.id,  t1.name AS product, COUNT(1) AS bug
-FROM zt_product AS t1
-LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = '0'
-WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
-ORDER BY `year`, bug DESC
+select year(t2.openeddate) as year, t1.id, t1.name as product, count(1) as bug
+from zt_product as t1
+left join zt_bug as t2 on t1.id = t2.product and t2.deleted = '0'
+where t1.deleted = '0' and t1.shadow = '0' and t1.vision = 'rnd' and t2.id is not null
+group by year, t1.id, product, t1.name
+order by year, bug desc
 EOT,
     'settings'  => array
     (
