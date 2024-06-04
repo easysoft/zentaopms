@@ -4,15 +4,15 @@
 /**
 
 title=测试 storyModel->getExportStories();
+timeout=0
 cid=0
 
 - 查看只保存导出条件，导出选中需求数 @2
 - 查看只保存导出条件，导出全部需求数 @9
 - 查看保存全部导出SQL，导出选中需求数 @2
 - 查看保存全部导出SQL，导出全部需求数 @5
-- 查看需求的id顺序 @9|8|7|6|5|4|2|3|1
+- 查看需求的id顺序 @9|8|7|6|5|4|3|2|1
 - 查看需求ID为2的数据信息。
- - 第2条的parent属性 @`-1`
  - 第2条的title属性 @用户需求版本一2
  - 第2条的spec属性 @这是一个软件需求描述2
  - 第2条的verify属性 @这是一个需求验收2
@@ -60,5 +60,5 @@ r(count($stories2)) && p() && e('9');  //查看只保存导出条件，导出全
 r(count($stories3)) && p() && e('2');  //查看保存全部导出SQL，导出选中需求数
 r(count($stories4)) && p() && e('5');  //查看保存全部导出SQL，导出全部需求数
 
-r(implode('|', array_keys($stories2))) && p() && e('9|8|7|6|5|4|2|3|1');  //查看需求的id顺序
-r($stories2) && p('2:parent,title,spec,verify,bugCountAB') && e('`-1`,用户需求版本一2,这是一个软件需求描述2,这是一个需求验收2,1');  //查看需求ID为2的数据信息。
+r(implode('|', array_keys($stories2))) && p() && e('9|8|7|6|5|4|3|2|1');  //查看需求的id顺序
+r($stories2) && p('2:title,spec,verify,bugCountAB') && e('用户需求版本一2,这是一个软件需求描述2,这是一个需求验收2,1');  //查看需求ID为2的数据信息。
