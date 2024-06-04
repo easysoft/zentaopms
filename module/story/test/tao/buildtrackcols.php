@@ -64,6 +64,28 @@ cid=0
  - 属性title @SR2
  - 属性parent @story
  - 属性parentName @story
+- 执行$epicCols[0]
+ - 属性name @epic_1
+ - 属性title @业务需求
+ - 属性parent @0
+- 执行$epicCols[1]
+ - 属性name @requirement
+ - 属性title @用户需求
+ - 属性parent @-1
+- 执行$epicCols[2]
+ - 属性name @story
+ - 属性title @研发需求
+ - 属性parent @-1
+- 执行$epicCols[10]
+ - 属性name @story_1
+ - 属性title @SR1
+ - 属性parent @story
+ - 属性parentName @story
+- 执行$epicCols[13]
+ - 属性name @requirement_2
+ - 属性title @UR2
+ - 属性parent @requirement
+ - 属性parentName @requirement
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
