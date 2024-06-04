@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->update();
+timeout=0
 cid=0
 
 - 编辑用户需求，判断返回的信息，stage为空
@@ -28,7 +29,7 @@ zenData('product')->gen(30);
 
 $story  = new storyTest();
 $story1 = $tester->loadModel('story')->fetchByID(2);
-$story1->parent        = 2;
+$story1->parent        = 1;
 $story1->pri           = 4;
 $story1->plan          = '0';
 $story1->estimate      = 1;
