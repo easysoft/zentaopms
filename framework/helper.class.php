@@ -627,6 +627,18 @@ function checkOtherPriv(array $actionConfig, string $action, object $item, objec
 }
 
 /**
+ * 检查是否启用APCu。
+ * Check if APCu is enabled.
+ *
+ * @access public
+ * @return bool
+ */
+function isAPCuEnabled(): bool
+{
+    return extension_loaded('apcu') && ini_get('apc.enabled') == '1';
+}
+
+/**
  * Set the parent property of the data.
  *
  * @param  array  $items
