@@ -385,6 +385,8 @@ class install extends control
 
             $this->install->importBIData();
 
+            $this->install->enableDaoCache();
+
             /**
              * 安装完成后清除缓存。
              * 通过 dao 的 exec 方法更新数据库会自动更新缓存。
