@@ -1194,7 +1194,10 @@ class commonModel extends model
          * 忽略无请求头 HTTP_SEC_FETCH_DEST 或者 HTTP_SEC_FETCH_DEST 为 iframe 的请求，较新的浏览器在启用 https 的情况下才会正确发送该请求头。
          * Ignore the request without HTTP_SEC_FETCH_DEST or HTTP_SEC_FETCH_DEST is iframe, the latest browser will send this request header correctly when enable https.
          */
-        if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return true;
+        $this->app->loadConfig('index');
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if(in_array("{$module}-{$method}", $this->config->index->oldPages) && (!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe')) return true;
 
         /**
          * 当有 HTTP_REFERER 请求头时，忽略 safari 浏览器，因为 safari 浏览器不会正确发送 HTTP_SEC_FETCH_DEST 请求头。
@@ -1210,7 +1213,6 @@ class commonModel extends model
          * 忽略所有方法名以 ajax 开头的请求。
          * Ignore all requests which it's method name starts with 'ajax'.
          */
-        $method = $this->app->getMethodName();
         if(strpos($method, 'ajax') === 0) return true;
 
         /**
