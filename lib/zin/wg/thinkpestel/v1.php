@@ -20,12 +20,12 @@ class thinkPestel extends wg
 
     protected function buildItem($questions, $blockIndex): array
     {
-        global $lang;
+        global $config;
         $cards = array();
 
         foreach($questions as $item)
         {
-            $cards[] = div(setClass('h-4 mt-2 w-full bg-opacity-20 rounded-sm bg-' . $lang->thinkbackground->blockColor[$blockIndex]));
+            $cards[] = div(setClass('h-4 mt-2 w-full bg-opacity-20 rounded-sm bg-' . $config->thinkbackground->blockColor[$blockIndex]));
         }
         return $cards;
     }
@@ -33,6 +33,7 @@ class thinkPestel extends wg
     protected function buildBody(): array
     {
         global $lang;
+        global $config;
         $blocks           = $this->prop('blocks');
         $mode             = $this->prop('mode');
         $blockIndex       = 0;
@@ -42,7 +43,7 @@ class thinkPestel extends wg
 
         foreach($blocks as $block)
         {
-            $blockColor = $lang->thinkbackground->blockColor[$blockIndex];
+            $blockColor = $config->thinkbackground->blockColor[$blockIndex];
             $modelItems[] = div
             (
                 setClass('h-full w-1/' . count($blocks), 'block-' . $blockIndex),
@@ -57,7 +58,7 @@ class thinkPestel extends wg
                             setClass('item-step-title overflow-y-hidden'),
                             setStyle(array('max-height' => '40px')),
                             set::title($block->text ? $block->text : null),
-                             $block->text ? $block->text : $defaultTitle
+                            $block->text ? $block->text : $defaultTitle
                         )
                     ),
                     div(setClass('px-2 pb-2 h-52 model-block relative'), $this->buildItem($defaultQuestions, $blockIndex))

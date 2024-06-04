@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace zin;
 
-use block;
-
 /**
  * 思引波特五力模型部件类。
  * thinmory porter's five forces model widget class.
@@ -23,10 +21,11 @@ class thinkPffa extends wg
     protected function buildCards($questions, $blockIndex)
     {
         global $lang;
+        global $config;
         $blocks       = $this->prop('blocks');
         $mode         = $this->prop('mode');
         $cards        = array();
-        $blockColor   = $lang->thinkbackground->blockColor[$blockIndex];
+        $blockColor   = $config->thinkbackground->blockColor[$blockIndex];
         $defaultTitle = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
 
         foreach($questions as $item)
