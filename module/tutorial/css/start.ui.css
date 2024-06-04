@@ -5,4 +5,4 @@
 .start-icon .icon2{font-size: 56px; position: absolute; top: 35px; left: 42px; color: #EBF2F9; z-index: 10; width: 70px; height: 70px; text-align: center; line-height: 70px; text-shadow: 0 1px 3px rgb(0,0,0,.15);}
 #start > h1, #start > p {margin-bottom: 30px;}
 h1{font-size: 24px;}
-#startModal .modal-body {padding: 0; margin-top: 0;}
+#startModal .modal-body {padding: 0; margin-top: 0; margin-right: 0;}
