@@ -1,7 +1,6 @@
 <?php
 $config->bi = new stdclass();
 $config->bi->builtin = new stdclass();
-<<<<<<< HEAD
 
 $config->bi->builtin->screens = array(1, 2, 3, 4, 5, 6, 7, 8,1001);
 
@@ -10,7 +9,6 @@ $config->bi->default->styles  = json_decode('{"filterShow":false,"hueRotate":0,"
 $config->bi->default->status  = json_decode('{"lock":false,"hide":false}');
 $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestInterval":null,"requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
-=======
 $config->bi->duckSQLTemp = <<<EOT
 LOAD '{EXTENSIONPATH}';
 ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);
@@ -265,4 +263,3 @@ EOT;
 $config->bi->duckdb->ztvtables['projectteams'] = <<<EOT
 SELECT * FROM ztv_projectteams
 EOT;
->>>>>>> duckdb
