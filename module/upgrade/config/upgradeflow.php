@@ -96,6 +96,7 @@ $config->upgrade->execFlow['18_10_1']     = array('functions' => 'migrateAIModel
 $config->upgrade->execFlow['20_0_alpha1'] = array('functions' => 'revertStoryCustomFields');
 $config->upgrade->execFlow['20_0_beta1']  = array('functions' => 'hideOA,updateMetricDateType,update18101,migrateAIModelConfig');
 $config->upgrade->execFlow['20_0_beta2']  = array('functions' => 'updateWorkflowFieldDefaultValue,update1811,updateZeroDateToNull,updateProgramplanCustom');
+$config->upgrade->execFlow['20_0']        = array('functions' => 'openCacheByAPCu');
 
 if(!empty($config->isINT))
 {
