@@ -4435,16 +4435,20 @@ $config->bi->builtin->charts[] = array
     'id'        => 1104,
     'name'      => '年度排行-产品-修复Bug条目榜',
     'code'      => 'annualRank_productBug_fixed',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '44',
     'sql'       => <<<EOT
-SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, COUNT(1) AS bug
-FROM zt_product AS t1
-LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.resolution = 'fixed' AND t2.status = 'closed'
-WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
-ORDER BY `year`, bug DESC
+select year(t2.closeddate) as year, t1.id, t1.name as product, count(1) as bug
+from zt_product as t1
+left join zt_bug as t2 on t1.id = t2.product and t2.deleted = '0' and t2.resolution = 'fixed' and t2.status = 'closed'
+where t1.deleted = '0'
+and t1.shadow = '0'
+and t1.vision = 'rnd'
+and t2.id is not null
+group by year, t1.id, product, t1.name
+order by year, bug desc
 EOT,
     'settings'  => array
     (
@@ -4488,15 +4492,18 @@ $config->bi->builtin->charts[] = array
     'id'        => 1105,
     'name'      => '年度排行-个人-创建需求条目榜',
     'code'      => 'annualRank_personalStoryCount_created',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT
-YEAR(t3.openedDate) AS `year`,t2.realname,count(1) AS count
-FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_story AS t3 ON t1.objectID=t3.id
-WHERE t1.objectType='story' AND t1.action='opened' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC
+select year(t3.openeddate) as year, t2.realname, count(1) as count
+from zt_action as t1
+right join zt_user as t2 on t1.actor = t2.account
+left join zt_story as t3 on t1.objectid = t3.id
+where t1.objecttype = 'story' and t1.action = 'opened' and t3.deleted = '0'
+group by year, t2.account, t2.realname
+order by year, count desc
 EOT,
     'settings'  => array
     (
@@ -4538,15 +4545,20 @@ $config->bi->builtin->charts[] = array
     'id'        => 1106,
     'name'      => '年度排行-个人-创建用例条目榜',
     'code'      => 'annualRank_personalCaseCount_created',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT
-YEAR(t3.openedDate) AS `year`,t2.realname,count(1) AS count
-FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_case AS t3 ON t1.objectID=t3.id
-WHERE t1.objectType='case' AND t1.action='opened' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC
+select year(t3.openeddate) as year, t2.realname, count(1) as count
+from zt_action as t1
+right join zt_user as t2 on t1.actor = t2.account
+left join zt_case as t3 on t1.objectid = t3.id
+where t1.objecttype = 'case'
+and t1.action = 'opened'
+and t3.deleted = '0'
+group by year, t2.account, t2.realname
+order by year, count desc
 EOT,
     'settings'  => array
     (
