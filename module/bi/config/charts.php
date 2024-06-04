@@ -4192,47 +4192,22 @@ $config->bi->builtin->charts[] = array
     'id'        => 1100,
     'name'      => '年度排行-项目-完成需求规模榜',
     'code'      => 'annualRank_projectStoryEstimate_finished',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '43',
     'sql'       => <<<EOT
-SELECT
-  YEAR(t1.closedDate) AS `year`,
-  t1.id,
-  t1.project,
-  ROUND(
-    SUM(t1.estimate),
-    2
-  ) AS story
-FROM
-  (
-    SELECT
-      DISTINCT t1.id,
-      t1.name AS project,
-      t4.id AS story,
-      t4.estimate,
-      t4.closedDate
-    FROM
-      zt_project AS t1
-      LEFT JOIN zt_project AS t2 ON t1.id = t2.parent
-      AND t2.deleted = '0'
-      AND t2.type IN ('sprint', 'stage', 'kanban')
-      LEFT JOIN zt_projectstory AS t3 ON t2.id = t3.project
-      LEFT JOIN zt_story AS t4 ON t3.story = t4.id
-      AND t4.deleted = '0'
-      AND t4.closedReason = 'done'
-    WHERE
-      t1.deleted = '0'
-      AND t1.type = 'project'
-      AND t4.id IS NOT NULL
-  ) AS t1
-GROUP BY
-  `year`,
-  id,
-  project
-ORDER BY
-  `year`,
-  story DESC
+select year(t1.closeddate) as year, t1.id, t1.project, round(sum(t1.estimate), 2) as story
+    from (
+        select distinct t1.id, t1.name as project, t4.id as story, t4.estimate, t4.closeddate
+        from zt_project as t1
+        left join zt_project as t2 on t1.id = t2.parent and t2.deleted = '0' and t2.type in ('sprint', 'stage', 'kanban')
+        left join zt_projectstory as t3 on t2.id = t3.project
+        left join zt_story as t4 on t3.story = t4.id and t4.deleted = '0' and t4.closedreason = 'done'
+        where t1.deleted = '0' and t1.type = 'project' and t4.id is not null
+    ) as t1
+group by year, id, project
+order by year, story desc
 EOT,
     'settings'  => array
     (
