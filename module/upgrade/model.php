@@ -8810,15 +8810,6 @@ class upgradeModel extends model
      */
     public function openCacheByAPCu(): bool
     {
-        if(!extension_loaded('apcu')) return false;
-
-        $cache = new stdclass();
-        $cache->owner   = 'system';
-        $cache->module  = 'common';
-        $cache->section = 'global';
-        $cache->key     = 'cache';
-        $cache->value   = '{"dao":{"enable":"1"}}';
-        $this->dao->replace(TABLE_CONFIG)->data($cache)->exec();
-        return true;
+        return $this->loadModel('install')->enableDaoCache();
     }
 }
