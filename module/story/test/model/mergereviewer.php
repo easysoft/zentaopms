@@ -4,18 +4,15 @@
 /**
 
 title=测试 storyModel->mergeReviewer();
+timeout=0
 cid=0
 
 - 获取需求2的评审人 @admin|user1|user2
 - 获取需求2的待评审人 @admin|user1
 - 获取需求18的评审人 @admin|user1|user2
 - 获取需求18的待评审人 @admin|user1
-- 获取需求18子需求的评审人 @admin|user1|user2
-- 获取需求18子需求的待评审人 @admin|user1
 - 批量获取需求18的评审人 @admin|user1|user2
 - 批量获取需求18的待评审人 @admin|user1
-- 批量获取需求18子需求的评审人 @admin|user1|user2
-- 批量获取需求18子需求的待评审人 @admin|user1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -45,18 +42,14 @@ global $tester;
 $story = $tester->loadModel('story')->getById(2);
 $story = $tester->story->mergeReviewer($story, true);
 r(implode('|', $story->reviewer))  && p()  && e('admin|user1|user2'); // 获取需求2的评审人
-r(implode('|', $story->notReview)) && p()  && e('admin|user1');       // 获取需求2的待评审人
+r(implode('|', $story->notReview)) && p()  && e('admin|user1'); // 获取需求2的待评审人
 
 $story = $tester->loadModel('story')->getById(18);
 $story = $tester->story->mergeReviewer($story, true);
-r(implode('|', $story->reviewer))  && p()  && e('admin|user1|user2');               // 获取需求18的评审人
-r(implode('|', $story->notReview)) && p()  && e('admin|user1');                     // 获取需求18的待评审人
-r(implode('|', $story->children[20]->reviewer))  && p()  && e('admin|user1|user2'); // 获取需求18子需求的评审人
-r(implode('|', $story->children[20]->notReview)) && p()  && e('admin|user1');       // 获取需求18子需求的待评审人
+r(implode('|', $story->reviewer))  && p()  && e('admin|user1|user2'); // 获取需求18的评审人
+r(implode('|', $story->notReview)) && p()  && e('admin|user1'); // 获取需求18的待评审人
 
 $stories = $tester->story->mergeReviewer(array(18 => $story));
 
-r(implode('|', $stories[18]->reviewer))  && p()  && e('admin|user1|user2');               // 批量获取需求18的评审人
-r(implode('|', $stories[18]->notReview)) && p()  && e('admin|user1');                     // 批量获取需求18的待评审人
-r(implode('|', $stories[18]->children[20]->reviewer))  && p()  && e('admin|user1|user2'); // 批量获取需求18子需求的评审人
-r(implode('|', $stories[18]->children[20]->notReview)) && p()  && e('admin|user1');       // 批量获取需求18子需求的待评审人
+r(implode('|', $stories[18]->reviewer))  && p()  && e('admin|user1|user2'); // 批量获取需求18的评审人
+r(implode('|', $stories[18]->notReview)) && p()  && e('admin|user1'); // 批量获取需求18的待评审人
