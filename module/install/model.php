@@ -140,13 +140,6 @@ class installModel extends model
                 if($saveLog) file_put_contents($this->buildDBLogFile('progress'), $table . "\n", FILE_APPEND);
                 $this->dbh->exec($table);
             }
-
-            /* If APCu is not loaded, then disable cache function. */
-            if(!extension_loaded('apcu'))
-            {
-                $sql = "DELETE FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `module` = 'common' AND `section` = 'global' AND `key` = 'cache'";
-                $this->dbh->exec($sql);
-            }
         }
         catch (PDOException $exception)
         {
