@@ -4035,40 +4035,21 @@ $config->bi->builtin->charts[] = array
     'id'        => 1098,
     'name'      => '年度排行-项目-工时消耗榜',
     'code'      => 'annualRank_projectConsumed',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '41',
     'sql'       => <<<EOT
-SELECT
-  YEAR(t4.date) AS `year`,
-  t1.id,
-  t1.name AS project,
-  ROUND(
-    SUM(t4.consumed),
-    2
-  ) AS consumed
-FROM
-  zt_project AS t1
-  LEFT JOIN zt_project AS t2 ON t1.id = t2.parent
-  AND t2.deleted = '0'
-  AND t2.type IN ('sprint', 'stage', 'kanban')
-  LEFT JOIN zt_task AS t3 ON t2.id = t3.execution
-  AND t3.deleted = '0'
-  AND t3.status != 'cancel'
-  LEFT JOIN zt_effort AS t4 ON t3.id = t4.objectID
-  AND t4.deleted = '0'
-  AND t4.objectType = 'task'
-WHERE
-  t1.deleted = '0'
-  AND t1.type = 'project'
-  AND t4.id IS NOT NULL
-GROUP BY
-  `year`,
-  id,
-  project
-ORDER BY
-  `year`,
-  consumed DESC
+select year(t4.date) as year, t1.id, t1.name as project, round(sum(t4.consumed), 2) as consumed
+from zt_project as t1
+left join zt_project as t2 on t1.id = t2.parent and t2.deleted = '0' and t2.type in ('sprint', 'stage', 'kanban')
+left join zt_task as t3 on t2.id = t3.execution and t3.deleted = '0' and t3.status != 'cancel'
+left join zt_effort as t4 on t3.id = t4.objectid and t4.deleted = '0' and t4.objecttype = 'task'
+where t1.deleted = '0'
+and t1.type = 'project'
+and t4.id is not null
+group by year, t1.id, t1.project, t1.name
+order by year, consumed desc
 EOT,
     'settings'  => array
     (
