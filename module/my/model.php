@@ -348,6 +348,7 @@ class myModel extends model
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
         unset($this->config->testcase->search['fields']['module']);
+        unset($this->config->testcase->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
