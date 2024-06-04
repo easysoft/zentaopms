@@ -4588,15 +4588,20 @@ $config->bi->builtin->charts[] = array
     'id'        => 1107,
     'name'      => '年度排行-个人-创建Bug条目榜',
     'code'      => 'annualRank_personalBug_created',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT
-YEAR(t3.openedDate) AS `year`,t2.realname,count(1) AS count
-FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_bug AS t3 ON t1.objectID=t3.id
-WHERE t1.objectType='bug' AND t1.action='opened' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC
+select year(t3.openeddate) as year, t2.realname, count(1) as count
+from zt_action as t1
+right join zt_user as t2 on t1.actor = t2.account
+left join zt_bug as t3 on t1.objectid = t3.id
+where t1.objecttype = 'bug'
+and t1.action = 'opened'
+and t3.deleted = '0'
+group by year, t2.account, t2.realname
+order by year, count desc
 EOT,
     'settings'  => array
     (
@@ -4643,11 +4648,10 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-select
-    year(t3.openeddate) as year, t2.realname, count(distinct t3.id) as count
-    from zt_action as t1
-    right join zt_user as t2 on t1.actor = t2.account
-    left join zt_bug as t3 on t1.objectid = t3.id
+select year(t3.openeddate) as year, t2.realname, count(distinct t3.id) as count
+from zt_action as t1
+right join zt_user as t2 on t1.actor = t2.account
+left join zt_bug as t3 on t1.objectid = t3.id
 where t1.objecttype = 'bug' and t1.action = 'resolved' and t3.deleted = '0'
 group by year, t2.account, t2.realname
 order by year, count desc
