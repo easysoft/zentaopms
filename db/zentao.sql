@@ -491,6 +491,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
+  `driver` enum('mysql', 'duckdb') not NULL default 'duckdb';
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `type` varchar(30) NOT NULL DEFAULT '',
   `group` varchar(255) NOT NULL DEFAULT '',
@@ -15077,6 +15078,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `group` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
+  `driver` enum('mysql', 'duckdb') not NULL default 'duckdb';
   `name` text NULL,
   `desc` text NULL,
   `sql` mediumtext NULL,
@@ -16186,7 +16188,14 @@ CREATE INDEX `date` ON zt_metriclib (date);
 INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NUll);
 INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('0', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NUll);
 
-INSERT INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
-INSERT INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'cache', '{"dao":{"enable":"1"}}');
-INSERT INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('*/10', '*', '*', '*', '*', 'moduleName=bi&methodName=syncParquetFile', '生成parquet文件', 'zentao', 1, 'normal');
 
+UPDATE `zt_chart` SET `createdBy` = 'system' where `createdBy` = 'admin';
+UPDATE `zt_pivot` SET `createdBy` = 'system' where `createdBy` = 'admin';
+UPDATE `zt_pivot` SET `createdBy` = 'system' where `createdBy` = 'admin';
+UPDATE `zt_chart` SET `editedBy` = 'system' where `editedBy` = 'admin';
+UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
+UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
+
+INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
+INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());

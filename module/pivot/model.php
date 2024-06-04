@@ -188,6 +188,7 @@ class pivotModel extends model
      */
     public function processFieldSettings(object $pivot): void
     {
+        $this->loadModel('dataview');
         $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
         if(empty($fieldSettings)) return;
 
@@ -202,11 +203,11 @@ class pivotModel extends model
         $stmt = $this->dbh->query($querySQL);
         if(!$stmt) return;
 
-        $columns      = $this->loadModel('dataview')->getColumns($querySQL);
+        $columns      = $this->bi->getColumnsType($querySQL);
         $columnFields = array();
         foreach(array_keys(get_object_vars($columns)) as $type) $columnFields[$type] = $type;
 
-        extract($this->chart->getTables($querySQL));
+        extract($this->bi->getTables($querySQL));
 
         /* 获取field的键值对以及相关联的对象。 */
         /* Get field key value pairs and related objects. */
@@ -787,7 +788,7 @@ class pivotModel extends model
             $connectSQL .= " where $whereStr";
         }
 
-        $sql = "select * from ($sql) tt" . $connectSQL;
+        $sql = "select * from ( $sql ) tt" . $connectSQL;
 
         return $sql;
     }
@@ -801,11 +802,11 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function mapRecordValueWithFieldOptions(array $records, array $fields, string $sql): array
+    public function mapRecordValueWithFieldOptions(array $records, array $fields, string $sql, string $driver): array
     {
         $this->app->loadConfig('dataview');
         $records      = json_decode(json_encode($records), true);
-        $fieldOptions = $this->getFieldsOptions($fields, $sql);
+        $fieldOptions = $this->getFieldsOptions($fields, $sql, $driver);
         foreach($records as $index => $record)
         {
             foreach($record as $field => $value)
@@ -1310,7 +1311,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function genSheet(array $fields, array $settings, string $sql, array $filters, array $langs = array()): array
+    public function genSheet(array $fields, array $settings, string $sql, array $filters, array $langs = array(), string $driver = 'mysql'): array
     {
         $groups = $this->getGroupsFromSettings($settings);
         $cols   = $this->generateTableCols($fields, $groups, $langs);
@@ -1320,8 +1321,9 @@ class pivotModel extends model
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters);
 
-        $records = $this->dao->query($sql)->fetchAll();
-        $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql);
+        $dbh     = $this->app->loadDriver($driver);
+        $records = $dbh->query($sql)->fetchAll();
+        $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
 
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
 
@@ -1337,7 +1339,7 @@ class pivotModel extends model
                 $columnField      = $columnSetting['field'];
                 $columnSlice      = zget($columnSetting, 'slice', 'noSlice');
 
-                $cols = $this->getTableHeader($records, $columnSetting, $fields, $cols, $sql, $langs, $columnShowOrigin);
+                $cols = $this->getTableHeader($records, $columnSetting, $fields, $cols, $sql, $langs, $columnShowOrigin, $driver);
 
                 if($columnShowOrigin)
                 {
@@ -1457,7 +1459,7 @@ class pivotModel extends model
      * @access public
      * @return string
      */
-    public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array())
+    public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql')
     {
         $sql = $this->initVarFilter($filters, $sql);
 
@@ -1487,7 +1489,9 @@ class pivotModel extends model
         $sql = $statement->build();
 
         $columnSQL = "select * from ($sql) tt" . $connectSQL;
-        $rows = $this->dao->query($columnSQL)->fetchAll();
+
+        $dbh  = $this->app->loadDriver($driver);
+        $rows = $dbh->query($columnSQL)->fetchAll();
         $rows = json_decode(json_encode($rows), true);
 
         $cols = array();
@@ -1834,7 +1838,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs = array(), $showOrigin = false)
+    public function getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs = array(), $showOrigin = false, $driver = 'mysql')
     {
         $stat       = zget($column, 'stat', '');
         $showMode   = zget($column, 'showMode', 'default');
@@ -1877,7 +1881,7 @@ class pivotModel extends model
             $sliceList = array();
             foreach($columnRows as $rows) $sliceList[$rows->{$slice}] = $rows->{$slice};
 
-            $optionList = $this->getSysOptions($fields[$slice]['type'], $fields[$slice]['object'], $fields[$slice]['field'], $sql);
+            $optionList = $this->getSysOptions($fields[$slice]['type'], $fields[$slice]['object'], $fields[$slice]['field'], $sql, '', $driver);
             foreach($sliceList as $field)
             {
                 $childCol = new stdclass();
@@ -2187,7 +2191,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '')
+    public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '', $driver = 'mysql')
     {
         if(in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'project.status'))) return $this->bi->getScopeOptions($type);
         if(!$field) return array();
@@ -2222,7 +2226,7 @@ class pivotModel extends model
                     {
                         $keyField   = $field;
                         $valueField = $saveAs ? $saveAs : $field;
-                        $options = $this->bi->getOptionsFromSql($source, $keyField, $valueField);
+                        $options = $this->bi->getOptionsFromSql($source, $driver, $keyField, $valueField);
                     }
                 }
                 break;
@@ -2230,7 +2234,7 @@ class pivotModel extends model
 
         if(is_string($source) and $source and $saveAs and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'option', 'object')))
         {
-            $options = $this->bi->getOptionsFromSql($source, $field, $saveAs);
+            $options = $this->bi->getOptionsFromSql($source, $driver, $field, $saveAs);
         }
 
         return array_filter($options);
@@ -2304,11 +2308,12 @@ class pivotModel extends model
      * @return array
      *
      */
-    public function getFieldsOptions(array $fieldSettings, string $sql): array
+    public function getFieldsOptions(array $fieldSettings, string $sql, string $driver = 'mysql'): array
     {
         $options = array();
 
-        $sqlRecords = $this->dbh->query($sql)->fetchAll();
+        $dbh        = $this->app->loadDriver($driver);
+        $sqlRecords = $dbh->query($sql)->fetchAll();
 
         foreach($fieldSettings as $key => $fieldSetting)
         {
@@ -2319,7 +2324,7 @@ class pivotModel extends model
             $source = $sql;
             if(in_array($type, array('string', 'number', 'date'))) $source = $sqlRecords;
 
-            $options[$key] = $this->getSysOptions($type, $object, $field, $source);
+            $options[$key] = $this->getSysOptions($type, $object, $field, $source, '', $driver);
         }
 
         return $options;

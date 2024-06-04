@@ -3,6 +3,180 @@
 class biModel extends model
 {
     /**
+     * 获取sql中的表、字段。
+     * Get tables and fields form sql.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array|false
+     */
+    public function getTables(string $sql): array|false
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+
+        if(empty($statement))  return false;
+
+        $fields = array();
+        if($statement->expr)
+        {
+            foreach($statement->expr as $fieldInfo)
+            {
+                $field = $fieldInfo->expr;
+                $fields[$field] = $field;
+            }
+        }
+
+        $tables = array();
+        if($statement->from)
+        {
+            foreach($statement->from as $fromInfo)
+            {
+                $tables[] = $fromInfo->table;
+            }
+        }
+        if($statement->join)
+        {
+            foreach($statement->join as $joinInfo)
+            {
+                $tables[] = $joinInfo->expr->table;
+            }
+        }
+
+        return array('tables' => array_unique($tables), 'fields' => $fields);
+    }
+
+    /**
+     * Try to explain sql.
+     *
+     * @param  string     $sql
+     * @param  string     $driver mysql|duckdb
+     * @access public
+     * @return array
+     */
+    public function explainSQL($sql, $driver = 'mysql')
+    {
+        $dbh = $this->app->loadDriver($driver);
+
+        $prefixSQL = $driver == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
+        try
+        {
+            $rows = $dbh->query("$prefixSQL $sql")->fetchAll();
+        }
+        catch(Exception $e)
+        {
+            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
+            $message = strip_tags($message);
+            return array('result' => 'fail', 'message' => $message);
+        }
+
+        return array('result' => 'success');
+    }
+
+    /**
+     * Try to explain sql.
+     *
+     * @param  string     $sql
+     * @param  string     $limitSql
+     * @param  string     $driver mysql|duckdb
+     * @access public
+     * @return array
+     */
+    public function querySQL($sql, $limitSql, $driver = 'mysql')
+    {
+        $dbh = $this->app->loadDriver($driver);
+
+        try
+        {
+            if($driver == 'mysql')
+            {
+                $rows      = $dbh->query($limitSql)->fetchAll();
+                $count     = $dbh->query("SELECT FOUND_ROWS() as count")->fetch();
+                $rowsCount = $count->count;
+            }
+            elseif($driver == 'duckdb')
+            {
+                $rows      = $dbh->query($limitSql)->fetchAll();
+                $allRows   = $dbh->query("SELECT COUNT(1) as count FROM ( $sql )")->fetch();
+                $rowsCount = $allRows->count;
+            }
+        }
+        catch(Exception $e)
+        {
+            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
+            $message = strip_tags($message);
+            return array('result' => 'fail', 'message' => $message);
+        }
+
+        return array('result' => 'success', 'rows' => $rows, 'rowsCount' => $rowsCount);
+    }
+
+    /**
+     * Get sql result columns.
+     *
+     * @param  string     $sql
+     * @param  string     $driver mysql|duckdb
+     * @access public
+     * @return array|false
+     */
+    public function getColumns(string $sql, $driver = 'mysql'): array|false
+    {
+        if(!in_array($driver, $this->config->bi->drivers)) return false;
+
+        if($driver == 'mysql')
+        {
+            $columns = $this->dao->getColumns($sql);
+        }
+        else
+        {
+            $dbh     = $this->app->loadDriver('duckdb');
+            $columns = $dbh->query("DESCRIBE $sql")->fetchAll();
+        }
+
+        $result = array();
+        foreach($columns as $column)
+        {
+            $column = (array)$column;
+
+            $name       = $driver == 'mysql' ? $column['name']        : $column['column_name'];
+            $nativeType = $driver == 'mysql' ? $column['native_type'] : $column['column_type'];
+
+            $result[$name] = array('name' => $name, 'native_type' => $nativeType);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取表的字段类型。
+     * Get table data.
+     *
+     * @param  string $sql
+     * @param  string $driverName mysql|duckdb
+     * @param  array  $columns
+     * @access public
+     * @return object
+     */
+    public function getColumnsType(string $sql, string $driverName = 'mysql', array $columns = array()): object
+    {
+        if(empty($columns)) $columns = $this->getColumns($sql, $driverName);
+
+        $columnTypes = new stdclass();
+        foreach($columns as $column)
+        {
+            $field      = $column['name'];
+            $nativeType = $column['native_type'];
+            $type       = $this->config->bi->columnTypes->$driverName[$nativeType];
+
+            if(isset($columnTypes->$field)) $field = $column['table'] . $field;
+            $columnTypes->$field = $type;
+        }
+
+        return $columnTypes;
+    }
+
+    /**
      * Get object options.
      *
      * @param  string $type user|product|project|execution|dept
@@ -104,13 +278,15 @@ class biModel extends model
      * @param  string $sql
      * @param  string $keyField
      * @param  string $valueField
+     * @param  string $driver
      * @access public
      * @return array
      */
-    public function getOptionsFromSql(string $sql, string $keyField, string $valueField): array
+    public function getOptionsFromSql(string $sql, $driver, string $keyField, string $valueField): array
     {
         $options = array();
-        $cols    = $this->dbh->query($sql)->fetchAll();
+        $dbh     = $this->app->loadDriver($driver);
+        $cols    = $dbh->query($sql)->fetchAll();
         $sample  = current($cols);
 
         if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;
@@ -297,7 +473,7 @@ class biModel extends model
         return $stat;
     }
 
-    /**
+    /*
      * 准备内置的图表sql语句。
      * Prepare builtin chart sql.
      *
@@ -483,6 +659,109 @@ class biModel extends model
         }
 
         return $screenSQLs;
+    }
+
+    /*
+     * 获取DuckDB的可执行文件路径。
+     * Get DcukDB path.
+     *
+     * @access public
+     * @return object|false
+     */
+    public function getDuckDBPath()
+    {
+        $binPath   = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
+        $file      = $binPath . 'duckdb';
+        $extension = $binPath . 'mysql_scanner.duckdb_extension';
+
+        if(!file_exists($file) && !file_exists($extension) && !is_executable($file)) return false;
+
+        return (object)array('bin' => $file, 'extension' => $extension);
+    }
+
+    /**
+     * 获取DuckDB临时目录。
+     * Get DuckDB temp directory.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function getDuckDBTmpDir()
+    {
+        $duckdbTmpPath = $this->app->getTmpRoot() . 'duckdb' . DS . 'bi' . DS;
+        if(!is_dir($duckdbTmpPath) && !mkdir($duckdbTmpPath, 0755, true)) return false;
+
+        return $duckdbTmpPath;
+    }
+
+    /**
+     * 准备同步数据库所需的复制SQL。
+     * Prepare copy SQL for sync.
+     *
+     * @param  string $duckdbTmpPath
+     * @access public
+     * @return string
+     */
+    public function prepareCopySQL($duckdbTmpPath)
+    {
+        $tables    = $this->config->bi->duckdb->tables;
+        $ztvtables = $this->config->bi->duckdb->ztvtables;
+        if(empty($tables)) return '';
+
+        $tablePrefix = $this->config->db->prefix;
+        $ztvPrefix   = 'ztv_';
+
+        $copySQL  = '';
+        foreach($tables as $table => $sql)
+        {
+            $table = $tablePrefix . $table;
+            $sql   = str_replace('zt_', $tablePrefix, $sql);
+
+            $tablePath = $duckdbTmpPath . $table;
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
+        }
+
+        foreach($ztvtables as $table => $sql)
+        {
+            $table = $ztvPrefix . $table;
+
+            $tablePath = $duckdbTmpPath . $table;
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
+        }
+
+        return $copySQL;
+    }
+
+    /**
+     * 准备同步命令。
+     * Prepare sync command.
+     *
+     * @param  string    $binPath
+     * @param  string    $extensionPath
+     * @param  string    $copySQL
+     * @access public
+     * @return string
+     */
+    public function prepareSyncCommand($binPath, $extensionPath, $copySQL)
+    {
+        $sqlContent = $this->config->bi->duckSQLTemp;
+        $dbConfig   = $this->config->db;
+        $variables  = array(
+            '{EXTENSIONPATH}' => $extensionPath,
+            '{DATABASE}'      => $dbConfig->name,
+            '{USER}'          => $dbConfig->user,
+            '{PASSWORD}'      => $dbConfig->password,
+            '{HOST}'          => $dbConfig->host,
+            '{PORT}'          => $dbConfig->port,
+            '{COPYSQL}'       => $copySQL
+        );
+
+        foreach($variables as $key => $value)
+        {
+            $sqlContent = str_replace($key, $value, $sqlContent);
+        }
+
+        return "$binPath :memory: \"$sqlContent\" 2>&1";
     }
 
     /**

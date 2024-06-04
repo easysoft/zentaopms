@@ -33,7 +33,7 @@ function query(callback) {
 
     $('.query').addClass('disabled');
     $('#querying').removeClass('hidden');
-    $.post(createLink('dataview', 'ajaxQuery'), {sql: $('#sql').val(), filters: filters, recPerPage: DataStorage.recPerPage, pageID: DataStorage.pageID}, function(resp)
+    $.post(createLink('dataview', 'ajaxQuery'), {sql: $('#sql').val(), driver: DataStorage.driver, filters: filters, recPerPage: DataStorage.recPerPage, pageID: DataStorage.pageID}, function(resp)
     {
         resp = JSON.parse(resp);
         $('.query').removeClass('disabled');

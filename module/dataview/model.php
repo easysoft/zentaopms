@@ -22,7 +22,7 @@ class dataviewModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->loadBIDAO();
+        $this->loadModel('bi');
     }
 
 
@@ -230,60 +230,33 @@ class dataviewModel extends model
     }
 
     /**
-     * 获取表的字段类型。
-     * Get table data.
-     *
-     * @param  string $sql
-     * @access public
-     * @return object
-     */
-    public function getColumns(string $sql): object
-    {
-        $columns = $this->dao->getColumns($sql);
-
-        $columnTypes = new stdclass();
-        foreach($columns as $column)
-        {
-            $field      = $column['name'];
-            $nativeType = $column['native_type'];
-            $type       = $this->config->dataview->columnTypes->$nativeType;
-
-            if(isset($columnTypes->$field)) $field = $column['table'] . $field;
-            $columnTypes->$field = $type;
-        }
-
-        return $columnTypes;
-    }
-
-    /**
      * 检查查询结果的唯一性。
      * Check that the column of an sql query is unique.
      *
      * @param  string     $sql
+     * @param  string     $driverName mysql|duckdb
      * @param  bool       $repeat
+     * @param  array      $columns
      * @access public
      * @return bool|array
      */
-    public function checkUniColumn(string $sql, bool $repeat = false): bool|array
+    public function checkUniColumn(string $sql, string $driverName = 'mysql', bool $repeat = false, $columns = array()): bool|array
     {
-        $columns = $this->dao->getColumns($sql);
+        if(empty($columns)) $columns = $this->bi->getColumns($sql, $driverName);
 
         $isUnique     = true;
-        $columnList   = array();
-        $repeatColumn = array();
-        foreach($columns as $column)
+        $repeatFields = array();
+        $fieldCounts  = array_count_values(array_column($columns, 'name'));
+        foreach($fieldCounts as $field => $value)
         {
-            $field = $column['name'];
-            if(isset($columnTypes[$field]))
+            if($value > 1)
             {
                 $isUnique = false;
-                $repeatColumn[$field] = $field;
+                $repeatFields[$field] = $field;
             }
-
-            $columnTypes[$field] = $field;
         }
 
-        if($repeat) return array($isUnique, $repeatColumn);
+        if($repeat) return array($isUnique, $repeatFields);
         return $isUnique;
     }
 

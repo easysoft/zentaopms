@@ -453,6 +453,28 @@ class router extends baseRouter
     }
 
     /**
+     * Get sql driver instance.
+     *
+     * @param  string $driverName mysql|duckdb
+     * @access public
+     * @return object
+     */
+    public function loadDriver($driverName = 'mysql')
+    {
+        if($driverName == 'mysql')
+        {
+            return $this->dbh;
+        }
+        elseif($driverName == 'duckdb')
+        {
+            $this->loadClass('duckdb');
+            $duckdb = new duckdb();
+
+            return $duckdb;
+        }
+    }
+
+    /**
      * Export config.
      *
      * @access public
