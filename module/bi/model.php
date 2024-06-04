@@ -809,6 +809,8 @@ class biModel extends model
     {
         $this->loadModel('dataview');
 
+        $driver = 'mysql';
+
         if(empty($sql)) return $this->lang->dataview->empty;
         try
         {
@@ -819,8 +821,8 @@ class biModel extends model
             return $e->getMessage();
         }
 
-        $sqlColumns = $this->dao->getColumns($sql);
-        list($isUnique, $repeatColumn) = $this->dataview->checkUniColumn($sql, true, $sqlColumns);
+        $sqlColumns = $this->getColumns($sql, $driver);
+        list($isUnique, $repeatColumn) = $this->dataview->checkUniColumn($sql, $driver, true, $sqlColumns);
 
         if(!$isUnique) return sprintf($this->lang->dataview->duplicateField, implode(',', $repeatColumn));
 
@@ -864,15 +866,18 @@ class biModel extends model
     {
         $this->loadModel('chart');
         $this->loadModel('dataview');
-        $sqlColumns   = $this->dao->getColumns($sql);
-        $columnTypes  = $this->dataview->getColumns($sql, $sqlColumns);
+
+        // TODO 需要替换成实际图表或者透视表的driver。
+        $driver = 'mysql';
+
+        $sqlColumns   = $this->getColumns($sql, $driver);
+        $columnTypes  = $this->getColumnsType($sql, $driver, $sqlColumns);
         $columnFields = array();
         foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
 
-        $tableAndFields = $this->chart->getTables($sql);
+        $tableAndFields = $this->getTables($sql);
         $tables   = $tableAndFields['tables'];
         $fields   = $tableAndFields['fields'];
-        $querySQL = $tableAndFields['sql'];
 
         $moduleNames = array();
         $aliasNames  = array();
@@ -976,11 +981,13 @@ class biModel extends model
     public function buildQueryResultTableColumns($fieldSettings)
     {
         $cols = array();
+        $clientLang = $this->app->getClientLang();
         foreach($fieldSettings as $field => $settings)
         {
-            $title = $settings['name'];
+            $settings = (array)$settings;
+            $title = $settings[$clientLang];
             $type  = $settings['type'];
-            $cols[] = array('name' => $field, 'title' => $title, 'type' => $type, 'sortType' => false);
+            $cols[] = array('name' => $field, 'title' => $title, 'sortType' => false);
         }
 
         return $cols;
