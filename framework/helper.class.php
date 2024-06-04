@@ -401,6 +401,18 @@ class helper extends baseHelper
         global $config;
         return $config->cache->enable;
     }
+
+    /**
+     * 检查是否启用APCu。
+     * Check if APCu is enabled.
+     *
+     * @access public
+     * @return bool
+     */
+    public static function isAPCuEnabled(): bool
+    {
+        return extension_loaded('apcu') && ini_get('apc.enabled') == '1';
+    }
 }
 
 /**
@@ -624,18 +636,6 @@ function checkOtherPriv(array $actionConfig, string $action, object $item, objec
     $method = $action;
     if(!empty($actionConfig['url']['method']) && $method != $actionConfig['url']['method']) $method = $actionConfig['url']['method'];
     return common::hasPriv($module, $method, $item);
-}
-
-/**
- * 检查是否启用APCu。
- * Check if APCu is enabled.
- *
- * @access public
- * @return bool
- */
-function isAPCuEnabled(): bool
-{
-    return extension_loaded('apcu') && ini_get('apc.enabled') == '1';
 }
 
 /**
