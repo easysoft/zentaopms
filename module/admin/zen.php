@@ -313,7 +313,7 @@ class adminZen extends admin
      */
     public function getAPCuMemory(string $type = 'total'): string|float
     {
-        if(!extension_loaded('apcu')) return '';
+        if(!helper::isAPCuEnabled()) return '';
 
         $info = apcu_sma_info(true);
 

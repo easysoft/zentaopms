@@ -588,7 +588,7 @@ class admin extends control
     {
         if($_POST)
         {
-            if(!extension_loaded('apcu')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotFound));
+            if(!helper::isAPCuEnabled()) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotFound));
 
             $cache = form::data()->get();
             $this->loadModel('setting')->setItem('system.common.global.cache', json_encode($cache));
@@ -598,7 +598,7 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        if(extension_loaded('apcu'))
+        if(helper::isAPCuEnabled())
         {
             $this->view->rate  = $this->adminZen->getAPCuMemory('rate');
             $this->view->used  = $this->adminZen->getAPCuMemory('used');
