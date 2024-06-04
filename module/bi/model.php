@@ -902,7 +902,7 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function querySql($sql, $recPerPage = 100, $pageID = 1)
+    public function query($sql, $recPerPage = 100, $pageID = 1)
     {
         $queryResult = new stdclass();
         $queryResult->error    = false;
