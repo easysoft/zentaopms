@@ -4054,27 +4054,6 @@ class storyModel extends model
     }
 
     /**
-     * 获取单个用户需求的跟踪矩阵
-     * Get track by id.
-     *
-     * @param  int  $storyID
-     * @access public
-     * @return array
-     */
-    public function getTrackByID(int $storyID): array
-    {
-        $requirement = $this->getByID($storyID);
-
-        /* 获取该用户需求细分的研发需求，并构造跟踪矩阵信息。 */
-        $storyIdList = $this->storyTao->getRelation($requirement->id, 'requirement');
-        $stories     = $this->dao->select('id,title,parent')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $track       = array();
-        foreach($stories as $id => $story) $track[$id] = $this->storyTao->buildStoryTrack($story);
-
-        return $track;
-    }
-
-    /**
      * 获取需求关联的需求列表。
      * Get story relation.
      *
