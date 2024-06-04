@@ -4638,15 +4638,19 @@ $config->bi->builtin->charts[] = array
     'id'        => 1108,
     'name'      => '年度排行-个人-修复Bug条目榜',
     'code'      => 'annualRank_personalBug_Fixed',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT
-YEAR(t3.openedDate) AS `year`,t2.realname,count(DISTINCT t3.id) AS count
-FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_bug AS t3 ON t1.objectID=t3.id
-WHERE t1.objectType='bug' AND t1.action='resolved' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC
+select
+    year(t3.openeddate) as year, t2.realname, count(distinct t3.id) as count
+    from zt_action as t1
+    right join zt_user as t2 on t1.actor = t2.account
+    left join zt_bug as t3 on t1.objectid = t3.id
+where t1.objecttype = 'bug' and t1.action = 'resolved' and t3.deleted = '0'
+group by year, t2.account, t2.realname
+order by year, count desc
 EOT,
     'settings'  => array
     (
@@ -4688,15 +4692,19 @@ $config->bi->builtin->charts[] = array
     'id'        => 1109,
     'name'      => '年度排行-个人-工时消耗榜',
     'code'      => 'annualRank_personalConsumed',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT YEAR(t1.date) AS `year`, t2.realname, ROUND(SUM(t1.consumed),1) AS consumed
-FROM zt_effort AS t1 LEFT JOIN zt_user AS t2 ON t1.account = t2.account
-WHERE t1.deleted = '0' AND t2.deleted = '0'
-GROUP BY `year`, realname
-ORDER BY `year`, consumed DESC
+select year(t1.date) as year, t2.realname, round(sum(t1.consumed), 1) as consumed
+from zt_effort as t1
+left join zt_user as t2 on t1.account = t2.account
+where t1.deleted = '0'
+and t2.deleted = '0'
+and year(t1.date) is not null
+group by year, realname
+order by year, consumed desc
 EOT,
     'settings'  => array
     (
@@ -4738,11 +4746,19 @@ $config->bi->builtin->charts[] = array
     'id'        => 1110,
     'name'      => '年度排行-个人-禅道操作次数榜',
     'code'      => 'annualRank_personalAction',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT YEAR(t1.date) AS `year`,IFNULL(t2.realname,t1.actor) AS realname,count(1) AS count FROM zt_action t1 LEFT JOIN zt_user AS t2 ON t1.actor=t2.account where t1.actor is not null and t1.actor not in('', 'system') GROUP BY `year`,t1.actor ORDER BY `year`, `count` DESC
+select year(t1.date) as year, ifnull(t2.realname, t1.actor) as realname, count(1) as count
+from zt_action t1
+left join zt_user as t2 on t1.actor = t2.account
+where t1.actor is not null
+and year(t1.date) is not null
+and t1.actor not in('', 'system')
+group by year, t1.actor, t2.realname
+order by year, `count` desc
 EOT,
     'settings'  => array
     (
