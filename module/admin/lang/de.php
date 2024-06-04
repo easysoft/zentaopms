@@ -53,10 +53,11 @@ $lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>
 $lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
 $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
-$lang->admin->daoCache     = 'DAO Cache';
-$lang->admin->memory       = 'Memory';
-$lang->admin->usedMemory   = 'Total %s, %s used';
-$lang->admin->apcuNotFound = 'Please enable APCu extension before turning on DAO cache';
+$lang->admin->daoCache       = 'DAO Cache';
+$lang->admin->memory         = 'Memory';
+$lang->admin->usedMemory     = 'Total %s, %s used';
+$lang->admin->apcuNotLoaded  = 'Please load the APCu extension before enabling DAO cache';
+$lang->admin->apcuNotEnabled = 'Please enable the apc.enabled option before enabling DAO cache';
 
 $lang->admin->cacheStatusList[1] = 'On';
 $lang->admin->cacheStatusList[0] = 'Off';
