@@ -4,15 +4,15 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range(1);
 $story->version->range(1);
 $story->parent->range('0{18},`-1`,19');
 $story->type->range('requirement{10},story{10}');
 $story->gen(20);
 
-zdTable('storyspec')->gen(60);
-$relation = zdTable('relation');
+zenData('storyspec')->gen(60);
+$relation = zenData('relation');
 $relation->gen(0);
 
 /**
