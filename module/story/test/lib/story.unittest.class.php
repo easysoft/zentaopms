@@ -383,22 +383,15 @@ class storyTest
      * @access public
      * @return object|array
      */
-    public function subdivideTest(int $storyID, array $stories, string $type): object|array
+    public function subdivideTest(int $storyID, array $stories): object|array
     {
-        $this->objectModel->dao->delete()->from(TABLE_RELATION)->exec();
         $this->objectModel->subdivide($storyID, $stories);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        if($type == 'requirement')
-        {
-            return $tester->dao->select('*')->from(TABLE_RELATION)->fetchAll();
-        }
-        else
-        {
-            return $this->objectModel->getById($storyID);
-        }
+        $story = $this->objectModel->getById($storyID);
+        $story->children = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->fetchAll();
+        return $story;
     }
 
     /**
