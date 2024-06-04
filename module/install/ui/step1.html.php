@@ -17,15 +17,19 @@ $extendItems = array('pdo', 'pdoMySQL', 'json', 'openssl', 'mbstring', 'zlib', '
 $dirItems    = array('tmpRoot', 'dataRoot', 'session');
 foreach($extendItems as $extendItem)
 {
-    $result     = ${"{$extendItem}Result"};
-    $failLang   = $extendItem . 'Fail';
+    $result   = ${"{$extendItem}Result"};
+    $failLang = $extendItem . 'Fail';
+
+    $resultClass = $result == 'ok' ? 'bg-success' : 'bg-danger';
+    if($extendItem == 'apcu') $resultClass = 'bg-warning';
+
     $checkTrs[] = h::tr
     (
         h::th($lang->install->{$extendItem}),
         h::td($result == 'ok' ? $lang->install->loaded : $lang->install->unloaded),
         h::td
         (
-            setClass($result . ' text-white' . ($result == 'ok' ? ' bg-success' : ' bg-danger')),
+            setClass("{$result} text-white {$resultClass}"),
             $lang->install->{$result}
         ),
         h::td
@@ -136,7 +140,7 @@ div
                 && $tmpRootResult == 'ok' && $dataRootResult == 'ok' && $sessionResult  == 'ok'
                 && $jsonResult    == 'ok' && $opensslResult  == 'ok' && $mbstringResult == 'ok'
                 && $zlibResult    == 'ok' && $curlResult     == 'ok' && $filterResult   == 'ok'
-                && $iconvResult   == 'ok' && $apcuResult     == 'ok' ?  btn
+                && $iconvResult   == 'ok' ? btn
                 (
                     setClass('px-6 mx-4'),
                     set::url(inlink('step2')),
