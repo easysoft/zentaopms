@@ -649,12 +649,9 @@ class testcaseModel extends model
         $this->dao->update(TABLE_CASE)->data($case, 'result,comment')->autoCheck()->checkFlow()->where('id')->eq($oldCase->id)->exec();
         if(dao::isError()) return false;
 
-        $changes = common::createChanges($oldCase, $case);
-        if(!empty($changes))
-        {
-            $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $case->comment, ucfirst($case->result));
-            $this->action->logHistory($actionID, $changes);
-        }
+        $changes  = common::createChanges($oldCase, $case);
+        $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $case->comment, ucfirst($case->result));
+        $this->action->logHistory($actionID, $changes);
         return true;
     }
 
