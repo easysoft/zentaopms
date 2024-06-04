@@ -2181,26 +2181,34 @@ class storyTao extends storyModel
         $storyGrade = $this->getGradeGroup();
 
         $cols = array();
-        if($storyType == 'epic')  $cols[] = $this->buildTrackCol('epic',        $this->lang->ERCommon, empty($storyGrade['epic'])        ? 0 : -1);
-        if($storyType != 'story') $cols[] = $this->buildTrackCol('requirement', $this->lang->URCommon, empty($storyGrade['requirement']) ? 0 : -1);
+        if($storyType == 'epic')  $cols['epic']        = $this->buildTrackCol('epic',        $this->lang->ERCommon, empty($storyGrade['epic'])        ? 0 : -1);
+        if($storyType != 'story') $cols['requirement'] = $this->buildTrackCol('requirement', $this->lang->URCommon, empty($storyGrade['requirement']) ? 0 : -1);
 
-        $cols[] = $this->buildTrackCol('story',     $this->lang->SRCommon, empty($storyGrade['story']) ? 0 : -1);
-        $cols[] = $this->buildTrackCol('project',   $this->lang->story->project);
-        $cols[] = $this->buildTrackCol('execution', $this->lang->story->execution);
-        $cols[] = $this->buildTrackCol('design',    $this->lang->story->design);
-        $cols[] = $this->buildTrackCol('commit',    $this->lang->story->repoCommit);
-        $cols[] = $this->buildTrackCol('task',      $this->lang->story->tasks);
-        $cols[] = $this->buildTrackCol('bug',       $this->lang->story->bugs);
-        $cols[] = $this->buildTrackCol('case',      $this->lang->story->cases);
+        $cols['story']     = $this->buildTrackCol('story',     $this->lang->SRCommon, empty($storyGrade['story']) ? 0 : -1);
+        $cols['project']   = $this->buildTrackCol('project',   $this->lang->story->project);
+        $cols['execution'] = $this->buildTrackCol('execution', $this->lang->story->execution);
+        $cols['design']    = $this->buildTrackCol('design',    $this->lang->story->design);
+        $cols['commit']    = $this->buildTrackCol('commit',    $this->lang->story->repoCommit);
+        $cols['task']      = $this->buildTrackCol('task',      $this->lang->story->tasks);
+        $cols['bug']       = $this->buildTrackCol('bug',       $this->lang->story->bugs);
+        $cols['case']      = $this->buildTrackCol('case',      $this->lang->story->cases);
 
         foreach($storyGrade as $type => $grades)
         {
-            if($storyType == 'requirement' && $type == 'epic') continue;
-            if($storyType == 'story' && ($type == 'requirement' || $type == 'epic')) continue;
-            foreach($grades as $grade) $cols[] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
+            if(!isset($cols[$type])) continue;
+            if(count($grades) == 1)
+            {
+                $grade = array_shift($grades);
+                $cols["{$type}_{$grade->grade}"] = $this->buildTrackCol("{$type}_{$grade->grade}", $cols[$type]['title']);
+                unset($cols[$type]);
+            }
+            else
+            {
+                foreach($grades as $grade) $cols["{$type}_{$grade->grade}"] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
+            }
         }
 
-        return $cols;
+        return array_values($cols);
     }
 
     /**
