@@ -23,7 +23,7 @@ formPanel
             set::inline(true)
         )
     ),
-    extension_loaded('apcu') ? formRow
+    helper::isAPCuEnabled() ? formRow
     (
         formGroup
         (
