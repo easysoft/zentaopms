@@ -11,6 +11,7 @@ $lang->dataview->code           = 'Code';
 $lang->dataview->group          = 'Group';
 $lang->dataview->view           = 'View Name';
 $lang->dataview->desc           = 'Description';
+$lang->dataview->length         = 'length';
 $lang->dataview->data           = 'Data';
 $lang->dataview->schema         = 'Schema';
 $lang->dataview->details        = 'Details';

@@ -50,3 +50,14 @@ $config->dataview->columnTypes->time      = 'string';
 $config->dataview->columnTypes->double    = 'number';
 $config->dataview->columnTypes->number    = 'number';
 $config->dataview->columnTypes->bigint    = 'number';
+
+$config->dataview->fieldTypes['int']      = 'number';
+$config->dataview->fieldTypes['double']   = 'number';
+$config->dataview->fieldTypes['float']    = 'number';
+$config->dataview->fieldTypes['decimal']  = 'number';
+$config->dataview->fieldTypes['char']     = 'text';
+$config->dataview->fieldTypes['varchar']  = 'text';
+$config->dataview->fieldTypes['text']     = 'text';
+$config->dataview->fieldTypes['date']     = 'date';
+$config->dataview->fieldTypes['time']     = 'time';
+$config->dataview->fieldTypes['datetime'] = 'datetime';
