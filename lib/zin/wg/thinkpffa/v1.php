@@ -20,8 +20,7 @@ class thinkPffa extends wg
 
     protected function buildCards($questions, $blockIndex)
     {
-        global $lang;
-        global $config;
+        global $lang, $config;
         $blocks       = $this->prop('blocks');
         $mode         = $this->prop('mode');
         $cards        = array();

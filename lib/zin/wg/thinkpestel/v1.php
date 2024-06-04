@@ -32,8 +32,7 @@ class thinkPestel extends wg
 
     protected function buildBody(): array
     {
-        global $lang;
-        global $config;
+        global $lang, $config;
         $blocks           = $this->prop('blocks');
         $mode             = $this->prop('mode');
         $blockIndex       = 0;
