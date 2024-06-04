@@ -765,6 +765,247 @@ class biModel extends model
     }
 
     /**
+     * Process filter variables in sql.
+     *
+     * @param  string    $sql
+     * @param  array  $filters
+     * @access public
+     * @return string
+     */
+    public function processVars($sql, $filters = array())
+    {
+        return $sql;
+    }
+
+    /**
+     * Build statement object from sql.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return object
+     */
+    public function sql2Statement($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+
+        if(count($parser->statements) == 0) return $this->lang->dataview->empty;
+        if(count($parser->statements) > 1)  return $this->lang->dataview->onlyOne;
+
+        $statement = $parser->statements[0];
+        if($statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement == false) return $this->lang->dataview->allowSelect;
+
+        return $statement;
+    }
+
+    /**
+     * Validate sql.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return string|true
+     */
+    public function validateSql($sql)
+    {
+        $this->loadModel('dataview');
+
+        if(empty($sql)) return $this->lang->dataview->empty;
+        try
+        {
+            $rows = $this->dbh->query("EXPLAIN $sql")->fetchAll();
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+
+        $sqlColumns = $this->dao->getColumns($sql);
+        list($isUnique, $repeatColumn) = $this->dataview->checkUniColumn($sql, true, $sqlColumns);
+
+        if(!$isUnique) return sprintf($this->lang->dataview->duplicateField, implode(',', $repeatColumn));
+
+        return true;
+    }
+
+    /**
+     * Prepare pager from sql.
+     *
+     * @param  object    $statement
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return string
+     */
+    public function prepareSqlPager($statement, $recPerPage, $pageID)
+    {
+        if(!$statement->limit)
+        {
+            $statement->limit = new stdclass();
+        }
+        $statement->limit->offset   = $recPerPage * ($pageID - 1);
+        $statement->limit->rowCount = $recPerPage;
+
+        $statement->options->options[] = 'SQL_CALC_FOUND_ROWS';
+
+        $limitSql = $statement->build();
+
+        return $limitSql;
+    }
+
+    /**
+     * Prepare columns setting from sql.
+     *
+     * @param  string    $sql
+     * @param  object    $statement
+     * @access public
+     * @return array
+     */
+    public function prepareColumns($sql, $statement)
+    {
+        $this->loadModel('chart');
+        $this->loadModel('dataview');
+        $sqlColumns   = $this->dao->getColumns($sql);
+        $columnTypes  = $this->dataview->getColumns($sql, $sqlColumns);
+        $columnFields = array();
+        foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
+
+        $tableAndFields = $this->chart->getTables($sql);
+        $tables   = $tableAndFields['tables'];
+        $fields   = $tableAndFields['fields'];
+        $querySQL = $tableAndFields['sql'];
+
+        $moduleNames = array();
+        $aliasNames  = array();
+        if($tables)
+        {
+            $moduleNames = $this->dataview->getModuleNames($tables);
+            $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
+        }
+
+        list($fields, $objects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
+
+        $columns = array();
+        foreach($fields as $field => $name)
+        {
+            $columns[$field] = array('name' => $name, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $objects[$field]);
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Query sql.
+     *
+     * @param  string    $sql
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return object
+     */
+    public function querySql($sql, $recPerPage = 100, $pageID = 1)
+    {
+        $queryResult = new stdclass();
+        $queryResult->error    = false;
+        $queryResult->errorMsg = '';
+        $queryResult->cols     = array();
+        $queryResult->rows     = array();
+        $queryResult->sql      = '';
+        $queryResult->fieldSettings = array();
+
+        $sql = $this->processVars($sql);
+
+        $statement = $this->sql2Statement($sql);
+        if(is_string($statement))
+        {
+            $queryResult->error    = true;
+            $queryResult->errorMsg = $statement;
+
+            return $queryResult;
+        }
+
+        $checked = $this->validateSql($sql);
+        if($checked !== true)
+        {
+            $queryResult->error    = true;
+            $queryResult->errorMsg = $checked;
+
+            return $queryResult;
+        }
+
+        $limitSql = $this->prepareSqlPager($statement, $recPerPage, $pageID);
+
+        try
+        {
+            $queryResult->rows      = $this->dbh->query($limitSql)->fetchAll();
+            $queryResult->rowsCount = $this->dbh->query("SELECT FOUND_ROWS() as count")->fetch()->count;
+        }
+        catch(Exception $e)
+        {
+            $queryResult->error = true;
+            $queryResult->errorMsg = $e;
+
+            return $queryResult;
+        }
+
+        $columns    = $this->prepareColumns($limitSql, $statement);
+        $clientLang = $this->app->getClientLang();
+
+        $fieldSettings = array();
+        foreach($columns as $field => $settings)
+        {
+            $title = $settings['name'];
+
+            if(!isset($settings[$clientLang]) || empty($settings[$clientLang])) $settings[$clientLang] = $title;
+            $fieldSettings[$field] = $settings;
+        }
+
+        $queryResult->cols          = $this->buildQueryResultTableColumns($fieldSettings);
+        $queryResult->fieldSettings = $fieldSettings;
+        $queryResult->sql           = $limitSql;
+
+        return $queryResult;
+    }
+
+    /**
+     * Build table columns from query result.
+     *
+     * @param  array    $fieldSettings
+     * @access public
+     * @return array
+     */
+    public function buildQueryResultTableColumns($fieldSettings)
+    {
+        $cols = array();
+        foreach($fieldSettings as $field => $settings)
+        {
+            $title = $settings['name'];
+            $type  = $settings['type'];
+            $cols[] = array('name' => $field, 'title' => $title, 'type' => $type, 'sortType' => false);
+        }
+
+        return $cols;
+    }
+
+    /**
+     * Prepare field objects.
+     *
+     * @access public
+     * @return array
+     */
+    public function prepareFieldObjects()
+    {
+        $this->loadModel('dataview');
+        $options = array();
+        foreach($this->lang->dataview->objects as $table => $name)
+        {
+            $fields = $this->dataview->getTypeOptions($table);
+            $options[] = array('text' => $name, 'value' => $table, 'fields' => $fields);
+        }
+
+        return $options;
+    }
+
+    /**
      * Encode json.
      *
      * @param  object|array  $object
