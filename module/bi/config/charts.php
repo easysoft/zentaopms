@@ -4329,16 +4329,17 @@ $config->bi->builtin->charts[] = array
     'id'        => 1102,
     'name'      => '年度排行-产品-完成需求规模榜',
     'code'      => 'annualRank_productStoryEstimate_finished',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, ROUND(SUM(t2.estimate), 1) AS story
-FROM zt_product AS t1
-LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.closedReason = 'done'
-WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
-ORDER BY `year`, story DESC
+select year(t2.closeddate) as year, t1.id, t1.name as product, round(sum(t2.estimate), 1) as story
+from zt_product as t1
+left join zt_story as t2 on t1.id = t2.product and t2.deleted = '0' and t2.closedreason = 'done'
+where t1.deleted = '0' and t1.shadow = '0' and t1.vision = 'rnd' and t2.id is not null
+group by year, t1.id, product, t1.name
+order by year, story desc
 EOT,
     'settings'  => array
     (
