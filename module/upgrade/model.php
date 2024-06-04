@@ -8800,4 +8800,25 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 根据是否加载 APCu 扩展，开启缓存。
+     * Open cache by load APCu or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function openCacheByAPCu(): bool
+    {
+        if(!extension_loaded('apcu')) return false;
+
+        $cache = new stdclass();
+        $cache->owner   = 'system';
+        $cache->module  = 'common';
+        $cache->section = 'global';
+        $cache->key     = 'cache';
+        $cache->value   = '{"dao":{"enable":"1"}}';
+        $this->dao->replace(TABLE_CONFIG)->data($cache)->exec();
+        return true;
+    }
 }
