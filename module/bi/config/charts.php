@@ -1224,7 +1224,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '36',
     'sql'       => <<<EOT
-SELECT id, IF(closedReason='done', 'done', 'undone') AS bugstatus FROM zt_story WHERE deleted='0' AND (status != 'closed' OR closedReason='done')
+select id, if(closedReason='done', 'done', 'undone') as bugstatus from zt_story where deleted='0' and (status != 'closed' or closedReason='done')
 EOT,
     'settings'  => array
     (
