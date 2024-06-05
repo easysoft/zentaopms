@@ -1448,8 +1448,10 @@ class project extends control
     public function whitelist(int $projectID = 0, string $from = 'project', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $projectID = $this->project->setMenu($projectID);
-        $project   = $this->project->getByID($projectID);
-        if(isset($project->acl) and $project->acl == 'open') return $this->sendError($this->lang->whitelistNotNeed, true);
+        if(!$projectID) return $this->locate(inLink('browse'));
+
+        $project = $this->project->getByID($projectID);
+        if(isset($project->acl) and $project->acl == 'open') return $this->sendError($this->lang->whitelistNotNeed, inLink('browse'));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=project&browseType=project&orderBy=id_desc&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
