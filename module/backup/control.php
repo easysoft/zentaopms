@@ -332,6 +332,8 @@ class backup extends control
     {
         session_write_close();
 
+        if($this->config->inQuickon) return print('');
+
         $files = glob($this->backupPath . '/*.*');
         rsort($files);
 
