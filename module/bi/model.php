@@ -1081,6 +1081,22 @@ class biModel extends model
     }
 
     /**
+     * Convert json string to array.
+     *
+     * @param  string|object|array    $json
+     * @access public
+     * @return array
+     */
+    public function json2Array(string|object|array $json): array
+    {
+        if(empty($json)) return array();
+        if(is_string($json)) return json_decode($json, true);
+        if(is_object($json)) return json_decode(json_encode($json), true);
+
+        return $json;
+    }
+
+    /**
      * Encode json.
      *
      * @param  object|array  $object
