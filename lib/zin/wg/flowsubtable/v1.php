@@ -38,7 +38,7 @@ class flowSubTable extends wg
             if(!$field->show) continue;
 
             $items[] = [
-                'name'         => "children[{$module}][{$field->field}]",    // 子表的字段可以重名，所以需要加上 module
+                'name'         => "children[sub_{$module}][{$field->field}]",    // 子表的字段可以重名，所以需要加上 module
                 'label'        => $field->name,
                 'control'      => $common->flow->buildFormControl($field, 'batch'),
                 'items'        => array_filter($field->options),
@@ -54,7 +54,7 @@ class flowSubTable extends wg
          * The id field of the sub-table does not exist in $fields. Add the id field to distinguish between new and edit.
          */
         $items[] = [
-            'name'  => "children[{$module}][id]",
+            'name'  => "children[sub_{$module}][id]",
             'label' => 'id',
             'hidden' => true
         ];
@@ -69,11 +69,11 @@ class flowSubTable extends wg
             foreach($fields as $field)
             {
                 $field = (object)$field;
-                $newKey = "children[{$module}][{$field->field}]";
+                $newKey = "children[sub_{$module}][{$field->field}]";
                 $rows[$key][$newKey] = $data->{$field->field};
             }
 
-            $newKey = "children[{$module}][id]";
+            $newKey = "children[sub_{$module}][id]";
             $rows[$key][$newKey] = $data->id;
         }
 
