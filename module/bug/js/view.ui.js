@@ -22,7 +22,7 @@ $(document).on('click', '#toTaskButton', function()
         if(isInModal) zui.Modal.hide();
 
         const url = $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=' + projectID + '&bugID=' + bugID);
-        openPage(url, executions[executionID].indexOf(disableExecution) >= 0 ? 'project' : 'execution');
+        openPage(url, executions[executionID] != undefined && executions[executionID].indexOf(disableExecution) >= 0 ? 'project' : 'execution');
     }
     else if(projectID == 0)
     {
