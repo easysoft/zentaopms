@@ -84,6 +84,12 @@ class biModel extends model
                 {
                     $tables[] = $joinInfo->expr->table;
                 }
+                elseif($deep && $joinInfo->expr->subquery)
+                {
+                    $parser = new sqlparser($joinInfo->expr->expr);
+                    $subTables = $this->getTables($parser->statements[0], true);
+                    $tables = array_merge($tables, $subTables);
+                }
             }
         }
 
