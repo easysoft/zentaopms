@@ -12,7 +12,7 @@ $config->tutorial->tasksConfig['createAccount']['nav']['method']         = 'crea
 $config->tutorial->tasksConfig['createAccount']['nav']['menuModule']     = 'company';
 $config->tutorial->tasksConfig['createAccount']['nav']['menu']           = 'browseUser';
 $config->tutorial->tasksConfig['createAccount']['nav']['form']           = '#mainContent';
-$config->tutorial->tasksConfig['createAccount']['nav']['requiredFields'] = 'account,realname,verifyPassword,password1,password2';
+$config->tutorial->tasksConfig['createAccount']['nav']['requiredFields'] = 'account,password1,password2,realname,verifyPassword';
 $config->tutorial->tasksConfig['createAccount']['nav']['submit']         = 'button[type=submit]';
 $config->tutorial->tasksConfig['createAccount']['nav']['target']         = '.create-user-btn';
 $config->tutorial->tasksConfig['createAccount']['nav']['targetPageName'] = $lang->tutorial->tasks->createAccount->targetPageName;
