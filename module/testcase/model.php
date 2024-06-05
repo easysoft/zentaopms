@@ -1487,6 +1487,7 @@ class testcaseModel extends model
             foreach($cellValue as $field => $value)
             {
                 if($field != 'stepDesc' and $field != 'stepExpect') continue;
+                $value = (string)$value;
                 if($field == 'stepDesc' or $field == 'stepExpect')
                 {
                     $steps = $value;
