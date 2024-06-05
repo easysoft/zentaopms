@@ -10,7 +10,7 @@ class biModel extends model
      * @access public
      * @return array|false
      */
-    public function getTables(string $sql): array|false
+    public function getTableAndFields(string $sql): array|false
     {
         $this->app->loadClass('sqlparser', true);
         $parser    = new sqlparser($sql);
@@ -33,14 +33,14 @@ class biModel extends model
         {
             foreach($statement->from as $fromInfo)
             {
-                $tables[] = $fromInfo->table;
+                if($fromInfo->table) $tables[] = $fromInfo->table;
             }
         }
         if($statement->join)
         {
             foreach($statement->join as $joinInfo)
             {
-                $tables[] = $joinInfo->expr->table;
+                if($joinInfo->expr->table) $tables[] = $joinInfo->expr->table;
             }
         }
 
@@ -875,7 +875,7 @@ class biModel extends model
         $columnFields = array();
         foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
 
-        $tableAndFields = $this->getTables($sql);
+        $tableAndFields = $this->getTableAndFields($sql);
         $tables   = $tableAndFields['tables'];
         $fields   = $tableAndFields['fields'];
 
