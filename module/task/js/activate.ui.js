@@ -67,7 +67,7 @@ function setTeamUser()
  * @access public
  * @return void
  */
-$(document).on('click', '#confirmButton', function()
+$(document).off('click', '#confirmButton').on('click', '#confirmButton', function()
 {
     let memberCount   = '';
     let totalEstimate = 0;
