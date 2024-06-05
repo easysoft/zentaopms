@@ -41,14 +41,22 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
-if(!$isInModal && hasPriv('testcase', 'create', $case))
+if(!$isInModal)
 {
-    $toolbar[] = array
+    if(!$isLibCase && hasPriv('testcase', 'create', $case)) $toolbar[] = array
     (
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->case->create,
         'url'  => createLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}")
+    );
+
+    if($isLibCase && hasPriv('caselib', 'createCase')) $toolbar[] = array
+    (
+        'icon' => 'plus',
+        'type' => 'primary',
+        'text' => $lang->case->create,
+        'url'  => createLink('caselib', 'createCase', "libID={$case->lib}&module={$case->module}")
     );
 }
 
