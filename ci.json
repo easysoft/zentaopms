@@ -5,7 +5,7 @@
       "version": "8.1.1"
     },
     "zentaoext": {
-      "gitRepo": "easycorp/zentaoext"
+      "gitRepo": "zentao/zentaoext"
     },
     "downgrade": {
       "gitRepo": "devops/zentaopms-downgrade"
