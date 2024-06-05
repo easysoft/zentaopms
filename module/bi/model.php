@@ -1044,6 +1044,26 @@ class biModel extends model
     }
 
     /**
+     * Prepare field setting form data.
+     *
+     * @param  object    $settings
+     * @access public
+     * @return array
+     */
+    public function prepareFieldSettingFormData($settings)
+    {
+        $formData = array();
+        foreach((array)$settings as $key => $setting)
+        {
+            $setting = (array)$setting;
+            $setting['key'] = $key;
+            $formData[] = $setting;
+        }
+
+        return $formData;
+    }
+
+    /**
      * Encode json.
      *
      * @param  object|array  $object
