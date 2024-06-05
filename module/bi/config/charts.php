@@ -1263,7 +1263,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '44',
     'sql'       => <<<EOT
-SELECT id, IF(`status`='closed' AND resolution='fixed', 'done', 'undone') AS bugstatus FROM zt_bug WHERE deleted='0' AND (status = 'active' OR resolution in ('fixed', 'postponed'))
+select id, if("status"='closed' and resolution='fixed', 'done', 'undone') as bugstatus from zt_bug where deleted='0' and (status = 'active' or resolution in ('fixed', 'postponed'))
 EOT,
     'settings'  => array
     (
