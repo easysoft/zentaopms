@@ -1975,17 +1975,17 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT count(1) as count, "0-1年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 1 YEAR)
+select count(1) as count, '0-1年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '1 year')
 union
-SELECT count(1) as count, "1-3年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 3 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 1 YEAR)
+select count(1) as count, '1-3年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '3 year') and "join" <= (current_date() - interval '1 year')
 union
-SELECT count(1) as count, "3-5年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 5 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 3 YEAR)
+select count(1) as count, '3-5年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '5 year') and "join" <= (current_date() - interval '3 year')
 union
-SELECT count(1) as count, "5-10年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 10 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 5 YEAR)
+select count(1) as count, '5-10年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '10 year') and "join" <= (current_date() - interval '5 year')
 union
-SELECT count(1) as count, "10年以上" as joinDate FROM zt_user WHERE deleted = '0' AND `join` < DATE_SUB(NOW(), INTERVAL 10 YEAR) AND LEFT(`join`, 4) != '0000'
+select count(1) as count, '10年以上' as joindate from zt_user where deleted = '0' and "join" < (current_date() - interval '10 year') and date_part('year', "join") != '0000'
 union
-SELECT count(1) as count, "未知" as joinDate FROM zt_user WHERE deleted = '0' AND LEFT(`join`, 4) = '0000'
+select count(1) as count, '未知' as joindate from zt_user where deleted = '0' and date_part('year', "join") = '0000'
 EOT,
     'settings'  => array
     (
