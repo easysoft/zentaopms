@@ -837,21 +837,29 @@ $config->bi->builtin->charts[] = array
     'id'        => 1016,
     'name'      => '年度总结-用例结果分布',
     'code'      => 'annualSummary_caseResult',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'pie',
     'group'     => '0',
     'sql'       => <<<EOT
-SELECT count ,t2.caseResult as status,t2.`year`, t1.account, realname, dept
-FROM zt_user t1
-LEFT JOIN (
-    SELECT t21.lastRunner, YEAR(t21.`date`) as 'year', t21.caseResult, count(distinct t21.`id`) as count
-    FROM zt_testresult t21
-    LEFT JOIN zt_case t22 on t21.case = t22.id
-    WHERE t22.deleted = '0'
-    GROUP BY t21.lastRunner, `year`, t21.caseResult
-) t2 on t1.account = t2.lastRunner
-WHERE t1.deleted = '0'
-GROUP BY t2.caseResult,t2.`year`, t1.account, realname, dept
+select
+    tt.join as year,
+    count(1) as number,
+    tt.setname
+from (
+    select
+        year(t1.join) as join,
+        t4.name as setname
+    from zt_team as t1
+    right join zt_project as t2 on t2.id = t1.root
+    left join zt_project as t4 on (',' || t2.path || ',' like '%,' || t4.id || ',%') and t4.grade = 1
+    right join zt_user as t3 on t3.account = t1.account
+    where t1.type = 'project'
+    and t2.deleted = '0'
+    and t3.deleted = '0'
+) as tt
+group by tt.setname, tt.join
+order by tt.join, number desc, tt.setname
 EOT,
     'settings'  => array
     (
