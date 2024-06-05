@@ -252,7 +252,7 @@ $config->ai->injectAuditButton->locations['task']['edit'] = array(
         'class'           => 'pull-right btn-toolbar',
     ),
     'action' => (object)array(
-        'targetContainer' => '#mainContent .form-actions',
+        'targetContainer' => '#mainContent > .panel > .panel-body .form-actions',
         'injectMethod'    => 'html',
     )
 );
@@ -264,7 +264,7 @@ $config->ai->injectAuditButton->locations['bug']['create'] = array(
         'containerStyles' => '{"padding-right": "8px"}',
     ),
     'action' => (object)array(
-        'targetContainer' => '#mainContent .form-actions',
+        'targetContainer' => '#mainContent > .panel > .panel-body .form-actions',
         'injectMethod'    => 'html',
     )
 );
@@ -288,11 +288,13 @@ $config->ai->injectAuditButton->locations['story']['change']       = $config->ai
 $config->ai->injectAuditButton->locations['testcase']['edit']      = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['testreport']['create']  = $config->ai->injectAuditButton->locations['task']['edit'];
 
-$config->ai->injectAuditButton->locations['story']['batchcreate'] = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['story']['create']      = $config->ai->injectAuditButton->locations['bug']['create'];
-$config->ai->injectAuditButton->locations['task']['batchcreate']  = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['task']['create']       = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['testcase']['create']   = $config->ai->injectAuditButton->locations['bug']['create'];
+
+$config->ai->injectAuditButton->locations['story']['batchcreate'] = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['story']['batchcreate']['toolbar']->targetContainer = '#mainContent .panel-heading .panel-actions';
+$config->ai->injectAuditButton->locations['task']['batchcreate']  = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 
 $config->ai->miniPrograms = new stdClass();
 $config->ai->miniPrograms->iconList = array();
