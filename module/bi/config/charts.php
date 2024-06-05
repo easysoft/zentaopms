@@ -1796,20 +1796,20 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '44',
     'sql'       => <<<EOT
-SELECT
-  t1.name AS product,
-  IFNULL(t2.name, '/') AS program,
-  IFNULL(t3.name, '/') AS productLine,
-  IFNULL(t4.bug, 0) AS fixedBug,
-  t5.bug AS totalBug,
-  ROUND(IFNULL(t4.bug, 0) / t5.bug * 100, 2) AS fixedRate
-FROM zt_product AS t1
-LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
-LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
-LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed' GROUP BY product) AS t4 ON t1.id = t4.product
-LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' AND (resolution = 'fixed' OR resolution = 'postponed' OR status = 'active') GROUP BY product) AS t5 ON t1.id = t5.product
-WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0' AND t1.vision = 'rnd'  AND t5.bug IS NOT NULL
-ORDER BY t1.order DESC
+select
+  t1.name as product,
+  ifnull(t2.name, '/') as program,
+  ifnull(t3.name, '/') as productLine,
+  ifnull(t4.bug, 0) as fixedBug,
+  t5.bug as totalBug,
+  round(ifnull(t4.bug, 0) / t5.bug * 100, 2) as fixedRate
+from zt_product as t1
+left join zt_project as t2 on t1.program = t2.id and t2.type = 'program' and t2.grade = 1
+left join zt_module as t3 on t1.line = t3.id and t3.type = 'line'
+left join (select product, count(1) as bug from zt_bug where deleted = '0' and resolution = 'fixed' and status = 'closed' group by product) as t4 on t1.id = t4.product
+left join (select product, count(1) as bug from zt_bug where deleted = '0' and (resolution = 'fixed' or resolution = 'postponed' or status = 'active') group by product) as t5 on t1.id = t5.product
+where t1.deleted = '0' and t1.status != 'closed' and t1.shadow = '0' and t1.vision = 'rnd' and t5.bug is not null
+order by t1.order desc
 EOT,
     'settings'  => array
     (
