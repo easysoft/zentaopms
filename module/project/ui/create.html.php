@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $fields = useFields('project.create');
-$fields->autoLoad('parent', 'acl');
+$fields->autoLoad('parent', 'acl,productsBox');
 $loadUrl = $this->createLink('project', 'create', "model={$model}&program={parent}");
 
 jsVar('model', $model);
