@@ -161,9 +161,9 @@ class duckdb
      */
     private function replaceTable2Parquet($sql)
     {
-        /* $0全量匹配以 prefix 开头的表，替换为对应的 parquet 文件。 */
-        $ztpattern   = "/{$this->prefix}\S+/";
-        $ztvpattern  = "/ztv_\S+/";
+        /* $0全量匹配以 prefix 开头的表，如果存在右闭合的括号，不对其进行替换，替换为对应的 parquet 文件。 */
+        $ztpattern   = "/{$this->prefix}\S+(?=\))/";
+        $ztvpattern  = "/ztv_\S+(?=\))/";
         $replacement = "'" . $this->tmpPath . "$0" . '.parquet' . "'";
 
         $sql = preg_replace($ztpattern, $replacement, $sql);
