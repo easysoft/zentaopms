@@ -19,29 +19,14 @@ class biModel extends model
         if(empty($statement))  return false;
 
         $fields = $this->getFields($statement);
-
-        $tables = array();
-        if($statement->from)
-        {
-            foreach($statement->from as $fromInfo)
-            {
-                if($fromInfo->table) $tables[] = $fromInfo->table;
-            }
-        }
-        if($statement->join)
-        {
-            foreach($statement->join as $joinInfo)
-            {
-                if($joinInfo->expr->table) $tables[] = $joinInfo->expr->table;
-            }
-        }
+        $tables = $this->getTables($statment, true);
 
         return array('tables' => array_unique($tables), 'fields' => $fields);
     }
 
     /**
      * 获取sql中的字段。
-     * Get tables and fields form sqlparser statment.
+     * Get fields form sqlparser statment.
      *
      * @param  object $statment
      * @param  bool   $deep
@@ -61,6 +46,36 @@ class biModel extends model
         }
 
         return $fields;
+    }
+
+    /**
+     * 获取sql中的标名。
+     * Get tables form sqlparser statment.
+     *
+     * @param  object $statment
+     * @param  bool   $deep
+     * @access public
+     * @return array
+     */
+    public function getTables(object $statement, bool $deep = false)
+    {
+        $tables = array();
+        if($statement->from)
+        {
+            foreach($statement->from as $fromInfo)
+            {
+                if($fromInfo->table) $tables[] = $fromInfo->table;
+            }
+        }
+        if($statement->join)
+        {
+            foreach($statement->join as $joinInfo)
+            {
+                if($joinInfo->expr->table) $tables[] = $joinInfo->expr->table;
+            }
+        }
+
+        return $tables;
     }
 
     /**
