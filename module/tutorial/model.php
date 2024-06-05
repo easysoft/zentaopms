@@ -167,6 +167,10 @@ class tutorialModel extends model
         $project->hasProduct   = 1;
         $project->multiple     = '1';
         $project->stageBy      = 'project';
+        $project->progress     = 0;
+        $project->consumed     = 0;
+        $project->estimate     = 0;
+        $project->left         = 0;
 
         return $project;
     }
