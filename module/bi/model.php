@@ -29,11 +29,10 @@ class biModel extends model
      * Get fields form sqlparser statment.
      *
      * @param  object $statment
-     * @param  bool   $deep
      * @access public
      * @return array
      */
-    public function getFields(object $statement, bool $deep = false)
+    public function getFields(object $statement)
     {
         $fields = array();
         if($statement->expr)
