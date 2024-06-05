@@ -19,7 +19,7 @@ class biModel extends model
         if(empty($statement))  return false;
 
         $fields = $this->getFields($statement);
-        $tables = $this->getTables($statment, true);
+        $tables = $this->getTables($statement, true);
 
         return array('tables' => array_unique($tables), 'fields' => $fields);
     }
@@ -64,14 +64,26 @@ class biModel extends model
         {
             foreach($statement->from as $fromInfo)
             {
-                if($fromInfo->table) $tables[] = $fromInfo->table;
+                if($fromInfo->table)
+                {
+                    $tables[] = $fromInfo->table;
+                }
+                elseif($deep && $fromInfo->subquery)
+                {
+                    $parser = new sqlparser($fromInfo->expr);
+                    $subTables = $this->getTables($parser->statements[0], true);
+                    $tables = array_merge($tables, $subTables);
+                }
             }
         }
         if($statement->join)
         {
             foreach($statement->join as $joinInfo)
             {
-                if($joinInfo->expr->table) $tables[] = $joinInfo->expr->table;
+                if($joinInfo->expr->table)
+                {
+                    $tables[] = $joinInfo->expr->table;
+                }
             }
         }
 
