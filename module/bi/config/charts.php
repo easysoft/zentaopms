@@ -1604,7 +1604,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'pie',
     'group'     => '45',
     'sql'       => <<<EOT
-SELECT id, CASE `status` WHEN 'wait' then '未开始' WHEN 'doing' THEN '进行中' WHEN 'suspended' THEN '已挂起' ELSE '已关闭' END status FROM zt_project  WHERE type = 'program' AND grade = 1 AND deleted = '0'
+select id, case "status" when 'wait' then '未开始' when 'doing' then '进行中' when 'suspended' then '已挂起' else '已关闭' end status from zt_project where type = 'program' and grade = 1 and deleted = '0'
 EOT,
     'settings'  => array
     (
