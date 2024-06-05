@@ -14,6 +14,7 @@ $fields = array();
 $fields['id']      = array('name' => 'id', 'label' => $lang->transfer->id, 'control' => 'input', 'required' => false, 'width' => '64px', 'hidden' => true);
 $fields['idIndex'] = array('name' => 'id', 'label' => $lang->transfer->id, 'control' => 'index', 'required' => false, 'width' => '64px');
 $fields           += $datas->fields;
+if(isset($fields['pri']) && isset($fields['pri']['control']) && $fields['pri']['control'] == 'picker') $fields['pri']['control'] = 'priPicker';
 
 $requiredFields = $datas->requiredFields;
 $allCount       = $datas->allCount;
