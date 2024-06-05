@@ -123,15 +123,16 @@ if(!empty($copyProjects))
 {
     foreach($copyProjects as $id => $project)
     {
+        $projectName = is_object($project) ? $project->name : $project;
         $copyProjectsBox[] = btn
         (
             setClass('project-block justify-start'),
             setClass($copyProjectID == $id ? 'primary-outline' : ''),
             set('data-id', $id),
-            set('data-pinyin', zget($copyPinyinList, is_object($project) ? $project->name : $project, '')),
+            set('data-pinyin', zget($copyPinyinList, $projectName)),
             icon(setClass('text-gray'), !empty($project->model) ? ($project->model == 'scrum' ? 'sprint' : $project->model) : $lang->icons['project']),
             on::click($toggleActiveProject),
-            span($project->name, set::title($project->name), setClass('text-left'))
+            span($projectName, set::title($projectName), setClass('text-left'))
         );
     }
 }
