@@ -93,9 +93,9 @@ $lang->todo->beforeDays   = "<span class='input-group-addon'>提前</span>%s<spa
 $lang->todo->dayNames     = array(1 => '星期一', 2 => '星期二', 3 => '星期三', 4 => '星期四', 5 => '星期五', 6 => '星期六', 0 => '星期日');
 $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
-$lang->todo->confirmBug     = '该待办关联的是Bug #%s，需要修改它吗？';
-$lang->todo->confirmTask    = '该待办关联的是Task #%s，需要修改它吗？';
-$lang->todo->confirmStory   = '该待办关联的是Story #%s，需要修改它吗？';
+$lang->todo->confirmBug     = '该待办关联的是' . $lang->bug->common . ' #%s，需要修改它吗？';
+$lang->todo->confirmTask    = '该待办关联的是' . $lang->task->common .  ' #%s，需要修改它吗？';
+$lang->todo->confirmStory   = '该待办关联的是' . $lang->story->common . ' #%s，需要修改它吗？';
 $lang->todo->noOptions      = '您暂时没有待处理的%s，请重新选择待办类型。';
 $lang->todo->summary        = '本页共 <strong>%s</strong> 项待办，未开始 <strong>%s</strong>，进行中 <strong>%s</strong>。';
 $lang->todo->checkedSummary = '共选择 <strong>%total%</strong> 项待办，未开始 <strong>%wait%</strong>，进行中 <strong>%doing%</strong>。';
