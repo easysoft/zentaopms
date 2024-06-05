@@ -339,7 +339,7 @@ class blockZen extends block
 
         /* 调取接口获取数据。 */
         $startTime = microtime(true);
-        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($this->config->admin->dynamicAPIURL)));
+        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http(sprintf($this->config->admin->dynamicAPIURL, $this->config->version))));
 
         /* 请求超过一定时间后判断为网络请求缓慢。 */
         if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);
@@ -371,7 +371,7 @@ class blockZen extends block
             {
                 foreach($data->release as $release)
                 {
-                    $releaseLength      = strpos($release->content, '发布');
+                    $releaseLength      = strpos($release->content, $this->lang->release->common);
                     $release->title     = $this->lang->block->zentaodynamic->release;
                     $release->label     = $releaseLength > 0 && $releaseLength <= 30 ? mb_strcut($release->content, 0, $releaseLength + 8) : formatTime($release->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($release->time))];
                     $release->linklabel = false;
