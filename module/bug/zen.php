@@ -1023,6 +1023,11 @@ class bugZen extends bug
         {
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, 'full', 'story', false);
         }
+        if(!isset($stories[$bug->storyID]))
+        {
+            $bugStory = $this->story->fetchById($bug->storyID);
+            $stories[$bug->storyID] = $bugStory->title;
+        }
 
         return $this->updateBug($bug, array('stories' => $stories));
     }
