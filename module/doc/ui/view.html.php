@@ -112,13 +112,13 @@ if(!empty($editors))
     (
         btn
         (
-            setClass('ghost btn square btn-default'),
+            setClass('ghost btn btn-default'),
             $editorInfo
         ),
         set::items($items)
     ) : btn
     (
-        setClass('ghost btn square btn-default'),
+        setClass('ghost btn btn-default'),
         $editorInfo
     );
 }
