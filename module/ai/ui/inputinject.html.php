@@ -73,7 +73,7 @@ $auditInject = function() use($module, $method)
         $auditButton = html::commonButton($this->lang->ai->audit->designPrompt, 'id="promptAudit" data-toggle="modal" data-type="iframe" data-url="' . helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId") . '"', 'btn btn-info iframe');
         $targetContainer = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->targetContainer;
         $injectMethod    = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->injectMethod;
-        $buttonHTML = $isAudit ? "$regenButton $auditButton" : $regenButton;
+        $buttonHTML = $isAudit ? "<div class='btn-group'>$regenButton $auditButton</div>" : $regenButton;
 
         $auditScript .= <<< JAVASCRIPT
         const buttonHTML = `$buttonHTML`;
