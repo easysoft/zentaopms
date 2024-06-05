@@ -1021,8 +1021,8 @@ class testcase extends control
 
         if($taskID)
         {
-            unset($this->lang->exportTypeList['selected']);
-            $taskName = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch('name');
+            $task     = $this->loadModel('testtask')->fetchByID($taskID);
+            $taskName = $task->name;
         }
 
         $this->view->fileName        = $product->name . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
