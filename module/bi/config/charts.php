@@ -1535,24 +1535,24 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '45',
     'sql'       => <<<EOT
-SELECT
-    t1.name AS topProgram,
-    SUM(IFNULL(t3.doneStory,0)) as doneStory,
-    SUM(IFNULL(t4.allStory,0)) as allStory,
-    CONVERT(IF(SUM(IFNULL(t4.allStory,0)) <= 0, 0, SUM(IFNULL(t3.doneStory,0)) / SUM(IFNULL(t4.allStory,0))*100), decimal(10,2)) as storyDoneRate,
-    SUM(IFNULL(t5.solvedBug,0)) as solvedBug,
-    SUM(IFNULL(t6.allBug,0)) as allBug,
-    CONVERT(IF(SUM(IFNULL(t6.allBug,0)) <= 0, 0, SUM(IFNULL(t5.solvedBug,0)) / SUM(IFNULL(t6.allBug,0))*100), decimal(10,2)) as bugSolvedRate
-FROM zt_project AS t1
-LEFT JOIN zt_product AS t2 ON t1.id = t2.program
-LEFT JOIN (SELECT COUNT(1) as doneStory, product FROM zt_story WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed' GROUP BY product) AS t3 ON t2.id = t3.product
-LEFT JOIN (SELECT COUNT(1) as allStory, product FROM zt_story WHERE deleted = '0' AND ((closedReason = 'done' AND status = 'closed') OR status != 'closed') GROUP BY product) AS t4 ON t2.id = t4.product
-LEFT JOIN (SELECT COUNT(1) as solvedBug, product FROM zt_bug WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed' GROUP BY product) AS t5 ON t2.id = t5.product
-LEFT JOIN (SELECT COUNT(1) as allBug, product FROM zt_bug WHERE deleted = '0' AND (resolution in ('fixed', 'postponed') OR status = 'active') GROUP BY product) AS t6 ON t2.id = t6.product
-WHERE t1.type = 'program' AND t1.grade = 1 AND t1.deleted = '0'
-AND t2.deleted = '0'
-GROUP BY t1.name
-ORDER BY t1.`order` DESC
+select
+    t1.name as topProgram,
+    sum(ifnull(t3.doneStory,0)) as doneStory,
+    sum(ifnull(t4.allStory,0)) as allStory,
+    cast(if(sum(ifnull(t4.allStory,0)) <= 0, 0, sum(ifnull(t3.doneStory,0)) / sum(ifnull(t4.allStory,0))*100) as decimal(10,2)) as storyDoneRate,
+    sum(ifnull(t5.solvedBug,0)) as solvedBug,
+    sum(ifnull(t6.allBug,0)) as allBug,
+    cast(if(sum(ifnull(t6.allBug,0)) <= 0, 0, sum(ifnull(t5.solvedBug,0)) / sum(ifnull(t6.allBug,0))*100) as decimal(10,2)) as bugSolvedRate
+from zt_project as t1
+left join zt_product as t2 on t1.id = t2.program
+left join (select count(1) as doneStory, product from zt_story where deleted = '0' and closedReason = 'done' and status = 'closed' group by product) as t3 on t2.id = t3.product
+left join (select count(1) as allStory, product from zt_story where deleted = '0' and ((closedReason = 'done' and status = 'closed') or status != 'closed') group by product) as t4 on t2.id = t4.product
+left join (select count(1) as solvedBug, product from zt_bug where deleted = '0' and resolution = 'fixed' and status = 'closed' group by product) as t5 on t2.id = t5.product
+left join (select count(1) as allBug, product from zt_bug where deleted = '0' and (resolution in ('fixed', 'postponed') or status = 'active') group by product) as t6 on t2.id = t6.product
+where t1.type = 'program' and t1.grade = 1 and t1.deleted = '0'
+and t2.deleted = '0'
+group by t1.name, t1."order"
+order by t1."order" desc
 EOT,
     'settings'  => array
     (
