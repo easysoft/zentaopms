@@ -1026,7 +1026,7 @@ class bugZen extends bug
         if(!isset($stories[$bug->storyID]))
         {
             $bugStory = $this->story->fetchById($bug->storyID);
-            $stories[$bug->storyID] = $bugStory->title;
+            $bugStory ? $stories[$bug->storyID] = $bugStory->title : $bug->storyID = 0;
         }
 
         return $this->updateBug($bug, array('stories' => $stories));
