@@ -119,6 +119,7 @@ $buildStoryBox = function($props)
                     setClass('text-primary'),
                     isInModal() ? setData('toggle', 'modal') : null,
                     isInModal() ? setData('size', 'lg') : null,
+                    setData('app', data('app.tab')),
                     data('lang.execution.linkStory')
                 )
             );
