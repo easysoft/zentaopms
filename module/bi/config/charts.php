@@ -1908,32 +1908,32 @@ $config->bi->builtin->charts[] = array
     'type'      => 'pie',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT
+select
 	account,
-CASE
-		ROLE
-		WHEN 'dev' THEN
-		"研发"
-		WHEN 'qa' THEN
-		"测试"
-		WHEN 'pm' THEN
-		"项目经理"
-		WHEN 'others' THEN
-		"其他"
-		WHEN 'td' THEN
-		"研发主管"
-		WHEN 'pd' THEN
-		"产品主管"
-		WHEN 'po' THEN
-		"产品经理"
-		WHEN 'qd' THEN
-		"测试主管"
-		WHEN 'top' THEN
-		"高层管理" ELSE "未知"
-	END role
-FROM
+case
+		role
+		when 'dev' then
+		'研发'
+		when 'qa' then
+		'测试'
+		when 'pm' then
+		'项目经理'
+		when 'others' then
+		'其他'
+		when 'td' then
+		'研发主管'
+		when 'pd' then
+		'产品主管'
+		when 'po' then
+		'产品经理'
+		when 'qd' then
+		'测试主管'
+		when 'top' then
+		'高层管理' else '未知'
+	end "role"
+from
 	zt_user
-WHERE
+where
 	deleted = '0'
 EOT,
     'settings'  => array
