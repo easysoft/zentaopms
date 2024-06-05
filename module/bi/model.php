@@ -18,15 +18,7 @@ class biModel extends model
 
         if(empty($statement))  return false;
 
-        $fields = array();
-        if($statement->expr)
-        {
-            foreach($statement->expr as $fieldInfo)
-            {
-                $field = $fieldInfo->expr;
-                $fields[$field] = $field;
-            }
-        }
+        $fields = $this->getFields($statement);
 
         $tables = array();
         if($statement->from)
@@ -45,6 +37,30 @@ class biModel extends model
         }
 
         return array('tables' => array_unique($tables), 'fields' => $fields);
+    }
+
+    /**
+     * 获取sql中的字段。
+     * Get tables and fields form sqlparser statment.
+     *
+     * @param  object $statment
+     * @param  bool   $deep
+     * @access public
+     * @return array
+     */
+    public function getFields(object $statement, bool $deep = false)
+    {
+        $fields = array();
+        if($statement->expr)
+        {
+            foreach($statement->expr as $fieldInfo)
+            {
+                $field = $fieldInfo->expr;
+                $fields[$field] = $field;
+            }
+        }
+
+        return $fields;
     }
 
     /**
