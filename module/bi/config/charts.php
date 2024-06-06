@@ -3723,37 +3723,21 @@ $config->bi->builtin->charts[] = array
     'id'        => 1092,
     'name'      => '年度排行-项目集-完成需求规模榜',
     'code'      => 'annualRank_programStoryEstimate_finished',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-SELECT
-  YEAR(t3.closedDate) AS `year`,
-  t1.id,
-  t1.name AS program,
-  ROUND(
-    SUM(t3.estimate),
-    2
-  ) AS story
-FROM
-  zt_project AS t1
-  LEFT JOIN zt_product AS t2 ON t1.id = t2.program
-  AND t2.deleted = '0'
-  LEFT JOIN zt_story AS t3 ON t2.id = t3.product
-  AND t3.deleted = '0'
-  AND t3.closedReason = 'done'
-WHERE
-  t1.deleted = '0'
-  AND t1.type = 'program'
-  AND t1.grade = 1
-  AND t3.id IS NOT NULL
-GROUP BY
-  `year`,
-  id,
-  program
-ORDER BY
-  `year`,
-  story DESC
+select year(t3.closedDate) as year, t1.id, t1.name as program, round(sum(t3.estimate), 2) as story
+from zt_project as t1
+left join zt_product as t2 on t1.id = t2.program and t2.deleted = '0'
+left join zt_story as t3 on t2.id = t3.product and t3.deleted = '0' and t3.closedReason = 'done'
+where t1.deleted = '0'
+and t1.type = 'program'
+and t1.grade = 1
+and t3.id is not null
+group by year, t1.id, t1.name
+order by year, story desc
 EOT,
     'settings'  => array
     (
@@ -3810,7 +3794,7 @@ where t1.deleted = '0'
 and t1.type = 'program'
 and t1.grade = 1
 and t3.id is not null
-group by year, t1.id, program, t1.name
+group by year, t1.id, t1.name
 order by year, bug desc
 EOT,
     'settings'  => array
