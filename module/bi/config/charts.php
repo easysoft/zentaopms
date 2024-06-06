@@ -3231,32 +3231,32 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '41',
     'sql'       => <<<EOT
-SELECT
-  YEAR(t2.openedDate) AS `year`,
+select
+  year(t2.openedDate) as "year",
   t1.id,
-  t1.name AS program,
-  ROUND(
-    SUM(
-      IFNULL(t2.budget, 0)
+  t1.name as program,
+  round(
+    sum(
+      ifnull(cast(t2.budget as integer), 0)
     ) / 10000,
     2
-  ) AS budget
-FROM
-  zt_project AS t1
-  LEFT JOIN zt_project AS t2 ON FIND_IN_SET(t1.id, t2.path)
-  AND t2.deleted = '0'
-  AND t2.type = 'project'
-WHERE
+  ) as budget
+from
+  zt_project as t1
+  left join zt_project as t2 on (',' || t2.path || ',' like '%,' || t1.id || ',%')
+  and t2.deleted = '0'
+  and t2.type = 'project'
+where
   t1.deleted = '0'
-  AND t1.type = 'program'
-  AND t1.grade = 1
-GROUP BY
-  `year`,
-  id,
+  and t1.type = 'program'
+  and t1.grade = 1
+group by
+  "year",
+  t1.id,
   program
-ORDER BY
-  `year`,
-  budget DESC
+order by
+  "year",
+  budget desc
 EOT,
     'settings'  => array
     (
