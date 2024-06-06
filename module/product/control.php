@@ -169,6 +169,9 @@ class product extends control
         /* Build search form. */
         $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
 
+        /* Build confirmeObject. */
+        if($this->config->edition == 'ipd' && $storyType == 'story') $this->loadModel('story')->getAffectObject($stories, 'story');
+
         /* Assign. */
         $this->view->moduleID   = $moduleID;
         $this->view->pager      = $pager;
