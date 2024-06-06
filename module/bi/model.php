@@ -822,6 +822,16 @@ class biModel extends model
      */
     public function processVars($sql, $filters = array())
     {
+        foreach($filters as $index => $filter)
+        {
+            if(empty($filter['default'])) continue;
+            if(!isset($filter['from']) || $filter['from'] != 'query') continue;
+
+            $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
+        }
+        $sql = $this->loadModel('chart')->parseSqlVars($sql, $filters);
+        $sql = trim($sql, ';');
+
         return $sql;
     }
 
@@ -964,8 +974,6 @@ class biModel extends model
         $queryResult->rows     = array();
         $queryResult->sql      = '';
         $queryResult->fieldSettings = array();
-
-        $sql = $this->processVars($sql);
 
         $statement = $this->sql2Statement($sql);
         if(is_string($statement))
