@@ -129,7 +129,8 @@ class duckdb
         include_once $sqlparser;
 
         $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0]->bodyParser->statements[0];
+        $statement = $parser->statements[0];
+        if(isset($statement->bodyParser->statements[0])) $statement = $statement->bodyParser->statements[0];
         $tables = $this->getTables($statement);
 
         $sql = $this->replaceBackQuote($sql);
@@ -171,7 +172,7 @@ class duckdb
         if(empty($tables)) return $sql;
 
         $replaceTables = array();
-        foreach($tables as $table) $replaceTables[] = "{$this->tmpPath}{$table}.parquet";
+        foreach($tables as $table) $replaceTables[] = "'{$this->tmpPath}{$table}.parquet'";
         $sql = str_replace($tables, $replaceTables, $sql);
 
         return $sql;
