@@ -197,12 +197,14 @@ class reportModel extends model
             ->query();
 
         $todos = array();
+        $users = $this->loadModel('user')->getPairs('nodeleted');
         while($todo = $stmt->fetch())
         {
+            $user = !empty($todo->assignedTo) ? $todo->assignedTo : $todo->account;
+            if(!isset($users[$user])) continue;
+
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
-
-            $user = !empty($todo->assignedTo) ? $todo->assignedTo : $todo->account;
             $todos[$user][] = $todo;
         }
         return $todos;
