@@ -2248,8 +2248,8 @@ class storyTao extends storyModel
         $designs    = zget($designGroup, 'design', array());
         $commits    = zget($designGroup, 'commit', array());
         $tasks      = $this->getTasksForTrack($storyIdList);
-        $cases      = $this->dao->select('id,pri,status,color,title,story,lastRunner,lastRunResult')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
-        $bugs       = $this->dao->select('id,pri,status,color,title,story,assignedTo,severity')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchGroup('story', 'id');
+        $cases      = $this->dao->select('id,project,pri,status,color,title,story,lastRunner,lastRunResult')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
+        $bugs       = $this->dao->select('id,project,pri,status,color,title,story,assignedTo,severity')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
         $storyGrade = $this->getGradeGroup();
 
         $items = array();
@@ -2359,7 +2359,7 @@ class storyTao extends storyModel
      */
     public function getTasksForTrack(array $storyIdList): array
     {
-        $stmt  = $this->dao->select('id,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('parent')->query();
+        $stmt  = $this->dao->select('id,project,execution,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('execution,parent')->query();
         $tasks = array();
         while($task = $stmt->fetch())
         {
