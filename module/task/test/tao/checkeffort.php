@@ -61,9 +61,9 @@ $dateGtTodayEffort->left     = 3;
 $dateGtTodayEffort->work     = '无消耗变更工作内容测试';
 $dateGtTodayEffort->date     = date('Y-m-d', strtotime('+1 day'));
 
-$task = new taskTest(); 
-r($task->checkEffortTest(1, $normalEffort))      && p()    && e('1'); // 检查正常编辑的工时信息，查看返回的信息
-r($task->checkEffortTest(2, $noLeftEffort))      && p()    && e('1'); // 检查无剩余工时的工时信息，查看返回的信息
-r($task->checkEffortTest(3, $noConsumedEffort))  && p('0') && e('『工时』应当大于『0』。'); // 编辑日志消耗为0，查看返回的信息
-r($task->checkEffortTest(4, $noDateEffort))      && p('0') && e('请填写"日期"');            // 编辑日志日期为空，查看返回的信息
-r($task->checkEffortTest(5, $dateGtTodayEffort)) && p('0') && e('日期不能大于今天');        // 编辑日志日期大于今天，查看返回的信息
+$task = new taskTest();
+r($task->checkEffortTest(1, $normalEffort))      && p()           && e('1');                       // 检查正常编辑的工时信息，查看返回的信息
+r($task->checkEffortTest(2, $noLeftEffort))      && p()           && e('1');                       // 检查无剩余工时的工时信息，查看返回的信息
+r($task->checkEffortTest(3, $noConsumedEffort))  && p('comsumed') && e('『工时』应当大于『0』。'); // 编辑日志消耗为0，查看返回的信息
+r($task->checkEffortTest(4, $noDateEffort))      && p('date')     && e('请填写"日期"');            // 编辑日志日期为空，查看返回的信息
+r($task->checkEffortTest(5, $dateGtTodayEffort)) && p('date')     && e('日期不能大于今天');        // 编辑日志日期大于今天，查看返回的信息
