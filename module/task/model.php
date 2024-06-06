@@ -191,7 +191,6 @@ class taskModel extends model
         /* Process other data. */
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story) $this->loadModel('story')->setStage($task->story);
-        if($this->config->edition != 'open' && $task->feedback) $this->loadModel('feedback')->updateStatus('task', $task->feedback, $task->status, $task->status);
 
         $this->updateKanbanCell($task->id, $output, $task->execution);
 
@@ -1186,6 +1185,7 @@ class taskModel extends model
         if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
         return common::createChanges($oldTask, $task);
     }
 
