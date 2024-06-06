@@ -287,8 +287,8 @@ class duckdb
     }
 
     /**
-     * 替换sql语句中的表为parquet文件路径。
-     * Replace sql table to parquet file path.
+     * 尝试执行duckdb sql并获取返回结果。
+     * Try to exec duckdb sql.
      *
      * @access public
      * @return this.
@@ -313,6 +313,13 @@ class duckdb
         }
     }
 
+    /**
+     * 检查sql返回的字段不能与表名同名。
+     * Check sql fields can not same as table name.
+     *
+     * @access public
+     * @return this.
+     */
     public function checkFieldNamesMatch()
     {
         $flipTable = array_flip($this->tables);
