@@ -13,6 +13,16 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+/* 检查是否需要确认撤销/移除。*/
+/* Build confirmeObject. */
+if($this->config->edition == 'ipd')
+{
+    $bug = $this->loadModel('story')->getAffectObject(array(), 'bug', $bug);
+
+    if(!empty($bug->confirmeActionType)) $config->bug->actions->view['mainActions'] = array('confirmDemandRetract', 'confirmDemandUnlink');
+    if(!empty($bug->confirmeActionType)) $config->bug->actions->view['suffixActions'] = array();
+}
+
 jsVar('bugID',            $bug->id);
 jsVar('productID',        $bug->product);
 jsVar('branchID',         $bug->branch);
@@ -124,7 +134,7 @@ $tabs[] = setting()
 
 detail
 (
-    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module)),
+    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module, '{confirmeObjectID}' => $bug->confirmeObjectID)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
