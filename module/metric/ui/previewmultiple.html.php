@@ -36,15 +36,15 @@ div
     (
         setClass('{spanClass}'),
         set('metric-id', '{id}'),
-        div
+        span
         (
-             setClass('gray-pale-div'),
+             setClass('text'),
              set('title', '{name}'),
             '{name}'
         ),
         button
         (
-            setClass('picker-deselect-btn size-sm square ghost {multiple}'),
+            setClass('picker-deselect-btn btn size-xs ghost {multiple}'),
             set('onclick', 'window.handleRemoveLabel({id})'),
             span
             (
@@ -221,7 +221,7 @@ div
                 set::align('center'),
                 cell
                 (
-                    setClass('checked-label-content'),
+                    setClass('picker-multi-selections checked-label-content gap-0'),
                     set::flex('auto')
                 ),
                 cell
