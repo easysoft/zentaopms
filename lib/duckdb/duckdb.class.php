@@ -73,7 +73,22 @@ class duckdb
      */
     public $tmpPath;
 
+    /**
+     * 全局变量$fields
+     * The global fields variable.
+     *
+     * @var object
+     * @access public
+     */
     public $fields;
+
+    /**
+     * 全局变量$tables
+     * The global fields variable.
+     *
+     * @var object
+     * @access public
+     */
     public $tables;
 
     /**
@@ -138,7 +153,7 @@ class duckdb
         $this->tables = $this->getTables($statement);
 
         $sql = $this->replaceBackQuote($sql);
-        $sql = $this->replaceTable2Parquet($sql, $this->tables);
+        $sql = $this->replaceTable2Parquet($sql);
         $sql = $this->standLimit($sql);
 
         $this->sql = $sql;
@@ -171,12 +186,12 @@ class duckdb
      * @access public
      * @return sql.
      */
-    private function replaceTable2Parquet($sql, $tables)
+    private function replaceTable2Parquet($sql)
     {
-        if(empty($tables)) return $sql;
+        if(empty($this->tables)) return $sql;
 
         $replaceTables = array();
-        foreach($tables as $table) $replaceTables[] = "'{$this->tmpPath}{$table}.parquet'";
+        foreach($this->tables as $table) $replaceTables[] = "'{$this->tmpPath}{$table}.parquet'";
         $sql = str_replace($tables, $replaceTables, $sql);
 
         return $sql;
