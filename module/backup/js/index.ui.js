@@ -116,13 +116,16 @@ $(document).off('click', '.modal [z-key="confirm"]').on('click', '.modal [z-key=
 window.backupInProcess = function(backupName)
 {
     if(!inQuickon) return false;
+
+    $('.origin-action').attr('disabled', 'disabled');
+    loadTable();
     let intervalId = setInterval(function()
     {
-        $.get($.createLink('system', 'ajaxGetBackupProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
+        $.get($.createLink('system', 'ajaxGetBackupProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
         {
-            if(resp.status == 'completed')
+            if(resp.status == 'completed' || resp.status.toLowerCase().includes('failed'))
             {
-                $.apps.reloadApp('admin');
+                loadCurrentPage();
                 clearInterval(intervalId);
             }
         }, 'json');
@@ -132,13 +135,16 @@ window.backupInProcess = function(backupName)
 window.restoreInProcess = function(backupName)
 {
     if(!inQuickon) return false;
+
+    $('.origin-action').attr('disabled', 'disabled');
+    loadTable();
     let intervalId = setInterval(function()
     {
         $.get($.createLink('system', 'ajaxGetRestoreProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
         {
-            if(resp.status == 'completed')
+            if(resp.status == 'completed' || resp.status.toLowerCase().includes('failed'))
             {
-                $.apps.reloadApp('admin');
+                loadCurrentPage();
                 clearInterval(intervalId);
             }
         }, 'json');
@@ -149,14 +155,16 @@ window.restoreInProcess = function(backupName)
 window.deleteInProcess = function(backupName)
 {
     if(!inQuickon) return false;
+
+    loadTable();
     let intervalId = setInterval(function()
     {
 
-        $.get($.createLink('system', 'ajaxGetDeleteProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
+        $.get($.createLink('system', 'ajaxGetDeleteProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
         {
-            if(resp.status == 'completed')
+            if(resp.status == 'completed' || resp.status.toLowerCase().includes('failed'))
             {
-                $.apps.reloadApp('admin');
+                loadCurrentPage();
                 clearInterval(intervalId);
             }
         }, 'json');
