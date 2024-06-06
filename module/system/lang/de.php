@@ -215,10 +215,12 @@ $lang->system->backup->rollback = 'Rollback';
 $lang->system->backup->restart  = 'Restart';
 $lang->system->backup->delete   = 'Delete';
 
-$lang->system->backup->statusList['pending']    = 'Waiting';
-$lang->system->backup->statusList['inprogress'] = 'In progress';
-$lang->system->backup->statusList['completed']  = 'Complete';
-$lang->system->backup->statusList['failed']     = 'Fail';
+$lang->system->backup->statusList['pending']       = 'Waiting';
+$lang->system->backup->statusList['inprogress']    = 'In progress';
+$lang->system->backup->statusList['completed']     = 'Complete';
+$lang->system->backup->statusList['failed']        = 'Fail';
+$lang->system->backup->statusList['deleting']      = 'Deleting';
+$lang->system->backup->statusList['executeFailed'] = 'Execute failed';
 
 $lang->system->backup->restoreProgress['doing'] = 'Doing';
 $lang->system->backup->restoreProgress['done']  = 'Done';

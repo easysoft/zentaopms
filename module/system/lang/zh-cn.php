@@ -215,11 +215,12 @@ $lang->system->backup->rollback = '回滚';
 $lang->system->backup->restart  = '重启';
 $lang->system->backup->delete   = '删除';
 
-$lang->system->backup->statusList['pending']    = '等待中';
-$lang->system->backup->statusList['inprogress'] = '进行中';
-$lang->system->backup->statusList['completed']  = '完成';
-$lang->system->backup->statusList['failed']     = '失败';
-$lang->system->backup->statusList['deleting']   = '删除中';
+$lang->system->backup->statusList['pending']       = '等待中';
+$lang->system->backup->statusList['inprogress']    = '进行中';
+$lang->system->backup->statusList['completed']     = '完成';
+$lang->system->backup->statusList['failed']        = '失败';
+$lang->system->backup->statusList['deleting']      = '删除中';
+$lang->system->backup->statusList['executeFailed'] = '执行失败';
 
 $lang->system->backup->restoreProgress['doing'] = '进行中';
 $lang->system->backup->restoreProgress['done']  = '完成';
