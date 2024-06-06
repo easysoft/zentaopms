@@ -73,6 +73,9 @@ class duckdb
      */
     public $tmpPath;
 
+    public $fields;
+    public $tables;
+
     /**
      * 构造方法。
      * The construct method.
@@ -131,10 +134,11 @@ class duckdb
         $parser    = new sqlparser($sql);
         $statement = $parser->statements[0];
         if(isset($statement->bodyParser->statements[0])) $statement = $statement->bodyParser->statements[0];
-        $tables = $this->getTables($statement);
+        $this->fields = $this->getFields($statement);
+        $this->tables = $this->getTables($statement);
 
         $sql = $this->replaceBackQuote($sql);
-        $sql = $this->replaceTable2Parquet($sql, $tables);
+        $sql = $this->replaceTable2Parquet($sql, $this->tables);
         $sql = $this->standLimit($sql);
 
         $this->sql = $sql;
@@ -177,6 +181,7 @@ class duckdb
 
         return $sql;
     }
+
     /**
      * 获取sql中的字段。
      * Get fields form sqlparser statment.
@@ -192,12 +197,14 @@ class duckdb
         {
             foreach($statement->expr as $fieldInfo)
             {
-                $field = $fieldInfo->expr;
-                $fields[$field] = $field;
+                $column = $fieldInfo->column;
+                $alias  = $fieldInfo->alias;
+                $fields[$column] = array('column' => $column, 'alias' => $alias);
             }
         }
         return $fields;
     }
+
     /**
      * 获取sql中的表名。
      * Get tables form sqlparser statment.
@@ -242,7 +249,7 @@ class duckdb
             }
         }
 
-        return $tables;
+        return array_filter(array_unique($tables));
     }
 
     /**
@@ -273,6 +280,8 @@ class duckdb
      */
     public function getResult()
     {
+        $this->checkFieldNamesMatch();
+
         $exec   = "$this->binPath :memory: \"$this->sql\" -json 2>&1";
         $output = shell_exec($exec);
 
@@ -286,6 +295,16 @@ class duckdb
         else
         {
             return $rows ? $rows : array();
+        }
+    }
+
+    public function checkFieldNamesMatch()
+    {
+        $flipTable = array_flip($this->tables);
+        foreach($this->fields as $field)
+        {
+            if(isset($flipTable[$field['column']])) return throw new Exception("sql fields can not named {$field['column']}");
+            if(isset($flipTable[$field['alias']]))  return throw new Exception("sql fields can not named {$field['alias']}");
         }
     }
 

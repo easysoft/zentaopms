@@ -92,7 +92,7 @@ class biModel extends model
             }
         }
 
-        return $tables;
+        return array_filter(array_unique($tables));
     }
 
     /**
