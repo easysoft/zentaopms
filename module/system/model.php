@@ -281,4 +281,24 @@ class systemModel extends model
         return false;
     }
 
+    /**
+     * 检查当前版本是否可升级。
+     * Check if the current release is upgradeable.
+     *
+     * @return bool
+     */
+    public function isUpgradeable(): bool
+    {
+        $latestRelease = $this->getLatestRelease();
+        if(!$latestRelease) return false;
+
+        $latestVersion = false;
+        if(isset($latestRelease->products->{$this->config->edition}))
+            $latestVersion = $latestRelease->products->{$this->config->edition};
+        else
+            $latestVersion = $latestRelease->products->oss;
+
+        if(version_compare($latestVersion, $this->config->version, 'gt')) return true;
+        return false;
+    }
 }
