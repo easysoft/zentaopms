@@ -89,7 +89,7 @@ class artifactrepoModel extends model
         elseif($server->type == 'gitfox')
         {
             $apiRoot  = $this->loadModel('gitfox')->getApiRoot($serverID);
-            $url      = sprintf($apiRoot->url, '/artifacts/repos');
+            $url      = sprintf($apiRoot->url, '/repos');
             $response = common::http($url, '', array(), $apiRoot->header, 'json', 'GET', 10, true);
             $data     = array('result' => $response[1] == 200, 'data' => (array)json_decode($response['body']));
             if($data['data'])
