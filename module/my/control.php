@@ -435,6 +435,10 @@ class my extends control
             $this->view->checkedSummary = str_replace('{total}', (string)count($bugs), $this->lang->bug->notice->checkedSummary);
         }
 
+        /* 检查是否需要确认撤销/移除。*/
+        /* Build confirmeObject. */
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
+
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->bug;
         $this->view->bugs        = $bugs;

@@ -1854,6 +1854,18 @@ class bugModel extends model
         /* check feedback toStory priv. */
         if($module == 'bug' && $action == 'create')   return ($config->global->flow == 'full' || $config->global->flow == 'onlyTest') && strpos('closed|clarify|noreview', $object->status) === false;
 
+        if($module == 'bug' && $action == 'confirmdemandretract')
+        {
+            if(!empty($object->confirmeActionType)) return $object->confirmeActionType == 'confirmedretract';
+            return false;
+        }
+
+        if($module == 'bug' && $action == 'confirmdemandunlink')
+        {
+           if(!empty($object->confirmeActionType)) return $object->confirmeActionType == 'confirmdemandunlink';
+           return false;
+        }
+
         return true;
     }
 

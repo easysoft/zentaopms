@@ -251,6 +251,10 @@ class bugZen extends bug
         /* Process bug for check story changed. */
         $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
 
+        /* 检查是否需要确认撤销/移除。*/
+        /* Build confirmeObject. */
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
+
         /* 处理 bug 的版本信息。*/
         /* Process the openedBuild and resolvedBuild fields. */
         return $this->bug->processBuildForBugs($bugs);
