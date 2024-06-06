@@ -34,6 +34,9 @@ $config->system->dtable->backup->fieldList['time']['type']        = 'datetime';
 $config->system->dtable->backup->fieldList['time']['formatDate']  = 'yyyy-MM-dd hh::mm:ss';
 $config->system->dtable->backup->fieldList['time']['sort']        = false;
 
+$config->system->dtable->backup->fieldList['name']['title']       = $lang->backup->name;
+$config->system->dtable->backup->fieldList['name']['sort']        = false;
+
 $config->system->dtable->backup->fieldList['creator']['title'] = $lang->system->backup->creator;
 $config->system->dtable->backup->fieldList['creator']['type']  = 'user';
 $config->system->dtable->backup->fieldList['creator']['sort']  = false;
