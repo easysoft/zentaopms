@@ -177,7 +177,7 @@ class taskTest
             $taskData[$task->id] = $task;
         }
 
-        return $this->objectModel->afterBatchUpdate($taskData);
+        return $this->objectModel->afterBatchUpdate($taskData, $oldTasks);
     }
 
     /**
