@@ -192,7 +192,7 @@ class duckdb
 
         $replaceTables = array();
         foreach($this->tables as $table) $replaceTables[] = "'{$this->tmpPath}{$table}.parquet'";
-        $sql = str_replace($tables, $replaceTables, $sql);
+        $sql = str_replace($this->tables, $replaceTables, $sql);
 
         return $sql;
     }
