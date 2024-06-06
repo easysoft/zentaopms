@@ -1,5 +1,6 @@
 <?php
 $lang->backup->common      = 'Backup';
+$lang->backup->name        = 'Backup Name';
 $lang->backup->index       = 'Backup List';
 $lang->backup->history     = 'History';
 $lang->backup->delete      = 'Delete Backup';

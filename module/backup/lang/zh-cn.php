@@ -1,5 +1,6 @@
 <?php
 $lang->backup->common      = '备份';
+$lang->backup->name        = '备份名称';
 $lang->backup->index       = '备份列表';
 $lang->backup->history     = '备份历史';
 $lang->backup->delete      = '删除备份';
