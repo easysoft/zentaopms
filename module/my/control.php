@@ -1329,7 +1329,7 @@ class my extends control
 
             $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => '$.apps.updateAppsMenu'));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->preference;
