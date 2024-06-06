@@ -182,6 +182,7 @@ $hasRepo    = $this->loadModel('repo')->getListByProduct($story->product, 'Gitla
 $actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+
 foreach($actions as $key => $action)
 {
     if(!$hasDivider && isset($action['type']) && $action['type'] == 'divider')
@@ -201,6 +202,15 @@ foreach($actions as $key => $action)
         $actions[$key]['data-load'] = 'modal';
         $actions[$key]['data-size'] = 'lg';
     }
+}
+
+if($this->config->edition == 'ipd' and $story->type == 'story') $story = $this->story->getAffectObject(array(), $story->type, $story);
+if($config->edition == 'ipd' && $story->type == 'story' && !empty($story->confirmeObject))
+{
+    $actions   = array();
+    $method    = $story->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+    $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObject['id']}");
+    $actions[] = array('name' => $method, 'text' => $lang->story->$method, 'icon' => 'search', 'hint' => $lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
 }
 
 detail
