@@ -901,7 +901,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', object $pager = null): array
+    public function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
