@@ -31,12 +31,10 @@ if($repo->SCM == 'GitFox' || $repo->SCM == 'Gitlab') $job->pipeline = $repo->nam
 if($compile and $compile->status)
 {
     $status = zget($lang->compile->statusList, $compile->status);
-    $time   = zget($lang->compile->statusList, $compile->updateDate);
 }
 elseif($job->lastStatus)
 {
     $status = zget($lang->compile->statusList, $job->lastStatus);
-    $time   = zget($lang->compile->statusList, $job->lastExec);
 }
 
 $customParam = '';
@@ -104,7 +102,7 @@ detailBody
                     item
                     (
                         set::name($lang->compile->time),
-                        !empty($time) ? $time : ''
+                        !empty($job->lastExec) ? $job->lastExec : ''
                     ),
                     item
                     (
