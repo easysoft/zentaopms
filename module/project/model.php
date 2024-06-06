@@ -2158,6 +2158,7 @@ class projectModel extends model
         $lang->project->menu        = $lang->$navGroup->menu;
         $lang->project->menuOrder   = $lang->$navGroup->menuOrder;
         $lang->project->dividerMenu = $lang->$navGroup->dividerMenu;
+        $this->lang->switcherMenu   = $this->getSwitcher($projectID, $this->app->rawModule, $this->app->rawMethod);
 
         /* If projectID is set, cannot use homeMenu. */
         unset($lang->project->homeMenu);
