@@ -3092,11 +3092,11 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '40',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, "月") AS `month`, IFNULL(t2.execution, 0) AS newExecution, IFNULL(t3.execution, 0) AS closedExecution
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH,YEAR(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
-LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS execution FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND multiple = '1' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
-LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS execution FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND status = 'closed' AND multiple = '1' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
-ORDER BY `year`, t1.month
+select yearmonth, t1.year, t1.month || '月' as "month", ifnull(t2.execution, 0) as newExecution, ifnull(t3.execution, 0) as closedExecution
+from (select distinct printf('%04d-%02d', year(date), month(date)) yearmonth, year(date) as "year", month(date) as "month" from zt_action) as t1
+left join (select year(openedDate) as "year", month(openedDate) as "month", count(1) as execution from zt_project where deleted = '0' and type in ('sprint', 'stage', 'kanban') and multiple = '1' group by "year", "month") as t2 on t1.year = t2.year and t1.month = t2.month
+left join (select year(closedDate) as "year", month(closedDate) as "month", count(1) as execution from zt_project where deleted = '0' and type in ('sprint', 'stage', 'kanban') and status = 'closed' and multiple = '1' group by "year", "month") as t3 on t1.year = t3.year and t1.month = t3.month
+order by t1."year", t1."month"
 EOT,
     'settings'  => array
     (
@@ -3105,7 +3105,7 @@ EOT,
             'type'  => 'line',
             'xaxis' => array
             (
-                array('field' => 'YEARMONTH', 'name' => 'YEARMONTH', 'group' => '')
+                array('field' => 'yearmonth', 'name' => 'yearmonth', 'group' => '')
             ),
             'yaxis' => array
             (
@@ -3120,7 +3120,7 @@ EOT,
     ),
     'fields'    => array
     (
-        'YEARMONTH'       => array('name' => 'YEARMONTH', 'object' => 'project', 'field' => 'YEARMONTH', 'type' => 'string'),
+        'yearmonth'       => array('name' => 'yearmonth', 'object' => 'project', 'field' => 'yearmonth', 'type' => 'string'),
         'year'            => array('name' => 'year', 'object' => 'project', 'field' => 'year', 'type' => 'number'),
         'month'           => array('name' => 'month', 'object' => 'project', 'field' => 'month', 'type' => 'string'),
         'newExecution'    => array('name' => 'newExecution', 'object' => 'project', 'field' => 'newExecution', 'type' => 'string'),
@@ -3128,7 +3128,7 @@ EOT,
     ),
     'langs'     => array
     (
-        'YEARMONTH'       => array('zh-cn' => 'YEARMONTH', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'yearmonth'       => array('zh-cn' => 'yearmonth', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'year'            => array('zh-cn' => '年度', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'month'           => array('zh-cn' => '月份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'newExecution'    => array('zh-cn' => '新增执行数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
