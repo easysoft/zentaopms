@@ -3304,19 +3304,19 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '41',
     'sql'       => <<<EOT
-SELECT tt.join as `year`, count(1) as number, tt.setName from (
+select tt.join as "year", count(1) as "number", tt.setName from (
 select
-YEAR(t1.join) as `join`, t4.name as setName
+year(t1.join) as "join", t4.name as setName
 from zt_team t1
-RIGHT JOIN zt_project t2 on t2.id = t1.root
-LEFT JOIN zt_project t4 on FIND_IN_SET(t4.id,t2.path) and t4.grade = 1
-RIGHT JOIN zt_user t3 on t3.account = t1.account
-WHERE t1.type = 'project'
-AND t2.deleted = '0'
-AND t3.deleted = '0'
+right join zt_project t2 on t2.id = t1.root
+left join zt_project t4 on (',' || t2.path || ',' like '%,' || t4.id || ',%') and t4.grade = 1
+right join zt_user t3 on t3.account = t1.account
+where t1.type = 'project'
+and t2.deleted = '0'
+and t3.deleted = '0'
 ) tt
-GROUP BY tt.setName, tt.join
-ORDER BY tt.join, number desc, tt.setName
+group by tt.setName, tt.join
+order by tt.join, "number" desc, tt.setName
 EOT,
     'settings'  => array
     (
