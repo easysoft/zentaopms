@@ -2869,11 +2869,11 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '36',
     'sql'       => <<<EOT
-SELECT t1.YEARMONTH, t1.year, t1.month AS `month`, IFNULL(t2.story, 0) AS newStory, IFNULL(t3.story, 0) AS closedStory
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
-LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS story FROM zt_story WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
-LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS story FROM zt_story WHERE deleted = '0' AND closedReason = 'done' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
-ORDER BY `year`, t1.month
+select t1.yearmonth, t1.year, t1.month as "month", ifnull(t2.story, 0) as newStory, ifnull(t3.story, 0) as closedStory
+from (select distinct printf('%04d-%02d', year(date), month(date)) yearmonth, year(date) as "year", month(date) as "month" from zt_action) as t1
+left join (select year(openedDate) as "year", month(openedDate) as "month", count(1) as story from zt_story where deleted = '0' group by "year", "month") as t2 on t1.year = t2.year and t1.month = t2.month
+left join (select year(closedDate) as "year", month(closedDate) as "month", count(1) as story from zt_story where deleted = '0' and closedReason = 'done' group by "year", "month") as t3 on t1.year = t3.year and t1.month = t3.month
+order by t1."year", t1."month"
 EOT,
     'settings'  => array
     (
@@ -2882,7 +2882,7 @@ EOT,
             'type'    => 'line',
             'xaxis'   => array
             (
-                array('field' => 'YEARMONTH', 'name' => 'YEARMONTH', 'group' => '')
+                array('field' => 'yearmonth', 'name' => 'yearmonth', 'group' => '')
             ),
             'yaxis'   => array
             (
@@ -2898,7 +2898,7 @@ EOT,
     ),
     'fields'    => array
     (
-        'YEARMONTH'   => array('name' => 'YEARMONTH', 'object' => 'story', 'field' => 'YEARMONTH', 'type' => 'string'),
+        'yearmonth'   => array('name' => 'yearmonth', 'object' => 'story', 'field' => 'yearmonth', 'type' => 'string'),
         'year'        => array('name' => 'year', 'object' => 'story', 'field' => 'year', 'type' => 'number'),
         'month'       => array('name' => 'month', 'object' => 'story', 'field' => 'month', 'type' => 'number'),
         'newStory'    => array('name' => '继续添加研发需求', 'object' => 'story', 'field' => 'newStory', 'type' => 'string'),
@@ -2906,7 +2906,7 @@ EOT,
     ),
     'langs'     => array
     (
-        'YEARMONTH'   => array('zh-cn' => 'YEARMONTH', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'yearmonth'   => array('zh-cn' => 'yearmonth', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'year'        => array('zh-cn' => '年度', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'month'       => array('zh-cn' => '月份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'newStory'    => array('zh-cn' => '新增需求数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
