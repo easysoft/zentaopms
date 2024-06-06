@@ -13,6 +13,8 @@ class createBugTester extends tester
         if(isset($bug['steps']))       $form->dom->steps->setValue($bug['steps']);
         if(isset($bug['deadline']))    $form->dom->deadline->datePicker($bug['deadline']['datePicker']);
         if(isset($bug['type']))        $form->dom->type->picker($bug['type']);
+        if(isset($bug['severity']))    $form->dom->severity->picker($bug['severity']);
+        if(isset($bug['pri']))         $form->dom->pri->picker($bug['pri']);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
