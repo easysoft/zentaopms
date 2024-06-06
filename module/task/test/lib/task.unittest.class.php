@@ -1376,6 +1376,7 @@ class taskTest
     public function createMultiTaskObject(array $param = array(), array $teamData = array(), string $requiredField = ''): object|array
     {
         $createFields = array(
+            'project'      => 1,
             'execution'    => 3,
             'module'       => 1,
             'story'        => 2,
