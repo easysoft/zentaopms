@@ -176,7 +176,27 @@ class duckdb
 
         return $sql;
     }
-
+    private function getTables(object $statement)
+    {
+        $tables = array();
+        if($statement->from)
+        {
+            foreach($statement->from as $fromInfo)
+            {
+                if($fromInfo->table)
+                {
+                    $tables[] = $fromInfo->table;
+                }
+                elseif($fromInfo->subquery)
+                {
+                    $parser = new sqlparser($fromInfo->expr);
+                    $subTables = $this->getTables($parser->statements[0]);
+                    $tables = array_merge($tables, $subTables);
+                }
+            }
+        }
+        return $tables;
+    }
     /**
      * 将LIMIT语句替换为duckdb可执行的格式。
      * Standard LIMIT syntax.
