@@ -3869,13 +3869,22 @@ $config->bi->builtin->charts[] = array
     'id'        => 1094,
     'name'      => '年度排行-项目-工期榜',
     'code'      => 'annualRank_projectDuration',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '42',
     'sql'       => <<<EOT
-SELECT `year`, id,name,status,realBegan,realEnd,IF(status = 'closed', DATEDIFF(realEnd, realBegan), DATEDIFF(NOW(),realBegan)) as duration
-FROM (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) AS t1
-LEFT JOIN zt_project AS t2 ON 1 = 1 WHERE deleted = '0' AND type = 'project' AND YEAR(realBegan) <= `year` AND LEFT(realBegan, 4) != '0000' AND (status ='doing' OR (status = 'suspended' AND YEAR(suspendedDate) >= `year`) OR (status = 'closed' AND YEAR(realEnd) >= `year`)) HAVING 1=1 ORDER BY `year`, duration desc
+select year, id, name, status, realBegan, realEnd,
+    if(status = 'closed', datediff('day', realBegan, realEnd), datediff('day', realBegan, current_date())) as duration
+from (select distinct year(date) as year from zt_action) as t1
+left join zt_project as t2 on 1 = 1
+where deleted = '0'
+and type = 'project'
+and year(realBegan) <= year
+and year(realBegan) is not null
+and (status ='doing' or (status = 'suspended' and year(suspendedDate) >= year)
+or (status = 'closed' and year(realEnd) >= year))
+order by year, duration desc
 EOT,
     'settings'  => array
     (
