@@ -264,6 +264,7 @@ class system extends control
      */
     public function restoreBackup($backupName)
     {
+        $backupName = str_replace('_', '-', $backupName);
         $instance = $this->config->instance->zentaopaas;
 
         $result = $this->system->restore($instance, $backupName);
@@ -282,6 +283,7 @@ class system extends control
      */
     public function deleteBackup($backupName)
     {
+        $backupName = str_replace('_', '-', $backupName);
         $instance = $this->config->instance->zentaopaas;
 
         $result = $this->system->deleteBackup($instance, $backupName);
@@ -342,7 +344,7 @@ class system extends control
     {
         session_write_close();
 
-        if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
+        $backupName = str_replace('_', '-', $backupName);
         $result = $this->cne->getRestoreStatus($this->config->instance->zentaopaas, $backupName);
         if($result && $result->code == 200)
         {
