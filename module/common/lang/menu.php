@@ -517,7 +517,8 @@ $lang->devops->menuOrder[15] = 'code';
 $lang->devops->menuOrder[20] = 'mr';
 $lang->devops->menuOrder[25] = 'compile';
 $lang->devops->menuOrder[30] = 'artifactrepo';
-$lang->devops->menuOrder[35] = 'apps';
+$lang->devops->menuOrder[35] = 'deploy';
+$lang->devops->menuOrder[40] = 'apps';
 
 $lang->devops->dividerMenu = ',apps,';
 
