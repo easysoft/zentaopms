@@ -58,7 +58,7 @@ $lang->dataview->relatedTable   = 'Table';
 $lang->dataview->relatedField   = 'Field';
 $lang->dataview->multilingual   = 'After switching the system language, the corresponding name will be displayed';
 $lang->dataview->duplicateField = 'Duplicate field names exist: <strong>%s</strong>. You are advised to: (1) Modify the <strong>*</strong> query to a specific field. (2) Use <strong>as</strong> to alias the field.';
-$lang->dataview->errorField     = 'The current field %s is an invalid character. Please [as] it in English or English underscore format.';
+$lang->dataview->errorField     = 'There is an illegal character in the current field <strong>%s</strong>. The [as] alias only supports a combination of Chinese, English, numbers, and underscores.';
 $lang->dataview->queryFilterTip = 'Query filter is a way to implement dynamic query filtering by inserting variables into SQL. The result filter configured in the third step is to further filter the SQL query results.';
 
 $lang->dataview->varFilter = new stdclass();
