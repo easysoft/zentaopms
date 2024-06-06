@@ -125,8 +125,15 @@ class duckdb
      */
     public function query($sql = '')
     {
+        $sqlparser = dirname(dirname(__FILE__)) . '/sqlparser/sqlparser.class.php';
+        include_once $sqlparser;
+
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0]->bodyParser->statements[0];
+        $tables = $this->getTables($statement);
+
         $sql = $this->replaceBackQuote($sql);
-        $sql = $this->replaceTable2Parquet($sql);
+        $sql = $this->replaceTable2Parquet($sql, $tables);
         $sql = $this->standLimit($sql);
 
         $this->sql = $sql;
@@ -159,15 +166,13 @@ class duckdb
      * @access public
      * @return sql.
      */
-    private function replaceTable2Parquet($sql)
+    private function replaceTable2Parquet($sql, $tables)
     {
-        /* $0全量匹配以 prefix 开头的表，如果存在右闭合的括号，不对其进行替换，替换为对应的 parquet 文件。 */
-        $ztpattern   = "/({$this->prefix}\S+)(?!\))/";
-        $ztvpattern  = "/(ztv_\S+)(?!\))/";
-        $replacement = "'{$this->tmpPath}$1.parquet'";
+        if(empty($tables)) return $sql;
 
-        $sql = preg_replace($ztpattern, $replacement, $sql);
-        $sql = preg_replace($ztvpattern, $replacement, $sql);
+        $replaceTables = array();
+        foreach($tables as $table) $replaceTables[] = "{$this->tmpPath}{$table}.parquet";
+        $sql = str_replace($tables, $replaceTables, $sql);
 
         return $sql;
     }
