@@ -253,4 +253,32 @@ class systemModel extends model
 
         return $this->loadModel('setting')->setItem('system.system.maintenance', json_encode($maintenance));
     }
+
+    /**
+     * 从云API服务器获取最新的发布版本。
+     * Get the latest release from cloud API server.
+     *
+     * @return object
+     */
+    public function getLatestRelease(): object|false
+    {
+        $cloudApiHost = getenv('CLOUD_API_HOST');
+        if(empty($cloudApiHost)) $cloudApiHost = $this->config->cloud->api->host;
+
+        $currentRelease = array(
+            'name' => 'zentaopaas',
+            'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
+            'version' => getenv('APP_VERSION')
+        );
+        $query = http_build_query($currentRelease);
+
+        $response = common::http($cloudApiHost . '/api/market/app/version/latest?' . $query);
+        if($response)
+        {
+            $response =json_decode($response);
+            if($response && $response->code == 200) return $response->data;
+        }
+        return false;
+    }
+
 }
