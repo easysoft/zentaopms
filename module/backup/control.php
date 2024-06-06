@@ -68,6 +68,7 @@ class backup extends control
                     $backup->time    = isset($backup->create_time) ? $backup->create_time : '';
                     $backup->creator = isset($backup->creator) ? $backup->creator : '';
                     $backup->type    = isset($backup->mode) ? $backup->mode : 'manual';
+                    $backup->id      = str_replace('-', '_', $backup->name);
                 }
 
                 function cmp($left, $right){return $left->create_time < $right->create_time ? 1 : -1;}
