@@ -330,7 +330,7 @@ window.renderEchart = function($obj, option)
 
 window.setDropDown = function()
 {
-    var $drop    = $('.dropdown-icon');
+    var $drop = $('.dropdown-icon');
     $drop.toggleClass('rotate');
     if($drop.hasClass('rotate'))
     {
@@ -510,7 +510,7 @@ window.handleSidebarToggle = function(status)
 
 window.renderCheckedLabel = function()
 {
-    var $content =  $('.checked-label-content');
+    var $content =  $('.picker-multi-selections');
     if(!$content.length) return;
     $content.empty();
 
@@ -524,12 +524,9 @@ window.renderCheckedLabel = function()
     var nextLine  = false;
     var lineCount = 1;
 
-    var labelClass = 'label circle gray-pale';
-    if(multi) labelClass += ' gray-pale-withdelete';
-
     for(var i = 0; i < labels.length; i++)
     {
-        var classes = labelClass;
+        var classes = 'picker-multi-selection';
         if(nextLine) classes += ' gray-next';
 
         var label = labels[i];
@@ -547,12 +544,12 @@ window.renderCheckedLabel = function()
         var labelWidth = $label.width();
         var labelLeft  = parseInt($label.css('padding-left')) + parseInt($label.css('margin-left'));
         var labelRight = parseInt($label.css('padding-right')) + parseInt($label.css('margin-right'));
-        var labelWidth = Math.ceil(labelWidth + labelLeft + labelRight);
+        var labelWidth = Math.ceil(labelWidth + labelLeft + labelRight + 2);
 
         left = left - labelWidth;
         if(left <= 0)
         {
-            var $div     = $label.find('.gray-pale-div');
+            var $div     = $label.find('.text');
             var divWidth = $div.width();
 
             if(divWidth < -left)
@@ -583,7 +580,7 @@ window.renderCheckedLabel = function()
     if(!multi)
     {
         var maxSelectTipText = maxSelectTip.replace('%s', maxSelectNum);
-        $content.append(`<span class="label ghost gray-pale">${maxSelectTipText}</span>`);
+        $content.append(`<span class="label ghost">${maxSelectTipText}</span>`);
     }
     else
     {
