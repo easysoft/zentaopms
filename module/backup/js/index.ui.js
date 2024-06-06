@@ -134,7 +134,7 @@ window.restoreInProcess = function(backupName)
     if(!inQuickon) return false;
     let intervalId = setInterval(function()
     {
-        $.get($.createLink('system', 'ajaxGetRestoreProgress', 'backupName=' + backupName.replace('-', '_')), function(resp)
+        $.get($.createLink('system', 'ajaxGetRestoreProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
         {
             if(resp.status == 'completed')
             {
