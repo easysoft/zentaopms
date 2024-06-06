@@ -448,9 +448,9 @@ CSS;
         list($linkCreator, $prevBtn, $nextBtn, $objectType) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn', 'objectType'));
         $preAndNext = data('preAndNext');
 
+        global $app;
         if(!$linkCreator && $preAndNext && ($prevBtn === true || $nextBtn === true))
         {
-            global $app;
             $linkCreator = createLink($app->rawModule, $app->rawMethod, $objectType . 'ID={id}');
         }
         if($prevBtn === true && $preAndNext && $preAndNext->pre && $linkCreator)
@@ -481,6 +481,7 @@ CSS;
             (
                 setClass('detail-prev-btn absolute top-0 left-0 inverse rounded-full w-12 h-12 center bg-opacity-40 backdrop-blur ring-0'),
                 set::icon('angle-left icon-2x text-canvas'),
+                setData('app', $app->tab),
                 set($prevBtn)
             );
         }
@@ -490,6 +491,7 @@ CSS;
             (
                 setClass('detail-next-btn absolute top-0 right-0 inverse rounded-full w-12 h-12 center bg-opacity-40 backdrop-blur ring-0'),
                 set::icon('angle-right icon-2x text-canvas'),
+                setData('app', $app->tab),
                 set($nextBtn)
             );
         }
