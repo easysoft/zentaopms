@@ -53,7 +53,6 @@ class backup extends control
         $this->loadModel('action');
 
         $backups = array();
-
         if($this->config->inQuickon)
         {
             $this->loadModel('instance');
@@ -62,17 +61,21 @@ class backup extends control
             $backupResult = $this->loadModel('system')->getBackupList($instance);
             if($backupResult['result'] == 'success')
             {
-                $backups = !empty($backupResult['data']) ? $backupResult['data'] : array();
+                $operating = false;
+                $backups   = !empty($backupResult['data']) ? $backupResult['data'] : array();
                 foreach($backups as $backup)
                 {
                     $backup->time    = isset($backup->create_time) ? $backup->create_time : '';
                     $backup->creator = isset($backup->creator) ? $backup->creator : '';
                     $backup->type    = isset($backup->mode) ? $backup->mode : 'manual';
                     $backup->id      = str_replace('-', '_', $backup->name);
+                    if(in_array(strtolower($backup->status), array('pending', 'inprogress', 'processing'))) $operating = true;
                 }
 
                 function cmp($left, $right){return $left->create_time < $right->create_time ? 1 : -1;}
                 usort($backups, 'cmp');
+
+                $this->view->operating = $operating;
             }
 
             $this->app->loadClass('pager', true);
