@@ -177,7 +177,27 @@ class duckdb
 
         return $sql;
     }
-
+    /**
+     * 获取sql中的字段。
+     * Get fields form sqlparser statment.
+     *
+     * @param  object $statment
+     * @access public
+     * @return array
+     */
+    public function getFields(object $statement)
+    {
+        $fields = array();
+        if($statement->expr)
+        {
+            foreach($statement->expr as $fieldInfo)
+            {
+                $field = $fieldInfo->expr;
+                $fields[$field] = $field;
+            }
+        }
+        return $fields;
+    }
     /**
      * 获取sql中的表名。
      * Get tables form sqlparser statment.
