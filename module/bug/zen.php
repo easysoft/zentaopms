@@ -1290,7 +1290,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function buildBugsForBatchCreate(int $productID, string $branch, array $bugImagesFile): array
+    protected function buildBugsForBatchCreate(int $productID, string $branch, array $bugImagesFile = array()): array
     {
         $bugs = form::batchData($this->config->bug->form->batchCreate)->get();
 
