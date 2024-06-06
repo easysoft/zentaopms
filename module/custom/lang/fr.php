@@ -68,9 +68,10 @@ $lang->custom->closeGrade           = 'Close Story Grade';
 $lang->custom->activateGrade        = 'Activate Story Grade';
 $lang->custom->deleteGrade          = 'Delete Story Grade';
 $lang->custom->closeSetting         = 'Close Setting';
+$lang->custom->gradeRule            = 'Allow cross-level segmentation';
 
-$lang->custom->gradeRuleList['stepwise'] = 'Restriction level-by-level subdivision';
-$lang->custom->gradeRuleList['cross']    = 'Allow cross-level segmentation';
+$lang->custom->gradeRuleList['cross']    = 'Yes';
+$lang->custom->gradeRuleList['stepwise'] = 'No';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -223,8 +224,7 @@ $lang->custom->notice->closeGrade          = "After closing, the grade cannot be
 $lang->custom->notice->activateGrade       = "After activating, the grade can be used to create new stories.";
 $lang->custom->notice->gradeNotEmpty       = 'There are stories in this grade, and it cannot be deleted!';
 $lang->custom->notice->deleteGrade         = 'Are you sure you want to delete this grade?';
-$lang->custom->notice->stepwise            = 'Level-by-level subdivision: It needs to be created starting from the top requirement level and subdivided layer by layer to the last requirement level.';
-$lang->custom->notice->cross               = 'Cross-level segmentation: Requirements can be created from any requirement level and support cross-level association of parent-child relationships.';
+$lang->custom->notice->gradeRule           = 'Cross-lavel segmentation: Requirements can be created from any requirement system and support cross-system associated parent relationships. For example: you can create third-level requirements directly under first-level requirements.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has {$lang->projectCommon} Home. Do you want to go to {$lang->projectCommon} Home?";

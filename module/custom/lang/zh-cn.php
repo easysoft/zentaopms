@@ -68,9 +68,10 @@ $lang->custom->closeGrade           = '停用需求层级';
 $lang->custom->activateGrade        = '启用需求层级';
 $lang->custom->deleteGrade          = '删除需求层级';
 $lang->custom->closeSetting         = '关闭设置';
+$lang->custom->gradeRule            = '是否允许跨层级细分';
 
-$lang->custom->gradeRuleList['stepwise'] = '限制逐层级细分';
-$lang->custom->gradeRuleList['cross']    = '允许跨层级细分';
+$lang->custom->gradeRuleList['cross']    = '是';
+$lang->custom->gradeRuleList['stepwise'] = '否';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -223,8 +224,7 @@ $lang->custom->notice->closeGrade          = "停用后，该层级无法再创�
 $lang->custom->notice->activateGrade       = "启用后，该层级可以创建新需求。";
 $lang->custom->notice->gradeNotEmpty       = '系统内存在该层级的需求，不能删除！';
 $lang->custom->notice->deleteGrade         = '层级删除后无法恢复！';
-$lang->custom->notice->stepwise            = '逐层细分：需从顶级需求层级开始创建，逐层细分至最后一个需求层级。';
-$lang->custom->notice->cross               = '跨层细分：可从任意需求层级创建需求，并支持跨层级关联父子关系。';
+$lang->custom->notice->gradeRule           = '跨层细分：可从任意需求层级创建需求，并支持跨层级关联父子关系。例如：您可以在第一层需求下直接创建第三层需求。';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了{$lang->projectCommon}主页视图，是否默认进入{$lang->projectCommon}主页？";
