@@ -48,7 +48,7 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function index()
+    public function index(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('action');
 
@@ -73,6 +73,10 @@ class backup extends control
                 function cmp($left, $right){return $left->create_time < $right->create_time ? 1 : -1;}
                 usort($backups, 'cmp');
             }
+
+            $this->app->loadClass('pager', true);
+            $pager = pager::init($recTotal, $recPerPage, $pageID);
+            $this->view->pager = $pager;
         }
         else
         {
