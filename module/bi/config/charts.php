@@ -3362,40 +3362,40 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '41',
     'sql'       => <<<EOT
-SELECT
-  YEAR(t5.date) AS `year`,
+select
+  year(t5.date) as "year",
   t1.id,
-  t1.name AS program,
-  ROUND(
-    SUM(t5.consumed),
+  t1.name as program,
+  round(
+    sum(t5.consumed),
     2
-  ) AS consumed
-FROM
-  zt_project AS t1
-  LEFT JOIN zt_project AS t2 ON FIND_IN_SET(t1.id, t2.path)
-  AND t2.deleted = '0'
-  AND t2.type = 'project'
-  LEFT JOIN zt_project AS t3 ON t2.id = t3.parent
-  AND t3.deleted = '0'
-  AND t3.type IN ('sprint', 'stage', 'kanban')
-  LEFT JOIN zt_task AS t4 ON t3.id = t4.execution
-  AND t4.deleted = '0'
-  AND t4.status != 'cancel'
-  LEFT JOIN zt_effort AS t5 ON t4.id = t5.objectID
-  AND t5.deleted = '0'
-  AND t5.objectType = 'task'
-WHERE
+  ) as consumed
+from
+  zt_project as t1
+  left join zt_project as t2 on (',' || t2.path || ',' like '%,' || t1.id || ',%')
+  and t2.deleted = '0'
+  and t2.type = 'project'
+  left join zt_project as t3 on t2.id = t3.parent
+  and t3.deleted = '0'
+  and t3.type in ('sprint', 'stage', 'kanban')
+  left join zt_task as t4 on t3.id = t4.execution
+  and t4.deleted = '0'
+  and t4.status != 'cancel'
+  left join zt_effort as t5 on t4.id = t5.objectID
+  and t5.deleted = '0'
+  and t5.objectType = 'task'
+where
   t1.deleted = '0'
-  AND t1.type = 'program'
-  AND t1.grade = 1
-  AND t5.id IS NOT NULL
-GROUP BY
-  `year`,
-  id,
+  and t1.type = 'program'
+  and t1.grade = 1
+  and t5.id is not null
+group by
+  "year",
+  t1.id,
   program
-ORDER BY
-  `year`,
-  consumed DESC
+order by
+  "year",
+  consumed desc
 EOT,
     'settings'  => array
     (
