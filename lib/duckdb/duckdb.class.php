@@ -176,6 +176,15 @@ class duckdb
 
         return $sql;
     }
+
+    /**
+     * 获取sql中的表名。
+     * Get tables form sqlparser statment.
+     *
+     * @param  object $statment
+     * @access public
+     * @return array
+     */
     private function getTables(object $statement)
     {
         $tables = array();
@@ -197,6 +206,7 @@ class duckdb
         }
         return $tables;
     }
+
     /**
      * 将LIMIT语句替换为duckdb可执行的格式。
      * Standard LIMIT syntax.
