@@ -222,6 +222,40 @@ class system extends control
     }
 
     /**
+     * 创建一个禅道DevOps平台版的备份。
+     * Backup the system.
+     *
+     * @param  string $reload yes|no
+     * @param  string $mode   |manual|system|upgrade|downgrade
+     * @access public
+     * @return void
+     */
+    public function backup(string $reload = 'no', string $mode = 'manual')
+    {
+        if($reload == 'yes') session_write_close();
+
+        set_time_limit(0);
+
+        if(!$this->config->inQuickon) $this->sendError($this->lang->system->cneStatus);
+
+        $this->loadModel('instance');
+        $instance = $this->config->instance->zentaopaas;
+
+        $result = $this->system->backup($instance, $mode);
+        $this->loadModel('action')->create('system', 0, 'createBackup');
+
+        if($result['result'] == 'success')
+        {
+            $backupName = $result['data']->backup_name;
+            $this->send($result + array('callback' => "backupInProcess('$backupName')"));
+        }
+        else
+        {
+            $this->send($result);
+        }
+    }
+
+    /**
      * 恢复一个备份。
      * Restore the backup.
      *
