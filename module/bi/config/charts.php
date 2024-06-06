@@ -3925,19 +3925,22 @@ $config->bi->builtin->charts[] = array
     'id'        => 1096,
     'name'      => '年度排行-项目-工期偏差榜',
     'code'      => 'annualRank_projectDurationDeviation',
+    'driver'    => 'duckdb',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '42',
     'sql'       => <<<EOT
-SELECT `year`, id,name,status,`begin`,`end`,realBegan,realEnd,
-ROUND((IF(LEFT(realEnd,4) != '0000', DATEDIFF(realEnd, realBegan), DATEDIFF(NOW(),realBegan)) - DATEDIFF(`end`, `begin`)) / DATEDIFF(`end`,`begin`) * 100) as duration
-FROM (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) AS t1
-LEFT JOIN zt_project AS t2 ON 1 = 1
-WHERE deleted = '0' AND type = 'project'
-AND YEAR(realBegan) <= `year` AND LEFT(realBegan, 4) != '0000'
-AND (YEAR(realEnd) >= `year` OR LEFT(realEnd, 4) = '0000') AND YEAR(`end`) != '2059'
-HAVING 1=1
-ORDER BY duration ASC
+select `year`, id, name, status, begin, "end", realBegan, realEnd,
+    round((if(year(realEnd) is not null,
+    datediff('day', realBegan, realEnd),
+    datediff('day', realBegan, current_date())) - datediff('day', begin, "end")) / datediff('day', begin, "end") * 100) as duration
+from (select distinct year(date) as year from zt_action) as t1
+left join zt_project as t2 on 1=1
+where deleted = '0' and t2.type = 'project'
+and (year(realBegan) <= year and year(realBegan) is not null)
+and (year(realEnd) >= year and year(realEnd) is not null)
+and year("end") != '2059'
+order by duration asc
 EOT,
     'settings'  => array
     (
