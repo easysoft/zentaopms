@@ -1858,14 +1858,14 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT IF(t3.id IS NOT NULL, t3.`name`, "空") AS deptName,count(1) as count,
-IF(t3.id IS NOT NULL, t3.`order`, 9999) AS deptOrder
-FROM zt_user AS t1
-LEFT JOIN zt_dept AS t2 ON t1.dept = t2.id
-LEFT JOIN zt_dept AS t3 ON FIND_IN_SET(TRIM(',' FROM t3.path), TRIM(',' FROM t2.path)) AND t3.grade = '1'
-WHERE t1.deleted = '0'
-GROUP BY deptName, deptOrder
-ORDER BY deptOrder  ASC
+select if(t3.id is not null, t3."name", '空') as deptName, count(1) as count,
+if(t3.id is not null, t3."order", 9999) as deptOrder
+from zt_user as t1
+left join zt_dept as t2 on t1.dept = t2.id
+left join zt_dept as t3 on (t2.path like '%' || t3.path || '%') and t3.grade = '1'
+where t1.deleted = '0'
+group by deptName, deptOrder
+order by deptOrder asc
 EOT,
     'settings'  => array
     (
