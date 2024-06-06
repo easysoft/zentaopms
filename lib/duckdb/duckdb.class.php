@@ -204,6 +204,23 @@ class duckdb
                 }
             }
         }
+        if($statement->join)
+        {
+            foreach($statement->join as $joinInfo)
+            {
+                if($joinInfo->expr->table)
+                {
+                    $tables[] = $joinInfo->expr->table;
+                }
+                elseif($joinInfo->expr->subquery)
+                {
+                    $parser = new sqlparser($joinInfo->expr->expr);
+                    $subTables = $this->getTables($parser->statements[0]);
+                    $tables = array_merge($tables, $subTables);
+                }
+            }
+        }
+
         return $tables;
     }
 
