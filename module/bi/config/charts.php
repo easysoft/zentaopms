@@ -3147,10 +3147,10 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '37',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, "月") AS `month`, IFNULL(t2.release, 0) AS `release`
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH,Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
-LEFT JOIN (SELECT YEAR(createdDate) AS `year`, MONTH(createdDate) AS `month`, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
-ORDER BY `year`, t1.month
+select yearmonth, t1.year, t1.month || '月' as "month", ifnull(t2.release, 0) as "release"
+from (select distinct printf('%04d-%02d', year(date), month(date)) yearmonth, year(date) as "year", month(date) as "month" from zt_action) as t1
+left join (select year(createdDate) as "year", month(createdDate) as "month", count(1) as "release" from zt_release where deleted = '0' group by "year", "month") as t2 on t1.year = t2.year and t1.month = t2.month
+order by t1."year", t1."month"
 EOT,
     'settings'  => array
     (
@@ -3159,7 +3159,7 @@ EOT,
             'type'  => 'line',
             'xaxis' => array
             (
-                array('field' => 'YEARMONTH', 'name' => 'YEARMONTH', 'group' => '')
+                array('field' => 'yearmonth', 'name' => 'yearmonth', 'group' => '')
             ),
             'yaxis' => array
             (
@@ -3173,14 +3173,14 @@ EOT,
     ),
     'fields'    => array
     (
-        'YEARMONTH' => array('name' => 'YEARMONTH', 'object' => 'release', 'field' => 'YEARMONTH', 'type' => 'string'),
+        'yearmonth' => array('name' => 'yearmonth', 'object' => 'release', 'field' => 'yearmonth', 'type' => 'string'),
         'year'      => array('name' => 'year', 'object' => 'release', 'field' => 'year', 'type' => 'number'),
         'month'     => array('name' => 'month', 'object' => 'release', 'field' => 'month', 'type' => 'string'),
         'release'   => array('name' => 'release', 'object' => 'release', 'field' => 'release', 'type' => 'string')
     ),
     'langs'     => array
     (
-        'YEARMONTH' => array('zh-cn' => 'YEARMONTH', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'yearmonth' => array('zh-cn' => 'yearmonth', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'year'      => array('zh-cn' => '年度', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'month'     => array('zh-cn' => '月份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'release'   => array('zh-cn' => '发布次数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
