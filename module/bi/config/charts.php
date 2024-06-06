@@ -2925,11 +2925,13 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '44',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, t1.month AS `month`, IFNULL(t2.bug, 0) AS newBug, IFNULL(t3.bug, 0) AS fixedBug
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
-LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
-LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
-ORDER BY `year`, t1.month
+select yearmonth, t1.year, t1.month as month, ifnull(t2.bug, 0) as newBug, ifnull(t3.bug, 0) as fixedBug
+from (select distinct printf('%04d-%02d', year(date), month(date)) yearmonth, year(date) as year, month(date) as month from zt_action) as t1
+left join (select year(openedDate) as year, month(openedDate) as month, count(1) as bug from zt_bug where deleted = '0' group by year, month) as t2
+ON t1.year = t2.year and t1.month = t2.month
+left join (select year(closedDate) as year, month(closedDate) as month, count(1) as bug from zt_bug where deleted = '0' and resolution = 'fixed' and status = 'closed' group by year, month) as t3
+on t1.year = t3.year and t1.month = t3.month
+order by t1.year, t1.month
 EOT,
     'settings'  => array
     (
@@ -2938,7 +2940,7 @@ EOT,
             'type'  => 'line',
             'xaxis' => array
             (
-                array('field' => 'YEARMONTH', 'name' => 'YEARMONTH', 'group' => '')
+                array('field' => 'yearmonth', 'name' => 'yearmonth', 'group' => '')
             ),
             'yaxis' => array
             (
@@ -2953,7 +2955,7 @@ EOT,
     ),
     'fields'    => array
     (
-        'YEARMONTH' => array('name' => 'YEARMONTH', 'object' => 'bug', 'field' => 'YEARMONTH', 'type' => 'string'),
+        'yearmonth' => array('name' => 'yearmonth', 'object' => 'bug', 'field' => 'yearmonth', 'type' => 'string'),
         'year'      => array('name' => 'year', 'object' => 'bug', 'field' => 'year', 'type' => 'number'),
         'month'     => array('name' => 'month', 'object' => 'bug', 'field' => 'month', 'type' => 'number'),
         'newBug'    => array('name' => 'newBug', 'object' => 'bug', 'field' => 'newBug', 'type' => 'string'),
@@ -2961,7 +2963,7 @@ EOT,
     ),
     'langs'     => array
     (
-        'YEARMONTH' => array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'yearmonth' => array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'year'      => array('zh-cn' => '年度', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'month'     => array('zh-cn' => '月份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'newBug'    => array('zh-cn' => '新增Bug数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
