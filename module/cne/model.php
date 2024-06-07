@@ -897,6 +897,12 @@ class cneModel extends model
         $this->error->code    = $apiResult->code;
         $this->error->message = zget($this->lang->CNE->errorList, $apiResult->code, $this->lang->CNE->serverError); // Translate CNE api error message to multi language.
 
+        if($this->config->debug)
+        {
+            if(isset($apiResult->code))    $this->error->message .= " [{$apiResult->code}]:";
+            if(isset($apiResult->message)) $this->error->message .= " [{$apiResult->message}]";
+        }
+
         $apiResult->message = $this->error->message;
 
         return $this->error;
