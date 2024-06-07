@@ -2196,15 +2196,7 @@ class storyTao extends storyModel
         foreach($storyGrade as $type => $grades)
         {
             if(!isset($cols[$type])) continue;
-            if(count($grades) == 1)
-            {
-                $grade = array_shift($grades);
-                $cols[$type] = $this->buildTrackCol("{$type}_{$grade->grade}", $cols[$type]['title']);
-            }
-            else
-            {
-                foreach($grades as $grade) $cols["{$type}_{$grade->grade}"] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
-            }
+            foreach($grades as $grade) $cols["{$type}_{$grade->grade}"] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
         }
 
         return array_values($cols);
