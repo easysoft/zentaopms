@@ -82,7 +82,7 @@ class productsBox extends wg
             setClass('addProductBox flex hidden'),
             formGroup
             (
-                on::change('[name=newProduct]', 'toggleNewProduct'),
+                on::change()->call('toggleNewProduct'),
                 set::width('1/2'),
                 set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'newProduct', 'checked' => false)),
                 set::required(true),
@@ -95,7 +95,7 @@ class productsBox extends wg
             set::className("productBox flex items-center $hidden"),
             formGroup
             (
-                on::change('[name=addProduct]', 'toggleNewProduct'),
+                on::change()->call('toggleNewProduct'),
                 set::width('1/2'),
                 setClass('linkProduct'),
                 set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
