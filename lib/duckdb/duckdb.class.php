@@ -190,9 +190,13 @@ class duckdb
     {
         if(empty($this->tables)) return $sql;
 
-        $replaceTables = array();
-        foreach($this->tables as $table) $replaceTables[] = "'{$this->tmpPath}{$table}.parquet'";
-        $sql = str_replace($this->tables, $replaceTables, $sql);
+        foreach($this->tables as $table)
+        {
+            $pattern = "/\b{$table}\b/";
+            $replace = "'{$this->tmpPath}{$table}.parquet'";
+
+            $sql = preg_replace($pattern, $replace, $sql);
+        }
 
         return $sql;
     }
