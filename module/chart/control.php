@@ -11,6 +11,12 @@
  */
 class chart extends control
 {
+    /**
+     * __construct method.
+     *
+     * @access public
+     * @return void
+     */
     public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
