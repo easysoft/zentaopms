@@ -122,6 +122,15 @@ class biModel extends model
         return array('result' => 'success');
     }
 
+    /**
+     * Query a sql with driver.
+     *
+     * @param  string     $driver mysql|duckdb
+     * @param  string     $sql
+     * @param  bool       $fetchAll
+     * @access public
+     * @return array|string
+     */
     public function queryWithDriver($driver, $sql, $fetchAll = true)
     {
         $dbh = $this->app->loadDriver($driver);
