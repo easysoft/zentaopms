@@ -65,9 +65,10 @@ class executionTaskList extends wg
 
         foreach($executions as $executionID => $execution)
         {
-            if(isset($items[$executionID]) || !$execution->multiple) continue;
+            if(isset($items[$executionID])) continue;
 
             $executionLink = (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? null : createLink('execution', 'view', "executionID=$executionID");
+            if(!$execution->multiple) $executionLink = createLink('project', 'view', "projectID=$execution->project");
             $items[$executionID] = array
             (
                 'icon'    => 'run',
