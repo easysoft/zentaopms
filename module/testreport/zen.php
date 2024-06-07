@@ -194,6 +194,8 @@ class testreportZen extends testreport
         $buildIdList   = array();
         $productIdList = array();
         $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
+        $taskBegin     = '';
+        $taskEnd       = '';
         foreach($tasks as $i => $task)
         {
             if($extra && strpos(",{$extra},", ",{$task->id},") === false)
@@ -206,11 +208,16 @@ class testreportZen extends testreport
             $productIdList[$task->product] = $task->product;
             $this->setChartDatas($task->id);
             if($task->build != 'trunk') $buildIdList[$task->build] = $task->build;
+
+            if(empty($taskBegin)) $taskBegin = $task->begin;
+            if(empty($taskEnd))   $taskEnd   = $task->end;
+            if($taskBegin > $task->begin) $taskBegin = $task->begin;
+            if($taskEnd < $task->end)     $taskEnd   = $task->end;
         }
 
         $task      = $objectID ? $this->testtask->getByID((int)$extra) : key($tasks);
-        $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : (string)$task->begin;
-        $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : (string)$task->end;
+        $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : (string)$taskBegin;
+        $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : (string)$taskEnd;
         $builds    = $this->build->getByList($buildIdList);
         $bugs      = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
         $execution = $this->execution->getById($executionID);
