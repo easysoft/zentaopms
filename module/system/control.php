@@ -264,9 +264,22 @@ class system extends control
      */
     public function restoreBackup($backupName)
     {
-        $backupName = str_replace('_', '-', $backupName);
-        $instance = $this->config->instance->zentaopaas;
+        session_write_close();
+        set_time_limit(0);
 
+        $instance     = $this->config->instance->zentaopaas;
+        $backupResult = $this->cne->backup($instance, 'SYSTEM', 'restore');
+        if($backupResult->code != 200) $this->sendError($backupResult->message);
+
+        while(true)
+        {
+            $backupStatus = $this->cne->getBackupStatus($instance, $backupResult->data->name);
+            if($backupStatus->code != 200) $this->sendError($backupStatus->message);
+            if(strtolower($backupStatus->data->status) == 'completed') break;
+            sleep(1);
+        }
+
+        $backupName   = str_replace('_', '-', $backupName);
         $result = $this->system->restore($instance, $backupName);
 
         $this->loadModel('action')->create('system', 0, 'restoreBackup', '', $backupName);
