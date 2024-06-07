@@ -119,6 +119,24 @@ foreach($resolvedBugCount as $productID => $bugCount)
 
 blockPanel
 (
+    to::titleSuffix
+    (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        )
+    ),
     div
     (
         setClass('flex h-full w-full' . ($longBlock ? ' flex-nowrap' : ' flex-wrap')),
