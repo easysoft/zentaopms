@@ -1559,11 +1559,10 @@ class executionZen extends execution
     protected function getLink(string $module, string $method, string $type = ''): string
     {
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport', 'doc');
-        if(in_array($module, array('task', 'testcase')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report'))) $method = $module;
+        if(in_array($module, array('task', 'testcase', 'story')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report'))) $method = $module;
         if(in_array($module, $executionModules) && in_array($method, array('view', 'edit', 'create'))) $method = $module;
-        if(in_array($module, $executionModules + array('story', 'product'))) $module = 'execution';
+        if(in_array($module, array_merge($executionModules, array('story', 'product')))) $module = 'execution';
 
-        if($module == 'product' && $method == 'showerrornone') $method = 'task';
         if($module == 'execution' && $method == 'create') return '';
 
         $link = helper::createLink($module, $method, "executionID=%s");
@@ -1610,10 +1609,6 @@ class executionZen extends execution
         elseif(($module == 'testreport' && $method == 'create') || ($module == 'execution' && $method == 'cases'))
         {
             $link = helper::createLink('execution', 'testtask', "executionID=%s");
-        }
-        elseif($module == 'story')
-        {
-            $link = helper::createLink('execution', 'story', "executionID=%s");
         }
 
         if($type != '') $link .= "&type=$type";
