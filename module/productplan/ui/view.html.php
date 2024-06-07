@@ -59,15 +59,15 @@ foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]
 $storyCols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $storyCols['title']['nestedToggle'] = false;
 $storyCols['assignedTo']['type']    = 'user';
-$storyCols['actions']['width']      = 50;
-$bugCols['assignedTo']['type']      = 'user';
 $storyCols['module']['type']        = 'text';
 $storyCols['module']['map']         = $modulePairs;
+$storyCols['module']['sortType']    = true;
 $storyCols['actions']['list']       = $config->productplan->actionList;
-$bugCols['actions']['list']         = $config->productplan->actionList;
 $storyCols['actions']['menu']       = array('unlinkStory');
-$bugCols['actions']['menu']         = array('unlinkBug');
 $storyCols['actions']['minWidth']   = 60;
+$bugCols['assignedTo']['type']      = 'user';
+$bugCols['actions']['list']         = $config->productplan->actionList;
+$bugCols['actions']['menu']         = array('unlinkBug');
 $bugCols['actions']['minWidth']     = 60;
 
 $canBeChanged              = common::canBeChanged('plan', $plan);
@@ -128,7 +128,6 @@ if($canBatchActionStory)
         ))
     ));
 }
-
 
 $planItems = array();
 foreach($plans as $planID => $planName) $planItems[] = array('text' => $planName, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-url' => $this->createLink('bug', 'batchChangePlan', "planID=$planID"));
