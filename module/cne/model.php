@@ -924,4 +924,57 @@ class cneModel extends model
         $apiUrl = "/api/cne/system/resource/try-allocate";
         return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
+
+    /**
+     * 从云API服务器获取最新的发布版本号。
+     * Get the latest release version from cloud API server.
+     *
+     * @return string|false
+     */
+    public function getLatestVersion(): string|false
+    {
+        $cloudApiHost = getenv('CLOUD_API_HOST');
+        if(empty($cloudApiHost)) $cloudApiHost = $this->config->cloud->api->host;
+
+        $currentRelease = array(
+            'name' => 'zentaopaas',
+            'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
+            'version' => getenv('APP_VERSION')
+        );
+        $query = http_build_query($currentRelease);
+
+        $response = common::http($cloudApiHost . '/api/market/app/version/latest?' . $query);
+        if($response)
+        {
+            $response =json_decode($response);
+            if($response && $response->code == 200) return $response->data->version;
+        }
+        return false;
+    }
+
+    /**
+     * 升级禅道DevOps平台版。
+     * Upgrade the quickon system.
+     *
+     * @param  string $edition oss|open|biz|max|ipd
+     * @return object|false
+     */
+    public function upgrade($edition = 'oss'): object|false
+    {
+        $numArgs = func_num_args();
+        if($numArgs == 0) $edition = $this->config->edition;
+        if($edition == 'open') $edition = 'oss';
+
+        $version = $this->getLatestVersion();
+        if(!$version) return false;
+
+        $apiParams = array(
+            'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
+            'version' => $version,
+            'product' => $edition
+        );
+
+        $apiUrl = "/api/cne/system/update";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
 }
