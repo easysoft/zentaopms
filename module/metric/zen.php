@@ -419,7 +419,7 @@ class metricZen extends metric
 
         $statement = $statement->query();
 
-        while($row = $stmt->fetch())
+        while($row = $statement->fetch())
         {
             foreach($calcList as $code => $calc)
             {
