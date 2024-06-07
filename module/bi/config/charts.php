@@ -3255,7 +3255,7 @@ select
   t1.name as program,
   round(
     sum(
-      ifnull(cast(t2.budget as integer), 0)
+      ifnull(try_cast(t2.budget as integer), 0)
     ) / 10000,
     2
   ) as budget

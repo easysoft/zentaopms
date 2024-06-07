@@ -474,7 +474,7 @@ class biModel extends model
                 $sql .= " where $whereStr";
             }
             $sql .= " group by $groupBySql";
-            $rows = $this->query($driver, $sql);
+            $rows = $this->queryWithDriver($driver, $sql);
             $stat = $this->processRows($rows, $date, $group, $metric);
 
             $maxCount = 50;
