@@ -15,6 +15,24 @@ $uniqid = uniqid();
 
 panel
 (
+    to::titleSuffix
+    (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        )
+    ),
     setClass('singlebugstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::bodyClass('no-shadow border-t p-0'),
     set::title($block->title),
