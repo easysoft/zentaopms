@@ -2342,7 +2342,14 @@ class storyTao extends storyModel
             foreach($designs as $designID => $design)
             {
                 if(empty($design->commit)) continue;
-                foreach(explode(',', $design->commit) as $commitID) $storyGroup['commit'][$storyID][$commitID] = zget($commits, $commitID, '');
+                foreach(explode(',', $design->commit) as $commitID)
+                {
+                    $commit = zget($commits, $commitID, '');
+                    if(empty($commit)) continue;
+
+                    $commit->project = $design->project;
+                    $storyGroup['commit'][$storyID][$commitID] = $commit;
+                }
             }
         }
 
@@ -2359,7 +2366,7 @@ class storyTao extends storyModel
      */
     public function getTasksForTrack(array $storyIdList): array
     {
-        $stmt  = $this->dao->select('id,project,execution,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('execution,parent')->query();
+        $stmt  = $this->dao->select('id,project,execution,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution')->query();
         $tasks = array();
         while($task = $stmt->fetch())
         {
