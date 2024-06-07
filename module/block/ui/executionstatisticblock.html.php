@@ -363,6 +363,21 @@ statisticBlock
 (
     to::titleSuffix
     (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        ),
         picker
         (
             setClass('font-normal gray-400-outline ml-3 text-base circle filter-project-pricker'),
