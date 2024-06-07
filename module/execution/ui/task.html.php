@@ -53,6 +53,10 @@ if(common::canModify('execution', $execution))
 $cols = $this->loadModel('datatable')->getSetting('execution');
 if($execution->type != 'stage') unset($cols['design']);
 
+/* 追加是否需要确认撤销/移除操作的信息到数据列表中。*/
+/* Build confirmeObject. */
+if($this->config->edition == 'ipd') $tasks = $this->loadModel('story')->getAffectObject($tasks, 'task');
+
 $tableData = initTableData($tasks, $cols, $this->task);
 $tableData = array_map(
     function($task)

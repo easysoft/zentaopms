@@ -30,6 +30,16 @@ if(!$isInModal && hasPriv('task', 'create', $task))
 /* 初始化底部操作栏。Init bottom actions. */
 $config->task->actionList['batchCreate']['hint'] = $config->task->actionList['batchCreate']['text'] = $lang->task->children;
 
+/* 检查是否需要确认撤销/移除。*/
+/* Build confirmeObject. */
+if($this->config->edition == 'ipd')
+{
+    $task = $this->loadModel('story')->getAffectObject(array(), 'task', $task);
+
+    if(!empty($task->confirmeActionType)) $config->task->actions->view['mainActions']   = array('confirmDemandRetract', 'confirmDemandUnlin');
+    if(!empty($task->confirmeActionType)) $config->task->actions->view['suffixActions'] = array();
+}
+
 $task->executionInfo = $execution;
 $actions             = !$task->deleted && common::canModify('execution', $execution) ? $this->loadModel('common')->buildOperateMenu($task) : array();
 $hasDivider          = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
@@ -169,7 +179,7 @@ detail
         set::parentTitleProps(array('data-load' => 'modal')),
         to::title(to::leading(label(setClass('gray-pale rounded-full'), $lang->task->childrenAB)))
     ) : null,
-    set::urlFormatter(array('{id}' => $task->id, '{parent}' => $task->parent, '{execution}' => $task->execution)),
+    set::urlFormatter(array('{id}' => $task->id, '{parent}' => $task->parent, '{execution}' => $task->execution, '{confirmeObjectID}' => $task->confirmeObjectID)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
