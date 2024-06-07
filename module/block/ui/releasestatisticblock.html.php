@@ -66,6 +66,24 @@ foreach($releases as $productName => $releaseCount)
 
 blockPanel
 (
+    to::titleSuffix
+    (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        )
+    ),
     div
     (
         set::className('flex flex-wrap justify-between'),
