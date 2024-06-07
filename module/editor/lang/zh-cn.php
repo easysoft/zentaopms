@@ -30,7 +30,7 @@ $lang->editor->deleteConfirm = '是否要删除？';
 $lang->editor->extendConfirm = '是否要重用原来代码？';
 $lang->editor->repeatFile    = '文件名重复';
 $lang->editor->repeatPage    = '已经有此页面。是否覆盖？';
-$lang->editor->noticeOkFile  = '为了安全起见，系统需要确认您的管理员身份。\n 请登录禅道所在的服务器，创建%s文件。\n 注意：\n 1. 文件内容为空。\n 2. 如果之前文件存在，删除之后重新创建。';
+$lang->editor->noticeOkFile  = "为了安全起见，系统需要确认您的管理员身份。\n 请登录禅道所在的服务器，创建%s文件。\n 注意：\n 1. 文件内容为空。\n 2. 如果之前文件存在，删除之后重新创建。";
 $lang->editor->editFileError = '只能修改禅道文件！';
 $lang->editor->turnOff       = '如不使用编辑器功能，可在此关闭。';
 
