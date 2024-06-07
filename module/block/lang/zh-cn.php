@@ -741,3 +741,4 @@ $lang->block->tooltips['ac']                = "瀑布{$lang->projectCommon}中�
 $lang->block->tooltips['executionProgress'] = "<strong>{$lang->execution->common}进度</strong>=按{$lang->execution->common}统计的任务消耗工时数 /（按{$lang->execution->common}统计的任务消耗工时数+按{$lang->execution->common}统计的任务剩余工时数）<br/>
 <strong>按{$lang->execution->common}统计的任务消耗工时数</strong>：{$lang->execution->common}中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。<br/>
 <strong>按{$lang->execution->common}统计的任务剩余工时数</strong>：{$lang->execution->common}中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['metricTime']        = '统计数据将整点更新，最新更新时间为 %s。';
