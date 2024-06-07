@@ -1563,7 +1563,6 @@ class executionZen extends execution
         if(in_array($module, $executionModules) && in_array($method, array('view', 'edit', 'create'))) $method = $module;
         if(in_array($module, $executionModules + array('story', 'product'))) $module = 'execution';
 
-        if($module == 'story') $method = 'story';
         if($module == 'product' && $method == 'showerrornone') $method = 'task';
         if($module == 'execution' && $method == 'create') return '';
 
@@ -1611,6 +1610,10 @@ class executionZen extends execution
         elseif(($module == 'testreport' && $method == 'create') || ($module == 'execution' && $method == 'cases'))
         {
             $link = helper::createLink('execution', 'testtask', "executionID=%s");
+        }
+        elseif($module == 'story')
+        {
+            $link = helper::createLink('execution', 'story', "executionID=%s");
         }
 
         if($type != '') $link .= "&type=$type";
