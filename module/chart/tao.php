@@ -15,7 +15,7 @@ class chartTao extends chartModel
      * @access protected
      * @return array
      */
-    protected function getRows(string $defaultSql, array $filters, string $date, string $group, string $metric, string $agg): array
+    protected function getRows(string $defaultSql, array $filters, string $date, string $group, string $metric, string $agg, string $driver): array
     {
         $groupSql = $groupBySql = "tt.`$group`";
         if(!empty($date))
@@ -47,7 +47,8 @@ class chartTao extends chartModel
         }
         $sql .= " group by $groupBySql";
 
-        return $this->dao->query($sql)->fetchAll();
+        $dbh = $this->app->loadDriver($driver);
+        return $dbh->query($sql)->fetchAll();
     }
 
     /**

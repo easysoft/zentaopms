@@ -200,16 +200,17 @@ class chartModel extends model
     {
         $settings = current($chart->settings);
         $type     = $settings['type'];
+        $driver   = $chart->driver;
         $options  = array();
 
         $filterFormat = $this->getFilterFormat($chart->filters);
 
-        if($type == 'pie')   $options = $this->genPie($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
-        if($type == 'radar') $options = $this->genRadar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
-        if($type == 'line')  $options = $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
-        if($type == 'cluBarX'    || $type == 'cluBarY')     $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs);
-        if($type == 'stackedBar' || $type == 'stackedBarY') $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
-        if($type == 'waterpolo') $options = $this->bi->genWaterpolo($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
+        if($type == 'pie')   $options = $this->genPie($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $driver);
+        if($type == 'radar') $options = $this->genRadar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs, $driver);
+        if($type == 'line')  $options = $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs, $driver);
+        if($type == 'cluBarX'    || $type == 'cluBarY')     $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs, $driver);
+        if($type == 'stackedBar' || $type == 'stackedBarY') $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs, $driver);
+        if($type == 'waterpolo') $options = $this->bi->genWaterpolo($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $driver);
 
         if(empty($options)) return array();
 
@@ -280,9 +281,9 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function genRadar(array $fields, array $settings, string $defaultSql, array $filters, array $langs = array()): array
+    public function genRadar(array $fields, array $settings, string $defaultSql, array $filters, array $langs = array(), $driver = 'mysql'): array
     {
-        list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters);
+        list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters, $driver);
 
         $yDatas = array();
         $max    = 0;
@@ -332,14 +333,14 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function genPie(array $fields, array $settings, string $sql, array $filters): array
+    public function genPie(array $fields, array $settings, string $sql, array $filters, string $driver = 'mysql'): array
     {
         $group  = isset($settings['group'][0]['field']) ? $settings['group'][0]['field'] : '';
         $date   = isset($settings['group'][0]['group']) ? zget($this->config->chart->dateConvert, $settings['group'][0]['group']) : '';
         $metric = isset($settings['metric'][0]['field']) ? $settings['metric'][0]['field'] : '';
         $agg    = isset($settings['metric'][0]['valOrAgg']) ? $settings['metric'][0]['valOrAgg'] : '';
 
-        $rows = $this->chartTao->getRows(str_replace(';', '', $sql), $filters, $date, $group, $metric, $agg);
+        $rows = $this->chartTao->getRows(str_replace(';', '', $sql), $filters, $date, $group, $metric, $agg, $driver);
         $stat = $this->chartTao->processRows($rows, $date, $group, $metric);
         if(empty($date)) arsort($stat);
 
@@ -390,9 +391,9 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function genLineChart(array $fields, array $settings, string $defaultSql, array $filters, array $langs = array()): array
+    public function genLineChart(array $fields, array $settings, string $defaultSql, array $filters, array $langs = array(), string $driver = 'mysql'): array
     {
-        list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters);
+        list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters, $driver);
 
         $fieldType = $fields[$settings['xaxis'][0]['field']]['type'];
         if($fieldType == 'date') sort($xLabels);
@@ -438,9 +439,9 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function genCluBar(array $fields, array $settings, string $defaultSql, array $filters, string $stack = '', array $langs = array()): array
+    public function genCluBar(array $fields, array $settings, string $defaultSql, array $filters, string $stack = '', array $langs = array(), $driver = 'mysql'): array
     {
-        list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters);
+        list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters, $driver);
 
         $yDatas = array();
         foreach($yStats as $yStat)
@@ -508,7 +509,7 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function getMultiData(array $settings, string $defaultSql, array $filters, bool $sort = false): array
+    public function getMultiData(array $settings, string $defaultSql, array $filters, string $driver, bool $sort = false): array
     {
         $group = isset($settings['xaxis'][0]['field']) ? $settings['xaxis'][0]['field'] : '';
         $date  = isset($settings['xaxis'][0]['group']) ? zget($this->config->chart->dateConvert, $settings['xaxis'][0]['group']) : '';
@@ -552,7 +553,7 @@ class chartModel extends model
      * @access public
      * @return array
      */
-    public function genWaterpolo(array $settings, string $sql, array $filters)
+    public function genWaterpolo(array $settings, string $sql, array $filters, string $driver = 'mysql')
     {
         $operate = "{$settings['calc']}({$settings['goal']})";
         $sql = "select $operate count from ($sql) tt ";
@@ -583,8 +584,8 @@ class chartModel extends model
         if($moleculeWheres)    $moleculeSQL    .= 'where ' . implode(' and ', $moleculeWheres);
         if($denominatorWheres) $denominatorSQL .= 'where ' . implode(' and ', $denominatorWheres);
 
-        $molecule    = $this->dao->query($moleculeSQL)->fetch();
-        $denominator = $this->dao->query($denominatorSQL)->fetch();
+        $molecule    = $this->bi->queryWithDriver($driver, $moleculeSQL, false);
+        $denominator = $this->bi->queryWithDriver($driver, $denominatorSQL, false);
 
         $percent = $denominator->count ? round((int)$molecule->count / (int)$denominator->count, 4) : 0;
 

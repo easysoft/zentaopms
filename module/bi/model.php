@@ -122,6 +122,16 @@ class biModel extends model
         return array('result' => 'success');
     }
 
+    public function queryWithDriver($driver, $sql, $fetchAll = true)
+    {
+        $dbh = $this->app->loadDriver($driver);
+
+        if($fetchAll) $results = $dbh->query($sql)->fetchAll();
+        else $results = $dbh->query($sql)->fetch();
+
+        return $results;
+    }
+
     /**
      * Try to explain sql.
      *
@@ -412,7 +422,7 @@ class biModel extends model
      * @access public
      * @return void
      */
-    public function getMultiData($settings, $defaultSql, $filters, $sort = false)
+    public function getMultiData($settings, $defaultSql, $filters, $driver, $sort = false)
     {
         $this->loadModel('chart');
 
@@ -464,7 +474,7 @@ class biModel extends model
                 $sql .= " where $whereStr";
             }
             $sql .= " group by $groupBySql";
-            $rows = $this->dao->query($sql)->fetchAll();
+            $rows = $this->query($driver, $sql);
             $stat = $this->processRows($rows, $date, $group, $metric);
 
             $maxCount = 50;

@@ -757,7 +757,7 @@ class screenModel extends model
             $settings = $settings[0];
 
             $isSort = in_array($chart->id, $this->config->screen->annualRankingChart) ? true : false;
-            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters, $isSort);
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters, $chart->driver, $isSort);
 
             $fields       = json_decode($chart->fields, true);
             $dimensions   = array($settings['xaxis'][0]['field']);
@@ -809,7 +809,7 @@ class screenModel extends model
             $langs    = json_decode($chart->langs, true);
             $settings = $settings[0];
 
-            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters);
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters, $chart->driver);
 
             $fields       = json_decode($chart->fields, true);
             $dimensions   = array($settings['xaxis'][0]['field']);
@@ -868,7 +868,7 @@ class screenModel extends model
             $settings = json_decode($chart->settings, true);
             $settings = $settings[0];
 
-            $options = $this->loadModel('chart')->genPie(json_decode($chart->fields, true), $settings, $chart->sql, $filters);
+            $options = $this->loadModel('chart')->genPie(json_decode($chart->fields, true), $settings, $chart->sql, $filters, $chart->driver);
 
             if($settings['group'][0]['field'] == $settings['metric'][0]['field']) $settings['group'][0]['field'] = $settings['group'][0]['field'] . '1';
             $dimensions = array($settings['group'][0]['field'], $settings['metric'][0]['field']);
@@ -915,7 +915,7 @@ class screenModel extends model
             $langs    = json_decode($chart->langs, true);
             $settings = $settings[0];
 
-            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters);
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters, $chart->driver);
 
             $fields         = json_decode($chart->fields, true);
             $radarIndicator = array();
@@ -1617,7 +1617,7 @@ class screenModel extends model
                 {
                     $field   = $settings->value->field;
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->buildDataset($chart->id, $sql);
+                    $results = $this->buildDataset($chart->id, $chart->driver, $sql);
 
                     if($settings->value->type === 'text')
                     {
@@ -1685,7 +1685,7 @@ class screenModel extends model
                     $sourceData = array();
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->bi->queryWithDriver($chart->driver, $sql);
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
@@ -1744,7 +1744,7 @@ class screenModel extends model
                     }
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->buildDataset($chart->id, $sql);
+                    $results = $this->buildDataset($chart->id, $chart->driver, $sql);
 
                     foreach($results as $result)
                     {
@@ -1798,7 +1798,7 @@ class screenModel extends model
                     $sourceData = array();
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->bi->queryWithDriver($chart->driver, $sql);
 
                     foreach($results as $result)
                     {
@@ -1869,7 +1869,7 @@ class screenModel extends model
                     $sourceData = array();
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->bi->queryWithDriver($driver, $sql);
                     $group = $settings->group[0]->field;
 
                     $groupCount = array();
@@ -1944,7 +1944,7 @@ class screenModel extends model
                     $sourceData = array();
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->bi->queryWithDriver($chart->driver, $sql);
                     $group = $settings->group[0]->field;
 
                     $groupCount = array();
@@ -2035,7 +2035,7 @@ class screenModel extends model
         else
         {
             $setting = json_decode($chart->settings, true)[0];
-            $options = $this->bi->genWaterPolo(json_decode($chart->fields, true), $setting, $chart->sql, $filters);
+            $options = $this->bi->genWaterPolo(json_decode($chart->fields, true), $setting, $chart->sql, $filters, $chart->driver);
 
             $component->option->dataset = $options['series'][0]['data'][0];
             return $this->setComponentDefaults($component);
@@ -2284,7 +2284,7 @@ class screenModel extends model
                 if($settings and isset($settings->metric))
                 {
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->bi->queryWithDriver($driver, $sql);
                     $group   = $settings->group[0]->field;
 
                     $metrics = array();
@@ -2603,10 +2603,10 @@ class screenModel extends model
      * @access public
      * @return array
      */
-    public function buildDataset($chartID, $sql = '')
+    public function buildDataset($chartID, $driver, $sql = '')
     {
         if(in_array($chartID, $this->config->screen->phpChart)) return $this->getDatasetForUsageReport($chartID);
-        return $this->dao->query($sql)->fetchAll();
+        return $this->bi->queryWithDriver($driver, $sql);
     }
 
     /**
