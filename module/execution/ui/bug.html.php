@@ -55,6 +55,10 @@ sidebar
     )))
 );
 
+/* 追加是否需要确认撤销/移除操作的信息到数据列表中。*/
+/* Build confirmeObject. */
+if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
+
 $bugs = initTableData($bugs, $this->config->bug->dtable->fieldList, $this->bug);
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 
