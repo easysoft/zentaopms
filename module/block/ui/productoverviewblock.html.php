@@ -17,6 +17,24 @@ if($block->width == 1)
 {
     blockPanel
     (
+        to::titleSuffix
+        (
+            icon
+            (
+                setClass('text-light text-sm cursor-pointer'),
+                toggle::tooltip
+                (
+                    array
+                    (
+                        'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                        'placement' => 'bottom',
+                        'type'      => 'white',
+                        'className' => 'text-dark border border-light leading-5'
+                    )
+                ),
+                'help'
+            )
+        ),
         set::bodyClass('row items-center text-center'),
         set::headingClass('border-0 pb-0'),
         cell

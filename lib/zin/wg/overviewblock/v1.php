@@ -137,6 +137,7 @@ class overviewBlock extends wg
 
         return new blockPanel
         (
+            to::titleSuffix($this->block('titleSuffix')),
             set::block($block),
             set::title($title),
             set::id($id),
