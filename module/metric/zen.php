@@ -189,8 +189,7 @@ class metricZen extends metric
             {
                 $statement = $this->prepareDataset($calcGroup);
 
-                $rows = !empty($statement) ? $statement->fetchAll() : array();
-                $this->calcMetric($rows, $calcGroup->calcList);
+                $this->calcMetric($statement, $calcGroup->calcList);
 
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
                 $this->metric->insertMetricLib($recordWithCode);
@@ -414,13 +413,17 @@ class metricZen extends metric
      * @access protected
      * @return void
      */
-    protected function calcMetric($rows, $calcList)
+    protected function calcMetric($statement, $calcList)
     {
-        foreach($calcList as $code => $calc)
+        if(empty($statement)) return;
+
+        $statement = $statement->query();
+
+        while($row = $stmt->fetch())
         {
-            if(!$calc->reuse)
+            foreach($calcList as $code => $calc)
             {
-                foreach($rows as $row)
+                if(!$calc->reuse)
                 {
                     $record = $this->getCalcFields($calc, $row);
                     $calc->calculate($record);
