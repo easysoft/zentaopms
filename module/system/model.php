@@ -24,6 +24,7 @@ class systemModel extends model
         parent::__construct();
         $this->loadModel('setting');
         $this->loadModel('cne');
+        $this->loadModel('instance');
     }
 
     /**
@@ -134,8 +135,10 @@ class systemModel extends model
      * @param  string $mode     |manual|system|upgrade|downgrade
      * @return array
      */
-    public function backup(object $instance, string $mode = ''): array
+    public function backup(?object $instance, string $mode = ''): array
     {
+        if(empty($instance)) $instance = $this->config->instance->zentaopaas;
+
         $rawResult = $this->cne->backup($instance, $this->app->user->account, $mode);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
