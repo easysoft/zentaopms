@@ -1626,10 +1626,10 @@ class storyTao extends storyModel
         $tutorialMode = commonModel::isTutorialMode();
         if($this->config->edition == 'ipd' && $storyType == 'story')
         {
-            if(!empty($story->confirmeObject))
+            if(!empty($story->confirmeActionType))
             {
-                $method    = $story->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
-                $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObject['id']}");
+                $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
                 $actions[] = array('name' => $method, 'icon' => 'search', 'hint' => $this->lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
                 return $actions;
             }

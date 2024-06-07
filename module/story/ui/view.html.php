@@ -205,11 +205,11 @@ foreach($actions as $key => $action)
 }
 
 if($this->config->edition == 'ipd' and $story->type == 'story') $story = $this->story->getAffectObject(array(), $story->type, $story);
-if($config->edition == 'ipd' && $story->type == 'story' && !empty($story->confirmeObject))
+if($config->edition == 'ipd' && $story->type == 'story' && !empty($story->confirmeActionType))
 {
     $actions   = array();
-    $method    = $story->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
-    $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObject['id']}");
+    $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+    $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
     $actions[] = array('name' => $method, 'text' => $lang->story->$method, 'icon' => 'search', 'hint' => $lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
 }
 
