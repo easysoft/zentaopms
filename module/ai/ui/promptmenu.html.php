@@ -15,6 +15,11 @@
 
 namespace zin;
 
+h::css("
+.detail-view > .detail-body > .detail-main > .detail-sections:first > .detail-section {position: relative; z-index: 1;}
+.detail-view > .detail-body > .detail-main > .detail-sections:first > .detail-section:first {z-index: 2;}
+");
+
 $promptMenuInject = function()
 {
     if(isInModal()) return;
