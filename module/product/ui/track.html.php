@@ -63,7 +63,7 @@ featureBar
             set::items($dropdownItems),
         ) : null
     ),
-    li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module']), set::text($lang->searchAB . $storyTypeLang)))
+    li(searchToggle(set::open($browseType == 'bysearch'), set::module($config->product->search['module']), set::text($lang->searchAB . $storyTypeLang)))
 );
 
 toolbar
