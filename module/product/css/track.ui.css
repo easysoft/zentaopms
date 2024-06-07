@@ -7,6 +7,10 @@
 .card .card-title{height:40px; width:100%;}
 .card .card-content{flex-direction: row;justify-content: space-between;color:var(--color-gray-800)}
 
+.kanban-item.parentTask { padding-bottom: 1px;}
+.kanban-item.childTask { padding-top:0px; padding-bottom: 1px;}
+.kanban-item.childTask .card {background-color: #f9f9f9;}
+
 .kanban-header-lane-name, .kanban-lane-name {display:none;}
 .kanban-lane-cols, .kanban-header-cols, .kanban-header-sub-cols { gap: calc(var(--kanban-cols-gap) / 2); }
 .lane-col-shrink-with-above { position: relative; }
