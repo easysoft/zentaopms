@@ -556,8 +556,6 @@ class groupModel extends model
         $data->method = 'index';
         $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
 
-        $hasDepend = false;
-
         /* Insert new. */
         if($this->post->actions)
         {
@@ -591,12 +589,23 @@ class groupModel extends model
             }
 
             $insertDependPrivs = $this->processDepends($dependPrivs, $insertPrivKeys, $insertPrivKeys);
-            if(!empty($insertDependPrivs)) $hasDepend = true;
+            foreach($insertDependPrivs as $priKey)
+            {
+                if(isset($insertPrivs[$priKey])) continue;
+                list($moduleName, $actionName) = explode('-', $priKey);
 
-            $this->insertPrivs($insertPrivs + $insertDependPrivs);
+                $data = new stdclass();
+                $data->group  = $groupID;
+                $data->module = $moduleName;
+                $data->method = $actionName;
+
+                $insertPrivs[$priKey] = $data;
+            }
+
+            $this->insertPrivs($insertPrivs);
         }
 
-        return $hasDepend;
+        return count($insertDependPrivs) != count($insertPrivKeys);
     }
 
     /**
