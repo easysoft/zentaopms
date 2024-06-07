@@ -99,7 +99,11 @@ window.getCol = function(col)
 window.itemRender = function(info)
 {
     const col = info.col;
-    if(col == 'task' && info.item.parent > '0') info.item.className.push('hidden parent-' + info.item.parent);
+    if(col == 'task')
+    {
+        if(info.item.parent > '0') info.item.className.push('hidden childTask parent-' + info.item.parent);
+        if(info.item.parent == '-1') info.item.className.push('parentTask');
+    }
     if(col == 'project' || col == 'execution')
     {
         $delayed = $('.kanban-lane-col[z-lane="' + info.lane + '"][z-col="' + col + '"] .kanban-item[z-key="' + info.item.id + '"] .delayed');
