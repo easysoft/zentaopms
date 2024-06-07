@@ -984,11 +984,11 @@ class screenModel extends model
 
             if(isset($settings['summary']) and $settings['summary'] == 'notuse')
             {
-                list($options, $config) = $this->loadModel('pivot')->genOriginSheet($fields, $settings, $chart->sql, $filters, $langs);
+                list($options, $config) = $this->loadModel('pivot')->genOriginSheet($fields, $settings, $chart->sql, $filters, $langs, $chart->driver);
             }
             else
             {
-                list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
+                list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs, $chart->driver);
             }
 
             $colspan = array();
