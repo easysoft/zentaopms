@@ -201,7 +201,7 @@ class myZen extends my
         $count['case'] = $pager->recTotal;
 
         /* Get the number of testtasks assigned to me. */
-        $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'assignedTo');
+        $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
         $count['testtask'] = $pager->recTotal;
 
         $count = $this->showWorkCountNotInOpen($count, $pager);

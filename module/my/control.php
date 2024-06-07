@@ -488,7 +488,7 @@ class my extends control
         $this->app->loadLang('project');
         $sort  = common::appendOrder($orderBy);
         $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
+        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type == 'assignedTo' ? 'wait' : $type);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
