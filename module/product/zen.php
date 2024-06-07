@@ -1166,7 +1166,7 @@ class productZen extends product
         $actionURL = $this->createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=bySearch&param=myQueryID&storyType=$storyType");
         if($this->app->rawModule == 'projectstory') $actionURL = $this->createLink('projectstory', 'track', "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=bySearch&param=myQueryID&storyType=$storyType");
 
-        if($this->app->rawModule != 'product') $this->config->product->search['module'] = $this->app->rawModule;
+        $this->config->product->search['module'] = $this->app->rawModule . 'Track';
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $projectID);
     }
