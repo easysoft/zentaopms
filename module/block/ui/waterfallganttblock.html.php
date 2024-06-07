@@ -23,9 +23,24 @@ foreach($products as $id => $productName)
 }
 panel
 (
-    $productItems ? to::titleSuffix
+    to::titleSuffix
     (
-        dropdown
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        ),
+        $productItems ?  dropdown
         (
             btn
             (
@@ -34,9 +49,9 @@ panel
                 $products[$productID]
             ),
             set::items($productItems)
-        ),
-        span(setClass('text-gray-400 font-normal'), "* {$lang->block->selectProduct}")
-    ) : null,
+        ) : null,
+        $productItems ? span(setClass('text-gray-400 font-normal'), "* {$lang->block->selectProduct}") : null
+    ),
     setID($waterfallGanttID),
     set('headingClass', 'border-b'),
     set::title($block->title),
