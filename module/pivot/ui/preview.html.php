@@ -19,6 +19,7 @@ if(file_exists($viewFile)) include_once $viewFile;
 if($this->config->edition != 'open')
 {
     $pivotPath = $this->app->getModuleExtPath('pivot', 'ui');
+    if($method == 'show') $exportMode = 'preview';
     include $pivotPath['common'] . 'exportdata.html.php';
 }
 
