@@ -533,6 +533,7 @@ $lang->action->label->imported                = 'imported';
 $lang->action->label->createbackup            = 'Created system backup';
 $lang->action->label->deletebackup            = 'Deleted system backup';
 $lang->action->label->restorebackup           = 'Restored system backup';
+$lang->action->label->upgradesystem           = 'Executed system upgrade';
 $lang->action->label->system                  = '';
 
 /* Dynamic information is grouped by object. */
