@@ -61,8 +61,8 @@ if(!$isInModal)
 }
 
 /* 初始化底部操作栏。Init bottom actions. */
-$actions = $this->loadModel('common')->buildOperateMenu($case);
-$actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
+$actions = !$testcase->deleted ? $this->loadModel('common')->buildOperateMenu($case) : array();
+if(!$testcase->deleted) $actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
 {
     if(!isset($action['url'])) continue;
