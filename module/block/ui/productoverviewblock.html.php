@@ -88,7 +88,22 @@ if($block->width == 3)
             div
             (
                 setClass('text-md font-bold mt-2 mb-3 ml-3'),
-                $block->title
+                $block->title,
+                icon
+                (
+                    setClass('text-light text-sm cursor-pointer ml-2'),
+                    toggle::tooltip
+                    (
+                        array
+                        (
+                            'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                            'placement' => 'bottom',
+                            'type'      => 'white',
+                            'className' => 'text-dark border border-light leading-5'
+                        )
+                    ),
+                    'help'
+                )
             ),
             row
             (
