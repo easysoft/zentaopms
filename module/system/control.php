@@ -307,6 +307,32 @@ class system extends control
     }
 
     /**
+     * 执行系统升级。
+     * Upgrade ths quickon system.
+     *
+     * @param  string $edition
+     * @return void
+     */
+    public function upgrade($backup = 'yes', $edition = 'open')
+    {
+        session_write_close();
+        set_time_limit(0);
+
+        $this->loadModel('action')->create('system', 0, 'upgradeSystem');
+
+        $rawResult = $this->cne->upgrade($edition);
+        if($rawResult)
+        {
+            if($rawResult->code == 200)
+                $this->sendSuccess();
+            else
+                $this->sendError($rawResult->message);
+        }
+
+        $this->sendError($this->lang->CNE->serverError);
+    }
+
+    /**
      * AJAX: 获取备份列表。
      * AJAX: Get the backup list.
      *
