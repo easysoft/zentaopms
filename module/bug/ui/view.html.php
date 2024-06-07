@@ -48,7 +48,7 @@ if(!$isInModal && $canCreateBug)
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->bug->create,
-        'url'  => createLink('bug', 'create', "productID={$product->id}")
+        'url'  => createLink('bug', 'create', "productID={$product->id}&branch={$bug->branch}&extras=moduleID={$bug->module}")
     );
 }
 
