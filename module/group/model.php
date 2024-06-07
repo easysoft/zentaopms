@@ -571,7 +571,8 @@ class groupModel extends model
                 }
             }
 
-            $insertPrivs = array();
+            $insertPrivs    = array();
+            $insertPrivKeys = array();
             foreach($this->post->actions as $moduleName => $moduleActions)
             {
                 if(empty($moduleName) or empty($moduleActions)) continue;
@@ -583,31 +584,16 @@ class groupModel extends model
                     $data->module = $moduleName;
                     $data->method = $actionName;
 
-                    $insertPrivs["{$moduleName}-{$actionName}"] = $data;
+                    $priKey = "{$moduleName}-{$actionName}";
+                    $insertPrivs[$priKey] = $data;
+                    $insertPrivKeys[$priKey] = $priKey;
                 }
             }
 
-            foreach($insertPrivs as $key => $priv)
-            {
-                if(!isset($dependPrivs[$key])) continue;
-                foreach($dependPrivs[$key] as $depend)
-                {
-                    if(isset($insertPrivs[$depend])) continue;
+            $insertDependPrivs = $this->processDepends($dependPrivs, $insertPrivKeys, $insertPrivKeys);
+            if(!empty($insertDependPrivs)) $hasDepend = true;
 
-                    list($moduleName, $methodName) = explode('-', $depend);
-
-                    $data = new stdclass();
-                    $data->group  = $groupID;
-                    $data->module = $moduleName;
-                    $data->method = $methodName;
-
-                    $insertPrivs[$depend] = $data;
-
-                    $hasDepend = true;
-                }
-            }
-
-            $this->insertPrivs($insertPrivs);
+            $this->insertPrivs($insertPrivs + $insertDependPrivs);
         }
 
         return $hasDepend;
