@@ -21,7 +21,7 @@ foreach($extendItems as $extendItem)
     $failLang = $extendItem . 'Fail';
 
     $resultClass = $result == 'ok' ? 'bg-success' : 'bg-danger';
-    if($extendItem == 'apcu') $resultClass = 'bg-warning';
+    if($extendItem == 'apcu' && $result != 'ok') $resultClass = 'bg-warning';
 
     $checkTrs[] = h::tr
     (
