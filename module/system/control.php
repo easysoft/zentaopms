@@ -320,6 +320,21 @@ class system extends control
 
         $this->loadModel('action')->create('system', 0, 'upgradeSystem');
 
+        if($backup == 'yes')
+        {
+            $instance     = $this->config->instance->zentaopaas;
+            $backupResult = $this->cne->backup($instance, 'SYSTEM', 'upgrade');
+            if($backupResult->code != 200) $this->sendError($backupResult->message);
+
+            while(true)
+            {
+                $backupStatus = $this->cne->getBackupStatus($instance, $backupResult->data->name);
+                if($backupStatus->code != 200) $this->sendError($backupStatus->message);
+                if(strtolower($backupStatus->data->status) == 'completed') break;
+                sleep(1);
+            }
+        }
+
         $rawResult = $this->cne->upgrade($edition);
         if($rawResult)
         {
