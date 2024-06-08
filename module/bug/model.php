@@ -1853,18 +1853,12 @@ class bugModel extends model
         /* 判断反馈转bug操作按钮的权限。 */
         /* check feedback toStory priv. */
         if($module == 'bug' && $action == 'create')   return ($config->global->flow == 'full' || $config->global->flow == 'onlyTest') && strpos('closed|clarify|noreview', $object->status) === false;
-
-        if($module == 'bug' && $action == 'confirmdemandretract')
-        {
-            if(!empty($object->confirmeActionType)) return $object->confirmeActionType == 'confirmedretract';
-            return false;
-        }
-
-        if($module == 'bug' && $action == 'confirmdemandunlink')
-        {
-           if(!empty($object->confirmeActionType)) return $object->confirmeActionType == 'confirmdemandunlink';
-           return false;
-        }
+        /* 判断确认撤销操作按钮的权限。 */
+        /* Check confirmdemandretract priv. */
+        if($module == 'bug' && $action == 'confirmdemandretract') return !empty($object->confirmeActionType) && $object->confirmeActionType == 'confirmedretract';
+        /* 判断确认移除操作按钮的权限。 */
+        /* Check confirmdemandunlink priv. */
+        if($module == 'bug' && $action == 'confirmdemandunlink') return !empty($object->confirmeActionType) && $object->confirmeActionType == 'confirmedunlink';
 
         return true;
     }
