@@ -2152,17 +2152,8 @@ class taskModel extends model
 
         /* IPD任务当关联的需求池需求撤销/移除移除时，任务需要点击确认。*/
         /* IPD Task when the associated demand is retraec / unlink, the task needs to confirm . */
-        if($action == 'confirmdemandretract')
-        {
-            if(!empty($task->confirmeActionType)) return $task->confirmeActionType == 'confirmedretract';
-            return false;
-        }
-
-        if($action == 'confirmdemandunlink')
-        {
-           if(!empty($task->confirmeActionType)) return $task->confirmeActionType == 'confirmdemandunlink';
-           return false;
-        }
+        if($action == 'confirmdemandretract') return !empty($task->confirmeActionType) && $task->confirmeActionType == 'confirmedretract';
+        if($action == 'confirmdemandunlink')  return !empty($task->confirmeActionType) && $task->confirmeActionType == 'confirmedunlink';
 
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
