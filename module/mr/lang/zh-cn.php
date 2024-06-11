@@ -117,6 +117,8 @@ $lang->mr->targetProject     = '目标仓库';
 $lang->mr->targetBranch      = '目标分支';
 $lang->mr->noCompileJob      = '没有流水线任务';
 $lang->mr->compileUnexecuted = '还未执行';
+$lang->mr->compileID         = '构建任务';
+$lang->mr->compileStatus     = '构建结果';
 
 $lang->mr->notFound          = "此{$lang->mr->common}不存在。";
 $lang->mr->toCreatedMessage  = "您提交的合并请求：<a href='%s'>%s</a> 流水线任务执行通过。";
