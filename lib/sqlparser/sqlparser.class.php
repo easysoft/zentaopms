@@ -72,6 +72,26 @@ class sqlparser
     }
 
     /**
+     * Parse columns.
+     *
+     * @access public
+     * @return void
+     */
+    public function parseColumns()
+    {
+        $fields = array();
+        foreach($this->statement->expr as $expr)
+        {
+            /* 获取查询数据后真正展示出来的列名 */
+            $columnName = empty($expr->alias) ? $expr->column : $expr->alias;
+
+            $fields[$columnName] = array('origin' => $expr->column, 'table' => $expr->table);
+        }
+
+        return $fields;
+    }
+
+    /**
      * Parse tables.
      *
      * @access public
