@@ -51,6 +51,14 @@ class sqlparser
      */
     public $dao = null;
 
+    /**
+     * Origin tables.
+     *
+     * @var array
+     * @access public
+     */
+    public $originTables = array();
+
     public function __construct($query)
     {
         $query = $this->skipLineBreak($query);
@@ -61,6 +69,18 @@ class sqlparser
         $this->statementsCount = count($this->statements);
 
         $this->isSelect = $this->statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement === true;
+    }
+
+    /**
+     * Store origin table.
+     *
+     * @param  string    $table
+     * @access public
+     * @return void
+     */
+    public function storeOriginTable($table)
+    {
+        if(!isset($this->originTables[$table])) $this->originTables[$table] = $this->dao->descTable($table);
     }
 
     /**
