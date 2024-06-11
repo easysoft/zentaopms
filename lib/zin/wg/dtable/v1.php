@@ -207,7 +207,7 @@ class dtable extends wg
         }
 
         global $config;
-        if($config->edition != 'open')
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading))
         {
             $extendFields = $app->control->loadModel('workflowaction')->getFields($moduleName, $methodName);
             $extendCols   = $app->control->loadModel('flow')->buildDtableCols($extendFields);
