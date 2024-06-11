@@ -72,6 +72,18 @@ class sqlparser
     }
 
     /**
+     * Match columns with table.
+     *
+     * @access public
+     * @return array
+     */
+    public function matchColumnsWithTable()
+    {
+        if(count($tables) == 1) return $this->combineSingleTable();
+        return $this->combineMultipleTable();
+    }
+
+    /**
      * Combine single table to columns.
      *
      * @access public
