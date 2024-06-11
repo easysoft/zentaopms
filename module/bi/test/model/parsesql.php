@@ -65,8 +65,27 @@ WHERE 1 = (
 )
 EOT;
 
+$sqls[4] = <<<EOT
+SELECT
+    t1.name,
+    t1.PM,
+    t1.begin,
+    t1.realBegan,
+    t3.realname
+FROM
+    zt_project AS t1
+LEFT JOIN
+    zt_team AS t2 ON t1.id = t2.root AND t2.type = 'execution'
+LEFT JOIN
+    zt_user AS t3 ON t2.account = t3.account
+WHERE t1.name LIKE '%zentaopms%'
+    AND t1.realBegan > '2022-01-01'
+order by t1.id
+EOT;
+
 $bi=new biTest();
 r($bi->parseSqlTest($sqls[0])) && p('id,name,bugID,type,fixedBugs,caseTitle') && e('zt_product=>id,zt_product=>name,zt_bug=>id,zt_bug=>type,zt_product=>fixedBugs,zt_case=>title'); // 测试第1条sql
 r($bi->parseSqlTest($sqls[1])) && p('id,name,consumed')                       && e('zt_task=>id,zt_task=>name,zt_task=>consumed');                                                  // 测试第2条sql
 r($bi->parseSqlTest($sqls[2])) && p('id,estimate')                            && e('zt_story=>id,zt_story=>estimate');                                                              // 测试第3条sql
 r($bi->parseSqlTest($sqls[3])) && p('id,hour')                                && e('zt_story=>id,zt_story=>estimate');                                                              // 测试第4条sql
+r($bi->parseSqlTest($sqls[4])) && p('name,PM,begin,realBegan,realname')       && e('zt_project=>name,zt_project=>PM,zt_project=>begin,zt_project=>realBegan,zt_user=>realname');    // 测试第5条sql
