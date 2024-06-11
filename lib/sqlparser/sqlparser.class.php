@@ -72,6 +72,24 @@ class sqlparser
     }
 
     /**
+     * Search table from origin tables.
+     *
+     * @param  string    $tableName
+     * @param  string    $tables
+     * @param  string    $column
+     * @access public
+     * @return string|false
+     */
+    public function searchTables($tableName, $tables, $column)
+    {
+        /* 如果能使用别名匹配上，那么直接返回。*/
+        /* If it can be matched using an alias, then it returns. */
+        foreach($tables as $table) if($tableName == $table['alias']) return array_merge($table, array('column' => $column));
+
+        return false;
+    }
+
+    /**
      * Parse columns.
      *
      * @access public
