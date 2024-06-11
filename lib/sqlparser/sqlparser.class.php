@@ -75,7 +75,7 @@ class sqlparser
      * Combine single table to columns.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function combineSingleTable()
     {
@@ -85,6 +85,23 @@ class sqlparser
         {
             $column['table'] = array_merge($fromTable, array('column' => $columnName));
 
+            $combineColumns[$columnName] = $column;
+        }
+
+        return $combineColumns;
+    }
+
+    /**
+     * Combine multiple table to columns.
+     *
+     * @access public
+     * @return array
+     */
+    public function combineMultipleTable()
+    {
+        foreach($this->columns as $columnName => $column)
+        {
+            $column['table'] = $this->searchTables($column['table'], $this->tables, $column['origin']);
             $combineColumns[$columnName] = $column;
         }
 
