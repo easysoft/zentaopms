@@ -117,6 +117,8 @@ $lang->mr->targetProject     = 'Target repository';
 $lang->mr->targetBranch      = 'Target branch';
 $lang->mr->noCompileJob      = 'No Pipeline Job';
 $lang->mr->compileUnexecuted = 'Compile Unexecuted';
+$lang->mr->compileID         = 'Compile ID';
+$lang->mr->compileStatus     = 'Compile Status';
 
 $lang->mr->notFound          = "Merge Request does not exist!";
 $lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the pipeline task succeeded.";
