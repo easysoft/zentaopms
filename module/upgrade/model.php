@@ -481,13 +481,17 @@ class upgradeModel extends model
         if($defaultPos === false) return false; // No default in std, don't change.
 
         $stdDefault = str_replace("'", '', substr($stdField, $defaultPos + 9));
+        $commentPos = stripos($stdDefault, ' COMMENT ');
+        if($commentPos !== false) $stdDefault = substr($stdDefault, 0, $commentPos);
         if($stdDefault == 'NULL') return false; // Default is NULL, don't change.
         if(strpos($stdField, 'text') !== false && empty($stdDefault)) return false; // Default is '' and text type, don't change.
 
         $defaultPos = stripos($dbField,  ' DEFAULT ');
         if($defaultPos === false) return true; // No default in db, change it.
 
-        $dbDefault = str_replace("'", '', substr($dbField, $defaultPos + 9));
+        $dbDefault  = str_replace("'", '', substr($dbField, $defaultPos + 9));
+        $commentPos = stripos($dbDefault, ' COMMENT ');
+        if($commentPos !== false) $dbDefault = substr($dbDefault, 0, $commentPos);
 
         return $stdDefault != $dbDefault;
     }
