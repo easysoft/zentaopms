@@ -35,6 +35,14 @@ class sqlparser
      */
     public $statementsCount = 0;
 
+    /**
+     * Is first statemnt select type.
+     *
+     * @var bool
+     * @access public
+     */
+    public $isSelect = false;
+
     public function __construct($query)
     {
         $query = $this->skipLineBreak($query);
@@ -43,6 +51,8 @@ class sqlparser
         $this->statements      = $this->parser->statements;
         $this->statement       = $this->statementsCount > 0 ? current($this->statements) : null;
         $this->statementsCount = count($this->statements);
+
+        $this->isSelect = $this->statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement === true;
     }
 
     /**
