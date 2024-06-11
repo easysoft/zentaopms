@@ -26,7 +26,7 @@ class bugRelatedList extends relatedList
         $canViewStory  = common::hasPriv('story', 'view');
         $canViewTask   = common::hasPriv('task', 'view');
         $canViewMR     = common::hasPriv('mr', 'view');
-        $linkedCommits = $this->prop('linkedCommits', data('linkedCommits'));
+        $linkedCommits = $this->prop('linkedCommits', data('linkCommits'));
 
         $data = array();
 
