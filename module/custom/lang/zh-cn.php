@@ -195,7 +195,14 @@ $lang->custom->notice->required            = '页面提交时，选中的字段�
 $lang->custom->notice->conceptResult       = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划、版本都禁止修改。';
-$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、版本、日志以及关联需求都禁止修改。";
+if(in_array($config->edition, array('open', 'biz')))
+{
+    $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、日志、版本、测试单、测试报告、文档以及关联需求等都禁止修改。";
+}
+else
+{
+    $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、日志、版本、测试单、测试报告、文档、问题、风险、QA、会议以及关联需求等都禁止修改。";
+}
 $lang->custom->notice->readOnlyOfKanban    = "禁止修改后，已关闭{$lang->custom->kanban}下的卡片以及相关设置都禁止修改。";
 $lang->custom->notice->URSREmpty           = '自定义需求名称不能为空！';
 $lang->custom->notice->valueEmpty          = '值不能为空！';
