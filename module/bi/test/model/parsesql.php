@@ -20,6 +20,9 @@ cid=1
  - 属性id @zt_task=>id
  - 属性name @zt_task=>name
  - 属性consumed @zt_task=>consumed
+- 测试第3条sql
+ - 属性id @zt_story=>id
+ - 属性estimate @zt_story=>estimate
 
 */
 
