@@ -78,7 +78,8 @@ class backBtn extends btn
             'api'            => 'api-index',
             'demand'         => 'demand-browse,demand-view',
             'issue'          => 'issue-browse,issue-view',
-            'risk'           => 'risk-browse,risk-view'
+            'risk'           => 'risk-browse,risk-view',
+            'designguide'    => 'designguide-browse,designguide-view' // For designguide plugin.
         );
 
         $props  = parent::getProps();
