@@ -15,6 +15,8 @@ cid=1
 - 测试operator的值第0条的operator属性 @include
 - 测试value的值第0条的value属性 @test
 - 测试生成的查询sql的值 @(( 1  AND `title`  LIKE '%test%' ) AND ( 1  ))
+- 测试生成的查询sql的值 @(( 1  AND `title`  LIKE '%0%' ) AND ( 1  ))
+- 测试生成的查询sql的值 @(( 1  ) AND ( 1  ))
 
 */
 
@@ -42,7 +44,18 @@ $postDatas[] = $postData1;
 $returnList = array('form', 'query');
 
 $search = new searchTest();
-r($search->buildQueryTest($searchConfig, $postDatas, $returnList[0])) && p('0:field')    && e('title');   //测试field的值
-r($search->buildQueryTest($searchConfig, $postDatas, $returnList[0])) && p('0:operator') && e('include'); //测试operator的值
-r($search->buildQueryTest($searchConfig, $postDatas, $returnList[0])) && p('0:value')    && e('test');    //测试value的值
+$form = $search->buildQueryTest($searchConfig, $postDatas, $returnList[0]);
+r($form) && p('0:field')    && e('title');   //测试field的值
+r($form) && p('0:operator') && e('include'); //测试operator的值
+r($form) && p('0:value')    && e('test');    //测试value的值
 r($search->buildQueryTest($searchConfig, $postDatas, $returnList[1])) && p() && e("(( 1  AND `title`  LIKE '%test%' ) AND ( 1  ))"); //测试生成的查询sql的值
+
+$postData1->value1 = '0';
+$postDatas = array();
+$postDatas[] = $postData1;
+r($search->buildQueryTest($searchConfig, $postDatas, $returnList[1])) && p() && e("(( 1  AND `title`  LIKE '%0%' ) AND ( 1  ))"); //测试生成的查询sql的值
+
+$postData1->value1 = '';
+$postDatas = array();
+$postDatas[] = $postData1;
+r($search->buildQueryTest($searchConfig, $postDatas, $returnList[1])) && p() && e("(( 1  ) AND ( 1  ))"); //测试生成的查询sql的值
