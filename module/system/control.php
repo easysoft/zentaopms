@@ -331,7 +331,7 @@ class system extends control
 
             while(true)
             {
-                $backupStatus = $this->cne->getBackupStatus($instance, $backupResult->data->name);
+                $backupStatus = $this->cne->getBackupStatus($instance, $backupResult->data->backup_name);
                 if($backupStatus->code != 200) $this->sendError($backupStatus->message);
                 if(strtolower($backupStatus->data->status) == 'completed') break;
                 sleep(1);
