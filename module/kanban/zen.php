@@ -62,6 +62,13 @@ class kanbanZen extends kanban
         $this->display();
     }
 
+    /**
+     * 设置用户头像。
+     * Set user avatar data.
+     *
+     * @access public
+     * @return void
+     */
     public function setUserAvatar()
     {
         /* Get user list. */
@@ -74,6 +81,9 @@ class kanbanZen extends kanban
             $userList[$account]['realname'] = $users[$account];
             $userList[$account]['avatar']   = $avatar;
         }
+        $userList['closed']['account']  = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar']   = '';
 
         $this->view->userList = $userList;
     }
