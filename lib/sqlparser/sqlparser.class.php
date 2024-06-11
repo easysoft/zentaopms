@@ -72,6 +72,18 @@ class sqlparser
     }
 
     /**
+     * Parse statement.
+     *
+     * @access public
+     * @return void
+     */
+    public function parseStatement()
+    {
+        $this->columns = $this->parseColumns();
+        $this->tables  = $this->parseTables();
+    }
+
+    /**
      * Match columns with table.
      *
      * @access public
