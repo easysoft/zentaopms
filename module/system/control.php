@@ -270,7 +270,7 @@ class system extends control
         if(empty($this->config->system->noBackupBeforeRestore))
         {
             $instance     = $this->config->instance->zentaopaas;
-            $backupResult = $this->cne->backup($instance, 'SYSTEM', 'restore');
+            $backupResult = $this->cne->backup($instance, null, 'restore');
             if($backupResult->code != 200) $this->sendError($backupResult->message);
 
             while(true)
@@ -326,7 +326,7 @@ class system extends control
         if($backup == 'yes')
         {
             $instance     = $this->config->instance->zentaopaas;
-            $backupResult = $this->cne->backup($instance, 'SYSTEM', 'upgrade');
+            $backupResult = $this->cne->backup($instance, null, 'upgrade');
             if($backupResult->code != 200) $this->sendError($backupResult->message);
 
             while(true)
