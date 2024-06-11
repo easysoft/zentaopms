@@ -8812,4 +8812,23 @@ class upgradeModel extends model
     {
         return $this->loadModel('install')->enableDaoCache();
     }
+
+    /**
+     * 更新分类项语言项
+     * Update classify lang.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateClassifyLang()
+    {
+        $this->app->loadLang('install');
+
+        foreach($this->lang->install->langList as $langInfo)
+        {
+            $this->dao->update(TABLE_LANG)->set('value')->eq($langInfo['value'])->where('module')->eq($langInfo['module'])->andWhere('`key`')->eq($langInfo['key'])->exec();
+        }
+
+        return true;
+    }
 }
