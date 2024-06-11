@@ -682,8 +682,7 @@ class doc extends control
 
         $lib = $this->doc->getLibByID((int)$doc->lib);
         if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
-        if($this->app->tab == 'doc' && $lib->type == 'execution') $appendLib = $doc->lib;
-
+        if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($doc, $objectType, 0);
