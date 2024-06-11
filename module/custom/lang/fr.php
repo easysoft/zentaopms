@@ -195,7 +195,14 @@ $lang->custom->notice->required            = 'Le champ sélectionné est obligat
 $lang->custom->notice->conceptResult       = 'Selon votre préférence, <b> %s-%s </b> peut être fixé pour vous. Utilisez <b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = 'Allez à Admin -> Custom -> Concept pour le paramétrer.';
 $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases, plans and builds of the closed product is also forbidden.';
-$lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
+if(in_array($config->edition, array('open', 'biz')))
+{
+    $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts, test tasks, test reports, documents and stories of the closed {$lang->executionCommon} is also forbidden.";
+}
+else
+{
+    $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts, test tasks, test reports, documents, issues, risks, QAs, meettings and stories of the closed {$lang->executionCommon} is also forbidden.";
+}
 $lang->custom->notice->readOnlyOfKanban    = "If Change Forbidden, any change on kanban card and related operations of {$lang->custom->kanban} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
 $lang->custom->notice->valueEmpty          = 'Value can not be empty!';
