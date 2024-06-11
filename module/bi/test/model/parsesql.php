@@ -23,6 +23,9 @@ cid=1
 - 测试第3条sql
  - 属性id @zt_story=>id
  - 属性estimate @zt_story=>estimate
+- 测试第4条sql
+ - 属性id @zt_story=>id
+ - 属性hour @zt_story=>estimate
 
 */
 
