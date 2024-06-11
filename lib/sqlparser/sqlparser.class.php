@@ -20,6 +20,14 @@ class sqlparser
     public $statements;
 
     /**
+     * First statement.
+     *
+     * @var object
+     * @access public
+     */
+    public $statement;
+
+    /**
      * Count statements.
      *
      * @var int
@@ -31,8 +39,9 @@ class sqlparser
     {
         $query = $this->skipLineBreak($query);
 
-        $this->parser = new PhpMyAdmin\SqlParser\Parser($query);
-        $this->statements = $this->parser->statements;
+        $this->parser          = new PhpMyAdmin\SqlParser\Parser($query);
+        $this->statements      = $this->parser->statements;
+        $this->statement       = $this->statementsCount > 0 ? current($this->statements) : null;
         $this->statementsCount = count($this->statements);
     }
 
