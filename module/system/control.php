@@ -323,7 +323,7 @@ class system extends control
 
         $this->loadModel('action')->create('system', 0, 'upgradeSystem');
 
-        if($backup == 'yes')
+        if($backup == 'yes' && empty($this->config->system->noBackupBeforeUpgrade))
         {
             $instance     = $this->config->instance->zentaopaas;
             $backupResult = $this->cne->backup($instance, null, 'upgrade');
