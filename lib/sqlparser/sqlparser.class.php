@@ -59,6 +59,14 @@ class sqlparser
      */
     public $originTables = array();
 
+    /**
+     * Columns.
+     *
+     * @var array
+     * @access public
+     */
+    public $columns = array();
+
     public function __construct($query)
     {
         $query = $this->skipLineBreak($query);
