@@ -259,7 +259,9 @@ class pivotZen extends pivot
             $index++;
         }
 
-        $lastRow = count($data->array) - 1;
+        $lastRow        = count($data->array) - 1;
+        $hasGroup       = $data->groups;
+        $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
         foreach($data->array as $rowKey => $rowData)
         {
             $index   = 0;
@@ -292,7 +294,9 @@ class pivotZen extends pivot
                     $cellSpan[$field]['rowspan'] = $field . '_rowspan';
                 }
 
-                if($i == 0 && !empty($data->groups) && !empty($data->columnTotal) && $rowKey == $lastRow)
+                $isFirstColumnAndLastRow = $i === 0 && $rowKey === $lastRow;
+
+                if($isFirstColumnAndLastRow && $hasGroup && $hasColumnTotal)
                 {
                     $rows[$rowKey][$field . '_colspan'] = count($data->groups);
                     $cellSpan[$field]['colspan'] = $field . '_colspan';
