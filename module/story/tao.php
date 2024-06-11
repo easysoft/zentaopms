@@ -2318,7 +2318,7 @@ class storyTao extends storyModel
      */
     public function getDesignsForTrack(array $storyIdList): array
     {
-        $storyGroup   = array();
+        $storyGroup   = array('design' => array(), 'commit' => array());
         $stmt         = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->query();
         $commitIdList = '';
         $commitGroup  = array();
