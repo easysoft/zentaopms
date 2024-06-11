@@ -5,6 +5,8 @@ class sqlparser
 {
     public function __construct($query)
     {
+        $query = $this->skipLineBreak($query);
+
         $this->parser = new PhpMyAdmin\SqlParser\Parser($query);
         $this->statements = $this->parser->statements;
     }
