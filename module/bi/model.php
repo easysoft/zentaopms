@@ -866,13 +866,12 @@ class biModel extends model
         $this->app->loadClass('sqlparser', true);
         $parser = new sqlparser($sql);
 
-        if(count($parser->statements) == 0) return $this->lang->dataview->empty;
-        if(count($parser->statements) > 1)  return $this->lang->dataview->onlyOne;
+        if($parser->statementsCount == 0) return $this->lang->dataview->empty;
+        if($parser->statementsCount > 1)  return $this->lang->dataview->onlyOne;
 
-        $statement = $parser->statements[0];
-        if($statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement == false) return $this->lang->dataview->allowSelect;
+        if(!$parser->isSelect) return $this->lang->dataview->allowSelect;
 
-        return $statement;
+        return $parser->statement;
     }
 
     /**
