@@ -10,3 +10,18 @@ timeout=0
 cid=1
 
 */
+
+$sqls = array();
+
+$sqls[0] = <<<EOT
+select t1.id,t1.name,t2.id as bugID,t2.type, fixedBugs, caseTitle
+from zt_product as t1
+left join zt_bug as t2 on t1.id=t2.product and t2.deleted = '0'
+left join zt_project as t3 on t1.program=t3.id
+left join (select id, title as caseTitle from zt_case where deleted = '0') as t4 on t2.case = t4.id
+where t1.deleted='0' and t2.deleted='0'
+order by t3.`order` asc, t1.line desc, t1.`order` asc
+EOT;
+
+$bi=new biTest();
+r($bi->parseSqlTest($sqls[0])) && p('id,name,bugID,type,fixedBugs,caseTitle') && e('zt_product=>id,zt_product=>name,zt_bug=>id,zt_bug=>type,zt_product=>fixedBugs,zt_case=>title'); // 测试第1条sql
