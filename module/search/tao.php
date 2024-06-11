@@ -163,8 +163,9 @@ class searchTao extends searchModel
 
         /* 设置字段的值。*/
         /* Skip empty values. */
-        if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
-        if(isset($fieldParams->$field) && $fieldParams->$field->control == 'select' && $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select.
+        $value = $this->post->$valueName;
+        if($value == 'ZERO') $this->post->set($valueName, 0);   // ZERO is special, stands to 0.
+        if(isset($fieldParams->$field) && $fieldParams->$field->control == 'select' && $value === 'null') $this->post->set($valueName, '');   // Null is special, stands to empty if control is select.
         $value = addcslashes(trim((string)$this->post->{$valueName}), '%');
 
         return array($andOr, $operator, $value);

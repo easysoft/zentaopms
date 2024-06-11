@@ -75,11 +75,12 @@ class searchModel extends model
             $valueName    = "value$i";
 
             $field = $this->post->$fieldName;
-            if(empty($field) || $this->post->$valueName == false) continue;
+            $value = $this->post->$valueName;
+            if(empty($field) || $value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
 
             /* 如果是输入框，并且输入框的值为'0'，或者 id 的值为'0'，将值设置为zero。*/
-            if(isset($fieldParams->$field) && $fieldParams->$field->control == 'input' && $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
-            if($field == 'id' && $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+            if(isset($fieldParams->$field) && $fieldParams->$field->control == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
+            if($field == 'id' && $value === '0') $this->post->set($valueName, 'ZERO');
 
             /* set queryForm. */
             list($andOr, $operator, $value) = $this->searchTao->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
@@ -134,13 +135,13 @@ class searchModel extends model
 
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
-            if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->set($valueName, 'ZERO');
+            if($field == 'id' and $this->post->$valueName === '0') $this->post->set($valueName, 'ZERO');
 
             /* Skip empty values. */
             if($this->post->$valueName == false) continue;
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->set($valueName, '');   // Null is special, stands to empty if control is select. Fix bug #3279.
 
             $scoreNum += 1;
 
