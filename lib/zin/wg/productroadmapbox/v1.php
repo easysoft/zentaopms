@@ -72,7 +72,7 @@ class productRoadmapBox extends wg
                     (
                         div
                         (
-                            setClass('grow linkProduct'),
+                            setClass('grow linkProduct w-1/2'),
                             picker
                             (
                                 set::name("product[$index]"),
@@ -111,7 +111,7 @@ class productRoadmapBox extends wg
                     (
                         div
                         (
-                            setClass('grow linkRoadmap'),
+                            setClass('grow linkRoadmap w-1/2'),
                             picker
                             (
                                 set::name("roadmap[$index]"),

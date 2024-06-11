@@ -100,6 +100,7 @@ class programplanModel extends model
     {
         $plans   = $this->getStage($executionID, $productID, $type);
         $parents = array();
+        $pairs   = array();
 
         if(strpos($type, 'leaf') !== false) array_map(function($plan) use(&$parents){$parents[$plan->parent] = true;}, $plans);
         foreach($plans as $planID => $plan)
