@@ -8,4 +8,20 @@ class biTest
         $this->objectModel = $tester->loadModel('bi');
     }
 
+    public function parseSqlTest($sql)
+    {
+        $columns = $this->objectModel->parseSql($sql);
+
+        $result = array();
+        foreach($columns as $field => $column)
+        {
+            if(empty($column['table'])) continue;
+
+            $result[$field] = "{$column['table']['originTable']}=>{$column['table']['column']}";
+        }
+
+        arsort($result);
+
+        return $result;
+    }
 }
