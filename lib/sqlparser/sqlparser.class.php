@@ -75,11 +75,20 @@ class sqlparser
      * Get origin table from table name or expr.
      *
      * @param  string    $table
+     * @param  bool    $isTable
      * @access public
      * @return string|array
      */
-    public function getOriginTable($table)
+    public function getOriginTable($table, $isTable)
     {
+        if(!$isTable)
+        {
+            $parser = new sqlparser($table);
+            $parser->setDAO($this->dao);
+            $parser->parseStatement();
+            return $parser->matchColumnsWithTable();
+        }
+
         $this->storeOriginTable($table);
 
         return $table;
