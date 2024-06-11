@@ -87,7 +87,7 @@ $privs['project']     = commonModel::hasPriv('project',     'view');
 $privs['execution']   = commonModel::hasPriv('execution',   'task');
 $privs['task']        = commonModel::hasPriv('task',        'view');
 $privs['bug']         = commonModel::hasPriv('bug',         'view');
-$privs['case']        = commonModel::hasPriv('case',        'view');
+$privs['case']        = commonModel::hasPriv('testcase',    'view');
 $privs['design']      = commonModel::hasPriv('design',      'view');
 $privs['commit']      = commonModel::hasPriv('repo',        'revision');
 
