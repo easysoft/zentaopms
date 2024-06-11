@@ -72,6 +72,22 @@ class sqlparser
     }
 
     /**
+     * Judge column exist in origin table or not.
+     *
+     * @param  string    $table
+     * @param  string    $column
+     * @access public
+     * @return bool
+     */
+    public function columnExistInOriginTable($table, $column)
+    {
+        $originTable = $this->getOriginTableColumns($table);
+        if(!$originTable) return false;
+
+        return isset($originTable[$column]);
+    }
+
+    /**
      * Get origin table columns.
      *
      * @param  string    $table
