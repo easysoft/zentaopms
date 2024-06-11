@@ -25,6 +25,7 @@ window.parent.$(function()
     $('#treemap').treemap($.extend({}, window.parent[$.getSearchParam('options')]));
     const treemap = $('#treemap').data('zui.treemap');
     window.parent.getTreemap = function() {return treemap;};
+    if(treemap.options.onReady) treemap.options.onReady(treemap, window);
     $('body').on('click', () => window.parent.$(window.frameElement).trigger('click'));
     if(treemap.options.onContextMenu)
     {
