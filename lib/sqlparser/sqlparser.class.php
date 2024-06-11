@@ -11,7 +11,6 @@ class sqlparser
      */
     public $parser;
 
-
     /**
      * Statements of parser.
      *
@@ -20,12 +19,21 @@ class sqlparser
      */
     public $statements;
 
+    /**
+     * Count statements.
+     *
+     * @var int
+     * @access public
+     */
+    public $statementsCount = 0;
+
     public function __construct($query)
     {
         $query = $this->skipLineBreak($query);
 
         $this->parser = new PhpMyAdmin\SqlParser\Parser($query);
         $this->statements = $this->parser->statements;
+        $this->statementsCount = count($this->statements);
     }
 
     /**
