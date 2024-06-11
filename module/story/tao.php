@@ -2196,15 +2196,7 @@ class storyTao extends storyModel
         foreach($storyGrade as $type => $grades)
         {
             if(!isset($cols[$type])) continue;
-            if(count($grades) == 1)
-            {
-                $grade = array_shift($grades);
-                $cols[$type] = $this->buildTrackCol("{$type}_{$grade->grade}", $cols[$type]['title']);
-            }
-            else
-            {
-                foreach($grades as $grade) $cols["{$type}_{$grade->grade}"] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
-            }
+            foreach($grades as $grade) $cols["{$type}_{$grade->grade}"] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
         }
 
         return array_values($cols);
@@ -2326,7 +2318,7 @@ class storyTao extends storyModel
      */
     public function getDesignsForTrack(array $storyIdList): array
     {
-        $storyGroup   = array();
+        $storyGroup   = array('design' => array(), 'commit' => array());
         $stmt         = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->query();
         $commitIdList = '';
         $commitGroup  = array();

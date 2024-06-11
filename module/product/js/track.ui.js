@@ -128,6 +128,21 @@ window.afterRender = function()
         new zui.Dropdown($('.orderByIcon'), {menu: {items: orderByItems}});
         $orderByIcon.addClass('dropdownInited');
     }
+
+    $hasSubCols = $('.kanban-header-cols .kanban-header-col.has-subs');
+    if($hasSubCols.length > 0)
+    {
+        $hasSubCols.each(function()
+        {
+            $subCols = $(this).find(".kanban-header-sub-cols .kanban-header-col.is-sub");
+            if($subCols.length == 1)
+            {
+                style = $subCols.attr('style');
+                $subCols.parent().addClass('hidden');
+                $(this).removeClass('has-subs').attr('style', style);
+            }
+        });
+    }
 }
 
 window.toggleChildren = function(obj, parentID)

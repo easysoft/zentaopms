@@ -75,6 +75,12 @@ if(!$bug->deleted)
             }
             $actions[$key] = $action;
         }
+        if($action['icon'] == 'edit' && isInModal())
+        {
+            $action['data-load'] = 'modal';
+            $action['data-size'] = 'lg';
+            $actions[$key] = $action;
+        }
     }
 }
 
