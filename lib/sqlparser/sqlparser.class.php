@@ -43,6 +43,14 @@ class sqlparser
      */
     public $isSelect = false;
 
+    /**
+     * DAO
+     *
+     * @var object
+     * @access public
+     */
+    public $dao = null;
+
     public function __construct($query)
     {
         $query = $this->skipLineBreak($query);
@@ -53,6 +61,18 @@ class sqlparser
         $this->statementsCount = count($this->statements);
 
         $this->isSelect = $this->statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement === true;
+    }
+
+    /**
+     * Set dao.
+     *
+     * @param  object    $dao
+     * @access public
+     * @return void
+     */
+    public function setDAO($dao)
+    {
+        $this->dao = $dao;
     }
 
     /**
