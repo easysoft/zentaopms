@@ -16,6 +16,10 @@ cid=1
  - 属性type @zt_bug=>type
  - 属性fixedBugs @zt_product=>fixedBugs
  - 属性caseTitle @zt_case=>title
+- 测试第2条sql
+ - 属性id @zt_task=>id
+ - 属性name @zt_task=>name
+ - 属性consumed @zt_task=>consumed
 
 */
 
