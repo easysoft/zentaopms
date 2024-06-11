@@ -163,16 +163,19 @@ class sqlparser
         /* If it can be matched using an alias, then it returns. */
         foreach($tables as $table) if($tableName == $table['alias']) return array_merge($table, array('column' => $column));
 
+        $isTable     = $table['isTable'];
+        $originTable = $table['originTable'];
+
         /* 如果匹配不上，则字段没有使用别名进行限制，那么需要通过字段去遍历所有表。*/
         /* If it doesn't match, then the field is not aliased, and you need to iterate over all tables using the field. */
         foreach($tables as $table)
         {
             /* 如果是原始表，并且列在原始表中存在，那么返回这个表。*/
             /* If it is the original table and the column exists in the original table, then the table is returned. */
-            if($table['isTable'] && $this->columnExistInOriginTable($table['originTable'], $column)) return array_merge($table, array('column' => $column));
+            if($isTable && $this->columnExistInOriginTable($originTable, $column)) return array_merge($table, array('column' => $column));
             /* 如果不是原始表，并且列在子句中存在，那么返回子句中这个字段对应的表。*/
             /* If it is not the original table and the column exists in the clause, then the table corresponding to the field in the clause is returned. */
-            if(!$table['isTable'] && isset($table['originTable'][$column])) return array_merge($table['originTable'][$column['table'], array('column' => $table['originTable'][$column['origin']));
+            if(!$isTable && isset($originTable[$column])) return array_merge($originTable[$column]['table'], array('column' => $originTable[$column]['origin']));
         }
 
         return false;
