@@ -72,6 +72,24 @@ class sqlparser
     }
 
     /**
+     * Parse table.
+     *
+     * @param  object    $expr
+     * @param  string    $type
+     * @access public
+     * @return void
+     */
+    public function parseTable($expr, $type)
+    {
+        $isTable = empty($expr->subquery);
+
+        $table = array('alias' => $expr->alias, 'isTable' => $isTable, 'type' => $type);
+        $table['originTable'] = $this->getOriginTable($expr->expr, $isTable);
+
+        return $table;
+    }
+
+    /**
      * Get origin table from table name or expr.
      *
      * @param  string    $table
