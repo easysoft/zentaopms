@@ -43,22 +43,22 @@ class backBtn extends btn
         global $app;
 
         $backs = array(
-            'task'           => 'execution-task,my-work,my-contribute,execution-tree,execution-grouptask,project-execution,product-track,repo-view,story-change,execution-kanban,execution-taskkanban,my-index,feedback-adminview,projectstory-track,execution-calendar',
-            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view',
-            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,execution-task,product-track,execution-task,task-view,repo-view,story-change,repo-review,feedback-adminview,my-index,projectstory-track',
-            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,product-track,story-change,my-index,projectstory-track',
+            'task'           => 'execution-task,my-work,my-contribute,execution-tree,execution-grouptask,project-execution,product-track,repo-view,story-change,execution-kanban,execution-taskkanban,my-index,feedback-adminview,projectstory-track,execution-calendar,my-effort',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view,my-effort',
+            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,execution-task,product-track,execution-task,task-view,repo-view,story-change,repo-review,feedback-adminview,my-index,projectstory-track,my-effort',
+            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,product-track,story-change,my-index,projectstory-track,my-effort',
             'testsuite'      => 'testsuite-browse,testsuite-view,testtask-cases,my-index',
-            'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,execution-build,my-index',
+            'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,execution-build,my-index,my-effort',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,execution-testtask',
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,testcase-browse,caselib-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
-            'design'         => 'design-browse,projectstory-track',
-            'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse,story-view,my-index',
-            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse,my-index',
+            'design'         => 'design-browse,projectstory-track,my-effort',
+            'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse,story-view,my-index,my-effort',
+            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse,my-index,my-effort',
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
             'projectstory'   => 'projectstory-story',
-            'build'          => 'execution-build,build-view,project-index,kanban-view,testtask-browse,projectbuild-browse',
+            'build'          => 'execution-build,build-view,project-index,kanban-view,testtask-browse,projectbuild-browse,my-effort',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view,project-index',
             'mr'             => 'mr-browse',
             'repo'           => 'repo-maintain,repo-log,repo-browse,repo-view',
@@ -79,6 +79,8 @@ class backBtn extends btn
             'demand'         => 'demand-browse,demand-view',
             'issue'          => 'issue-browse,issue-view',
             'risk'           => 'risk-browse,risk-view',
+            'todo'           => 'my-effort',
+            'ticket'         => 'my-effort',
             'designguide'    => 'designguide-browse,designguide-view' // For designguide plugin.
         );
 
