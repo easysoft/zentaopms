@@ -12,3 +12,14 @@ UPDATE `zt_grouppriv` SET module='researchtask', `method`='batchCreate'    WHERE
 UPDATE `zt_grouppriv` SET module='researchtask', `method`='recordWorkhour' WHERE module='marketresearch' AND `method`='recordTaskEstimate';
 
 UPDATE `zt_grouppriv` SET module='marketresearch', `method`='task'   WHERE module='marketresearch' AND `method`='stage';
+
+REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
+('all', 'process', 'scrumClassify', 'support', '支持过程', '1'),
+('all', 'process', 'scrumClassify', 'engineering', '工程支持', '1'),
+('all', 'process', 'scrumClassify', 'project', '项目管理', '1'),
+('all', 'process', 'agileplusClassify', 'support', '支持过程', '1'),
+('all', 'process', 'agileplusClassify', 'engineering', '工程支持', '1'),
+('all', 'process', 'agileplusClassify', 'project', '项目管理', '1'),
+('all', 'process', 'waterfallplusClassify', 'support', '支持过程', '1'),
+('all', 'process', 'waterfallplusClassify', 'engineering', '工程支持', '1'),
+('all', 'process', 'waterfallplusClassify', 'project', '项目管理', '1');
