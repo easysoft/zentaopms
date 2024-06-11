@@ -72,6 +72,25 @@ class sqlparser
     }
 
     /**
+     * Parse tables.
+     *
+     * @access public
+     * @return void
+     */
+    public function parseTables()
+    {
+        $from  = current($this->statement->from);
+        $joins = $this->statement->join;
+
+        $tables = array();
+        $tables[] = $this->parseTable($from, 'from');
+
+        foreach($joins as $join) $tables[] = $this->parseTable($join->expr, 'join');
+
+        return $tables;
+    }
+
+    /**
      * Parse table.
      *
      * @param  object    $expr
