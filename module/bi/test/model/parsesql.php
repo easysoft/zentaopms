@@ -9,6 +9,14 @@ title=biModel->parseSql();
 timeout=0
 cid=1
 
+- 测试第1条sql
+ - 属性id @zt_product=>id
+ - 属性name @zt_product=>name
+ - 属性bugID @zt_bug=>id
+ - 属性type @zt_bug=>type
+ - 属性fixedBugs @zt_product=>fixedBugs
+ - 属性caseTitle @zt_case=>title
+
 */
 
 $sqls = array();
