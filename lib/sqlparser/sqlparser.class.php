@@ -72,6 +72,19 @@ class sqlparser
     }
 
     /**
+     * Get origin table columns.
+     *
+     * @param  string    $table
+     * @access public
+     * @return array|null
+     */
+    public function getOriginTableColumns($table)
+    {
+        $originTables = $this->originTables;
+        return isset($originTables[$table]) ? $originTables[$table] : null;
+    }
+
+    /**
      * Store origin table.
      *
      * @param  string    $table
