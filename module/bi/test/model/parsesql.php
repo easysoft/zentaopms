@@ -26,6 +26,12 @@ cid=1
 - 测试第4条sql
  - 属性id @zt_story=>id
  - 属性hour @zt_story=>estimate
+- 测试第5条sql
+ - 属性name @zt_project=>name
+ - 属性PM @zt_project=>PM
+ - 属性begin @zt_project=>begin
+ - 属性realBegan @zt_project=>realBegan
+ - 属性realname @zt_user=>realname
 
 */
 
