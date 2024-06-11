@@ -81,8 +81,8 @@ class sqlparser
 
         $this->parser          = new PhpMyAdmin\SqlParser\Parser($query);
         $this->statements      = $this->parser->statements;
-        $this->statement       = $this->statementsCount > 0 ? current($this->statements) : null;
         $this->statementsCount = count($this->statements);
+        $this->statement       = $this->statementsCount > 0 ? current($this->statements) : null;
 
         $this->isSelect = $this->statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement === true;
     }
@@ -107,7 +107,7 @@ class sqlparser
      */
     public function matchColumnsWithTable()
     {
-        if(count($tables) == 1) return $this->combineSingleTable();
+        if(count($this->tables) == 1) return $this->combineSingleTable();
         return $this->combineMultipleTable();
     }
 
