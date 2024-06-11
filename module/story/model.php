@@ -48,12 +48,12 @@ class storyModel extends model
         $story->relationStoryID = $this->getRelationStoryID($story->id, $story->type);
 
         $storyIdList = $storyID . ($story->relationStoryID ? "," . trim($story->relationStoryID, ',') : '') . ($story->twins ? "," . trim($story->twins, ',') : '');
-        $story->executions = $this->dao->select('t1.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $story->executions = $this->dao->select('t2.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
             ->andWhere('t1.story')->in($storyIdList)
             ->orderBy('t1.`order` DESC')
-            ->fetchAll('project');
+            ->fetchAll('id');
 
         $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($storyIdList)->orderBy('id DESC')->fetchGroup('execution');
 
