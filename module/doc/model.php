@@ -1217,7 +1217,7 @@ class docModel extends model
         if(!isset($doc->lib)) return false;
 
         /* Asset document don't check privilege. */
-        if(isset($doc->assetLibType) && $doc->assetLibType) return true;
+        if((isset($doc->assetLibType) && $doc->assetLibType) || $doc->type == 'article') return true;
 
         /* My document are accessible only to the creator. */
         if($doc->status == 'draft' && $doc->addedBy != $this->app->user->account) return false;
@@ -1443,7 +1443,7 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)
