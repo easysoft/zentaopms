@@ -8822,6 +8822,8 @@ class upgradeModel extends model
      */
     public function updateClassifyLang()
     {
+        if($this->app->clientLang == 'zh-cn') return true;
+
         $this->app->loadLang('install');
 
         foreach($this->lang->install->langList as $langInfo)
