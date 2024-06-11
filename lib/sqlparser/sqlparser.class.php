@@ -72,6 +72,20 @@ class sqlparser
     }
 
     /**
+     * Get origin table from table name or expr.
+     *
+     * @param  string    $table
+     * @access public
+     * @return string|array
+     */
+    public function getOriginTable($table)
+    {
+        $this->storeOriginTable($table);
+
+        return $table;
+    }
+
+    /**
      * Judge column exist in origin table or not.
      *
      * @param  string    $table
