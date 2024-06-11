@@ -91,6 +91,9 @@ class backup extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->backups = $backups;
 
+        $this->view->users['SYSTEM'] = $this->lang->admin->system;
+        $this->view->users['system'] = $this->lang->admin->system;
+
         if(trim($this->config->visions, ',') == 'lite')
         {
             $version     = $this->config->liteVersion;
