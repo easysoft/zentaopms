@@ -875,6 +875,23 @@ class biModel extends model
     }
 
     /**
+     * Parse sql.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return array
+     */
+    public function parseSql(string $sql): array
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+        $parser->setDAO($this->dao);
+        $parser->parseStatement();
+
+        return $parser->matchColumnsWithTable();
+    }
+
+    /**
      * Validate sql.
      *
      * @param  string    $sql
