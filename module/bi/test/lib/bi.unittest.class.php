@@ -8,6 +8,13 @@ class biTest
         $this->objectModel = $tester->loadModel('bi');
     }
 
+    /**
+     * Parse sql test
+     *
+     * @param  string    $sql
+     * @access public
+     * @return array
+     */
     public function parseSqlTest($sql)
     {
         $columns = $this->objectModel->parseSql($sql);
