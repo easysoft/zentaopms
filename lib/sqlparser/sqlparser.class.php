@@ -3,6 +3,23 @@ require __DIR__ . '/vendor/autoload.php';
 
 class sqlparser
 {
+    /**
+     * Parser object of SqlParser.
+     *
+     * @var object
+     * @access public
+     */
+    public $parser;
+
+
+    /**
+     * Statements of parser.
+     *
+     * @var array
+     * @access public
+     */
+    public $statements;
+
     public function __construct($query)
     {
         $query = $this->skipLineBreak($query);
