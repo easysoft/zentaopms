@@ -589,6 +589,8 @@ class docModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', true);
+
         return $this->processCollector($docs);
     }
 
@@ -2105,6 +2107,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', true);
 
         return $this->processCollector($docs);
     }
