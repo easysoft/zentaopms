@@ -323,6 +323,7 @@ class customModel extends model
         $module         = $menuModuleName;
         foreach($allMenu as $name => $item)
         {
+            $name = (string)$name;
             if(is_object($item)) $item = (array)$item;
 
             /* The variable of item has not link && is not link then ignore it. */
@@ -369,7 +370,7 @@ class customModel extends model
                 }
 
                 /* Process menu item's order and hidden attirbute. */
-                $menuItem = static::buildMenuItem($item, $customMenuMap, is_string($name) ? $name : '', $label, $itemLink, $isTutorialMode, $subMenu);
+                $menuItem = static::buildMenuItem($item, $customMenuMap, $name, $label, $itemLink, $isTutorialMode, $subMenu);
                 $menuItem->order = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order ++);
                 if($app->viewType == 'mhtml' && isset($config->custom->moblieHidden[$menuModuleName]) && in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1; // Hidden menu by config in mobile.
                 while(isset($menu[$menuItem->order])) $menuItem->order ++;
