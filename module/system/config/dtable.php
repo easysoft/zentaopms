@@ -54,15 +54,19 @@ $config->system->dtable->backup->fieldList['actions']['type']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['menu']  = array('restore', 'delete');
 $config->system->dtable->backup->fieldList['actions']['width'] = 0.1;
 
-$config->system->dtable->backup->fieldList['actions']['list']['restore']['icon'] = 'history';
-$config->system->dtable->backup->fieldList['actions']['list']['restore']['hint'] = $lang->backup->restore;
-$config->system->dtable->backup->fieldList['actions']['list']['restore']['url']  = array('module' => 'system', 'method' => 'restoreBackup', 'params' => 'name={name}');
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['icon']         = 'history';
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['text']         = $lang->backup->restore;
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['hint']         = $lang->backup->restore;
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['url']          = array('module' => 'system', 'method' => 'restoreBackup', 'params' => 'name={name}');
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['data-confirm'] = $lang->system->backup->confirmRestore;
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['className']    = 'ajax-submit';
 
-$config->system->dtable->backup->fieldList['actions']['list']['delete']['icon'] = 'trash';
-$config->system->dtable->backup->fieldList['actions']['list']['delete']['hint'] = $lang->delete;
-$config->system->dtable->backup->fieldList['actions']['list']['delete']['url']  = array('module' => 'system', 'method' => 'deleteBackup', 'params' => 'name={name}');
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['text']         = $lang->system->backup->delete;
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['hint']         = $lang->delete;
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['url']          = array('module' => 'system', 'method' => 'deleteBackup', 'params' => 'name={name}');
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->system->backup->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
 
 $config->system->dtable->instanceList = new stdclass();
 
