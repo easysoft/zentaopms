@@ -28,7 +28,7 @@ class demandLifeInfo extends wg
 
         $items = array();
         $items[$lang->demand->createdBy]    = zget($users, $demand->createdBy)  . $lang->at . $demand->createdDate;
-        $items[$lang->demand->assignedTo]   = zget($users, $demand->assignedTo) . $lang->at . (helper::isZeroDate($demand->assignedDate) ? '' : $demand->assignedDate);
+        $items[$lang->demand->assignedTo]   = $demand->assignedTo ? zget($users, $demand->assignedTo) . $lang->at . $demand->assignedDate : '';
         $items[$lang->demand->reviewer]     = $reviewerList;
         $items[$lang->demand->reviewedDate] = helper::isZeroDate($demand->reviewedDate) ? '' : $demand->reviewedDate;
         $items[$lang->demand->closedBy]     = zget($users, $demand->closedBy);
