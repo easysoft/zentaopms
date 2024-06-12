@@ -246,15 +246,15 @@ class pivotTao extends pivotModel
     protected function getAssignTask(array $deptUsers): array
     {
         return $this->dao->select(<<<EOT
-            t1.id,
-            IF(t1.mode = '', t1.assignedTo, t4.account) AS user,
-            IF(t1.mode = '', t1.left, t4.left) AS 'left',
-            t2.multiple,
-            t2.id AS executionID,
-            t2.name AS executionName,
-            t3.id AS projectID,
-            t3.name AS projectName
-        EOT)->from(TABLE_TASK)->alias('t1')
+t1.id,
+IF(t1.mode = '', t1.assignedTo, t4.account) AS user,
+IF(t1.mode = '', t1.left, t4.left) AS 'left',
+t2.multiple,
+t2.id AS executionID,
+t2.name AS executionName,
+t3.id AS projectID,
+t3.name AS projectName
+EOT)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
             ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t1.id=t4.task and t1.mode IN ('multi', 'linear')")
