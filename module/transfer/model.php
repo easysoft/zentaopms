@@ -192,7 +192,7 @@ class transferModel extends model
             $fieldList['mailto']['items']    = $this->transferConfig->sysDataList['user'];
         }
 
-        if($this->config->edition != 'open') $fieldList = $this->initWorkflowFieldList($module, $fieldList, $fields);
+        if($this->config->edition != 'open') $fieldList = $this->initWorkflowFieldList($module, $fieldList);
         return $fieldList;
     }
 
@@ -202,35 +202,54 @@ class transferModel extends model
      *
      * @param  string    $module
      * @param  array     $fieldList
-     * @param  array     $fields
      * @access protected
      * @return array
      */
-    protected function initWorkflowFieldList(string $module, array $fieldList, array $fields): array
+    protected function initWorkflowFieldList(string $module, array $fieldList): array
     {
         $this->loadModel($module);
-        /* Set workflow fields. */
-        $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
-            ->where('module')->eq($module)
-            ->andWhere('buildin')->eq(0)
-            ->fetchAll('id');
 
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+        $action     = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($moduleName)->andWhere('action')->eq($methodName)->fetch();
+
+        if(empty($action)) return $fieldList;
+        if($action->extensionType == 'none' and $action->buildin == 1) return $fieldList;
+
+        $layouts = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
+
+        $workflowFields = $this->loadModel('workflowaction')->getFields($moduleName, $methodName);
         foreach($workflowFields as $field)
         {
+            if(!empty($field->buildin)) continue;
+            if(empty($field->show)) continue;
+            if(!isset($layouts[$field->field])) continue;
+
+            $fieldList[$field->field]['name']  = $field->field;
+            $fieldList[$field->field]['label'] = $field->name;
+            $fieldList[$field->field]['title'] = $field->name;
+            $fieldList[$field->field]['from']  = 'workflow';
+
+            $fieldRules = explode(',', trim((string) $field->rules, ','));
+            $fieldRules = array_unique($fieldRules);
+            foreach($fieldRules as $ruleID)
+            {
+                if(!isset($rules[$ruleID])) continue;
+
+                $rule = $rules[$ruleID];
+                if($rule->type == 'system' and $rule->rule == 'notempty') $fieldList[$field->field]['required'] = true;
+            }
+
             if(!in_array($field->control, array('select', 'radio', 'multi-select', 'checkbox'))) continue;
-            if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
             if(empty($field->options)) continue;
 
             $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
             $options = $this->workflowfield->getFieldOptions($field, true);
             if($options)
             {
-                $fieldList[$field->field]['name']    = $field->field;
-                $fieldList[$field->field]['label']   = $field->name;
-                $fieldList[$field->field]['title']   = $field->name;
                 $fieldList[$field->field]['control'] = 'picker';
                 $fieldList[$field->field]['items']   = $options;
-                $fieldList[$field->field]['from']    = 'workflow';
                 if($field->control == 'multi-select') $fieldList[$field->field]['multiple'] = true;
 
                 $this->moduleListFields[] = $field->field;
