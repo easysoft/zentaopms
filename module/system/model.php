@@ -139,6 +139,8 @@ class systemModel extends model
     {
         if(empty($instance)) $instance = $this->config->instance->zentaopaas;
 
+        $this->setMaintenance('backup');
+
         $rawResult = $this->cne->backup($instance, $this->app->user->account, $mode);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
@@ -252,9 +254,23 @@ class systemModel extends model
 
         $maintenance = new stdclass();
         $maintenance->action = $action;
-        $maintenance->reason = $this->lang->system->maintenance[$action];
+        $maintenance->reason = zget($this->lang->system->maintenance->reason, $action, $this->lang->unknown);
 
         return $this->loadModel('setting')->setItem('system.system.maintenance', json_encode($maintenance));
+    }
+
+    /**
+     * 复原系统维护信息。
+     * Unset Maintenance message.
+     *
+     * @return void
+     */
+    public function unsetMaintenance(): void
+    {
+        $maintenance = $this->loadModel('setting')->getItem('owner=system&module=system&key=maintenance');
+        if(empty($maintenance)) return;
+
+        $this->setting->deleteItems('owner=system&module=system&key=maintenance');
     }
 
     /**

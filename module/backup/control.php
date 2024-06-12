@@ -75,6 +75,8 @@ class backup extends control
                 function cmp($left, $right){return $left->create_time < $right->create_time ? 1 : -1;}
                 usort($backups, 'cmp');
 
+                if(empty($operating)) $this->system->unsetMaintenance();
+
                 $this->view->operating = $operating;
             }
 
