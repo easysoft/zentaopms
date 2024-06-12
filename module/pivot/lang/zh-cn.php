@@ -177,6 +177,9 @@ $lang->pivot->workloadDesc  = '工作负载=用户所有任务剩余工时之和
 $lang->pivot->featureBar = array();
 $lang->pivot->featureBar['preview'] = array();
 
+$lang->pivot->moreSelects['preview'] = array();
+$lang->pivot->moreSelects['preview']['more'] = array();
+
 $lang->pivot->showProduct = '所有' . $lang->productCommon . '统计数据';
 $lang->pivot->showProject = '所有' . $lang->projectCommon . '统计数据';
 
