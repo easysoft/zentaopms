@@ -81,7 +81,10 @@ class backBtn extends btn
             'risk'           => 'risk-browse,risk-view',
             'todo'           => 'my-effort',
             'ticket'         => 'my-effort',
-            'designguide'    => 'designguide-browse,designguide-view' // For designguide plugin.
+            'designguide'    => 'designguide-browse,designguide-view', // For designguide plugin.
+            'deploy'         => 'deploy-browse,deploy-steps,deploy-scope,deploy-view,deploy-cases',
+            'service'        => 'service-browse,service-manage,service-view',
+            'domain'         => 'domain-browse,domain-view',
         );
 
         $props  = parent::getProps();
