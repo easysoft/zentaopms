@@ -29,22 +29,24 @@ class thinkResult extends wg
         list($wizard, $mode, $models) = $this->prop(array('wizard', 'mode', 'models'));
         return div
         (
-            setClass('think-result-content col items-center px-7 py-6'),
+            setClass('think-result-content col items-center px-7 py-6 gap-4 mx-auto'),
             div
             (
-                setClass('w-full h-10 text-center text-md py-2.5 ellipsis overflow-hidden whitespace-nowrap'),
+                setClass('w-full flex items-center justify-center ellipsis overflow-hidden whitespace-nowrap'),
+                setStyle(array('font-size' => '20px', 'height' => '30px')),
+                set::title($wizard->introduction),
                 $wizard->introduction ? $wizard->introduction : ($mode == 'preview' ? $lang->thinkwizard->introduction : '')
             ),
             div
             (
-                setClass('w-full my-4'),
+                setClass('w-full'),
                 setStyle('min-height', '200px'),
                 $this->buildModel(),
-                div(setClass('mt-4 text-center text-lg font-medium text-gray-950'), $models[$wizard->model])
+                div(setClass('mt-4 text-center font-bold text-gray-950'), setStyle(array('font-size' => '2rem')), $models[$wizard->model])
             ),
             div
             (
-                setClass('w-full text-center text-md py-2.5'),
+                setClass('w-full text-center text-md py-2.5 leading-5'),
                 html($wizard->suggestion ? htmlspecialchars_decode($wizard->suggestion) : ($mode == 'preview' ? $lang->thinkwizard->suggestion : ''))
             )
         );
