@@ -135,9 +135,6 @@ if($this->config->inQuickon)
 
     $config->system->dtable->backup->fieldList['actions']['actionsMap']['delete']['text'] = $config->system->dtable->backup->fieldList['actions']['list']['delete']['text'];
 
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['restore']['text'] = $config->system->dtable->backup->fieldList['actions']['list']['restore']['text'];
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['delete']['text']  = $config->system->dtable->backup->fieldList['actions']['list']['delete']['text'];
-
     dtable
     (
         set::customCols(false),
