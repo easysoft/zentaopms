@@ -47,8 +47,7 @@ class bug_concentration_of_developed_story_in_product extends baseCalc
             ->leftJoin("($developedStory)")->alias('t2')->on('t1.id = t2.product')
             ->leftJoin("($effectiveBug)")->alias('t3')->on('t1.id = t3.product')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.shadow')->eq(0)
-            ->query();
+            ->andWhere('t1.shadow')->eq(0);
     }
 
     public function calculate($data)
