@@ -3,6 +3,8 @@ $config->pivot = new stdclass();
 $config->pivot->widthInput = 128;
 $config->pivot->widthDate  = 248;
 
+$config->pivot->maxFeatureItem = 5;
+
 $config->pivot->fileType =  array('xlsx' => 'xlsx', 'xls' => 'xls', 'html' => 'html', 'mht' => 'mht');
 
 $config->pivot->create = new stdclass();
