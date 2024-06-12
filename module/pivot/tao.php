@@ -217,11 +217,18 @@ class pivotTao extends pivotModel
      */
     protected function getNoAssignExecution(array $deptUsers): array
     {
+        $assignedToList = $this->dao->select("DISTINCT IF(tt1.mode = '', tt1.assignedTo, tt2.account) AS assignedTo")->from(TABLE_TASK)->alias('tt1')
+            ->leftJoin(TABLE_TASKTEAM)->alias('tt2')->on("tt1.id=tt2.task AND tt1.mode IN ('multi', 'linear')")
+            ->where('tt1.status')->notIn('cancel,closed,done,pause')
+            ->andWhere("IF(tt1.mode = '', tt1.assignedTo, tt2.account)")->ne('')
+            ->andWhere('tt1.execution = t1.`root`')
+            ->get();
+
         return $this->dao->select('t1.account AS user, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
             ->where('t1.type')->eq('execution')
-            ->andWhere('t1.account NOT IN (SELECT DISTINCT `assignedTo` FROM ' . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN ('cancel', 'closed', 'done', 'pause') AND assignedTo != '')")
+            ->andWhere("t1.account NOT IN ($assignedToList)")
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
             ->beginIF($deptUsers)->andWhere('t1.account')->in($deptUsers)->fi()
@@ -238,14 +245,24 @@ class pivotTao extends pivotModel
      */
     protected function getAssignTask(array $deptUsers): array
     {
-        return $this->dao->select('t1.id, t1.assignedTo AS user, t1.left, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select(<<<EOT
+            t1.id,
+            IF(t1.mode = '', t1.assignedTo, t4.account) AS user,
+            IF(t1.mode = '', t1.left, t4.left) AS 'left',
+            t2.multiple,
+            t2.id AS executionID,
+            t2.name AS executionName,
+            t3.id AS projectID,
+            t3.name AS projectName
+        EOT)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
+            ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t1.id=t4.task and t1.mode IN ('multi', 'linear')")
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.parent')->ge(0)
             ->andWhere('t1.status')->in('wait,pause,doing')
-            ->andWhere('t1.assignedTo')->ne('')
-            ->beginIF($deptUsers)->andWhere('t1.assignedTo')->in($deptUsers)->fi()
+            ->andWhere("if(t1.mode = '', t1.assignedTo, t4.account)")->ne('')
+            ->beginIF($deptUsers)->andWhere("if(t1.mode = '', t1.assignedTo, t4.account)")->in($deptUsers)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.vision')->like('rnd')
             ->andWhere('t2.status')->in('wait,suspended,doing')
