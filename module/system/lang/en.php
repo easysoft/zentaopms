@@ -32,7 +32,7 @@ $lang->system->memUsage        = 'Memory（GB）';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;
-$lang->system->LDAP->info             = 'LDAP infomation';
+$lang->system->LDAP->info             = 'LDAP information';
 $lang->system->LDAP->ldapEnabled      = 'Enable LDAP';
 $lang->system->LDAP->ldapQucheng      = 'Built in Qucheng';
 $lang->system->LDAP->ldapSource       = 'Source';
@@ -185,7 +185,7 @@ $lang->system->backup->change       = 'Retention time';
 $lang->system->backup->changeAB     = 'modify';
 $lang->system->backup->rmPHPHeader  = 'Remove security settings';
 $lang->system->backup->setting      = 'Setting';
-$lang->system->backup->backupPerson = 'Backup person';
+$lang->system->backup->creator      = 'Backup creator';
 $lang->system->backup->type         = 'Backup type';
 
 $lang->system->backup->settingAction = 'Backup Settings';
@@ -213,12 +213,14 @@ $lang->system->backup->checkService = 'Check Service:';
 $lang->system->backup->upgrade  = 'Upgrade';
 $lang->system->backup->rollback = 'Rollback';
 $lang->system->backup->restart  = 'Restart';
-$lang->system->backup->delete   = 'Delte';
+$lang->system->backup->delete   = 'Delete';
 
-$lang->system->backup->statusList['pending']    = 'Waiting';
-$lang->system->backup->statusList['inprogress'] = 'In progress';
-$lang->system->backup->statusList['completed']  = 'Compelete';
-$lang->system->backup->statusList['failed']     = 'Fail';
+$lang->system->backup->statusList['pending']       = 'Waiting';
+$lang->system->backup->statusList['inprogress']    = 'In progress';
+$lang->system->backup->statusList['completed']     = 'Complete';
+$lang->system->backup->statusList['failed']        = 'Fail';
+$lang->system->backup->statusList['deleting']      = 'Deleting';
+$lang->system->backup->statusList['executeFailed'] = 'Execute failed';
 
 $lang->system->backup->restoreProgress['doing'] = 'Doing';
 $lang->system->backup->restoreProgress['done']  = 'Done';
@@ -227,14 +229,14 @@ $lang->system->backup->typeList['manual']  = 'Manual backup';
 $lang->system->backup->typeList['upgrade'] = 'Automatic backup before upgrade';
 $lang->system->backup->typeList['restore'] = 'Automatic backup before rollback';
 
-$lang->system->backup->waitting        = 'Backup is in progress, please wait...';
-$lang->system->backup->waittingStore   = 'Restoring app data, please wait...';
-$lang->system->backup->progress        = 'Backup in progress（%d/%d）';
+$lang->system->backup->waiting         = 'Backup is in progress, please wait...';
+$lang->system->backup->waitingStore    = 'Restoring app data, please wait...';
+$lang->system->backup->progress        = 'Backup in progress(%d/%d)';
 $lang->system->backup->progressStore   = 'Restoring, progress(%d/%d)';
 $lang->system->backup->progressSQL     = 'In backup，%s has been backed up';
 $lang->system->backup->progressAttach  = 'There are a total of %s files in the backup, and %s files have already been backed up';
 $lang->system->backup->progressCode    = 'There are a total of %s files in the backup, and %s files have already been backed up';
-$lang->system->backup->confirmDelete   = 'Do you want to delte the backup';
+$lang->system->backup->confirmDelete   = 'Do you want to delete the backup';
 $lang->system->backup->confirmRestore  = 'A restart is required during the platform restore process, which will cause all your current operations to be interrupted and cannot be restored. Are you sure you want to continue?';
 $lang->system->backup->holdDays        = 'Backup has been retained for the last %s days';
 $lang->system->backup->copiedFail      = 'Files that failed to copy:';
@@ -246,6 +248,8 @@ $lang->system->backup->backupTitle     = 'Backing up the channel platform...';
 $lang->system->backup->restoreTitle    = 'Rolling back the channel platform...';
 $lang->system->backup->backingUp       = 'In progress';
 $lang->system->backup->restoring       = 'In progress';
+$lang->system->backup->backupSucceed   = 'Backup succeed';
+$lang->system->backup->restoreSucceed  = 'Restore succeed';
 
 $lang->system->backup->success = new stdclass();
 $lang->system->backup->success->upgrade = 'Upgrade successful!';
@@ -259,3 +263,8 @@ $lang->system->backup->error->upgradeOvertime   = "Upgrade timed out!";
 $lang->system->backup->error->degradeFail       = "Downgrade failed!";
 $lang->system->backup->error->beenLatestVersion = "It is already the latest version, no upgrade required!";
 $lang->system->backup->error->requireVersion    = "Version number must be uploaded!";
+
+$lang->system->maintenance = new stdclass();
+$lang->system->maintenance->reason['backup']  = 'The platform is under backup, please visit later';
+$lang->system->maintenance->reason['restore'] = 'The platform is under restore, please visit later';
+$lang->system->maintenance->reason['upgrade'] = 'The platform is under upgrade, please visit later';

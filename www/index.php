@@ -79,6 +79,7 @@ try
 {
     $app->parseRequest();
     if(!$app->setParams()) helper::end();
+    $common->checkMaintenance();
     $common->checkPriv();
     if(!$common->checkIframe()) helper::end();
 

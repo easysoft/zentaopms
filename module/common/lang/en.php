@@ -154,6 +154,10 @@ $lang->serviceAgreement = "Service Agreement";
 $lang->privacyPolicy    = "Privacy Policy";
 $lang->needAgreePrivacy = "Please read the service agreement and privacy policy first";
 $lang->iAgreedPrivacy   = "I have read and agree";
+$lang->inMaintenance    = "The system is under the maintenance!";
+$lang->maintainReason   = "Reason: %s.";
+$lang->systemMaintainer = "Please contact the administrator if you have any question.";
+$lang->unknown          = "Unknown";
 
 $lang->preShortcutKey    = '[Shortcut:←]';
 $lang->nextShortcutKey   = '[Shortcut:→]';

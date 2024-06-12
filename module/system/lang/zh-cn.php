@@ -185,7 +185,7 @@ $lang->system->backup->change       = '保留时间';
 $lang->system->backup->changeAB     = '修改';
 $lang->system->backup->rmPHPHeader  = '去除安全设置';
 $lang->system->backup->setting      = '设置';
-$lang->system->backup->backupPerson = '备份人';
+$lang->system->backup->creator      = '创建者';
 $lang->system->backup->type         = '备份类型';
 
 $lang->system->backup->settingAction = '备份设置';
@@ -215,20 +215,22 @@ $lang->system->backup->rollback = '回滚';
 $lang->system->backup->restart  = '重启';
 $lang->system->backup->delete   = '删除';
 
-$lang->system->backup->statusList['pending']    = '等待中';
-$lang->system->backup->statusList['inprogress'] = '进行中';
-$lang->system->backup->statusList['completed']  = '完成';
-$lang->system->backup->statusList['failed']     = '失败';
+$lang->system->backup->statusList['pending']       = '等待中';
+$lang->system->backup->statusList['inprogress']    = '进行中';
+$lang->system->backup->statusList['completed']     = '完成';
+$lang->system->backup->statusList['failed']        = '失败';
+$lang->system->backup->statusList['deleting']      = '删除中';
+$lang->system->backup->statusList['executeFailed'] = '执行失败';
 
 $lang->system->backup->restoreProgress['doing'] = '进行中';
 $lang->system->backup->restoreProgress['done']  = '完成';
 
 $lang->system->backup->typeList['manual']  = '手动备份';
 $lang->system->backup->typeList['upgrade'] = '升级前自动备份';
-$lang->system->backup->typeList['restore'] = '回滚前自动备份';
+$lang->system->backup->typeList['restore'] = '还原前自动备份';
 
-$lang->system->backup->waitting        = '备份正在进行中，请稍候...';
-$lang->system->backup->waittingStore   = '正在还原应用数据，请稍候...';
+$lang->system->backup->waiting         = '备份正在进行中，请稍候...';
+$lang->system->backup->waitingStore    = '正在还原应用数据，请稍候...';
 $lang->system->backup->progress        = '备份中，进度（%d/%d）';
 $lang->system->backup->progressStore   = '还原中，进度（%d/%d）';
 $lang->system->backup->progressSQL     = '备份中，已备份%s';
@@ -246,6 +248,8 @@ $lang->system->backup->backupTitle     = '正在备份 渠成平台...';
 $lang->system->backup->restoreTitle    = '正在回滚 渠成平台...';
 $lang->system->backup->backingUp       = '进行中';
 $lang->system->backup->restoring       = '进行中';
+$lang->system->backup->backupSucceed   = '备份成功';
+$lang->system->backup->restoreSucceed  = '还原成功';
 
 $lang->system->backup->success = new stdclass();
 $lang->system->backup->success->upgrade = '升级成功！';
@@ -259,3 +263,8 @@ $lang->system->backup->error->upgradeOvertime   = "升级超时!";
 $lang->system->backup->error->degradeFail       = "降级失败!";
 $lang->system->backup->error->beenLatestVersion = "已经是最新版，无需升级!";
 $lang->system->backup->error->requireVersion    = "必须上传版本号!";
+
+$lang->system->maintenance = new stdclass();
+$lang->system->maintenance->reason['backup']  = '平台正在备份中，请稍后访问';
+$lang->system->maintenance->reason['restore'] = '平台正在恢复中，请稍后访问';
+$lang->system->maintenance->reason['upgrade'] = '平台正在升级中，请稍后访问';

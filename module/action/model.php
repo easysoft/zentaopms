@@ -664,25 +664,22 @@ class actionModel extends model
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
 
-        if($action->objectType == 'board')
+        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
         {
-            if(in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
+            if($action->action == 'importstory' || $action->action == 'importrequirement')
             {
-                if($action->action == 'importstory' || $action->action == 'importrequirement')
-                {
-                    $story = $this->loadModel('story')->getById((int)$action->extra);
-                    $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
-                }
-                if($action->action == 'importdemand')
-                {
-                    $story = $this->loadModel('demand')->getByID((int)$action->extra);
-                    $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
-                }
-
-                $link .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-                $replace = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
-                $actionDesc = str_replace('$extra', $replace, $desc['main']);
+                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
+            if($action->action == 'importdemand')
+            {
+                $story = $this->loadModel('demand')->getByID((int)$action->extra);
+                $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
+            }
+
+            $link      .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+            $replace    = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
+            $actionDesc = str_replace('$extra', $replace, $desc['main']);
         }
         return $actionDesc;
     }
@@ -996,6 +993,7 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $projectID  = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
+            $this->loadModel($action->objectType);
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->{$objectType}->{$actionType}) ? $this->lang->{$objectType}->{$actionType} : $action->action;

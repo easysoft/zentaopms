@@ -1107,6 +1107,33 @@ class commonModel extends model
     }
 
     /**
+     * 检查系统是否处于维护状态，如果处于维护状态则给非管理员用户输出提示。
+     * Check whether system in maintenance status and show message for non-admin user.
+     *
+     * @return void
+     */
+    public function checkMaintenance()
+    {
+        $maintenance = $this->loadModel('setting')->getItem('owner=system&module=system&key=maintenance');
+        if(empty($maintenance)) return true;
+
+        $maintenance = json_decode($maintenance);
+        if(!empty($this->app->user->admin)) return true;
+
+        if(isset($maintenance->action) && in_array($maintenance->action, array('upgrade', 'downgrade', 'restore'))) helper::setStatus(503);
+
+        $reason  = sprintf($this->lang->maintainReason, isset($maintenance->reason) ? $maintenance->reason : $this->lang->unknown);
+        $message = <<<eof
+<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>
+<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>
+<h4>{$this->lang->inMaintenance}</h4>
+<p>{$reason}{$this->lang->systemMaintainer}</p>
+</td></tr></table></body></html>'
+eof;
+        helper::end($message);
+    }
+
+    /**
      * 禅道鉴权核心方法，如果用户没有当前模块、方法的权限，则跳转到登录页面或者拒绝页面。
      * Check the user has permission to access this method, if not, locate to the login page or deny page.
      *
@@ -1260,6 +1287,7 @@ class commonModel extends model
         if(isset($config->{$module}->groupPrivs[$method]))
         {
             $groupPriv = strtolower($config->{$module}->groupPrivs[$method]);
+            if(strpos($groupPriv, '|') !== false) list($module, $groupPriv) = explode('|', $groupPriv);
             if($groupPriv && $groupPriv != $method) return self::hasPriv($module, $groupPriv, $object, $vars);
         }
 

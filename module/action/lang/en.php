@@ -530,6 +530,14 @@ $lang->action->label->unpublished             = 'unpublished';
 $lang->action->label->aiassistant             = 'AI Assistant';
 $lang->action->label->synced                  = 'synced';
 $lang->action->label->imported                = 'imported';
+$lang->action->label->createbackup            = 'Created system backup';
+$lang->action->label->deletebackup            = 'Deleted system backup';
+$lang->action->label->restorebackup           = 'Restored system backup';
+$lang->action->label->upgradesystem           = 'Executed system upgrade';
+$lang->action->label->system                  = '';
+$lang->action->label->aiassistant             = 'AI Assistant';
+$lang->action->label->synced                  = 'synced';
+$lang->action->label->imported                = 'imported';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
