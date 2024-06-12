@@ -134,7 +134,7 @@ $tabs[] = setting()
 
 detail
 (
-    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module, '{confirmeObjectID}' => $bug->confirmeObjectID)),
+    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module, '{confirmeObjectID}' => isset($bug->confirmeObjectID) ? $bug->confirmeObjectID : 0)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
