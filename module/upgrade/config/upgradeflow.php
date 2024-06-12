@@ -97,7 +97,7 @@ $config->upgrade->execFlow['20_0_alpha1'] = array('functions' => 'revertStoryCus
 $config->upgrade->execFlow['20_0_beta1']  = array('functions' => 'hideOA,updateMetricDateType,update18101,migrateAIModelConfig');
 $config->upgrade->execFlow['20_0_beta2']  = array('functions' => 'updateWorkflowFieldDefaultValue,update1811,updateZeroDateToNull,updateProgramplanCustom');
 $config->upgrade->execFlow['20_0']        = array('functions' => 'openCacheByAPCu');
-$config->upgrade->execFlow['20_1_0']      = array('functions' => 'updateClassifyLang');
+$config->upgrade->execFlow['20_1_0']      = array('functions' => 'completeClassifyLang');
 
 if(!empty($config->isINT))
 {
