@@ -13,6 +13,7 @@ $lang->message->browserSetting = new stdclass();
 $lang->message->browserSetting->turnon   = 'Notification';
 $lang->message->browserSetting->pollTime = 'Intervalle';
 
+$lang->message->browserSetting->pollTimeTip         = 'Polling time can not less than 30 seconds.';
 $lang->message->browserSetting->pollTimePlaceholder = 'Notifier les intervalles de temps pour la recherche par secondes.';
 
 $lang->message->browserSetting->turnonList[1] = 'On';

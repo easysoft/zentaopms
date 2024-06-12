@@ -34,6 +34,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
+            set::required(true),
             set::label($lang->message->browserSetting->pollTime),
             set::name('pollTime'),
             set::value($browserConfig->pollTime)
