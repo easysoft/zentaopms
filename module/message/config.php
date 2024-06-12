@@ -40,5 +40,6 @@ $config->message->setting['webhook']['setting']  = $config->message->available['
 $config->message->setting['mail']['setting']     = $config->message->available['mail'];
 
 $config->message->browser = new stdclass();
-$config->message->browser->turnon   = 1;
-$config->message->browser->pollTime = 300;
+$config->message->browser->turnon      = 1;
+$config->message->browser->pollTime    = 300;
+$config->message->browser->minPollTime = 30;

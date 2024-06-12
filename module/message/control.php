@@ -45,6 +45,8 @@ class message extends control
         if($_POST)
         {
             $data = fixer::input('post')->get();
+            if(empty($data->pollTime)) $this->send(array('result' => 'fail', 'message' => array('pollTime' => sprintf($this->lang->error->notempty, $this->lang->message->browserSetting->pollTime))));
+            if($data->pollTime < $this->config->message->browser->minPollTime) $this->send(array('result' => 'fail', 'message' => array('pollTime' => $this->lang->message->browserSetting->pollTimeTip)));
 
             $browserConfig = new stdclass();
             $browserConfig->turnon   = $data->turnon;
