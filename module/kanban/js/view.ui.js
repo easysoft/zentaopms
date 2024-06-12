@@ -320,13 +320,13 @@ window.renderTicketItem = function(info)
     const date = info.item.deadline && info.item.deadline != '0000-00-00' ? '<span class="ml-2 label gray-pale">' + info.item.deadline.slice(5) + ' ' + cardLang.deadlineAB + '</span>' : '';
 
     let avatar = '';
-    console.log(info.item.assignedTo);
     if(info.item.assignedTo && typeof userList[info.item.assignedTo] != 'undefined')
     {
-        user       = userList[info.item.assignedTo];
-        assignedTo = user.realname;
-        userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : assignedTo.substr(0, 1).toUpperCase();
-        avatar     = "<span class='avatar rounded-full size-xs ml-1 primary' title=" + assignedTo + '>' + userAvatar + '</span>';
+        const user       = userList[info.item.assignedTo];
+        const assignedTo = user.realname;
+        const userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : assignedTo.substr(0, 1).toUpperCase();
+
+        avatar = "<span class='avatar rounded-full size-xs ml-1 primary' title=" + assignedTo + '>' + userAvatar + '</span>';
     }
     const content = `
       <div class='flex items-center'>

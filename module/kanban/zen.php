@@ -69,7 +69,7 @@ class kanbanZen extends kanban
      * @access public
      * @return void
      */
-    public function setUserAvatar()
+    public function setUserAvatar(): void
     {
         /* Get user list. */
         $userList    = array();
