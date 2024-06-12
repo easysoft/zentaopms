@@ -535,6 +535,8 @@ $lang->action->label->deletebackup            = '删除了系统备份';
 $lang->action->label->restorebackup           = '还原了系统备份';
 $lang->action->label->upgradesystem           = '执行了系统升级';
 $lang->action->label->system                  = '';
+$lang->action->label->synced                  = '同步了';
+$lang->action->label->imported                = '导入了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
