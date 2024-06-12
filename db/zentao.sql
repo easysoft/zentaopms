@@ -14547,7 +14547,16 @@ REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
 ('all', 'process', 'classify', 'engineering', '工程支持', '1'),
-('all', 'process', 'classify', 'project', '项目管理', '1');
+('all', 'process', 'classify', 'project', '项目管理', '1'),
+('all', 'process', 'scrumClassify', 'support', '支持过程', '1'),
+('all', 'process', 'scrumClassify', 'engineering', '工程支持', '1'),
+('all', 'process', 'scrumClassify', 'project', '项目管理', '1'),
+('all', 'process', 'agileplusClassify', 'support', '支持过程', '1'),
+('all', 'process', 'agileplusClassify', 'engineering', '工程支持', '1'),
+('all', 'process', 'agileplusClassify', 'project', '项目管理', '1'),
+('all', 'process', 'waterfallplusClassify', 'support', '支持过程', '1'),
+('all', 'process', 'waterfallplusClassify', 'engineering', '工程支持', '1'),
+('all', 'process', 'waterfallplusClassify', 'project', '项目管理', '1');
 
 REPLACE INTO `zt_process` (`id`, `model`, `name`, `type`, `abbr`, `desc`, `assignedTo`, `status`, `order`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `assignedBy`, `assignedDate`, `deleted`) VALUES
 (11, 'waterfall', '立项管理', 'project', 'PIM', '', '', '', 55, 'admin', '2020-01-09 10:29:55', '', '1970-01-01 00:00:01', '', '1970-01-01 00:00:01', '0'),

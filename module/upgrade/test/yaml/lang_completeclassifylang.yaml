@@ -1,0 +1,26 @@
+title: table zt_lang
+desc: "语言项"
+author: Fangzhou Hu
+version: "1.0"
+fields:
+  - field: lang
+    note: "语言"
+    range: all
+  - field: module
+    note: "模块"
+    range: process
+  - field: section
+    note: "板块"
+    range: waterfall{3},agileplusClassify{3},waterfallplusClassify{2}
+  - field: key
+    note: "键"
+    range: support,engineering,project
+  - field: value
+    note: "值"
+    range: 支持过程,工程支持,项目管理
+  - field: system
+    note: "是否系统内置"
+    range: 1
+  - field: vision
+    note: "界面"
+    range: rnd
