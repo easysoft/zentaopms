@@ -4116,10 +4116,10 @@ $config->group->package->manageResearchTask->privs['researchtask-start']        
 $config->group->package->manageResearchTask->privs['researchtask-recordWorkhour'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('marketresearch-task', 'researchtask-view'));
 $config->group->package->manageResearchTask->privs['researchtask-editEffort']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 35, 'depend' => array('marketresearch-task', 'researchtask-view'), 'recommend' => array('researchtask-recordWorkhour', 'researchtask-deleteWorkhour'));
 $config->group->package->manageResearchTask->privs['researchtask-deleteWorkhour'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('marketresearch-task', 'researchtask-view'), 'recommend' => array('researchtask-recordWorkhour', 'researchtask-editEffort'));
-$config->group->package->manageResearchTask->privs['researchtask-finish']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 35, 'depend' => array('marketresearch-task', 'researchtask-view'));
-$config->group->package->manageResearchTask->privs['researchtask-activate']       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('marketresearch-task', 'researchtask-view'));
-$config->group->package->manageResearchTask->privs['researchtask-close']          = array('edition' => 'ipd', 'vision' => 'or', 'order' => 45, 'depend' => array('marketresearch-task', 'researchtask-view'));
-$config->group->package->manageResearchTask->privs['researchtask-cancel']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('marketresearch-task', 'researchtask-view'));
+$config->group->package->manageResearchTask->privs['researchtask-finish']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 45, 'depend' => array('marketresearch-task', 'researchtask-view'));
+$config->group->package->manageResearchTask->privs['researchtask-activate']       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('marketresearch-task', 'researchtask-view'));
+$config->group->package->manageResearchTask->privs['researchtask-close']          = array('edition' => 'ipd', 'vision' => 'or', 'order' => 55, 'depend' => array('marketresearch-task', 'researchtask-view'));
+$config->group->package->manageResearchTask->privs['researchtask-cancel']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 60, 'depend' => array('marketresearch-task', 'researchtask-view'));
 
 $config->group->package->deleteResearchTask = new stdclass();
 $config->group->package->deleteResearchTask->subset = 'researchtask';
