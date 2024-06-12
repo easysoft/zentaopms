@@ -530,6 +530,8 @@ $lang->action->label->unpublished             = '下架了';
 $lang->action->label->aiassistant             = 'AI 助手';
 $lang->action->label->synced                  = '同步了';
 $lang->action->label->imported                = '导入了';
+$lang->action->label->createbackup            = '创建了系统备份';
+$lang->action->label->system                  = '';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
