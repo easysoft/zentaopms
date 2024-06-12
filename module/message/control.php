@@ -45,12 +45,16 @@ class message extends control
         if($_POST)
         {
             $data = fixer::input('post')->get();
-            if(empty($data->pollTime)) $this->send(array('result' => 'fail', 'message' => array('pollTime' => sprintf($this->lang->error->notempty, $this->lang->message->browserSetting->pollTime))));
-            if($data->pollTime < $this->config->message->browser->minPollTime) $this->send(array('result' => 'fail', 'message' => array('pollTime' => $this->lang->message->browserSetting->pollTimeTip)));
 
             $browserConfig = new stdclass();
             $browserConfig->turnon   = $data->turnon;
-            $browserConfig->pollTime = $data->pollTime;
+            $browserConfig->pollTime = (int)$data->pollTime;
+
+            if($browserConfig->turnon)
+            {
+                if(empty($browserConfig->pollTime)) $this->send(array('result' => 'fail', 'message' => array('pollTime' => sprintf($this->lang->error->notempty, $this->lang->message->browserSetting->pollTime))));
+                if($browserConfig->pollTime < $this->config->message->browser->minPollTime) $this->send(array('result' => 'fail', 'message' => array('pollTime' => $this->lang->message->browserSetting->pollTimeTip)));
+            }
 
             $this->loadModel('setting')->setItems('system.message.browser', $browserConfig);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
