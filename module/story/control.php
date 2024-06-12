@@ -334,6 +334,8 @@ class story extends control
         $this->story->replaceURLang($storyType);
         $this->storyZen->setMenuForBatchEdit($productID, $executionID, $storyType, $from);
 
+        if($this->config->vision != 'or') unset($this->config->story->form->batchEdit['roadmap']);
+
         /* Load model. */
         $this->loadModel('productplan');
         if($this->post->title)
