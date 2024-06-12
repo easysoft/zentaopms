@@ -1,9 +1,3 @@
-$(function()
-{
-    const options  = zui.DTable.query().options;
-    initialOptions = $.extend(true, {}, options);
-});
-
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
@@ -77,10 +71,10 @@ window.onRenderCell = function(result, {row, col})
 
 window.deformation = function(event)
 {
-    let newData      = [];
-    const options    = zui.DTable.query().options;
-    const product    = $(event.target).closest('a').data('product');
-    const oldOptions = $.extend(true, {}, initialOptions);
+    let newData   = [];
+    const options = zui.DTable.query().options;
+    const product = $(event.target).closest('a').data('product');
+    const oldData = JSON.parse(JSON.stringify(options.taskData));
 
     if($(event.target).closest('a').find('span').hasClass('is-collapsed'))
     {
@@ -89,10 +83,10 @@ window.deformation = function(event)
             if(!options.data[index]) return;
             if(options.data[index].product == product)
             {
-                $.each(oldOptions.data, function(key)
+                $.each(oldData, function(key)
                 {
-                    if(!oldOptions.data[key]) return;
-                    if(oldOptions.data[key].product == product) newData.push(oldOptions.data[key]);
+                    if(!oldData[key]) return;
+                    if(oldData[key].product == product) newData.push(oldData[key]);
                 });
             }
             else
@@ -110,11 +104,11 @@ window.deformation = function(event)
         {
             return option.product != product || option.rowspan != 0;
         });
-        $.each(options.data, function(index)
+        $.each(options.data, function(index, data)
         {
-            if(options.data[index] && options.data[index].product == product)
+            if(data && data.product == product)
             {
-                options.data[index].id      = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
+                options.data[index].id      = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + data.rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
                 options.data[index].colspan = 10;
                 options.data[index].hidden  = 1;

@@ -61,6 +61,7 @@ dtable
     set::cols($config->project->dtable->testtask->fieldList),
     set::data($tasks),
     set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::taskData($tasks),
     set::userMap($users),
     set::orderBy($orderBy),
     set::sortLink(createLink('project', 'testtask', "projectID={$project->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
