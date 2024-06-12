@@ -441,7 +441,6 @@ $config->delete['17_8'][] = 'extension/max/common/ext/lang/fr/crystal.php';
 $config->delete['17_8'][] = 'extension/max/common/ext/lang/vi/crystal.php';
 $config->delete['18_0'][] = 'extension/max/custom/ext/view/mode.zentaomax.html.hook.php';
 $config->delete['18_0'][] = 'extension/max/my/ext/view/audit.html.php';
-$config->delete['18_0'][] = 'extension/max/block/ext/config/zentaomax.php';
 $config->delete['18_0'][] = 'extension/biz/repo/ext/control/ajaxgetcommitinfo.php';
 $config->delete['18_0'][] = 'extension/biz/repo/ext/control/ajaxgetbranchesandtags.php';
 $config->delete['18_0'][] = 'extension/biz/repo/ext/control/ajaxgetbranchesandtags.php';

@@ -1159,6 +1159,7 @@ EOT;
     {
         $js  = static::start();
         $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
+        $js .= "else if($window.zui) { $window.zui.Modal.hide(); " . ($callback && $callback != 'null' ? "($callback)();" : '') . '}';
         $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal($callback, '$location');}";
         $js .= static::end();
         return $js;
