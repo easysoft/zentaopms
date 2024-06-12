@@ -25,20 +25,18 @@ if($this->config->edition != 'open')
 jsVar('dimensionID', $dimensionID);
 jsVar('groupID', $groupID);
 
-$items = array();
-foreach($groups as $id => $name)
-{
-    $items[] = array
-    (
-        'text' => $name,
-        'value' => $id,
-        'url' => inlink('preview', "dimension={$dimensionID}&group={$id}"),
-        'badge' => $id == $groupID ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
-        'active' => $id == $groupID
-    );
-}
+$commonGroups = array_slice($groups, 0, $config->pivot->maxFeatureItem, true);
+$moreGroups   = array_slice($groups, $config->pivot->maxFeatureItem, null, true);
 
-featureBar(set::items($items));
+foreach($commonGroups as $id => $name) $lang->pivot->featureBar['preview'][$id] = $name;
+if(!empty($moreGroups)) $lang->pivot->featureBar['preview']['more'] = $lang->more;
+foreach($moreGroups as $id => $name) $lang->pivot->moreSelects['preview']['more'][$id] = $name;
+
+featureBar
+(
+    set::current($groupID),
+    set::linkParams("dimension={$dimensionID}&group={key}"),
+);
 
 if($config->edition != 'open')
 {
