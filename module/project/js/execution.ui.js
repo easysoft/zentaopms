@@ -53,7 +53,8 @@ window.onRenderCell = function(result, {col, row})
         return result;
     }
     if(col.name == 'rawID' && row.data.parent && !row.data.isExecution) result[0] = '';
-    if(['estimate', 'consumed','left'].includes(col.name) && result) result[0] = {html: result[0] + ' h'};
+    if(['estimate', 'consumed','left'].includes(col.name) && result) result[0] = row.data.type == 'point' ? '' : {html: result[0] + ' h'};
+    if(col.name == 'progress' && row.data.type == 'point') result[0] = '';
 
     return result;
 }

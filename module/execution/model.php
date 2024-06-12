@@ -4782,7 +4782,7 @@ class executionModel extends model
             $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
-            if(!empty($execution->tasks)) $rows = $this->appendTasks($execution->tasks, $rows);
+            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows);
             if(!empty($execution->points)) $rows = $this->appendPoints($execution->points, $rows);
         }
 
