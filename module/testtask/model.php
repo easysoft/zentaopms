@@ -152,7 +152,7 @@ class testtaskModel extends model
      */
     public function getProjectTasks(int $projectID, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $tasks = $this->dao->select('t1.*, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName')
+        $tasks = $this->dao->select('t1.*, t1.id as idAB, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.order as productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
@@ -161,7 +161,7 @@ class testtaskModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)
+            ->orderBy('productOrder_asc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id');
 

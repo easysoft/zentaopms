@@ -179,7 +179,7 @@ detail
         set::parentTitleProps(array('data-load' => 'modal')),
         to::title(to::leading(label(setClass('gray-pale rounded-full'), $lang->task->childrenAB)))
     ) : null,
-    set::urlFormatter(array('{id}' => $task->id, '{parent}' => $task->parent, '{execution}' => $task->execution, '{confirmeObjectID}' => $task->confirmeObjectID)),
+    set::urlFormatter(array('{id}' => $task->id, '{parent}' => $task->parent, '{execution}' => $task->execution, '{confirmeObjectID}' => isset($task->confirmeObjectID) ? $task->confirmeObjectID : 0)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
