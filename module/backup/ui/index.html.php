@@ -130,10 +130,11 @@ if($this->config->inQuickon)
     $data = null;
     if(!empty($backups)) $data = initTableData($backups, $config->system->dtable->backup->fieldList, $this->system);
 
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['restore']['text']     = $config->system->dtable->backup->fieldList['actions']['list']['restore']['text'];
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['restore']['disabled'] = !empty($operating);
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['delete']['text']      = $config->system->dtable->backup->fieldList['actions']['list']['delete']['text'];
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['delete']['disabled']  = !empty($operating);
+    foreach($data as &$backup) foreach($backup->actions as &$action) $action['disabled'] = !empty($operating);
+
+    /* Add the display text to the icon. */
+    $config->system->dtable->backup->fieldList['actions']['actionsMap']['restore']['text'] = $config->system->dtable->backup->fieldList['actions']['list']['restore']['text'];
+    $config->system->dtable->backup->fieldList['actions']['actionsMap']['delete']['text']  = $config->system->dtable->backup->fieldList['actions']['list']['delete']['text'];
 
     dtable
     (
