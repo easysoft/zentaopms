@@ -506,8 +506,8 @@ class upgradeModel extends model
      */
     private function checkFieldTypeDiff($stdField, $dbField)
     {
-        $stdConfigs = explode(' ', $stdField);
-        $dbConfigs  = explode(' ', $dbField);
+        $stdConfigs = preg_split('/\s+/', $stdField);
+        $dbConfigs  = preg_split('/\s+/', $dbField);
 
         $stdType = $stdConfigs[1];
         $dbType  = $dbConfigs[1];
@@ -541,7 +541,7 @@ class upgradeModel extends model
         }
         elseif($dbIsVarchar)
         {
-            if($stdIsInt || $stdIsFloat || $stdIsText) return true;
+            if($stdIsText) return true;
             if($dbLength && $stdLength > $dbLength) return true;
         }
 
