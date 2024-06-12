@@ -1324,7 +1324,8 @@ class storyModel extends model
         }
 
         $story->reviewer = implode(',', $story->reviewer);
-        if($story->reviewer) $story->status = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') ? 'launched' : 'reviewing';
+        if($story->reviewer) $story->status = 'reviewing';
+        if($this->config->systemMode == 'PLM' && $this->config->vision == 'rnd' && $oldStory->type == 'requirement' && $story->status == 'active') $story->status = 'launched';
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->in($twinsIdList)->exec();
 

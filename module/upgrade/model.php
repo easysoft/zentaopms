@@ -8816,4 +8816,46 @@ class upgradeModel extends model
     {
         return $this->loadModel('install')->enableDaoCache();
     }
+
+    /**
+     * 补充分类项语言项。
+     * Complete classify lang.
+     *
+     * @access public
+     * @return bool
+     */
+    public function completeClassifyLang()
+    {
+        $this->app->loadLang('install');
+
+        $classifyLang = $this->dao->select('*')->from(TABLE_LANG)
+            ->where('lang')->eq('all')
+            ->andWhere('module')->eq('process')
+            ->andWhere('section')->in(array('scrumClassify', 'agileplusClassify', 'waterfallplusClassify'))
+            ->andWhere('`key`')->in(array('support', 'engineering', 'project'))
+            ->andWhere('vision')->eq('rnd')
+            ->fetchGroup('section', 'key');
+
+        foreach(array('scrum', 'agileplus', 'waterfallplus') as $modal)
+        {
+            foreach($this->lang->install->langList as $langInfo)
+            {
+                if($langInfo['module'] != 'process') continue;
+                if(isset($classifyLang[$modal . 'Classify'][$langInfo['key']])) continue;
+
+                $classifyData = new stdclass();
+                $classifyData->lang    = 'all';
+                $classifyData->module  = 'process';
+                $classifyData->section = $modal . 'Classify';
+                $classifyData->key     = $langInfo['key'];
+                $classifyData->value   = $langInfo['value'];
+                $classifyData->vision  = 'rnd';
+                $classifyData->system  = 1;
+
+                $this->dao->replace(TABLE_LANG)->data($classifyData)->exec();
+            }
+        }
+
+        return true;
+    }
 }

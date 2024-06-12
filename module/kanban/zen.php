@@ -61,4 +61,30 @@ class kanbanZen extends kanban
 
         $this->display();
     }
+
+    /**
+     * 设置用户头像。
+     * Set user avatar data.
+     *
+     * @access public
+     * @return void
+     */
+    public function setUserAvatar(): void
+    {
+        /* Get user list. */
+        $userList    = array();
+        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $avatarPairs = $this->user->getAvatarPairs('all');
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar']   = $avatar;
+        }
+        $userList['closed']['account']  = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar']   = '';
+
+        $this->view->userList = $userList;
+    }
 }

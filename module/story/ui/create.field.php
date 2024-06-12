@@ -120,6 +120,7 @@ $fields->field('pri')
 
 $fields->field('estimate')
     ->width('1/4')
+    ->control(array('control' => 'number'))
     ->required($createFields['estimate']['required'])
     ->label($lang->story->estimateAB . $lang->story->estimateUnit)
     ->value($createFields['estimate']['default']);
