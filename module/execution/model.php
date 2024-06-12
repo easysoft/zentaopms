@@ -4827,6 +4827,7 @@ class executionModel extends model
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             $task->begin         = $task->estStarted;
             $task->end           = $task->deadline;
+            $task->PM            = $task->assignedTo;
 
             $rows[] = $task;
         }

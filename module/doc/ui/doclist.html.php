@@ -10,13 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('iconList', $config->doc->iconList);
-jsVar('draftText', $lang->doc->draft);
-jsVar('canViewDoc', common::hasPriv('doc', 'view'));
-jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
-jsVar('currentAccount', $app->user->account);
-jsVar('currentTab', $app->tab);
-
 $cols = array();
 foreach($config->doc->dtable->fieldList as $colName => $col)
 {
@@ -31,6 +24,13 @@ $tableData     = empty($docs) ? array() : initTableData($docs, $cols);
 $createDocLink = '';
 if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html");
 $docContent = dtable(
+    setID('docTable'),
+    set::iconList($config->doc->iconList),
+    set::draftText($lang->doc->draft),
+    set::canViewDoc(common::hasPriv('doc', 'view')),
+    set::canCollect(common::hasPriv('doc', 'collect') && $libType && $libType != 'api'),
+    set::currentAccount($app->user->account),
+    set::currentTab($app->tab),
     set::module($this->app->moduleName),
     set::userMap($users),
     set::cols($cols),
