@@ -260,6 +260,20 @@ class systemModel extends model
     }
 
     /**
+     * 复原系统维护信息。
+     * Unset Maintenance message.
+     *
+     * @return void
+     */
+    public function unsetMaintenance(): void
+    {
+        $maintenance = $this->loadModel('setting')->getItem('owner=system&module=system&key=maintenance');
+        if(empty($maintenance)) return;
+
+        $this->setting->deleteItems('owner=system&module=system&key=maintenance');
+    }
+
+    /**
      * 从云API服务器获取最新的发布版本。
      * Get the latest release from cloud API server.
      *
