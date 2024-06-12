@@ -184,7 +184,7 @@ class mail extends control
 
         foreach($queueList as $queue)
         {
-            $log = $this->mailZen->sendQueues($queue, true);
+            $log = $this->mailZen->sendQueue($queue, true);
             if($log) echo $log['message'];
         }
 
