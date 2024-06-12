@@ -1278,8 +1278,6 @@ eof;
         global $app;
         if(empty($app->user->account)) return false;
 
-        if($object) return self::getUserPriv($module, $method, $object, $vars);
-
         $module = strtolower($module);
         $method = strtolower($method);
 
@@ -1288,8 +1286,14 @@ eof;
         {
             $groupPriv = strtolower($config->{$module}->groupPrivs[$method]);
             if(strpos($groupPriv, '|') !== false) list($module, $groupPriv) = explode('|', $groupPriv);
-            if($groupPriv && $groupPriv != $method) return self::hasPriv($module, $groupPriv, $object, $vars);
+            if($groupPriv && $groupPriv != $method)
+            {
+                if($object) return self::getUserPriv($module, $groupPriv, $object, $vars);
+                return self::hasPriv($module, $groupPriv, $object, $vars);
+            }
         }
+
+        if($object) return self::getUserPriv($module, $method, $object, $vars);
 
         if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
 
