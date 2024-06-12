@@ -455,6 +455,7 @@ class control extends baseControl
     public function getFlowExportFields()
     {
         if($this->config->edition == 'open') return array();
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         $moduleName = $this->moduleName;
         return $this->$moduleName->getFlowExportFields();
@@ -479,6 +480,7 @@ class control extends baseControl
     public function printExtendFields(object|string $object, string $type, string $extras = '', bool $print = true, string $moduleName = '', string $methodName = '')
     {
         if($this->config->edition == 'open') return false;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return false;
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
         $methodName = $methodName ?: $this->app->getMethodName();
@@ -515,6 +517,7 @@ class control extends baseControl
     public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = ''): zin\fieldList
     {
         if($this->config->edition == 'open') return $fields;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $fields;
 
         $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
         $methodName = $methodName ? $moduleName : $this->app->getMethodName();
@@ -541,6 +544,7 @@ class control extends baseControl
     public function appendExtendCssAndJS(string $moduleName = '', string $methodName = ''): string
     {
         if($this->config->edition == 'open') return '';
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
         $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
         $methodName = $methodName ? $methodName : $this->app->getMethodName();
@@ -579,6 +583,7 @@ class control extends baseControl
     public function appendExtendForm(string $position = 'info', object $object = null, string $moduleName = '', string $methodName = ''): array
     {
         if($this->config->edition == 'open') return array();
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
         $methodName = $methodName ? $moduleName : $this->app->getMethodName();
@@ -679,6 +684,7 @@ class control extends baseControl
     public function checkRequireFlowField()
     {
         if($this->config->edition == 'open') return false;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return false;
         if(empty($_POST)) return false;
 
         $action = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($this->moduleName)->andWhere('action')->eq($this->methodName)->fetch();
