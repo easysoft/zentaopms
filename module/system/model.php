@@ -254,7 +254,7 @@ class systemModel extends model
 
         $maintenance = new stdclass();
         $maintenance->action = $action;
-        $maintenance->reason = $this->lang->system->maintenance[$action];
+        $maintenance->reason = $this->lang->system->maintenance->reason[$action] ?? $this->lang->unknown;
 
         return $this->loadModel('setting')->setItem('system.system.maintenance', json_encode($maintenance));
     }
