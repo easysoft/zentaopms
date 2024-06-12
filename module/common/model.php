@@ -1281,8 +1281,6 @@ eof;
         $module = strtolower($module);
         $method = strtolower($method);
 
-        if($object) return self::getUserPriv($module, $method, $object, $vars);
-
         global $config;
         if(isset($config->{$module}->groupPrivs[$method]))
         {
@@ -1294,6 +1292,8 @@ eof;
                 return self::hasPriv($module, $groupPriv, $object, $vars);
             }
         }
+
+        if($object) return self::getUserPriv($module, $method, $object, $vars);
 
         if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
 
