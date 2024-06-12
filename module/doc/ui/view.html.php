@@ -12,6 +12,8 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+jsVar('docID', $docID);
+
 featureBar
 (
     li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
@@ -45,7 +47,18 @@ toolbar
 $versionList = array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'active' => $itemVersion == $version);
+    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
+}
+
+$menuOptions = array();
+if($config->edition != 'open' && common::hasPriv('doc', 'diff'))
+{
+    $menuOptions['header']       = jsRaw('window.getVersionHeader');
+    $menuOptions['footer']       = jsRaw('window.getVersionFooter');
+    $menuOptions['getItem']      = jsRaw('window.getDropdownItem');
+    $menuOptions['onClickItem']  = jsRaw('window.onClickDropdownItem');
+    $menuOptions['width']        = 200;
+    $menuOptions['checkOnClick'] = '.has-checkbox .item';
 }
 
 $star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
@@ -146,7 +159,8 @@ $contentDom = div
                     setClass('ghost btn square btn-default selelct-version inline-flex ml-1'),
                     span(setClass('pl-1'), 'V' . ($version ? $version : $doc->version))
                 ),
-                set::items($versionList)
+                set::items($versionList),
+                set::menu($menuOptions)
             ) : null
         ),
         $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
@@ -237,6 +251,7 @@ $contentDom = div
     ),
     div
     (
+        setID('diffContain'),
         setClass('detail-content article'),
         $doc->contentType == 'markdown' ? editor
         (
