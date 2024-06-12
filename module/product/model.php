@@ -1426,6 +1426,9 @@ class productModel extends model
         $product = $this->fetchByID($productID);
         if(!$product) return false;
 
+        /* 设置1.5级导航数据。*/
+        $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
+
         /* 设置导航中分支的显示数据。*/
         /* 如果产品类型是正常的，隐藏导航中分支的显示。*/
         if($product->type == 'normal')
