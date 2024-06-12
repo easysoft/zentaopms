@@ -1235,13 +1235,13 @@ class bugZen extends bug
             $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
         }
 
-        $resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
-        $resolvedBuilds = $this->build->addReleaseLabelForBuilds($bug->product, $resolvedBuilds);
-
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
+        $resolvedBuildPairs = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
+        $this->view->resolvedBuildPairs = $resolvedBuildPairs;
+        $this->view->resolvedBuilds     = $this->build->addReleaseLabelForBuilds($bug->product, $resolvedBuildPairs);
+
         $this->view->openedBuilds   = $openedBuilds;
-        $this->view->resolvedBuilds = $resolvedBuilds;
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->stories        = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
@@ -1964,7 +1964,7 @@ class bugZen extends bug
         /* Unlink old resolved build and link new resolved build. */
         if($bug->resolution == 'fixed' && !empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
         {
-            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, $bug->id);
+            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, $bug->id);
             $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
         }
 
