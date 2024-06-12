@@ -225,6 +225,7 @@ class transferModel extends model
             if(!empty($field->buildin)) continue;
             if(empty($field->show)) continue;
             if(!isset($layouts[$field->field])) continue;
+            if($field->control == 'file') continue;
 
             $fieldList[$field->field]['name']  = $field->field;
             $fieldList[$field->field]['label'] = $field->name;
