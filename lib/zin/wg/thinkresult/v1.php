@@ -42,7 +42,7 @@ class thinkResult extends wg
                 setClass('w-full'),
                 setStyle('min-height', '200px'),
                 $this->buildModel(),
-                div(setClass('mt-4 text-center font-bold text-gray-950'), setStyle(array('font-size' => '2rem')), $models[$wizard->model])
+                div(setClass('mt-4 text-center font-bold text-gray-950 text-3xl'), $models[$wizard->model])
             ),
             div
             (
