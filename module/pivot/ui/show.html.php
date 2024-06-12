@@ -103,8 +103,8 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     'text'  => $lang->delete,
                     'icon'  => 'trash',
                     'class' => 'ghost ajax-submit',
-                    'url'   => inlink('delete', "id=$pivot->id&confirm=yes&isOld=no"),
-                    'data-confirm' => $lang->pivot->deleteTip,
+                    'url'   => inlink('delete', "id=$pivot->id"),
+                    'data-confirm' => array('message' => $lang->pivot->deleteTip, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')
                 ))) : null) : null
             ),
             div(setClass('divider')),
