@@ -12,6 +12,11 @@ class thinkResult extends wg
         'steps?: array',        // 所有问题步骤数据
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function buildModel(): wg|array
     {
         list($wizard, $mode, $blocks, $steps) = $this->prop(array('wizard', 'mode', 'blocks', 'steps'));
