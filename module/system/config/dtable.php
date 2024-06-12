@@ -29,13 +29,19 @@ $config->system->dtable->dbList->fieldList['actions']['list']['dblist']['url']  
 
 $config->system->dtable->backup = new stdclass();
 
-$config->system->dtable->backup->fieldList['time']['title'] = $lang->backup->time;
-$config->system->dtable->backup->fieldList['time']['type']  = 'datetime';
+$config->system->dtable->backup->fieldList['time']['title']       = $lang->backup->time;
+$config->system->dtable->backup->fieldList['time']['type']        = 'datetime';
+$config->system->dtable->backup->fieldList['time']['formatDate']  = 'yyyy-MM-dd hh::mm:ss';
+
+$config->system->dtable->backup->fieldList['backupPerson']['title'] = $lang->system->backup->backupPerson;
+$config->system->dtable->backup->fieldList['backupPerson']['type']  = 'user';
 
 $config->system->dtable->backup->fieldList['type']['title'] = $lang->system->backup->type;
 $config->system->dtable->backup->fieldList['type']['map']   = $lang->system->backup->typeList;
 
-$config->system->dtable->backup->fieldList['status']['title'] = $lang->backup->status;
+$config->system->dtable->backup->fieldList['status']['title']  = $lang->backup->status;
+$config->system->dtable->backup->fieldList['status']['hidden'] = false;
+$config->system->dtable->backup->fieldList['status']['map']    = $lang->system->backup->statusList;
 
 $config->system->dtable->backup->fieldList['comment']['title'] = $lang->comment;
 $config->system->dtable->backup->fieldList['comment']['type']  = 'html';
