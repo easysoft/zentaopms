@@ -129,6 +129,23 @@ window.renderRowData = function($row, index, story)
         const storyFileter   = ['draft', 'reviewing', 'closed'];
         let roadmapCondition = (allRoadmaps[story.roadmap] && roadmapFilter.indexOf(allRoadmaps[story.roadmap].status) !== -1);
         let storyCondition   = storyFileter.indexOf(story.rawStatus) !== -1;
+
+        $roadmap.find('.picker-box').on('inited', function(e, info)
+        {
+            let $picker = info[0];
+            let options = $picker.options;
+
+            $.each(roadmaps, function(key, value)
+            {
+                options.items.push({text: value, value: key});
+            })
+            if(allRoadmaps[story.roadmap] && !roadmaps[story.roadmap]) options.items.push({text: allRoadmaps[story.roadmap].name, value: story.roadmap});
+
+            options.disabled = (roadmapCondition || storyCondition);
+            $picker.render(options);
+        });
+
+        if(roadmapCondition || storyCondition) $roadmap.append("<input type='hidden' name='roadmap[" + story.id + "]' value='" + story.roadmap + "' />");
     }
 
     if(story.source == 'meeting' || story.source == 'researchreport')
