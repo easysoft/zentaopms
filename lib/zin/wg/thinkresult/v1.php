@@ -17,6 +17,11 @@ class thinkResult extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function buildModel(): wg|array
     {
         list($wizard, $mode, $blocks, $steps) = $this->prop(array('wizard', 'mode', 'blocks', 'steps'));
