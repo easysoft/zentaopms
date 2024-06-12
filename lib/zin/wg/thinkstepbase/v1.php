@@ -60,7 +60,7 @@ class thinkStepBase extends wg
         (
             div
             (
-                setClass('h-10 flex items-start justify-between mb-2'),
+                setClass('h-10 flex items-start justify-between mb-2 step-title'),
                 $step->type == 'question' ? array
                 (
                     div
