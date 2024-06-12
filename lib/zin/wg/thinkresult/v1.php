@@ -9,15 +9,16 @@ class thinkResult extends wg
         'mode?: string="view"', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
         'blocks: array',        // 模型节点
         'models: array',        // 模型列表
+        'steps?: array',        // 所有问题步骤数据
     );
 
     protected function buildModel(): wg|array
     {
-        list($wizard, $mode, $blocks) = $this->prop(array('wizard', 'mode', 'blocks'));
+        list($wizard, $mode, $blocks, $steps) = $this->prop(array('wizard', 'mode', 'blocks', 'steps'));
 
-        if($wizard->model == 'swot')   return thinkSwot(set::mode($mode), set::blocks($blocks));
-        if($wizard->model == 'pffa')   return thinkPffa(set::mode($mode), set::blocks($blocks));
-        if($wizard->model == 'pestel') return thinkPestel(set::mode($mode), set::blocks($blocks));
+        if($wizard->model == 'swot')   return thinkSwot(set::mode($mode), set::blocks($blocks), set::steps($steps));
+        if($wizard->model == 'pffa')   return thinkPffa(set::mode($mode), set::blocks($blocks), set::steps($steps));
+        if($wizard->model == 'pestel') return thinkPestel(set::mode($mode), set::blocks($blocks), set::steps($steps));
         return array();
     }
 
