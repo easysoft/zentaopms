@@ -229,7 +229,6 @@ class transferModel extends model
             $fieldList[$field->field]['name']  = $field->field;
             $fieldList[$field->field]['label'] = $field->name;
             $fieldList[$field->field]['title'] = $field->name;
-            $fieldList[$field->field]['from']  = 'workflow';
 
             if($notEmptyRule && strpos(",{$field->rules},", ",{$notEmptyRule->id},") !== false) $fieldList[$field->field]['required'] = true;
 
