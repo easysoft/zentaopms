@@ -324,7 +324,7 @@ window.renderTicketItem = function(info)
     {
         const user       = userList[info.item.assignedTo];
         const assignedTo = user.realname;
-        const userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : assignedTo.substr(0, 1).toUpperCase();
+        const userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : info.item.assignedTo.substr(0, 1).toUpperCase();
 
         avatar = "<span class='avatar rounded-full size-xs ml-1 primary' title=" + assignedTo + '>' + userAvatar + '</span>';
     }
