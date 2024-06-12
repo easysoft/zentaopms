@@ -1418,8 +1418,6 @@ class upgradeModel extends model
      */
     public function addORPriv($openVersion = ''): bool
     {
-        if(version_compare($openVersion, '18_6', '>=')) return false;
-
         /* Get admin users. */
         $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchPairs();
         $admins = explode(',', implode(',', $admins));
@@ -1435,6 +1433,8 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
             }
         }
+
+        if(version_compare($openVersion, '18_6', '>=')) return false;
 
         include('priv.php');
         /* Add or groups. */
