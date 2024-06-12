@@ -41,8 +41,7 @@ class count_of_delayed_bug_in_user extends baseCalc
             ->andWhere('t1.status')->eq('active')
             ->andWhere('t1.assignedDate')->notZeroDatetime()
             ->andWhere('DATEDIFF(CURDATE(), assignedDate)')->gt($longlife)
-            ->groupBy('t1.assignedTo')
-            ->query();
+            ->groupBy('t1.assignedTo');
     }
 
     public function calculate($row)

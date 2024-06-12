@@ -27,8 +27,7 @@ class count_of_application extends baseCalc
         $count = (int)$this->dao->select('count(*) as count')->from(TABLE_INSTANCE)->where('deleted')->eq(0)->fetch('count');
 
         return $this->dao->select("count(*) as count, {$count} as instanceCount")->from(TABLE_PIPELINE)
-            ->where('deleted')->eq(0)
-            ->query();
+            ->where('deleted')->eq(0);
     }
 
     public function calculate($row)
