@@ -139,6 +139,8 @@ class systemModel extends model
     {
         if(empty($instance)) $instance = $this->config->instance->zentaopaas;
 
+        $this->setMaintenance('backup');
+
         $rawResult = $this->cne->backup($instance, $this->app->user->account, $mode);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
