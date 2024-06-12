@@ -12,3 +12,5 @@ UPDATE `zt_grouppriv` SET module='researchtask', `method`='batchCreate'    WHERE
 UPDATE `zt_grouppriv` SET module='researchtask', `method`='recordWorkhour' WHERE module='marketresearch' AND `method`='recordTaskEstimate';
 
 UPDATE `zt_grouppriv` SET module='marketresearch', `method`='task'   WHERE module='marketresearch' AND `method`='stage';
+
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'tasks') WHERE `module` = 'task' AND `field` = 'parent';
