@@ -1,4 +1,12 @@
 $(document).on('#left', 'input', setTeamUser);
+window.waitDom('.picker-box [name=assignedTo]', function()
+{
+    if(taskMode == 'linear' || taskMode == 'multi')
+    {
+        $('#multiple').trigger('click');
+        computeTotalLeft();
+    }
+});
 
 window.manageTeam = function()
 {
@@ -163,6 +171,18 @@ function updateAssignedTo()
         $assignedToPicker.render({items: memberItems});
     }
     $assignedToPicker.$.setValue(assignedTo);
+}
+
+function computeTotalLeft()
+{
+    let totalLeft = 0;
+    $('.picker-box [name^=team]').each(function()
+    {
+        let $leftBox = $(this).closest('tr').find('[name^=teamLeft]');
+        let left     = parseFloat($leftBox.val());
+        if(!isNaN(left)) totalLeft += left;
+    });
+    $('#left').val(totalLeft);
 }
 
 $('#teamTable').on('change', '.picker-box [name^=team]', function()
