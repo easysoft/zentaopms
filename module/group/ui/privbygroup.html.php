@@ -281,6 +281,7 @@ else
     formBase
     (
         setID('managePrivForm'),
+        setClass('gap-0'),
         formHidden('actions[][]', ''),
         formHidden('noChecked', ''),
         set::actions(array()),

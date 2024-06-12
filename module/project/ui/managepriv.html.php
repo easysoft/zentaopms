@@ -138,6 +138,7 @@ panel
     form
     (
         setID('managePrivForm'),
+        setClass('gap-0'),
         set::actions(array()),
         h::table
         (
