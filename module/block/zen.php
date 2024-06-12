@@ -204,6 +204,13 @@ class blockZen extends block
             if($block->code == 'scrumrisk'      && !helper::hasFeature('scrum_risk'))      continue;
             if($block->code == 'scrumissue'     && !helper::hasFeature('scrum_issue'))     continue;
 
+            /* 过滤目前已经不存在的区块。 */
+            if(!isset($this->lang->block->moduleList[$block->code]) && !isset($this->lang->block->modules[$block->module]->availableBlocks[$block->code]))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
+
             /* 将没有视图权限的区块过滤。 */
             $module = $block->module;
             if($module == 'scrumproject' || $module == 'waterfallproject') $module = 'project';
