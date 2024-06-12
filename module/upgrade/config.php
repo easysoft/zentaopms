@@ -928,7 +928,6 @@ $config->delete['18_6'][] = 'module/gitlab/js/browseproject.js';
 $config->delete['18_8'][] = 'extension/biz/screen/ext/control/ajaxgetchart.php';
 $config->delete['18_8'][] = 'extension/max/screen/ext/control/ajaxgetchart.php';
 $config->delete['18_8'][] = 'extension/ipd/screen/ext/control/ajaxgetchart.php';
-$config->delete['18_8'][] = 'config/ext/feedback.php';
 $config->delete['18_9'][] = 'module/automation/control.php';
 $config->delete['18_9'][] = 'module/automation/model.php';
 $config->delete['18_9'][] = 'module/automation/config.php';
