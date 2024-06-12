@@ -591,9 +591,9 @@ $(function()
         var $query = $(this).closest('.user-query');
         var queryId = $query.data('queryId');
         var deleteQueryLink = $.createLink('search', 'deleteQuery', 'queryID=' + queryId);
-        $.get(deleteQueryLink, function(data)
+        $.getJSON(deleteQueryLink, function(data)
         {
-            if(data == 'success') $query.remove();
+            if(data.result == 'success') $query.remove();
         });
         e.stopPropagation();
     });
