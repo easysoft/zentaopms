@@ -135,7 +135,7 @@ class form extends fixer
                 }
                 else
                 {
-                    $configObject[$field->field] = array('required' => $required, 'type' => 'string');
+                    $configObject[$field->field] = array('required' => $required, 'type' => 'string', 'default' => '');
                     if($field->control == 'richtext') $configObject[$field->field]['control'] = 'editor';
                 }
             }
