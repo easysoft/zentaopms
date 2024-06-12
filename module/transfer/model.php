@@ -216,8 +216,8 @@ class transferModel extends model
         if(empty($action)) return $fieldList;
         if($action->extensionType == 'none' and $action->buildin == 1) return $fieldList;
 
-        $layouts = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
-        $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
         $workflowFields = $this->loadModel('workflowaction')->getFields($moduleName, $methodName);
         foreach($workflowFields as $field)
@@ -231,15 +231,7 @@ class transferModel extends model
             $fieldList[$field->field]['title'] = $field->name;
             $fieldList[$field->field]['from']  = 'workflow';
 
-            $fieldRules = explode(',', trim((string) $field->rules, ','));
-            $fieldRules = array_unique($fieldRules);
-            foreach($fieldRules as $ruleID)
-            {
-                if(!isset($rules[$ruleID])) continue;
-
-                $rule = $rules[$ruleID];
-                if($rule->type == 'system' and $rule->rule == 'notempty') $fieldList[$field->field]['required'] = true;
-            }
+            if($notEmptyRule && strpos(",{$field->rules},", ",{$notEmptyRule->id},") !== false) $fieldList[$field->field]['required'] = true;
 
             if(!in_array($field->control, array('select', 'radio', 'multi-select', 'checkbox'))) continue;
             if(empty($field->options)) continue;
