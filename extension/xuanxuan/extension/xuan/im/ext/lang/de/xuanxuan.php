@@ -125,4 +125,4 @@ The Task Edit command supports making status changes to tasks.
 | close task #ID | Close the task and record its consumption/remaining work hours |
 EOT;
 
-$lang->im->bot->upgradeWelcome->link = 'https://www.zentao.net/page/download-new.html';
+$lang->im->bot->upgradeWelcome->link = 'https://www.zentao.net/downloads.html';
