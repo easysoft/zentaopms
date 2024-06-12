@@ -308,6 +308,7 @@ window.renderTicketItem = function(info)
     info.item.titleUrl   = canViewTicket ? $.createLink('ticket', 'view', `id=${info.item.fromID}`) : '';
     info.item.titleAttrs = {'class': 'card-title clip', 'title': info.item.title};
 
+    let statusBox = '';
     if(info.item.deleted == '0')
     {
         statusBox = '<span class="label label-' + info.item.objectStatus + '">' + ticketLang.statusList[info.item.objectStatus] + '</span>';
