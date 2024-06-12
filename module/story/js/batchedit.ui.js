@@ -56,6 +56,7 @@ window.renderRowData = function($row, index, story)
     var $module = $row.find('.form-batch-control[data-name="module"]');
     var $plan   = $row.find('.form-batch-control[data-name="plan"]');
     var $branch = $row.find('.form-batch-control[data-name="branch"]');
+    var $roadmap = $row.find('.form-batch-control[data-name="roadmap"]');
 
     $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
     $row.find('.form-control-static[data-name="status"]').addClass('status-' + story.rawStatus);
@@ -120,6 +121,14 @@ window.renderRowData = function($row, index, story)
 
             $picker.render(options);
         });
+    }
+
+    if($roadmap && $roadmap.length > 0)
+    {
+        const roadmapFilter  = ['launching', 'launched', 'closed'];
+        const storyFileter   = ['draft', 'reviewing', 'closed'];
+        let roadmapCondition = (allRoadmaps[story.roadmap] && roadmapFilter.indexOf(allRoadmaps[story.roadmap].status) !== -1);
+        let storyCondition   = storyFileter.indexOf(story.rawStatus) !== -1;
     }
 
     if(story.source == 'meeting' || story.source == 'researchreport')
