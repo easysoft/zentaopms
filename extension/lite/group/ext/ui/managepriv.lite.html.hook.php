@@ -1,3 +1,4 @@
-<script>
-$('#versionSelect').remove();
-</script>
+<?php
+namespace zin;
+
+query('#versionSelect')->remove();
