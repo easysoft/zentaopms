@@ -61,6 +61,7 @@ dtable
     set::cols($config->project->dtable->testtask->fieldList),
     set::data($tasks),
     set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::canRowCheckable(jsRaw('window.canRowCheckable')),
     set::taskData($tasks),
     set::userMap($users),
     set::orderBy($orderBy),

@@ -32,7 +32,7 @@ window.getCellSpan = function(cell)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
-    if(cell.col.name == 'id' && cell.row.data.colspan)
+    if(cell.col.name == 'idAB' && cell.row.data.colspan)
     {
         return {colSpan: cell.row.data.colspan};
     }
@@ -61,7 +61,7 @@ window.onRenderCell = function(result, {row, col})
             result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
     }
-    if(result && col.name == 'id' && row.data.hidden)
+    if(result && col.name == 'idAB' && row.data.hidden)
     {
         result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
     }
@@ -108,7 +108,7 @@ window.deformation = function(event)
         {
             if(data && data.product == product)
             {
-                options.data[index].id      = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + data.rowspan + '</strong></span>'};
+                options.data[index].idAB    = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + data.rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
                 options.data[index].colspan = 10;
                 options.data[index].hidden  = 1;
@@ -171,4 +171,22 @@ window.setStatistics = function(element, checkedIDList)
         .replace('%blocked%', blockedCount)
         .replace('%done%', doneCount)
     };
+}
+
+/**
+ * 判断当前行是否可以选中。
+ * Judge whether the row can be selected.
+ *
+ * @param  string rowID
+ * @access public
+ * @return object
+ */
+window.canRowCheckable = function(rowID)
+{
+    let checkable = true;
+    $.each(this.options.data, function(index, data)
+        {
+            if(data.id == rowID && data.hidden == 1) checkable = false;
+        });
+    return checkable;
 }
