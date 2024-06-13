@@ -315,7 +315,7 @@ if($canBatchAction)
         $assignedToItems = array();
         foreach ($users as $account => $name)
         {
-            if($account == 'closed') continue;
+            if($account == 'closed' || !$name) continue;
 
             $assignedToItems[] = array(
                 'text'       => $name,
@@ -332,7 +332,8 @@ if($canBatchAction)
             'text'        => $lang->story->assignedTo,
             'className'   => 'btn btn-caret size-sm secondary',
             'type'        => 'dropdown',
-            'items'       => $assignedToItems
+            'items'       => $assignedToItems,
+            'menu'        => array('searchBox' => true)
         );
     }
 
