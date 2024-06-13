@@ -37,6 +37,10 @@ class thinkResult extends wg
         $app->loadLang('thinkwizard');
 
         list($wizard, $mode, $models) = $this->prop(array('wizard', 'mode', 'models'));
+        $introduction = $mode == 'preview' ? $lang->thinkwizard->introduction : '';
+        $introduction = $wizard->introduction ? $wizard->introduction : $introduction;
+        $suggestion   = $mode == 'preview' ? $lang->thinkwizard->suggestion : '';
+        $suggestion   = $wizard->suggestion ? htmlspecialchars_decode($wizard->suggestion) : $suggestion;
         return div
         (
             setClass('think-result-content col items-center px-7 py-6 gap-4 mx-auto'),
@@ -45,7 +49,7 @@ class thinkResult extends wg
                 setClass('w-full flex items-center justify-center ellipsis overflow-hidden whitespace-nowrap'),
                 setStyle(array('font-size' => '20px', 'height' => '30px')),
                 set::title($wizard->introduction),
-                $wizard->introduction ? $wizard->introduction : ($mode == 'preview' ? $lang->thinkwizard->introduction : '')
+                $introduction
             ),
             div
             (
@@ -57,7 +61,7 @@ class thinkResult extends wg
             div
             (
                 setClass('w-full text-center text-md py-2.5 leading-5'),
-                html($wizard->suggestion ? htmlspecialchars_decode($wizard->suggestion) : ($mode == 'preview' ? $lang->thinkwizard->suggestion : ''))
+                html($suggestion)
             )
         );
     }
