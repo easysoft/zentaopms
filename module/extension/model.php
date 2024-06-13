@@ -569,6 +569,20 @@ class extensionModel extends model
             try
             {
                 $this->dbh->query($sql);
+
+                /* 查找 sql 语句中包含的表名。*/
+                /* Find the table names in the sql. */
+                preg_match_all("/({$this->config->db->prefix}\w+)[`\" ]/", $sql, $tables);
+                if(isset($tables[1]))
+                {
+                    foreach($tables[1] as $table)
+                    {
+                        /* 更新表的缓存时间。*/
+                        /* Update the table cache time. */
+                        $table = str_replace(array('`', '"'), '', $table);
+                        $this->dao->setCache($table);
+                    }
+                }
             }
             catch(PDOException $e)
             {
