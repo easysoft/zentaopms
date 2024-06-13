@@ -166,7 +166,7 @@ class field extends setting
         return $this->addToMap('labelHintProps', $props);
     }
 
-    function labelHintIcon(array|object|null $icon): field
+    function labelHintIcon(array|object|string|null $icon): field
     {
         return $this->setVal('labelHintIcon', $icon);
     }
