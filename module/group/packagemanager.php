@@ -3303,7 +3303,7 @@ $config->group->package->browseExecutionStory->subset = 'executionstory';
 $config->group->package->browseExecutionStory->privs  = array();
 $config->group->package->browseExecutionStory->privs['execution-story']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array(), 'recommend' => array('execution-linkStory', 'execution-storyEstimate', 'execution-storyKanban', 'execution-storySort', 'execution-storyView', 'execution-unlinkStory'));
 $config->group->package->browseExecutionStory->privs['execution-storyKanban'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('execution-story'), 'recommend' => array('execution-linkStory', 'execution-storyEstimate', 'execution-storySort', 'execution-storyView', 'execution-unlinkStory'));
-$config->group->package->browseExecutionStory->privs['execution-storyView']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('execution-story'), 'recommend' => array('execution-linkStory', 'execution-storyEstimate', 'execution-storyKanban', 'execution-storySort', 'execution-unlinkStory'));
+$config->group->package->browseExecutionStory->privs['execution-storyView']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('execution-story'), 'recommend' => array('execution-linkStory', 'execution-storyEstimate', 'execution-storyKanban', 'execution-storySort', 'execution-unlinkStory', 'execution-storyView'));
 
 $config->group->package->manageCard = new stdclass();
 $config->group->package->manageCard->order  = 20;

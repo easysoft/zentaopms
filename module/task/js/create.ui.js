@@ -294,7 +294,7 @@ function setStoryRelated()
 function setPreview()
 {
     let storyID = $("input[name='story']").val() ? $("input[name='story']").val() : 0;
-    if(parseFloat(storyID) == 0)
+    if(parseFloat(storyID) == 0 || !canViewStory)
     {
         $('#preview').addClass('hidden');
     }
