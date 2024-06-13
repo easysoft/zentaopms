@@ -35,6 +35,22 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT product.id AS `id`,program.name AS `program_name`,program.id AS `program_id`,line.name AS `line_name`,product.name AS `name`,product.code AS `code`,product.type AS `type`,product.status AS `status`,product.desc AS `desc`,product.PO AS `PO`,product.QD AS `QD`,product.RD AS `RD`,product.createdBy AS `createdBy`,product.createdDate AS `createdDate` FROM zt_product AS `product`  LEFT JOIN zt_project AS `program` ON product.program = program.id  LEFT JOIN zt_module AS `line` ON product.line    = line.id where `product`.deleted = '0' LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'id'           => array('name' => '编号', 'field' => 'id', 'object' => 'product', 'type' => 'number'),
+        'program_id'   => array('name' => '编号', 'field' => 'id', 'object' => 'program', 'type' => 'object'),
+        'program_name' => array('name' => '所属项目集', 'field' => 'name', 'object' => 'program', 'type' => 'object'),
+        'line_name'    => array('name' => '产品线', 'field' => 'name', 'object' => 'line', 'type' => 'object'),
+        'name'         => array('name' => '产品名称', 'field' => 'name', 'object' => 'product', 'type' => 'string'),
+        'code'         => array('name' => '产品代号', 'field' => 'code', 'object' => 'product', 'type' => 'string'),
+        'type'         => array('name' => '产品类型', 'field' => 'type', 'object' => 'product', 'type' => 'option'),
+        'status'       => array('name' => '状态', 'field' => 'status', 'object' => 'product', 'type' => 'option'),
+        'desc'         => array('name' => '产品描述', 'field' => 'desc', 'object' => 'product', 'type' => 'string'),
+        'PO'           => array('name' => '产品负责人', 'field' => 'PO', 'object' => 'product', 'type' => 'user'),
+        'QD'           => array('name' => '测试负责人', 'field' => 'QD', 'object' => 'product', 'type' => 'user'),
+        'RD'           => array('name' => '发布负责人', 'field' => 'RD', 'object' => 'product', 'type' => 'user'),
+        'createdBy'    => array('name' => '由谁创建', 'field' => 'createdBy', 'object' => 'product', 'type' => 'user'),
+        'createdDate'  => array('name' => '创建日期', 'field' => 'createdDate', 'object' => 'product', 'type' => 'date')
+    ),
     'group'     => '101'
 );
