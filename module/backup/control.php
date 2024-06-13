@@ -126,6 +126,13 @@ class backup extends control
         $systemInfo->upgradeHint    = $systemInfo->upgradeable ? $this->lang->system->backup->versionInfo: null;
         $systemInfo->latestURL      = !empty($latestVersionList[$version]->link) ? $latestVersionList[$version]->link : $this->lang->install->officeDomain;
 
+        if($this->config->inQuickon)
+        {
+            $latestRelease = $this->loadModel('system')->getLatestRelease();
+            $systemInfo->currentVersionTitle = getenv('CHART_VERSION') ?: '';
+            $systemInfo->latestVersionTitle  = !empty($latestRelease->version) ? $latestRelease->version : '';
+        }
+
         $this->view->systemInfo = $systemInfo;
 
         if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
