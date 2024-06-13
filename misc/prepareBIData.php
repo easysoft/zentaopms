@@ -95,11 +95,13 @@ include "$path/config.php";
 include "$path/config/charts.php";
 include "$path/config/metrics.php";
 include "$path/config/pivots.php";
+include "$path/config/dataviews.php";
 
 truncate('zt_chart');
 truncate('zt_pivot');
 truncate('zt_metric');
 truncate('zt_screen');
+truncate('zt_dataview');
 foreach($config->bi->builtin->charts as $chart)
 {
     $chart['createdBy']   = 'system';
@@ -151,4 +153,15 @@ foreach($config->bi->builtin->screens as $screenID)
     $screen['createdDate'] = date('Y-m-d H:i:s');
 
     insert('zt_screen', $screen);
+}
+
+foreach($config->bi->builtin->dataviews as $dataview)
+{
+    $dataview['createdBy']   = 'system';
+    $dataview['createdDate'] = date('Y-m-d H:i:s');
+
+    if(isset($dataview['fields']))   $dataview['fields']   = jsonEncode($dataview['fields']);
+
+    insert('zt_dataview', $dataview);
+    createView($dataview['view'], $dataview['sql']);
 }
