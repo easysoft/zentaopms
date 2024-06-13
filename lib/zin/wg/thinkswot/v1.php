@@ -24,6 +24,26 @@ class thinkSwot extends wg
         return array();
     }
 
+    protected function buildQuestion(int $stepID, int $originalID): array
+    {
+        $steps      = $this->prop('steps');
+        $blockSteps = array();
+        foreach($steps as $stepItem)
+        {
+            $path = explode(',', trim($stepItem->path, ','));
+            if(in_array($stepID, $path) || in_array($originalID, $path)) $blockSteps[] = $stepItem;
+        }
+
+        $questionList = array();
+        foreach($blockSteps as &$step)
+        {
+            if(is_string($step->options)) $step->options = json_decode($step->options);
+            if(is_string($step->answer))  $step->answer  = json_decode($step->answer);
+            $questionList[] = div(setClass('w-80 bg-canvas p-2 shadow'), $this->buildQuestionItem($step));
+        }
+        return $questionList;
+    }
+
     protected function buildItem(int $order, string $blockTitle): node
     {
         global $app, $lang;
