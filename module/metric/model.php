@@ -1141,7 +1141,7 @@ class metricModel extends model
             $calcInstances[$className] = $metricInstance;
         }
 
-        return $calcInstances;
+        return $this->filterCalcByEdition($calcInstances);
     }
 
     /**
@@ -2749,5 +2749,20 @@ class metricModel extends model
             ->orderBy('date_asc')
             ->limit(1)
             ->fetch('date');
+    }
+
+    public function filterCalcByEdition($calcInstances)
+    {
+        foreach($calcInstances as $code => $instance)
+        {
+            $excludeDatasetConfig = $this->config->metric->excludeDatasetList;
+            if(!empty($instance->dataset) && !empty($excludeDatasetConfig[$this->config->edition]))
+            {
+                $excludeDatasetList = $excludeDatasetConfig[$this->config->edition];
+                if(in_array($instance->dataset, $excludeDatasetList)) unset($calcInstances[$code]);
+            }
+        }
+
+        return $calcInstances;
     }
 }

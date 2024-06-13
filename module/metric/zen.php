@@ -182,9 +182,6 @@ class metricZen extends metric
     {
         foreach($classifiedCalcGroup as $calcGroup)
         {
-            if($this->config->edition == 'open' && in_array($calcGroup->dataset, array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks', 'getDemands', 'getQAs'))) continue;
-            if($this->config->edition == 'biz'  && in_array($calcGroup->dataset, array('getIssues', 'getRisks', 'getDemands', 'getQAs'))) continue;
-
             try
             {
                 $statement = $this->prepareDataset($calcGroup);
