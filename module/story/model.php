@@ -1171,7 +1171,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function triggerURChanged($storyID)
+    public function triggerURChanged(int $storyID): void
     {
         $relations = $this->storyTao->getRelation($storyID, 'requirement');
         $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
