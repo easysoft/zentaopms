@@ -321,6 +321,8 @@ class system extends control
         session_write_close();
         set_time_limit(0);
 
+        if(!$this->system->isUpgradeable()) $this->sendError($this->lang->system->backup->error->beenLatestVersion);
+
         $this->loadModel('action')->create('system', 0, 'upgradeSystem');
 
         if($backup == 'yes' && empty($this->config->system->noBackupBeforeUpgrade))
