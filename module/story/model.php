@@ -4279,9 +4279,6 @@ class storyModel extends model
             $reviewedByList = array_filter(explode(',', $story->reviewedBy));
             foreach($reviewedByList as $i => $reviewedBy) $reviewedByList[$i] = zget($users, trim($reviewedBy));
             $story->reviewedBy = implode(',', array_filter($reviewedByList));
-
-            /* Set child story title. */
-            if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
         }
 
         return $stories;
