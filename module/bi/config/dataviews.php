@@ -168,6 +168,18 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT project.name AS `project_name`,project.id AS `project_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,story.title AS `story_title`,story.id AS `story_id`,taskmodule.name AS `taskmodule_name`,taskmodule.id AS `taskmodule_id`,task.name AS `name`,task.pri AS `pri`,task.type AS `type`,task.status AS `status`,task.desc AS `desc`,task.estimate AS `estimate`,task.consumed AS `consumed`,task.left AS `left`,task.estStarted AS `estStarted`,task.deadline AS `deadline`,task.assignedTo AS `assignedTo`,task.finishedBy AS `finishedBy`,task.closedBy AS `closedBy`,task.openedBy AS `openedBy`,task.openedDate AS `openedDate` FROM zt_task AS `task`  LEFT JOIN zt_project AS `execution` ON task.execution = execution.id  LEFT JOIN zt_project AS `project` ON task.project   = project.id  LEFT JOIN zt_story AS `story` ON task.story     = story.id  LEFT JOIN zt_module AS `taskmodule` ON task.module    = taskmodule.id where `task`.deleted = '0' LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'project_id'      => array('name' => '项目ID', 'field' => 'id', 'object' => 'project', 'type' => 'object'),
+        'project_name'    => array('name' => '所属项目', 'field' => 'name', 'object' => 'project', 'type' => 'object'),
+        'execution_id'    => array('name' => '迭代编号', 'field' => 'id', 'object' => 'execution', 'type' => 'object'),
+        'execution_name'  => array('name' => '所属执行', 'field' => 'name', 'object' => 'execution', 'type' => 'object'),
+        'story_id'        => array('name' => '编号', 'field' => 'id', 'object' => 'story', 'type' => 'object'),
+        'story_title'     => array('name' => '相关研发需求', 'field' => 'title', 'object' => 'story', 'type' => 'object'),
+        'taskmodule_id'   => array('name' => '编号', 'field' => 'id', 'object' => 'taskmodule', 'type' => 'object'),
+        'taskmodule_name' => array('name' => '所属模块', 'field' => 'name', 'object' => 'taskmodule', 'type' => 'object'),
+        'name'            => array('name' => '任务名称', 'field' => 'name', 'object' => 'task', 'type' => 'string'),
+        'pri'             => array('name' => '优先级', 'field' => 'pri', 'object' => 'task', 'type' => 'option'),
+    ),
     'group'     => '101'
 );
