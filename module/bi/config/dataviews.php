@@ -404,3 +404,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '测试单用例每次执行结果',
+    'code'      => 'testresult',
+    'view'      => 'ztv_testresult',
+    'sql'       => <<<EOT
+SELECT testresult.caseResult AS `caseResult`,testresult.stepResults AS `stepResults`,testresult.lastRunner AS `lastRunner`,testresult.date AS `date`,testcase.title AS `testcase_title`,testcase.id AS `testcase_id`,testtask.name AS `testtask_name`,testtask.id AS `testtask_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,project.name AS `project_name`,project.id AS `project_id`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id`,build.name AS `build_name`,build.id AS `build_id`,caselib.name AS `caselib_name`,caselib.id AS `caselib_id` FROM zt_testresult AS `testresult`  LEFT JOIN zt_case AS `testcase` ON testcase.id   = testresult.case  LEFT JOIN zt_testrun AS `testrun` ON testrun.id    = testresult.run  LEFT JOIN zt_testtask AS `testtask` ON testrun.task  = testtask.id  LEFT JOIN zt_project AS `project` ON project.id    = testtask.project  LEFT JOIN zt_project AS `execution` ON execution.id  = testtask.execution  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module  LEFT JOIN zt_build AS `build` ON build.id      = testtask.build  LEFT JOIN zt_testsuite AS `caselib` ON caselib.id    = testcase.lib  LEFT JOIN zt_product AS `product` ON product.id    = testcase.product LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
