@@ -755,6 +755,10 @@ class storyModel extends model
                 $story->reviewers    = implode(',', $story->reviewer);
             }
         }
+        if($specChanged && $oldStory->type == 'requirement' && $story->status == 'active')
+        {
+            $this->triggerURChanged($storyID);
+        }
 
         $changes = common::createChanges($oldStory, $story);
         if(isset($story->relievedTwins))
@@ -1152,14 +1156,25 @@ class storyModel extends model
 
         if($story->result == 'pass' && $oldStory->type == 'requirement')
         {
-            /* IF is requirement changed, notify its relation. */
-            $relations = $this->storyTao->getRelation($storyID, 'requirement');
-            $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
+            $this->triggerURChanged($storyID);
         }
 
         if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Reviewed');
 
         return true;
+    }
+
+    /**
+     * Update story relation URChanged.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function triggerURChanged($storyID)
+    {
+        $relations = $this->storyTao->getRelation($storyID, 'requirement');
+        $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
     }
 
     /**
