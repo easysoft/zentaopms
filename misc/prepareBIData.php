@@ -6,7 +6,6 @@ if(count($argv) < 7)
     exit;
 }
 
-
 function getPDO($argv)
 {
     global $pdo;
@@ -72,6 +71,15 @@ function insert($table, $data)
     {
         $statement->bindValue(":$field", $value);
     }
+    $statement->execute();
+}
+
+function createView($viewName, $sql)
+{
+    global $pdo;
+
+    $prepareSql = "CREATE OR REPLACE VIEW $viewName AS $sql";
+    $statement  = $pdo->prepare($prepareSql);
     $statement->execute();
 }
 
