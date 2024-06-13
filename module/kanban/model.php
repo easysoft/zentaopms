@@ -2454,7 +2454,7 @@ class kanbanModel extends model
         {
             if(empty($cardID)) continue;
 
-            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET `cards` = REPLACE(cards, ',$cardID,', ',') WHERE `type` = '$type' AND `kanban` = {$kanbanList[$cardID]}");
+            $this->dao->update(TABLE_KANBANCELL)->set("cards = REPLACE(cards, ',$cardID,', ',')")->where('type')->eq($type)->andWhere('kanban')->eq($kanbanList[$cardID])->exec();
         }
 
         $this->dao->update(TABLE_KANBANCELL)

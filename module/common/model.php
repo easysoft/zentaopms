@@ -808,7 +808,8 @@ class commonModel extends model
                     $flow    = $app->dbQuery('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
                     $default = $field->options[$newStatus]['default'];
 
-                    $app->dbh->exec("UPDATE `$flow->table` SET `subStatus` = '$default' WHERE `id` = '$oldID'");
+                    $common = new self();
+                    $common->dao->update($flow->table)->set('subStatus')->eq($default)->where('id')->eq($oldID)->exec();
 
                     $new->subStatus = $default;
                 }

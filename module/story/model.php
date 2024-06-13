@@ -591,7 +591,7 @@ class storyModel extends model
     public function relieveTwins(int $productID, int $storyID): bool
     {
         /* batchUnset twinID from twins.*/
-        $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $productID");
+        $this->dao->update(TABLE_STORY)->set("twins = REPLACE(twins, ',$storyID,', ',')")->where('product')->eq($productID)->exec();
         /* Update twins to empty by twinID and if twins eq ','.*/
         $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
 
