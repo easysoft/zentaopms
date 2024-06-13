@@ -60,21 +60,6 @@ window.downloadCode = function()
 }
 
 /**
- * 点击左侧菜单打开详情tab。
- * Open new tab when click tree item.
- *
- * @access public
- * @return void
- */
-window.treeClick = function(info)
-{
-    if (info.item.items && info.item.items.length > 0) return;
-    $('li[z-key="' + info.item.id + '"] .listitem').addClass('selected');
-    openTab(info.item.id, info.item.text);
-    arrowTabs('monacoTabs', -2);
-}
-
-/**
  *  Change code encoding.
  *
  * @param  string encoding
