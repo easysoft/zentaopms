@@ -14,6 +14,7 @@ include 'header.html.php';
 
 jsVar('children',   $lang->story->children);
 jsVar('childrenAB', $lang->story->childrenAB);
+jsVar('URChanged', $lang->story->URChanged);
 
 featureBar
 (
@@ -75,6 +76,17 @@ if($canBatchAction) $config->my->story->dtable->fieldList['id']['type'] = 'check
 $stories = initTableData($stories, $config->my->story->dtable->fieldList, $this->story);
 $cols    = array_values($config->my->story->dtable->fieldList);
 $data    = array_values($stories);
+
+$canProcess = common::hasPriv('story', 'processStoryChange');
+foreach($stories as $story)
+{
+    if($story->URChanged)
+    {
+        $processStoryChangeLink = helper::createLink('story', 'processStoryChange', "storyID=$story->id");
+        $story->actions = array(array('name' => 'processStoryChange', 'icon' => 'ok', 'hint' => $lang->confirm, 'data-toggle' => 'modal', 'url' => $canProcess ? $processStoryChangeLink : null, 'disabled' => !$canProcess));
+    }
+}
+
 dtable
 (
     set::cols($cols),

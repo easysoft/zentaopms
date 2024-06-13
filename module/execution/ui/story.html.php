@@ -21,7 +21,7 @@ jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
 jsVar('typeNotEmpty',       sprintf($this->lang->error->notempty, $this->lang->task->type));
 jsVar('hourPointNotEmpty',  sprintf($this->lang->error->notempty, $this->lang->story->convertRelations));
 jsVar('hourPointNotError', sprintf($this->lang->story->float, $this->lang->story->convertRelations));
-jsVar('URChanged', $this->lang->story->URChanged);
+jsVar('URChanged', $lang->story->URChanged);
 
 /* Show feature bar. */
 featureBar
