@@ -200,11 +200,14 @@ foreach($stories as $story)
     if(!isset($story->children)) continue;
 
     /* Children. */
-    foreach($story->children as $key => $child)
+    if($config->vision != 'or')
     {
-        if($app->rawModule == 'projectstory' && $child->project != $story->project) continue;
-        $child->rawModule = $child->module;
-        $data[] = $this->story->formatStoryForList($child, $options, $storyType);
+        foreach($story->children as $key => $child)
+        {
+            if($app->rawModule == 'projectstory' && $child->project != $story->project) continue;
+            $child->rawModule = $child->module;
+            $data[] = $this->story->formatStoryForList($child, $options, $storyType);
+        }
     }
 }
 
