@@ -1295,5 +1295,3 @@ $config->upgrade->editors['testtask']    = array('table' => TABLE_TESTTASK,    '
 $config->upgrade->editors['todo']        = array('table' => TABLE_TODO,        'fields' => 'id,`desc`');
 $config->upgrade->editors['task']        = array('table' => TABLE_TASK,        'fields' => 'id,`desc`');
 $config->upgrade->editors['build']       = array('table' => TABLE_BUILD,       'fields' => 'id,`desc`');
-
-include dirname(__FILE__) . DS . 'config' . DS . 'upgradeflow.php';
