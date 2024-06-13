@@ -2,7 +2,7 @@
 
 if(count($argv) < 7)
 {
-    echo "Usage: php prepareBIData.php [host] [port] [db] [user] [pwd] [zentaoRoot]\n";
+    echo "Usage: php preparebidata.php [host] [port] [db] [user] [pwd] [zentaoRoot]\n";
     exit;
 }
 
