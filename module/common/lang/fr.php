@@ -410,7 +410,6 @@ $lang->devops->rules        = 'Rule';
 $lang->devops->settings     = 'Setting Merge Request';
 $lang->devops->platform     = 'Platform';
 $lang->devops->set          = 'Set';
-$lang->devops->artifactrepo = 'Artifact Repo';
 $lang->devops->environment  = 'Environment';
 $lang->devops->resource     = 'Resource';
 $lang->devops->dblist       = 'Database';
