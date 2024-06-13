@@ -11,17 +11,17 @@ declare(strict_types=1);
 
 namespace zin;
 
-data('activeMenuID', $storyType);
-jsVar('executionID', $execution->id);
-jsVar('childrenAB',  $lang->story->childrenAB);
-jsVar('modulePairs', $modulePairs);
-jsVar('hasProduct',  $execution->hasProduct);
+data('activeMenuID',        $storyType);
+jsVar('executionID',        $execution->id);
+jsVar('childrenAB',         $lang->story->childrenAB);
+jsVar('modulePairs',        $modulePairs);
+jsVar('hasProduct',         $execution->hasProduct);
 jsVar('linkedTaskStories',  $linkedTaskStories);
+jsVar('URChanged',          $lang->story->URChanged);
 jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
-jsVar('typeNotEmpty',       sprintf($this->lang->error->notempty, $this->lang->task->type));
-jsVar('hourPointNotEmpty',  sprintf($this->lang->error->notempty, $this->lang->story->convertRelations));
-jsVar('hourPointNotError', sprintf($this->lang->story->float, $this->lang->story->convertRelations));
-jsVar('URChanged', $lang->story->URChanged);
+jsVar('typeNotEmpty',       sprintf($lang->error->notempty, $lang->task->type));
+jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->convertRelations));
+jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
 
 /* Show feature bar. */
 featureBar
