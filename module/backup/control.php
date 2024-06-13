@@ -122,7 +122,7 @@ class backup extends control
         $systemInfo->currentVersion = $version;
         $systemInfo->versionHint    = $version;
         $systemInfo->latestVersion  = $latestVersion;
-        $systemInfo->upgradeable    = $version != $latestVersion && $this->loadModel('system')->isUpgradeable();
+        $systemInfo->upgradeable    = $version != $latestVersion || $this->loadModel('system')->isUpgradeable();
         $systemInfo->upgradeHint    = $systemInfo->upgradeable ? $this->lang->system->backup->versionInfo: null;
         $systemInfo->latestURL      = !empty($latestVersionList[$version]->link) ? $latestVersionList[$version]->link : $this->lang->install->officeDomain;
 
