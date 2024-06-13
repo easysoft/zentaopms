@@ -268,3 +268,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '需求数据',
+    'code'      => 'story',
+    'view'      => 'ztv_story',
+    'sql'       => <<<EOT
+SELECT story.id AS `id`,story.title AS `title`,story.status AS `status`,story.stage AS `stage`,story.pri AS `pri`,product.name AS `product_name`,product.id AS `product_id`,storymodule.name AS `storymodule_name`,storymodule.id AS `storymodule_id`,story.closedDate AS `closedDate`,story.closedReason AS `closedReason`,story.openedBy AS `openedBy`,story.openedDate AS `openedDate` FROM zt_story AS `story`  LEFT JOIN zt_product AS `product` ON product.id = story.product  LEFT JOIN zt_module AS `storymodule` ON storymodule.id = story.module where `story`.deleted = '0' LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
