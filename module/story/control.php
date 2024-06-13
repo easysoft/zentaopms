@@ -1768,6 +1768,12 @@ class story extends control
             $postData = form::data($this->config->transfer->form->export)->get();
 
             $this->session->set('storyTransferParams', array('productID' => $productID, 'executionID' => $executionID));
+
+            /* 给评审过的人员添加下拉选择，方便再次导入时转换成待评审人员。*/
+            /* Add a drop-down selection to the reviewer to facilitate the conversion to the reviewer during import. */
+            $this->config->story->dtable->fieldList['reviewedBy']['control']    = 'multiple';
+            $this->config->story->dtable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getProductReviewers', 'params' => array('productID' => (int)$productID));
+
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {
