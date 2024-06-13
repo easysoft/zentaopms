@@ -13645,8 +13645,6 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '套件权限',       'testsuiteAuth',            '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'testsuiteAuth', '', '', ''),
 ('system',      '项目集',         'programs',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     ''),
 ('lang',        '需求关闭原因',   'storyClosedReason',        '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyClosedReason', '', '', ''),
-('lang',        '工单类型',       'ticketType',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketType', '', '', ''),
-('lang',        '工单优先级',     'ticketPri',                '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
 ('system',      '项目',           'liteprojects',             '1', 'lite', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
 ('sql',         '任务',           'litetasks',                '1', 'lite', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_54',    'id',   'name'),
 ('system',      '权限分组',       'litegroups',               '1', 'lite', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
@@ -13663,7 +13661,10 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '反馈类型',       'litefeedbackType',         '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackType',         '', '', ''),
 ('lang',        '反馈处理方案',   'litefeedbackSolution',     '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackSolution',     '', '', ''),
 ('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackclosedReason', '', '', ''),
-('lang',        '任务关闭原因',   'litetaskReason',           '1', 'lite', 'admin', '1970-01-01 00:00:01', 'taskReason',           '', '', '');
+('lang',        '任务关闭原因',   'litetaskReason',           '1', 'lite', 'admin', '1970-01-01 00:00:01', 'taskReason',           '', '', ''),
+('lang',        '工单类型',       'ticketType',               '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketType', '', '', ''),
+('lang',        '工单优先级',     'ticketPri',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
+('lang',        '工单状态',       'ticketStatus',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketStatus', '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_4`;
 DROP VIEW IF EXISTS `view_datasource_5`;
