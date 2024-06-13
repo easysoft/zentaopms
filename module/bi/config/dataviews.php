@@ -54,3 +54,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '产品计划数据',
+    'code'      => 'productplan',
+    'view'      => 'ztv_productplan',
+    'sql'       => <<<EOT
+SELECT product.name AS `product_name`,product.id AS `product_id`,productplan.title AS `title`,productplan.status AS `status`,productplan.desc AS `desc`,productplan.begin AS `begin`,productplan.end AS `end` FROM zt_productplan AS `productplan`  LEFT JOIN zt_product AS `product` ON productplan.product = product.id where `productplan`.deleted = '0' LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
