@@ -56,9 +56,9 @@ class zentaoBot extends xuanBot
         }
 
         /* Backup user model of im module, load user module and restore. Use `$this->userModel` as user module from now on. */
-        $imUser = $this->im->user;
+        $imUser = clone $this->im->user;
         $this->userModel = $this->im->loadModel('user');
-        $this->im->user = $imUser;
+        $this->im->user = clone $imUser;
 
         $this->im->loadModel('task');
         $this->im->app->loadClass('pager', $static = true);
@@ -973,7 +973,9 @@ class zentaoBot extends xuanBot
     {
         try
         {
+            $imUser = clone $this->im->user;
             $this->im->loadModel('user');
+            $this->im->user = clone $imUser;
 
             $user = $this->userModel->getByID($this->im->app->input['userID'], 'id');
             /* Authorize him and save to session. */
