@@ -17,3 +17,23 @@ $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($execution
 $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($execution) ? $execution : null);
 $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($execution) ? $execution : null);
 $canBatchAction       = in_array(true, array($canBatchEdit, $canBatchClose, $canBatchCancel, $canBatchChangeModule, $canBatchAssignTo));
+
+if(!$canBatchAction)
+{
+    global $lang;
+    query('#exportPanel .form-row.exportRange')->replaceWith
+    (
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->file->exportRange),
+                set::control('picker'),
+                set::name('exportType'),
+                set::items($lang->exportTypeList),
+                set::required(true),
+                set::disabled(true)
+            )
+        )
+    );
+}
