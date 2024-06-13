@@ -344,3 +344,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '测试单列表',
+    'code'      => 'testtask',
+    'view'      => 'ztv_testtask',
+    'sql'       => <<<EOT
+SELECT product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,build.name AS `build_name`,build.id AS `build_id`,testtask.id AS `id`,testtask.name AS `name`,testtask.type AS `type`,testtask.owner AS `owner`,testtask.pri AS `pri`,testtask.begin AS `begin`,testtask.end AS `end`,testtask.status AS `status` FROM zt_testtask AS `testtask`  LEFT JOIN zt_product AS `product` ON product.id   = testtask.product  LEFT JOIN zt_project AS `project` ON project.id   = testtask.project  LEFT JOIN zt_project AS `execution` ON execution.id = testtask.execution  LEFT JOIN zt_build AS `build` ON build.id     = testtask.build LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
