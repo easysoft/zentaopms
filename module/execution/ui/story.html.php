@@ -21,6 +21,7 @@ jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
 jsVar('typeNotEmpty',       sprintf($this->lang->error->notempty, $this->lang->task->type));
 jsVar('hourPointNotEmpty',  sprintf($this->lang->error->notempty, $this->lang->story->convertRelations));
 jsVar('hourPointNotError', sprintf($this->lang->story->float, $this->lang->story->convertRelations));
+jsVar('URChanged', $this->lang->story->URChanged);
 
 /* Show feature bar. */
 featureBar
@@ -397,10 +398,10 @@ foreach($setting as $col)
 
 /* DataTable data. */
 $data        = array();
-$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink');
+$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink', 'processStoryChange');
 if(empty($execution->hasProduct) && empty($execution->multiple))
 {
-    $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close');
+    $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close', 'processStoryChange');
     if($storyType == 'requirement') $actionMenus = array('change', 'submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'edit', 'divider', 'batchCreate', 'close');
 }
 if(!$canModifyExecution) $actionMenus = array();

@@ -121,7 +121,7 @@ $tabs[] = setting()
     ->group('basic')
     ->title($lang->story->legendBasicInfo)
     ->control('storyBasicInfo')
-    ->statusText($this->processStatus('story', $story));
+    ->statusText($story->URChanged ? $lang->story->URChanged : $this->processStatus('story', $story));
 
 /* 需求一生。Legend life items. */
 $tabs[] = setting()
