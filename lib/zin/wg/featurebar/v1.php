@@ -25,13 +25,6 @@ class featureBar extends wg
         'trailing' => array()
     );
 
-    public static function getPageCSS(): ?string
-    {
-        return <<<CSS
-        #featureBar menu.nav .nav-item a span.text {overflow: hidden; text-overflow: ellipsis; max-width: 128px;}
-        CSS;
-    }
-
     protected function getItems()
     {
         $items = $this->prop('items');
@@ -119,7 +112,8 @@ class featureBar extends wg
                     'caret'  => 'down',
                     'items'  => $subItems,
                     'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
-                    'props'  => array('data-id' => $item->name, 'title' => $activeText)
+                    'props'  => array('data-id' => $item->name, 'title' => $activeText),
+                    'textClass' => 'text-ellipsis max-w-32'
                 );
 
                 continue;
@@ -131,7 +125,8 @@ class featureBar extends wg
                 'active' => $isActive,
                 'url'    => str_replace('{key}', strval($item->name), $link),
                 'badge'  => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
-                'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'title' => $item->text)
+                'props'  => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'title' => $item->text),
+                'textClass' => 'text-ellipsis max-w-32'
             );
         }
 
