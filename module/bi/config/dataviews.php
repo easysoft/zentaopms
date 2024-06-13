@@ -413,6 +413,26 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT testresult.caseResult AS `caseResult`,testresult.stepResults AS `stepResults`,testresult.lastRunner AS `lastRunner`,testresult.date AS `date`,testcase.title AS `testcase_title`,testcase.id AS `testcase_id`,testtask.name AS `testtask_name`,testtask.id AS `testtask_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,project.name AS `project_name`,project.id AS `project_id`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id`,build.name AS `build_name`,build.id AS `build_id`,caselib.name AS `caselib_name`,caselib.id AS `caselib_id` FROM zt_testresult AS `testresult`  LEFT JOIN zt_case AS `testcase` ON testcase.id   = testresult.case  LEFT JOIN zt_testrun AS `testrun` ON testrun.id    = testresult.run  LEFT JOIN zt_testtask AS `testtask` ON testrun.task  = testtask.id  LEFT JOIN zt_project AS `project` ON project.id    = testtask.project  LEFT JOIN zt_project AS `execution` ON execution.id  = testtask.execution  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module  LEFT JOIN zt_build AS `build` ON build.id      = testtask.build  LEFT JOIN zt_testsuite AS `caselib` ON caselib.id    = testcase.lib  LEFT JOIN zt_product AS `product` ON product.id    = testcase.product LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'caseResult'      => array('name' => '测试结果', 'field' => 'caseResult', 'object' => 'testresult', 'type' => 'option'),
+        'stepResults'     => array('name' => '步骤结果', 'field' => 'stepResults', 'object' => 'testresult', 'type' => 'json'),
+        'lastRunner'      => array('name' => '最后执行人', 'field' => 'lastRunner', 'object' => 'testresult', 'type' => 'user'),
+        'date'            => array('name' => '测试时间', 'field' => 'date', 'object' => 'testresult', 'type' => 'date'),
+        'testcase_id'     => array('name' => '用例编号', 'field' => 'id', 'object' => 'testcase', 'type' => 'object'),
+        'testcase_title'  => array('name' => '用例', 'field' => 'title', 'object' => 'testcase', 'type' => 'object'),
+        'testtask_id'     => array('name' => '编号', 'field' => 'id', 'object' => 'testtask', 'type' => 'object'),
+        'testtask_name'   => array('name' => '测试单', 'field' => 'name', 'object' => 'testtask', 'type' => 'object'),
+        'execution_id'    => array('name' => '迭代编号', 'field' => 'id', 'object' => 'execution', 'type' => 'object'),
+        'execution_name'  => array('name' => '执行', 'field' => 'name', 'object' => 'execution', 'type' => 'object'),
+        'project_id'      => array('name' => '项目ID', 'field' => 'id', 'object' => 'project', 'type' => 'object'),
+        'project_name'    => array('name' => '项目', 'field' => 'name', 'object' => 'project', 'type' => 'object'),
+        'casemodule_id'   => array('name' => '编号', 'field' => 'id', 'object' => 'casemodule', 'type' => 'object'),
+        'casemodule_name' => array('name' => '模块维护', 'field' => 'name', 'object' => 'casemodule', 'type' => 'object'),
+        'build_id'        => array('name' => '编号', 'field' => 'id', 'object' => 'build', 'type' => 'object'),
+        'build_name'      => array('name' => '版本', 'field' => 'name', 'object' => 'build', 'type' => 'object'),
+        'caselib_id'      => array('name' => '编号', 'field' => 'id', 'object' => 'caselib', 'type' => 'object'),
+        'caselib_name'    => array('name' => '用例库', 'field' => 'name', 'object' => 'caselib', 'type' => 'object')
+    ),
     'group'     => '101'
 );
