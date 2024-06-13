@@ -44,23 +44,32 @@ class thinkSwot extends wg
         return $questionList;
     }
 
-    protected function buildItem(int $order, string $blockTitle): node
+    protected function buildItem(int $order, string $blockTitle, int $blockID): node|array
     {
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        $mode         = $this->prop('mode');
+        list($mode, $steps) = $this->prop(array('mode', 'steps'));
         $defaultTitle = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
         $blockTitle   = $blockTitle ?: $defaultTitle;
+        $urlParams    = !empty($app->params) ? $app->params : array();
+
+        $stepID = 0;
+        if(isset($urlParams['runID']))
+        {
+            $stepID = $app->control->loadModel('thinkstep')->getRunStepIDByID($blockID, $urlParams['runID']);
+            if(!$stepID) return array();
+        }
+
         return div
         (
-            setClass('relative p-1 bg-canvas border border-gray-200 model-block', "block-$order"),
-            setStyle(array('width' => '50%', 'height' => '127px')),
+            setClass('relative p-1 bg-canvas border border-canvas border-2 model-block', "block-$order"),
+            setStyle(array('width' => '50%', 'min-height' => '294px')),
             div
             (
                 setClass('h-full'),
-                div(setClass('item-step-title text-center text-sm text-clip'), set::title($blockTitle), $blockTitle),
-                div(setClass('item-step-answer h-5/6'))
+                div(setClass('item-step-title text-center text-clip'), set::title($blockTitle), $blockTitle),
+                empty($steps) ? null : div(setClass('px-5 py-3 flex flex-wrap gap-5 relative z-10'), $this->buildQuestion($stepID, $blockID))
             )
         );
     }
@@ -69,10 +78,7 @@ class thinkSwot extends wg
     {
         $blocks     = $this->prop('blocks');
         $modelItems = array();
-        foreach($blocks as $key => $block)
-        {
-            $modelItems[] = $this->buildItem($key, $block->text ?? '');
-        }
+        foreach($blocks as $key => $block) $modelItems[] = $this->buildItem($key, $block->text ?? '', (int)$block->id);
         return $modelItems;
     }
 
