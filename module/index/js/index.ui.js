@@ -446,6 +446,7 @@ function getAppCode(urlOrModuleName, defaultCode)
             if(viewType === 'doc')   return 'doc';
             if(viewType === 'story') return 'product';
             if(viewType === 'host')  return 'admin';
+            if(viewType === 'ticket') return 'feedback';
         }
         if(methodLowerCase === 'browsetask') return 'execution';
         if(methodLowerCase === 'browsegroup') return 'bi';

@@ -161,7 +161,11 @@ class dropmenu extends wg
         }
 
         if($tab == 'caselib')    $objectID = data('libID');
-        if($tab == 'feedback')   $objectID = data('productID');
+        if($tab == 'feedback')
+        {
+            $objectID = data('productID');
+            $extra    = data('viewType');
+        }
         if($tab == 'demandpool') $objectID = data('poolID');
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
