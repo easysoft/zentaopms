@@ -30,3 +30,8 @@ window.importJob = function()
         }
     });
 }
+
+$(function()
+{
+    importJob();
+});
