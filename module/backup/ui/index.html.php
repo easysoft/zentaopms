@@ -73,9 +73,10 @@ if($this->config->inQuickon)
             setClass('text-center'),
             h::td($systemInfo->name),
             h::td($systemInfo->status),
-            h::td($systemInfo->currentVersion),
+            h::td(set::title($systemInfo->currentVersionTitle), $systemInfo->currentVersion),
             h::td
             (
+                set::title($systemInfo->latestVersionTitle),
                 $systemInfo->latestVersion,
                 $systemInfo->upgradeHint ? a
                 (
