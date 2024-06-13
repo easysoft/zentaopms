@@ -324,3 +324,23 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '用例步骤数据',
+    'code'      => 'casestep',
+    'view'      => 'ztv_casestep',
+    'sql'       => <<<EOT
+SELECT testcase.title AS `testcase_title`,testcase.id AS `testcase_id`,casestep.type AS `type`,casestep.desc AS `desc`,casestep.expect AS `expect`,casestep.version AS `version` FROM zt_casestep AS `casestep`  LEFT JOIN zt_case AS `testcase` ON testcase.id = casestep.`case` LIMIT 100
+EOT,
+    'fields'    => array
+    (
+        'testcase_id'    => array('name' => '用例编号', 'field' => 'id', 'object' => 'testcase', 'type' => 'object'),
+        'testcase_title' => array('name' => '用例', 'field' => 'title', 'object' => 'testcase', 'type' => 'object'),
+        'type'           => array('name' => '步骤类型', 'field' => 'type', 'object' => 'casestep', 'type' => 'option'),
+        'desc'           => array('name' => '步骤', 'field' => 'desc', 'object' => 'casestep', 'type' => 'string'),
+        'expect'         => array('name' => '预期', 'field' => 'expect', 'object' => 'casestep', 'type' => 'string'),
+        'version'        => array('name' => '用例版本', 'field' => 'version', 'object' => 'casestep', 'type' => 'number')
+    ),
+    'group'     => '101'
+);
