@@ -209,21 +209,22 @@ foreach($stories as $story)
 }
 
 /* Generate toolbar of DataTable footer. */
-$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID)
+$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $roadmaps, $config)
 {
     /* Flag variables of permissions. */
-    $canBeChanged         = common::canModify('product', $product);
-    $canBatchEdit         = $canBeChanged && hasPriv($storyType, 'batchEdit');
-    $canBatchClose        = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
-    $canBatchReview       = $canBeChanged && hasPriv($storyType, 'batchReview');
-    $canBatchChangeStage  = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
-    $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
-    $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
-    $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && $storyType == 'story' && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
-    $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
-    $canBatchUnlink       = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
-    $canBatchImportToLib  = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
+    $canBeChanged          = common::canModify('product', $product);
+    $canBatchEdit          = $canBeChanged && hasPriv($storyType, 'batchEdit');
+    $canBatchClose         = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
+    $canBatchReview        = $canBeChanged && hasPriv($storyType, 'batchReview');
+    $canBatchChangeStage   = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
+    $canBatchChangeBranch  = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
+    $canBatchChangeModule  = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
+    $canBatchChangePlan    = $canBeChanged && hasPriv('story', 'batchChangePlan') && $storyType == 'story' && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
+    $canBatchChangeRoadmap = $canBeChanged && hasPriv('story', 'batchChangeRoadmap') && $config->vision == 'or';
+    $canBatchAssignTo      = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
+    $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
+    $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
+    $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
 
     /* Remove empty data from data list. */
     unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
@@ -237,6 +238,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
     foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
     foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangePlan', "planID=$planID"));
+    foreach($roadmaps as $roadmapID => $roadmapName)           $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeRoadmap', "roadmapID=$roadmapID"));
     foreach($lang->story->stageList as $key => $stageName)
     {
         if(!str_contains('|tested|verified|released|closed|', "|$key|")) continue;
@@ -284,6 +286,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary batchChangeModuleBtn' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Plan button. */
         array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary batchCnangePlanBtn' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
+        $canBatchChangeRoadmap ? array('caret' => 'up', 'text' => $lang->roadmap->common, 'className' => 'secondary batchCnangePlanBtn', 'items' => $roadmapItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
         /* Change branch button. */
         ($canBatchChangeBranch && $product->type != 'normal') ? array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'className' => 'batchChangeBranchBtn', 'items' => $branchItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
         /* AssignedTo button. */
