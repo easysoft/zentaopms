@@ -295,3 +295,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '用例数据',
+    'code'      => 'testcase',
+    'view'      => 'ztv_testcase',
+    'sql'       => <<<EOT
+SELECT testcase.id AS `id`,testcase.title AS `title`,testcase.pri AS `pri`,testcase.type AS `type`,testcase.stage AS `stage`,testcase.status AS `status`,testcase.version AS `version`,product.name AS `product_name`,product.id AS `product_id`,story.title AS `story_title`,story.id AS `story_id`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id`,testcase.openedBy AS `openedBy`,testcase.openedDate AS `openedDate` FROM zt_case AS `testcase`  LEFT JOIN zt_product AS `product` ON product.id = testcase.product  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module  LEFT JOIN zt_story AS `story` ON story.id = testcase.story  LEFT JOIN zt_casestep AS `casestep` ON casestep.case = testcase.id where `testcase`.deleted = '0' LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
