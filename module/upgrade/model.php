@@ -6780,7 +6780,7 @@ class upgradeModel extends model
 
             $group->name      = $name;
             $group->collector = $module;
-            $this->dao->replace(TABLE_MODULE)->data($group)->exec();
+            $this->dao->insert(TABLE_MODULE)->data($group)->exec();
 
             $modules[$module] = $this->dao->lastInsertID();
 
