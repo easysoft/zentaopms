@@ -317,7 +317,13 @@ class systemModel extends model
         else
             $latestVersion = $latestRelease->products->oss;
 
-        if(version_compare($latestVersion, $this->config->version, 'gt')) return true;
+        if(version_compare($latestVersion, $this->config->version, 'lt')) return false;
+
+        $chartVersion = getenv('CHART_VERSION');
+        if(empty($chartVersion)) return false;
+
+        if(version_compare($latestRelease->version, $chartVersion, 'gt')) return true;
+
         return false;
     }
 }
