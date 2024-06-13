@@ -12,3 +12,26 @@ window.renderCell = function(result, {col, row})
 
     return result;
 };
+
+window.importJob = function()
+{
+    if(repoID === undefined || repoID === null || typeof repoID != "number" || !canImportJob) return;
+
+    var url = $.createLink('job', 'ajaxImportJobs', "repoID=" + repoID);
+    $.getJSON(url, function(data)
+    {
+        if(data.result == 'success')
+        {
+            if(!sessionStorage.getItem('jobImported'))
+            {
+                sessionStorage.setItem('jobImported', 'true');
+                return loadTable();
+            }
+        }
+    });
+}
+
+$(function()
+{
+    importJob();
+});
