@@ -75,3 +75,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '产品发布数据',
+    'code'      => 'release',
+    'view'      => 'ztv_release',
+    'sql'       => <<<EOT
+SELECT product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,build.name AS `build_name`,build.id AS `build_id`,release.name AS `name`,release.status AS `status`,release.desc AS `desc`,release.date AS `date`,release.stories AS `stories`,release.bugs AS `bugs`,release.leftBugs AS `leftBugs` FROM zt_release AS `release`  LEFT JOIN zt_product AS `product` ON release.product = product.id  LEFT JOIN zt_project AS `project` ON release.project = project.id  LEFT JOIN zt_build AS `build` ON release.build   = build.id where `release`.deleted = '0' LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
