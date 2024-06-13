@@ -580,6 +580,25 @@ class storyModel extends model
     }
 
     /**
+     * 解除孪生需求。
+     * Relieve twins stories.
+     *
+     * @param  int $productID
+     * @param  int $storyID
+     * @access public
+     * @return bool
+     */
+    public function relieveTwins(int $productID, int $storyID): bool
+    {
+        /* batchUnset twinID from twins.*/
+        $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $productID");
+        /* Update twins to empty by twinID and if twins eq ','.*/
+        $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * Create story from gitlab issue.
      *
      * @param  object    $story
@@ -740,8 +759,7 @@ class storyModel extends model
         $changes = common::createChanges($oldStory, $story);
         if(isset($story->relievedTwins))
         {
-            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
-            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            $this->relieveTwins($oldStory->product, $storyID);
             if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
         }
         elseif(!empty($oldStory->twins))
@@ -766,8 +784,7 @@ class storyModel extends model
         /* Relieve twins when change product. */
         if(!empty($oldStory->twins) and $story->product != $oldStory->product)
         {
-            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
-            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            $this->relieveTwins($oldStory->product, $storyID);
             $oldStory->twins = '';
         }
 
@@ -1433,12 +1450,7 @@ class storyModel extends model
         $changes = common::createChanges($oldStory, $story);
         if(!empty($postData->closeSync))
         {
-            /* batchUnset twinID from twins.*/
-            $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$storyID,', ',') WHERE `product` = $oldStory->product";
-            $this->dbh->exec($replaceSql);
-
-            /* Update twins to empty by twinID and if twins eq ','.*/
-            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            $this->relieveTwins($oldStory->product, $storyID);
 
             if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
         }
