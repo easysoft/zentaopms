@@ -7,11 +7,21 @@ class thinkSwot extends wg
     protected static array $defineProps = array(
         'mode?: string', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
         'blocks: array', // 模型节点
+        'steps?: array', // 所有问题步骤数据
     );
 
     public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
+    protected function buildQuestionItem(object $step): wg|array
+    {
+        if($step->options->questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode('detail'));
+        if($step->options->questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode('detail'));
+        if($step->options->questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode('detail'));
+        if($step->options->questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode('detail'));
+        return array();
     }
 
     protected function buildItem(int $order, string $blockTitle): node
