@@ -354,6 +354,7 @@ pipeline {
                     steps {
                       sh 'ls -l ${OUTPUT_PKG_PATH}'
                       container('jnlp') {
+                        sh 'find $OUTPUT_PKG_PATH -type f -name "*$PMS_VERSION*" -delete'
                         sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
                         sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir $OUTPUT_PKG_PATH --key-prefix $OBJECT_KEY_PREFIX'
                       }
@@ -435,7 +436,7 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_BIZ_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
@@ -490,7 +491,7 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_BIZ_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
@@ -563,8 +564,8 @@ pipeline {
                   sh "make markdown-init"
                 }
                 stage("docker build") {
-                  sh 'make build'
-                  sh 'make test-open'
+                  // sh 'make build'
+                  // sh 'make test-open'
 
                   sh 'make test-biz'
                   sh 'make build-biz'
@@ -591,8 +592,9 @@ pipeline {
             script {
               if (env.BUILD_KIND=='release') {
                 stage("离线镜像包") {
-                  offlineImage.save()
-                  offlineImage.release()
+                  sh "echo ignore"
+                  // offlineImage.save()
+                  // offlineImage.release()
                 }
               }
               def j = job.newJob()
