@@ -139,6 +139,23 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT project.name AS `project_name`,project.id AS `project_id`,execution.name AS `name`,execution.code AS `code`,execution.type AS `type`,execution.status AS `status`,execution.desc AS `desc`,execution.begin AS `begin`,execution.end AS `end`,execution.PO AS `PO`,execution.PM AS `PM`,execution.QD AS `QD`,execution.RD AS `RD`,execution.openedBy AS `openedBy`,execution.openedDate AS `openedDate` FROM zt_project AS `execution`  LEFT JOIN zt_project AS `project` ON execution.project = project.id LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'project_id'   => array('name' => '项目ID', 'field' => 'id', 'object' => 'project', 'type' => 'object'),
+        'project_name' => array('name' => '项目名称', 'field' => 'name', 'object' => 'project', 'type' => 'object'),
+        'name'         => array('name' => '迭代名称', 'field' => 'name', 'object' => 'execution', 'type' => 'string'),
+        'code'         => array('name' => '迭代代号', 'field' => 'code', 'object' => 'execution', 'type' => 'string'),
+        'type'         => array('name' => '迭代类型', 'field' => 'type', 'object' => 'execution', 'type' => 'option'),
+        'status'       => array('name' => '迭代状态', 'field' => 'status', 'object' => 'execution', 'type' => 'option'),
+        'desc'         => array('name' => '迭代描述', 'field' => 'desc', 'object' => 'execution', 'type' => 'string'),
+        'begin'        => array('name' => '计划开始', 'field' => 'begin', 'object' => 'execution', 'type' => 'date'),
+        'end'          => array('name' => '计划完成', 'field' => 'end', 'object' => 'execution', 'type' => 'date'),
+        'PO'           => array('name' => '产品负责人', 'field' => 'PO', 'object' => 'execution', 'type' => 'user'),
+        'PM'           => array('name' => '迭代负责人', 'field' => 'PM', 'object' => 'execution', 'type' => 'user'),
+        'QD'           => array('name' => '测试负责人', 'field' => 'QD', 'object' => 'execution', 'type' => 'user'),
+        'RD'           => array('name' => '发布负责人', 'field' => 'RD', 'object' => 'execution', 'type' => 'user'),
+        'openedBy'     => array('name' => '由谁创建', 'field' => 'openedBy', 'object' => 'execution', 'type' => 'user'),
+        'openedDate'   => array('name' => '创建日期', 'field' => 'openedDate', 'object' => 'execution', 'type' => 'date')
+    ),
     'group'     => '101'
 );
