@@ -222,6 +222,11 @@ EOT,
         'story_id'       => array('name' => '编号', 'field' => 'id', 'object' => 'story', 'type' => 'object'),
         'story_title'    => array('name' => '研发需求', 'field' => 'title', 'object' => 'story', 'type' => 'object'),
         'pri'            => array('name' => '优先级', 'field' => 'pri', 'object' => 'bug', 'type' => 'option'),
+        'openedBy'       => array('name' => '由谁创建', 'field' => 'openedBy', 'object' => 'bug', 'type' => 'user'),
+        'openedDate'     => array('name' => '创建日期', 'field' => 'openedDate', 'object' => 'bug', 'type' => 'date'),
+        'resolvedBy'     => array('name' => '解决者', 'field' => 'resolvedBy', 'object' => 'bug', 'type' => 'user'),
+        'resolution'     => array('name' => '解决方案', 'field' => 'resolution', 'object' => 'bug', 'type' => 'option'),
+        'resolvedDate'   => array('name' => '解决日期', 'field' => 'resolvedDate', 'object' => 'bug', 'type' => 'date')
     ),
     'group'     => '101'
 );
