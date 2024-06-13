@@ -13,7 +13,7 @@ UPDATE `zt_grouppriv` SET module='researchtask', `method`='recordWorkhour' WHERE
 
 UPDATE `zt_grouppriv` SET module='marketresearch', `method`='task'   WHERE module='marketresearch' AND `method`='stage';
 
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'tasks') WHERE `module` = 'task' AND `field` = 'parent';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'tasks'), `control` = 'select' WHERE `module` = 'task' AND `field` = 'parent';
 
 UPDATE `zt_ai_miniprogram` SET `prompt` = '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <兴趣领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。' WHERE `id` = 1;
 UPDATE `zt_ai_miniprogramfield` SET `name` = '兴趣领域' WHERE `appID` = 1 AND `name` = '更多感兴趣的领域';
