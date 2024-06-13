@@ -111,6 +111,22 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT project.name AS `name`,project.code AS `code`,project.model AS `model`,project.type AS `type`,project.status AS `status`,project.desc AS `desc`,project.begin AS `begin`,project.end AS `end`,project.PO AS `PO`,project.PM AS `PM`,project.QD AS `QD`,project.RD AS `RD`,project.openedBy AS `openedBy`,project.openedDate AS `openedDate` FROM zt_project AS `project`  where `project`.deleted = '0' LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'name'       => array('name' => '项目名称', 'field' => 'name', 'object' => 'project', 'type' => 'string'),
+        'code'       => array('name' => '项目代号', 'field' => 'code', 'object' => 'project', 'type' => 'string'),
+        'model'      => array('name' => '项目管理方式', 'field' => 'model', 'object' => 'project', 'type' => 'option'),
+        'type'       => array('name' => '项目类型', 'field' => 'type', 'object' => 'project', 'type' => 'option'),
+        'status'     => array('name' => '状态', 'field' => 'status', 'object' => 'project', 'type' => 'option'),
+        'desc'       => array('name' => '项目描述', 'field' => 'desc', 'object' => 'project', 'type' => 'string'),
+        'begin'      => array('name' => '计划开始', 'field' => 'begin', 'object' => 'project', 'type' => 'date'),
+        'end'        => array('name' => '计划完成', 'field' => 'end', 'object' => 'project', 'type' => 'date'),
+        'PO'         => array('name' => '产品负责人', 'field' => 'PO', 'object' => 'project', 'type' => 'user'),
+        'PM'         => array('name' => '项目负责人', 'field' => 'PM', 'object' => 'project', 'type' => 'user'),
+        'QD'         => array('name' => '测试负责人', 'field' => 'QD', 'object' => 'project', 'type' => 'user'),
+        'RD'         => array('name' => '发布负责人', 'field' => 'RD', 'object' => 'project', 'type' => 'user'),
+        'openedBy'   => array('name' => '由谁创建', 'field' => 'openedBy', 'object' => 'project', 'type' => 'user'),
+        'openedDate' => array('name' => '创建日期', 'field' => 'openedDate', 'object' => 'project', 'type' => 'date')
+    ),
     'group'     => '101'
 );
