@@ -159,3 +159,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '任务数据',
+    'code'      => 'task',
+    'view'      => 'ztv_task',
+    'sql'       => <<<EOT
+SELECT project.name AS `project_name`,project.id AS `project_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,story.title AS `story_title`,story.id AS `story_id`,taskmodule.name AS `taskmodule_name`,taskmodule.id AS `taskmodule_id`,task.name AS `name`,task.pri AS `pri`,task.type AS `type`,task.status AS `status`,task.desc AS `desc`,task.estimate AS `estimate`,task.consumed AS `consumed`,task.left AS `left`,task.estStarted AS `estStarted`,task.deadline AS `deadline`,task.assignedTo AS `assignedTo`,task.finishedBy AS `finishedBy`,task.closedBy AS `closedBy`,task.openedBy AS `openedBy`,task.openedDate AS `openedDate` FROM zt_task AS `task`  LEFT JOIN zt_project AS `execution` ON task.execution = execution.id  LEFT JOIN zt_project AS `project` ON task.project   = project.id  LEFT JOIN zt_story AS `story` ON task.story     = story.id  LEFT JOIN zt_module AS `taskmodule` ON task.module    = taskmodule.id where `task`.deleted = '0' LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
