@@ -103,8 +103,9 @@ class backup extends control
         }
         else
         {
-            $version     = $this->config->version;
-            $versionName = ($this->config->inQuickon ? 'DevOps' : '') . $this->lang->pmsName . $this->config->version;
+            $version = $this->config->version;
+            if($this->config->edition == 'open') $versionName = $this->lang->pmsName . $this->config->version;
+            if($this->config->edition != 'open') $versionName = $this->lang->{$this->config->edition . 'Name'} . str_replace($this->config->edition, '', $this->config->version);
         }
 
         $latestVersionList = array();
