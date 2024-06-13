@@ -2751,6 +2751,14 @@ class metricModel extends model
             ->fetch('date');
     }
 
+    /**
+     * 根据版本过滤度量项。
+     * Filter metric instance by edition.
+     *
+     * @param  array  $calcInstances
+     * @access public
+     * @return array
+     */
     public function filterCalcByEdition($calcInstances)
     {
         foreach($calcInstances as $code => $instance)
