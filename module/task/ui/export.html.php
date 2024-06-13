@@ -8,4 +8,12 @@ declare(strict_types=1);
  * @package     task
  * @link        https://www.zentao.net
  */
+namespace zin;
 include '../../file/ui/export.html.php';
+
+$canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($execution) ? $execution : null);
+$canBatchClose        = common::hasPriv('task', 'batchClose', !empty($execution) ? $execution : null) && strtolower($type) != 'closed';
+$canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($execution) ? $execution : null) && strtolower($type) != 'cancel';
+$canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($execution) ? $execution : null);
+$canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($execution) ? $execution : null);
+$canBatchAction       = in_array(true, array($canBatchEdit, $canBatchClose, $canBatchCancel, $canBatchChangeModule, $canBatchAssignTo));

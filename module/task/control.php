@@ -1135,6 +1135,7 @@ class task extends control
         $this->view->orderBy         = $orderBy;
         $this->view->type            = $type;
         $this->view->executionID     = $executionID;
+        $this->view->execution       = $execution;
 
         $this->display();
     }
