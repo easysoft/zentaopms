@@ -62,6 +62,11 @@ $('#teamTable').on('change.team', '.picker-select', function()
     disableMembers();
 });
 
+$('#teamTable').on('click', "[data-type='add']", function()
+{
+    setTimeout(function(){disableMembers()}, 300);
+});
+
 /* 切换串行/并行 展示/隐藏工序图标. */
 $('.form').on('change.team', '[name="mode"]', function()
 {
