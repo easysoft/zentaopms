@@ -141,7 +141,7 @@ class props extends \zin\utils\dataset
     {
         foreach($this->storedData as $name => $value)
         {
-            if(str_starts_with($name, '@')) return true;
+            if(str_starts_with($name, '@') && $name !== '@init') return true;
         }
 
         return false;
