@@ -239,6 +239,23 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT bug.id AS `id`,bug.title AS `title`,bug.steps AS `steps`,bug.status AS `status`,bug.confirmed AS `confirmed`,bug.severity AS `severity`,product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,build.name AS `build_name`,build.id AS `build_id`,module.name AS `module_name`,module.id AS `module_id`,testtask.name AS `testtask_name`,testtask.id AS `testtask_id`,bug.pri AS `pri`,bug.openedBy AS `openedBy`,bug.openedDate AS `openedDate`,bug.resolvedBy AS `resolvedBy`,bug.resolution AS `resolution`,bug.resolvedDate AS `resolvedDate`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id` FROM zt_bug AS `bug`  LEFT JOIN zt_product AS `product` ON product.id = bug.product  LEFT JOIN zt_testtask AS `testtask` ON testtask.id = bug.testtask  LEFT JOIN zt_build AS `build` ON build.id = testtask.build  LEFT JOIN zt_project AS `execution` ON execution.id = build.execution  LEFT JOIN zt_project AS `project` ON project.id = build.project  LEFT JOIN zt_module AS `module` ON module.id = bug.module  LEFT JOIN zt_case AS `testcase` ON testcase.id = bug.case  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module LIMIT 100
 EOT,
-    'fields'    => array();
+    'fields'    => array
+    (
+        'id'              => array('name' => 'Bug编号', 'field' => 'id', 'object' => 'bugbuild', 'type' => 'number'),
+        'title'           => array('name' => 'Bug标题', 'field' => 'title', 'object' => 'bugbuild', 'type' => 'string'),
+        'steps'           => array('name' => '重现步骤', 'field' => 'steps', 'object' => 'bugbuild', 'type' => 'text'),
+        'status'          => array('name' => 'Bug状态', 'field' => 'status', 'object' => 'bugbuild', 'type' => 'option'),
+        'confirmed'       => array('name' => '是否确认', 'field' => 'confirmed', 'object' => 'bugbuild', 'type' => 'option'),
+        'severity'        => array('name' => '严重程度', 'field' => 'severity', 'object' => 'bugbuild', 'type' => 'option'),
+        'product_id'      => array('name' => '编号', 'field' => 'id', 'object' => 'product', 'type' => 'object'),
+        'product_name'    => array('name' => '所属产品', 'field' => 'name', 'object' => 'product', 'type' => 'object'),
+        'project_id'      => array('name' => '项目ID', 'field' => 'id', 'object' => 'project', 'type' => 'object'),
+        'project_name'    => array('name' => '所属项目', 'field' => 'name', 'object' => 'project', 'type' => 'object'),
+        'build_id'        => array('name' => 'ID', 'field' => 'id', 'object' => 'build', 'type' => 'object'),
+        'build_name'      => array('name' => '版本', 'field' => 'name', 'object' => 'build', 'type' => 'object'),
+        'module_id'       => array('name' => '编号', 'field' => 'id', 'object' => 'module', 'type' => 'object'),
+        'module_name'     => array('name' => '所属模块', 'field' => 'name', 'object' => 'module', 'type' => 'object'),
+        'testtask_id'     => array('name' => '编号', 'field' => 'id', 'object' => 'testtask', 'type' => 'object'),
+    ),
     'group'     => '101'
 );
