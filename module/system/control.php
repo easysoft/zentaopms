@@ -344,7 +344,7 @@ class system extends control
         if($rawResult)
         {
             if($rawResult->code == 200)
-                $this->sendSuccess();
+                $this->sendSuccess($this->lang->system->backup->success->upgrade);
             else
                 $this->sendError($rawResult->message);
         }
