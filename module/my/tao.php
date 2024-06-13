@@ -77,6 +77,8 @@ class myTao extends myModel
             $operatorAndAccount  = $assignedToMatches[1];
             $query = str_replace("t1.{$assignedToMatches[0]}", "(t1.{$assignedToCondition} or (t1.mode = 'multi' and t5.`account` {$operatorAndAccount} and t1.status != 'closed' and t5.status != 'done') )", $query);
         }
+        if(strpos($query, "t2.`project` = 'all'") !== false)   $query = str_replace("t2.`project` = 'all'", "t2.`project` != '0'", $query);
+        if(strpos($query, "t2.`project` != 'all'") !== false)  $query = str_replace("t2.`project` != 'all'", "t2.`project` = '0'", $query);
         if(strpos($query, "t1.`execution` = 'all'") !== false) $query = str_replace("t1.`execution` = 'all'", "t1.`execution` != '0'", $query);
 
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
