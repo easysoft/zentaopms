@@ -63,6 +63,15 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT product.name AS `product_name`,product.id AS `product_id`,productplan.title AS `title`,productplan.status AS `status`,productplan.desc AS `desc`,productplan.begin AS `begin`,productplan.end AS `end` FROM zt_productplan AS `productplan`  LEFT JOIN zt_product AS `product` ON productplan.product = product.id where `productplan`.deleted = '0' LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'product_id'   => array('name' => '编号', 'field' => 'id', 'object' => 'product', 'type' => 'object'),
+        'product_name' => array('name' => '产品', 'field' => 'name', 'object' => 'product', 'type' => 'object'),
+        'title'        => array('name' => '名称', 'field' => 'title', 'object' => 'productplan', 'type' => 'string'),
+        'status'       => array('name' => '状态', 'field' => 'status', 'object' => 'productplan', 'type' => 'option'),
+        'desc'         => array('name' => '描述', 'field' => 'desc', 'object' => 'productplan', 'type' => 'string'),
+        'begin'        => array('name' => '开始日期', 'field' => 'begin', 'object' => 'productplan', 'type' => 'date'),
+        'end'          => array('name' => '结束日期', 'field' => 'end', 'object' => 'productplan', 'type' => 'date')
+    ),
     'group'     => '101'
 );
