@@ -1,6 +1,6 @@
 window.renderRowData = function($row, index, row)
 {
-    if(row.type == 'stage' || row.attribute != '')
+    if((row.type == 'stage' || row.attribute != '') && stageList[row.attribute])
     {
         const parentType = row.grade > 1 && parents[row.parent] ? parents[row.parent].attribute : '';
         /* If is stage, modify lifetime to attribute. */
