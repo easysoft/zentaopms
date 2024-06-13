@@ -256,6 +256,15 @@ EOT,
         'module_id'       => array('name' => '编号', 'field' => 'id', 'object' => 'module', 'type' => 'object'),
         'module_name'     => array('name' => '所属模块', 'field' => 'name', 'object' => 'module', 'type' => 'object'),
         'testtask_id'     => array('name' => '编号', 'field' => 'id', 'object' => 'testtask', 'type' => 'object'),
+        'testtask_name'   => array('name' => '测试单', 'field' => 'name', 'object' => 'testtask', 'type' => 'object'),
+        'pri'             => array('name' => '优先级', 'field' => 'pri', 'object' => 'bugbuild', 'type' => 'option'),
+        'openedBy'        => array('name' => '由谁创建', 'field' => 'openedBy', 'object' => 'bugbuild', 'type' => 'user'),
+        'openedDate'      => array('name' => '创建日期', 'field' => 'openedDate', 'object' => 'bugbuild', 'type' => 'datetime'),
+        'resolvedBy'      => array('name' => '解决者', 'field' => 'resolvedBy', 'object' => 'bugbuild', 'type' => 'user'),
+        'resolution'      => array('name' => '解决方案', 'field' => 'resolution', 'object' => 'bugbuild', 'type' => 'option'),
+        'resolvedDate'    => array('name' => '解决日期', 'field' => 'resolvedDate', 'object' => 'bugbuild', 'type' => 'datetime'),
+        'casemodule_id'   => array('name' => '编号', 'field' => 'id', 'object' => 'casemodule', 'type' => 'object'),
+        'casemodule_name' => array('name' => '模块', 'field' => 'name', 'object' => 'casemodule', 'type' => 'object')
     ),
     'group'     => '101'
 );
