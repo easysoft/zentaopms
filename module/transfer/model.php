@@ -653,9 +653,14 @@ class transferModel extends model
         {
             if($module == 'story') $queryCondition = str_replace('`story`', '`id`', $queryCondition);
 
-            $table       = zget($this->config->objectTables, $module); //获取对应的表
-            $moduleDatas = $this->dao->select('*')->from($table)->alias('t1')
-                ->where($queryCondition)
+            $table = zget($this->config->objectTables, $module); //获取对应的表
+            $sql   = $this->dao->select('*')->from($table)->alias('t1');
+            if($module == 'task' && strpos($queryCondition, '`assignedTo`') !== false)
+            {
+                preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $queryCondition, $matches);
+                $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and t2.account $matches[1]");
+            }
+            $moduleDatas = $sql->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
                 ->fetchAll('id');
         }

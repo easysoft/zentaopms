@@ -3736,6 +3736,8 @@ class executionModel extends model
             preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $condition, $matches);
             $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
             $condition = str_replace("t1.$matches[0]", "(t1.$matches[0] or (t1.mode = 'multi' and t2.`account` $matches[1] and t1.status != 'closed' and t2.status != 'done') )", $condition);
+
+            $this->session->set('taskQueryCondition', $condition, $this->app->tab);
         }
 
         $sql = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1');
