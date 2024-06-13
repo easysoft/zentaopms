@@ -7,7 +7,6 @@ class thinkSwot extends wg
     protected static array $defineProps = array(
         'mode?: string', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
         'blocks: array', // 模型节点
-        'steps?: array', // 所有问题步骤数据
     );
 
     public static function getPageCSS(): ?string
@@ -24,42 +23,21 @@ class thinkSwot extends wg
         return array();
     }
 
-    protected function buildQuestion(int $stepID, int $originalID): array
+    protected function buildQuestion(array $steps): array
     {
-        $steps      = $this->prop('steps');
-        $blockSteps = array();
-        foreach($steps as $stepItem)
-        {
-            $path = explode(',', trim($stepItem->path, ','));
-            if(in_array($stepID, $path) || in_array($originalID, $path)) $blockSteps[] = $stepItem;
-        }
-
         $questionList = array();
-        foreach($blockSteps as &$step)
-        {
-            if(is_string($step->options)) $step->options = json_decode($step->options);
-            if(is_string($step->answer))  $step->answer  = json_decode($step->answer);
-            $questionList[] = div(setClass('w-80 bg-canvas p-2 shadow'), $this->buildQuestionItem($step));
-        }
+        foreach($steps as &$step) $questionList[] = div(setClass('w-80 bg-canvas p-2 shadow'), $this->buildQuestionItem($step));
         return $questionList;
     }
 
-    protected function buildItem(int $order, string $blockTitle, int $blockID): node|array
+    protected function buildItem(int $order, object $block): node|array
     {
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        list($mode, $steps) = $this->prop(array('mode', 'steps'));
+        $mode         = $this->prop('mode');
         $defaultTitle = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
-        $blockTitle   = $blockTitle ?: $defaultTitle;
-        $urlParams    = !empty($app->params) ? $app->params : array();
-
-        $stepID = 0;
-        if(isset($urlParams['runID']))
-        {
-            $stepID = $app->control->loadModel('thinkstep')->getRunStepIDByID($blockID, $urlParams['runID']);
-            if(!$stepID) return array();
-        }
+        $blockTitle   = $block->text ?: $defaultTitle;
 
         return div
         (
@@ -69,7 +47,7 @@ class thinkSwot extends wg
             (
                 setClass('h-full'),
                 div(setClass('item-step-title text-center text-clip'), set::title($blockTitle), $blockTitle),
-                empty($steps) ? null : div(setClass('px-5 py-3 flex flex-wrap gap-5 relative z-10'), $this->buildQuestion($stepID, $blockID))
+                !isset($block->steps) ? null : div(setClass('px-5 py-3 flex flex-wrap gap-5 relative z-10'), $this->buildQuestion($block->steps))
             )
         );
     }
@@ -78,7 +56,7 @@ class thinkSwot extends wg
     {
         $blocks     = $this->prop('blocks');
         $modelItems = array();
-        foreach($blocks as $key => $block) $modelItems[] = $this->buildItem($key, $block->text ?? '', (int)$block->id);
+        foreach($blocks as $key => $block) $modelItems[] = $this->buildItem($key, $block);
         return $modelItems;
     }
 
