@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('repoID', $repoID);
+jsVar('canImportJob', empty($jobList));
+
 if($repoID)
 {
     $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch('name');
