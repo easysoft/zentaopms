@@ -64,7 +64,7 @@ $('#teamTable').on('change.team', '.picker-select', function()
 
 $('#teamTable').on('click', "[data-type='add']", function()
 {
-    setInterval(function(){disableMembers()}, 300);
+    setTimeout(function(){disableMembers()}, 300);
 });
 
 /* 切换串行/并行 展示/隐藏工序图标. */
