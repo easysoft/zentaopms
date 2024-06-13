@@ -230,3 +230,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '版本Bug数据',
+    'code'      => 'bugbuild',
+    'view'      => 'ztv_bugbuild',
+    'sql'       => <<<EOT
+SELECT bug.id AS `id`,bug.title AS `title`,bug.steps AS `steps`,bug.status AS `status`,bug.confirmed AS `confirmed`,bug.severity AS `severity`,product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,build.name AS `build_name`,build.id AS `build_id`,module.name AS `module_name`,module.id AS `module_id`,testtask.name AS `testtask_name`,testtask.id AS `testtask_id`,bug.pri AS `pri`,bug.openedBy AS `openedBy`,bug.openedDate AS `openedDate`,bug.resolvedBy AS `resolvedBy`,bug.resolution AS `resolution`,bug.resolvedDate AS `resolvedDate`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id` FROM zt_bug AS `bug`  LEFT JOIN zt_product AS `product` ON product.id = bug.product  LEFT JOIN zt_testtask AS `testtask` ON testtask.id = bug.testtask  LEFT JOIN zt_build AS `build` ON build.id = testtask.build  LEFT JOIN zt_project AS `execution` ON execution.id = build.execution  LEFT JOIN zt_project AS `project` ON project.id = build.project  LEFT JOIN zt_module AS `module` ON module.id = bug.module  LEFT JOIN zt_case AS `testcase` ON testcase.id = bug.case  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module LIMIT 100
+EOT,
+    'fields'    => array();
+    'group'     => '101'
+);
