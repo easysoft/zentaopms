@@ -353,6 +353,24 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,build.name AS `build_name`,build.id AS `build_id`,testtask.id AS `id`,testtask.name AS `name`,testtask.type AS `type`,testtask.owner AS `owner`,testtask.pri AS `pri`,testtask.begin AS `begin`,testtask.end AS `end`,testtask.status AS `status` FROM zt_testtask AS `testtask`  LEFT JOIN zt_product AS `product` ON product.id   = testtask.product  LEFT JOIN zt_project AS `project` ON project.id   = testtask.project  LEFT JOIN zt_project AS `execution` ON execution.id = testtask.execution  LEFT JOIN zt_build AS `build` ON build.id     = testtask.build LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'product_id'     => array('name' => '编号', 'field' => 'id', 'object' => 'product', 'type' => 'object'),
+        'product_name'   => array('name' => '所属产品', 'field' => 'name', 'object' => 'product', 'type' => 'object'),
+        'project_id'     => array('name' => '项目ID', 'field' => 'id', 'object' => 'project', 'type' => 'object'),
+        'project_name'   => array('name' => '所属项目', 'field' => 'name', 'object' => 'project', 'type' => 'object'),
+        'execution_id'   => array('name' => '迭代编号', 'field' => 'id', 'object' => 'execution', 'type' => 'object'),
+        'execution_name' => array('name' => '所属执行', 'field' => 'name', 'object' => 'execution', 'type' => 'object'),
+        'build_id'       => array('name' => 'ID', 'field' => 'id', 'object' => 'build', 'type' => 'object'),
+        'build_name'     => array('name' => '版本', 'field' => 'name', 'object' => 'build', 'type' => 'object'),
+        'id'             => array('name' => '编号', 'field' => 'id', 'object' => 'testtask', 'type' => 'number'),
+        'name'           => array('name' => '名称', 'field' => 'name', 'object' => 'testtask', 'type' => 'string'),
+        'type'           => array('name' => '测试类型', 'field' => 'type', 'object' => 'testtask', 'type' => 'option'),
+        'owner'          => array('name' => '负责人', 'field' => 'owner', 'object' => 'testtask', 'type' => 'user'),
+        'pri'            => array('name' => '优先级', 'field' => 'pri', 'object' => 'testtask', 'type' => 'option'),
+        'begin'          => array('name' => '开始日期', 'field' => 'begin', 'object' => 'testtask', 'type' => 'date'),
+        'end'            => array('name' => '结束日期', 'field' => 'end', 'object' => 'testtask', 'type' => 'date'),
+        'status'         => array('name' => '当前状态', 'field' => 'status', 'object' => 'testtask', 'type' => 'option')
+    ),
     'group'     => '101'
 );
