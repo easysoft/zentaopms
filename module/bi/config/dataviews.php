@@ -130,3 +130,15 @@ EOT,
     ),
     'group'     => '101'
 );
+
+$config->bi->builtin->dataviews[] = array
+(
+    'name'      => '执行数据',
+    'code'      => 'execution',
+    'view'      => 'ztv_execution',
+    'sql'       => <<<EOT
+SELECT project.name AS `project_name`,project.id AS `project_id`,execution.name AS `name`,execution.code AS `code`,execution.type AS `type`,execution.status AS `status`,execution.desc AS `desc`,execution.begin AS `begin`,execution.end AS `end`,execution.PO AS `PO`,execution.PM AS `PM`,execution.QD AS `QD`,execution.RD AS `RD`,execution.openedBy AS `openedBy`,execution.openedDate AS `openedDate` FROM zt_project AS `execution`  LEFT JOIN zt_project AS `project` ON execution.project = project.id LIMIT 100
+EOT,
+    'fields'    => array(),
+    'group'     => '101'
+);
