@@ -304,6 +304,23 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT testcase.id AS `id`,testcase.title AS `title`,testcase.pri AS `pri`,testcase.type AS `type`,testcase.stage AS `stage`,testcase.status AS `status`,testcase.version AS `version`,product.name AS `product_name`,product.id AS `product_id`,story.title AS `story_title`,story.id AS `story_id`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id`,testcase.openedBy AS `openedBy`,testcase.openedDate AS `openedDate` FROM zt_case AS `testcase`  LEFT JOIN zt_product AS `product` ON product.id = testcase.product  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module  LEFT JOIN zt_story AS `story` ON story.id = testcase.story  LEFT JOIN zt_casestep AS `casestep` ON casestep.case = testcase.id where `testcase`.deleted = '0' LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'id'              => array('name' => '用例编号', 'field' => 'id', 'object' => 'testcase', 'type' => 'number'),
+        'title'           => array('name' => '用例标题', 'field' => 'title', 'object' => 'testcase', 'type' => 'string'),
+        'pri'             => array('name' => '优先级', 'field' => 'pri', 'object' => 'testcase', 'type' => 'option'),
+        'type'            => array('name' => '用例类型', 'field' => 'type', 'object' => 'testcase', 'type' => 'option'),
+        'stage'           => array('name' => '适用阶段', 'field' => 'stage', 'object' => 'testcase', 'type' => 'option'),
+        'status'          => array('name' => '用例状态', 'field' => 'status', 'object' => 'testcase', 'type' => 'option'),
+        'version'         => array('name' => '用例版本', 'field' => 'version', 'object' => 'testcase', 'type' => 'number'),
+        'product_id'      => array('name' => '编号', 'field' => 'id', 'object' => 'product', 'type' => 'object'),
+        'product_name'    => array('name' => '所属产品', 'field' => 'name', 'object' => 'product', 'type' => 'object'),
+        'story_id'        => array('name' => '编号', 'field' => 'id', 'object' => 'story', 'type' => 'object'),
+        'story_title'     => array('name' => '相关研发需求', 'field' => 'title', 'object' => 'story', 'type' => 'object'),
+        'casemodule_id'   => array('name' => '编号', 'field' => 'id', 'object' => 'casemodule', 'type' => 'object'),
+        'casemodule_name' => array('name' => '所属模块', 'field' => 'name', 'object' => 'casemodule', 'type' => 'object'),
+        'openedBy'        => array('name' => '由谁创建', 'field' => 'openedBy', 'object' => 'testcase', 'type' => 'user'),
+        'openedDate'      => array('name' => '创建日期', 'field' => 'openedDate', 'object' => 'testcase', 'type' => 'date')
+    ),
     'group'     => '101'
 );
