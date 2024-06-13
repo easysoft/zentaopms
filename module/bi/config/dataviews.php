@@ -277,6 +277,21 @@ $config->bi->builtin->dataviews[] = array
     'sql'       => <<<EOT
 SELECT story.id AS `id`,story.title AS `title`,story.status AS `status`,story.stage AS `stage`,story.pri AS `pri`,product.name AS `product_name`,product.id AS `product_id`,storymodule.name AS `storymodule_name`,storymodule.id AS `storymodule_id`,story.closedDate AS `closedDate`,story.closedReason AS `closedReason`,story.openedBy AS `openedBy`,story.openedDate AS `openedDate` FROM zt_story AS `story`  LEFT JOIN zt_product AS `product` ON product.id = story.product  LEFT JOIN zt_module AS `storymodule` ON storymodule.id = story.module where `story`.deleted = '0' LIMIT 100
 EOT,
-    'fields'    => array(),
+    'fields'    => array
+    (
+        'id'               => array('name' => '编号', 'field' => 'id', 'object' => 'story', 'type' => 'number'),
+        'title'            => array('name' => '研发需求名称', 'field' => 'title', 'object' => 'story', 'type' => 'string'),
+        'status'           => array('name' => '当前状态', 'field' => 'status', 'object' => 'story', 'type' => 'option'),
+        'stage'            => array('name' => '所处阶段', 'field' => 'stage', 'object' => 'story', 'type' => 'option'),
+        'pri'              => array('name' => '优先级', 'field' => 'pri', 'object' => 'story', 'type' => 'option'),
+        'product_id'       => array('name' => '编号', 'field' => 'id', 'object' => 'product', 'type' => 'object'),
+        'product_name'     => array('name' => '所属产品', 'field' => 'name', 'object' => 'product', 'type' => 'object'),
+        'storymodule_id'   => array('name' => '编号', 'field' => 'id', 'object' => 'storymodule', 'type' => 'object'),
+        'storymodule_name' => array('name' => '所属模块', 'field' => 'name', 'object' => 'storymodule', 'type' => 'object'),
+        'closedDate'       => array('name' => '关闭日期', 'field' => 'closedDate', 'object' => 'story', 'type' => 'date'),
+        'closedReason'     => array('name' => '关闭原因', 'field' => 'closedReason', 'object' => 'story', 'type' => 'option'),
+        'openedBy'         => array('name' => '由谁创建', 'field' => 'openedBy', 'object' => 'story', 'type' => 'user'),
+        'openedDate'       => array('name' => '创建日期', 'field' => 'openedDate', 'object' => 'story', 'type' => 'date')
+    ),
     'group'     => '101'
 );
