@@ -133,10 +133,6 @@ if($this->config->inQuickon)
 
     foreach($data as &$backup) foreach($backup->actions as &$action) $action['disabled'] = !empty($operating);
 
-    /* Add the display text to the icon. */
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['restore']['text'] = $config->system->dtable->backup->fieldList['actions']['list']['restore']['text'];
-    $config->system->dtable->backup->fieldList['actions']['actionsMap']['delete']['text']  = $config->system->dtable->backup->fieldList['actions']['list']['delete']['text'];
-
     dtable
     (
         set::customCols(false),
