@@ -8884,6 +8884,14 @@ class upgradeModel extends model
         $datasource->createdDate = helper::now();
 
         $this->dao->insert(TABLE_WORKFLOWDATASOURCE)->data($datasource)->autoCheck()->exec();
+        $datasourceID = $this->dao->lastInsertID();
+
+        $view = "view_datasource_$datasourceID";
+        $sql  = "CREATE VIEW $view (`id`, `title`) AS $datasource->datasource";
+
+        $this->dbh->query($sql);
+
+        $this->dao->update(TABLE_WORKFLOWDATASOURCE)->set('view')->eq($view)->where('id')->eq($datasourceID)->exec();
 
         return !dao::isError();
     }
