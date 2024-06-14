@@ -730,6 +730,18 @@ class metricModel extends model
         return $result;
     }
 
+    public function mergeRecord($record, $result)
+    {
+        $uniqueKey = $this->getUniqueKeyByRecord($record);
+        if(isset($result[$uniqueKey]))
+        {
+            $result[$uniqueKey]['value'] += $record['value'];
+            return $result;
+        }
+        $result[$uniqueKey] = $record;
+        return $result;
+    }
+
     /**
      * 根据度量数据的字段生成唯一键。
      * Get unique key by record field.
