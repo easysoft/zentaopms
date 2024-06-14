@@ -247,7 +247,7 @@ class system extends control
         if($result['result'] == 'success')
         {
             $backupName = $result['data']->backup_name;
-            $this->send($result + array('callback' => "backupInProcess('$backupName')"));
+            $this->send($result + array('callback' => "backupInProgress('$backupName')"));
         }
         else
         {
@@ -287,7 +287,7 @@ class system extends control
 
         $this->loadModel('action')->create('system', 0, 'restoreBackup', '', $backupName);
 
-        $this->send($result + array('load' => true, 'callback' => "restoreInProcess('$backupName')"));
+        $this->send($result + array('load' => true, 'callback' => "restoreInProgress('$backupName')"));
     }
 
     /**
@@ -306,7 +306,7 @@ class system extends control
 
         $this->loadModel('action')->create('system', 0, 'deleteBackup', '', $backupName);
 
-        $this->send($result + array('load' => true, 'callback' => "deleteInProcess('$backupName')"));
+        $this->send($result + array('load' => true, 'callback' => "deleteInProgress('$backupName')"));
     }
 
     /**

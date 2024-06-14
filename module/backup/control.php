@@ -185,7 +185,7 @@ class backup extends control
             if($result['result'] == 'success')
             {
                 $backupName = $result['data']->backup_name;
-                $this->send($result + array('callback' => "backupInProcess('$backupName')"));
+                $this->send($result + array('callback' => "backupInProgress('$backupName')"));
             }
             else
             {

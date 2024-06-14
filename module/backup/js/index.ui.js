@@ -113,7 +113,7 @@ $(document).off('click', '.modal [z-key="confirm"]').on('click', '.modal [z-key=
     if(deleting) $('#main').addClass('loading');
 });
 
-window.backupInProcess = function(backupName)
+window.backupInProgress = function(backupName)
 {
     if(!inQuickon) return false;
 
@@ -132,7 +132,7 @@ window.backupInProcess = function(backupName)
     }, 2000);
 };
 
-window.restoreInProcess = function(backupName)
+window.restoreInProgress = function(backupName)
 {
     if(!inQuickon) return false;
 
@@ -152,7 +152,7 @@ window.restoreInProcess = function(backupName)
     }, 2000);
 };
 
-window.deleteInProcess = function(backupName)
+window.deleteInProgress = function(backupName)
 {
     if(!inQuickon) return false;
 
