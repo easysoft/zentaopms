@@ -8868,5 +8868,23 @@ class upgradeModel extends model
      */
     public function addFeedbackDatasource()
     {
+        $this->loadModel('feedback');
+
+        $datasource = new stdclass();
+        $datasource->type        = 'sql';
+        $datasource->name        = $this->lang->feedback->common;
+        $datasource->code        = 'feedbacks';
+        $datasource->datasource  = "select id,title from zt_feedback where deleted = '0'";
+        $datasource->keyField    = 'id';
+        $datasource->valueField  = 'title';
+        $datasource->buildin     = '1';
+        $datasource->vision      = 'rnd';
+        $datasource->vision      = 'rnd';
+        $datasource->createdBy   = 'system';
+        $datasource->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_WORKFLOWDATASOURCE)->data($datasource)->autoCheck()->exec();
+
+        return !dao::isError();
     }
 }
