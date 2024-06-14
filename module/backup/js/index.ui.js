@@ -171,3 +171,23 @@ window.deleteInProcess = function(backupName)
 
     }, 2000);
 }
+
+window.upgradeInProgress= function()
+{
+    if(!inQuickon) return false;
+
+    loadTable();
+    let intervalId = setInterval(function()
+    {
+
+        $.get($.createLink('system', 'ajaxGetUpgradeProgress'), function(resp)
+        {
+            if(resp.result == 'success')
+            {
+                loadCurrentPage();
+                clearInterval(intervalId);
+            }
+        }, 'json');
+
+    }, 2000);
+}
