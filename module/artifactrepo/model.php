@@ -42,6 +42,7 @@ class artifactrepoModel extends model
      */
     public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(substr($orderBy, 0, 5) == 'type_') $orderBy = 't2.' . $orderBy;
         $artifactRepos = $this->dao->select('t1.*, t2.id AS pipelineID, t2.url, t2.type')->from(TABLE_ARTIFACTREPO)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.serverID = t2.id')
             ->where('t1.deleted')->eq(0)
