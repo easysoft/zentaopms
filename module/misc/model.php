@@ -143,6 +143,7 @@ class miscModel extends model
      */
     public function getUpgradeRemind(): bool
     {
+        return false; // beta versions hidden upgrade window, fix bug #51122.
         if(!empty($this->config->global->hideUpgradeGuide)) return false;
 
         $remind = false;
