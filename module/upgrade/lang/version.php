@@ -435,7 +435,7 @@ $lang->upgrade->fromVersions['max4_9']        = 'Max4.9';
 $lang->upgrade->fromVersions['max4_10']       = 'Max4.10';
 $lang->upgrade->fromVersions['max4_10_1']     = 'Max4.10.1';
 $lang->upgrade->fromVersions['max4_11']       = 'Max4.11';
-$lang->upgrade->fromVersions['max4_12']       = 'Max4.11';
+$lang->upgrade->fromVersions['max4_12']       = 'Max4.12';
 $lang->upgrade->fromVersions['max5_0_beta1']  = 'Max5.0.beta1'; // max insert position.
 
 /* Ipd */
