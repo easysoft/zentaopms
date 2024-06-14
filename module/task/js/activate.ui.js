@@ -4,6 +4,7 @@ window.waitDom('.picker-box [name=assignedTo]', function()
     if(taskMode == 'linear' || taskMode == 'multi')
     {
         $('#multiple').trigger('click');
+        updateAssignedTo();
         computeTotalLeft();
     }
 });
