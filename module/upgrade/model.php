@@ -8893,6 +8893,8 @@ class upgradeModel extends model
 
         $this->dao->update(TABLE_WORKFLOWDATASOURCE)->set('view')->eq($view)->where('id')->eq($datasourceID)->exec();
 
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('options')->eq($datasourceID)->where('module')->eq('ticket')->andWhere('field')->eq('feedback')->exec();
+
         return !dao::isError();
     }
 }
