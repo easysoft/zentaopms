@@ -43,13 +43,13 @@ $config->system->dtable->backup->fieldList['creator']['sort']  = false;
 
 $config->system->dtable->backup->fieldList['type']['title'] = $lang->system->backup->type;
 $config->system->dtable->backup->fieldList['type']['map']   = $lang->system->backup->typeList;
+$config->system->dtable->backup->fieldList['type']['m-width']  = '40px';
 
 $config->system->dtable->backup->fieldList['status']['title']  = $lang->backup->status;
 $config->system->dtable->backup->fieldList['status']['hidden'] = false;
 $config->system->dtable->backup->fieldList['status']['map']    = $lang->system->backup->statusList;
+$config->system->dtable->backup->fieldList['status']['width']  = '20px';
 
-$config->system->dtable->backup->fieldList['comment']['title'] = $lang->comment;
-$config->system->dtable->backup->fieldList['comment']['type']  = 'html';
 
 $config->system->dtable->backup->fieldList['actions']['name']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['title'] = $lang->actions;
