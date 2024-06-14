@@ -14,6 +14,7 @@ class thinkModel extends wg
         $questionType = $step->options->questionType;
         $wgMap        = array('input' => 'thinkInput', 'radio' => 'thinkRadio', 'checkbox' => 'thinkCheckbox', 'tableInput' => 'thinkTableInput');
         if(!isset($wgMap[$questionType])) return array();
+
         $wgFuncName = $wgMap[$questionType];
         return call_user_func("\zin\\$wgFuncName", set::step($step), set::questionType($questionType), set::mode('detail'));
     }
