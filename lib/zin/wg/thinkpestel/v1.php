@@ -2,30 +2,17 @@
 declare(strict_types=1);
 namespace zin;
 
+requireWg('thinkModel');
+
 /**
  * 思引师PESTEL模型部件类。
  * thinmory PESTEL model widget class.
  */
-class thinkPestel extends wg
+class thinkPestel extends thinkModel
 {
-    protected static array $defineProps = array(
-        'mode?: string', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
-        'blocks: array', // 模型节点
-    );
-
     public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
-    protected function buildQuestionItem(object $step): wg|array
-    {
-        $questionType = $step->options->questionType;
-        $wgMap        = array('input' => 'thinkInput', 'radio' => 'thinkRadio', 'checkbox' => 'thinkCheckbox', 'tableInput' => 'thinkTableInput');
-        if(!isset($wgMap[$questionType])) return array();
-
-        $wgFuncName = $wgMap[$questionType];
-        return call_user_func("\zin\\$wgFuncName", set::step($step), set::questionType($questionType), set::mode('detail'));
     }
 
     protected function buildItem(object $block): array
@@ -65,7 +52,7 @@ class thinkPestel extends wg
                             $block->text ? $block->text : $defaultTitle
                         )
                     ),
-                    div(setClass('p-2 relative z-10 col gap-2'), $this->buildItem($block))
+                    isset($block->steps) ? div(setClass('p-2 relative z-10 col gap-2'), $this->buildItem($block)) : null
                 ),
             );
         }
