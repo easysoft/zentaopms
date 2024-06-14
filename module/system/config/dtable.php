@@ -55,7 +55,6 @@ $config->system->dtable->backup->fieldList['actions']['name']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['title'] = $lang->actions;
 $config->system->dtable->backup->fieldList['actions']['type']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['menu']  = array('restore', 'delete');
-$config->system->dtable->backup->fieldList['actions']['width'] = 0.1;
 
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['icon']         = 'history';
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['text']         = $lang->backup->restore;
