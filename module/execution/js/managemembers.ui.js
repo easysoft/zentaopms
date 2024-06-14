@@ -7,7 +7,7 @@
  */
 window.addItem = function(obj)
 {
-    let item         = $('#addItem > tbody').html().replace(/%i%/g, itemIndex);
+    let item         = $('#addItem > tbody').html().replace(/_i/g, itemIndex);
     const $currentTr = $(obj).closest('tr');
 
     $currentTr.after(item);

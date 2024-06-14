@@ -153,7 +153,7 @@ foreach($teamMembers as $member)
 
 jsVar('+itemIndex', $i);
 
-$i = '%i%';
+$i = '_i';
 h::table
 (
     set::className('hidden'),
