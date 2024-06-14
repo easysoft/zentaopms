@@ -654,7 +654,7 @@ class transferModel extends model
             if($module == 'story') $queryCondition = str_replace('`story`', '`id`', $queryCondition);
 
             $table = zget($this->config->objectTables, $module); //获取对应的表
-            $sql   = $this->dao->select('*')->from($table)->alias('t1');
+            $sql   = $this->dao->select('t1.*')->from($table)->alias('t1');
             if($module == 'task' && strpos($queryCondition, '`assignedTo`') !== false)
             {
                 preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $queryCondition, $matches);
