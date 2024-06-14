@@ -203,7 +203,7 @@ foreach($actions as $key => $action)
         $actions[$key]['data-size'] = 'lg';
     }
 
-    if($isRequirement && $action['icon'] == 'assets') unset($actions[$key]);
+    if($isRequirement && isset($action['icon']) && $action['icon'] == 'assets') unset($actions[$key]);
 }
 
 if($this->config->edition == 'ipd' and $story->type == 'story') $story = $this->story->getAffectObject(array(), $story->type, $story);
