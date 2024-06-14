@@ -730,6 +730,14 @@ class metricModel extends model
         return $result;
     }
 
+    /**
+     * 根据度量数据的字段生成唯一键。
+     * Get unique key by record field.
+     *
+     * @param  array    $record
+     * @access public
+     * @return string
+     */
     public function getUniqueKeyByRecord($record)
     {
         $record = (array)$record;
