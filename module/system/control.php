@@ -419,6 +419,19 @@ class system extends control
     }
 
     /**
+     * 获取升级的进度。（当前没有进度，但可以通过获取是否可以升级来检查）
+     * AJAX: Get upgrade progress.
+     *
+     * @return void
+     */
+    public function ajaxGetUpgradeProgress()
+    {
+        $isUpgradeable = $this->system->isUpgradeable();
+        if($isUpgradeable) return $this->send(array('result' => 'fail', 'message' => $this->lang->system->backup->upgrading));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->system->backup->success->upgrade, 'load' => true));
+    }
+
+    /**
      * 获取删除的进度。
      *  AJAX: Get delete progress.
      *
