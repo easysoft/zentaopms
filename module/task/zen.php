@@ -302,8 +302,11 @@ class taskZen extends task
      */
     protected function buildAssignToForm(int $executionID, int $taskID): void
     {
-        $task    = $this->task->getByID($taskID);
-        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $task         = $this->task->getByID($taskID);
+        $projectModel = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch('model');
+        $memberType   = $projectModel == 'research' ? 'project'      : 'execution';
+        $objectID     = $projectModel == 'research' ? $task->project : $executionID;
+        $members      = $this->loadModel('user')->getTeamMemberPairs($objectID, $memberType, 'nodeleted');
 
         /* Compute next assignedTo. */
         if(!empty($task->team) && in_array($task->status, $this->config->task->unfinishedStatus))
