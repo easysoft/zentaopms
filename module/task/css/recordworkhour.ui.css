@@ -3,3 +3,7 @@
 .panel-form .panel-heading {padding: 1rem 0}
 .panel-form .panel-heading .panel-title {font-size: 14px}
 .panel-form .form-actions.btn-actions {position: sticky;}
+
+.modal-body .panel-form-batch {padding-top: 1rem;}
+.modal-body .table {margin-bottom: 1.5rem;}
+.modal-body .table + .panel-form-batch {padding-top: 0;}
