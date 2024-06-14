@@ -344,7 +344,7 @@ class system extends control
         if($rawResult)
         {
             if($rawResult->code == 200)
-                $this->sendSuccess(array('message' => $this->lang->system->backup->success->upgrade, 'callback' => 'loadCurrentPage()'));
+                $this->sendSuccess(array('message' => $this->lang->system->backup->success->upgrade, 'callback' => 'upgradeInProgress'));
             else
                 $this->sendError($rawResult->message);
         }
