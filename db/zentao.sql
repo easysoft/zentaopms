@@ -3286,12 +3286,6 @@ CREATE TABLE IF NOT EXISTS `zt_domain`(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `domain` ON `zt_domain` (`domain`);
 
-DROP VIEW IF EXISTS `view_datasource_5`;
-CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'rnd';
-
-DROP VIEW IF EXISTS `view_datasource_54`;
-CREATE VIEW `view_datasource_54` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
-
 UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
