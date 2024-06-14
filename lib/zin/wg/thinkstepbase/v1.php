@@ -58,7 +58,7 @@ class thinkStepBase extends wg
 
         $requiredSymbal = !empty($options->required) ? span(setClass('text-danger mr-0.5 h-5'), '*') : null;
         $questionTips   = !empty($tips) ? span(setClass('text-gray mx-1'), '(' . $tips . ')') : null;
-        $errorText      = !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
+        $errorText      = isset($options->questionType) && !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
         (
             setClass('run-error-msg h-5 inline-block text-canvas text-md px-2 ml-0.5 rounded-md hidden'),
             setStyle('background', 'var(--color-danger-600)'),
