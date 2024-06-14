@@ -18,52 +18,56 @@ class thinkPestel extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildItem($questions, $blockIndex): array
+    protected function buildQuestionItem(object $step): wg|array
     {
-        global $config;
-        $cards = array();
+        $questionType = $step->options->questionType;
+        $wgMap        = array('input' => 'thinkInput', 'radio' => 'thinkRadio', 'checkbox' => 'thinkCheckbox', 'tableInput' => 'thinkTableInput');
+        if(!isset($wgMap[$questionType])) return array();
 
-        foreach($questions as $item)
-        {
-            $cards[] = div(setClass('h-4 mt-2 w-full bg-opacity-20 rounded-sm bg-' . $config->thinkbackground->blockColor[$blockIndex]));
-        }
+        $wgFuncName = $wgMap[$questionType];
+        return call_user_func("\zin\\$wgFuncName", set::step($step), set::questionType($questionType), set::mode('detail'));
+    }
+
+    protected function buildItem(object $block): array
+    {
+        $cards = array();
+        foreach($block->steps as &$step) $cards[] = div(setClass('w-full bg-canvas p-2 shadow relative'), $this->buildQuestionItem($step));
         return $cards;
     }
 
     protected function buildBody(): array
     {
         global $lang, $config;
-        $blocks           = $this->prop('blocks');
-        $mode             = $this->prop('mode');
-        $blockIndex       = 0;
-        $modelItems       = array();
-        $defaultQuestions = array_pad(array(), 6, null);
-        $defaultTitle     = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
 
-        foreach($blocks as $block)
+        list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
+        $modelItems   = array();
+        $defaultTitle = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
+
+        foreach($blocks as $blockIndex => $block)
         {
             $blockColor = $config->thinkbackground->blockColor[$blockIndex];
             $modelItems[] = div
             (
-                setClass('h-full w-1/' . count($blocks), 'block-' . $blockIndex),
+                setClass('relative w-1/' . count($blocks), 'block-' . $blockIndex),
+                setStyle(array('min-height' => '256px')),
                 $mode === 'preview' ? div(setClass('w-full text-center text-sm leading-tight text-gray-400'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
                 div
                 (
-                    setClass('border border-opacity-80 rounded-lg bg-white mt-1 mx-1'),
+                    setClass('h-full mt-1 mx-px bg-opacity-20 model-block bg-' . $blockColor),
                     div
                     (
-                        setClass('bg-opacity-20 h-16 rounded-lg px-2 py-3 w-full flex items-center justify-center bg-' . $blockColor, 'text-' . $blockColor),
-                        span(
+                        setClass('h-16 px-2 py-3 w-full relative z-10 flex justify-center', 'text-' . $blockColor),
+                        span
+                        (
                             setClass('item-step-title overflow-y-hidden'),
                             setStyle(array('max-height' => '40px')),
                             set::title($block->text ? $block->text : null),
                             $block->text ? $block->text : $defaultTitle
                         )
                     ),
-                    div(setClass('px-2 pb-2 h-52 model-block relative'), $this->buildItem($defaultQuestions, $blockIndex))
+                    div(setClass('p-2 relative z-10 col gap-2'), $this->buildItem($block))
                 ),
             );
-            $blockIndex ++;
         }
         return $modelItems;
     }
