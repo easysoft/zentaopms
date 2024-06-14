@@ -1747,7 +1747,7 @@ class storyTao extends storyModel
             $title = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
             if(!$canBatchCreateStory && $story->status != 'closed')
             {
-                if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
+                if(!in_array($story->status, array('active', 'launched', 'developing'))) $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                 if($story->parent > 0)    $title = $this->lang->story->subDivideTip['subStory'];

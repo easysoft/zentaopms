@@ -3287,9 +3287,9 @@ class storyModel extends model
             if($story->parent > 0 || !empty($story->twins)) return false;
             if($story->type == 'requirement' && strpos('draft,reviewing,changing', $story->status) !== false) return false;
 
-            if(strpos('active,launched', $story->status) === false || !empty($story->plan)) return false;
+            if(strpos('active,launched,developing', $story->status) === false || !empty($story->plan)) return false;
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
-            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait') return false;
+            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait' && $story->type == 'story') return false;
         }
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();

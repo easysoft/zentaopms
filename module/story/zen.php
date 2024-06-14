@@ -1173,10 +1173,12 @@ class storyZen extends story
         }
 
         /* Need and force review, then set status to reviewing. */
-        if($storyData->status != 'draft' and $this->story->checkForceReview() and !$this->post->needNotReview) $storyData->status = 'reviewing';
+        if($storyData->status != 'draft' && $this->story->checkForceReview() && !$this->post->needNotReview) $storyData->status = 'reviewing';
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $storyData->type == 'requirement' and $storyData->status == 'active' and $this->config->vision == 'rnd') $storyData->status = 'launched';
+        if($this->config->systemMode == 'PLM' && $storyData->type == 'requirement' && $storyData->status == 'active' && $this->config->vision == 'rnd') $storyData->status = 'launched';
+        if($storyData->status == 'launched' && $this->app->tab != 'product') $storyData->status = 'developing';
+
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
