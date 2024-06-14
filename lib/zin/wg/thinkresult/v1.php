@@ -25,10 +25,11 @@ class thinkResult extends wg
     {
         list($wizard, $mode, $blocks) = $this->prop(array('wizard', 'mode', 'blocks'));
 
-        if($wizard->model == 'swot')   return thinkSwot(set::mode($mode), set::blocks($blocks));
-        if($wizard->model == 'pffa')   return thinkPffa(set::mode($mode), set::blocks($blocks));
-        if($wizard->model == 'pestel') return thinkPestel(set::mode($mode), set::blocks($blocks));
-        return array();
+        $model = $wizard->model;
+        $wgMap = array('swot' => 'thinkSwot', 'pffa' => 'thinkPffa', 'pestel' => 'thinkPestel');
+        if(!isset($wgMap[$model])) return array();
+
+        return createWg($wgMap[$model], array(set::mode($mode), set::blocks($blocks)));
     }
 
     protected function build(): node
