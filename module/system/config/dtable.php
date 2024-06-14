@@ -34,15 +34,15 @@ $config->system->dtable->backup->fieldList['time']['type']        = 'datetime';
 $config->system->dtable->backup->fieldList['time']['formatDate']  = 'yyyy-MM-dd hh:mm:ss';
 $config->system->dtable->backup->fieldList['time']['sort']        = false;
 
-$config->system->dtable->backup->fieldList['name']['title']       = $lang->backup->name;
-$config->system->dtable->backup->fieldList['name']['sort']        = false;
+$config->system->dtable->backup->fieldList['name']['title'] = $lang->backup->name;
+$config->system->dtable->backup->fieldList['name']['sort']  = false;
 
 $config->system->dtable->backup->fieldList['creator']['title'] = $lang->system->backup->creator;
 $config->system->dtable->backup->fieldList['creator']['type']  = 'user';
 $config->system->dtable->backup->fieldList['creator']['sort']  = false;
 
-$config->system->dtable->backup->fieldList['type']['title'] = $lang->system->backup->type;
-$config->system->dtable->backup->fieldList['type']['map']   = $lang->system->backup->typeList;
+$config->system->dtable->backup->fieldList['type']['title']    = $lang->system->backup->type;
+$config->system->dtable->backup->fieldList['type']['map']      = $lang->system->backup->typeList;
 $config->system->dtable->backup->fieldList['type']['m-width']  = '40px';
 
 $config->system->dtable->backup->fieldList['status']['title']  = $lang->backup->status;
@@ -87,6 +87,6 @@ $config->system->dtable->instanceList->fieldList['cpu']['title'] = array('html' 
 $config->system->dtable->instanceList->fieldList['cpu']['name']     = 'cpu';
 $config->system->dtable->instanceList->fieldList['cpu']['minWidth'] = '160';
 
-$config->system->dtable->instanceList->fieldList['mem']['title'] = array('html' => '<i class="icon icon-memory mr-1"></i>' . $lang->instance->mem);
+$config->system->dtable->instanceList->fieldList['mem']['title']    = array('html' => '<i class="icon icon-memory mr-1"></i>' . $lang->instance->mem);
 $config->system->dtable->instanceList->fieldList['mem']['name']     = 'mem';
 $config->system->dtable->instanceList->fieldList['mem']['minWidth'] = '230';
