@@ -160,7 +160,7 @@ foreach($config->bi->builtin->dataviews as $dataview)
     $dataview['createdBy']   = 'system';
     $dataview['createdDate'] = date('Y-m-d H:i:s');
 
-    if(isset($dataview['fields']))   $dataview['fields']   = jsonEncode($dataview['fields']);
+    if(isset($dataview['fields'])) $dataview['fields'] = jsonEncode($dataview['fields']);
 
     insert('zt_dataview', $dataview);
     createView($dataview['view'], $dataview['sql']);
