@@ -166,7 +166,7 @@ $config->search->recPerPage = 10;
 $config->search->summaryLength = 120;
 $config->search->maxFileSize   = 1024;
 
-$config->search->oldQuery = array('workFeedback', 'workTicket', 'issue', 'risk', 'traincourse', 'ticket', 'activity', 'zoutput', 'trainplan', 'reviewissue', 'researchreport', 'researchplan', 'process', 'opportunity', 'nc', 'meetingroom', 'meeting', 'measurement', 'gapanalysis', 'auditplan', 'auditcl', 'assetlib', 'testcase', 'domain', 'demandpool', 'demand');
+$config->search->oldQuery = array('workFeedback', 'workTicket', 'issue', 'risk', 'traincourse', 'ticket', 'activity', 'zoutput', 'trainplan', 'reviewissue', 'researchreport', 'researchplan', 'process', 'opportunity', 'nc', 'meetingroom', 'meeting', 'measurement', 'gapanalysis', 'auditplan', 'auditcl', 'assetlib', 'testcase', 'domain', 'demandpool', 'demand', 'storyLib', 'issueLib', 'riskLib', 'opportunityLib', 'practiceLib', 'componentLib');
 
 if($config->vision == 'rnd')
 {
