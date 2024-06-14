@@ -50,7 +50,6 @@ $config->system->dtable->backup->fieldList['status']['hidden'] = false;
 $config->system->dtable->backup->fieldList['status']['map']    = $lang->system->backup->statusList;
 $config->system->dtable->backup->fieldList['status']['width']  = '20px';
 
-
 $config->system->dtable->backup->fieldList['actions']['name']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['title'] = $lang->actions;
 $config->system->dtable->backup->fieldList['actions']['type']  = 'actions';
