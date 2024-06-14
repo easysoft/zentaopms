@@ -8858,4 +8858,15 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 新增反馈的数据源，并且更新到工单的由反馈转化字段。
+     * Add feedback datasource and set options of ticket feedback.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addFeedbackDatasource()
+    {
+    }
 }
