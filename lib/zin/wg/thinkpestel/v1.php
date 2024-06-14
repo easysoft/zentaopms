@@ -53,7 +53,7 @@ class thinkPestel extends thinkModel
                         )
                     ),
                     isset($block->steps) ? div(setClass('p-2 relative z-10 col gap-2'), $this->buildItem($block)) : null
-                ),
+                )
             );
         }
         return $modelItems;
