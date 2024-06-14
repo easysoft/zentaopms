@@ -54,8 +54,14 @@ if($this->config->inQuickon)
     $actions = array
     (
         array('class' => 'btn text-primary ghost ajax-submit origin-action', 'disabled' => !empty($operating), 'icon' => 'refresh', 'text' => $lang->backup->common , 'data-confirm' => array('message' => $lang->system->backup->confirmBackup, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x'), 'url' => createLink('backup', 'backup', 'reload=yes')),
-        array('class' => 'btn text-primary ghost ajax-submit', 'disabled' => !empty($operating), 'icon' => 'arrow-up', 'text' => $lang->system->backup->upgrade, 'data-confirm' => array('message' => $lang->system->backup->confirmUpgrade, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x'), 'url' => createLink('system', 'upgrade', 'backup=yes&edition=' . $this->config->edition), 'disabled' => $systemInfo->upgradeable ? false : true),
     );
+
+    if($this->app->user->admin || common::hasPriv('system', 'upgrade'))
+    {
+        $upgradeAction = array('tagName' => 'a', 'class' => 'btn text-primary ghost ajax-submit', 'icon' => 'arrow-up', 'text' => $lang->system->backup->upgrade, 'data-confirm' => array('message' => $lang->system->backup->confirmUpgrade, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x'), 'url' => createLink('system', 'upgrade', 'backup=yes&edition=' . $this->config->edition), 'disabled' => !empty($operating) || !$systemInfo->upgradeable);
+        if(!$systemInfo->upgradeable) $upgradeAction['hint'] = $lang->system->backup->error->beenLatestVersion;
+        $actions[] = $upgradeAction;
+    }
 
     h::table
     (
