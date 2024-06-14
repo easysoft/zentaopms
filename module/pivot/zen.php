@@ -260,7 +260,7 @@ class pivotZen extends pivot
         }
 
         $lastRow        = count($data->array) - 1;
-        $hasGroup       = $data->groups;
+        $hasGroup       = isset($data->groups);
         $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
         foreach($data->array as $rowKey => $rowData)
         {
