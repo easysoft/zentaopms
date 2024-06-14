@@ -1195,7 +1195,9 @@ class storyModel extends model
             if($oldStory->status != 'reviewing') continue;
             if($oldStory->version > 1 and $result == 'reject') continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStory->version) continue;
-            if(!isset($reviewerList[$storyID][$account]) && !$isSuperReviewer)
+
+            /* 当评审人列表中没有当前用户或者当前用户不是当前版本需求的评审人时，将需求ID添加到不能评审的提示语中。*/
+            if((!isset($reviewerList[$storyID][$account]) || (isset($reviewerList[$storyID][$account]) && $reviewerList[$storyID][$account]->version != $oldStory->version)) && !$isSuperReviewer)
             {
                 $cannotReviewStories[$storyID] = "#{$storyID}";
                 continue;
@@ -1214,7 +1216,7 @@ class storyModel extends model
             $story->lastEditedBy   = $account;
             $story->lastEditedDate = $now;
             $story->status         = $oldStory->status;
-            if(!str_contains(",{$oldStory->reviewedBy},", ",{$account},")) $story->reviewedBy = $oldStory->reviewedBy . ',' . $account;
+            $story->reviewedBy     = str_contains(",{$oldStory->reviewedBy},", ",{$account},") ? $oldStory->reviewedBy : ($oldStory->reviewedBy . ',' . $account);
 
             $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
             $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($account)->exec();
