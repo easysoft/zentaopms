@@ -407,6 +407,7 @@ class biModel extends model
         $this->dao->delete()->from(TABLE_METRIC)
             ->where('builtin')->eq('1')
             ->andWhere('code')->notIn(array_column($metrics, 'code'))
+            ->andWhere('type')->eq('php')
             ->exec();
         foreach($metrics as $metric)
         {
