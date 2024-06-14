@@ -730,6 +730,20 @@ class metricModel extends model
         return $result;
     }
 
+    public function getUniqueKeyByRecord($record)
+    {
+        $record = (array)$record;
+        $uniqueKeys = array();
+        $ignoreFields = $this->config->metric->ignoreFields;
+        foreach($record as $field => $value)
+        {
+            if(in_array($field, $ignoreFields) || empty($value)) continue;
+            $uniqueKeys[] = $field . $value;
+        }
+
+        return implode('_', $uniqueKeys);
+    }
+
     /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
