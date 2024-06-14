@@ -715,16 +715,32 @@ class metricModel extends model
         if(!$metric) return array();
         $dataFields = $this->getMetricRecordDateField($metric);
 
-        $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
-        if(empty($records)) return array();
+        $visions  = explode(',', $vision);
 
         $result = array();
-        foreach($records as $index => $record)
+        foreach($visions as $vision)
         {
-            $record          = (array)$record;
-            $record['value'] = (float)$record['value'];
+            if($vision == 'rnd')
+            {
+                $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
+                if(empty($records)) return array();
 
-            $result[] = $record;
+                foreach($records as $index => $record)
+                {
+                    $record          = (array)$record;
+                    $record['value'] = (float)$record['value'];
+
+                    $result = $this->mergeRecord($record, $result);
+                }
+            }
+            else
+            {
+                $otherVisionResult = $this->getResultByCode($code, $options, 'realtime', $pager, $vision);
+                foreach($otherVisionResult as $record)
+                {
+                    $result = $this->mergeRecord($record, $result);
+                }
+            }
         }
 
         return $result;
