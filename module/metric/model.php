@@ -730,6 +730,15 @@ class metricModel extends model
         return $result;
     }
 
+    /**
+     * 合并度量数据。
+     * Merge record.
+     *
+     * @param  array    $record
+     * @param  array    $result
+     * @access public
+     * @return array
+     */
     public function mergeRecord($record, $result)
     {
         $uniqueKey = $this->getUniqueKeyByRecord($record);
