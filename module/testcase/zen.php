@@ -2286,7 +2286,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return array|int
      */
-    protected function responseAfterCreate(int $caseID): array|int
+    protected function responseAfterCreate(int $caseID, int $moduleID = 0): array|int
     {
         $message = $this->executeHooks($caseID);
         if(!$message) $message = $this->lang->saveSuccess;
@@ -2298,7 +2298,17 @@ class testcaseZen extends testcase
         /* 判断是否当前一级菜单不是 QA，并且 caseList session 存在，并且 caseList 不是动态页面。 */
         /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
         $useSession = ($this->app->tab != 'qa' and $this->session->caseList and strpos($this->session->caseList, 'dynamic') === false);
-        $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}") : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
+
+        if($this->app->tab == 'project')
+        {
+            $locateLink = $this->createLink('project', 'testcase', "projectID={$this->session->project}");
+        }
+        else
+        {
+            $params = "productID={$this->post->product}&branch={$this->post->branch}";
+            if($moduleID) $params .= "&browseType=byModule&param=$moduleID";
+            $locateLink = $this->createLink('testcase', 'browse', $params);
+        }
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $useSession ? $this->session->caseList : $locateLink));
     }
 
