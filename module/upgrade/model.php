@@ -8915,4 +8915,22 @@ class upgradeModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 将瀑布项目的活动和文档同步到融合瀑。
+     * Synchronise the activities and zoutputs of the Waterfall project with the Waterfallplus project.
+     *
+     * @access public
+     * @return bool
+     */
+    public function syncActivityAndOutput()
+    {
+        $waterfallplusProcesses = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq('waterfallplus')->orderBy('order_asc')->fetchAll('id');
+        if(!empty($waterfallplusProcesses))
+        {
+            $waterfallplusActivities = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('deleted')->eq(0)->andWhere('process')->in(array_keys($waterfallplusProcesses))->orderBy('order_asc')->fetchAll();
+            if(!empty($waterfallplusActivities)) return true;
+        }
+        return !dao::isError();
+    }
 }

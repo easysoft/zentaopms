@@ -98,6 +98,7 @@ $config->upgrade->execFlow['20_0_beta1']  = array('functions' => 'hideOA,updateM
 $config->upgrade->execFlow['20_0_beta2']  = array('functions' => 'updateWorkflowFieldDefaultValue,update1811,updateZeroDateToNull,updateProgramplanCustom');
 $config->upgrade->execFlow['20_0']        = array('functions' => 'openCacheByAPCu');
 $config->upgrade->execFlow['20_1_0']      = array('functions' => 'completeClassifyLang');
+$config->upgrade->execFlow['20_1_1']      = array('functions' => 'syncActivityAndOutput');
 
 if(!empty($config->isINT))
 {
