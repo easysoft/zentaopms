@@ -11,7 +11,7 @@ if(trim($config->visions, ',') == 'lite')
 else
 {
     $version     = $config->version;
-    $versionName = ($config->inQuickon ? 'DevOps' : '') . $lang->pmsName . $config->version;
+    $versionName = $lang->pmsName . $config->version;
 }
 
 $scoreNotice = '';
