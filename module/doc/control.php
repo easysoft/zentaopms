@@ -402,7 +402,11 @@ class doc extends control
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                     ->get();
                 $result  = $this->doc->update($docID, $docData);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(dao::isError())
+                {
+                    if(!empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
 
                 $changes = $result['changes'];
                 $files   = $result['files'];
