@@ -168,7 +168,6 @@ class transferModel extends model
                 }
             }
 
-
             if(in_array($field, $this->moduleConfig->dateFields)) $moduleFieldList['control'] = 'datePicker';
             if(in_array($field, $this->moduleConfig->datetimeFields)) $moduleFieldList['control'] = 'datetimePicker';
             $moduleFieldList['multiple'] = $moduleFieldList['control'] == 'multiple';
@@ -272,6 +271,18 @@ class transferModel extends model
         /* Parse dataSource. */
         extract($object['dataSource']); // $module, $method, $params, $pairs, $sql, $lang
 
+        /* 如果配置了系统字段,使用系统数据。*/
+        /* If empty items put system datas. */
+        if(empty($items))
+        {
+            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'}))
+            {
+                if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
+                $items = $this->moduleLang->{$field.'List'};
+            }
+            if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) $items = $this->transferConfig->sysDataList[$field];
+        }
+
         /* 如果配置了来源方法，则调用该方法。*/
         /* If config the source method, call the method. */
         if(!empty($module) && !empty($method))
@@ -285,18 +296,6 @@ class transferModel extends model
             /* 如果配置了语言字段,返回语言数据。*/
             /* If config the language field, return language data. */
             $items = isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
-        }
-
-        /* 如果配置了系统字段,返回系统数据。*/
-        /* If empty items put system datas. */
-        if(empty($items))
-        {
-            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'}))
-            {
-                if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
-                return $this->moduleLang->{$field.'List'};
-            }
-            if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
         }
 
         if(is_array($items) && $withKey)
