@@ -2959,7 +2959,7 @@ eof;
                     {
                         $params       = "programID=0&from=global";
                         $createMethod = 'createGuide';
-                        $attr         = 'data-toggle="modal"';
+                        $attr         = 'data-toggle="modal" data-type="iframe"';
                     }
                     break;
                 case 'bug':
