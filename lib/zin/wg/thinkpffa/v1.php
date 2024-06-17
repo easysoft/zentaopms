@@ -32,14 +32,18 @@ class thinkPffa extends thinkModel
 
         return div
         (
-            setClass('w-full h-full px-2 py-2.5 border overflow-auto col justify-between gap-4 bg-opacity-20 bg-' . $blockColor, 'border-' . $blockColor),
+            setClass('w-full h-full px-2 py-2.5 outline overflow-auto col justify-between gap-2 bg-opacity-20 bg-' . $blockColor, $blockColor . '-outline'),
             div
             (
-                setClass('text-sm item-step-title text-clip', 'text-' . $blockColor),
-                set::title(!empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : null),
-                !empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : $defaultTitle
+                setClass('col gap-2'),
+                div
+                (
+                    setClass('text-sm item-step-title text-clip', 'text-' . $blockColor),
+                    set::title(!empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : null),
+                    !empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : $defaultTitle
+                ),
+                div(setClass('flex flex-wrap gap-1.5'), !isset($blocks[$blockIndex]->steps) ? null : $this->buildQuestion($blocks[$blockIndex]->steps)),
             ),
-            div(setClass('flex flex-wrap gap-1.5'), !isset($blocks[$blockIndex]->steps) ? null : $this->buildQuestion($blocks[$blockIndex]->steps)),
             div(setClass('text-left text-sm leading-tight text-canvas'), $lang->thinkwizard->pffaGroundText[$blockIndex])
         );
     }
