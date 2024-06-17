@@ -178,7 +178,6 @@ $routes['/z/files/:id']         = 'zfile';
 $routes['/z/files/:id/content'] = 'zfileContent';
 
 $routes['/gitlab/webhook'] = 'gitlabWebhook';
-$routes['/gitfox/webhook'] = 'gitfoxWebhook';
 
 $routes['/ciresults'] = 'ciresults';
 
