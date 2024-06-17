@@ -353,12 +353,12 @@ class repo extends control
      * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function monaco(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
+    public function monaco(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
     {
         $this->commonAction($repoID, $objectID);
 
@@ -409,12 +409,12 @@ class repo extends control
      * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function view(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
+    public function view(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
     {
         set_time_limit(0);
         if($this->get->repoPath) $entry = $this->get->repoPath;
@@ -687,13 +687,13 @@ class repo extends control
      * @param  string $entry
      * @param  string $oldRevision
      * @param  string $newRevision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @param  bool   $isBranchOrTag
      * @access public
      * @return void
      */
-    public function diff(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', string $showBug = 'false', string $encoding = '', bool $isBranchOrTag = false)
+    public function diff(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '', int $isBranchOrTag = 0)
     {
         $newRevision = strtr($newRevision, '*', '-');
         $oldRevision = strtr($oldRevision, '*', '-');
@@ -761,11 +761,11 @@ class repo extends control
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $type
-     * @param  bool   $isBranchOrTag
+     * @param  int    $isBranchOrTag
      * @access public
      * @return void
      */
-    public function download(int $repoID, string $path, string $fromRevision = 'HEAD', string $toRevision = '', string $type = 'file', bool $isBranchOrTag = false)
+    public function download(int $repoID, string $path, string $fromRevision = 'HEAD', string $toRevision = '', string $type = 'file', int $isBranchOrTag = 0)
     {
         if($this->get->repoPath) $path = $this->get->repoPath;
         $entry = $this->repo->decodePath($path);
@@ -1066,12 +1066,12 @@ class repo extends control
      * @param  string $entry
      * @param  string $oldRevision
      * @param  string $newRevision
-     * @param  string $showBug     // Used for biz.
+     * @param  int    $showBug     // Used for biz.
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', string $showBug = 'false', string $encoding = '')
+    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '')
     {
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
@@ -1116,12 +1116,12 @@ class repo extends control
      * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
+    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
     {
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 

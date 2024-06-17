@@ -1331,12 +1331,12 @@ class repoZen extends repo
      * @param  int       $repoID
      * @param  int       $objectID
      * @param  string    $arrange
-     * @param  bool      $isBranchOrTag
+     * @param  int       $isBranchOrTag
      * @param  string    $file
      * @access protected
      * @return void
      */
-    protected function locateDiffPage(int $repoID, int $objectID, string $arrange, bool $isBranchOrTag, string $file)
+    protected function locateDiffPage(int $repoID, int $objectID, string $arrange, int $isBranchOrTag, string $file)
     {
         $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
         $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
@@ -1347,9 +1347,9 @@ class repoZen extends repo
             helper::setcookie('arrange', $arrange);
         }
         if($this->post->encoding)      $encoding      = $this->post->encoding;
-        if($this->post->isBranchOrTag) $isBranchOrTag = $this->post->isBranchOrTag;
+        if($this->post->isBranchOrTag) $isBranchOrTag = (int)$this->post->isBranchOrTag;
 
-        return $this->locate($this->repo->createLink('diff', "repoID={$repoID}&objectID={$objectID}&entry={$file}&oldrevision={$oldRevision}&newRevision={$newRevision}&showBug=&encoding={$encoding}&isBranchOrTag={$isBranchOrTag}"));
+        return $this->locate($this->repo->createLink('diff', "repoID={$repoID}&objectID={$objectID}&entry={$file}&oldrevision={$oldRevision}&newRevision={$newRevision}&showBug=0&encoding={$encoding}&isBranchOrTag={$isBranchOrTag}"));
     }
 
     /**
