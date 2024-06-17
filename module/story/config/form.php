@@ -153,8 +153,6 @@ $config->story->form->activate['lastEditedBy']    = array('type' => 'string',   
 $config->story->form->activate['closedBy']        = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->activate['closedReason']    = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->activate['closedDate']      = array('type' => 'datetime', 'required' => false, 'default' => null);
-$config->story->form->activate['reviewedBy']      = array('type' => 'string',   'required' => false, 'default' => '');
-$config->story->form->activate['reviewedDate']    = array('type' => 'datetime', 'required' => false, 'default' => null);
 $config->story->form->activate['assignedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->activate['duplicateStory']  = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->story->form->activate['childStories']    = array('type' => 'string',   'required' => false, 'default' => '');
