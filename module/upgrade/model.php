@@ -113,7 +113,25 @@ class upgradeModel extends model
             file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
         }
 
-        if(version_compare($fromVersion, '20.0.beta1', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+        if(!empty($this->config->global->hideUpgradeGuide))
+        {
+            if(strpos($fromVersion, 'ipd') !== false)
+            {
+                if(version_compare($fromVersion, 'ipd2.0.0', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+            elseif(strpos($fromVersion, 'max') !== false)
+            {
+                if(version_compare($fromVersion, 'max5.0.0', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+            elseif(strpos($fromVersion, 'pro') !== false || strpos($fromVersion, 'biz') !== false)
+            {
+                if(version_compare($fromVersion, 'biz10.0.0', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+            else
+            {
+                if(version_compare($fromVersion, '20.0.beta1', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+        }
 
         $fromEdition = $this->getEditionByVersion($fromVersion);
         $this->fromVersion = $fromVersion;
