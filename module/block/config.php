@@ -39,6 +39,12 @@ $config->block->shortBlock['']['contribute'] = 'contribute';
 $config->statistic = new stdclass();
 $config->statistic->storyStages = array('wait', 'planned', 'developing', 'testing', 'released');
 
+$config->upgradeGuide = array();
+$config->upgradeGuide['open'] = array();
+$config->upgradeGuide['open']['imagePath'] = 'static/svg/';
+$config->upgradeGuide['open']['version']   = '20_0';
+$config->upgradeGuide['open']['linkItem']  = 'release20';
+
 $config->block->workMethods = 'task,story,requirement,bug,testcase,testtask,issue,risk,meeting';
 
 $config->block->storyUnitList['0'] = 'H';
