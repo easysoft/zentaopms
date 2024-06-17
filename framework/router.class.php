@@ -219,8 +219,12 @@ class router extends baseRouter
     {
         if(!$this->checkInstalled() || !$this->isServing()) return;
 
-        $flows = $this->dbQuery('SELECT * FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow' AND `navigator` = 'primary'")->fetchAll();
-        foreach($flows as $flow) $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
+        try
+        {
+            $flows = $this->dbQuery('SELECT * FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow' AND `navigator` = 'primary'")->fetchAll();
+            foreach($flows as $flow) $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
+        }
+        catch(PDOException){}
     }
 
     /**
