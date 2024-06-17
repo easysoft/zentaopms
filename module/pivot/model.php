@@ -503,7 +503,20 @@ class pivotModel extends model
         foreach($tasks as $task)
         {
             if(!isset($users[$task->user])) continue;
-            $taskGroups[$task->user][$task->projectID][$task->executionID][$task->id] = $task;
+
+            $user      = $task->user;
+            $project   = $task->projectID;
+            $execution = $task->executionID;
+            $id        = $task->id;
+
+            if(isset($taskGroups[$user][$project][$execution][$id]))
+            {
+                $taskGroups[$user][$project][$execution][$id]->left += $task->left;
+            }
+            else
+            {
+                $taskGroups[$user][$project][$execution][$id] = $task;
+            }
         }
 
         /* 获取团队任务的剩余工时。 */
