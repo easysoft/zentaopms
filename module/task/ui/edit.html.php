@@ -377,7 +377,7 @@ detailBody
                     formBatchItem
                     (
                         set::name('estimateBox'),
-                        set::label($lang->task->estimateAB),
+                        set::label($lang->task->estimate),
                         set::width('135px'),
                         set::control('inputGroup'),
                         set::required(true),
