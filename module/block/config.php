@@ -45,6 +45,11 @@ $config->upgradeGuide['open']['imagePath'] = 'static/svg/';
 $config->upgradeGuide['open']['version']   = '20_0';
 $config->upgradeGuide['open']['linkItem']  = 'release20';
 
+$config->upgradeGuide['biz'] = array();
+$config->upgradeGuide['biz']['imagePath'] = 'static/svg/biz/';
+$config->upgradeGuide['biz']['version']   = '10_0';
+$config->upgradeGuide['biz']['linkItem']  = 'releasebiz10';
+
 $config->block->workMethods = 'task,story,requirement,bug,testcase,testtask,issue,risk,meeting';
 
 $config->block->storyUnitList['0'] = 'H';
