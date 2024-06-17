@@ -114,6 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['20.1.2']      = '2024-06-21';
 $lang->misc->releaseDate['20.1.1']      = '2024-06-14';
 $lang->misc->releaseDate['20.1.0']      = '2024-06-03';
 $lang->misc->releaseDate['20.0']        = '2024-04-30';
@@ -229,6 +230,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['20.1.2'][]      = array('title' => "", 'desc' => '');
 $lang->misc->feature->all['20.1.1'][]      = array('title' => "We've completely refactored the core PHP and UI frameworks, streamlining forms and dashboards for a whole new user experience. Plus, APCu caching delivers a significant performance boost. The baseline review list now boasts a search function, making it a breeze to find what you need. And the OR interface enhancements include a dedicated pending tasks feature, along with the ability to customize IPD project stages and review points for maximum flexibility, and a search function within the baseline review list.", 'desc' => '');
 $lang->misc->feature->all['20.1.0'][]      = array('title' => 'Leverages APCu caching to significantly boost system performance. Fine-tuned the interaction design for an optimized user experience. Implemented bug fixes.', 'desc' => '');
 $lang->misc->feature->all['20.0'][]        = array('title' => 'In this upgrade, we have reconstructed the underlying PHP and UI frameworks, revamped the core forms and dashboards, resulting in a completely elevated user experience.', 'desc' => '');
