@@ -50,6 +50,16 @@ $config->upgradeGuide['biz']['imagePath'] = 'static/svg/biz/';
 $config->upgradeGuide['biz']['version']   = '10_0';
 $config->upgradeGuide['biz']['linkItem']  = 'releasebiz10';
 
+$config->upgradeGuide['max'] = array();
+$config->upgradeGuide['max']['imagePath'] = 'static/svg/max/';
+$config->upgradeGuide['max']['version']   = '5_0';
+$config->upgradeGuide['max']['linkItem']  = 'releasemax5';
+
+$config->upgradeGuide['ipd'] = array();
+$config->upgradeGuide['ipd']['imagePath'] = 'static/svg/ipd/';
+$config->upgradeGuide['ipd']['version']   = '2_0';
+$config->upgradeGuide['ipd']['linkItem']  = 'releaseipd2';
+
 $config->block->workMethods = 'task,story,requirement,bug,testcase,testtask,issue,risk,meeting';
 
 $config->block->storyUnitList['0'] = 'H';
