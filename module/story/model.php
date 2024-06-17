@@ -1888,12 +1888,6 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
-        if($story->status == 'active')
-        {
-            $twinsIdList = $storyID . (!empty($oldStory->twins) ? ",{$oldStory->twins}" : '');
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->exec();
-        }
-
         $this->setStage($storyID);
 
         /* Update parent story status. */
