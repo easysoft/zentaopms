@@ -567,8 +567,8 @@ pipeline {
                   // sh 'make build'
                   // sh 'make test-open'
 
-                  sh 'make test-biz'
                   sh 'make build-biz'
+                  sh 'make test-biz'
 
                   sh 'make test-biz-k8s'
                   sh 'make build-biz-k8s'
