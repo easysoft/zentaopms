@@ -74,10 +74,9 @@ class commonModel extends model
         $rawModule = $app->rawModule;
         $rawMethod = strtolower($app->rawMethod);
 
-        if($rawModule == 'marketresearch' and strpos($rawMethod, 'task') !== false)  $rawModule = 'task';
         if($rawModule == 'marketresearch' and strpos($rawMethod, 'stage') !== false) $rawModule = 'execution';
 
-        if($rawModule == 'task' or $rawModule == 'effort')
+        if($rawModule == 'task' || $rawModule == 'effort' || $rawModule == 'researchtask')
         {
             $taskID    = $objectID;
             $execution = $this->syncExecutionStatus($taskID);
