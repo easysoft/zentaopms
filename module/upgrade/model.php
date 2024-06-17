@@ -8931,6 +8931,26 @@ class upgradeModel extends model
             $waterfallplusActivities = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('deleted')->eq(0)->andWhere('process')->in(array_keys($waterfallplusProcesses))->orderBy('order_asc')->fetchAll();
             if(!empty($waterfallplusActivities)) return true;
         }
+
+        $waterfallProcesses = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq('waterfall')->orderBy('order_asc')->fetchAll('id');
+        $acitivies          = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('deleted')->eq(0)->orderBy('order_asc')->fetchGroup('process', 'id');
+        $zoutputs           = $this->dao->select('*')->from(TABLE_ZOUTPUT)->where('deleted')->eq(0)->orderBy('order_asc')->fetchGroup('activity', 'id');
+        foreach($waterfallplusProcesses as $plusProcess)
+        {
+            foreach($waterfallProcesses as $process)
+            {
+                if($plusProcess->name != $process->name || $plusProcess->type != $process->type || $plusProcess->abbr != $process->abbr) continue;
+                if(!isset($acitivies[$process->id])) continue;
+
+                foreach($acitivies[$process->id] as $activity)
+                {
+                    $data = clone $activity;
+                    $data->process    = $plusProcess->id;
+                    $data->model      = 'waterfallplus';
+                    $data->editedDate = $data->assignedDate = null;
+                }
+            }
+        }
         return !dao::isError();
     }
 }
