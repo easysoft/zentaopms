@@ -92,7 +92,7 @@ class formBatchPanel extends formPanel
         /* Multi-input. */
         if($pasteField)
         {
-            $headingActions[] = array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
+            $headingActions[] = array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText, 'data-backdrop' => 'static');
 
             $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
         }
