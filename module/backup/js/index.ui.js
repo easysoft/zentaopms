@@ -119,6 +119,7 @@ window.backupInProgress = function(backupName)
 
     $('.origin-action').attr('disabled', 'disabled');
     loadTable();
+    $('#main').removeClass('loading');
     let intervalId = setInterval(function()
     {
         $.get($.createLink('system', 'ajaxGetBackupProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
