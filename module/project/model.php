@@ -1774,6 +1774,8 @@ class projectModel extends model
      */
     public function updateProducts(int $projectID, array $products = array(), object|array|null $postProductData = array()): bool
     {
+        if(!empty($_POST['newProduct'])) return array();
+
         $this->loadModel('user');
         $teams        = array_keys($this->getTeamMembers($projectID));
         $stakeholders = array_keys($this->loadModel('stakeholder')->getStakeHolderPairs($projectID));
