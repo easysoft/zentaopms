@@ -323,8 +323,8 @@ pipeline {
                   stage("upload zip") {
                     steps {
                       sh 'mkdir ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}'
-                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
-                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.tar.xz'
+                      // sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
+                      // sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.tar.xz'
 
                       script {
                         buildPkg.uploadPMS(env.PHPVERSION)
@@ -341,7 +341,8 @@ pipeline {
                     }
                     steps{
                       script {
-                        buildPkg.buildRpmAndDeb()
+                        echo "ignored"
+                        // buildPkg.buildRpmAndDeb()
                       }
                     }
                   }
@@ -354,7 +355,6 @@ pipeline {
                     steps {
                       sh 'ls -l ${OUTPUT_PKG_PATH}'
                       container('jnlp') {
-                        sh 'find $OUTPUT_PKG_PATH -type f -name "*$PMS_VERSION*" -delete'
                         sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
                         sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir $OUTPUT_PKG_PATH --key-prefix $OBJECT_KEY_PREFIX'
                       }
@@ -618,7 +618,7 @@ pipeline {
               userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
             )
             container('xuanimbot') {
-              sh './script/push_zentao_version.sh'
+              // sh './script/push_zentao_version.sh'
             }
           }
         }
