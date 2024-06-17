@@ -115,7 +115,7 @@ class thinkPffa extends thinkModel
 
         return div
         (
-            setClass('w-1/3 relative pt-3.5 block-' . $blockIndex),
+            setClass('w-1/3 relative block-' . $blockIndex),
             $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
             $mode === 'preview' ? span(setClass('absolute text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
@@ -150,7 +150,7 @@ class thinkPffa extends thinkModel
     {
         return div
         (
-            setClass('col justify-center items-center'),
+            setClass('col justify-center items-center gap-3.5'),
             $this->buildTopBlock(),
             div
             (
