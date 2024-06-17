@@ -70,7 +70,7 @@
 .messagers > .messager-holder {max-width: 35%;}
 .messager-notice, .score-notice {align-items: flex-start;}
 .messager-notice > .icon-envelope-o, .score-notice > .icon-diamond {margin-top: 2px;}
-.messager-notice > .alert-close {position: fixed; top: 10px; right: 30px; width: 20px; height: 20px;}
+.messager-notice > .alert-close {position: fixed; top: 10px; right: 15px; width: 20px; height: 20px;}
 .messager-notice .browser-message-content {color: rgba(30,168,254); max-height: calc(100vh - 14rem); overflow-y: auto;}
 .messager-notice .browser-message-content > span {width: 94%; display: inline-block;}
 .messager-notice .browser-message-content > a {color: rgba(49,60,82)}

@@ -953,6 +953,14 @@ window.browserNotify = function()
     }, pollTime * 1000);
 };
 
+window.clickMessage = function(obj)
+{
+    let $obj = $(obj);
+    let url  = $obj.data('url');
+    openApp(url);
+    $(obj).closest('.alert.messager').find('.alert-close').trigger('click');
+}
+
 window.ping = function()
 {
     setInterval(function(){$.get($.createLink('misc', 'ping'));}, pollTime * 1000);
