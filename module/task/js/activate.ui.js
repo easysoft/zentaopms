@@ -253,10 +253,7 @@ window.renderRowData = function($row, index, row)
         $row.find('[name^=teamEstimate]').attr('readonly', 'readonly');
         $row.find('[name^=teamLeft]').attr('readonly', 'readonly');
     }
-    if(row)
-    {
-        $row.find('[name^=teamConsumed]').attr('readonly', 'readonly');
-    }
 
+    $row.find('[name^=teamConsumed]').attr('readonly', 'readonly');
     $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down " + (taskMode == 'linear' ? '' : 'hidden') + "'><i/>");
 }
