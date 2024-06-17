@@ -217,8 +217,7 @@ class router extends baseRouter
      */
     public function mergeFlowLang()
     {
-        if(!$this->dbh || empty($this->config->db->name)) return;
-        if($this->installing || $this->upgrading)         return;
+        if(!$this->checkInstalled() || !$this->isServing()) return;
 
         $flows = $this->dbQuery('SELECT * FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow' AND `navigator` = 'primary'")->fetchAll();
         foreach($flows as $flow) $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
