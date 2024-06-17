@@ -1224,24 +1224,11 @@ class baseRouter
      */
     public function setOpenApp()
     {
-        if(isset($this->config->zin))
-        {
-            $module  = $this->rawModule;
-            $tab     = '';
-
-            if(isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = $_SERVER['HTTP_X_ZIN_APP'];
-            elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $tab = $_COOKIE['tab'];
-            elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
-
-            if(!isset($this->lang->mainNav->{$tab}) && !isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = '';
-            $this->tab = empty($tab) ? 'my' : $tab;
-            return;
-        }
-
         $module    = $this->rawModule;
         $this->tab = 'my';
-        if(isset($this->lang->navGroup) && $module) $this->tab = zget($this->lang->navGroup, $module, 'my');
-        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', (string) $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
+        if(isset($this->lang->navGroup))                                                        $this->tab = zget($this->lang->navGroup, $module, 'my');
+        if(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
+        if(isset($this->config->zin) && isset($_SERVER['HTTP_X_ZIN_APP']))                      $this->tab = $_SERVER['HTTP_X_ZIN_APP'];
         if(!isset($this->lang->mainNav->{$this->tab})) $this->tab = 'my';
     }
 

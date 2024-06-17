@@ -153,6 +153,8 @@ class router extends baseRouter
             }
         }
 
+        if($this->config->edition != 'open') $this->mergeFlowLang();
+
         /* Merge from the db lang. */
         if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
         {
@@ -205,6 +207,20 @@ class router extends baseRouter
         }
 
         return $lang;
+    }
+
+    /**
+     * Merge workflow mainNav Lang.
+     *
+     * @access public
+     * @return void
+     */
+    public function mergeFlowLang()
+    {
+        if(defined('IN_UPGRADE')) return;
+
+        $flows = $this->dbQuery('SELECT * FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow' AND `navigator` = 'primary'")->fetchAll();
+        foreach($flows as $flow) $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
     }
 
     /**
