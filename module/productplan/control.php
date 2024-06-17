@@ -151,7 +151,7 @@ class productplan extends control
         $oldBranch = array($planID => $plan->branch);
 
         /* Get the parent plan pair exclusion itself. */
-        $parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product);
+        $parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product, 'done,closed');
         unset($parentPlanPairs[$planID]);
         $this->view->parentPlanPairs = $parentPlanPairs;
         $this->view->parentList      = $this->productplan->getByIDList(array_keys($this->view->parentPlanPairs));

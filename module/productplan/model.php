@@ -165,7 +165,7 @@ class productplanModel extends model
             ->where('product')->eq($productID)
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($exclude)->andWhere('status')->notin($exclude)
+            ->beginIF($exclude)->andWhere('status')->notin($exclude)->fi()
             ->orderBy('id_desc')
             ->fetchPairs();
     }
