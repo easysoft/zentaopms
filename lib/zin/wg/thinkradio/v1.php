@@ -20,7 +20,9 @@ class thinkRadio extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        $step     = $this->prop('step');
+        list($step, $mode) = $this->prop(array('step', 'mode'));
+        if($mode != 'detail') return array();
+
         $answer   = $step->answer;
         $result   = isset($answer->result) ? $answer->result : array();
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);

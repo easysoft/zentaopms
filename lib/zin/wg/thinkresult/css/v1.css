@@ -5,5 +5,6 @@
 
 .think-result-content .bg-think-blue {background-color: rgba(34, 148, 251, var(--tw-bg-opacity));}
 .think-result-content .text-think-blue {color: #2294FB;}
+.think-result-content .border-think-blue {border-color: #2294FB;}
 .think-result-content .bg-think-yellow {background-color: rgba(250, 174, 26, var(--tw-bg-opacity));}
 .think-result-content .text-think-yellow {color: #FAAE1A;}
