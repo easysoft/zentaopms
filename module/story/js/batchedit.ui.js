@@ -52,11 +52,12 @@ window.renderRowData = function($row, index, story)
         $picker.render(options);
     });
 
-    var $title  = $row.find('.form-batch-input[data-name="title"]');
-    var $module = $row.find('.form-batch-control[data-name="module"]');
-    var $plan   = $row.find('.form-batch-control[data-name="plan"]');
-    var $branch = $row.find('.form-batch-control[data-name="branch"]');
-    var $roadmap = $row.find('.form-batch-control[data-name="roadmap"]');
+    var $title    = $row.find('.form-batch-input[data-name="title"]');
+    var $module   = $row.find('.form-batch-control[data-name="module"]');
+    var $plan     = $row.find('.form-batch-control[data-name="plan"]');
+    var $branch   = $row.find('.form-batch-control[data-name="branch"]');
+    var $estimate = $row.find('.form-batch-control[data-name="estimate"]');
+    var $roadmap  = $row.find('.form-batch-control[data-name="roadmap"]');
 
     $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
     $row.find('.form-control-static[data-name="status"]').addClass('status-' + story.rawStatus);
@@ -121,6 +122,11 @@ window.renderRowData = function($row, index, story)
 
             $picker.render(options);
         });
+    }
+
+    if($estimate.length > 0)
+    {
+        if(story.parent == -1) $estimate.find('[name^=estimate]').attr('readonly', 'readonly');
     }
 
     if($roadmap && $roadmap.length > 0)
