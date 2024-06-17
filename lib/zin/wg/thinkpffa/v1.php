@@ -53,7 +53,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 col justify-stretch pr-3.5 block-' . $blockIndex),
-            setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -73,7 +73,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 block-' . $blockIndex),
-            setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -93,7 +93,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 col justify-stretch block-' . $blockIndex),
-            setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -112,7 +112,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 relative pt-3.5 block-' . $blockIndex),
-            setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
             $mode === 'preview' ? span(setClass('absolute text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -132,7 +132,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 col justify-stretch pl-3.5 block-' . $blockIndex),
-            setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm ml-4'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
