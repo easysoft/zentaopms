@@ -801,6 +801,15 @@ function debug($message = '', $file = 'undefined', $line = 0)
     $app->saveError(E_USER_WARNING, $message, $file, $line);
 }
 
+/**
+ * 为数组使用字母排序。
+ * Use alphabetical sorting for arrays.
+ *
+ * @param  array  $data
+ * @param  string $fieldName
+ * @param  string $suffix
+ * @return void
+ */
 function addPrefixToField(&$data, $fieldName, $suffix = '. ')
 {
     $key = 0;
@@ -816,6 +825,10 @@ function addPrefixToField(&$data, $fieldName, $suffix = '. ')
         if(is_array($item))
         {
             $item[$fieldName] = $prefix . $suffix . $item[$fieldName];
+        }
+        else
+        {
+            $item->{$fieldName} = $prefix . $suffix . $item->{$fieldName};
         }
         $key++;
     }
