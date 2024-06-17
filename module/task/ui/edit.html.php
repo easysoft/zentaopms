@@ -380,6 +380,7 @@ detailBody
                         set::label($lang->task->estimateAB),
                         set::width('135px'),
                         set::control('inputGroup'),
+                        set::required(true),
                         inputControl
                         (
                             input(set::name("teamEstimate")),
