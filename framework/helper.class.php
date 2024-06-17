@@ -800,3 +800,23 @@ function debug($message = '', $file = 'undefined', $line = 0)
     global $app;
     $app->saveError(E_USER_WARNING, $message, $file, $line);
 }
+
+function addPrefixToField(&$data, $fieldName, $suffix = '. ')
+{
+    $key = 0;
+    foreach($data as &$item)
+    {
+        $prefix = '';
+        $index  = $key;
+        while($index >= 0)
+        {
+            $prefix = chr(65 + ($index % 26)) . $prefix;
+            $index  = floor($index / 26) - 1;
+        }
+        if(is_array($item))
+        {
+            $item[$fieldName] = $prefix . $suffix . $item[$fieldName];
+        }
+        $key++;
+    }
+}
