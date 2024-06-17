@@ -809,6 +809,12 @@ class baseRouter
      */
     public function setDebug()
     {
+        /* 如果没有启用 debug 模式，但是用户已登录且在请求头中有 X-ZIN-DEBUG，则启用 debug 模式。If debug is not enabled, but the user is logged in and X-ZIN-DEBUG is in the request header, enable debug mode. */
+        if(empty($this->config->debug) && !empty($_SERVER['HTTP_X_ZIN_DEBUG']) && !empty($_SESSION['user']->account) && $_SESSION['user']->account != 'guest')
+        {
+            $this->config->debug = 1;
+        }
+
         if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
     }
 
