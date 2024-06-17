@@ -8794,6 +8794,7 @@ class upgradeModel extends model
     public function upgradeBIData()
     {
         $this->loadModel('bi');
+        $this->saveLogs('Run Method ' . __FUNCTION__);
 
         /* Prepare built-in sqls of bi. */
         $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
@@ -8801,17 +8802,20 @@ class upgradeModel extends model
         $metricSQLs = $this->bi->prepareBuiltinMetricSQL('update');
         $screenSQLs = $this->bi->prepareBuiltinScreenSQL('update');
 
-        $upgradeTables = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
+        $upgradeSqls = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
 
         try
         {
-            foreach($upgradeTables as $table)
+            foreach($upgradeSqls as $sql)
             {
-                $table = trim($table);
-                if(empty($table)) continue;
+                $sql = trim($sql);
+                if(empty($sql)) continue;
 
-                $table = str_replace('zt_', $this->config->db->prefix, $table);
-                if(!$this->dao->query($table)) return false;
+                $this->saveLogs($sql);
+
+                $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+                $this->dbh->query($sql);
+                if(dao::isError()) return false;
             }
         }
         catch(Error $e)
