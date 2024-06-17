@@ -21,7 +21,7 @@ jsvar('confirmDeleteLang', $lang->backup->confirmDelete);
 jsvar('confirmRestoreLang', $lang->backup->confirmRestore);
 jsVar('inQuickon', $this->config->inQuickon);
 
-featureBar();
+featureBar(set::items(array(array('text' => $lang->system->backup->history, 'class' => 'font-bold'))));
 
 /* Toolbar. */
 $settingLink = $this->createLink('backup', 'setting');
@@ -125,12 +125,6 @@ else
             );
     }
 }
-
-div
-(
-    setClass('panel-title mt-6'),
-    $lang->system->backup->history
-);
 
 if($this->config->inQuickon)
 {
