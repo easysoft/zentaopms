@@ -14864,7 +14864,7 @@ REPLACE INTO `zt_activity` (`id`, `process`, `name`, `optional`, `tailorNorm`, `
 (246, 58, '原因分析与解决', '', '', '', '', '', 'admin', '2020-01-09 13:40:35', '', NULL, '', NULL, 430, '0'),
 (247, 58, '确定评估方法', '', '', '', '', '', 'admin', '2020-01-09 13:40:35', '', NULL, '', NULL, 435, '0'),
 (248, 58, '评估候选方案', '', '', '', '', '', 'admin', '2020-01-09 13:40:35', '', NULL, '', NULL, 440, '0'),
-(249, 58, '做出决策', '', '', '', '', '', 'admin', '2020-01-09 13:40:35', '', NULL, '', NULL, 445, '0'),
+(249, 58, '做出决策', '', '', '', '', '', 'admin', '2020-01-09 13:40:35', '', NULL, '', NULL, 445, '0');
 
 REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `tailorNorm`, `status`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `order`, `deleted`) VALUES
 (5, 4, '《技术可行性分析报告》', '', '', '', '', 'admin', '2020-01-09 11:01:52', '', '1970-01-01 00:00:01', 25, '0'),
