@@ -8948,6 +8948,21 @@ class upgradeModel extends model
                     $data->process    = $plusProcess->id;
                     $data->model      = 'waterfallplus';
                     $data->editedDate = $data->assignedDate = null;
+                    unset($data->id);
+
+                    $this->dao->insert(TABLE_ACTIVITY)->data($data)->autoCheck()->exec();
+                    $newActivityID = $this->dao->lastInsertID();
+
+                    if(!isset($zoutputs[$activity->id])) continue;
+                    foreach($zoutputs[$activity->id] as $zoutput)
+                    {
+                        $data = clone $zoutput;
+                        $data->activity   = $newActivityID;
+                        $data->editedDate = null;
+                        unset($data->id);
+
+                        $this->dao->insert(TABLE_ZOUTPUT)->data($data)->autoCheck()->exec();
+                    }
                 }
             }
         }
