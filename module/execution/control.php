@@ -821,11 +821,11 @@ class execution extends control
      */
     public function computeBurn(string $reload = 'no')
     {
-        $this->view->burns = $this->execution->computeBurn();
+        $burns = $this->execution->computeBurn();
 
         if($reload == 'yes') return $this->send(array('load' => true, 'result' => 'success'));
+        return print(json_encode($burns));
 
-        $this->display();
     }
 
     /**
