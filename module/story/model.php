@@ -3260,7 +3260,15 @@ class storyModel extends model
         }
 
         $disabledFeatures = ",{$config->disabledFeatures},";
-        if($action == 'importtolib') return in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false && $story->type != 'requirement';
+        if($action == 'importtolib')
+        {
+            if(!in_array($config->edition, array('max', 'ipd'))) return false;
+            if($app->tab != 'project')                           return false;
+            if($story->type == 'requirement')                    return false;
+            if(!common::hasPriv('story', 'importToLib'))         return false;
+            if(strpos($disabledFeatures, ',assetlibStorylib,') !== false || strpos($disabledFeatures, ',assetlib,') !== false) return false;
+            return true;
+        }
 
         static $shadowProducts = array();
         static $taskGroups     = array();
