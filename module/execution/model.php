@@ -2121,25 +2121,6 @@ class executionModel extends model
             if($delay > 0) $execution->delay = $delay;
         }
 
-        /* Get hours information. */
-        $total = $this->dao->select('
-            ROUND(SUM(estimate), 2) AS totalEstimate,
-            ROUND(SUM(consumed), 2) AS totalConsumed,
-            ROUND(SUM(`left`), 2) AS totalLeft')
-            ->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->fetch();
-
-        /* Get hours information of the closed and cancel task. */
-        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('status')->in('closed,cancel')
-            ->fetch('totalLeft');
-
         $totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.account=t2.account')
@@ -2151,9 +2132,9 @@ class executionModel extends model
         /* Set the hours information for the task. */
         $execution->totalHours    = $totalHours;
         $execution->days          = $execution->days ? $execution->days : 0;
-        $execution->totalEstimate = round((float)$total->totalEstimate, 1);
-        $execution->totalConsumed = round((float)$total->totalConsumed, 1);
-        $execution->totalLeft     = round(((float)$total->totalLeft - (float)$closedTotalLeft), 1);
+        $execution->totalEstimate = round((float)$execution->estimate, 1);
+        $execution->totalConsumed = round((float)$execution->consumed, 1);
+        $execution->totalLeft     = round((float)$execution->left, 1);
 
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
