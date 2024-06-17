@@ -317,6 +317,7 @@ class testcase extends control
             foreach($testcases as $testcase)
             {
                 $testcaseID = $this->testcase->create($testcase);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 $this->executeHooks($testcaseID);
                 $this->testcase->syncCase2Project($testcase, $testcaseID);
             }
