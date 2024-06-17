@@ -34,7 +34,7 @@ $title = $lang->programplan->create;
 if($planID) $title = $programPlan->name . $lang->project->stage . '（' . $programPlan->begin . $lang->project->to . $programPlan->end . '）';
 
 /* Generate product list dropdown menu while stage by product. */
-$fnGenerateStageByProductList = function() use ($productID, $productList, $project)
+$fnGenerateStageByProductList = function() use ($productID, $productList, $project, $planID)
 {
     if(empty($productList) || $project->stageBy != 'product') return null;
 
@@ -43,7 +43,7 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
     $items = array();
     foreach($productList as $key => $product)
     {
-        $items[] = array('text' => $product, 'active' => $productID == $key, 'url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key"));
+        $items[] = array('text' => $product, 'active' => $productID == $key, 'url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key&planID=$planID"));
     }
 
     return dropdown
