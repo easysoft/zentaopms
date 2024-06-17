@@ -67,7 +67,6 @@ class build extends control
         $status = empty($this->config->CRProduct) ? 'noclosed' : '';
         $this->loadModel('execution');
         $this->loadModel('project');
-        $this->app->loadLang('artifactrepo');
 
         /* Set menu. */
         if($this->app->tab == 'project')
