@@ -113,7 +113,7 @@ class upgradeModel extends model
             file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
         }
 
-        if(!empty($this->config->global->hideUpgradeGuide))
+        if(empty($this->config->global->hideUpgradeGuide))
         {
             if(strpos($fromVersion, 'ipd') !== false)
             {
