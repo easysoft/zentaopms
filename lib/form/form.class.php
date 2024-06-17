@@ -321,7 +321,7 @@ class form extends fixer
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter']);
 
-        if(isset($config['required']) && $config['required'] && empty($data))
+        if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && empty($data))
         {
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
             $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;

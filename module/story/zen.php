@@ -1143,7 +1143,7 @@ class storyZen extends story
         $fields       = $this->config->story->form->create;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->story->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
-        if($this->post->type == 'requirement') $fields['plan']['required'] = false;
+        if(!isset($_POST['plan'])) $this->config->story->create->requiredFields = str_replace(',plan,', ',', ",{$this->config->story->create->requiredFields},");
         if(!empty($_POST['modules']) && !empty($fields['module']['required']))
         {
             /* Check empty module in the product with multi-branches. */
