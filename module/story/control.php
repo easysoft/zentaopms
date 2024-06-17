@@ -1784,9 +1784,10 @@ class story extends control
                 $this->config->story->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
                 $this->config->story->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
 
-                $productIdList = implode(',', array_flip($this->session->exportProductList));
+                $products      = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+                $productIdList = array_keys($products);
 
-                $this->config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
+                $this->config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => array($productIdList));
             }
 
             $this->post->set('rows', $this->story->getExportStories($orderBy, $storyType, $postData));
