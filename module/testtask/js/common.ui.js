@@ -46,13 +46,16 @@ window.loadExecutionBuilds = function()
         let oldBuild     = $('[name="build"]').val();
         $buildPicker.render({items: data});
         executionID == 0 ? $buildPicker.$.setValue('') : $buildPicker.$.setValue(oldBuild);
+        let createBuild = $('[name="build"]').closest('.input-group').find('.input-group-addon');
         if(data.length == 0 && executionID != 0)
         {
-            $('[name="build"]').closest('.input-group').find('.input-group-addon').removeClass('hidden');
+            var url = createBuild.find('a').attr('href');
+            createBuild.find('a').attr('href', url.replace('{executionID}', executionID));
+            createBuild.removeClass('hidden');
         }
         else
         {
-            $('[name="build"]').closest('.input-group').find('.input-group-addon').addClass('hidden');
+            createBuild.addClass('hidden');
         }
     });
 }
