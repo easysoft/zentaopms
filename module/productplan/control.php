@@ -86,7 +86,7 @@ class productplan extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
             if(isInModal())
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductPlans($productID);"));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductPlans($productID, $branchID);"));
             }
             return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID")));
         }
