@@ -781,7 +781,7 @@
         else if(typeof selector === 'object') options = $.extend({}, options, selector);
         if(!options.selector && options.url && options.url.includes(' '))
         {
-            const parts = url.split(' ', 2);
+            const parts = options.url.split(' ', 2);
             options.url      = parts[0];
             options.selector = parts[1];
         }
