@@ -723,8 +723,6 @@ class executionZen extends execution
                 if(!isset($task->$field)) continue;
                 if(!empty($task->$field)) continue;
 
-                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
-
                 dao::$errors["{$field}[{$bugID}]"] = 'ID: ' . $bugID . sprintf($this->lang->error->notempty, $this->lang->task->$field);
                 return false;
             }
