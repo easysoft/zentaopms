@@ -323,8 +323,8 @@ pipeline {
                   stage("upload zip") {
                     steps {
                       sh 'mkdir ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}'
-                      // sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
-                      // sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.tar.xz'
+                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
+                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.tar.xz'
 
                       script {
                         buildPkg.uploadPMS(env.PHPVERSION)
@@ -341,8 +341,7 @@ pipeline {
                     }
                     steps{
                       script {
-                        echo "ignored"
-                        // buildPkg.buildRpmAndDeb()
+                        buildPkg.buildRpmAndDeb()
                       }
                     }
                   }
@@ -436,7 +435,7 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
-                          // sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_BIZ_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
@@ -491,7 +490,7 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
-                          // sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_BIZ_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
@@ -564,8 +563,8 @@ pipeline {
                   sh "make markdown-init"
                 }
                 stage("docker build") {
-                  // sh 'make build'
-                  // sh 'make test-open'
+                  sh 'make build'
+                  sh 'make test-open'
 
                   sh 'make build-biz'
                   sh 'make test-biz'
@@ -592,9 +591,8 @@ pipeline {
             script {
               if (env.BUILD_KIND=='release') {
                 stage("离线镜像包") {
-                  sh "echo ignore"
-                  // offlineImage.save()
-                  // offlineImage.release()
+                  offlineImage.save()
+                  offlineImage.release()
                 }
               }
               def j = job.newJob()
@@ -618,7 +616,7 @@ pipeline {
               userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
             )
             container('xuanimbot') {
-              // sh './script/push_zentao_version.sh'
+              sh './script/push_zentao_version.sh'
             }
           }
         }
@@ -673,4 +671,5 @@ pipeline {
   }
 
 }
+
 
