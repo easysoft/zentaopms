@@ -963,7 +963,7 @@ class docModel extends model
 
         $requiredFields = $this->config->doc->create->requiredFields;
         if($doc->status == 'draft') $requiredFields = 'title';
-        if(strpos("url|word|ppt|excel", $lib->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
+        if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
         if($checkContent && strpos("url|word|ppt|excel|", $lib->type) === false)
