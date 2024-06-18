@@ -4140,6 +4140,6 @@ $config->group->package->browseThinkRun->privs['thinkrun-result'] = array('editi
 $config->group->package->manageThinkRun = new stdclass();
 $config->group->package->manageThinkRun->subset = 'thinkrun';
 $config->group->package->manageThinkRun->privs  = array();
-$config->group->package->manageThinkRun->privs['thinkrun-create']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkrun-browse'));
+$config->group->package->manageThinkRun->privs['thinkrun-create']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkrun-browse', 'thinkwizard-browse', 'thinkwizard-view', 'thinkwizard-run'));
 $config->group->package->manageThinkRun->privs['thinkrun-answer']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkrun-browse'));
 $config->group->package->manageThinkRun->privs['thinkrun-conclusion'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
