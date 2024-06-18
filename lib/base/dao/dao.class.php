@@ -183,6 +183,15 @@ class baseDAO
     static public $realTimeFile = '';
 
     /**
+     * 缓存已经查询过的表结构。
+     * Cache desc tables.
+     *
+     * @var array
+     * @access public
+     */
+    static public $tablesDesc = array();
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -493,8 +502,7 @@ class baseDAO
      */
     public function descTable($tableName)
     {
-        static $tablesDesc = array();
-        if(isset($tablesDesc[$tableName])) return $tablesDesc[$tableName];
+        if(isset(dao::$tablesDesc[$tableName])) return dao::$tablesDesc[$tableName];
 
         $dbh = $this->slaveDBH ? $this->slaveDBH : $this->dbh;
         $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
@@ -502,7 +510,7 @@ class baseDAO
         $fields = array();
         $stmt   = $dbh->rawQuery("DESC $tableName");
         while($field = $stmt->fetch()) $fields[$field->field] = $field;
-        $tablesDesc[$tableName] = $fields;
+        dao::$tablesDesc[$tableName] = $fields;
 
         $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
