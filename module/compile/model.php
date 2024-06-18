@@ -165,10 +165,6 @@ class compileModel extends model
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($logs)->where('id')->eq($compile->id)->exec();
             }
         }
-        elseif($job->engine == 'gitfox')
-        {
-            $logs = $this->loadModel('gitfox')->apiGetPipelineLogs($job->server, (int)$pipeline->project, $pipeline);
-        }
         else
         {
             $projectID = isset($pipeline->project) ? $pipeline->project : 0;
@@ -325,54 +321,6 @@ class compileModel extends model
     }
 
     /**
-     * Sync gitfox build list.
-     *
-     * @param  object $gitfox
-     * @param  object $job
-     * @access public
-     * @return bool
-     */
-    public function syncGitfoxBuildList(object $gitfox, object $job): bool
-    {
-        if(empty($gitfox->id)) return false;
-
-        $pipeline  = json_decode($job->pipeline);
-        $projectID = zget($pipeline, 'project',   '');
-        $pipeline  = zget($pipeline, 'name',      '');
-        $apiRoot   = $this->loadModel('gitfox')->getApiRoot($gitfox->id, false);
-        $url       = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines/{$pipeline}/executions");
-
-        /* Get build list by API. */
-        for($page = 1; true; $page++)
-        {
-            $param   = $job->lastSyncDate ? '&after=' . strtotime($job->lastSyncDate) : '';
-            $builds  = json_decode(commonModel::http($url . "&page={$page}&limit=100" . $param, null, array(), $apiRoot->header));
-            if(!is_array($builds)) break;
-
-            if(!empty($builds))
-            {
-                $queueIDList = array();
-                foreach($builds as &$build)
-                {
-                    $build->id = $build->number;
-                    $queueIDList[] = $build->id;
-                }
-                $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->in($queueIDList)->fetchPairs();
-
-                foreach($builds as $build)
-                {
-                    if(isset($compilePairs[$build->id])) continue;
-
-                    $this->compileTao->createByBuildInfo($job->name, $job->id, $build, 'gitfox');
-                }
-            }
-
-            if(count($builds) < 100) break;
-        }
-        return !dao::isError();
-    }
-
-    /**
      * Execute compile
      *
      * @param  object $compile
@@ -404,11 +352,10 @@ class compileModel extends model
             $this->dao->update(TABLE_COMPILE)->set('tag')->eq($lastTag)->where('id')->eq($compile->id)->exec();
         }
 
-        $this->loadModel('job');
-        $result = new stdclass();
-        if($job->engine == 'gitlab')  $result = $this->job->execGitlabPipeline($job);
-        if($job->engine == 'jenkins') $result = $this->job->execJenkinsPipeline($job, $repo, $compileID);
-        if($job->engine == 'gitfox')  $result = $this->job->execGitfoxPipeline($job);
+        $method = 'exec' . ucfirst($job->engine) . 'Pipeline';
+        if(!method_exists($this, $method)) return false;
+
+        $result = $this->loadModel('job')->$method($job, $repo, $compileID, $result);
 
         $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
