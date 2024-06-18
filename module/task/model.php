@@ -908,10 +908,11 @@ class taskModel extends model
      * Create a task.
      *
      * @param  object    $task
+     * @param  bool      $createAction
      * @access public
      * @return false|int
      */
-    public function create(object $task): false|int
+    public function create(object $task, bool $createAction = true): false|int
     {
         /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
         $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
@@ -943,7 +944,7 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+        if($createAction) $this->loadModel('action')->create('task', $taskID, 'Opened', '');
         $this->loadModel('file')->updateObjectID($this->post->uid, $taskID, 'task');
         $this->loadModel('score')->create('task', 'create', $taskID);
         if(dao::isError()) return false;
@@ -1102,7 +1103,7 @@ class taskModel extends model
     public function createMultiTask(object $task, object $teamData): false|int
     {
         $task->assignedTo = '';
-        $taskID = $this->create($task);
+        $taskID = $this->create($task, false);
         if(!$taskID) return false;
 
         if(count(array_filter($teamData->team)) < 2) return $taskID;
@@ -1115,6 +1116,9 @@ class taskModel extends model
             $this->computeMultipleHours($task);
             $this->loadModel('program')->refreshProjectStats($task->project);
         }
+
+        /* Send mail after created team. */
+        $this->loadModel('action')->create('task', $taskID, 'Opened', '');
 
         return $taskID;
     }
