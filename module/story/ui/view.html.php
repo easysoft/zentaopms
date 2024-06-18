@@ -178,7 +178,8 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 
 if($isInModal) $config->story->actionList['recall']['url'] = str_replace('&from=view&', '&from=modal&', $config->story->actionList['recall']['url']);
 if($story->status == 'changing') $config->story->actionList['recall']['text'] = $lang->story->recallChange;
-$hasRepo    = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+$this->loadModel('repo');
+$hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
 $actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);

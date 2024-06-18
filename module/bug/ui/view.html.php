@@ -60,7 +60,8 @@ if(!$bug->deleted)
     $actions = $operateList['mainActions'];
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
 
-    $hasRepo        = $this->loadModel('repo')->getListByProduct($bug->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+    $this->loadModel('repo');
+    $hasRepo        = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);
     $isExecutionTab = $app->tab == 'execution';
     foreach($actions as $key => $action)
     {
