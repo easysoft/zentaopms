@@ -300,7 +300,7 @@ class taskZen extends task
      * @access protected
      * @return void
      */
-    protected function buildAssignToForm(int $executionID, int $taskID): void
+    protected function buildUsersAndMembersToFrom(int $executionID, int $taskID)
     {
         $task         = $this->task->getByID($taskID);
         $projectModel = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch('model');
@@ -318,11 +318,8 @@ class taskZen extends task
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
-        $this->view->title   = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
-        $this->view->task    = $task;
         $this->view->members = $members;
         $this->view->users   = $this->loadModel('user')->getPairs();
-        $this->display();
     }
 
     /**

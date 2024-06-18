@@ -271,7 +271,10 @@ class task extends control
             return $this->send($response);
         }
 
-        $this->taskZen->buildAssignToForm($executionID, $taskID);
+        $this->view->task  = $task;
+        $this->view->title = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
+        $this->taskZen->buildUsersAndMembersToFrom($executionID, $taskID);
+        $this->display();
     }
 
     /**
@@ -467,11 +470,10 @@ class task extends control
         $assignedTo = empty($task->assignedTo) ? $this->app->user->account : $task->assignedTo;
 
         $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->start;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members         = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
+        $this->taskZen->buildUsersAndMembersToFrom($task->execution, $taskID);
         $this->display();
     }
 
