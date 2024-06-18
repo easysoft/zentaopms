@@ -101,7 +101,7 @@ class productsBox extends wg
                 $hasNewProduct ? set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'addProduct', 'checked' => false)) : false,
                 picker
                 (
-                    on::change()->call('loadBranches', jsRaw('event')),
+                    bind::change('loadBranches(event)'),
                     set::name('products[0]'),
                     set::items($productItems),
                     !empty($project) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
@@ -146,13 +146,13 @@ class productsBox extends wg
                 setClass('pl-2 flex self-center line-btn c-actions first-action'),
                 btn
                 (
-                    on::click()->call('addNewLine', jsRaw('event')),
+                    bind::click('addNewLine(event)'),
                     setClass('btn btn-link text-gray addLine'),
                     icon('plus')
                 ),
                 btn
                 (
-                    on::click()->call('removeLine', jsRaw('event')),
+                    bind::click('removeLine(event)'),
                     setClass('btn btn-link text-gray removeLine'),
                     setClass('hidden'),
                     icon('trash')
@@ -258,7 +258,7 @@ class productsBox extends wg
                             setClass('grow'),
                             picker
                             (
-                                on::change()->call('loadBranches', jsRaw('event')),
+                                bind::change('loadBranches(event)'),
                                 set::name("products[$i]"),
                                 set::value($product->id),
                                 set::items($productItems),
@@ -324,13 +324,13 @@ class productsBox extends wg
                     setClass('pl-2 flex self-center line-btn c-actions', $i == 0 ? 'first-action' : ''),
                     btn
                     (
-                        on::click()->call('addNewLine', jsRaw('event')),
+                        bind::click('addNewLine(event)'),
                         setClass('btn btn-link text-gray addLine'),
                         icon('plus')
                     ),
                     btn
                     (
-                        on::click()->call('removeLine', jsRaw('event')),
+                        bind::click('removeLine(event)'),
                         setClass('btn btn-link text-gray removeLine'),
                         setClass($i == 0 ? 'hidden' : ''),
                         icon('trash')
