@@ -173,7 +173,7 @@ window.rendDocCell = function(result, {col, row})
 
         return result;
     }
-    if(col.name == 'actions')
+    if(col.name == 'actions' && result[0].length)
     {
         if(col.setting.list.edit && row.data.type != 'text')
         {
