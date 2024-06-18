@@ -532,7 +532,6 @@ $lang->action->label->deletebackup            = 'Deleted system backup';
 $lang->action->label->restorebackup           = 'Restored system backup';
 $lang->action->label->upgradesystem           = 'Executed system upgrade';
 $lang->action->label->system                  = '';
-$lang->action->label->aiassistant             = 'AI Assistant';
 $lang->action->label->synced                  = 'synced';
 $lang->action->label->imported                = 'imported';
 
