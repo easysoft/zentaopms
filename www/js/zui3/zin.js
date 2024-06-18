@@ -9,7 +9,7 @@
     const moduleMethod  = `${currentModule}-${currentMethod}`;
 
     const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat'.split('|'));
-    const iframeList = new Set(['cron-index']);
+    const iframeList = new Set(['cron-index', 'zanode-create']);
     const isAllowSelfOpen = !iframeList.has(moduleMethod) &&
         (isIndexPage
         || location.hash === '#_single'

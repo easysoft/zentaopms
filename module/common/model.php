@@ -1246,7 +1246,7 @@ eof;
          */
         $module     = $this->app->getModuleName();
         $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|';
-        $iframeList = '|cron-index|';
+        $iframeList = '|cron-index|zanode-create|';
 
         if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return true;
 
