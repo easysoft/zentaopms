@@ -1210,10 +1210,11 @@ class testtaskModel extends model
      * @param  int    $caseID
      * @param  int    $version
      * @param  array  $stepResults
+     * @param  int    $deployID
      * @access public
      * @return bool|string
      */
-    public function createResult(int $runID, int $caseID, int $version, array $stepResults): bool|string
+    public function createResult(int $runID, int $caseID, int $version, array $stepResults, int $deployID = 0): bool|string
     {
         /* 根据测试用例步骤的执行结果获取测试用例的执行结果。*/
         /* Get the execution results of the test case based on the execution results of the test case steps. */
@@ -1239,6 +1240,7 @@ class testtaskModel extends model
         $result->stepResults = serialize($stepResults);
         $result->lastRunner  = $this->app->user->account;
         $result->date        = $now;
+        $result->deploy      = $deployID;
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
         if(dao::isError()) return false;
 
@@ -1394,16 +1396,18 @@ class testtaskModel extends model
      * @param  int    $caseID
      * @param  string $status all|done
      * @param  string $type   all|fail
+     * @param  int    $deployID
      * @access public
      * @return void
      */
-    public function getResults(int $runID, int $caseID = 0, string $status = 'all', string $type = 'all'): array
+    public function getResults(int $runID, int $caseID = 0, string $status = 'all', string $type = 'all', int $deployID = 0): array
     {
         $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
             ->beginIF($runID > 0)->where('run')->eq($runID)->fi()
             ->beginIF($runID <= 0)->where('`case`')->eq($caseID)->fi()
             ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
             ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
+            ->beginIF($deployID)->andWhere('deploy')->eq($deployID)->fi()
             ->orderBy('id desc')
             ->fetchAll('id');
         if(!$results) return array();
