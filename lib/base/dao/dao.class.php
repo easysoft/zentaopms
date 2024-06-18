@@ -189,7 +189,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $tablesDesc = array();
+    public static $tablesDesc = array();
 
     /**
      * 构造方法。
