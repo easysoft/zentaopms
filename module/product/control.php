@@ -279,7 +279,7 @@ class product extends control
         if(empty($productIdList)) return $this->locate($this->session->productList);
 
         /* Set menu when page come from program. */
-        if($this->app->tab == 'program') common::setMenuVars('program', 0);
+        if($this->app->tab == 'program' && $programID) common::setMenuVars('program', $programID);
 
         if($this->config->vision == 'or') unset($this->lang->product->statusList['normal']);
 
