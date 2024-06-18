@@ -41,15 +41,15 @@ $laneCount += count($kanbanGroup);
 
 $checkObject = new stdclass();
 $checkObject->execution = $executionID;
-$canCreateTask       = common::hasPriv('task', 'create', $checkObject);
-$canBatchCreateTask  = common::hasPriv('task', 'batchCreate', $checkObject);
-$canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
-$canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate'));
-$canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
-$canCreateStory      = ($productID and common::hasPriv('story', 'create'));
-$canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
-$canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory') and !empty($execution->hasProduct));
-$canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories') and !$hiddenPlan and !empty($execution->hasProduct));
+$canCreateTask       = common::canModify('execution', $execution) && common::hasPriv('task', 'create', $checkObject);
+$canBatchCreateTask  = common::canModify('execution', $execution) && common::hasPriv('task', 'batchCreate', $checkObject);
+$canCreateBug        = (common::canModify('execution', $execution) && $productID && common::hasPriv('bug', 'create'));
+$canBatchCreateBug   = (common::canModify('execution', $execution) && $productID && common::hasPriv('bug', 'batchCreate'));
+$canImportBug        = (common::canModify('execution', $execution) && $productID && common::hasPriv('execution', 'importBug'));
+$canCreateStory      = (common::canModify('execution', $execution) && $productID && common::hasPriv('story', 'create'));
+$canBatchCreateStory = (common::canModify('execution', $execution) && $productID && common::hasPriv('story', 'batchCreate'));
+$canLinkStory        = (common::canModify('execution', $execution) && $productID && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct));
+$canLinkStoryByPlan  = (common::canModify('execution', $execution) && $productID && common::hasPriv('execution', 'importplanstories') && !$hiddenPlan && !empty($execution->hasProduct));
 $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
 $hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
 $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
@@ -207,14 +207,14 @@ row
             set::items(array
             (
                 $features['story'] && common::hasPriv('story', 'create') ? ($hasStoryButton && $canCreateStory && !empty($productID) ? array('text' => $lang->execution->createStory, 'url' => createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : array('text' => $lang->story->create, 'data-on' => 'click', 'data-do' => "zui.Modal.alert('" . $lang->execution->needLinkProducts . "')")) : null,
-                ($features['story'] and $hasStoryButton and $canBatchCreateStory) ? array('text' => $lang->execution->batchCreateStory, 'url' => createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($features['story'] and $hasStoryButton and $canLinkStory) ? array('text' => $lang->execution->linkStory, 'url' => createLink('execution', 'linkStory', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($features['story'] and $hasStoryButton and $canLinkStoryByPlan) ? array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
-                ($features['story'] and $hasStoryButton and $features['qa']) ? array('class' => 'divider menu-divider') : null,
+                ($features['story'] && $hasStoryButton && $canBatchCreateStory) ? array('text' => $lang->execution->batchCreateStory, 'url' => createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
+                ($features['story'] && $hasStoryButton && $canLinkStory) ? array('text' => $lang->execution->linkStory, 'url' => createLink('execution', 'linkStory', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
+                ($features['story'] && $hasStoryButton && $canLinkStoryByPlan) ? array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
+                ($features['story'] && $hasStoryButton && $features['qa']) ? array('class' => 'divider menu-divider') : null,
                 $features['qa'] && common::hasPriv('bug', 'create') ? ($canCreateBug && !empty($productID) ? array('text' => $lang->bug->create, 'url' => createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : array('text' => $lang->bug->create, 'data-on' => 'click', 'data-do' => "zui.Modal.alert('" . $lang->execution->needLinkProducts . "')" )) : null,
                 ($features['qa'] && $canBatchCreateBug) ? array('text' => $lang->bug->batchCreate, 'url' => ($productNum > 1 ? '#batchCreateBug' : createLink('bug', 'batchCreate', "productID=$productID&branch=0&executionID=$execution->id")), 'data-toggle' => 'modal', 'data-size' => $productNum > 1 ? null : 'lg') : null,
                 ($features['qa'] && $canImportBug) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($features['story'] and $hasStoryButton and $features['qa']) ? array('text' => '', 'class' => 'divider menu-divider') : null,
+                ($features['story'] && $hasStoryButton && $features['qa']) ? array('text' => '', 'class' => 'divider menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))

@@ -3480,12 +3480,14 @@ class kanbanModel extends model
     public function getKanbanCardMenu(int $executionID, array $objects, string $objecType): array
     {
         $this->app->loadLang('execution');
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(!common::canModify('execution', $execution)) return array();
 
         $menus = array();
         switch ($objecType)
         {
             case 'story':
-                $menus = $this->kanbanTao->getStoryCardMenu($executionID, $objects);
+                if($execution) $menus = $this->kanbanTao->getStoryCardMenu($execution, $objects);
                 break;
             case 'bug':
                 $menus = $this->kanbanTao->getBugCardMenu($objects);
