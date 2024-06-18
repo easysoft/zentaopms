@@ -50,7 +50,7 @@ class aiapp extends control
         $miniProgram = $this->ai->getMiniProgramByID($id);
         if(empty($miniProgram)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->aiapp->noMiniProgram, 'locate' => $this->createLink('aiapp', 'square'))));
 
-        if($miniProgram->model == 0) $miniProgram->model = 'default';
+        if(empty($miniProgram->model)) $miniProgram->model = 'default';
 
         $this->view->miniProgram  = $miniProgram;
         $this->view->models       = $this->ai->getLanguageModelNamesWithDefault();
