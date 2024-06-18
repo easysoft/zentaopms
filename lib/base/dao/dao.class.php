@@ -1546,7 +1546,7 @@ class baseDAO
             $message = '';
             foreach($errors as $item)
             {
-                is_array($item) ? $message .= implode('\n', $item) . '\n' : $message .= $item . '\n';
+                is_array($item) ? $message .= implode('\n', $item) . "\n" : $message .= $item . "\n";
             }
             return $message;
         }
