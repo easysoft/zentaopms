@@ -14,10 +14,12 @@ namespace zin;
 
 /* zin: Define the set::module('task') feature bar on main menu. */
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
+$queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 featureBar
 (
     set::current($browseType),
     set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::module('task'), set::open($browseType == 'bysearch')))
 );
 
