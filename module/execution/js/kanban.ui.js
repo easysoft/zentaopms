@@ -53,12 +53,16 @@ window.getColActions = function(col)
     {
         if(productID || col.type == 'wait')
         {
-            actionList.push({
-                type: 'dropdown',
-                icon: 'expand-alt text-primary',
-                caret: false,
-                items: buildColCardActions(col),
-            });
+            const colCardActions = buildColCardActions(col);
+            if(colCardActions.length)
+            {
+                actionList.push({
+                    type: 'dropdown',
+                    icon: 'expand-alt text-primary',
+                    caret: false,
+                    items: colCardActions,
+                });
+            }
         }
         else
         {
@@ -227,12 +231,15 @@ window.getItemActions = function(item)
     else if(item.cardType == 'bug')  actions = buildBugActions(item);
     else if(item.cardType == 'task') actions = buildTaskActions(item);
 
-    return [{
-        type: 'dropdown',
-        icon: 'ellipsis-v',
-        caret: false,
-        items: actions
-    }];
+    if(actions.length)
+    {
+        return [{
+            type: 'dropdown',
+            icon: 'ellipsis-v',
+            caret: false,
+            items: actions
+        }];
+    }
 }
 
 window.buildStoryActions = function(item)
