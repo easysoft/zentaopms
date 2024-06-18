@@ -2828,6 +2828,12 @@ class docModel extends model
             ->where('t2.id')->eq($docID)
             ->fetch();
 
+        unset($docContent->id);
+        $docContent->files    = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
+        $docContent->version += 1;
+        $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+        $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
+
         return !dao::isError();
     }
 }
