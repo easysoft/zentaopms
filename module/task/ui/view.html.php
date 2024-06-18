@@ -34,6 +34,7 @@ $config->task->actionList['batchCreate']['hint'] = $config->task->actionList['ba
 /* Build confirmeObject. */
 if($this->config->edition == 'ipd')
 {
+    $execution->canStartExecution = $this->loadModel('execution')->checkStageStatus($execution->id, 'start');
     $task = $this->loadModel('story')->getAffectObject(array(), 'task', $task);
 
     if(!empty($task->confirmeActionType)) $config->task->actions->view['mainActions']   = array('confirmDemandRetract', 'confirmDemandUnlin');

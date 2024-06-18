@@ -2191,6 +2191,10 @@ class taskModel extends model
 
         $executionInfo = zget($task, 'executionInfo', array());
 
+        /* 如果是IPD串行项目下的任务，则只有当前阶段开始以后才能开始/关闭任务。*/
+        /* If it is a task under an IPD serial project, the task can be started / closed only after the current phase begins. */
+        if(!empty($executionInfo->canStartExecution['disabled']) && in_array($action, array('start', 'finish', 'recordworkhour'))) return false;
+
         /* 根据状态判断是否可以点击。 Check clickable by status. */
         if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && zget($executionInfo, 'type') != 'kanban';
         if($action == 'start')              return $task->status == 'wait';

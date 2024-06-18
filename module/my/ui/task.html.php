@@ -42,6 +42,16 @@ $data  = array_values($tasks);
 
 if($config->edition == 'ipd')
 {
+    static $canStartExecution = '';
+    static $executionID       = '';
+    foreach($data as $task)
+    {
+        if(empty($canStartExecution) || $executionID != $task->execution)
+        {
+            $executionID       = $task->execution;
+            $canStartExecution = $this->execution->checkStageStatus($executionID, 'start');
+        }
+
         if(!empty($canStartExecution['disabled']))
         {
             foreach($task->actions as $key => $action)
@@ -54,6 +64,7 @@ if($config->edition == 'ipd')
                 }
             }
         }
+    }
 }
 
 dtable
