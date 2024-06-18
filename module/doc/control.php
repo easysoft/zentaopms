@@ -1037,5 +1037,15 @@ class doc extends control
             $formUrl = inlink('deleteFile', "docID={$docID}&fileID={$fileID}&confirm=yes");
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->file->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
         }
+        else
+        {
+            $this->doc->deleteFile($docID, $fileID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $file = $this->file->getById($fileID);
+            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        }
     }
 }

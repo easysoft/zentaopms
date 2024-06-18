@@ -270,6 +270,8 @@ $contentDom = div
         $doc->files ? h::hr(setClass('mt-4')) : null,
         $doc->files ? fileList
         (
+            set::objectType('doc'),
+            set::objectID($doc->id),
             set::files($doc->files)
         ) : null
     )
