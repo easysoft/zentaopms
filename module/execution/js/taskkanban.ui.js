@@ -290,6 +290,7 @@ window.canDrop = function(dragInfo, dropInfo)
 
     if(dropInfo.type != 'item')
     {
+        if(!canChangeObject) return false;
         let kanbanRules = kanbanDropRules[laneType];
         let colRules    = typeof kanbanRules[fromColType] == 'undefined' ? null : kanbanRules[fromColType];
         if(!colRules) return false;

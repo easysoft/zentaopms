@@ -120,6 +120,7 @@ jsVar('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $exe
 jsVar('maxColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 jsVar('teamWords', $lang->execution->teamWords);
 jsVar('canImportBug', $features['qa']);
+jsVar('canChangeObject', common::canModify('execution', $execution));
 
 $canCreateObject = ($canCreateTask or $canBatchCreateTask or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
 row
