@@ -23,6 +23,7 @@ $lang->message->label = new stdclass();
 $lang->message->label->created      = 'create';
 $lang->message->label->opened       = 'open';
 $lang->message->label->changed      = 'change';
+$lang->message->label->releaseddoc  = 'release';
 $lang->message->label->edited       = 'edit';
 $lang->message->label->assigned     = 'assign';
 $lang->message->label->closed       = 'close';

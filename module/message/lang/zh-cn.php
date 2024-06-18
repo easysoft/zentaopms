@@ -23,6 +23,7 @@ $lang->message->label = new stdclass();
 $lang->message->label->created      = '创建';
 $lang->message->label->opened       = '创建';
 $lang->message->label->changed      = '变更';
+$lang->message->label->releaseddoc  = '发布';
 $lang->message->label->edited       = '编辑';
 $lang->message->label->assigned     = '指派';
 $lang->message->label->closed       = '关闭';
