@@ -26,7 +26,7 @@ $hasResult = ($compile && !empty($compile->testtask));
 $hasLog    = ($compile && !empty($compile->logs));
 $repo      = $repo ? $repo : new stdclass();
 
-if($repo->SCM == 'GitFox' || $repo->SCM == 'Gitlab') $job->pipeline = $repo->name;
+if($repo->SCM == 'Gitlab') $job->pipeline = $repo->name;
 
 if($compile and $compile->status)
 {
@@ -87,7 +87,7 @@ detailBody
                     item
                     (
                         set::name($lang->job->server),
-                        urldecode($job->pipeline) . '@' . $jenkins->name
+                        span(setID('jobServer'), urldecode($job->pipeline) . '@' . $jenkins->name)
                     ),
                     item
                     (
