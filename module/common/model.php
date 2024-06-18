@@ -2444,25 +2444,30 @@ eof;
     {
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $module = $actionData['url']['module'];
-            $method = $actionData['url']['method'];
-            $params = $actionData['url']['params'];
-            if(!common::hasPriv($module, $method)) return false;
-            $actionData['url'] = helper::createLink($module, $method, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
+            $moduleName = $actionData['url']['module'];
+            $methodName = $actionData['url']['method'];
+            $params     = $actionData['url']['params'];
+            if(!common::hasPriv($moduleName, $methodName)) return false;
+            $actionData['url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
-            $module = $actionData['data-url']['module'];
-            $method = $actionData['data-url']['method'];
-            $params = $actionData['data-url']['params'];
-            if(!common::hasPriv($module, $method)) return false;
-            $actionData['data-url'] = helper::createLink($module, $method, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
+            $moduleName = $actionData['data-url']['module'];
+            $methodName = $actionData['data-url']['method'];
+            $params     = $actionData['data-url']['params'];
+            if(!common::hasPriv($moduleName, $methodName)) return false;
+            $actionData['data-url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
+        }
+        elseif(empty($actionData['url']))
+        {
+            return $actionData;
         }
         else
         {
             if(!common::hasPriv($moduleName, $action)) return false;
         }
 
+        if(!isset($this->$moduleName)) $this->loadModel($moduleName);
         if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
 

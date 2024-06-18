@@ -192,7 +192,8 @@ CSS;
     protected function buildTitle()
     {
         list($object, $objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType, $parentTitleProps) = $this->prop(array('object', 'objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType', 'parentTitleProps'));
-        $titleBlock = $this->block('title');
+        $titleBlock   = $this->block('title');
+        $titleLeading = $this->block('titleLeading');
 
         return new entityTitle
         (
@@ -211,6 +212,7 @@ CSS;
             set::parentType($parentType),
             set::parentTitleProps($parentTitleProps),
             set::joinerClass('text-lg'),
+            $titleLeading ? to::leading($titleLeading) : null,
             $titleBlock
         );
     }
