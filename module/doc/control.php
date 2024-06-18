@@ -1039,7 +1039,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->deleteFile($docID, $fileID);
+            $this->doc->updateDocFile($docID, $fileID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $file = $this->file->getById($fileID);
