@@ -1404,7 +1404,7 @@ class pivotModel extends model
     {
         foreach($data as $key => $value)
         {
-            if($value == '$totalGroup$') $data[$key] = $this->lang->pivot->step2->total;
+            if($value === '$totalGroup$') $data[$key] = $this->lang->pivot->step2->total;
         }
     }
 
