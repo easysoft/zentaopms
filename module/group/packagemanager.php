@@ -503,6 +503,13 @@ $config->group->subset->researchstage->nav = 'market';
 
 $config->group->subset->researchtask = new stdclass();
 $config->group->subset->researchtask->nav = 'market';
+
+$config->group->subset->thinkwizard = new stdclass();
+$config->group->subset->thinkwizard->nav = 'market';
+
+$config->group->subset->thinkrun = new stdclass();
+$config->group->subset->thinkrun->nav = 'market';
+
 $config->group->subset->other = new stdclass();
 $config->group->subset->other->order = 100000;
 
@@ -4101,3 +4108,38 @@ $config->group->package->deleteResearchTask = new stdclass();
 $config->group->package->deleteResearchTask->subset = 'researchtask';
 $config->group->package->deleteResearchTask->privs  = array();
 $config->group->package->deleteResearchTask->privs['researchtask-delete'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('marketresearch-task', 'researchtask-view'));
+
+$config->group->package->browseThinkWizard = new stdclass();
+$config->group->package->browseThinkWizard->subset = 'thinkwizard';
+$config->group->package->browseThinkWizard->privs  = array();
+$config->group->package->browseThinkWizard->privs['thinkwizard-browse'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array());
+$config->group->package->browseThinkWizard->privs['thinkwizard-view']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
+
+$config->group->package->manageThinkWizard = new stdclass();
+$config->group->package->manageThinkWizard->subset = 'thinkwizard';
+$config->group->package->manageThinkWizard->privs  = array();
+$config->group->package->manageThinkWizard->privs['thinkwizard-create']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-edit']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-run']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-publish'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-offline'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-design']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-result']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 35, 'depend' => array('thinkwizard-browse', 'thinkwizard-design'));
+
+$config->group->package->deleteThinkWizard = new stdclass();
+$config->group->package->deleteThinkWizard->subset = 'thinkwizard';
+$config->group->package->deleteThinkWizard->privs  = array();
+$config->group->package->deleteThinkWizard->privs['thinkwizard-delete'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5, 'depend' => array('thinkwizard-browse'));
+
+$config->group->package->browseThinkRun = new stdclass();
+$config->group->package->browseThinkRun->subset = 'thinkrun';
+$config->group->package->browseThinkRun->privs  = array();
+$config->group->package->browseThinkRun->privs['thinkrun-browse'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array());
+$config->group->package->browseThinkRun->privs['thinkrun-result'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkrun-browse'));
+
+$config->group->package->manageThinkRun = new stdclass();
+$config->group->package->manageThinkRun->subset = 'thinkrun';
+$config->group->package->manageThinkRun->privs  = array();
+$config->group->package->manageThinkRun->privs['thinkrun-create']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkrun-browse'));
+$config->group->package->manageThinkRun->privs['thinkrun-answer']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkrun-browse'));
+$config->group->package->manageThinkRun->privs['thinkrun-conclusion'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
