@@ -35,13 +35,13 @@ class storeModel extends model
      *
      * @param  string $orderBy
      * @param  string $keyword
-     * @param  array  $categories
+     * @param  int    $categories
      * @param  int    $page
      * @param  int    $pageSize
      * @access public
      * @return object
      */
-    public function searchApps(string $orderBy = '', string $keyword = '', array $categories = array(), int $page = 1, int $pageSize = 20): object
+    public function searchApps(string $orderBy = '', string $keyword = '', int $categoryID = 0, int $page = 1, int $pageSize = 20): object
     {
         $apps  = array();
         $total = 0;
@@ -51,7 +51,7 @@ class storeModel extends model
         $apiUrl .= "&q=" . rawurlencode(trim($keyword));
         $apiUrl .= "&sort=" . rawurlencode(trim($orderBy));
         $apiUrl .= "&page_size=$pageSize";
-        foreach($categories as $category) $apiUrl .= "&category=$category"; // The names of category are same that reason is CNE api is required.
+        if($categoryID) $apiUrl .= "&category=$categoryID"; // The names of category are same that reason is CNE api is required.
 
         $pageID = 1;
         while(true)

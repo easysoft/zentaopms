@@ -78,7 +78,7 @@ class space extends control
         $defaultApp = '';
         if($this->config->inQuickon)
         {
-            $pagedApps = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
+            $pagedApps = $this->loadModel('store')->searchApps('', '', 0, 1, 10000);
             foreach($pagedApps->apps as $app)
             {
                 if(!$appID && $app->alias == 'GitLab') $defaultApp = $app->id;
