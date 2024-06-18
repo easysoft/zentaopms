@@ -366,7 +366,7 @@ class job extends control
     public function ajaxGetRepoType(int $repoID)
     {
         $repo = $this->loadModel('repo')->getByID($repoID);
-        $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM)));
+        $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM), 'triggerByTag' => true));
     }
 
     /**
