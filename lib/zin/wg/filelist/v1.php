@@ -75,7 +75,7 @@ class fileList extends wg
                     'data-showDelete' => $showDelete,
                     'data-session'    => session_name() . '=' . session_id(),
                     'data-objectType' => $objectType,
-                    'data-objectID'   => $objectID,
+                    'data-objectID'   => $objectID
                 )
             ),
             $this->fileList()
