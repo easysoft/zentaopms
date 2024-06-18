@@ -375,6 +375,30 @@ class baseDAO
     }
 
     /**
+     * 检查 sql 语句中是否包含表名，如果包含则设置表的缓存时间。
+     * Check if the sql contains the table name, if contains, set the table cache time.
+     *
+     * @param  string $sql
+     * @access public
+     * @return void
+     */
+    public function setTableCache($sql)
+    {
+        /* 查找 sql 语句中包含的表名。*/
+        /* Find the table names in the sql. */
+        preg_match_all("/({$this->config->db->prefix}\w+)[`\" ]/", $sql, $tables);
+        if(!isset($tables[1])) return;
+
+        foreach($tables[1] as $table)
+        {
+            /* 更新表的缓存时间。*/
+            /* Update the table cache time. */
+            $table = str_replace(array('`', '"'), '', $table);
+            $this->dao->setCache($table);
+        }
+    }
+
+    /**
      * 清除缓存。
      * Clear the cache.
      *
@@ -995,8 +1019,6 @@ class baseDAO
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
-            $table = $this->table;
-
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
@@ -1004,13 +1026,7 @@ class baseDAO
 
             $result = $this->dbh->exec($sql);
 
-            if($table)
-            {
-                /* 更新表的缓存时间。*/
-                /* Update the table cache time. */
-                $table = str_replace(array('`', '"'), '', $table);
-                $this->setCache($table);
-            }
+            $this->setTableCache($sql);
 
             return $result;
         }
