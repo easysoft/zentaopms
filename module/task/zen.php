@@ -300,7 +300,7 @@ class taskZen extends task
      * @access protected
      * @return void
      */
-    protected function buildUsersAndMembersToFrom(int $executionID, int $taskID)
+    protected function buildUsersAndMembersToFrom(int $executionID, int $taskID): void
     {
         $task         = $this->task->getByID($taskID);
         $projectModel = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch('model');
