@@ -8796,6 +8796,7 @@ class upgradeModel extends model
         $this->loadModel('bi');
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
+        $this->dao->clearTablesDescCache();
         /* Prepare built-in sqls of bi. */
         $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
         $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL('update');
