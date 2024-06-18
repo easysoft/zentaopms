@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\import;
+
 /**
  * The control file of job of ZenTaoPMS.
  *
@@ -250,22 +253,22 @@ class job extends control
         $compile = $this->job->exec($jobID);
         if(dao::isError())
         {
-            $errors = '';
+            $errors = array();
             foreach(dao::getError() as $error)
             {
                 if(is_array($error))
                 {
                     foreach($error as $val)
                     {
-                        $errors .= $val . '\n';
+                        $errors[] = $val;
                     }
                 }
                 else
                 {
-                    $errors .= $error . '\n';
+                    $errors[] = $error;
                 }
             }
-            return $this->sendError($errors);
+            return $this->sendError(implode("\n", $errors));
         }
 
         $this->app->loadLang('compile');
