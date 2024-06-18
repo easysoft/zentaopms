@@ -94,7 +94,7 @@ class dropmenu extends wg
 
         if($module == 'testcase' && in_array($method, array('view', 'edit')) && data('isLibCase')) $tab = 'caselib';
 
-        if(strpos(',story-create,story-batchcreate,product-browse,', ",$module-$method,") !== false) $extra = data('storyType');
+        if(strpos(',story-create,story-batchcreate,product-browse,projectstory-story,', ",$module-$method,") !== false) $extra = data('storyType');
 
         if($tab == 'dimension' && $module == 'tree' && $method == 'browsegroup') $extra = data('viewType');
 

@@ -477,7 +477,7 @@ class projectModel extends model
      * @access public
      * @return string
      */
-    public function getProjectLink(string $module, string $method, int $projectID) :string
+    public function getProjectLink(string $module, string $method, int $projectID, string $extra = '') :string
     {
         $link    = helper::createLink('project', 'index', "projectID=%s");
 
@@ -498,6 +498,7 @@ class projectModel extends model
             $linkParams = $this->config->project->linkMap->$module[$method];
             if(!$linkParams[0]) $linkParams[0] = $module;
             if(!$linkParams[1]) $linkParams[1] = $method;
+            if(strpos($linkParams[2], '{extra}') !== false) $linkParams[2] = str_replace('{extra}', $extra, $linkParams[2]);
 
             return helper::createLink($linkParams[0], $linkParams[1], $linkParams[2]) . $linkParams[3];
         }

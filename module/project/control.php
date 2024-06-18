@@ -95,7 +95,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(int $projectID, string $module, string $method)
+    public function ajaxGetDropMenu(int $projectID, string $module, string $method, string $extra = '')
     {
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
@@ -114,7 +114,7 @@ class project extends control
             $orderedProjects[$project->parent][] = $project;
         }
 
-        $this->view->link      = $this->project->getProjectLink($module, $method, $projectID); // Create the link from module,method.
+        $this->view->link      = $this->project->getProjectLink($module, $method, $projectID, $extra); // Create the link from module,method.
         $this->view->projectID = $projectID;
         $this->view->projects  = $orderedProjects;
         $this->view->module    = $module;
