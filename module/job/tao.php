@@ -28,11 +28,6 @@ class jobTao extends jobModel
             $job->server   = (int)zget($job, 'jkServer', 0);
             $job->pipeline = zget($job, 'jkTask', '');
         }
-        elseif($job->engine == 'gitfox')
-        {
-            $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $project, 'name' => $job->gitfoxpipeline, 'reference' => $job->reference));
-        }
         elseif($job->engine == 'gitlab')
         {
             if($job->repo && !empty($repo))
@@ -50,7 +45,6 @@ class jobTao extends jobModel
         }
 
         unset($job->reference);
-        unset($job->gitfoxpipeline);
         unset($job->jkServer);
         unset($job->jkTask);
         unset($job->gitlabRepo);

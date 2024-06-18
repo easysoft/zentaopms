@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use function zin\import;
-
 /**
  * The control file of job of ZenTaoPMS.
  *
@@ -96,7 +94,6 @@ class job extends control
     {
         if($_POST)
         {
-            if($this->post->engine == 'gitfox') $this->config->job->form->create['gitfoxpipeline']['required'] = true;
             if($this->post->useZentao == '1')   $this->config->job->form->create['triggerType']['required']    = true;
             $job = form::data($this->config->job->form->create)
                 ->setIF($this->post->useZentao != '1', 'triggerType', '')
@@ -116,7 +113,6 @@ class job extends control
         }
 
         $this->loadModel('ci');
-        $this->app->loadLang('action');
 
         $this->view->title               = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->create;
         $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
@@ -141,7 +137,6 @@ class job extends control
         $job = $this->job->getByID($jobID);
         if($_POST)
         {
-            if($job->engine == 'gitfox')      $this->config->job->form->edit['gitfoxpipeline']['required'] = true;
             if($this->post->useZentao == '1') $this->config->job->form->edit['triggerType']['required']    = true;
             $job = form::data($this->config->job->form->edit)
                 ->setIF($this->post->useZentao != '1', 'triggerType', '')
@@ -185,7 +180,6 @@ class job extends control
         $this->view->products            = $products;
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
         $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
-        $this->view->pipelines           = $repo->SCM == 'GitFox' ? $this->ajaxGetPipelines($job->repo, false) : array();
 
         $this->display();
     }
