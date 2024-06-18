@@ -494,6 +494,17 @@ class baseDAO
     }
 
     /**
+     * Clear the cache of tables desc fields.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearTablesDescCache()
+    {
+        dao::$tablesDesc = array();
+    }
+
+    /**
      * Desc table, show fields.
      *
      * @param  string $tableName
