@@ -1018,4 +1018,24 @@ class doc extends control
             return $this->send(array('result' => 'success'));
         }
     }
+
+    /**
+     * 删除文档附件。
+     * Delete file for doc.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteFile(int $docID, int $fileID, string $confirm = 'no')
+    {
+        $this->loadModel('file');
+        if($confirm == 'no')
+        {
+            $formUrl = inlink('deleteFile', "docID={$docID}&fileID={$fileID}&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->file->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
+        }
+    }
 }
