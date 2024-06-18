@@ -2811,4 +2811,23 @@ class docModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 删除一个附件。
+     * Delete a file.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @access public
+     * @return bool
+     */
+    public function deleteFile(int $docID, int $fileID): bool
+    {
+        $docContent = $this->dao->select('t1.*')->from(TABLE_DOCCONTENT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
+            ->where('t2.id')->eq($docID)
+            ->fetch();
+
+        return !dao::isError();
+    }
 }
