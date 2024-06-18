@@ -815,7 +815,6 @@ class executionZen extends execution
         unset($this->config->bug->search['fields']['status']);
         unset($this->config->bug->search['fields']['toTask']);
         unset($this->config->bug->search['fields']['toStory']);
-        unset($this->config->bug->search['fields']['severity']);
         unset($this->config->bug->search['fields']['resolution']);
         unset($this->config->bug->search['fields']['resolvedBuild']);
         unset($this->config->bug->search['fields']['resolvedDate']);
@@ -832,7 +831,6 @@ class executionZen extends execution
         unset($this->config->bug->search['params']['status']);
         unset($this->config->bug->search['params']['toTask']);
         unset($this->config->bug->search['params']['toStory']);
-        unset($this->config->bug->search['params']['severity']);
         unset($this->config->bug->search['params']['resolution']);
         unset($this->config->bug->search['params']['resolvedBuild']);
         unset($this->config->bug->search['params']['resolvedDate']);
