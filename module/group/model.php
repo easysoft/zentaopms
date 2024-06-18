@@ -30,7 +30,7 @@ class groupModel extends model
 
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' && project='{$group->project}'")
             ->exec();
         if(dao::isError()) return false;
 
@@ -58,7 +58,7 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->update(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "id != {$groupID} AND vision = '{$this->config->vision}'")
+            ->check('name', 'unique', "id != {$groupID} AND vision = '{$this->config->vision}' AND project = '{$group->project}'")
             ->where('id')->eq($groupID)
             ->exec();
 
@@ -79,7 +79,7 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' && project = '{$group->project}'")
             ->exec();
         if(dao::isError()) return false;
 
