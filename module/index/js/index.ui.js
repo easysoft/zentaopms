@@ -956,7 +956,7 @@ window.browserNotify = function()
 window.clickMessage = function(obj)
 {
     let $obj = $(obj);
-    let url  = $obj.data('url');
+    let url  = $obj.attr('data-url').replace(/\?onlybody=yes/g, '').replace(/\&onlybody=yes/g, '');
     openApp(url);
     $(obj).closest('.alert.messager').find('.alert-close').trigger('click');
 }
