@@ -749,6 +749,12 @@ class storyModel extends model
                 $this->updateStoryVersion($newStory);
             }
 
+            if($oldStory->type == 'requirement' && $story->status == 'active')
+            {
+                $relations = $this->storyTao->getRelation($storyID, 'requirement');
+                $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
+            }
+
             if($story->reviewerHasChanged)
             {
                 $oldStoryReviewers   = $this->getReviewerPairs($storyID, $oldStory->version);
