@@ -14,35 +14,38 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 jsVar('docID', $docID);
 
-featureBar
-(
-    li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
-);
-
-if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
-include 'lefttree.html.php';
-
-toolbar
-(
-    $canExport ? item(set(array
+if(!isInModal())
+{
+    featureBar
     (
-        'id'     => $exportMethod,
-        'icon'   => 'export',
-        'target' => '_self',
-        'class'  => 'ghost export',
-        'text'   => $lang->export,
-        'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
-    ))) : null,
-    common::hasPriv('doc', 'createLib') ? item(set(array
+        li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
+    );
+
+    if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
+    include 'lefttree.html.php';
+
+    toolbar
     (
-        'icon'        => 'plus',
-        'class'       => 'btn secondary',
-        'text'        => $lang->doc->createLib,
-        'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    $libID && common::hasPriv('doc', 'create') ? $createButton : null
-);
+        $canExport ? item(set(array
+        (
+            'id'     => $exportMethod,
+            'icon'   => 'export',
+            'target' => '_self',
+            'class'  => 'ghost export',
+            'text'   => $lang->export,
+            'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
+        ))) : null,
+        common::hasPriv('doc', 'createLib') ? item(set(array
+        (
+            'icon'        => 'plus',
+            'class'       => 'btn secondary',
+            'text'        => $lang->doc->createLib,
+            'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        $libID && common::hasPriv('doc', 'create') ? $createButton : null
+    );
+}
 
 $versionList = array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
@@ -184,8 +187,7 @@ $contentDom = div
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
                     $doc->type != 'text' ? setData('toggle', 'modal') : null,
                     setClass('btn ghost'),
-                    icon('edit'),
-                    setData('app', $app->tab)
+                    icon('edit')
                 ) : null,
                 common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
                 (
