@@ -394,7 +394,7 @@ class baseDAO
             /* 更新表的缓存时间。*/
             /* Update the table cache time. */
             $table = str_replace(array('`', '"'), '', $table);
-            $this->dao->setCache($table);
+            $this->setCache($table);
         }
     }
 
