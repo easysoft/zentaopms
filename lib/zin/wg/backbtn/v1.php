@@ -79,7 +79,7 @@ class backBtn extends btn
             'demand'         => 'demand-browse,demand-view,my-work',
             'issue'          => 'issue-browse,issue-view',
             'risk'           => 'risk-browse,risk-view',
-            'todo'           => 'my-effort',
+            'todo'           => 'my-todo,my-effort',
             'ticket'         => 'my-effort',
             'designguide'    => 'designguide-browse,designguide-view', // For designguide plugin.
             'deploy'         => 'deploy-browse,deploy-steps,deploy-scope,deploy-view,deploy-cases',
