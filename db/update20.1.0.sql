@@ -25,3 +25,11 @@ UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasour
 
 UPDATE `zt_ai_miniprogram` SET `prompt` = '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <兴趣领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。' WHERE `id` = 1;
 UPDATE `zt_ai_miniprogramfield` SET `name` = '兴趣领域' WHERE `appID` = 1 AND `name` = '更多感兴趣的领域';
+
+ALTER TABLE `zt_chart` MODIFY COLUMN `type`        varchar(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_chart` MODIFY COLUMN `dataset`     varchar(30) NULL;
+ALTER TABLE `zt_chart` MODIFY COLUMN `desc`        text        NULL;
+ALTER TABLE `zt_chart` MODIFY COLUMN `settings`    mediumtext  NULL;
+ALTER TABLE `zt_chart` MODIFY COLUMN `filters`     mediumtext  NULL;
+ALTER TABLE `zt_chart` MODIFY COLUMN `createdBy`   varchar(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_chart` MODIFY COLUMN `createdDate` datetime    NULL;
