@@ -267,7 +267,6 @@ function updateAssignedTo()
 
 window.renderRowData = function($row, index, row)
 {
-    if(!row) return;
     $row.addClass('member member-' + (row ? row.memberStatus : 'wait'));
     $row.attr('data-estimate', row ? row.teamEstimate : 0);
     $row.attr('data-consumed', row ? row.teamConsumed : 0);
