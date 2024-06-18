@@ -1095,6 +1095,9 @@ class groupModel extends model
                 if(!isset($subsetPrivs[$type][$subsetName])) $subsetPrivs[$type][$subsetName] = array('id' => $subsetName, 'text' => $subsetTitle, 'children' => array());
 
                 list($moduleName, $methodName) = explode('-', $relatedPriv);
+
+                if(!isset($this->lang->resource->$moduleName->$methodName)) continue;
+
                 $method = $this->lang->resource->$moduleName->$methodName;
 
                 if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);
