@@ -380,6 +380,9 @@ class cron extends control
         unset($_SESSION['company']);
         unset($this->app->company);
 
+        /* Mark that this request was triggered by the scheduled task, not by the user. */
+        $_SESSION['fromCron'] = true;
+
         $this->loadModel('common');
         $this->common->setCompany();
         $this->common->loadConfigFromDB();
