@@ -528,8 +528,7 @@ class task extends control
             $actionID = $this->loadModel('action')->create('task', $effort->objectID, 'EditEffort', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
-            $currentModule = $this->config->vision == 'or' ? 'researchtask' : 'task';
-            $url           = $this->createLink($currentModule, 'recordWorkhour', "taskID={$effort->objectID}");
+            $url = $this->createLink($this->app->rawModule, 'recordWorkhour', "taskID={$effort->objectID}");
             return $this->send(array(
                 'result'     => 'success',
                 'message'    => $this->lang->saveSuccess,
