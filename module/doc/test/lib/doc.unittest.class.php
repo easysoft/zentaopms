@@ -1430,4 +1430,22 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('`order`')->from(TABLE_MODULE)->where('id')->eq($catalogID)->fetch('order');
     }
+
+    /**
+     * 更新文档中的附件信息。
+     * Update doc file.
+     *
+     * @param  int          $docID
+     * @param  int          $fileID
+     * @access public
+     * @return array|object
+     */
+    public function updateDocFileTest(int $docID, int $fileID): array|object
+    {
+        $doc = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        $this->objectModel->updateDocFile($docID, $fileID);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($doc->version + 1)->fetch();
+    }
 }
