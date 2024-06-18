@@ -66,6 +66,26 @@ $tableData = array_map(
     $tableData
 );
 
+if($config->edition == 'ipd')
+{
+    $canStartExecution = $this->execution->checkStageStatus($execution->id, 'start');
+    if(!empty($canStartExecution['disabled']))
+    {
+        foreach($tableData as $task)
+        {
+            foreach($task->actions as $key => $action)
+            {
+                if(in_array($action['name'], array('start', 'finish', 'recordWorkhour')))
+                {
+                    $tip = $action['name'] . 'Tip';
+                    $task->actions[$key]['disabled'] = true;
+                    $task->actions[$key]['hint']     = $lang->task->disabledTip->$tip;
+                }
+            }
+        }
+    }
+}
+
 toolbar
 (
     hasPriv('task', 'report') ? item(set(array
