@@ -89,6 +89,7 @@ $lang->custom->convertRelationTips = "After converting {$lang->hourCommon} to %s
 $lang->custom->saveTips            = 'After clicking save, the current %s will be used as the default estimation unit';
 
 $lang->custom->numberError = 'The interval must be greater than zero!';
+$lang->custom->hoursError  = 'The working hours must be between 0 and 24!';
 
 $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;

@@ -508,6 +508,8 @@ class custom extends control
             unset($data['type']);
             if($data['weekend'] != 1) unset($data['restDay']);
 
+            if($type == 'hours' && ($data['defaultWorkhours'] < 0 || $data['defaultWorkhours'] > 24)) $this->sendError($this->lang->custom->hoursError);
+
             $this->loadModel('setting')->setItems('system.execution', $data);
             return $this->sendSuccess(array('load' => inLink('hours', "type={$type}")));
         }

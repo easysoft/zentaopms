@@ -89,6 +89,7 @@ $lang->custom->convertRelationTips = "{$lang->hourCommon}转换为%s后，历史
 $lang->custom->saveTips            = '点击保存后，则以当前%s为默认估算单位';
 
 $lang->custom->numberError = '区间必须大于零';
+$lang->custom->hoursError  = '可用工时必须在0到24之间！';
 
 $lang->custom->closedExecution = '已关闭' . $lang->custom->executionCommon;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
