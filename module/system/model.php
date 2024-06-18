@@ -139,7 +139,7 @@ class systemModel extends model
     {
         if(empty($instance)) $instance = $this->config->instance->zentaopaas;
 
-        $this->setMaintenance('backup');
+        if(empty($_SESSION['fromCron'])) $this->setMaintenance('backup');
 
         $rawResult = $this->cne->backup($instance, $this->app->user->account, $mode);
 
