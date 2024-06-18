@@ -328,7 +328,7 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setConcept($_POST['sprintConcept']);
-            if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+            $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             return $this->sendSuccess(array('load' => true));
         }
