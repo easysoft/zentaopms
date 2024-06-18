@@ -1288,16 +1288,16 @@ eof;
             if(strpos($groupPriv, '|') !== false) list($module, $groupPriv) = explode('|', $groupPriv);
             if($groupPriv && $groupPriv != $method)
             {
-                if($object) return self::getUserPriv($module, $groupPriv, $object, $vars);
-                return self::hasPriv($module, $groupPriv, $object, $vars);
+                if($object) return static::getUserPriv($module, $groupPriv, $object, $vars);
+                return static::hasPriv($module, $groupPriv, $object, $vars);
             }
         }
 
-        if($object) return self::getUserPriv($module, $method, $object, $vars);
+        if($object) return static::getUserPriv($module, $method, $object, $vars);
 
-        if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
+        if(!isset(static::$userPrivs[$module][$method][$vars])) static::$userPrivs[$module][$method][$vars] = static::getUserPriv($module, $method, $object, $vars);
 
-        return self::$userPrivs[$module][$method][$vars];
+        return static::$userPrivs[$module][$method][$vars];
     }
 
     /**
@@ -2848,7 +2848,7 @@ eof;
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
 
-        self::printClientLink();
+        static::printClientLink();
 
         echo '<li class="zentao-about">' . html::a(helper::createLink('misc', 'about'), "<i class='icon icon-about'></i> " . $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
         echo '<li class="AIUX">' . $lang->designedByAIUX . '</li>';
