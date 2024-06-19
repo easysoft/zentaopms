@@ -9,6 +9,7 @@ class thinkResult extends wg
         'mode?: string="view"', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
         'blocks: array',        // 模型节点
         'models: array',        // 模型列表
+        'conclusion: string'    // 分析结论
     );
 
     public static function getPageCSS(): ?string
@@ -37,7 +38,7 @@ class thinkResult extends wg
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        list($wizard, $mode, $models) = $this->prop(array('wizard', 'mode', 'models'));
+        list($wizard, $mode, $models, $conclusion) = $this->prop(array('wizard', 'mode', 'models', 'conclusion'));
         $introduction = $mode == 'preview' ? $lang->thinkwizard->introduction : '';
         $introduction = $wizard->introduction ? $wizard->introduction : $introduction;
         $suggestion   = $mode == 'preview' ? $lang->thinkwizard->suggestion : '';
@@ -61,8 +62,13 @@ class thinkResult extends wg
             ),
             div
             (
-                setClass('w-full text-center text-md py-2.5 leading-5'),
+                setClass('w-full text-center text-base py-2.5 leading-5'),
                 html($suggestion)
+            ),
+            div
+            (
+                setClass('w-full text-center text-base leading-5'),
+                $conclusion
             )
         );
     }
