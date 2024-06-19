@@ -436,7 +436,7 @@ class docMenu extends wg
         $menuLink  = $this->prop('menuLink', '');
         $objectID  = $this->prop('objectID', 0);
         $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover', 'sortable', 'onSort'));
-        $preserve  = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
+        $preserve  = $this->prop('preserve', $app->rawModule . '-' . $app->rawMethod);
 
         $isInSidebar = $this->parent instanceof sidebar;
 

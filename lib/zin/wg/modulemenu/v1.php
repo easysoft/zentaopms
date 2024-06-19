@@ -273,7 +273,7 @@ class moduleMenu extends wg
         $title         = $this->getTitle();
         $userTreeProps = $this->prop('tree');
         $treeProps     = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
-        $preserve      = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
+        $preserve      = $this->prop('preserve', $app->rawModule . '-' . $app->rawMethod);
         $isInSidebar   = $this->parent instanceof sidebar;
         $titleShow     = $this->prop('titleShow');
         if(!is_null($this->prop('filterMap'))) static::$filterMap = $this->prop('filterMap');
