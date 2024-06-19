@@ -2,6 +2,7 @@
 $config->bi = new stdclass();
 $config->bi->builtin = new stdclass();
 
+$config->bi->builtin->modules = new stdclass();
 $config->bi->builtin->screens = array(1, 2, 3, 4, 5, 6, 7, 8,1001);
 
 $config->bi->default = new stdclass();

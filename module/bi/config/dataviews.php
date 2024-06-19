@@ -1,8 +1,7 @@
 <?php
 $config->bi->builtin->dataviews = array();
 
-$config->bi->builtin->modules = array();
-$config->bi->builtin->modules[] = array('id' => 101, 'root' => 0, 'branch' => 0, 'name' => '内置数据分组', 'parent' => 0, 'path' => ',101,', 'grade' => 1, 'order' => 10, 'type' => 'dataview', 'from' => 0);
+$config->bi->builtin->modules->dataviews = array(array('id' => 101, 'root' => 0, 'branch' => 0, 'name' => '内置数据分组', 'parent' => 0, 'path' => ',101,', 'grade' => 1, 'order' => 10, 'type' => 'dataview', 'from' => 0));
 
 $build = array('name' => '版本数据', 'code' => 'build', 'view' => 'ztv_build', 'group' => '101');
 $build['sql'] = <<<EOT
