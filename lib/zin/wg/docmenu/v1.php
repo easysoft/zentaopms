@@ -61,17 +61,17 @@ class docMenu extends wg
         {
             $methodName = 'index';
         }
-        else if($item->type == 'annex')
+        elseif($item->type == 'annex')
         {
             $methodName = 'showFiles';
             $linkParams = "type={$objectType}&objectID={$item->objectID}";
         }
-        else if(in_array($item->type, array('text', 'word','ppt', 'excel', 'attachment')))
+        elseif(in_array($item->type, array('text', 'word','ppt', 'excel', 'attachment')))
         {
             $methodName = 'view';
             $linkParams = "docID={$item->id}";
         }
-        else if($objectType == 'execution' && $app->tab == 'execution')
+        elseif($objectType == 'execution' && $app->tab == 'execution')
         {
             $moduleName = 'execution';
             $methodName = 'doc';
