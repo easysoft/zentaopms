@@ -3,6 +3,24 @@
 class biModel extends model
 {
     /**
+     * 获取sql中的表、字段。
+     * Get tables and fields form sql.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array|false
+     */
+    public function getTableAndFields(string $sql): array|false
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+
+        if(empty($statement)) return false;
+        return array('tables' => array_unique($this->getTables($statement, true)), 'fields' => $this->getFields($statement));
+    }
+
+    /**
      * Get object options.
      *
      * @param  string $type user|product|project|execution|dept
