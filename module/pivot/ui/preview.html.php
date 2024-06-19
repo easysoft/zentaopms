@@ -35,6 +35,7 @@ foreach($moreGroups as $id => $name) $lang->pivot->moreSelects['preview']['more'
 featureBar
 (
     set::current($groupID),
+    set::load(''),
     set::linkParams("dimension={$dimensionID}&group={key}"),
 );
 
