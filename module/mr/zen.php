@@ -36,27 +36,25 @@ class mrZen extends mr
      */
     protected function assignEditData(object $MR, string $scm): void
     {
+        $this->app->loadConfig('pipeline');
+
         $MR->canDeleteBranch = true;
-        if($scm != 'gitfox')
+        if(in_array($scm, $this->config->pipeline->formatTypeService)) $MR->sourceProject = (int)$MR->sourceProject;
+        $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
+        foreach($branchPrivs as $priv)
         {
-            if($scm == 'gitlab') $MR->sourceProject = (int)$MR->sourceProject;
-            $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
-            foreach($branchPrivs as $priv)
-            {
-                if($MR->canDeleteBranch && $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
-            }
+            if($MR->canDeleteBranch && $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
         }
 
         $sourceProject = $targetProject = $MR->sourceProject;
         if($MR->sourceProject != $MR->targetProject) $targetProject = $MR->targetProject;
-        if($scm == 'gitlab' || $scm == 'gitfox')
+        if(in_array($scm, $this->config->pipeline->formatTypeService))
         {
-            $method  = $scm == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
-            $project = $this->loadModel($scm)->$method($MR->hostID, (int)$MR->sourceProject);
+            $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject);
             $targetProject = $sourceProject = zget($project, 'name_with_namespace', '');
             if($MR->sourceProject != $MR->targetProject)
             {
-                $project = $this->loadModel($scm)->$method($MR->hostID, (int)$MR->targetProject);
+                $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->targetProject);
                 $targetProject = zget($project, 'name_with_namespace', '');
             }
 
@@ -264,21 +262,13 @@ class mrZen extends mr
      * Get repo branch url.
      *
      * @param  object     $host
-     * @param  int|string $projectID $projectID is an int in gitlab or gitfox and a string in gitea or gogs.
+     * @param  int|string $projectID $projectID is an int in gitlab and a string in gitea or gogs.
      * @param  string     $branch
      * @access protected
      * @return string
      */
     protected function getBranchUrl(object $host, int|string $projectID, string $branch): string
     {
-        if($host->type == 'gitfox')
-        {
-            $project = $this->loadModel('gitfox')->apiGetSingleRepo($host->id, $projectID, false);
-            if(empty($project->id)) return '';
-
-            return rtrim($host->url, '/') . "/{$project->path}/files/{$branch}";
-        }
-
         $branch = $this->loadModel($host->type)->apiGetSingleBranch($host->id, $projectID, $branch);
         return $branch ? zget($branch, 'web_url', '') : '';
     }
@@ -301,7 +291,6 @@ class mrZen extends mr
         if($commitLogs)
         {
             $lastCommit = zget($commitLogs[0], 'committed_date', '');
-            if($hostType == 'gitfox') $lastCommit = date('Y-m-d H:i:s', strtotime($commitLogs[0]->author->when));
             if(in_array($hostType, array('gitea', 'gogs'))) $lastCommit = $commitLogs[0]->author->committer->date;
 
             if($lastCommit > $lastTime) return true;
