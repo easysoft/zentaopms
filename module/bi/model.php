@@ -584,6 +584,17 @@ class biModel extends model
      */
     public function getCorrectGroup($id, $type)
     {
+        if(strpos($id, ',') !== false)
+        {
+            $ids = explode(',', $id);
+            $correctIds = array();
+            foreach($ids as $id) $correctIds[] = $this->getCorrectGroup($id, $type);
+
+            $correctIds = array_filter($correctIds);
+
+            return empty($correctIds) ? '' : implode(',', $correctIds);
+        }
+
         $key = "{$type}s";
 
         $builtinModules = $this->config->bi->builtin->modules->$key;
