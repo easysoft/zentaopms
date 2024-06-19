@@ -42,7 +42,7 @@ class biModel extends model
     }
 
     /**
-     * 获取sql中的标名。
+     * 获取sql中的表名。
      * Get tables form sqlparser statment.
      *
      * @param  object $statment
