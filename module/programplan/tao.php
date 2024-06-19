@@ -424,14 +424,14 @@ class programplanTao extends programplanModel
 
         $end     = $reviewDeadline[$planID]['stageEnd'];
         $begin   = $reviewDeadline[$planID]['stageBegin'];
-        $endDate = '';
-        if(strpos($point->category, "DCP") !== false) $endDate = $this->getReviewDeadline($end, 2);
+
+        if(strpos($point->category, "DCP") !== false) $end = $this->getReviewDeadline($end, 2);
         if(strpos($point->category, "TR") !== false)
         {
             if(isset($reviewDeadline[$planID]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$planID]['taskEnd'])) return $reviewDeadline[$planID]['taskEnd'];
-            $endDate = $this->getReviewDeadline($end);
+            $end = $this->getReviewDeadline($end);
         }
-        return ($endDate && $endDate <= $begin) ? $begin : $endDate;
+        return $end <= $begin ? $begin : $end;
     }
 
     /**
