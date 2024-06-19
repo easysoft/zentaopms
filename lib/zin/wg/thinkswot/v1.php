@@ -54,11 +54,12 @@ class thinkSwot extends thinkModel
         $app->loadLang('thinkwizard');
 
         $mode  = $this->prop('mode');
+        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'min-width' => '1160px'));
         $model = array(
             div
             (
                 setClass('model-swot my-1 flex flex-wrap justify-between'),
-                setStyle(array('min-height' => '254px', 'min-width' => '1160px')),
+                $style,
                 $this->buildBody()
             )
         );
