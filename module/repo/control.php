@@ -1031,9 +1031,9 @@ class repo extends control
 
         if($_POST)
         {
-            $repos = $this->repoZen->prepareBatchCreate();
+            $repos = form::batchData($this->config->repo->form->import)->get();
 
-            if($repos) $this->repo->batchCreate($repos, (int)$_POST['serviceHost']);
+            if($repos) $this->repo->batchCreate($repos, $serverID, (string)$this->post->serverType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));

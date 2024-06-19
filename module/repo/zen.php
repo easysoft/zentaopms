@@ -472,38 +472,6 @@ class repoZen extends repo
     }
 
     /**
-     * 准备批量创建版本库的数据。
-     * Prepare batch create repo data.
-     *
-     * @access protected
-     * @return array|false
-     */
-    protected function prepareBatchCreate(): array|false
-    {
-        if(!$this->post->serviceProject) return false;
-
-        $this->app->loadLang('testcase');
-
-        $data = array();
-        foreach($this->post->serviceProject as $i => $project)
-        {
-            $products = array_filter($this->post->product[$i]);
-            if(empty($products)) continue;
-            if(isset($this->post->name[$i]) && $this->post->name[$i] == '') dao::$errors['name_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
-            if(isset($this->post->identifier[$i]) && $this->post->identifier[$i] == '') dao::$errors['identifier_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
-            if(dao::isError()) continue;
-
-            $nameList = isset($this->post->name[$i]) ? array('name' => $this->post->name[$i]) : array('identifier' => $this->post->identifier[$i]);
-            $data[] = $nameList + array('serviceProject' => $project,
-                'product' => implode(',', $this->post->product[$i]),
-                'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
-        }
-        if(dao::isError()) return false;
-
-        return $data;
-    }
-
-    /**
      * 获取还没存在禅道的项目列表。
      * Get not exist repos.
      *
