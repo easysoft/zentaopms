@@ -14,7 +14,7 @@ class thinkSwot extends thinkModel
     protected function buildQuestion(array $steps): array
     {
         $questionList = array();
-        foreach($steps as &$step) $questionList[] = div(setClass('w-80 bg-canvas p-2 shadow'), $this->buildQuestionItem($step));
+        foreach($steps as &$step) $questionList[] = div(setClass('w-64 bg-canvas p-2 shadow'), $this->buildQuestionItem($step));
         return $questionList;
     }
 
@@ -35,7 +35,7 @@ class thinkSwot extends thinkModel
             (
                 setClass('h-full'),
                 div(setClass('item-step-title text-center text-clip'), set::title($blockTitle), $blockTitle),
-                !isset($block->steps) ? null : div(setClass('px-5 py-3 flex flex-wrap gap-5 relative z-10'), $this->buildQuestion($block->steps))
+                !isset($block->steps) ? null : div(setClass('px-4 py-3 flex flex-wrap gap-5 relative z-10'), $this->buildQuestion($block->steps))
             )
         );
     }
@@ -58,7 +58,7 @@ class thinkSwot extends thinkModel
             div
             (
                 setClass('model-swot my-1 flex flex-wrap justify-between'),
-                setStyle(array('min-height' => '254px')),
+                setStyle(array('min-height' => '254px', 'min-width' => '1160px')),
                 $this->buildBody()
             )
         );

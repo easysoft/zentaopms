@@ -52,7 +52,7 @@ class thinkPestel extends thinkModel
                             $block->text ? $block->text : $defaultTitle
                         )
                     ),
-                    isset($block->steps) ? div(setClass('p-2 relative z-10 col gap-2'), $this->buildItem($block)) : null
+                    isset($block->steps) ? div(setClass('py-2 px-5 relative z-10 col gap-5'), $this->buildItem($block)) : null
                 )
             );
         }
