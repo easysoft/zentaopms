@@ -136,6 +136,7 @@ $auditInject = function() use($module, $method)
             {
                 $('body').attr('data-loading', `$loadingText`);
                 $('body').addClass('load-indicator loading');
+                window.sessionStorage.setItem('ai-prompt-regen', true);
             });
         }
         JAVASCRIPT;
