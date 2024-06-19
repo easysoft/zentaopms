@@ -576,6 +576,10 @@ class storyZen extends story
         {
             $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $products = $this->product->getProductPairsByProject($objectID);
+            /* 如果是无产品项目，则所属产品显示需求本身的所属产品。*/
+            /* If there is no product item, the product shows the product of story itself.*/
+            $object = $this->loadModel('execution')->getByID($objectID);
+            if(!$object->hasProduct) $products = array($product->id => $product->name);
             $this->view->objectID = $objectID;
         }
 
