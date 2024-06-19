@@ -2163,6 +2163,9 @@ class taskModel extends model
         if($action == 'confirmdemandretract') return !empty($task->confirmeActionType) && $task->confirmeActionType == 'confirmedretract';
         if($action == 'confirmdemandunlink')  return !empty($task->confirmeActionType) && $task->confirmeActionType == 'confirmedunlink';
 
+        /* 如果是转任务，直接返回 true。 */
+        if($action == 'totask') return true;
+
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
 

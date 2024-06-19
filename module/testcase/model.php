@@ -1149,7 +1149,7 @@ class testcaseModel extends model
         if($action == 'create')             return !$case->lib || !empty($case->product);
         if($action == 'review')             return ($config->testcase->needReview || !empty($config->testcase->forceReview)) && (isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait');
         if($action == 'showscript')         return $case->auto == 'auto';
-        if($action == 'createcase')         return $case->lib && empty($case->product);
+        if($action == 'createcase')         return !isset($case->lib) || ($case->lib && empty($case->product));
 
         return true;
     }
