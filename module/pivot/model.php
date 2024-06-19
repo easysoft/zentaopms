@@ -2356,6 +2356,24 @@ class pivotModel extends model
     }
 
     /**
+     * Process DTable data, let buildPivotTable use.
+     *
+     * @param  array  $cols
+     * @param  array  $datas
+     * @access public
+     * @return array
+     */
+    public function processDTableData($cols, $datas)
+    {
+        return array_map(function($data) use ($cols)
+        {
+            $result = [];
+            foreach ($cols as $field) $result[] = isset($data->$field) ? $data->$field : '';
+            return $result;
+        }, $datas);
+    }
+
+    /**
      * Build table use data and rowspan.
      *
      * @param  object $data
