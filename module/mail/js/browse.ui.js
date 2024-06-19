@@ -19,7 +19,7 @@ window.renderCell = function(result, info)
     if(info.col.name == 'failReason' && result)
     {
         const mail = info.row.data;
-        if(mail.failReason == '') return result;
+        if(!mail.failReason?.length) return result;
 
         let failReason = mail.failReason.replaceAll('<br />', '');
         let html = "<span title='" + failReason + "'>" + failReason.replaceAll("\n", '') + "</span> ";

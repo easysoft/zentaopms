@@ -495,6 +495,7 @@ class mailModel extends model
         $groupMails = array();
         foreach($mails as $mail)
         {
+            $mail->data = htmlspecialchars($mail->data);
             $users = $mail->toList . ',' . $mail->ccList;
             $groupMails[$users][] = $mail;
         }
