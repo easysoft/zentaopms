@@ -346,7 +346,7 @@ class story extends control
             $this->story->batchUpdate($stories);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => array('back' => true)));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
         }
 
         $stories = $this->storyZen->getStoriesByChecked();
@@ -2000,13 +2000,13 @@ class story extends control
     {
         $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
 
-        $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'active,launched', 'id_desc', 0, '', 'requirement');
+        $requirements = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'active,launched', 'id_desc', 0, '', 'requirement');
 
         $items = array();
-        foreach($URS as $URID => $URTitle)
+        foreach($requirements as $requirementID => $requirementTitle)
         {
-            if(empty($URID)) continue;
-            $items[] = array('text' => $URTitle, 'value' => $URID);
+            if(empty($requirementID)) continue;
+            $items[] = array('text' => $requirementTitle, 'value' => $requirementID);
         }
 
         return print(json_encode(array('name' => 'URS[]', 'multiple' => true, 'defaultValue' => $requirementList, 'items' => $items)));
