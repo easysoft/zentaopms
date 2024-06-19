@@ -77,6 +77,7 @@ class searchModel extends model
             $field = $this->post->$fieldName;
             $value = $this->post->$valueName;
             if(empty($field) || $value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
+            if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
 
             /* 如果是输入框，并且输入框的值为'0'，或者 id 的值为'0'，将值设置为zero。*/
             if(isset($fieldParams->$field) && $fieldParams->$field->control == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
@@ -135,6 +136,7 @@ class searchModel extends model
 
             /* Fix bug #2704. */
             $field = $this->post->$fieldName;
+            if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
             if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->set($valueName, 'ZERO');
             if($field == 'id' and $this->post->$valueName === '0') $this->post->set($valueName, 'ZERO');
 
