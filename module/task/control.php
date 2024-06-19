@@ -569,6 +569,16 @@ class task extends control
         $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
         $this->action->logHistory($actionID, $changes);
 
+        /* Delete task burn. */
+        if($this->edition != 'open')
+        {
+            $this->dao->update(TABLE_BURN)
+                 ->set("`consumed` = `consumed` - {$effort->consumed}")
+                 ->where('task')->eq($taskID)
+                 ->andWhere('date')->eq($effort->date)
+                 ->exec();
+        }
+
         /* The task status will be set to wait as the consumed effort is set to 0. */
         if($task->consumed - $effort->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
 
