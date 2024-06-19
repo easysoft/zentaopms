@@ -1174,10 +1174,7 @@ eof;
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
-                    if($module === 'feedback' && stripos(',view,adminview,', ",$method,") !== false) // Make both feedback view and adminview privs interchangeable.
-                    {
-                        if($method === 'view' && commonModel::hasPriv('feedback', 'adminview') || $method === 'adminview' && commonModel::hasPriv('feedback', 'view')) return true;
-                    }
+                    if($module === 'feedback' && stripos(',view,adminview,', ",$method,") !== false && ($method === 'view' && commonModel::hasPriv('feedback', 'adminview') || $method === 'adminview' && commonModel::hasPriv('feedback', 'view'))) return true; // Make both feedback view and adminview privs interchangeable.
 
                     if($module == 'story' and !empty($this->app->params['storyType']) and strpos(",story,requirement,", ",{$this->app->params['storyType']},") !== false) $module = $this->app->params['storyType'];
                     $this->deny($module, $method);
