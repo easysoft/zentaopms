@@ -414,6 +414,8 @@ class biModel extends model
             {
                 $chart->createdBy   = 'system';
                 $chart->createdDate = helper::now();
+                $chart->group       = $this->getCorrectGroup($chart->group, $chart->type == 'table' ? 'pivot' : 'chart');
+
                 $stmt = $this->dao->insert(TABLE_CHART)->data($chart);
             }
             if($currentOperate == 'update')
@@ -463,6 +465,8 @@ class biModel extends model
             {
                 $pivot->createdBy   = 'system';
                 $pivot->createdDate = helper::now();
+                $pivot->group       = $this->getCorrectGroup($pivot->group, 'pivot');
+
                 $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot);
             }
             if($currentOperate == 'update')
