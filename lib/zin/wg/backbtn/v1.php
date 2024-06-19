@@ -76,7 +76,7 @@ class backBtn extends btn
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution',
             'ai'             => 'ai-models',
             'api'            => 'api-index',
-            'demand'         => 'demand-browse,demand-view,my-work',
+            'demand'         => 'demand-browse,demand-view,my-work,feedback-adminview,feedback-admin',
             'issue'          => 'issue-browse,issue-view',
             'risk'           => 'risk-browse,risk-view',
             'todo'           => 'my-todo,my-effort',
