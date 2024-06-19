@@ -1452,7 +1452,7 @@ class upgradeModel extends model
             }
         }
 
-        if(version_compare($openVersion, '18_6', '>=')) return false;
+        if(version_compare($openVersion, '18_5', '>=')) return false;
 
         include('priv.php');
         /* Add or groups. */
