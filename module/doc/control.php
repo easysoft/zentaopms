@@ -294,6 +294,8 @@ class doc extends control
                 $this->config->doc->form->create['title']['skipRequired'] = true;
             }
 
+            $this->config->doc->create->requiredFields = trim(str_replace(array(',content,', ',keywords,'), ",", ",{$this->config->doc->create->requiredFields},"), ',');
+
             $docData = form::data($this->config->doc->form->create)
                 ->setDefault('addedBy', $this->app->user->account)
                 ->get();
@@ -308,6 +310,7 @@ class doc extends control
                 $docResult = $this->doc->createSeperateDocs($docData);
             }
 
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterUploadDocs($docResult);
         }
 
@@ -1043,7 +1046,7 @@ class doc extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $file = $this->file->getById($fileID);
-            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
+            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $file->title);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
