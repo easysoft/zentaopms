@@ -1619,13 +1619,8 @@ class testtaskModel extends model
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
-
-        if($action == 'runcase')
-        {
-            if(isset($testtask->auto) && $testtask->auto == 'unit')  return false;
-            if(isset($testtask->caseStatus)) return $testtask->caseStatus != 'wait';
-            return $testtask->status != 'wait';
-        }
+        if($action == 'ztfrun')   return $testtask->auto == 'auto';
+        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && $testtask->auto == 'no' && $testtask->status != 'wait';
 
         return true;
     }
