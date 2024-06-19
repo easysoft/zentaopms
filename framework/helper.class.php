@@ -630,7 +630,10 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
  */
 function checkOtherPriv(array $actionConfig, string $action, object $item, object $model)
 {
+    global $app;
+
     $module = $model->getModuleName();
+    if($module == 'flow') $module = $app->rawModule;
     if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module']) $module = $actionConfig['url']['module'];
 
     $method = $action;
