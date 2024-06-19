@@ -18,7 +18,7 @@ class thinkPffa extends thinkModel
     protected function buildQuestion(array $steps): array
     {
         $questionList = array();
-        foreach($steps as &$step) $questionList[] = div(setClass('w-60 bg-canvas p-2 shadow'), setStyle(array('width' => '240px')), $this->buildQuestionItem($step));
+        foreach($steps as $step) $questionList[] = div(setClass('w-60 bg-canvas p-2 shadow'), setStyle(array('width' => '230px')), $this->buildQuestionItem($step));
         return $questionList;
     }
 
@@ -32,7 +32,7 @@ class thinkPffa extends thinkModel
 
         return div
         (
-            setClass('w-full h-full px-2 py-2.5 outline overflow-auto col justify-between gap-2 bg-opacity-20 bg-' . $blockColor, $blockColor . '-outline'),
+            setClass('w-full h-full px-5 py-2.5 outline overflow-auto col justify-between gap-2 bg-opacity-20 bg-' . $blockColor, $blockColor . '-outline'),
             div
             (
                 setClass('col gap-2'),
@@ -42,7 +42,7 @@ class thinkPffa extends thinkModel
                     set::title(!empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : null),
                     !empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : $defaultTitle
                 ),
-                div(setClass('flex flex-wrap gap-1.5'), !isset($blocks[$blockIndex]->steps) ? null : $this->buildQuestion($blocks[$blockIndex]->steps)),
+                div(setClass('flex flex-wrap gap-5'), !isset($blocks[$blockIndex]->steps) ? null : $this->buildQuestion($blocks[$blockIndex]->steps)),
             ),
             div(setClass('text-left text-sm leading-tight text-canvas'), $lang->thinkwizard->pffaGroundText[$blockIndex])
         );
@@ -57,7 +57,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 col justify-stretch pr-3.5 block-' . $blockIndex),
-            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '560px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -77,7 +77,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 block-' . $blockIndex),
-            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '540px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -97,7 +97,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 col justify-stretch block-' . $blockIndex),
-            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '540px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -116,7 +116,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 relative block-' . $blockIndex),
-            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '540px')),
             $mode === 'preview' ? span(setClass('absolute text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
@@ -136,7 +136,7 @@ class thinkPffa extends thinkModel
         return div
         (
             setClass('w-1/3 col justify-stretch pl-3.5 block-' . $blockIndex),
-            $mode === 'preview' ? null : setStyle(array('min-width' => '504px')),
+            $mode === 'preview' ? null : setStyle(array('min-width' => '560px')),
             $mode === 'preview' ? span(setClass('text-gray-400 text-sm ml-4'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
             div
             (
