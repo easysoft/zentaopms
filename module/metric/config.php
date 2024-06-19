@@ -15,7 +15,7 @@ $config->metric->excludeDatasetList['biz']  = array('getIssues', 'getRisks', 'ge
 $config->metric->collapseList = array('codebase', 'pipeline', 'artifact', 'deployment', 'node', 'application', 'cpu', 'memory', 'commit', 'mergeRequest', 'code', 'vulnerability', 'codeAnalysis');
 if(in_array($config->edition, array('max', 'ipd'))) $config->metric->collapseList = array_merge($config->metric->collapseList, array('risk', 'issue'));
 
-$config->metric->ignoreFields = array('id', 'metricID', 'metricCode', 'date', 'value', 'calcType', 'calculatedBy');
+$config->metric->ignoreLibFields = array('id', 'metricID', 'metricCode', 'date', 'value', 'calcType', 'calculatedBy');
 
 global $lang;
 $this->loadLang('metric');
