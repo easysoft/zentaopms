@@ -1150,6 +1150,12 @@ class testcaseModel extends model
         if($action == 'review')             return ($config->testcase->needReview || !empty($config->testcase->forceReview)) && (isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait');
         if($action == 'showscript')         return $case->auto == 'auto';
         if($action == 'createcase')         return !isset($case->lib) || ($case->lib && empty($case->product));
+        /* 判断确认撤销操作按钮的权限。 */
+        /* Check confirmdemandretract priv. */
+        if($action == 'confirmdemandretract') return !empty($case->confirmeActionType) && $case->confirmeActionType == 'confirmedretract';
+        /* 判断确认移除操作按钮的权限。 */
+        /* Check confirmdemandunlink priv. */
+        if($action == 'confirmdemandunlink') return !empty($case->confirmeActionType) && $case->confirmeActionType == 'confirmedunlink';
 
         return true;
     }

@@ -60,6 +60,16 @@ if(!$isInModal)
     );
 }
 
+/* 检查是否需要确认撤销/移除。*/
+/* Build confirmeObject. */
+if($this->config->edition == 'ipd')
+{
+    $testcase = $this->loadModel('story')->getAffectObject(array(), 'case', $case);
+
+    if(!empty($testcase->confirmeActionType)) $config->testcase->actions->view['mainActions'] = array('confirmDemandRetract', 'confirmDemandUnlink');
+    if(!empty($testcase->confirmeActionType)) $config->testcase->actions->view['suffixActions'] = array();
+}
+
 /* 初始化底部操作栏。Init bottom actions. */
 $actions = !$testcase->deleted ? $this->loadModel('common')->buildOperateMenu($case) : array();
 if(!$testcase->deleted) $actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
@@ -206,7 +216,7 @@ $tabs[] = setting()
 
 detail
 (
-    set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib)),
+    set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib, '{confirmeObjectID}' => isset($case->confirmeObjectID) ? $case->confirmeObjectID : 0)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
