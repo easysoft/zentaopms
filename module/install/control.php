@@ -52,8 +52,7 @@ class install extends control
         {
             $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             if($this->config->edition === 'max') $editionName = '';
-            $this->view->versionName   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->view->versionName);
-            $this->lang->install->desc = $this->lang->install->desc . "\n" . $this->lang->install->devopsDesc;
+            $this->view->versionName = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->view->versionName);
         }
         $this->display();
     }
