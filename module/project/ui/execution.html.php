@@ -171,6 +171,7 @@ toolbar
     ) : null
 );
 
+$canCreateExecution = $isStage ? common::hasPriv('programplan', 'create') : common::hasPriv('execution', 'create');
 dtable
 (
     set::userMap($users),
@@ -185,7 +186,7 @@ dtable
     set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
     set::emptyTip($lang->execution->noExecution),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
-    set::createLink(hasPriv('execution', 'create') ? $createLink : ''),
+    set::createLink($canCreateExecution ? $createLink : ''),
     set::createAttr($isStage ? 'data-app="project"' : 'data-app="execution"')
 );
 
