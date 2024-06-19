@@ -167,7 +167,11 @@ class dropmenu extends wg
             $extra    = data('viewType');
         }
         if($tab == 'demandpool') $objectID = data('poolID');
-        if($tab == 'market')     $objectID = data('marketID');
+        if($tab == 'market')
+        {
+            $objectID = data('marketID');
+            if(empty($objectID)) return array();
+        }
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab) && !empty($objectID))
