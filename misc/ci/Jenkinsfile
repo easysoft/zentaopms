@@ -1,5 +1,5 @@
 library 'z-common@master'
-library 'z-zentaopms@feat-240509'
+library 'z-zentaopms@feat-240619'
 
 pipeline {
   agent {
@@ -21,13 +21,15 @@ pipeline {
     choice choices: ['auto', 'snapshot', 'release'], description: '构建包类型（快照或发版）', name: 'build_kind'
     booleanParam defaultValue: true, description: '制作开源版', name: 'publish_open'
     booleanParam defaultValue: true, description: '制作企业版', name: 'publish_biz'
-    booleanParam defaultValue: false, description: '制作SAFe插件', name: 'publish_plugin_safe'
+    booleanParam defaultValue: true, description: '制作SAFe插件', name: 'publish_plugin_safe'
+    booleanParam defaultValue: true, description: '制作DevOps插件', name: 'publish_plugin_devops'
     booleanParam defaultValue: true, description: '制作镜像', name: 'publish_image'
     booleanParam defaultValue: true, description: '制作一键安装包', name: 'publish_zbox'
 
     separator(name: "replay", sectionHeader: "仓库切换")
     string description: '指定一个构建Id用于回放', name: 'REPLAY_ID', trim: true
     string description: '指定 zentaoext 分支, 也可以是 tag 或者 commit', name: 'zentaoext_version', trim: true
+    string description: '指定 devops 分支, 也可以是 tag 或者 commit', name: 'zentao_devops_version', trim: true
     string description: '指定 xuanxuan 分支', name: 'xuanxuan_version', trim: true
     string description: '指定开源版全量降级 revision', name: 'fulldown_pms_version', trim: true
     string description: '指定收费版全量降级 revision', name: 'fulldown_ext_version', trim: true
@@ -45,6 +47,7 @@ pipeline {
     SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
     SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
     SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
+    SRC_ZENTAO_DEVOPS_PATH = "${WORKSPACE}/zentao_devops"
 
     MIRROR = "true"
 
@@ -95,6 +98,7 @@ pipeline {
               zCheckout([
                 [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
+                [name: "zentao_devops", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAO_DEVOPS_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentao_devops_version}", j.getReplaySHA("zentao_devops"), "${env.ZENTAO_DEVOPS_VERSION}", "${env.GIT_BRANCH}"] ],
                 [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_pms_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ],
                 [name: "downRepoExt", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_ext_version}", j.getReplaySHA("${env.DOWNGRADE_EXT_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
               ])
@@ -235,6 +239,32 @@ pipeline {
                 script {
                   env.UPLOADED_PLUGIN_SAFE = 'true'
                   buildPkg.uploadSAFe(["php7.0", "php7.1", "php7.2_7.4", "php8.1"])
+                }
+
+              }
+            }
+
+            stage("DevOps") {
+              when {
+                allOf {
+                  expression { return params.publish_plugin_devops }
+                }
+              }
+              steps {
+                container('package') {
+                    sh 'cd $SRC_ZENTAO_DEVOPS_PATH && make package'
+                    sh '''${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -n devops -s -i \
+                      -p 7.2,7.1,7.0 \
+                      -c ${PWD}/misc -r $SRC_ZENTAO_DEVOPS_PATH -o ${ZENTAO_BUILD_PATH} \
+                      devops '''
+                    sh 'cp -v ${ZENTAO_BUILD_PATH}/devops-*.zip ${ZENTAO_RELEASE_PATH}/'
+                    sh 'cd $SRC_ZENTAO_DEVOPS_PATH && make encrypt-devops-all'
+                    sh 'ls -l ${ZENTAO_RELEASE_PATH}/'
+                }
+                script {
+                  env.UPLOADED_PLUGIN_DEVOPS = 'true'
+                  env.DEVOPS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAO_DEVOPS_PATH}/VERSION').trim()
+                  buildPkg.uploadDevOps(["php7.0", "php7.1", "php7.2_7.4", "php8.1"])
                 }
 
               }
