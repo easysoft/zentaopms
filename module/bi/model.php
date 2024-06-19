@@ -40,6 +40,20 @@ class biModel extends model
         }
         return $fields;
     }
+
+    /**
+     * 获取sql中的标名。
+     * Get tables form sqlparser statment.
+     *
+     * @param  object $statment
+     * @param  bool   $deep
+     * @access public
+     * @return array
+     */
+    public function getTables(object $statement, bool $deep = false)
+    {
+    }
+
     /**
      * Get object options.
      *
