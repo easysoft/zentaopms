@@ -21,6 +21,26 @@ class biModel extends model
     }
 
     /**
+     * 获取sql中的字段。
+     * Get fields form sqlparser statment.
+     *
+     * @param  object $statment
+     * @access public
+     * @return array
+     */
+    public function getFields(object $statement)
+    {
+        if(!$statement->expr) return array();
+
+        $fields = array();
+        foreach($statement->expr as $fieldInfo)
+        {
+            $field = $fieldInfo->expr;
+            $fields[$field] = $field;
+        }
+        return $fields;
+    }
+    /**
      * Get object options.
      *
      * @param  string $type user|product|project|execution|dept
