@@ -1721,7 +1721,7 @@ class blockZen extends block
         $this->loadModel('metric');
 
         /* 从度量项获取产品总数量。 */
-        $productCount = $this->metric->getResultByCodeWithArray('count_of_product', array(), 'cron', null, 'rnd,or');
+        $productCount = $this->metric->getResultByCodeWithArray('count_of_product', array(), 'cron', null, $this->config->vision == 'or' ? 'rnd,or' : 'rnd');
         if(!empty($productCount))
         {
             $productCount = reset($productCount);
