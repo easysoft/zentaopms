@@ -14,7 +14,7 @@ window.renderRowData = function($row, index, story)
         $picker.render(options);
     });
 
-    var $closedReasonTD = $row.find('[data-name="closedReason"]');
+    let $closedReasonTD = $row.find('[data-name="closedReason"]');
     $closedReasonTD.find('.picker-box').on('inited', function(e, info)
     {
         $closedReasonTD.find('.picker-box').wrap("<div class='input-group'></div>");
@@ -27,8 +27,8 @@ window.renderRowData = function($row, index, story)
 
         if(story.rawStatus == 'closed')
         {
-            var productStories = typeof(productStoryList[story.product]) == 'undefined' ? [] : productStoryList[story.product];
-            var productStories = typeof(productStories[story.branch]) == 'undefined' ? [] : productStories[story.branch];
+            let productStories = typeof(productStoryList[story.product]) == 'undefined' ? [] : productStoryList[story.product];
+            productStories     = typeof(productStories[story.branch]) == 'undefined' ? [] : productStories[story.branch];
 
             let appendStoryHtml = "<span id='duplicateStoryBox" + story.id + "' " + (story.closedReason != 'duplicate' ? "class='hidden'" : '') + ">";
             appendStoryHtml    += "<div class='form-control picker-box' data-name='duplicateStory' style='padding:0'></div></span>";
@@ -52,18 +52,18 @@ window.renderRowData = function($row, index, story)
         $picker.render(options);
     });
 
-    var $title    = $row.find('.form-batch-input[data-name="title"]');
-    var $module   = $row.find('.form-batch-control[data-name="module"]');
-    var $plan     = $row.find('.form-batch-control[data-name="plan"]');
-    var $branch   = $row.find('.form-batch-control[data-name="branch"]');
-    var $estimate = $row.find('.form-batch-control[data-name="estimate"]');
-    var $roadmap  = $row.find('.form-batch-control[data-name="roadmap"]');
+    let $title    = $row.find('.form-batch-input[data-name="title"]');
+    let $module   = $row.find('.form-batch-control[data-name="module"]');
+    let $plan     = $row.find('.form-batch-control[data-name="plan"]');
+    let $branch   = $row.find('.form-batch-control[data-name="branch"]');
+    let $estimate = $row.find('.form-batch-control[data-name="estimate"]');
+    let $roadmap  = $row.find('.form-batch-control[data-name="roadmap"]');
 
     $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
     $row.find('.form-control-static[data-name="status"]').addClass('status-' + story.rawStatus);
     if($branch.length > 0)
     {
-        var branches = typeof branchTagOption[story.product] == 'undefined' ? [] : branchTagOption[story.product];
+        let branches = typeof branchTagOption[story.product] == 'undefined' ? [] : branchTagOption[story.product];
 
         $branch.find('.picker-box').on('inited', function(e, info)
         {
@@ -86,7 +86,7 @@ window.renderRowData = function($row, index, story)
 
     if($module.length > 0)
     {
-        var modules = typeof moduleList[story.id] == 'undefined' ? ['/'] : moduleList[story.id];
+        let modules = typeof moduleList[story.id] == 'undefined' ? ['/'] : moduleList[story.id];
 
         $module.find('.picker-box').on('inited', function(e, info)
         {
@@ -104,8 +104,8 @@ window.renderRowData = function($row, index, story)
     if($plan.length > 0)
     {
         const branchID = story.branch.replace('branch', '');
-        var plans      = typeof(planGroups[story.product]) == 'undefined' ? [] : planGroups[story.product];
-        var plans      = typeof(plans[branchID]) == 'undefined' ? [] : plans[branchID];
+        let plans      = typeof(planGroups[story.product]) == 'undefined' ? [] : planGroups[story.product];
+        plans          = typeof(plans[branchID]) == 'undefined' ? [] : plans[branchID];
 
         $plan.find('.picker-box').on('inited', function(e, info)
         {
@@ -158,7 +158,7 @@ window.renderRowData = function($row, index, story)
     if(story.source == 'meeting' || story.source == 'researchreport')
     {
         objects = story.source == 'meeting' ? meetings : researchReports;
-        var $sourceNoteTd = $row.find('.form-batch-control[data-name="sourceNote"]');
+        let $sourceNoteTd = $row.find('.form-batch-control[data-name="sourceNote"]');
         $sourceNoteTd.html("<div class='form-control picker-box' data-name='source'></div>");
 
         items = [];
@@ -172,10 +172,10 @@ window.loadBranches = function(product, obj)
     $this  = $(obj.target);
     branch = $this.find('input[name^=branch]').val();
 
-    var storyID         = $this.closest('tr').find('.form-batch-input[data-name="storyIdList"]').val();
-    var $module         = $this.closest('tr').find('.form-batch-control[data-name="module"]');
-    var currentModuleID = $module.val();
-    var moduleLink      = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=' + storyID + '&extra=nodeleted&currentModuleID=' + currentModuleID);
+    let storyID         = $this.closest('tr').find('.form-batch-input[data-name="storyIdList"]').val();
+    let $module         = $this.closest('tr').find('.form-batch-control[data-name="module"]');
+    let currentModuleID = $module.val();
+    let moduleLink      = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=' + storyID + '&extra=nodeleted&currentModuleID=' + currentModuleID);
     $.getJSON(moduleLink, function(items)
     {
         let $picker = $this.closest('tr').find('.picker-box[data-name="module"]').zui('picker');
@@ -185,9 +185,9 @@ window.loadBranches = function(product, obj)
         $picker.$.setValue(0);
     });
 
-    var $plan    = $this.closest('tr').find('.form-batch-control[data-name="plan"]');
-    var planID   = $plan.val();
-    var planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=false&expired=&param=skipParent');
+    let $plan    = $this.closest('tr').find('.form-batch-control[data-name="plan"]');
+    let planID   = $plan.val();
+    let planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=false&expired=&param=skipParent');
     $.getJSON(planLink, function(items)
     {
         let $picker = $this.closest('tr').find('.picker-box[data-name="plan"]').zui('picker');
