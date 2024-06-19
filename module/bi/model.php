@@ -579,10 +579,11 @@ class biModel extends model
     }
 
     /**
+     * 根据类型和模块ID获取正确的模块ID。
      * Get correct group id with type.
      *
-     * @param  string    $id
-     * @param  string    $type
+     * @param  string $id
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -608,13 +609,13 @@ class biModel extends model
         $builtinModule = $builtinModules[$id];
         extract($builtinModule);
 
-        $module = $this->dao->select('id')->from(TABLE_MODULE)
+        $moduleID = $this->dao->select('id')->from(TABLE_MODULE)
             ->where('root')->eq($root)
             ->andWhere('name')->eq($name)
             ->andWhere('type')->eq($type)
-            ->fetch();
+            ->fetch('id');
 
-        return isset($module->id) ? $module->id : '';
+        return empty($moduleID) ? '' : $moduleID;
     }
 
     /**
