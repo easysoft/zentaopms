@@ -584,7 +584,22 @@ class biModel extends model
      */
     public function getCorrectGroup($id, $type)
     {
-        return '';
+        $key = "{$type}s";
+
+        $builtinModules = $this->config->bi->builtin->modules->$key;
+
+        if(!isset($builtinModules[$id])) return '';
+
+        $builtinModule = $builtinModules[$id];
+        extract($builtinModule);
+
+        $module = $this->dao->select('id')->from(TABLE_MODULE)
+            ->where('root')->eq($root)
+            ->andWhere('name')->eq($name)
+            ->andWhere('type')->eq($type)
+            ->fetch();
+
+        return isset($module->id) ? $module->id : '';
     }
 
     /**
