@@ -2368,7 +2368,8 @@ class pivotModel extends model
         return array_map(function($data) use ($cols)
         {
             $result = [];
-            foreach ($cols as $field) $result[] = isset($data->$field) ? $data->$field : '';
+            $data   = (array)$data;
+            foreach ($cols as $field) $result[] = isset($data[$field]) ? $data[$field] : '';
             return $result;
         }, $datas);
     }
