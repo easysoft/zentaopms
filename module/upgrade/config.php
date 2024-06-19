@@ -1229,6 +1229,21 @@ $config->delete['20_0'][] = 'extension/or/product/ext/control/batchedit.php';
 
 $config->delete['20_1'][] = 'module/gitfox';
 $config->delete['20_1'][] = 'module/artifactrepo';
+$config->delete['20_1'][] = 'execution/biz/common/ext/lang/zh-tw/report.php';
+$config->delete['20_1'][] = 'execution/biz/common/ext/lang/zh-cn/report.php';
+$config->delete['20_1'][] = 'execution/biz/common/ext/lang/en/report.php';
+$config->delete['20_1'][] = 'execution/biz/common/ext/lang/fr/report.php';
+$config->delete['20_1'][] = 'execution/biz/common/ext/lang/de/report.php';
+$config->delete['20_1'][] = 'execution/max/common/ext/lang/zh-tw/report.php';
+$config->delete['20_1'][] = 'execution/max/common/ext/lang/zh-cn/report.php';
+$config->delete['20_1'][] = 'execution/max/common/ext/lang/en/report.php';
+$config->delete['20_1'][] = 'execution/max/common/ext/lang/fr/report.php';
+$config->delete['20_1'][] = 'execution/max/common/ext/lang/de/report.php';
+$config->delete['20_1'][] = 'execution/ipd/common/ext/lang/zh-tw/report.php';
+$config->delete['20_1'][] = 'execution/ipd/common/ext/lang/zh-cn/report.php';
+$config->delete['20_1'][] = 'execution/ipd/common/ext/lang/en/report.php';
+$config->delete['20_1'][] = 'execution/ipd/common/ext/lang/fr/report.php';
+$config->delete['20_1'][] = 'execution/ipd/common/ext/lang/de/report.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand');
 
