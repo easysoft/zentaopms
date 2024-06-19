@@ -28,7 +28,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function getFields(object $statement)
+    public function getFields(object $statement): array
     {
         if(!$statement->expr) return array();
 
@@ -50,7 +50,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function getTables(object $statement, bool $deep = false)
+    public function getTables(object $statement, bool $deep = false): array
     {
         $tables = array();
         if($statement->from)
