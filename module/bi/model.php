@@ -52,6 +52,23 @@ class biModel extends model
      */
     public function getTables(object $statement, bool $deep = false)
     {
+        $tables = array();
+        if($statement->from)
+        {
+            foreach($statement->from as $fromInfo)
+            {
+                if($fromInfo->table)
+                {
+                    $tables[] = $fromInfo->table;
+                }
+                elseif($deep && $fromInfo->subquery)
+                {
+                    $parser = new sqlparser($fromInfo->expr);
+                    $subTables = $this->getTables($parser->statements[0], true);
+                    $tables = array_merge($tables, $subTables);
+                }
+            }
+        }
     }
 
     /**
