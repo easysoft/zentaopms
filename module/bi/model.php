@@ -575,6 +575,19 @@ class biModel extends model
     }
 
     /**
+     * Get correct group id with type.
+     *
+     * @param  string    $id
+     * @param  string    $type
+     * @access public
+     * @return string
+     */
+    public function getCorrectGroup($id, $type)
+    {
+        return '';
+    }
+
+    /**
      * Process filter variables in sql.
      *
      * @param  string    $sql
