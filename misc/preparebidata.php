@@ -155,7 +155,7 @@ foreach($config->bi->builtin->screens as $screenID)
     insert('zt_screen', $screen);
 }
 
-foreach($config->bi->builtin->modules as $module)
+foreach($config->bi->builtin->modules->dataviews as $module)
 {
     insert('zt_module', $module);
 }
