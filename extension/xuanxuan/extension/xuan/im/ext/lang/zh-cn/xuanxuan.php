@@ -135,5 +135,4 @@ $lang->im->bot->zentaoBot->help = <<<EOT
 EOT;
 
 $lang->im->bot->upgradeWelcome->link = 'https://www.zentao.net/downloads.html';
-$lang->im->detachedConferenceUpgradeMessage->newClient->content = '管理员已将会议机制更新，支持 v7.2.beta 及以上版本，为了不影响您的使用体验，建议您重启应用我们将更新您的会议机制，详情请移步禅道官网查看。';
-$lang->im->detachedConferenceUpgradeMessage->oldClient->content = '管理员已将会议机制更新，支持 v7.2.beta 及以上版本，为了不影响您的使用体验，建议您重启应用我们将更新您的会议机制，请移步禅道官网更新。';
+$lang->im->detachedConferenceUpgradeMessage->content = '管理员已将会议机制更新，支持 v7.2.beta 及以上版本，为了不影响您的使用体验，建议您重启应用，我们将更新您的会议机制。更多详情请移步禅道官网查看。';
