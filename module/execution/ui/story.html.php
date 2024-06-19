@@ -407,6 +407,11 @@ if(empty($execution->hasProduct) && empty($execution->multiple))
 }
 if(!$canModifyExecution) $actionMenus = array();
 
+if($config->edition == 'ipd')
+{
+    $actionMenus[] = 'confirmDemandRetract';
+    $actionMenus[] = 'confirmDemandUnlink';
+}
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus, 'branches' => $branchPairs);
 foreach($stories as $story)
 {
