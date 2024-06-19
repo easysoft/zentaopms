@@ -25,7 +25,12 @@ class dataset
 
     public function defaultWhere($query, $table)
     {
-        return $query->andWhere("{$table}.vision LIKE '%{$this->vision}%'", true)
+        $visions = explode(',', $this->vision);
+        $wheres = array();
+        foreach($visions as $vision) $wheres[] = "{$table}.vision LIKE '%{$vision}%'";
+        $where = implode(' OR ', $wheres);
+
+        return $query->andWhere($where, true)
             ->orWhere("{$table}.vision IS NULL")->markRight(1);
     }
 
@@ -1013,24 +1018,24 @@ class dataset
         $projectTable   = $this->config->objectTables['project'];
 
         $auditplanSQL = <<<EOT
-    SELECT $fieldList 
-    FROM $auditplanTable AS t1 
+    SELECT $fieldList
+    FROM $auditplanTable AS t1
     LEFT JOIN $projectTable AS t2 ON t1.project = t2.id
-    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account 
-    WHERE t1.status = 'wait' 
-    AND   t2.type = 'project' 
+    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account
+    WHERE t1.status = 'wait'
+    AND   t2.type = 'project'
     AND   t1.deleted = '0'
     AND   t2.deleted = '0'
     AND   t3.deleted = '0'
     EOT;
 
         $ncSQL = <<<EOT
-    SELECT $fieldList 
-    FROM $ncTable AS t1 
+    SELECT $fieldList
+    FROM $ncTable AS t1
     LEFT JOIN $projectTable AS t2 ON t1.project = t2.id
-    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account 
-    WHERE t1.status = 'active' 
-    AND   t2.type = 'project' 
+    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account
+    WHERE t1.status = 'active'
+    AND   t2.type = 'project'
     AND   t1.deleted = '0'
     AND   t2.deleted = '0'
     AND   t3.deleted = '0'
