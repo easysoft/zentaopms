@@ -2047,10 +2047,11 @@ class story extends control
         $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
         $items = array();
-        foreach($stories as $storyID => $storyTitle)
+        foreach($stories as $id => $storyTitle)
         {
-            if(empty($storyID)) continue;
-            $items[] = array('text' => $storyTitle, 'value' => $storyID, 'keys' => $storyTitle);
+            if(empty($id)) continue;
+            if($id == $storyID) continue;
+            $items[] = array('text' => $storyTitle, 'value' => $id, 'keys' => $storyTitle);
         }
         return print(json_encode($items));
     }
