@@ -1244,6 +1244,15 @@ $config->delete['20_1'][] = 'execution/ipd/common/ext/lang/zh-cn/report.php';
 $config->delete['20_1'][] = 'execution/ipd/common/ext/lang/en/report.php';
 $config->delete['20_1'][] = 'execution/ipd/common/ext/lang/fr/report.php';
 $config->delete['20_1'][] = 'execution/ipd/common/ext/lang/de/report.php';
+$config->delete['20_1'][] = 'execution/biz/bug/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/biz/story/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/biz/testcase/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/max/bug/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/max/story/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/max/testcase/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/ipd/bug/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/ipd/story/ext/ui/view.effort.html.hook.php';
+$config->delete['20_1'][] = 'execution/ipd/testcase/ext/ui/view.effort.html.hook.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand');
 
