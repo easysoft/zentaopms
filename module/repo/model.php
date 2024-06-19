@@ -2309,38 +2309,6 @@ class repoModel extends model
     }
 
     /**
-     * 获取gitfox项目列表。
-     * Get gitfox projects.
-     *
-     * @param  int    $gitfoxID
-     * @param  string $projectFilter
-     * @access public
-     * @return array
-     */
-    public function getGitfoxProjects(int $gitfoxID, string $projectFilter = ''): array
-    {
-        if($this->app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create')))
-        {
-            $projects = $this->loadModel('gitfox')->apiGetRepos($gitfoxID);
-        }
-        else
-        {
-            $gitfoxUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitfoxID, 'gitfox', $this->app->user->account);
-            if(!$gitfoxUser) return array();
-
-            $projects    = $this->loadModel('gitfox')->apiGetRepos($gitfoxID, $projectFilter);
-            $groupIDList = array(0 => 0);
-            $groups      = $this->gitfox->apiGetGroups($gitfoxID, 'name_asc');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-        }
-
-        $importedProjects = $this->getImportedProjects($gitfoxID);
-        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
-
-        return $projects;
-    }
-
-    /**
      * Get repo groups.
      *
      * @param  int    $serverID
@@ -2382,24 +2350,6 @@ class repoModel extends model
         foreach($groups as $group)
         {
             $options[] = array('text' => $group->name, 'value' => $group->id);
-        }
-        return $options;
-    }
-
-    /**
-     * Get gitfox groups.
-     *
-     * @param  int    $gitfoxID
-     * @access public
-     * @return void
-     */
-    public function getGitFoxGroups(int $gitfoxID): array
-    {
-        $groups = $this->loadModel('gitfox')->apiGetGroups($gitfoxID, 'identifier_asc');
-        $options = array();
-        foreach($groups as $group)
-        {
-            $options[] = array('text' => $group->identifier, 'value' => $group->id);
         }
         return $options;
     }
