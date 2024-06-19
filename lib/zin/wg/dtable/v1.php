@@ -22,7 +22,7 @@ class dtable extends wg
         'loadOptions?: array',                     // 分页和排序加载选项。
         'userMap?: array',                         // 用户账号姓名对应列表
         'unassignedText?: string',                 // 未指派文本
-        'extensible?: bool=true',                  // 是否获取工作流扩展字段
+        'extensible?: bool=true'                   // 是否获取工作流扩展字段
     );
 
     static $dtableID = 0;
