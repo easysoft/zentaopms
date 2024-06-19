@@ -69,6 +69,25 @@ class biModel extends model
                 }
             }
         }
+
+        if($statement->join)
+        {
+            foreach($statement->join as $joinInfo)
+            {
+                if($joinInfo->expr->table)
+                {
+                    $tables[] = $joinInfo->expr->table;
+                }
+                elseif($deep && $joinInfo->expr->subquery)
+                {
+                    $parser = new sqlparser($joinInfo->expr->expr);
+                    $subTables = $this->getTables($parser->statements[0], true);
+                    $tables = array_merge($tables, $subTables);
+                }
+            }
+        }
+
+        return array_filter(array_unique($tables));
     }
 
     /**
