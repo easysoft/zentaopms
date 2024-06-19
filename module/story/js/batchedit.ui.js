@@ -103,8 +103,9 @@ window.renderRowData = function($row, index, story)
 
     if($plan.length > 0)
     {
-        var plans = typeof(planGroups[story.product]) == 'undefined' ? [] : planGroups[story.product];
-        var plans = typeof(plans[story.branch]) == 'undefined'       ? [] : plans[story.branch];
+        const branchID = story.branch.replace('branch', '');
+        var plans      = typeof(planGroups[story.product]) == 'undefined' ? [] : planGroups[story.product];
+        var plans      = typeof(plans[branchID]) == 'undefined' ? [] : plans[branchID];
 
         $plan.find('.picker-box').on('inited', function(e, info)
         {
