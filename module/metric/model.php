@@ -715,35 +715,24 @@ class metricModel extends model
         if(!$metric) return array();
         $dataFields = $this->getMetricRecordDateField($metric);
 
-        $visions  = explode(',', $vision);
-
         $result = array();
-        foreach($visions as $vision)
+        if($vision == 'rnd')
         {
-            if($vision == 'rnd')
-            {
-                $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
-                if(empty($records)) return array();
+            $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
+            if(empty($records)) return array();
 
-                foreach($records as $index => $record)
-                {
-                    $record          = (array)$record;
-                    $record['value'] = (float)$record['value'];
-
-                    $result = $this->mergeRecord($record, $result);
-                }
-            }
-            else
+            foreach($records as $index => $record)
             {
-                $otherVisionResult = $this->getResultByCode($code, $options, 'realtime', $pager, $vision);
-                foreach($otherVisionResult as $record)
-                {
-                    $result = $this->mergeRecord($record, $result);
-                }
+                $record          = (array)$record;
+                $record['value'] = (float)$record['value'];
+
+                $result[] = $record;
             }
+
+            return $result;
         }
 
-        return $result;
+        return $this->getResultByCode($code, $options, 'realtime', $pager, $vision);
     }
 
     /**
@@ -779,14 +768,14 @@ class metricModel extends model
     {
         $record = (array)$record;
         $uniqueKeys = array();
-        $ignoreFields = $this->config->metric->ignoreFields;
+        $ignoreLibFields = $this->config->metric->ignoreLibFields;
         foreach($record as $field => $value)
         {
-            if(in_array($field, $ignoreFields) || empty($value)) continue;
+            if(in_array($field, $ignoreLibFields) || empty($value)) continue;
             $uniqueKeys[] = $field . $value;
         }
 
-        return implode('_', $uniqueKeys);
+        return empty($uniqueKeys) ? 'none' : implode('_', $uniqueKeys);
     }
 
     /**
