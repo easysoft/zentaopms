@@ -159,35 +159,6 @@ class mrModel extends model
     }
 
     /**
-     * 获取GitFox服务器的项目.
-     * Get gitfox projects.
-     *
-     * @param  int    $hostID
-     * @param  array  $projectIdList
-     * @access public
-     * @return array
-     */
-    public function getGitFoxProjects(int $hostID = 0, array $projectIdList = array()): array
-    {
-        $gitfoxUsers = $this->loadModel('pipeline')->getProviderPairsByAccount('gitfox');
-        if(!$this->app->user->admin && !isset($gitfoxUsers[$hostID])) return array();
-
-        $projectPairs = array();
-        $projects     = $this->loadModel('gitfox')->apiGetRepos($hostID);
-        foreach($projects as $project)
-        {
-            if($projectIdList && !in_array($project->id, $projectIdList)) continue;
-
-            $project->full_name = $project->path;
-            $projectPairs[$hostID][$project->id] = $project;
-
-            $project->isDeveloper = true;
-        }
-
-        return $projectPairs;
-    }
-
-    /**
      * 创建合并请求。
      * Create MR function.
      *
@@ -564,10 +535,6 @@ class mrModel extends model
         if($host->type == 'gitlab')
         {
             $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/commits");
-        }
-        elseif($host->type == 'gitfox')
-        {
-            $url = sprintf($apiRoot->url, "/repos/$projectID/pullreq/$MRID/commits");
         }
         else
         {

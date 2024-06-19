@@ -210,14 +210,7 @@ class mr extends control
         }
 
         if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) $repo->serviceProject = (int)$repo->serviceProject;
-        if($repo->SCM == 'GitFox')
-        {
-            $project = $this->loadModel('gitfox')->apiGetSingleRepo($repo->gitService, $repo->serviceProject);
-        }
-        else
-        {
-            $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
-        }
+        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
 
         $jobPairs = array();
         $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
@@ -319,14 +312,13 @@ class mr extends control
         }
 
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-        if(in_array($host->type, array('gitlab', 'gitfox')))
+        if(in_array($host->type, $this->config->pipeline->formatTypeService))
         {
             $MR->sourceProject = (int)$MR->sourceProject;
             $MR->targetProject = (int)$MR->targetProject;
         }
 
-        $projectMethod = $host->type == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
-        $sourceProject = $this->loadModel($host->type)->$projectMethod($MR->hostID, $MR->sourceProject);
+        $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject);
         $compile       = $this->loadModel('compile')->getByID($MR->compileID);
 
         $this->view->title         = $this->lang->mr->view;
@@ -807,14 +799,7 @@ class mr extends control
         foreach($commitLogs as $commitLog)
         {
             $commitLog->repoID = $MR->repoID;
-            if(strtolower($repo->SCM) == 'gitfox')
-            {
-                $commitLog->id = $commitLog->sha;
-                $commitLog->committed_date  = date('Y-m-d H:i:s', strtotime($commitLog->author->when));
-                $commitLog->committer_name  = $commitLog->author->identity->name;
-                $commitLog->committer_email = $commitLog->author->identity->email;
-            }
-            elseif(in_array(strtolower($repo->SCM), array('gitea', 'gogs')))
+            if(in_array(strtolower($repo->SCM), array('gitea', 'gogs')))
             {
                 $commitLog->id = $commitLog->sha;
                 $commitLog->committed_date  = $commitLog->author->committer->date;
