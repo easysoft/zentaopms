@@ -2339,6 +2339,23 @@ class pivotModel extends model
     }
 
     /**
+     * Process DTable cols config, let buildPivotTable use.
+     *
+     * @param  array  $cols
+     * @access public
+     * @return array
+     */
+    public function processDTableCols($cols)
+    {
+        $formatCols = array();
+        foreach($cols as $colField => $colInfo)
+        {
+            $formatCols[] = (object)array('name' => $colField,  'label' => $colInfo['title'], 'colspan' => 1);
+        }
+        return array($formatCols);
+    }
+
+    /**
      * Build table use data and rowspan.
      *
      * @param  object $data
