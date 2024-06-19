@@ -82,3 +82,7 @@ $pivots['95'] = array("root" => 3, "name" => "产品");
 $pivots['96'] = array("root" => 3, "name" => "项目");
 $pivots['97'] = array("root" => 3, "name" => "测试");
 $pivots['98'] = array("root" => 3, "name" => "组织");
+$pivots['99'] = array("root" => 3, "name" => "Bug");
+
+$config->bi->builtin->modules->charts = $charts;
+$config->bi->builtin->modules->pivots = $pivots;
