@@ -29,10 +29,10 @@ function getBranchPriv(project)
     });
 }
 
-function onProjectChange()
+window.onProjectChange = function()
 {
     var sourceProject = projectNamespace ? urlencode(projectNamespace) : projectID;
-    var branchUrl     = $.createLink(hostType, 'ajaxGetProjectBranches', "id=" + (repo.SCM == 'GitFox' ? repo.id : hostID) + "&projectID=" + sourceProject);
+    var branchUrl     = $.createLink(hostType, 'ajaxGetProjectBranches', "id=" + hostID + "&projectID=" + sourceProject);
     $.ajaxSubmit(
     {
         url: branchUrl,
@@ -47,7 +47,7 @@ function onProjectChange()
         },
     });
 
-    if(repo.SCM != 'GitFox') getBranchPriv(projectID);
+    getBranchPriv(projectID);
 }
 
 function onSourceProjectChange()
