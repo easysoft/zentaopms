@@ -1182,7 +1182,8 @@ class blockZen extends block
             $execution->burns = array();
             $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
             $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
-            if(strpos('closed,suspended', $execution->status) === false) $deadline = $execution->end;
+            $today    = helper::today();
+            if(strpos('closed,suspended', $execution->status) === false) $deadline = $today > $execution->end ? $today : $execution->end;
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $deadline, 'noweekend', 0, 'Y-m-d', $execution->end);
 
             foreach($burnData as $data) $execution->burns[] = $data->value;
