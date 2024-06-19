@@ -37,7 +37,7 @@ if(!empty($list->userList))
 
 div
 (
-    setClass('canvas shadow ring rounded mx-auto'),
+    setClass('canvas shadow ring rounded mx-auto no-shadow-in-modal'),
     style::maxWidth(1200),
     div
     (

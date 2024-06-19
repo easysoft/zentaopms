@@ -4,3 +4,6 @@
 #contactPanel .form-row .form-group {padding-left: 70px;}
 #contactPanel .form-row .form-group .form-label {padding-left: 0; justify-content: start; width: 80px;}
 #contactPanel .form-actions {margin-top: 0;}
+
+.no-shadow-in-modal {box-shadow: none}
+.modal-body > div > #manageContacts {margin: -12px -20px}
