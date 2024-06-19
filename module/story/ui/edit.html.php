@@ -247,7 +247,7 @@ detailBody
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
             ) : formHidden('parent', $story->parent),
-            $story->type == 'story' ? item
+            $story->type == 'story' && $story->parent >= 0 ? item
             (
                 set::trClass(zget($fields['plan'], 'className', '')),
                 set::name($lang->story->plan),
