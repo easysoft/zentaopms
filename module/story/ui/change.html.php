@@ -24,25 +24,11 @@ jsVar('storyType', $story->type);
 jsVar('rawModule', $this->app->rawModule);
 jsVar('page', $this->app->rawMethod);
 
-$formTitle = div
-(
-    setClass('flex items-center pb-3'),
-    div($lang->story->changed),
-    entityLabel
-    (
-        set::level(1),
-        setClass('pl-2'),
-        set::entityID($story->id),
-        set::reverse(true),
-        span(setID('storyTitle'), $story->title)
-    )
-);
-
 $formItems = array();
-$formItems['reviewer'] = formGroup
+$formItems['reviewer'] = section
 (
     set::width('full'),
-    set::label($fields['reviewer']['title']),
+    set::title($fields['reviewer']['title']),
     inputGroup
     (
         picker
@@ -69,10 +55,10 @@ $formItems['reviewer'] = formGroup
     ),
     set::required(true)
 );
-$formItems['title'] = formGroup
+$formItems['title'] = section
 (
     set::width('full'),
-    set::label($fields['title']['title']),
+    set::title($fields['title']['title']),
     inputGroup
     (
         inputControl
@@ -108,7 +94,7 @@ $formItems['title'] = formGroup
     ),
     set::required($fields['title']['required'])
 );
-$formItems['hidden'] = formRow
+$formItems['hidden'] = section
 (
     set::hidden(true),
     formGroup
@@ -117,10 +103,10 @@ $formItems['hidden'] = formRow
         input(set::type('hidden'), set::name('lastEditedDate'), set::value($story->lastEditedDate))
     )
 );
-$formItems['spec'] = formGroup
+$formItems['spec'] = section
 (
     set::width('full'),
-    set::label($fields['spec']['title']),
+    set::title($fields['spec']['title']),
     set::required(strpos(",{$this->config->story->change->requiredFields},", ",spec,") !== false),
     set::tip($lang->story->specTemplate),
     editor
@@ -140,10 +126,10 @@ foreach($fields as $field => $attr)
 
     if($attr['control'] == 'editor')
     {
-        $formItems[$field] = formGroup
+        $formItems[$field] = section
         (
             set::width('full'),
-            set::label($attr['title']),
+            set::title($attr['title']),
             set::required($attr['required']),
             editor
             (
@@ -154,11 +140,11 @@ foreach($fields as $field => $attr)
     }
     else
     {
-        $formItems[$field] = formGroup
+        $formItems[$field] = section
         (
             set::width('full'),
             set::name($fieldName),
-            set::label($attr['title']),
+            set::title($attr['title']),
             set::control($control),
             set::value($attr['default']),
             set::required($attr['required'])
@@ -166,10 +152,10 @@ foreach($fields as $field => $attr)
     }
 
 }
-$formItems['file'] = formGroup
+$formItems['file'] = section
 (
     set::width('full'),
-    set::label($lang->attach),
+    set::title($lang->attach),
     $story->files ? fileList
     (
         set::files($story->files),
@@ -180,9 +166,26 @@ $formItems['file'] = formGroup
 );
 if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
 
-formPanel
+detailHeader
+(
+    to::prefix($lang->story->changed),
+    to::title
+    (
+        entityLabel
+        (
+            set::level(1),
+            set::entityID($story->id),
+            set::reverse(true),
+            span(setID('storyTitle'), $story->title)
+        )
+    )
+);
+
+
+detailBody
 (
     setID('dataform'),
+    set::isForm(true),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::actions(array
     (
@@ -190,8 +193,7 @@ formPanel
         array('text' => $lang->story->doNotSubmit, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
         array('text' => $lang->goback,             'data-back'   => 'APP',    'class' => 'open-url')
     )),
-    $formTitle,
-    $formItems,
+    sectionList($formItems),
     h::hr(),
     history()
 );
