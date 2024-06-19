@@ -24,7 +24,6 @@ $lang->install->keepInstalling   = 'Installation dieser Version fortsetzen.';
 $lang->install->seeLatestRelease = 'Letzte Version anzeigen';
 $lang->install->welcome          = 'Danke, dass sie sich für ZenTao als Projektmanagement Software entschieden haben!';
 $lang->install->license          = 'ZenTao PMS läuft unter der Z PUBLIC LICENSE(ZPL) 1.2';
-$lang->install->devopsDesc       = 'The underlying foundation of the DevOps platform is built upon cloud-native technologies such as Docker and Kubernetes (K8s). It incorporates an integrated application marketplace, allowing seamless installation of essential tools like code repositories, pipelines, and artifact libraries.';
 $lang->install->desc             = <<<EOT
 ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> or <a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a> License. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
 
