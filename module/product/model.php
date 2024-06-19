@@ -1222,7 +1222,8 @@ class productModel extends model
         $casesCount = count($this->productTao->filterNoCasesStory($storyIdList));
         $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 4);
 
-        if($storyType == 'story') return sprintf($this->lang->product->storySummary, $allCount, $totalEstimate, $rate * 100 . "%");
+        if($storyType == 'story')         return sprintf($this->lang->product->storySummary, $allCount, $totalEstimate, $rate * 100 . "%");
+        if($this->config->vision == 'or') return sprintf($this->lang->product->requirementSummary, $allCount, $totalEstimate);
         return sprintf($this->lang->product->requirementSummary, $allCount, $SRTotal, $totalEstimate);
     }
 
