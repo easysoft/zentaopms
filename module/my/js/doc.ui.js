@@ -36,7 +36,7 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'actions')
     {
-        if(info.col.setting.list.edit && info.row.data.type != 'text' && typeof result[0]['props']['items'] != 'undefined')
+        if(info.col.setting.list.edit && info.row.data.type != 'text' && typeof result[0]['props'] != 'undefined' && typeof result[0]['props']['items'] != 'undefined')
         {
             result[0]['props']['items'][0]['data-toggle'] = 'modal';
             return result;
