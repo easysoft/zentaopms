@@ -21,7 +21,8 @@ class dtable extends wg
         'loadPartial?: bool',                      // 启用部分加载，不更新浏览器地址栏 URL。
         'loadOptions?: array',                     // 分页和排序加载选项。
         'userMap?: array',                         // 用户账号姓名对应列表
-        'unassignedText?: string'                  // 未指派文本
+        'unassignedText?: string',                 // 未指派文本
+        'extensible?: bool=true',                  // 是否获取工作流扩展字段
     );
 
     static $dtableID = 0;
@@ -207,7 +208,7 @@ class dtable extends wg
         }
 
         global $config;
-        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading))
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading) && $this->prop('extensible'))
         {
             $extendFields = $app->control->loadModel('workflowaction')->getFields($moduleName, $methodName);
             $extendCols   = $app->control->loadModel('flow')->buildDtableCols($extendFields);
