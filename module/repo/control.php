@@ -118,7 +118,7 @@ class repo extends control
         $this->repoZen->buildRepoSearchForm($products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
         $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
-        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitfox,gitlab');
+        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitlab');
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
@@ -604,7 +604,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
-        if($revision && $repo->SCM != 'GitFox')
+        if($revision)
         {
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
@@ -1039,7 +1039,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $serverList = $this->loadModel('pipeline')->getPairs('gitfox') + $this->loadModel('pipeline')->getPairs('gitlab');
+        $serverList = $this->loadModel('pipeline')->getPairs('gitlab');
         if(!$serverID) $serverID = key($serverList);
 
         $server      = $this->pipeline->getByID($serverID);
@@ -1492,34 +1492,6 @@ class repo extends control
         {
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
-        }
-
-        return $options;
-    }
-
-    /**
-     * 获取Gitfox项目。
-     * Ajax get gitfox projects.
-     *
-     * @param  int    $gitfoxID
-     * @param  string $projectIdList
-     * @param  string $filter
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = ''): array
-    {
-        $projects = $this->repo->getGitfoxProjects($gitfoxID, $filter);
-
-        if(!$projects) return array();
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options[] = array('text' => $project->path, 'value' => $project->id);
         }
 
         return $options;

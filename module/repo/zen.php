@@ -410,12 +410,8 @@ class repoZen extends repo
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
 
-        $gitlabHosts  = $this->loadModel('gitlab')->getPairs();
-        $gitfoxHosts  = $this->loadModel('gitfox')->getPairs();
-        $serviceHosts = $gitfoxHosts + $gitlabHosts;
-
         $repoGroups   = array();
-
+        $serviceHosts = $this->loadModel('gitlab')->getPairs();
         if(!empty($serviceHosts))
         {
             $serverID   = array_keys($serviceHosts)[0];
@@ -452,14 +448,7 @@ class repoZen extends repo
         {
             $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
             $projectID = in_array($repo->SCM, $this->config->repo->notSyncSCM) ? (int)$repo->serviceProject : $repo->serviceProject;
-            if($scm == 'gitfox')
-            {
-                $project  = $this->loadModel($scm)->apiGetSingleRepo($serviceID, $projectID);
-            }
-            else
-            {
-                $project  = $this->loadModel($scm)->apiGetSingleProject($serviceID, $projectID);
-            }
+            $project   = $this->loadModel($scm)->apiGetSingleProject($serviceID, $projectID);
 
             $this->view->project = $project;
         }
@@ -527,10 +516,9 @@ class repoZen extends repo
         $repoList = array();
         if(!empty($server))
         {
-            $repoList      = $server->type == 'gitlab' ? $this->getGitlabProjectsByApi($server) : $this->loadModel('gitfox')->apiGetRepos($server->id);
-            $type = $server->type == 'gitlab' ? 'Gitlab' : 'GitFox';
+            $repoList      = $this->getGitlabProjectsByApi($server);
             $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
-                ->where('SCM')->eq($type)
+                ->where('SCM')->eq('Gitlab')
                 ->andWhere('serviceHost')->eq($server->id)
                 ->fetchPairs();
             foreach($repoList as $key => $repo)
@@ -601,10 +589,6 @@ class repoZen extends repo
                 $file->account  = '';
                 $file->date     = '';
             }
-        }
-        elseif($repo->SCM == 'GitFox')
-        {
-            $infos = $scm->ls($path);
         }
         else
         {
@@ -1618,7 +1602,7 @@ class repoZen extends repo
     {
         if($repo->SCM == 'Gitlab') return $this->repo->getGitlabFilesByPath($repo, '', (string)$this->cookie->repoBranch);
 
-        if($repo->SCM != 'Subversion' && $repo->SCM != 'GitFox') return $this->repo->getFileTree($repo);
+        if($repo->SCM != 'Subversion') return $this->repo->getFileTree($repo);
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
