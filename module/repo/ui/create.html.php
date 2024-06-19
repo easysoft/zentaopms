@@ -29,6 +29,7 @@ jsVar('noProductTip', $lang->repo->error->noProduct);
 jsVar('noRepoLeft', $lang->repo->notice->noRepoLeft);
 jsVar('hasProduct', !empty($products));
 jsVar('appTab', $app->tab);
+jsVar('client', '');
 
 formPanel
 (
