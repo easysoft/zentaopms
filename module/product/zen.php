@@ -1378,6 +1378,7 @@ class productZen extends product
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
         $this->view->roadmaps   = ($this->config->edition == 'ipd' && $storyType == 'requirement') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($product->id) : array();
+        $this->view->reports    = in_array($this->config->edition, array('max', 'ipd')) ? $this->loadModel('researchreport')->getPairs() : array();
 
         $this->display();
     }
