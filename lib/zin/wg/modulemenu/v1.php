@@ -38,7 +38,7 @@ class moduleMenu extends wg
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
-        .module-menu {max-height: calc(100vh - 79px); min-height: 32px; --menu-selected-bg: none;}
+        .module-menu {max-height: calc(100vh - 79px); display: flex; flex-direction: column; min-height: 32px; --menu-selected-bg: none;}
         .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
         .module-menu .tree-item * {white-space: nowrap;}
         .module-menu .tree-item .item-content {color: var(--color-gray-700)}
@@ -313,7 +313,7 @@ class moduleMenu extends wg
                 $this->block('footer'),
                 $this->prop('toggleSidebar') ? row
                 (
-                    setClass('justify-end p-1'),
+                    setClass('justify-end p-1 flex-none'),
                     btn
                     (
                         set::type('ghost'),

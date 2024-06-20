@@ -74,6 +74,7 @@
         title:         (data) => document.title = data,
         main:          (data) => $('#main').html(data),
         featureBar:    updateFeatureBar,
+        moduleMenu:    updateModuleMenu,
         pageCSS:       (data) => $('style.zin-page-css').html(data),
         pageJS:        updatePageJS,
         configJS:      updateConfigJS,
@@ -292,6 +293,25 @@
                 zui.toggleSearchForm({module: $searchToggle.data('module'), show: false});
             }
         }
+    }
+
+    function updateModuleMenu(data, info, options)
+    {
+        const selector = parseSelector(info.selector);
+        let $target    = $(selector.select);
+        if(!$target.length) return;
+
+        $target.css('min-height', $target.height());
+        if(selector.inner)
+        {
+            $target.html(info.data);
+        }
+        else
+        {
+            $target.replaceWith(info.data);
+            $target = $(selector.select);
+        }
+
     }
 
     function updateHeading(data, options)
@@ -859,7 +879,7 @@
         {
             selector = 'pageJS/.zin-page-js,' + selector + ',#mainMenu>*,hookCode()';
             if($('#mainNavbar a > .label').length) selector += ',#mainNavbar>*';
-            if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
+            if($('#moduleMenu').length) selector += ',#moduleMenu>*,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
         delete options.selector;
