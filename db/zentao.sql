@@ -13659,7 +13659,13 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '工单类型',       'ticketType',               '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketType', '', '', ''),
 ('lang',        '工单优先级',     'ticketPri',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
 ('lang',        '工单状态',       'ticketStatus',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketStatus', '', '', ''),
-('sql',         '反馈',           'feedbacks',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select id,title from zt_feedback where deleted=\"0\"', 'view_datasource_55', 'id', 'title');
+('sql',         '反馈',           'feedbacks',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select id,title from zt_feedback where deleted=\"0\"', 'view_datasource_55', 'id', 'title'),
+('lang',        '需求优先级',     'demandPri',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandPri', '', '', ''),
+('lang',        '需求来源',       'demandSource',             '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandSource', '', '', ''),
+('lang',        '需求类别',       'demandCategory',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandCategory', '', '', ''),
+('lang',        '需求状态',       'demandStatus',             '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandStatus', '', '', ''),
+('lang',        '需求管理周期',   'demandDuration',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandDuration', '', '', ''),
+('lang',        '需求BSA',        'demandBSA',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandBSA', '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_4`;
 DROP VIEW IF EXISTS `view_datasource_5`;
