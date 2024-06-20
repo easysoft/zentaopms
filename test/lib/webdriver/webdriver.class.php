@@ -649,11 +649,11 @@ class dom
         $action = new WebDriverActions($this->driver);
         if($isDouble)
         {
-            $action->moveToElement($this->element)->click()->perform();
+            $action->moveToElement($this->element)->doubleClick()->perform();
         }
         else
         {
-            $action->moveToElement($this->element)->doubleClick()->perform();
+            $action->moveToElement($this->element)->click()->perform();
         }
 
         return $this;
@@ -987,12 +987,12 @@ class dom
                 {
                     $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
                 }
-                else 
+                else
                 {
                     $this->driver->findElement(WebDriverBy::xpath("//button[@data-pick-value=$value]"))->click();
                 }
                 break;
-            } 
+            }
             catch (Exception $selectionException)
             {
                 continue;
