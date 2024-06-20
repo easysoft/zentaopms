@@ -84,6 +84,7 @@ function locateView(module, objectID)
     if(module == 'productplan' || module == 'release') dataApp = 'product';
     if(module == 'execution') dataApp = 'execution';
     if(module == 'build') dataApp = 'project';
+    if(module == 'ticket') dataApp = 'feedback';
     parent.$.apps.open(createLink(module, 'view', 'objectID=' + objectID), dataApp);
 }
 

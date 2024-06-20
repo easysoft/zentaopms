@@ -177,6 +177,9 @@ $lang->pivot->workloadDesc  = 'Workload = the total left hours of all tasks of t
 $lang->pivot->featureBar = array();
 $lang->pivot->featureBar['preview'] = array();
 
+$lang->pivot->moreSelects['preview'] = array();
+$lang->pivot->moreSelects['preview']['more'] = array();
+
 $lang->pivot->showProduct = 'All' . $lang->productCommon . 'Statistics';
 $lang->pivot->showProject = 'All' . $lang->projectCommon . 'Statistics';
 

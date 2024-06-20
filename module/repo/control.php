@@ -118,7 +118,7 @@ class repo extends control
         $this->repoZen->buildRepoSearchForm($products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
         $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
-        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitfox,gitlab');
+        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitlab');
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
@@ -353,12 +353,12 @@ class repo extends control
      * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function monaco(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
+    public function monaco(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
     {
         $this->commonAction($repoID, $objectID);
 
@@ -409,12 +409,12 @@ class repo extends control
      * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function view(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
+    public function view(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
     {
         set_time_limit(0);
         if($this->get->repoPath) $entry = $this->get->repoPath;
@@ -479,7 +479,7 @@ class repo extends control
         /* Set branch or tag for git. */
         $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
-        if($this->app->tab == 'devops' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+        if($this->app->tab == 'devops' && $repo->SCM != 'Subversion' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;
@@ -604,7 +604,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
-        if($revision && $repo->SCM != 'GitFox')
+        if($revision)
         {
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
@@ -687,13 +687,13 @@ class repo extends control
      * @param  string $entry
      * @param  string $oldRevision
      * @param  string $newRevision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @param  bool   $isBranchOrTag
      * @access public
      * @return void
      */
-    public function diff(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', string $showBug = 'false', string $encoding = '', bool $isBranchOrTag = false)
+    public function diff(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '', int $isBranchOrTag = 0)
     {
         $newRevision = strtr($newRevision, '*', '-');
         $oldRevision = strtr($oldRevision, '*', '-');
@@ -761,11 +761,11 @@ class repo extends control
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $type
-     * @param  bool   $isBranchOrTag
+     * @param  int    $isBranchOrTag
      * @access public
      * @return void
      */
-    public function download(int $repoID, string $path, string $fromRevision = 'HEAD', string $toRevision = '', string $type = 'file', bool $isBranchOrTag = false)
+    public function download(int $repoID, string $path, string $fromRevision = 'HEAD', string $toRevision = '', string $type = 'file', int $isBranchOrTag = 0)
     {
         if($this->get->repoPath) $path = $this->get->repoPath;
         $entry = $this->repo->decodePath($path);
@@ -1031,15 +1031,15 @@ class repo extends control
 
         if($_POST)
         {
-            $repos = $this->repoZen->prepareBatchCreate();
+            $repos = form::batchData($this->config->repo->form->import)->get();
 
-            if($repos) $this->repo->batchCreate($repos, (int)$_POST['serviceHost']);
+            if($repos) $this->repo->batchCreate($repos, $serverID, (string)$this->post->serverType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $serverList = $this->loadModel('pipeline')->getPairs('gitfox') + $this->loadModel('pipeline')->getPairs('gitlab');
+        $serverList = $this->loadModel('pipeline')->getPairs('gitlab');
         if(!$serverID) $serverID = key($serverList);
 
         $server      = $this->pipeline->getByID($serverID);
@@ -1066,12 +1066,12 @@ class repo extends control
      * @param  string $entry
      * @param  string $oldRevision
      * @param  string $newRevision
-     * @param  string $showBug     // Used for biz.
+     * @param  int    $showBug     // Used for biz.
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', string $showBug = 'false', string $encoding = '')
+    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '')
     {
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
@@ -1116,12 +1116,12 @@ class repo extends control
      * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision
-     * @param  string $showBug
+     * @param  int    $showBug
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
+    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
     {
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
@@ -1492,34 +1492,6 @@ class repo extends control
         {
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
-        }
-
-        return $options;
-    }
-
-    /**
-     * 获取Gitfox项目。
-     * Ajax get gitfox projects.
-     *
-     * @param  int    $gitfoxID
-     * @param  string $projectIdList
-     * @param  string $filter
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = ''): array
-    {
-        $projects = $this->repo->getGitfoxProjects($gitfoxID, $filter);
-
-        if(!$projects) return array();
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options[] = array('text' => $project->path, 'value' => $project->id);
         }
 
         return $options;

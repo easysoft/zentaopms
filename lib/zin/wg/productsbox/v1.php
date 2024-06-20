@@ -60,9 +60,6 @@ class productsBox extends wg
         return div
         (
             setClass('productsBox'),
-            on::click('.productsBox .addLine', 'window.addNewLine'),
-            on::click('.productsBox .removeLine', 'window.removeLine'),
-            on::change('.productsBox [name^=products]', 'window.loadBranches'),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
             jsVar('errorSameProducts', $errorSameProducts),
@@ -82,7 +79,7 @@ class productsBox extends wg
             setClass('addProductBox flex hidden'),
             formGroup
             (
-                on::change('[name=newProduct]', 'toggleNewProduct'),
+                on::change()->call('toggleNewProduct'),
                 set::width('1/2'),
                 set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'newProduct', 'checked' => false)),
                 set::required(true),
@@ -95,7 +92,7 @@ class productsBox extends wg
             set::className("productBox flex items-center $hidden"),
             formGroup
             (
-                on::change('[name=addProduct]', 'toggleNewProduct'),
+                on::change()->call('toggleNewProduct'),
                 set::width('1/2'),
                 setClass('linkProduct'),
                 set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
@@ -104,6 +101,7 @@ class productsBox extends wg
                 $hasNewProduct ? set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'addProduct', 'checked' => false)) : false,
                 picker
                 (
+                    bind::change('loadBranches(event)'),
                     set::name('products[0]'),
                     set::items($productItems),
                     !empty($project) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
@@ -148,11 +146,13 @@ class productsBox extends wg
                 setClass('pl-2 flex self-center line-btn c-actions first-action'),
                 btn
                 (
+                    bind::click('addNewLine(event)'),
                     setClass('btn btn-link text-gray addLine'),
                     icon('plus')
                 ),
                 btn
                 (
+                    bind::click('removeLine(event)'),
                     setClass('btn btn-link text-gray removeLine'),
                     setClass('hidden'),
                     icon('trash')
@@ -258,6 +258,7 @@ class productsBox extends wg
                             setClass('grow'),
                             picker
                             (
+                                bind::change('loadBranches(event)'),
                                 set::name("products[$i]"),
                                 set::value($product->id),
                                 set::items($productItems),
@@ -323,11 +324,13 @@ class productsBox extends wg
                     setClass('pl-2 flex self-center line-btn c-actions', $i == 0 ? 'first-action' : ''),
                     btn
                     (
+                        bind::click('addNewLine(event)'),
                         setClass('btn btn-link text-gray addLine'),
                         icon('plus')
                     ),
                     btn
                     (
+                        bind::click('removeLine(event)'),
                         setClass('btn btn-link text-gray removeLine'),
                         setClass($i == 0 ? 'hidden' : ''),
                         icon('trash')

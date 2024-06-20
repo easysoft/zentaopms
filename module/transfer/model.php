@@ -170,7 +170,6 @@ class transferModel extends model
                 }
             }
 
-
             if(in_array($field, $this->moduleConfig->dateFields)) $moduleFieldList['control'] = 'datePicker';
             if(in_array($field, $this->moduleConfig->datetimeFields)) $moduleFieldList['control'] = 'datetimePicker';
             $moduleFieldList['multiple'] = $moduleFieldList['control'] == 'multiple';
@@ -194,7 +193,7 @@ class transferModel extends model
             $fieldList['mailto']['items']    = $this->transferConfig->sysDataList['user'];
         }
 
-        if($this->config->edition != 'open') $fieldList = $this->initWorkflowFieldList($module, $fieldList, $fields);
+        if($this->config->edition != 'open') $fieldList = $this->initWorkflowFieldList($module, $fieldList);
         return $fieldList;
     }
 
@@ -204,35 +203,46 @@ class transferModel extends model
      *
      * @param  string    $module
      * @param  array     $fieldList
-     * @param  array     $fields
      * @access protected
      * @return array
      */
-    protected function initWorkflowFieldList(string $module, array $fieldList, array $fields): array
+    protected function initWorkflowFieldList(string $module, array $fieldList): array
     {
         $this->loadModel($module);
-        /* Set workflow fields. */
-        $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
-            ->where('module')->eq($module)
-            ->andWhere('buildin')->eq(0)
-            ->fetchAll('id');
 
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+        $action     = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($moduleName)->andWhere('action')->eq($methodName)->fetch();
+
+        if(empty($action)) return $fieldList;
+        if($action->extensionType == 'none' and $action->buildin == 1) return $fieldList;
+
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+        $workflowFields = $this->loadModel('workflowaction')->getFields($moduleName, $methodName);
         foreach($workflowFields as $field)
         {
+            if(!empty($field->buildin)) continue;
+            if(empty($field->show)) continue;
+            if(!isset($layouts[$field->field])) continue;
+            if($field->control == 'file') continue;
+
+            $fieldList[$field->field]['name']  = $field->field;
+            $fieldList[$field->field]['label'] = $field->name;
+            $fieldList[$field->field]['title'] = $field->name;
+
+            if($notEmptyRule && strpos(",{$field->rules},", ",{$notEmptyRule->id},") !== false) $fieldList[$field->field]['required'] = true;
+
             if(!in_array($field->control, array('select', 'radio', 'multi-select', 'checkbox'))) continue;
-            if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
             if(empty($field->options)) continue;
 
             $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
             $options = $this->workflowfield->getFieldOptions($field, true);
             if($options)
             {
-                $fieldList[$field->field]['name']    = $field->field;
-                $fieldList[$field->field]['label']   = $field->name;
-                $fieldList[$field->field]['title']   = $field->name;
                 $fieldList[$field->field]['control'] = 'picker';
                 $fieldList[$field->field]['items']   = $options;
-                $fieldList[$field->field]['from']    = 'workflow';
                 if($field->control == 'multi-select') $fieldList[$field->field]['multiple'] = true;
 
                 $this->moduleListFields[] = $field->field;
@@ -263,6 +273,18 @@ class transferModel extends model
         /* Parse dataSource. */
         extract($object['dataSource']); // $module, $method, $params, $pairs, $sql, $lang
 
+        /* 如果配置了系统字段,使用系统数据。*/
+        /* If empty items put system datas. */
+        if(empty($items))
+        {
+            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'}))
+            {
+                if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
+                $items = $this->moduleLang->{$field.'List'};
+            }
+            if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) $items = $this->transferConfig->sysDataList[$field];
+        }
+
         /* 如果配置了来源方法，则调用该方法。*/
         /* If config the source method, call the method. */
         if(!empty($module) && !empty($method))
@@ -276,18 +298,6 @@ class transferModel extends model
             /* 如果配置了语言字段,返回语言数据。*/
             /* If config the language field, return language data. */
             $items = isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
-        }
-
-        /* 如果配置了系统字段,返回系统数据。*/
-        /* If empty items put system datas. */
-        if(empty($items))
-        {
-            if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'}))
-            {
-                if($field == 'pri' && isset($this->moduleLang->priList[0])) unset($this->moduleLang->priList[0]);
-                return $this->moduleLang->{$field.'List'};
-            }
-            if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
         }
 
         if(is_array($items) && $withKey)
@@ -640,9 +650,14 @@ class transferModel extends model
         {
             if($module == 'story') $queryCondition = str_replace('`story`', '`id`', $queryCondition);
 
-            $table       = zget($this->config->objectTables, $module); //获取对应的表
-            $moduleDatas = $this->dao->select('*')->from($table)->alias('t1')
-                ->where($queryCondition)
+            $table = zget($this->config->objectTables, $module); //获取对应的表
+            $sql   = $this->dao->select('t1.*')->from($table)->alias('t1');
+            if($module == 'task' && strpos($queryCondition, '`assignedTo`') !== false)
+            {
+                preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $queryCondition, $matches);
+                $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and t2.account $matches[1]");
+            }
+            $moduleDatas = $sql->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
                 ->fetchAll('id');
         }
@@ -655,6 +670,7 @@ class transferModel extends model
             /* Add table alias to field. */
             preg_match_all('/[`"]' . $this->config->db->prefix . $module .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
+            if($module == 'case' && !empty($_SESSION['testcaseTransferParams']['taskID'])) $selectKey = 't1.id';
 
             $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : ''));
             while($row = $stmt->fetch())

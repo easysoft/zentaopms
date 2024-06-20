@@ -25,6 +25,28 @@ window.parent.$(function()
     $('#treemap').treemap($.extend({}, window.parent[$.getSearchParam('options')]));
     const treemap = $('#treemap').data('zui.treemap');
     window.parent.getTreemap = function() {return treemap;};
+    if(treemap.options.onReady) treemap.options.onReady(treemap, window);
+    $('body').on('click', () => window.parent.$(window.frameElement).trigger('click'));
+    if(treemap.options.onContextMenu)
+    {
+        treemap.$nodes.on('contextmenu', function(e)
+        {
+            const $node = $(e.target).closest('.treemap-node');
+            const node = $node.data('node');
+            const frameBounding = window.frameElement.getBoundingClientRect();
+            const clientX = e.clientX + frameBounding.left;
+            const clientY = e.clientY + frameBounding.top;
+            let result = treemap.options.onContextMenu({node: node, clientX: clientX, clientY: clientY, treemap: treemap, event: e});
+            if(!result) return;
+            if(Array.isArray(result)) result = {items: result};
+            window.parent.zui.ContextMenu.show($.extend(
+            {
+                element: {getBoundingClientRect: () => ({x: clientX, y: clientY, width: 0, height: 0, left: clientX, top: clientY})},
+            }, result));
+            e.preventDefault();
+            return false;
+        });
+    }
 });
 </script>
 </body>

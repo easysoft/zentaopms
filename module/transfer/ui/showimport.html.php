@@ -14,6 +14,7 @@ $fields = array();
 $fields['id']      = array('name' => 'id', 'label' => $lang->transfer->id, 'control' => 'input', 'required' => false, 'width' => '64px', 'hidden' => true);
 $fields['idIndex'] = array('name' => 'id', 'label' => $lang->transfer->id, 'control' => 'index', 'required' => false, 'width' => '64px');
 $fields           += $datas->fields;
+if(isset($fields['pri']) && isset($fields['pri']['control']) && $fields['pri']['control'] == 'picker') $fields['pri']['control'] = 'priPicker';
 
 $requiredFields = $datas->requiredFields;
 $allCount       = $datas->allCount;
@@ -73,6 +74,7 @@ else
         set::data(array_values($datas)),
         set::actions(array()),
         set::showExtra(false),
+        set::onRenderRow(jsRaw('renderRowData')),
         div
         (
             setClass('toolbar form-actions form-group no-label'),
@@ -107,6 +109,13 @@ else
     {
         $('#importNoticeModal [name=insert]').val(type == 'insert' ? 1 : 0);
     };
+    window.renderRowData = function(\$row, index, row)
+    {
+        if(typeof renderImportRowData == 'function')
+        {
+            renderImportRowData(\$row, index, row);
+        }
+    }
     JAVASCRIPT);
     css('.form-batch-container .form-batch-control .check-list-inline {padding-top: 0;}');
 }

@@ -1113,7 +1113,11 @@ EOT;
     {
         $js  = static::start();
         // See bug #2379 http://pms.zentao.net/bug-view-2379.html
-        if($window !== 'self' && $window !== 'window')
+        if($window === 'parent.parent')
+        {
+            $js .= "if(parent.parent.loadCurrentPage) parent.parent.loadCurrentPage(); else parent.parent.location.reload(true);\n";
+        }
+        else if($window !== 'self' && $window !== 'window')
         {
             $js .= "if($window !== window) $window.location.reload(true);\n";
         }
@@ -1155,6 +1159,7 @@ EOT;
     {
         $js  = static::start();
         $js .= "if($window.location.href == self.location.href){ $window.window.close();}";
+        $js .= "else if($window.zui) { $window.zui.Modal.hide(); " . ($callback && $callback != 'null' ? "($callback)();" : '') . '}';
         $js .= "else{ $window.$.cookie('selfClose', 1);$window.$.closeModal($callback, '$location');}";
         $js .= static::end();
         return $js;

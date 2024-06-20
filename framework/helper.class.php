@@ -401,6 +401,18 @@ class helper extends baseHelper
         global $config;
         return $config->cache->enable;
     }
+
+    /**
+     * 检查是否启用APCu。
+     * Check if APCu is enabled.
+     *
+     * @access public
+     * @return bool
+     */
+    public static function isAPCuEnabled(): bool
+    {
+        return extension_loaded('apcu') && ini_get('apc.enabled') == '1';
+    }
 }
 
 /**
@@ -618,7 +630,10 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
  */
 function checkOtherPriv(array $actionConfig, string $action, object $item, object $model)
 {
+    global $app;
+
     $module = $model->getModuleName();
+    if($module == 'flow') $module = $app->rawModule;
     if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module']) $module = $actionConfig['url']['module'];
 
     $method = $action;
@@ -787,4 +802,37 @@ function debug($message = '', $file = 'undefined', $line = 0)
 
     global $app;
     $app->saveError(E_USER_WARNING, $message, $file, $line);
+}
+
+/**
+ * 为数组使用字母排序。
+ * Use alphabetical sorting for arrays.
+ *
+ * @param  array  $data
+ * @param  string $fieldName
+ * @param  string $suffix
+ * @return void
+ */
+function addPrefixToField(&$data, $fieldName, $suffix = '. ')
+{
+    $key = 0;
+    foreach($data as &$item)
+    {
+        $prefix = '';
+        $index  = $key;
+        while($index >= 0)
+        {
+            $prefix = chr(65 + ($index % 26)) . $prefix;
+            $index  = floor($index / 26) - 1;
+        }
+        if(is_array($item))
+        {
+            $item[$fieldName] = $prefix . $suffix . $item[$fieldName];
+        }
+        else
+        {
+            $item->{$fieldName} = $prefix . $suffix . $item->{$fieldName};
+        }
+        $key++;
+    }
 }

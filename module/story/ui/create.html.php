@@ -110,7 +110,7 @@ formGridPanel
     (
         array('text' => $lang->save,             'data-status' => 'active', 'class' => 'primary',   'btnType' => 'submit'),
         array('text' => $lang->story->saveDraft, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
-        array('text' => $lang->goback,           'back'   => true)
+        !isInModal() ? array('text' => $lang->goback, 'back' => true) : null
     )),
     set::fields($createFields),
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),

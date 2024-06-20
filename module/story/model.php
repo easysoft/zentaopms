@@ -45,14 +45,15 @@ class storyModel extends model
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
         $storyIdList = $storyID . ($story->twins ? "," . trim($story->twins, ',') : '');
-        $story->executions = $this->dao->select('t1.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $story->executions = $this->dao->select('t2.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
             ->andWhere('t1.story')->in($storyIdList)
             ->orderBy('t1.`order` DESC')
-            ->fetchAll('project');
+            ->fetchAll('id');
 
         $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($storyIdList)->orderBy('id DESC')->fetchGroup('execution');
+        if($this->config->vision == 'lite' && $story->tasks) $story->executions += $this->dao->select('project,id,name,status,type,multiple')->from(TABLE_EXECUTION)->where('id')->in(array_keys($story->tasks))->orderBy('`order` DESC')->fetchAll('id');
 
         if($story->parent > 0)
         {
@@ -563,8 +564,8 @@ class storyModel extends model
 
             if($this->config->edition != 'open')
             {
-                $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-                if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+                $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+                if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
             }
         }
 
@@ -603,6 +604,25 @@ class storyModel extends model
 
         $this->storyTao->updateTwins($storyIdList, $mainStoryID);
         return $mainStoryID;
+    }
+
+    /**
+     * 解除孪生需求。
+     * Relieve twins stories.
+     *
+     * @param  int $productID
+     * @param  int $storyID
+     * @access public
+     * @return bool
+     */
+    public function relieveTwins(int $productID, int $storyID): bool
+    {
+        /* batchUnset twinID from twins.*/
+        $this->dao->update(TABLE_STORY)->set("twins = REPLACE(twins, ',$storyID,', ',')")->where('product')->eq($productID)->exec();
+        /* Update twins to empty by twinID and if twins eq ','.*/
+        $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+
+        return !dao::isError();
     }
 
     /**
@@ -752,6 +772,14 @@ class storyModel extends model
                 }
             }
 
+            /* IF is story and has changed, update its relation version to new. */
+            if($oldStory->type == 'story')
+            {
+                $newStory = $this->fetchById($storyID);
+                $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
+                $this->updateStoryVersion($newStory);
+            }
+
             if($story->reviewerHasChanged)
             {
                 $oldStoryReviewers   = $this->getReviewerPairs($storyID, $oldStory->version);
@@ -763,8 +791,7 @@ class storyModel extends model
         $changes = common::createChanges($oldStory, $story);
         if(isset($story->relievedTwins))
         {
-            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
-            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            $this->relieveTwins($oldStory->product, $storyID);
             if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
         }
         elseif(!empty($oldStory->twins))
@@ -789,8 +816,7 @@ class storyModel extends model
         /* Relieve twins when change product. */
         if(!empty($oldStory->twins) and $story->product != $oldStory->product)
         {
-            $this->dbh->exec("UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins, ',$storyID,', ',') WHERE `product` = $oldStory->product");
-            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            $this->relieveTwins($oldStory->product, $storyID);
             $oldStory->twins = '';
         }
 
@@ -1210,7 +1236,9 @@ class storyModel extends model
             if($oldStory->status != 'reviewing') continue;
             if($oldStory->version > 1 and $result == 'reject') continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStory->version) continue;
-            if(!isset($reviewerList[$storyID][$account]) && !$isSuperReviewer)
+
+            /* 当评审人列表中没有当前用户或者当前用户不是当前版本需求的评审人时，将需求ID添加到不能评审的提示语中。*/
+            if((!isset($reviewerList[$storyID][$account]) || (isset($reviewerList[$storyID][$account]) && $reviewerList[$storyID][$account]->version != $oldStory->version)) && !$isSuperReviewer)
             {
                 $cannotReviewStories[$storyID] = "#{$storyID}";
                 continue;
@@ -1229,7 +1257,7 @@ class storyModel extends model
             $story->lastEditedBy   = $account;
             $story->lastEditedDate = $now;
             $story->status         = $oldStory->status;
-            if(!str_contains(",{$oldStory->reviewedBy},", ",{$account},")) $story->reviewedBy = $oldStory->reviewedBy . ',' . $account;
+            $story->reviewedBy     = str_contains(",{$oldStory->reviewedBy},", ",{$account},") ? $oldStory->reviewedBy : ($oldStory->reviewedBy . ',' . $account);
 
             $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
             $this->dao->update(TABLE_STORYREVIEW)->set('result')->eq($result)->set('reviewDate')->eq($now)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->eq($account)->exec();
@@ -1349,7 +1377,8 @@ class storyModel extends model
         }
 
         $story->reviewer = implode(',', $story->reviewer);
-        if($story->reviewer) $story->status = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') ? 'launched' : 'reviewing';
+        if($story->reviewer) $story->status = 'reviewing';
+        if($this->config->systemMode == 'PLM' && $this->config->vision == 'rnd' && $oldStory->type == 'requirement' && $story->status == 'active') $story->status = 'launched';
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->in($twinsIdList)->exec();
 
@@ -1455,12 +1484,7 @@ class storyModel extends model
         $changes = common::createChanges($oldStory, $story);
         if(!empty($postData->closeSync))
         {
-            /* batchUnset twinID from twins.*/
-            $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$storyID,', ',') WHERE `product` = $oldStory->product";
-            $this->dbh->exec($replaceSql);
-
-            /* Update twins to empty by twinID and if twins eq ','.*/
-            $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($storyID)->orWhere('twins')->eq(',')->exec();
+            $this->relieveTwins($oldStory->product, $storyID);
 
             if(!dao::isError()) $this->loadModel('action')->create('story', $storyID, 'relieved');
         }
@@ -2079,12 +2103,6 @@ class storyModel extends model
         if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
 
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
-
-        if($story->status == 'active')
-        {
-            $twinsIdList = $storyID . (!empty($oldStory->twins) ? ",{$oldStory->twins}" : '');
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->exec();
-        }
 
         $this->setStage($storyID);
 
@@ -3647,7 +3665,15 @@ class storyModel extends model
         }
 
         $disabledFeatures = ",{$config->disabledFeatures},";
-        if($action == 'importtolib') return in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false;
+        if($action == 'importtolib')
+        {
+            if(!in_array($config->edition, array('max', 'ipd'))) return false;
+            if($app->tab != 'project')                           return false;
+            if($story->type == 'requirement')                    return false;
+            if(!common::hasPriv('story', 'importToLib'))         return false;
+            if(strpos($disabledFeatures, ',assetlibStorylib,') !== false || strpos($disabledFeatures, ',assetlib,') !== false) return false;
+            return true;
+        }
 
         static $shadowProducts = array();
         static $taskGroups     = array();
@@ -3679,8 +3705,9 @@ class storyModel extends model
         $storyType        = $app->methodName == 'audit' ? $story->storyType : $story->type;
         $isSuperReviewer  = isset($config->{$storyType}) ? strpos(',' . trim(zget($config->{$storyType}, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',') : false;
 
-        if($action == 'change') return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
-        if($action == 'review') return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
+        if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'review')       return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
+        if($action == 'createbranch') return $story->type == 'story';
 
         return true;
     }

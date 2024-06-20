@@ -41,31 +41,20 @@ class store extends control
      * Browse departments and users of a store.
      *
      * @param  string $sortType
+     * @param  int    $categoryID
+     * @param  string $keyword
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse(string $sortType = 'create_time', int $recPerPage = 0, int $pageID = 1)
+    public function browse(string $sortType = 'create_time', int $categoryID = 0, string $keyword = '', int $recPerPage = 0, int $pageID = 1)
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         if(empty($recPerPage)) $recPerPage = $this->cookie->pagerStoreBrowse ? $this->cookie->pagerStoreBrowse : 12;
 
-        $keyword        = '';
-        $postCategories = array();
-        if(!empty($_POST))
-        {
-            $pageID = 1;
-            $conditions = fixer::input('post')
-                ->setDefault('keyword', '')
-                ->setDefault('categories', array())
-                ->get();
-            $keyword        = $conditions->keyword;
-            $postCategories = $conditions->categories;
-        }
-
-        $pagedApps = $this->store->searchApps($sortType, $keyword, $postCategories, $pageID, (int)$recPerPage);
+        $pagedApps = $this->store->searchApps($sortType, $keyword, $categoryID, $pageID, (int)$recPerPage);
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($pagedApps->total, $recPerPage, $pageID);
@@ -73,14 +62,14 @@ class store extends control
         $pagedCategories = $this->store->getCategories();
         $categories      = array_combine(helper::arrayColumn($pagedCategories->categories, 'id'), helper::arrayColumn($pagedCategories->categories, 'alias'));
 
-        $this->view->title          = $this->lang->store->common;
-        $this->view->cloudApps      = $pagedApps->apps;
-        $this->view->installedApps  = $this->storeZen->getInstalledApps();
-        $this->view->categories     = $categories;
-        $this->view->postCategories = $postCategories;
-        $this->view->keyword        = $keyword;
-        $this->view->sortType       = $sortType;
-        $this->view->pager          = $pager;
+        $this->view->title             = $this->lang->store->common;
+        $this->view->cloudApps         = $pagedApps->apps;
+        $this->view->installedApps     = $this->storeZen->getInstalledApps();
+        $this->view->categories        = $categories;
+        $this->view->keyword           = $keyword;
+        $this->view->currentCategoryID = $categoryID;
+        $this->view->sortType          = $sortType;
+        $this->view->pager             = $pager;
 
         $this->display();
     }

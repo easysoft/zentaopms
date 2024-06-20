@@ -593,7 +593,8 @@ class admin extends control
     {
         if($_POST)
         {
-            if(!extension_loaded('apcu')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotFound));
+            if(!extension_loaded('apcu')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotLoaded));
+            if(!ini_get('apc.enabled')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotEnabled));
 
             $cache = form::data()->get();
             $this->loadModel('setting')->setItem('system.common.global.cache', json_encode($cache));
@@ -601,6 +602,13 @@ class admin extends control
             if($cache->dao['enable'] != $this->config->cache->dao->enable) $this->dao->clearCache();
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        }
+
+        if(helper::isAPCuEnabled())
+        {
+            $this->view->rate  = $this->adminZen->getAPCuMemory('rate');
+            $this->view->used  = $this->adminZen->getAPCuMemory('used');
+            $this->view->total = $this->adminZen->getAPCuMemory('total');
         }
 
         $this->view->title = $this->lang->admin->cache;

@@ -16,7 +16,7 @@ function onChangeType(event)
     }
 }
 
-function onChangeAppType(event)
+window.onChangeAppType = function(event)
 {
     const appType = $(event.target).val();
 
@@ -50,11 +50,6 @@ function onChangeAppType(event)
             $('#createAppForm').attr('action', $.createLink('gitlab', 'create'));
             $('#url').attr('placeholder', gitlabUrlTips);
             $('#token').attr('placeholder', gitlabTokenTips);
-            break;
-        case 'gitfox':
-            $('#createAppForm').attr('action', $.createLink('gitfox', 'create'));
-            $('#url').attr('placeholder', gitfoxUrlTips);
-            $('#token').attr('placeholder', gitfoxTokenTips);
             break;
         case 'gitea':
             $('#createAppForm').attr('action', $.createLink('gitea', 'create'));

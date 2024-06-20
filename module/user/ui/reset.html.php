@@ -56,12 +56,7 @@ $content = $needCreateFile ? div
     (
         setClass('reset-form w-full'),
         set::title($lang->user->resetPwdByAdmin),
-        set::actions(
-            array(
-                btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'px-8 mx-4'))),
-                btn(set(array('text' => $lang->goback, 'url' => inlink('login'), 'class' => 'px-8 mx-4 not-open-url')))
-            )
-        ),
+        set::actions(array()),
         on::change('#password1,#password2', 'changePassword'),
         on::click('button[type=submit]', 'encryptPassword'),
         !empty($config->resetPWDByMail) ? to::headingActions
@@ -105,6 +100,15 @@ $content = $needCreateFile ? div
             setClass('hidden'),
             input(set::name('passwordLength'), set::value(0)),
             input(set::name('passwordStrength'), set::value(0))
+        ),
+        formRow
+        (
+            setClass('justify-center'),
+            array
+            (
+                btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'px-8 mx-4'))),
+                btn(set(array('text' => $lang->goback, 'url' => inlink('login'), 'class' => 'px-8 mx-4 not-open-url')))
+            )
         )
     ),
     formHidden('verifyRand', $rand)

@@ -677,25 +677,22 @@ class actionModel extends model
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
 
-        if($action->objectType == 'board')
+        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
         {
-            if(in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
+            if($action->action == 'importstory' || $action->action == 'importrequirement')
             {
-                if($action->action == 'importstory' || $action->action == 'importrequirement')
-                {
-                    $story = $this->loadModel('story')->getById((int)$action->extra);
-                    $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
-                }
-                if($action->action == 'importdemand')
-                {
-                    $story = $this->loadModel('demand')->getByID((int)$action->extra);
-                    $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
-                }
-
-                $link .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-                $replace = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
-                $actionDesc = str_replace('$extra', $replace, $desc['main']);
+                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
+            if($action->action == 'importdemand')
+            {
+                $story = $this->loadModel('demand')->getByID((int)$action->extra);
+                $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
+            }
+
+            $link      .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
+            $replace    = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
+            $actionDesc = str_replace('$extra', $replace, $desc['main']);
         }
         return $actionDesc;
     }
@@ -871,7 +868,7 @@ class actionModel extends model
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
                 if(isset($this->lang->mainNav->{$moduleName}) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $actionCondition .= "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN($actions) . ") OR ";
+                $actionCondition .= "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN(array_keys($actions)) . ") OR ";
             }
             $actionCondition = trim($actionCondition, 'OR ');
         }
@@ -1009,6 +1006,7 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $projectID  = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
+            $this->loadModel($action->objectType);
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->{$objectType}->{$actionType}) ? $this->lang->{$objectType}->{$actionType} : $action->action;
@@ -2081,7 +2079,7 @@ class actionModel extends model
         {
             $projectID  = (int)$projectID;
             $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            $executions = $this->loadModel('execution')->fetchPairs($projectID) + array(0 => 0);
+            $executions = $this->loadModel('execution')->fetchPairs($projectID, $type = 'all', $filterMulti = false) + array(0);
 
             $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), is_array($grantedProducts) ? $grantedProducts : explode(',', $grantedProducts)) : array_keys($products);
             $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), is_array($grantedExecutions) ? $grantedExecutions : explode(',', $grantedExecutions)) : array_keys($executions);

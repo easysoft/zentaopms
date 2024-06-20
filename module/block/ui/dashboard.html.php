@@ -51,9 +51,12 @@ $remind ? modal
 $upgradeRemind = $this->misc->getUpgradeRemind();
 if($upgradeRemind)
 {
+    $guideInfo = $this->config->upgradeGuide[$config->edition];
+
     $clientLang = common::checkNotCN() ? 'en' : 'cn';
-    $version    = $config->edition == 'open' ? '20_0' : '10_0';
-    $imagePath  = $config->edition == 'open' ? 'static/svg/' : 'static/svg/biz/';
+    $version    = $guideInfo['version'];
+    $imagePath  = $guideInfo['imagePath'];
+    $moreLink   = 'https://api.zentao.net/goto.php?item=' . $guideInfo['linkItem'];
 }
 $upgradeRemind ? modal
 (
@@ -62,7 +65,7 @@ $upgradeRemind ? modal
     (
         setClass('page-block pageOne'),
         img(set::src("{$imagePath}{$clientLang}_upgrade_guide1_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
         div
         (
             setClass('my-6 text-center'),
@@ -78,7 +81,7 @@ $upgradeRemind ? modal
     (
         setClass('page-block pageTwo hidden'),
         img(set::src("{$imagePath}{$clientLang}_upgrade_guide2_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
         div
         (
             setClass('my-6 text-center'),
@@ -100,7 +103,7 @@ $upgradeRemind ? modal
     (
         setClass('page-block pageThree hidden'),
         img(set::src("{$imagePath}{$clientLang}_upgrade_guide3_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
         div
         (
             setClass('my-6 text-center'),
@@ -122,7 +125,7 @@ $upgradeRemind ? modal
     (
         setClass('page-block pageFour hidden'),
         img(set::src("{$imagePath}{$clientLang}_upgrade_guide4_{$version}.svg")),
-        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href('https://api.zentao.net/goto.php?item=release20'), set::target('_blank'), $lang->block->learnMore . ' >')),
+        div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
         div
         (
             setClass('my-6 text-center'),

@@ -13,6 +13,7 @@ $lang->message->browserSetting = new stdclass();
 $lang->message->browserSetting->turnon   = '是否打开';
 $lang->message->browserSetting->pollTime = '轮询时间';
 
+$lang->message->browserSetting->pollTimeTip         = '轮询时间不能小于30秒。';
 $lang->message->browserSetting->pollTimePlaceholder = '通知的时间间隔，以秒为单位。';
 
 $lang->message->browserSetting->turnonList[1] = '打开';
@@ -22,6 +23,7 @@ $lang->message->label = new stdclass();
 $lang->message->label->created      = '创建';
 $lang->message->label->opened       = '创建';
 $lang->message->label->changed      = '变更';
+$lang->message->label->releaseddoc  = '发布';
 $lang->message->label->edited       = '编辑';
 $lang->message->label->assigned     = '指派';
 $lang->message->label->closed       = '关闭';

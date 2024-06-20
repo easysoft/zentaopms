@@ -291,6 +291,7 @@ class file extends control
         if($confirm == 'no')
         {
             $formUrl = $this->createLink('file', 'delete', "fileID=$fileID&confirm=yes");
+            if(!helper::isAjaxRequest()) return print(js::confirm($this->lang->file->confirmDelete, $formUrl));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->file->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
         }
         else
@@ -304,6 +305,7 @@ class file extends control
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
 
+            if(!helper::isAjaxRequest()) return print(js::reload('parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }

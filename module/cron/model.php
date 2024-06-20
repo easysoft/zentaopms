@@ -133,8 +133,7 @@ class cronModel extends model
      */
     public function getLastTime(): string
     {
-        $cron = $this->dao->select('*')->from(TABLE_CRON)->orderBy('lastTime desc')->limit(1)->fetch();
-        return isset($cron->lastTime) ? $cron->lastTime : '';
+        return zget(zget($this->config->cron, 'scheduler', array()), 'lastTime', '');
     }
 
     /**
@@ -150,8 +149,6 @@ class cronModel extends model
 
         $lastTime = $this->getLastTime();
         if(helper::isZeroDate($lastTime) or ((time() - strtotime($lastTime)) > $this->config->cron->maxRunTime)) return true;
-        if(!isset($this->config->cron->run->status)) return true;
-        if($this->config->cron->run->status == 'stop') return true;
 
         return false;
     }

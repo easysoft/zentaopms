@@ -1564,7 +1564,7 @@ EOT,
     'fields'    => array
     (
         'account'  => array('object' => 'effort', 'field' => 'account', 'type' => 'user', 'name' => 'account'),
-        'consumed' => array('object' => 'effort', 'field' => 'consumed', 'type' => 'object', 'name' => 'consumed'),
+        'consumed' => array('object' => 'effort', 'field' => 'consumed', 'type' => 'number', 'name' => 'consumed'),
         'date'     => array('object' => 'effort', 'field' => 'date', 'type' => 'object', 'name' => 'date'),
         'dept'     => array('object' => 'effort', 'field' => 'dept', 'type' => 'object', 'name' => 'dept')
     ),
@@ -2013,6 +2013,7 @@ select t1.id,t1.name,t2.id as bugID,t2.resolution from zt_product as t1
 left join zt_bug as t2 on t1.id=t2.product
 left join zt_project as t3 on t1.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
+and t2.resolution != ''
 order by t3.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array

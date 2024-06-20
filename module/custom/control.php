@@ -387,7 +387,7 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setConcept($_POST['sprintConcept']);
-            if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+            $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             return $this->sendSuccess(array('load' => true));
         }
@@ -423,7 +423,7 @@ class custom extends control
             if($mode == 'light') $this->custom->processProjectAcl();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->sendSuccess(array('callback' => '$.apps.updateAppsMenu(true);loadCurrentPage();', 'closeModel' => true));
+            return $this->sendSuccess(array('callback' => '$.apps.updateAppsMenu(true);', 'load' => true, 'closeModel' => true));
         }
 
         list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();
@@ -572,6 +572,8 @@ class custom extends control
 
             unset($data['type']);
             if($data['weekend'] != 1) unset($data['restDay']);
+
+            if($type == 'hours' && ($data['defaultWorkhours'] < 0 || $data['defaultWorkhours'] > 24)) $this->sendError($this->lang->custom->hoursError);
 
             $this->loadModel('setting')->setItems('system.execution', $data);
             return $this->sendSuccess(array('load' => inLink('hours', "type={$type}")));

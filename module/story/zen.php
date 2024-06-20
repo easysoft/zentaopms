@@ -586,6 +586,10 @@ class storyZen extends story
         {
             $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $products = $this->product->getProductPairsByProject($objectID);
+            /* 如果是无产品项目，则所属产品显示需求本身的所属产品。*/
+            /* If there is no product item, the product shows the product of story itself.*/
+            $object = $this->loadModel('execution')->getByID($objectID);
+            if(!$object->hasProduct) $products = array($product->id => $product->name);
             $this->view->objectID = $objectID;
         }
 
@@ -1149,7 +1153,7 @@ class storyZen extends story
         $fields       = $this->config->story->form->create;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
-        if($this->post->type == 'requirement') $fields['plan']['required'] = false;
+        if(!isset($_POST['plan'])) $this->config->story->create->requiredFields = str_replace(',plan,', ',', ",{$this->config->story->create->requiredFields},");
         if(!empty($_POST['modules']) && !empty($fields['module']['required']))
         {
             /* Check empty module in the product with multi-branches. */
@@ -1183,7 +1187,9 @@ class storyZen extends story
         if($storyData->status != 'draft' and $this->story->checkForceReview($storyType) and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $storyData->type == 'requirement' and $storyData->status == 'active' and $this->config->vision == 'rnd') $storyData->status = 'launched';
+        if($this->config->systemMode == 'PLM' && $storyData->type == 'requirement' && $storyData->status == 'active' && $this->config->vision == 'rnd') $storyData->status = 'launched';
+        if($storyData->status == 'launched' && $this->app->tab != 'product') $storyData->status = 'developing';
+
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 

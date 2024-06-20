@@ -64,6 +64,11 @@ class myIm extends im
             $sender = new stdclass();
             $sender->id          = 0;
             $sender->displayName = empty($aiModel->name) ? $this->lang->ai->models->typeList[$aiModel->type] : $aiModel->name;
+            if(!empty($assistantId))
+            {
+                $sender->displayName = $assistant->name;
+                $sender->aiAssistantIcon = $assistant->icon;
+            }
 
             $replyMessage->data = new stdclass();
             $replyMessage->data->sender = $sender;

@@ -164,7 +164,6 @@ if($confirm != 'yes')
     )
 ) : '';
 
-
 form
 (
     set::id('caseStepForm'),
@@ -250,7 +249,8 @@ form
                 )
             )
         ),
-        $fileModals
+        $fileModals,
+        isset($deployID) ? formHidden('deploy', $deployID) : null
     )
 );
 

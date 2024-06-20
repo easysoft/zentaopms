@@ -552,7 +552,8 @@ class testcaseModel extends model
         {
             $caseID = isset($row->case) ? $row->case : $row->id;
 
-            if($exportType == 'selected' && strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
+            if($exportType == 'selected' && $taskID  && strpos(",{$this->cookie->checkedItem},", ",$row->id,") === false) continue;
+            if($exportType == 'selected' && !$taskID && strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
 
             $row->id        = $caseID;
             $cases[$caseID] = $row;
@@ -649,12 +650,9 @@ class testcaseModel extends model
         $this->dao->update(TABLE_CASE)->data($case, 'result,comment')->autoCheck()->checkFlow()->where('id')->eq($oldCase->id)->exec();
         if(dao::isError()) return false;
 
-        $changes = common::createChanges($oldCase, $case);
-        if(!empty($changes))
-        {
-            $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $case->comment, ucfirst($case->result));
-            $this->action->logHistory($actionID, $changes);
-        }
+        $changes  = common::createChanges($oldCase, $case);
+        $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $case->comment, ucfirst($case->result));
+        $this->action->logHistory($actionID, $changes);
         return true;
     }
 
@@ -1151,7 +1149,13 @@ class testcaseModel extends model
         if($action == 'create')             return !$case->lib || !empty($case->product);
         if($action == 'review')             return ($config->testcase->needReview || !empty($config->testcase->forceReview)) && (isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait');
         if($action == 'showscript')         return $case->auto == 'auto';
-        if($action == 'createcase')         return $case->lib && empty($case->product);
+        if($action == 'createcase')         return !isset($case->lib) || ($case->lib && empty($case->product));
+        /* 判断确认撤销操作按钮的权限。 */
+        /* Check confirmdemandretract priv. */
+        if($action == 'confirmdemandretract') return !empty($case->confirmeActionType) && $case->confirmeActionType == 'confirmedretract';
+        /* 判断确认移除操作按钮的权限。 */
+        /* Check confirmdemandunlink priv. */
+        if($action == 'confirmdemandunlink') return !empty($case->confirmeActionType) && $case->confirmeActionType == 'confirmedunlink';
 
         return true;
     }
@@ -1489,6 +1493,7 @@ class testcaseModel extends model
             foreach($cellValue as $field => $value)
             {
                 if($field != 'stepDesc' and $field != 'stepExpect') continue;
+                $value = (string)$value;
                 if($field == 'stepDesc' or $field == 'stepExpect')
                 {
                     $steps = $value;

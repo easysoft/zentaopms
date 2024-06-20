@@ -40,7 +40,7 @@ detailHeader
 $entry        = count($diffs) ? $diffs[0]->fileName : '';
 $currentEntry = $this->repo->encodePath($entry);
 $fileInfo     = $entry ? pathinfo($entry) : array();
-$showBug      = isset($showBug) ? $showBug : true;
+$showBug      = isset($showBug) ? $showBug : 0;
 $objectID     = isset($objectID) ? $objectID : 0;
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
 $diffLink     = $this->repo->createLink('diff', "repoID={$MR->repoID}&objectID=$objectID&entry=&oldrevision={oldRevision}&newRevision={newRevision}");

@@ -212,6 +212,7 @@ class model extends baseModel
     public function buildFlowMenu($module, $data, $type = 'browse', $show = '')
     {
         if($this->config->edition == 'open') return '';
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
         $moduleName = $module;
         if(str_contains($module, '.')) [$appName, $moduleName] = explode('.', $module);
@@ -305,6 +306,7 @@ class model extends baseModel
     public function processExportData($data)
     {
         if($this->config->edition == 'open') return $data;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $data;
 
         return $this->loadModel('workflowfield')->processExportData($data);
     }
@@ -319,6 +321,7 @@ class model extends baseModel
     public function processExportOptions($data)
     {
         if($this->config->edition == 'open') return $data;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $data;
 
         return $this->loadModel('workflowfield')->processExportOptions($data);
     }
@@ -333,6 +336,7 @@ class model extends baseModel
     public function processImportData($data)
     {
         if($this->config->edition == 'open') return $data;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $data;
 
         return $this->loadModel('workflowfield')->processImportData($data);
     }
@@ -346,6 +350,7 @@ class model extends baseModel
     public function getFlowExtendFields()
     {
         if($this->config->edition == 'open') return array();
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName());
     }
@@ -359,6 +364,7 @@ class model extends baseModel
     public function getFlowExportFields()
     {
         if($this->config->edition == 'open') return array();
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         return $this->loadModel('workflowfield')->getExportFields($this->app->getModuleName());
     }
@@ -373,6 +379,7 @@ class model extends baseModel
     public function executeHooks(int $objectID): string
     {
         if($this->config->edition == 'open') return '';
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();

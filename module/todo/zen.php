@@ -120,7 +120,7 @@ class todoZen extends todo
             ->setDefault('assignedDate', helper::now())
             ->cleanInt('pri, begin, end')
             ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
-            ->setIF(empty($rawData->date) || $this->post->switchDate || $this->post->cycle, 'date', FUTURE_TIME)
+            ->setIF(empty($rawData->date) || $this->post->switchDate, 'date', FUTURE_TIME)
             ->setIF(empty($rawData->begin) || $this->post->switchTime, 'begin', '2400')
             ->setIF(empty($rawData->begin) || empty($rawData->end) || $this->post->switchTime, 'end', '2400')
             ->setIF($rawData->private == 'on', 'private', 1)
@@ -578,7 +578,7 @@ class todoZen extends todo
      */
     private function setCycle(object $todoData): false|object
     {
-        $todoData->date = helper::today();
+        if(helper::isZeroDate($todoData->date)) $todoData->date = helper::today();
         $todoData->config['begin'] = $todoData->date;
 
         if($todoData->config['type'] == 'day')

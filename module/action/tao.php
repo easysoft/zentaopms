@@ -511,6 +511,7 @@ class actionTao extends actionModel
                 break;
             case 'task':
             case 'story':
+            case 'charter':
                 $paramString = "{$type}ID={$action->extra}";
                 break;
             case 'project':
@@ -814,7 +815,7 @@ class actionTao extends actionModel
         {
             $action->objectName = $this->dao->select('name')->from(TABLE_AI_ASSISTANT)->where('id')->eq($action->objectID)->fetch('name');
         }
-        if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 6) == 'gitfox' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs' || substr($objectType, 0, 2) == 'mr')) $action->objectName = $action->extra;
+        if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs' || substr($objectType, 0, 2) == 'mr')) $action->objectName = $action->extra;
     }
 
     /**

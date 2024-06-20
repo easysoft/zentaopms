@@ -144,6 +144,8 @@ class backupModel extends model
             catch(PDOException $e){}
         }
 
+        $this->dao->clearCache();
+
         return $zdb->import($backupFile);
     }
 

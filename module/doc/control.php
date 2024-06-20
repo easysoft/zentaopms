@@ -294,6 +294,8 @@ class doc extends control
                 $this->config->doc->form->create['title']['skipRequired'] = true;
             }
 
+            $this->config->doc->create->requiredFields = trim(str_replace(array(',content,', ',keywords,'), ",", ",{$this->config->doc->create->requiredFields},"), ',');
+
             $docData = form::data($this->config->doc->form->create)
                 ->setDefault('addedBy', $this->app->user->account)
                 ->get();
@@ -308,6 +310,7 @@ class doc extends control
                 $docResult = $this->doc->createSeperateDocs($docData);
             }
 
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterUploadDocs($docResult);
         }
 
@@ -402,7 +405,11 @@ class doc extends control
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                     ->get();
                 $result  = $this->doc->update($docID, $docData);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(dao::isError())
+                {
+                    if(!empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
 
                 $changes = $result['changes'];
                 $files   = $result['files'];
@@ -682,8 +689,7 @@ class doc extends control
 
         $lib = $this->doc->getLibByID((int)$doc->lib);
         if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
-        if($this->app->tab == 'doc' && $lib->type == 'execution') $appendLib = $doc->lib;
-
+        if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($doc, $objectType, 0);
@@ -744,7 +750,7 @@ class doc extends control
 
         /* Build the search form. */
         $queryID = $browseType == 'bySearch' ? $param : 0;
-        $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bySearch&orderBy={$orderBy}&param=0";
+        $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bySearch&orderBy={$orderBy}&param=myQueryID";
         if($this->app->rawMethod == 'tablecontents') $params = "type={$type}&" . $params;
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params);
         if($libType == 'api') $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);
@@ -1013,6 +1019,36 @@ class doc extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * 删除文档附件。
+     * Delete file for doc.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteFile(int $docID, int $fileID, string $confirm = 'no')
+    {
+        $this->loadModel('file');
+        if($confirm == 'no')
+        {
+            $formUrl = inlink('deleteFile', "docID={$docID}&fileID={$fileID}&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->file->confirmDelete}').then((res) => {if(res) $.ajaxSubmit({url: '$formUrl'});});"));
+        }
+        else
+        {
+            $this->doc->updateDocFile($docID, $fileID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $file = $this->file->getById($fileID);
+            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $file->title);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }
 }

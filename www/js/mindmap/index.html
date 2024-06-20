@@ -29,6 +29,7 @@ if(!options.manual) $('#mindmap').mindmap(options);
 parent.createMindmap = function(userOptions){return $('#mindmap').mindmap($.extend({}, options, userOptions)).data('zui.mindmap');};
 parent.getMindmap = function(){return $('#mindmap').data('zui.mindmap');};
 parent.mindmap$ = $;
+$('body').on('click', () => window.parent.$(window.frameElement).trigger('click'));
 </script>
 </body>
 </html>

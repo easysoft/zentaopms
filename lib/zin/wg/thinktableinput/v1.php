@@ -31,7 +31,9 @@ class thinkTableInput extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $supportAdd, $canAddRows) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows'));
+        list($step, $fields, $supportAdd, $canAddRows, $mode) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode'));
+        if($mode != 'detail') return array();
+
         if($step)
         {
             $fields       = $step->options->fields;

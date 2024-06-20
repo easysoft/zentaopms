@@ -72,7 +72,7 @@ class programplanZen extends programplan
             if(!empty($parentID) and !empty($parentStage) and $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
             if(!empty($parentID) and !empty($parentStage)) $plan->acl = $parentStage->acl;
 
-            if(in_array($this->config->edition, array('max', 'ipd')))
+            if(in_array($this->config->edition, array('max', 'ipd')) && !dao::isError())
             {
                 $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
                 $plan->realDuration = $this->programplan->getDuration((string)$plan->realBegan, (string)$plan->realEnd);
@@ -153,7 +153,7 @@ class programplanZen extends programplan
      * @access protected
      * @return object|false
      */
-    protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): object|false 
+    protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): object|false
     {
         if($plan->parent)
         {

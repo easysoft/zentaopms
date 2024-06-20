@@ -5,3 +5,5 @@
 .assignedToBox .add-team {height: 24px; width: 81px; margin-left: 0.25rem;}
 .panel-heading {z-index: 2 !important;}
 .assignedToBox.border {border-color: var(--form-control-border); padding-top: 0.25rem; padding-bottom: 0.25rem;}
+
+#modalTeam .form-actions {bottom: -1.5rem; padding-bottom: 1.5rem;}

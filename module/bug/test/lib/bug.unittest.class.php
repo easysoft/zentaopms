@@ -485,7 +485,7 @@ class bugTest
 
         if($returnType == 'kanban')
         {
-            unset(dao::$cache[TABLE_KANBANLANE]);
+            if(isset(dao::$cache)) unset(dao::$cache[TABLE_KANBANLANE]);
 
             $bug = $this->objectModel->fetchByID($bugID);
             return $tester->dao->select('t3.type')->from(TABLE_KANBANLANE)->alias('t1')

@@ -48,24 +48,17 @@ class buildZen extends build
             }
         }
 
-        $artifactRepos = array();
-        if(!$this->view->hidden && $productGroups) $this->loadModel('artifactrepo');
-        foreach($productGroups as $product)
-        {
-            $products[$product->id] = $product->name;
-            if(!$this->view->hidden) $artifactRepos[$product->id] = $this->artifactrepo->getReposByProduct($product->id);
-        }
+        foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-        $this->view->title         = $this->lang->build->create;
-        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->product       = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
-        $this->view->branches      = $branches;
-        $this->view->products      = $products;
-        $this->view->executionID   = $executionID;
-        $this->view->executions    = $executions;
-        $this->view->lastBuild     = $this->build->getLast($executionID, $projectID);
-        $this->view->project       = $this->project->getByID($projectID);
-        $this->view->artifactRepos = $artifactRepos;
+        $this->view->title       = $this->lang->build->create;
+        $this->view->users       = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->product     = isset($productGroups[$productID]) ? $productGroups[$productID] : '';
+        $this->view->branches    = $branches;
+        $this->view->products    = $products;
+        $this->view->executionID = $executionID;
+        $this->view->executions  = $executions;
+        $this->view->lastBuild   = $this->build->getLast($executionID, $projectID);
+        $this->view->project     = $this->project->getByID($projectID);
         $this->display();
     }
 

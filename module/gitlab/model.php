@@ -279,8 +279,6 @@ class gitlabModel extends model
 
         if(isset($pager->recTotal)) $pager->recTotal = count($comments) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
-        $designNames = $this->dao->select("commit, name")->from(TABLE_DESIGN)->where('deleted')->eq(0)->fetchPairs();
-        $designIds   = $this->dao->select("commit, id")->from(TABLE_DESIGN)->where('deleted')->eq(0)->fetchPairs();
         $commitIds   = array();
         foreach($comments as $comment)
         {
@@ -293,8 +291,6 @@ class gitlabModel extends model
             $comment->comment         = $this->loadModel('repo')->replaceCommentLink($comment->title);
             $comment->committer       = isset($comment->author->identity->name) ? $comment->author->identity->name : $comment->committer_name;
             $comment->time            = date("Y-m-d H:i:s", strtotime($commitDate));
-            $comment->designName      = zget($designNames, $comment->revision, '');
-            $comment->designID        = zget($designIds, $comment->revision, '');
             $commitIds[]              = $comment->id;
         }
         $commitCounts = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($commitIds)->fetchPairs();

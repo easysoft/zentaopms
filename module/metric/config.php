@@ -6,11 +6,16 @@ $config->metric->purposeList   = array('scale', 'qc', 'hour', 'cost', 'rate', 't
 $config->metric->dateList      = array('year', 'month', 'week', 'day');
 $config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user');
 $config->metric->orMetricList  = array('count_of_assigned_demand_in_user');
+$config->metric->maxSelectNum  = 10;
 
-$config->metric->maxSelectNum = 10;
+$config->metric->excludeDatasetList = array();
+$config->metric->excludeDatasetList['open'] = array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks', 'getDemands', 'getQAs');
+$config->metric->excludeDatasetList['biz']  = array('getIssues', 'getRisks', 'getDemands', 'getQAs');
 
 $config->metric->collapseList = array('codebase', 'pipeline', 'artifact', 'deployment', 'node', 'application', 'cpu', 'memory', 'commit', 'mergeRequest', 'code', 'vulnerability', 'codeAnalysis');
 if(in_array($config->edition, array('max', 'ipd'))) $config->metric->collapseList = array_merge($config->metric->collapseList, array('risk', 'issue'));
+
+$config->metric->ignoreLibFields = array('id', 'metricID', 'metricCode', 'date', 'value', 'calcType', 'calculatedBy');
 
 global $lang;
 $this->loadLang('metric');

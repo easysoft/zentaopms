@@ -107,8 +107,6 @@ class installModel extends model
             $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
             $tables = explode(';', file_get_contents($dbFile));
 
-
-
             foreach($tables as $table)
             {
                 $table = trim($table);
@@ -412,5 +410,27 @@ class installModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * 开启 dao 缓存。
+     * Enable dao cache.
+     *
+     * @access public
+     * @return bool
+     */
+    public function enableDaoCache(): bool
+    {
+        if(!helper::isAPCuEnabled()) return false;
+
+        $cache = new stdclass();
+        $cache->owner   = 'system';
+        $cache->module  = 'common';
+        $cache->section = 'global';
+        $cache->key     = 'cache';
+        $cache->value   = '{"dao":{"enable":"1"}}';
+        $this->dao->replace(TABLE_CONFIG)->data($cache)->exec();
+
+        return !dao::isError();
     }
 }

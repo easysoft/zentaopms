@@ -1,9 +1,3 @@
-$(function()
-{
-    const options  = zui.DTable.query().options;
-    initialOptions = $.extend(true, {}, options);
-});
-
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
@@ -38,7 +32,7 @@ window.getCellSpan = function(cell)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
-    if(cell.col.name == 'id' && cell.row.data.colspan)
+    if(cell.col.name == 'idName' && cell.row.data.colspan)
     {
         return {colSpan: cell.row.data.colspan};
     }
@@ -67,7 +61,7 @@ window.onRenderCell = function(result, {row, col})
             result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
     }
-    if(result && col.name == 'id' && row.data.hidden)
+    if(result && col.name == 'idName' && row.data.hidden)
     {
         result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
     }
@@ -77,10 +71,10 @@ window.onRenderCell = function(result, {row, col})
 
 window.deformation = function(event)
 {
-    let newData      = [];
-    const options    = zui.DTable.query().options;
-    const product    = $(event.target).closest('a').data('product');
-    const oldOptions = $.extend(true, {}, initialOptions);
+    let newData   = [];
+    const options = zui.DTable.query().options;
+    const product = $(event.target).closest('a').data('product');
+    const oldData = JSON.parse(JSON.stringify(options.taskData));
 
     if($(event.target).closest('a').find('span').hasClass('is-collapsed'))
     {
@@ -89,10 +83,10 @@ window.deformation = function(event)
             if(!options.data[index]) return;
             if(options.data[index].product == product)
             {
-                $.each(oldOptions.data, function(key)
+                $.each(oldData, function(key)
                 {
-                    if(!oldOptions.data[key]) return;
-                    if(oldOptions.data[key].product == product) newData.push(oldOptions.data[key]);
+                    if(!oldData[key]) return;
+                    if(oldData[key].product == product) newData.push(oldData[key]);
                 });
             }
             else
@@ -110,11 +104,11 @@ window.deformation = function(event)
         {
             return option.product != product || option.rowspan != 0;
         });
-        $.each(options.data, function(index)
+        $.each(options.data, function(index, data)
         {
-            if(options.data[index] && options.data[index].product == product)
+            if(data && data.product == product)
             {
-                options.data[index].id      = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
+                options.data[index].idName  = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + data.rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
                 options.data[index].colspan = 10;
                 options.data[index].hidden  = 1;
@@ -177,4 +171,26 @@ window.setStatistics = function(element, checkedIDList)
         .replace('%blocked%', blockedCount)
         .replace('%done%', doneCount)
     };
+}
+
+/**
+ * 判断当前行是否可以选中。
+ * Judge whether the row can be selected.
+ *
+ * @param  string rowID
+ * @access public
+ * @return bool
+ */
+window.canRowCheckable = function(rowID)
+{
+    let checkable = true;
+    $.each(this.options.data, function(index, data)
+    {
+        if(data.id == rowID)
+        {
+            if(data.hidden == 1) checkable = false;
+            return false;
+        }
+    });
+    return checkable;
 }

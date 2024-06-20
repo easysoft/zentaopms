@@ -30,7 +30,7 @@ class groupModel extends model
 
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' && project='{$group->project}'")
             ->exec();
         if(dao::isError()) return false;
 
@@ -58,7 +58,7 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->update(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "id != {$groupID} AND vision = '{$this->config->vision}'")
+            ->check('name', 'unique', "id != {$groupID} AND vision = '{$this->config->vision}' AND project = '{$group->project}'")
             ->where('id')->eq($groupID)
             ->exec();
 
@@ -79,7 +79,7 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' && project = '{$group->project}'")
             ->exec();
         if(dao::isError()) return false;
 
@@ -556,8 +556,6 @@ class groupModel extends model
         $data->method = 'index';
         $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
 
-        $hasDepend = false;
-
         /* Insert new. */
         if($this->post->actions)
         {
@@ -571,7 +569,8 @@ class groupModel extends model
                 }
             }
 
-            $insertPrivs = array();
+            $insertPrivs    = array();
+            $insertPrivKeys = array();
             foreach($this->post->actions as $moduleName => $moduleActions)
             {
                 if(empty($moduleName) or empty($moduleActions)) continue;
@@ -583,34 +582,30 @@ class groupModel extends model
                     $data->module = $moduleName;
                     $data->method = $actionName;
 
-                    $insertPrivs["{$moduleName}-{$actionName}"] = $data;
+                    $priKey = "{$moduleName}-{$actionName}";
+                    $insertPrivs[$priKey] = $data;
+                    $insertPrivKeys[$priKey] = $priKey;
                 }
             }
 
-            foreach($insertPrivs as $key => $priv)
+            $insertDependPrivs = $this->processDepends($dependPrivs, $insertPrivKeys, $insertPrivKeys);
+            foreach($insertDependPrivs as $priKey)
             {
-                if(!isset($dependPrivs[$key])) continue;
-                foreach($dependPrivs[$key] as $depend)
-                {
-                    if(isset($insertPrivs[$depend])) continue;
+                if(isset($insertPrivs[$priKey])) continue;
+                list($moduleName, $actionName) = explode('-', $priKey);
 
-                    list($moduleName, $methodName) = explode('-', $depend);
+                $data = new stdclass();
+                $data->group  = $groupID;
+                $data->module = $moduleName;
+                $data->method = $actionName;
 
-                    $data = new stdclass();
-                    $data->group  = $groupID;
-                    $data->module = $moduleName;
-                    $data->method = $methodName;
-
-                    $insertPrivs[$depend] = $data;
-
-                    $hasDepend = true;
-                }
+                $insertPrivs[$priKey] = $data;
             }
 
             $this->insertPrivs($insertPrivs);
         }
 
-        return $hasDepend;
+        return count($insertDependPrivs) != count($insertPrivKeys);
     }
 
     /**
@@ -1100,6 +1095,9 @@ class groupModel extends model
                 if(!isset($subsetPrivs[$type][$subsetName])) $subsetPrivs[$type][$subsetName] = array('id' => $subsetName, 'text' => $subsetTitle, 'children' => array());
 
                 list($moduleName, $methodName) = explode('-', $relatedPriv);
+
+                if(!isset($this->lang->resource->$moduleName->$methodName)) continue;
+
                 $method = $this->lang->resource->$moduleName->$methodName;
 
                 if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);

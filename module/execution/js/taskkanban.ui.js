@@ -251,12 +251,15 @@ window.getItem = function(info)
 
 window.getItemActions = function(item)
 {
-    return [{
-        type: 'dropdown',
-        icon: 'ellipsis-v',
-        caret: false,
-        items: buildCardActions(item),
-    }];
+    if(item.actionList.length)
+    {
+        return [{
+            type: 'dropdown',
+            icon: 'ellipsis-v',
+            caret: false,
+            items: buildCardActions(item),
+        }];
+    }
 }
 
 window.buildCardActions = function(item)
@@ -296,6 +299,7 @@ window.canDrop = function(dragInfo, dropInfo)
 
     if(dropInfo.type != 'item')
     {
+        if(!canChangeObject) return false;
         let kanbanRules = kanbanDropRules[laneType];
         let colRules    = typeof kanbanRules[fromColType] == 'undefined' ? null : kanbanRules[fromColType];
         if(!colRules) return false;

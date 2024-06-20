@@ -115,6 +115,7 @@ $lang->gitlab->apiError[9]  = 'admin is a reserved name';
 $lang->gitlab->apiError[10] = 'has already been taken';
 $lang->gitlab->apiError[11] = 'Missing CI config file';
 $lang->gitlab->apiError[12] = 'is too big (should be at most 200.0 KB)';
+$lang->gitlab->apiError[13] = 'Reference not found';
 
 $lang->gitlab->errorLang[0]  = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[1]  = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
@@ -129,6 +130,7 @@ $lang->gitlab->errorLang[9]  = 'admin is a reserved name';
 $lang->gitlab->errorLang[10] = 'has already been taken';
 $lang->gitlab->errorLang[11] = 'Missing CI config file';
 $lang->gitlab->errorLang[12] = 'is too big (should be at most 200.0 KB)';
+$lang->gitlab->errorLang[13] = 'Reference not found';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = 'Email has already been taken';
 $lang->gitlab->errorResonse['Username has already been taken'] = 'Username has already been taken';

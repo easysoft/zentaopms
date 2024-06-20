@@ -410,12 +410,8 @@ class repoZen extends repo
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
 
-        $gitlabHosts  = $this->loadModel('gitlab')->getPairs();
-        $gitfoxHosts  = $this->loadModel('gitfox')->getPairs();
-        $serviceHosts = $gitfoxHosts + $gitlabHosts;
-
         $repoGroups   = array();
-
+        $serviceHosts = $this->loadModel('gitlab')->getPairs();
         if(!empty($serviceHosts))
         {
             $serverID   = array_keys($serviceHosts)[0];
@@ -452,14 +448,7 @@ class repoZen extends repo
         {
             $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
             $projectID = in_array($repo->SCM, $this->config->repo->notSyncSCM) ? (int)$repo->serviceProject : $repo->serviceProject;
-            if($scm == 'gitfox')
-            {
-                $project  = $this->loadModel($scm)->apiGetSingleRepo($serviceID, $projectID);
-            }
-            else
-            {
-                $project  = $this->loadModel($scm)->apiGetSingleProject($serviceID, $projectID);
-            }
+            $project   = $this->loadModel($scm)->apiGetSingleProject($serviceID, $projectID);
 
             $this->view->project = $project;
         }
@@ -483,38 +472,6 @@ class repoZen extends repo
     }
 
     /**
-     * 准备批量创建版本库的数据。
-     * Prepare batch create repo data.
-     *
-     * @access protected
-     * @return array|false
-     */
-    protected function prepareBatchCreate(): array|false
-    {
-        if(!$this->post->serviceProject) return false;
-
-        $this->app->loadLang('testcase');
-
-        $data = array();
-        foreach($this->post->serviceProject as $i => $project)
-        {
-            $products = array_filter($this->post->product[$i]);
-            if(empty($products)) continue;
-            if(isset($this->post->name[$i]) && $this->post->name[$i] == '') dao::$errors['name_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
-            if(isset($this->post->identifier[$i]) && $this->post->identifier[$i] == '') dao::$errors['identifier_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
-            if(dao::isError()) continue;
-
-            $nameList = isset($this->post->name[$i]) ? array('name' => $this->post->name[$i]) : array('identifier' => $this->post->identifier[$i]);
-            $data[] = $nameList + array('serviceProject' => $project,
-                'product' => implode(',', $this->post->product[$i]),
-                'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
-        }
-        if(dao::isError()) return false;
-
-        return $data;
-    }
-
-    /**
      * 获取还没存在禅道的项目列表。
      * Get not exist repos.
      *
@@ -527,10 +484,9 @@ class repoZen extends repo
         $repoList = array();
         if(!empty($server))
         {
-            $repoList      = $server->type == 'gitlab' ? $this->getGitlabProjectsByApi($server) : $this->loadModel('gitfox')->apiGetRepos($server->id);
-            $type = $server->type == 'gitlab' ? 'Gitlab' : 'GitFox';
+            $repoList      = $this->getGitlabProjectsByApi($server);
             $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
-                ->where('SCM')->eq($type)
+                ->where('SCM')->eq('Gitlab')
                 ->andWhere('serviceHost')->eq($server->id)
                 ->fetchPairs();
             foreach($repoList as $key => $repo)
@@ -601,10 +557,6 @@ class repoZen extends repo
                 $file->account  = '';
                 $file->date     = '';
             }
-        }
-        elseif($repo->SCM == 'GitFox')
-        {
-            $infos = $scm->ls($path);
         }
         else
         {
@@ -1333,12 +1285,12 @@ class repoZen extends repo
      * @param  int       $repoID
      * @param  int       $objectID
      * @param  string    $arrange
-     * @param  bool      $isBranchOrTag
+     * @param  int       $isBranchOrTag
      * @param  string    $file
      * @access protected
      * @return void
      */
-    protected function locateDiffPage(int $repoID, int $objectID, string $arrange, bool $isBranchOrTag, string $file)
+    protected function locateDiffPage(int $repoID, int $objectID, string $arrange, int $isBranchOrTag, string $file)
     {
         $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
         $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
@@ -1349,9 +1301,9 @@ class repoZen extends repo
             helper::setcookie('arrange', $arrange);
         }
         if($this->post->encoding)      $encoding      = $this->post->encoding;
-        if($this->post->isBranchOrTag) $isBranchOrTag = $this->post->isBranchOrTag;
+        if($this->post->isBranchOrTag) $isBranchOrTag = (int)$this->post->isBranchOrTag;
 
-        return $this->locate($this->repo->createLink('diff', "repoID={$repoID}&objectID={$objectID}&entry={$file}&oldrevision={$oldRevision}&newRevision={$newRevision}&showBug=&encoding={$encoding}&isBranchOrTag={$isBranchOrTag}"));
+        return $this->locate($this->repo->createLink('diff', "repoID={$repoID}&objectID={$objectID}&entry={$file}&oldrevision={$oldRevision}&newRevision={$newRevision}&showBug=0&encoding={$encoding}&isBranchOrTag={$isBranchOrTag}"));
     }
 
     /**
@@ -1620,7 +1572,7 @@ class repoZen extends repo
     {
         if($repo->SCM == 'Gitlab') return $this->repo->getGitlabFilesByPath($repo, '', (string)$this->cookie->repoBranch);
 
-        if($repo->SCM != 'Subversion' && $repo->SCM != 'GitFox') return $this->repo->getFileTree($repo);
+        if($repo->SCM != 'Subversion') return $this->repo->getFileTree($repo);
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);

@@ -97,6 +97,7 @@ $lang->custom->convertRelationTips = "{$lang->hourCommon}转换为%s后，历史
 $lang->custom->saveTips            = '点击保存后，则以当前%s为默认估算单位';
 
 $lang->custom->numberError = '区间必须大于零';
+$lang->custom->hoursError  = '可用工时必须在0到24之间！';
 
 $lang->custom->closedExecution = '已关闭' . $lang->custom->executionCommon;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
@@ -209,7 +210,14 @@ $lang->custom->notice->required            = '页面提交时，选中的字段�
 $lang->custom->notice->conceptResult       = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划、版本都禁止修改。';
-$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、版本、日志以及关联需求都禁止修改。";
+if(in_array($config->edition, array('open', 'biz')))
+{
+    $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、日志、版本、测试单、测试报告、文档以及关联需求等都禁止修改。";
+}
+else
+{
+    $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、日志、版本、测试单、测试报告、文档、问题、风险、QA、会议以及关联需求等都禁止修改。";
+}
 $lang->custom->notice->readOnlyOfKanban    = "禁止修改后，已关闭{$lang->custom->kanban}下的卡片以及相关设置都禁止修改。";
 $lang->custom->notice->URSREmpty           = '自定义需求名称不能为空！';
 $lang->custom->notice->valueEmpty          = '值不能为空！';

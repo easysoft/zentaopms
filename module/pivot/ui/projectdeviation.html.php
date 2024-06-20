@@ -51,8 +51,11 @@ foreach($executions as $execution)
 }
 
 $cols = $config->pivot->dtable->projectDeviation->fieldList;
+$data        = new stdclass();
+$data->cols  = $this->pivot->processDTableCols($cols);
+$data->array = $this->pivot->processDTableData(array_keys($cols), $executions);
 
-$generateData = function() use ($lang, $title, $cols, $executions, $chartData, $begin, $end)
+$generateData = function() use ($lang, $title, $cols, $data, $executions, $chartData, $begin, $end)
 {
     return array
     (
@@ -96,6 +99,13 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
                 set::cols($cols),
                 set::data($executions),
                 set::emptyTip($lang->error->noData),
+            ),
+            div
+            (
+                setID('exportData'),
+                setClass('hidden'),
+                rawContent(),
+                $this->pivot->buildPivotTable($data, array()),
             )
         ),
         panel

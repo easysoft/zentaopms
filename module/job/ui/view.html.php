@@ -26,17 +26,15 @@ $hasResult = ($compile && !empty($compile->testtask));
 $hasLog    = ($compile && !empty($compile->logs));
 $repo      = $repo ? $repo : new stdclass();
 
-if($repo->SCM == 'GitFox' || $repo->SCM == 'Gitlab') $job->pipeline = $repo->name;
+if($repo->SCM == 'Gitlab') $job->pipeline = $repo->name;
 
 if($compile and $compile->status)
 {
     $status = zget($lang->compile->statusList, $compile->status);
-    $time   = zget($lang->compile->statusList, $compile->updateDate);
 }
 elseif($job->lastStatus)
 {
     $status = zget($lang->compile->statusList, $job->lastStatus);
-    $time   = zget($lang->compile->statusList, $job->lastExec);
 }
 
 $customParam = '';
@@ -89,7 +87,7 @@ detailBody
                     item
                     (
                         set::name($lang->job->server),
-                        urldecode($job->pipeline) . '@' . $jenkins->name
+                        span(setID('jobServer'), urldecode($job->pipeline) . '@' . $jenkins->name)
                     ),
                     item
                     (
@@ -104,7 +102,7 @@ detailBody
                     item
                     (
                         set::name($lang->compile->time),
-                        !empty($time) ? $time : ''
+                        !empty($job->lastExec) ? $job->lastExec : ''
                     ),
                     item
                     (

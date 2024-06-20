@@ -41,20 +41,38 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
-if(!$isInModal && hasPriv('testcase', 'create', $case))
+if(!$isInModal)
 {
-    $toolbar[] = array
+    if(!$isLibCase && hasPriv('testcase', 'create', $case)) $toolbar[] = array
     (
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->case->create,
         'url'  => createLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}")
     );
+
+    if($isLibCase && hasPriv('caselib', 'createCase')) $toolbar[] = array
+    (
+        'icon' => 'plus',
+        'type' => 'primary',
+        'text' => $lang->case->create,
+        'url'  => createLink('caselib', 'createCase', "libID={$case->lib}&module={$case->module}")
+    );
+}
+
+/* 检查是否需要确认撤销/移除。*/
+/* Build confirmeObject. */
+if($this->config->edition == 'ipd')
+{
+    $testcase = $this->loadModel('story')->getAffectObject(array(), 'case', $case);
+
+    if(!empty($testcase->confirmeActionType)) $config->testcase->actions->view['mainActions'] = array('confirmDemandRetract', 'confirmDemandUnlink');
+    if(!empty($testcase->confirmeActionType)) $config->testcase->actions->view['suffixActions'] = array();
 }
 
 /* 初始化底部操作栏。Init bottom actions. */
-$actions = $this->loadModel('common')->buildOperateMenu($case);
-$actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
+$actions = !$testcase->deleted ? $this->loadModel('common')->buildOperateMenu($case) : array();
+if(!$testcase->deleted) $actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
 {
     if(!isset($action['url'])) continue;
@@ -198,7 +216,7 @@ $tabs[] = setting()
 
 detail
 (
-    set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib)),
+    set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib, '{confirmeObjectID}' => isset($case->confirmeObjectID) ? $case->confirmeObjectID : 0)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),

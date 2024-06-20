@@ -114,7 +114,7 @@ window.buildColCardActions = function(col)
         if(kanban.object.indexOf('releases') != -1) items.push({text: kanbanLang.importRelease, url: $.createLink('kanban', 'importRelease', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(kanban.object.indexOf('executions') != -1) items.push({text: kanbanLang.importExecution, url: $.createLink('kanban', 'importExecution', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(kanban.object.indexOf('builds') != -1) items.push({text: kanbanLang.importBuild, url: $.createLink('kanban', 'importBuild', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'});
-        //{text: kanbanLang.importTicket, url: $.createLink('kanban', 'importTicket', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'},
+        if(kanban.object.indexOf('tickets') != -1) items.push({text: kanbanLang.importTicket, url: $.createLink('kanban', 'importTicket', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-type': 'iframe'}),
         actions.push(
             {
                 text: kanbanLang.importAB,
@@ -297,12 +297,46 @@ window.renderProductplanItem = function(info)
     const labelType = (info.item.begin <= today && info.item.end >= today) ? 'danger' : 'ghost';
 
     const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
-    info.item.content      = {html: info.item.desc}
+    info.item.content      = {html: `<div title='${info.item.desc}'>${info.item.desc}</div>`};
     info.item.contentClass = 'text-gray clip mr-2';
     info.item.footer       = {html: statusBox + date}
 }
+
 window.renderTicketItem = function(info)
 {
+    info.item.icon       = 'ticket';
+    info.item.titleUrl   = canViewTicket ? $.createLink('ticket', 'view', `id=${info.item.fromID}`) : '';
+    info.item.titleAttrs = {'class': 'card-title clip', 'title': info.item.title};
+
+    let statusBox = '';
+    if(info.item.deleted == '0')
+    {
+        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + ticketLang.statusList[info.item.objectStatus] + '</span>';
+    }
+    else
+    {
+        statusBox = '<span class="label label-deleted">' + ticketLang.deleted + '</span>';
+    }
+
+    const date = info.item.deadline && info.item.deadline != '0000-00-00' ? '<span class="ml-2 label gray-pale">' + info.item.deadline.slice(5) + ' ' + cardLang.deadlineAB + '</span>' : '';
+
+    let avatar = '';
+    if(info.item.assignedTo && typeof userList[info.item.assignedTo] != 'undefined')
+    {
+        const user       = userList[info.item.assignedTo];
+        const assignedTo = user.realname;
+        const userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : info.item.assignedTo.substr(0, 1).toUpperCase();
+
+        avatar = "<span class='avatar rounded-full size-xs ml-1 primary' title=" + assignedTo + '>' + userAvatar + '</span>';
+    }
+    const content = `
+      <div class='flex items-center'>
+        ${statusBox}
+        ${date}
+        <div class='flex-1 flex justify-end'>${avatar}</div>
+      </div>
+    `;
+    info.item.content = {html: content};
 }
 
 function renderAvatar(avatarList)

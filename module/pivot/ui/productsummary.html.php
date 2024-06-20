@@ -12,8 +12,11 @@ namespace zin;
 
 $cols = $config->pivot->dtable->productSummary->fieldList;
 $cols['PO']['map'] = $users;
+$data        = new stdclass();
+$data->cols  = $this->pivot->processDTableCols($cols);
+$data->array = $this->pivot->processDTableData(array_keys($cols), $products);
 
-$generateData = function() use ($lang, $title, $cols, $products)
+$generateData = function() use ($lang, $title, $cols, $data, $products)
 {
     return array
     (
@@ -46,6 +49,13 @@ $generateData = function() use ($lang, $title, $cols, $products)
                 set::plugins(array('cellspan')),
                 set::getCellSpan(jsRaw('getCellSpan')),
                 set::cellSpanOptions(array('name' => array(), 'PO' => array()))
+            ),
+            div
+            (
+                setID('exportData'),
+                setClass('hidden'),
+                rawContent(),
+                $this->pivot->buildPivotTable($data, array()),
             )
         )
     );

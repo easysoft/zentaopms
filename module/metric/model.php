@@ -715,19 +715,67 @@ class metricModel extends model
         if(!$metric) return array();
         $dataFields = $this->getMetricRecordDateField($metric);
 
-        $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
-        if(empty($records)) return array();
-
         $result = array();
-        foreach($records as $index => $record)
+        if($vision == 'rnd')
         {
-            $record          = (array)$record;
-            $record['value'] = (float)$record['value'];
+            $records = $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
+            if(empty($records)) return array();
 
-            $result[] = $record;
+            foreach($records as $index => $record)
+            {
+                $record          = (array)$record;
+                $record['value'] = (float)$record['value'];
+
+                $result[] = $record;
+            }
+
+            return $result;
         }
 
+        return $this->getResultByCode($code, $options, 'realtime', $pager, $vision);
+    }
+
+    /**
+     * 合并度量数据。
+     * Merge record.
+     *
+     * @param  array    $record
+     * @param  array    $result
+     * @access public
+     * @return array
+     */
+    public function mergeRecord($record, $result)
+    {
+        $uniqueKey = $this->getUniqueKeyByRecord($record);
+        if(isset($result[$uniqueKey]))
+        {
+            $result[$uniqueKey]['value'] += $record['value'];
+            return $result;
+        }
+        $result[$uniqueKey] = $record;
         return $result;
+    }
+
+    /**
+     * 根据度量数据的字段生成唯一键。
+     * Get unique key by record field.
+     *
+     * @param  array    $record
+     * @access public
+     * @return string
+     */
+    public function getUniqueKeyByRecord($record)
+    {
+        $record = (array)$record;
+        $uniqueKeys = array();
+        $ignoreLibFields = $this->config->metric->ignoreLibFields;
+        foreach($record as $field => $value)
+        {
+            if(in_array($field, $ignoreLibFields) || empty($value)) continue;
+            $uniqueKeys[] = $field . $value;
+        }
+
+        return empty($uniqueKeys) ? 'none' : implode('_', $uniqueKeys);
     }
 
     /**
@@ -1141,7 +1189,7 @@ class metricModel extends model
             $calcInstances[$className] = $metricInstance;
         }
 
-        return $calcInstances;
+        return $this->filterCalcByEdition($calcInstances);
     }
 
     /**
@@ -2749,5 +2797,28 @@ class metricModel extends model
             ->orderBy('date_asc')
             ->limit(1)
             ->fetch('date');
+    }
+
+    /**
+     * 根据版本过滤度量项。
+     * Filter metric instance by edition.
+     *
+     * @param  array  $calcInstances
+     * @access public
+     * @return array
+     */
+    public function filterCalcByEdition($calcInstances)
+    {
+        foreach($calcInstances as $code => $instance)
+        {
+            $excludeDatasetConfig = $this->config->metric->excludeDatasetList;
+            if(!empty($instance->dataset) && !empty($excludeDatasetConfig[$this->config->edition]))
+            {
+                $excludeDatasetList = $excludeDatasetConfig[$this->config->edition];
+                if(in_array($instance->dataset, $excludeDatasetList)) unset($calcInstances[$code]);
+            }
+        }
+
+        return $calcInstances;
     }
 }

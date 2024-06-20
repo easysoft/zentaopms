@@ -97,6 +97,7 @@ $config->story->form->batchCreate['mailto']     = array('ditto' => false, 'type'
 $config->story->form->batchEdit = array();
 $config->story->form->batchEdit['branch']       = array('type' => 'string', 'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => '', 'options' => array());
 $config->story->form->batchEdit['module']       = array('type' => 'int',    'width' => '200px', 'control' => array('control' => 'picker', 'required' => true), 'required' => false, 'default' => 0, 'options' => array());
+$config->story->form->batchEdit['roadmap']      = array('type' => 'int',    'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->batchEdit['plan']         = array('type' => 'array',  'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => 0, 'options' => array(), 'filter' => 'join');
 $config->story->form->batchEdit['title']        = array('type' => 'string', 'width' => '240px', 'control' => array('control' => 'colorInput', 'inputClass' => 'filter-none'), 'required' => true,  'filter'  => 'trim', 'base' => true);
 $config->story->form->batchEdit['color']        = array('type' => 'string',                     'control' => 'color',  'required' => false, 'default' => '', 'filter'  => 'trim');
@@ -151,8 +152,6 @@ $config->story->form->activate['lastEditedBy']    = array('type' => 'string',   
 $config->story->form->activate['closedBy']        = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->activate['closedReason']    = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->activate['closedDate']      = array('type' => 'datetime', 'required' => false, 'default' => null);
-$config->story->form->activate['reviewedBy']      = array('type' => 'string',   'required' => false, 'default' => '');
-$config->story->form->activate['reviewedDate']    = array('type' => 'datetime', 'required' => false, 'default' => null);
 $config->story->form->activate['assignedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->activate['duplicateStory']  = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->story->form->activate['retractedBy']     = array('type' => 'string',   'required' => false, 'default' => '');

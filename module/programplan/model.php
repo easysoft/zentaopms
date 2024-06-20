@@ -100,6 +100,7 @@ class programplanModel extends model
     {
         $plans   = $this->getStage($executionID, $productID, $type);
         $parents = array();
+        $pairs   = array();
 
         if(strpos($type, 'leaf') !== false) array_map(function($plan) use(&$parents){$parents[$plan->parent] = true;}, $plans);
         foreach($plans as $planID => $plan)
@@ -328,14 +329,12 @@ class programplanModel extends model
 
         /* Set each plans. */
         $updateUserViewIdList = array();
-        $milestone            = 0;
         $enabledPoints        = array();
         $parallel             = 0;
         foreach($plans as $plan)
         {
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
             if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point);
-            if($plan->milestone) $milestone = 1;
             if($plan->id)
             {
                 $stageID = $plan->id;
@@ -364,8 +363,6 @@ class programplanModel extends model
             }
         }
 
-        /* If child plans has milestone, update parent plan set milestone eq 0 . */
-        if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
         if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
@@ -424,13 +421,6 @@ class programplanModel extends model
     public function update(int $planID = 0, int $projectID = 0, object|null $plan = null): bool
     {
         if(empty($plan)) return false;
-        if($plan->parent > 0)
-        {
-            /* 如果子阶段有里程碑，那么父阶段的更新为0。 */
-            /* If child plan has milestone, update parent plan set milestone eq 0 . */
-            $parentStage = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($plan->parent)->andWhere('type')->eq('stage')->fetch();
-            if($plan->milestone && $parentStage->milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($plan->parent)->exec();
-        }
 
         $changes = $this->programplanTao->updateRow($planID, $projectID, $plan);
         if(dao::isError()) return false;

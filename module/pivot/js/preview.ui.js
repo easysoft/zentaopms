@@ -107,7 +107,7 @@ function loadCustomPivot(showMode = 'group')
 
     const params = window.btoa('groupID=' + currentGroup + '&pivotID=' + pivotID);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=show&params=' + params);
-    postAndLoadPage(link, form, 'dtable/#table-pivot-preview:component');
+    postAndLoadPage(link, form, 'dtable/#table-pivot-preview:component,#exportData');
 }
 
 /**

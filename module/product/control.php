@@ -174,6 +174,9 @@ class product extends control
         /* Build search form. */
         $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
 
+        /* Build confirmeObject. */
+        if($this->config->edition == 'ipd' && $storyType == 'story') $this->loadModel('story')->getAffectObject($stories, 'story');
+
         /* Assign. */
         $this->view->moduleID   = $moduleID;
         $this->view->pager      = $pager;
@@ -281,7 +284,7 @@ class product extends control
         if(empty($productIdList)) return $this->locate($this->session->productList);
 
         /* Set menu when page come from program. */
-        if($this->app->tab == 'program') common::setMenuVars('program', 0);
+        if($this->app->tab == 'program' && $programID) common::setMenuVars('program', $programID);
 
         if($this->config->vision == 'or') unset($this->lang->product->statusList['normal']);
 

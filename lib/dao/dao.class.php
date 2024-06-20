@@ -139,7 +139,7 @@ class dao extends baseDAO
             }
             else
             {
-                if(str_contains(',radio,checkbox,multi-select,', ",$field->control,")) $data->{$field->field} = '';
+                if(str_contains(',radio,checkbox,multi-select,', ",$field->control,") && $this->method != 'update') $data->{$field->field} = '';
             }
         }
 

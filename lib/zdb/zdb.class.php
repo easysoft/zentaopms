@@ -350,8 +350,6 @@ class zdb
                 }
                 catch(PDOException $e)
                 {
-                    a($sql);
-                    exit;
                     $return->result = false;
                     $return->error .= $e->getMessage() . "\n";
                 }

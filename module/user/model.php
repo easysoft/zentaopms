@@ -849,7 +849,7 @@ class userModel extends model
         $oldUser = $this->getById($user->account);
         if(!$oldUser)
         {
-            dao::$errors[] = $this->lang->user->error->noUser;
+            dao::$errors['account'] = $this->lang->user->error->noUser;
             return false;
         }
 

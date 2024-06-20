@@ -89,61 +89,68 @@ function getActionsBox($navGroup, $group, $module)
 }
 
 $dynamicActionList = null;
-foreach($lang->mainNav as $module => $title)
+if($config->vision != 'or')
 {
-    if(!is_string($title)) continue;
-
-    /* Ignore null actions menus. */
-    $isNullActions = true;
-    if(isset($lang->action->dynamicAction->$module)) $isNullActions = false;
-    if(isset($navGroup[$module]) and $isNullActions)
+    foreach($lang->mainNav as $module => $title)
     {
-        foreach($navGroup[$module] as $subModule)
+        if(!is_string($title)) continue;
+
+        /* Ignore null actions menus. */
+        $isNullActions = true;
+        if(isset($lang->action->dynamicAction->$module)) $isNullActions = false;
+        if(isset($navGroup[$module]) and $isNullActions)
         {
-            if(isset($lang->action->dynamicAction->$subModule))
+            foreach($navGroup[$module] as $subModule)
             {
-                $isNullActions = false;
-                break;
+                if(isset($lang->action->dynamicAction->$subModule))
+                {
+                    $isNullActions = false;
+                    break;
+                }
             }
         }
-    }
-    if($isNullActions) continue;
-    $dynamicActionList[] = div
-    (
-        set::id("{$module}ActionBox"),
-        set::className('flex w-full'),
-        div
+        if($isNullActions) continue;
+        $dynamicActionList[] = div
         (
-            set::className('flex item-center action-title'),
-            checkbox
+            set::id("{$module}ActionBox"),
+            set::className('flex w-full'),
+            div
             (
-                set::name('allchecker'),
-                on::click('selectItems')
+                set::className('flex item-center action-title'),
+                checkbox
+                (
+                    set::name('allchecker'),
+                    on::click('selectItems')
+                ),
+                span(html(substr($title, 0, strpos($title, '|'))))
             ),
-            span(html(substr($title, 0, strpos($title, '|'))))
-        ),
-        div
-        (
-            set::className('flex check-list-inline w-full justify-start'),
-            getActionsBox($navGroup, $group, $module)
-        )
-    );
+            div
+            (
+                set::className('flex check-list-inline w-full justify-start'),
+                getActionsBox($navGroup, $group, $module)
+            )
+        );
+    }
 }
 
 formPanel
 (
     set::id('manageViewForm'),
-    span
+    div
     (
-        set::className('text-md font-bold'),
-        icon('lock mr-2'),
-        $group->name
-    ),
-    span
-    (
-        set::className('text-md text-gray'),
-        html($lang->arrow),
-        $lang->group->manageView
+        set::className('flex'),
+        span
+        (
+            set::className('text-md font-bold'),
+            icon('lock mr-2'),
+            $group->name
+        ),
+        span
+        (
+            set::className('text-md text-gray'),
+            html($lang->arrow),
+            $lang->group->manageView
+        )
     ),
     formGroup
     (

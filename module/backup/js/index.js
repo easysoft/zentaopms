@@ -32,9 +32,9 @@ $(function ()
     });
 
     $('.rmPHPHeader').click(function () {
-        $('#waitting .modal-body #backupType').html(rmPHPHeader);
-        $('#waitting .modal-content #message').hide();
-        $('#waitting').modal('show');
+        $('#waiting .modal-body #backupType').html(rmPHPHeader);
+        $('#waiting .modal-content #message').hide();
+        $('#waiting').modal('show');
     });
 
     $('.restore').click(function ()
@@ -44,13 +44,13 @@ $(function ()
         {
             if (result)
             {
-                $('#waitting .modal-body #backupType').html(restore);
-                $('#waitting .modal-content #message').hide();
-                $('#waitting').modal('show');
+                $('#waiting .modal-body #backupType').html(restore);
+                $('#waiting .modal-content #message').hide();
+                $('#waiting').modal('show');
 
                 $.getJSON(url, function (response)
                 {
-                    $('#waitting').modal('hide');
+                    $('#waiting').modal('hide');
                     bootbox.alert(response.message);
                 });
             }
@@ -70,22 +70,22 @@ function backupData() {
         url: $('.backup').attr('data-link'),
         success: function (data) {
             clearInterval(timeID);
-            $('#waitting .modal-body #message').append(data);
+            $('#waiting .modal-body #message').append(data);
             setTimeout(function () {return location.reload();}, 2000);
         },
         error: function (request, textstatus, error) {
             clearInterval(timeID);
-            if (textstatus == 'timeout') $('#waitting .modal-body #message').append("<p class='text-danger'>" + backupTimeout + '</p>');
+            if (textstatus == 'timeout') $('#waiting .modal-body #message').append("<p class='text-danger'>" + backupTimeout + '</p>');
             setTimeout(function () {return location.reload();}, 2000);
         }
     });
 
-    $('#waitting .modal-body #backupType').html(backup);
-    $('#waitting').modal('show');
+    $('#waiting .modal-body #backupType').html(backup);
+    $('#waiting').modal('show');
 
     timeID = setInterval(function () {
         $.get(createLink('backup', 'ajaxGetProgress'), function (data) {
-            $('#waitting .modal-content #message').html(data);
+            $('#waiting .modal-content #message').html(data);
         });
     }, 1000);
 }

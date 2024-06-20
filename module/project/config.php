@@ -228,7 +228,7 @@ $config->project->linkMap->product = array();
 $config->project->linkMap->product['showerrornone'] = array('projectstory', 'story', 'projectID=%s', '');
 
 $config->project->linkMap->projectstory = array();
-$config->project->linkMap->projectstory['story']     = array('', '', 'projectID=%s', '');
+$config->project->linkMap->projectstory['story']     = array('', '', 'projectID=%s&productID=0&branch=0&browseType=&param=0&storyType={extra}', '');
 $config->project->linkMap->projectstory['linkstory'] = array('', '', 'projectID=%s', '');
 $config->project->linkMap->projectstory['track']     = array('', '', 'projectID=%s', '');
 

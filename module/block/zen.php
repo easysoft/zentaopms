@@ -204,6 +204,13 @@ class blockZen extends block
             if($block->code == 'scrumrisk'      && !helper::hasFeature('scrum_risk'))      continue;
             if($block->code == 'scrumissue'     && !helper::hasFeature('scrum_issue'))     continue;
 
+            /* 过滤目前已经不存在的区块。 */
+            if(!isset($this->lang->block->moduleList[$block->code]) && !isset($this->lang->block->modules[$block->module]->availableBlocks[$block->code]))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
+
             /* 将没有视图权限的区块过滤。 */
             $module = $block->module;
             if($module == 'scrumproject' || $module == 'waterfallproject') $module = 'project';
@@ -339,7 +346,7 @@ class blockZen extends block
 
         /* 调取接口获取数据。 */
         $startTime = microtime(true);
-        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http($this->config->admin->dynamicAPIURL)));
+        $result    = json_decode(preg_replace('/[[:cntrl:]]/mu', '', common::http(sprintf($this->config->admin->dynamicAPIURL, $this->config->version))));
 
         /* 请求超过一定时间后判断为网络请求缓慢。 */
         if(microtime(true) - $startTime > $this->config->timeout / 1000) $this->session->set('isSlowNetwork', true);
@@ -371,7 +378,7 @@ class blockZen extends block
             {
                 foreach($data->release as $release)
                 {
-                    $releaseLength      = strpos($release->content, '发布');
+                    $releaseLength      = strpos($release->content, $this->lang->release->common);
                     $release->title     = $this->lang->block->zentaodynamic->release;
                     $release->label     = $releaseLength > 0 && $releaseLength <= 30 ? mb_strcut($release->content, 0, $releaseLength + 8) : formatTime($release->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($release->time))];
                     $release->linklabel = false;
@@ -1175,7 +1182,8 @@ class blockZen extends block
             $execution->burns = array();
             $burnData = isset($burns[$execution->id]) ? $burns[$execution->id] : array();
             $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
-            $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+            $today    = helper::today();
+            if(strpos('closed,suspended', $execution->status) === false) $deadline = $today > $execution->end ? $today : $execution->end;
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $deadline, 'noweekend', 0, 'Y-m-d', $execution->end);
 
             foreach($burnData as $data) $execution->burns[] = $data->value;
@@ -1335,7 +1343,7 @@ class blockZen extends block
         $projectID     = $this->session->project;
         $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
 
-        $charts = array();
+        $charts = array('pv' => array(), 'ev' => array(), 'ac' => array());
         foreach($projectWeekly as $weekStart => $data)
         {
             $charts['pv'][$weekStart] = $data->pv;
@@ -1713,7 +1721,7 @@ class blockZen extends block
         $this->loadModel('metric');
 
         /* 从度量项获取产品总数量。 */
-        $productCount = $this->metric->getResultByCodeWithArray('count_of_product', array(), 'cron');
+        $productCount = $this->metric->getResultByCodeWithArray('count_of_product', array(), 'cron', null, $this->config->vision == 'or' ? 'rnd,or' : 'rnd');
         if(!empty($productCount))
         {
             $productCount = reset($productCount);

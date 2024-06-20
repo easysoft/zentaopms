@@ -74,10 +74,9 @@ class commonModel extends model
         $rawModule = $app->rawModule;
         $rawMethod = strtolower($app->rawMethod);
 
-        if($rawModule == 'marketresearch' and strpos($rawMethod, 'task') !== false)  $rawModule = 'task';
         if($rawModule == 'marketresearch' and strpos($rawMethod, 'stage') !== false) $rawModule = 'execution';
 
-        if($rawModule == 'task' or $rawModule == 'effort')
+        if($rawModule == 'task' || $rawModule == 'effort' || $rawModule == 'researchtask')
         {
             $taskID    = $objectID;
             $execution = $this->syncExecutionStatus($taskID);
@@ -808,7 +807,8 @@ class commonModel extends model
                     $flow    = $app->dbQuery('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
                     $default = $field->options[$newStatus]['default'];
 
-                    $app->dbh->exec("UPDATE `$flow->table` SET `subStatus` = '$default' WHERE `id` = '$oldID'");
+                    $common = new self();
+                    $common->dao->update($flow->table)->set('subStatus')->eq($default)->where('id')->eq($oldID)->exec();
 
                     $new->subStatus = $default;
                 }
@@ -1107,6 +1107,33 @@ class commonModel extends model
     }
 
     /**
+     * 检查系统是否处于维护状态，如果处于维护状态则给非管理员用户输出提示。
+     * Check whether system in maintenance status and show message for non-admin user.
+     *
+     * @return void
+     */
+    public function checkMaintenance()
+    {
+        $maintenance = $this->loadModel('setting')->getItem('owner=system&module=system&key=maintenance');
+        if(empty($maintenance)) return true;
+
+        $maintenance = json_decode($maintenance);
+        if(!empty($this->app->user->admin)) return true;
+
+        if(isset($maintenance->action) && in_array($maintenance->action, array('upgrade', 'downgrade', 'restore'))) helper::setStatus(503);
+
+        $reason  = sprintf($this->lang->maintainReason, isset($maintenance->reason) ? $maintenance->reason : $this->lang->unknown);
+        $message = <<<eof
+<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>
+<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>
+<h4>{$this->lang->inMaintenance}</h4>
+<p>{$reason}{$this->lang->systemMaintainer}</p>
+</td></tr></table></body></html>'
+eof;
+        helper::end($message);
+    }
+
+    /**
      * 禅道鉴权核心方法，如果用户没有当前模块、方法的权限，则跳转到登录页面或者拒绝页面。
      * Check the user has permission to access this method, if not, locate to the login page or deny page.
      *
@@ -1147,6 +1174,8 @@ class commonModel extends model
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
+                    if($module === 'feedback' && stripos(',view,adminview,', ",$method,") !== false && ($method === 'view' && commonModel::hasPriv('feedback', 'adminview') || $method === 'adminview' && commonModel::hasPriv('feedback', 'view'))) return true; // Make both feedback view and adminview privs interchangeable.
+
                     if($module == 'story' and !empty($this->app->params['storyType']) and strpos(",story,requirement,", ",{$this->app->params['storyType']},") !== false) $module = $this->app->params['storyType'];
                     $this->deny($module, $method);
                 }
@@ -1218,8 +1247,8 @@ class commonModel extends model
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module     = $this->app->getModuleName();
-        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|';
-        $iframeList = '|cron-index|';
+        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|';
+        $iframeList = '|cron-index|zanode-create|';
 
         if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return true;
 
@@ -1251,8 +1280,6 @@ class commonModel extends model
         global $app;
         if(empty($app->user->account)) return false;
 
-        if($object) return self::getUserPriv($module, $method, $object, $vars);
-
         $module = strtolower($module);
         $method = strtolower($method);
 
@@ -1260,12 +1287,19 @@ class commonModel extends model
         if(isset($config->{$module}->groupPrivs[$method]))
         {
             $groupPriv = strtolower($config->{$module}->groupPrivs[$method]);
-            if($groupPriv && $groupPriv != $method) return self::hasPriv($module, $groupPriv, $object, $vars);
+            if(strpos($groupPriv, '|') !== false) list($module, $groupPriv) = explode('|', $groupPriv);
+            if($groupPriv && $groupPriv != $method)
+            {
+                if($object) return static::getUserPriv($module, $groupPriv, $object, $vars);
+                return static::hasPriv($module, $groupPriv, $object, $vars);
+            }
         }
 
-        if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
+        if($object) return static::getUserPriv($module, $method, $object, $vars);
 
-        return self::$userPrivs[$module][$method][$vars];
+        if(!isset(static::$userPrivs[$module][$method][$vars])) static::$userPrivs[$module][$method][$vars] = static::getUserPriv($module, $method, $object, $vars);
+
+        return static::$userPrivs[$module][$method][$vars];
     }
 
     /**
@@ -2412,25 +2446,30 @@ class commonModel extends model
     {
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $module = ($actionData['url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['url']['module'];
-            $method = $actionData['url']['method'];
-            $params = $actionData['url']['params'];
-            if(!common::hasPriv($module, $method)) return false;
-            $actionData['url'] = helper::createLink($module, $method, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
+            $moduleName = ($actionData['url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['url']['module'];
+            $methodName = $actionData['url']['method'];
+            $params     = $actionData['url']['params'];
+            if(!common::hasPriv($moduleName, $methodName)) return false;
+            $actionData['url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
-            $module = ($actionData['data-url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['data-url']['module'];
-            $method = $actionData['data-url']['method'];
-            $params = $actionData['data-url']['params'];
-            if(!common::hasPriv($module, $method)) return false;
-            $actionData['data-url'] = helper::createLink($module, $method, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
+            $moduleName = ($actionData['data-url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['data-url']['module'];
+            $methodName = $actionData['data-url']['method'];
+            $params     = $actionData['data-url']['params'];
+            if(!common::hasPriv($moduleName, $methodName)) return false;
+            $actionData['data-url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
+        }
+        elseif(empty($actionData['url']))
+        {
+            return $actionData;
         }
         else
         {
             if(!common::hasPriv($moduleName, $action)) return false;
         }
 
+        if(!isset($this->$moduleName)) $this->loadModel($moduleName);
         if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
 
@@ -2811,7 +2850,7 @@ class commonModel extends model
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
 
-        self::printClientLink();
+        static::printClientLink();
 
         echo '<li class="zentao-about">' . html::a(helper::createLink('misc', 'about'), "<i class='icon icon-about'></i> " . $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
         echo '<li class="AIUX">' . $lang->designedByAIUX . '</li>';
@@ -2926,7 +2965,7 @@ class commonModel extends model
                     {
                         $params       = "programID=0&from=global";
                         $createMethod = 'createGuide';
-                        $attr         = 'data-toggle="modal"';
+                        $attr         = 'data-toggle="modal" data-type="iframe"';
                     }
                     break;
                 case 'bug':

@@ -271,7 +271,10 @@ class task extends control
             return $this->send($response);
         }
 
-        $this->taskZen->buildAssignToForm($executionID, $taskID);
+        $this->view->task  = $task;
+        $this->view->title = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
+        $this->taskZen->buildUsersAndMembersToFrom($executionID, $taskID);
+        $this->display();
     }
 
     /**
@@ -467,11 +470,10 @@ class task extends control
         $assignedTo = empty($task->assignedTo) ? $this->app->user->account : $task->assignedTo;
 
         $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->start;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
-        $this->view->members         = $this->user->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
+        $this->taskZen->buildUsersAndMembersToFrom($task->execution, $taskID);
         $this->display();
     }
 
@@ -526,10 +528,11 @@ class task extends control
             $actionID = $this->loadModel('action')->create('task', $effort->objectID, 'EditEffort', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
+            $url = $this->createLink($this->app->rawModule, 'recordWorkhour', "taskID={$effort->objectID}");
             return $this->send(array(
                 'result'     => 'success',
                 'message'    => $this->lang->saveSuccess,
-                'callback'   => "loadModal('" . inLink('recordWorkhour', "taskID={$effort->objectID}") . "')"
+                'callback'   => "loadModal('$url')"
             ));
         }
 
@@ -565,6 +568,16 @@ class task extends control
 
         $actionID = $this->loadModel('action')->create('task', $taskID, 'DeleteEstimate');
         $this->action->logHistory($actionID, $changes);
+
+        /* Delete task burn. */
+        if($this->edition != 'open')
+        {
+            $this->dao->update(TABLE_BURN)
+                 ->set("`consumed` = `consumed` - {$effort->consumed}")
+                 ->where('task')->eq($taskID)
+                 ->andWhere('date')->eq($effort->date)
+                 ->exec();
+        }
 
         /* The task status will be set to wait as the consumed effort is set to 0. */
         if($task->consumed - $effort->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
@@ -1135,6 +1148,7 @@ class task extends control
         $this->view->orderBy         = $orderBy;
         $this->view->type            = $type;
         $this->view->executionID     = $executionID;
+        $this->view->execution       = $execution;
 
         $this->display();
     }

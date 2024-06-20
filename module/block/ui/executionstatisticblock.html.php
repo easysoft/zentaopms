@@ -123,7 +123,7 @@ else
                 set::grid(array('left' => '2px', 'top' => '30px', 'right' => '10px', 'bottom' => '0',  'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0')),
                 set::xAxis(array('type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'), 'axisLabel' => array('rotate' => 45))),
-                set::yAxis(array('type' => 'value', 'name' => 'h', 'minInterval' => $chartData['baseLine'][0], 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
+                set::yAxis(array('type' => 'value', 'name' => 'h', 'minInterval' => zget($chartData['baseLine'], 0), 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
                 set::series
                 (
                     array
@@ -363,6 +363,21 @@ statisticBlock
 (
     to::titleSuffix
     (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        ),
         picker
         (
             setClass('font-normal gray-400-outline ml-3 text-base circle filter-project-pricker'),

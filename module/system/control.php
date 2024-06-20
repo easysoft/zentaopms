@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @package   system
  * @version   $Id$
  * @link      https://www.zentao.net
+ * @property  systemModel $system
+ * @property  cneModel    $cne
  */
 class system extends control
 {
@@ -25,6 +27,8 @@ class system extends control
 
         $this->loadModel('action');
         $this->loadModel('setting');
+        $this->loadModel('cne');
+        $this->loadModel('instance');
     }
 
     /**
@@ -215,6 +219,240 @@ class system extends control
         $this->view->cert           = $cert;
 
         $this->display();
+    }
+
+    /**
+     * 创建一个禅道DevOps平台版的备份。
+     * Backup the system.
+     *
+     * @param  string $reload yes|no
+     * @param  string $mode   |manual|system|upgrade|downgrade
+     * @access public
+     * @return void
+     */
+    public function backup(string $reload = 'no', string $mode = 'manual')
+    {
+        if($reload == 'yes') session_write_close();
+
+        set_time_limit(0);
+
+        if(!$this->config->inQuickon) $this->sendError($this->lang->system->cneStatus);
+
+        $this->loadModel('instance');
+        $instance = $this->config->instance->zentaopaas;
+
+        $result = $this->system->backup($instance, $mode);
+        $this->loadModel('action')->create('system', 0, 'createBackup');
+
+        if($result['result'] == 'success')
+        {
+            $backupName = $result['data']->backup_name;
+            $this->send($result + array('callback' => "backupInProgress('$backupName')"));
+        }
+        else
+        {
+            $this->send($result);
+        }
+    }
+
+    /**
+     * 恢复一个备份。
+     * Restore the backup.
+     *
+     * @param  string $backupName
+     * @return void
+     */
+    public function restoreBackup($backupName)
+    {
+        session_write_close();
+        set_time_limit(0);
+
+        if(empty($this->config->system->noBackupBeforeRestore))
+        {
+            $instance     = $this->config->instance->zentaopaas;
+            $backupResult = $this->cne->backup($instance, null, 'restore');
+            if($backupResult->code != 200) $this->sendError($backupResult->message);
+
+            while(true)
+            {
+                $backupStatus = $this->cne->getBackupStatus($instance, $backupResult->data->backup_name);
+                if($backupStatus->code != 200) $this->sendError($backupStatus->message);
+                if(strtolower($backupStatus->data->status) == 'completed') break;
+                sleep(1);
+            }
+        }
+
+        $backupName   = str_replace('_', '-', $backupName);
+        $result = $this->system->restore($instance, $backupName);
+
+        $this->loadModel('action')->create('system', 0, 'restoreBackup', '', $backupName);
+
+        $this->send($result + array('load' => true, 'callback' => "restoreInProgress('$backupName')"));
+    }
+
+    /**
+     * 删除一个备份。
+     * Delete the backup.
+     *
+     * @param  string $backupName
+     * @return void
+     */
+    public function deleteBackup($backupName)
+    {
+        $backupName = str_replace('_', '-', $backupName);
+        $instance = $this->config->instance->zentaopaas;
+
+        $result = $this->system->deleteBackup($instance, $backupName);
+
+        $this->loadModel('action')->create('system', 0, 'deleteBackup', '', $backupName);
+
+        $this->send($result + array('load' => true, 'callback' => "deleteInProgress('$backupName')"));
+    }
+
+    /**
+     * 执行系统升级。
+     * Upgrade ths quickon system.
+     *
+     * @param  string $edition
+     * @return void
+     */
+    public function upgrade($backup = 'yes', $edition = 'open')
+    {
+        session_write_close();
+        set_time_limit(0);
+
+        if(!$this->system->isUpgradeable()) $this->sendError($this->lang->system->backup->error->beenLatestVersion);
+
+        $this->loadModel('action')->create('system', 0, 'upgradeSystem');
+
+        if($backup == 'yes' && empty($this->config->system->noBackupBeforeUpgrade))
+        {
+            $instance     = $this->config->instance->zentaopaas;
+            $backupResult = $this->cne->backup($instance, null, 'upgrade');
+            if($backupResult->code != 200) $this->sendError($backupResult->message);
+
+            while(true)
+            {
+                $backupStatus = $this->cne->getBackupStatus($instance, $backupResult->data->backup_name);
+                if($backupStatus->code != 200) $this->sendError($backupStatus->message);
+                if(strtolower($backupStatus->data->status) == 'completed') break;
+                sleep(1);
+            }
+        }
+
+        $rawResult = $this->cne->upgrade($edition);
+        if($rawResult)
+        {
+            if($rawResult->code == 200)
+                $this->sendSuccess(array('message' => $this->lang->system->backup->success->upgrade, 'callback' => 'upgradeInProgress'));
+            else
+                $this->sendError($rawResult->message);
+        }
+
+        $this->sendError($this->lang->CNE->serverError);
+    }
+
+    /**
+     * AJAX: 获取备份列表。
+     * AJAX: Get the backup list.
+     *
+     * @return void
+     */
+    public function ajaxGetBackups()
+    {
+        $result = $this->system->getBackupList($this->config->instance->zentaopaas);
+        $this->send($result);
+    }
+
+    /**
+     * 获取备份的进度。
+     * AJAX: Get the progress of the backup.
+     *
+     * @access public
+     * @param  string $backupName
+     * @return void
+     */
+    public function ajaxGetBackupProgress($backupName)
+    {
+        session_write_close();
+
+        if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
+        $result = $this->cne->getBackupStatus($this->config->instance->zentaopaas, $backupName);
+        if($result && $result->code == 200)
+        {
+            $status = strtolower($result->data->status);
+            if($status == 'completed') return $this->send(array('result' => 'success', 'message' => $this->lang->system->backup->backupSucceed, 'status' => 'completed', 'closeModal' => true, 'load' => helper::createLink('backup', 'index')));
+            if($status == 'pending' || $status == 'inprogress') return $this->send(array('result' => 'progress', 'status' => 'inprogress', 'text' => sprintf($this->lang->system->backup->progress, $result->data->completed, $result->data->total)));
+            if($status == 'failed') return $this->send(array('result' => 'failed', 'message' => $this->lang->system->backup->error->backupFail, 'closeModal' => true));
+        }
+        else
+        {
+            return $this->send(array('result' => 'failed', 'message' => $result->message, 'closeModal' => true));
+        }
+    }
+
+    /**
+     * 获取还原的进度。
+     * AJAX: Get the progress of the restore.
+     *
+     * @access public
+     * @param  string $backupName
+     * @return void
+     */
+    public function ajaxGetRestoreProgress($backupName)
+    {
+        session_write_close();
+
+        $backupName = str_replace('_', '-', $backupName);
+        $result = $this->cne->getRestoreStatus($this->config->instance->zentaopaas, $backupName);
+        if($result && $result->code == 200)
+        {
+            $status = $result->data->status;
+            if($status == 'completed') return $this->send(array('result' => 'success', 'message' => $this->lang->system->backup->restoreSucceed, 'status' => 'completed', 'load' => helper::createLink('backup', 'index')));
+            if($status == 'pending' || $status == 'inprogress') return $this->send(array('result' => 'progress', 'status' => 'inprogress', 'text' => sprintf($this->lang->system->backup->progressStore, $result->data->completed, $result->data->total)));
+            if($status == 'failed') return $this->send(array('result' => 'failed', 'message' => $this->lang->system->backup->error->backupFail, 'load' => helper::createLink('backup', 'index')));
+        }
+        else
+        {
+            return $this->send(array('result' => 'failed', 'message' => $result->message, 'load' => helper::createLink('backup', 'index')));
+        }
+    }
+
+    /**
+     * 获取升级的进度。（当前没有进度，但可以通过获取是否可以升级来检查）
+     * AJAX: Get upgrade progress.
+     *
+     * @return void
+     */
+    public function ajaxGetUpgradeProgress()
+    {
+        $isUpgradeable = $this->system->isUpgradeable();
+        if($isUpgradeable) return $this->send(array('result' => 'fail', 'message' => $this->lang->system->backup->upgrading));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->system->backup->success->upgrade, 'load' => true));
+    }
+
+    /**
+     * 获取删除的进度。
+     *  AJAX: Get delete progress.
+     *
+     * @param  string $backupName
+     * @return void
+     */
+    public function ajaxGetDeleteProgress($backupName)
+    {
+        session_write_close();
+
+        if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
+        $rawResult = $this->cne->getBackupList($this->config->instance->zentaopaas);
+        if($rawResult && $rawResult->code == 200)
+        {
+            foreach($rawResult->data as $backup)
+            {
+                if($backup->name == $backupName) return $this->sendSuccess(array('status' => 'inprogress', 'message' => $rawResult->message));
+            }
+            $this->sendSuccess(array('status' => 'completed', 'message' => $rawResult->message));
+        }
+        $this->sendError(isset($rawResult->message) ? $rawResult->message : 'fail');
     }
 
     /**

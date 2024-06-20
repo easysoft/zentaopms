@@ -61,8 +61,7 @@ class xxx_of_xxx_in_xxx extends baseCalc
          *       ->andWhere('t2.deleted')->eq(0)
          *       ->andWhere('t2.shadow')->eq(0)
          *       ->andWhere('t1.type')->eq('story')
-         *       ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel')
-         *       ->query();
+         *       ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel');
          */
         return $this->dao->XXX->query();
     }

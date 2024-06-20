@@ -8,10 +8,12 @@ requestAnimationFrame(() =>
 {
     setTimeout(() =>
     {
-        /* Prevent unnecessary refresh. */
         const currentURL = new URL($.apps.getLastApp().currentUrl, location.href);
         const formURL    = new URL(`$formLocation`, location.href);
-        if(currentURL.href === formURL.href) return;
+
+        /* Prevent unnecessary refresh. */
+        const isRegen = window.sessionStorage.getItem('ai-prompt-regen') === 'true';
+        if(currentURL.href === formURL.href && !isRegen) return;
 
         openUrl(`{$formLocation}`);
     }, 1000);

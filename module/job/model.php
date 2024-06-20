@@ -330,9 +330,9 @@ class jobModel extends model
             $compileID = $this->loadModel('compile')->createByJob($job->id);
         }
 
-        if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID, $extraParam);
-        if($job->engine == 'gitlab')  $compile = $this->execGitlabPipeline($job);
-        if($job->engine == 'gitfox')  $compile = $this->execGitfoxPipeline($job);
+        $method = 'exec' . ucfirst($job->engine) . 'Pipeline';
+        if(!method_exists($this, $method)) return false;
+        $compile = $this->$method($job, $repo, $compileID, $extraParam);
 
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
@@ -439,38 +439,6 @@ class jobModel extends model
         else
         {
             $compile->queue  = $pipeline->id;
-            $compile->status = zget($pipeline, 'status', 'create_fail');
-        }
-
-        return $compile;
-    }
-
-    /**
-     * 执行gitfox流水线。
-     * Exec gitfox pipeline.
-     *
-     * @param  object $job
-     * @access public
-     * @return object
-     */
-    public function execGitfoxPipeline(object $job): object
-    {
-        $pipeline = json_decode($job->pipeline);
-
-        /* Run pipeline. */
-        $compile      = new stdclass();
-        $pipelineName = zget($pipeline, 'name', '');
-        $params       = array('branch' => zget($pipeline, 'reference', ''));
-        $apiRoot      = $this->loadModel('gitfox')->getApiRoot($job->server);
-        $pipeline     = json_decode(common::http(sprintf($apiRoot->url, "/repos/{$pipeline->project}/pipelines/{$pipelineName}/executions"), $params, array(), $apiRoot->header));
-        if(!empty($pipeline->message) && !in_array(!empty($pipeline->status) ? $pipeline->status : null, array('pending', 'success')))
-        {
-            dao::$errors[] = $pipeline->message;
-            $compile->status = 'create_fail';
-        }
-        else
-        {
-            $compile->queue  = $pipeline->number;
             $compile->status = zget($pipeline, 'status', 'create_fail');
         }
 
@@ -592,7 +560,7 @@ class jobModel extends model
     public function import(string|int $repoID)
     {
         $repo = $this->loadModel('repo')->getByID((int)$repoID);
-        if(!in_array($repo->SCM, array('Gitlab', 'GitFox'))) return false;
+        if($repo->SCM != 'Gitlab') return false;
 
         $pipelines = $this->loadModel(strtolower($repo->SCM))->apiGetPipeline((int)$repo->serviceHost, (int)$repo->serviceProject, '');
         if(!is_array($pipelines) or empty($pipelines)) return false;
@@ -610,13 +578,7 @@ class jobModel extends model
         {
             if(!empty($pipeline->disabled)) continue;
 
-            $pipelineMeta = array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch);
-            if($repo->SCM == 'GitFox')
-            {
-                $pipelineMeta['identifier'] = $pipeline ->identifier;
-                $pipelineMeta['name']       = $pipeline ->identifier;
-            }
-
+            $pipelineMeta  = array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch);
             $job->pipeline = json_encode($pipelineMeta);
 
             $hash = md5($job->pipeline);

@@ -548,6 +548,12 @@ $config->my->story->actionList['close']['hint']        = $lang->story->close;
 $config->my->story->actionList['close']['url']         = array('module' => 'story', 'method' => 'close', 'params' => 'storyID={id}');
 $config->my->story->actionList['close']['data-toggle'] = 'modal';
 
+$config->my->story->actionList['processStoryChange']['icon']        = 'ok';
+$config->my->story->actionList['processStoryChange']['text']        = $lang->confirm;
+$config->my->story->actionList['processStoryChange']['hint']        = $lang->confirm;
+$config->my->story->actionList['processStoryChange']['url']         = array('module' => 'story', 'method' => 'processStoryChange', 'params' => 'storyID={id}');
+$config->my->story->actionList['processStoryChange']['data-toggle'] = 'modal';
+
 $config->my->story->dtable = new stdclass();
 $config->my->story->dtable->fieldList['id']['name']     = 'id';
 $config->my->story->dtable->fieldList['id']['title']    = $lang->idAB;
@@ -611,7 +617,7 @@ $config->my->story->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->story->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->story->dtable->fieldList['actions']['sortType'] = false;
 $config->my->story->dtable->fieldList['actions']['list']     = $config->my->story->actionList;
-$config->my->story->dtable->fieldList['actions']['menu']     = array('change', 'review|submitReview', 'recall', 'edit', 'create', 'close');
+$config->my->story->dtable->fieldList['actions']['menu']     = array(array('processStoryChange'), array('change', 'review|submitReview', 'recall', 'edit', 'create', 'close'));
 
 $config->my->bug = new stdclass();
 $config->my->bug->actionList = array();

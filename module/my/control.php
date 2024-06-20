@@ -508,6 +508,10 @@ class my extends control
             $this->view->checkedSummary = str_replace('{total}', (string)count($bugs), $this->lang->bug->notice->checkedSummary);
         }
 
+        /* 检查是否需要确认撤销/移除。*/
+        /* Build confirmeObject. */
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
+
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->bug;
         $this->view->bugs        = $bugs;
@@ -557,7 +561,7 @@ class my extends control
         $this->app->loadLang('project');
         $sort  = common::appendOrder($orderBy);
         $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
+        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type == 'assignedTo' ? 'wait' : $type);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
@@ -1404,7 +1408,7 @@ class my extends control
 
             $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => '$.apps.updateAppsMenu'));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->preference;

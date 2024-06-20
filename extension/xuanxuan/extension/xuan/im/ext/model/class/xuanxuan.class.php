@@ -221,6 +221,11 @@ class xuanxuanIm extends imModel
             {
                 /* Group by $message->content->content->objectType, ...->parentType, ...->action, ...->actor */
                 $contentDataOuter = json_decode($message->content);
+                if(!isset($contentDataOuter->content))
+                {
+                    $messageGroups['text'][] = $message;
+                    continue;
+                }
                 $contentData = json_decode($contentDataOuter->content);
                 if(isset($contentData->contentType) && $contentData->contentType == 'text')
                 {

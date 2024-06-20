@@ -14,8 +14,11 @@ jsVar('weekend', $config->execution->weekend);
 
 $cols = $config->pivot->dtable->workload->fieldList;
 $cols['user']['map'] = $users;
+$data        = new stdclass();
+$data->cols  = $this->pivot->processDTableCols($cols);
+$data->array = $this->pivot->processDTableData(array_keys($cols), $workload);
 
-$generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, $begin, $end, $days, $workhour, $assign)
+$generateData = function() use ($lang, $title, $cols, $data, $workload, $depts, $dept, $begin, $end, $days, $workhour, $assign)
 {
     return array
     (
@@ -93,6 +96,13 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
                     'workload'    => array('rowspan' => 'userRowspan'),
                     'projectName' => array('rowspan' => 'projectRowspan')
                 ))
+            ),
+            div
+            (
+                setID('exportData'),
+                setClass('hidden'),
+                rawContent(),
+                $this->pivot->buildPivotTable($data, array()),
             )
         )
     );

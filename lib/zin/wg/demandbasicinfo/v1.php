@@ -29,7 +29,7 @@ class demandBasicInfo extends wg
 
         $items = array();
         $items[$lang->demand->pool]         = zget($demandpools, $demand->pool, '');
-        $items[$lang->demand->status]       = zget($lang->demand->statusList, $demand->status);
+        $items[$lang->demand->status]       = array('control' => 'status', 'class' => 'status-story', 'status' => $demand->status, 'text' => zget($lang->demand->statusList, $demand->status));
         $items[$lang->demand->product]      = trim($productList, ', ') ? trim($productList, ', ') : $lang->demand->undetermined;
         $items[$lang->demand->pri]          = array('control' => 'pri', 'text' => $lang->demand->priList, 'pri' => $demand->pri);
         $items[$lang->demand->category]     = zget($lang->demand->categoryList, $demand->category);

@@ -286,7 +286,6 @@ $lang->devops->rules        = '指令';
 $lang->devops->settings     = '合併請求設置';
 $lang->devops->platform     = '平台';
 $lang->devops->set          = '设置';
-$lang->devops->artifactrepo = '制品库';
 $lang->devops->environment  = '环境';
 $lang->devops->resource     = '资源';
 $lang->devops->dblist       = '数据库';

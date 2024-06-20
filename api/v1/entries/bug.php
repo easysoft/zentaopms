@@ -118,6 +118,13 @@ class bugEntry extends entry
      */
     public function delete($bugID)
     {
+        if(!$this->app->user->admin)
+        {
+            $bug = $this->loadModel('bug')->getByID($bugID);
+            $projects = explode(',', "0,{$this->app->user->view->projects}");
+            if(!in_array($bug->project, $projects)) return $this->sendError(400, 'No access to the project that the bug belongs to');
+        }
+
         $control = $this->loadController('bug', 'delete');
         $control->delete($bugID, 'yes');
 

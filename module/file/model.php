@@ -132,7 +132,7 @@ class fileModel extends model
 
         foreach($files as $file)
         {
-            if(empty($file['size'])) continue;
+            if(!isset($file['size']) || $file['size'] == 0) continue;
             if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
 
             $file = $this->compressImage($file);

@@ -2,6 +2,15 @@ $(function()
 {
     $('#log').on('click', '.btn-close', closeRelation);
     window.onScmChange();
+
+    $('#monacoTabs').on('show.zui.tab', function(e, tab)
+    {
+        $('#monacoTree .listitem').removeClass('selected');
+
+        if(!tab || !tab[tab.length - 1]) return;
+        const fileKey = tab[tab.length - 1].substring(5).replace(/-/g, '=');
+        $('li[z-key="' + fileKey + '"] .listitem').addClass('selected');
+    });
 });
 
 /**
@@ -285,14 +294,14 @@ window.onScmChange = function()
         $('.account-fields').addClass('hidden');
         $('#path').attr('placeholder', pathGitTip);
         $('#client').attr('placeholder', clientGitTip);
-        $('#client').val('/usr/bin/git');
+        if(!client) $('#client').val('/usr/bin/git');
     }
     else
     {
         $('.account-fields').removeClass('hidden');
         $('#path').attr('placeholder', pathSvnTip);
         $('#client').attr('placeholder', clientSvnTip);
-        $('#client').val('/usr/bin/svn');
+        if(!client) $('#client').val('/usr/bin/svn');
     }
 
     if(scm == 'Git' || scm == 'Subversion')
@@ -344,4 +353,22 @@ window.onAclChange = function(event)
     {
         $('#whitelist').addClass('hidden');
     }
+}
+
+/**
+ * 点击左侧菜单打开详情tab。
+ * Open new tab when click tree item.
+ *
+ * @access public
+ * @return void
+ */
+window.treeClick = function(info)
+{
+    if(info.item.items && (info.item.items.length > 0 || info.item.items.url)) return;
+
+    $('#monacoTree .listitem').removeClass('selected');
+
+    $('li[z-key="' + info.item.id + '"] .listitem').addClass('selected');
+    openTab(info.item.id, info.item.text);
+    arrowTabs('monacoTabs', -2);
 }

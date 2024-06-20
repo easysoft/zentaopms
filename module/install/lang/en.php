@@ -24,7 +24,6 @@ $lang->install->keepInstalling   = 'Continue installing this version';
 $lang->install->seeLatestRelease = 'View the latest version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
 $lang->install->license          = 'License';
-$lang->install->devopsDesc       = 'The underlying foundation of the DevOps platform is built upon cloud-native technologies such as Docker and Kubernetes (K8s). It incorporates an integrated application marketplace, allowing seamless installation of essential tools like code repositories, pipelines, and artifact libraries.';
 $lang->install->desc             = <<<EOT
 ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> or <a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a> License. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
 
@@ -112,7 +111,7 @@ $lang->install->gdFail       = 'Edit the php.ini file to load gd extension.';
 $lang->install->iconv        = 'Iconv Extension';
 $lang->install->iconvFail    = 'Edit the php.ini file to load iconv extension.';
 $lang->install->apcu         = 'APCu Extension';
-$lang->install->apcuFail     = 'Edit the php.ini file to load APCu extension.';
+$lang->install->apcuFail     = "APCu isn't loaded. IF loaded the APCu, then enable cache function.";
 $lang->install->tmpRoot      = 'Temp Directory';
 $lang->install->dataRoot     = 'Uploaded File Directory';
 $lang->install->session      = 'Session Save Path';

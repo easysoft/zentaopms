@@ -348,6 +348,7 @@ class myModel extends model
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
         unset($this->config->testcase->search['fields']['module']);
+        unset($this->config->testcase->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
@@ -944,15 +945,15 @@ class myModel extends model
     {
         $vision     = $this->config->vision;
         $reviewList = array();
-        if($browseType == 'all' || $browseType == 'demand')                                              $reviewList = array_merge($reviewList, $this->getReviewingDemands());
-        if($browseType == 'all' || $browseType == 'story')                                               $reviewList = array_merge($reviewList, $this->getReviewingStories());
-        if($browseType == 'all' || $browseType == 'epic')                                                $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'epic'));
-        if($browseType == 'all' || $browseType == 'requirement')                                         $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'requirement'));
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase'))                       $reviewList = array_merge($reviewList, $this->getReviewingCases());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                        $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($browseType == 'all' || $browseType == 'feedback')                                            $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                             $reviewList = array_merge($reviewList, $this->getReviewingOA());
-        if($browseType == 'all' || !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
+        if($browseType == 'all' || $browseType == 'demand')                                       $reviewList = array_merge($reviewList, $this->getReviewingDemands());
+        if($browseType == 'all' || $browseType == 'story')                                        $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($browseType == 'all' || $browseType == 'epic')                                         $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'epic'));
+        if($browseType == 'all' || $browseType == 'requirement')                                  $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'requirement'));
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase'))                $reviewList = array_merge($reviewList, $this->getReviewingCases());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                 $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
+        if($browseType == 'all' || $browseType == 'feedback')                                     $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                      $reviewList = array_merge($reviewList, $this->getReviewingOA());
+        if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules)) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(empty($reviewList)) return array();
 
         $field     = $orderBy;

@@ -12,8 +12,11 @@ namespace zin;
 
 $cols = $config->pivot->dtable->bugAssign->fieldList;
 $cols['assignedTo']['map'] = $users;
+$data        = new stdclass();
+$data->cols  = $this->pivot->processDTableCols($cols);
+$data->array = $this->pivot->processDTableData(array_keys($cols), $bugs);
 
-$generateData = function() use ($lang, $title, $cols, $bugs)
+$generateData = function() use ($lang, $title, $cols, $data, $bugs)
 {
     return panel
     (
@@ -33,6 +36,13 @@ $generateData = function() use ($lang, $title, $cols, $bugs)
             set::plugins(array('cellspan')),
             set::getCellSpan(jsRaw('getCellSpan')),
             set::cellSpanOptions(array('assignedTo' => array(), 'total' => array()))
+        ),
+        div
+        (
+            setID('exportData'),
+            setClass('hidden'),
+            rawContent(),
+            $this->pivot->buildPivotTable($data, array()),
         )
     );
 };

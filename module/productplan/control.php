@@ -86,7 +86,7 @@ class productplan extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
             if(isInModal())
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductPlans($productID);"));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadProductPlans($productID, $branchID);"));
             }
             return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse', "productID=$productID")));
         }
@@ -151,7 +151,7 @@ class productplan extends control
         $oldBranch = array($planID => $plan->branch);
 
         /* Get the parent plan pair exclusion itself. */
-        $parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product);
+        $parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product, 'done,closed');
         unset($parentPlanPairs[$planID]);
         $this->view->parentPlanPairs = $parentPlanPairs;
         $this->view->parentList      = $this->productplan->getByIDList(array_keys($this->view->parentPlanPairs));

@@ -40,6 +40,7 @@ class docMenu extends wg
 
     private function buildLink($item, $releaseID = 0): string
     {
+        global $app;
         $url = zget($item, 'url', '');
         if(!empty($url)) return $url;
         $objectType = $this->objectType;
@@ -70,7 +71,7 @@ class docMenu extends wg
             $methodName = 'view';
             $linkParams = "docID={$item->id}";
         }
-        else if($objectType == 'execution')
+        else if($objectType == 'execution' && $app->tab == 'execution')
         {
             $moduleName = 'execution';
             $methodName = 'doc';

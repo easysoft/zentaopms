@@ -46,7 +46,6 @@ $config->action->objectNameFields['kanban']       = 'name';
 $config->action->objectNameFields['kanbancard']   = 'name';
 $config->action->objectNameFields['sonarqube']    = 'name';
 $config->action->objectNameFields['gitlab']       = 'name';
-$config->action->objectNameFields['gitfox']       = 'name';
 $config->action->objectNameFields['gitea']        = 'name';
 $config->action->objectNameFields['gogs']         = 'name';
 $config->action->objectNameFields['jenkins']      = 'name';
@@ -66,7 +65,6 @@ $config->action->objectNameFields['host']         = 'name';
 $config->action->objectNameFields['instance']     = 'name';
 $config->action->objectNameFields['space']        = 'name';
 $config->action->objectNameFields['solution']     = 'name';
-$config->action->objectNameFields['artifactrepo'] = 'name';
 $config->action->objectNameFields['prompt']       = 'name';
 $config->action->objectNameFields['miniprogram']  = 'name';
 $config->action->objectNameFields['holiday']      = 'name';
@@ -86,7 +84,7 @@ $config->action->majorList['doc']       = array('releaseddoc');
 
 $config->action->needGetProjectType       = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
 $config->action->needGetRelateField       = ',branch,story,epic,requirement,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,review,';
-$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,';
+$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,auditplan,auditresult,';
 $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolumn';
 $config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr';
 

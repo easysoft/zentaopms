@@ -272,7 +272,7 @@ detailBody
                         picker(set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default']), set::multiple($multiplePlan)),
                     ),
                     empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), setData(array('toggle' => 'modal')), icon('plus')) : null,
-                    empty($fields['plan']['options']) ? btn(set('onclick', "loadProductPlans({$story->product})"), setClass('refresh'), icon('refresh')) : null
+                    empty($fields['plan']['options']) ? btn(set('onclick', "loadProductPlans({$story->product}, {$story->branch})"), setClass('refresh'), icon('refresh')) : null
                 )
             ),
             item

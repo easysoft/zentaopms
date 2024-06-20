@@ -22,7 +22,6 @@ $lang->build->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = '批量移除Bug';
 $lang->build->viewBug          = '查看Bug';
 $lang->build->bugList          = 'Bug列表';
-$lang->build->linkArtifactRepo = '关联制品库';
 
 $lang->build->confirmDelete      = "您确认删除该版本吗？";
 $lang->build->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
@@ -53,6 +52,8 @@ $lang->build->desc           = '描述';
 $lang->build->mailto         = 'Mailto';
 $lang->build->files          = '上传发行包';
 $lang->build->last           = '上个版本';
+$lang->build->createdBy      = '由谁创建';
+$lang->build->createdDate    = '创建时间';
 $lang->build->packageType    = '包类型';
 $lang->build->unlinkStory    = "移除{$lang->SRCommon}";
 $lang->build->unlinkBug      = '移除Bug';

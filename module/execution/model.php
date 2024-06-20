@@ -2119,25 +2119,6 @@ class executionModel extends model
             if($delay > 0) $execution->delay = $delay;
         }
 
-        /* Get hours information. */
-        $total = $this->dao->select('
-            ROUND(SUM(estimate), 2) AS totalEstimate,
-            ROUND(SUM(consumed), 2) AS totalConsumed,
-            ROUND(SUM(`left`), 2) AS totalLeft')
-            ->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->fetch();
-
-        /* Get hours information of the closed and cancel task. */
-        $closedTotalLeft = $this->dao->select('ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('status')->in('closed,cancel')
-            ->fetch('totalLeft');
-
         $totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.account=t2.account')
@@ -2149,9 +2130,9 @@ class executionModel extends model
         /* Set the hours information for the task. */
         $execution->totalHours    = $totalHours;
         $execution->days          = $execution->days ? $execution->days : 0;
-        $execution->totalEstimate = round((float)$total->totalEstimate, 1);
-        $execution->totalConsumed = round((float)$total->totalConsumed, 1);
-        $execution->totalLeft     = round(((float)$total->totalLeft - (float)$closedTotalLeft), 1);
+        $execution->totalEstimate = round((float)$execution->estimate, 1);
+        $execution->totalConsumed = round((float)$execution->consumed, 1);
+        $execution->totalLeft     = round((float)$execution->left, 1);
 
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
@@ -2890,7 +2871,7 @@ class executionModel extends model
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($action == 'linked2execution' and $execution->type == 'kanban') $action = 'linked2kanban';
             if($execution->multiple or $execution->type == 'project') $this->action->create('story', $storyID, $action, '', $executionID);
-            if($storyType == 'requirement' and $execution->model == 'ipd') $this->dao->update(TABLE_STORY)->set('status')->eq('developing')->where('id')->eq($storyID)->exec();
+            if($storyType == 'requirement' and $this->config->edition == 'ipd') $this->dao->update(TABLE_STORY)->set('status')->eq('developing')->where('id')->eq($storyID)->exec();
         }
 
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID);
@@ -3756,6 +3737,8 @@ class executionModel extends model
             preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $condition, $matches);
             $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
             $condition = str_replace("t1.$matches[0]", "(t1.$matches[0] or (t1.mode = 'multi' and t2.`account` $matches[1] and t1.status != 'closed' and t2.status != 'done') )", $condition);
+
+            $this->session->set('taskQueryCondition', $condition, $this->app->tab);
         }
 
         $sql = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1');
@@ -4823,8 +4806,7 @@ class executionModel extends model
             $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
-            if(!empty($execution->tasks)) $rows = $this->appendTasks($execution->tasks, $rows);
-            if(!empty($execution->points)) $rows = $this->appendPoints($execution->points, $rows);
+            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows);
         }
 
         return $rows;
@@ -4868,6 +4850,7 @@ class executionModel extends model
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             $task->begin         = $task->estStarted;
             $task->end           = $task->deadline;
+            $task->PM            = $task->assignedTo;
 
             $rows[] = $task;
         }

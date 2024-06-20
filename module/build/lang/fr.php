@@ -22,7 +22,6 @@ $lang->build->batchUnlinkStory = "Retirer {$lang->SRCommon} par Lot";
 $lang->build->batchUnlinkBug   = 'Retirer Bugs par Lot';
 $lang->build->viewBug          = 'Bugs';
 $lang->build->bugList          = 'Bug List';
-$lang->build->linkArtifactRepo = 'Link Artifact Repo';
 
 $lang->build->confirmDelete      = "Voulez-vous supprimer ce build ?";
 $lang->build->confirmUnlinkStory = "Voulez-vous retirer cette {$lang->SRCommon} du Build ?";
@@ -53,6 +52,8 @@ $lang->build->desc           = 'Description';
 $lang->build->mailto         = 'Mailto';
 $lang->build->files          = 'Fichiers';
 $lang->build->last           = 'Dernier Build';
+$lang->build->createdBy      = 'Created By';
+$lang->build->createdDate    = 'Created Date';
 $lang->build->packageType    = 'Type de Package';
 $lang->build->unlinkStory    = "Retirer {$lang->SRCommon}";
 $lang->build->unlinkBug      = 'Retirer Bug';

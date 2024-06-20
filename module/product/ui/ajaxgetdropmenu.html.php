@@ -11,6 +11,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+/* 旧页面获取旧的1.5级导航。*/
+if(in_array("{$module}-{$method}", $config->index->oldPages))
+{
+    include '../view/ajaxgetdropmenu.html.php';
+    return;
+}
+
 /**
  * 获取产品所属分组。
  * Get product group.

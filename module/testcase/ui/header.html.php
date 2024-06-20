@@ -42,8 +42,8 @@ $canImport           = hasPriv('testcase', 'import');
 $canImportFromLib    = hasPriv('testcase', 'importFromLib');
 $canImportXmind      = hasPriv('testcase', 'importXmind');
 $canCreateCase       = hasPriv('testcase', 'create');
-$canBatchCreateCase  = $this->app->tab == 'qa' && hasPriv('testcase', 'batchCreate');
-$canCreateScene      = $this->app->tab == 'qa' && hasPriv('testcase', 'createScene');
+$canBatchCreateCase  = $productID && hasPriv('testcase', 'batchCreate');
+$canCreateScene      = $productID && hasPriv('testcase', 'createScene');
 $canImportUnitResult = hasPriv('testtask', 'importUnitResult');
 $canCreate           = $canCreateCase || $canBatchCreateCase || $canCreateScene;
 
@@ -105,10 +105,12 @@ $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
 
+$queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
+    set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     set::current($methodName == 'browse' ? $this->session->caseBrowseType : null),
     set::load($load),
     set::app($app->tab),

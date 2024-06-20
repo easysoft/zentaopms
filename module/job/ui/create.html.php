@@ -21,14 +21,9 @@ $engine = key($lang->job->engineList);
 if($repo)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
-
-    if($repo->SCM == 'GitFox')
+    if(isset($lang->job->engineList[strtolower($repo->SCM)]))
     {
-        $engine = 'gitfox';
-    }
-    elseif($repo->SCM != 'Gitlab')
-    {
-        $engine = 'jenkins';
+        $engine = strtolower($repo->SCM);
     }
     else
     {
@@ -96,15 +91,7 @@ formPanel
     ),
     formGroup
     (
-        setClass('gitfox-pipeline hidden'),
-        set::label($lang->job->gitfoxpipeline),
-        set::required(true),
-        set::name('gitfoxpipeline'),
-        set::items(array()),
-        set::width('1/2')
-    ),
-    formGroup
-    (
+        set::id('productBox'),
         set::name('product'),
         set::label($lang->job->product),
         set::width('1/2'),

@@ -263,7 +263,7 @@ class programplan extends control
         $this->loadModel('task')->updateOrderByGantt($postData);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->loadModel('action')->create('task', $taskID, 'ganttMove');
+        $this->loadModel('action')->create('task', (int)$taskID, 'ganttMove');
         return $this->send(array('result' => 'success'));
     }
 

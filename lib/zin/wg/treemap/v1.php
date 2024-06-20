@@ -36,7 +36,9 @@ class treemap extends wg
         'nodeTemplate?: string',         // 节点元素模板。
         'onNodeClick?: function',        // 节点元素模板。
         'afterDrawLines?: function',     // 节点元素模板。
-        'afterRender?: function'         // 节点元素模板。
+        'afterRender?: function',        // 节点元素模板。
+        'onContextMenu?: function',      // 上下文菜单事件回调函数。
+        'onReady?: function'             // 组件就绪回调函数。
     );
 
     protected function build(): array
@@ -46,7 +48,7 @@ class treemap extends wg
         list($width, $height) = $this->prop(array('width', 'height'));
         $dataVarName = "_treemap_$this->gid";
         $treemapPath = $app->getWebRoot() . 'js/zui/treemap/index.html?options=' . $dataVarName;
-        $options = $this->props->pick(array('hotkeyEnable', 'hotkeys', 'lang', 'langs', 'data', 'nodeTeamplate', 'hSpace', 'vSpace', 'canvasPadding', 'removingNodeTip', 'lineCurvature', 'subLineWidth', 'lineColor', 'lineOpacity', 'lineSaturation', 'lineLightness', 'nodeLineWidth', 'showToggleButton', 'readonly', 'minimap', 'toolbar', 'zoom', 'zoomMax', 'zoomMin', 'minimapHeight', 'onNodeClick', 'afterDrawLines', 'afterRender'));
+        $options = $this->props->pick(array('hotkeyEnable', 'hotkeys', 'lang', 'langs', 'data', 'nodeTeamplate', 'hSpace', 'vSpace', 'canvasPadding', 'removingNodeTip', 'lineCurvature', 'subLineWidth', 'lineColor', 'lineOpacity', 'lineSaturation', 'lineLightness', 'nodeLineWidth', 'showToggleButton', 'readonly', 'minimap', 'toolbar', 'zoom', 'zoomMax', 'zoomMin', 'minimapHeight', 'onNodeClick', 'afterDrawLines', 'afterRender', 'onReady', 'onContextMenu'));
         return array
         (
             h::jsVar("window.$dataVarName", $options),

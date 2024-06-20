@@ -13,6 +13,16 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+/* 检查是否需要确认撤销/移除。*/
+/* Build confirmeObject. */
+if($this->config->edition == 'ipd')
+{
+    $bug = $this->loadModel('story')->getAffectObject(array(), 'bug', $bug);
+
+    if(!empty($bug->confirmeActionType)) $config->bug->actions->view['mainActions'] = array('confirmDemandRetract', 'confirmDemandUnlink');
+    if(!empty($bug->confirmeActionType)) $config->bug->actions->view['suffixActions'] = array();
+}
+
 jsVar('bugID',            $bug->id);
 jsVar('productID',        $bug->product);
 jsVar('branchID',         $bug->branch);
@@ -38,7 +48,7 @@ if(!$isInModal && $canCreateBug)
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->bug->create,
-        'url'  => createLink('bug', 'create', "productID={$product->id}")
+        'url'  => createLink('bug', 'create', "productID={$product->id}&branch={$bug->branch}&extras=moduleID={$bug->module}")
     );
 }
 
@@ -50,7 +60,8 @@ if(!$bug->deleted)
     $actions = $operateList['mainActions'];
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
 
-    $hasRepo        = $this->loadModel('repo')->getListByProduct($bug->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+    $this->loadModel('repo');
+    $hasRepo        = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);
     $isExecutionTab = $app->tab == 'execution';
     foreach($actions as $key => $action)
     {
@@ -130,7 +141,7 @@ $tabs[] = setting()
 
 detail
 (
-    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module)),
+    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module, '{confirmeObjectID}' => isset($bug->confirmeObjectID) ? $bug->confirmeObjectID : 0)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),

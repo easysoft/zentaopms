@@ -10,17 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('iconList', $config->doc->iconList);
-jsVar('draftText', $lang->doc->draft);
-jsVar('canViewDoc', common::hasPriv('doc', 'view'));
-jsVar('canCollect', common::hasPriv('doc', 'collect') && $libType && $libType != 'api');
-jsVar('currentAccount', $app->user->account);
 jsVar('spaceMethodList', $config->doc->spaceMethod);
 jsVar('myspacePriv', common::hasPriv('doc', 'myspace'));
 jsVar('productspacePriv', common::hasPriv('doc', 'productspace'));
 jsVar('projectspacePriv', common::hasPriv('doc', 'projectspace'));
 jsVar('teamspacePriv', common::hasPriv('doc', 'teamspace'));
-jsVar('currentTab', $app->tab);
 
 $cols = array();
 foreach($config->doc->dtable->fieldList as $colName => $col)
@@ -45,6 +39,13 @@ if($app->rawMethod == 'myspace')
 }
 $docContent = dtable
 (
+    setID('docTable'),
+    set::iconList($config->doc->iconList),
+    set::draftText($lang->doc->draft),
+    set::canViewDoc(common::hasPriv('doc', 'view')),
+    set::canCollect(common::hasPriv('doc', 'collect') && $libType && $libType != 'api'),
+    set::currentAccount($app->user->account),
+    set::currentTab($app->tab),
     set::userMap($users),
     set::cols($cols),
     set::data($tableData),

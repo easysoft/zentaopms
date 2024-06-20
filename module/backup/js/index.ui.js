@@ -39,7 +39,7 @@ function backupData()
     var timeID = null;
     $.ajax(
     {
-        url: $('.backup').attr('data-link'),
+        url: $.createLink('backup', 'backup', 'reload=yes'),
         success: function (data)
         {
             clearInterval(timeID);
@@ -112,3 +112,83 @@ $(document).off('click', '.modal [z-key="confirm"]').on('click', '.modal [z-key=
 {
     if(deleting) $('#main').addClass('loading');
 });
+
+window.backupInProgress = function(backupName)
+{
+    if(!inQuickon) return false;
+
+    $('.origin-action').attr('disabled', 'disabled');
+    loadTable();
+    $('#main').removeClass('loading');
+    let intervalId = setInterval(function()
+    {
+        $.get($.createLink('system', 'ajaxGetBackupProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
+        {
+            if(resp.status == 'completed' || resp.status.toLowerCase().includes('failed'))
+            {
+                loadCurrentPage();
+                clearInterval(intervalId);
+            }
+        }, 'json');
+    }, 2000);
+};
+
+window.restoreInProgress = function(backupName)
+{
+    if(!inQuickon) return false;
+
+    $('.origin-action').attr('disabled', 'disabled');
+    loadTable();
+    let intervalId = setInterval(function()
+    {
+        $.get($.createLink('system', 'ajaxGetRestoreProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
+        {
+            if(resp.status == 'completed' || resp.status.toLowerCase().includes('failed'))
+            {
+                loadCurrentPage();
+                clearInterval(intervalId);
+            }
+        }, 'json');
+
+    }, 2000);
+};
+
+window.deleteInProgress = function(backupName)
+{
+    if(!inQuickon) return false;
+
+    loadTable();
+    let intervalId = setInterval(function()
+    {
+
+        $.get($.createLink('system', 'ajaxGetDeleteProgress', 'backupName=' + backupName.replace(/-/g, '_')), function(resp)
+        {
+            if(resp.status == 'completed' || resp.status.toLowerCase().includes('failed'))
+            {
+                loadCurrentPage();
+                clearInterval(intervalId);
+            }
+        }, 'json');
+
+    }, 2000);
+}
+
+window.upgradeInProgress= function()
+{
+    if(!inQuickon) return false;
+
+    loadTable();
+    let intervalId = setInterval(function()
+    {
+
+        $.get($.createLink('system', 'ajaxGetUpgradeProgress'), function(resp)
+        {
+            if(resp.result == 'success')
+            {
+                loadCurrentPage();
+                clearInterval(intervalId);
+            }
+        }, 'json');
+
+    }, 2000);
+}
