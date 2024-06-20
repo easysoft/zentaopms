@@ -180,7 +180,7 @@ class mail extends control
         /* Reload mail config. */
         $this->loadModel('common')->loadConfigFromDB();
         $this->app->loadConfig('mail');
-        $queueList = $this->mail->getQueue('wait', 'id_asc', null, false);
+        $queueList = $this->mail->getQueue('wait', 'id_asc');
         if(isset($this->config->mail->async))$this->config->mail->async = 0;
 
         foreach($queueList as $queue)
