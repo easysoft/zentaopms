@@ -49,7 +49,7 @@ if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die(helper::removeUTF8
 /* Remove install.php and upgrade.php. */
 if(file_exists('install.php') or file_exists('upgrade.php'))
 {
-    if(!empty($config->inContainer))
+    if(!empty($config->inContainer) && !isset($_SESSION['installing']))
     {
         if(file_exists('install.php')) unlink('install.php');
         if(file_exists('upgrade.php')) unlink('upgrade.php');
