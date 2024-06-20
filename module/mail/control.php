@@ -180,7 +180,7 @@ class mail extends control
         /* Reload mail config. */
         $this->loadModel('common')->loadConfigFromDB();
         $this->app->loadConfig('mail');
-        $queueList = $this->mail->getQueue('wait', 'id_asc');
+        $queueList = $this->mail->getQueue('wait', 'id_asc', null, false);
         if(isset($this->config->mail->async))$this->config->mail->async = 0;
 
         foreach($queueList as $queue)
@@ -229,7 +229,7 @@ class mail extends control
 
         $this->view->title      = $this->lang->mail->browse;
 
-        $this->view->queueList = $this->mail->getQueue('all', $orderBy, $pager);
+        $this->view->queueList = $this->mail->getQueue('all', $orderBy, $pager, false);
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
