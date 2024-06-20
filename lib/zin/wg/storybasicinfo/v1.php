@@ -97,11 +97,18 @@ class storyBasicInfo extends wg
         );
         if(isset($story->parentName))
         {
-            $items[$lang->story->parent] = $story->parentName;
+            $items[$lang->story->parent] = array(
+                'control' => 'text',
+                'content' => $story->parentName
+            );
         }
         if($showGrade)
         {
-            $items[$lang->story->grade] = zget($gradePairs, $story->grade);
+            $items[$lang->story->grade] = array
+            (
+                'control' => 'text',
+                'content' => zget($gradePairs, $story->grade)
+            );
         }
         if(!$hiddenPlan)
         {
