@@ -182,7 +182,7 @@ $this->loadModel('repo');
 $hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
 $actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
-if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 
 foreach($actions as $key => $action)
 {
