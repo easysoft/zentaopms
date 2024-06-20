@@ -3244,7 +3244,7 @@ class storyModel extends model
 
         if($action == 'subdivide')
         {
-            if(helper::isAjaxRequest('modal') || $config->vision == 'lite') return false;
+            if(helper::isAjaxRequest('modal')) return false;
             $action = 'batchcreate';
         }
 
