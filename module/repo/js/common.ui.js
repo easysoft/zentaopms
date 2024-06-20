@@ -7,6 +7,7 @@ $(function()
     {
         $('#monacoTree .listitem').removeClass('selected');
 
+        if(!tab || !tab[tab.length - 1]) return;
         const fileKey = tab[tab.length - 1].substring(5).replace(/-/g, '=');
         $('li[z-key="' + fileKey + '"] .listitem').addClass('selected');
     });
