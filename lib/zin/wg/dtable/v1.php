@@ -323,8 +323,8 @@ class dtable extends wg
             $url = $setting['url'];
             if(!empty($url['module']) && !empty($url['method']))
             {
-                $setting['url'] = '';
-                if(hasPriv($url['module'], $url['method'])) $setting['url'] = createLink($url['module'], $url['method'], zget($url, 'params', ''), '', !empty($setting['onlybody']));
+                if(!hasPriv($url['module'], $url['method'])) return '';
+                $setting['url'] = createLink($url['module'], $url['method'], zget($url, 'params', ''), '', !empty($setting['onlybody']));
             }
             return $setting;
         }
