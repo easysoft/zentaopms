@@ -292,8 +292,10 @@ class cron extends control
      */
     public function schedule(int $execId)
     {
-        $this->loadModel('common');
+        if(empty($this->config->global->cron)) return;
 
+        $this->dao->clearCache();
+        $this->loadModel('common');
         $this->cron->updateTime('scheduler', $execId);
 
         /* Get and parse crons. */
@@ -367,6 +369,7 @@ class cron extends control
     public function consumeTask(int $execId, object $task)
     {
         /* Other executor may execute the task at the same time，so we mark execId and wait 500ms to check whether we own it. */
+        $this->dao->clearCache();
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('doing')->set('execId')->eq($execId)->where('id')->eq($task->id)->exec();
         usleep(500);
 

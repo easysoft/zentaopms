@@ -194,7 +194,7 @@ class messageModel extends model
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
         if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
-        if(empty($toList) and $objectType == 'feedback') $toList = $object->openedBy;
+        if(empty($toList) and $objectType == 'feedback')   $toList = $object->openedBy;
         if(empty($toList) && $objectType == 'release')
         {
             /* Get notifiy persons. */
@@ -216,7 +216,7 @@ class messageModel extends model
         {
             $action = $this->loadModel('action')->getById($actionID);
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
-            $toList = $toList . $ccList;
+            $toList .= ',' . $ccList;
         }
 
         if($objectType == 'testtask')
@@ -238,7 +238,7 @@ class messageModel extends model
             $toList = trim($toList, ',');
         }
 
-        return $toList;
+        return trim($toList, ',');
     }
 
     /**
