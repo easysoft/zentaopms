@@ -60,6 +60,7 @@ $lang->dataview->multilingual   = '切换系统语言项后，将显示对应名
 $lang->dataview->duplicateField = '存在重复的字段名： <strong>%s</strong>。建议您：（1）修改 <strong>*</strong> 查询为具体的字段。（2）使用 <strong>as</strong> 为字段设置别名。';
 $lang->dataview->errorField     = '当前字段<strong>%s</strong>存在非法字符,[as] 别名仅支持中英文、数字及下划线的组合。';
 $lang->dataview->queryFilterTip = '查询筛选器是通过在 SQL 中插入变量实现动态查询的筛选方式，第三步配置的结果筛选器是对SQL查询结果进行进一步筛选。';
+$lang->dataview->consumed       = '消耗工时';
 
 $lang->dataview->varFilter = new stdclass();
 $lang->dataview->varFilter->varCode     = '变量代号';

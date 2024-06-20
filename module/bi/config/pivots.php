@@ -1564,7 +1564,7 @@ EOT,
     'fields'    => array
     (
         'account'  => array('object' => 'effort', 'field' => 'account', 'type' => 'user', 'name' => 'account'),
-        'consumed' => array('object' => 'effort', 'field' => 'consumed', 'type' => 'object', 'name' => 'consumed'),
+        'consumed' => array('object' => 'effort', 'field' => 'consumed', 'type' => 'number', 'name' => 'consumed'),
         'date'     => array('object' => 'effort', 'field' => 'date', 'type' => 'object', 'name' => 'date'),
         'dept'     => array('object' => 'effort', 'field' => 'dept', 'type' => 'object', 'name' => 'dept')
     ),
