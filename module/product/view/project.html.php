@@ -22,7 +22,7 @@
   </div>
   <?php if($branchStatus != 'closed'):?>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('project', 'manageProducts')) echo html::a('#link2Project', '<i class="icon-link"></i> ' . $lang->product->link2Project, '', "data-toggle='modal' class='btn btn-secondary'");?>
+    <?php if(common::hasPriv('project', 'manageProducts')) echo html::a('#link2Project', '<i class="icon-link"></i> ' . $lang->product->link2Project, '', "class='btn btn-secondary'");?>
     <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
   </div>
   <?php endif;?>

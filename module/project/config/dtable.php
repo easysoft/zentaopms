@@ -401,7 +401,7 @@ $config->project->dtable->testtask->fieldList['product']['title'] = $lang->testt
 $config->project->dtable->testtask->fieldList['product']['type']  = 'text';
 $config->project->dtable->testtask->fieldList['product']['group'] = '1';
 
-$config->project->dtable->testtask->fieldList['id']['name']     = 'id';
+$config->project->dtable->testtask->fieldList['id']['name']     = 'idName';
 $config->project->dtable->testtask->fieldList['id']['title']    = $lang->idAB;
 $config->project->dtable->testtask->fieldList['id']['type']     = 'id';
 $config->project->dtable->testtask->fieldList['id']['checkbox'] = true;

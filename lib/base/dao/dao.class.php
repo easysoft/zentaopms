@@ -183,6 +183,15 @@ class baseDAO
     static public $realTimeFile = '';
 
     /**
+     * 缓存已经查询过的表结构。
+     * Cache desc tables.
+     *
+     * @var array
+     * @access public
+     */
+    public static $tablesDesc = array();
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -203,7 +212,7 @@ class baseDAO
             $app->loadClass('cache', true);
             try
             {
-                $this->cache = new cache($config->cache->dao->driver, 'dao-', $config->cache->dao->lifetime);
+                $this->cache = new cache($config->cache->dao->driver, $config->db->name . '-dao-', $config->cache->dao->lifetime);
             }
             catch (Exception $e)
             {
@@ -375,6 +384,30 @@ class baseDAO
     }
 
     /**
+     * 检查 sql 语句中是否包含表名，如果包含则设置表的缓存时间。
+     * Check if the sql contains the table name, if contains, set the table cache time.
+     *
+     * @param  string $sql
+     * @access public
+     * @return void
+     */
+    public function setTableCache($sql)
+    {
+        /* 查找 sql 语句中包含的表名。*/
+        /* Find the table names in the sql. */
+        preg_match_all("/({$this->config->db->prefix}\w+)[`\" ]/", $sql, $tables);
+        if(!isset($tables[1])) return;
+
+        foreach($tables[1] as $table)
+        {
+            /* 更新表的缓存时间。*/
+            /* Update the table cache time. */
+            $table = str_replace(array('`', '"'), '', $table);
+            $this->setCache($table);
+        }
+    }
+
+    /**
      * 清除缓存。
      * Clear the cache.
      *
@@ -461,6 +494,17 @@ class baseDAO
     }
 
     /**
+     * Clear the cache of tables desc fields.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearTablesDescCache()
+    {
+        dao::$tablesDesc = array();
+    }
+
+    /**
      * Desc table, show fields.
      *
      * @param  string $tableName
@@ -469,8 +513,7 @@ class baseDAO
      */
     public function descTable($tableName)
     {
-        static $tablesDesc = array();
-        if(isset($tablesDesc[$tableName])) return $tablesDesc[$tableName];
+        if(isset(dao::$tablesDesc[$tableName])) return dao::$tablesDesc[$tableName];
 
         $dbh = $this->slaveDBH ? $this->slaveDBH : $this->dbh;
         $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
@@ -478,7 +521,7 @@ class baseDAO
         $fields = array();
         $stmt   = $dbh->rawQuery("DESC $tableName");
         while($field = $stmt->fetch()) $fields[$field->field] = $field;
-        $tablesDesc[$tableName] = $fields;
+        dao::$tablesDesc[$tableName] = $fields;
 
         $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
@@ -995,8 +1038,6 @@ class baseDAO
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
-            $table = $this->table;
-
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
@@ -1004,13 +1045,7 @@ class baseDAO
 
             $result = $this->dbh->exec($sql);
 
-            if($table)
-            {
-                /* 更新表的缓存时间。*/
-                /* Update the table cache time. */
-                $table = str_replace(array('`', '"'), '', $table);
-                $this->setCache($table);
-            }
+            $this->setTableCache($sql);
 
             return $result;
         }
@@ -1511,7 +1546,7 @@ class baseDAO
             $message = '';
             foreach($errors as $item)
             {
-                is_array($item) ? $message .= implode('\n', $item) . '\n' : $message .= $item . '\n';
+                is_array($item) ? $message .= implode('\n', $item) . "\n" : $message .= $item . "\n";
             }
             return $message;
         }

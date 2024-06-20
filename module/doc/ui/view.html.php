@@ -12,40 +12,56 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-featureBar
-(
-    li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
-);
+jsVar('docID', $docID);
 
-if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
-include 'lefttree.html.php';
+if(!isInModal())
+{
+    featureBar
+    (
+        li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
+    );
 
-toolbar
-(
-    $canExport ? item(set(array
+    if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
+    include 'lefttree.html.php';
+
+    toolbar
     (
-        'id'     => $exportMethod,
-        'icon'   => 'export',
-        'target' => '_self',
-        'class'  => 'ghost export',
-        'text'   => $lang->export,
-        'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
-    ))) : null,
-    common::hasPriv('doc', 'createLib') ? item(set(array
-    (
-        'icon'        => 'plus',
-        'class'       => 'btn secondary',
-        'text'        => $lang->doc->createLib,
-        'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    $libID && common::hasPriv('doc', 'create') ? $createButton : null
-);
+        $canExport ? item(set(array
+        (
+            'id'     => $exportMethod,
+            'icon'   => 'export',
+            'target' => '_self',
+            'class'  => 'ghost export',
+            'text'   => $lang->export,
+            'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
+        ))) : null,
+        common::hasPriv('doc', 'createLib') ? item(set(array
+        (
+            'icon'        => 'plus',
+            'class'       => 'btn secondary',
+            'text'        => $lang->doc->createLib,
+            'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
+            'data-toggle' => 'modal'
+        ))) : null,
+        $libID && common::hasPriv('doc', 'create') ? $createButton : null
+    );
+}
 
 $versionList = array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'active' => $itemVersion == $version);
+    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
+}
+
+$menuOptions = array();
+if($config->edition != 'open' && common::hasPriv('doc', 'diff'))
+{
+    $menuOptions['header']       = jsRaw('window.getVersionHeader');
+    $menuOptions['footer']       = jsRaw('window.getVersionFooter');
+    $menuOptions['getItem']      = jsRaw('window.getDropdownItem');
+    $menuOptions['onClickItem']  = jsRaw('window.onClickDropdownItem');
+    $menuOptions['width']        = 200;
+    $menuOptions['checkOnClick'] = '.has-checkbox .item';
 }
 
 $star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
@@ -112,13 +128,13 @@ if(!empty($editors))
     (
         btn
         (
-            setClass('ghost btn square btn-default'),
+            setClass('ghost btn btn-default'),
             $editorInfo
         ),
         set::items($items)
     ) : btn
     (
-        setClass('ghost btn square btn-default'),
+        setClass('ghost btn btn-default'),
         $editorInfo
     );
 }
@@ -146,7 +162,8 @@ $contentDom = div
                     setClass('ghost btn square btn-default selelct-version inline-flex ml-1'),
                     span(setClass('pl-1'), 'V' . ($version ? $version : $doc->version))
                 ),
-                set::items($versionList)
+                set::items($versionList),
+                set::menu($menuOptions)
             ) : null
         ),
         $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
@@ -170,8 +187,7 @@ $contentDom = div
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
                     $doc->type != 'text' ? setData('toggle', 'modal') : null,
                     setClass('btn ghost'),
-                    icon('edit'),
-                    setData('app', $app->tab)
+                    icon('edit')
                 ) : null,
                 common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
                 (
@@ -237,6 +253,7 @@ $contentDom = div
     ),
     div
     (
+        setID('diffContain'),
         setClass('detail-content article'),
         $doc->contentType == 'markdown' ? editor
         (
@@ -253,6 +270,8 @@ $contentDom = div
         $doc->files ? h::hr(setClass('mt-4')) : null,
         $doc->files ? fileList
         (
+            set::objectType('doc'),
+            set::objectID($doc->id),
             set::files($doc->files)
         ) : null
     )

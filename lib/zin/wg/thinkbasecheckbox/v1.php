@@ -115,20 +115,19 @@ class thinkBaseCheckbox extends wg
         if(!empty($items))
         {
             $valueList = $this->getValueList();
-            $letters   = range('A', 'Z');
             foreach($items as $key => $item)
             {
-                $index = $key;
-                do
+                $prefix = '';
+                $index  = $key;
+                while($index >= 0)
                 {
-                    $remainder = $index % 26;
-                    $text      = $letters[$remainder];
-                    $index     = floor($index / 26) - 1;
-                } while ($index >= 0);
+                    $prefix = chr(65 + ($index % 26)) . $prefix;
+                    $index  = floor($index / 26) - 1;
+                }
 
-                if(!is_array($item))         $item = array('text' => ($text . '. ' . $item), 'value' => $key);
+                if(!is_array($item))         $item = array('text' => $item, 'value' => $key);
                 if(!isset($item['checked'])) $item['checked'] = !empty($item['value']) && in_array($item['value'], $valueList);
-                $item['text'] = $text . '. ' . $item['text'];
+                $item['text'] = $prefix . '. ' . $item['text'];
                 $items[$key]  = $this->onBuildItem($item);
             }
         }

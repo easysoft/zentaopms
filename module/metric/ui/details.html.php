@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('calcTitleList', $lang->metric->calcTitleList);
+
 $buildItems = function($items): array
 {
     $itemList = array();

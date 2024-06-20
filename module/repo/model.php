@@ -220,32 +220,27 @@ class repoModel extends model
             return false;
         }
 
-        $server = $this->loadModel('pipeline')->getByID($repo->serviceHost);
+        $response = $this->createGitlabRepo($repo, $repo->namespace);
 
-        $method   = $server->type == 'gitlab' ? 'createGitlabRepo' : 'createGitFoxRepo';
-        $response = $this->$method($repo, $repo->namespace);
-
-        $this->loadModel($server->type);
-
+        $this->loadModel('gitlab');
         if(!empty($response->id))
         {
             $repo->path           = $response->path;
             $repo->serviceProject = $response->serviceProject;
             $repo->extra          = $response->extra;
-            $repo->SCM            = $server->type == 'gitlab' ? 'Gitlab' : 'GitFox';
+            $repo->SCM            = 'Gitlab';
 
             unset($repo->namespace);
             $repoID = $this->create($repo, false);
             if(dao::isError())
             {
-                $deleteMethod = $server->type == 'gitlab' ? 'apiDeleteProject' : 'apiDeleteRepo';
-                $this->{$server->type}->$deleteMethod($repo->serviceHost, $response->id);
+                $this->gitlab->apiDeleteProject($repo->serviceHost, $response->id);
                 return false;
             }
             return $repoID;
         }
 
-        return $this->{$server->type}->apiErrorHandling($response);
+        return $this->gitlab->apiErrorHandling($response);
     }
 
     /**
@@ -280,57 +275,28 @@ class repoModel extends model
     }
 
     /**
-     * 创建gitfox远程版本库。
-     * Create gitfox repo.
-     *
-     * @param  object $repo
-     * @param  int    $namespace
-     * @access public
-     * @return object|false
-     */
-    public function createGitFoxRepo(object $repo, string $namespace): object|false
-    {
-        $project = new stdclass();
-        $project->identifier  = $repo->name;
-        $project->description = $repo->desc;
-        $project->parent_ref  = (string)$namespace;
-        $project->readme      = true;
-
-        $response = $this->loadModel('gitfox')->apiCreateRepo($repo->serviceHost, $project);
-
-        if(empty($response->id)) return $response;
-
-        $result = new stdclass();
-        $result->id             = $response->id;
-        $result->path           = $response->git_url;
-        $result->serviceProject = $response->id;
-        $result->extra          = $response->id;
-
-        return $result;
-    }
-
-    /**
      * 批量创建版本库。
      * Batch create repos.
      *
      * @param  array  $repos
+     * @param  int    $serviceHost
+     * @param  string $scm
      * @access public
      * @return bool
      */
-    public function batchCreate(array $repos, int $serviceHost): bool
+    public function batchCreate(array $repos, int $serviceHost, string $scm): bool
     {
-        foreach($repos as $data)
+        foreach($repos as $index => $repo)
         {
-            $repo = new stdclass();
-            $repo->serviceHost    = $serviceHost;
-            $repo->serviceProject = $data['serviceProject'];
-            $repo->product        = $data['product'];
-            $repo->name           = isset($data['name']) ? $data['name'] : $data['identifier'];
-            $repo->projects       = $data['projects'];
-            $repo->SCM            = isset($data['name']) ? 'Gitlab' : 'GitFox';
-            $repo->encoding       = 'utf-8';
-            $repo->encrypt        = 'base64';
-            $repo->acl            = '{"acl":"open","groups":[""],"users":[""]}';
+            if(empty($repo->product)) continue;
+            if(empty($repo->name))
+            {
+                dao::$errors["name[$index]"] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+                return false;
+            }
+
+            $repo->serviceHost = $serviceHost;
+            $repo->SCM         = $scm;
 
             $this->dao->insert(TABLE_REPO)->data($repo)
                 ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
@@ -2343,38 +2309,6 @@ class repoModel extends model
     }
 
     /**
-     * 获取gitfox项目列表。
-     * Get gitfox projects.
-     *
-     * @param  int    $gitfoxID
-     * @param  string $projectFilter
-     * @access public
-     * @return array
-     */
-    public function getGitfoxProjects(int $gitfoxID, string $projectFilter = ''): array
-    {
-        if($this->app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create')))
-        {
-            $projects = $this->loadModel('gitfox')->apiGetRepos($gitfoxID);
-        }
-        else
-        {
-            $gitfoxUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitfoxID, 'gitfox', $this->app->user->account);
-            if(!$gitfoxUser) return array();
-
-            $projects    = $this->loadModel('gitfox')->apiGetRepos($gitfoxID, $projectFilter);
-            $groupIDList = array(0 => 0);
-            $groups      = $this->gitfox->apiGetGroups($gitfoxID, 'name_asc');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-        }
-
-        $importedProjects = $this->getImportedProjects($gitfoxID);
-        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
-
-        return $projects;
-    }
-
-    /**
      * Get repo groups.
      *
      * @param  int    $serverID
@@ -2416,24 +2350,6 @@ class repoModel extends model
         foreach($groups as $group)
         {
             $options[] = array('text' => $group->name, 'value' => $group->id);
-        }
-        return $options;
-    }
-
-    /**
-     * Get gitfox groups.
-     *
-     * @param  int    $gitfoxID
-     * @access public
-     * @return void
-     */
-    public function getGitFoxGroups(int $gitfoxID): array
-    {
-        $groups = $this->loadModel('gitfox')->apiGetGroups($gitfoxID, 'identifier_asc');
-        $options = array();
-        foreach($groups as $group)
-        {
-            $options[] = array('text' => $group->identifier, 'value' => $group->id);
         }
         return $options;
     }

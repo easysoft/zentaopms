@@ -13,11 +13,3 @@ window.saveMode = function(obj)
         zui.Modal.confirm({message: changeModeTips, icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: $.createLink('custom', 'mode'), data: formData});});
     }
 };
-
-window.submitMode = function()
-{
-    const formData = new FormData();
-    formData.append('mode', $('[name=mode]').val());
-    formData.append('program', $('[name=program]').val());
-    $.ajaxSubmit({url: $.createLink('custom', 'mode'), data: formData});
-};

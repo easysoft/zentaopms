@@ -569,6 +569,8 @@ class extensionModel extends model
             try
             {
                 $this->dbh->query($sql);
+
+                $this->dao->setTableCache($sql);
             }
             catch(PDOException $e)
             {

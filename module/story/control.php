@@ -350,6 +350,8 @@ class story extends control
         $this->story->replaceURLang($storyType);
         $this->storyZen->setMenuForBatchEdit($productID, $executionID, $storyType, $from);
 
+        if($this->config->vision != 'or') unset($this->config->story->form->batchEdit['roadmap']);
+
         /* Load model. */
         $this->loadModel('productplan');
         if($this->post->title)
@@ -360,7 +362,7 @@ class story extends control
             $this->story->batchUpdate($stories);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => array('back' => true)));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
         }
 
         $stories = $this->storyZen->getStoriesByChecked();
@@ -509,7 +511,14 @@ class story extends control
         $product = $this->product->getByID((int)$story->product);
 
         if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
-        if(!$story || (isset($story->type) && $story->type != $storyType)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'index'))));
+
+        if(!$story || (isset($story->type) && $story->type != $storyType))
+        {
+            $locateModule = $this->config->vision == 'lite' ? 'project' : 'product';
+            $locateMethod = ($this->config->edition == 'ipd' && $this->config->vision == 'or') ? 'browse' : 'index';
+            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink($locateModule, $locateMethod))));
+        }
+
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return $this->send(array('result' => 'success', 'message' => $this->lang->product->accessDenied, 'load' => array('back' => true)));
 
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
@@ -1838,6 +1847,12 @@ class story extends control
             $postData = form::data($this->config->transfer->form->export)->get();
 
             $this->session->set("{$storyType}TransferParams", array('productID' => $productID, 'executionID' => $executionID));
+
+            /* 给评审过的人员添加下拉选择，方便再次导入时转换成待评审人员。*/
+            /* Add a drop-down selection to the reviewer to facilitate the conversion to the reviewer during import. */
+            $this->config->story->dtable->fieldList['reviewedBy']['control']    = 'multiple';
+            $this->config->story->dtable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getProductReviewers', 'params' => array('productID' => (int)$productID));
+
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {
@@ -1848,9 +1863,10 @@ class story extends control
                 $this->config->story->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
                 $this->config->story->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
 
-                $productIdList = implode(',', array_flip($this->session->exportProductList));
+                $products      = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+                $productIdList = array_keys($products);
 
-                $this->config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
+                $this->config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => array($productIdList));
             }
 
             $this->post->set('rows', $this->story->getExportStories($orderBy, $storyType, $postData));
@@ -2025,12 +2041,7 @@ class story extends control
 
         if(empty($story->twins)) return $this->send(array('result' => 'fail'));
 
-        /* Batch unset twinID from twins for the story by the product. */
-        $replaceSql = "UPDATE " . TABLE_STORY . " SET twins = REPLACE(twins,',$twinID,', ',') WHERE `product` = $story->product";
-        $this->dbh->exec($replaceSql);
-
-        /* Update twins to empty by twinID and if twins eq ','. */
-        $this->dao->update(TABLE_STORY)->set('twins')->eq('')->where('id')->eq($twinID)->orWhere('twins')->eq(',')->exec();
+        $this->story->relieveTwins($story->product, $twinID);
 
         if(!dao::isError()) $this->loadModel('action')->create('story', (int)$twinID, 'relieved');
         return $this->send(array('result' => 'success', 'twinsCount' => count($twins)-1));
@@ -2050,10 +2061,11 @@ class story extends control
         $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
         $items = array();
-        foreach($stories as $storyID => $storyTitle)
+        foreach($stories as $id => $storyTitle)
         {
-            if(empty($storyID)) continue;
-            $items[] = array('text' => $storyTitle, 'value' => $storyID, 'keys' => $storyTitle);
+            if(empty($id)) continue;
+            if($id == $storyID) continue;
+            $items[] = array('text' => $storyTitle, 'value' => $id, 'keys' => $storyTitle);
         }
         return print(json_encode($items));
     }

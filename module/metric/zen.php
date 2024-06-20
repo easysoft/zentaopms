@@ -182,15 +182,11 @@ class metricZen extends metric
     {
         foreach($classifiedCalcGroup as $calcGroup)
         {
-            if($this->config->edition == 'open' && in_array($calcGroup->dataset, array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks', 'getDemands'))) continue;
-            if($this->config->edition == 'biz'  && in_array($calcGroup->dataset, array('getIssues', 'getRisks', 'getDemands'))) continue;
-
             try
             {
                 $statement = $this->prepareDataset($calcGroup);
 
-                $rows = !empty($statement) ? $statement->fetchAll() : array();
-                $this->calcMetric($rows, $calcGroup->calcList);
+                $this->calcMetric($statement, $calcGroup->calcList);
 
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
                 $this->metric->insertMetricLib($recordWithCode);
@@ -414,13 +410,17 @@ class metricZen extends metric
      * @access protected
      * @return void
      */
-    protected function calcMetric($rows, $calcList)
+    protected function calcMetric($statement, $calcList)
     {
-        foreach($calcList as $code => $calc)
+        if(empty($statement)) return;
+
+        $statement = $statement->query();
+
+        while($row = $statement->fetch())
         {
-            if(!$calc->reuse)
+            foreach($calcList as $code => $calc)
             {
-                foreach($rows as $row)
+                if(!$calc->reuse)
                 {
                     $record = $this->getCalcFields($calc, $row);
                     $calc->calculate($record);

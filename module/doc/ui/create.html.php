@@ -17,14 +17,14 @@ if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false)
     set::title($lang->doc->create);
     if($this->config->edition != 'open')
     {
+        $setOfficeLink = common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice') : '###';
+        $officeNotice  = sprintf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), $setOfficeLink);
+        if(!empty($config->file->libreOfficeTurnon) and $config->file->convertType != 'collabora') $officeNotice = sprintf($lang->doc->notSetCollabora, zget($lang->doc->typeList, $docType), $setOfficeLink);
+        if($config->requestType != 'PATH_INFO') $officeNotice = $lang->doc->requestTypeError;
         div
         (
             setClass('alert warning-pale bd bd-warning'),
-            html
-            (
-                sprintf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType),
-                common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice') : '###')
-            )
+            html($officeNotice)
         );
     }
     else

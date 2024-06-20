@@ -49,6 +49,7 @@ if($execution->type == 'kanban')
     unset($fieldList['actions']['list']['createTest']['data-app']);
     $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['bugList']['url'];
 }
+if(!common::canModify('execution', $execution)) unset($fieldList['actions']['list']['createTest']);
 $builds = initTableData($builds, $fieldList, $this->build);
 
 dtable

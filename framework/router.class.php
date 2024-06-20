@@ -153,6 +153,8 @@ class router extends baseRouter
             }
         }
 
+        if($moduleName == 'common' && $this->config->edition != 'open') $this->mergeFlowLang();
+
         /* Merge from the db lang. */
         if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
         {
@@ -205,6 +207,26 @@ class router extends baseRouter
         }
 
         return $lang;
+    }
+
+    /**
+     * Merge workflow mainNav Lang.
+     *
+     * @access public
+     * @return void
+     */
+    public function mergeFlowLang()
+    {
+        if(!$this->checkInstalled() || !$this->isServing()) return;
+
+	    /* 12版本升级到付费版时，workflow表不存在。 */
+	    /* When upgrading from version 12 to the paid version, the workflow table does not exist. */
+        try
+        {
+            $flows = $this->dbQuery('SELECT * FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow' AND `navigator` = 'primary'")->fetchAll();
+            foreach($flows as $flow) $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
+        }
+        catch(PDOException){}
     }
 
     /**

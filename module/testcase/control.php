@@ -263,7 +263,7 @@ class testcase extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->testcaseZen->afterCreate($case, $caseID);
-            return $this->testcaseZen->responseAfterCreate($caseID);
+            return $this->testcaseZen->responseAfterCreate($caseID, $moduleID);
         }
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -317,6 +317,7 @@ class testcase extends control
             foreach($testcases as $testcase)
             {
                 $testcaseID = $this->testcase->create($testcase);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 $this->executeHooks($testcaseID);
                 $this->testcase->syncCase2Project($testcase, $testcaseID);
             }
@@ -1023,8 +1024,8 @@ class testcase extends control
 
         if($taskID)
         {
-            unset($this->lang->exportTypeList['selected']);
-            $taskName = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch('name');
+            $task     = $this->loadModel('testtask')->fetchByID($taskID);
+            $taskName = $task->name;
         }
 
         $this->view->fileName        = $product->name . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;

@@ -110,6 +110,7 @@ class block extends control
         $this->view->longBlock      = $block->width >= 2;
         $this->view->isExternalCall = $this->blockZen->isExternalCall();
         $this->view->params         = $params;
+        $this->view->metricTime     = $this->dao->select('lastTime')->from(TABLE_CRON)->where('command')->eq('moduleName=metric&methodName=updateMetricLib')->fetch('lastTime');
 
         /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */
         $viewType = (isset($block->params->viewType) && $block->params->viewType == 'json') ? 'json' : 'html';

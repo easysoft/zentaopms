@@ -152,7 +152,7 @@ class testtaskModel extends model
      */
     public function getProjectTasks(int $projectID, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $tasks = $this->dao->select('t1.*, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName')
+        $tasks = $this->dao->select('t1.*, t1.id as idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.order as productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
@@ -161,7 +161,7 @@ class testtaskModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)
+            ->orderBy('productOrder_asc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id');
 
@@ -1210,10 +1210,11 @@ class testtaskModel extends model
      * @param  int    $caseID
      * @param  int    $version
      * @param  array  $stepResults
+     * @param  int    $deployID
      * @access public
      * @return bool|string
      */
-    public function createResult(int $runID, int $caseID, int $version, array $stepResults): bool|string
+    public function createResult(int $runID, int $caseID, int $version, array $stepResults, int $deployID = 0): bool|string
     {
         /* 根据测试用例步骤的执行结果获取测试用例的执行结果。*/
         /* Get the execution results of the test case based on the execution results of the test case steps. */
@@ -1239,6 +1240,7 @@ class testtaskModel extends model
         $result->stepResults = serialize($stepResults);
         $result->lastRunner  = $this->app->user->account;
         $result->date        = $now;
+        $result->deploy      = $deployID;
         $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
         if(dao::isError()) return false;
 
@@ -1394,16 +1396,18 @@ class testtaskModel extends model
      * @param  int    $caseID
      * @param  string $status all|done
      * @param  string $type   all|fail
+     * @param  int    $deployID
      * @access public
      * @return void
      */
-    public function getResults(int $runID, int $caseID = 0, string $status = 'all', string $type = 'all'): array
+    public function getResults(int $runID, int $caseID = 0, string $status = 'all', string $type = 'all', int $deployID = 0): array
     {
         $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
             ->beginIF($runID > 0)->where('run')->eq($runID)->fi()
             ->beginIF($runID <= 0)->where('`case`')->eq($caseID)->fi()
             ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
             ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
+            ->beginIF($deployID)->andWhere('deploy')->eq($deployID)->fi()
             ->orderBy('id desc')
             ->fetchAll('id');
         if(!$results) return array();
@@ -1615,13 +1619,8 @@ class testtaskModel extends model
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
-
-        if($action == 'runcase')
-        {
-            if(isset($testtask->auto) && $testtask->auto == 'unit')  return false;
-            if(isset($testtask->caseStatus)) return $testtask->caseStatus != 'wait';
-            return $testtask->status != 'wait';
-        }
+        if($action == 'ztfrun')   return $testtask->auto == 'auto';
+        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && $testtask->auto == 'no' && $testtask->status != 'wait';
 
         return true;
     }

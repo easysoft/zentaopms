@@ -47,9 +47,9 @@ class thinkCover extends wg
                     div
                     (
                         setClass('text-md text-black leading-6.5'),
-                        $lang->thinkwizard->run->expect,
+                        $lang->thinkwizard->expect,
                         $item->duration,
-                        $lang->thinkwizard->run->minTime
+                        $lang->thinkwizard->minute
                     )
                 ),
                 div
@@ -76,7 +76,7 @@ class thinkCover extends wg
             (
                 setClass('btn primary px-8 py-2'),
                 set::href($actionUrl),
-                $lang->thinkwizard->run->start
+                $lang->thinkwizard->start
             )
         );
     }

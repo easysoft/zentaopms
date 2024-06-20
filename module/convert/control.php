@@ -330,12 +330,15 @@ class convert extends control
 
         if($method == 'db')
         {
+            $originDBH = $this->dbh;
             $dbh = $this->convert->connectDB($dbName);
 
             $issueTypeList  = $this->dao->dbh($dbh)->select('*')->from(JIRA_ISSUETYPE)->fetchAll('ID');
             $linkTypeList   = $this->dao->dbh($dbh)->select('*, LINKNAME as linkname')->from(JIRA_ISSUELINKTYPE)->fetchAll('ID');
             $resolutionList = $this->dao->dbh($dbh)->select('*')->from(JIRA_RESOLUTION)->fetchAll('ID');
             $statusList     = $this->dao->dbh($dbh)->select('*')->from(JIRA_ISSUESTATUS)->fetchAll('ID');
+
+            $this->dao->dbh($originDBH);
         }
         else
         {

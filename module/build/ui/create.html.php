@@ -16,7 +16,6 @@ jsVar('multipleSelect', $lang->build->placeholder->multipleSelect);
 jsVar('autoRelationTip', $lang->build->notice->autoRelation);
 jsVar('projectID', $projectID);
 jsVar('executionID', $executionID);
-jsVar('artifactRepos', !empty($artifactRepos) ? $artifactRepos : '');
 jsVar('today', helper::today());
 jsVar('projectModel', isset($project->model) ? $project->model : '');
 
@@ -130,7 +129,6 @@ formPanel
             )
         )
     ),
-    !empty($artifactRepoRow) ? $artifactRepoRow : null,
     formRow
     (
         setClass('hidden'),

@@ -59,6 +59,24 @@ $monthCreated = !empty($product) ? $product->monthCreated : array();
 
 statisticBlock
 (
+    to::titleSuffix
+    (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        )
+    ),
     set::block($block),
     set::active($active),
     set::moreLink(createLink('product', 'all', 'browseType=' . $block->params->type)),

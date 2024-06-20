@@ -9,7 +9,6 @@ $('#teamTable').on('click.team', '.btn-add', function()
 
     $newRow.find('input').val('');
     $newRow.find('[name^=teamConsumed]').val(0);
-    $newRow.find('.required').removeClass('required');
     $(this).closest('tr').after($newRow);
 
     toggleBtn();
@@ -60,6 +59,11 @@ $('#teamTable').on('click.team', '.btn-delete', function()
 $('#teamTable').on('change.team', '.picker-select', function()
 {
     disableMembers();
+});
+
+$('#teamTable').on('click', "[data-type='add']", function()
+{
+    setTimeout(function(){disableMembers()}, 300);
 });
 
 /* 切换串行/并行 展示/隐藏工序图标. */
@@ -177,8 +181,6 @@ function disableMembers()
 
 $('#teamTable').on('change.team', '.picker-box [name^=team]', function()
 {
-    $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
-
     disableMembers();
 })
 

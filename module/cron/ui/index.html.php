@@ -28,8 +28,9 @@ foreach($crons as $cron)
 
 panel
 (
-    set::title($lang->cron->list),
-    set::bodyClass('p-0'),
+    !empty($config->global->cron) ? set::title($lang->cron->list) : null,
+    !empty($config->global->cron) ? null : setClass('leading-loose m-auto mt-0 mb-0 w-2/4'),
+    !empty($config->global->cron) ? set::bodyClass('p-0') : null,
     !empty($config->global->cron) ? set::headingActions(array
     (
         array('class' => 'mr-3 ajaxRefresh', 'data-href' => inlink('ajaxExec', 'restart=1'), 'text' => $lang->cron->openProcess, 'onclick' => 'refreshURL(this)'),

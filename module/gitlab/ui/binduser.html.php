@@ -55,7 +55,7 @@ form
                 array(
                     'text'    => $lang->goback,
                     'btnType' => 'info',
-                    'back'    => true
+                    'back'    => jsRaw('() => {goBack()}')
                  )
             )
         ))

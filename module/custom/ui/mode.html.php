@@ -75,13 +75,13 @@ formPanel
                     $mode == 'light' ? set::title($currentModeTips) : null,
                     btn
                     (
-                        setID('useLight'), 
-                        setClass('primary wide'), 
-                        set('data-mode', 'light'), 
-                        $mode != 'light' && empty($programs) ? null : set('data-toggle', 'modal'), 
-                        $mode != 'light' && empty($programs) ? null : set('data-target', '#selectProgramModal'), 
-                        $mode == 'light' ? set('disabled', true) : null, 
-                        set('onclick', 'saveMode(this)'), 
+                        setID('useLight'),
+                        setClass('primary wide'),
+                        set('data-mode', 'light'),
+                        $mode != 'light' && empty($programs) ? null : set('data-toggle', 'modal'),
+                        $mode != 'light' && empty($programs) ? null : set('data-target', '#selectProgramModal'),
+                        $mode == 'light' ? set('disabled', true) : null,
+                        set('onclick', 'saveMode(this)'),
                         $lang->custom->useLight
                     )
                 ),
@@ -105,7 +105,8 @@ modal
     (
         div(setClass('alert secondary-pale'), $lang->custom->selectProgramTips),
         formGroup(set::label($lang->custom->defaultProgram), picker(setID('program'), set::name('program'), set::items($programs), set::value(!empty($programs) ? $programID : ''), set::required(true))),
-        set::actions(array(array('text' => $lang->save, 'class' => 'primary btn-save', 'onclick' => 'submitMode(this)')))
+        formHidden('mode', 'light'),
+        set::actions(array('submit'))
     )
 );
 

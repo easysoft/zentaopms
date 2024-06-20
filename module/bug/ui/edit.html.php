@@ -18,7 +18,7 @@ jsVar('confirmChangeProduct',  $lang->bug->notice->confirmChangeProduct);
 jsVar('moduleID',              $bug->module);
 jsVar('tab',                   $this->app->tab);
 jsVar('released',              $lang->build->released);
-jsVar('confirmUnlinkBuild',    sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+jsVar('confirmUnlinkBuild',    sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuildPairs, $bug->resolvedBuild)));
 jsVar('projectExecutionPairs', $projectExecutionPairs);
 jsVar('edition',               $config->edition);
 

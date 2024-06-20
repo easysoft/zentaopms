@@ -100,7 +100,7 @@ zentaoxx:
 	cp -r extension/xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
 	cp -r extension/xuanxuan/www/* zentaoxx/www/
 	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
-	rm -rf zentaoxx/www/data/xuanxuan/web/node_modules zentaoxx/www/data/xuanxuan/web/*.json zentaoxx/www/data/xuanxuan/web/resources zentaoxx/www/data/xuanxuan/web/media/img zentaoxx/www/data/xuanxuan/web/assets/draft.dev.js
+	rm -rf zentaoxx/www/data/xuanxuan/web/node_modules zentaoxx/www/data/xuanxuan/web/*.json zentaoxx/www/data/xuanxuan/web/resources zentaoxx/www/data/xuanxuan/web/media/img zentaoxx/www/data/xuanxuan/web/media/twemoji zentaoxx/www/data/xuanxuan/web/assets/draft.dev.js
 	find zentaoxx/www/data/xuanxuan/web/media/sound -not -name 'message.mp3' -type f -delete
 	find zentaoxx/www/data/xuanxuan/web/lang -not -name 'zh-*.json' -not -name 'en.json' -type f -delete
 	mv zentaoxx/db/ zentaoxx/db_bak
@@ -183,6 +183,7 @@ zentaoxx:
 	echo "\$$config->xuanxuan->enabledMethods['im']['getaiassistant'] = 'getAiAssistant';" >> zentaoxx/config/ext/_0_xuanxuan.php
 	echo "\$$config->xuanxuan->enabledMethods['im']['getaichat'] = 'getAiChat';" >> zentaoxx/config/ext/_0_xuanxuan.php
 	find zentaoxx/extension/xuan/ -name '*.php' -exec sed -i -r 's|->ne(["'\'']0000-00-00 00:00:00["'\''])|->notZeroDatetime()|g; s|["'\'']\)->eq\(["'\'']0000-00-00( 00:00:00)?| is null|g; s|([=!]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|([^!=]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|(["'\''])(,.*)\)->eq\(["'\'']0000-00-00( 00:00:00)?["'\'']| is null\1\2|g; s|["'\'']0000-00-00 00:00:00["'\'']|null|g' {} +
+	perl -i -0777 -pe 's/(\$$query[^\n]*?=[^\n]*?(TABLE_\w+).*?\$$this->dao->query\(\$$query\);)/$$1 \$$this->dao->setCache(trim($$2, "`"));/gs' zentaoxx/extension/xuan/im/model/*.php
 	mkdir zentaoxx/misc; cp misc/cn2tw.php zentaoxx/misc; cd zentaoxx/misc; php cn2tw.php
 	cp misc/en2other.php zentaoxx/misc; cd zentaoxx/misc; php en2other.php ../
 	rm -rf zentaoxx/misc

@@ -63,7 +63,6 @@ class compileTao extends compileModel
     {
         if($buildType == 'jenkins' && empty($build->queueId)) return false;
         if($buildType == 'gitlab' && empty($build->id)) return false;
-        if($buildType == 'gitfox' && empty($build->number)) return false;
 
         $data = new stdclass();
         $data->name = $name;

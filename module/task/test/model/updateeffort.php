@@ -73,5 +73,5 @@ r($task->updateEffortTest(3, $noLeftEffort)) && p()                  && e('0'); 
 r($task->updateEffortTest(4, $noLeftEffort)) && p()                  && e('0');          // 编辑日志，剩余时间传0，查看返回的信息
 r($task->updateEffortTest(5, $noLeftEffort)) && p()                  && e('0');          // 编辑日志，剩余时间传0，查看返回的信息
 
-r($task->updateEffortTest(1, $noConsumedEffort)) && p('0') && e('『工时』应当大于『0』。'); // 编辑日志，消耗时间传0，查看返回的信息
-r($task->updateEffortTest(2, $noConsumedEffort)) && p('0') && e('『工时』应当大于『0』。'); // 编辑日志，消耗时间传0，查看返回的信息
+r($task->updateEffortTest(1, $noConsumedEffort)) && p('comsumed') && e('『工时』应当大于『0』。'); // 编辑日志，消耗时间传0，查看返回的信息
+r($task->updateEffortTest(2, $noConsumedEffort)) && p('comsumed') && e('『工时』应当大于『0』。'); // 编辑日志，消耗时间传0，查看返回的信息

@@ -49,10 +49,12 @@ formPanel
                 ),
                 span
                 (
-                    setClass('input-group-addon hidden'),
-                    a
+                    setClass('input-group-addon hidden px-0'),
+                    btn
                     (
                         set('data-toggle', 'modal'),
+                        set::type('ghost'),
+                        set::url(helper::createLink('build', 'create', "executionID={executionID}")),
                         $lang->build->create
                     )
                 )

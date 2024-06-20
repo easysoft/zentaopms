@@ -98,6 +98,7 @@ $doc->type == 'text' ? form
             on::change('#product',   "loadObjectModules"),
             on::change('#project',   "loadObjectModules"),
             on::change('#execution', "loadObjectModules"),
+            $type == 'execution' ? formHidden('project', $doc->project) : null,
             (strpos('product|project|execution', $type) !== false) ? formGroup
             (
                 set::width('1/2'),

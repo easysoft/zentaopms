@@ -94,7 +94,7 @@ class dropmenu extends wg
 
         if($module == 'testcase' && in_array($method, array('view', 'edit')) && data('isLibCase')) $tab = 'caselib';
 
-        if(strpos(',story-create,story-batchcreate,product-browse,', ",$module-$method,") !== false) $extra = data('storyType');
+        if(strpos(',story-create,story-batchcreate,product-browse,projectstory-story,', ",$module-$method,") !== false) $extra = data('storyType');
 
         if($tab == 'dimension' && $module == 'tree' && $method == 'browsegroup') $extra = data('viewType');
 
@@ -161,8 +161,17 @@ class dropmenu extends wg
         }
 
         if($tab == 'caselib')    $objectID = data('libID');
-        if($tab == 'feedback')   $objectID = data('productID');
+        if($tab == 'feedback')
+        {
+            $objectID = data('productID');
+            $extra    = data('viewType');
+        }
         if($tab == 'demandpool') $objectID = data('poolID');
+        if($tab == 'market')
+        {
+            $objectID = data('marketID');
+            if(empty($objectID)) return array();
+        }
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab) && !empty($objectID))

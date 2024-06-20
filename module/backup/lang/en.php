@@ -1,5 +1,6 @@
 <?php
 $lang->backup->common      = 'Backup';
+$lang->backup->name        = 'Backup Name';
 $lang->backup->index       = 'Backup List';
 $lang->backup->history     = 'History';
 $lang->backup->delete      = 'Delete Backup';
@@ -30,7 +31,7 @@ $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file head
 global $config;
 if($config->inContainer) $lang->backup->settingList['nofile'] = 'Do not back up files.';
 
-$lang->backup->waitting         = '<span id="backupType"></span> is ongoing. Please wait...';
+$lang->backup->waiting          = '<span id="backupType"></span> is ongoing. Please wait...';
 $lang->backup->progressSQL      = '<p>SQL backup: %s is backed up.</p>';
 $lang->backup->progressAttach   = '<p>SQL backup is completed.</p><p>Attachment backing up.</p>';
 $lang->backup->progressCode     = '<p>SQL backup is completed.</p><p>Attachment backup is completed.</p><p>Code backing up.</p>';

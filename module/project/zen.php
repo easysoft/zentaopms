@@ -42,6 +42,7 @@ class projectZen extends project
             ->join('storyType', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->get();
+        if($this->post->newProduct == 'on') $project->stageBy = 'project';
 
         $copyProject = $this->project->getByID($copyProjectID);
         if($copyProject)
@@ -141,6 +142,11 @@ class projectZen extends project
     private function checkProductAndBranch(object $project, object $rawdata): bool
     {
         $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
+        if($project->hasProduct && !empty($project->parent) && empty($linkedProductsCount) && empty($rawdata->addProduct))
+        {
+            dao::$errors['products[0]'] = $this->lang->project->errorNoProducts;
+            return false;
+        }
 
         if(!empty($rawdata->products))
         {

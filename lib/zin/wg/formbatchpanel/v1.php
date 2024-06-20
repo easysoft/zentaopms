@@ -53,8 +53,10 @@ class formBatchPanel extends formPanel
         .panel-form-batch > .panel-body {position: relative; padding: 0; margin: 0 -16px}
         .panel-form-batch .form {gap: 0}
         .panel-form-batch .form-batch-container {max-height: calc(100vh - 214px); padding: 0 16px 16px; flex: auto; min-height: 0; overflow: auto}
-        .modal-body .panel-form-batch .form-batch-container {max-height: unset;}
         .panel-form-batch .form-actions {left: 0; position: static; flex: none; padding: 24px 0; border-top: 1px solid var(--color-border)}
+        .modal-body .panel-form-batch .form-batch-container {max-height: calc(100vh - 208px);}
+        .modal-body > .panel-form-batch {box-shadow: none; margin-top: -12px; margin-bottom: -24px}
+        .modal-actions + .modal-body > .panel-form-batch > .panel-heading {padding-right: 20px; background: var(--color-canvas); position: sticky; top: -12px; z-index: 12}
         CSS;
     }
 
@@ -90,7 +92,7 @@ class formBatchPanel extends formPanel
         /* Multi-input. */
         if($pasteField)
         {
-            $headingActions[] = array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText);
+            $headingActions[] = array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText, 'data-backdrop' => 'static');
 
             $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
         }

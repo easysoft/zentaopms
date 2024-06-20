@@ -164,7 +164,8 @@ class mail extends control
      */
     public function reset()
     {
-        $this->dao->delete('*')->from(TABLE_CONFIG)->where('module')->eq('mail')->exec();
+        $this->loadModel('setting')->deleteItems('module=mail');
+        unset($_SESSION['mailConfig']);
         return $this->sendSuccess(array('load' => inlink('detect')));
     }
 
@@ -184,7 +185,7 @@ class mail extends control
 
         foreach($queueList as $queue)
         {
-            $log = $this->mailZen->sendQueues($queue, true);
+            $log = $this->mailZen->sendQueue($queue, true);
             if($log) echo $log['message'];
         }
 

@@ -251,6 +251,10 @@ class bugZen extends bug
         /* Process bug for check story changed. */
         $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
 
+        /* 检查是否需要确认撤销/移除。*/
+        /* Build confirmeObject. */
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
+
         /* 处理 bug 的版本信息。*/
         /* Process the openedBuild and resolvedBuild fields. */
         return $this->bug->processBuildForBugs($bugs);
@@ -945,7 +949,7 @@ class bugZen extends bug
         $branch      = (string)$bug->branch;
         $projectID   = (int)$bug->projectID;
         $executionID = (int)$bug->executionID;
-        $executions  = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', $projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
+        $executions  = $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', $projectID, !$projectID ? 'multiple|stagefilter|noclosed' : 'stagefilter|noclosed');
         $executionID = isset($executions[$executionID]) ? $executionID : '';
 
         $execution = null;
@@ -1022,6 +1026,11 @@ class bugZen extends bug
         else
         {
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, 'full', 'story', false);
+        }
+        if(!isset($stories[$bug->storyID]))
+        {
+            $bugStory = $this->story->fetchById($bug->storyID);
+            $bugStory ? $stories[$bug->storyID] = $bugStory->title : $bug->storyID = 0;
         }
 
         $stories = $this->story->addGradeLabel($stories);
@@ -1228,9 +1237,6 @@ class bugZen extends bug
             $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
         }
 
-        $resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
-        $resolvedBuilds = $this->build->addReleaseLabelForBuilds($bug->product, $resolvedBuilds);
-
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
         if($bug->execution)
@@ -1242,8 +1248,11 @@ class bugZen extends bug
             $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, 'full', 'story', false);
         }
 
+        $resolvedBuildPairs = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
+        $this->view->resolvedBuildPairs = $resolvedBuildPairs;
+        $this->view->resolvedBuilds     = $this->build->addReleaseLabelForBuilds($bug->product, $resolvedBuildPairs);
+
         $this->view->openedBuilds   = $openedBuilds;
-        $this->view->resolvedBuilds = $resolvedBuilds;
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->stories        = $this->story->addGradeLabel($stories);
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
@@ -1296,7 +1305,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function buildBugsForBatchCreate(int $productID, string $branch, array $bugImagesFile): array
+    protected function buildBugsForBatchCreate(int $productID, string $branch, array $bugImagesFile = array()): array
     {
         $bugs = form::batchData($this->config->bug->form->batchCreate)->get();
 
@@ -1966,7 +1975,7 @@ class bugZen extends bug
         /* Unlink old resolved build and link new resolved build. */
         if($bug->resolution == 'fixed' && !empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
         {
-            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, $bug->id);
+            if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, $bug->id);
             $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
         }
 
@@ -2366,17 +2375,13 @@ class bugZen extends bug
 
         /* 获取用例的标题、步骤、所属需求、所属模块、版本、所属执行。 */
         /* Get title, steps, storyID, moduleID, version, executionID from case. */
-        if(isset($runID) and $runID and isset($resultID) and $resultID) $fields = $this->bug->getBugInfoFromResult($resultID, isset($caseID) ? $caseID : 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
-        if(isset($runID) and !$runID and isset($caseID) and $caseID) $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
-        if(isset($fields))
-        {
-            if(isset($fields['moduleID']) && !isset($this->view->moduleOptionMenu[$fields['moduleID']])) $fields['moduleID'] = 0;
-            $bug = $this->updateBug($bug, $fields);
-        }
+        if(isset($runID) && $runID && isset($resultID) && $resultID) $fields = $this->bug->getBugInfoFromResult($resultID, isset($caseID) ? $caseID : 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
+        if(isset($runID) && !$runID && isset($caseID) && $caseID)    $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
+        if(isset($fields)) $bug = $this->updateBug($bug, $fields);
 
         /* 获得bug的所属项目、所属模块、所属执行、关联产品、关联任务、关联需求、关联版本、关联用例、标题、步骤、严重程度、类型、指派给、截止日期、操作系统、浏览器、抄送给、关键词、颜色、所属测试单、反馈人、通知邮箱、优先级。 */
         /* Get projectID, moduleID, executionID, productID, taskID, storyID, buildID, caseID, title, steps, severity, type, assignedTo, deadline, os, browser, mailto, keywords, color, testtask, feedbackBy, notifyEmail, pri from case. */
-        if(isset($bugID) and $bugID)
+        if(isset($bugID) && $bugID)
         {
             $bugInfo = $this->bug->getById((int)$bugID);
 

@@ -9,6 +9,7 @@ $schema->tables = array();
 $schema->tables['effort'] = 'zt_effort';
 
 $schema->fields = array();
-$schema->fields['id']      = array('type' => 'number', 'name' => $this->lang->account->id);
-$schema->fields['account'] = array('type' => 'user',   'name' => $this->lang->account->name);
+$schema->fields['id']       = array('type' => 'number', 'name' => $this->lang->account->id);
+$schema->fields['account']  = array('type' => 'user',   'name' => $this->lang->account->name);
+$schema->fields['consumed'] = array('type' => 'number', 'name' => $this->lang->dataview->consumed);
 

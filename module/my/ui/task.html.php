@@ -39,6 +39,34 @@ if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
 $cols  = array_values($config->my->task->dtable->fieldList);
 $data  = array_values($tasks);
+
+if($config->edition == 'ipd')
+{
+    static $canStartExecution = '';
+    static $executionID       = '';
+    foreach($data as $task)
+    {
+        if(empty($canStartExecution) || $executionID != $task->execution)
+        {
+            $executionID       = $task->execution;
+            $canStartExecution = $this->execution->checkStageStatus($executionID, 'start');
+        }
+
+        if(!empty($canStartExecution['disabled']))
+        {
+            foreach($task->actions as $key => $action)
+            {
+                if(in_array($action['name'], array('start', 'finish', 'recordWorkhour')))
+                {
+                    $tip = $action['name'] . 'Tip';
+                    $task->actions[$key]['disabled'] = true;
+                    $task->actions[$key]['hint']     = $lang->task->disabledTip->$tip;
+                }
+            }
+        }
+    }
+}
+
 dtable
 (
     set::cols($cols),

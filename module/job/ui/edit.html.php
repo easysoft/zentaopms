@@ -173,15 +173,7 @@ formPanel
     ),
     formGroup
     (
-        setClass('gitfox-pipeline', $repo->SCM == 'GitFox' ? '' : 'hidden'),
-        set::label($lang->job->gitfoxpipeline),
-        set::required(true),
-        set::name('gitfoxpipeline'),
-        set::items($pipelines),
-        set::width('1/2')
-    ),
-    formGroup
-    (
+        set::id('productBox'),
         set::name('product'),
         set::width('1/2'),
         set::label($lang->job->product),

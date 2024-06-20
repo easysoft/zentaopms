@@ -503,7 +503,20 @@ class pivotModel extends model
         foreach($tasks as $task)
         {
             if(!isset($users[$task->user])) continue;
-            $taskGroups[$task->user][$task->projectID][$task->executionID][$task->id] = $task;
+
+            $user      = $task->user;
+            $project   = $task->projectID;
+            $execution = $task->executionID;
+            $id        = $task->id;
+
+            if(isset($taskGroups[$user][$project][$execution][$id]))
+            {
+                $taskGroups[$user][$project][$execution][$id]->left += $task->left;
+            }
+            else
+            {
+                $taskGroups[$user][$project][$execution][$id] = $task;
+            }
         }
 
         /* 获取团队任务的剩余工时。 */
@@ -1391,7 +1404,7 @@ class pivotModel extends model
     {
         foreach($data as $key => $value)
         {
-            if($value == '$totalGroup$') $data[$key] = $this->lang->pivot->step2->total;
+            if($value === '$totalGroup$') $data[$key] = $this->lang->pivot->step2->total;
         }
     }
 
@@ -2323,6 +2336,42 @@ class pivotModel extends model
         }
 
         return $options;
+    }
+
+    /**
+     * Process DTable cols config, let buildPivotTable use.
+     *
+     * @param  array  $cols
+     * @access public
+     * @return array
+     */
+    public function processDTableCols($cols)
+    {
+        $formatCols = array();
+        foreach($cols as $colField => $colInfo)
+        {
+            $formatCols[] = (object)array('name' => $colField,  'label' => $colInfo['title'], 'colspan' => 1);
+        }
+        return array($formatCols);
+    }
+
+    /**
+     * Process DTable data, let buildPivotTable use.
+     *
+     * @param  array  $cols
+     * @param  array  $datas
+     * @access public
+     * @return array
+     */
+    public function processDTableData($cols, $datas)
+    {
+        return array_map(function($data) use ($cols)
+        {
+            $result = [];
+            $data   = (array)$data;
+            foreach ($cols as $field) $result[] = isset($data[$field]) ? $data[$field] : '';
+            return $result;
+        }, $datas);
     }
 
     /**

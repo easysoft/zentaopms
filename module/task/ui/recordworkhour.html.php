@@ -71,19 +71,19 @@ if($efforts)
                 h::td("{$effort->left} {$lang->task->suffixHour}"),
                 h::td
                 (
-                    common::hasPriv('task', 'editEffort') ? a
+                    common::hasPriv($app->rawModule, 'editEffort') ? a
                     (
                         setClass('btn ghost toolbar-item square size-sm text-primary edit-effort'),
-                        $canOperateEffort ? on::click()->call('loadModal', createLink('task', 'editEffort', "id={$effort->id}")) : null,
+                        $canOperateEffort ? on::click()->call('loadModal', createLink($app->rawModule, 'editEffort', "id={$effort->id}")) : null,
                         !$canOperateEffort ? set::disabled(true) : null,
                         set::title($operateTips ? sprintf($operateTips, $lang->task->update) : ''),
                         icon('edit'),
                     ) : null,
-                    common::hasPriv('task', 'deleteWorkhour') ? a
+                    common::hasPriv($app->rawModule, 'deleteWorkhour') ? a
                     (
                         setClass('btn ghost toolbar-item square size-sm ajax-submit text-primary'),
                         set('data-confirm', $lang->task->confirmDeleteEffort),
-                        set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
+                        set::href(createLink($app->rawModule, 'deleteWorkhour', "id={$effort->id}")),
                         !$canOperateEffort ? set::disabled(true) : null,
                         set::title($operateTips ? sprintf($operateTips, $lang->delete) : ''),
                         icon('trash')

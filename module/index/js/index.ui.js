@@ -446,6 +446,7 @@ function getAppCode(urlOrModuleName, defaultCode)
             if(viewType === 'doc')   return 'doc';
             if(viewType === 'story') return 'product';
             if(viewType === 'host')  return 'admin';
+            if(viewType === 'ticket') return 'feedback';
         }
         if(methodLowerCase === 'browsetask') return 'execution';
         if(methodLowerCase === 'browsegroup') return 'bi';
@@ -951,6 +952,14 @@ window.browserNotify = function()
         });
     }, pollTime * 1000);
 };
+
+window.clickMessage = function(obj)
+{
+    let $obj = $(obj);
+    let url  = $obj.attr('data-url').replace(/\?onlybody=yes/g, '').replace(/\&onlybody=yes/g, '');
+    openApp(url);
+    $(obj).closest('.alert.messager').find('.alert-close').trigger('click');
+}
 
 window.ping = function()
 {

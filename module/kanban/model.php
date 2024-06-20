@@ -2540,7 +2540,7 @@ class kanbanModel extends model
         {
             if(empty($cardID)) continue;
 
-            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET `cards` = REPLACE(cards, ',$cardID,', ',') WHERE `type` = '$type' AND `kanban` = {$kanbanList[$cardID]}");
+            $this->dao->update(TABLE_KANBANCELL)->set("cards = REPLACE(cards, ',$cardID,', ',')")->where('type')->eq($type)->andWhere('kanban')->eq($kanbanList[$cardID])->exec();
         }
 
         $this->dao->update(TABLE_KANBANCELL)
@@ -3575,6 +3575,8 @@ class kanbanModel extends model
     public function getKanbanCardMenu(int $executionID, array $objects, string $objecType): array
     {
         $this->app->loadLang('execution');
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(!common::canModify('execution', $execution)) return array();
 
         $menus = array();
         switch ($objecType)
@@ -3589,7 +3591,7 @@ class kanbanModel extends model
                 $menus = $this->kanbanTao->getERURCardMenu($executionID, $objects);
                 break;
             case 'story':
-                $menus = $this->kanbanTao->getStoryCardMenu($executionID, $objects);
+                if($execution) $menus = $this->kanbanTao->getStoryCardMenu($execution, $objects);
                 break;
             case 'bug':
                 $menus = $this->kanbanTao->getBugCardMenu($objects);

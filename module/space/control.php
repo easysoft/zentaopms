@@ -73,13 +73,12 @@ class space extends control
 
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
-        $this->app->loadLang('gitfox');
 
         $apps       = array();
         $defaultApp = '';
         if($this->config->inQuickon)
         {
-            $pagedApps = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
+            $pagedApps = $this->loadModel('store')->searchApps('', '', 0, 1, 10000);
             foreach($pagedApps->apps as $app)
             {
                 if(!$appID && $app->alias == 'GitLab') $defaultApp = $app->id;

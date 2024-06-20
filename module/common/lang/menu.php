@@ -158,7 +158,7 @@ $lang->my->dividerMenu = ',work,dynamic,';
 /* Program menu. */
 $lang->program->homeMenu = new stdclass();
 $lang->program->homeMenu->browse      = array('link' => "{$lang->program->projectView}|program|browse|", 'alias' => 'create,edit', 'subModule' => 'project');
-$lang->program->homeMenu->productView = array('link' => "{$lang->program->productView}|program|productview|", 'alias' => 'create,edit', 'subModule' => 'project');
+$lang->program->homeMenu->productView = array('link' => "{$lang->program->productView}|program|productview|", 'alias' => 'create,edit', 'subModule' => 'project,product');
 $lang->program->homeMenu->kanban      = array('link' => "{$lang->program->kanban}|program|kanban|");
 
 $lang->program->menu = new stdclass();
@@ -495,9 +495,8 @@ $lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
 if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
-$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitfox,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
@@ -508,8 +507,8 @@ $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
 $lang->devops->menuOrder[20] = 'mr';
 $lang->devops->menuOrder[25] = 'compile';
-$lang->devops->menuOrder[30] = 'artifactrepo';
-$lang->devops->menuOrder[35] = 'apps';
+$lang->devops->menuOrder[35] = 'deploy';
+$lang->devops->menuOrder[40] = 'apps';
 
 $lang->devops->dividerMenu = ',apps,';
 
@@ -681,7 +680,6 @@ $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';
 $lang->navGroup->gitlab           = 'devops';
-$lang->navGroup->gitfox           = 'devops';
 $lang->navGroup->gogs             = 'devops';
 $lang->navGroup->gitea            = 'devops';
 $lang->navGroup->sonarqube        = 'devops';
@@ -697,7 +695,6 @@ $lang->navGroup->space            = 'devops';
 $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
 $lang->navGroup->deploy           = 'devops';
-$lang->navGroup->artifactrepo     = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';

@@ -701,7 +701,7 @@ class executionZen extends execution
         $showAllModule  = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules        = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule ? 'allModule' : '');
         $now            = helper::now();
-        $requiredFields = str_replace(',story,', ',', ',' . $this->config->task->create->requiredFields . ',');
+        $requiredFields = str_replace(array(',story,', ',module,'), ',', ',' . $this->config->task->create->requiredFields . ',');
         $requiredFields = trim($requiredFields, ',');
         foreach($postData as $bugID => $task)
         {
@@ -734,8 +734,6 @@ class executionZen extends execution
                 if(empty($field))         continue;
                 if(!isset($task->$field)) continue;
                 if(!empty($task->$field)) continue;
-
-                if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
 
                 dao::$errors["{$field}[{$bugID}]"] = 'ID: ' . $bugID . sprintf($this->lang->error->notempty, $this->lang->task->$field);
                 return false;
@@ -829,7 +827,6 @@ class executionZen extends execution
         unset($this->config->bug->search['fields']['status']);
         unset($this->config->bug->search['fields']['toTask']);
         unset($this->config->bug->search['fields']['toStory']);
-        unset($this->config->bug->search['fields']['severity']);
         unset($this->config->bug->search['fields']['resolution']);
         unset($this->config->bug->search['fields']['resolvedBuild']);
         unset($this->config->bug->search['fields']['resolvedDate']);
@@ -846,7 +843,6 @@ class executionZen extends execution
         unset($this->config->bug->search['params']['status']);
         unset($this->config->bug->search['params']['toTask']);
         unset($this->config->bug->search['params']['toStory']);
-        unset($this->config->bug->search['params']['severity']);
         unset($this->config->bug->search['params']['resolution']);
         unset($this->config->bug->search['params']['resolvedBuild']);
         unset($this->config->bug->search['params']['resolvedDate']);
@@ -1571,12 +1567,10 @@ class executionZen extends execution
     protected function getLink(string $module, string $method, string $type = ''): string
     {
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport', 'doc');
-        if(in_array($module, array('task', 'testcase')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report'))) $method = $module;
+        if(in_array($module, array('task', 'testcase', 'story')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report'))) $method = $module;
         if(in_array($module, $executionModules) && in_array($method, array('view', 'edit', 'create'))) $method = $module;
-        if(in_array($module, $executionModules + array('story', 'product'))) $module = 'execution';
+        if(in_array($module, array_merge($executionModules, array('story', 'product')))) $module = 'execution';
 
-        if($module == 'story') $method = 'story';
-        if($module == 'product' && $method == 'showerrornone') $method = 'task';
         if($module == 'execution' && $method == 'create') return '';
 
         $link = helper::createLink($module, $method, "executionID=%s");

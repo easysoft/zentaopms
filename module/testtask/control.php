@@ -875,7 +875,8 @@ class testtask extends control
         if(!empty($_POST))
         {
             $stepResults = form::batchData($this->config->testtask->form->runCase)->get();
-            $caseResult  = $this->testtask->createResult($runID, (int)$this->post->case, (int)$this->post->version, $stepResults);
+            $deployID    = (int)$this->post->deploy;// code for biz.
+            $caseResult  = $this->testtask->createResult($runID, (int)$this->post->case, (int)$this->post->version, $stepResults, $deployID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', 0));
@@ -946,10 +947,11 @@ class testtask extends control
      * @param  int    $version
      * @param  string $status  all|done
      * @param  string $type    all|fail
+     * @param  int    $deployID
      * @access public
      * @return void
      */
-    public function results(int $runID, int $caseID = 0, int $version = 0, string $status = 'done', string $type = 'all')
+    public function results(int $runID, int $caseID = 0, int $version = 0, string $status = 'done', string $type = 'all', int $deployID = 0)
     {
         /* Set project menu. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
@@ -969,7 +971,7 @@ class testtask extends control
         else
         {
             $case    = $this->loadModel('testcase')->getByID($caseID, $version);
-            $results = $this->testtask->getResults(0, $caseID, $status, $type);
+            $results = $this->testtask->getResults(0, $caseID, $status, $type, $deployID);
         }
 
         /* Assign. */

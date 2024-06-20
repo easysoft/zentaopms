@@ -327,6 +327,141 @@ class cneModel extends model
     }
 
     /**
+     * 备份一个应用实例。
+     * Backup a instance with account.
+     *
+     * @param  object $instance
+     * @param  string $account
+     * @param  string $mode     |manual|system|upgrade|downgrade
+     * @access public
+     * @return object
+     */
+    public function backup(object $instance, string|null $account = '', string $mode = ''): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->username  = $account ?: $this->app->user->account;
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+        $apiParams->channel   = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        if(!empty($mode)) $apiParams->mode = $mode;
+
+        $apiUrl = "/api/cne/app/backup";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份的进度。
+     * Get the status of backup progress.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return object
+     */
+    public function getBackupStatus(object $instance, string $backupName): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster     = '';
+        $apiParams->namespace   = $instance->spaceData->k8space;
+        $apiParams->name        = $instance->k8name;
+        $apiParams->backup_name = $backupName;
+        $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/backup/status";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份列表。
+     * Get the backup list.
+     *
+     * @param  object $instance
+     * @access public
+     * @return object
+     */
+    public function getBackupList(object $instance): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+        $apiParams->channel   = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/backups";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 删除一个备份.
+     * Delete backup.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return object
+     */
+    public function deleteBackup(object $instance, string $backupName): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster     = '';
+        $apiParams->namespace   = $instance->spaceData->k8space;
+        $apiParams->name        = $instance->k8name;
+        $apiParams->backup_name = $backupName;
+        $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/backup/remove";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 恢复一个备份。
+     * Restore from the backup.
+     *
+     * @param  object $instance
+     * @param  object $backupName
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function restore(object $instance, string $backupName, string $account = ''): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->username    = $account ?: $this->app->user->account;
+        $apiParams->cluster     = '';
+        $apiParams->namespace   = $instance->spaceData->k8space;
+        $apiParams->name        = $instance->k8name;
+        $apiParams->backup_name = $backupName;
+        $apiParams->channel     = empty($instance->channel) ? $this->config->CNE->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/restore";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取备份恢复的状态。
+     * Get the status of restore progress.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return object
+     */
+    public function getRestoreStatus(object $instance, string $backupName): object
+    {
+        $apiParams = new stdclass;
+        $apiParams->cluster      = '';
+        $apiParams->namespace    = $instance->spaceData->k8space;
+        $apiParams->name         = $instance->k8name;
+        $apiParams->restore_name = $backupName;
+        $apiParams->channel      = empty($instance->channel) ? $this->config->cne->api->channel : $instance->channel;
+
+        $apiUrl = "/api/cne/app/restore/status";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
      * 启动一个应用实例。
      * Start an app instance.
      *
@@ -762,6 +897,12 @@ class cneModel extends model
         $this->error->code    = $apiResult->code;
         $this->error->message = zget($this->lang->CNE->errorList, $apiResult->code, $this->lang->CNE->serverError); // Translate CNE api error message to multi language.
 
+        if($this->config->debug)
+        {
+            if(isset($apiResult->code))    $this->error->message .= " [{$apiResult->code}]:";
+            if(isset($apiResult->message)) $this->error->message .= " [{$apiResult->message}]";
+        }
+
         $apiResult->message = $this->error->message;
 
         return $this->error;
@@ -781,6 +922,59 @@ class cneModel extends model
         $apiParams->requests = $resources;
 
         $apiUrl = "/api/cne/system/resource/try-allocate";
+        return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 从云API服务器获取最新的发布版本号。
+     * Get the latest release version from cloud API server.
+     *
+     * @return string|false
+     */
+    public function getLatestVersion(): string|false
+    {
+        $cloudApiHost = getenv('CLOUD_API_HOST');
+        if(empty($cloudApiHost)) $cloudApiHost = $this->config->cloud->api->host;
+
+        $currentRelease = array(
+            'name' => 'zentaopaas',
+            'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
+            'version' => getenv('APP_VERSION')
+        );
+        $query = http_build_query($currentRelease);
+
+        $response = common::http($cloudApiHost . '/api/market/app/version/latest?' . $query);
+        if($response)
+        {
+            $response =json_decode($response);
+            if($response && $response->code == 200) return $response->data->version;
+        }
+        return false;
+    }
+
+    /**
+     * 升级禅道DevOps平台版。
+     * Upgrade the quickon system.
+     *
+     * @param  string $edition oss|open|biz|max|ipd
+     * @return object|false
+     */
+    public function upgrade($edition = 'oss'): object|false
+    {
+        $numArgs = func_num_args();
+        if($numArgs == 0) $edition = $this->config->edition;
+        if($edition == 'open') $edition = 'oss';
+
+        $version = $this->getLatestVersion();
+        if(!$version) return false;
+
+        $apiParams = array(
+            'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
+            'version' => $version,
+            'product' => $edition
+        );
+
+        $apiUrl = "/api/cne/system/update";
         return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 }

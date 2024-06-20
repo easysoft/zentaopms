@@ -51,8 +51,11 @@ class productTao extends productModel
         return $this->dao->select("t1.*, IF(INSTR(' closed', t1.status) < 2, 0, 1) AS isClosed")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.name')->ne('')
-            ->beginIF($this->config->vision != 'or' && $this->config->vision != 'lite')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
-            ->beginIF(($this->config->vision == 'or' || $this->config->vision == 'lite') && $this->app->tab == 'feedback')->andWhere('t1.status')->eq('normal')->fi()
+            ->beginIF($this->config->vision == 'rnd')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
+            ->beginIF($this->app->tab == 'feedback')
+            ->andWhere('t1.status')->eq('normal')
+            ->andWhere('t1.vision')->ne('lite')
+            ->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->andWhere('((1=1')
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
@@ -748,32 +751,18 @@ class productTao extends productModel
      */
     protected function buildExecutionPairs(array $executions, string $mode = '', bool $withProjectName = false): array
     {
-        $projectIdList = array();
-        foreach($executions as $id => $execution) $projectIdList[$execution->project] = $execution->project;
+        $projectIdList = array_column($executions, 'project');
 
         /* 现在只有阶段有子阶段，所以只查询阶段类型的执行。 */
-        $stages      = $this->dao->select('id,name,attribute,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $stages      = $this->dao->select('id,name,attribute,parent,path')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
         $stageFilter = str_contains($mode, 'stagefilter');
+        foreach($stages as $exec) $parents[$exec->parent] = true;
 
         /* 根据条件整理数据，将子阶段放到父阶段中。 */
+        $executionPairs = array();
         foreach($executions as $id => $execution)
         {
-            if($execution->grade == 2 && isset($stages[$execution->parent]))
-            {
-                $executionName = (!$withProjectName ? '' : $execution->projectName) . '/' . $stages[$execution->parent]->name . '/' . $execution->name;
-                if(isset($executions[$execution->parent]))
-                {
-                    $executions[$execution->parent]->children[$id] = $executionName;
-                    unset($executions[$id]);
-                }
-            }
-        }
-
-        /* Build execution pairs. */
-        $this->app->loadLang('project');
-        $executionPairs = array();
-        foreach($executions as $executionID => $execution)
-        {
+            if(isset($parents[$id])) continue;
             if($stageFilter && in_array($execution->attribute, array('request', 'design', 'review'))) continue; // Some stages of waterfall not need.
 
             if(isset($execution->children))
@@ -782,10 +771,24 @@ class productTao extends productModel
                 continue;
             }
 
-            $executionPairs[$executionID] = (!$withProjectName ? '' : $execution->projectName) . '/' . $execution->name;
-            if(empty($execution->multiple)) $executionPairs[$executionID] = $execution->projectName . "({$this->lang->project->disableExecution})";
+            /* Set execution name. */
+            $executionName = '';
+            if(isset($stages[$id]))
+            {
+                $paths = array_slice(explode(',', trim($execution->path, ',')), 1);
+                foreach($paths as $path)
+                {
+                    if(isset($stages[$path])) $executionName .= '/' . $stages[$path]->name;
+                }
+            }
+            else
+            {
+                $executionName = $execution->name;
+            }
+            if($withProjectName) $executionName = $execution->projectName . $executionName;
+            if(empty($execution->multiple)) $executionName = $execution->projectName . "({$this->lang->project->disableExecution})";
+            $executionPairs[$id] = $executionName;
         }
-
         return $executionPairs;
     }
 

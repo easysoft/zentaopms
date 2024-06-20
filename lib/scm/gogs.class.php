@@ -21,6 +21,7 @@ class gogsRepo
     {
         putenv('LC_CTYPE=en_US.UTF-8');
 
+        $this->repo   = $repo;
         $this->client = $client;
         $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
         if(!realpath($this->root) and !empty($repo))
@@ -44,7 +45,6 @@ class gogsRepo
             if(isset($branches[$branch])) $branch = "origin/$branch";
         }
         $this->branch = $branch;
-        $this->repo   = $repo;
 
         chdir($this->root);
         exec("{$this->client} config core.quotepath false");
@@ -148,34 +148,13 @@ class gogsRepo
      */
     public function branch()
     {
-        chdir($this->root);
+        global $app;
+        $apiRoot  = $app->control->loadModel('gogs')->getApiRoot($this->repo->serviceHost);
+        $url      = sprintf($apiRoot, "/repos/{$this->repo->serviceProject}/branches");
+        $branches = json_decode(commonModel::http($url));
+        if(empty($branches)) return array();
 
-        /* Get local branch. */
-        $cmd  = escapeCmd("$this->client branch -a");
-        $list = execCmd($cmd . ' 2>&1', 'array', $result);
-        if($result) return array();
-
-        /* Get default branch. */
-        $defaultBranch = execCmd("$this->client symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'");
-        $defaultBranch = trim($defaultBranch);
-
-        $branches = array();
-        foreach($list as $localBranch)
-        {
-            $localBranch = trim($localBranch);
-            if(substr($localBranch, 0, 19) == 'remotes/origin/HEAD') continue;
-            if(substr($localBranch, 0, 1) == '*') continue;
-            if(substr($localBranch, 0, 15) == 'remotes/origin/') $localBranch = substr($localBranch, 15);
-
-            $localBranch = trim($localBranch);
-            if(empty($localBranch))continue;
-            if($localBranch != $defaultBranch) $branches[$localBranch] = $localBranch;
-        }
-
-        asort($branches);
-        if($defaultBranch) $branches = array($defaultBranch => $defaultBranch) + $branches;
-
-        return $branches;
+        return array_column($branches, 'name', 'name');
     }
 
     /**

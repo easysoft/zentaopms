@@ -12,8 +12,11 @@ namespace zin;
 
 $cols = $config->pivot->dtable->bugCreate->fieldList;
 $cols['openedBy']['map'] = $users;
+$data        = new stdclass();
+$data->cols  = $this->pivot->processDTableCols($cols);
+$data->array = $this->pivot->processDTableData(array_keys($cols), $bugs);
 
-$generateData = function() use ($lang, $title, $cols, $bugs, $products, $executions, $begin, $end, $product, $execution)
+$generateData = function() use ($lang, $title, $cols, $data, $bugs, $products, $executions, $begin, $end, $product, $execution)
 {
     return array
     (
@@ -66,6 +69,13 @@ $generateData = function() use ($lang, $title, $cols, $bugs, $products, $executi
                 set::data($bugs),
                 set::emptyTip($lang->error->noData),
                 set::height(jsRaw('getHeight'))
+            ),
+            div
+            (
+                setID('exportData'),
+                setClass('hidden'),
+                rawContent(),
+                $this->pivot->buildPivotTable($data, array()),
             )
         )
     );

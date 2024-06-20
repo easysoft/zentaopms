@@ -34,7 +34,7 @@
 .tree > .tree-item.project-tree-title .item-icon {color: var(--nav-active-color); opacity: 1;}
 .tree > .tree-item.project-tree-title > .tree-toggle-icon {display: none;}
 
-.has-doc-menu-header #mainMenu {padding-left: 215px;}
+.has-doc-menu-header #mainMenu {padding-left: var(--sidebar-left-width);}
 .has-doc-menu-header.is-sidebar-left-collapsed #mainMenu {padding-left: 0;}
 #mainContent > .sidebar:not(.is-collapsed) {min-width: 200px !important;}
 

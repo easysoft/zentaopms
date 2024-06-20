@@ -16,6 +16,7 @@ jsVar('clientGitTip', $lang->repo->example->client->git);
 jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
 jsVar('repoSCM', $repo->SCM);
+jsVar('client', $repo->client);
 
 formPanel
 (

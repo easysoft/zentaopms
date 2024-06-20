@@ -477,7 +477,7 @@ class projectModel extends model
      * @access public
      * @return string
      */
-    public function getProjectLink(string $module, string $method, int $projectID) :string
+    public function getProjectLink(string $module, string $method, int $projectID, string $extra = '') :string
     {
         $link    = helper::createLink('project', 'index', "projectID=%s");
 
@@ -498,6 +498,7 @@ class projectModel extends model
             $linkParams = $this->config->project->linkMap->$module[$method];
             if(!$linkParams[0]) $linkParams[0] = $module;
             if(!$linkParams[1]) $linkParams[1] = $method;
+            if(strpos($linkParams[2], '{extra}') !== false) $linkParams[2] = str_replace('{extra}', $extra, $linkParams[2]);
 
             return helper::createLink($linkParams[0], $linkParams[1], $linkParams[2]) . $linkParams[3];
         }
@@ -1802,6 +1803,8 @@ class projectModel extends model
      */
     public function updateProducts(int $projectID, array $products = array(), object|array|null $postProductData = array()): bool
     {
+        if(!empty($_POST['newProduct'])) return array();
+
         $this->loadModel('user');
         $teams        = array_keys($this->getTeamMembers($projectID));
         $stakeholders = array_keys($this->loadModel('stakeholder')->getStakeHolderPairs($projectID));
@@ -2186,6 +2189,7 @@ class projectModel extends model
         $lang->project->menu        = $lang->$navGroup->menu;
         $lang->project->menuOrder   = $lang->$navGroup->menuOrder;
         $lang->project->dividerMenu = $lang->$navGroup->dividerMenu;
+        $this->lang->switcherMenu   = $this->getSwitcher($projectID, $this->app->rawModule, $this->app->rawMethod);
 
         /* If projectID is set, cannot use homeMenu. */
         unset($lang->project->homeMenu);

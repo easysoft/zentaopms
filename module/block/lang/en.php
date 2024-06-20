@@ -543,8 +543,8 @@ $lang->block->welcome->assignList['task'] = 'Task';
 if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'Bug';
 if($config->vision != 'or') $lang->block->welcome->assignList['story'] = 'SRStroy';
 $lang->block->welcome->assignList['testcase'] = 'TestCase';
-if($config->URAndSR)  $lang->block->welcome->assignList['requirement'] = "{$lang->URCommon}";
-if($config->enableER) $lang->block->welcome->assignList['epic']        = "{$lang->ERCommon}";
+if($config->URAndSR && $config->vision != 'or')  $lang->block->welcome->assignList['requirement'] = "{$lang->URCommon}";
+if($config->enableER && $config->vision != 'or') $lang->block->welcome->assignList['epic']        = "{$lang->ERCommon}";
 
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = 'There are 2 running modes of ZenTao:  Light Mode and ALM Mode.';
@@ -743,3 +743,4 @@ $lang->block->tooltips['ac']                = "The sum of all logged work hours 
 $lang->block->tooltips['executionProgress'] = "<strong>Total Progress</strong> = Number of hours consumed for task by {$lang->execution->common}/(Number of hours consumed for tasks by {$lang->execution->common} + Number of hours remaining for tasks by {$lang->execution->common})<br/>
 <strong>Number of hours consumed for tasks by {$lang->execution->common}</strong>: Summarise the number of hours consumed for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.<br/>
 <strong>Number of hours remaining for tasks by {$lang->execution->common}</strong>: Summarise the number of remaining hours for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.";
+$lang->block->tooltips['metricTime']        = 'The statistical data will be updated on the hour, with the latest update time being %s.';

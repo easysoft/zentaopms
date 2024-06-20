@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$service     = strtolower(key($lang->space->appType));
+$service     = key($lang->space->appType);
 $showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();
 foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
@@ -19,8 +19,6 @@ $colWidth = isInModal() ? 'full' : '2/3';
 
 jsVar('gitlabUrlTips', $lang->gitlab->placeholder->url);
 jsVar('gitlabTokenTips', $lang->gitlab->placeholder->token);
-jsVar('gitfoxUrlTips', $lang->gitfox->placeholder->url);
-jsVar('gitfoxTokenTips', $lang->gitfox->placeholder->token);
 jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
 jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
 jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
@@ -167,18 +165,6 @@ if($config->inQuickon)
     );
 }
 
-$typeList = array();
-foreach($lang->space->appType as $type => $typeName)
-{
-    $item = array('text' => $typeName, 'value' => $type);
-    if($type == 'gitfox')
-    {
-        $item['content'] = array('html' => "<div class='flex clip'>{$typeName}</div><label class='label bg-primary-50 text-primary ml-2 flex-none'>{$this->lang->recommend}</label>", 'class' => 'w-full flex nowrap');
-    }
-
-    $typeList[] = $item;
-}
-
 formPanel
 (
     $config->inQuickon ? setClass('externalPanel hidden') : setClass('externalPanel'),
@@ -191,8 +177,9 @@ formPanel
         set::width($colWidth),
         set::label($lang->app->common),
         set::name('appType'),
-        set::items($typeList),
+        set::items($lang->space->appType),
         set::required(true),
+        set::control(array('type' => 'picker', 'id' => 'appType')),
         on::change('onChangeAppType')
     ),
     $config->inQuickon ? formGroup

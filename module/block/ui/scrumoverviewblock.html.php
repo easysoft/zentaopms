@@ -83,6 +83,24 @@ $remainingDays = zget($project, 'remainingDays' , 0);
 
 panel
 (
+    to::titleSuffix
+    (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        )
+    ),
     setClass('scrumoverview-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::bodyClass('no-shadow border-t'),
     set::title($block->title),

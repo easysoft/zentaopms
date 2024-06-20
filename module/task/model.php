@@ -38,6 +38,10 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
+            /* When activate and assigned to a team member, then update his left data in teamData. */
+            $teamIndex = zget(array_flip($teamData->team), $task->assignedTo, '');
+            if($teamIndex !== '') $teamData->teamLeft[$teamIndex] = $task->left;
+
             $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             $task = $this->computeMultipleHours($oldTask, $task);
         }
@@ -191,7 +195,6 @@ class taskModel extends model
         /* Process other data. */
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story) $this->loadModel('story')->setStage($task->story);
-        if($this->config->edition != 'open' && $task->feedback) $this->loadModel('feedback')->updateStatus('task', $task->feedback, $task->status, $task->status);
 
         $this->updateKanbanCell($task->id, $output, $task->execution);
 
@@ -815,7 +818,7 @@ class taskModel extends model
             /* Get members, old team and current task. */
             $members     = array_column($team, 'account');
             $oldTeam     = zget($oldTask, 'team', array());
-            $currentTask = !empty($task) ? $task : new stdclass();
+            $currentTask = !empty($task) ? clone $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
             $oldTask->team = $team;
 
@@ -905,10 +908,11 @@ class taskModel extends model
      * Create a task.
      *
      * @param  object    $task
+     * @param  bool      $createAction
      * @access public
      * @return false|int
      */
-    public function create(object $task): false|int
+    public function create(object $task, bool $createAction = true): false|int
     {
         /* If the lifetime if the execution is ops and the attribute of execution is request or review, remove story from required fields. */
         $execution      = $this->dao->findByID($task->execution)->from(TABLE_PROJECT)->fetch();
@@ -940,7 +944,7 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+        if($createAction) $this->loadModel('action')->create('task', $taskID, 'Opened', '');
         $this->loadModel('file')->updateObjectID($this->post->uid, $taskID, 'task');
         $this->loadModel('score')->create('task', 'create', $taskID);
         if(dao::isError()) return false;
@@ -1099,7 +1103,7 @@ class taskModel extends model
     public function createMultiTask(object $task, object $teamData): false|int
     {
         $task->assignedTo = '';
-        $taskID = $this->create($task);
+        $taskID = $this->create($task, false);
         if(!$taskID) return false;
 
         if(count(array_filter($teamData->team)) < 2) return $taskID;
@@ -1112,6 +1116,9 @@ class taskModel extends model
             $this->computeMultipleHours($task);
             $this->loadModel('program')->refreshProjectStats($task->project);
         }
+
+        /* Send mail after created team. */
+        $this->loadModel('action')->create('task', $taskID, 'Opened', '');
 
         return $taskID;
     }
@@ -1186,6 +1193,7 @@ class taskModel extends model
         if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
         return common::createChanges($oldTask, $task);
     }
 
@@ -2150,6 +2158,14 @@ class taskModel extends model
         /* 任务不可修改的话，则无法进行操作。 */
         if(!common::canModify('task', $task)) return false;
 
+        /* IPD任务当关联的需求池需求撤销/移除移除时，任务需要点击确认。*/
+        /* IPD Task when the associated demand is retraec / unlink, the task needs to confirm . */
+        if($action == 'confirmdemandretract') return !empty($task->confirmeActionType) && $task->confirmeActionType == 'confirmedretract';
+        if($action == 'confirmdemandunlink')  return !empty($task->confirmeActionType) && $task->confirmeActionType == 'confirmedunlink';
+
+        /* 如果是转任务，直接返回 true。 */
+        if($action == 'totask') return true;
+
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
 
@@ -2181,6 +2197,10 @@ class taskModel extends model
         }
 
         $executionInfo = zget($task, 'executionInfo', array());
+
+        /* 如果是IPD串行项目下的任务，则只有当前阶段开始以后才能开始/关闭任务。*/
+        /* If it is a task under an IPD serial project, the task can be started / closed only after the current phase begins. */
+        if(!empty($executionInfo->canStartExecution['disabled']) && in_array($action, array('start', 'finish', 'recordworkhour'))) return false;
 
         /* 根据状态判断是否可以点击。 Check clickable by status. */
         if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && zget($executionInfo, 'type') != 'kanban';

@@ -19,10 +19,11 @@ jsVar('oldShowGrades', $showGrades);
 jsVar('gradeGroup', $gradeGroup);
 jsVar('hasProduct',  $execution->hasProduct);
 jsVar('linkedTaskStories',  $linkedTaskStories);
+jsVar('URChanged',          $lang->story->URChanged);
 jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
-jsVar('typeNotEmpty',       sprintf($this->lang->error->notempty, $this->lang->task->type));
-jsVar('hourPointNotEmpty',  sprintf($this->lang->error->notempty, $this->lang->story->convertRelations));
-jsVar('hourPointNotError',  sprintf($this->lang->story->float, $this->lang->story->convertRelations));
+jsVar('typeNotEmpty',       sprintf($lang->error->notempty, $lang->task->type));
+jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->convertRelations));
+jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
 
 /* Show feature bar. */
 featureBar
@@ -369,7 +370,7 @@ if($canBatchAction)
         $assignedToItems = array();
         foreach ($users as $account => $name)
         {
-            if($account == 'closed') continue;
+            if($account == 'closed' || !$name) continue;
 
             $assignedToItems[] = array(
                 'text'       => $name,
@@ -386,7 +387,8 @@ if($canBatchAction)
             'text'        => $lang->story->assignedTo,
             'className'   => 'btn btn-caret size-sm secondary',
             'type'        => 'dropdown',
-            'items'       => $assignedToItems
+            'items'       => $assignedToItems,
+            'menu'        => array('searchBox' => true)
         );
     }
 
@@ -456,14 +458,19 @@ foreach($setting as $col)
 
 /* DataTable data. */
 $data        = array();
-$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'unlink');
+$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'unlink', 'processStoryChange');
 if(empty($execution->hasProduct) && empty($execution->multiple))
 {
-    $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close');
+    $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close', 'processStoryChange');
     if($storyType == 'requirement') $actionMenus = array('change', 'submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'edit', 'divider', 'batchCreate', 'close');
 }
 if(!$canModifyExecution) $actionMenus = array();
 
+if($config->edition == 'ipd')
+{
+    $actionMenus[] = 'confirmDemandRetract';
+    $actionMenus[] = 'confirmDemandUnlink';
+}
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus, 'branches' => $branchPairs);
 foreach($stories as $story)
 {

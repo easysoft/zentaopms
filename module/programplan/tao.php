@@ -226,7 +226,8 @@ class programplanTao extends programplanModel
         foreach($plans as $plan)
         {
             $planIdList[$plan->id] = $plan->id;
-            $reviewDeadline[$plan->id]['stageEnd'] = $plan->end;
+            $reviewDeadline[$plan->id]['stageEnd']   = $plan->end;
+            $reviewDeadline[$plan->id]['stageBegin'] = $plan->begin;
 
             $data = $this->buildPlanDataForGantt($plan);
 
@@ -421,14 +422,16 @@ class programplanTao extends programplanModel
     {
         if($point->end and !helper::isZeroDate($point->end)) return $point->end;
 
-        $end = $reviewDeadline[$planID]['stageEnd'];
-        if(strpos($point->category, "DCP") !== false) return $this->getReviewDeadline($end, 2);
+        $end     = $reviewDeadline[$planID]['stageEnd'];
+        $begin   = $reviewDeadline[$planID]['stageBegin'];
+
+        if(strpos($point->category, "DCP") !== false) $end = $this->getReviewDeadline($end, 2);
         if(strpos($point->category, "TR") !== false)
         {
             if(isset($reviewDeadline[$planID]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$planID]['taskEnd'])) return $reviewDeadline[$planID]['taskEnd'];
-            return $this->getReviewDeadline($end);
+            $end = $this->getReviewDeadline($end);
         }
-        return $end;
+        return $end <= $begin ? $begin : $end;
     }
 
     /**

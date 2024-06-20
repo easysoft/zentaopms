@@ -37,8 +37,9 @@ class thinkStepBase extends wg
         global $lang, $app;
         $app->loadLang('thinkrun');
         $app->loadLang('thinkstep');
+        list($step, $mode) = $this->prop(array('step', 'mode'));
+        if($mode != 'detail') return array();
 
-        $step    = $this->prop('step');
         $options = $step->options;
         if($options)
         {
@@ -56,27 +57,28 @@ class thinkStepBase extends wg
             }
         }
 
+        $requiredSymbal = !empty($options->required) ? span(setClass('text-danger mr-0.5 h-5'), '*') : null;
+        $questionTips   = !empty($tips) ? span(setClass('text-gray mx-1'), '(' . $tips . ')') : null;
+        $errorText      = isset($options->questionType) && !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
+        (
+            setClass('run-error-msg h-5 inline-block text-canvas text-md px-2 ml-0.5 rounded-md hidden'),
+            setStyle('background', 'var(--color-danger-600)'),
+            $lang->thinkrun->error->requiredType[$options->questionType]
+        ) : null;
+
         return array
         (
             div
             (
-                setClass('h-10 flex items-start justify-between mb-2'),
-                $step->type == 'question' ? array
+                setClass('flex items-start justify-between mb-2 step-title'),
+                $step->type == 'question' ? div
                 (
-                    div
-                    (
-                        setStyle(array('font-size' => '1.25rem')),
-                        setClass('h-full flex items-center text-fore'),
-                        !empty($options->required) ? div(setClass('text-danger mr-0.5 h-5'), '*') : null,
-                        $step->title,
-                        !empty($tips) ? span(setClass('text-gray mx-1'), '(' . $tips . ')') : null,
-                        !empty($lang->thinkrun->error->requiredType[$options->questionType]) ? span
-                        (
-                            setClass('run-error-msg h-5 inline-block text-canvas text-md px-2 ml-0.5 rounded-md hidden'),
-                            setStyle('background', 'var(--color-danger-600)'),
-                            $lang->thinkrun->error->requiredType[$options->questionType]
-                        ) : null,
-                    ),
+                    setStyle(array('font-size' => '1.25rem')),
+                    setClass('h-full text-fore'),
+                    $requiredSymbal,
+                    $step->title,
+                    $questionTips,
+                    $errorText
                 ) : div
                 (
                     setClass('text-2xl'),
@@ -162,7 +164,7 @@ class thinkStepBase extends wg
 
     protected function build(): wg|node|array
     {
-        return $this->prop('mode') == 'detail' ? ($this->prop('isRun') ? div
+        $content = $this->prop('isRun') ? div
         (
             setClass('w-full col bg-white items-center py-10 px-8 mb-4'),
             div
@@ -171,6 +173,7 @@ class thinkStepBase extends wg
                 setClass('w-full'),
                 $this->buildDetail()
             )
-        ) : $this->buildDetail()): $this->buildForm();
+        ) : $this->buildDetail();
+        return $this->prop('mode') == 'detail' ? $content : $this->buildForm();
     }
 }

@@ -456,7 +456,7 @@ class projectTao extends projectModel
      */
     protected function getLinkedProductsCount(object $project, object $rawdata): int
     {
-        if(!isset($project)) return 0;
+        if(!isset($project) || !empty($project->newProject)) return 0;
 
         $linkedProductsCount = 0;
         if($project->hasProduct && isset($rawdata->products))

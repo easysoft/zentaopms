@@ -589,6 +589,8 @@ class docModel extends model
             ->page($pager)
             ->fetchAll('id');
 
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', true);
+
         return $this->processCollector($docs);
     }
 
@@ -961,7 +963,7 @@ class docModel extends model
 
         $requiredFields = $this->config->doc->create->requiredFields;
         if($doc->status == 'draft') $requiredFields = 'title';
-        if(strpos("url|word|ppt|excel", $lib->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
+        if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
         if($checkContent && strpos("url|word|ppt|excel|", $lib->type) === false)
@@ -1217,7 +1219,7 @@ class docModel extends model
         if(!isset($doc->lib)) return false;
 
         /* Asset document don't check privilege. */
-        if(isset($doc->assetLibType) && $doc->assetLibType) return true;
+        if((isset($doc->assetLibType) && $doc->assetLibType) || $doc->type == 'article') return true;
 
         /* My document are accessible only to the creator. */
         if($doc->status == 'draft' && $doc->addedBy != $this->app->user->account) return false;
@@ -1443,7 +1445,7 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)
@@ -2105,6 +2107,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', true);
 
         return $this->processCollector($docs);
     }
@@ -2804,6 +2808,31 @@ class docModel extends model
     public function updateOrder(int $catalogID, int $order, string $type = 'doc'): bool
     {
         $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($catalogID)->andWhere('type')->eq($type)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 更新文档中的附件信息。
+     * Update doc file.
+     *
+     * @param  int    $docID
+     * @param  int    $fileID
+     * @access public
+     * @return bool
+     */
+    public function updateDocFile(int $docID, int $fileID): bool
+    {
+        $docContent = $this->dao->select('t1.*')->from(TABLE_DOCCONTENT)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
+            ->where('t2.id')->eq($docID)
+            ->fetch();
+
+        unset($docContent->id);
+        $docContent->files    = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
+        $docContent->version += 1;
+        $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+        $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
 
         return !dao::isError();
     }

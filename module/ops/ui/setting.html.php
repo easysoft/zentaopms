@@ -35,10 +35,11 @@ foreach($lang->$module->$fieldList as $key => $value)
     (
         formGroup
         (
+            set::className('grow-0'),
             set::width('150px'),
             set::label($key === '' ? 'NULL' : $key),
             set::name('keys[]'),
-            set::control('hidden'),
+            set::control(array('type' => 'hidden')),
             set::value($key)
         ),
         input

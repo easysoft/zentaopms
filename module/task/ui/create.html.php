@@ -26,6 +26,7 @@ jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimateAB, '0'
 jsVar('taskID', $taskID ?? 0);
 jsVar('toTaskList', !empty($task->id));
 jsVar('showFields', $showFields);
+jsVar('canViewStory', common::hasPriv('execution', 'storyView'));
 
 if(!empty($task->team))
 {

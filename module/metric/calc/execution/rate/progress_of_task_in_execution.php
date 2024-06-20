@@ -20,31 +20,23 @@
  */
 class progress_of_task_in_execution extends baseCalc
 {
-    public $dataset = 'getTasks';
+    public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.consumed', 't1.left', 't1.execution');
+    public $fieldList = array('t1.id', 't1.progress');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $consumed = !empty($row->consumed) ? $row->consumed : 0;
-        $left     = !empty($row->left)     ? $row->left : 0;
+        $execution = $row->id;
+        $progress  = $row->progress;
 
-        if(!isset($this->result[$row->execution])) $this->result[$row->execution] = array('consumed' => 0, 'left' => 0);
-        $this->result[$row->execution]['consumed'] += $consumed;
-        $this->result[$row->execution]['left']     += $left;
+        $this->result[$execution] = (float)$progress / 100;
     }
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $execution => $taskInfo)
-        {
-            $total = $taskInfo['consumed'] + $taskInfo['left'];
-            $progress = $total ? round($taskInfo['consumed'] / $total, 4) : 0;
-            $records[] = array('execution' => $execution, 'value' => $progress);
-        }
+        $records = $this->getRecords(array('execution', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

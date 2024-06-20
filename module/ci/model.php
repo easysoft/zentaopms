@@ -174,7 +174,6 @@ class ciModel extends model
         }
 
         if($compile->engine == 'gitlab') return $this->syncGitlabTaskStatus($compile);
-        if($compile->engine == 'gitfox') return $this->syncGitFoxTaskStatus($compile);
 
         $jenkinsServer   = $compile->url;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
@@ -231,51 +230,6 @@ class ciModel extends model
             $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
             $data->logs .= $this->transformAnsiToHtml($this->gitlab->apiGetJobLog($compile->server, $compile->project, $job->id));
         }
-
-        $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();
-        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
-
-        /* Send mr message by compile status. */
-        $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($compile->id)->fetch();
-        if($relateMR)
-        {
-            if($data->status == 'success') $this->loadModel('action')->create('mr', $relateMR->id, 'compilePass');
-            if($data->status == 'failed')  $this->loadModel('action')->create('mr', $relateMR->id, 'compileFail');
-        }
-
-        return !dao::isError();
-    }
-
-    /**
-     * 同步gitfox任务状态。
-     * Sync gitfox task status.
-     *
-     * @param  object $compile
-     * @access public
-     * @return bool
-     */
-    public function syncGitFoxTaskStatus(object $compile): bool
-    {
-        /* The value of `$compile->pipeline` is like `'{"project":"46", "name": "test", "reference":"master"}'` in current design. */
-        $pipeline = json_decode($compile->pipeline);
-        $compile->project  = isset($pipeline->project) ? (int)$pipeline->project : (int)$compile->pipeline;
-        $compile->pipeline = zget($pipeline, 'name', '');
-
-        $now      = helper::now();
-        $pipeline = $this->loadModel('gitfox')->apiGetSinglePipeline($compile->server, $compile->project, $compile->pipeline, $compile->queue);
-        if(!isset($pipeline->number)) /* The pipeline is not available. */
-        {
-            $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq('create_fail')->where('id')->eq($compile->job)->exec();
-            return false;
-        }
-
-        $pipeline->name = $compile->pipeline;
-        $logs = $this->gitfox->apiGetPipelineLogs($compile->server, $compile->project, $pipeline);
-
-        $data = new stdclass();
-        $data->status     = $pipeline->status;
-        $data->updateDate = $now;
-        $data->logs       = $this->transformAnsiToHtml($logs);
 
         $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();

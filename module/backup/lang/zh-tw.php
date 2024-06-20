@@ -29,7 +29,7 @@ $lang->backup->settingList['nosafe'] = '不需要防下載PHP檔案頭';
 global $config;
 if($config->inContainer) $lang->backup->settingList['nofile'] = '不備份附件';
 
-$lang->backup->waitting        = '<span id="backupType"></span>正在進行中，請稍候...';
+$lang->backup->waiting         = '<span id="backupType"></span>正在進行中，請稍候...';
 $lang->backup->progressSQL     = '<p>SQL備份中，已備份%s</p>';
 $lang->backup->progressAttach  = '<p>SQL備份完成</p><p>附件備份中，共有%s個檔案，已經備份%s個</p>';
 $lang->backup->progressCode    = '<p>SQL備份完成</p><p>附件備份完成</p><p>代碼備份中，共有%s個檔案，已經備份%s個</p>';

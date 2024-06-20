@@ -92,33 +92,6 @@ window.changeTrigger = function(event)
 /*
  * Check sonarqube linked.
  */
-window.setPipeline = function()
-{
-    if($('[name=engine]').val() != 'gitfox') $('.gitfox-pipeline').addClass('hidden');
-    const $pipeline = $('[name=gitfoxpipeline]').zui('picker');
-    if(!$pipeline) return;
-    $pipeline.$.clear();
-
-    const engine = $('[name=engine]').val();
-    if(engine != 'gitfox') return;
-
-    const repoID = $('[name=repo]').val();
-    if(!repoID) return;
-    $.getJSON($.createLink('job', 'ajaxGetPipelines', 'repoID=' + repoID), function(result)
-    {
-        let pipelines = [];
-        if(result.data.length > 0) pipelines = result.data;
-
-        $pipeline.render({items: pipelines});
-        const pipeline = JSON.parse(job.pipeline).name;
-        if(repoID == job.repo && pipeline) $pipeline.$.setValue(pipeline);
-        $('.gitfox-pipeline').removeClass('hidden');
-    })
-}
-
-/*
- * Check sonarqube linked.
- */
 window.checkSonarquebLink = function()
 {
     const repoID = $('[name=repo]').val();
@@ -230,7 +203,6 @@ window.changeEngine = function(event)
     else
     {
         $('#jenkinsServerTR').addClass('hidden');
-        if(engine == 'gitfox') $('.gitfox-pipeline').removeClass('hidden');
     }
 
     const items = [];
@@ -270,7 +242,7 @@ window.changeRepo = function()
             const triggerOptions = [];
             for(code in triggerList)
             {
-                if(code == 'tag' && data.type == 'gitfox') continue;
+                if(code == 'tag' && !data.triggerByTag) continue;
                 triggerOptions.push({text: triggerList[code], value: code})
             }
             $trigger.render({items: triggerOptions});
@@ -314,8 +286,6 @@ window.changeRepo = function()
             $trigger.render({items: triggerOptions});
         }
     });
-
-    window.setPipeline();
 
     /* Check exists sonarqube data. */
     window.checkSonarquebLink();

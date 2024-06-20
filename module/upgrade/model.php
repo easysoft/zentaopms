@@ -113,7 +113,25 @@ class upgradeModel extends model
             file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
         }
 
-        if(version_compare($fromVersion, '20.0.beta1', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+        if(empty($this->config->global->hideUpgradeGuide))
+        {
+            if(strpos($fromVersion, 'ipd') !== false)
+            {
+                if(version_compare($fromVersion, 'ipd2.0.0', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+            elseif(strpos($fromVersion, 'max') !== false)
+            {
+                if(version_compare($fromVersion, 'max5.0.0', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+            elseif(strpos($fromVersion, 'pro') !== false || strpos($fromVersion, 'biz') !== false)
+            {
+                if(version_compare($fromVersion, 'biz10.0.0', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+            else
+            {
+                if(version_compare($fromVersion, '20.0.beta1', '>=')) $this->loadModel('setting')->setItem("system.common.global.hideUpgradeGuide", 1);
+            }
+        }
 
         $fromEdition = $this->getEditionByVersion($fromVersion);
         $this->fromVersion = $fromVersion;
@@ -481,13 +499,17 @@ class upgradeModel extends model
         if($defaultPos === false) return false; // No default in std, don't change.
 
         $stdDefault = str_replace("'", '', substr($stdField, $defaultPos + 9));
+        $commentPos = stripos($stdDefault, ' COMMENT ');
+        if($commentPos !== false) $stdDefault = substr($stdDefault, 0, $commentPos);
         if($stdDefault == 'NULL') return false; // Default is NULL, don't change.
         if(strpos($stdField, 'text') !== false && empty($stdDefault)) return false; // Default is '' and text type, don't change.
 
         $defaultPos = stripos($dbField,  ' DEFAULT ');
         if($defaultPos === false) return true; // No default in db, change it.
 
-        $dbDefault = str_replace("'", '', substr($dbField, $defaultPos + 9));
+        $dbDefault  = str_replace("'", '', substr($dbField, $defaultPos + 9));
+        $commentPos = stripos($dbDefault, ' COMMENT ');
+        if($commentPos !== false) $dbDefault = substr($dbDefault, 0, $commentPos);
 
         return $stdDefault != $dbDefault;
     }
@@ -502,8 +524,8 @@ class upgradeModel extends model
      */
     private function checkFieldTypeDiff($stdField, $dbField)
     {
-        $stdConfigs = explode(' ', $stdField);
-        $dbConfigs  = explode(' ', $dbField);
+        $stdConfigs = preg_split('/\s+/', $stdField);
+        $dbConfigs  = preg_split('/\s+/', $dbField);
 
         $stdType = $stdConfigs[1];
         $dbType  = $dbConfigs[1];
@@ -537,7 +559,7 @@ class upgradeModel extends model
         }
         elseif($dbIsVarchar)
         {
-            if($stdIsInt || $stdIsFloat || $stdIsText) return true;
+            if($stdIsText) return true;
             if($dbLength && $stdLength > $dbLength) return true;
         }
 
@@ -1414,8 +1436,6 @@ class upgradeModel extends model
      */
     public function addORPriv($openVersion = ''): bool
     {
-        if(version_compare($openVersion, '18_6', '>=')) return false;
-
         /* Get admin users. */
         $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchPairs();
         $admins = explode(',', implode(',', $admins));
@@ -1431,6 +1451,8 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_USER)->set('visions')->eq($visions)->where('account')->eq($account)->exec();
             }
         }
+
+        if(version_compare($openVersion, '18_5', '>=')) return false;
 
         include('priv.php');
         /* Add or groups. */
@@ -6776,7 +6798,7 @@ class upgradeModel extends model
 
             $group->name      = $name;
             $group->collector = $module;
-            $this->dao->replace(TABLE_MODULE)->data($group)->exec();
+            $this->dao->insert(TABLE_MODULE)->data($group)->exec();
 
             $modules[$module] = $this->dao->lastInsertID();
 
@@ -8980,24 +9002,29 @@ class upgradeModel extends model
     public function upgradeBIData()
     {
         $this->loadModel('bi');
+        $this->saveLogs('Run Method ' . __FUNCTION__);
 
+        $this->dao->clearTablesDescCache();
         /* Prepare built-in sqls of bi. */
         $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
         $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL('update');
         $metricSQLs = $this->bi->prepareBuiltinMetricSQL('update');
         $screenSQLs = $this->bi->prepareBuiltinScreenSQL('update');
 
-        $upgradeTables = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
+        $upgradeSqls = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
 
         try
         {
-            foreach($upgradeTables as $table)
+            foreach($upgradeSqls as $sql)
             {
-                $table = trim($table);
-                if(empty($table)) continue;
+                $sql = trim($sql);
+                if(empty($sql)) continue;
 
-                $table = str_replace('zt_', $this->config->db->prefix, $table);
-                if(!$this->dbh->query($table)) return false;
+                $this->saveLogs($sql);
+
+                $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+                $this->dbh->query($sql);
+                if(dao::isError()) return false;
             }
         }
         catch(Error $e)
@@ -9007,5 +9034,154 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * 根据是否加载 APCu 扩展，开启缓存。
+     * Open cache by load APCu or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function openCacheByAPCu(): bool
+    {
+        return $this->loadModel('install')->enableDaoCache();
+    }
+
+    /**
+     * 补充分类项语言项。
+     * Complete classify lang.
+     *
+     * @access public
+     * @return bool
+     */
+    public function completeClassifyLang()
+    {
+        $this->app->loadLang('install');
+
+        $classifyLang = $this->dao->select('*')->from(TABLE_LANG)
+            ->where('lang')->eq('all')
+            ->andWhere('module')->eq('process')
+            ->andWhere('section')->in(array('scrumClassify', 'agileplusClassify', 'waterfallplusClassify'))
+            ->andWhere('`key`')->in(array('support', 'engineering', 'project'))
+            ->andWhere('vision')->eq('rnd')
+            ->fetchGroup('section', 'key');
+
+        foreach(array('scrum', 'agileplus', 'waterfallplus') as $modal)
+        {
+            foreach($this->lang->install->langList as $langInfo)
+            {
+                if($langInfo['module'] != 'process') continue;
+                if(isset($classifyLang[$modal . 'Classify'][$langInfo['key']])) continue;
+
+                $classifyData = new stdclass();
+                $classifyData->lang    = 'all';
+                $classifyData->module  = 'process';
+                $classifyData->section = $modal . 'Classify';
+                $classifyData->key     = $langInfo['key'];
+                $classifyData->value   = $langInfo['value'];
+                $classifyData->vision  = 'rnd';
+                $classifyData->system  = 1;
+
+                $this->dao->replace(TABLE_LANG)->data($classifyData)->exec();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 新增反馈的数据源，并且更新到工单的由反馈转化字段。
+     * Add feedback datasource and set options of ticket feedback.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addFeedbackDatasource()
+    {
+        $this->loadModel('feedback');
+
+        $datasource = new stdclass();
+        $datasource->type        = 'sql';
+        $datasource->name        = $this->lang->feedback->common;
+        $datasource->code        = 'feedbacks';
+        $datasource->datasource  = "select id,title from zt_feedback where deleted = '0'";
+        $datasource->keyField    = 'id';
+        $datasource->valueField  = 'title';
+        $datasource->buildin     = '1';
+        $datasource->vision      = 'rnd';
+        $datasource->vision      = 'rnd';
+        $datasource->createdBy   = 'system';
+        $datasource->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_WORKFLOWDATASOURCE)->data($datasource)->autoCheck()->exec();
+        $datasourceID = $this->dao->lastInsertID();
+
+        $view = "view_datasource_$datasourceID";
+        $sql  = "CREATE VIEW $view (`id`, `title`) AS $datasource->datasource";
+
+        $this->dbh->query($sql);
+
+        $this->dao->update(TABLE_WORKFLOWDATASOURCE)->set('view')->eq($view)->where('id')->eq($datasourceID)->exec();
+
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('options')->eq($datasourceID)->where('module')->eq('ticket')->andWhere('field')->eq('feedback')->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 将瀑布项目的活动和文档同步到融合瀑。
+     * Synchronise the activities and zoutputs of the Waterfall project with the Waterfallplus project.
+     *
+     * @access public
+     * @return bool
+     */
+    public function syncActivityAndOutput()
+    {
+        $models    = array('waterfall' => 'waterfallplus', 'scrum' => 'agileplus');
+        $acitivies = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('deleted')->eq(0)->orderBy('order_asc')->fetchGroup('process', 'id');
+        $zoutputs  = $this->dao->select('*')->from(TABLE_ZOUTPUT)->where('deleted')->eq(0)->orderBy('order_asc')->fetchGroup('activity', 'id');
+        foreach($models as $model => $plusModel)
+        {
+            $plusProcesses = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq($plusModel)->orderBy('order_asc')->fetchAll('id');
+            if(!empty($plusProcesses))
+            {
+                $plusActivities = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('deleted')->eq(0)->andWhere('process')->in(array_keys($plusProcesses))->orderBy('order_asc')->fetchAll();
+                if(!empty($plusActivities)) continue;
+            }
+
+            $processes = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq($model)->orderBy('order_asc')->fetchAll('id');
+            foreach($processes as $process)
+            {
+                if(!isset($acitivies[$process->id])) continue;
+                foreach($plusProcesses as $plusProcess)
+                {
+                    if($plusProcess->name != $process->name || $plusProcess->type != $process->type || $plusProcess->abbr != $process->abbr) continue;
+
+                    foreach($acitivies[$process->id] as $activity)
+                    {
+                        $data = clone $activity;
+                        $data->process    = $plusProcess->id;
+                        $data->editedDate = $data->assignedDate = null;
+                        unset($data->id);
+
+                        $this->dao->insert(TABLE_ACTIVITY)->data($data)->autoCheck()->exec();
+                        $newActivityID = $this->dao->lastInsertID();
+
+                        if(!isset($zoutputs[$activity->id])) continue;
+                        foreach($zoutputs[$activity->id] as $zoutput)
+                        {
+                            $data = clone $zoutput;
+                            $data->activity   = $newActivityID;
+                            $data->editedDate = null;
+                            unset($data->id);
+
+                            $this->dao->insert(TABLE_ZOUTPUT)->data($data)->autoCheck()->exec();
+                        }
+                    }
+                }
+            }
+        }
+        return !dao::isError();
     }
 }

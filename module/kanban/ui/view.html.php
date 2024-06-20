@@ -63,6 +63,7 @@ jsVar('cardLang', $lang->kanbancard);
 jsVar('executionLang', $lang->execution);
 jsVar('releaseLang', $lang->release);
 jsVar('productplanLang', $lang->productplan);
+jsVar('ticketLang', isset($lang->ticket) ? $lang->ticket : '');
 jsVar('kanbanID', $kanban->id);
 jsVar('kanban', $kanban);
 jsVar('groupCols', $groupCols);
@@ -74,6 +75,8 @@ jsVar('canViewPlan', common::hasPriv('productplan', 'view') && $config->vision !
 jsVar('canViewRelease', common::hasPriv('release', 'view') && $config->vision != 'lite');
 jsVar('canViewExecution', common::hasPriv('execution', 'task') && $config->vision != 'lite');
 jsVar('canViewBuild', common::hasPriv('build', 'view') && $config->vision != 'lite');
+jsVar('canViewTicket', common::hasPriv('ticket', 'view'));
+jsVar('userList', $userList);
 
 dropmenu(set::tab('kanban'), set::objectID($kanban->id));
 

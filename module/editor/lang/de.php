@@ -30,7 +30,7 @@ $lang->editor->deleteConfirm = 'Möchten Sie das löschen?';
 $lang->editor->extendConfirm = 'Möchten Sie den Originalcode verwenden?';
 $lang->editor->repeatFile    = 'Datei existiert bereits';
 $lang->editor->repeatPage    = 'Seite existiert bereits. Möchten Sie die Seite überschreiben?';
-$lang->editor->noticeOkFile  = 'Aus Sicherheitsgründen muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
+$lang->editor->noticeOkFile  = "Aus Sicherheitsgründen muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.";
 $lang->editor->editFileError = 'Sie können nur ZenTao Dateien verändern!';
 $lang->editor->turnOff       = "If you don't use the editor function, you can turn it off here.";
 

@@ -12,7 +12,7 @@ $config->tutorial->tasksConfig['createAccount']['nav']['method']         = 'crea
 $config->tutorial->tasksConfig['createAccount']['nav']['menuModule']     = 'company';
 $config->tutorial->tasksConfig['createAccount']['nav']['menu']           = 'browseUser';
 $config->tutorial->tasksConfig['createAccount']['nav']['form']           = '#mainContent';
-$config->tutorial->tasksConfig['createAccount']['nav']['requiredFields'] = 'account,realname,verifyPassword,password1,password2';
+$config->tutorial->tasksConfig['createAccount']['nav']['requiredFields'] = 'account,password1,password2,realname,verifyPassword';
 $config->tutorial->tasksConfig['createAccount']['nav']['submit']         = 'button[type=submit]';
 $config->tutorial->tasksConfig['createAccount']['nav']['target']         = '.create-user-btn';
 $config->tutorial->tasksConfig['createAccount']['nav']['targetPageName'] = $lang->tutorial->tasks->createAccount->targetPageName;
@@ -111,7 +111,7 @@ $config->tutorial->tasksConfig['createProjectExecution']['nav']['app']          
 $config->tutorial->tasksConfig['createProjectExecution']['nav']['module']         = 'execution';
 $config->tutorial->tasksConfig['createProjectExecution']['nav']['method']         = 'create';
 $config->tutorial->tasksConfig['createProjectExecution']['nav']['menuModule']     = '';
-$config->tutorial->tasksConfig['createProjectExecution']['nav']['menu']           = '#heading > .toolbar > .toolbar-item, #table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, .create-execution-btn';
+$config->tutorial->tasksConfig['createProjectExecution']['nav']['menu']           = '#table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, .create-execution-btn';
 $config->tutorial->tasksConfig['createProjectExecution']['nav']['form']           = '#mainContent';
 $config->tutorial->tasksConfig['createProjectExecution']['nav']['submit']         = 'button[type=submit]';
 $config->tutorial->tasksConfig['createProjectExecution']['nav']['targetPageName'] = $lang->tutorial->tasks->createProjectExecution->targetPageName;

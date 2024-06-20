@@ -123,7 +123,7 @@ $tabs[] = setting()
     ->group('basic')
     ->title($lang->story->legendBasicInfo)
     ->control('storyBasicInfo')
-    ->statusText($this->processStatus('story', $story));
+    ->statusText($story->URChanged ? $lang->story->URChanged : $this->processStatus('story', $story));
 
 /* 需求一生。Legend life items. */
 $tabs[] = setting()
@@ -180,12 +180,15 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 
 if($isInModal) $config->story->actionList['recall']['url'] = str_replace('&from=view&', '&from=modal&', $config->story->actionList['recall']['url']);
 if($story->status == 'changing') $config->story->actionList['recall']['text'] = $lang->story->recallChange;
-$hasRepo    = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+$this->loadModel('repo');
+$hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
 $actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
-if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
+
 foreach($actions as $key => $action)
 {
+    if($story->type == 'requirement' && isset($action['key']) && in_array($action['key'], array('testcase', 'createTask'))) unset($actions[$key]);
     if(!$hasDivider && isset($action['type']) && $action['type'] == 'divider')
     {
         unset($actions[$key]);
@@ -226,6 +229,15 @@ foreach($actions as $key => $action)
         $actions[$key]['data-load'] = 'modal';
         $actions[$key]['data-size'] = 'lg';
     }
+}
+
+if($this->config->edition == 'ipd' and $story->type == 'story') $story = $this->story->getAffectObject(array(), $story->type, $story);
+if($config->edition == 'ipd' && $story->type == 'story' && !empty($story->confirmeActionType))
+{
+    $actions   = array();
+    $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+    $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
+    $actions[] = array('name' => $method, 'text' => $lang->story->$method, 'icon' => 'search', 'hint' => $lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
 }
 
 detail

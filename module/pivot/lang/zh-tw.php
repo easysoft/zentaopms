@@ -105,3 +105,6 @@ $lang->pivot->workloadDesc  = '工作負載=用戶所有任務剩餘工時之和
 
 $lang->pivot->featureBar = array();
 $lang->pivot->featureBar['preview'] = array();
+
+$lang->pivot->moreSelects['preview'] = array();
+$lang->pivot->moreSelects['preview']['more'] = array();

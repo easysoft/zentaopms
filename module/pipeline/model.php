@@ -162,7 +162,7 @@ class pipelineModel extends model
      */
     public function deleteByObject(int $id, string $type = 'gitlab'): int|bool
     {
-        if(in_array($type, array('gitlab', 'gitea', 'gogs', 'gitfox')))
+        if(in_array($type, array('gitlab', 'gitea', 'gogs')))
         {
             $repo = $this->dao->select('*')->from(TABLE_REPO)
                 ->where('deleted')->eq('0')

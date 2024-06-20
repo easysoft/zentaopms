@@ -1444,6 +1444,9 @@ class productModel extends model
         $product = $this->fetchByID($productID);
         if(!$product) return false;
 
+        /* 设置1.5级导航数据。*/
+        $this->lang->switcherMenu = $this->getSwitcher($productID, $extra, $branch);
+
         /* 设置导航中分支的显示数据。*/
         /* 如果产品类型是正常的，隐藏导航中分支的显示。*/
         if($product->type == 'normal')
@@ -2097,5 +2100,42 @@ class productModel extends model
 
         /* 4. Clear actions older than 30 days. */
         $this->loadModel('action')->cleanActions();
+    }
+
+    /*
+     * 获取1.5级导航数据。
+     * Get product switcher.
+     *
+     * @param  int         $productID
+     * @param  string      $extra
+     * @access public
+     * @return string
+     */
+    public function getSwitcher(int $productID = 0, string $extra = ''): string
+    {
+        /* 获取产品名称，产品类型。 */
+        $currentProduct     = new stdclass();
+        $currentProductName = $this->lang->productCommon;
+        if($productID)
+        {
+            $currentProduct     = $this->getByID($productID);
+            $currentProductName = $currentProduct->name;
+            $this->session->set('currentProductType', $currentProduct->type);
+        }
+
+        /* Init locateModule and locateMethod for report and story. */
+        list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
+
+        /* 生成异步获取产品下拉菜单的链接。*/
+        $fromModule     = $this->app->tab == 'qa' ? 'qa' : '';
+        $dropMenuModule = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
+        $dropMenuLink   = helper::createLink($dropMenuModule, 'ajaxGetDropMenu', "objectID=$productID&module=$locateModule&method=$locateMethod&extra=$extra&from=$fromModule");
+
+        /* 构建产品1.5级导航数据。*/
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
     }
 }

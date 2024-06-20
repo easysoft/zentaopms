@@ -4,3 +4,4 @@ body > .modal-dialog > .modal-content > .modal-body > .detail-body {height: auto
 .modal-content, .modal-dialog {height: auto!important; max-height: none!important}
 .modal-body {overflow: visible!important;}
 .modal {overflow: auto!important;}
+.body-modal .modal-body .panel-form-batch .form-batch-container {max-height: unset;}

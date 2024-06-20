@@ -473,6 +473,8 @@ class execution extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+        if($this->config->edition == 'ipd') $stories = $this->loadModel('story')->getAffectObject($stories, 'story');
+
         $this->executionZen->assignCountForStory($executionID, $stories, $storyType);
         $this->executionZen->assignRelationForStory($execution, $products, $productID, $type, $storyType, $param, $orderBy, $pager);
 
@@ -825,11 +827,11 @@ class execution extends control
      */
     public function computeBurn(string $reload = 'no')
     {
-        $this->view->burns = $this->execution->computeBurn();
+        $burns = $this->execution->computeBurn();
 
         if($reload == 'yes') return $this->send(array('load' => true, 'result' => 'success'));
+        return print(json_encode($burns));
 
-        $this->display();
     }
 
     /**

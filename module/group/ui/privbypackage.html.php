@@ -38,6 +38,7 @@ if($group->role == 'limited')
     form
     (
         setID('managePrivForm'),
+        setClass('gap-0'),
         set::actions(array()),
         div
         (
@@ -296,6 +297,7 @@ else
     formBase
     (
         setID('managePrivForm'),
+        setClass('gap-0'),
         formHidden('actions[][]', ''),
         formHidden('noChecked', ''),
         set::actions(array()),

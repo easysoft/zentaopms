@@ -9,7 +9,8 @@ $config->my->taskCounts    = 10;
 $config->my->bugCounts     = 10;
 $config->my->storyCounts   = 10;
 
-$config->my->oaObjectType = 'attend,leave,makeup,overtime,lieu';
+$config->my->oaObjectType       = 'attend,leave,makeup,overtime,lieu';
+$config->my->noFlowAuditModules = array('story', 'testcase', 'feedback', 'oa');
 
 $config->mobile = new stdclass();
 $config->mobile->todoBar  = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'all');

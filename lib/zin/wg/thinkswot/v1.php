@@ -2,35 +2,40 @@
 declare(strict_types=1);
 namespace zin;
 
-class thinkSwot extends wg
-{
-    protected static array $defineProps = array(
-        'mode?: string', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
-        'blocks: array', // 模型节点
-    );
+requireWg('thinkModel');
 
+class thinkSwot extends thinkModel
+{
     public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildItem(int $order, string $blockTitle): node
+    protected function buildQuestion(array $steps): array
+    {
+        $questionList = array();
+        foreach($steps as &$step) $questionList[] = div(setClass('w-64 bg-canvas p-2 shadow'), $this->buildQuestionItem($step));
+        return $questionList;
+    }
+
+    protected function buildItem(int $order, object $block): node|array
     {
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
         $mode         = $this->prop('mode');
         $defaultTitle = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
-        $blockTitle   = $blockTitle ?: $defaultTitle;
+        $blockTitle   = $block->text ?: $defaultTitle;
+
         return div
         (
-            setClass('relative p-1 bg-canvas border border-gray-200 model-block', "block-$order"),
-            setStyle(array('width' => '50%', 'height' => '127px')),
+            setClass('relative p-1 bg-canvas border border-canvas border-2 model-block', "block-$order"),
+            setStyle(array('width' => '50%', 'min-height' => '294px')),
             div
             (
                 setClass('h-full'),
-                div(setClass('item-step-title text-center text-sm text-clip'), set::title($blockTitle), $blockTitle),
-                div(setClass('item-step-answer h-5/6'))
+                div(setClass('item-step-title text-center text-clip'), set::title($blockTitle), $blockTitle),
+                !isset($block->steps) ? null : div(setClass('px-4 py-3 flex flex-wrap gap-5 relative z-10'), $this->buildQuestion($block->steps))
             )
         );
     }
@@ -39,10 +44,7 @@ class thinkSwot extends wg
     {
         $blocks     = $this->prop('blocks');
         $modelItems = array();
-        foreach($blocks as $key => $block)
-        {
-            $modelItems[] = $this->buildItem($key, $block->text ?? '');
-        }
+        foreach($blocks as $key => $block) $modelItems[] = $this->buildItem($key, $block);
         return $modelItems;
     }
 
@@ -52,11 +54,12 @@ class thinkSwot extends wg
         $app->loadLang('thinkwizard');
 
         $mode  = $this->prop('mode');
+        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'min-width' => '1160px'));
         $model = array(
             div
             (
                 setClass('model-swot my-1 flex flex-wrap justify-between'),
-                setStyle(array('min-height' => '254px')),
+                $style,
                 $this->buildBody()
             )
         );

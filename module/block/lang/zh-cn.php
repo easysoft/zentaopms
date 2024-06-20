@@ -543,8 +543,8 @@ $lang->block->welcome->assignList['task'] = '任务数';
 if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'BUG数';
 if($config->vision != 'or') $lang->block->welcome->assignList['story'] = "{$lang->SRCommon}数";
 $lang->block->welcome->assignList['testcase'] = '用例数';
-if($config->URAndSR)  $lang->block->welcome->assignList['requirement'] = "{$lang->URCommon}数";
-if($config->enableER) $lang->block->welcome->assignList['epic']        = "{$lang->ERCommon}数";
+if($config->URAndSR && $config->vision != 'or')  $lang->block->welcome->assignList['requirement'] = "{$lang->URCommon}数";
+if($config->enableER && $config->vision != 'or') $lang->block->welcome->assignList['epic']        = "{$lang->ERCommon}数";
 
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';
@@ -743,3 +743,4 @@ $lang->block->tooltips['ac']                = "瀑布{$lang->projectCommon}中�
 $lang->block->tooltips['executionProgress'] = "<strong>{$lang->execution->common}进度</strong>=按{$lang->execution->common}统计的任务消耗工时数 /（按{$lang->execution->common}统计的任务消耗工时数+按{$lang->execution->common}统计的任务剩余工时数）<br/>
 <strong>按{$lang->execution->common}统计的任务消耗工时数</strong>：{$lang->execution->common}中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。<br/>
 <strong>按{$lang->execution->common}统计的任务剩余工时数</strong>：{$lang->execution->common}中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['metricTime']        = '统计数据将整点更新，最新更新时间为 %s。';

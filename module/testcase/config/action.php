@@ -17,6 +17,7 @@ $config->testcase->actionList['runCase']['url']          = array('module' => 'te
 $config->testcase->actionList['runCase']['notLoadModel'] = true;
 $config->testcase->actionList['runCase']['data-toggle']  = 'modal';
 $config->testcase->actionList['runCase']['data-size']    = 'lg';
+$config->testcase->actionList['runCase']['notInModal']   = true;
 
 $config->testcase->actionList['ztfRun']['icon']         = 'play';
 $config->testcase->actionList['ztfRun']['text']         = $lang->testtask->runCase;
@@ -33,6 +34,7 @@ $config->testcase->actionList['runResult']['hint']        = $lang->testtask->res
 $config->testcase->actionList['runResult']['url']         = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID={runID}&caseID={caseID}');
 $config->testcase->actionList['runResult']['data-toggle'] = 'modal';
 $config->testcase->actionList['runResult']['data-size']   = 'lg';
+$config->testcase->actionList['runResult']['notInModal']  = true;
 
 $config->testcase->actionList['edit']['icon']       = 'edit';
 $config->testcase->actionList['edit']['text']       = $lang->testcase->edit;

@@ -14,7 +14,9 @@ class fileList extends wg
         'showEdit?:bool=true',
         'extra?:string=""',
         'object?:object',
-        'padding?:bool=true'
+        'padding?:bool=true',
+        'objectType?:string=""',
+        'objectID?: int'
     );
 
     public static function getPageCSS(): ?string
@@ -61,15 +63,19 @@ class fileList extends wg
 
         $method     = $this->prop('method');
         $showDelete = $this->prop('showDelete');
+        $objectType = $this->prop('objectType');
+        $objectID   = $this->prop('objectID');
 
         $fileDiv = div
         (
             set
             (
                 array(
-                    'data-method' => $method,
+                    'data-method'     => $method,
                     'data-showDelete' => $showDelete,
-                    'data-session' => session_name() . '=' . session_id()
+                    'data-session'    => session_name() . '=' . session_id(),
+                    'data-objectType' => $objectType,
+                    'data-objectID'   => $objectID
                 )
             ),
             $this->fileList()

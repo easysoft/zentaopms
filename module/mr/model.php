@@ -159,35 +159,6 @@ class mrModel extends model
     }
 
     /**
-     * 获取GitFox服务器的项目.
-     * Get gitfox projects.
-     *
-     * @param  int    $hostID
-     * @param  array  $projectIdList
-     * @access public
-     * @return array
-     */
-    public function getGitFoxProjects(int $hostID = 0, array $projectIdList = array()): array
-    {
-        $gitfoxUsers = $this->loadModel('pipeline')->getProviderPairsByAccount('gitfox');
-        if(!$this->app->user->admin && !isset($gitfoxUsers[$hostID])) return array();
-
-        $projectPairs = array();
-        $projects     = $this->loadModel('gitfox')->apiGetRepos($hostID);
-        foreach($projects as $project)
-        {
-            if($projectIdList && !in_array($project->id, $projectIdList)) continue;
-
-            $project->full_name = $project->path;
-            $projectPairs[$hostID][$project->id] = $project;
-
-            $project->isDeveloper = true;
-        }
-
-        return $projectPairs;
-    }
-
-    /**
      * 创建合并请求。
      * Create MR function.
      *
@@ -565,10 +536,6 @@ class mrModel extends model
         {
             $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/commits");
         }
-        elseif($host->type == 'gitfox')
-        {
-            $url = sprintf($apiRoot->url, "/repos/$projectID/pullreq/$MRID/commits");
-        }
         else
         {
             $url = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/commits");
@@ -606,14 +573,6 @@ class mrModel extends model
 
             $url = sprintf($apiRoot, "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->mriid}");
             return json_decode(commonModel::http($url, $MRObject, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
-        }
-        elseif($host->type == 'gitfox')
-        {
-            if(isset($MR->description)) $MRObject->description = $MR->description;
-            $url = sprintf($apiRoot->url, "/repos/{$oldMR->sourceProject}/pullreq/{$oldMR->mriid}");
-            $mergeResult = json_decode(commonModel::http($url, $MRObject, array(), $apiRoot->header, 'json', 'PATCH'));
-            if(isset($mergeResult->number)) $mergeResult->id = $mergeResult->number;
-            return $mergeResult;
         }
         else
         {
@@ -671,8 +630,7 @@ class mrModel extends model
 
             if(is_object($apiRoot)) $apiRoot = $apiRoot->url;
             $api = "/repos/$projectID/pulls/$MRID";
-            if($host->type == 'gitfox') $api = "/repos/$projectID/pullreq/$MRID/state";
-            return json_decode(commonModel::http(sprintf($apiRoot, $api), array('state' => 'closed'), array(), $header, 'json', $host->type == 'gitfox' ? 'POST' : 'PATCH'));
+            return json_decode(commonModel::http(sprintf($apiRoot, $api), array('state' => 'closed'), array(), $header, 'json', 'PATCH'));
         }
 
         return null;
@@ -725,11 +683,6 @@ class mrModel extends model
             $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
-        elseif($host->type == 'gitfox')
-        {
-            $url = sprintf($apiRoot->url, "/repos/$projectID/pullreq/$MRID/state");
-            return json_decode(commonModel::http($url, array('state' => 'open'), array(), $apiRoot->header, 'json'));
-        }
         else
         {
             $url = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID");
@@ -759,12 +712,6 @@ class mrModel extends model
             $url = sprintf($apiRoot, "/projects/$MR->targetProject/merge_requests/$MR->mriid/merge");
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
-        elseif($host->type == 'gitfox')
-        {
-            $rowMR = $this->apiGetSingleMR($MR->repoID, $MR->mriid);
-            $url   = sprintf($apiRoot->url, "/repos/$MR->targetProject/pullreq/$MR->mriid/merge");
-            $data  = array('dry_run' => false, 'bypass_rules' => false, 'source_sha' => $rowMR->source_sha, 'method' => $MR->squash == '1' ? 'squash' : 'merge');
-        }
         else
         {
             $url  = sprintf($apiRoot, "/repos/$MR->targetProject/pulls/$MR->mriid/merge");
@@ -772,11 +719,11 @@ class mrModel extends model
             if($MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
         }
 
-        $rowMR = json_decode(commonModel::http($url, $data, array(), $host->type == 'gitfox' ? $apiRoot->header : array(), 'json', 'POST'));
+        $rowMR = json_decode(commonModel::http($url, $data, array(), array(), 'json', 'POST'));
         if(!isset($rowMR->massage))
         {
             $rowMR = $this->apiGetSingleMR($MR->repoID, $MR->mriid);
-            if($MR->removeSourceBranch == '1' && in_array($host->type, array('gogs', 'gitfox'))) $this->loadModel($host->type)->apiDeleteBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
+            if($MR->removeSourceBranch == '1' && $host->type == 'gogs') $this->loadModel($host->type)->apiDeleteBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
         }
 
         return $rowMR;
@@ -823,10 +770,6 @@ class mrModel extends model
                     foreach($diffLines as $diffLine) $lines[] = $diffLine;
                 }
             }
-        }
-        elseif($host->type == 'gitfox')
-        {
-            $lines = $scm->diff('', $MR->targetBranch, $MR->sourceBranch, 'isBranchOrTag');
         }
         else
         {

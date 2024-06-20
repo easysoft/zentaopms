@@ -404,6 +404,24 @@ if($project)
 
 statisticBlock
 (
+    to::titleSuffix
+    (
+        icon
+        (
+            setClass('text-light text-sm cursor-pointer'),
+            toggle::tooltip
+            (
+                array
+                (
+                    'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
+                    'placement' => 'bottom',
+                    'type'      => 'white',
+                    'className' => 'text-dark border border-light leading-5'
+                )
+            ),
+            'help'
+        )
+    ),
     set::block($block),
     set::active($active),
     set::moreLink(createLink('project', 'browse', 'programID=0&browseType=' . zget($block->params, 'type', ''))),

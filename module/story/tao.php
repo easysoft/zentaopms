@@ -214,7 +214,7 @@ class storyTao extends storyModel
         $reviewers = $product->reviewer;
 
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->user->getProductViewListUsers($product);
-        return $this->user->getPairs('noclosed|nodeleted', $storyReviewers, 0, $reviewers);
+        return $this->user->getPairs('noclosed|nodeleted|noletter', $storyReviewers, 0, $reviewers);
     }
 
     /**
@@ -1842,6 +1842,16 @@ class storyTao extends storyModel
         global $lang;
 
         $tutorialMode = commonModel::isTutorialMode();
+        if($this->config->edition == 'ipd' && $storyType == 'story')
+        {
+            if(!empty($story->confirmeActionType))
+            {
+                $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
+                $actions[] = array('name' => $method, 'icon' => 'search', 'hint' => $this->lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
+                return $actions;
+            }
+        }
 
         static $taskGroups = array();
 

@@ -450,7 +450,7 @@ class todo extends control
             if($todo->status == 'done') $this->todo->close($todoID);
             if($todo->status != 'done' and $todo->status != 'closed') $waitIdList[] = $todoID;
         }
-        if(!empty($waitIdList)) echo js::alert(sprintf($this->lang->todo->unfinishedTodo, implode(',', $waitIdList)));
+        if(!empty($waitIdList)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->todo->unfinishedTodo, implode(',', $waitIdList))));
 
         return $this->send(array('result' => 'success', 'load' => true));
     }

@@ -1,31 +1,6 @@
 var checkedCategories = {};
 
 /**
- * 菜单点击刷新数据。
- * Refresh data when click menu item.
- */
-window.treeClick = function(info)
-{
-    if (info.item.items && info.item.items.length > 0) return;
-    if(checkedCategories[info.item.id] != undefined)
-    {
-        $('.store-tree-' + info.item.id + ' > .listitem').removeClass('active');
-        delete checkedCategories[info.item.id];
-    }
-    else
-    {
-        $('.store-tree-' + info.item.id + ' > .listitem').addClass('active');
-        checkedCategories[info.item.id] = true;
-    }
-
-    const form = new FormData();
-    form.append('keyword', $('#name').val());
-    Object.keys(checkedCategories).forEach((id) => form.append('categories[]', id));
-
-    postAndLoadPage(link, form, '#cloudAppContainer', {partial: true});
-}
-
-/**
  * 安装应用。
  * Install app.
  */
@@ -51,14 +26,11 @@ window.installApp = function()
     });
 }
 
-$('#mainContent').on('keydown', '#name', function(event)
+$('#actionBar').on('keydown', '#name', function(event)
 {
     if (event.key === 'Enter')
     {
-        const form = new FormData();
-        form.append('keyword', $('#name').val());
-        Object.keys(checkedCategories).forEach((id) => form.append('categories[]', id));
-
-        postAndLoadPage(link, form);
+        const keyword = $('#name').val();
+        loadPage($.createLink('store', 'browse', `sortType=${sortType}&categoryID=${currentCategoryID}&keyword=${keyword}`));
     }
 });

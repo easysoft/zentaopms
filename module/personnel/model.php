@@ -255,7 +255,7 @@ class personnelModel extends model
     public function getBugAndStoryInvest(array $accounts, int $programID): array
     {
         /* Get invest products. */
-        $productPairs = $this->loadModel('product')->getPairs('', $programID);
+        $productPairs = $this->loadModel('product')->getPairs('', $programID, '', 'all');
         $productKeys  = array_keys($productPairs);
 
         /* Get invest bugs, requirements and stories. */

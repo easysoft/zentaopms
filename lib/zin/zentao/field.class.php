@@ -45,82 +45,82 @@ class field extends setting
         return $this->get('name');
     }
 
-    function name(?string $name): field
+    public function name(?string $name): field
     {
         return $this->setVal('name', $name);
     }
 
-    function type(?string $type): field
+    public function type(?string $type): field
     {
         return $this->setVal('type', $type);
     }
 
-    function group(?string $group): field
+    public function group(?string $group): field
     {
         return $this->setVal('group', $group);
     }
 
-    function id(?string $id): field
+    public function id(?string $id): field
     {
         return $this->setVal('id', $id);
     }
 
-    function className(mixed ...$classList): field
+    public function className(mixed ...$classList): field
     {
         return $this->setClass('className', ...$classList);
     }
 
-    function value(string|array|int|null $value): field
+    public function value(string|array|int|null $value): field
     {
         return $this->setVal('value', $value);
     }
 
-    function width(string|int|null $width): field
+    public function width(string|int|null $width): field
     {
         return $this->setVal('width', $width);
     }
 
-    function required(?bool $required = true): field
+    public function required(?bool $required = true): field
     {
         return $this->setVal('required', $required);
     }
 
-    function disabled(?bool $disabled = true): field
+    public function disabled(?bool $disabled = true): field
     {
         return $this->setVal('disabled', $disabled);
     }
 
-    function readonly(?bool $readonly = true): field
+    public function readonly(?bool $readonly = true): field
     {
         return $this->setVal('readonly', $readonly);
     }
 
-    function placeholder(?string $placeholder): field
+    public function placeholder(?string $placeholder): field
     {
         return $this->setVal('placeholder', $placeholder);
     }
 
-    function foldable(?bool $foldable = true): field
+    public function foldable(?bool $foldable = true): field
     {
         return $this->setVal('foldable', $foldable);
     }
 
-    function pinned(?bool $pinned = true): field
+    public function pinned(?bool $pinned = true): field
     {
         return $this->setVal('pinned', $pinned);
     }
 
-    function hidden(?bool $hidden = true): field
+    public function hidden(?bool $hidden = true): field
     {
         return $this->setVal('hidden', $hidden);
     }
 
-    function strong(?bool $strong = true): field
+    public function strong(?bool $strong = true): field
     {
         return $this->setVal('strong', $strong);
     }
 
-    function label(bool|string|null $label, string|object|array $classOrProps = null): field
+    public function label(bool|string|null $label, string|object|array $classOrProps = null): field
     {
         $this->setVal('label', $label);
         if (is_string($classOrProps)) $this->labelClass($classOrProps);
@@ -128,27 +128,27 @@ class field extends setting
         return $this;
     }
 
-    function labelFor(bool|string|null $for): field
+    public function labelFor(bool|string|null $for): field
     {
         return $this->setVal('labelFor', $for);
     }
 
-    function labelClass(mixed ...$classList): field
+    public function labelClass(mixed ...$classList): field
     {
         return $this->setClass('labelClass', ...$classList);
     }
 
-    function labelProps(array|object|null $props): field
+    public function labelProps(array|object|null $props): field
     {
         return $this->addToMap('labelProps', $props);
     }
 
-    function labelWidth(int|string|null $width): field
+    public function labelWidth(int|string|null $width): field
     {
         return $this->setVal('labelWidth', $width);
     }
 
-    function labelHint(?string $hint, string|object|array $classOrProps = null): field
+    public function labelHint(?string $hint, string|object|array $classOrProps = null): field
     {
         $this->setVal('labelHint', $hint);
         if (is_string($classOrProps)) $this->labelHintClass($classOrProps);
@@ -156,22 +156,22 @@ class field extends setting
         return $this;
     }
 
-    function labelHintClass(mixed ...$classList): field
+    public function labelHintClass(mixed ...$classList): field
     {
         return $this->setClass('labelHintClass', ...$classList);
     }
 
-    function labelHintProps(array|object|null $props): field
+    public function labelHintProps(array|object|null $props): field
     {
         return $this->addToMap('labelHintProps', $props);
     }
 
-    function labelHintIcon(array|object|null $icon): field
+    public function labelHintIcon(array|object|string|null $icon): field
     {
         return $this->setVal('labelHintIcon', $icon);
     }
 
-    function labelActions(array|false|null $actions, bool $reset = false, ?string $key = null): field
+    public function labelActions(array|false|null $actions, bool $reset = false, ?string $key = null): field
     {
         if($actions === false)  return $this->remove('actions');
         if($reset)              return $this->setVal('actions', $actions);
@@ -179,79 +179,79 @@ class field extends setting
         return $this;
     }
 
-    function labelAction(mixed $action, ?string $key = null): field
+    public function labelAction(mixed $action, ?string $key = null): field
     {
         return $this->addToList('labelActions', $action, $key);
     }
 
-    function labelActionsClass(mixed ...$classList): field
+    public function labelActionsClass(mixed ...$classList): field
     {
         return $this->setClass('labelActionsClass', ...$classList);
     }
 
-    function labelActionsProps(array|object|null $props): field
+    public function labelActionsProps(array|object|null $props): field
     {
         return $this->addToMap('labelActionsProps', $props);
     }
 
-    function checkbox(bool|array|null $checkbox = true): field
+    public function checkbox(bool|array|null $checkbox = true): field
     {
         return $this->setVal('checkbox', $checkbox);
     }
 
-    function wrapBefore(?bool $wrapBefore = true): field
+    public function wrapBefore(?bool $wrapBefore = true): field
     {
         return $this->setVal('wrapBefore', $wrapBefore);
     }
 
-    function wrapAfter(?bool $wrapAfter = true): field
+    public function wrapAfter(?bool $wrapAfter = true): field
     {
         return $this->setVal('wrapAfter', $wrapAfter);
     }
 
-    function wrap(string $side = 'before', bool $wrap = true): field
+    public function wrap(string $side = 'before', bool $wrap = true): field
     {
         return $this->setVal($side == 'before' ? 'wrapBefore' : 'wrapAfter', $wrap);
     }
 
-    function text(bool|string|null $text): field
+    public function text(bool|string|null $text): field
     {
         return $this->setVal('text', $text);
     }
 
-    function tip(bool|string|null $tip): field
+    public function tip(bool|string|null $tip): field
     {
         return $this->setVal('tip', $tip);
     }
 
-    function tipClass(mixed ...$classList): field
+    public function tipClass(mixed ...$classList): field
     {
         return $this->setClass('tipClass', ...$classList);
     }
 
-    function tipProps(array|object|null $tipProps): field
+    public function tipProps(array|object|null $tipProps): field
     {
         return $this->addToMap('tipProps', $tipProps);
     }
 
-    function multiple(?bool $multiple = true): field
+    public function multiple(?bool $multiple = true): field
     {
         return $this->setVal('multiple', $multiple);
     }
 
-    function data(array|object|string|null $nameOrData, mixed $value = null): field
+    public function data(array|object|string|null $nameOrData, mixed $value = null): field
     {
         if(is_string($nameOrData)) $nameOrData = array($nameOrData => $value);
         return $this->addToMap('data', $nameOrData);
     }
 
-    function createChild(?string $itemName = null): field
+    public function createChild(?string $itemName = null): field
     {
         $item = new field($itemName, null, $this);
         return $item;
     }
 
-    function control(string|array|object|false|null $control, array|object|null $props = null): field
+    public function control(string|array|object|false|null $control, array|object|null $props = null): field
     {
         if($control === false) return $this->remove('control');
 
@@ -262,12 +262,12 @@ class field extends setting
         return $this->setVal('control', $control);
     }
 
-    function controlBegin(?string $itemName): field
+    public function controlBegin(?string $itemName): field
     {
         return $this->createChild($itemName);
     }
 
-    function controlEnd(): field
+    public function controlEnd(): field
     {
         if(is_null($this->parent))
         {
@@ -288,7 +288,7 @@ class field extends setting
      * @param  array|false|null $items  - Items.
      * @return field
      */
-    function items(array|false|null $items): field
+    public function items(array|false|null $items): field
     {
         if($items === false) return $this->remove('items');
         return $this->setVal('items', $items);
@@ -297,17 +297,17 @@ class field extends setting
     /**
      * Add item.
      */
-    function item(mixed $item, ?string $key = null): field
+    public function item(mixed $item, ?string $key = null): field
     {
         return $this->addToList('items', $item, $key);
     }
 
-    function itemBegin(?string $itemName = null): field
+    public function itemBegin(?string $itemName = null): field
     {
         return $this->createChild($itemName);
     }
 
-    function itemEnd(): field
+    public function itemEnd(): field
     {
         if(is_null($this->parent))
         {
@@ -317,24 +317,24 @@ class field extends setting
         return $this->parent;
     }
 
-    function children(mixed ...$children): field
+    public function children(mixed ...$children): field
     {
         return $this->mergeToList('children', $children);
     }
 
-    function setDefault(string|array|null $default): field
+    public function setDefault(string|array|null $default): field
     {
         $this->default = $default;
         return $this;
     }
 
-    function setDataType(?string $dataType): field
+    public function setDataType(?string $dataType): field
     {
         $this->dataType = $dataType;
         return $this;
     }
 
-    function moveBefore(string $name): field
+    public function moveBefore(string $name): field
     {
         if(is_null($this->fieldList))
         {
@@ -344,7 +344,7 @@ class field extends setting
         return $this;
     }
 
-    function moveAfter(string $name): field
+    public function moveAfter(string $name): field
     {
         if(is_null($this->fieldList))
         {
@@ -354,7 +354,7 @@ class field extends setting
         return $this;
     }
 
-    function moveToBegin(): field
+    public function moveToBegin(): field
     {
         if(is_null($this->fieldList))
         {
@@ -364,7 +364,7 @@ class field extends setting
         return $this;
     }
 
-    function moveToEnd(): field
+    public function moveToEnd(): field
     {
         if(is_null($this->fieldList))
         {
@@ -374,7 +374,7 @@ class field extends setting
         return $this;
     }
 
-    function detach(): field
+    public function detach(): field
     {
         if(is_null($this->fieldList))
         {
@@ -384,7 +384,7 @@ class field extends setting
         return $this;
     }
 
-    function toArray(): array
+    public function toArray(): array
     {
         $array = parent::toArray();
         if(isset($array['items']))

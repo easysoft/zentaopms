@@ -14,10 +14,12 @@ namespace zin;
 
 /* zin: Define the set::module('task') feature bar on main menu. */
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
+$queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 featureBar
 (
     set::current($browseType),
     set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::module('task'), set::open($browseType == 'bysearch')))
 );
 
@@ -63,6 +65,26 @@ $tableData = array_map(
     },
     $tableData
 );
+
+if($config->edition == 'ipd')
+{
+    $canStartExecution = $this->execution->checkStageStatus($execution->id, 'start');
+    if(!empty($canStartExecution['disabled']))
+    {
+        foreach($tableData as $task)
+        {
+            foreach($task->actions as $key => $action)
+            {
+                if(in_array($action['name'], array('start', 'finish', 'recordWorkhour')))
+                {
+                    $tip = $action['name'] . 'Tip';
+                    $task->actions[$key]['disabled'] = true;
+                    $task->actions[$key]['hint']     = $lang->task->disabledTip->$tip;
+                }
+            }
+        }
+    }
+}
 
 toolbar
 (

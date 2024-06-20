@@ -738,4 +738,26 @@ class upgradeTest
         $this->objectModel->revertStoryCustomFields();
         return $this->objectModel->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('datatable')->andWhere('section')->eq('productBrowse')->andWhere('key')->eq('cols')->fetch();
     }
+
+    /**
+     * 测试补充模型分类项。
+     * Test complete classify lang.
+     *
+     * @param  string $section
+     * @param  string $key
+     * @access public
+     * @return string
+     */
+    public function completeClassifyLangTest(string $section, string $key): string
+    {
+        $this->objectModel->completeClassifyLang();
+        return $this->objectModel->dao->select('value')->from(TABLE_LANG)
+            ->where('lang')->eq('all')
+            ->andWhere('module')->eq('process')
+            ->andWhere('section')->eq($section)
+            ->andWhere('`key`')->eq($key)
+            ->andWhere('system')->eq(1)
+            ->andWhere('vision')->eq('rnd')
+            ->fetch('value');
+    }
 }

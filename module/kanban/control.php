@@ -381,6 +381,8 @@ class kanban extends control
         $regionID = !isset($regions[$regionID]) ? 'all' : $regionID;
         $this->session->set('regionID', $regionID, 'kanban');
 
+        $this->kanbanZen->setUserAvatar();
+
         $this->view->title       = $this->lang->kanban->view;
         $this->view->kanban      = $kanban;
         $this->view->regions     = $regions;

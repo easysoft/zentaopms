@@ -192,7 +192,8 @@ CSS;
     protected function buildTitle()
     {
         list($object, $objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType, $parentTitleProps) = $this->prop(array('object', 'objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType', 'parentTitleProps'));
-        $titleBlock = $this->block('title');
+        $titleBlock   = $this->block('title');
+        $titleLeading = $this->block('titleLeading');
 
         return new entityTitle
         (
@@ -211,6 +212,7 @@ CSS;
             set::parentType($parentType),
             set::parentTitleProps($parentTitleProps),
             set::joinerClass('text-lg'),
+            $titleLeading ? to::leading($titleLeading) : null,
             $titleBlock
         );
     }
@@ -282,7 +284,7 @@ CSS;
     {
         global $app, $config;
         $sections = $this->prop('sections');
-        if($config->edition != 'open') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
         $list = array();
         foreach($sections as $key => $item)
@@ -399,7 +401,7 @@ CSS;
     {
         global $app, $config;
         $tabs = $this->prop('tabs');
-        if($config->edition != 'open') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 
         $groups = array();
@@ -448,9 +450,9 @@ CSS;
         list($linkCreator, $prevBtn, $nextBtn, $objectType) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn', 'objectType'));
         $preAndNext = data('preAndNext');
 
+        global $app;
         if(!$linkCreator && $preAndNext && ($prevBtn === true || $nextBtn === true))
         {
-            global $app;
             $linkCreator = createLink($app->rawModule, $app->rawMethod, $objectType . 'ID={id}');
         }
         if($prevBtn === true && $preAndNext && $preAndNext->pre && $linkCreator)
@@ -481,6 +483,7 @@ CSS;
             (
                 setClass('detail-prev-btn absolute top-0 left-0 inverse rounded-full w-12 h-12 center bg-opacity-40 backdrop-blur ring-0'),
                 set::icon('angle-left icon-2x text-canvas'),
+                setData('app', $app->tab),
                 set($prevBtn)
             );
         }
@@ -490,6 +493,7 @@ CSS;
             (
                 setClass('detail-next-btn absolute top-0 right-0 inverse rounded-full w-12 h-12 center bg-opacity-40 backdrop-blur ring-0'),
                 set::icon('angle-right icon-2x text-canvas'),
+                setData('app', $app->tab),
                 set($nextBtn)
             );
         }

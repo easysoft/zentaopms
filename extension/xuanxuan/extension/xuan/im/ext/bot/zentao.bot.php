@@ -973,7 +973,9 @@ class zentaoBot extends xuanBot
     {
         try
         {
-            $this->im->loadModel('user');
+            $imUser = $this->im->user;
+            $this->userModel = $this->im->loadModel('user');
+            $this->im->user = $imUser;
 
             $user = $this->userModel->getByID($this->im->app->input['userID'], 'id');
             /* Authorize him and save to session. */

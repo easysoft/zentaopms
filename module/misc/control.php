@@ -106,7 +106,7 @@ class misc extends control
      * @access public
      * @return string
      */
-    public function checkExtension(): string
+    public function checkExtension()
     {
         echo $this->miscZen->hello();
     }

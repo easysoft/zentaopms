@@ -60,3 +60,10 @@ $config->instance->actions->view['mainActions']   = array('visit', 'ajaxStart', 
 $config->instance->actions->view['suffixActions'] = array('ajaxUninstall');
 
 $config->instance->devopsApps = array('gitea', 'gitlab', 'jenkins', 'sonarqube', 'nexus3', 'nexus');
+
+/* The zentaopaas instance object. */
+$config->instance->zentaopaas = new stdclass();
+$config->instance->zentaopaas->spaceData = new stdclass();
+$config->instance->zentaopaas->spaceData->k8space = $config->k8space;
+$config->instance->zentaopaas->k8name  = 'zentaopaas';
+$config->instance->zentaopaas->channel = $config->CNE->api->channel ?: $config->cloud->api->channel;

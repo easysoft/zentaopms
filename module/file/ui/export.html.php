@@ -159,6 +159,7 @@ formPanel
     formRow
     (
         $hideExportRange ? setClass('hidden') : null,
+        setClass('exportRange'),
         formGroup
         (
             set::label($lang->file->exportRange),

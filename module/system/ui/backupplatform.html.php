@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('waitting', $lang->system->backup->waitting);
+jsVar('waiting', $lang->system->backup->waiting);
 
 modalHeader(set::title($lang->system->backup->backup));
 formPanel
