@@ -578,7 +578,7 @@ $(function()
         $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
-    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
+    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($stages));?>);
     if(!ganttData) ganttData = {};
     if(!ganttData.data) ganttData.data = [];
 
