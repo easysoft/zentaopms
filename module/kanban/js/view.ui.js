@@ -297,7 +297,7 @@ window.renderProductplanItem = function(info)
     const labelType = (info.item.begin <= today && info.item.end >= today) ? 'danger' : 'ghost';
 
     const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
-    info.item.content      = {html: info.item.desc}
+    info.item.content      = {html: `<div title='${info.item.desc}'>${info.item.desc}</div>`};
     info.item.contentClass = 'text-gray clip mr-2';
     info.item.footer       = {html: statusBox + date}
 }
