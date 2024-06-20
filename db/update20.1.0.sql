@@ -42,3 +42,6 @@ ALTER TABLE `zt_pivot` MODIFY COLUMN `filters`  mediumtext NULL;
 ALTER TABLE `zt_pivot` DROP COLUMN IF EXISTS `dataset`;
 
 ALTER TABLE `zt_project` MODIFY `stageBy` enum('project', 'product') NOT NULL DEFAULT 'product';
+
+ALTER TABLE `zt_bug` MODIFY COLUMN `v1` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `zt_bug` MODIFY COLUMN `v2` varchar(255) NOT NULL DEFAULT '';
