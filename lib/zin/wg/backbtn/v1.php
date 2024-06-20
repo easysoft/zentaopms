@@ -86,7 +86,8 @@ class backBtn extends btn
             'service'        => 'service-browse,service-manage,service-view',
             'domain'         => 'domain-browse,domain-view',
             'thinkwizard'    => 'thinkwizard-browse',
-            'thinkrun'       => 'thinkrun-browse'
+            'thinkrun'       => 'thinkrun-browse',
+            'researchtask'   => 'marketresearch-task,my-index'
         );
 
         $props  = parent::getProps();
