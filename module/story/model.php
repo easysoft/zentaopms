@@ -3268,6 +3268,7 @@ class storyModel extends model
         $disabledFeatures = ",{$config->disabledFeatures},";
         if($action == 'importtolib')
         {
+            if($config->vision == 'lite')                        return false;
             if(!in_array($config->edition, array('max', 'ipd'))) return false;
             if($app->tab != 'project')                           return false;
             if($story->type == 'requirement')                    return false;
