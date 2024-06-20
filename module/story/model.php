@@ -3293,7 +3293,7 @@ class storyModel extends model
         if($action == 'batchcreate')
         {
             if($config->vision == 'or') return false;
-            if($config->vision == 'lite' && ($story->parent <= 0 && $story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
+            if($config->vision == 'lite' && $story->parent <= 0 && $story->status == 'active' && in_array($story->stage, array('wait', 'projected'))) return true;
 
             if($story->parent > 0 || !empty($story->twins)) return false;
             if($story->type == 'requirement' && strpos('draft,reviewing,changing', $story->status) !== false) return false;
