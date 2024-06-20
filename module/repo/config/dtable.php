@@ -251,9 +251,11 @@ $config->repo->reviewDtable->fieldList['revisionA']['width'] = '100';
 $config->repo->reviewDtable->fieldList['revisionA']['hint']  = true;
 $config->repo->reviewDtable->fieldList['revisionA']['link']  = array('module' => 'repo', 'method' => 'revision', 'params' => 'repoID={repo}&objectID=0&revision={v2}');
 
+$app->loadLang('bug');
 $config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
-$config->repo->reviewDtable->fieldList['type']['name'] = 'repoType';
-$config->repo->reviewDtable->fieldList['type']['map']  = $lang->repo->typeList;
+$config->repo->reviewDtable->fieldList['type']['name']  = 'type';
+$config->repo->reviewDtable->fieldList['type']['map']   = $lang->bug->typeList;
+$config->repo->reviewDtable->fieldList['type']['map']  += $lang->repo->typeList;
 
 $config->repo->reviewDtable->fieldList['status']['map'] = $lang->bug->statusList;
 
