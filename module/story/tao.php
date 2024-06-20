@@ -25,7 +25,7 @@ class storyTao extends storyModel
     }
 
     /**
-     * 获取项目研发需求关联的用户需求。
+     * 获取项目关联的用户需求。
      * Get project requirements.
      *
      * @param  int $productID
@@ -36,13 +36,12 @@ class storyTao extends storyModel
      */
     protected function getProjectRequirements(int $productID, int $projectID, object|null $pager = null): array
     {
-        return $this->dao->select('t3.*')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.story=t2.AID && t2.AType='story'")
-            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement' && t3.deleted='0'")
-            ->where('t1.project')->eq($projectID)
+        return $this->dao->select('t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on("t1.story = t2.id && t2.type ='requirement'")
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t3.id')->ne('')
-            ->page($pager, 't3.id')
+            ->page($pager, 't2.id')
             ->fetchAll('id');
     }
 
