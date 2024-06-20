@@ -60,12 +60,10 @@ class form extends formBase
         global $app, $lang;
         $module = $app->getModuleName();
         $method = $app->getMethodName();
-        if(isAjaxRequest('modal'))
+        if(isAjaxRequest('modal') && !$this->prop('submitBtnText'))
         {
-            $text   = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method, '');
-
             $defaultProps = array();
-            $defaultProps['submitBtnText'] = $text;
+            $defaultProps['submitBtnText'] = !empty($lang->$module->$method) ? $lang->$module->$method : zget($lang, $method, '');
             $this->setDefaultProps($defaultProps);
         }
 
