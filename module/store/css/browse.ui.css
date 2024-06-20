@@ -4,3 +4,5 @@
 #storePager .ghost {color: rgb(131, 138, 157);}
 #mainContent > .icon-search {display: none;}
 #cloudAppContainer .install-btn {padding-left: 25px; padding-right: 25px;}
+
+#cloudAppContainer .line-2 {word-break:break-all; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
