@@ -66,10 +66,10 @@ class programplan extends control
         if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, false);
 
         /* Generate stage list page data. */
-        $stages = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy);
+        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy);
 
         /* Build gantt browse view. */
-        $this->programplanZen->buildBrowseView($projectID, $productID, $stages, $type, $orderBy);
+        $this->programplanZen->buildBrowseView($projectID, $productID, $plans, $type, $orderBy);
     }
 
     /**

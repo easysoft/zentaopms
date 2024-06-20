@@ -407,7 +407,7 @@ class programplanZen extends programplan
         $this->view->productID   = $productID;
         $this->view->type        = $type;
         $this->view->ganttType   = $type;
-        $this->view->stages      = $stages;
+        $this->view->plans       = $stages;
         $this->view->orderBy     = $orderBy;
         $this->view->project     = $project;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
