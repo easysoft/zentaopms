@@ -37,6 +37,6 @@ $case->gen(20);
 
 $tree = new treeTest();
 
-r($tree->getCaseTreeMenuTest(1, 1))   && p() && e('正常产品1|模块5'); // 测试获取产品1的Case模块
-r($tree->getCaseTreeMenuTest(10, 10)) && p() && e('正常产品10');      // 测试产品10的Case模块
-r($tree->getCaseTreeMenuTest(30, 30)) && p() && e('0');               // 测试不存在产品的Case模块
+r($tree->getCaseTreeMenuTest(1, 1))   && p() && e('正常产品1');  // 测试获取产品1的Case模块
+r($tree->getCaseTreeMenuTest(10, 10)) && p() && e('正常产品10'); // 测试产品10的Case模块
+r($tree->getCaseTreeMenuTest(30, 30)) && p() && e('0');          // 测试不存在产品的Case模块
