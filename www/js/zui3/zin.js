@@ -542,7 +542,8 @@
                 {
                     if(DEBUG) console.error('[APP] ', 'Parse data failed from ' + url, {error: e, data: rawData});
                     if(!isInAppTab && config.zin) return;
-                    hasFatal = rawData.includes('Fatal error') || rawData.includes('Uncaught TypeError:');
+                    hasFatal = rawData.includes('Fatal error') || rawData.includes('Uncaught TypeError:') || rawData.startsWith('<!DOCTYPE html');
+                    ;
                     data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
                 }
                 if(Array.isArray(data))
