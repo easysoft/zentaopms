@@ -570,13 +570,13 @@
                 {
                     updatePerfInfo(options, 'renderBegin');
                     if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
-                    let newCacheData = cacheKey ? rawData : null;
+                    let newCacheData = (cacheKey && !hasFatal) ? rawData : null;
                     if(newCacheData && DEBUG)
                     {
                         const parts = newCacheData.split(',["zinDebug:<BEGIN>",');
                         if(parts.length > 1) newCacheData = parts[0] + ']';
                     }
-                    const cacheHit = cache && newCacheData === cache.data.data;
+                    const cacheHit = !hasFatal && cache && newCacheData === cache.data.data;
                     if(!cacheHit)
                     {
                         renderPageData(data);
