@@ -93,10 +93,7 @@
 
     function showFatalError(data, _info, options)
     {
-        const zinDebug = window.zinDebug;
-        if(zinDebug && zinDebug.basePath) data = data.split(zinDebug.basePath).join('<i class="icon icon-file-text opacity-50"></i>/');
-        if(data.startsWith('<br />\n'))   data = data.replace('<br />\n', '');
-        zui.Modal.alert({message: {html: data}, title: `Fatal error: ${options.url}`, actions: [], size: 'lg', custom: {className: 'backdrop-blur border-2 border-canvas bg-opacity-80 rounded-xl', bodyClass: 'font-mono', headerClass: 'text-danger'}});
+        zui.Modal.showError({error: `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg'})
     }
 
     function initZinbar()
