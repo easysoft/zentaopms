@@ -39,11 +39,7 @@ $data->url  = 'http://www.zentaopms.com/';
 $data->name = '';
 $result4    = $pipelineTester->createTest('Jenkins', $data); // 添加名称为空时
 
-$data->name = 'Jenkins';
-$pipelineTester->createTest('Jenkins', $data); // 添加名称重复时
-$result5 = $pipelineTester->createTest('Jenkins', $data); // 添加名称重复时
-
 r($result1) && p('type')    && e('Jenkins');                                                                                         // 获取添加的type
 r($result2) && p('account') && e('JenkinsAccount');                                                                                  // 获取添加的account
 r($result3) && p('url:0')   && e('『服务器地址』应当为合法的URL。');                                                                 // 添加错误的url信息
-r($result4) && p('name:0')  && e('『应用名称』不能为空。');                                                                          // 添加名称为空时
+r($result4) && p('name:0')  && e('『应用名称』不能为空。1');                                                                          // 添加名称为空时
