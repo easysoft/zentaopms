@@ -1113,6 +1113,7 @@
             partial:       options.partial,
             loadingTarget: loadingTarget,
             loadingClass:  'pointer-events-none',
+            cache:         false,
             success:       () =>
             {
                 let updateActionUrl = options.updateActionUrl;
