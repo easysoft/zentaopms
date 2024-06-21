@@ -178,8 +178,13 @@ class mail extends control
     public function asyncSend()
     {
         /* Reload mail config. */
+        unset(router::$loadedConfigs['mail']);
         $this->loadModel('common')->loadConfigFromDB();
         $this->app->loadConfig('mail');
+        mailModel::$instance = null;
+        $this->mail->setMTA();
+        if(!$this->config->mail->turnon) return false;
+
         $queueList = $this->mail->getQueue('wait', 'id_asc');
         if(isset($this->config->mail->async))$this->config->mail->async = 0;
 
