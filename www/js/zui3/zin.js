@@ -1645,14 +1645,6 @@
 
         if(DEBUG)
         {
-            if(window.zinDebug)
-            {
-                let requestBegin = startTime;
-                if(performance.timing) requestBegin -= ((performance.timing.loadEventStart || Date.now()) - (performance.timing.navigationStart || Date.now()));
-                else if(window.zinDebug.trace && window.zinDebug.trace.request) requestBegin -= window.zinDebug.trace.request.timeUsed;
-                updatePerfInfo({id: 'page'}, 'renderEnd', {id: 'page', perf: {requestBegin: Math.max(0, requestBegin), requestEnd: startTime, renderBegin: startTime}});
-                showZinDebugInfo(window.zinDebug, {id: 'page'});
-            }
             if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
         }
     });
