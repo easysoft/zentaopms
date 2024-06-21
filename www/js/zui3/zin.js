@@ -753,9 +753,12 @@
             task.timerID = 0;
             task.xhr = requestContent(options, () =>
             {
-                const runID = task.xhr.getResponseHeader('Xhprof-RunID');
-                updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
-                task.xhr = null;
+                if(task.xhr)
+                {
+                    const runID = task.xhr.getResponseHeader('Xhprof-RunID');
+                    updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
+                    task.xhr = null;
+                }
                 fetchTasks.delete(id);
             });
         }, options.delayTime || 0);
