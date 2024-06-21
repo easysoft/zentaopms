@@ -30,7 +30,9 @@ class confirmBugTester extends tester
         {
            $bugList[] = $bugTitleList->getText();
         }
+
         if(!in_array($bugTitle, $bugList)) return $this->success('确认bug成功');
+        return $this->failed('确认bug失败');
     }
 
 }
