@@ -85,7 +85,8 @@ class gitlabModel extends model
             if($openID) $sudoParam = "&sudo={$openID}";
         }
 
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
+        $url = rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
+        return $url;
     }
 
     /**
