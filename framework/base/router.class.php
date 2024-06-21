@@ -1608,6 +1608,8 @@ class baseRouter
         $this->loadLang('company');
         $common->setUserConfig();
 
+        $this->setDebug();
+
         return $common;
     }
 
