@@ -320,6 +320,7 @@ formPanel
     ),
     formGroup
     (
+        setClass('typeBox'),
         set::label($lang->todo->type),
         set::width($isInModal ? '3/5' : '1/3'),
         set::items($lang->todo->typeList),
