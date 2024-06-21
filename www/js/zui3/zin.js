@@ -179,6 +179,7 @@
 
         if(data.debug)
         {
+            window.zinDebug = data.debug;
             data.debug.forEach(dump =>
             {
                 console.groupCollapsed('%c ZIN %c debug %c' + dump.name, 'color:#fff;font-weight:bold;background:#ec4899', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
@@ -522,16 +523,27 @@
                 options.result = 'success';
                 let hasFatal = false;
                 let data;
+
+                if(!rawData && !ajax.sendedAgain)
+                {
+                    ajax.sendedAgain = true;
+                    headers['X-Zin-Debug'] = true;
+                    ajax.send({headers: headers});
+                    ajax.canceled = true;
+                    return;
+                }
+                ajax.canceled = false;
+
                 try
                 {
                     data = $.parseRawData(rawData);
                 }
                 catch(e)
                 {
-                    if(DEBUG) console.error('[APP] ', 'Parse data failed from ' + url, e);
+                    if(DEBUG) console.error('[APP] ', 'Parse data failed from ' + url, {error: e, data: rawData});
                     if(!isInAppTab && config.zin) return;
-                    hasFatal = data.includes('Fatal error') || data.includes('Uncaught TypeError:');
-                    data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
+                    hasFatal = rawData.includes('Fatal error') || rawData.includes('Uncaught TypeError:');
+                    data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
                 }
                 if(Array.isArray(data))
                 {
@@ -610,6 +622,7 @@
             },
             error: (error, type) =>
             {
+                if(ajax.canceled) return;
                 updatePerfInfo(options, 'requestEnd', {error: error});
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});;
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {type, error});
@@ -619,6 +632,7 @@
             },
             complete: () =>
             {
+                if(ajax.canceled) return;
                 if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, false, options.loadingClass);
                 if(options.complete) options.complete();
                 $(document).trigger('pageload.app');
@@ -652,6 +666,7 @@
                         catch(error)
                         {
                             if(DEBUG) console.error('[APP] ', 'Parse cache data failed from ' + url, {error: error, cache: cache});
+                            $.db.setCacheData(cacheKey, null, cache.time, 'zinFetch');
                         }
                     }
                     else
