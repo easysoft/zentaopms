@@ -547,8 +547,10 @@
                 if(!rawData && !ajax.sendedAgain)
                 {
                     ajax.sendedAgain = true;
-                    headers['X-Zin-Debug'] = true;
-                    ajax.send({headers: headers});
+                    ajax.setting.headers['X-Zin-Debug'] = true;
+                    delete ajax.data;
+                    delete ajax.error;
+                    ajax.send();
                     ajax.canceled = true;
                     return;
                 }
@@ -643,6 +645,23 @@
             },
             error: (error, type) =>
             {
+                const data = ajax.data;
+                if(!data && !ajax.sendedAgain)
+                {
+                    ajax.sendedAgain = true;
+                    ajax.setting.headers['X-Zin-Debug'] = true;
+                    delete ajax.data;
+                    delete ajax.error;
+                    ajax.send();
+                    ajax.canceled = true;
+                    return;
+                }
+                else if(data)
+                {
+                    showFatalError(data, _, options);
+                    ajax.canceled = false;
+                }
+
                 if(ajax.canceled) return;
                 updatePerfInfo(options, 'requestEnd', {error: error});
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});;
