@@ -53,10 +53,9 @@ $config->repo->form->createBranch['branchName'] = array('required' => true, 'typ
 
 $config->repo->form->import = array();
 $config->repo->form->import['serviceProject'] = array('required' => true,  'type' => 'string', 'filter' => 'trim');
-$config->repo->form->import['product']        = array('required' => false,  'type' => 'array',  'filter' => 'join', 'base' => true);
-$config->repo->form->import['projects']       = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
-$config->repo->form->import['name']           = array('required' => false,  'type' => 'string', 'filter' => 'trim');
-$config->repo->form->import['projects']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->repo->form->import['product']        = array('required' => false, 'type' => 'array',  'filter' => 'join', 'default' => array(), 'base' => true);
+$config->repo->form->import['projects']       = array('required' => false, 'type' => 'array',  'filter' => 'join', 'default' => array());
+$config->repo->form->import['name']           = array('required' => false, 'type' => 'string', 'filter' => 'trim');
 $config->repo->form->import['encoding']       = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
 $config->repo->form->import['encrypt']        = array('required' => false, 'type' => 'string', 'default' => 'base64');
 $config->repo->form->import['acl']            = array('required' => false, 'type' => 'string', 'default' => '{"acl":"open","groups":[""],"users":[""]}');
