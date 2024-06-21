@@ -212,7 +212,7 @@ foreach($stories as $story)
 }
 
 /* Generate toolbar of DataTable footer. */
-$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $roadmaps, $config)
+$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $config, $noclosedRoadmaps)
 {
     /* Flag variables of permissions. */
     $canBeChanged          = common::canModify('product', $product);
@@ -241,7 +241,8 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
     foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
     foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangePlan', "planID=$planID"));
-    foreach($roadmaps as $roadmapID => $roadmapName)           $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeRoadmap', "roadmapID=$roadmapID"));
+    foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeRoadmap', "roadmapID=$roadmapID"));
+
     foreach($lang->story->stageList as $key => $stageName)
     {
         if(!str_contains('|tested|verified|released|closed|', "|$key|")) continue;
@@ -289,7 +290,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary batchChangeModuleBtn' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Plan button. */
         array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary batchCnangePlanBtn' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
-        $canBatchChangeRoadmap ? array('caret' => 'up', 'text' => $lang->roadmap->common, 'className' => 'secondary batchCnangePlanBtn', 'items' => $roadmapItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
+        $canBatchChangeRoadmap ? array('caret' => 'up', 'text' => $lang->roadmap->common, 'className' => 'secondary', 'items' => $roadmapItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
         /* Change branch button. */
         ($canBatchChangeBranch && $product->type != 'normal') ? array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'className' => 'batchChangeBranchBtn', 'items' => $branchItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
         /* AssignedTo button. */
