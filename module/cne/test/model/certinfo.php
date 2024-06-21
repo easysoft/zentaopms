@@ -25,4 +25,4 @@ $certName = 'fail-name';
 r($cneModel->certInfoTest($certName)) && p() && e('0'); // 证书名称错误
 
 $certName = 'tls-haogs-cn';
-r($cneModel->certInfoTest($certName)) && p('sans:0') && e('dops.corp.cc'); // 证书名称正确
+r($cneModel->certInfoTest($certName)) && p('sans:0') && e('pgeo.corp.cc'); // 证书名称正确
