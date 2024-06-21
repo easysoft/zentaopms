@@ -1451,16 +1451,19 @@ class kanbanModel extends model
             ->orderBy('id_asc')
             ->fetchGroup('lane', 'id');
 
+        $geMax = in_array($this->config->edition, array('max', 'ipd'));
         /* Get group objects. */
-        if($browseType == 'all' || $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($browseType == 'all' || $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'all' || $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($browseType == 'all' || $browseType == 'story')            $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'all' || $browseType == 'bug')              $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'all' || $browseType == 'task')             $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($geMax && ($browseType == 'all' || $browseType == 'risk')) $objectGroup['risk']  = $this->loadModel('risk')->getKanbanRisks($executionID);
 
         /* Get objects cards menus. */
         $menus = array();
-        $menus['story'] = $browseType == 'all' || $browseType == 'story' ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
-        $menus['bug']   = $browseType == 'all' || $browseType == 'bug'   ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug')     : array();
-        $menus['task']  = $browseType == 'all' || $browseType == 'task'  ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task')   : array();
+        $menus['story'] = $browseType == 'all' || $browseType == 'story'            ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
+        $menus['bug']   = $browseType == 'all' || $browseType == 'bug'              ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug')     : array();
+        $menus['task']  = $browseType == 'all' || $browseType == 'task'             ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task')   : array();
+        $menus['risk']  = $geMax && ($browseType == 'all' || $browseType == 'risk') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk')   : array();
 
         /* Build kanban group data. */
         $kanbanGroup = array();
@@ -1468,6 +1471,7 @@ class kanbanModel extends model
         {
             list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
 
+            if($geMax && $lane->type == 'risk') $cardsData = $this->appendRiskField($cardsData, $objectGroup['risk']);
             $kanbanGroup[$lane->type]['id']   = $lane->id;
             $kanbanGroup[$lane->type]['key']  = 'group' . $lane->id;
             $kanbanGroup[$lane->type]['data'] = array();
@@ -2294,18 +2298,48 @@ class kanbanModel extends model
         return true;
     }
 
+    /* 执行看板新增列和泳道。
+     * Check whether kanban lane exists.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function createLaneIfNotExist($executionID)
+    {
+        $kanbanColumns = $this->dao->select('*')->from(TABLE_KANBANLANE)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('type');
+        $types = array_keys($kanbanColumns);
+
+        /* 如果没有任意一种类型的 kanban， 生成一份新的 */
+        if(empty($types)) $this->createExecutionLane($executionID, 'all');
+
+        /* 如果缺少某种类型的 kanban，单独生成缺少的 */
+        $kanbanTypes = $this->lang->kanban->type;
+        unset($kanbanTypes['all']);
+        foreach($kanbanTypes as $type => $typeName)
+        {
+            if(!in_array($type, $types)) $this->createExecutionLane($executionID, $type);
+        }
+    }
+
     /**
      * 执行看板新增列和泳道。
      * Add execution Kanban lanes and columns.
      *
      * @param  int    $executionID
-     * @param  string $type all|story|bug|task
+     * @param  string $type all|story|bug|task|risk
      * @access public
      * @return void
      */
     public function createExecutionLane(int $executionID, string $type = 'all')
     {
-        foreach($this->config->kanban->default as $type => $lane)
+        /* e.g  $defaults = array('risk' => (object)array('name' => 'risk', 'color' => '#FF0000', 'order' => 20)); */
+        $defaults = ($type != 'all') ? array($type => $this->config->kanban->default->$type) : (array)$this->config->kanban->default;
+
+        foreach($defaults as $type => $lane)
         {
             $lane->type      = $type;
             $lane->execution = $executionID;
@@ -2316,7 +2350,9 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
-            $this->createExecutionColumns($laneID, $type, $executionID);
+
+            if($type != 'risk') $this->createExecutionColumns($laneID, $type, $executionID);
+            else $this->createExecutionRiskColumns($laneID, $type, $executionID);
         }
     }
 
@@ -2705,6 +2741,7 @@ class kanbanModel extends model
         if($laneType == 'story') $cardPairs = $this->kanbanTao->refreshStoryCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'bug')   $cardPairs = $this->kanbanTao->refreshBugCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'task')  $cardPairs = $this->kanbanTao->refreshTaskCards($cardPairs, $executionID, $otherCardList);
+        if($laneType == 'risk')  $cardPairs = $this->refreshRiskCards($cardPairs, $executionID, $otherCardList);
 
         $colPairs = $this->dao->select('t2.type, t2.id')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
@@ -3494,6 +3531,9 @@ class kanbanModel extends model
                 break;
             case 'task':
                 $menus = $this->kanbanTao->getTaskCardMenu($objects);
+                break;
+            case 'risk':
+                $menus = $this->kanbanTao->getRiskCardMenu($objects);
                 break;
         }
         return $menus;

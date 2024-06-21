@@ -31,6 +31,14 @@ const kanbanDropRules =
         'pause': ['developing'],
         'canceled': ['developing', 'closed'],
         'closed': ['developing'],
+    },
+    risk:
+    {
+        'active': ['track', 'hangup', 'canceled', 'closed'],
+        'track': ['active', 'hangup', 'canceled', 'closed'],
+        'hangup': ['active', 'track', 'canceled', 'closed'],
+        'canceled': ['active', 'track', 'closed'],
+        'closed': ['active', 'track'],
     }
 };
 
@@ -122,7 +130,7 @@ window.getColActions = function(col)
     let actionList = [];
 
     /* 父列不需要创建卡片相关的操作按钮。 */
-    if(col.parent != '-1' && (col.type == 'backlog' || col.type == 'unconfirmed' || col.type == 'wait'))
+    if(col.parent != '-1' && (col.type == 'backlog' || col.type == 'unconfirmed' || col.type == 'wait' || col.type == 'active'))
     {
         let cardActions = buildColCardActions(col);
         if(cardActions.length > 0) actionList.push({type:'dropdown', icon:'expand-alt text-primary', caret:false, items:cardActions});
@@ -161,6 +169,11 @@ window.buildColCardActions = function(col)
         if(priv.canCreateTask)                actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateTask)           actions.push({text: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canImportBug && canImportBug) actions.push({text: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
+    }
+    else if(col.type == 'active')
+    {
+        if(priv.canCreateRisk)      actions.push({text: riskLang.create, url: $.createLink('risk', 'create', 'executionID=' + executionID + '&from=execution'), 'data-toggle': 'modal', 'data-size': 'lg'});
+        if(priv.canBatchCreateRisk) actions.push({text: riskLang.batchCreateRisk, url: $.createLink('risk', 'batchcreate', 'executionID=' + executionID + '&from=execution'), 'data-toggle': 'modal', 'data-size': 'lg'});
     }
 
     return actions;
@@ -217,23 +230,51 @@ window.getItem = function(info)
     if(info.laneInfo.type == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'task' && priv.canAssignTask)   assignLink = $.createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
+    if(info.laneInfo.type == 'risk' && priv.canAssignRisk)   assignLink = $.createLink('risk', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(assignLink) avatar = "<a href='" + assignLink + "' data-toggle='modal'>" + avatar + "</a>";
 
-    const content = `
-      <div class='flex items-center'>
-        <span class='text-gray mr-1'>#${info.item.id}</span>
-        <span class='pri-${info.item.pri}'>${info.item.pri}</span>
-        <span class='date ml-1'>${beginAndEnd}</span>
-        <div class='flex-1 flex justify-end'>${avatar}</div>
-      </div>
-    `;
+    if(info.laneInfo.type == 'risk')
+    {
+        var content = `
+          <div class='flex items-center'>
+            <span class='text-gray mr-1'>#${info.item.id}</span>
+            <span class='pri-${info.item.priLevel}'>${info.item.pri}</span>
+            <span class='ml-1'>${info.item.strategy}</span>
+            <span class='date ml-1'>${beginAndEnd}</span>
+            <div class='flex-1 flex justify-end'>${avatar}</div>
+          </div>
+        `;
+    }
+    else
+    {
+        var content = `
+          <div class='flex items-center'>
+            <span class='text-gray mr-1'>#${info.item.id}</span>
+            <span class='pri-${info.item.pri}'>${info.item.pri}</span>
+            <span class='date ml-1'>${beginAndEnd}</span>
+            <div class='flex-1 flex justify-end'>${avatar}</div>
+          </div>
+        `;
+    }
 
     if(searchValue != '')
     {
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
         info.item.title = {html: info.item.title};
     }
-    info.item.titleUrl   = info.laneInfo.type == 'story' ? $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`) : $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
+
+    if(info.laneInfo.type == 'story')
+    {
+        info.item.titleUrl = $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`);
+    }
+    else if(info.laneInfo.type == 'task' || info.laneInfo.type == 'bug')
+    {
+        info.item.titleUrl = $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
+    }
+    else if(info.laneInfo.type == 'risk')
+    {
+        info.item.titleUrl = $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}&from=execution`);
+    }
     info.item.titleAttrs = {'data-toggle': 'modal', 'data-size': 'lg', 'title': info.item.title, 'class': 'card-title clip'};
 
     info.item.content = {html: content};
@@ -376,6 +417,23 @@ window.onDrop = function(changes, dropInfo)
             ajaxMoveCard(objectID, fromColID, toColID, laneID, laneID);
             return true;
         }
+    }
+
+    if(laneType == 'risk')
+    {
+        let params = window.btoa('module=kanban&method=moveRiskCard&objectID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&laneID=' + laneID + '&execution=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+
+        if(toColType == 'active' && fromColType == 'track')
+        {
+            ajaxMoveCard(objectID, fromColID, toColID, laneID, laneID);
+            return true;
+        }
+        if(toColType == 'active' && (fromColType == 'hangup' || fromColType == 'canceled' || fromColType == 'closed') && priv.canActivateRisk) link = $.createLink('risk', 'activate', 'riskID=' + objectID);
+        if(toColType == 'track' && fromColType == 'active' && priv.canTrackRisk) link = $.createLink('risk', 'track', 'riskID=' + objectID + '&params=' + params);
+        if(toColType == 'track' && (fromColType == 'hangup' || fromColType == 'canceled' || fromColType == 'closed') && priv.canTrackRisk) link = $.createLink('risk', 'activate', 'riskID=' + objectID + '&params=' + params);
+        if(toColType == 'hangup' && (fromColType == 'active' || fromColType == 'track') && priv.canHangupRisk) link = $.createLink('risk', 'hangup', 'riskID=' + objectID);
+        if(toColType == 'canceled' && (fromColType == 'active' || fromColType == 'track' || fromColType == 'hangup') && priv.canCancelRisk) link = $.createLink('risk', 'cancel', 'riskID=' + objectID);
+        if(toColType == 'closed' && (fromColType == 'active' || fromColType == 'track' || fromColType == 'hangup' || fromColType == 'canceled') && priv.canCancelRisk) link = $.createLink('risk', 'close', 'riskID=' + objectID);
     }
 
     if(link) zui.Modal.open({url: link});
