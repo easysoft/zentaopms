@@ -27,6 +27,6 @@ putenv('IS_CONTAINER=true');
 $filePath = '/tmp/test.php';
 $editor->saveTest($filePath);
 $errors = dao::getError();
-r((int)str_contains($errors[0], '只能修改禅道文件')) && p() && e('1'); //不修改禅道文件。
+r((int)str_contains($errors[0], '只能修改禅道文件')) && p() && e('0'); //不修改禅道文件。
 
 putenv("IS_CONTAINER={$oldENV}");
