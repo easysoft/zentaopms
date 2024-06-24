@@ -47,7 +47,7 @@ class execution extends control
 
         $this->executions = $this->execution->getPairs(0, 'all', "nocode,noprefix,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all', 'ajaxgetcopyprojectexecutions');
-        if(in_array($this->methodName, $skipCreateStep) && $this->app->tab == 'execution') return false;
+        if(in_array($this->methodName, $skipCreateStep)) return false;
         if($this->executions || $this->methodName == 'index' || $this->methodName == 'create' || $this->app->getViewType() == 'mhtml') return false;
         if($this->app->tab == 'project' && in_array($this->app->rawMethod, array('linkstory', 'importplanstories', 'unlinkstory', 'export'))) return false;
 
