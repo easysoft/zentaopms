@@ -1364,7 +1364,7 @@ class storyZen extends story
 
             if(in_array($task->name, $taskNames)) dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $task->name;
             if(!helper::isZeroDate($task->deadline) and $task->deadline < $task->estStarted) dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
-            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$task->estimate)) dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$task->estimate)) dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
             if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($executionID, (string)$task->estStarted, (string)$task->deadline);
 
             $taskNames[] = $task->name;
