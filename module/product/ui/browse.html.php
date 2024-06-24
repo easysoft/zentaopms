@@ -273,7 +273,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
 
     foreach($lang->story->stageList as $key => $stageName)
     {
-        if(!str_contains('|tested|verified|rejected|pending|released|closed|', "|$key|")) continue;
+        if(!str_contains('|tested|verified|rejected|released|closed|', "|$key|")) continue;
         $stageItems[] = array('text' => $stageName,  'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
     }
     foreach($users as $account => $realname)
