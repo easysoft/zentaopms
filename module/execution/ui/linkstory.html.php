@@ -12,12 +12,10 @@ declare(strict_types=1);
 
 namespace zin;
 
-data('activeMenuID', $storyType);
-
 featureBar(li
 (
     setClass('nav-item'),
-    a(setClass('active'), $lang->execution->linkStory),
+    a(setClass('active'), $lang->execution->linkStory)
 ));
 
 searchForm
@@ -32,7 +30,6 @@ $cols = $config->execution->linkStory->dtable->fieldList;
 $cols['module']['map']  = $modules;
 $cols['product']['map'] = $productPairs;
 
-if($storyType == 'requirement') $cols['title']['title'] = str_replace($lang->SRCommon, $lang->URCommon, $lang->story->title);
 if($productType != 'normal')
 {
     $cols['branch']['title'] = $lang->product->branchName[$productType];
@@ -43,7 +40,8 @@ else
 }
 
 jsVar('branchGroups', $branchGroups);
-
+jsVar('gradeGroup', $gradeGroup);
+jsVar('showGrade', $showGrade);
 
 $footToolbar['items'][] = array(
     'text'      => $lang->save,
@@ -63,7 +61,6 @@ if(!isInModal())
 
 $objectType = $object->type == 'project' ? 'projectstory' : 'execution';
 
-jsVar('childrenAB', $lang->story->childrenAB);
 dtable
 (
     set::groupDivider(true),

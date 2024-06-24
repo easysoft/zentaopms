@@ -124,6 +124,30 @@ class transfer extends control
             return $this->send(array('result' => 'success', 'load' => $locate, 'closeModal' => true));
         }
 
+        /* 项目和执行中的需求导入时应选择需求类型. */
+        if($module == 'story')
+        {
+            $this->app->loadLang('story');
+
+            $storyType = '';
+            if($this->app->tab == 'project')
+            {
+                $project   = $this->loadModel('project')->fetchByID($this->session->project);
+                $storyType = $project->storyType;
+            }
+
+            if($storyType)
+            {
+                foreach($this->lang->story->typeList as $key => $value)
+                {
+                    if(strpos(",$storyType,", ",$key,") === false) unset($this->lang->story->typeList[$key]);
+                }
+            }
+
+            $this->view->isProjectStory = $this->app->tab == 'project';
+            $this->view->typeList       = $this->lang->story->typeList;
+        }
+
         $this->view->title = $this->lang->transfer->importCase;
         $this->display();
     }

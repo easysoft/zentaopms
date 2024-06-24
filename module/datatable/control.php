@@ -82,6 +82,8 @@ class datatable extends control
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
             $rawModule  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+            if($rawModule == 'story' && $extra && $rawModule != $extra) $rawModule = $extra;
+
             $fieldList  = $this->datatable->getFieldList($rawModule, $method);
             $postFields = json_decode($this->post->fields);
 
@@ -102,7 +104,7 @@ class datatable extends control
             $value = json_encode($fields);
 
             /* Split story and requirement custom fields. */
-            if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement,', ",$extra,") !== false) $name = 'datatable.' . $module . ucfirst($method) . ucfirst($extra) . '.cols';
+            if(("$module-$method" == 'product-browse') && in_array($extra, array('story', 'requirement', 'epic'))) $name = 'datatable.' . $module . ucfirst($method) . ucfirst($extra) . '.cols';
 
             /* 保存个人配置信息。 */
             $this->loadModel('setting')->setItem($account . '.' . $name, $value);
@@ -144,12 +146,13 @@ class datatable extends control
         if(zget($this->config->datatable->moduleAlias, "$module-$method", $module) == 'story')
         {
             unset($cols['product'], $cols['module']);
-            if($extra != 'requirement') unset($cols['SRS']);
-            if($extra == 'requirement')
+            if($extra != 'story')
             {
-                foreach(array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount', 'URS') as $field) unset($cols[$field]);
-                $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+                foreach(array('taskCount', 'bugCount', 'caseCount') as $field) unset($cols[$field]);
+                $cols['title']['title'] = $cols['title']['title'] = $this->lang->story->name;
             }
+
+            if($this->app->tab != 'product') $cols['title']['title'] = $this->lang->story->name;
         }
 
         if(($module == 'productplan' && $method == 'browse') || ($module == 'project' && $method == 'bug'))

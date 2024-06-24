@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * The zen file of project module of ZenTaoPMS.
  *
@@ -28,6 +29,7 @@ class projectZen extends project
             ->setIF($this->post->multiple != 'on', 'multiple', '0')
             ->setIF($this->post->multiple == 'on' || !in_array($this->post->model, array('scrum', 'kanban')) || $this->config->vision == 'lite', 'multiple', '1')
             ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
+            ->setIF($this->post->hasProduct == '0', 'storyType', 'story,epic,requirement')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
@@ -37,6 +39,7 @@ class projectZen extends project
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->join('auth', ',')
+            ->join('storyType', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->get();
         if($this->post->newProduct == 'on') $project->stageBy = 'project';
@@ -98,6 +101,7 @@ class projectZen extends project
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->join('whitelist', ',')
             ->join('auth', ',')
+            ->join('storyType', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products,plans,branch')
             ->get();
@@ -720,7 +724,6 @@ class projectZen extends project
     {
         if($project->hasProduct)
         {
-            if($this->config->URAndSR) unset($this->lang->resource->requirement);
             unset($this->lang->resource->productplan);
             unset($this->lang->resource->tree);
         }
@@ -736,8 +739,6 @@ class projectZen extends project
             unset($this->lang->resource->projectstory->unlinkStory);
             unset($this->lang->resource->projectstory->batchUnlinkStory);
             unset($this->lang->resource->story->view);
-            if($this->config->URAndSR) unset($this->lang->resource->requirement->view);
-            if($this->config->URAndSR) unset($this->lang->resource->requirement->batchChangeBranch);
             unset($this->lang->resource->tree->browseTask);
             unset($this->lang->resource->tree->browsehost);
             unset($this->lang->resource->tree->editHost);

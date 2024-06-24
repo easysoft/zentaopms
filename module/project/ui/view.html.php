@@ -203,7 +203,7 @@ row
                     (
                         setClass('w-1/3 storyCount'),
                         div(setClass('text-md font-bold'), $statData->storyCount),
-                        span(setClass('text-gray'), $lang->story->common)
+                        span(setClass('text-gray'), $lang->common->story)
                     ),
                     div
                     (

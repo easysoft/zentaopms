@@ -26,6 +26,7 @@ $config->project->form->create['desc']       = array('type' => 'string', 'requir
 $config->project->form->create['acl']        = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['whitelist']  = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['auth']       = array('type' => 'array',  'required' => false, 'default' => '');
+$config->project->form->create['storyType']  = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['model']      = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['vision']     = array('type' => 'string', 'required' => false, 'default' => $config->vision);
 if(isset($this->config->setCode) && $this->config->setCode == 1) $config->project->form->create['code'] = array('type' => 'string', 'required' => false,  'filter'  => 'trim');

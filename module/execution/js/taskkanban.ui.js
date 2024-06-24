@@ -6,12 +6,13 @@ const kanbanDropRules =
 {
     story:
     {
-        'backlog': ['ready'],
-        'ready': ['backlog'],
-        'tested': ['verified'],
-        'verified': ['tested', 'released'],
-        'released': ['verified', 'closed'],
-        'closed': ['released'],
+        backlog: ['ready', 'backlog'],
+        ready: ['backlog', 'ready'],
+        tested: ['verified', 'rejected'],
+        verified: ['tested', 'pending', 'released'],
+        pending: ['verified', 'released'],
+        released: ['verified', 'closed'],
+        closed: ['released']
     },
     bug:
     {
@@ -101,6 +102,7 @@ window.getLaneActions = function(lane)
 window.getCol = function(col)
 {
     /* 计算WIP。*/
+    if(ERURColumn.includes(col.type)) return;
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
     const cards = col.cards;
 
@@ -174,8 +176,8 @@ window.buildColActions = function(col)
 {
     let actions = [];
 
-    if(priv.canEditName && col.actionList && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(priv.canSetWIP   && col.actionList && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(priv.canEditName && col.actionList && col.actionList.includes('setColumn'))                                actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(priv.canSetWIP   && col.actionList && col.actionList.includes('setWIP') && !ERURColumn.includes(col.type)) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }
@@ -217,7 +219,14 @@ window.getItem = function(info)
     if(info.laneInfo.type == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'task' && priv.canAssignTask)   assignLink = $.createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
-    if(assignLink) avatar = "<a href='" + assignLink + "' data-toggle='modal'>" + avatar + "</a>";
+    if(assignLink)
+    {
+        avatar = "<a href='" + assignLink + "' data-toggle='modal'>" + avatar + "</a>";
+    }
+    else if(['parentStory', 'requirement', 'epic'].includes(info.laneInfo.type))
+    {
+        avatar = '<div class="avatar child-item rounded-full size-xs ml-1" title="' + storyLang.children + '" style="background: #ccc; color: #fff; cursor: pointer;"><i class="icon icon-split"></i></div>';
+    }
 
     const content = `
       <div class='flex items-center'>
@@ -233,7 +242,7 @@ window.getItem = function(info)
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
         info.item.title = {html: info.item.title};
     }
-    info.item.titleUrl   = info.laneInfo.type == 'story' ? $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`) : $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
+    info.item.titleUrl   = ['story', 'epic', 'requirement', 'parentStory'].includes(info.laneInfo.type) ? $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`) : $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
     info.item.titleAttrs = {'data-toggle': 'modal', 'data-size': 'lg', 'title': info.item.title, 'class': 'card-title clip'};
 
     info.item.content = {html: content};

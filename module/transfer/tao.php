@@ -243,7 +243,6 @@ class transferTao extends transferModel
                 /* 根据name或title获取父数据。*/
                 /* Get parent data by name or title. */
                 if(!empty($data->name)) $data->name = '>' . $data->name;
-                elseif(!empty($data->title)) $data->title = '>' . $data->title;
                 $children[$data->parent][$id] = $data;
                 unset($datas[$id]);
             }
@@ -263,28 +262,5 @@ class transferTao extends transferModel
         }
 
         return $datas;
-    }
-
-    /**
-     * 设置导出用户需求相关相关研发需求数据。
-     * Process LinkStories datas.
-     *
-     * @param  array $stories
-     * @access protected
-     * @return array
-     */
-    protected function processLinkStories($stories)
-    {
-        $storyDatas = end($stories);
-        $lastType   = $storyDatas->type;
-        if(empty($storyDatas->type) || $storyDatas->type == 'story') return $stories;
-
-        /* 获取产品ID列表。*/
-        /* Get product id list. */
-        $productIDList = array();
-        foreach($stories as $story) $productIDList[] = $story->product;
-        $productIDList = array_unique($productIDList);
-
-        return $this->loadModel('story')->mergePlanTitleAndChildren($productIDList, $stories, $lastType);
     }
 }

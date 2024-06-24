@@ -81,6 +81,8 @@ jsVar('confirmDelete',  $lang->build->confirmDelete);
 jsVar('currentAccount', $app->user->account);
 jsVar('buildProduct',   $build->product);
 jsVar('buildModule',    $buildModule);
+jsVar('grades',         $grades);
+jsVar('showGrade',      $showGrade);
 
 /* Story's batch btn. */
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkStory');
@@ -184,6 +186,7 @@ detailBody
                     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.noCheckBox ? 'disabled' : true;}")),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::onRenderCell(jsRaw('window.renderStoryCell')),
                     set::extraHeight('+144'),
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager('storyPager', '', array(

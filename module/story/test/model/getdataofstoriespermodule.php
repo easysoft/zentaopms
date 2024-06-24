@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getDataOfStoriesPerModule();
+timeout=0
 cid=0
 
 - 按照模块分组，获取分组后的需求数量 @6

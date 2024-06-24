@@ -21,15 +21,17 @@ jsVar('storyType', $storyType);
 
 if(!empty($twinsTip)) pageJS("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
-$fields = $config->story->form->batchEdit;
-
 $items = array();
 $items['storyIdList'] = array('name' => 'storyIdList', 'label' => '', 'control' => 'hidden', 'hidden' => true);
 $items['id']          = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px');
+$fields = $config->story->form->batchEdit;
 foreach($fields as $fieldName => $field)
 {
     if($fieldName == 'color') continue;
     if(isset($field['options']) && $field['options'] == 'users') $field['options'] = $users;
+    if($fieldName == 'source')   $field['options'] = $lang->{$storyType}->sourceList;
+    if($fieldName == 'pri')      $field['options'] = $lang->{$storyType}->priList;
+    if($fieldName == 'category') $field['options'] = $lang->{$storyType}->categoryList;
     $items[$fieldName] = array('name' => $fieldName, 'label' => zget($lang->story, $fieldName), 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
     if(isset($customFields[$fieldName]) && strpos(",$showFields,", ",$fieldName,") === false) $items[$fieldName]['hidden'] = true;
     if($fieldName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $items['sourceNote']['hidden'] = true;
@@ -41,12 +43,6 @@ $items['stage']['ditto']             = true;
 $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
-
-if($storyType == 'requirement')
-{
-    unset($items['plan']);
-    unset($items['stage']);
-}
 
 if(!$branchProduct) unset($items['branch'], $customFields['branch']);
 

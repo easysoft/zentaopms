@@ -224,6 +224,7 @@ $lang->metric->common       = '度量项';
 $lang->report->common       = '统计';
 $lang->system->common       = '组织';
 $lang->admin->common        = '后台';
+$lang->epic->common         = $lang->ERCommon;
 $lang->story->common        = $lang->SRCommon;
 $lang->task->common         = '任务';
 $lang->bug->common          = 'Bug';
@@ -437,7 +438,8 @@ $lang->admin->cache       = '缓存';
 
 $lang->convert->importJira = '导入Jira数据';
 
-$lang->storyConcept = '需求概念';
+$lang->storyConcept  = '需求概念';
+$lang->defaultERName = '业务需求';
 
 $lang->searchTips = '';
 $lang->searchAB   = '搜索';
@@ -445,7 +447,9 @@ $lang->searchAB   = '搜索';
 /* 查询中可以选择的对象列表。*/
 $lang->searchObjects['all']         = '全部';
 $lang->searchObjects['bug']         = 'Bug';
-$lang->searchObjects['story']       = '需求';
+$lang->searchObjects['story']       = $lang->SRCommon;
+if($config->enableER) $lang->searchObjects['epic']        = $lang->ERCommon;
+if($config->URAndSR)  $lang->searchObjects['requirement'] = $lang->URCommon;
 $lang->searchObjects['task']        = '任务';
 $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['product']     = $lang->productCommon;

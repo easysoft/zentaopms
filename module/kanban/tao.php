@@ -426,17 +426,44 @@ class kanbanTao extends kanbanModel
      */
     protected function buildRDRegionData(array $regionData, array $groups, array $laneGroup, array $columnGroup, array $cardGroup, string $searchValue = '')
     {
-        $laneCount = 0;
-        $groupData = array();
+        $laneCount    = 0;
+        $groupData    = array();
+        $fromKanbanID = '';
         foreach($groups as $group)
         {
             $lanes = zget($laneGroup, $group->id, array());
             if(!$lanes) continue;
 
+            $kanbanID = "group{$group->id}";
+
             $cols  = zget($columnGroup, $group->id, array());
             $items = zget($cardGroup, $group->id, array());
 
             if($searchValue != '' and empty($items)) continue;
+
+            $lane = current($lanes);
+            if($lane['type'] == 'parentStory')
+            {
+                if(empty($items))
+                {
+                    unset($this->lang->kanban->type['parentStory']);
+                    continue;
+                }
+                $fromKanbanID = $kanbanID;
+            }
+            elseif($lane['type'] == 'story')
+            {
+                foreach($items as $colGroup)
+                {
+                    foreach($colGroup as $cards)
+                    {
+                        foreach($cards as $card)
+                        {
+                            $regionData['links'][] = array('fromKanban' => $fromKanbanID, 'toKanban' => $kanbanID, 'from' => $card['parent'], 'to' => $card['id']);
+                        }
+                    }
+                }
+            }
 
             /* 计算各个列上的卡片数量。 */
             $columnCount = array();
@@ -463,7 +490,7 @@ class kanbanTao extends kanbanModel
             $laneCount += count($lanes);
 
             $groupData['id']            = $group->id;
-            $groupData['key']           = "group{$group->id}";
+            $groupData['key']           = $kanbanID;
             $groupData['data']['lanes'] = $lanes;
             $groupData['data']['cols']  = $cols;
             $groupData['data']['items'] = $items;
@@ -499,6 +526,7 @@ class kanbanTao extends kanbanModel
         $item['pri']          = $card->pri;
         $item['color']        = $card->color;
         $item['assignedTo']   = $card->assignedTo;
+        $item['parent']       = !empty($card->originParent) ? $card->originParent : 0;
         $item['progress']     = !empty($card->progress) ? $card->progress : 0;
         $item['group']        = !empty($card->group) ? $card->group : '';
         $item['region']       = !empty($card->region) ? $card->region : '';
@@ -597,6 +625,7 @@ class kanbanTao extends kanbanModel
         $cardList    = array();
         $avatarPairs = $this->loadModel('user')->getAvatarPairs();
         $users       = $this->loadModel('user')->getPairs('noletter');
+        $module      = $browseType == 'parentStory' ? 'story' : $browseType;
         foreach($lanes as $laneID => $lane)
         {
             $laneData = array();
@@ -604,7 +633,7 @@ class kanbanTao extends kanbanModel
             $laneData['type']   = $browseType;
             $laneData['name']   = $laneData['id'];
             $laneData['region'] = $lane->execution;
-            $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
+            $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$module->$groupBy . ':' . $lane->name : $lane->name;
             $laneData['color']  = $lane->color;
             $laneData['order']  = $lane->order;
 
@@ -739,6 +768,7 @@ class kanbanTao extends kanbanModel
      */
     protected function getObjectPairs(string $groupBy, array $groupByList, string $browseType, string $orderBy): array
     {
+        if($browseType == 'parentStory') $browseType = 'story';
         $objectPairs = array();
         if(in_array($groupBy, array('module', 'story', 'assignedTo')))
         {
@@ -771,6 +801,41 @@ class kanbanTao extends kanbanModel
     }
 
     /**
+     * 更新专业研发看板中的用需、业需、父需求泳道上的卡片。
+     * Update card of feature, epic, parent story lane in RD kanban.
+     *
+     * @param  array  $cardPairs
+     * @param  int    $executionID
+     * @param  string $otherCardList
+     * @param  string $laneType
+     * @access public
+     * @return array
+     */
+    protected function refreshERURCards(array $cardPairs, int $executionID, string $otherCardList, $laneType = 'story'): array
+    {
+        $storyType = $laneType == 'parentStory' ? 'story' : $laneType;
+        $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', $storyType, $otherCardList);
+        foreach($stories as $storyID => $story)
+        {
+            if($laneType == 'parentStory' && $story->isParent != '1') continue;
+            foreach($this->lang->kanban->ERURColumn as $stage => $langItem)
+            {
+                if($story->stage != $stage and strpos($cardPairs[$stage], ",$storyID,") !== false)
+                {
+                    $cardPairs[$stage] = str_replace(",$storyID,", ',', $cardPairs[$stage]);
+                }
+
+                if($story->stage == $stage and strpos($cardPairs[$stage], ",$storyID,") === false)
+                {
+                    $cardPairs[$stage] = empty($cardPairs[$stage]) ? ",$storyID," : ",$storyID" . $cardPairs[$stage];
+                }
+            }
+        }
+
+        return $cardPairs;
+    }
+
+    /**
      * 更新专业研发看板中的需求泳道上的卡片。
      * Update card of story lane in RD kanban.
      *
@@ -787,12 +852,13 @@ class kanbanTao extends kanbanModel
         {
             foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
             {
+                if(!isset($cardPairs[$colType])) continue;
                 if($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
                 {
                     $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                 }
 
-                if(strpos(',ready,backlog,develop,test,', $colType) !== false) continue;
+                if(strpos(',ready,backlog,design,develop,test,', $colType) !== false) continue;
 
                 if($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                 {
@@ -897,6 +963,38 @@ class kanbanTao extends kanbanModel
         }
 
         return $cardPairs;
+    }
+
+    /**
+     * 获取父需求类型的卡片操作菜单。
+     * Get menu of story card.
+     *
+     * @param  int    $executionID
+     * @param  array  $objects
+     * @access public
+     * @return array
+     */
+    protected function getERURCardMenu(int $executionID, array $objects): array
+    {
+        $execution = $this->loadModel('execution')->getByID($executionID);
+
+        $menus = array();
+        $objects = $this->loadModel('story')->mergeReviewer($objects);
+        foreach($objects as $story)
+        {
+            $menu = array();
+
+            if(common::hasPriv($story->type, 'edit') and $this->story->isClickable($story, 'edit'))         $menu[] = array('label' => $this->lang->story->edit, 'icon' => 'edit', 'url' => helper::createLink($story->type, 'edit', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv($story->type, 'change') and $this->story->isClickable($story, 'change'))     $menu[] = array('label' => $this->lang->story->change, 'icon' => 'alter', 'url' => helper::createLink($story->type, 'change', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv($story->type, 'review') and $this->story->isClickable($story, 'review'))     $menu[] = array('label' => $this->lang->story->review, 'icon' => 'search', 'url' => helper::createLink($story->type, 'review', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv($story->type, 'activate') and $this->story->isClickable($story, 'activate')) $menu[] = array('label' => $this->lang->story->activate, 'icon' => 'magic', 'url' => helper::createLink($story->type, 'activate', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct)                       $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no&from=taskkanban"));
+            if(common::hasPriv($story->type, 'delete'))                                                     $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink($story->type, 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
+
+            $menus[$story->id] = $menu;
+        }
+
+        return $menus;
     }
 
     /**

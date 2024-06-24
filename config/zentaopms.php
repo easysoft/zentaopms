@@ -119,6 +119,26 @@ $config->executionCommonList['pt'][1] = 'Sprint';
 $config->executionCommonList['pt'][2] = 'Fase';
 
 /* Story common list. */
+$config->storyCommonList['zh-cn']['epic']        = '业务需求';
+$config->storyCommonList['zh-cn']['requirement'] = '用户需求';
+$config->storyCommonList['zh-cn']['story']       = '软件需求';
+
+$config->storyCommonList['zh-tw']['epic']        = '業務需求';
+$config->storyCommonList['zh-tw']['requirement'] = '用戶需求';
+$config->storyCommonList['zh-tw']['story']       = '軟件需求';
+
+$config->storyCommonList['en']['epic']        = 'Epic';
+$config->storyCommonList['en']['requirement'] = 'Requirement';
+$config->storyCommonList['en']['story']       = 'Story';
+
+$config->storyCommonList['de']['epic']        = 'Epic';
+$config->storyCommonList['de']['requirement'] = 'Requirement';
+$config->storyCommonList['de']['story']       = 'Story';
+
+$config->storyCommonList['fr']['epic']        = 'Epic';
+$config->storyCommonList['fr']['requirement'] = 'Requirement';
+$config->storyCommonList['fr']['story']       = 'Story';
+
 $config->hourPointCommonList['zh-cn'][0] = '工时';
 $config->hourPointCommonList['zh-cn'][1] = '故事点';
 $config->hourPointCommonList['zh-cn'][2] = '功能点';
@@ -254,6 +274,7 @@ $config->openMethods[] = 'search.buildzinform';
 $config->openMethods[] = 'search.buildzinquery';
 $config->openMethods[] = 'search.savezinquery';
 $config->openMethods[] = 'space.createapplication';
+$config->openMethods[] = 'story.storyview';
 $config->openMethods[] = 'ai.adminindex';
 $config->openMethods[] = 'sonarqube.create';
 $config->openMethods[] = 'sonarqube.edit';
@@ -372,6 +393,7 @@ define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
 define('TABLE_STORYREVIEW',   '`' . $config->db->prefix . 'storyreview`');
 define('TABLE_STORYSTAGE',    '`' . $config->db->prefix . 'storystage`');
 define('TABLE_STORYESTIMATE', '`' . $config->db->prefix . 'storyestimate`');
+define('TABLE_STORYGRADE',    '`' . $config->db->prefix . 'storygrade`');
 define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productplan`');
 define('TABLE_PLANSTORY',     '`' . $config->db->prefix . 'planstory`');
 define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
@@ -603,6 +625,7 @@ if(!defined('TABLE_MARKETRESEARCH')) define('TABLE_MARKETRESEARCH', '`' . $confi
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
 $config->objectTables['productplan']    = TABLE_PRODUCTPLAN;
+$config->objectTables['epic']           = TABLE_STORY;
 $config->objectTables['story']          = TABLE_STORY;
 $config->objectTables['requirement']    = TABLE_STORY;
 $config->objectTables['release']        = TABLE_RELEASE;
@@ -698,8 +721,8 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint      = array('task', 'story', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
-$config->programPriv->scrum         = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease');
+$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;
@@ -711,14 +734,14 @@ $config->waterfallModules = array('workestimation', 'durationestimation', 'budge
 $config->showMainMenu = true;
 $config->maxPriValue  = '256';
 
-$config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
+$config->importWhiteList = array('user', 'task', 'epic', 'requirement', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->dtable = new stdclass();
 $config->dtable->colVars = array('width', 'minWidth', 'type', 'flex', 'fixed', 'sortType', 'checkbox', 'nestedToggle', 'statusMap', 'actionsMap', 'group');
 
 $config->featureGroup = new stdclass();
 $config->featureGroup->my            = array('score');
-$config->featureGroup->product       = array('roadmap', 'track', 'UR');
+$config->featureGroup->product       = array('roadmap', 'track', 'UR', 'ER');
 $config->featureGroup->scrum         = array();
 $config->featureGroup->waterfall     = array();
 $config->featureGroup->agileplus     = array();

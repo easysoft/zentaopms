@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->updateParentStatus();
+timeout=0
 cid=0
 
 - 只有一个子需求，并且需求状态为closed，检查父需求的状态。 @closed
@@ -34,7 +35,7 @@ $story4  = $storyModel->fetchByID(4);
 $story15 = $storyModel->fetchByID(15);
 $story16 = $storyModel->fetchByID(16);
 
-r($story2->status) && p() && e('closed');  // 只有一个子需求，并且需求状态为closed，检查父需求的状态。
-r($story4->parent) && p() && e('0');       // 没有子需求的父需求，检查父需求的parent字段。
-r($story15->status) && p() && e('active'); // 已经关闭的父需求，有激活状态的子需求，检查父需求的状态。
-r($story16->parent) && p() && e('0');      // 没有父任务的子需求，检查子需求的parent字段。
+r($story2->status)   && p() && e('closed'); // 只有一个子需求，并且需求状态为closed，检查父需求的状态。
+r($story4->isParent) && p() && e('0');      // 没有子需求的父需求，检查父需求的parent字段。
+r($story15->status)  && p() && e('active'); // 已经关闭的父需求，有激活状态的子需求，检查父需求的状态。
+r($story16->parent)  && p() && e('0');      // 没有父任务的子需求，检查子需求的parent字段。

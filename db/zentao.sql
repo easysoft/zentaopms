@@ -1363,6 +1363,20 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `whitelist` text NULL,
   `reviewer` text NULL,
   `PMT` text NULL,
+  `draftEpics` mediumint(8) NOT NULL DEFAULT '0',
+  `activeEpics` mediumint(8) NOT NULL DEFAULT '0',
+  `changingEpics` mediumint(8) NOT NULL DEFAULT '0',
+  `reviewingEpics` mediumint(8) NOT NULL DEFAULT '0',
+  `finishedEpics` mediumint(8) NOT NULL DEFAULT '0',
+  `closedEpics` mediumint(8) NOT NULL DEFAULT '0',
+  `totalEpics` mediumint(8) NOT NULL DEFAULT '0',
+  `draftRequirements` mediumint(8) NOT NULL DEFAULT '0',
+  `activeRequirements` mediumint(8) NOT NULL DEFAULT '0',
+  `changingRequirements` mediumint(8) NOT NULL DEFAULT '0',
+  `reviewingRequirements` mediumint(8) NOT NULL DEFAULT '0',
+  `finishedRequirements` mediumint(8) NOT NULL DEFAULT '0',
+  `closedRequirements` mediumint(8) NOT NULL DEFAULT '0',
+  `totalRequirements` mediumint(8) NOT NULL DEFAULT '0',
   `draftStories` mediumint(8) NOT NULL DEFAULT '0',
   `activeStories` mediumint(8) NOT NULL DEFAULT '0',
   `changingStories` mediumint(8) NOT NULL DEFAULT '0',
@@ -1427,6 +1441,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `milestone` enum('0','1') NOT NULL DEFAULT '0',
   `output` text NULL,
   `auth` char(30) NOT NULL DEFAULT '',
+  `storyType` char(30) NOT NULL DEFAULT '',
   `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `path` varchar(255) NOT NULL DEFAULT '',
   `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1765,6 +1780,10 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `parent` mediumint(9) NOT NULL DEFAULT '0',
+  `isParent` enum('0', '1') NOT NULL DEFAULT '0',
+  `root` mediumint(9) NOT NULL DEFAULT '0',
+  `path` text NULL,
+  `grade` smallint(6) NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1782,7 +1801,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
-  `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released','closed') NOT NULL DEFAULT 'wait',
+  `stage` enum('','wait','defining','planning','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','delivering','pending','released','closed') NOT NULL DEFAULT 'wait',
   `stagedBy` char(30) NOT NULL DEFAULT '',
   `mailto` text NULL,
   `lib` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -1805,12 +1824,12 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `closedReason` varchar(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
   `toBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `childStories` varchar(255) NOT NULL DEFAULT '',
   `linkStories` varchar(255) NOT NULL DEFAULT '',
   `linkRequirements` varchar(255) NOT NULL DEFAULT '',
   `twins` varchar(255) NOT NULL DEFAULT '',
   `duplicateStory` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `version` smallint(6) NOT NULL DEFAULT '1',
+  `parentVersion` smallint(6) NOT NULL DEFAULT '0',
   `storyChanged` enum('0','1') NOT NULL DEFAULT '0',
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
@@ -1828,8 +1847,17 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product` ON `zt_story` (`product`);
+CREATE INDEX `root` ON `zt_story` (`root`);
 CREATE INDEX `status` ON `zt_story` (`status`);
 CREATE INDEX `assignedTo` ON `zt_story` (`assignedTo`);
+
+-- DROP TABLE IF EXISTS `zt_storygrade`;
+CREATE TABLE `zt_storygrade` (
+  `type` enum('story','requirement','epic') NOT NULL,
+  `grade` smallint NOT NULL,
+  `name` char(30) NOT NULL,
+  `status` char(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
@@ -2343,23 +2371,34 @@ REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDDEM
 REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDPMT',         'IPDPMT', '');
 REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDADMIN',       'IPDADMIN', '');
 
-REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
-('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1'),
-('zh-cn', 'custom', 'URSRList', '5', '{\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
-('zh-tw', 'custom', 'URSRList', '1', '{"SRName":"\\u8edf\\u4ef6\\u9700\\u6c42","URName":"\\u7528\\u6236\\u9700\\u6c42"}', '0'),
-('zh-tw', 'custom', 'URSRList', '2', '{"SRName":"\\u7814\\u767c\\u9700\\u6c42","URName":"\\u7528\\u6236\\u9700\\u6c42"}', '0'),
-('zh-tw', 'custom', 'URSRList', '3', '{"SRName":"\\u8edf\\u9700","URName":"\\u7528\\u9700"}', '0'),
-('zh-tw', 'custom', 'URSRList', '4', '{"SRName":"\\u6545\\u4e8b","URName":"\\u53f2\\u8a69"}', '0'),
-('zh-tw', 'custom', 'URSRList', '5', '{"SRName":"\\u9700\\u6c42","URName":"\\u7528\\u6236\\u9700\\u6c42"}', '0'),
-('en', 'custom', 'URSRList', '1', '{\"SRName\":\"Story\",\"URName\":\"Epic\"}', '0'),
-('en', 'custom', 'URSRList', '2', '{\"SRName\":\"Story\",\"URName\":\"Requirement\"}', '0'),
-('fr', 'custom', 'URSRList', '1', '{\"SRName\":\"Story\",\"URName\":\"Epic\"}', '0'),
-('fr', 'custom', 'URSRList', '2', '{\"SRName\":\"Story\",\"URName\":\"Requirement\"}', '0'),
-('de', 'custom', 'URSRList', '1', '{\"SRName\":\"Story\",\"URName\":\"Epic\"}', '0'),
-('de', 'custom', 'URSRList', '2', '{\"SRName\":\"Story\",\"URName\":\"Requirement\"}', '0');
+REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
+('zh-cn', 'custom', 'URSRList', '1', '{\"ERName\":\"\\u4e1a\\u52a1\\u9700\\u6c42\",\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '0', 'rnd'),
+('zh-cn', 'custom', 'URSRList', '2', '{\"ERName\":\"\\u4e1a\\u52a1\\u9700\\u6c42\",\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '0', 'rnd'),
+('zh-cn', 'custom', 'URSRList', '3', '{\"ERName\":\"\\u4e1a\\u9700\",\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '0', 'rnd'),
+('zh-cn', 'custom', 'URSRList', '4', '{\"ERName\":\"\\u53f2\\u8bd7\",\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u7279\\u6027\"}', '0', 'rnd'),
+('zh-cn', 'custom', 'URSRList', '5', '{\"ERName\":\"\\u4e1a\\u52a1\\u9700\\u6c42\",\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '0', 'rnd'),
+('zh-cn', 'custom', 'URSRList', '6', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd'),
+('en',    'custom', 'URSRList', '1', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd'),
+('en',    'custom', 'URSRList', '2', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Requirement\"}', '0', 'rnd'),
+('en',    'custom', 'URSRList', '3', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd'),
+('fr',    'custom', 'URSRList', '1', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd'),
+('fr',    'custom', 'URSRList', '2', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Requirement\"}', '0', 'rnd'),
+('fr',    'custom', 'URSRList', '3', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd'),
+('de',    'custom', 'URSRList', '1', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd'),
+('de',    'custom', 'URSRList', '2', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Requirement\"}', '0', 'rnd'),
+('de',    'custom', 'URSRList', '3', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd'),
+('zh-tw', 'custom', 'URSRList', '1', '{\"ERName\":\"\\u696d\\u52d9\\u9700\\u6c42\",\"SRName\":\"\\u8edf\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6236\\u9700\\u6c42\"}', '0', 'rnd'),
+('zh-tw', 'custom', 'URSRList', '2', '{\"ERName\":\"\\u696d\\u52d9\\u9700\\u6c42\",\"SRName\":\"\\u7814\\u767c\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6236\\u9700\\u6c42\"}', '0', 'rnd'),
+('zh-tw', 'custom', 'URSRList', '3', '{\"ERName\":\"\\u696d\\u9700\",\"SRName\":\"\\u8edf\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '0', 'rnd'),
+('zh-tw', 'custom', 'URSRList', '4', '{\"ERName\":\"\\u53f2\\u8a69\",\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u7279\\u6027\"}', '0', 'rnd'),
+('zh-tw', 'custom', 'URSRList', '5', '{\"ERName\":\"\\u696d\\u52d9\\u9700\\u6c42\",\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6236\\u9700\\u6c42\"}', '0', 'rnd'),
+('zh-tw', 'custom', 'URSRList', '6', '{\"ERName\":\"Epic\",\"SRName\":\"Story\",\"URName\":\"Feature\"}',     '0', 'rnd');
+
+INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
+('requirement', 1,    'UR', 'enable'),
+('epic',        1,    'BR', 'enable'),
+('story',       1,    'SR', 'enable'),
+('story',       2,    '子', 'enable');
 
 REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`projectType`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
 ('需求','10','request','waterfall','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
@@ -2379,11 +2418,15 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct',   '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRExecution', '1');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '2');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'enableER', '0');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'mode', 'ALM');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'unitList', 'CNY,USD');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'defaultCurrency', 'CNY');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'reviewRules', 'allpass');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'syncProduct', '{"feedback":{},"ticket":{}}');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'gradeRule', 'cross');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'requirement', '', 'gradeRule', 'cross');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'epic', '', 'gradeRule', 'cross');
 -- DROP TABLE IF EXISTS `zt_im_chat`;
 CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -13590,7 +13633,9 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
 ('system',      '项目',           'projects',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
 ('system',      '产品线',         'productLines',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getLinePairs\",\"methodDesc\":\"Get line pairs.\",\"params\":[{\"name\":\"useShort\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '需求',           'stories',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\"',    'view_datasource_4',    'id',   'title'),
+('sql',         '软件需求',       'stories',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"story\"',    'view_datasource_4',    'id',   'title'),
+('sql',         '用户需求',       'requirements',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"requirement\"',    'view_datasource_3',    'id',   'title'),
+('sql',         '业务需求',       'epics',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" type=\"epic\"',    'view_datasource_2',    'id',   'title'),
 ('sql',         '任务',           'tasks',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_task where deleted=\"0\" and vision=\"rnd\"',      'view_datasource_5',    'id',   'name'),
 ('sql',         'Bug',            'bugs',                     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_bug where deleted=\"0\"',      'view_datasource_6',    'id',   'title'),
 ('system',      '权限分组',       'groups',                   '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
@@ -13667,6 +13712,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '需求管理周期',   'demandDuration',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandDuration', '', '', ''),
 ('lang',        '需求BSA',        'demandBSA',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandBSA', '', '', '');
 
+DROP VIEW IF EXISTS `view_datasource_2`;
+DROP VIEW IF EXISTS `view_datasource_3`;
 DROP VIEW IF EXISTS `view_datasource_4`;
 DROP VIEW IF EXISTS `view_datasource_5`;
 DROP VIEW IF EXISTS `view_datasource_6`;
@@ -13677,7 +13724,9 @@ DROP VIEW IF EXISTS `view_datasource_41`;
 DROP VIEW IF EXISTS `view_datasource_54`;
 DROP VIEW IF EXISTS `view_datasource_55`;
 
-CREATE VIEW `view_datasource_4`  AS select `id`,`title` from `zt_story` where `deleted` = '0';
+CREATE VIEW `view_datasource_2`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'epic';
+CREATE VIEW `view_datasource_3`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'requirement';
+CREATE VIEW `view_datasource_4`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'story';
 CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'rnd';
 CREATE VIEW `view_datasource_6`  AS select `id`,`title` from `zt_bug` where `deleted` = '0';
 CREATE VIEW `view_datasource_10` AS select `id`,`name` from `zt_build` where `deleted` = '0';

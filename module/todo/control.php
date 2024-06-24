@@ -499,16 +499,18 @@ class todo extends control
             $todos = $this->todo->getByExportList($orderBy, (string) $this->session->todoReportCondition, (string)$checkedItem);
 
             list($todos, $fields) = $this->todoZen->exportTodoInfo((array)$todos, (string)$this->config->todo->list->exportFields, $todoLang);
-            list($users, $bugs, $stories, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', (string)$user->account);
+            list($users, $bugs, $stories, $epics, $requirements, $tasks, $testTasks) = $this->todoZen->exportAssociated('default', (string)$user->account);
 
             $times = date::buildTimeList((int)$configTime->begin, (int)$configTime->end, (int)$configTime->delta);
 
             $assemble = new stdclass();
-            $assemble->users     = $users;
-            $assemble->bugs      = $bugs;
-            $assemble->stories   = $stories;
-            $assemble->tasks     = $tasks;
-            $assemble->testTasks = $testTasks;
+            $assemble->users        = $users;
+            $assemble->bugs         = $bugs;
+            $assemble->stories      = $stories;
+            $assemble->epics        = $epics;
+            $assemble->requirements = $requirements;
+            $assemble->tasks        = $tasks;
+            $assemble->testTasks    = $testTasks;
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 $iroData = $this->todoZen->exportAssociated((string)$this->config->edition, (string)$user->account);

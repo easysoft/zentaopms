@@ -13,14 +13,12 @@ window.switchShow = function(obj)
     {
         $('#rejectedReasonBox').addClass('hidden');
         $('#duplicateStoryBox').addClass('hidden');
-        $('#childStoriesBox').addClass('hidden');
         if(isLastOne) $('#assignedToBox').removeClass('hidden');
     }
     else if(result == 'clarify')
     {
         $('#rejectedReasonBox').addClass('hidden');
         $('#duplicateStoryBox').addClass('hidden');
-        $('#childStoriesBox').addClass('hidden');
         $('#rejectedReasonBox').addClass('hidden');
         if(isLastOne) $('#assignedToBox').removeClass('hidden');
     }
@@ -28,7 +26,6 @@ window.switchShow = function(obj)
     {
         $('#rejectedReasonBox').addClass('hidden');
         $('#duplicateStoryBox').addClass('hidden');
-        $('#childStoriesBox').addClass('hidden');
         $('#rejectedReasonBox').addClass('hidden');
         if(isLastOne) $('#assignedToBox').removeClass('hidden');
         if(result == 'pass')
@@ -43,5 +40,4 @@ window.setStory = function(obj)
 {
     var reason = $(obj).val();
     $('#duplicateStoryBox').toggleClass('hidden', reason != 'duplicate');
-    $('#childStoriesBox').toggleClass('hidden', reason != 'subdivided');
 }

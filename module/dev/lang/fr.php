@@ -25,7 +25,8 @@ $lang->dev->language    = 'Language: %s';
 $lang->dev->default     = 'Default';
 $lang->dev->currentLang = 'Current Language';
 $lang->dev->change      = 'Change';
-$lang->dev->UR          = 'Epic';
+$lang->dev->ER          = 'Epic';
+$lang->dev->UR          = 'Feature';
 $lang->dev->SR          = 'Story';
 $lang->dev->branch      = 'Branch';
 

@@ -2,7 +2,7 @@
 global $app;
 $app->loadLang('story');
 $config->product->search['module']             = 'story';
-$config->product->search['fields']['title']    = $lang->story->title;
+$config->product->search['fields']['title']    = $lang->story->name;
 $config->product->search['fields']['id']       = $lang->story->id;
 $config->product->search['fields']['keywords'] = $lang->story->keywords;
 $config->product->search['fields']['status']   = $lang->story->status;
@@ -13,6 +13,7 @@ if($config->edition == 'ipd') $config->product->search['fields']['roadmap']  = $
 $config->product->search['fields']['stage']    = $lang->story->stage;
 $config->product->search['fields']['product']  = $lang->story->product;
 $config->product->search['fields']['branch']   = '';
+$config->product->search['fields']['grade']    = $lang->story->grade;
 $config->product->search['fields']['plan']     = $lang->story->plan;
 $config->product->search['fields']['estimate'] = $lang->story->estimate;
 
@@ -48,6 +49,7 @@ $config->product->search['params']['pri']            = array('operator' => '=', 
 
 $config->product->search['params']['product']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['branch']         = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->product->search['params']['grade']          = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 $config->product->search['params']['roadmap']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->product->search['params']['plan']           = array('operator' => '=',       'control' => 'select', 'values' => '');

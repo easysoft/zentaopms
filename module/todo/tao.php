@@ -387,7 +387,7 @@ class todoTao extends todoModel
     {
         $savedTodoName = $todo->name;
 
-        if($todo->type == 'story')
+        if(in_array($todo->type, array('story', 'epic', 'requirement')))
         {
             $story        = $this->dao->findByID($todo->objectID)->from(TABLE_STORY)->fetch();
             $todo->object = $story;

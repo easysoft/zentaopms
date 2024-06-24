@@ -529,15 +529,11 @@ class projectModel extends model
     public function getStatData($projectID)
     {
         $executions = $this->loadModel('execution')->getPairs($projectID);
-        $storyTypeCount = $this->dao->select('count(t2.story) as storyCount,t1.type')->from(TABLE_STORY)->alias('t1')
+        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->groupBy('t1.type')
-            ->fetchPairs('type', 'storyCount');
-
-        $storyCount       = isset($storyTypeCount['story']) ? $storyTypeCount['story'] : 0;
-        $requirementCount = isset($storyTypeCount['requirement']) ? $storyTypeCount['requirement'] : 0;
+            ->fetch('storyCount');
 
         $bugCount = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)
              ->where('project')->in($projectID)
@@ -561,14 +557,13 @@ class projectModel extends model
             ->fetch('count');
 
         $statData = new stdclass();
-        $statData->storyCount       = $storyCount;
-        $statData->requirementCount = $requirementCount;
-        $statData->bugCount         = $bugCount;
-        $statData->taskCount        = $taskCount->count;
-        $statData->waitCount        = $taskCount->waitCount;
-        $statData->doingCount       = $taskCount->doingCount;
-        $statData->finishedCount    = $taskCount->finishedCount;
-        $statData->delayedCount     = $delayedCount;
+        $statData->storyCount    = $storyCount;
+        $statData->bugCount      = $bugCount;
+        $statData->taskCount     = $taskCount->count;
+        $statData->waitCount     = $taskCount->waitCount;
+        $statData->doingCount    = $taskCount->doingCount;
+        $statData->finishedCount = $taskCount->finishedCount;
+        $statData->delayedCount  = $delayedCount;
 
         return $statData;
     }
@@ -1354,6 +1349,12 @@ class projectModel extends model
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
         if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade); // 更新项目从属路径。
+        if($oldProject->storyType != $project->storyType)
+        {
+            /* 编辑项目时如果取消关联需求类型，则把对应类型的需求移除。 */
+            $unlinkType = array_diff(explode(',', $oldProject->storyType), explode(',', $project->storyType));
+            if($unlinkType) $this->unlinkStoryByType($projectID, $unlinkType);
+        }
         if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);                // 无迭代的非瀑布项目需要更新。
 
         if(dao::isError()) return false;
@@ -1650,6 +1651,33 @@ class projectModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 删除项目和迭代下对应需求概念的关联关系。
+     * Unlink the relationship between the project and the story concept under the iteration and the project.
+     *
+     * @param  int    $projectID
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function unlinkStoryByType($projectID, $storyType)
+    {
+        $idList = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->eq($projectID)
+            ->fetchPairs();
+
+        $idList[$projectID] = $projectID;
+
+        $storyIdList = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->in($idList)
+            ->andWhere('t2.type')->in($storyType)
+            ->fetchPairs();
+
+        if($storyIdList) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->andWhere('project')->in($idList)->exec();
     }
 
     /**

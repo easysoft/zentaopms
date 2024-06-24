@@ -88,7 +88,7 @@ class design extends control
 
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
-        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
         $queryID       = $type == 'bySearch' ? $param : 0;
 
         /* Build Search Form. */
@@ -150,10 +150,11 @@ class design extends control
 
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
         $this->view->title      = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->create;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
+        $this->view->stories    = $this->story->addGradeLabel($stories);
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
         $this->view->type       = $type;
@@ -187,11 +188,12 @@ class design extends control
 
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
         $project = $this->loadModel('project')->getByID($projectID);
 
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->batchCreate;
-        $this->view->stories   = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->stories   = $this->story->addGradeLabel($stories);
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
         $this->view->type      = $type;
         $this->view->typeList  = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
@@ -222,7 +224,7 @@ class design extends control
 
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->view;
         $this->view->design   = $design;
-        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions  = $this->loadModel('action')->getList('design', $design->id);
         $this->view->repos    = $this->loadModel('repo')->getRepoPairs('project', $design->project);
@@ -265,11 +267,12 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
         $project       = $this->loadModel('project')->getByID($design->project);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'full');
 
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->edit;
         $this->view->design   = $design;
         $this->view->project  = $project;
-        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->stories  = $this->story->addGradeLabel($stories);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
@@ -441,15 +444,12 @@ class design extends control
      */
     public function ajaxGetProductStories(int $productID, int $projectID, string $status = 'all', string $hasParent = 'true')
     {
+        $hasParent     = $hasParent == 'true';
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
-        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'story', $hasParent);
+        $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, $status, 'id_desc', 0, 'full', 'full', $hasParent);
 
-        $items = array();
-        foreach($stories as $storyID => $storyTitle)
-        {
-            $items[] = array('value' => $storyID, 'text' => $storyTitle, 'keys' => $storyTitle);
-        }
+        $items = $this->story->addGradeLabel($stories);
         return print(json_encode($items));
     }
 

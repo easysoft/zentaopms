@@ -14,6 +14,8 @@ window.renderRowData = function($row, index, story)
         $picker.render(options);
     });
 
+    $row.addClass('story' + story.id);
+
     let $closedReasonTD = $row.find('[data-name="closedReason"]');
     $closedReasonTD.find('.picker-box').on('inited', function(e, info)
     {
@@ -33,9 +35,6 @@ window.renderRowData = function($row, index, story)
             let appendStoryHtml = "<span id='duplicateStoryBox" + story.id + "' " + (story.closedReason != 'duplicate' ? "class='hidden'" : '') + ">";
             appendStoryHtml    += "<div class='form-control picker-box' data-name='duplicateStory' style='padding:0'></div></span>";
 
-            appendStoryHtml += "<span id='childStoryBox" + story.id + "' " + (story.closedReason != 'subdivided' ? "class='hidden'" : '') + ">";
-            appendStoryHtml += "<input type='text' class='form-control form-batch-input' name='childStories[" + story.id + "]' value='" + (typeof story.childStories == 'undefined' ? '' : story.childStories) + "' id='childStories_" + index + "' data-name='childStories' autocomplete='off'>";
-            appendStoryHtml += '</span>';
             $closedReasonTD.find('.input-group').append(appendStoryHtml);
 
             items = [];
@@ -56,8 +55,36 @@ window.renderRowData = function($row, index, story)
     let $module   = $row.find('.form-batch-control[data-name="module"]');
     let $plan     = $row.find('.form-batch-control[data-name="plan"]');
     let $branch   = $row.find('.form-batch-control[data-name="branch"]');
+    let $stage    = $row.find('.form-batch-control[data-name="stage"]');
     let $estimate = $row.find('.form-batch-control[data-name="estimate"]');
     let $roadmap  = $row.find('.form-batch-control[data-name="roadmap"]');
+
+    if($estimate.length > 0 && story.isParent == '1') $estimate.find('input.form-control').attr('readonly', 'readonly');
+
+    if($stage.length > 0)
+    {
+        $stage.find('.picker-box').on('inited', function(e, info)
+        {
+            let $picker = info[0];
+            let options = $picker.options;
+            let items   = options.items;
+
+            if(story.type == 'story' && story.isParent == '0')
+            {
+                /* 叶子需求删除父需求的阶段。*/
+                items.splice(0, 1);
+                items.splice(1, 1);
+                items.splice(11, 1);
+                options.items = items;
+            }
+            else if(story.type != 'story' || story.isParent == '1')
+            {
+                options.disabled = true;
+            }
+
+            $picker.render(options);
+        })
+    }
 
     $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
     $row.find('.form-control-static[data-name="status"]').addClass('status-' + story.rawStatus);
@@ -118,11 +145,13 @@ window.renderRowData = function($row, index, story)
                 items.push({text: plans[plan], value: plan});
             }
             options.items = items;
-            options.disabled = story.parent < 0 || story.type == 'requirement';
             options.defaultValue = story.plan;
+            options.multiple = story.type != 'story' ? true : false;
 
             $picker.render(options);
         });
+
+        $row.attr('type', story.type);
     }
 
     if($estimate.length > 0)
@@ -202,17 +231,10 @@ window.setDuplicateAndChild = function(resolution, storyID)
 {
     if(resolution == 'duplicate')
     {
-        $('#childStoryBox' + storyID).addClass('hidden');
         $('#duplicateStoryBox' + storyID).removeClass('hidden');
-    }
-    else if(resolution == 'subdivided')
-    {
-        $('#duplicateStoryBox' + storyID).addClass('hidden');
-        $('#childStoryBox' + storyID).removeClass('hidden');
     }
     else
     {
         $('#duplicateStoryBox' + storyID).addClass('hidden');
-        $('#childStoryBox' + storyID).addClass('hidden');
     }
 };

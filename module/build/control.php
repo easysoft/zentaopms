@@ -185,6 +185,8 @@ class build extends control
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link          = $link;
         $this->view->orderBy       = $orderBy;
+        $this->view->grades        = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->showGrade     = $this->config->edition == 'ipd';
         $this->view->execution     = $this->loadModel('execution')->getByID((int)$build->execution);
         $this->view->childBuilds   = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
         $this->view->productID     = $build->product;
@@ -436,13 +438,14 @@ class build extends control
 
         $this->loadModel('story');
         $executionID = $build->execution ? (int)$build->execution : (int)$build->project;
+        $excludeStoryIdList = $this->buildZen->getExcludeStoryIdList($build);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $build->allStories, '', $pager);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $excludeStoryIdList, '', $pager);
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($executionID, $build->product, $orderBy, 'byBranch', $build->branch, 'story', $build->allStories, $pager);
+            $allStories = $this->story->getExecutionStories($executionID, $build->product, $orderBy, 'byBranch', $build->branch, 'story', $excludeStoryIdList, $pager);
         }
 
         $checkedRows = array();
@@ -459,6 +462,8 @@ class build extends control
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
         $this->view->pager        = $pager;
+        $this->view->grades       = $this->story->getGradePairs('story', 'all');
+        $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->orderBy      = $orderBy;
         $this->display();
     }

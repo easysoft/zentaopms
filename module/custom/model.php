@@ -634,7 +634,9 @@ class customModel extends model
         foreach($langData as $content)
         {
             $value = json_decode($content->value);
-            $URSRPairs[$content->key] = $this->config->URAndSR ? $value->URName . '/' . $value->SRName : $value->SRName;
+            if(!$this->config->URAndSR && !$this->config->enableER) $URSRPairs[$content->key] = $value->SRName;
+            if($this->config->URAndSR  && !$this->config->enableER) $URSRPairs[$content->key] = $value->URName . '/' . $value->SRName;
+            if($this->config->URAndSR  && $this->config->enableER)  $URSRPairs[$content->key] = $value->ERName . '/' . $value->URName . '/' . $value->SRName;
         }
 
         return $URSRPairs;
@@ -722,6 +724,7 @@ class customModel extends model
             $value = json_decode($URSRData->value);
             $URSRList[$URSRData->key] = new stdclass();
             $URSRList[$URSRData->key]->key    = $URSRData->key;
+            $URSRList[$URSRData->key]->ERName = $value->ERName;
             $URSRList[$URSRData->key]->SRName = $value->SRName;
             $URSRList[$URSRData->key]->URName = $value->URName;
             $URSRList[$URSRData->key]->system = $URSRData->system;
@@ -833,11 +836,13 @@ class customModel extends model
         /* If has custom UR and SR name. */
         foreach($data['SRName'] as $key => $SRName)
         {
-            if(isset($data['URName']))  $URName = zget($data['URName'], $key, '');
-            if(!isset($data['URName'])) $URName = $this->lang->URCommon;
-            if(!$URName || !$SRName) continue;
+            $URName = zget($data['URName'], $key, $this->lang->URCommon);
+            $ERName = zget($data['ERName'], $key, $this->lang->ERCommon);
+
+            if(!$URName || !$SRName || !$ERName) continue;
 
             $URSRList = new stdclass();
+            $URSRList->ERName = $ERName;
             $URSRList->SRName = $SRName;
             $URSRList->URName = $URName;
 
@@ -863,7 +868,7 @@ class customModel extends model
     public function updateURAndSR(int $key = 0, string $lang = '', array $data = array()): bool
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        if(empty($data['SRName']) || empty($data['URName'])) return false;
+        if(empty($data['SRName']) || empty($data['URName']) || empty($data['ERName'])) return false;
 
         $oldValue = $this->getURSRConcept($key, $lang);
         $oldValue = json_decode($oldValue);
@@ -871,8 +876,10 @@ class customModel extends model
         if(!$oldValue) return false;
 
         $URSRList = new stdclass();
+        $URSRList->defaultERName = zget($oldValue, 'defaultERName', $oldValue->ERName);
         $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
         $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
+        $URSRList->ERName        = empty($data['ERName']) ? $URSRList->defaultERName : $data['ERName'];
         $URSRList->SRName        = empty($data['SRName']) ? $URSRList->defaultSRName : $data['SRName'];
         $URSRList->URName        = empty($data['URName']) ? $URSRList->defaultURName : $data['URName'];
 
@@ -1032,7 +1039,23 @@ class customModel extends model
         $URAndSR = strpos(",$disabledFeatures,", ',productUR,') === false ? '1' : '0';
         $this->setting->setItem('system.custom.URAndSR', $URAndSR);
 
+        $disableER = strpos(",$disabledFeatures,", ',productER,') !== false;
+        $enableER  = (!$URAndSR || $disableER) ? '0' : '1';
+        $this->setting->setItem('system.custom.enableER', $enableER);
+
         $this->processMeasrecordCron();
+    }
+
+    /**
+     * 检查系统中是否有业务需求数据。
+     * Check whether there is epic data in the system.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasProductERData(): int
+    {
+        return (int)$this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('epic')->andWhere('deleted')->eq('0')->count();
     }
 
     /**

@@ -67,3 +67,12 @@ function copyStoryTitle(event)
 
     $($story.closest('tr').find('[name^=name]')).val(storyTitle);
 }
+
+if(hasERUR)
+{
+    zui.Modal.alert(errorERURSplitTask);
+}
+else if(hasParent)
+{
+    zui.Modal.alert(errorParentSplitTask);
+}

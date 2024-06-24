@@ -147,10 +147,13 @@ $lang->kanban->alignmentList['center'] = '居中';
 $lang->kanban->alignmentList['left']   = '居左';
 
 $lang->kanban->type = array();
-$lang->kanban->type['all']   = "综合看板";
-$lang->kanban->type['story'] = "{$lang->SRCommon}看板";
-$lang->kanban->type['task']  = "任务看板";
-$lang->kanban->type['bug']   = "Bug看板";
+$lang->kanban->type['all']         = "综合看板";
+$lang->kanban->type['epic']        = "{$lang->ERCommon}看板";
+$lang->kanban->type['requirement'] = "{$lang->URCommon}看板";
+$lang->kanban->type['parentStory'] = "父{$lang->SRCommon}看板";
+$lang->kanban->type['story']       = "{$lang->SRCommon}看板";
+$lang->kanban->type['task']        = "任务看板";
+$lang->kanban->type['bug']         = "Bug看板";
 
 $lang->kanban->group = new stdclass();
 
@@ -162,6 +165,10 @@ $lang->kanban->group->story['category']   = "需求类别";
 $lang->kanban->group->story['module']     = "需求模块";
 $lang->kanban->group->story['source']     = "需求来源";
 $lang->kanban->group->story['assignedTo'] = "指派人员";
+
+$lang->kanban->group->epic        = $lang->kanban->group->story;
+$lang->kanban->group->requirement = $lang->kanban->group->story;
+$lang->kanban->group->parentStory = $lang->kanban->group->story;
 
 $lang->kanban->group->task = array();
 $lang->kanban->group->task['default']    = "默认分组";
@@ -248,13 +255,24 @@ $lang->kanban->defaultColumn['done']   = '已完成';
 $lang->kanban->defaultColumn['closed'] = '已关闭';
 
 $lang->kanban->laneTypeList = array();
-$lang->kanban->laneTypeList['story'] = $lang->SRCommon;
-$lang->kanban->laneTypeList['bug']   = 'Bug';
-$lang->kanban->laneTypeList['task']  = '任务';
+$lang->kanban->laneTypeList['parentStory'] = "父" . $lang->SRCommon;
+$lang->kanban->laneTypeList['story']       = $lang->SRCommon;
+$lang->kanban->laneTypeList['bug']         = 'Bug';
+$lang->kanban->laneTypeList['task']        = '任务';
+
+$lang->kanban->ERURColumn = array();
+$lang->kanban->ERURColumn['defining']   = '定义中';
+$lang->kanban->ERURColumn['planning']   = '规划中';
+$lang->kanban->ERURColumn['developing'] = '研发中';
+$lang->kanban->ERURColumn['delivering'] = '交付中';
+$lang->kanban->ERURColumn['closed']     = '已关闭';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';
 $lang->kanban->storyColumn['ready']      = '准备好';
+$lang->kanban->storyColumn['design']     = '设计';
+$lang->kanban->storyColumn['designing']  = '设计中';
+$lang->kanban->storyColumn['designed']   = '设计完毕';
 $lang->kanban->storyColumn['develop']    = '开发';
 $lang->kanban->storyColumn['developing'] = '进行中';
 $lang->kanban->storyColumn['developed']  = '完成';
@@ -262,6 +280,8 @@ $lang->kanban->storyColumn['test']       = '测试';
 $lang->kanban->storyColumn['testing']    = '进行中';
 $lang->kanban->storyColumn['tested']     = '完成';
 $lang->kanban->storyColumn['verified']   = '已验收';
+$lang->kanban->storyColumn['rejected']   = '验收失败';
+$lang->kanban->storyColumn['pending']    = '待发布';
 $lang->kanban->storyColumn['released']   = '已发布';
 $lang->kanban->storyColumn['closed']     = '已关闭';
 

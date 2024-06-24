@@ -11,11 +11,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-data('activeMenuID',        $storyType);
-jsVar('executionID',        $execution->id);
-jsVar('childrenAB',         $lang->story->childrenAB);
-jsVar('modulePairs',        $modulePairs);
-jsVar('hasProduct',         $execution->hasProduct);
+data('activeMenuID', $storyType);
+jsVar('executionID', $execution->id);
+jsVar('childrenAB',  $lang->story->childrenAB);
+jsVar('modulePairs', $modulePairs);
+jsVar('oldShowGrades', $showGrades);
+jsVar('gradeGroup', $gradeGroup);
+jsVar('hasProduct',  $execution->hasProduct);
 jsVar('linkedTaskStories',  $linkedTaskStories);
 jsVar('URChanged',          $lang->story->URChanged);
 jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
@@ -26,6 +28,23 @@ jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRe
 /* Show feature bar. */
 featureBar
 (
+    $config->edition == 'ipd' ? to::leading
+    (
+        picker
+        (
+            set::tree(),
+            set::name('showGrades'),
+            set::items($gradeMenu),
+            set::search(false),
+            set::multiple(true),
+            set::width('150px'),
+            setStyle('justify-content', 'center'),
+            set::display($lang->story->viewAllGrades),
+            set::menu(array('checkbox' => true)),
+            set::value($showGrades),
+            set::onPopHidden(jsRaw('setShowGrades'))
+        )
+    ) : null,
     set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
     li(searchToggle(set::module('executionStory'), set::open($type == 'bysearch')))
@@ -69,12 +88,22 @@ if(!$product)
     $product = new stdclass();
     $product->id = 0;
 }
-$canModifyProduct   = common::canModify('product', $product);
-$canModifyExecution = common::canModify('execution', $execution);
-$canCreate          = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');
-$canBatchCreate     = $canModifyProduct && $canModifyExecution && hasPriv('story', 'batchCreate');
-$createLink         = createLink('story', 'create', "product={$product->id}&branch=0&moduleID={$moduleID}&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
-$batchCreateLink    = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
+
+$canModifyProduct                     = common::canModify('product', $product);
+$canModifyExecution                   = common::canModify('execution', $execution);
+$canOpreate['create']                 = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');
+$canOpreate['batchCreate']            = $canModifyProduct && $canModifyExecution && hasPriv('story', 'batchCreate');
+$canOpreate['createEpic']             = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'create') && strpos($project->storyType, 'epic') !== false;
+$canOpreate['batchCreateEpic']        = $canModifyProduct && $canModifyExecution && hasPriv('epic', 'batchCreate') && strpos($project->storyType, 'epic') !== false;
+$canOpreate['createRequirement']      = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'create') && strpos($project->storyType, 'requirement') !== false;
+$canOpreate['batchCreateRequirement'] = $canModifyProduct && $canModifyExecution && hasPriv('requirement', 'batchCreate') && strpos($project->storyType, 'requirement') !== false;
+
+$createLink                 = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
+$batchCreateLink            = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
+$createEpicLink             = createLink('epic', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}") . "#app={$app->tab}";
+$batchCreateEpicLink        = createLink('epic', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}") . "#app={$app->tab}";
+$createRequirementLink      = createLink('requirement', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}") . "#app={$app->tab}";
+$batchCreateRequirementLink = createLink('requirement', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}") . "#app={$app->tab}";
 
 /* Tutorial create link. */
 if(commonModel::isTutorialMode())
@@ -84,8 +113,26 @@ if(commonModel::isTutorialMode())
     $canBatchCreate = false;
 }
 
-$createItem      = array('text' => $lang->story->create,      'url' => $createLink);
-$batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+$createItems = array();
+$batchItems  = array();
+if($canOpreate['batchCreate']) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
+if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execution->multiple)
+{
+    if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink);
+    if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink);
+    if($canOpreate['batchCreateRequirement']) $batchItems[]  = array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink);
+    if($canOpreate['batchCreateEpic'])        $batchItems[]  = array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink);
+}
+
+if(count($batchItems) > 1)
+{
+    $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+}
+else
+{
+    $batchItems[0]['text'] = $lang->story->batchCreate;
+    $createItems = array_merge($createItems, $batchItems);
+}
 
 $canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'linkStory');
 $canlinkPlanStory = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'importPlanStories') && $storyType == 'story';
@@ -100,6 +147,32 @@ if(commonModel::isTutorialMode())
 
 $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab);
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
+
+$createBtnGroup = null;
+if($canOpreate['create'])
+{
+    $createBtnGroup = btngroup
+    (
+        btn
+        (
+            setClass('btn secondary'),
+            set::icon('plus'),
+            set::url($createLink),
+            $lang->story->create
+        ),
+        dropdown
+        (
+            btn(setClass('btn secondary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::items($createItems),
+            set::placement('bottom-end')
+        )
+    );
+}
+elseif(count($createItems) == 1)
+{
+    $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary', 'icon' => 'plus')));
+}
 
 $product ? toolbar
 (
@@ -137,25 +210,7 @@ $product ? toolbar
         'data-toggle' => 'modal'
     ))) : null,
 
-    $canCreate && $canBatchCreate ? btngroup
-    (
-        btn
-        (
-            setClass('btn secondary'),
-            set::icon('plus'),
-            set::url($createLink),
-            $lang->story->create
-        ),
-        dropdown
-        (
-            btn(setClass('btn secondary dropdown-toggle'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::items(array_filter(array($createItem, $batchCreateItem))),
-            set::placement('bottom-end')
-        )
-    ) : null,
-    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $createBtnGroup,
 
     $canLinkStory && $canlinkPlanStory ? btngroup
     (
@@ -392,14 +447,18 @@ foreach($setting as $col)
     if(!$execution->hasProduct && $col['name'] == 'branch') continue;
     if(!$execution->hasProduct && !$execution->multiple && $col['name'] == 'plan') continue;
 
-    if($col['name'] == 'title') $col['link'] = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
+    if($col['name'] == 'title')
+    {
+        $col['link']  = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
+        $col['title'] = $this->lang->story->name;
+    }
 
     $cols[] = $col;
 }
 
 /* DataTable data. */
 $data        = array();
-$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink', 'processStoryChange');
+$actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'unlink', 'processStoryChange');
 if(empty($execution->hasProduct) && empty($execution->multiple))
 {
     $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close', 'processStoryChange');
@@ -417,21 +476,14 @@ foreach($stories as $story)
 {
     $story->moduleID = $story->module;
     $story->from     = 'execution';
-    $data[] = $this->story->formatStoryForList($story, $options, $storyType);
+    $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
     if(!isset($story->children)) continue;
-
-    /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        $child->moduleID = $child->module;
-        $data[] = $this->story->formatStoryForList($child, $options, $storyType);
-    }
 }
 
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);
+jsVar('checkedSummary', $lang->product->checkedAllSummary);
 jsVar('storyType', $storyType);
-jsVar('checkedSummary', $storyType == 'story' ? $lang->product->checkedSRSummary : $lang->product->checkedURSummary);
 dtable
 (
     setClass('shadow rounded'),
@@ -453,7 +505,7 @@ dtable
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->story->noStory),
     set::createTip($lang->story->create),
-    set::createLink($canCreate ? $createLink : '')
+    set::createLink($canOpreate['create'] ? $createLink : '')
 );
 
 render();

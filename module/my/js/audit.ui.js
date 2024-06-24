@@ -20,15 +20,17 @@ window.onRenderCell = function(result, {row, col})
         }
         else
         {
-            result[0].props.items[0]['disabled'] = true;
-            delete result[0].props.items[0]['data-toggle'];
-            delete result[0].props.items[0]['url'];
-            delete result[0].props.items[0]['href'];
+            delete result[0].props.items[0];
         }
     }
-    if(result && col.name == 'title' && row.data.module == 'review')
+    if(result && col.name == 'title')
     {
-        result[0].props['data-toggle'] = '';
+        if(row.data.module == 'review') result[0].props['data-toggle'] = '';
+        if(!viewPrivs[row.data.module])
+        {
+            result[0].props['data-toggle'] = '';
+            result[0].props['href'] = '#';
+        }
     }
     return result;
 }

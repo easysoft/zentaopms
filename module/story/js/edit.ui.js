@@ -13,29 +13,20 @@ window.loadProduct = function()
         }
     }
 
-    if(parentStory)
+    if(isParent == '1')
     {
-        confirmLoadProduct = confirm(moveChildrenTips);
-        if(!confirmLoadProduct)
-        {
-            $product.$.setValue(oldProductID.toString());
-            return false;
-        }
+        zui.Modal.confirm(moveChildrenTips).then((result) => {
+            if(!result)
+            {
+                $product.$.setValue(oldProductID.toString(), true);
+                loadProductBranches(oldProductID);
+                return false;
+            }
+        });
     }
 
     loadProductBranches(productID);
     loadProductReviewers(productID);
-    loadURS();
-
-    if(storyType == 'story')
-    {
-        var storyLink = $.createLink('story', 'ajaxGetParentStory', 'productID=' + productID + '&labelName=parent');
-        var $parent   = $('#parent').zui('picker');
-        $.get(storyLink, function(data)
-        {
-            $parent.render(JSON.parse(data));
-        });
-    }
 }
 
 window.linkStories = function(e)
@@ -116,7 +107,7 @@ function loadProductBranches(productID)
         if(data && data != '[]')
         {
             $branchBox.html("<div class='picker-box' id='branch'></div>").removeClass('hidden');
-            $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch'});
+            $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch', defaultValue: 0});
             branch  = $branch.$.value;
         }
     });
@@ -144,4 +135,34 @@ function loadProductReviewers(productID)
     {
         if(needNotReview) $('.reviewerBox #reviewer').attr('disabled', 'disabled');
     });
+}
+
+window.loadGrade = function(e)
+{
+    let parent = e.target.value;
+    let link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + storyType);
+    $.getJSON(link, function(options){
+        const checkLink = $.createLink('story', 'ajaxCheckGrade', 'id=' + storyID + '&grade=' + options.default);
+        $.getJSON(checkLink, function(data){
+            if(data.result)
+            {
+                const $grade = $('[name=grade]').zui('picker');
+                $grade.render({items: options.items});
+                $grade.$.setValue(options.default);
+            }
+            else
+            {
+                zui.Modal.alert(data.message.grade);
+                const $parent = $('[name=parent]').zui('picker');
+                $parent.$.setValue(oldParent, true);
+
+                let link = $.createLink('story', 'ajaxGetGrade', 'parent=' + oldParent + '&type=' + storyType);
+                $.getJSON(link, function(options){
+                    const $grade = $('[name=grade]').zui('picker');
+                    $grade.render({items: options.items});
+                    $grade.$.setValue(oldGrade);
+                });
+            }
+        });
+    })
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('storyType', $story->type);
+jsVar('storyID', $story->id);
 
 modalHeader();
 formPanel

@@ -583,7 +583,7 @@ class kanbanTest
         if(empty($objects))
         {
             $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
-            $objects = $this->objectModel->getExecutionKanban($executionID, $browseType, $groupBy);
+            list($objects, $links) = $this->objectModel->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 
         if(dao::isError()) return dao::getError();

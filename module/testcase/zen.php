@@ -426,11 +426,11 @@ class testcaseZen extends testcase
         if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
+            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'all', 'story', false);
         }
         if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
 
-        $this->view->stories          = $stories;
+        $this->view->stories          = $this->story->addGradeLabel($stories);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
@@ -915,7 +915,7 @@ class testcaseZen extends testcase
         $storyStatus = $this->loadModel('story')->getStatusList('noclosed');
         if($this->app->tab == 'execution')
         {
-            $stories = $this->loadModel('story')->getExecutionStoryPairs($case->execution, $case->product, $case->branch, $moduleIdList);
+            $stories = $this->loadModel('story')->getExecutionStoryPairs($case->execution, $case->product, $case->branch, $moduleIdList, 'full', 'all', 'story', false);
         }
         else
         {
@@ -924,7 +924,7 @@ class testcaseZen extends testcase
 
         if(!in_array($this->app->tab, array('execution', 'project')) && empty($stories)) $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', false);
 
-        $this->view->stories = $stories;
+        $this->view->stories = $this->story->addGradeLabel($stories);
     }
 
     /**
@@ -1362,7 +1362,7 @@ class testcaseZen extends testcase
         $this->view->customFields    = $customFields;
         $this->view->showFields      = $showFields;
         $this->view->story           = $story;
-        $this->view->storyPairs      = $storyPairs;
+        $this->view->storyPairs      = $this->story->addGradeLabel($storyPairs);
         $this->view->sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->currentModuleID = $moduleID;
     }

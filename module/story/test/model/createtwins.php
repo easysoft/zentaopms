@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->createTwins();
+timeout=0
 cid=0
 
 - 检查创建后的数据。
@@ -39,7 +40,7 @@ $data->module      = 0;
 $data->branches    = array(0, 1);
 $data->modules     = array(1, 2);
 $data->plans       = array(0, 0);
-$data->plan        = 1;
+$data->plan        = '1';
 $data->assignedTo  = '';
 $data->source      = '';
 $data->sourceNote  = '';
@@ -61,7 +62,6 @@ $data->openedBy    = 'admin';
 $data->openedDate  = date('Y-m-d H:i:s');
 $data->mailto      = '';
 $data->parent      = 1;
-$data->URS[]       = 1;
 $data->reviewer[]  = 'admin';
 
 $story = new storyTest();

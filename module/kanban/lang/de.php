@@ -147,10 +147,13 @@ $lang->kanban->alignmentList['center'] = 'Center';
 $lang->kanban->alignmentList['left']   = 'Left';
 
 $lang->kanban->type = array();
-$lang->kanban->type['all']   = "All KanBan";
-$lang->kanban->type['story'] = "Story KanBan";
-$lang->kanban->type['task']  = "Task KanBan";
-$lang->kanban->type['bug']   = "Bug KanBan";
+$lang->kanban->type['all']         = "All KanBan";
+$lang->kanban->type['epic']        = "{$lang->ERCommon} KanBan";
+$lang->kanban->type['requirement'] = "{$lang->URCommon} KanBan";
+$lang->kanban->type['parentStory'] = "Parent Story KanBan";
+$lang->kanban->type['story']       = "Story KanBan";
+$lang->kanban->type['task']        = "Task KanBan";
+$lang->kanban->type['bug']         = "Bug KanBan";
 
 $lang->kanban->group = new stdclass();
 
@@ -162,6 +165,10 @@ $lang->kanban->group->story['category']   = "Story Category";
 $lang->kanban->group->story['module']     = "Story Module";
 $lang->kanban->group->story['source']     = "Story Source";
 $lang->kanban->group->story['assignedTo'] = "Assigned To";
+
+$lang->kanban->group->epic        = $lang->kanban->group->story;
+$lang->kanban->group->requirement = $lang->kanban->group->story;
+$lang->kanban->group->parentStory = $lang->kanban->group->story;
 
 $lang->kanban->group->task = array();
 $lang->kanban->group->task['default']    = "Default Group";
@@ -248,13 +255,24 @@ $lang->kanban->defaultColumn['done']   = 'done';
 $lang->kanban->defaultColumn['closed'] = 'close';
 
 $lang->kanban->laneTypeList = array();
-$lang->kanban->laneTypeList['story'] = $lang->SRCommon;
-$lang->kanban->laneTypeList['bug']   = 'Bug';
-$lang->kanban->laneTypeList['task']  = 'Task';
+$lang->kanban->laneTypeList['parentStory'] = "Parent " . $lang->SRCommon;
+$lang->kanban->laneTypeList['story']       = $lang->SRCommon;
+$lang->kanban->laneTypeList['bug']         = 'Bug';
+$lang->kanban->laneTypeList['task']        = 'Task';
+
+$lang->kanban->ERURColumn = array();
+$lang->kanban->ERURColumn['defining']   = 'Defining';
+$lang->kanban->ERURColumn['planning']   = 'Planning';
+$lang->kanban->ERURColumn['developing'] = 'Developing';
+$lang->kanban->ERURColumn['delivering'] = 'Delivering';
+$lang->kanban->ERURColumn['closed']     = 'Closed';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';
 $lang->kanban->storyColumn['ready']      = 'Ready';
+$lang->kanban->storyColumn['design']     = 'Design';
+$lang->kanban->storyColumn['designing']  = 'Designing';
+$lang->kanban->storyColumn['designed']   = 'Designed';
 $lang->kanban->storyColumn['develop']    = 'Development';
 $lang->kanban->storyColumn['developing'] = 'Doing';
 $lang->kanban->storyColumn['developed']  = 'Done';
@@ -262,6 +280,8 @@ $lang->kanban->storyColumn['test']       = 'Testing';
 $lang->kanban->storyColumn['testing']    = 'Doing';
 $lang->kanban->storyColumn['tested']     = 'Done';
 $lang->kanban->storyColumn['verified']   = 'Verified';
+$lang->kanban->storyColumn['rejected']   = 'Rejected';
+$lang->kanban->storyColumn['pending']    = 'Pending';
 $lang->kanban->storyColumn['released']   = 'Released';
 $lang->kanban->storyColumn['closed']     = 'Closed';
 

@@ -26,7 +26,7 @@ if($app->tab == 'execution')
 $config->story->dtable->fieldList['title']['name']         = 'title';
 $config->story->dtable->fieldList['title']['title']        = $lang->story->title;
 $config->story->dtable->fieldList['title']['type']         = 'title';
-$config->story->dtable->fieldList['title']['link']         = array('url' => helper::createLink('story', 'view', 'storyID={id}'));
+$config->story->dtable->fieldList['title']['link']         = array('url' => helper::createLink('{type}', 'view', 'storyID={id}'));
 $config->story->dtable->fieldList['title']['fixed']        = 'left';
 $config->story->dtable->fieldList['title']['sortType']     = true;
 $config->story->dtable->fieldList['title']['minWidth']     = '342';
@@ -58,6 +58,7 @@ $config->story->dtable->fieldList['plan']['title']      = $lang->story->planAB;
 $config->story->dtable->fieldList['plan']['sortType']   = true;
 $config->story->dtable->fieldList['plan']['width']      = '136';
 $config->story->dtable->fieldList['plan']['show']       = true;
+$config->story->dtable->fieldList['plan']['control']    = 'multiple';
 $config->story->dtable->fieldList['plan']['group']      = 4;
 $config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 
@@ -201,23 +202,11 @@ $config->story->dtable->fieldList['caseCount']['link']        = "RAWJS<function(
 $config->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['caseCount']['group']       = 7;
 
-$config->story->dtable->fieldList['URS']['name']        = 'URS';
-$config->story->dtable->fieldList['URS']['title']       = 'UR';
-$config->story->dtable->fieldList['URS']['sortType']    = false;
-$config->story->dtable->fieldList['URS']['width']       = '50';
-$config->story->dtable->fieldList['URS']['type']        = 'text';
-$config->story->dtable->fieldList['URS']['link']        = $config->edition != 'open' && common::hasPriv('story', 'relation') ? helper::createLink('story', 'relation', 'storyID={id}&storyType={type}') : '';
-$config->story->dtable->fieldList['URS']['data-toggle'] = 'modal';
-$config->story->dtable->fieldList['URS']['group']       = 7;
-
-$config->story->dtable->fieldList['SRS']['name']        = 'SRS';
-$config->story->dtable->fieldList['SRS']['title']       = 'SR';
-$config->story->dtable->fieldList['SRS']['sortType']    = false;
-$config->story->dtable->fieldList['SRS']['width']       = '50';
-$config->story->dtable->fieldList['SRS']['type']        = 'text';
-$config->story->dtable->fieldList['SRS']['link']        = $config->edition != 'open' && common::hasPriv('story', 'relation') ? helper::createLink('story', 'relation', 'storyID={id}&storyType={type}') : '';
-$config->story->dtable->fieldList['SRS']['data-toggle'] = 'modal';
-$config->story->dtable->fieldList['SRS']['group']       = 7;
+$config->story->dtable->fieldList['childItem']['name']     = 'childItem';
+$config->story->dtable->fieldList['childItem']['title']    = $lang->story->childItem;
+$config->story->dtable->fieldList['childItem']['sortType'] = false;
+$config->story->dtable->fieldList['childItem']['type']     = 'text';
+$config->story->dtable->fieldList['childItem']['group']    = 6;
 
 $config->story->dtable->fieldList['closedBy']['name']     = 'closedBy';
 $config->story->dtable->fieldList['closedBy']['title']    = $lang->story->closedBy;
@@ -303,7 +292,7 @@ $config->story->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->story->dtable->fieldList['actions']['fixed']    = 'right';
 $config->story->dtable->fieldList['actions']['required'] = true;
 $config->story->dtable->fieldList['actions']['width']    = 'auto';
-$config->story->dtable->fieldList['actions']['minWidth'] = $app->tab == 'project' ? 250 : 200;
+$config->story->dtable->fieldList['actions']['minWidth'] = $app->tab != 'product' ? 240 : 200;
 $config->story->dtable->fieldList['actions']['type']     = 'actions';
 
 $config->story->dtable->fieldList['actions']['actionsMap']['assigned']['icon'] = 'hand-right';
@@ -345,7 +334,7 @@ $config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['hint'] 
 $config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['data-app'] = $app->tab;
 
 $config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['icon'] = 'ok';
-$config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['hint'] = $lang->confirm;
+$config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['hint'] = $lang->story->processStoryChange;
 
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon']     = 'split';
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint']     = $lang->story->subdivide;

@@ -450,6 +450,24 @@ class actionTao extends actionModel
     }
 
     /**
+     * 处理需求层级。
+     * Process story grade.
+     *
+     * @param  object $action
+     * @access public
+     * @return object
+     */
+    public function processStoryGradeActionExtra($action): object
+    {
+        $action->extra = $this->dao->select('t1.name')->from(TABLE_STORYGRADE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.grade = t2.grade AND t1.type = t2.type')
+            ->where('t2.id')->eq($action->objectID)
+            ->fetch('name');
+
+        return $action;
+    }
+
+    /**
      * 处理属性。
      * Process attribute.
      *
@@ -488,6 +506,9 @@ class actionTao extends actionModel
                 break;
             case 'execution':
             case 'kanban':
+            case 'story':
+                $paramString = "{$type}ID={$action->extra}";
+                break;
             case 'task':
             case 'story':
             case 'charter':
@@ -593,7 +614,7 @@ class actionTao extends actionModel
     public function processLinkStoryAndBugActionExtra(object $action, string $module, string $method): void
     {
         $extra = '';
-        foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv($module, $method) ? html::a(helper::createLink($module, $method, "{$module}ID={$id}"), "#{$id} ", '', "data-size='lg' data-load='modal'") . ', ' : "#{$id}, ";
+        foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv($module, $method) ? html::a(helper::createLink($module, $method, "{$module}ID={$id}"), "#{$id} ", '', "data-size='lg' data-toggle='modal'") . ', ' : "#{$id}, ";
         $action->extra = trim(trim($extra), ',');
     }
 

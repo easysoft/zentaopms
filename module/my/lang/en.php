@@ -41,6 +41,7 @@ $lang->my->noData          = 'No %s yet. ';
 $lang->my->storyChanged    = "Story Changed";
 $lang->my->hours           = "Hours/day";
 $lang->my->uploadAvatar    = 'Upload Avatar';
+$lang->my->epic            = "My {$lang->ERCommon}";
 $lang->my->requirement     = "My {$lang->URCommon}";
 $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
@@ -150,10 +151,12 @@ $lang->my->moreSelects['todo']['more']['thisYear']        = 'This Year';
 $lang->my->moreSelects['todo']['more']['assignedToOther'] = 'Assigned To Other';
 $lang->my->moreSelects['todo']['more']['cycle']           = 'Recurrence';
 
-$lang->my->featureBar['audit']['all']      = 'All';
-$lang->my->featureBar['audit']['demand']   = 'Demand';
-$lang->my->featureBar['audit']['story']    = 'Story';
-$lang->my->featureBar['audit']['testcase'] = 'Test case';
+$lang->my->featureBar['audit']['all']         = 'All';
+$lang->my->featureBar['audit']['demand']      = 'Demand';
+$lang->my->featureBar['audit']['story']       = $lang->SRCommon;
+$lang->my->featureBar['audit']['requirement'] = $lang->URCommon;
+$lang->my->featureBar['audit']['epic']        = $lang->ERCommon;
+$lang->my->featureBar['audit']['testcase']    = 'Test case';
 if(in_array($config->edition, array('max', 'ipd')) and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
 if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = 'Feedback';
 if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = 'OA';
@@ -179,6 +182,9 @@ $lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToM
 $lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testtask']['assignedTo'] = 'Test task';
 
+$lang->my->featureBar['work']['epic'] = $lang->my->featureBar['work']['task'];
+$lang->my->featureBar['work']['epic']['reviewBy'] = 'ReviewByMe';
+
 $lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
 $lang->my->featureBar['work']['requirement']['reviewBy'] = 'ReviewByMe';
 
@@ -190,6 +196,11 @@ $lang->my->featureBar['contribute']['task']['finishedBy'] = 'FinishedByMe';
 $lang->my->featureBar['contribute']['task']['closedBy']   = 'ClosedByMe';
 $lang->my->featureBar['contribute']['task']['canceledBy'] = 'CancelledByMe';
 $lang->my->featureBar['contribute']['task']['assignedBy'] = 'AssignedByMe';
+
+$lang->my->featureBar['contribute']['epic']['openedBy']   = 'CreatedByMe';
+$lang->my->featureBar['contribute']['epic']['reviewedBy'] = 'ReviewedByMe';
+$lang->my->featureBar['contribute']['epic']['closedBy']   = 'ClosedByMe';
+$lang->my->featureBar['contribute']['epic']['assignedBy'] = 'AssignedByMe';
 
 $lang->my->featureBar['contribute']['requirement']['openedBy']   = 'CreatedByMe';
 $lang->my->featureBar['contribute']['requirement']['reviewedBy'] = 'ReviewedByMe';

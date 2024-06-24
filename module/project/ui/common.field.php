@@ -130,3 +130,12 @@ $fields->field('auth')
     ->wrapBefore()
     ->control('radioList')
     ->items($lang->project->authList);
+
+$storyTypeList = array();
+foreach($lang->story->typeList as $key => $text)
+{
+    $disabled = $key == 'story' ? true : false;
+    $storyTypeList[] = array('text' => $text, 'value' => $key, 'disabled' => $disabled);
+}
+
+$fields->field('storyType')->control(array('control' => 'checkBox', 'items' => $storyTypeList, 'name' => 'storyType[]'));

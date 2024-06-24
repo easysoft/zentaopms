@@ -40,6 +40,7 @@ $lang->custom->setStoryConcept      = "Set Story Concept";
 $lang->custom->setDefaultConcept    = "Set Default Concept";
 $lang->custom->browseStoryConcept   = "List of story concepts";
 $lang->custom->deleteStoryConcept   = "Delete story Concept";
+$lang->custom->ERConcept            = "ER Concept";
 $lang->custom->URConcept            = "UR Concept";
 $lang->custom->SRConcept            = "SR Concept";
 $lang->custom->reviewRule           = 'Review Rules';
@@ -63,7 +64,14 @@ $lang->custom->setPercent           = "Enable or Disable {$lang->stage->percent}
 $lang->custom->beginAndEndDate      = 'Begin & End';
 $lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
 $lang->custom->limitTaskDateAction  = 'Set start and end date required';
+$lang->custom->closeGrade           = 'Close Story Grade';
+$lang->custom->activateGrade        = 'Activate Story Grade';
+$lang->custom->deleteGrade          = 'Delete Story Grade';
 $lang->custom->closeSetting         = 'Close Setting';
+$lang->custom->gradeRule            = 'Allow cross-level segmentation';
+
+$lang->custom->gradeRuleList['cross']    = 'Yes';
+$lang->custom->gradeRuleList['stepwise'] = 'No';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -95,6 +103,9 @@ $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
+$lang->custom->gradeStatusList['enable']  = 'Normal';
+$lang->custom->gradeStatusList['disable'] = 'Disabled';
+
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
@@ -124,6 +135,9 @@ $lang->custom->story->fields['statusList']       = 'Status';
 $lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Need Review';
+
+$lang->custom->epic        = clone $lang->custom->story;
+$lang->custom->requirement = clone $lang->custom->story;
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['required']      = $lang->custom->required;
@@ -214,6 +228,11 @@ $lang->custom->notice->selectAllTip        = 'After selecting all people, the re
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
 $lang->custom->notice->readOnlyOfCode      = "A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of {$lang->productCommon}, {$lang->projectCommon}, and execution in the system will be displayed in the creation, editing, detail, and list pages.";
 $lang->custom->notice->readOnlyOfPercent   = "The \"Workload Ratio\" is used to divide the workload of a {$lang->projectCommon} into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the \"Workload Ratio\", users have to fill in the ratio fields when setting up the stages in the Waterfall {$lang->projectCommon} and Waterfall Plus {$lang->projectCommon} management models.";
+$lang->custom->notice->closeGrade          = "After closing, the grade cannot be used to create new stories.";
+$lang->custom->notice->activateGrade       = "After activating, the grade can be used to create new stories.";
+$lang->custom->notice->gradeNotEmpty       = 'There are stories in this grade, and it cannot be deleted!';
+$lang->custom->notice->deleteGrade         = 'Are you sure you want to delete this grade?';
+$lang->custom->notice->gradeRule           = 'Cross-lavel segmentation: Requirements can be created from any requirement system and support cross-system associated parent relationships. For example: you can create third-level requirements directly under first-level requirements.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has {$lang->projectCommon} Home. Do you want to go to {$lang->projectCommon} Home?";

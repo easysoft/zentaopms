@@ -1,3 +1,15 @@
+$(document).on('mouseenter', '.detail-side .tab-pane ul li', function(e)
+{
+    $(this).find('.unlink').removeClass('hidden');
+    e.stopPropagation();
+});
+
+$(document).on('mouseleave', '.detail-side .tab-pane ul li', function(e)
+{
+    $(this).find('.unlink').addClass('hidden');
+    e.stopPropagation();
+});
+
 window.ajaxDelete = function(storyID)
 {
     zui.Modal.confirm({message: confirmDeleteTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>

@@ -122,6 +122,7 @@ class executionTao extends executionModel
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->ne('closed')
             ->andWhere('t2.stage')->in('wait,planned,projected,developing')
+            ->andWhere('t2.isParent')->eq('0')
             ->groupBy('project')
             ->fetchAll('project');
 
@@ -369,23 +370,54 @@ class executionTao extends executionModel
         $node->type = 'module';
         $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
 
+        $node->children = $this->buildStoryTree($stories, $taskGroups, $executionID, $node);
+
+        /* Append for task of no story && node is not root. */
+        if($node->id && isset($taskGroups[$node->id][0]))
+        {
+            $taskItems = $this->formatTasksForTree($taskGroups[$node->id][0]);
+            $node->tasksCount = count($taskItems);
+            foreach($taskItems as $taskItem) $node->children[] = $taskItem;
+        }
+
+        return $node;
+    }
+
+    /**
+     * 构造需求树。
+     * Build story tree.
+     *
+     * @param  array     $stories
+     * @param  array     $taskGroups
+     * @param  int       $executionID
+     * @param  object    $node
+     * @param  int       $parentID
+     * @access protected
+     * @return array
+     */
+    protected function buildStoryTree(array $stories, array $taskGroups, int $executionID, object $node, int $parentID = 0): array
+    {
         static $users, $avatarPairs;
         if(empty($users))       $users       = $this->loadModel('user')->getPairs('noletter');
         if(empty($avatarPairs)) $avatarPairs = $this->loadModel('user')->getAvatarPairs();
 
+        $children = array();
         foreach($stories as $story)
         {
+            if($story->parent != $parentID) continue;
+
             $avatarAccount = empty($story->assignedTo) ? zget($story, 'openedBy', '') : $story->assignedTo;
             $userAvatar    = zget($avatarPairs, $avatarAccount);
             $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}'/>" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
 
             $storyItem = new stdclass();
-            $storyItem->type          = 'story';
+            $storyItem->type          = $story->type;
             $storyItem->id            = 'story' . $story->id;
             $storyItem->title         = $story->title;
             $storyItem->color         = $story->color;
             $storyItem->pri           = $story->pri;
             $storyItem->storyId       = $story->id;
+            $storyItem->grade         = $story->grade;
             $storyItem->openedBy      = zget($users, $story->openedBy);
             $storyItem->assignedTo    = zget($users, $story->assignedTo);
             $storyItem->url           = helper::createLink('execution', 'storyView', "storyID=$story->id&execution=$executionID");
@@ -400,19 +432,16 @@ class executionTao extends executionModel
                 $storyItem->tasksCount = count($taskItems);
                 $storyItem->children   = $taskItems;
             }
+            else
+            {
+                $storyItemChildren = $this->buildStoryTree($stories, $taskGroups, $executionID, $node, $story->id);
+                if($storyItemChildren) $storyItem->children = $storyItemChildren;
+            }
 
-            $node->children[] = $storyItem;
+            $children[] = $storyItem;
         }
 
-        /* Append for task of no story && node is not root. */
-        if($node->id && isset($taskGroups[$node->id][0]))
-        {
-            $taskItems = $this->formatTasksForTree($taskGroups[$node->id][0]);
-            $node->tasksCount = count($taskItems);
-            foreach($taskItems as $taskItem) $node->children[] = $taskItem;
-        }
-
-        return $node;
+        return $children;
     }
 
     /**

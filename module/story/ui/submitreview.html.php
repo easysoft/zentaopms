@@ -16,7 +16,7 @@ jsVar('lastReviewer', $reviewers);
 jsVar('storyType', $story->type);
 
 $needNotReviewBox = null;
-if(!$this->story->checkForceReview())
+if($needReview)
 {
     $needNotReviewBox = span
     (
@@ -52,7 +52,7 @@ formPanel
                 set::value($story->reviewer),
                 set::multiple(true),
                 set::items($reviewers),
-                set::disabled(!$this->story->checkForceReview() && $needReview)
+                set::disabled(!$this->story->checkForceReview($story->type) && $needReview)
             ),
             $needNotReviewBox
         )

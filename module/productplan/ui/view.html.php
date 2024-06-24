@@ -37,6 +37,7 @@ jsVar('summary',         $summary);
 jsVar('checkedSummary',  $lang->product->checkedSRSummary);
 jsVar('storyPageID',     $storyPager->pageID);
 jsVar('storyRecPerPage', $storyPager->recPerPage);
+jsVar('gradeGroup',      $gradeGroup);
 
 $bugCols   = array();
 $storyCols = array();
@@ -56,8 +57,8 @@ foreach($config->productplan->defaultFields['story'] as $field)
 if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
 foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
-$storyCols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
-$storyCols['title']['nestedToggle'] = false;
+$storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
+$storyCols['title']['title']        = $lang->productplan->storyTitle;
 $storyCols['assignedTo']['type']    = 'user';
 $storyCols['module']['type']        = 'text';
 $storyCols['module']['map']         = $modulePairs;
@@ -153,8 +154,12 @@ $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
 foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
-$createStoryLink      = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
-$batchCreateStoryLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createRequirementLink      = common::hasPriv('requirement', 'create') ? $this->createLink('requirement', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateRequirementLink = common::hasPriv('requirement', 'batchCreate') ? $this->createLink('requirement', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createEpicLink             = common::hasPriv('epic', 'create') ? $this->createLink('epic', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateEpicLink        = common::hasPriv('epic', 'batchCreate')  ? $this->createLink('epic', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
 
 $branchNames = '';
 if($product->type != 'normal')
@@ -236,7 +241,15 @@ detailBody
                             set::caret(true),
                             set::url($createStoryLink)
                         ),
-                        set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
+                        set::items(array(
+                            array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : ''),
+                            array('text' => $lang->epic->create, 'url' => $createEpicLink, 'class' => empty($createEpicLink) ? 'disabled' : ''),
+                            array('text' => $lang->story->batchCreate, 'items' => array(
+                                array('text' => $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''),
+                                array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : ''),
+                                array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : '')
+                            ))
+                        )),
                         set::trigger('hover'),
                         set::placement('bottom-end')
                     ),
@@ -265,7 +278,7 @@ detailBody
                     set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={$storyPager->recPerPage}&page={$storyPager->pageID}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
-                    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+                    set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
                     set::footPager
                     (
                         usePager('storyPager', '', array(

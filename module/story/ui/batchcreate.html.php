@@ -14,10 +14,14 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
-data('activeMenuID', $type);
+if($app->tab == 'product') data('activeMenuID', $type);
 data('storyType', $type);
 jsVar('storyType', $type);
 jsVar('productID', $productID);
+jsVar('executionID', $executionID);
+jsVar('branch', $branch);
+jsVar('storyID', $storyID);
+data('gradeRule', $gradeRule);
 
 !isAjaxRequest() && dropmenu();
 
@@ -27,7 +31,7 @@ foreach(explode(',', $this->config->story->create->requiredFields) as $requiredF
 }
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $showFields)
+$fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $customFields, $showFields, $storyID, $gradeRule, $hiddenGrade)
 {
     global $config;
 
@@ -55,22 +59,61 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $sh
     foreach($cols as $index => $col)
     {
         $colName = $col['name'];
-        if(str_contains(",{$config->story->create->requiredFields},", ",{$colName},")) $cols[$index]['required'] = true;
+        if(str_contains(",{$config->{$app->rawModule}->create->requiredFields},", ",{$colName},")) $cols[$index]['required'] = true;
         if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") === false) $cols[$index]['hidden'] = true;
         if($colName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $cols[$index]['hidden'] = true;
+        if($colName == 'plan' && $type != 'story') $cols[$index]['multiple'] = true;
+        if($colName == 'grade' && $gradeRule == 'stepwise') $cols[$index]['disabled'] = true;
+        if($colName == 'grade' && $hiddenGrade)   $cols[$index]['hidden'] = true;
+        if($colName == 'parent' && $storyID > 0 ) $cols[$index]['hidden'] = true;
+        if($colName == 'spec') unset($cols[$index]['control']);
+        if($colName == 'source')   $cols[$index]['items']    = $lang->{$type}->sourceList;
+        if($colName == 'category') $cols[$index]['items']    = $lang->{$type}->categoryList;
+        if($colName == 'pri')      $cols[$index]['items']    = $lang->{$type}->priList;
+        if($colName == 'grade')    $cols[$index]['required'] = true;
     }
 
     return $cols;
 };
 
+$storyTypeRadio = null;
+if($storyID > 0 && $story->type != 'story' && $config->{$story->type}->gradeRule != 'stepwise')
+{
+    $gradeRule   = $this->config->{$story->type}->gradeRule;
+    $isLastGrade = $story->grade == $maxGradeGroup[$story->type];
+    $disabled    = $story->isParent == '1' || $isLastGrade || ($gradeRule == 'stepwise' && !$isLastGrade);
+
+    $title = '';
+    if($story->isParent == '1')                   $title = $lang->story->errorCannotSplit;
+    if($isLastGrade)                              $title = $lang->story->errorMaxGradeSubdivide;
+    if(!$isLastGrade && $gradeRule == 'stepwise') $title = $lang->story->errorStepwiseSubdivide;
+
+    if($story->type == 'epic')        unset($lang->story->typeList['story']);
+    if($story->type == 'requirement') unset($lang->story->typeList['epic']);
+
+    $storyTypeRadio = radioList
+    (
+        set::name('typeSwitcher'),
+        set::items($lang->story->typeList),
+        set::inline(true),
+        set::value($type),
+        set::disabled($disabled),
+        $title ? set::title($title) : null,
+        on::change('switchType')
+    );
+}
+
 formBatchPanel
 (
     setID('dataform'),
     on::change('[data-name="branch"]', 'setModuleAndPlanByBranch'),
+    on::change('[data-name="parent"]', 'setGrade'),
     on::change('[data-name="region"]', 'changeRegion'),
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->hyphen . $this->lang->story->subdivide : $this->lang->story->batchCreate),
+    $storyTypeRadio ? set::headingActionsClass('flex-auto') : null,
+    $storyTypeRadio ? to::headingActions($storyTypeRadio) : null,
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan={$planID}&type=$type")),
     set::pasteField('title'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
