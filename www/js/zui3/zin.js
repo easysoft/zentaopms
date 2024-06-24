@@ -458,8 +458,6 @@
         var $target = $(target);
 
         loadingClass = loadingClass || 'loading';
-        $loginPanel = $target.find('#loginPanel');
-        if($loginPanel.length > 0) $target = $loginPanel;
 
         const position = $target.css('position');
         if(!['relative', 'absolute', 'fixed'].includes(position)) $target.css('position', 'relative');
@@ -1680,6 +1678,8 @@
 
     if(!isInAppTab && !isIndexPage)
     {
+        const initialState = {url: currentAppUrl, title: document.title};
+        window.history.pushState(initialState, initialState.title, initialState.url);
         $(window).on('popstate', function(event)
         {
             const state = event.state;
