@@ -1485,8 +1485,8 @@ class productZen extends product
         $listFields['design']      = $this->lang->story->design;
         $listFields['commit']      = $this->lang->story->repoCommit;
         $listFields['task']        = $this->lang->story->tasks;
-        $listFields['bug']         = $this->lang->story->bug;
-        $listFields['case']        = $this->lang->story->case;
+        $listFields['bug']         = $this->lang->story->bugs;
+        $listFields['case']        = $this->lang->story->cases;
 
         if($storyType == 'requirement' || $storyType == 'story') unset($listFields['requirement']);
         if($storyType == 'story') unset($listFields['story']);
