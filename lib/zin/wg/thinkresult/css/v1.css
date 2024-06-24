@@ -3,12 +3,16 @@
 .think-result-content .think-check-list .item-control {cursor: unset;}
 .think-result-content .think-check-list .item-control:not(.is-checked):hover {border-color: inherit;}
 
-.think-result-content .bg-think-blue {background-color: rgba(34, 148, 251, var(--tw-bg-opacity));}
+.think-result-content .bg-think-blue-100 {background-color: #cfe7fe;}
 .think-result-content .text-think-blue {color: #2294FB;}
-.think-result-content .bg-think-yellow {background-color: rgba(250, 174, 26, var(--tw-bg-opacity));}
+.think-result-content .bg-think-yellow-100 {background-color: #FFF2D9;}
 .think-result-content .text-think-yellow {color: #FAAE1A;}
 .think-result-content .think-blue-outline {--skin-ring: #2294FB;}
-.think-result-content .special-outline {--skin-text: unset; --skin-bg: rgba(var(--color-special-500-rgb), var(--tw-bg-opacity));}
-.think-result-content .success-outline {--skin-text: unset; --skin-bg: rgba(var(--color-success-500-rgb), var(--tw-bg-opacity));}
-.think-result-content .warning-outline {--skin-text: unset; --skin-bg: rgba(var(--color-warning-500-rgb), var(--tw-bg-opacity));}
-.think-result-content .important-outline {--skin-text: unset; --skin-bg: rgba(var(--color-important-500-rgb), var(--tw-bg-opacity));}
+.think-result-content .special-outline {--skin-text: unset; --skin-bg: var(--color-special-100);}
+.think-result-content .success-outline {--skin-text: unset; --skin-bg: var(--color-success-100);}
+.think-result-content .warning-outline {--skin-text: unset; --skin-bg: var(--color-warning-100);}
+.think-result-content .important-outline {--skin-text: unset; --skin-bg: var(--color-important-100);}
+.bg-success-100 {background-color: var(--color-success-100);}
+.bg-special-100 {background-color: var(--color-special-100);}
+.bg-important-100 {background-color: var(--color-important-100);}
+.bg-warning-100 {background-color: var(--color-warning-100);}
