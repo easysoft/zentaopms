@@ -179,9 +179,9 @@ class executionTest
      */
     public function createTest($param = array(), $project = '', $teamMembers = array(), $days = '')
     {
-        $products  = array('');
-        $plans     = array('');
-        $whitelist = array('');
+        $products  = array();
+        $plans     = array();
+        $whitelist = array();
         $beginData = date('Y-m-d');
         $endData   = date('Y-m-d',strtotime("+$days day"));
         $delta     = intval($days) + 1;

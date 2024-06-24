@@ -4,14 +4,15 @@
 /**
 
 title=测试 storyModel->getProjectRequirements();
+timeout=0
 cid=0
 
 - 执行storyModel模块的getProjectRequirements方法，参数是0, 0  @0
 - 执行storyModel模块的getProjectRequirements方法，参数是0, 1  @0
 - 执行storyModel模块的getProjectRequirements方法，参数是1, 0  @0
-- 执行storyModel模块的getProjectRequirements方法，参数是1, 1  @8
+- 执行storyModel模块的getProjectRequirements方法，参数是1, 1  @9
 - 执行storyModel模块的getProjectRequirements方法，参数是1, 1, $pager  @5
-- 执行storyModel模块的getProjectRequirements方法，参数是1, 1  @7
+- 执行storyModel模块的getProjectRequirements方法，参数是1, 1  @8
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
@@ -38,7 +39,7 @@ $storyModel = $tester->loadModel('story');
 r($storyModel->getProjectRequirements(0, 0)) && p() && e('0');
 r($storyModel->getProjectRequirements(0, 1)) && p() && e('0');
 r($storyModel->getProjectRequirements(1, 0)) && p() && e('0');
-r(count($storyModel->getProjectRequirements(1, 1))) && p() && e('8');
+r(count($storyModel->getProjectRequirements(1, 1))) && p() && e('9');
 
 $storyModel->app->moduleName = 'product';
 $storyModel->app->methodName = 'track';
@@ -47,4 +48,4 @@ $pager = new pager(0, 5, 1);
 r(count($storyModel->getProjectRequirements(1, 1, $pager))) && p() && e('5');
 
 $storyModel->dao->update(TABLE_STORY)->set('deleted')->eq(1)->where('id')->eq(1)->exec();
-r(count($storyModel->getProjectRequirements(1, 1))) && p() && e('7');
+r(count($storyModel->getProjectRequirements(1, 1))) && p() && e('8');

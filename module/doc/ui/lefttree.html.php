@@ -26,7 +26,6 @@ if($app->rawModule == 'doc' && $app->rawMethod == 'myspace')
 $canSort = hasPriv('doc', 'sortCatalog');
 sidebar
 (
-    set::preserve(false),
     set::width(200),
     set::minWidth(200),
     docMenu

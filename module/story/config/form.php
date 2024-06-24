@@ -23,7 +23,7 @@ $config->story->form->create['title']       = array('type' => 'string',  'contro
 $config->story->form->create['color']       = array('type' => 'string',  'control' => 'color',        'required' => false, 'default' => '');
 $config->story->form->create['category']    = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'feature', 'options' => $lang->story->categoryList);
 $config->story->form->create['pri']         = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => $config->story->defaultPriority, 'options' => array_filter($lang->story->priList));
-$config->story->form->create['estimate']    = array('type' => 'float',   'control' => 'text',         'required' => false, 'default' => 0);
+$config->story->form->create['estimate']    = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => 0);
 $config->story->form->create['spec']        = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->create['verify']      = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 $config->story->form->create['keywords']    = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '');
@@ -60,7 +60,7 @@ $config->story->form->edit['sourceNote']     = array('type' => 'string',  'contr
 $config->story->form->edit['stage']          = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => $lang->story->stageList);
 $config->story->form->edit['category']       = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'feature', 'options' => $lang->story->categoryList);
 $config->story->form->edit['pri']            = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => $config->story->defaultPriority, 'options' => array_filter($lang->story->priList));
-$config->story->form->edit['estimate']       = array('type' => 'float',   'control' => 'text',         'required' => false, 'default' => 0);
+$config->story->form->edit['estimate']       = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => 0);
 $config->story->form->edit['feedbackBy']     = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->story->form->edit['notifyEmail']    = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->story->form->edit['keywords']       = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '');
@@ -140,7 +140,7 @@ $config->story->form->review['result']         = array('type' => 'string', 'cont
 $config->story->form->review['assignedTo']     = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '', 'options' => 'users');
 $config->story->form->review['closedReason']   = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '', 'options' => $lang->story->reasonList, 'title' => $lang->story->rejectedReason);
 $config->story->form->review['pri']            = array('type' => 'int',    'control' => 'priPicker',      'required' => false, 'default' => '', 'options' => $lang->story->priList);
-$config->story->form->review['estimate']       = array('type' => 'float',  'control' => 'text',           'required' => false, 'default' => '');
+$config->story->form->review['estimate']       = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
 $config->story->form->review['duplicateStory'] = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
 $config->story->form->review['status']         = array('type' => 'string', 'control' => 'hidden',         'required' => false, 'default' => '');
 

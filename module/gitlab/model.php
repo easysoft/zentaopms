@@ -85,7 +85,8 @@ class gitlabModel extends model
             if($openID) $sudoParam = "&sudo={$openID}";
         }
 
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
+        $url = rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
+        return $url;
     }
 
     /**
@@ -1063,7 +1064,7 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks");
 
-        return json_decode(commonModel::http($url, $newHook));
+        return json_decode(commonModel::http($url, $newHook, array(), array(), 'json'));
     }
 
     /**
@@ -1111,7 +1112,7 @@ class gitlabModel extends model
 
         if(!empty($result->id)) return true;
 
-        if(!empty($result->message)) return array('result' => 'fail', 'message' => $result->message);
+        if(!empty($result->message)) return array('result' => 'fail', 'message' => $this->lang->gitlab->failCreateWebhook);
         return false;
     }
 

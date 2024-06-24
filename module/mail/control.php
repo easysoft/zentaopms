@@ -178,8 +178,14 @@ class mail extends control
     public function asyncSend()
     {
         /* Reload mail config. */
+        unset(router::$loadedConfigs['mail']);
         $this->loadModel('common')->loadConfigFromDB();
         $this->app->loadConfig('mail');
+        if(!$this->config->mail->turnon) return false;
+
+        mailModel::$instance = null;
+        $this->mail->setMTA();
+
         $queueList = $this->mail->getQueue('wait', 'id_asc');
         if(isset($this->config->mail->async))$this->config->mail->async = 0;
 
@@ -229,7 +235,7 @@ class mail extends control
 
         $this->view->title      = $this->lang->mail->browse;
 
-        $this->view->queueList = $this->mail->getQueue('all', $orderBy, $pager);
+        $this->view->queueList = $this->mail->getQueue('all', $orderBy, $pager, false);
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');

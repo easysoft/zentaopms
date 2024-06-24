@@ -1,7 +1,7 @@
 $.ajax(
 {
     url: $.createLink('misc', 'checkNetConnect'),
-    timeout: 3000,
+    timeout: 1000,
     success: function(data)
     {
         if(data == 'fail') $('.btn.primary.disabled').attr('onclick', "self.location.href=\"" + $.createLink('upgrade', 'consistency', "netConnect=0") + "\"");

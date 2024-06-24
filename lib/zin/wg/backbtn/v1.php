@@ -44,7 +44,7 @@ class backBtn extends btn
 
         $backs = array(
             'task'           => 'execution-task,my-work,my-contribute,execution-tree,execution-grouptask,project-execution,product-track,repo-view,story-change,execution-kanban,execution-taskkanban,my-index,feedback-adminview,projectstory-track,execution-calendar,my-effort',
-            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view,my-effort',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view,my-effort,demandpool-track',
             'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,execution-task,product-track,execution-task,task-view,repo-view,story-change,repo-review,feedback-adminview,my-index,projectstory-track,my-effort',
             'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,product-track,story-change,my-index,projectstory-track,my-effort',
             'testsuite'      => 'testsuite-browse,testsuite-view,testtask-cases,my-index',
@@ -76,7 +76,7 @@ class backBtn extends btn
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution',
             'ai'             => 'ai-models',
             'api'            => 'api-index',
-            'demand'         => 'demand-browse,demand-view,my-work,feedback-adminview,feedback-admin,my-index',
+            'demand'         => 'demand-browse,demand-view,my-work,feedback-adminview,feedback-admin,my-index,demandpool-track',
             'issue'          => 'issue-browse,issue-view',
             'risk'           => 'risk-browse,risk-view',
             'todo'           => 'my-todo,my-effort',
@@ -86,7 +86,8 @@ class backBtn extends btn
             'service'        => 'service-browse,service-manage,service-view',
             'domain'         => 'domain-browse,domain-view',
             'thinkwizard'    => 'thinkwizard-browse',
-            'thinkrun'       => 'thinkrun-browse'
+            'thinkrun'       => 'thinkrun-browse',
+            'researchtask'   => 'marketresearch-task,my-index'
         );
 
         $props  = parent::getProps();

@@ -1608,6 +1608,8 @@ class baseRouter
         $this->loadLang('company');
         $common->setUserConfig();
 
+        $this->setDebug();
+
         return $common;
     }
 
@@ -1687,7 +1689,7 @@ class baseRouter
 
         /* Check file is encode by ioncube. */
         $isEncrypted = false;
-        if(str_contains($file2Included, 'extension' . DS . $this->config->edition . DS))
+        if(preg_match('/extension\\' . DS . '(custom|xuan|biz|max|ipd|or)\\' . DS . '/', $file2Included))
         {
             $fp    = fopen($file2Included, 'r');
             $line1 = fgets($fp);

@@ -331,6 +331,7 @@ class pivotZen extends pivot
         $end   = date('Y-m-d',  strtotime($end ?: 'now'));
 
         $this->view->title       = $this->lang->pivot->bugCreate;
+        $this->view->pivotName   = $this->lang->pivot->bugCreate;
         $this->view->bugs        = $this->pivot->getBugs($begin, $end, $product ? $product : 0, $execution ? $execution : 0);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->executions  = $this->pivot->getProjectExecutions();
@@ -353,6 +354,7 @@ class pivotZen extends pivot
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $this->view->title       = $this->lang->pivot->bugAssign;
+        $this->view->pivotName   = $this->lang->pivot->bugAssign;
         $this->view->bugs        = $this->pivot->getBugAssign();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->currentMenu = 'bugassign';
@@ -375,6 +377,7 @@ class pivotZen extends pivot
         $products = $this->pivot->getProducts($conditions);
 
         $this->view->title       = $this->lang->pivot->productSummary;
+        $this->view->pivotName   = $this->lang->pivot->productSummary;
         $this->view->products    = $this->processProductsForProductSummary($products);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->conditions  = $conditions;
@@ -453,6 +456,7 @@ class pivotZen extends pivot
         $end   = $end   ? date('Y-m-d', strtotime($end))   : date('Y-m-d', strtotime(date('Y-m-01', strtotime('next month')) . ' -1 day'));
 
         $this->view->title       = $this->lang->pivot->projectDeviation;
+        $this->view->pivotName   = $this->lang->pivot->projectDeviation;
         $this->view->executions  = $this->pivot->getExecutions($begin, $end);
         $this->view->begin       = $begin;
         $this->view->end         = $end;
@@ -502,6 +506,7 @@ class pivotZen extends pivot
         $users   = $this->loadModel('user')->getPairs('noletter|noclosed');
 
         $this->view->title       = $this->lang->pivot->workload;
+        $this->view->pivotName   = $this->lang->pivot->workload;
         $this->view->workload    = $this->pivot->getWorkload($dept, $assign, $users, $allHour);
         $this->view->depts       = $this->loadModel('dept')->getOptionMenu();
         $this->view->users       = $users;

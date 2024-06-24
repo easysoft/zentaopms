@@ -613,6 +613,7 @@ class biModel extends model
             ->where('root')->eq($root)
             ->andWhere('name')->eq($name)
             ->andWhere('type')->eq($type)
+            ->andWhere('grade')->eq($grade)
             ->fetch('id');
 
         return empty($moduleID) ? '' : $moduleID;

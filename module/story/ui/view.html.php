@@ -188,7 +188,7 @@ if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider
 
 foreach($actions as $key => $action)
 {
-    if($story->type == 'requirement' && isset($action['key']) && in_array($action['key'], array('testcase', 'createTask'))) unset($actions[$key]);
+    if(($story->type == 'requirement' || $config->vision == 'lite') && isset($action['key']) && in_array($action['key'], array('testcase', 'createTask'))) unset($actions[$key]);
     if(!$hasDivider && isset($action['type']) && $action['type'] == 'divider')
     {
         unset($actions[$key]);

@@ -33,7 +33,7 @@ $tester->loadModel('extension');
 $apiList = $tester->extension->getExtensionsByAPI('byupdatedtime', '', 0, 15, 1);
 $extensions = array_values((array)$apiList->extensions);
 
-r(array_keys((array)$apiList)) && p('0,1,2,3,4') && e('title,layouts,extensions,dbPager,pager');                         // 判断返回的数据是否包含title,layouts,extensions,dbPager,pager字段。
-r(count((array)$apiList->extensions) > 0) && p() && e('1');                                                              // 检查是否返回了插件数据。
-r(array_keys((array)$extensions[0])) && p('0,2,5,10,15,20,25') && e('id,code,keyword,addedTime,status,images,objectID'); // 检查返回的插件数据是否包含id,code,keyword,addedTime,status,images,objectID字段。
-r($apiList->dbPager) && p('recPerPage') && e('15');                                                                      // 检查是否按照要求分页。
+r(array_keys((array)$apiList)) && p('0,1,2,3,4') && e('title,layouts,extensions,dbPager,pager');                   // 判断返回的数据是否包含title,layouts,extensions,dbPager,pager字段。
+r(count((array)$apiList->extensions) > 0) && p() && e('1');                                                        // 检查是否返回了插件数据。
+r(array_keys((array)$extensions[0])) && p('0,2,5,10,15,20,25') && e('id,code,keyword,account,grade,color,langID'); // 检查返回的插件数据是否包含id,code,keyword,account,grade,color,langID字段。
+r($apiList->dbPager) && p('recPerPage') && e('15');                                                                // 检查是否按照要求分页。

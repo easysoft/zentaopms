@@ -983,6 +983,7 @@ class zentaoBot extends xuanBot
             $user->groups = $this->userModel->getGroups($user->account);
             $user->view   = $this->userModel->grantUserView($user->account, $user->rights['acls'], $user->rights['projects']);
             $user->admin  = strpos($this->im->app->company->admins, ",{$user->account},") !== false;
+            $_SESSION['user'] = $user;
 
             global $app;
             $app->action = $action;

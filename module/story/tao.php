@@ -25,7 +25,7 @@ class storyTao extends storyModel
     }
 
     /**
-     * 获取项目研发需求关联的用户需求。
+     * 获取项目关联的用户需求。
      * Get project requirements.
      *
      * @param  int $productID
@@ -36,13 +36,12 @@ class storyTao extends storyModel
      */
     protected function getProjectRequirements(int $productID, int $projectID, object|null $pager = null): array
     {
-        return $this->dao->select('t3.*')->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t1.story=t2.AID && t2.AType='story'")
-            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.BID=t3.id && t2.BType='requirement' && t3.deleted='0'")
-            ->where('t1.project')->eq($projectID)
+        return $this->dao->select('t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on("t1.story = t2.id && t2.type ='requirement'")
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t3.id')->ne('')
-            ->page($pager, 't3.id')
+            ->page($pager, 't2.id')
             ->fetchAll('id');
     }
 
@@ -1654,7 +1653,7 @@ class storyTao extends storyModel
         $this->config->story->affect = new stdclass();
         $this->config->story->affect->projects = new stdclass();
         $this->config->story->affect->projects->fields['id']         = array('name' => 'id',         'title' => $this->lang->task->id);
-        $this->config->story->affect->projects->fields['name']       = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => $this->config->vision != 'or' ? helper::createLink('task', 'view', 'id={id}') : '');
+        $this->config->story->affect->projects->fields['name']       = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => $this->config->vision != 'or' ? helper::createLink('task', 'view', 'id={id}') : '', 'type' => 'title', 'fixed' => false, 'sortType' => false, 'flex' => false);
         $this->config->story->affect->projects->fields['assignedTo'] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
         $this->config->story->affect->projects->fields['consumed']   = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
         $this->config->story->affect->projects->fields['left']       = array('name' => 'left',       'title' => $this->lang->task->left);
@@ -1696,7 +1695,7 @@ class storyTao extends storyModel
         if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->bugs = new stdclass();
         $this->config->story->affect->bugs->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
-        $this->config->story->affect->bugs->fields[] = array('name' => 'title',        'title' => $this->lang->bug->title, 'link' => $this->config->vision != 'or' ? helper::createLink('bug', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg');
+        $this->config->story->affect->bugs->fields[] = array('name' => 'title',        'title' => $this->lang->bug->title, 'link' => $this->config->vision != 'or' ? helper::createLink('bug', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg', 'fixed' => false, 'sortType' => false, 'flex' => false);
         $this->config->story->affect->bugs->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
         $this->config->story->affect->bugs->fields[] = array('name' => 'openedBy',     'title' => $this->lang->bug->openedBy);
         $this->config->story->affect->bugs->fields[] = array('name' => 'resolvedBy',   'title' => $this->lang->bug->resolvedBy);
@@ -1738,7 +1737,7 @@ class storyTao extends storyModel
         if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->cases = new stdclass();
         $this->config->story->affect->cases->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
-        $this->config->story->affect->cases->fields[] = array('name' => 'title',        'title' => $this->lang->testcase->title, 'link' => $this->config->vision != 'or' ? helper::createLink('testcase', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg');
+        $this->config->story->affect->cases->fields[] = array('name' => 'title',        'title' => $this->lang->testcase->title, 'link' => $this->config->vision != 'or' ? helper::createLink('testcase', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg', 'fixed' => false, 'sortType' => false, 'flex' => false);
         $this->config->story->affect->cases->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
         $this->config->story->affect->cases->fields[] = array('name' => 'openedBy',     'title' => $this->lang->testcase->openedBy);
         $this->config->story->affect->cases->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->testcase->lastEditedBy);
@@ -1805,7 +1804,7 @@ class storyTao extends storyModel
         $this->config->story->affect->twins = new stdclass();
         $this->config->story->affect->twins->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
         $this->config->story->affect->twins->fields[] = array('name' => 'branch',       'title' => $this->lang->story->branch);
-        $this->config->story->affect->twins->fields[] = array('name' => 'title',        'title' => $this->lang->story->title, 'link' => $this->config->vision != 'or' ? helper::createLink('story', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg');
+        $this->config->story->affect->twins->fields[] = array('name' => 'title',        'title' => $this->lang->story->title, 'link' => $this->config->vision != 'or' ? helper::createLink('story', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg', 'fixed' => false, 'sortType' => false, 'flex' => false);
         $this->config->story->affect->twins->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
         $this->config->story->affect->twins->fields[] = array('name' => 'stage',        'title' => $this->lang->story->stageAB);
         $this->config->story->affect->twins->fields[] = array('name' => 'openedBy',     'title' => $this->lang->story->openedBy);

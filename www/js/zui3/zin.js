@@ -74,6 +74,7 @@
         title:         (data) => document.title = data,
         main:          (data) => $('#main').html(data),
         featureBar:    updateFeatureBar,
+        moduleMenu:    updateModuleMenu,
         pageCSS:       (data) => $('style.zin-page-css').html(data),
         pageJS:        updatePageJS,
         configJS:      updateConfigJS,
@@ -93,10 +94,7 @@
 
     function showFatalError(data, _info, options)
     {
-        const zinDebug = window.zinDebug;
-        if(zinDebug && zinDebug.basePath) data = data.split(zinDebug.basePath).join('<i class="icon icon-file-text opacity-50"></i>/');
-        if(data.startsWith('<br />\n'))   data = data.replace('<br />\n', '');
-        zui.Modal.alert({message: {html: data}, title: `Fatal error: ${options.url}`, actions: [], size: 'lg', custom: {className: 'backdrop-blur border-2 border-canvas bg-opacity-80 rounded-xl', bodyClass: 'font-mono', headerClass: 'text-danger'}});
+        zui.Modal.showError({error: `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg'})
     }
 
     function initZinbar()
@@ -182,6 +180,7 @@
 
         if(data.debug)
         {
+            window.zinDebug = data.debug;
             data.debug.forEach(dump =>
             {
                 console.groupCollapsed('%c ZIN %c debug %c' + dump.name, 'color:#fff;font-weight:bold;background:#ec4899', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
@@ -292,6 +291,25 @@
                 zui.toggleSearchForm({module: $searchToggle.data('module'), show: false});
             }
         }
+    }
+
+    function updateModuleMenu(data, info, options)
+    {
+        const selector = parseSelector(info.selector);
+        let $target    = $(selector.select);
+        if(!$target.length) return;
+
+        $target.css('min-height', $target.height());
+        if(selector.inner)
+        {
+            $target.html(info.data);
+        }
+        else
+        {
+            $target.replaceWith(info.data);
+            $target = $(selector.select);
+        }
+
     }
 
     function updateHeading(data, options)
@@ -525,28 +543,42 @@
                 options.result = 'success';
                 let hasFatal = false;
                 let data;
+
+                if(!rawData && !ajax.sendedAgain)
+                {
+                    ajax.sendedAgain = true;
+                    ajax.setting.headers['X-Zin-Debug'] = true;
+                    delete ajax.data;
+                    delete ajax.error;
+                    ajax.send();
+                    ajax.canceled = true;
+                    return;
+                }
+                ajax.canceled = false;
+
                 try
                 {
                     data = $.parseRawData(rawData);
                 }
                 catch(e)
                 {
-                    if(DEBUG) console.error('[APP] ', 'Parse data failed from ' + url, e);
+                    if(DEBUG) console.error('[APP] ', 'Parse data failed from ' + url, {error: e, data: rawData});
                     if(!isInAppTab && config.zin) return;
-                    hasFatal = data.includes('Fatal error') || data.includes('Uncaught TypeError:');
-                    data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
+                    hasFatal = rawData.includes('Fatal error') || rawData.includes('Uncaught TypeError:') || rawData.startsWith('<!DOCTYPE html');
+                    ;
+                    data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
                 }
                 if(Array.isArray(data))
                 {
                     updatePerfInfo(options, 'renderBegin');
                     if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
-                    let newCacheData = cacheKey ? rawData : null;
+                    let newCacheData = (cacheKey && !hasFatal) ? rawData : null;
                     if(newCacheData && DEBUG)
                     {
                         const parts = newCacheData.split(',["zinDebug:<BEGIN>",');
                         if(parts.length > 1) newCacheData = parts[0] + ']';
                     }
-                    const cacheHit = cache && newCacheData === cache.data.data;
+                    const cacheHit = !hasFatal && cache && newCacheData === cache.data.data;
                     if(!cacheHit)
                     {
                         renderPageData(data);
@@ -613,15 +645,34 @@
             },
             error: (error, type) =>
             {
+                const data = ajax.data;
+                if(!data && !ajax.sendedAgain)
+                {
+                    ajax.sendedAgain = true;
+                    ajax.setting.headers['X-Zin-Debug'] = true;
+                    delete ajax.data;
+                    delete ajax.error;
+                    ajax.send();
+                    ajax.canceled = true;
+                    return;
+                }
+                else if(data)
+                {
+                    showFatalError(data, null, options);
+                    ajax.canceled = false;
+                }
+
+                if(ajax.canceled) return;
                 updatePerfInfo(options, 'requestEnd', {error: error});
-                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});;
+                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {type, error});
-                zui.Messager.show('ZIN: Fetch data failed from ' + url);
+                if(!data) zui.Messager.show('ZIN: Fetch data failed from ' + url);
                 if(options.error) options.error(data, error);
                 if(onFinish) onFinish(error);
             },
             complete: () =>
             {
+                if(ajax.canceled) return;
                 if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, false, options.loadingClass);
                 if(options.complete) options.complete();
                 $(document).trigger('pageload.app');
@@ -655,6 +706,7 @@
                         catch(error)
                         {
                             if(DEBUG) console.error('[APP] ', 'Parse cache data failed from ' + url, {error: error, cache: cache});
+                            $.db.setCacheData(cacheKey, null, cache.time, 'zinFetch');
                         }
                     }
                     else
@@ -701,9 +753,12 @@
             task.timerID = 0;
             task.xhr = requestContent(options, () =>
             {
-                const runID = task.xhr.getResponseHeader('Xhprof-RunID');
-                updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
-                task.xhr = null;
+                if(task.xhr)
+                {
+                    const runID = task.xhr.getResponseHeader('Xhprof-RunID');
+                    updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
+                    task.xhr = null;
+                }
                 fetchTasks.delete(id);
             });
         }, options.delayTime || 0);
@@ -859,7 +914,7 @@
         {
             selector = 'pageJS/.zin-page-js,' + selector + ',#mainMenu>*,hookCode()';
             if($('#mainNavbar a > .label').length) selector += ',#mainNavbar>*';
-            if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
+            if($('#moduleMenu').length) selector += ',#moduleMenu>*,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
         delete options.selector;
@@ -1058,6 +1113,7 @@
             partial:       options.partial,
             loadingTarget: loadingTarget,
             loadingClass:  'pointer-events-none',
+            cache:         false,
             success:       () =>
             {
                 let updateActionUrl = options.updateActionUrl;
@@ -1645,14 +1701,6 @@
 
         if(DEBUG)
         {
-            if(window.zinDebug)
-            {
-                let requestBegin = startTime;
-                if(performance.timing) requestBegin -= ((performance.timing.loadEventStart || Date.now()) - (performance.timing.navigationStart || Date.now()));
-                else if(window.zinDebug.trace && window.zinDebug.trace.request) requestBegin -= window.zinDebug.trace.request.timeUsed;
-                updatePerfInfo({id: 'page'}, 'renderEnd', {id: 'page', perf: {requestBegin: Math.max(0, requestBegin), requestEnd: startTime, renderBegin: startTime}});
-                showZinDebugInfo(window.zinDebug, {id: 'page'});
-            }
             if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
         }
     });

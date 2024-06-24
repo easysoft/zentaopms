@@ -277,11 +277,13 @@ detailBody
             ),
             item
             (
+                set::trClass('sourceBox'),
                 set::name($lang->story->source),
                 picker(setID('source'), set::name('source'), set::items($lang->{$story->type}->sourceList), set::value($fields['source']['default']), on::change('window.toggleFeedback(e.target)'))
             ),
             item
             (
+                set::trClass('sourceNoteBox'),
                 set::name($lang->story->sourceNote),
                 input(set::name('sourceNote'), set::value($story->sourceNote))
             ),

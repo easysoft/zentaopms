@@ -91,7 +91,7 @@ class mailZen extends mail
     {
         $now        = helper::now();
         $log        = '';
-        $mailStatus = '';
+        $mailStatus = 'wait';
         if(!isset($queue->merge) or $queue->merge == false) $mailStatus = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($queue->id)->fetch('status');
         if(empty($mailStatus) or $mailStatus != 'wait') return false;
 
