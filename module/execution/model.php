@@ -77,7 +77,6 @@ class executionModel extends model
 
                 if(in_array($execution->attribute, array('request', 'review')))
                 {
-                    $features['story'] = false;
                     $features['plan'] = false;
                 }
             }
@@ -157,7 +156,6 @@ class executionModel extends model
 
         /* Set stroy navigation for no-product project. */
         $this->loadModel('project')->setNoMultipleMenu($executionID);
-        if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
         if(isset($this->lang->execution->menu->story['dropMenu']) && $this->app->getMethodName() == 'storykanban')
         {
             $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
@@ -2309,7 +2307,7 @@ class executionModel extends model
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
 
-        $this->config->product->search['fields']['title'] = str_replace($this->lang->SRCommon, $this->lang->SRCommon, $this->lang->story->title);
+        $this->config->product->search['fields']['title']             = $this->lang->story->name;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values']    = $planPairs;
         $this->config->product->search['params']['module']['values']  = $modules;
@@ -2338,6 +2336,20 @@ class executionModel extends model
                 unset($this->config->product->search['params']['plan']);
             }
         }
+
+        $gradePairs = array();
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
+        if(!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design')))) $storyTypes = 'story';
+        foreach($gradeList as $grade)
+        {
+            if(strpos($storyTypes, $grade->type) === false) continue;
+            $key = (string)$grade->type . (string)$grade->grade;
+            $gradePairs[$key] = $grade->name;
+        }
+        asort($gradePairs);
+
+        $this->config->product->search['params']['grade']['values'] = $gradePairs;
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
@@ -2820,10 +2832,12 @@ class executionModel extends model
         $versions         = $this->loadModel('story')->getVersions($stories);
         $linkedStories    = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder        = (int)reset($linkedStories);
-        $storyList        = $this->dao->select('id, status, branch, product')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
+        $storyList        = $this->dao->select('id, status, branch, product, type')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
         $execution        = $this->fetchByID($executionID);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
+
+        $project = $execution->type == 'project' ? $execution : $this->loadModel('project')->fetchById($execution->project);
 
         foreach($stories as $storyID)
         {
@@ -2833,11 +2847,14 @@ class executionModel extends model
             $storyID = (int)$storyID;
             $story   = zget($storyList, $storyID, '');
             if(empty($story)) continue;
+            if(strpos($project->storyType, "$story->type") === false) continue;
+
+            if($execution->multiple && $story->type != 'story' && (!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $execution->type != 'project')) continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
             if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, (int)$laneID, (int)$columnID, 'story', (string)$storyID);
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, (int)$laneID, (int)$columnID, $storyType, (string)$storyID);
 
             $data = new stdclass();
             $data->project = $executionID;
@@ -2857,7 +2874,7 @@ class executionModel extends model
             if($storyType == 'requirement' and $this->config->edition == 'ipd') $this->dao->update(TABLE_STORY)->set('status')->eq('developing')->where('id')->eq($storyID)->exec();
         }
 
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID);
         return true;
     }
 
@@ -2907,8 +2924,9 @@ class executionModel extends model
     {
         $stories   = array();
         $plans     = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchPairs('product', 'plan');
-        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-        $this->session->set('project', $projectID);
+        $execution = $this->fetchByID($executionID);
+        $project   = $this->fetchByID($execution->project);
+        $this->session->set('project', $project->id);
 
         $this->loadModel('story');
         $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
@@ -2925,13 +2943,15 @@ class executionModel extends model
 
                 foreach($planStories as $id => $story)
                 {
-                    if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
+                    if(!in_array($story->status, array('active', 'launched')) || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
+                    if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
+                    if(!in_array($execution->attribute, array('mix', 'request', 'design')) && $story->type != 'story') unset($planStories[$id]);
                 }
                 $stories = array_merge($stories, array_keys($planStories));
             }
         }
 
-        $this->linkStory($projectID, $stories);
+        $this->linkStory($project->id, $stories);
         $this->linkStory($executionID, $stories);
 
         return true;
@@ -4584,10 +4604,11 @@ class executionModel extends model
      *
      * @param  array $trees
      * @param  bool  $hasProduct
+     * @param  array $gradeGroup
      * @access pubic
      * @return array
      */
-    public function buildTree(array $trees, bool $hasProduct = true): array
+    public function buildTree(array $trees, bool $hasProduct = true, array $gradeGroup = array()): array
     {
         $treeData = array();
         foreach($trees as $index => $tree)
@@ -4611,9 +4632,29 @@ class executionModel extends model
                     break;
                 case 'story':
                     $this->app->loadLang('story');
-                    $treeData[$index]['url']    = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $gradePairs = zget($gradeGroup, $tree->type, array());
+                    $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                    );
+                    break;
+                case 'requirement':
+                    $this->app->loadLang('requirement');
+                    $gradePairs = zget($gradeGroup, $tree->type, array());
+                    $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $treeData[$index]['content'] = array(
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                    );
+                    break;
+                case 'epic':
+                    $this->app->loadLang('epic');
+                    $gradePairs = zget($gradeGroup, $tree->type, array());
+                    $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $treeData[$index]['content'] = array(
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'branch':
@@ -4632,7 +4673,7 @@ class executionModel extends model
             if(isset($tree->children))
             {
                 if($tree->type == 'task') $treeData[$index]['content']['html'] = "<span class='title' title='{$tree->title}'>{$tree->title}</span>";
-                $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct);
+                $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct, $gradeGroup);
             }
         }
         return $treeData;
@@ -4852,6 +4893,7 @@ class executionModel extends model
         $executionData->project     = $projectID;
         $executionData->name        = $project->name;
         $executionData->grade       = 1;
+        $executionData->storyType   = $project->storyType;
         $executionData->begin       = $project->begin;
         $executionData->end         = $project->end;
         $executionData->status      = 'wait';
@@ -4911,6 +4953,7 @@ class executionModel extends model
         $postData = new stdclass();
         $postData->project   = $projectID;
         $postData->name      = $project->name;
+        $postData->storyType = $project->storyType;
         $postData->begin     = $project->begin;
         $postData->end       = $project->end;
         $postData->realBegan = $project->realBegan ? $project->realBegan : null;

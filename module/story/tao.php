@@ -67,29 +67,31 @@ class storyTao extends storyModel
     }
 
     /**
-     * 获取用户需求细分的研发需求，或者研发需求关联的用户需求。
-     * Get associated requirements.
+     * 获取需求主动关联、被动关联的需求。
+     * Get linked stories.
      *
      * @param  int     $storyID
      * @param  string  $storyType
-     * @param  array   $fields
      * @access public
      * @return array
      */
-    public function getRelation(int $storyID, string $storyType, array $fields = array()): array
+    public function getRelation(int $storyID, string $storyType): array
     {
-        /* 初始化查询条件变量。*/
-        $BType       = $storyType == 'story' ? 'requirement' : 'story';
-        $relation    = $storyType == 'story' ? 'subdividedfrom' : 'subdivideinto';
-        $queryFields = empty($fields) ? 'id,title' : implode(',', $fields);
-
-        /* 获取对应的关联数据。*/
-        return $this->dao->select('BID')->from(TABLE_RELATION)
+        /* 主动关联。*/
+        $linkedToList = $this->dao->select('BID')->from(TABLE_RELATION)
             ->where('AType')->eq($storyType)
-            ->andWhere('BType')->eq($BType)
-            ->andWhere('relation')->eq($relation)
             ->andWhere('AID')->eq($storyID)
+            ->andWhere('relation')->eq('linkedto')
             ->fetchPairs();
+
+        /* 被动关联。*/
+        $linkedFromList = $this->dao->select('AID')->from(TABLE_RELATION)
+            ->where('BType')->eq($storyType)
+            ->andWhere('BID')->eq($storyID)
+            ->andWhere('relation')->eq('linkedto')
+            ->fetchPairs();
+
+        return $linkedToList + $linkedFromList;
     }
 
     /**
@@ -285,58 +287,12 @@ class storyTao extends storyModel
     }
 
     /**
-     * 将需求列表中的子需求合并到列表中的父需求下。
-     * Merge children to parent.
-     *
-     * @param  array     $stories
-     * @param  string    $type
-     * @access protected
-     * @return int[]
-     */
-    protected function appendSRToChildren(array $stories): array
-    {
-        /* For requirement children. */
-        $relationGroups = $this->batchGetRelations(array_keys($stories), 'requirement', array('*'));
-        if(empty($stories));
-
-        if($this->app->rawModule == 'projectstory')
-        {
-            $projectID = $this->session->project;
-            /* For story children. */
-            $relationIDList = array();
-            foreach($relationGroups as $relationGroup) $relationIDList = array_merge($relationIDList, array_keys($relationGroup));
-            $projectIDList = $this->dao->select('story,project')->from(TABLE_PROJECTSTORY)->where('story')->in($relationIDList)->andWhere('project')->eq($projectID)->fetchPairs('story', 'project');
-        }
-
-        foreach($stories as $story)
-        {
-            /* Merge subdivided stories for requirement. */
-            if(empty($relationGroups[$story->id])) continue;
-
-            $story->parent   = '-1';
-            $story->children = array();
-            foreach($relationGroups[$story->id] as $SRID => $SRStory)
-            {
-                if(empty($SRStory)) continue;
-                if(!empty($projectID) && !isset($projectIDList[$SRID])) continue;
-
-                $children = clone $SRStory;
-                $children->parent  = $story->id;
-                $children->project = isset($projectIDList[$SRID]) ? $projectIDList[$SRID] : 0;
-                $story->children[$SRID] = $children;
-            }
-            $story->linkStories = implode(',', array_column($story->children, 'title'));
-        }
-        return $stories;
-    }
-
-    /**
      * 追加需求所属的计划标题和子需求。
      * Merge plan title and children.
      *
      * @param  int|array|string $productID
      * @param  array            $stories
-     * @param  string           $type          story|requirement
+     * @param  string           $type      story|requirement
      *
      * @access protected
      * @return array
@@ -352,40 +308,61 @@ class storyTao extends storyModel
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->beginIF($productID)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
         $parents = $this->extractParents($stories);
-        if($parents)
+        if($parents) $parents = $this->dao->select('id,title,status,version,type')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
+
+        $childItems = $this->getChildItems($stories);
+
+        if($type != 'story')
         {
-            $children = $this->dao->select('id,parent,title')->from(TABLE_STORY)->where('parent')->in($parents)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
-            $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $sameTypeChildren = $this->dao->select('distinct t1.parent')->from(TABLE_STORY)->alias('t1')
+                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.parent = t2.id')
+                 ->where('t1.parent')->in(array_keys($stories))
+                 ->andWhere('t1.type = t2.type')
+                 ->andWhere('t2.deleted')->eq(0)
+                 ->fetchPairs();
+
+            $otherTypeChildren = $this->dao->select('distinct t1.parent')->from(TABLE_STORY)->alias('t1')
+                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.parent = t2.id')
+                 ->where('t1.parent')->in(array_keys($stories))
+                 ->andWhere('t1.type != t2.type')
+                 ->andWhere('t2.deleted')->eq(0)
+                 ->fetchPairs();
         }
 
-        $mainID  = $type == 'story' ? 'BID' : 'AID';
-        $countID = $type == 'story' ? 'AID' : 'BID';
-
-        $relations = $this->dao->select("$mainID, count($countID) as count")->from(TABLE_RELATION)
-            ->where('AType')->eq('requirement')
-            ->andWhere('BType')->eq('story')
-            ->andWhere('relation')->eq('subdivideinto')
-            ->groupBy($mainID)
-            ->fetchAll($mainID);
-
-        if($type == 'requirement') $stories = $this->appendSRToChildren($stories);
         foreach($stories as $story)
         {
-            /* Export story linkstories. */
-            if(isset($children[$story->id])) $story->linkStories = implode(',', array_column($children[$story->id], 'title'));
+            /* Judge parent story has changed. */
+            if($story->parent > 0 and isset($parents[$story->parent]))
+            {
+                if($parents[$story->parent]->version > $story->parentVersion && $story->parentVersion > 0 && $parents[$story->parent]->status == 'active') $story->parentChanged = true;
+            }
 
-            /* Merge parent story title. */
-            if($story->parent > 0 and isset($parents[$story->parent])) $story->parentName = $parents[$story->parent]->title;
+            /* Judge parent story if has same type child or other type child. */
+            if($story->type != 'story' && $story->isParent == '1')
+            {
+                if(isset($sameTypeChildren[$story->id]))  $story->hasSameTypeChild  = true;
+                if(isset($otherTypeChildren[$story->id])) $story->hasOtherTypeChild = true;
+            }
 
             /* Merge plan title. */
             $story->planTitle = '';
-            $storyPlans       = explode(',', trim($story->plan, ','));
+            $storyPlans       = explode(',', trim((string)$story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
 
-            if(isset($relations[$story->id]))
+            if(isset($childItems[$story->id]))
             {
-                if($type == 'story')       $story->URS = $relations[$story->id]->count;
-                if($type == 'requirement') $story->SRS = $relations[$story->id]->count;
+                $story->childItem      = $childItems[$story->id]['finished'] . ' / ' . $childItems[$story->id]['total'];
+                $story->childItemTitle = $childItems[$story->id]['title'];
+            }
+
+            $story->originParent = $story->parent;
+
+            $story->parent = array();
+            foreach(explode(',', trim((string)$story->path, ',')) as $parentID)
+            {
+                if(!$parentID) continue;
+                if($parentID == $story->id) continue;
+                $story->parent[] = (int)$parentID;
             }
         }
 
@@ -406,11 +383,49 @@ class storyTao extends storyModel
     {
         $parent = array_map(function($story)
         {
-            if($story->parent == '-1') return $story->id;
-            if($story->parent > '0')   return $story->parent;
+            if($story->parent > '0') return $story->parent;
             return false;
         }, $stories);
         return array_values(array_unique(array_filter($parent)));
+    }
+
+    /**
+     * 获取需求的子项，统计已完成/总数。
+     * Get child items of stories, and count the finished/total.
+     *
+     * @param  array     $stories
+     * @access protected
+     * @return array
+     */
+    protected function getChildItems(array $stories): array
+    {
+        $childItems = array();
+
+        $childStories = $this->dao->select('id, parent, status')->from(TABLE_STORY)
+            ->where('parent')->in(array_keys($stories))
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('parent');
+
+        foreach($childStories as $parentID => $childStory)
+        {
+            $childItems[$parentID]['total']    = count($childStory);
+            $childItems[$parentID]['finished'] = count(array_filter($childStory, function($story){return $story->status == 'closed';}));
+            $childItems[$parentID]['title']    = sprintf($this->lang->story->childStoryTitle, $childItems[$parentID]['total'], $childItems[$parentID]['finished']);
+        }
+
+        $childTasks = $this->dao->select('id, story, status')->from(TABLE_TASK)
+            ->where('story')->in(array_keys($stories))
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('story');
+
+        foreach($childTasks as $parentID => $childTask)
+        {
+            $childItems[$parentID]['total']    = count($childTask);
+            $childItems[$parentID]['finished'] = count(array_filter($childTask, function($task){return in_array($task->status, array('done', 'closed', 'cancel'));}));
+            $childItems[$parentID]['title']    = sprintf($this->lang->story->childTaskTitle, $childItems[$parentID]['total'], $childItems[$parentID]['finished']);
+        }
+
+        return $childItems;
     }
 
     /**
@@ -422,12 +437,13 @@ class storyTao extends storyModel
      * @param  int         $productID
      * @param  string      $orderBy
      * @param  string      $storyType
+     * @param  string      $sqlCondition
      * @param  array       $excludeStories
      * @param  object|null $pager
      * @access protected
      * @return array
      */
-    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType = 'story', array $excludeStories = array(), object|null $pager = null): array
+    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType = 'story', string $sqlCondition = '', array $excludeStories = array(), object|null $pager = null): array
     {
         /* 获取查询条件。 */
         $rawModule = $this->app->rawModule;
@@ -439,6 +455,7 @@ class storyTao extends storyModel
         $storyQuery = $this->replaceAllProductQuery($this->session->executionStoryQuery);
         $storyQuery = $this->replaceRevertQuery($storyQuery, $productID);
         $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
+        $storyQuery = preg_replace_callback("/t2.`grade` (=|!=) '(\w+)(\d+)'/", function($matches){return "t2.`grade` {$matches[1]} '" . $matches[3] . "' AND t2.`type` = '" . $matches[2] . "'";}, $storyQuery);
         if(strpos($storyQuery, 'result') !== false) $storyQuery = str_replace('t2.`result`', 't4.`result`', $storyQuery);
 
         return $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -449,7 +466,8 @@ class storyTao extends storyModel
             ->andWhere('t1.project')->eq($executionID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t2.type')->eq($storyType)
+            ->andWhere('t2.type')->in($storyType)
+            ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
             ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
@@ -633,7 +651,10 @@ class storyTao extends storyModel
      */
     protected function getUnclosedStatusKeys(): array
     {
-        $unclosedStatus = $this->lang->story->statusList;
+        $moduleName = $this->app->rawModule;
+        if(!in_array($moduleName, array('story', 'epic', 'requirement'))) $moduleName = 'story';
+
+        $unclosedStatus = $this->lang->{$moduleName}->statusList;
         unset($unclosedStatus['closed']);
         return array_keys($unclosedStatus);
     }
@@ -686,10 +707,10 @@ class storyTao extends storyModel
      */
     protected function doCreateStory(object $story): int|false
     {
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane,branches,plans,modules,uploadImage')
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,region,lane,branches,plans,modules,uploadImage')
             ->autoCheck()
             ->checkIF(!empty($story->notifyEmail), 'notifyEmail', 'email')
-            ->batchCheck($this->config->story->create->requiredFields, 'notempty')
+            ->batchCheck($this->config->{$story->type}->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
@@ -836,51 +857,71 @@ class storyTao extends storyModel
      *
      * @param  int       $storyID
      * @param  object    $story
-     * @param  int       $oldStoryParent
+     * @param  object    $oldStory
      * @access protected
      * @return void
      */
-    protected function doChangeParent(int $storyID, object $story, int $oldStoryParent)
+    protected function doChangeParent(int $storyID, object $story, object $oldStory)
     {
         $this->loadModel('action');
-        $this->updateStoryProduct($storyID, $story->product);
-        if($oldStoryParent == '-1')
+        if($oldStory->parent > 0)
         {
-            $childStories = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchPairs('id');
-            foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
-        }
+            $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
+            $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStory->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            if(empty($oldChildren))
+            {
+                $this->dao->update(TABLE_STORY)
+                     ->set('isParent')->eq('0')
+                     ->beginIF($oldParentStory->type == 'story')->set('stage')->eq('wait')->fi()
+                     ->where('id')->eq($oldStory->parent)
+                     ->exec();
+            }
+            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
 
-        if($oldStoryParent > 0)
-        {
-            $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
-            $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStoryParent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
-            if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('parent')->eq(0)->where('id')->eq($oldStoryParent)->exec();
-            $this->dao->update(TABLE_STORY)->set('childStories')->eq(implode(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStoryParent)->exec();
-
-            $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStoryParent, '', false);
-            $actionID = $this->action->create('story', $oldStoryParent, 'unLinkChildrenStory', '', $storyID, '', false);
+            $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStory->parent, '', false);
+            $actionID = $this->action->create('story', $oldStory->parent, 'unLinkChildrenStory', '', $storyID, '', false);
             $changes  = common::createChanges($oldParentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            $this->updateLane($oldParentStory->id, $oldParentStory->type);
         }
 
         if($story->parent > 0)
         {
-            $parentStory    = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
-            $children       = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
-            $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')
-                ->set('childStories')->eq(implode(',', $children))
+            $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
+            $newRoot     = $parentStory->root;
+            $story->path = rtrim($parentStory->path, ',') . ',' . $storyID . ',';
+
+            $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parentStory->version)->where('id')->eq($storyID)->exec();
+            $this->dao->update(TABLE_STORY)
+                ->set('isParent')->eq('1')
                 ->set('lastEditedBy')->eq($this->app->user->account)
                 ->set('lastEditedDate')->eq(helper::now())
                 ->where('id')->eq($story->parent)
                 ->exec();
+            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
 
             $this->action->create('story', $storyID, 'linkParentStory', '', $story->parent, '', false);
             $actionID = $this->action->create('story', $story->parent, 'linkChildStory', '', $storyID, '', false);
             $changes  = common::createChanges($parentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            $this->updateLane($parentStory->id, $parentStory->type);
         }
+        else
+        {
+            $newRoot     = $storyID;
+            $story->path = ",{$storyID},";
+        }
+
+        $childIdList = $this->getAllChildId($storyID, false);
+        $children    = $this->getByList($childIdList);
+        foreach($children as $child)
+        {
+            $newChildPath = str_replace($oldStory->path, $story->path, $child->path);
+            $this->dao->update(TABLE_STORY)->set('path')->eq($newChildPath)->where('id')->eq($child->id)->exec();
+        }
+
+        if($childIdList) $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->where('id')->in($childIdList)->exec();
+        $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->set('path')->eq($story->path)->where('id')->eq($storyID)->exec();
     }
 
     /**
@@ -894,6 +935,7 @@ class storyTao extends storyModel
      */
     protected function doUpdateLinkStories(int $storyID, object $story, object $oldStory)
     {
+        if($oldStory->type == 'epic') return;
         $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
         $linkStories    = explode(',', $story->{$linkStoryField});
         $oldLinkStories = explode(',', $oldStory->{$linkStoryField});
@@ -915,53 +957,6 @@ class storyTao extends storyModel
                 $linkedStories = trim($linkedStories, ',');
                 $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq((string)$linkedStories)->where('id')->eq((int)$changeStoryID)->exec();
             }
-        }
-    }
-
-    /**
-     * 创建用户需求和软件需求的关联关系。
-     * Do create UR and SR relations.
-     *
-     * @param  int       $storyID
-     * @param  array     $URList
-     * @access protected
-     * @return void
-     */
-    protected function doCreateURRelations(int $storyID, array $URList): void
-    {
-        if(empty($storyID) || empty($URList)) return;
-
-        $requirements = $this->getByList($URList);
-        $data         = new stdclass();
-        foreach($URList as $URID)
-        {
-            if(!isset($requirements[$URID])) continue;
-
-            $requirement = $requirements[$URID];
-            if($requirement->type != 'requirement') continue;
-
-            $requirement    = $requirements[$URID];
-            $data->product  = $requirement->product;
-            $data->AType    = 'requirement';
-            $data->BType    = 'story';
-            $data->relation = 'subdivideinto';
-            $data->AID      = $URID;
-            $data->BID      = $storyID;
-            $data->AVersion = $requirement->version;
-            $data->BVersion = 1;
-            $data->extra    = 1;
-
-            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
-
-            $data->AType    = 'story';
-            $data->BType    = 'requirement';
-            $data->relation = 'subdividedfrom';
-            $data->AID      = $storyID;
-            $data->BID      = $URID;
-            $data->AVersion = 1;
-            $data->BVersion = $requirement->version;
-
-            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
         }
     }
 
@@ -1130,11 +1125,32 @@ class storyTao extends storyModel
     protected function checkCanSubdivide($story, $isShadowProduct): bool
     {
         if($this->config->vision == 'lite') return true;
+        if($story->type != 'story') return true;
 
-        if(in_array($story->status, array('launched', 'developing', 'active')))     return true;
-        if(!$isShadowProduct && $story->type == 'story' && $story->stage != 'wait') return false;
-        if($isShadowProduct && $story->stage != 'projected')                        return false;
-        if($story->parent > 0)                                                      return false;
+        if(!in_array($story->status, array('launched', 'developing', 'active'))) return false;
+        if($story->isParent == '1') return true;
+        if(!$isShadowProduct && !in_array($story->stage, array('wait', 'planned', 'projected'))) return false;
+        if($isShadowProduct && $story->stage != 'projected') return false;
+
+        return true;
+    }
+
+    /**
+     * Check whether a story can be split.
+     *
+     * @param  object    $story
+     * @access protected
+     * @return bool
+     */
+    protected function checkCanSplit($story): bool
+    {
+        $sameTypeChild = $this->dao->select('id')->from(TABLE_STORY)
+             ->where('parent')->eq($story->id)
+             ->andWhere('type')->eq($story->type)
+             ->andWhere('deleted')->eq(0)
+             ->fetch('id');
+
+        if($sameTypeChild) return false;
 
         return true;
     }
@@ -1227,7 +1243,9 @@ class storyTao extends storyModel
         {
             if(!empty($branchID)) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq('closed')->exec();
         }
+
         if($story->stage != 'closed') $this->updateLinkedLane($storyID, $linkedProjects);
+        if($story->parent > 0) $this->computeParentStage($story);
         return true;
     }
 
@@ -1244,10 +1262,14 @@ class storyTao extends storyModel
      */
     protected function updateStage(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): bool
     {
-        if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
-        if(empty($stages)) return false;
-
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
+        if(empty($stages))
+        {
+            if($story->parent > 0) $this->computeParentStage($story);
+            return false;
+        }
+
         if(empty($story)) return false;
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         if($product and $product->type != 'normal' and empty($story->branch))
@@ -1280,8 +1302,143 @@ class storyTao extends storyModel
             $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
         }
 
-        if($story->stage != $stage) $this->updateLinkedLane($storyID, $linkedProjects);
+        if($story->stage != $stage)
+        {
+            $this->updateLinkedLane($storyID, $linkedProjects);
+            if($story->parent > 0) $this->computeParentStage($story);
+        }
         return true;
+    }
+
+    /**
+     * 通过子需求更新父需求的阶段。
+     * 子需求阶段范围：未开始、已计划、已立项、设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败、待发布、已发布、已关闭。
+     * 父需求阶段范围：定义中、规划中、研发中、交付中、已关闭。
+     *
+     * 父需求阶段由子需求阶段决定，规则如下：
+     * 1. 定义中:
+     *   排除已关闭（关闭原因不是已完成）后，所有子需求阶段仅为定义中、未开始。
+     * 2. 规划中:
+     *   排除已关闭（关闭原因不是已完成）后，至少有一个子级需求为规划中、已立项、已计划， 其他子需求阶段仅为定义中、未开始。
+     * 3. 研发中:
+     *   排除已关闭（关闭原因不是已完成）后，至少有一个子级需求为设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败， 其他子需求阶段仅为未开始、规划中、已立项、已计划。
+     * 4. 交付中:
+     *   至少有一个子级需求为交付中、待发布、已发布；或者有一个子级需求为已关闭（关闭原因是已完成）。
+     * 5. 已关闭:
+     *   所有子需求都已关闭。
+     *
+     * Update parent stage by children.
+     * Parent stage is decided by children stage, the rules are as follows:
+     * 1. Defining:
+     *   All children stages are defining or wait, and no children stage is closed and closedReason is not done.
+     * 2. Planning:
+     *   At least one child stage is planning, planned or projected, and all other children stages are defining or wait, and no children stage is closed and closedReason is not done.
+     * 3. Developing:
+     *   At least one child stage is designing, designed, developing, developed, testing, tested, verified or rejected, and all other children stages are defining, planning, planned or projected, and no children stage is closed and closedReason is not done.
+     * 4. Delivering:
+     *   At least one child stage is delivering, pending or released, or at least one child stage is closed and closedReason is done.
+     * 5. Closed:
+     *   All children stages are closed.
+     *
+     * @param  object    $story
+     * @access protected
+     * @return void
+     */
+    protected function computeParentStage(object $story)
+    {
+        $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
+        if(empty($parent)) return;
+
+        $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
+            ->where('parent')->eq($story->parent)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        $allDefining = true;
+        $allClosed   = true;
+        foreach($children as $child)
+        {
+            if($child->stage == 'closed' && $child->closedReason != 'done') continue;
+            if(!in_array($child->stage, array('wait', 'defining'))) $allDefining = false;
+            if($child->stage != 'closed') $allClosed = false;
+        }
+
+        $parentStage = $parent->stage;
+        if($allClosed)
+        {
+            $parentStage = 'closed';
+        }
+        elseif($allDefining)
+        {
+            $parentStage = 'defining';
+        }
+        else
+        {
+            $hasPlanning = false;
+            $allClosedOrDefining = true;
+            foreach($children as $child)
+            {
+                /* Planning. */
+                if($child->stage == 'closed' && $child->closedReason != 'done') continue;
+                if(in_array($child->stage, array('planning', 'planned', 'projected')))
+                {
+                    $hasPlanning = true;
+                }
+                elseif(!in_array($child->stage, array('wait', 'defining')))
+                {
+                    $allClosedOrDefining = false;
+                }
+            }
+
+            if($hasPlanning && $allClosedOrDefining)
+            {
+                $parentStage = 'planning';
+            }
+            else
+            {
+                /* Developing. */
+                $hasDeveloping = false;
+                $allClosedOrDefiningOrPlanning = true;
+                foreach($children as $child)
+                {
+                    if($child->stage == 'closed' && $child->closedReason != 'done') continue;
+                    if(in_array($child->stage, array('designing', 'designed', 'developing', 'developed', 'testing', 'tested', 'verified', 'rejected')))
+                    {
+                        $hasDeveloping = true;
+                    }
+                    elseif(!in_array($child->stage, array('wait', 'defining', 'planning', 'planned', 'projected')))
+                    {
+                        $allClosedOrDefiningOrPlanning = false;
+                    }
+                }
+
+                if($hasDeveloping && $allClosedOrDefiningOrPlanning)
+                {
+                    $parentStage = 'developing';
+                }
+                else
+                {
+                    /* Delivering. */
+                    $hasDelivering = false;
+                    foreach($children as $child)
+                    {
+                        if(in_array($child->stage, array('delivering', 'pending', 'released')) || ($child->stage == 'closed' && $child->closedReason == 'done'))
+                        {
+                            $hasDelivering = true;
+                            break;
+                        }
+                    }
+
+                    if($hasDelivering) $parentStage = 'delivering';
+                }
+            }
+        }
+
+        if($parentStage != $parent->stage)
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
+            if($parent->parent > 0) $this->computeParentStage($parent);
+        }
     }
 
     /**
@@ -1321,7 +1478,7 @@ class storyTao extends storyModel
     protected function getLinkedTaskStat(int $storyID, array $linkedProjects): array
     {
         $tasks = $this->dao->select('type,execution,status')->from(TABLE_TASK)->where('execution')->in(array_keys($linkedProjects))
-            ->andWhere('type')->in('devel,test')
+            ->andWhere('type')->in('devel,test,design')
             ->andWhere('story')->eq($storyID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('cancel')
@@ -1330,9 +1487,10 @@ class storyTao extends storyModel
         if(empty($tasks)) return array();
 
         /* Cycle all tasks, get counts of every type and every status. */
-        $branchStatusList    = $branchDevelCount = $branchTestCount = array();
-        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
-        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+        $branchStatusList     = $branchDevelCount = $branchTestCount = $branchDesignCount = array();
+        $statusList['design'] = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+        $statusList['devel']  = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+        $statusList['test']   = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
         foreach($tasks as $type => $typeTasks)
         {
             if(!isset($statusList[$type])) continue;
@@ -1348,12 +1506,35 @@ class storyTao extends storyModel
                     if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
 
                     $branchStatusList[$branch][$type][$status] ++;
-                    if($type == 'devel') $branchDevelCount[$branch] = !isset($branchDevelCount[$branch]) ? 1 : ($branchDevelCount[$branch] + 1);
-                    if($type == 'test')  $branchTestCount[$branch]  = !isset($branchTestCount[$branch])  ? 1 : ($branchTestCount[$branch] + 1);
+                    if($type == 'devel')  $branchDevelCount[$branch]  = !isset($branchDevelCount[$branch])  ? 1 : ($branchDevelCount[$branch] + 1);
+                    if($type == 'test')   $branchTestCount[$branch]   = !isset($branchTestCount[$branch])   ? 1 : ($branchTestCount[$branch] + 1);
+                    if($type == 'design') $branchDesignCount[$branch] = !isset($branchDesignCount[$branch]) ? 1 : ($branchDesignCount[$branch] + 1);
                 }
             }
         }
-        return array($branchStatusList, $branchDevelCount, $branchTestCount);
+        return array($branchStatusList, $branchDevelCount, $branchTestCount, $branchDesignCount);
+    }
+
+    /**
+     * 更新关联的看板泳道卡片。
+     * Update linked lane.
+     *
+     * @param  int       $storyID
+     * @param  string    $storyType
+     * @access protected
+     * @return int
+     */
+    protected function updateLane(int $storyID, string $storyType)
+    {
+        $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.story')->eq($storyID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.type')->in('sprint,stage,kanban')
+            ->fetchPairs('project', 'project');
+
+        $this->loadModel('kanban');
+        foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, $storyType, $storyID);
     }
 
     /**
@@ -1400,14 +1581,18 @@ class storyTao extends storyModel
         }
 
         /* 根据任务状态统计信息，计算该需求所处的阶段。 */
-        list($branchStatusList, $branchDevelCount, $branchTestCount) = $taskStat;
+        list($branchStatusList, $branchDevelCount, $branchTestCount, $branchDesignCount) = $taskStat;
         foreach($branchStatusList as $branch => $statusList)
         {
             $branch     = (int)$branch;
             $stage      = 'projected';
-            $testCount  = isset($branchTestCount[$branch])  ? $branchTestCount[$branch]  : 0;
-            $develCount = isset($branchDevelCount[$branch]) ? $branchDevelCount[$branch] : 0;
+            $desginCount = isset($branchDesignCount[$branch])  ? $branchDesignCount[$branch]  : 0;
+            $testCount   = isset($branchTestCount[$branch])  ? $branchTestCount[$branch]  : 0;
+            $develCount  = isset($branchDevelCount[$branch]) ? $branchDevelCount[$branch] : 0;
 
+            $doingDesignTask  = $statusList['design']['wait'] < $desginCount && $statusList['design']['done'] < $desginCount && $desginCount > 0;
+            $doneDesignTask   = $statusList['design']['done'] == $desginCount && $desginCount > 0;
+            $notStartDevTask  = $statusList['devel']['wait'] == $develCount;
             $doingDevelTask   = $statusList['devel']['wait'] < $develCount && $statusList['devel']['done'] < $develCount && $develCount > 0;
             $doneDevelTask    = $statusList['devel']['done'] == $develCount && $develCount > 0;
             $notStartTestTask = $statusList['test']['wait'] == $testCount;
@@ -1416,13 +1601,15 @@ class storyTao extends storyModel
             $hasDoingTestTask = $statusList['test']['doing'] > 0 || $statusList['test']['pause'] > 0;
             $notDoingTestTask = $statusList['test']['doing'] == 0;
 
-            if($doingDevelTask && $notStartTestTask) $stage = 'developing'; //开发任务没有全部完成，测试任务没有开始，阶段为开发中。
-            if($doingDevelTask && $notDoingTestTask) $stage = 'developing'; //开发任务没有全部完成，没有测试中的测试任务，阶段为开发中。
-            if($doingDevelTask && $doneTestTask)     $stage = 'testing';    //开发任务没有全部完成，测试任务已经完成，阶段为测试中。
-            if($doneDevelTask  && $notStartTestTask) $stage = 'developed';  //开发任务已经完成，测试任务还没有开始，阶段为开发完成。
-            if($doneDevelTask  && $doingTestTask)    $stage = 'testing';    //开发任务已经完成，测试任务已经开始，阶段为测试中。
-            if($hasDoingTestTask)                    $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
-            if($doneDevelTask && $doneTestTask)      $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
+            if($doingDesignTask && $notStartDevTask)  $stage = 'designing';  //设计任务没有全部完成，开发任务还没有开始，阶段为设计中。
+            if($doneDesignTask  && $notStartDevTask)  $stage = 'designed';   //设计任务全部完成，开发任务还没有开始，阶段为设计完成。
+            if($doingDevelTask  && $notStartTestTask) $stage = 'developing'; //开发任务没有全部完成，测试任务没有开始，阶段为开发中。
+            if($doingDevelTask  && $notDoingTestTask) $stage = 'developing'; //开发任务没有全部完成，没有测试中的测试任务，阶段为开发中。
+            if($doingDevelTask  && $doneTestTask)     $stage = 'testing';    //开发任务没有全部完成，测试任务已经完成，阶段为测试中。
+            if($doneDevelTask   && $notStartTestTask) $stage = 'developed';  //开发任务已经完成，测试任务还没有开始，阶段为开发完成。
+            if($doneDevelTask   && $doingTestTask)    $stage = 'testing';    //开发任务已经完成，测试任务已经开始，阶段为测试中。
+            if($hasDoingTestTask)                     $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
+            if($doneDevelTask && $doneTestTask)       $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
 
             $stages[(int)$branch] = $stage;
         }
@@ -1508,7 +1695,7 @@ class storyTao extends storyModel
         if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->bugs = new stdclass();
         $this->config->story->affect->bugs->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
-        $this->config->story->affect->bugs->fields[] = array('name' => 'title',        'title' => $this->lang->bug->title, 'link' => $this->config->vision != 'or' ? helper::createLink('bug', 'view', 'id={id}') : '', 'type' => 'title', 'fixed' => false, 'sortType' => false, 'flex' => false);
+        $this->config->story->affect->bugs->fields[] = array('name' => 'title',        'title' => $this->lang->bug->title, 'link' => $this->config->vision != 'or' ? helper::createLink('bug', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg', 'fixed' => false, 'sortType' => false, 'flex' => false);
         $this->config->story->affect->bugs->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
         $this->config->story->affect->bugs->fields[] = array('name' => 'openedBy',     'title' => $this->lang->bug->openedBy);
         $this->config->story->affect->bugs->fields[] = array('name' => 'resolvedBy',   'title' => $this->lang->bug->resolvedBy);
@@ -1516,7 +1703,7 @@ class storyTao extends storyModel
         $this->config->story->affect->bugs->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->bug->lastEditedBy);
 
         /* Get affected bugs. */
-        $storyIdList = $story->id . ($story->relationStoryID ? ',' . trim($story->relationStoryID, ',') : '') . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')
             ->andWhere('story')->in($storyIdList)
             ->andWhere('status')->ne('closed')
@@ -1550,13 +1737,13 @@ class storyTao extends storyModel
         if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->cases = new stdclass();
         $this->config->story->affect->cases->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
-        $this->config->story->affect->cases->fields[] = array('name' => 'title',        'title' => $this->lang->testcase->title, 'link' => $this->config->vision != 'or' ? helper::createLink('testcase', 'view', 'id={id}') : '', 'type' => 'title', 'fixed' => false, 'sortType' => false, 'flex' => false);
+        $this->config->story->affect->cases->fields[] = array('name' => 'title',        'title' => $this->lang->testcase->title, 'link' => $this->config->vision != 'or' ? helper::createLink('testcase', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg', 'fixed' => false, 'sortType' => false, 'flex' => false);
         $this->config->story->affect->cases->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
         $this->config->story->affect->cases->fields[] = array('name' => 'openedBy',     'title' => $this->lang->testcase->openedBy);
         $this->config->story->affect->cases->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->testcase->lastEditedBy);
 
         /* Get affected cases. */
-        $storyIdList  = $story->id . ($story->relationStoryID ? ',' . trim($story->relationStoryID, ',') : '') . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList  = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->andWhere('story')->in($storyIdList)
             ->fetchAll();
@@ -1566,6 +1753,36 @@ class storyTao extends storyModel
             $case->openedBy     = zget($users, $case->openedBy);
             $case->lastEditedBy = zget($users, $case->lastEditedBy);
         }
+
+        return $story;
+    }
+
+    /**
+     * 获取该需求影响的子需求。
+     * Get affected children for this story.
+     *
+     * @param  object    $story
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
+    protected function getAffectedChildren(object $story, array $users): object
+    {
+        $storyType = $story->type;
+        foreach($story->children as $child)
+        {
+            $child->status   = $this->processStatus('story', $child);
+            $child->openedBy = zget($users, $child->openedBy);
+            $storyType       = $child->type;
+        }
+
+        if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
+        $this->config->story->affect->children = new stdclass();
+        $this->config->story->affect->children->fields[] = array('name' => 'id',       'title' => $this->lang->idAB, 'type' => 'id', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'title',    'title' => $this->lang->story->name, 'link' => helper::createLink($storyType, 'view', 'id={id}'), 'type' => 'title', 'sortType' => false, 'data-toggle' => 'modal', 'data-size' => 'lg');
+        $this->config->story->affect->children->fields[] = array('name' => 'pri',      'title' => $this->lang->priAB, 'type' => 'pri', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'status',   'title' => $this->lang->story->status, 'type' => 'status', 'sortType' => false);
+        $this->config->story->affect->children->fields[] = array('name' => 'openedBy', 'title' => $this->lang->story->openedBy, 'type' => 'user', 'sortType' => false);
 
         return $story;
     }
@@ -1587,7 +1804,7 @@ class storyTao extends storyModel
         $this->config->story->affect->twins = new stdclass();
         $this->config->story->affect->twins->fields[] = array('name' => 'id',           'title' => $this->lang->idAB);
         $this->config->story->affect->twins->fields[] = array('name' => 'branch',       'title' => $this->lang->story->branch);
-        $this->config->story->affect->twins->fields[] = array('name' => 'title',        'title' => $this->lang->story->title, 'link' => $this->config->vision != 'or' ? helper::createLink('story', 'view', 'id={id}') : '', 'type' => 'title', 'fixed' => false, 'sortType' => false, 'flex' => false);
+        $this->config->story->affect->twins->fields[] = array('name' => 'title',        'title' => $this->lang->story->title, 'link' => $this->config->vision != 'or' ? helper::createLink('story', 'view', 'id={id}') : '', 'data-toggle' => 'modal', 'data-size' => 'lg', 'fixed' => false, 'sortType' => false, 'flex' => false);
         $this->config->story->affect->twins->fields[] = array('name' => 'status',       'title' => $this->lang->statusAB);
         $this->config->story->affect->twins->fields[] = array('name' => 'stage',        'title' => $this->lang->story->stageAB);
         $this->config->story->affect->twins->fields[] = array('name' => 'openedBy',     'title' => $this->lang->story->openedBy);
@@ -1615,10 +1832,11 @@ class storyTao extends storyModel
      * @param  string    $params
      * @param  string    $storyType story|requirement
      * @param  object    $execution
+     * @param  array     $maxGradeGroup
      * @access protected
      * @return array
      */
-    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null): array
+    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null, array $maxGradeGroup = array()): array
     {
         global $lang;
 
@@ -1634,15 +1852,6 @@ class storyTao extends storyModel
             }
         }
 
-        if($storyType == 'requirement')
-        {
-            $this->lang->story->changeTip                = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->changeTip);
-            $this->lang->story->reviewTip['active']      = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->reviewTip['active']);
-            $this->lang->story->reviewTip['notReviewer'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->reviewTip['notReviewer']);
-            $this->lang->story->recallTip['actived']     = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->recallTip['actived']);
-            $this->lang->story->subDivideTip['notWait']  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->subDivideTip['notWait']);
-        }
-
         static $taskGroups = array();
 
         $actSubmitreview = array();
@@ -1652,36 +1861,36 @@ class storyTao extends storyModel
         $executionID     = empty($execution) ? 0 : $execution->id;
         if(!isset($story->from)) $story->from = '';
 
-        $closeLink              = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type");
-        $processStoryChangeLink = helper::createLink('story', 'processStoryChange', $params);
-        $changeLink             = helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type");
-        $submitReviewLink       = helper::createLink('story', 'submitReview', "storyID=$story->id&storyType=$story->type");
-        $reviewLink             = helper::createLink('story', 'review', $params . "&from=$story->from&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
-        $recallLink             = helper::createLink('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type");
-        $batchCreateStoryLink   = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
-        $editLink               = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
-        $createCaseLink         = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
+        $closeLink               = helper::createLink($story->type, 'close', $params . "&from=$story->from");
+        $processStoryChangeLink  = helper::createLink('story', 'processStoryChange', $params);
+        $changeLink              = helper::createLink($story->type, 'change', $params . "&from=$story->from");
+        $submitReviewLink        = helper::createLink($story->type, 'submitReview', "storyID=$story->id");
+        $reviewLink              = helper::createLink($story->type, 'review', $params . "&from=$story->from") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $recallLink              = helper::createLink($story->type, 'recall', $params . "&from=list&confirm=no");
+        $batchCreateStoryLink    = helper::createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0");
+        $editLink                = helper::createLink($story->type, 'edit', $params . "&kanbanGroup=default") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $createCaseLink          = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */
-        $canClose = common::hasPriv('story', 'close') && $this->isClickable($story, 'close');
-        if(!common::canBeChanged('story', $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
-        $canProcess = common::hasPriv('story', 'processStoryChange');
-        if($story->URChanged) return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'url' => $canProcess ? $processStoryChangeLink : null, 'disabled' => !$canProcess));
+        $canClose = common::hasPriv($story->type, 'close') && $this->isClickable($story, 'close');
+        if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
+        $canProcessChange = common::hasPriv('story', 'processStoryChange');
+        if(!empty($story->parentChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
 
         /* Change button. */
-        $canChange = common::hasPriv('story', 'change') && $this->isClickable($story, 'change');
+        $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change');
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
         $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange);
 
         /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)
         {
-            $canSubmitReview = common::hasPriv('story', 'submitReview');
+            $canSubmitReview = common::hasPriv($story->type, 'submitReview');
             $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null);
         }
         else
         {
-            $canReview = common::hasPriv('story', 'review') && $this->isClickable($story, 'review');
+            $canReview = common::hasPriv($story->type, 'review') && $this->isClickable($story, 'review');
             $title     = $this->lang->story->review;
             if(!$canReview && $story->status != 'closed')
             {
@@ -1730,30 +1939,49 @@ class storyTao extends storyModel
         $actions[] = array('name' => 'divider', 'type'=>'divider');
 
         /* Edit button. */
-        $canEdit = common::hasPriv('story', 'edit') && $this->isClickable($story, 'edit');
+        $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit');
         $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
-        if($story->type != 'requirement' && $this->config->vision != 'lite') $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') && $story->parent >= 0 ? $createCaseLink : null, 'disabled' => $story->parent < 0 || !common::hasPriv('testcase', 'create'), 'data-toggle' => 'modal', 'data-size' => 'lg');
+        if($story->type == 'story' && $this->config->vision != 'lite') $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') && $story->parent >= 0 ? $createCaseLink : null, 'disabled' => $story->parent < 0 || !common::hasPriv('testcase', 'create'), 'data-toggle' => 'modal', 'data-size' => 'lg');
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-        $canBatchCreateStory = $this->isClickable($story, 'batchcreate');
-        if($this->app->rawModule != 'projectstory' || $story->type == 'requirement' || $this->config->vision == 'lite' || $shadow)
+
+        $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+        if(!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow)
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
 
-            $title = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-            if(!$canBatchCreateStory && $story->status != 'closed')
+            /*
+             * 需求的拆分按钮分为两种情况：
+             *   1.拆分成相同类型的子需求。
+             *   2.拆分成其他类型的子需求。
+             * 这两种情况是互斥的，拆分了一种类型的需求后，另一种类型的需求就不能再拆分了。
+             * 默认拆分相同类型的需求，如果不能拆分相同类型的需求，则拆分其他类型的需求。
+             */
+            if($canBatchCreateStory)
             {
-                if(!in_array($story->status, array('active', 'launched', 'developing'))) $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
+                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
+            }
+            elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+            {
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
+            }
+            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+            {
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
+            }
+            elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
+            {
+                $title = $this->lang->story->split;
+                if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
-                if($story->parent > 0)    $title = $this->lang->story->subDivideTip['subStory'];
                 if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
+                $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
             }
-
-            $actions[] = array('name' => 'batchCreate', 'url' => $canBatchCreateStory ? $batchCreateStoryLink : null, 'hint' => $title, 'disabled' => !$canBatchCreateStory);
         }
 
         if(!empty($execution))
@@ -1764,9 +1992,9 @@ class storyTao extends storyModel
                 $batchCreateTaskLink = helper::createLink('task', 'batchCreate', "executionID={$execution->id}&storyID={$story->id}");
                 $storyEstimateLink   = helper::createLink('execution', 'storyEstimate', "executionID={$execution->id}&storyID={$story->id}");
 
-                $canCreateTask      = common::hasPriv('task', 'create') && $story->status == 'active';
-                $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active';
-                $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate');
+                $canCreateTask      = common::hasPriv('task', 'create') && $story->status == 'active' && $story->isParent == '0' && $story->type == 'story';
+                $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active' && $story->isParent == '0' && $story->type == 'story';
+                $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate') && $story->type == 'story';
 
                 $actions[] = array('name' => 'createTask',      'url' => $canCreateTask      ? $createTaskLink      : null, 'disabled' => !$canCreateTask, 'className' => 'create-task-btn');
                 $actions[] = array('name' => 'batchCreateTask', 'url' => $canBatchCreateTask ? $batchCreateTaskLink : null, 'disabled' => !$canBatchCreateTask);
@@ -1798,6 +2026,30 @@ class storyTao extends storyModel
                         $disabled    = true;
                         $unlinkTitle = $this->lang->execution->notAllowedUnlinkStory;
                     }
+
+                    $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+                    if($canBatchCreateStory)
+                    {
+                        $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
+                    }
+                    elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+                    {
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
+                    }
+                    elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+                    {
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
+                    }
+                    elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
+                    {
+                        $title = $this->lang->story->split;
+                        if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                        if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
+                        if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
+                        if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                        if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
+                        $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
+                    }
                 }
 
                 if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
@@ -1818,7 +2070,8 @@ class storyTao extends storyModel
      */
     protected function isSuperReviewer(): bool
     {
-        return str_contains(',' . zget($this->config->story, 'superReviewers', '') . ',', ",{$this->app->user->account},");
+        $moduleName = $this->app->rawModule;
+        return str_contains(',' . zget($this->config->{$moduleName}, 'superReviewers', '') . ',', ",{$this->app->user->account},");
     }
 
     /**
@@ -1839,7 +2092,6 @@ class storyTao extends storyModel
         $now   = helper::now();
         $story = new stdclass();
         $story->status = $status;
-        $story->stage  = 'wait';
         if(strpos('launched,active,changing,draft', $status) !== false)
         {
             $story->assignedTo   = $oldParentStory->openedBy;
@@ -1853,19 +2105,294 @@ class storyTao extends storyModel
 
         if($status == 'closed')
         {
+            $closedReason = $this->dao->select('closedReason')->from(TABLE_STORY)
+                ->where('parent')->eq($parentID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('closedReason')->eq('done')
+                ->fetch('closedReason');
+
             $story->assignedTo   = 'closed';
             $story->assignedDate = $now;
             $story->closedBy     = $this->app->user->account;
             $story->closedDate   = $now;
-            $story->closedReason = 'done';
-            $story->closedReason = 'done';
+            $story->closedReason = $closedReason ? 'done' : 'willnotdo';
         }
 
         $story->lastEditedBy   = $this->app->user->account;
         $story->lastEditedDate = $now;
-        $story->parent         = '-1';
         $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($parentID)->exec();
 
         return $story;
+    }
+
+    /**
+     * 获取传入所有需求的叶子结点，并按照根节点顺序返回
+     * Get leaf node by all stories, and sort by base nodes.
+     *
+     * @param  array    $stories
+     * @param  array    $allStoryIdList
+     * @access public
+     * @return array
+     */
+    public function getLeafNodes(array $stories, array $allStoryIdList): array
+    {
+        $parent    = array();
+        $leafNodes = array();
+        $stmt      = $this->dao->select('id,parent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('id')->in($allStoryIdList)->andWhere('deleted')->eq(0)->orderBy('type_desc,grade_desc,id_desc')->query();
+        while($story = $stmt->fetch())
+        {
+            $parent[$story->parent] = true;
+
+            if(isset($parent[$story->id])) continue;
+            $leafNodes[$story->root][$story->id] = $story;
+        }
+
+        $sortLeafNodes = array();
+        foreach($stories as $story)
+        {
+            if(isset($leafNodes[$story->root])) $sortLeafNodes += $leafNodes[$story->root];
+        }
+
+        return $sortLeafNodes;
+    }
+
+    /**
+     * 根据叶子结点数据，构建看板泳道数据。
+     * Build lanes data by leaf node.
+     *
+     * @param  array    $leafNodes
+     * @param  string   $storyType  epic|requirement|story
+     * @access public
+     * @return array
+     */
+    public function buildTrackLanes(array $leafNodes, string $storyType): array
+    {
+        $lanes = array();
+        foreach($leafNodes as $story)
+        {
+            if(($storyType == 'requirement' || $storyType == 'story') && $story->type == 'epic') continue;
+            if($storyType == 'story' && $story->type == 'requirement') continue;
+            $lanes[] = array('name' => "lane_{$story->id}", 'title' => '');
+        }
+        return $lanes;
+    }
+
+    /**
+     * 根据需求类型，构建看板列数据。
+     * Build cols data by storyType.
+     *
+     * @param  string  $storyType   epic|requirement|story
+     * @access public
+     * @return array
+     */
+    public function buildTrackCols(string $storyType): array
+    {
+        $storyGrade = $this->getGradeGroup();
+
+        $cols = array();
+        if($storyType == 'epic')  $cols['epic']        = $this->buildTrackCol('epic',        $this->lang->ERCommon, empty($storyGrade['epic'])        ? 0 : -1);
+        if($storyType != 'story') $cols['requirement'] = $this->buildTrackCol('requirement', $this->lang->URCommon, empty($storyGrade['requirement']) ? 0 : -1);
+
+        $cols['story']     = $this->buildTrackCol('story',     $this->lang->SRCommon, empty($storyGrade['story']) ? 0 : -1);
+        $cols['project']   = $this->buildTrackCol('project',   $this->lang->story->project);
+        $cols['execution'] = $this->buildTrackCol('execution', $this->lang->story->execution);
+        $cols['design']    = $this->buildTrackCol('design',    $this->lang->story->design);
+        $cols['commit']    = $this->buildTrackCol('commit',    $this->lang->story->repoCommit);
+        $cols['task']      = $this->buildTrackCol('task',      $this->lang->story->tasks);
+        $cols['bug']       = $this->buildTrackCol('bug',       $this->lang->story->bugs);
+        $cols['case']      = $this->buildTrackCol('case',      $this->lang->story->cases);
+
+        foreach($storyGrade as $type => $grades)
+        {
+            if(!isset($cols[$type])) continue;
+            foreach($grades as $grade) $cols["{$type}_{$grade->grade}"] = $this->buildTrackCol("{$type}_{$grade->grade}", $grade->name, $type);
+        }
+
+        return array_values($cols);
+    }
+
+    /**
+     * 根据单个看板列数据。
+     * Build single col data.
+     *
+     * @param  string     $name
+     * @param  string     $title
+     * @param  int|string $parent
+     * @access public
+     * @return array
+     */
+    public function buildTrackCol(string $name, string $title, int|string $parent = 0): array
+    {
+        $col = array('name' => $name, 'title' => $title, 'parent' => $parent);
+        if($parent != '0' && $parent != -1) $col['parentName'] = $parent;
+        return $col;
+    }
+
+    /**
+     * 构建看板项数据。
+     * Build items data by storyType.
+     *
+     * @param  array  $allStories
+     * @param  array  $leafNodes
+     * @param  string $storyType    epic|requirement|story
+     * @access public
+     * @return array
+     */
+    public function buildTrackItems(array $allStories, array $leafNodes, string $storyType): array
+    {
+        $storyIdList  = array_keys($leafNodes);
+        $projectGroup = $this->getProjectsForTrack($storyIdList);
+        $designGroup  = $this->getDesignsForTrack($storyIdList);
+
+        $projects   = zget($projectGroup, 'project', array());
+        $executions = zget($projectGroup, 'execution', array());
+        $designs    = zget($designGroup, 'design', array());
+        $commits    = zget($designGroup, 'commit', array());
+        $tasks      = $this->getTasksForTrack($storyIdList);
+        $cases      = $this->dao->select('id,project,pri,status,color,title,story,lastRunner,lastRunResult')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
+        $bugs       = $this->dao->select('id,project,pri,status,color,title,story,assignedTo,severity')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
+        $storyGrade = $this->getGradeGroup();
+
+        $items = array();
+        foreach($leafNodes as $node)
+        {
+            $laneName = "lane_{$node->id}";
+            foreach(explode(',', trim($node->path, ',')) as $storyID)
+            {
+                if(!isset($allStories[$storyID])) continue;
+                $story = $allStories[$storyID];
+
+                unset($allStories[$storyID]);
+                if($storyType == 'requirement' && $story->type == 'epic') continue;
+                if($storyType == 'story' && ($story->type == 'requirement' || $story->type == 'epic')) continue;
+                if(!isset($storyGrade[$story->type][$story->grade])) continue;
+
+                $colName = "{$story->type}_{$story->grade}";
+                $story->storyType = $story->type;
+                unset($story->type);
+
+                $items[$laneName][$colName][] = $story;
+            }
+            $items[$laneName]['project']   = array_values(zget($projects,   $node->id, array()));
+            $items[$laneName]['execution'] = array_values(zget($executions, $node->id, array()));
+            $items[$laneName]['design']    = array_values(zget($designs,    $node->id, array()));
+            $items[$laneName]['commit']    = array_values(zget($commits,    $node->id, array()));
+            $items[$laneName]['task']      = array_values(zget($tasks,      $node->id, array()));
+            $items[$laneName]['bug']       = array_values(zget($bugs,       $node->id, array()));
+            $items[$laneName]['case']      = array_values(zget($cases,      $node->id, array()));
+        }
+
+        return $items;
+    }
+
+    /**
+     * 根据需求ID列表获取关联的项目和执行
+     * Get linked projects and executions by story id list.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getProjectsForTrack(array $storyIdList): array
+    {
+        $projectStoryList = array();
+        $stmt = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->query();
+        while($projectStory = $stmt->fetch()) $projectStoryList[$projectStory->project][$projectStory->story] = $projectStory->story;
+
+        $projects   = array();
+        $executions = array();
+        $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
+        $today      = helper::today();
+        $storyGroup = array();
+        while($project = $stmt->fetch())
+        {
+            $delay = 0;
+            if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended') $delay = helper::diffDate($today, $project->end);
+
+            $project->delay = $delay > 0;
+            $projectType = $project->projectType == 'project' ? 'project' : 'execution';
+            foreach($projectStoryList[$project->id] as $storyID) $storyGroup[$projectType][$storyID][$project->id] = $project;
+        }
+
+        return $storyGroup;
+    }
+
+    /**
+     * 根据需求ID列表获取关联的设计和提交
+     * Get linked designs and commits by story id list.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getDesignsForTrack(array $storyIdList): array
+    {
+        $storyGroup   = array('design' => array(), 'commit' => array());
+        $stmt         = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->query();
+        $commitIdList = '';
+        $commitGroup  = array();
+        while($design = $stmt->fetch())
+        {
+            $storyGroup['design'][$design->story][$design->id] = $design;
+            $commitIdList .= $design->commit ? "{$design->commit}," : '';
+        }
+
+        $commits = $this->dao->select('id,repo,revision,committer,comment as title')->from(TABLE_REPOHISTORY)->where('id')->in(array_unique(explode(',', $commitIdList)))->fetchAll('id');
+        foreach($storyGroup['design'] as $storyID => $designs)
+        {
+            foreach($designs as $designID => $design)
+            {
+                if(empty($design->commit)) continue;
+                foreach(explode(',', $design->commit) as $commitID)
+                {
+                    $commit = zget($commits, $commitID, '');
+                    if(empty($commit)) continue;
+
+                    $commit->project = $design->project;
+                    $storyGroup['commit'][$storyID][$commitID] = $commit;
+                }
+            }
+        }
+
+        return $storyGroup;
+    }
+
+    /**
+     * 根据需求ID列表获取关联的任务
+     * Get linked tasks by story id list.
+     *
+     * @param  array  $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getTasksForTrack(array $storyIdList): array
+    {
+        $stmt  = $this->dao->select('id,project,execution,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution')->query();
+        $tasks = array();
+        while($task = $stmt->fetch())
+        {
+            $task->progress = 0;
+            if($task->consumed + $task->left) $task->progress = round(($task->consumed / ($task->consumed + $task->left)) * 100, 2);
+
+            if($task->parent > 0 && isset($tasks[$task->parent]))
+            {
+                $tasks[$task->parent]->children[$task->id] = $task;
+            }
+            else
+            {
+                $tasks[$task->id] = $task;
+            }
+        }
+
+        $taskGroup = array();
+        foreach($tasks as $task)
+        {
+            $children = !empty($task->children) ? $task->children : array();
+            unset($task->children);
+
+            $taskGroup[$task->story][$task->id] = $task;
+            foreach($children as $subTask) $taskGroup[$subTask->story][$subTask->id] = $subTask;
+        }
+        return $taskGroup;
     }
 }

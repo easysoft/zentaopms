@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getDataOfStoriesPerOpenedBy();
+timeout=0
 cid=0
 
 - 按照创建人分组，获取分组后的需求数量 @4

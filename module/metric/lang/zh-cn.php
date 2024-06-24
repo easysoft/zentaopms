@@ -257,6 +257,7 @@ $lang->metric->objectList['project']       = "项目";
 $lang->metric->objectList['productplan']   = "计划";
 $lang->metric->objectList['execution']     = "执行";
 $lang->metric->objectList['release']       = "发布";
+$lang->metric->objectList['epic']          = $lang->ERCommon;
 $lang->metric->objectList['story']         = $lang->SRCommon;
 $lang->metric->objectList['requirement']   = $lang->URCommon;
 $lang->metric->objectList['task']          = "任务";

@@ -319,6 +319,24 @@ class dataset
     }
 
     /**
+     * 获取所有需求数据，不区分类型。
+     * Get all story list.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllStories($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0);
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取执行的研发需求数据。
      * Get story list, with execution and type is story.
      *
@@ -347,6 +365,33 @@ class dataset
     }
 
     /**
+     * 获取执行的所有需求数据。
+     * Get story list, with execution story.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllStoriesWithExecution($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.story')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t4.project=t5.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
+            ->andWhere('t4.deleted')->eq(0) // 已删除的执行
+            ->andWhere('t4.type')->in('sprint,stage,kanban')
+            ->andWhere('t4.multiple')->eq('1')
+            ->andWhere('t5.deleted')->eq(0); // 已删除的项目
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取项目的研发需求数据。
      * Get story list, with project and type is story.
      *
@@ -356,6 +401,52 @@ class dataset
      */
     public function getDevStoriesWithProject($fieldList)
     {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.story')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('story')
+            ->andWhere('t4.deleted')->eq('0')
+            ->andWhere('t1.isParent')->eq('0')
+            ->andWhere('t4.type')->eq('project');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
+     * 获取项目的业务需求数据。
+     * Get epic list with project.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getEpicWithProject($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('epic')
+            ->andWhere('t3.type')->eq('project');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
+     * 获取项目的所有需求数据。
+     * Get story list, with project story.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllStoriesWithProject($fieldList)
+    {
         $stmt = $this->dao->select($fieldList)
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -363,7 +454,6 @@ class dataset
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.type')->eq('story')
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->eq('project');
 
@@ -380,19 +470,17 @@ class dataset
      */
     public function getDevStories($fieldList)
     {
-        $caseQuery = $this->dao->select('story, count(DISTINCT id) as case_count')
-            ->from(TABLE_CASE)
-            ->groupBy('story')
-            ->get();
+        $caseQuery = $this->dao->select('story, COUNT(DISTINCT id) AS case_count')->from(TABLE_CASE)->groupBy('story')->get();
 
         $stmt = $this->dao->select($fieldList)
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin("($caseQuery)")->alias('t3')->on('t1.id=t3.story')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t2.shadow')->eq(0);
+            ->andWhere('t1.isParent')->eq('0')
+            ->andWhere('t2.shadow')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
     }
@@ -407,12 +495,32 @@ class dataset
      */
     public function getAllDevStories($fieldList)
     {
-        $stmt =  $this->dao->select($fieldList)
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('story')
+            ->andWhere('t1.isParent')->eq('0');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
+     * 获取所有业务需求数据，不过滤影子产品。
+     * Get all epics, don't filter shadow product.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllEpics($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.type')->eq('story');
+            ->andWhere('t1.type')->eq('epic');
 
         return $this->defaultWhere($stmt, 't1');
     }

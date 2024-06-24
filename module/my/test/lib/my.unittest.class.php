@@ -165,6 +165,25 @@ class myTest
     }
 
     /**
+     * 测试通过搜索获取业务需求。
+     * Test get requirements by search.
+     *
+     * @param  int          $queryID
+     * @param  string       $type
+     * @param  string       $orderBy
+     * @access public
+     * @return string|array
+     */
+    public function getEpicsBySearchTest(int $queryID, string $type, string $orderBy): string|array
+    {
+        $objects = $this->objectModel->getEpicsBySearch($queryID, $type, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', array_keys($objects));
+    }
+
+    /**
      * 测试通过搜索获取用户需求。
      * Test get requirements by search.
      *

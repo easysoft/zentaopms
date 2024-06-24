@@ -4,13 +4,14 @@
 /**
 
 title=测试 storyModel->setStage();
+timeout=0
 cid=0
 
 - 不传入需求; @0
-- 传入已经分解任务的需求，检查需求阶段。属性stage @testing
+- 传入已经分解任务的需求，检查需求阶段。属性stage @planning
 - 传入已关闭的需求，检查需求阶段。属性stage @closed
 - 传入只关联的计划的需求，检查需求阶段。属性stage @planned
-- 传入只关联的项目的需求，检查需求阶段。属性stage @projected
+- 传入只关联的项目的需求，检查需求阶段。属性stage @planning
 - 传入关联多分支，并分解成任务的需求，检查需求阶段。属性stage @testing
 - 传入关联多分支，并分解成任务的需求，检查分支 0 的需求阶段。属性stage @testing
 - 传入关联多分支，并分解成任务的需求，检查分支 1 的需求阶段。属性stage @tested
@@ -47,6 +48,7 @@ $story = zenData('story');
 $story->product->range('1,2,2,1,1');
 $story->plan->range('1,0,1,1,1');
 $story->branch->range('0,0,1,0,0');
+$story->stage->range('defining,testing,closed,planned,planning');
 $story->gen(5);
 
 $task = zenData('task');
@@ -71,10 +73,10 @@ $storyModel = $tester->loadModel('story');
 r($storyModel->setStage(0)) && p() && e('0'); //不传入需求;
 
 $storyTest = new storyTest();
-r($storyTest->setStageTest(1)) && p('stage') && e('testing');   //传入已经分解任务的需求，检查需求阶段。
-r($storyTest->setStageTest(3)) && p('stage') && e('closed');    //传入已关闭的需求，检查需求阶段。
-r($storyTest->setStageTest(4)) && p('stage') && e('planned');   //传入只关联的计划的需求，检查需求阶段。
-r($storyTest->setStageTest(5)) && p('stage') && e('projected'); //传入只关联的项目的需求，检查需求阶段。
+r($storyTest->setStageTest(1)) && p('stage') && e('planning'); //传入已经分解任务的需求，检查需求阶段。
+r($storyTest->setStageTest(3)) && p('stage') && e('closed');   //传入已关闭的需求，检查需求阶段。
+r($storyTest->setStageTest(4)) && p('stage') && e('planned');  //传入只关联的计划的需求，检查需求阶段。
+r($storyTest->setStageTest(5)) && p('stage') && e('planning'); //传入只关联的项目的需求，检查需求阶段。
 
 $story = $storyTest->setStageTest(2);
 r($story) && p('stage') && e('testing');             //传入关联多分支，并分解成任务的需求，检查需求阶段。

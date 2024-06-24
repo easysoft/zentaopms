@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getDataOfStoriesPerClosedReason();
+timeout=0
 cid=0
 
 - 按照需求关闭原因分组，获取分组后的需求数量 @7

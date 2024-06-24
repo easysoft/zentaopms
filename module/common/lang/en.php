@@ -224,7 +224,8 @@ $lang->metric->common       = 'Metric';
 $lang->report->common       = 'Report';
 $lang->system->common       = 'System';
 $lang->admin->common        = 'Admin';
-$lang->story->common        = 'Story';
+$lang->epic->common         = $lang->ERCommon;
+$lang->story->common        = $lang->SRCommon;
 $lang->task->common         = 'Task';
 $lang->bug->common          = 'Bug';
 $lang->testcase->common     = 'Testcase';
@@ -437,7 +438,8 @@ $lang->admin->cache       = 'Cache';
 
 $lang->convert->importJira = 'Import Jira';
 
-$lang->storyConcept = 'Story Concpet';
+$lang->storyConcept  = 'Story Concpet';
+$lang->defaultERName = 'Epic';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Search';
@@ -445,7 +447,9 @@ $lang->searchAB   = 'Search';
 /* Object list in search form. */
 $lang->searchObjects['all']         = 'All';
 $lang->searchObjects['bug']         = 'Bug';
-$lang->searchObjects['story']       = 'Story';
+$lang->searchObjects['story']       = $lang->SRCommon;
+if($config->enableER) $lang->searchObjects['epic']        = $lang->ERCommon;
+if($config->URAndSR)  $lang->searchObjects['requirement'] = $lang->URCommon;
 $lang->searchObjects['task']        = 'Task';
 $lang->searchObjects['testcase']    = 'Case';
 $lang->searchObjects['product']     = $lang->productCommon;

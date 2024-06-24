@@ -211,7 +211,7 @@ class executionZen extends execution
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $executionID);
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
-        $this->view->summary    = $this->loadModel('product')->summary($stories, $storyType);
+        $this->view->summary    = $this->loadModel('product')->summary($stories, 'all');
     }
 
     /**
@@ -257,10 +257,17 @@ class executionZen extends execution
             }
         }
 
+        $project = $this->loadModel('project')->fetchByID($execution->project);
+        if(!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $project->multiple) $project->storyType = 'story';
+
         $productPairs = $this->loadModel('product')->getProductPairsByProject($execution->id); // Get execution's product.
         if(empty($productID)) $productID = (int)key($productPairs);
 
         $this->assignModuleForStory($type, $param, $storyType, $execution, $productID);
+
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
 
         /* Assign. */
         $this->view->title             = $execution->name . $this->lang->hyphen . $this->lang->execution->story;
@@ -274,6 +281,10 @@ class executionZen extends execution
         $this->view->users             = $this->loadModel('user')->getPairs('noletter');
         $this->view->multiBranch       = $multiBranch;
         $this->view->execution         = $execution;
+        $this->view->gradeMenu         = $this->loadModel('story')->getGradeMenu($storyType, $project);
+        $this->view->maxGradeGroup     = $this->story->getMaxGradeGroup();
+        $this->view->gradeGroup        = $gradeGroup;
+        $this->view->showGrades        = isset($this->config->execution->showGrades) ? $this->config->execution->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->branchPairs       = $this->loadModel('branch')->getPairs($productID, 'withClosed');
         $this->view->linkedTaskStories = $this->loadModel('story')->getIdListWithTask($execution->id);
@@ -362,6 +373,7 @@ class executionZen extends execution
         $this->view->allPlans     = $allPlans;
         $this->view->hiddenPlan   = $project->model !== 'scrum';
         $this->view->execution    = $execution;
+        $this->view->project      = $project;
         $this->view->canBeChanged = common::canModify('execution', $execution);
     }
 

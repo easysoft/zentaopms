@@ -715,28 +715,41 @@ class productModel extends model
 
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
-        $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
+        $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, (int)$projectID);
 
-        if($storyType == 'requirement')
+        $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
+
+        if($projectID || $storyType == 'all')
         {
-            /* Change for requirement story title. */
-            $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
-            $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
+            $project    = $this->loadModel('project')->fetchById($projectID);
+            $gradePairs = array();
+            $gradeList  = $this->loadModel('story')->getGradeList('');
+            $storyTypes = isset($project->storyType) ? $project->storyType : 'epic,story,requirement';
+            foreach($gradeList as $grade)
+            {
+                if(strpos($storyTypes, $grade->type) === false) continue;
+                $key = (string)$grade->type . (string)$grade->grade;
+                $gradePairs[$key] = $grade->name;
+            }
+            asort($gradePairs);
+            $this->lang->story->title = $this->lang->story->name;
+        }
+        elseif($storyType != 'story')
+        {
+            $replacement = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->ERCommon;
+
+            $this->lang->story->title        = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->title);
+            $this->lang->story->create       = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->create);
             $searchConfig['fields']['title'] = $this->lang->story->title;
-            unset($searchConfig['fields']['plan']);
-            unset($searchConfig['params']['plan']);
-            unset($searchConfig['fields']['stage']);
-            unset($searchConfig['params']['stage']);
+        }
 
-            if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
-        }
-        else
-        {
-            /* Get product plan data. */
-            $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
-            $branchParam   = ($this->app->tab == 'project' && empty($productID)) ? '' : $branch;
-            $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam);
-        }
+        $searchConfig['params']['grade']['values'] = $gradePairs;
+        if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+
+        /* Get product plan data. */
+        $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
+        $branchParam   = ($this->app->tab == 'project' && empty($productID)) ? '' : $branch;
+        $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam);
 
         /* Get branch data. */
         if($productID)
@@ -1187,44 +1200,48 @@ class productModel extends model
         $storyIdList   = array();
 
         $rateCount = 0;
-        $allCount  = 0;
+        $total     = 0;
         $SRTotal   = 0;
+        $URTotal   = 0;
+        $ERTotal   = 0;
+
+        $idList = array();
+        foreach($stories as $story) $idList[] = $story->id;
+        $childTypes = $this->dao->select('parent, type')->from(TABLE_STORY)->where('parent')->in($idList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'type');
         foreach($stories as $story)
         {
-            if($storyType == 'requirement' && $story->type == 'story') $SRTotal += 1;
-            if(!empty($story->type) && $story->type != $storyType) continue;
+            $total ++;
+            if($story->type == 'story')       $SRTotal += 1;
+            if($story->type == 'requirement') $URTotal += 1;
+            if($story->type == 'epic')        $ERTotal += 1;
 
-            $totalEstimate += $story->estimate;
-            $allCount ++;
+            /* 产品软需列表仅统计叶子需求的规模。
+               如果是产品用需、业需列表，则追加统计子需求类型和父需求不一样的父需求规模。
+               如果是项目需求列表，则只统计叶子需求的规模。
+            */
+            $isLeafStory = !isset($childTypes[$story->id]) || (isset($childTypes[$story->id]) && !isset($childTypes[$story->id][$story->type]));
+            if(($storyType == $story->type && $isLeafStory) || ($storyType == 'all' && $story->isParent == '0'))
+            {
+                $totalEstimate += $story->estimate;
+                $story->needSummaryEstimate = true;
+            }
 
-            if($story->parent >= 0 && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
+            if($story->type != 'story') continue;
+            if($story->isParent == '0' && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
             {
                 $storyIdList[] = $story->id;
                 $rateCount ++;
-            }
-
-            /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
-            if(empty($story->children)) continue;
-            foreach($story->children as $child)
-            {
-                if($storyType == 'requirement' && $child->type == 'story') $SRTotal += 1;
-                if($child->type != $storyType) continue;
-
-                $allCount ++;
-                if($child->status != 'closed' || in_array($child->closedReason, array('done', 'postponed')))
-                {
-                    $storyIdList[] = $child->id;
-                    $rateCount ++;
-                }
             }
         }
 
         $casesCount = count($this->productTao->filterNoCasesStory($storyIdList));
         $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 4);
 
-        if($storyType == 'story')         return sprintf($this->lang->product->storySummary, $allCount, $totalEstimate, $rate * 100 . "%");
-        if($this->config->vision == 'or') return sprintf($this->lang->product->requirementSummary, $allCount, $totalEstimate);
-        return sprintf($this->lang->product->requirementSummary, $allCount, $SRTotal, $totalEstimate);
+        if($storyType == 'all')         return sprintf($this->lang->product->allSummary, $total, $totalEstimate, $rate * 100 . "%");
+        if($storyType == 'epic')        return sprintf($this->lang->product->epicSummary, $ERTotal, $totalEstimate);
+        if($storyType == 'requirement') return sprintf($this->lang->product->requirementSummary, $URTotal, $totalEstimate);
+
+        return sprintf($this->lang->product->storySummary, $SRTotal, $totalEstimate, $rate * 100 . "%");
     }
 
     /**
@@ -1477,9 +1494,11 @@ class productModel extends model
 
         if($this->config->vision == 'or') return $product;
 
-        $product->testCaseCoverage   = $product->coverage;
-        $product->storyCompleteRate  = $product->totalStories == 0 ? 0 : round($product->finishedStories / $product->totalStories, 3) * 100;
-        $product->bugFixedRate       = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
+        $product->testCaseCoverage        = $product->coverage;
+        $product->epicCompleteRate        = $product->totalEpics == 0 ? 0 : round($product->finishedEpics / $product->totalEpics, 3) * 100;
+        $product->requirementCompleteRate = $product->totalRequirements == 0 ? 0 : round($product->finishedRequirements / $product->totalRequirements, 3) * 100;
+        $product->storyCompleteRate       = $product->totalStories == 0 ? 0 : round($product->finishedStories / $product->totalStories, 3) * 100;
+        $product->bugFixedRate            = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
 
         return $product;
     }

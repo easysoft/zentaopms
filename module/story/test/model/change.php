@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->change();
+timeout=0
 cid=0
 
 - 查看变更后需求数据。

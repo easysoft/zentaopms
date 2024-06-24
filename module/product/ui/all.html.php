@@ -140,6 +140,7 @@ dtable
     set::checkable($canBatchEdit),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::orderBy($orderBy),
+    set::plugins(array('header-group')),
     $canBatchEdit ? set::footToolbar
     (
         item

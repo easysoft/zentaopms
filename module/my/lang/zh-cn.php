@@ -41,6 +41,7 @@ $lang->my->noData          = "暂时没有%s。";
 $lang->my->storyChanged    = "需求变更";
 $lang->my->hours           = '工时/天';
 $lang->my->uploadAvatar    = '更换头像';
+$lang->my->epic            = "我的{$lang->ERCommon}";
 $lang->my->requirement     = "我的{$lang->URCommon}";
 $lang->my->testtask        = '我的测试单';
 $lang->my->testcase        = '我的用例';
@@ -150,10 +151,13 @@ $lang->my->moreSelects['todo']['more']['thisYear']        = '本年';
 $lang->my->moreSelects['todo']['more']['assignedToOther'] = '指派他人';
 $lang->my->moreSelects['todo']['more']['cycle']           = '周期';
 
-$lang->my->featureBar['audit']['all']      = '全部';
-$lang->my->featureBar['audit']['demand']   = '需求池需求';
-$lang->my->featureBar['audit']['story']    = '需求';
-$lang->my->featureBar['audit']['testcase'] = '用例';
+$lang->my->featureBar['audit']['all']         = '全部';
+$lang->my->featureBar['audit']['demand']      = '需求池需求';
+$lang->my->featureBar['audit']['story']       = $lang->SRCommon;
+$lang->my->featureBar['audit']['requirement'] = $lang->URCommon;
+$lang->my->featureBar['audit']['epic']        = $lang->ERCommon;
+$lang->my->featureBar['audit']['story']       = '需求';
+$lang->my->featureBar['audit']['testcase']    = '用例';
 if(in_array($config->edition, array('max', 'ipd')) and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
 if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = '反馈';
 if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = '办公';
@@ -179,6 +183,9 @@ $lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToM
 $lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testtask']['assignedTo'] = '由我负责';
 
+$lang->my->featureBar['work']['epic'] = $lang->my->featureBar['work']['task'];
+$lang->my->featureBar['work']['epic']['reviewBy'] = '待我评审';
+
 $lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
 $lang->my->featureBar['work']['requirement']['reviewBy'] = '待我评审';
 
@@ -190,6 +197,11 @@ $lang->my->featureBar['contribute']['task']['finishedBy'] = '由我完成';
 $lang->my->featureBar['contribute']['task']['closedBy']   = '由我关闭';
 $lang->my->featureBar['contribute']['task']['canceledBy'] = '由我取消';
 $lang->my->featureBar['contribute']['task']['assignedBy'] = '由我指派';
+
+$lang->my->featureBar['contribute']['epic']['openedBy']   = '由我创建';
+$lang->my->featureBar['contribute']['epic']['reviewedBy'] = '我评审过';
+$lang->my->featureBar['contribute']['epic']['closedBy']   = '由我关闭';
+$lang->my->featureBar['contribute']['epic']['assignedBy'] = '由我指派';
 
 $lang->my->featureBar['contribute']['requirement']['openedBy']   = '由我创建';
 $lang->my->featureBar['contribute']['requirement']['reviewedBy'] = '我评审过';

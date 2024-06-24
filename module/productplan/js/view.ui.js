@@ -12,7 +12,8 @@ window.renderStoryCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         let html = '';
-        if(story.parent > 0) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        let gradeLabel = gradeGroup[story.type][story.grade];
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(html) result.unshift({html});
     }
 
@@ -60,27 +61,30 @@ window.onSearchLinks = function(type, result)
  * @access public
  * @return object
  */
-window.setStatistics = function(element, checkedIdList)
+window.setStatistics = function(element, checkedIdList, pageSummary)
 {
-    const checkedTotal = checkedIdList.length;
-    if(checkedTotal == 0) return {html: summary};
+    if(checkedIdList == undefined || checkedIdList.length == 0) return {html: pageSummary};
 
     let checkedEstimate = 0;
     let checkedCase     = 0;
     let total           = 0;
 
-    checkedIdList.forEach((rowID) => {
-        const story  = element.getRowInfo(rowID);
-        total += 1;
-        if(story)
+    const rows = element.layout.allRows;
+    rows.forEach((row) => {
+        if(checkedIdList.includes(row.id))
         {
-            checkedEstimate += parseFloat(story.data.estimate);
-            if(cases[rowID]) checkedCase += 1;
+            const story = element.getRowInfo(row.id);
+            if(story.data.type == 'story')
+            {
+                total += 1;
+                checkedEstimate += parseFloat(story.data.estimate);
+                if(cases[row.id]) checkedCase += 1;
+            }
         }
-    })
+    });
 
-    const rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
-    return {html: checkedSummary.replace('%total%', checkedTotal)
+    const rate = Math.round(checkedCase / total * 10000) / 100 + '' + '%';
+    return {html: checkedSummary.replace('%total%', total)
         .replace('%estimate%', checkedEstimate.toFixed(1))
         .replace('%rate%', rate)};
 }

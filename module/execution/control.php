@@ -429,6 +429,8 @@ class execution extends control
     {
         /* Load these models. */
         $this->loadModel('story');
+        $this->loadModel('requirement');
+        $this->loadModel('epic');
         $this->loadModel('product');
 
         /* Change for requirement story title. */
@@ -455,6 +457,7 @@ class execution extends control
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        $project     = $this->loadModel('project')->fetchById($execution->project);
 
         /* Build the search form. */
         $products  = $this->product->getProducts($executionID);
@@ -466,7 +469,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, (string)$param, $storyType, '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, (string)$param, $project->storyType, '', $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
@@ -475,6 +478,7 @@ class execution extends control
         $this->executionZen->assignCountForStory($executionID, $stories, $storyType);
         $this->executionZen->assignRelationForStory($execution, $products, $productID, $type, $storyType, $param, $orderBy, $pager);
 
+        $this->view->project = $project;
         $this->display();
     }
 
@@ -1012,7 +1016,7 @@ class execution extends control
         if(!empty($_POST))
         {
             /* Filter empty plans. */
-            if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
+            if(isset($_POST['attribute']) and $_POST['attribute'] == 'review') unset($_POST['plans']);
             if(!empty($_POST['plans']))
             {
                 foreach($_POST['plans'] as $key => $planItem) $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
@@ -1656,6 +1660,8 @@ class execution extends control
     public function kanban(int $executionID, string $browseType = 'all', string $orderBy = 'id_asc', string $groupBy = 'default')
     {
         $this->app->loadLang('bug');
+        $this->app->loadLang('epic');
+        $this->app->loadLang('requirement');
         $this->app->loadLang('kanban');
 
         if($this->config->vision != 'lite') $this->lang->execution->menu = new stdclass();
@@ -1718,6 +1724,8 @@ class execution extends control
     {
         if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return $this->execution->accessDenied();
         /* Load model and language. */
+        $this->app->loadLang('epic');
+        $this->app->loadLang('requirement');
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->loadModel('kanban');
@@ -1744,12 +1752,12 @@ class execution extends control
         $this->session->set('execLaneType', $browseType);
 
         /* Get kanban data. */
-        $orderBy     = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
-        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
+        $orderBy = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
+        list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType);
-            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
+            list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
 
         /* Show lanes of the attribute: no story and bug in request, no bug in design. */
@@ -1765,6 +1773,7 @@ class execution extends control
         $this->view->browseType   = $browseType;
         $this->view->features     = $features;
         $this->view->kanbanGroup  = $kanbanGroup;
+        $this->view->links        = $links;
         $this->view->groupBy      = $groupBy;
 
         $this->display();
@@ -1895,15 +1904,17 @@ class execution extends control
 
         $execution = $this->execution->getById($executionID);
         $project   = $this->project->getById($execution->project);
-        if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
 
+        if($execution->lifetime == 'ops') unset($this->lang->execution->treeLevel['story']);
         if($this->app->tab == 'project') $this->view->projectID = $execution->project;
+
+        $gradeGroup = $this->loadModel('story')->getGradeGroup();
 
         $this->view->title       = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
-        $this->view->tree        = $this->execution->buildTree($tree, (bool)$project->hasProduct);
+        $this->view->tree        = $this->execution->buildTree($tree, (bool)$project->hasProduct, $gradeGroup);
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->display();
     }
@@ -2228,7 +2239,7 @@ class execution extends control
         $object = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
 
         $browseLink = $this->createLink('execution', 'story', "executionID=$objectID&storyType=$storyType");
-        if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID&productID=0&branch=0&browseType=&param=0&storyType=$storyType");
+        if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
 
         if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
 
@@ -2277,29 +2288,21 @@ class execution extends control
             }
         }
 
-        if($storyType == 'requirement')
-        {
-            $this->app->loadLang('projectstory');
-            $this->lang->story->title               = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
-            $this->lang->projectstory->whyNoStories = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->whyNoStories);
-            $this->lang->execution->linkStory       = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->linkStory);
-            if(isset($this->config->product->search['fields']['stage'])) unset($this->config->product->search['fields']['stage']);
-        }
-
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recPerPage=$recPerPage&pageID=$pageID&extra=$extra&storyType=$storyType");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $queryID      = ($browseType == 'bySearch') ? (int)$param : 0;
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
-        if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
-        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', $storyType, $orderBy, false, '', null);
-        $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
+        $project   = (strpos('sprint,stage,kanban', $object->type) !== false) ? $this->loadModel('project')->getByID($object->project) : $object;
+        $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? $project->storyType : 'story';
 
+        if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
+        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
+        $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
         foreach($allStories as $id => $story)
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
-            if($story->parent < 0) unset($allStories[$id]);
 
             if(!isset($modules[$story->module]))
             {
@@ -2311,13 +2314,14 @@ class execution extends control
             $story->estimate = $story->estimate . $this->config->hourUnit;
         }
 
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Set the pager. */
         $this->app->loadClass('pager', true);
         $pager      = new pager(count($allStories), $recPerPage, $pageID);
         $allStories = array_chunk($allStories, $pager->recPerPage);
-
-        $project = $object;
-        if(strpos('sprint,stage,kanban', $object->type) !== false) $project = $this->loadModel('project')->getByID($object->project);
 
         $productPairs = array();
         foreach($products as $id => $product) $productPairs[$id] = $product->name;
@@ -2328,6 +2332,8 @@ class execution extends control
         $this->view->extra        = $extra;
         $this->view->object       = $object;
         $this->view->orderBy      = $orderBy;
+        $this->view->gradeGroup   = $gradeGroup;
+        $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->productPairs = $productPairs;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;
@@ -2338,7 +2344,6 @@ class execution extends control
         $this->view->branchGroups = $branchGroups;
         $this->view->browseLink   = $browseLink;
 
-        /* NOT used in zin. */
         $this->view->project      = $project;
         $this->view->executionID  = $object->id;
         $this->view->projectID    = $object->id;
@@ -3045,6 +3050,9 @@ class execution extends control
      */
     public function treeStory(int $storyID, int $version = 0)
     {
+        $this->loadModel('requirement');
+        $this->loadModel('epic');
+
         $story   = $this->loadModel('story')->getById($storyID, $version, true);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, `type`, shadow')->fetch();
 
@@ -3150,7 +3158,14 @@ class execution extends control
         $enterTime      = date('Y-m-d H:i:s', $enterTime);
         if(in_array(true, array(empty($lastEditedTime), strtotime($lastEditedTime) < 0, $lastEditedTime > $enterTime, $groupBy != 'default', !empty($searchValue))))
         {
-            $kanbanGroup = $from == 'taskkanban' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
+            if($from == 'taskkanban')
+            {
+                list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy);
+            }
+            else
+            {
+                $kanbanGroup = $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
+            }
             return print(json_encode($kanbanGroup));
         }
     }

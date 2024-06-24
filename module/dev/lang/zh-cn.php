@@ -25,6 +25,7 @@ $lang->dev->language    = '语言：%s';
 $lang->dev->default     = '默认值';
 $lang->dev->currentLang = '当前语言';
 $lang->dev->change      = '修改值';
+$lang->dev->ER          = '业务需求';
 $lang->dev->UR          = '用户需求';
 $lang->dev->SR          = '软件需求';
 $lang->dev->branch      = '平台/分支';

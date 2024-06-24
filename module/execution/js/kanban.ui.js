@@ -8,6 +8,7 @@ window.getLane = function(lane)
 window.getCol = function(col)
 {
     /* 计算WIP。*/
+    if(ERURColumn.includes(col.type)) return;
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
     const cards = col.cards;
 
@@ -91,7 +92,7 @@ window.buildColActions = function(col)
     let actions = [];
 
     if(col.actionList && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(col.actionList && col.actionList.includes('setWIP')) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(col.actionList && col.actionList.includes('setWIP') && !ERURColumn.includes(col.type)) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }
@@ -139,7 +140,7 @@ window.getItem = function(info)
     const avatar = renderAvatar(info.item);
 
     info.item.titleAttrs = {};
-    if(info.item.cardType == 'story')
+    if(['story', 'parentStory'].includes(info.item.cardType))
     {
         info.item.icon = 'product';
         if(priv.canViewStory)
@@ -208,9 +209,14 @@ window.getItem = function(info)
 window.renderAvatar = function(item)
 {
     let assignLink = '';
-    if(item.cardType == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'bug' && priv.canAssignBug) assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'task' && priv.canAssignTask) assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
+    if(item.cardType == 'parentStory')
+    {
+        return '<div class="avatar child-item rounded-full size-xs ml-1" title="' + storyLang.children + '" style="background: #ccc; color: #fff; cursor: pointer;"><i class="icon icon-split"></i></div>';
+    }
+
+    if(item.cardType == 'story' && priv.canAssignStory)             assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'bug' && priv.canAssignBug)                 assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'task' && priv.canAssignTask)               assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
 
     if(item.assignedTo.length == 0)
     {
@@ -227,9 +233,10 @@ window.renderAvatar = function(item)
 window.getItemActions = function(item)
 {
     let actions = [];
-    if(item.cardType == 'story')     actions = buildStoryActions(item);
-    else if(item.cardType == 'bug')  actions = buildBugActions(item);
-    else if(item.cardType == 'task') actions = buildTaskActions(item);
+    if(item.cardType == 'story')            actions = buildStoryActions(item);
+    else if(item.cardType == 'parentStory') actions = buildParentStoryActions(item);
+    else if(item.cardType == 'bug')         actions = buildBugActions(item);
+    else if(item.cardType == 'task')        actions = buildTaskActions(item);
 
     if(actions.length)
     {
@@ -240,6 +247,19 @@ window.getItemActions = function(item)
             items: actions
         }];
     }
+}
+
+window.buildParentStoryActions = function(item)
+{
+    let actions = [];
+
+    if(priv.canEditStory) actions.push({text: storyLang.edit, icon: 'edit', url: $.createLink('story', 'edit', 'storyID=' + item.id + '&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canChangeStory && item.status == 'active') actions.push({text: storyLang.change, icon: 'change', url: $.createLink('story', 'change', 'storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canActivateStory && item.status == 'closed') actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('story', 'activate', 'storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canUnlinkStory) actions.push({text: executionLang.unlinkStory, icon: 'unlink', url: $.createLink('execution', 'unlinkStory', 'executionID=' + executionID + '&storyID=' + item.id + '&confirm=no&from=' + '&laneID=' + item.lane + '&columnID=' + item.column), 'innerClass' : 'ajax-submit'});
+    if(priv.canDeleteStory) actions.push({text: storyLang.delete, icon: 'trash', url: $.createLink('story', 'delete', 'storyID=' + item.id), 'innerClass': 'ajax-submit'});
+
+    return actions;
 }
 
 window.buildStoryActions = function(item)
@@ -345,10 +365,11 @@ if(!window.kanbanDropRules)
         {
             backlog: ['ready', 'backlog'],
             ready: ['backlog', 'ready'],
-            tested: ['verified'],
-            verified: ['tested', 'released'],
+            tested: ['verified', 'rejected'],
+            verified: ['tested', 'pending', 'released'],
+            pending: ['verified', 'released'],
             released: ['verified', 'closed'],
-            closed: ['released'],
+            closed: ['released']
         },
         bug:
         {

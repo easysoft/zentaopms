@@ -49,7 +49,7 @@ if($module == 'project' && $field == 'unitList')
     );
     $actionWidth = 'w-full';
 }
-elseif(in_array($module, array('story', 'demand')) && $field == 'reviewRules')
+elseif(in_array($module, array('story', 'requirement', 'epic', 'demand')) && $field == 'reviewRules')
 {
     $formItems[] = formGroup
     (
@@ -71,7 +71,24 @@ elseif(in_array($module, array('story', 'demand')) && $field == 'reviewRules')
         set::items($users)
     );
 }
-elseif(in_array($module, array('story', 'demand', 'testcase')) && $field == 'review')
+elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'gradeRule')
+{
+    $formItems[] = formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->custom->gradeRule),
+        set::name('gradeRule'),
+        set::value($gradeRule),
+        set::control('radioListInline'),
+        set::items($lang->custom->gradeRuleList)
+    );
+    $formItems[] = div
+    (
+        setClass('gradeRuleNotice'),
+        div($lang->custom->notice->gradeRule)
+    );
+}
+elseif(in_array($module, array('epic', 'story', 'requirement', 'demand', 'testcase')) && $field == 'review')
 {
     $formItems[] = formGroup
     (
@@ -84,7 +101,7 @@ elseif(in_array($module, array('story', 'demand', 'testcase')) && $field == 'rev
         on::change('changeReview')
     );
 
-    if($module == 'story' || $module == 'demand')
+    if(in_array($module, array('story', 'requirement', 'epic', 'demand')))
     {
         $formItems[] = formRow
         (
@@ -540,35 +557,103 @@ else
     }
 }
 
-div
-(
-    setID('mainContent'),
-    setClass('row has-sidebar-left'),
-    isset($sidebarMenu) ? $sidebarMenu : null,
-    formPanel
-    (
-        set::formID('settingForm'),
-        set::headingClass('justify-start'),
-        setClass('flex-auto'),
-        setClass(!empty($sidebarMenu) ? 'ml-0.5' : null),
-        set::actionsClass($actionWidth),
-        set::actions($formActions),
-        div
-        (
-            setClass('flex items-center'),
-            span
-            (
-                setClass('text-md font-bold'),
-                $lang->custom->$module->fields[$field]
-            ),
-            span
-            (
-                setClass('ml-2'),
-                $headingTips
+if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
+{
+    jsVar('enableLang', $lang->custom->gradeStatusList['enable']);
+    $tbody = array();
+    foreach($storyGrades as $grade)
+    {
+        $items   = array();
+        $hidden  = ($grade->grade == 1) ? 'hidden' : '';
+        $hideAdd = (end($storyGrades) == $grade) ? '' : 'hidden';
+        $items[] = array('icon' => 'plus',  'class' => "btn ghost btn-add-grade $hideAdd");
+        if($grade->status == 'enable' && common::hasPriv('custom', 'closeGrade'))     $items[] = array('icon' => 'off',   'class' => "btn ghost btn-close ajax-submit $hidden", 'url' => inlink('closeGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->closeGrade);
+        if($grade->status == 'disable' && common::hasPriv('custom', 'activateGrade')) $items[] = array('icon' => 'magic', 'class' => "btn ghost btn-active ajax-submit", 'url' => inlink('activateGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->activateGrade);
+        if(common::hasPriv('custom', 'deleteGrade')) $items[] = array('icon' => 'trash', 'class' => "btn ghost btn-delete-grade ajax-submit $hidden", 'url' => inlink('deleteGrade', "type={$module}&id={$grade->grade}"));
+
+        $tbody[] = h::tr(
+            formHidden('grade[]', $grade->grade),
+            h::td($grade->grade, set::width('100px'), setClass('index')),
+            h::td(input(set::name('gradeName[]'), set::value($grade->name))),
+            h::td(zget($lang->custom->gradeStatusList, $grade->status), set::width('80px'), setClass('grade-status')),
+            h::td(
+                set::width('100px'),
+                btnGroup
+                (
+                    set::items($items)
+                )
             )
-        ),
-        $formItems
-    )
-);
+        );
+    }
+
+    div
+    (
+        setID('mainContent'),
+        setClass('row has-sidebar-left'),
+        $sidebarMenu,
+        formPanel(
+            set::title($lang->custom->story->fields['grade']),
+            setClass('ml-0.5'),
+            on::click('.btn-add-grade', 'addGrade'),
+            set::actions(array()),
+            h::table(
+                setID('gradeList'),
+                setClass('table table-form borderless'),
+                h::tr(
+                    h::td($lang->story->grade),
+                    h::td($lang->story->gradeName, setClass('required')),
+                    h::td($lang->story->statusAB),
+                    h::td($lang->actions)
+                ),
+                $tbody,
+                h::tfoot(
+                    h::tr(
+                        h::td(),
+                        h::td(
+                            btn(
+                                $lang->save,
+                                setClass('primary btn-wide'),
+                                set::btnType('submit')
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+}
+else
+{
+    div
+    (
+        setID('mainContent'),
+        setClass('row has-sidebar-left'),
+        isset($sidebarMenu) ? $sidebarMenu : null,
+        formPanel
+        (
+            set::formID('settingForm'),
+            set::headingClass('justify-start'),
+            setClass('flex-auto'),
+            setClass(!empty($sidebarMenu) ? 'ml-0.5' : null),
+            set::actionsClass($actionWidth),
+            set::actions($formActions),
+            div
+            (
+                setClass('flex items-center'),
+                span
+                (
+                    setClass('text-md font-bold'),
+                    $lang->custom->$module->fields[$field]
+                ),
+                span
+                (
+                    setClass('ml-2'),
+                    $headingTips
+                )
+            ),
+            $formItems
+        )
+    );
+}
 
 render();

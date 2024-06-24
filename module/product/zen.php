@@ -378,6 +378,12 @@ class productZen extends product
         $extendFieldList = $this->product->getFlowExtendFields();
         foreach($extendFieldList as $field => $name)
         {
+            if(str_contains(strtolower($fieldName), 'epic') && !$this->config->enableER) continue;
+            if(str_contains(strtolower($fieldName), 'requirement') && !$this->config->URAndSR) continue;
+
+            $fieldName = trim($fieldName);
+            $fieldPairs[$fieldName] = zget($productLang, $fieldName);
+
             $extCol = $config->product->dtable->extendField;
             $extCol['name']  = $field;
             $extCol['title'] = $name;
@@ -895,7 +901,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getStories(int $projectID, int $productID, string $branchID, int $moduleID, int $param, string $storyType, string $browseType, string $orderBy, object $pager): array
+    public function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -910,7 +916,7 @@ class productZen extends product
             $this->products = $this->product->getProducts($projectID, 'all', '', false);
 
             if($browseType == 'bybranch') $param = $branchID;
-            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, $storyType, '', $pager);
+            $stories = $this->story->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, 'all', '', $pager);
         }
         else
         {
@@ -1136,6 +1142,36 @@ class productZen extends product
     }
 
     /**
+     * 构建矩阵搜索表单。
+     * Build search form for track.
+     *
+     * @param  int         $productID
+     * @param  string      $branch
+     * @param  int         $projectID
+     * @param  string      $browseType
+     * @param  int         $param
+     * @param  string      $storyType
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchFormForTrack(int &$productID, string $branch, int $projectID, string $browseType, int $param, string $storyType): void
+    {
+        if($this->config->edition == 'ipd' && $storyType == 'story') unset($this->config->product->search['fields']['roadmap']);
+        if($this->config->edition == 'ipd' && $storyType == 'requirement')
+        {
+            $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+        }
+
+        /* Build search form. */
+        $actionURL = $this->createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=bySearch&param=myQueryID&storyType=$storyType");
+        if($this->app->rawModule == 'projectstory') $actionURL = $this->createLink('projectstory', 'track', "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=bySearch&param=myQueryID&storyType=$storyType");
+
+        $this->config->product->search['module'] = $this->app->rawModule . 'Track';
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
+        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $projectID);
+    }
+
+    /**
      * 获取需求的ID列表。
      * Get ID list of stories.
      *
@@ -1350,6 +1386,10 @@ class productZen extends product
         $projectProducts = $this->getProjectProductList($projectID, $isProjectStory);
         list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
 
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Set show module by config. */
         $showModule = empty($this->config->product->browse->showModule) ? 0 : $this->config->product->browse->showModule;
         if($isProjectStory) $showModule = empty($this->config->projectstory->story->showModule) ? 0 : $this->config->projectstory->story->showModule;
@@ -1360,6 +1400,11 @@ class productZen extends product
         $this->view->projectID       = $projectID;
         $this->view->project         = $project;
         $this->view->stories         = $stories;
+        $this->view->gradeGroup      = $gradeGroup;
+        $this->view->showGrade       = $this->config->edition == 'ipd';
+        $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType, $project);
+        $this->view->gradePairs      = $this->story->getGradePairs($storyType);
+        $this->view->maxGradeGroup   = $this->story->getMaxGradeGroup();
         $this->view->storyType       = $storyType;
         $this->view->browseType      = $browseType;
         $this->view->isProjectStory  = $isProjectStory;
@@ -1370,6 +1415,10 @@ class productZen extends product
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
 
+        $module = $this->app->tab == 'product' ? $storyType : $this->app->tab;
+        $this->view->showGrades = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
+
+        $storyType = $isProjectStory ? 'all' : $storyType;
         $this->view->summary    = $this->product->summary($stories, $storyType);
         $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, isset($projectProducts[$productID]) ? array(BRANCH_MAIN) + $projectProducts[$productID]->branches : (($branch === 'all' || empty($branch)) ? '' : $branch), 'unexpired,noclosed', true);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
@@ -1419,5 +1468,62 @@ class productZen extends product
         }
 
         return array_values($projectList);
+    }
+
+    /**
+     * 为跟踪矩阵设置自定义列。
+     * Get custom fields for track.
+     *
+     * @param  string    $storyType   epic|requirement|story
+     * @access protected
+     * @return array
+     */
+    public function getCustomFieldsForTrack(string $storyType): array
+    {
+        $listFields = array();
+        $listFields['requirement'] = $this->lang->URCommon;
+        $listFields['story']       = $this->lang->SRCommon;
+        $listFields['project']     = $this->lang->story->project;
+        $listFields['execution']   = $this->lang->story->execution;
+        $listFields['design']      = $this->lang->story->design;
+        $listFields['commit']      = $this->lang->story->repoCommit;
+        $listFields['task']        = $this->lang->story->tasks;
+        $listFields['bug']         = $this->lang->story->bugs;
+        $listFields['case']        = $this->lang->story->cases;
+
+        if($storyType == 'requirement' || $storyType == 'story') unset($listFields['requirement']);
+        if($storyType == 'story') unset($listFields['story']);
+
+        $showFields = !isset($this->config->product->trackFields->{$storyType}) ? array_keys($listFields) : explode(',', $this->config->product->trackFields->{$storyType});
+        return array('list' => $listFields, 'show' => array_merge(array($storyType), $showFields));
+    }
+
+    /**
+     * 获取根据矩阵可用的需求类型。
+     * Get active storyType list for track.
+     *
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @access protected
+     * @return array
+     */
+    public function getActiveStoryTypeForTrack(int $projectID = 0, int $productID = 0): array
+    {
+        $storyTypeList = $this->lang->story->typeList;
+
+        /* Check story type by linked story's type. */
+        if($this->app->rawModule == 'projectstory' && $projectID)
+        {
+            $stories = $this->getStories($projectID, $productID);
+            if($stories)
+            {
+                $havingType = array();
+                foreach($stories as $story) $havingType[$story->type] = $story->type;
+                if(!isset($havingType['epic'])) unset($storyTypeList['epic']);
+                if(!isset($havingType['epic']) && !isset($havingType['requirement'])) unset($storyTypeList['requirement']);
+            }
+        }
+
+        return $storyTypeList;
     }
 }

@@ -235,11 +235,16 @@ class productplanZen extends productplan
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
-        $this->view->plan    = $plan;
-        $this->view->actions = $this->loadModel('action')->getList('productplan', $plan->id);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->plans   = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
-        $this->view->modules = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        $this->view->plan       = $plan;
+        $this->view->gradeGroup = $gradeGroup;
+        $this->view->actions    = $this->loadModel('action')->getList('productplan', $plan->id);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->plans      = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($plan->product);
 
         if($this->app->getViewType() == 'json')
         {
@@ -267,6 +272,7 @@ class productplanZen extends productplan
         $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$plan->id&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
+        $this->config->product->search['fields']['title']             = $this->lang->productplan->storyTitle;
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values']    = $this->productplan->getPairs($plan->product, $plan->branch, 'withMainPlan', true);
         $this->config->product->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
@@ -288,6 +294,8 @@ class productplanZen extends productplan
             $this->config->product->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
 
+        unset($this->config->product->search['fields']['grade']);
+        unset($this->config->product->search['params']['grade']);
         unset($this->config->product->search['fields']['product']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
@@ -332,5 +340,77 @@ class productplanZen extends productplan
             $this->config->bug->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
+
+    /**
+     * 构造需求列表的摘要信息。
+     * Get the summary of product's stories.
+     *
+     * @param  array  $stories
+     * @access public
+     * @return string
+     */
+    public function buildViewSummary(array $stories): string
+    {
+        $totalEstimate = 0.0;
+        $storyIdList   = array();
+
+        $rateCount = 0;
+        $SRTotal   = 0;
+        $URTotal   = 0;
+        $ERTotal   = 0;
+
+        foreach($stories as $story)
+        {
+            if($story->type == 'story')       $SRTotal += 1;
+            if($story->type == 'requirement') $URTotal += 1;
+            if($story->type == 'epic')        $ERTotal += 1;
+
+            if($story->isParent == '0') $totalEstimate += $story->estimate;
+
+            if($story->type != 'story') continue;
+            if($story->isParent == '0' && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
+            {
+                $storyIdList[] = $story->id;
+                $rateCount ++;
+            }
+        }
+
+        $casesCount = count($this->loadModel('product')->filterNoCasesStory($storyIdList));
+        $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
+
+        return sprintf($this->lang->productplan->storySummary, $ERTotal, $URTotal, $SRTotal, $totalEstimate, $rate * 100 . "%");
+    }
+
+    /**
+     * 构造计划详情页面的操作菜单。
+     * Build operate menu for plan detail page.
+     *
+     * @param  object $plan
+     * @access public
+     * @return array
+     */
+    public function buildViewActions(object $plan): array
+    {
+        $params = "planID=$plan->id";
+
+        $canEdit        = common::hasPriv('productplan', 'edit');
+        $canStart       = common::hasPriv('productplan', 'start')    && $this->productplan->isClickable($plan, 'start');
+        $canFinish      = common::hasPriv('productplan', 'finish')   && $this->productplan->isClickable($plan, 'finish');
+        $canClose       = common::hasPriv('productplan', 'close')    && $this->productplan->isClickable($plan, 'close');
+        $canActivate    = common::hasPriv('productplan', 'activate') && $this->productplan->isClickable($plan, 'activate');
+        $canCreateChild = common::hasPriv('productplan', 'create')   && $this->productplan->isClickable($plan, 'create');
+        $canDelete      = common::hasPriv('productplan', 'delete')   && $this->productplan->isClickable($plan, 'delete');
+
+        $menu = array();
+        if($canStart)       $menu[] = array('icon' => 'play text-primary',    'class' => 'ghost', 'text' => $this->lang->productplan->startAB,    'data-url' => helper::createLink('productplan', 'start', $params), 'data-action' => 'start', 'onclick' => 'ajaxConfirmLoad(this)');
+        if($canFinish)      $menu[] = array('icon' => 'checked text-primary', 'class' => 'ghost', 'text' => $this->lang->productplan->finishAB,   'data-url' => helper::createLink('productplan', 'finish', $params), 'data-action' => 'finish', 'onclick' => 'ajaxConfirmLoad(this)');
+        if($canClose)       $menu[] = array('icon' => 'off text-primary',     'class' => 'ghost', 'text' => $this->lang->productplan->closeAB,    'url' => helper::createLink('productplan', 'close', $params, '', true), 'data-toggle' => 'modal');
+        if($canActivate)    $menu[] = array('icon' => 'magic text-primary',   'class' => 'ghost', 'text' => $this->lang->productplan->activateAB, 'data-url' => helper::createLink('productplan', 'activate', $params), 'data-action' => 'activate', 'onclick' => 'ajaxConfirmLoad(this)');
+        if($canCreateChild) $menu[] = array('icon' => 'split text-primary',   'class' => 'ghost', 'text' => $this->lang->productplan->children,   'url' => helper::createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"));
+        if($canEdit)        $menu[] = array('icon' => 'edit text-primary',    'class' => 'ghost', 'text' => $this->lang->edit,                    'url' => helper::createLink('productplan', 'edit', $params));
+        if($canDelete)      $menu[] = array('icon' => 'trash text-primary',   'class' => 'ghost', 'text' => $this->lang->delete,                  'data-url' => helper::createLink('productplan', 'delete', $params), 'data-action' => 'delete', 'onclick' => 'ajaxConfirmLoad(this)');
+
+        return $menu;
     }
 }

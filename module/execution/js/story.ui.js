@@ -122,19 +122,25 @@ window.setStatistics = function(element, checkedIdList)
     let SRTotal         = 0;
     let total           = 0;
 
+    let rateCount = 0;
     checkedIdList.forEach((rowID) => {
-        const story  = element.getRowInfo(rowID);
+        const story = element.getRowInfo(rowID);
         if(storyType == 'requirement' && story.data.type == 'story') SRTotal += 1;
         if(storyType == story.data.type) total += 1;
         if(story)
         {
             checkedEstimate += parseFloat(story.data.estimate);
             if(cases[rowID]) checkedCase += 1;
+            if(story.data.isParent == '0') rateCount += 1;
         }
     })
 
-    const rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
-    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', checkedEstimate).replace('%rate%', rate).replace('%SRTotal%', SRTotal)};
+    const rate = rateCount ? Math.round(checkedCase / rateCount * 10000) / 100 + '' + '%' : 0 + '%';
+    return {
+        html: checkedSummary.replace('%total%', checkedTotal)
+            .replace('%estimate%', checkedEstimate)
+            .replace('%rate%', rate)
+    };
 }
 
 window.renderStoryCell = function(result, info)
@@ -143,10 +149,9 @@ window.renderStoryCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         let html = '';
-
-        if(story.parentName != undefined && story.parent > 0 && ($.cookie.get('tab') == 'execution' || ($.cookie.get('tab') == 'project' && hasProduct))) html += story.parentName + ' / ';
+        let gradeLabel = gradeGroup[story.type][story.grade];
         if(typeof modulePairs[story.moduleID] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.moduleID] + "</span> ";
-        if(story.parent > 0) html += "<span class='label gray-pale rounded-xl'>" + (storyType == 'requirement' ? 'SR' : childrenAB) + "</span>";
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl'>" + gradeLabel + "</span>";
         if(html) result.unshift({html});
     }
     if(info.col.name == 'status' && result)
@@ -155,3 +160,12 @@ window.renderStoryCell = function(result, info)
     }
     return result;
 };
+
+window.setShowGrades = function()
+{
+    const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
+    if(oldShowGrades == showGrades) return;
+
+    const link = $.createLink('product', 'ajaxSetShowGrades', 'module=execution&showGrades=' + showGrades);
+    $.get(link, function() { loadCurrentPage(); });
+}

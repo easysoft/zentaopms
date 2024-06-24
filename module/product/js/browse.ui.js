@@ -18,6 +18,29 @@ $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', f
         $.ajaxSubmit({"url": $this.data('formaction'), "data": postData});
     }
 });
+$(document).off('click', '.batchImportToLibBtn').on('click', '.batchImportToLibBtn', function()
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $("[name='storyIdList'").val(checkedList.join(','));
+});
+
+$(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParentBtn', function(e)
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+
+    $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
+});
+
+$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+{
+    var storyViewType = $(this).attr('data-type');
+    $.cookie.set('storyViewType', storyViewType, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+});
 
 $(document).off('click','#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
 {
@@ -32,7 +55,6 @@ $(document).off('click','#linkStoryByPlan button[type="submit"]').on('click', '#
 
 $(document).off('click', '.batchUnlinkStory').on('click', '.batchUnlinkStory', function(e)
 {
-    const $this       = $(this);
     const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
@@ -72,19 +94,26 @@ window.renderCell = function(result, info)
         let html = '';
         if(story.parentName != undefined && story.parent > 0 && $.cookie.get('tab') == 'project' && projectHasProduct && vision != 'lite') html += story.parentName + ' / ';
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
-        if(story.parent > 0) html += "<span class='label gray-pale rounded-xl clip'>" + (storyType == 'requirement' ? 'SR' : childrenAB) + "</span> ";
+
+        let gradeLabel = '';
+        if(showGrade || story.grade >= 2) gradeLabel = gradeGroup[story.type][story.grade];
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
     }
     if(info.col.name == 'status' && result)
     {
-        if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
+        result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
     }
     if(info.col.name == 'assignedTo' && info.row.data.status == 'closed')
     {
         delete result[0]['props']['data-toggle'];
         delete result[0]['props']['href'];
         result[0]['props']['className'] += ' disabled';
+    }
+    if(info.col.name == 'childItem')
+    {
+        result[1]['attrs']['title'] = info.row.data?.childItemTitle;
     }
     return result;
 };
@@ -94,7 +123,6 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
     if(checkedIdList == undefined || checkedIdList.length == 0) return {html: pageSummary};
 
     let total     = 0;
-    let SRTotal   = 0;
     let estimate  = 0;
     let rate      = '0%';
     let hasCase   = 0;
@@ -105,25 +133,38 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         if(checkedIdList.includes(row.id))
         {
             const story = row.data;
-            estimate   += parseFloat(story.estimate);
+            if(story.type != storyType && tab == 'product') return;
+            if(story?.needSummaryEstimate) estimate += parseFloat(story.estimate);
             if(story.caseCount > 0)
             {
                 hasCase += 1;
             }
-            else if(typeof story.isParent != 'undefined' && story.isParent)
+            else if(typeof story.isParent != 'undefined' && story.isParent == '1')
             {
                 rateCount -= 1;
             }
 
-            if(storyType == story.type) total += 1;
-            if(storyType == 'requirement' && story.type == 'story') SRTotal += 1;
+            total += 1;
         }
     })
 
     if(rateCount) rate = Math.round(hasCase / rateCount * 10000 / 100) + '' + '%';
 
-    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate).replace('%SRTotal%', SRTotal)};
+    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate)};
 };
+
+window.setShowGrades = function()
+{
+    const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
+    if(oldShowGrades == showGrades) return;
+
+    const module = tab == 'product' ? storyType : tab;
+    const link   = $.createLink('product', 'ajaxSetShowGrades', 'module=' + module + '&showGrades=' + showGrades);
+    $.get(link, function()
+    {
+        loadCurrentPage();
+    });
+}
 
 window.importToLib = function()
 {

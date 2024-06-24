@@ -383,22 +383,15 @@ class storyTest
      * @access public
      * @return object|array
      */
-    public function subdivideTest(int $storyID, array $stories, string $type): object|array
+    public function subdivideTest(int $storyID, array $stories): object|array
     {
-        $this->objectModel->dao->delete()->from(TABLE_RELATION)->exec();
         $this->objectModel->subdivide($storyID, $stories);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        if($type == 'requirement')
-        {
-            return $tester->dao->select('*')->from(TABLE_RELATION)->fetchAll();
-        }
-        else
-        {
-            return $this->objectModel->getById($storyID);
-        }
+        $story = $this->objectModel->getById($storyID);
+        $story->children = $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->fetchAll();
+        return $story;
     }
 
     /**
@@ -411,6 +404,9 @@ class storyTest
      */
     public function closeTest(int $storyID, object $postData)
     {
+        global $tester;
+        $tester->loadModel('requirement');
+        $tester->loadModel('epic');
         $this->objectModel->close($storyID, $postData);
 
         if(dao::isError()) return dao::getError();
@@ -682,7 +678,7 @@ class storyTest
      */
     public function getExecutionStoriesBySearchTest(int $executionID, int $queryID, int $productID, array $excludeStories = array(), object|null $pager = null): int
     {
-        $stories = $this->objectModel->getExecutionStoriesBySearch($executionID, $queryID, $productID, 't2.id_desc', 'story', $excludeStories, $pager);
+        $stories = $this->objectModel->getExecutionStoriesBySearch($executionID, $queryID, $productID, 't2.id_desc', 'story', '', $excludeStories, $pager);
         return count($stories);
     }
 
@@ -762,24 +758,6 @@ class storyTest
 
         $this->objectModel->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
         return array_filter((array)$this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch());
-    }
-
-    /**
-     * 测试 doCreateURRelations 方法。
-     * Test doCreateURRelations method.
-     *
-     * @param  int    $storyID
-     * @param  array  $URList
-     * @access public
-     * @return array
-     */
-    public function doCreateURRelationsTest(int $storyID, array $URList): array
-    {
-        $this->objectModel->dao->delete()->from(TABLE_RELATION)->exec();
-        $this->objectModel->doCreateURRelations($storyID, $URList);
-
-        if(dao::isError()) return dao::getError();
-        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->fetchAll();
     }
 
     /**
@@ -976,23 +954,6 @@ class storyTest
     public function fetchBaseInfoTest(int $storyID): object|false
     {
         return $this->objectModel->fetchBaseInfo($storyID);
-    }
-
-    /**
-     * 测试 updateStoryVersion 方法
-     * Test updateStoryVersion method
-     *
-     * @param  int    $storyID
-     * @access public
-     * @return object
-     */
-    public function updateStoryVersionTest(int $storyID): object
-    {
-        $story = $this->objectModel->fetchByID($storyID);
-        $this->objectModel->dao->update(TABLE_STORY)->set('version')->eq(2)->where('id')->eq(3)->exec();
-        $this->objectModel->updateStoryVersion($story);
-
-        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq('requirement')->andWhere('BType')->eq('story')->andWhere('relation')->eq('subdivideinto')->andWhere('AID')->eq(3)->andWhere('BID')->eq($storyID)->fetch();
     }
 
     /**

@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('showGrade', $showGrade);
+jsVar('grades', $grades);
+
 $buildModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
 
 $cols = array();
@@ -36,6 +39,7 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($allStories),
+    set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::updateCheckedRows($checkedRows),
     set::loadPartial(true),
     set::footToolbar(array

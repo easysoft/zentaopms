@@ -34,14 +34,14 @@ $relation->AID->range('1,11,1,2,12,2,3,13,3,4,14,4,5,15,5,6,16,6,7,17,7,8,18,8')
 $relation->BID->range('11,1,1,12,2,2,13,3,3,14,4,4,15,5,5,16,6,6,17,7,7,18,8,8');
 $relation->AType->range('requirement,story,design');
 $relation->BType->range('story,requirement,commit');
-$relation->relation->range('subdivideinto,subdividedfrom,completedin');
+$relation->relation->range('linkedto,linkedfrom,completedin');
 $relation->gen(24);
 
 global $tester;
 $relations1 = $tester->loadModel('story')->getStoryRelation(1, 'requirement');
 $relations2 = $tester->story->getStoryRelation(11, 'story');
 
-r(count($relations1)) && p()                    && e('1');                           // 获取用户需求1关联的软件需求数量
-r(count($relations2)) && p()                    && e('1');                           // 获取软件需求11关联的用户需求数量
-r($relations1[0])     && p('title,type,status') && e('用户需求11,story,closed');     // 获取用户需求1关联的软件需求详情
-r($relations2[0])     && p('title,type,status') && e('用户需求1,requirement,draft'); // 获取软件需求11关联的用户需求详情
+r(count($relations1))         && p()                       && e('1');                           // 获取用户需求1关联的软件需求数量
+r(count($relations2))         && p()                       && e('1');                           // 获取软件需求11关联的用户需求数量
+r($relations1['story'])       && p('11:title,type,status') && e('用户需求11,story,closed');     // 获取用户需求1关联的软件需求详情
+r($relations2['requirement']) && p('1:title,type,status')  && e('用户需求1,requirement,draft'); // 获取软件需求11关联的用户需求详情

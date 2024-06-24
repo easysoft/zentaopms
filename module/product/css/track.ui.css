@@ -1,9 +1,33 @@
-#mainContent .table-empty-tip {padding: 180px 60px; text-align: center;}
-#mainContent .table {table-layout: fixed; background-color: #fff; cursor: pointer; border: 1px solid #ddd;}
-#mainContent .table td {white-space:nowrap; text-overflow:clip; overflow:hidden; position:unset !important; border-bottom-color:#ddd !important; border: 1px solid #ddd;}
-#mainContent .table .requirement{background: #fff}
-#mainContent .main-table tbody > tr:hover { background-color: #fff;}
-#mainContent .main-table tbody > tr:nth-child(odd):hover { background-color: #f5f5f5;}
-#mainContent .main-table thead > tr > th {overflow: hidden; border: 1px solid #ddd;}
-#mainContent .table-footer {background: #fff; padding: 5px; margin-bottom: 10px;}
-#mainContent td.empty-tip {padding: 80px;}
+.switchBtn {background: transparent; box-shadow: none;}
+.orderByIcon.with-popover-show{color: var(--color-primary-500);}
+
+.card {min-height:80px;}
+.card .card-heading{color:var(--color-gray-900)}
+.card .card-heading a{color:var(--color-gray-900)}
+.card .card-title{height:40px; width:100%;}
+.card .card-content{flex-direction: row;justify-content: space-between;color:var(--color-gray-800)}
+
+.kanban-item.parentTask { padding-bottom: 1px;}
+.kanban-item.childTask { padding-top:0px; padding-bottom: 1px;}
+.kanban-item.childTask .card {background-color: #f9f9f9;}
+
+.kanban-header-title .as-title{font-size:14px;}
+.kanban-header-lane-name, .kanban-lane-name {display:none;}
+.kanban-lane-cols, .kanban-header-cols, .kanban-header-sub-cols { gap: calc(var(--kanban-cols-gap) / 2); }
+.lane-col-shrink-with-above { position: relative; }
+.lane-col-shrink-with-above:before {
+    background-color: inherit;
+    left: 0;
+    position: absolute;
+    right: 0;
+    --tw-content: "";
+    content: var(--tw-content);
+    height: calc(var(--kanban-col-gap-top, var(--kanban-lanes-gap)) - 2px);
+    top: calc(2px - var(--kanban-col-gap-top, var(--kanban-lanes-gap)));
+}
+
+.kanban-header-col-wrapper{
+  --tw-bg-opacity-60: 0.6;
+  background-color: rgba(var(--color-gray-100-rgb), var(--tw-bg-opacity-60));
+}
+.kanban-lane-col{background-color: rgba(var(--color-gray-100-rgb), var(--tw-bg-opacity));}

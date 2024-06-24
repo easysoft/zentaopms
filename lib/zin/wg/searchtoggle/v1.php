@@ -9,7 +9,8 @@ class searchToggle extends wg
         'open?: bool',
         'module?: string',
         'url?: string',
-        'searchUrl?: string'
+        'searchUrl?: string',
+        'text?: string'
     );
 
     public static function getPageCSS(): ?string
@@ -29,10 +30,11 @@ class searchToggle extends wg
     protected function build()
     {
         global $lang, $app, $config;
-        list($target, $module, $open, $url, $searchUrl) = $this->prop(array('target', 'module', 'open', 'url', 'searchUrl'));
+        list($target, $module, $open, $url, $searchUrl, $text) = $this->prop(array('target', 'module', 'open', 'url', 'searchUrl', 'text'));
 
         if(is_null($open) && !empty($_GET['browseType'])) $open = $_GET['browseType'] === 'bySearch';
         if(is_null($module)) $module = $app->rawModule;
+        if(empty($text)) $text = $lang->searchAB;
 
         if(isset($config->zin->mode) && $config->zin->mode == 'compatible')
         {
@@ -45,7 +47,7 @@ class searchToggle extends wg
             set::className('search-form-toggle rounded-full gray-300-outline size-sm'),
             set::icon('search'),
             set::active($open),
-            set::text($lang->searchAB),
+            set::text($text),
             toggle::searchform(array('module' => $module, 'target' => $target, 'url' => $url, 'searchUrl' => $searchUrl)),
             $open ? on::init()->call('zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => $open, 'url' => $url, 'searchUrl' => $searchUrl)) : on::init()->do('$element.closest(".show-search-form").removeClass("show-search-form").find(".search-form[data-module=' . $module . ']").remove()')
         );

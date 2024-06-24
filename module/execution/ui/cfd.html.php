@@ -89,7 +89,7 @@ featureBar
 );
 
 $index       = 0;
-$chartColors = array('#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF');
+$chartColors = array('#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF', '#B9E78C', '#E58CE7', '#EDE590', '#CFB5FA');
 $chartSeries = array();
 if(!empty($chartData['line']))
 {

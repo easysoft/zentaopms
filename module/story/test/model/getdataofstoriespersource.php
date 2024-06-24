@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getDataOfStoriesPerSource();
+timeout=0
 cid=0
 
 - 按照需求来源分组，获取分组后的需求数量 @14

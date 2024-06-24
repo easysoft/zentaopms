@@ -16,3 +16,35 @@ $(document).on('click', '.model-drop', function()
     $('#project-model').addClass(btnClass);
     $('#model').val(model);
 })
+
+window.toggleStoryType = function(e)
+{
+    if(!e.target.checked)
+    {
+        const link = $.createLink('project', 'ajaxGetStoryByType', 'projectID=' + currentProject + '&storyType=' + e.target.value)
+        $.get(link, function(data)
+        {
+            if(data)
+            {
+                zui.Modal.confirm(confirmDisableStoryType).then((res) => {
+                    if(!res)
+                    {
+                        if(storyType.includes('epic'))        $('input[value=epic]').prop('checked', true);
+                        if(storyType.includes('requirement')) $('input[value=requirement]').prop('checked', true);
+                        return false;
+                    }
+                })
+            }
+        });
+
+        if(e.target.value == 'requirement')
+        {
+            $('input[value=epic]').prop('checked', false);
+        }
+    }
+
+    if(e.target.value == 'epic' && e.target.checked)
+    {
+        $('input[value=requirement]').prop('checked', true);
+    }
+}

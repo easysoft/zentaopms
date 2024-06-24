@@ -13,8 +13,9 @@ namespace zin;
 $cols = array();
 foreach($config->productplan->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->story->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
-$cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
-$cols['title']['nestedToggle'] = false;
+$cols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
+$cols['title']['title']        = $lang->productplan->storyTitle;
+$cols['title']['nestedToggle'] = true;
 $cols['title']['data-toggle']  = 'modal';
 $cols['title']['data-size']    = 'lg';
 $cols['plan']['name']          = 'planTitle';
@@ -26,6 +27,7 @@ foreach($cols as $colKey => $colConfig) $cols[$colKey]['sort'] = true;
 
 foreach($allStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
+$config->product->search['fields']['title'] = $lang->productplan->storyTitle;
 searchForm
 (
     set::module('story'),

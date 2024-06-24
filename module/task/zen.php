@@ -128,7 +128,7 @@ class taskZen extends task
      */
     protected function assignStoryForCreate(int $executionID, int $moduleID): void
     {
-        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'full', 'active');
+        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'full', 'active', '', false);
         $testStoryIdList = $this->loadModel('story')->getTestStories(array_keys($stories), $executionID);
         $testStories     = array();
         foreach($stories as $testStoryID => $storyTitle)
@@ -281,7 +281,7 @@ class taskZen extends task
         }
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
-        $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active');
+        $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active', '', false);
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$task->openedBy},{$task->canceledBy},{$task->closedBy}");
@@ -351,7 +351,7 @@ class taskZen extends task
         $showAllModule = !empty($this->config->execution->task->allModule) ? 'allModule' : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule);
         $story         = $this->story->getByID($storyID);
-        $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active');
+        $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active', '', false);
 
         list($customFields, $checkedFields) = $this->getCustomFields($execution, 'batchCreate');
         if(isset($customFields['story'])) $customFields['preview'] = $customFields['copyStory'] = '';

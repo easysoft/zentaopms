@@ -68,7 +68,7 @@ class storiesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'title,spec,verify,module,reviewer,type,parent,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,URS,status';
+        $fields = 'title,spec,verify,module,reviewer,type,parent,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,status';
         $this->batchSetPost($fields);
 
         $this->setPost('plans', array($this->request('plan', 0)));
@@ -85,7 +85,7 @@ class storiesEntry extends entry
         $control = $this->loadController('story', 'create');
         $this->requireFields('title,spec,pri,category');
 
-        $control->create($productID, $this->param('branch', 0), $this->param('moduleID', 0), $this->param('storyID', 0), $this->param('objectID', 0), $this->param('bugID', 0));
+        $control->create($productID, $this->param('branch', 0), $this->param('moduleID', 0), $this->param('storyID', 0), $this->param('objectID', 0), $this->param('bugID', 0), 0, 0, '', $this->param('type', 'story'));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
