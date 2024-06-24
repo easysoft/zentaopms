@@ -15,7 +15,7 @@ global $tester;
 $backupModel = $tester->loadModel('backup');
 
 $backupName  = dirname(__FILE__) . '/test';
-r($backupModel->getBackupDirProgress($backupName)) && p() && e('0');
+r($backupModel->getBackupDirProgress($backupName)) && p('allCount') && e('0');
 
 $summaryFile = $backupModel->getTmpLogFile($backupName);
 file_put_contents($summaryFile, json_encode(array('size' => '1234')));

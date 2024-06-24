@@ -54,9 +54,10 @@ $lang->mail->sendTime    = 'Gesendet am';
 $lang->mail->status      = 'Status';
 $lang->mail->failReason  = 'Problem';
 
-$lang->mail->statusList['wait']   = 'Wait';
-$lang->mail->statusList['sended'] = 'Senden';
-$lang->mail->statusList['fail']   = 'Fehlgeschlagen';
+$lang->mail->statusList['wait']    = 'Wait';
+$lang->mail->statusList['sending'] = 'Sending';
+$lang->mail->statusList['sended']  = 'Senden';
+$lang->mail->statusList['fail']    = 'Fehlgeschlagen';
 
 $lang->mail->turnonList[1]  = 'An';
 $lang->mail->turnonList[0] = 'Aus';

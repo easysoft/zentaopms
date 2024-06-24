@@ -320,6 +320,7 @@ formPanel
     ),
     formGroup
     (
+        setClass('typeBox'),
         set::label($lang->todo->type),
         set::width($isInModal ? '3/5' : '1/3'),
         set::items($lang->todo->typeList),
@@ -334,7 +335,6 @@ formPanel
             set::width('1/3'),
             set::label($lang->todo->assignTo),
             set::required(true),
-            set::disabled(true),
             set::items($users),
             set::value($app->user->account),
             set::name('assignedTo'),
@@ -348,7 +348,6 @@ formPanel
                 setID('private'),
                 set::name('private'),
                 set::text($lang->todo->private),
-                set::checked(true),
                 on::change("zui.Picker.query('[name=assignedTo]').render({disabled: e.target.checked})")
             ),
             btn

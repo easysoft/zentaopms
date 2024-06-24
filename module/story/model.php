@@ -3643,7 +3643,7 @@ class storyModel extends model
 
         if($action == 'subdivide')
         {
-            if(helper::isAjaxRequest('modal') || $config->vision == 'lite') return false;
+            if(helper::isAjaxRequest('modal')) return false;
             $action = 'batchcreate';
         }
 
@@ -3667,6 +3667,7 @@ class storyModel extends model
         $disabledFeatures = ",{$config->disabledFeatures},";
         if($action == 'importtolib')
         {
+            if($config->vision == 'lite')                        return false;
             if(!in_array($config->edition, array('max', 'ipd'))) return false;
             if($app->tab != 'project')                           return false;
             if($story->type == 'requirement')                    return false;
@@ -5003,10 +5004,17 @@ class storyModel extends model
         $story->plan      = isset($story->planTitle) ? $story->planTitle : zget(zget($options, 'plans', array()), $story->plan, '');
         $story->roadmap   = zget(zget($options, 'roadmaps', array()), $story->roadmap, 0);
 
+        $story->sourceNote   = $story->source == 'researchreport' ? zget(zget($options, 'reports', array()), $story->sourceNote, '') : $story->sourceNote;
         $story->pri          = zget($this->lang->{$storyType}->priList,      $story->pri);
         $story->source       = zget($this->lang->{$storyType}->sourceList,   $story->source);
         $story->category     = zget($this->lang->{$storyType}->categoryList, $story->category);
         $story->closedReason = zget($this->lang->{$storyType}->reasonList,   $story->closedReason);
+
+        /* Set rowKey to uniqueID in dTable. */
+        $story->uniqueID = $story->parent > 0 ? $story->parent . '-' . $story->id : $story->id;
+
+        if($story->parent < 0) $story->parent = 0;
+        if(empty($options['execution'])) $story->isParent = isset($story->children);
 
         /* Format user list. */
         foreach(array('mailto', 'reviewer') as $fieldName)

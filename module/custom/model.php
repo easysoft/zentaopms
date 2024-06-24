@@ -567,6 +567,7 @@ class customModel extends model
             foreach(explode(',', $fieldList) as $fieldName)
             {
                 if($moduleName == 'user' && $method == 'edit' && strpos($this->config->user->contactField, $fieldName) === false) continue;
+                if($moduleName == 'project' && $fieldName == 'budget' && $this->config->vision == 'lite') continue;
                 if($fieldName == 'comment') $fields[$fieldName] = $this->lang->comment;
                 if(isset($moduleLang->{$fieldName}) && is_string($moduleLang->{$fieldName})) $fields[$fieldName] = $moduleLang->$fieldName;
 

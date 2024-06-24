@@ -33,7 +33,7 @@ class sidebar extends wg
         if($preserve === null)
         {
             global $app;
-            $preserve = $app->getModuleName() . '-' . $app->getMethodName();
+            $preserve = $app->rawModule . '-' . $app->rawMethod;
         }
         return div
         (

@@ -18,9 +18,9 @@ class cneTest
         su('admin');
 
         global $tester, $config;
-        $config->CNE->api->host   = 'http://10.0.7.210:32380';
-        $config->CNE->api->token  = 'JMz7HCoQ3WHoYbpNyYNpvMfHqde9ugtV';
-        $config->CNE->app->domain = 'dops.corp.cc';
+        $config->CNE->api->host   = 'http://20.205.128.72:32380';
+        $config->CNE->api->token  = 'esVqIv7c1LxMCwlCdCBv73LZTYANoApK';
+        $config->CNE->app->domain = 'pgeo.corp.cc';
 
         $this->objectModel = $tester->loadModel('cne');
     }

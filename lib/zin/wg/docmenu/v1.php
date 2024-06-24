@@ -61,17 +61,17 @@ class docMenu extends wg
         {
             $methodName = 'index';
         }
-        else if($item->type == 'annex')
+        elseif($item->type == 'annex')
         {
             $methodName = 'showFiles';
             $linkParams = "type={$objectType}&objectID={$item->objectID}";
         }
-        else if(in_array($item->type, array('text', 'word','ppt', 'excel', 'attachment')))
+        elseif(in_array($item->type, array('text', 'word','ppt', 'excel', 'attachment')))
         {
             $methodName = 'view';
             $linkParams = "docID={$item->id}";
         }
-        else if($objectType == 'execution' && $app->tab == 'execution')
+        elseif($objectType == 'execution' && $app->tab == 'execution')
         {
             $moduleName = 'execution';
             $methodName = 'doc';
@@ -436,7 +436,7 @@ class docMenu extends wg
         $menuLink  = $this->prop('menuLink', '');
         $objectID  = $this->prop('objectID', 0);
         $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover', 'sortable', 'onSort'));
-        $preserve  = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
+        $preserve  = $this->prop('preserve', $app->rawModule . '-' . $app->rawMethod);
 
         $isInSidebar = $this->parent instanceof sidebar;
 

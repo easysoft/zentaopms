@@ -388,27 +388,6 @@ class router extends baseRouter
     }
 
     /**
-     * Save error info.
-     *
-     * @param  int    $level
-     * @param  string $message
-     * @param  string $file
-     * @param  int    $line
-     * @access public
-     * @return void
-     */
-    public function saveError($level, $message, $file, $line)
-    {
-        $fatalLevel = array();
-        $fatalLevel[E_ERROR]      = E_ERROR;
-        $fatalLevel[E_PARSE]      = E_PARSE;
-        $fatalLevel[E_CORE_ERROR] = E_CORE_ERROR;
-        $fatalLevel[E_USER_ERROR] = E_USER_ERROR;
-        if(isset($fatalLevel[$level]) && (!isset($this->config->debug) || !$this->config->debug)) $this->config->debug = true;
-        parent::saveError($level, $message, $file, $line);
-    }
-
-    /**
      * 企业版部分功能是从然之合并过来的。然之代码中调用loadModuleConfig方法时传递了一个非空的appName，在禅道中会导致错误。
      * 把appName设置为空来避免这个错误。
      * Some codes merged from ranzhi called the function loadModuleConfig with a non-empty appName which causes an error in zentao.

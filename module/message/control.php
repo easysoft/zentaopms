@@ -135,6 +135,7 @@ class message extends control
         else
         {
             $messages = preg_replace("/<a href='([^\']+)'/", "<a data-url='$1' href='###' onclick='clickMessage(this)'", $messages);
+            $messages = preg_replace("/data-app='([^\']+)'/", '', $messages);
             echo html_entity_decode("<div class='browser-message-content'><span class='text-secondary-500'>{$messages}</span></div>");
         }
 

@@ -55,7 +55,7 @@ js::set('confirmDelete', $lang->programplan->confirmDelete);
       </tr>
     </thead>
     <tbody>
-      <?php foreach($stages as $plan):?>
+      <?php foreach($plans as $plan):?>
       <tr data-id='<?php echo $plan->id?>'>
         <?php foreach($setting as $key => $value) $this->programplan->printCell($value, $plan, $users, $projectID);?>
       </tr>

@@ -26,7 +26,7 @@ $lang->gitlab->serverFail        = '连接GitLab服务器异常，请检查GitLa
 $lang->gitlab->lastUpdate        = '最后更新';
 $lang->gitlab->confirmAddWebhook = '您确定创建Webhook吗？';
 $lang->gitlab->addWebhookSuccess = 'Webhook创建成功';
-$lang->gitlab->failCreateWebhook = 'Webhook创建失败，请查看日志';
+$lang->gitlab->failCreateWebhook = 'Webhook创建失败，请在tmp/log/saas.' . date('Ymd') . '.log.php 中查看日志';
 $lang->gitlab->placeholderSearch = '请输入名称';
 
 $lang->gitlab->bindStatus['binded']      = $lang->gitlab->binded;

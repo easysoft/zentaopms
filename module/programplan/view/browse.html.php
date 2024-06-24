@@ -14,7 +14,7 @@
 <style>#dropMenu{z-index:99999;}</style>
 <?php js::set('browseType', $type);?>
 <div class='main-table'>
-  <?php if(empty($stages)):?>
+  <?php if(empty($plans)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->programplan->noData;?></span>

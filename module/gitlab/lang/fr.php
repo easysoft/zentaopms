@@ -26,7 +26,7 @@ $lang->gitlab->serverFail        = 'Connect to GitLab server failed, please chec
 $lang->gitlab->lastUpdate        = 'Last Update';
 $lang->gitlab->confirmAddWebhook = 'Are you sure about creating Webhook？';
 $lang->gitlab->addWebhookSuccess = 'Webhook created successfully';
-$lang->gitlab->failCreateWebhook = 'Failed to create Webhook, please view the log';
+$lang->gitlab->failCreateWebhook = 'Failed to create Webhook, please view the log in tmp/log/saas.' . date('Ymd') . '.log.php';
 $lang->gitlab->placeholderSearch = 'Enter name';
 
 $lang->gitlab->bindStatus['binded']      = $lang->gitlab->binded;

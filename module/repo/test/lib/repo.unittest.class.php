@@ -130,9 +130,9 @@ class repoTest
         return $this->objectModel->getByID($repoID);
     }
 
-    public function batchCreateTest($repos, $serviceHost)
+    public function batchCreateTest($repos, $serviceHost, $scm)
     {
-        $repoID = $this->objectModel->batchCreate($repos, $serviceHost);
+        $this->objectModel->batchCreate($repos, $serviceHost, $scm);
 
         if(dao::isError()) return dao::getError();
 
