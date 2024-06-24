@@ -51,7 +51,11 @@
 
             if(title) document.title = title;
 
-            if(oldState && oldState.url === url) return;
+            if(oldState && oldState.url === url)
+            {
+                if(DEBUG) console.log('[APP]', 'skip update:', {oldState, state, code, url, title});
+                return;
+            }
 
             window.history.pushState(state, title, url);
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
@@ -488,7 +492,6 @@
         const selectors = (Array.isArray(options.selector) ? options.selector : options.selector.split(',')).map(selector => selector.replace(':component', ':type=json&data=props'));
         const url       = options.url;
 
-        if(DEBUG) console.log('[APP]', 'request', options);
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
@@ -684,6 +687,7 @@
                 }
             }
         });
+        if(DEBUG) console.log('[APP]', 'request', options);
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
         {
