@@ -180,6 +180,5 @@ $lang->upgrade->storyStageList['tested']     = 'Tested';
 $lang->upgrade->storyStageList['verified']   = 'Accepted';
 $lang->upgrade->storyStageList['rejected']   = 'Verify Rejected';
 $lang->upgrade->storyStageList['delivering'] = 'Delivering';
-$lang->upgrade->storyStageList['pending']    = 'Release Pending';
 $lang->upgrade->storyStageList['released']   = 'Released';
 $lang->upgrade->storyStageList['closed']     = 'Closed';

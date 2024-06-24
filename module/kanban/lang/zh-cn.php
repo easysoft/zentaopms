@@ -281,7 +281,6 @@ $lang->kanban->storyColumn['testing']    = '进行中';
 $lang->kanban->storyColumn['tested']     = '完成';
 $lang->kanban->storyColumn['verified']   = '已验收';
 $lang->kanban->storyColumn['rejected']   = '验收失败';
-$lang->kanban->storyColumn['pending']    = '待发布';
 $lang->kanban->storyColumn['released']   = '已发布';
 $lang->kanban->storyColumn['closed']     = '已关闭';
 

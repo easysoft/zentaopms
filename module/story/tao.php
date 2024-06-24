@@ -1323,7 +1323,7 @@ class storyTao extends storyModel
      * 3. 研发中:
      *   排除已关闭（关闭原因不是已完成）后，至少有一个子级需求为设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败， 其他子需求阶段仅为未开始、规划中、已立项、已计划。
      * 4. 交付中:
-     *   至少有一个子级需求为交付中、待发布、已发布；或者有一个子级需求为已关闭（关闭原因是已完成）。
+     *   至少有一个子级需求为交付中、已发布；或者有一个子级需求为已关闭（关闭原因是已完成）。
      * 5. 已关闭:
      *   所有子需求都已关闭。
      *
@@ -1336,7 +1336,7 @@ class storyTao extends storyModel
      * 3. Developing:
      *   At least one child stage is designing, designed, developing, developed, testing, tested, verified or rejected, and all other children stages are defining, planning, planned or projected, and no children stage is closed and closedReason is not done.
      * 4. Delivering:
-     *   At least one child stage is delivering, pending or released, or at least one child stage is closed and closedReason is done.
+     *   At least one child stage is delivering, released, or at least one child stage is closed and closedReason is done.
      * 5. Closed:
      *   All children stages are closed.
      *
@@ -1422,7 +1422,7 @@ class storyTao extends storyModel
                     $hasDelivering = false;
                     foreach($children as $child)
                     {
-                        if(in_array($child->stage, array('delivering', 'pending', 'released')) || ($child->stage == 'closed' && $child->closedReason == 'done'))
+                        if(in_array($child->stage, array('delivering', 'released')) || ($child->stage == 'closed' && $child->closedReason == 'done'))
                         {
                             $hasDelivering = true;
                             break;

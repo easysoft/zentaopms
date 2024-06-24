@@ -180,6 +180,5 @@ $lang->upgrade->storyStageList['tested']     = '测试完毕';
 $lang->upgrade->storyStageList['verified']   = '已验收';
 $lang->upgrade->storyStageList['rejected']   = '验收失败';
 $lang->upgrade->storyStageList['delivering'] = '交付中';
-$lang->upgrade->storyStageList['pending']    = '待发布';
 $lang->upgrade->storyStageList['released']   = '已发布';
 $lang->upgrade->storyStageList['closed']     = '已关闭';

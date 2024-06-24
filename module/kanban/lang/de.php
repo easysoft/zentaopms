@@ -281,7 +281,6 @@ $lang->kanban->storyColumn['testing']    = 'Doing';
 $lang->kanban->storyColumn['tested']     = 'Done';
 $lang->kanban->storyColumn['verified']   = 'Verified';
 $lang->kanban->storyColumn['rejected']   = 'Rejected';
-$lang->kanban->storyColumn['pending']    = 'Pending';
 $lang->kanban->storyColumn['released']   = 'Released';
 $lang->kanban->storyColumn['closed']     = 'Closed';
 

@@ -39,7 +39,7 @@ ALTER TABLE `zt_story` ADD `root` mediumint NOT NULL DEFAULT '0' AFTER `isParent
 ALTER TABLE `zt_story` ADD `path` text NULL AFTER `root`;
 ALTER TABLE `zt_story` ADD `grade` smallint(6) NOT NULL DEFAULT '0' AFTER `path`;
 ALTER TABLE `zt_story` ADD `parentVersion` smallint NOT NULL DEFAULT '0' AFTER `version`;
-ALTER TABLE `zt_story` CHANGE `stage` `stage` enum('','wait','defining','planning','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','delivering','pending','released','closed') NOT NULL DEFAULT 'wait';
+ALTER TABLE `zt_story` CHANGE `stage` `stage` enum('','wait','defining','planning','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','delivering','released','closed') NOT NULL DEFAULT 'wait';
 ALTER TABLE `zt_story` DROP `childStories`;
 CREATE INDEX `root` ON `zt_story` (`root`);
 UPDATE `zt_story` SET stage = 'defining'   WHERE stage = 'wait' AND (parent = -1 OR type != 'story');

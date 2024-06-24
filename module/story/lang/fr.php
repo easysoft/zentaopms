@@ -264,7 +264,6 @@ $lang->story->stageList['tested']     = 'Testée';
 $lang->story->stageList['verified']   = 'Acceptée';
 $lang->story->stageList['rejected']   = 'Verify Rejected';
 $lang->story->stageList['delivering'] = 'Delivering';
-$lang->story->stageList['pending']    = 'Release Pending';
 $lang->story->stageList['released']   = 'Versionnée';
 $lang->story->stageList['closed']     = 'Fermée';
 
