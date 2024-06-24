@@ -1,4 +1,4 @@
-.switchBtn, .search-form-toggle{background: transparent; box-shadow: none;}
+.switchBtn {background: transparent; box-shadow: none;}
 .orderByIcon.with-popover-show{color: var(--color-primary-500);}
 
 .card {min-height:80px;}
