@@ -2,6 +2,10 @@
 namespace zin;
 
 $this->app->loadConfig('message');
+h::css("
+.icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url('{$config->webRoot}theme/default/images/main/version-new.svg');}
+.icon-version:before {content:'';}
+");
 
 $upgradeBtn = null;
 if(trim($config->visions, ',') == 'lite')
@@ -75,6 +79,21 @@ if(!empty($latestVersionList))
         setClass('version-content'),
         $versionItems
     );
+}
+else
+{
+    $upgradeContent = div
+    (
+        setClass('table-empty-tip py-10 mt-8 center'),
+        btn
+        (
+            setClass('secondary-outline bg-secondary-50'),
+            set::url($lang->website),
+            set::target('_blank'),
+            set::text($lang->index->website . ': '. $lang->website)
+        )
+    );
+    h::css("#upgradeContent {height: 262px;} latestVersionList {height: 200px;} ");
 }
 
 $scoreNotice = '';
