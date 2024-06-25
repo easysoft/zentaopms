@@ -17,10 +17,10 @@ class confirmBugTester extends tester
         $this->webdriver->wait(1);
 
         if(isset($bug['assignedTo'])) $list->dom->assignedTo->picker($bug['assignedTo']);
-        if(isset($bug['type'])) $list->dom->type->picker($bug['type']);
-        if(isset($bug['pri'])) $list->dom->pri->picker($bug['pri']);
-        if(isset($bug['deadline'])) $list->dom->deadline->datePicker($bug['deadline']);
-        if(isset($bug['mailto'])) $list->dom->{'mailto[]'}->multiPicker($bug['mailto']);
+        if(isset($bug['type']))       $list->dom->type->picker($bug['type']);
+        if(isset($bug['pri']))        $list->dom->pri->picker($bug['pri']);
+        if(isset($bug['deadline']))   $list->dom->deadline->datePicker($bug['deadline']);
+        if(isset($bug['mailto']))     $list->dom->{'mailto[]'}->multiPicker($bug['mailto']);
         $list->dom->btn($this->lang->bug->confirm)->click();
         $this->webdriver->wait(1);
 
@@ -35,4 +35,23 @@ class confirmBugTester extends tester
         return $this->failed('确认bug失败');
     }
 
+    public function resolveBug($project = array(), $bug = array())
+    {
+        $this->login();
+        $list = $this->initForm('bug', 'browse',$project, 'appIframe-qa');
+        $list->dom->btn($this->lang->bug->search)->click();
+        $list->dom->field1->picker($bug['search']);
+        $list->dom->value1->picker($bug['isResolved']);
+        $list->dom->searchButton->click();
+        $this->webdriver->wait(1);
+        $bugTitle = $list->dom->bugTitle->getText();
+        $list->dom->resolveButton->click();
+        $this->webdriver->wait(1);
+
+        if(isset($bug['resolution']))    $list->dom->resolution->picker($bug['resolution']);
+        if(isset($bug['resolvedBuild'])) $list->dom->resolvedBuild->picker($bug['resolvedBuild']);
+        if(isset($bug['resolvedDate']))  $list->dom->resolvedDate->datePicker($bug['resolvedDate']);
+        if(isset($bug['assignedTo']))    $list->dom->assignedTo->picker($bug['assignedTo']);
+        $this->webdriver->wait(1);
+    }
 }
