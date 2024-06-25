@@ -2360,7 +2360,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createLaneIfNotExist($executionID)
+    public function createLaneIfNotExist(int $executionID)
     {
         $kanbanColumns = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
@@ -2392,7 +2392,7 @@ class kanbanModel extends model
      * Add execution Kanban lanes and columns.
      *
      * @param  int    $executionID
-     * @param  string $type all|story|bug|task|risk
+     * @param  string $type all|parentStory|story|bug|task|risk
      * @access public
      * @return void
      */
