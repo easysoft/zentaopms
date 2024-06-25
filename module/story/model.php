@@ -772,14 +772,6 @@ class storyModel extends model
                 }
             }
 
-            /* IF is story and has changed, update its relation version to new. */
-            if($oldStory->type == 'story')
-            {
-                $newStory = $this->fetchById($storyID);
-                $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
-                $this->updateStoryVersion($newStory);
-            }
-
             if($story->reviewerHasChanged)
             {
                 $oldStoryReviewers   = $this->getReviewerPairs($storyID, $oldStory->version);
