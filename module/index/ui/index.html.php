@@ -3,6 +3,7 @@ namespace zin;
 
 $this->app->loadConfig('message');
 
+$upgradeBtn = null;
 if(trim($config->visions, ',') == 'lite')
 {
     $version     = $config->liteVersion;
@@ -12,6 +13,19 @@ else
 {
     $version     = $config->version;
     $versionName = $lang->pmsName . $config->version;
+    $upgradeBtn  = $config->systemMode != 'PLM' ? btn
+    (
+        setID('bizLink'),
+        on::click()->do(<<<'JS'
+        $('#upgradeContent').toggle();
+        $('#bizLink').toggleClass('active', $('#upgradeContent').prop('style') && $('#upgradeContent').prop('style').display != 'none');
+        event.preventDefault();
+        JS),
+        setClass('ghost'),
+        set::target('_blank'),
+        span(setClass('upgrade'), $lang->index->upgrade),
+        icon('up-circle', setClass('text-danger'))
+    ) : null;
 }
 
 $scoreNotice = '';
