@@ -258,22 +258,22 @@ class instanceModel extends model
      * 更新应用的内存大小。
      * Update instance memory size.
      *
-     * @param  object $instnace
+     * @param  object $instance
      * @param  int    $size
      * @access public
      * @return bool
      */
-    public function updateMemorySize(object $instnace, int $size = 0): bool
+    public function updateMemorySize(object $instance, int $size = 0): bool
     {
         $settings = new stdclass;
         $settings->settings_map = new stdclass;
         $settings->settings_map->resources = new stdclass;
         $settings->settings_map->resources->memory = $size;
 
-        $success = $this->cne->updateConfig($instnace, $settings);
+        $success = $this->cne->updateConfig($instance, $settings);
         if($success)
         {
-            $this->action->create('instance', $instnace->id, 'adjustMemory', helper::formatKB(intval($size)));
+            $this->action->create('instance', $instance->id, 'adjustMemory', helper::formatKB(intval($size)));
             return true;
         }
 
@@ -495,8 +495,8 @@ class instanceModel extends model
         $validatedResult = $this->cne->validateDB($dbSettings->service, $dbSettings->name, $dbSettings->user, $dbSettings->namespace);
         if($validatedResult->user && $validatedResult->database) return $dbSettings;
 
-        if(!$validatedResult->user)     $dbSettings->user = $defaultUser . '_' . help::randStr(4);
-        if(!$validatedResult->database) $dbSettings->database = $defaultDBName  . '_' . help::randStr(4);
+        if(!$validatedResult->user)     $dbSettings->user = $defaultUser . '_' . helper::randStr(4);
+        if(!$validatedResult->database) $dbSettings->database = $defaultDBName  . '_' . helper::randStr(4);
 
         return $this->getValidDBSettings($dbSettings, $defaultUser, $defaultDBName, $times + 1);
     }
@@ -638,8 +638,8 @@ class instanceModel extends model
     private function doCneInstall(object $instance, object $space, object $settingsMap, array $snippets = array(), array $settings = array())
     {
         $apiParams = new stdclass;
-        $apiParams->userame           = $instance->createdBy;
-        $apiParams->cluser            = '';
+        $apiParams->username          = $instance->createdBy;
+        $apiParams->cluster           = '';
         $apiParams->namespace         = $space->k8space;
         $apiParams->name              = $instance->k8name;
         $apiParams->chart             = $instance->chart;
@@ -649,7 +649,7 @@ class instanceModel extends model
         $apiParams->settings          = $settings;
         $apiParams->settings_snippets = array_values($snippets);
 
-        if(strtolower($this->config->CNE->app->domain) == 'demo.haogs.cn') $apiParams->settings_snippets = array('quickon_saas'); // Only for demo enviroment.
+        if(strtolower($this->config->CNE->app->domain) == 'demo.haogs.cn') $apiParams->settings_snippets = array('quickon_saas'); // Only for demo environment.
 
         $result = $this->cne->installApp($apiParams);
         if($result->code != 200)
@@ -734,7 +734,7 @@ class instanceModel extends model
     public function stop(object $instance)
     {
         $apiParams = new stdclass;
-        $apiParams->cluster   = '';// Mulit cluster should set this field.
+        $apiParams->cluster   = '';
         $apiParams->name      = $instance->k8name;
         $apiParams->chart     = $instance->chart;
         $apiParams->namespace = $instance->spaceData->k8space;
