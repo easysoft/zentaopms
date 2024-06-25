@@ -1129,13 +1129,143 @@ class biModel extends model
     }
 
     /**
+     * 把自定义透视表的数据转换为数据表格可以使用的格式。
+     * Convert the data of custom pivot to the format that can be used by data table.
+     *
+     * @param  object $data
+     * @param  array  $configs
+     * @access public
+     * @return array
+     */
+    public function convertDataForDtable(object $data, array $configs): array
+    {
+        $columns      = array();
+        $rows         = array();
+        $cellSpan     = array();
+        $columnMaxLen = array();
+
+        $headerRow1 = !empty($data->cols[0]) ? $data->cols[0] : array();
+        $headerRow2 = !empty($data->cols[1]) ? $data->cols[1] : array();
+
+        /* 定义数据表格的列配置。*/
+        /* Define the column configuration of the data table. */
+        $index = 0;
+        foreach($headerRow1 as $column)
+        {
+            /* 如果 colspan 属性不为空则且存在第二行表头表示该列包含切片字段。*/
+            /* If the colspan attribute is not empty, it means that the column contains slice fields. */
+            if(!empty($column->colspan) && $column->colspan > 1 && !empty($headerRow2))
+            {
+                /* 找到实际切片的字段。*/
+                /* Find the actual sliced field. */
+                $colspan = 0;
+                while($colspan < $column->colspan)
+                {
+                    $subColumn = array_shift($headerRow2);
+
+                    $field = 'field' . $index;
+                    $columns[$field]['name']     = $field;
+                    $columns[$field]['title']    = $subColumn->label;
+                    $columns[$field]['width']    = 16 * mb_strlen($subColumn->label);
+                    $columns[$field]['minWidth'] = 128;
+                    $columns[$field]['align']    = 'center';
+
+                    $columnMaxLen[$field] = mb_strlen($column->label);
+
+                    /* 把被切片的字段名设置为数据表格的列配置的 headerGroup 属性。*/
+                    /* Set the sliced field name as the headerGroup attribute of the column configuration of the data table. */
+                    $columns[$field]['headerGroup'] = $column->label;
+
+                    /* 数据表格不支持表头第二行合并单元格，如果有这种情况把被合并的所有列视为一列，记录 colspan 属性并跳过其它列。*/
+                    /* The data table does not support merging cells in the second row of the header. If this is the case, all the merged columns are regarded as one column, the colspan attribute is recorded and other columns are skipped. */
+                    if(!empty($subColumn->colspan) && $subColumn->colspan > 1) $columns[$field]['colspan'] = $subColumn->colspan;
+
+                    $colspan += $subColumn->colspan ?: 1;
+                    $index++;
+                }
+
+                continue;
+            }
+
+            $field = 'field' . $index;
+            $columns[$field]['name']     = $field;
+            $columns[$field]['title']    = $column->label;
+            $columns[$field]['width']    = 16 * mb_strlen($column->label);
+            $columns[$field]['minWidth'] = 128;
+            $columns[$field]['align']    = 'center';
+
+            $columnMaxLen[$field] = mb_strlen($column->label);
+
+            if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
+
+            // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
+
+            $index++;
+        }
+
+        $lastRow        = count($data->array) - 1;
+        $hasGroup       = isset($data->groups);
+        $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
+        foreach($data->array as $rowKey => $rowData)
+        {
+            $index   = 0;
+            $rowData = array_values($rowData);
+
+            for($i = 0; $i < count($rowData); $i++)
+            {
+                $field = 'field' . $index;
+                $value = $rowData[$i];
+
+                if(!empty($columns[$field]['colspan']))
+                {
+                    $colspan = $columns[$field]['colspan'];
+                    $value   = array_slice($rowData, $i, $colspan);
+
+                    $i += $colspan - 1;
+                }
+
+                /* 定义数据表格的行数据。*/
+                /* Defind row data of the data table. */
+                $rows[$rowKey][$field] = $value;
+
+                if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
+
+                /* 定义数据表格合并单元格的配置。*/
+                /* Define configuration to merge cell of the data table. */
+                if(isset($configs[$rowKey][$index]) && $configs[$rowKey][$index] > 1)
+                {
+                    $rows[$rowKey][$field . '_rowspan'] = $configs[$rowKey][$index];
+                    $cellSpan[$field]['rowspan'] = $field . '_rowspan';
+                }
+
+                $isFirstColumnAndLastRow = $i === 0 && $rowKey === $lastRow;
+
+                if($isFirstColumnAndLastRow && $hasGroup && $hasColumnTotal)
+                {
+                    $rows[$rowKey][$field . '_colspan'] = count($data->groups);
+                    $cellSpan[$field]['colspan'] = $field . '_colspan';
+                }
+
+                $index++;
+            }
+        }
+
+        foreach($columns as $field => $column)
+        {
+            $columns[$field]['width'] = 16 * $columnMaxLen[$field];
+        }
+
+        return array($columns, $rows, $cellSpan);
+    }
+
+    /**
      * Convert json string to array.
      *
      * @param  string|object|array    $json
      * @access public
      * @return array
      */
-    public function json2Array(string|object|array $json): array
+    public function json2Array(string|object|array|null $json): array
     {
         if(empty($json)) return array();
         if(is_string($json)) return json_decode($json, true);
