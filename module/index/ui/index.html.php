@@ -43,6 +43,24 @@ if(!empty($latestVersionList))
                 setClass('version-name flex h-6 items-center'),
                 icon('version', setClass('version-upgrade')),
                 h4($version['name'])
+            ),
+            div
+            (
+                setClass('version-footer flex justify-between'),
+                btn
+                (
+                    setData(array('toggle' => 'modal')),
+                    setClass('ghost'),
+                    set::url(inLink('changeLog', 'version=' . $versionNumber)),
+                    $lang->index->log
+                ),
+                btn
+                (
+                    setClass('primary upgrade-now'),
+                    set::url($version['link']),
+                    set::target('_blank'),
+                    $lang->index->upgradeNow
+                )
             )
         );
     }
