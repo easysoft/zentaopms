@@ -91,6 +91,154 @@ class biModel extends model
     }
 
     /**
+     * Try to explain sql.
+     *
+     * @param  string     $sql
+     * @param  string     $driver mysql|duckdb
+     * @access public
+     * @return array
+     */
+    public function explainSQL($sql, $driver = 'mysql')
+    {
+        $dbh = $this->app->loadDriver($driver);
+
+        $prefixSQL = $driver == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
+        try
+        {
+            $rows = $dbh->query("$prefixSQL $sql")->fetchAll();
+        }
+        catch(Exception $e)
+        {
+            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
+            $message = strip_tags($message);
+            return array('result' => 'fail', 'message' => $message);
+        }
+
+        return array('result' => 'success');
+    }
+
+    /**
+     * Query a sql with driver.
+     *
+     * @param  string     $driver mysql|duckdb
+     * @param  string     $sql
+     * @param  bool       $fetchAll
+     * @access public
+     * @return array|string
+     */
+    public function queryWithDriver($driver, $sql, $fetchAll = true)
+    {
+        $dbh = $this->app->loadDriver($driver);
+
+        if($fetchAll) $results = $dbh->query($sql)->fetchAll();
+        else $results = $dbh->query($sql)->fetch();
+
+        return $results;
+    }
+
+    /**
+     * Try to explain sql.
+     *
+     * @param  string     $sql
+     * @param  string     $limitSql
+     * @param  string     $driver mysql|duckdb
+     * @access public
+     * @return array
+     */
+    public function querySQL($sql, $limitSql, $driver = 'mysql')
+    {
+        $dbh = $this->app->loadDriver($driver);
+
+        try
+        {
+            if($driver == 'mysql')
+            {
+                $rows      = $dbh->query($limitSql)->fetchAll();
+                $count     = $dbh->query("SELECT FOUND_ROWS() as count")->fetch();
+                $rowsCount = $count->count;
+            }
+            elseif($driver == 'duckdb')
+            {
+                $rows      = $dbh->query($limitSql)->fetchAll();
+                $allRows   = $dbh->query("SELECT COUNT(1) as count FROM ( $sql )")->fetch();
+                $rowsCount = $allRows->count;
+            }
+        }
+        catch(Exception $e)
+        {
+            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
+            $message = strip_tags($message);
+            return array('result' => 'fail', 'message' => $message);
+        }
+
+        return array('result' => 'success', 'rows' => $rows, 'rowsCount' => $rowsCount);
+    }
+
+    /**
+     * Get sql result columns.
+     *
+     * @param  string     $sql
+     * @param  string     $driver mysql|duckdb
+     * @access public
+     * @return array|false
+     */
+    public function getColumns(string $sql, $driver = 'mysql'): array|false
+    {
+        if(!in_array($driver, $this->config->bi->drivers)) return false;
+
+        if($driver == 'mysql')
+        {
+            $columns = $this->dao->getColumns($sql);
+        }
+        else
+        {
+            $dbh     = $this->app->loadDriver('duckdb');
+            $columns = $dbh->query("DESCRIBE $sql")->fetchAll();
+        }
+
+        $result = array();
+        foreach($columns as $column)
+        {
+            $column = (array)$column;
+
+            $name       = $driver == 'mysql' ? $column['name']        : $column['column_name'];
+            $nativeType = $driver == 'mysql' ? $column['native_type'] : $column['column_type'];
+
+            $result[$name] = array('name' => $name, 'native_type' => $nativeType);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取表的字段类型。
+     * Get table data.
+     *
+     * @param  string $sql
+     * @param  string $driverName mysql|duckdb
+     * @param  array  $columns
+     * @access public
+     * @return object
+     */
+    public function getColumnsType(string $sql, string $driverName = 'mysql', array $columns = array()): object
+    {
+        if(empty($columns)) $columns = $this->getColumns($sql, $driverName);
+
+        $columnTypes = new stdclass();
+        foreach($columns as $column)
+        {
+            $field      = $column['name'];
+            $nativeType = $column['native_type'];
+            $type       = $this->config->bi->columnTypes->$driverName[$nativeType];
+
+            if(isset($columnTypes->$field)) $field = $column['table'] . $field;
+            $columnTypes->$field = $type;
+        }
+
+        return $columnTypes;
+    }
+
+    /**
      * Get object options.
      *
      * @param  string $type user|product|project|execution|dept
@@ -192,13 +340,15 @@ class biModel extends model
      * @param  string $sql
      * @param  string $keyField
      * @param  string $valueField
+     * @param  string $driver
      * @access public
      * @return array
      */
-    public function getOptionsFromSql(string $sql, string $keyField, string $valueField): array
+    public function getOptionsFromSql(string $sql, $driver, string $keyField, string $valueField): array
     {
         $options = array();
-        $cols    = $this->dbh->query($sql)->fetchAll();
+        $dbh     = $this->app->loadDriver($driver);
+        $cols    = $dbh->query($sql)->fetchAll();
         $sample  = current($cols);
 
         if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;
@@ -276,7 +426,7 @@ class biModel extends model
      * @access public
      * @return void
      */
-    public function getMultiData($settings, $defaultSql, $filters, $sort = false)
+    public function getMultiData($settings, $defaultSql, $filters, $driver, $sort = false)
     {
         $this->loadModel('chart');
 
@@ -328,7 +478,7 @@ class biModel extends model
                 $sql .= " where $whereStr";
             }
             $sql .= " group by $groupBySql";
-            $rows = $this->dao->query($sql)->fetchAll();
+            $rows = $this->queryWithDriver($driver, $sql);
             $stat = $this->processRows($rows, $date, $group, $metric);
 
             $maxCount = 50;
@@ -385,7 +535,7 @@ class biModel extends model
         return $stat;
     }
 
-    /**
+    /*
      * 准备内置的图表sql语句。
      * Prepare builtin chart sql.
      *
@@ -576,6 +726,417 @@ class biModel extends model
         }
 
         return $screenSQLs;
+    }
+
+    /*
+     * 获取DuckDB的可执行文件路径。
+     * Get DcukDB path.
+     *
+     * @access public
+     * @return object|false
+     */
+    public function getDuckDBPath()
+    {
+        $binPath   = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
+        $file      = $binPath . 'duckdb';
+        $extension = $binPath . 'mysql_scanner.duckdb_extension';
+
+        if(!file_exists($file) && !file_exists($extension) && !is_executable($file)) return false;
+
+        return (object)array('bin' => $file, 'extension' => $extension);
+    }
+
+    /**
+     * 获取DuckDB临时目录。
+     * Get DuckDB temp directory.
+     *
+     * @access public
+     * @return string|false
+     */
+    public function getDuckDBTmpDir()
+    {
+        $duckdbTmpPath = $this->app->getTmpRoot() . 'duckdb' . DS . 'bi' . DS;
+        if(!is_dir($duckdbTmpPath) && !mkdir($duckdbTmpPath, 0755, true)) return false;
+
+        return $duckdbTmpPath;
+    }
+
+    /**
+     * 准备同步数据库所需的复制SQL。
+     * Prepare copy SQL for sync.
+     *
+     * @param  string $duckdbTmpPath
+     * @access public
+     * @return string
+     */
+    public function prepareCopySQL($duckdbTmpPath)
+    {
+        $tables    = $this->config->bi->duckdb->tables;
+        $ztvtables = $this->config->bi->duckdb->ztvtables;
+        if(empty($tables)) return '';
+
+        $tablePrefix = $this->config->db->prefix;
+        $ztvPrefix   = 'ztv_';
+
+        $copySQL  = '';
+        foreach($tables as $table => $sql)
+        {
+            $table = $tablePrefix . $table;
+            $sql   = str_replace('zt_', $tablePrefix, $sql);
+
+            $tablePath = $duckdbTmpPath . $table;
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
+        }
+
+        foreach($ztvtables as $table => $sql)
+        {
+            $table = $ztvPrefix . $table;
+
+            $tablePath = $duckdbTmpPath . $table;
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
+        }
+
+        return $copySQL;
+    }
+
+    /**
+     * 准备同步命令。
+     * Prepare sync command.
+     *
+     * @param  string    $binPath
+     * @param  string    $extensionPath
+     * @param  string    $copySQL
+     * @access public
+     * @return string
+     */
+    public function prepareSyncCommand($binPath, $extensionPath, $copySQL)
+    {
+        $sqlContent = $this->config->bi->duckSQLTemp;
+        $dbConfig   = $this->config->db;
+        $variables  = array(
+            '{EXTENSIONPATH}' => $extensionPath,
+            '{DATABASE}'      => $dbConfig->name,
+            '{USER}'          => $dbConfig->user,
+            '{PASSWORD}'      => $dbConfig->password,
+            '{HOST}'          => $dbConfig->host,
+            '{PORT}'          => $dbConfig->port,
+            '{COPYSQL}'       => $copySQL
+        );
+
+        foreach($variables as $key => $value)
+        {
+            $sqlContent = str_replace($key, $value, $sqlContent);
+        }
+
+        return "$binPath :memory: \"$sqlContent\" 2>&1";
+    }
+
+    /**
+     * Process filter variables in sql.
+     *
+     * @param  string    $sql
+     * @param  array  $filters
+     * @access public
+     * @return string
+     */
+    public function processVars($sql, $filters = array())
+    {
+        foreach($filters as $index => $filter)
+        {
+            if(empty($filter['default'])) continue;
+            if(!isset($filter['from']) || $filter['from'] != 'query') continue;
+
+            $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
+        }
+        $sql = $this->loadModel('chart')->parseSqlVars($sql, $filters);
+        $sql = trim($sql, ';');
+
+        return $sql;
+    }
+
+    /**
+     * Build statement object from sql.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return object
+     */
+    public function sql2Statement($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+
+        if($parser->statementsCount == 0) return $this->lang->dataview->empty;
+        if($parser->statementsCount > 1)  return $this->lang->dataview->onlyOne;
+
+        if(!$parser->isSelect) return $this->lang->dataview->allowSelect;
+
+        return $parser->statement;
+    }
+
+    /**
+     * Parse sql.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return array
+     */
+    public function parseSql(string $sql): array
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+        $parser->setDAO($this->dao);
+        $parser->parseStatement();
+
+        return $parser->matchColumnsWithTable();
+    }
+
+    /**
+     * Validate sql.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return string|true
+     */
+    public function validateSql($sql)
+    {
+        $this->loadModel('dataview');
+
+        $driver = 'mysql';
+
+        if(empty($sql)) return $this->lang->dataview->empty;
+        try
+        {
+            $rows = $this->dbh->query("EXPLAIN $sql")->fetchAll();
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+
+        $sqlColumns = $this->getColumns($sql, $driver);
+        list($isUnique, $repeatColumn) = $this->dataview->checkUniColumn($sql, $driver, true, $sqlColumns);
+
+        if(!$isUnique) return sprintf($this->lang->dataview->duplicateField, implode(',', $repeatColumn));
+
+        return true;
+    }
+
+    /**
+     * Prepare pager from sql.
+     *
+     * @param  object    $statement
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return string
+     */
+    public function prepareSqlPager($statement, $recPerPage, $pageID)
+    {
+        if(!$statement->limit)
+        {
+            $statement->limit = new stdclass();
+        }
+        $statement->limit->offset   = $recPerPage * ($pageID - 1);
+        $statement->limit->rowCount = $recPerPage;
+
+        $statement->options->options[] = 'SQL_CALC_FOUND_ROWS';
+
+        $limitSql = $statement->build();
+
+        return $limitSql;
+    }
+
+    /**
+     * Prepare columns setting from sql.
+     *
+     * @param  string    $sql
+     * @param  object    $statement
+     * @access public
+     * @return array
+     */
+    public function prepareColumns($sql, $statement)
+    {
+        $this->loadModel('chart');
+        $this->loadModel('dataview');
+
+        // TODO 需要替换成实际图表或者透视表的driver。
+        $driver = 'mysql';
+
+        $sqlColumns   = $this->getColumns($sql, $driver);
+        $columnTypes  = $this->getColumnsType($sql, $driver, $sqlColumns);
+        $columnFields = array();
+        foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
+
+        $tableAndFields = $this->getTableAndFields($sql);
+        $tables   = $tableAndFields['tables'];
+        $fields   = $tableAndFields['fields'];
+
+        $moduleNames = array();
+        $aliasNames  = array();
+        if($tables)
+        {
+            $moduleNames = $this->dataview->getModuleNames($tables);
+            $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
+        }
+
+        list($fields, $objects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
+
+        $columns = array();
+        foreach($fields as $field => $name)
+        {
+            $columns[$field] = array('name' => $name, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $objects[$field]);
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Query sql.
+     *
+     * @param  string    $sql
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return object
+     */
+    public function query($sql, $recPerPage = 100, $pageID = 1)
+    {
+        $queryResult = new stdclass();
+        $queryResult->error    = false;
+        $queryResult->errorMsg = '';
+        $queryResult->cols     = array();
+        $queryResult->rows     = array();
+        $queryResult->sql      = '';
+        $queryResult->fieldSettings = array();
+
+        $statement = $this->sql2Statement($sql);
+        if(is_string($statement))
+        {
+            $queryResult->error    = true;
+            $queryResult->errorMsg = $statement;
+
+            return $queryResult;
+        }
+
+        $checked = $this->validateSql($sql);
+        if($checked !== true)
+        {
+            $queryResult->error    = true;
+            $queryResult->errorMsg = $checked;
+
+            return $queryResult;
+        }
+
+        $limitSql = $this->prepareSqlPager($statement, $recPerPage, $pageID);
+
+        try
+        {
+            $queryResult->rows      = $this->dbh->query($limitSql)->fetchAll();
+            $queryResult->rowsCount = $this->dbh->query("SELECT FOUND_ROWS() as count")->fetch()->count;
+        }
+        catch(Exception $e)
+        {
+            $queryResult->error = true;
+            $queryResult->errorMsg = $e;
+
+            return $queryResult;
+        }
+
+        $columns    = $this->prepareColumns($limitSql, $statement);
+        $clientLang = $this->app->getClientLang();
+
+        $fieldSettings = array();
+        foreach($columns as $field => $settings)
+        {
+            $title = $settings['name'];
+
+            if(!isset($settings[$clientLang]) || empty($settings[$clientLang])) $settings[$clientLang] = $title;
+            $fieldSettings[$field] = $settings;
+        }
+
+        $queryResult->cols          = $this->buildQueryResultTableColumns($fieldSettings);
+        $queryResult->fieldSettings = $fieldSettings;
+        $queryResult->sql           = $limitSql;
+
+        return $queryResult;
+    }
+
+    /**
+     * Build table columns from query result.
+     *
+     * @param  array    $fieldSettings
+     * @access public
+     * @return array
+     */
+    public function buildQueryResultTableColumns($fieldSettings)
+    {
+        $cols = array();
+        $clientLang = $this->app->getClientLang();
+        foreach($fieldSettings as $field => $settings)
+        {
+            $settings = (array)$settings;
+            $title = $settings[$clientLang];
+            $type  = $settings['type'];
+            $cols[] = array('name' => $field, 'title' => $title, 'sortType' => false);
+        }
+
+        return $cols;
+    }
+
+    /**
+     * Prepare field objects.
+     *
+     * @access public
+     * @return array
+     */
+    public function prepareFieldObjects()
+    {
+        $this->loadModel('dataview');
+        $options = array();
+        foreach($this->lang->dataview->objects as $table => $name)
+        {
+            $fields = $this->dataview->getTypeOptions($table);
+            $options[] = array('text' => $name, 'value' => $table, 'fields' => $fields);
+        }
+
+        return $options;
+    }
+
+    /**
+     * Prepare field setting form data.
+     *
+     * @param  object    $settings
+     * @access public
+     * @return array
+     */
+    public function prepareFieldSettingFormData($settings)
+    {
+        $formData = array();
+        foreach((array)$settings as $key => $setting)
+        {
+            $setting = (array)$setting;
+            $setting['key'] = $key;
+            $formData[] = $setting;
+        }
+
+        return $formData;
+    }
+
+    /**
+     * Convert json string to array.
+     *
+     * @param  string|object|array    $json
+     * @access public
+     * @return array
+     */
+    public function json2Array(string|object|array $json): array
+    {
+        if(empty($json)) return array();
+        if(is_string($json)) return json_decode($json, true);
+        if(is_object($json)) return json_decode(json_encode($json), true);
+
+        return $json;
     }
 
     /**
