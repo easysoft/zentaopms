@@ -132,7 +132,7 @@ window.getColActions = function(col)
     let actionList = [];
 
     /* 父列不需要创建卡片相关的操作按钮。 */
-    if(col.parent != '-1' && (col.type == 'backlog' || col.type == 'unconfirmed' || col.type == 'wait' || col.type == 'active'))
+    if(col.parent != '-1' && (['backlog', 'unconfirmed', 'wait', 'active'].includes(col.type)))
     {
         let cardActions = buildColCardActions(col);
         if(cardActions.length > 0) actionList.push({type:'dropdown', icon:'expand-alt text-primary', caret:false, items:cardActions});
