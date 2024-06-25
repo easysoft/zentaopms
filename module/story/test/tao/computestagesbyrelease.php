@@ -4,13 +4,13 @@
 /**
 
 title=测试 storyModel->computeStagesByRelease();
+timeout=0
 cid=0
 
 - 不传入任何数据。 @0
 - 只传入需求 ID。 @0
 - 已经发布的需求。
  -  @released
- - 属性1 @released
  - 属性2 @released
 
 */
@@ -25,6 +25,6 @@ $release->gen(3);
 global $tester;
 $storyModel = $tester->loadModel('story');
 
-r($storyModel->computeStagesByRelease(0, array())) && p()        && e('0');                          //不传入任何数据。
-r($storyModel->computeStagesByRelease(1, array())) && p()        && e('0');                          //只传入需求 ID。
-r($storyModel->computeStagesByRelease(2, array())) && p('0,1,2') && e('released,released,released'); //已经发布的需求。
+r($storyModel->computeStagesByRelease(0, array())) && p()      && e('0');                 //不传入任何数据。
+r($storyModel->computeStagesByRelease(1, array())) && p()      && e('0');                 //只传入需求 ID。
+r($storyModel->computeStagesByRelease(2, array())) && p('0,2') && e('released,released'); //已经发布的需求。

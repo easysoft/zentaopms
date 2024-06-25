@@ -1629,7 +1629,12 @@ class storyTao extends storyModel
     protected function computeStagesByRelease(int $storyID, array $stages): array
     {
         /* 检查该需求是否已经发布，如果已经发布，阶段则为已发布。 */
-        $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
+        $releases = $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->eq('normal')
+            ->fetchPairs('branch', 'branch');
+
         foreach($releases as $branches)
         {
             foreach(explode(',', trim($branches, ',')) as $branch) $stages[(int)$branch] = 'released';
