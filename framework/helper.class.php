@@ -239,7 +239,7 @@ class helper extends baseHelper
      * @param  float  $traffic
      * @param  int    $precision
      * @access public
-     * @return float
+     * @return string
      */
     public static function formatKB($traffic, $precision = 2)
     {
