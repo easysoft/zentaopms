@@ -1144,6 +1144,26 @@ class biModel extends model
         $cellSpan     = array();
         $columnMaxLen = array();
 
+        $headerRow1 = !empty($data->cols[0]) ? $data->cols[0] : array();
+        $headerRow2 = !empty($data->cols[1]) ? $data->cols[1] : array();
+
+        $index = 0;
+        foreach($headerRow1 as $column)
+        {
+            $field = 'field' . $index;
+            $columns[$field]['name']     = $field;
+            $columns[$field]['title']    = $column->label;
+            $columns[$field]['width']    = 16 * mb_strlen($column->label);
+            $columns[$field]['minWidth'] = 128;
+            $columns[$field]['align']    = 'center';
+
+            $columnMaxLen[$field] = mb_strlen($column->label);
+
+            if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
+
+            $index++;
+        }
+
         return array($columns, $rows, $cellSpan);
     }
 
