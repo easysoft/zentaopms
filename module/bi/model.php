@@ -1000,8 +1000,9 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function query($sql, $recPerPage = 100, $pageID = 1)
+    public function query($sql, $recPerPage = 100, $pageID = 1, $driver = 'mysql')
     {
+        $dbh = $this->app->loadDriver($driver);
         $queryResult = new stdclass();
         $queryResult->error    = false;
         $queryResult->errorMsg = '';
@@ -1030,10 +1031,13 @@ class biModel extends model
 
         $limitSql = $this->prepareSqlPager($statement, $recPerPage, $pageID);
 
+        $mysqlCountSql  = "SELECT FOUND_ROWS() AS count";
+        $duckdbCountSql = "SELECT COUNT(1) AS count FROM ($sql)";
+
         try
         {
-            $queryResult->rows      = $this->dbh->query($limitSql)->fetchAll();
-            $queryResult->rowsCount = $this->dbh->query("SELECT FOUND_ROWS() as count")->fetch()->count;
+            $queryResult->rows      = $dbh->query($limitSql)->fetchAll();
+            $queryResult->rowsCount = $dbh->query($driver == 'mysql' ? $mysqlCountSql : $duckdbCountSql)->fetch()->count;
         }
         catch(Exception $e)
         {
@@ -1076,8 +1080,9 @@ class biModel extends model
         foreach($fieldSettings as $field => $settings)
         {
             $settings = (array)$settings;
-            $title = $settings[$clientLang];
-            $type  = $settings['type'];
+            $title    = isset($settings[$clientLang]) ? $settings[$clientLang] : $field;
+            $type     = $settings['type'];
+
             $cols[] = array('name' => $field, 'title' => $title, 'sortType' => false);
         }
 
