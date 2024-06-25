@@ -152,7 +152,8 @@ class pivotZen extends pivot
      */
     public function show(int $groupID, int $pivotID): void
     {
-        $pivot = $this->pivot->getByID($pivotID);
+        $pivot  = $this->pivot->getByID($pivotID);
+        $driver = $pivot->driver;
         if(isset($_POST['filterValues']) and $_POST['filterValues'])
         {
             foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
@@ -161,18 +162,16 @@ class pivotZen extends pivot
 
         list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
-        $tables = $this->loadModel('chart')->getTables($sql);
-        $sql    = $tables['sql'];
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 
         if(isset($pivot->settings['summary']) and $pivot->settings['summary'] == 'notuse')
         {
-            list($data, $configs) = $this->pivot->genOriginSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+            list($data, $configs) = $this->pivot->genOriginSheet($fields, $pivot->settings, $sql, $filterFormat, $langs, $driver);
         }
         else
         {
-            list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+            list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs, $driver);
         }
 
         $this->view->pivotName    = $pivot->name;

@@ -31,8 +31,8 @@ class moduleMenu extends wg
 
     protected static array $defineBlocks = array
     (
-        'header'   => array(),
-        'footer'   => array()
+        'header' => array(),
+        'footer' => array()
     );
 
     public static function getPageCSS(): ?string

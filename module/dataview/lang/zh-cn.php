@@ -11,6 +11,7 @@ $lang->dataview->code           = '代号';
 $lang->dataview->group          = '所属分组';
 $lang->dataview->view           = '视图名称';
 $lang->dataview->desc           = '描述';
+$lang->dataview->length         = '长度';
 $lang->dataview->data           = '数据';
 $lang->dataview->schema         = '字段';
 $lang->dataview->details        = '详情';

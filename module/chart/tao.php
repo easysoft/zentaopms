@@ -15,7 +15,7 @@ class chartTao extends chartModel
      * @access protected
      * @return array
      */
-    protected function getRows(string $defaultSql, array $filters, string $date, string $group, string $metric, string $agg): array
+    protected function getRows(string $defaultSql, array $filters, string $date, string $group, string $metric, string $agg, string $driver): array
     {
         $groupSql = $groupBySql = "tt.`$group`";
         if(!empty($date))
@@ -47,7 +47,8 @@ class chartTao extends chartModel
         }
         $sql .= " group by $groupBySql";
 
-        return $this->dao->query($sql)->fetchAll();
+        $dbh = $this->app->loadDriver($driver);
+        return $dbh->query($sql)->fetchAll();
     }
 
     /**
@@ -120,57 +121,5 @@ class chartTao extends chartModel
         if(isset($langs[$metrics[$index]]) and !empty($langs[$metrics[$index]][$clientLang])) $fieldName = $langs[$metrics[$index]][$clientLang];
 
         return $fieldName;
-    }
-
-    /**
-     * 在sql中提取字段。
-     * Switch field name.
-     *
-     * @param  string $selectSql
-     * @param  string $sql
-     * @param  array  $out
-     * @access protected
-     * @return array
-     */
-    protected function getFieldsBySql(string $selectSql, string $sql, array $out): array
-    {
-        $fields = explode(',', $selectSql);
-        foreach($fields as $i => $field)
-        {
-            if($field) $asField = '';
-            if(strrpos($field, ' as ') !== false) list($field, $asField) = explode(' as ', $field);
-            if(strrpos($field, ' AS ') !== false) list($field, $asField) = explode(' AS ', $field);
-
-            $field     = trim($field);
-            $asField   = trim($asField);
-            $fieldName = $field;
-            if(strrpos($field, '.') !== false)
-            {
-                $table     = substr($field, 0, strrpos($field, '.'));
-                $fieldName = substr($field, strrpos($field, '.') + 1);
-                if(!empty($out[0]) and in_array($table, $out[2]))
-                {
-                    $realTable = $out[1][array_search($table, $out[2])];
-                    $tableFieldName = str_replace($table . '.', $realTable . '.', $field);
-
-                    if(isset($fields[$fieldName]) && !$asField)
-                    {
-                        $fieldName = str_replace('.', '', $field);
-
-                        $sql = preg_replace(array("/$field/", "/`$field`/"), array("$field AS $fieldName", "`$field` AS $fieldName"), $sql, 1);
-
-                        $field = $tableFieldName;
-                    }
-                }
-
-                if($fieldName == '*') $fieldName = $field;
-            }
-
-            $fieldName = $asField ? $asField : $fieldName;
-
-            $fields[$fieldName] = $field;
-            unset($fields[$i]);
-        }
-        return array($fields, $sql);
     }
 }

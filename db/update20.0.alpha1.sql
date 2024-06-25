@@ -53,7 +53,7 @@ UPDATE `zt_config` SET `module` = 'product', `section` = 'browse' WHERE `module`
 UPDATE `zt_config` SET `module` = 'project', `section` = 'bug' WHERE `module` = 'datatable' AND `section` = 'projectBug' AND `key` = 'showModule';
 UPDATE `zt_config` SET `module` = 'testcase', `section` = 'browse' WHERE `module` = 'datatable' AND `section` = 'testcaseBrowse' AND `key` = 'showModule';
 
-INSERT IGNORE INTO `zt_config` (`owner`, `module`, `key`, `value`) VALUES ('system', 'execution', 'defaultWorkhours', '7');
+REPLACE INTO `zt_config` (`owner`, `module`, `key`, `value`) VALUES ('system', 'execution', 'defaultWorkhours', '7');
 
 CREATE TABLE IF NOT EXISTS `zt_session` (
     `id` varchar(32) NOT NULL,
