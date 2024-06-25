@@ -28,6 +28,26 @@ else
     ) : null;
 }
 
+if(!empty($latestVersionList))
+{
+    $lastVersionList = (array)$latestVersionList;
+    $lastVersion     = end($lastVersionList);
+    $versionItems    = array();
+    foreach($latestVersionList as $versionNumber => $version)
+    {
+        $versionItems[] = div
+        (
+            setClass('version-list py-2'),
+            div
+            (
+                setClass('version-name flex h-6 items-center'),
+                icon('version', setClass('version-upgrade')),
+                h4($version['name'])
+            )
+        );
+    }
+}
+
 $scoreNotice = '';
 if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
 
