@@ -5002,9 +5002,6 @@ class storyModel extends model
         $story->category     = zget($this->lang->{$storyType}->categoryList, $story->category);
         $story->closedReason = zget($this->lang->{$storyType}->reasonList,   $story->closedReason);
 
-        /* Set rowKey to uniqueID in dTable. */
-        $story->uniqueID = $story->parent > 0 ? $story->parent . '-' . $story->id : $story->id;
-
         if($story->parent < 0) $story->parent = 0;
         if(empty($options['execution'])) $story->isParent = isset($story->children);
 

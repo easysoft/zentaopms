@@ -246,14 +246,15 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         $canBatchChangePlan = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
     }
 
-    $canBatchChangeGrade  = $canBeChanged && hasPriv($storyType, 'batchChangeGrade');
-    $canBatchChangeStage  = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
-    $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
-    $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
-    $canBatchChangeParent = $canBeChanged && hasPriv($storyType, 'batchChangeParent');
-    $canBatchUnlink       = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
-    $canBatchImportToLib  = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
+    $canBatchChangeGrade   = $canBeChanged && hasPriv($storyType, 'batchChangeGrade');
+    $canBatchChangeStage   = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
+    $canBatchChangeBranch  = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
+    $canBatchChangeModule  = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
+    $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent');
+    $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
+    $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
+    $canBatchChangeRoadmap = $canBeChanged && hasPriv('story', 'batchChangeRoadmap') && $config->vision == 'or';
+    $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
 
     /* Remove empty data from data list. */
     unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
@@ -441,41 +442,6 @@ modal(set::id('#batchUnlinkStoryBox'));
 $linkStoryByPlanTips = $lang->execution->linkNormalStoryByPlanTips;
 if($product && $product->type != 'normal') $linkStoryByPlanTips = sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
 if($isProjectStory) $linkStoryByPlanTips = str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
-
-if(in_array($this->config->edition, array('max', 'ipd')))
-{
-    modal
-    (
-        setID('batchImportToLib'),
-        set::title($lang->story->importToLib),
-        form
-        (
-            set::action($this->createLink('story', 'batchImportToLib')),
-            formGroup
-            (
-                set::label($lang->story->lib),
-                picker
-                (
-                    set::name('lib'),
-                    set::items($libs),
-                    set::required(true)
-                )
-            ),
-            (!hasPriv('assetlib', 'approveStory') && !hasPriv('assetlib', 'batchApproveStory')) ? formGroup
-            (
-                set::label($lang->story->approver),
-                picker
-                (
-                    set::name('assignedTo'),
-                    set::items($approvers)
-                )
-            ) : null,
-            set::submitBtnText($lang->import),
-            formHidden('storyIdList', ''),
-            set::actions(array('submit'))
-        )
-    );
-}
 
 modal
 (
