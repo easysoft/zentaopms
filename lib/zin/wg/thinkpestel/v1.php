@@ -18,7 +18,7 @@ class thinkPestel extends thinkModel
     protected function buildItem(object $block): array
     {
         $cards = array();
-        foreach($block->steps as &$step) $cards[] = div(setClass('w-full bg-canvas p-2 shadow relative'), $this->buildQuestionItem($step));
+        foreach($block->steps as &$step) $cards[] = div(setClass('w-64 bg-canvas p-2 shadow relative'), $this->buildQuestionItem($step));
         return $cards;
     }
 
@@ -29,6 +29,7 @@ class thinkPestel extends thinkModel
         list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
         $modelItems   = array();
         $defaultTitle = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
+        $style        = $mode === 'preview' ? null : setStyle(array('width' => '544px'));
 
         foreach($blocks as $blockIndex => $block)
         {
@@ -36,7 +37,7 @@ class thinkPestel extends thinkModel
             $modelItems[] = div
             (
                 setClass('relative w-1/' . count($blocks), 'block-' . $blockIndex),
-                setStyle(array('min-height' => '256px')),
+                $style,
                 $mode === 'preview' ? div(setClass('w-full text-center text-sm leading-tight text-gray-400'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
                 div
                 (
@@ -52,7 +53,7 @@ class thinkPestel extends thinkModel
                             $block->text ? $block->text : $defaultTitle
                         )
                     ),
-                    isset($block->steps) ? div(setClass('py-2 px-5 relative z-10 col gap-5'), $this->buildItem($block)) : null
+                    isset($block->steps) ? div(setClass('py-2 px-2.5 relative z-10 flex flex-wrap gap-2.5'), $this->buildItem($block)) : null
                 )
             );
         }
@@ -61,9 +62,12 @@ class thinkPestel extends thinkModel
 
     protected function build()
     {
+        $mode      = $this->prop('mode');
+        $className = $mode == 'preview' ? 'pb-4' : '';
         return div
         (
-            setClass('flex model-pestel'),
+            setClass('flex model-pestel', $className),
+            setStyle(array('min-height' => '256px')),
             $this->buildBody()
         );
     }
