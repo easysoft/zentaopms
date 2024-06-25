@@ -90,3 +90,5 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('sql', '业务需求', 'epics',        '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" type=\"epic\"',    'view_datasource_2',    'id',   'title');
 
 UPDATE `zt_workflowdatasource` SET `datasource` = 'select id,title from zt_story where deleted=\"0\" and type=\"story\"' WHERE `code` = 'stories';
+
+ALTER TABLE `zt_demand` ADD `stage` enum('wait','distributed','inroadmap','projected','developing','delivering','delivered','closed') NOT NULL DEFAULT 'wait' AFTER `status`;
