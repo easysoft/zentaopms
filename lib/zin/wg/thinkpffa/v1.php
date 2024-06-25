@@ -49,123 +49,49 @@ class thinkPffa extends thinkModel
         );
     }
 
-    protected function buildLeftBlock()
+    protected function buildBlock(int $blockIndex, string $blockClass, string $contentClass, string $direction = '')
     {
         global $lang;
+
         $mode       = $this->prop('mode');
-        $blockIndex = 1;
-        $blockClass = $mode === 'preview' ? 'w-1/3' : '';
+        $blockWidth = in_array($blockIndex, array(1, 2)) ? '1108px' : '1078px';
+        $blockStyle = $mode === 'preview' ? null : setStyle(array('width' => $blockWidth));
+        $titleClass = 'text-gray-400 text-sm';
+        if($blockIndex == 3) $titleClass .= ' absolute';
+        if($blockIndex == 2) $titleClass .= ' ml-4';
+        $blockTitle    = $mode === 'preview' ? span(setClass($titleClass), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null;
+        $triangle      = $direction ? div(setClass('triangle triangle-' . $direction)) : null;
+        $contentClass .= ' mt-1 flex';
 
         return div
         (
-            setClass('col justify-stretch pr-3.5 block-' . $blockIndex, $blockClass),
-            $mode === 'preview' ? null : setStyle(array('width' => '1108px')),
-            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
+            setClass($blockClass, $mode === 'preview' ? 'w-1/3' : ''),
+            $blockStyle,
+            $blockTitle,
             div
             (
-                setClass('h-full flex items-center mt-1'),
+                setClass($contentClass),
+                in_array($blockIndex, array(2, 3)) ? $triangle : null,
                 $this->buildCards($blockIndex),
-                div(setClass('triangle triangle-right'))
+                in_array($blockIndex, array(2, 3)) ? null : $triangle
             )
         );
     }
 
-    protected function buildTopBlock()
-    {
-        global $lang;
-        $mode       = $this->prop('mode');
-        $blockIndex = 0;
-        $blockClass = $mode === 'preview' ? 'w-1/3' : '';
-
-        return div
-        (
-            setClass('block-' . $blockIndex, $blockClass),
-            $mode === 'preview' ? null : setStyle(array('width' => '1078px')),
-            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
-            div
-            (
-                setClass('flex justify-center flex-wrap mt-1'),
-                $this->buildCards($blockIndex),
-                div(setClass('triangle triangle-down'))
-            )
-        );
-    }
-
-    protected function buildCenterBlock()
-    {
-        global $lang;
-        $mode       = $this->prop('mode');
-        $blockIndex = 4;
-        $blockClass = $mode === 'preview' ? 'w-1/3' : '';
-
-        return div
-        (
-            setClass('col justify-stretch block-' . $blockIndex, $blockClass),
-            $mode === 'preview' ? null : setStyle(array('width' => '1078px')),
-            $mode === 'preview' ? span(setClass('text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
-            div
-            (
-                setClass('h-full flex justify-center flex-wrap mt-1'),
-                $this->buildCards($blockIndex)
-            )
-        );
-    }
-
-    protected function buildBottomBlock()
-    {
-        global $lang;
-        $mode       = $this->prop('mode');
-        $blockIndex = 3;
-        $blockClass = $mode === 'preview' ? 'w-1/3' : '';
-
-        return div
-        (
-            setClass('relative block-' . $blockIndex, $blockClass),
-            $mode === 'preview' ? null : setStyle(array('width' => '1078px')),
-            $mode === 'preview' ? span(setClass('absolute text-gray-400 text-sm'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
-            div
-            (
-                setClass('flex justify-center flex-wrap mt-1'),
-                div(setClass('triangle triangle-up')),
-                $this->buildCards($blockIndex)
-            )
-        );
-    }
-
-    protected function buildRightBlock()
-    {
-        global $lang;
-        $mode       = $this->prop('mode');
-        $blockIndex = 2;
-        $blockClass = $mode === 'preview' ? 'w-1/3' : '';
-
-        return div
-        (
-            setClass('col justify-stretch pl-3.5 block-' . $blockIndex, $blockClass),
-            $mode === 'preview' ? null : setStyle(array('width' => '1108px')),
-            $mode === 'preview' ? span(setClass('text-gray-400 text-sm ml-4'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
-            div
-            (
-                setClass('h-full flex items-center mt-1'),
-                div(setClass('triangle triangle-left')),
-                $this->buildCards($blockIndex)
-            )
-        );
-    }
     protected function build()
     {
         return div
         (
             setClass('col justify-center items-center gap-3.5 model-pffa'),
-            $this->buildTopBlock(),
+            $this->buildBlock(0, 'block-0', 'justify-center flex-wrap', 'down'),
             div
             (
                 setClass('w-full h-full flex items-stretch justify-center pffa-middle'),
-                $this->buildLeftBlock(),
-                $this->buildCenterBlock(),
-                $this->buildRightBlock(),
+                $this->buildBlock(1, 'col justify-stretch pr-3.5 block-1', 'h-full items-center', 'right'),
+                $this->buildBlock(4, 'col justify-stretch block-4', 'h-full justify-center flex-wrap'),
+                $this->buildBlock(2, 'col justify-stretch pl-3.5 block-2', 'h-full items-center', 'left')
             ),
-            $this->buildBottomBlock()
+            $this->buildBlock(3, 'relative block-3', 'justify-center flex-wrap', 'up')
         );
     }
 }
