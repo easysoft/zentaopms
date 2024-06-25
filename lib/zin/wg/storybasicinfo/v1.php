@@ -150,15 +150,12 @@ class storyBasicInfo extends wg
             'status'  => $story->URChanged ? 'changed' : $story->status,
             'text'    => $statusText
         );
-        if($story->type !== 'requirement')
-        {
-            $items[$lang->story->stage] = array
-            (
-                'control' => 'text',
-                'class'   => 'stage-line',
-                'text'    => zget($lang->story->stageList, $this->getMinStage($story, $branches), '')
-            );
-        }
+        $items[$lang->story->stage] = array
+        (
+            'control' => 'text',
+            'class'   => 'stage-line',
+            'text'    => zget($lang->story->stageList, $this->getMinStage($story, $branches), '')
+        );
         $items[$lang->story->category] = zget($lang->story->categoryList, $story->category);
         $items[$lang->story->pri] = array
         (
