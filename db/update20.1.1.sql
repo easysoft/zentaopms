@@ -92,3 +92,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 UPDATE `zt_workflowdatasource` SET `datasource` = 'select id,title from zt_story where deleted=\"0\" and type=\"story\"' WHERE `code` = 'stories';
 
 ALTER TABLE `zt_demand` ADD `stage` enum('wait','distributed','inroadmap','projected','developing','delivering','delivered','closed') NOT NULL DEFAULT 'wait' AFTER `status`;
+
+ALTER TABLE `zt_pivot` ADD `driver` enum('mysql', 'duckdb') not NULL default 'mysql' AFTER `code`;
+ALTER TABLE `zt_chart` ADD `driver` enum('mysql', 'duckdb') not NULL default 'mysql' AFTER `code`;
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('*/10', '*', '*', '*', '*', 'moduleName=bi&methodName=syncParquetFile', '生成parquet文件', 'zentao', 1, 'normal');
