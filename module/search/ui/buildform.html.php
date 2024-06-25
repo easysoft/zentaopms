@@ -77,6 +77,17 @@ if(is_array($queries))
     }
 }
 
+/* Build date period list. */
+$datePeriods = array();
+$dpText      = $lang->datepicker->dpText;
+$datePeriods[] = array('type' => 'heading',     'text' => $dpText->TEXT_DATE, 'className' => 'whitespace-nowrap');
+$datePeriods[] = array('value' => '$lastWeek',  'text' => $dpText->TEXT_PREV_WEEK);
+$datePeriods[] = array('value' => '$thisWeek',  'text' => $dpText->TEXT_THIS_WEEK);
+$datePeriods[] = array('value' => '$yesterday', 'text' => $dpText->TEXT_YESTERDAY);
+$datePeriods[] = array('value' => '$today',     'text' => $dpText->TEXT_TODAY);
+$datePeriods[] = array('value' => '$lastMonth', 'text' => $dpText->TEXT_PREV_MONTH);
+$datePeriods[] = array('value' => '$thisMonth', 'text' => $dpText->TEXT_THIS_MONTH);
+
 /* Build search form setting. */
 $setting = new stdClass();
 $setting->actionURL           = $actionURL;
@@ -96,6 +107,7 @@ $setting->saveQueryPanelTitle = $lang->search->savedQuery;
 $setting->saveQueryBtnText    = $lang->search->saveCondition;
 $setting->onMenuBar           = $onMenuBar;
 $setting->formName            = $formName;
+$setting->datePeriods         = $datePeriods;
 
 /**
  * 渲染 JSON 字符串并发送到客户端。
