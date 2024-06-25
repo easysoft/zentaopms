@@ -163,7 +163,7 @@ div
                     h::table
                     (
                         setStyle('min-width', '700px'),
-                        setClass('table w-auto max-w-full bordered mt-4 text-center'),
+                        setClass('table w-full max-w-full bordered mt-4 text-center'),
                         h::tr
                         (
                             $type !== 'store' ? null : h::th($lang->instance->status),
@@ -225,7 +225,7 @@ div
                     h::table
                     (
                         setStyle('min-width', '700px'),
-                        setClass('table w-auto max-w-full bordered mt-4 text-center'),
+                        setClass('table w-full max-w-full bordered mt-4 text-center'),
                         h::tr
                         (
                             h::th($lang->instance->dbName),
