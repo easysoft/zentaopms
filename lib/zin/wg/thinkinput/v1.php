@@ -19,7 +19,7 @@ class thinkInput extends thinkQuestion
         if($step)
         {
             $required = $step->options->required;
-            $value    = isset($step->answer->result)? $step->answer->result[0] : '';
+            $value    = !empty($step->answer->result) ? $step->answer->result[0] : '';
         }
         $detailWg[] = div(
             set::title($value),
