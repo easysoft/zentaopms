@@ -48,8 +48,8 @@ class thinkResult extends wg
             setClass('think-result-content col items-center px-7 py-6 gap-4 mx-auto'),
             div
             (
-                setClass('w-full flex items-center justify-center ellipsis overflow-hidden whitespace-nowrap'),
-                setStyle(array('font-size' => '20px', 'height' => '30px')),
+                setClass('w-full flex items-center justify-center'),
+                setStyle(array('font-size' => '20px')),
                 set::title($wizard->introduction),
                 $introduction
             ),

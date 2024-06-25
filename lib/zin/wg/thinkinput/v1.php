@@ -19,16 +19,18 @@ class thinkInput extends thinkQuestion
         if($step)
         {
             $required = $step->options->required;
-            $value    = isset($step->answer->result)? $step->answer->result : '';
+            $value    = !empty($step->answer->result) ? $step->answer->result[0] : '';
         }
-
-        $detailWg[] = textarea
-        (
-            set::rows('3'),
-            set::name('result'),
-            set::required($required),
-            set::value($value),
-            set::placeholder($lang->thinkstep->placeholder->pleaseInput)
+        $detailWg[] = div(
+            set::title($value),
+            textarea
+            (
+                set::rows('3'),
+                set::name('result'),
+                set::required($required),
+                set::value($value),
+                set::placeholder($lang->thinkstep->placeholder->pleaseInput)
+            ),
         );
         return $detailWg;
     }

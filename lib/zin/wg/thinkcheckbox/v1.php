@@ -37,6 +37,7 @@ class thinkCheckbox extends thinkRadio
             formGroup
             (
                 set::label($lang->thinkstep->label->minCount),
+                set::labelClass('required'),
                 setClass($className),
                 input
                 (
@@ -50,6 +51,7 @@ class thinkCheckbox extends thinkRadio
             formGroup
             (
                 set::label($lang->thinkstep->label->maxCount),
+                set::labelClass('required'),
                 setClass($className),
                 input
                 (
