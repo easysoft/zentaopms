@@ -1161,6 +1161,25 @@ class biModel extends model
                 $colspan = 0;
                 while($colspan < $column->colspan)
                 {
+                    $subColumn = array_shift($headerRow2);
+
+                    $field = 'field' . $index;
+                    $columns[$field]['name']     = $field;
+                    $columns[$field]['title']    = $subColumn->label;
+                    $columns[$field]['width']    = 16 * mb_strlen($subColumn->label);
+                    $columns[$field]['minWidth'] = 128;
+                    $columns[$field]['align']    = 'center';
+
+                    $columnMaxLen[$field] = mb_strlen($column->label);
+
+                    /* 把被切片的字段名设置为数据表格的列配置的 headerGroup 属性。*/
+                    /* Set the sliced field name as the headerGroup attribute of the column configuration of the data table. */
+                    $columns[$field]['headerGroup'] = $column->label;
+
+                    /* 数据表格不支持表头第二行合并单元格，如果有这种情况把被合并的所有列视为一列，记录 colspan 属性并跳过其它列。*/
+                    /* The data table does not support merging cells in the second row of the header. If this is the case, all the merged columns are regarded as one column, the colspan attribute is recorded and other columns are skipped. */
+                    if(!empty($subColumn->colspan) && $subColumn->colspan > 1) $columns[$field]['colspan'] = $subColumn->colspan;
+
                     $colspan += $subColumn->colspan ?: 1;
                     $index++;
                 }
