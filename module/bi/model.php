@@ -1201,6 +1201,20 @@ class biModel extends model
             $index++;
         }
 
+        $lastRow        = count($data->array) - 1;
+        $hasGroup       = isset($data->groups);
+        $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
+        foreach($data->array as $rowKey => $rowData)
+        {
+            $index   = 0;
+            $rowData = array_values($rowData);
+        }
+
+        foreach($columns as $field => $column)
+        {
+            $columns[$field]['width'] = 16 * $columnMaxLen[$field];
+        }
+
         return array($columns, $rows, $cellSpan);
     }
 
