@@ -1129,13 +1129,32 @@ class biModel extends model
     }
 
     /**
+     * 把自定义透视表的数据转换为数据表格可以使用的格式。
+     * Convert the data of custom pivot to the format that can be used by data table.
+     *
+     * @param  object $data
+     * @param  array  $configs
+     * @access public
+     * @return array
+     */
+    public function convertDataForDtable(object $data, array $configs): array
+    {
+        $columns      = array();
+        $rows         = array();
+        $cellSpan     = array();
+        $columnMaxLen = array();
+
+        return array($columns, $rows, $cellSpan);
+    }
+
+    /**
      * Convert json string to array.
      *
      * @param  string|object|array    $json
      * @access public
      * @return array
      */
-    public function json2Array(string|object|array $json): array
+    public function json2Array(string|object|array|null $json): array
     {
         if(empty($json)) return array();
         if(is_string($json)) return json_decode($json, true);
