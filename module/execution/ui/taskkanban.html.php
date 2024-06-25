@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$this->app->loadLang('risk');
 
 $laneCount = 0;
 $lanePairs  = array();
@@ -45,6 +46,8 @@ $checkObject->execution = $executionID;
 $canModifyExecution  = common::canModify('execution', $execution);
 $canCreateTask       = $canModifyExecution && common::hasPriv('task', 'create', $checkObject);
 $canBatchCreateTask  = $canModifyExecution && common::hasPriv('task', 'batchCreate', $checkObject);
+$canCreateRisk       = $canModifyExecution && common::hasPriv('risk', 'create', $checkObject);
+$canBatchCreateRisk  = $canModifyExecution && common::hasPriv('risk', 'batchCreate', $checkObject);
 $canCreateBug        = ($canModifyExecution && $productID && common::hasPriv('bug', 'create'));
 $canBatchCreateBug   = ($canModifyExecution && $productID && common::hasPriv('bug', 'batchCreate'));
 $canImportBug        = ($canModifyExecution && $productID && common::hasPriv('execution', 'importBug'));
@@ -78,6 +81,8 @@ jsVar('priv', array(
         'canSortCards'        => common::hasPriv('kanban', 'cardsSort'),
         'canCreateTask'       => $canCreateTask,
         'canBatchCreateTask'  => $canBatchCreateTask,
+        'canCreateRisk'       => $canCreateRisk,
+        'canBatchCreateRisk'  => $canBatchCreateRisk,
         'canImportBug'        => $canImportBug,
         'canCreateBug'        => $canCreateBug,
         'canBatchCreateBug'   => $canBatchCreateBug,
@@ -98,12 +103,19 @@ jsVar('priv', array(
         'canActivateBug'      => $canModifyExecution && common::hasPriv('bug', 'activate'),
         'canResolveBug'       => $canModifyExecution && common::hasPriv('bug', 'resolve'),
         'canCloseBug'         => $canModifyExecution && common::hasPriv('bug', 'close'),
-        'canCloseStory'       => $canModifyExecution && common::hasPriv('story', 'close')
+        'canCloseStory'       => $canModifyExecution && common::hasPriv('story', 'close'),
+        'canTrackRisk'        => $canModifyExecution && common::hasPriv('risk', 'track'),
+        'canAssignRisk'       => $canModifyExecution && common::hasPriv('risk', 'assignto'),
+        'canCloseRisk'        => $canModifyExecution && common::hasPriv('risk', 'close'),
+        'canHangupRisk'       => $canModifyExecution && common::hasPriv('risk', 'hangup'),
+        'canCancelRisk'       => $canModifyExecution && common::hasPriv('risk', 'cancel'),
+        'canActivateRisk'     => $canModifyExecution && common::hasPriv('risk', 'activate')
     )
 );
 jsVar('executionLang', $lang->execution);
 jsVar('storyLang', $lang->story);
 jsVar('taskLang', $lang->task);
+jsVar('riskLang', $lang->risk);
 jsVar('bugLang', $lang->bug);
 jsVar('editName', $lang->execution->editName);
 jsVar('setWIP', $lang->execution->setWIP);
@@ -125,7 +137,7 @@ jsVar('teamWords', $lang->execution->teamWords);
 jsVar('canImportBug', $features['qa']);
 jsVar('canChangeObject', common::canModify('execution', $execution));
 
-$canCreateObject = ($canCreateTask or $canBatchCreateTask or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
+$canCreateObject = ($canCreateTask or $canBatchCreateTask or $canCreateRisk or $canBatchCreateRisk or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
 if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')))
 {
     unset($lang->kanban->type['epic'], $lang->kanban->type['requirement']);
@@ -229,7 +241,10 @@ row
                 ($features['qa'] && $canImportBug) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] && $hasStoryButton && $features['qa']) ? array('text' => '', 'class' => 'divider menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
+                ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
+                array('class' => 'divider menu-divider'),
+                ($canCreateRisk) ? array('text' => $lang->risk->create, 'url' => createLink('risk', 'create', "execution=$execution->id&from=execution"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
+                ($canBatchCreateRisk) ? array('text' => $lang->risk->batchCreateRisk, 'url' => createLink('risk', 'batchCreate', "execution=$execution->id&from=execution"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))
         ) : null
     )

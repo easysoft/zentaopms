@@ -1093,4 +1093,31 @@ class kanbanTao extends kanbanModel
 
         return $menus;
     }
+
+    /**
+     * 获取风险看板操作菜单。
+     * Get the Kanban risk menu.
+     *
+     * @param  int         $executionID
+     * @access public
+     * @return array
+     */
+    public function getRiskCardMenu($risks)
+    {
+        $menus = array();
+        foreach($risks as $risk)
+        {
+            $menu = array();
+            if(common::hasPriv('risk', 'edit') and $this->isClickable($risk, 'edit'))         $menu[] = array('label' => $this->lang->risk->edit, 'icon' => 'edit', 'url' => helper::createLink('risk', 'edit', "riskID=$risk->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('risk', 'track') and $this->isClickable($risk, 'track'))       $menu[] = array('label' => $this->lang->risk->track, 'icon' => 'checked', 'url' => helper::createLink('risk', 'track', "riskID=$risk->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('risk', 'activate') and $this->isClickable($risk, 'activate')) $menu[] = array('label' => $this->lang->risk->activate, 'icon' => 'magic', 'url' => helper::createLink('risk', 'activate', "riskID=$risk->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('risk', 'hangup') and $this->isClickable($risk, 'hangup'))     $menu[] = array('label' => $this->lang->risk->hangup, 'icon' => 'pause', 'url' => helper::createLink('risk', 'hangup', "riskID=$risk->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('risk', 'cancel') and $this->isClickable($risk, 'cancel'))     $menu[] = array('label' => $this->lang->risk->cancel, 'icon' => 'ban-circle', 'url' => helper::createLink('risk', 'cancel', "riskID=$risk->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('risk', 'close') and $this->isClickable($risk, 'close'))      $menu[] = array('label' => $this->lang->risk->close, 'icon' => 'off', 'url' => helper::createLink('risk', 'close', "riskID=$risk->id"), 'modal' => true, 'size' => 'lg');
+
+            $menus[$risk->id] = $menu;
+        }
+
+        return $menus;
+    }
 }

@@ -1753,12 +1753,8 @@ class execution extends control
 
         /* Get kanban data. */
         $orderBy = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
+        $this->kanban->createLaneIfNotExist($executionID);
         list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
-        if(empty($kanbanGroup))
-        {
-            $this->kanban->createExecutionLane($executionID, $browseType);
-            list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
-        }
 
         /* Show lanes of the attribute: no story and bug in request, no bug in design. */
         if(!isset($this->lang->execution->menu->story)) unset($kanbanGroup['story']);

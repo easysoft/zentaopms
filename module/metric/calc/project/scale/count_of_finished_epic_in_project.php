@@ -41,6 +41,3 @@ class count_of_finished_epic_in_project extends baseCalc
         return $this->filterByOptions($records, $options);
     }
 }
-
-
-

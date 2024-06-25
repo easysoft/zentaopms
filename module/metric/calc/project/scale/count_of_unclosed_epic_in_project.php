@@ -41,6 +41,3 @@ class count_of_unclosed_epic_in_project extends baseCalc
         return $this->filterByOptions($records, $options);
     }
 }
-
-
-
