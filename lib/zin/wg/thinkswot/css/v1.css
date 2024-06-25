@@ -9,7 +9,6 @@
 .model-swot .model-block.block-1 {background-color: var(--color-success-100);}
 .model-swot .model-block.block-2 {background-color: var(--color-special-100);}
 .model-swot .model-block.block-3 {background-color: var(--color-warning-100);}
-.model-swot .model-block .item-step-title {font-size: 1.75rem;}
 .model-swot .model-block.block-0 .item-step-title {color: #2294FB;}
 .model-swot .model-block.block-1 .item-step-title {color: var(--color-success-400);}
 .model-swot .model-block.block-2 .item-step-title {color: var(--color-special-400);}

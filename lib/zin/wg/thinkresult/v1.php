@@ -43,9 +43,10 @@ class thinkResult extends wg
         $introduction = $wizard->introduction ? $wizard->introduction : $introduction;
         $suggestion   = $mode == 'preview' ? $lang->thinkwizard->suggestion : '';
         $suggestion   = $wizard->suggestion ? htmlspecialchars_decode($wizard->suggestion) : $suggestion;
+        $modelClass   = $mode == 'preview' ? 'w-full' : '';
         return div
         (
-            setClass('think-result-content col items-center px-7 py-6 gap-4 mx-auto'),
+            setClass('think-result-content col items-center px-12 py-6 gap-4 mx-auto'),
             div
             (
                 setClass('w-full flex items-center justify-center'),
@@ -55,7 +56,7 @@ class thinkResult extends wg
             ),
             div
             (
-                setClass('think-model-content w-full'),
+                setClass('think-model-content', $modelClass, 'is-' . $mode),
                 setStyle('min-height', '200px'),
                 $this->buildModel(),
                 div(setClass('mt-4 text-center font-bold text-gray-950 text-3xl'), $models[$wizard->model])

@@ -26,16 +26,17 @@ class thinkSwot extends thinkModel
         $mode         = $this->prop('mode');
         $defaultTitle = $mode == 'preview' ? $lang->thinkwizard->unAssociated : '';
         $blockTitle   = $block->text ?: $defaultTitle;
+        $blockStyle   = $mode == 'preview' ? array('min-height' => '200px', 'width' => '50%') : array('min-height' => '200px', 'width' => '1078px');
 
         return div
         (
-            setClass('relative p-1 bg-canvas border border-canvas border-2 model-block', "block-$order"),
-            setStyle(array('width' => '50%', 'min-height' => '294px')),
+            setClass('relative py-1 px-2.5 bg-canvas border border-canvas border-2 model-block', "block-$order"),
+            setStyle($blockStyle),
             div
             (
                 setClass('h-full'),
                 div(setClass('item-step-title text-center text-clip'), set::title($blockTitle), $blockTitle),
-                !isset($block->steps) ? null : div(setClass('px-4 py-3 flex flex-wrap gap-5 relative z-10'), $this->buildQuestion($block->steps))
+                !isset($block->steps) ? null : div(setClass('py-3 flex flex-wrap gap-2.5 relative z-10'), $this->buildQuestion($block->steps))
             )
         );
     }
@@ -54,7 +55,7 @@ class thinkSwot extends thinkModel
         $app->loadLang('thinkwizard');
 
         $mode  = $this->prop('mode');
-        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'min-width' => '1160px'));
+        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'width' => '2156px'));
         $model = array(
             div
             (
