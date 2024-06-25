@@ -275,7 +275,6 @@ window.getItem = function(info)
     if(['story', 'epic', 'requirement', 'parentStory'].includes(info.laneInfo.type))
     {
         info.item.titleUrl = $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`);
-      $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
     }
     else if(info.laneInfo.type == 'task' || info.laneInfo.type == 'bug')
     {

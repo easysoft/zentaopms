@@ -1477,15 +1477,6 @@ class kanbanModel extends model
         $fromKanbanID = '';
         foreach($lanes as $lane)
         {
-            list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
-
-            if($geMax && $lane->type == 'risk') $cardsData = $this->appendRiskField($cardsData, $objectGroup['risk']);
-            $kanbanGroup[$lane->type]['id']   = $lane->id;
-            $kanbanGroup[$lane->type]['key']  = 'group' . $lane->id;
-            $kanbanGroup[$lane->type]['data'] = array();
-            $kanbanGroup[$lane->type]['data']['lanes'] = array($laneData);
-            $kanbanGroup[$lane->type]['data']['cols']  = $columnData;
-            $kanbanGroup[$lane->type]['data']['items'] = $cardsData;
             if($lane->type == 'parentStory') $fromKanbanID = 'group' . $lane->id;
         }
 
