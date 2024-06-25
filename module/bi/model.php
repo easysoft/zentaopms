@@ -1208,6 +1208,22 @@ class biModel extends model
         {
             $index   = 0;
             $rowData = array_values($rowData);
+
+            for($i = 0; $i < count($rowData); $i++)
+            {
+                $field = 'field' . $index;
+                $value = $rowData[$i];
+
+                if(!empty($columns[$field]['colspan']))
+                {
+                    $colspan = $columns[$field]['colspan'];
+                    $value   = array_slice($rowData, $i, $colspan);
+
+                    $i += $colspan - 1;
+                }
+
+                $index++;
+            }
         }
 
         foreach($columns as $field => $column)
