@@ -3,6 +3,7 @@ namespace zin;
 
 $this->app->loadConfig('message');
 h::css("
+#versionTitle {background-image: url('{$config->webRoot}theme/default/images/main/version-upgrade.svg');}
 .icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url('{$config->webRoot}theme/default/images/main/version-new.svg');}
 .icon-version:before {content:'';}
 ");
@@ -46,7 +47,7 @@ if(!empty($latestVersionList))
             (
                 setClass('version-name flex h-6 items-center'),
                 icon('version', setClass('version-upgrade')),
-                h4($version['name'])
+                h5($version['name'])
             ),
             div
             (
@@ -191,21 +192,25 @@ div
             set::hint($version),
             set::text($versionName)
         ),
-        $upgradeBtn
-    )
-);
-
-panel
-(
-    setID('upgradeContent'),
-    set::title($lang->index->upgradeVersion),
-    set::headingClass('border-b'),
-    set::bodyClass('p-0'),
-    div
-    (
-        setID('latestVersionList'),
-        setClass('p-4'),
-        $upgradeContent
+        $upgradeBtn,
+        panel
+        (
+            setID('upgradeContent'),
+            to::heading
+            (
+                setClass('justify-start items-center gap-1'),
+                icon(setClass('version-upgrade'), setID('versionTitle')),
+                span($lang->index->upgradeVersion)
+            ),
+            set::headingClass('border-b'),
+            set::bodyClass('p-0'),
+            div
+            (
+                setID('latestVersionList'),
+                setClass('p-4'),
+                $upgradeContent
+            )
+        )
     )
 );
 
