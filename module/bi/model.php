@@ -1198,6 +1198,8 @@ class biModel extends model
 
             if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
 
+            // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
+
             $index++;
         }
 
@@ -1222,10 +1224,14 @@ class biModel extends model
                     $i += $colspan - 1;
                 }
 
+                /* 定义数据表格的行数据。*/
+                /* Defind row data of the data table. */
                 $rows[$rowKey][$field] = $value;
 
                 if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
 
+                /* 定义数据表格合并单元格的配置。*/
+                /* Define configuration to merge cell of the data table. */
                 if(isset($configs[$rowKey][$index]) && $configs[$rowKey][$index] > 1)
                 {
                     $rows[$rowKey][$field . '_rowspan'] = $configs[$rowKey][$index];
