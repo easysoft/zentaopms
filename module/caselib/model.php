@@ -322,13 +322,16 @@ class caselibModel extends model
      * 判断操作是否可以点击。
      * Judge an action is clickable or not.
      *
-     * @param  object $lib
+     * @param  object $object
      * @param  string $action
      * @access public
      * @return bool
      */
-    public function isClickable(object $lib, string $action): bool
+    public function isClickable(object $object, string $action): bool
     {
+        $action = strtolower($action);
+
+        if($action == 'createcase') return !empty($object->lib) && empty($object->product);
         return common::hasPriv('caselib', $action);
     }
 }
