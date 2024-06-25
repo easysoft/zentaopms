@@ -220,7 +220,7 @@ $lang->product->menu->settings['subMenu']->module    = array('link' => "{$lang->
 $lang->product->menu->settings['subMenu']->branch    = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
 $lang->product->menu->settings['subMenu']->whitelist = array('link' => "{$lang->whitelist}|product|whitelist|product=%s", 'subModule' => 'personnel');
 
-$lang->product->dividerMenu = ',epic,track,settings,';
+$lang->product->dividerMenu = ',epic,track,doc,settings,';
 
 /* Project menu. */
 $lang->project->homeMenu         = new stdclass();
