@@ -9,7 +9,7 @@ window.onRenderCell = function(result, {row, col})
         }
         else if(reviewPrivs[row.data.module])
         {
-            link = reviewLink;
+            let link = reviewLink;
             if(!noFlowAuditModules.includes(row.data.module)) link = flowReviewLink;
             link = link.replace('{module}', row.data.module).replace('{id}', row.data.id);
 
