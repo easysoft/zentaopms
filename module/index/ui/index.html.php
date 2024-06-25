@@ -46,6 +46,11 @@ if(!empty($latestVersionList))
             ),
             div
             (
+                setClass('version-detail text-gray my-2'),
+                $version['explain']
+            ),
+            div
+            (
                 setClass('version-footer flex justify-between'),
                 btn
                 (
@@ -63,7 +68,13 @@ if(!empty($latestVersionList))
                 )
             )
         );
+        if($version['name'] != $lastVersion['name']) $versionItems[] = h::hr(setClass('version-hr'));
     }
+    $upgradeContent = div
+    (
+        setClass('version-content'),
+        $versionItems
+    );
 }
 
 $scoreNotice = '';
