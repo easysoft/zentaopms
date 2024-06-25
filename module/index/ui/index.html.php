@@ -122,7 +122,22 @@ div
             set::target('_blank'),
             set::hint($version),
             set::text($versionName)
-        )
+        ),
+        $upgradeBtn
+    )
+);
+
+panel
+(
+    setID('upgradeContent'),
+    set::title($lang->index->upgradeVersion),
+    set::headingClass('border-b'),
+    set::bodyClass('p-0'),
+    div
+    (
+        setID('latestVersionList'),
+        setClass('p-4'),
+        $upgradeContent
     )
 );
 
