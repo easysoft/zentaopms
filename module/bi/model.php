@@ -1147,9 +1147,27 @@ class biModel extends model
         $headerRow1 = !empty($data->cols[0]) ? $data->cols[0] : array();
         $headerRow2 = !empty($data->cols[1]) ? $data->cols[1] : array();
 
+        /* 定义数据表格的列配置。*/
+        /* Define the column configuration of the data table. */
         $index = 0;
         foreach($headerRow1 as $column)
         {
+            /* 如果 colspan 属性不为空则且存在第二行表头表示该列包含切片字段。*/
+            /* If the colspan attribute is not empty, it means that the column contains slice fields. */
+            if(!empty($column->colspan) && $column->colspan > 1 && !empty($headerRow2))
+            {
+                /* 找到实际切片的字段。*/
+                /* Find the actual sliced field. */
+                $colspan = 0;
+                while($colspan < $column->colspan)
+                {
+                    $colspan += $subColumn->colspan ?: 1;
+                    $index++;
+                }
+
+                continue;
+            }
+
             $field = 'field' . $index;
             $columns[$field]['name']     = $field;
             $columns[$field]['title']    = $column->label;
