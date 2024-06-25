@@ -530,7 +530,7 @@ class chartModel extends model
             $metric = $metrics[$i];
             $agg    = $aggs[$i];
 
-            $rows = $this->chartTao->getRows($defaultSql, $filters, $date, $group, $metric, $agg);
+            $rows = $this->chartTao->getRows($defaultSql, $filters, $date, $group, $metric, $agg, $driver);
             $stat = $this->chartTao->processRows($rows, $date, $group, $metric);
 
             if($sort) arsort($stat);
