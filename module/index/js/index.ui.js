@@ -975,3 +975,13 @@ window.startCron = function(restart)
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
 if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'bg-secondary-50 text-secondary-600 score-notice'});
+
+/* Handle clicking outside. */
+$(document).on('click', e =>
+{
+    if($(e.target).attr('id') != 'bizLink' && !$(e.target).parents('#bizLink').length)
+    {
+        $('#upgradeContent').hide();
+        $('#bizLink').removeClass('active');
+    }
+});
