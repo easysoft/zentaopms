@@ -1500,6 +1500,7 @@ class kanbanModel extends model
             if(in_array($laneType, array('epic', 'requirement')) && strpos($project->storyType, $laneType) === false) continue;
             list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
 
+            if($lane->type == 'risk') $cardsData = $this->appendRiskField($cardsData, $objectGroup['risk']);
             $kanbanID = 'group' . $lane->id;
 
             $kanbanGroup[$laneType]['id']   = $lane->id;
@@ -2377,14 +2378,21 @@ class kanbanModel extends model
         $types = array_keys($kanbanColumns);
 
         /* 如果没有任意一种类型的 kanban， 生成一份新的 */
-        if(empty($types)) $this->createExecutionLane($executionID, 'all');
-
-        /* 如果缺少某种类型的 kanban，单独生成缺少的 */
-        $kanbanTypes = $this->lang->kanban->type;
-        unset($kanbanTypes['all']);
-        foreach($kanbanTypes as $type => $typeName)
+        if(empty($types))
         {
-            if(!in_array($type, $types)) $this->createExecutionLane($executionID, $type);
+            $this->createExecutionLane($executionID, 'all');
+        }
+        else
+        {
+            /* 如果缺少某种类型的 kanban，单独生成缺少的 */
+            $kanbanTypes = $this->lang->kanban->type;
+            unset($kanbanTypes['all']);
+            unset($kanbanTypes['epic']);
+            unset($kanbanTypes['requirement']);
+            foreach($kanbanTypes as $type => $typeName)
+            {
+                if(!in_array($type, $types)) $this->createExecutionLane($executionID, $type);
+            }
         }
     }
 
@@ -2405,7 +2413,7 @@ class kanbanModel extends model
         $ERURLanes         = array();
         $parentStoryLaneID = 0;
         $execution         = $this->loadModel('execution')->fetchById($executionID);
-        foreach($this->config->kanban->default as $type => $lane)
+        foreach($defaults as $type => $lane)
         {
             /* 只有综合、需求、设计阶段，才可关联业需、用需。 */
             if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')) && in_array($type, array('epic', 'requirement'))) continue;
