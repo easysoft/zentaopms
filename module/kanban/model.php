@@ -2360,7 +2360,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createLaneIfNotExist(int $executionID)
+    public function createLaneIfNotExist(int $executionID): void
     {
         $kanbanColumns = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
@@ -2396,7 +2396,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createExecutionLane(int $executionID, string $type = 'all')
+    public function createExecutionLane(int $executionID, string $type = 'all'): bool
     {
         /* e.g  $defaults = array('risk' => (object)array('name' => 'risk', 'color' => '#FF0000', 'order' => 20)); */
         $defaults = ($type != 'all') ? array($type => $this->config->kanban->default->$type) : (array)$this->config->kanban->default;
@@ -2455,7 +2455,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createExecutionColumns(int|array $laneID, string $type, int $executionID)
+    public function createExecutionColumns(int|array $laneID, string $type, int $executionID): void
     {
         $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
 
@@ -2511,7 +2511,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function addKanbanCell(int $kanbanID, int $laneID, int $colID, string $type, string $cardID = '')
+    public function addKanbanCell(int $kanbanID, int $laneID, int $colID, string $type, string $cardID = ''): void
     {
         $cell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)
@@ -2548,7 +2548,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function addSpaceMembers(int $spaceID, string $type, array $kanbanMembers = array())
+    public function addSpaceMembers(int $spaceID, string $type, array $kanbanMembers = array()): void
     {
         $space = $this->getSpaceById($spaceID);
         if(empty($space)) return;
@@ -2575,7 +2575,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function removeKanbanCell(string $type, int|array $removeCardID, array $kanbanList)
+    public function removeKanbanCell(string $type, int|array $removeCardID, array $kanbanList): void
     {
         $removeIDList = is_array($removeCardID) ? $removeCardID : array($removeCardID);
         foreach($removeIDList as $cardID)
@@ -2599,9 +2599,9 @@ class kanbanModel extends model
      *
      * @param  object $execution
      * @access public
-     * @return void
+     * @return bool
      */
-    public function createRDKanban(object $execution)
+    public function createRDKanban(object $execution): bool
     {
         $regionID =  $this->createRDRegion($execution);
         if(dao::isError()) return false;
@@ -2622,7 +2622,7 @@ class kanbanModel extends model
      * @access public
      * @return int|bool
      */
-    public function createRDRegion(object $execution)
+    public function createRDRegion(object $execution): int|bool
     {
         $region = new stdclass();
         $region->name        = $this->lang->kanbanregion->default;
@@ -2648,9 +2648,9 @@ class kanbanModel extends model
      * @param  int    $regionID
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function createRDLane(int $executionID, int $regionID)
+    public function createRDLane(int $executionID, int $regionID): bool
     {
         $execution = $this->loadModel('execution')->fetchByID($executionID);
         $project   = $this->loadModel('project')->fetchByID($execution->project);
@@ -2692,7 +2692,7 @@ class kanbanModel extends model
      * @access public
      * @return bool
      */
-    public function createRDColumn(int $regionID, int $groupID, int $laneID, string $laneType, int $executionID)
+    public function createRDColumn(int $regionID, int $groupID, int $laneID, string $laneType, int $executionID): bool
     {
         $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
         if($laneType == 'parentStory')  $columnList = $this->lang->kanban->ERURColumn;
@@ -2772,7 +2772,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function updateLane(int $executionID, string $laneType = '', int $cardID = 0)
+    public function updateLane(int $executionID, string $laneType = '', int $cardID = 0): void
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
         if($execution->type == 'kanban')
@@ -2810,7 +2810,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function refreshCards(array $lane)
+    public function refreshCards(array $lane): void
     {
         $laneID        = zget($lane, 'id');
         $laneType      = zget($lane, 'type');
