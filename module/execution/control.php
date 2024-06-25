@@ -1754,7 +1754,6 @@ class execution extends control
         /* Get kanban data. */
         $orderBy = $groupBy == 'story' && $browseType == 'task' && !isset($this->lang->kanban->orderList[$orderBy]) ? 'id_asc' : $orderBy;
         $this->kanban->createLaneIfNotExist($executionID);
-        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
 
         /* Show lanes of the attribute: no story and bug in request, no bug in design. */
