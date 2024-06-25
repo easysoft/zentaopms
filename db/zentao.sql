@@ -492,7 +492,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
   `driver` enum('mysql', 'duckdb') not NULL default 'duckdb',
-  `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `type` varchar(30) NOT NULL DEFAULT '',
   `group` varchar(255) NOT NULL DEFAULT '',
   `dataset` varchar(30) NOT NULL DEFAULT '0',
@@ -517,7 +517,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
 -- DROP TABLE IF EXISTS `zt_screen`;
 CREATE TABLE IF NOT EXISTS `zt_screen` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `dimension` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `cover` mediumtext NULL,
@@ -1853,7 +1853,7 @@ CREATE INDEX `status` ON `zt_story` (`status`);
 CREATE INDEX `assignedTo` ON `zt_story` (`assignedTo`);
 
 -- DROP TABLE IF EXISTS `zt_storygrade`;
-CREATE TABLE `zt_storygrade` (
+CREATE TABLE IF NOT EXISTS `zt_storygrade` (
   `type` enum('story','requirement','epic') NOT NULL,
   `grade` smallint NOT NULL,
   `name` char(30) NOT NULL,
