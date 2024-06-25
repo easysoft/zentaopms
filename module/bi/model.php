@@ -1222,6 +1222,24 @@ class biModel extends model
                     $i += $colspan - 1;
                 }
 
+                $rows[$rowKey][$field] = $value;
+
+                if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
+
+                if(isset($configs[$rowKey][$index]) && $configs[$rowKey][$index] > 1)
+                {
+                    $rows[$rowKey][$field . '_rowspan'] = $configs[$rowKey][$index];
+                    $cellSpan[$field]['rowspan'] = $field . '_rowspan';
+                }
+
+                $isFirstColumnAndLastRow = $i === 0 && $rowKey === $lastRow;
+
+                if($isFirstColumnAndLastRow && $hasGroup && $hasColumnTotal)
+                {
+                    $rows[$rowKey][$field . '_colspan'] = count($data->groups);
+                    $cellSpan[$field]['colspan'] = $field . '_colspan';
+                }
+
                 $index++;
             }
         }
