@@ -1,15 +1,15 @@
 <?php
 /**
- * 按系统统计的每日新增研发需求数。
+ * 按系统统计的每日新增需求数。
  * Count of daily created story.
  *
  * 范围：system
  * 对象：story
  * 目的：scale
- * 度量名称：按系统统计的每日新增研发需求数
+ * 度量名称：按系统统计的每日新增需求数
  * 单位：个
- * 描述：按系统统计的每日新增研发需求数表示每日新增加的研发需求的数量，可以用于评估组织的研发需求增长和规模扩展情况。
- * 定义：所有的研发需求个数求和;创建时间为某日;过滤已删除的研发需求;
+ * 描述：按系统统计的每日新增需求数表示每日新增加的需求的数量，可以用于评估组织的需求增长和规模扩展情况。
+ * 定义：所有的需求个数求和;创建时间为某日;过滤已删除的需求;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -20,7 +20,7 @@
  */
 class count_of_daily_created_story extends baseCalc
 {
-    public $dataset = 'getAllDevStories';
+    public $dataset = 'getAllStories';
 
     public $fieldList = array('t1.openedDate');
 

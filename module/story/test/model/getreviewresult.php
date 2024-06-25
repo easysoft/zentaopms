@@ -4,9 +4,10 @@
 /**
 
 title=测试 storyModel->getReviewResult();
+timeout=0
 cid=0
 
-- 传入空参数  @pass
+- 传入空参数 @pass
 - 设置 allpass，都是传入pass结果 @pass
 - 设置 allpass，传入 pass 和 reject @reject
 - 设置 allpass，传入 clarify 和 pass @clarify
@@ -15,7 +16,7 @@ cid=0
 - 设置 allpass，传入 clarify @clarify
 - 设置 allpass，传入 revert @revert
 - 设置 allpass，传入 reject @reject
-- 设置 halfpass，传入 pass 和 reject @pass
+- 设置 halfpass，传入 pass 和 reject @reject
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -38,4 +39,4 @@ r($storyModel->getReviewResult(array('revert',  '', '', ''))) && p() && e('rever
 r($storyModel->getReviewResult(array('reject',  '', '', ''))) && p() && e('reject');  //设置 allpass，传入 reject
 
 $storyModel->config->story->reviewRules = 'halfpass';
-r($storyModel->getReviewResult(array('pass', 'pass', 'reject'))) && p() && e('pass'); //设置 halfpass，传入 pass 和 reject
+r($storyModel->getReviewResult(array('pass', 'pass', 'reject'))) && p() && e('reject'); //设置 halfpass，传入 pass 和 reject

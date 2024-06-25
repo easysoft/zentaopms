@@ -129,6 +129,8 @@ class product extends control
         $browseType = strtolower($browseType);
 
         /* Pre process. */
+        $this->loadModel('requirement');
+        $this->loadModel('epic');
         $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
         $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
@@ -161,7 +163,10 @@ class product extends control
         $stories  = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
         /* Process the sql, get the condition partition, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false && !$isProjectStory));
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), $storyType, (strpos('bysearch,reviewbyme,bymodule', $browseType) === false && !$isProjectStory));
+
+        /* Append children. */
+        if($storyType != 'story') $stories = $this->loadModel('story')->appendChildren($productID, $stories, $storyType);
 
         /* Save session. */
         $this->productZen->saveSession4Browse($product, $browseType);
@@ -786,31 +791,67 @@ class product extends control
      * @param  int    $productID
      * @param  string $branch
      * @param  int    $projectID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $storyType
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function track(int $productID, string $branch = '', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function track(int $productID, string $branch = '', int $projectID = 0, string $browseType = 'allstory', int $param = 0, string $storyType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        $browseType = strtolower($browseType);
+        $branch     = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         if(is_bool($branch)) $branch = (string)(int)$branch;
 
         /* Set menu. The projectstory module does not execute. */
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
 
+        /* Init storyType param. */
+        $storyTypeList = $this->productZen->getActiveStoryTypeForTrack($projectID, $productID);
+        if(empty($storyType)) $storyType = key($storyTypeList);
+
         /* Load pager. */
         $this->app->loadClass('pager', true);
-        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $pager   = new pager($recTotal, $recPerPage, $pageID);
+        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, $orderBy, $pager);
+        $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
+
+        $customFields = $this->productZen->getCustomFieldsForTrack($storyType);
+        $mergeCells   = $this->story->getMergeTrackCells($tracks, $customFields['show']);
+        if(isset($tracks['cols']))
+        {
+            $showFields = $customFields['show'];
+            $cols       = array();
+            foreach($tracks['cols'] as $col)
+            {
+                if(in_array($col['name'], $showFields) || (isset($col['parentName']) && in_array($col['parentName'], $showFields))) $cols[] = $col;
+            }
+            $tracks['cols'] = $cols;
+        }
+
+        /* Build search form. */
+        $this->productZen->buildSearchFormForTrack($productID, $branch, $projectID, $browseType, $param, $storyType);
 
         $this->view->title           = $this->lang->story->track;
-        $this->view->tracks          = $this->loadModel('story')->getTracks($productID, $branch, $projectID, $pager);
+        $this->view->tracks          = $tracks;
+        $this->view->storyIdList     = array_keys($stories);
         $this->view->pager           = $pager;
         $this->view->productID       = $productID;
-        $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
         $this->view->branch          = $branch;
         $this->view->projectID       = $projectID;
+        $this->view->browseType      = $browseType;
+        $this->view->param           = $param;
+        $this->view->storyType       = $storyType;
+        $this->view->orderBy         = $orderBy;
+        $this->view->customFields    = $customFields;
+        $this->view->mergeCells      = $mergeCells;
+        $this->view->storyTypeList   = $storyTypeList;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
 
         $this->display();
     }
@@ -825,6 +866,20 @@ class product extends control
     public function ajaxSetShowSetting()
     {
         $this->loadModel('setting')->updateItem("{$this->app->user->account}.product.showAllProjects", $this->post->showAllProjects);
+    }
+
+    /**
+     * 设置需求列表展示的需求等级。
+     * Ajax set show grades.
+     *
+     * @param  string $module
+     * @param  string $showGrades
+     * @access public
+     * @return void
+     */
+    public function ajaxSetShowGrades(string $module, string $showGrades)
+    {
+        if($showGrades) $this->loadModel('setting')->updateItem("{$this->app->user->account}.$module.showGrades", $showGrades);
     }
 
     /**

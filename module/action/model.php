@@ -197,16 +197,17 @@ class actionModel extends model
             if(($actionName == 'finished' && $objectType == 'todo') || ($actionName == 'closed' && in_array($action->objectType, array('story', 'demand'))) || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processAppendLinkByExtra($action);
             if($actionName == 'distributed' && $objectType == 'story') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view');
 
-            if(in_array($actionName, array('retracted', 'restored')) && $action->objectType != 'demand') $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
+            if(in_array($actionName, array('retracted', 'restored')) && $action->objectType != 'demand') $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'storyView');
             if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask', 'converttotask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
-            if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
+            if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'storyView');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
             if(in_array($actionName, array('importfromstorylib', 'importfromrisklib', 'importfromissuelib', 'importfromopportunitylib')) && in_array($this->config->edition, array('max', 'ipd'))) $this->actionTao->processActionExtra(TABLE_ASSETLIB, $action, 'name', 'assetlib', $action->objectType);
             if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->processExecutionAndProjectActionExtra($action);
-            if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory', 'linkur', 'unlinkur'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
+            if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory', 'linkur', 'unlinkur', 'linkrelatedstory', 'unlinkrelatedstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'storyView');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
             if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
+            if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
@@ -610,7 +611,19 @@ class actionModel extends model
         $extra = strtolower($action->extra);
 
         /* Fix bug #741. */
-        if(isset($desc['extra'])) $desc['extra'] = $this->lang->{$objectType}->{$desc['extra']};
+        if(isset($desc['extra']))
+        {
+            if($objectType == 'story')
+            {
+                $story = $this->fetchByID($action->objectID, $objectType);
+                if($story->type != 'story') $this->app->loadLang($story->type);
+                $desc['extra'] = $this->lang->{$story->type}->{$desc['extra']};
+            }
+            else
+            {
+                $desc['extra'] = $this->lang->{$objectType}->{$desc['extra']};
+            }
+        }
 
         $actionDesc = '';
         if(isset($desc['extra'][$extra]))
@@ -956,7 +969,7 @@ class actionModel extends model
 
         /* 通过action获取对象名称，所属项目以及需求。 */
         /* Get object names, object projects and requirements by actions. */
-        list($objectNames, $relatedProjects, $requirements) = $this->getRelatedDataByActions($actions);
+        list($objectNames, $relatedProjects, $requirements, $epics) = $this->getRelatedDataByActions($actions);
 
         $projectIdList = array();
         foreach($relatedProjects as $objectType => $idList) $projectIdList = array_merge($projectIdList, $idList);
@@ -998,7 +1011,7 @@ class actionModel extends model
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->{$objectType}->{$actionType}) ? $this->lang->{$objectType}->{$actionType} : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->{$actionType}) ? $this->lang->action->label->{$actionType} : $action->actionLabel;
-            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
+            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements, $epics);
             $action->major        = isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType]) ? 1 : 0;
             if($actionType == 'svncommited' || $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
@@ -1028,7 +1041,7 @@ class actionModel extends model
         if(isset($objectTypes['branch'])) $this->app->loadLang('branch');
         $users = isset($objectTypes['gapanalysis']) || isset($objectTypes['stakeholder']) ? $this->loadModel('user')->getPairs('noletter') : array();
 
-        $objectNames = $relatedProjects = $requirements = array();
+        $objectNames = $relatedProjects = $requirements = $epics = array();
         foreach($objectTypes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType]) && $objectType != 'makeup') continue;    // If no defination for this type, omit it.
@@ -1039,7 +1052,7 @@ class actionModel extends model
             if(empty($field)) continue;
 
             /* Get object name, related projects, requirements. */
-            list($objectName, $relatedProject, $requirements) = $this->getObjectRelatedData($table, $objectType, $objectIdList, $field, $users, $requirements);
+            list($objectName, $relatedProject, $requirements, $epics) = $this->getObjectRelatedData($table, $objectType, $objectIdList, $field, $users, $requirements, $epics);
             if($objectType == 'branch' && in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
 
             $objectNames[$objectType]     = $objectName;
@@ -1048,7 +1061,7 @@ class actionModel extends model
 
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
-        return array($objectNames, $relatedProjects, $requirements);
+        return array($objectNames, $relatedProjects, $requirements, $epics);
     }
 
     /**
@@ -1059,10 +1072,11 @@ class actionModel extends model
      * @param  int    $objectID
      * @param  string $actionType
      * @param  array  $requirements
+     * @param  array  $epics
      * @access public
      * @return string
      */
-    public function getObjectLabel(string $objectType, int $objectID, string $actionType, array $requirements): string
+    public function getObjectLabel(string $objectType, int $objectID, string $actionType, array $requirements, array $epics): string
     {
         $actionObjectLabel = $objectType;
         if(isset($this->lang->action->label->{$objectType}))
@@ -1072,6 +1086,7 @@ class actionModel extends model
             /* 用户故事替换为需求。 */
             /* Replace story to requirement. */
             if(isset($requirements[$objectID]) && is_string($objectLabel)) $objectLabel = str_replace($this->lang->SRCommon, $this->lang->URCommon, $objectLabel);
+            if(isset($epics[$objectID])        && is_string($objectLabel)) $objectLabel = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $objectLabel);
 
             if(!is_array($objectLabel)) $actionObjectLabel = $objectLabel;
             if(is_array($objectLabel) && isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
@@ -1843,10 +1858,11 @@ class actionModel extends model
      * @param  string $field
      * @param  array  $users
      * @param  array  $requirements
+     * @param  array  $epics
      * @access public
      * @return array
      */
-    public function getObjectRelatedData(string $table, string $objectType, array $objectIdList, string $field, array $users, array $requirements): array
+    public function getObjectRelatedData(string $table, string $objectType, array $objectIdList, string $field, array $users, array $requirements, array $epics): array
     {
         $objectName     = array();
         $relatedProject = array();
@@ -1878,7 +1894,8 @@ class actionModel extends model
             {
                 $objectName[$object->id] = $object->title;
                 if($object->type == 'requirement') $requirements[$object->id] = $object->id;
-                if($object->type == 'project') $relatedProject[$object->id] = $object->id;
+                if($object->type == 'epic')        $epics[$object->id]        = $object->id;
+                if($object->type == 'project')     $relatedProject[$object->id] = $object->id;
             }
         }
         elseif($objectType == 'stakeholder') // Get stakeholder realname.
@@ -1890,7 +1907,7 @@ class actionModel extends model
         {
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
         }
-        return array($objectName, $relatedProject, $requirements);
+        return array($objectName, $relatedProject, $requirements, $epics);
     }
 
     /**

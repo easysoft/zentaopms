@@ -38,6 +38,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: grade
+    note: "需求层级"
+    range: 1-2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
   - field: source
     note: "需求来源"
     range: customer,user,po,market,service,operation,support,competitor,partner,dev,tester,bug,forum,other
@@ -221,13 +228,6 @@ fields:
     format: ""
   - field: toBug
     note: "转Bug"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: childStories
-    note: "细分需求"
     range: 0
     prefix: ""
     postfix: ""

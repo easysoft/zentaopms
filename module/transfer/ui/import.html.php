@@ -13,6 +13,14 @@ namespace zin;
 formPanel
 (
     set::title($title),
+    !empty($isProjectStory) ? formGroup
+    (
+        set::name('storyType'),
+        set::required(true),
+        set::control('picker'),
+        set::value('story'),
+        set::items($typeList)
+    ) : null,
     input(set::type('file'), set::name('file')),
     span(setClass('label secondary'), $lang->transfer->importNotice)
 );

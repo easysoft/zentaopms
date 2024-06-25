@@ -60,7 +60,6 @@ class custom extends control
 
         $this->view->title       = $this->lang->custom->common . $this->lang->hyphen . $this->lang->$module->common;
         $this->view->field       = $field;
-        $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;
@@ -255,6 +254,66 @@ class custom extends control
     }
 
     /**
+     * 停用需求等级。
+     * Close story grade.
+     *
+     * @param  string $type
+     * @param  int    $gradeID
+     * @access public
+     * @return void
+     */
+    public function closeGrade(string $type = 'story', int $gradeID = 0)
+    {
+        if($gradeID) $this->dao->update(TABLE_STORYGRADE)->set('status')->eq('disable')->where('grade')->eq($gradeID)->andWhere('type')->eq($type)->exec();
+        return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 启用需求等级。
+     * Activate story grade.
+     *
+     * @param  string $type
+     * @param  int    $gradeID
+     * @access public
+     * @return void
+     */
+    public function activateGrade(string $type = 'story', int $gradeID = 0)
+    {
+        if($gradeID) $this->dao->update(TABLE_STORYGRADE)->set('status')->eq('enable')->where('grade')->eq($gradeID)->andWhere('type')->eq($type)->exec();
+        return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 删除需求等级。
+     * Delete story grade.
+     *
+     * @param  string $type
+     * @param  int    $gradeID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteGrade(string $type = 'story', int $gradeID = 0, string $confirm = 'no')
+    {
+        $story = $this->dao->select('id')->from(TABLE_STORY)->where('grade')->eq($gradeID)->andWhere('type')->eq($type)->limit(1)->fetch('id');
+        if($story) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->custom->notice->gradeNotEmpty}');"));
+
+        if($confirm == 'no')
+        {
+            $formUrl = $this->createLink('custom', 'deleteGrade', "type=$type&gradeID=$gradeID&confirm=yes");
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->custom->notice->deleteGrade}'}).then((res) => {if(res) $.ajaxSubmit({url: '{$formUrl}'});});"));
+        }
+
+        if($gradeID)
+        {
+            $grades = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('grade')->gt($gradeID)->andWhere('type')->eq($type)->orderBy('grade_asc')->fetchAll();
+            $this->dao->delete()->from(TABLE_STORYGRADE)->where('grade')->eq($gradeID)->andWhere('type')->eq($type)->exec();
+            foreach($grades as $grade) $this->dao->update(TABLE_STORYGRADE)->set('grade')->eq($grade->grade - 1)->where('grade')->eq($grade->grade)->andWhere('type')->eq($type)->exec();
+        }
+        return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
      * 执行关闭设置。
      * Set whether the closed execution is read-only.
      *
@@ -396,19 +455,25 @@ class custom extends control
         if(!isset($this->config->custom->customFields[$module][$section])) return;
         if(!in_array($key, $this->config->custom->customFields[$module][$section])) return;
 
+        $this->loadModel('setting');
+        $global  = $this->post->global;
+        $action  = $this->post->action;
         $account = $this->app->user->account;
-        if($this->server->request_method == 'POST')
+        if($global) $account = 'system';
+        if($this->server->request_method == 'POST' && $action != 'reset')
         {
             $fields = $this->post->fields;
             if(is_array($fields)) $fields = implode(',', $fields);
             if($module == 'execution' && $section == 'custom' && $key == 'createFields' && strpos(",{$fields},", ',team,') !== false) $fields .= ',teams';
-            $this->loadModel('setting')->setItem("{$account}.{$module}.{$section}.{$key}", $fields);
+
+            $this->setting->setItem("{$account}.{$module}.{$section}.{$key}", $fields);
+
             if(in_array($module, array('story', 'task', 'testcase')) && $section == 'custom' && $key == 'batchCreateFields') return;
             if($module == 'bug' && $section == 'custom' && $key == 'batchCreateFields') return;
         }
         else
         {
-            $this->loadModel('setting')->deleteItems("owner={$account}&module={$module}&section={$section}&key={$key}");
+            $this->setting->deleteItems("owner={$account}&module={$module}&section={$section}&key={$key}");
         }
 
         $this->loadModel('common')->loadConfigFromDB();
@@ -416,8 +481,8 @@ class custom extends control
         $this->app->loadConfig($module);
 
         if($module == 'programplan' && $section == 'custom') $key = 'createFields';
-        $customFields = $this->config->$module->list->{'custom' . ucfirst($key)};
-        $showFields   = $this->config->$module->custom->$key;
+        $customFields = zget(zget($this->config->$module, 'list', array()), $section . ucfirst($key), '');
+        $showFields   = zget(zget($this->config->$module, $section, array()), $key, '');
         if($module == 'marketresearch') return print(js::reload('parent'));
         return $this->send(array('result' => 'success', 'key' => $key, 'callback' => 'loadCurrentPage', 'customFields' => $customFields, 'showFields' => $showFields));
     }

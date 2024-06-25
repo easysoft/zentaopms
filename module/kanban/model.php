@@ -1062,7 +1062,7 @@ class kanbanModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
             ->beginIf($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
-            ->orderBy('order')
+            ->orderBy('order_asc')
             ->fetchAll();
 
         $actions = array('sortLane', 'deleteLane', 'editLaneName', 'editLaneColor');
@@ -1382,9 +1382,10 @@ class kanbanModel extends model
             ->fetchgroup('lane', 'column');
 
         /* Get group objects. */
-        if($browseType == 'all' || $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($browseType == 'all' || $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'all' || $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($browseType == 'all' || $browseType == 'parentStory') $objectGroup['parentStory'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'all' || $browseType == 'story')       $objectGroup['story']       = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'all' || $browseType == 'bug')         $objectGroup['bug']         = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'all' || $browseType == 'task')        $objectGroup['task']        = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
         $cardGroup = array();
 
@@ -1403,6 +1404,7 @@ class kanbanModel extends model
                     $object   = zget($objects, $cardID, array());
 
                     if(empty($object)) continue;
+                    if($cell->type == 'parentStory' && $object->isParent != '1') continue;
 
                     $cardData = $this->kanbanTao->initCardItem($object, $cell, $order, $avatarPairs, $users);
                     $cardData['acl'] = 'open';
@@ -1431,7 +1433,7 @@ class kanbanModel extends model
      */
     public function getExecutionKanban(int $executionID, string $browseType = 'all', string $groupBy = 'default', string $searchValue = '', string $orderBy = 'id_asc'): array
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
+        if($groupBy != 'default') return array($this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy), array());
 
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
@@ -1453,20 +1455,26 @@ class kanbanModel extends model
 
         $geMax = in_array($this->config->edition, array('max', 'ipd'));
         /* Get group objects. */
-        if($browseType == 'all' || $browseType == 'story')            $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($browseType == 'all' || $browseType == 'bug')              $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'all' || $browseType == 'task')             $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
-        if($geMax && ($browseType == 'all' || $browseType == 'risk')) $objectGroup['risk']  = $this->loadModel('risk')->getKanbanRisks($executionID);
+        if($browseType == 'all' || $browseType == 'epic')             $objectGroup['epic']        = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', 'epic');
+        if($browseType == 'all' || $browseType == 'requirement')      $objectGroup['requirement'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', 'requirement');
+        if($browseType == 'all' || $browseType == 'parentStory')      $objectGroup['parentStory'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'all' || $browseType == 'story')            $objectGroup['story']       = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'all' || $browseType == 'bug')              $objectGroup['bug']         = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'all' || $browseType == 'task')             $objectGroup['task']        = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($geMax && ($browseType == 'all' || $browseType == 'risk')) $objectGroup['risk']        = $this->loadModel('risk')->getKanbanRisks($executionID);
 
         /* Get objects cards menus. */
         $menus = array();
-        $menus['story'] = $browseType == 'all' || $browseType == 'story'            ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
-        $menus['bug']   = $browseType == 'all' || $browseType == 'bug'              ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug')     : array();
-        $menus['task']  = $browseType == 'all' || $browseType == 'task'             ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task')   : array();
-        $menus['risk']  = $geMax && ($browseType == 'all' || $browseType == 'risk') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk')   : array();
+        $menus['epic']        = $browseType == 'all' || $browseType == 'epic'        ? $this->getKanbanCardMenu($executionID, $objectGroup['epic'], 'epic') : array();
+        $menus['requirement'] = $browseType == 'all' || $browseType == 'requirement' ? $this->getKanbanCardMenu($executionID, $objectGroup['requirement'], 'requirement') : array();
+        $menus['parentStory'] = $browseType == 'all' || $browseType == 'parentStory' ? $this->getKanbanCardMenu($executionID, $objectGroup['parentStory'], 'parentStory') : array();
+        $menus['story']       = $browseType == 'all' || $browseType == 'story'       ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
+        $menus['bug']         = $browseType == 'all' || $browseType == 'bug'         ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug')     : array();
+        $menus['task']        = $browseType == 'all' || $browseType == 'task'        ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task')   : array();
+        $menus['risk']        = $geMax && ($browseType == 'all' || $browseType == 'risk') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk')   : array();
 
-        /* Build kanban group data. */
-        $kanbanGroup = array();
+        /* 获取看板连线的fromKanbanID. */
+        $fromKanbanID = '';
         foreach($lanes as $lane)
         {
             list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
@@ -1478,9 +1486,60 @@ class kanbanModel extends model
             $kanbanGroup[$lane->type]['data']['lanes'] = array($laneData);
             $kanbanGroup[$lane->type]['data']['cols']  = $columnData;
             $kanbanGroup[$lane->type]['data']['items'] = $cardsData;
+            if($lane->type == 'parentStory') $fromKanbanID = 'group' . $lane->id;
         }
 
-        return array_values($kanbanGroup);
+        /* Build kanban group data. */
+        $kanbanGroup  = array();
+        $links        = array();
+        $execution    = $this->loadModel('execution')->fetchById($executionID);
+        $project      = $this->loadModel('project')->fetchById($execution->project);
+        foreach($lanes as $lane)
+        {
+            $laneType = $lane->type;
+            if(in_array($laneType, array('epic', 'requirement')) && strpos($project->storyType, $laneType) === false) continue;
+            list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
+
+            $kanbanID = 'group' . $lane->id;
+
+            $kanbanGroup[$laneType]['id']   = $lane->id;
+            $kanbanGroup[$laneType]['key']  = $kanbanID;
+            $kanbanGroup[$laneType]['data'] = array();
+            $kanbanGroup[$laneType]['data']['lanes'] = array($laneData);
+            $kanbanGroup[$laneType]['data']['cols']  = $columnData;
+            $kanbanGroup[$laneType]['data']['items'] = $cardsData;
+
+            foreach($cardsData as $columnCard)
+            {
+                foreach($columnCard as $cards)
+                {
+                    foreach($cards as $card)
+                    {
+                        if($card['parent'] == 0) continue;
+                        /* 获取看板卡片的连线关系，业需、用需和父需求共用同一组看板列，所以fromKanban和toKanban是一样的。 */
+                        $link = array('from' => $card['parent'], 'to' => $card['id'], 'fromKanban' => $fromKanbanID, 'toKanban' => $kanbanID);
+                        if(in_array($laneType, array('epic', 'requirement'))) $link['toKanban'] = $fromKanbanID;
+
+                        $links[] = $link;
+                    }
+                }
+            }
+        }
+
+        /* 展示所有泳道的时候，业务、用需与父需求泳道共用看板列。 */
+        if($browseType == 'all')
+        {
+            foreach(array('requirement', 'epic') as $laneType)
+            {
+                if(!isset($kanbanGroup[$laneType])) continue;
+
+                array_unshift($kanbanGroup['parentStory']['data']['lanes'], $kanbanGroup[$laneType]['data']['lanes'][0]);
+                $kanbanGroup['parentStory']['data']['items'] += $kanbanGroup[$laneType]['data']['items'];
+                unset($kanbanGroup[$laneType]);
+            }
+        }
+
+        return array(array_values($kanbanGroup), $links);
     }
 
     /**
@@ -1594,6 +1653,7 @@ class kanbanModel extends model
         $cardData['column']     = $column->id;
         $cardData['pri']        = zget($object, 'pri', 0);
         $cardData['group']      = $laneType;
+        $cardData['parent']     = zget($object, 'originParent', 0);
         $cardData['status']     = zget($object, 'status', '');
         $cardData['estimate']   = zget($object, 'estimate', 0);
         $cardData['assignedTo'] = $object->assignedTo;
@@ -1634,9 +1694,12 @@ class kanbanModel extends model
     {
         /* Get card  data. */
         $cardList = array();
-        if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
+        if(in_array($browseType, array('story', 'parentStory'))) $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
+
+        if($browseType == 'epic')        $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', 'epic');
+        if($browseType == 'requirement') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory', '0', 'requirement');
+        if($browseType == 'bug')         $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'task')        $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
 
         if($browseType == 'task' && $groupBy == 'assignedTo') $cardList = $this->appendTeamMember($cardList);
 
@@ -2339,8 +2402,14 @@ class kanbanModel extends model
         /* e.g  $defaults = array('risk' => (object)array('name' => 'risk', 'color' => '#FF0000', 'order' => 20)); */
         $defaults = ($type != 'all') ? array($type => $this->config->kanban->default->$type) : (array)$this->config->kanban->default;
 
-        foreach($defaults as $type => $lane)
+        $ERURLanes         = array();
+        $parentStoryLaneID = 0;
+        $execution         = $this->loadModel('execution')->fetchById($executionID);
+        foreach($this->config->kanban->default as $type => $lane)
         {
+            /* 只有综合、需求、设计阶段，才可关联业需、用需。 */
+            if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')) && in_array($type, array('epic', 'requirement'))) continue;
+
             $lane->type      = $type;
             $lane->execution = $executionID;
             $lane->region    = 0;
@@ -2350,9 +2419,30 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
+            if($type == 'parentStory') $parentStoryLaneID = $laneID;
 
-            if($type != 'risk') $this->createExecutionColumns($laneID, $type, $executionID);
-            else $this->createExecutionRiskColumns($laneID, $type, $executionID);
+            if(in_array($type, array('epic', 'requirement')))
+            {
+                $ERURLanes[$type] = $laneID;
+            }
+            else
+            {
+                if($type != 'risk') $this->createExecutionColumns($laneID, $type, $executionID);
+                else $this->createExecutionRiskColumns($laneID, $type, $executionID);
+            }
+        }
+
+        if($ERURLanes)
+        {
+            $columnIDList = $this->dao->select('`column`')->from(TABLE_KANBANCELL)->where('lane')->eq($parentStoryLaneID)->fetchPairs();
+            foreach($ERURLanes as $type => $laneID)
+            {
+                foreach($columnIDList as $columnID)
+                {
+                    $this->addKanbanCell($executionID, $laneID, $columnID, $type);
+                    if(dao::isError()) return false;
+                }
+            }
         }
     }
 
@@ -2368,9 +2458,10 @@ class kanbanModel extends model
      */
     public function createExecutionColumns(int|array $laneID, string $type, int $executionID)
     {
-        $devColumnID = $testColumnID = $resolvingColumnID = 0;
+        $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
 
         $columns = array();
+        if(in_array($type, array('epic', 'requirement', 'parentStory'))) $columns = $this->lang->kanban->ERURColumn;
         if($type == 'story') $columns = $this->lang->kanban->storyColumn;
         if($type == 'bug')   $columns = $this->lang->kanban->bugColumn;
         if($type == 'task')  $columns = $this->lang->kanban->taskColumn;
@@ -2384,6 +2475,7 @@ class kanbanModel extends model
             $data->type   = $colType;
             $data->region = 0;
 
+            if(str_contains(',designing,designed,',     ",{$colType},")) $data->parent = $designColumnID;
             if(str_contains(',developing,developed,',   ",{$colType},")) $data->parent = $devColumnID;
             if(str_contains(',testing,tested,',         ",{$colType},")) $data->parent = $testColumnID;
             if(str_contains(',fixing,fixed,',           ",{$colType},")) $data->parent = $resolvingColumnID;
@@ -2392,6 +2484,7 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
 
             $colID = $this->dao->lastInsertId();
+            if($colType == 'design')    $designColumnID    = $colID;
             if($colType == 'develop')   $devColumnID       = $colID;
             if($colType == 'test')      $testColumnID      = $colID;
             if($colType == 'resolving') $resolvingColumnID = $colID;
@@ -2560,7 +2653,9 @@ class kanbanModel extends model
      */
     public function createRDLane(int $executionID, int $regionID)
     {
-        $laneIndex = 0;
+        $execution = $this->loadModel('execution')->fetchByID($executionID);
+        $project   = $this->loadModel('project')->fetchByID($execution->project);
+        $index     = 0;
         foreach($this->lang->kanban->laneTypeList as $type => $name)
         {
             $groupID = $this->createGroup($executionID, $regionID);
@@ -2572,13 +2667,16 @@ class kanbanModel extends model
             $lane->region    = $regionID;
             $lane->group     = $groupID;
             $lane->name      = $name;
-            $lane->color     = $this->config->kanban->laneColorList[$laneIndex];
-            $lane->order     = ++ $laneIndex * 5;
+            $lane->color     = $this->config->kanban->laneColorList[$index];
+            $lane->order     = $this->config->kanban->RDLaneOrder[$type];
 
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->autoCheck()->exec();
             if(dao::isError()) return false;
+            $laneID = $this->dao->lastInsertId();
 
-            $this->createRDColumn($regionID, $groupID, $this->dao->lastInsertId(), $type, $executionID);
+            $this->createRDColumn($regionID, $groupID, $laneID, $type, $executionID);
+
+            $index ++;
         }
     }
 
@@ -2597,10 +2695,11 @@ class kanbanModel extends model
      */
     public function createRDColumn(int $regionID, int $groupID, int $laneID, string $laneType, int $executionID)
     {
-        $devColumnID = $testColumnID = $resolvingColumnID = 0;
-        if($laneType == 'story') $columnList = $this->lang->kanban->storyColumn;
-        if($laneType == 'bug')   $columnList = $this->lang->kanban->bugColumn;
-        if($laneType == 'task')  $columnList = $this->lang->kanban->taskColumn;
+        $designColumnID = $devColumnID = $testColumnID = $resolvingColumnID = 0;
+        if($laneType == 'parentStory')  $columnList = $this->lang->kanban->ERURColumn;
+        if($laneType == 'story')        $columnList = $this->lang->kanban->storyColumn;
+        if($laneType == 'bug')          $columnList = $this->lang->kanban->bugColumn;
+        if($laneType == 'task')         $columnList = $this->lang->kanban->taskColumn;
 
         foreach($columnList as $type => $name)
         {
@@ -2611,16 +2710,18 @@ class kanbanModel extends model
             $data->group  = $groupID;
             $data->region = $regionID;
 
+            if(strpos(',designing,designed,', $type) !== false)   $data->parent = $designColumnID;
             if(strpos(',developing,developed,', $type) !== false) $data->parent = $devColumnID;
-            if(strpos(',testing,tested,', $type) !== false) $data->parent = $testColumnID;
-            if(strpos(',fixing,fixed,', $type) !== false) $data->parent = $resolvingColumnID;
-            if(strpos(',develop,test,resolving,', $type) !== false) $data->parent = -1;
+            if(strpos(',testing,tested,', $type) !== false)       $data->parent = $testColumnID;
+            if(strpos(',fixing,fixed,', $type) !== false)         $data->parent = $resolvingColumnID;
+            if(strpos(',design,develop,test,resolving,', $type) !== false) $data->parent = -1;
 
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
             if(dao::isError()) return false;
 
-            if($type == 'develop') $devColumnID  = $this->dao->lastInsertId();
-            if($type == 'test')    $testColumnID = $this->dao->lastInsertId();
+            if($type == 'design')    $designColumnID    = $this->dao->lastInsertId();
+            if($type == 'develop')   $devColumnID       = $this->dao->lastInsertId();
+            if($type == 'test')      $testColumnID      = $this->dao->lastInsertId();
             if($type == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
 
             $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
@@ -2672,7 +2773,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function updateLane(int $executionID, string $laneType, int $cardID = 0)
+    public function updateLane(int $executionID, string $laneType = '', int $cardID = 0)
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
         if($execution->type == 'kanban')
@@ -2684,18 +2785,18 @@ class kanbanModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.kanban')->eq($executionID)
                 ->andWhere('t2.execution')->eq($executionID)
-                ->andWhere('t2.type')->eq($laneType)
+                ->beginIF($laneType)->andWhere('t2.type')->eq($laneType)->fi()
                 ->beginIF(!empty($cardID))->andWhere('t3.cards')->like("%,$cardID,%")->fi()
                 ->orderBy('t1.`order` asc, t2.`order` asc')
                 ->fetchAll('id');
 
-            if(count($lanes) > 1) $lanes = array_slice($lanes, 0, 1);
+            if(count($lanes) > 1) $lanes = array_slice($lanes, 0, 2);
         }
         else
         {
             $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
                 ->where('execution')->eq($executionID)
-                ->andWhere('type')->eq($laneType)
+                ->beginIF($laneType)->andWhere('type')->eq($laneType)->fi()
                 ->fetchAll('id');
         }
 
@@ -2738,6 +2839,7 @@ class kanbanModel extends model
         if(empty($cardPairs)) return;
         $sourceCards = $cardPairs;
 
+        if(in_array($laneType, array('epic', 'requirement', 'parentStory'))) $cardPairs = $this->kanbanTao->refreshERURCards($cardPairs, $executionID, $otherCardList, $laneType);
         if($laneType == 'story') $cardPairs = $this->kanbanTao->refreshStoryCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'bug')   $cardPairs = $this->kanbanTao->refreshBugCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'task')  $cardPairs = $this->kanbanTao->refreshTaskCards($cardPairs, $executionID, $otherCardList);
@@ -3523,6 +3625,15 @@ class kanbanModel extends model
         $menus = array();
         switch ($objecType)
         {
+            case 'epic':
+                $menus = $this->kanbanTao->getERURCardMenu($executionID, $objects);
+                break;
+            case 'requirement':
+                $menus = $this->kanbanTao->getERURCardMenu($executionID, $objects);
+                break;
+            case 'parentStory':
+                $menus = $this->kanbanTao->getERURCardMenu($executionID, $objects);
+                break;
             case 'story':
                 if($execution) $menus = $this->kanbanTao->getStoryCardMenu($execution, $objects);
                 break;

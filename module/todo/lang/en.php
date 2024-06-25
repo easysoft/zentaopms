@@ -116,12 +116,14 @@ $lang->todo->priList[2] = 'Important';
 $lang->todo->priList[3] = 'Normal';
 $lang->todo->priList[4] = 'Low';
 
-$lang->todo->typeList['custom']   = 'Custom';
-$lang->todo->typeList['cycle']    = 'Recur';
-$lang->todo->typeList['bug']      = 'Bug';
-$lang->todo->typeList['task']     = 'Task';
-$lang->todo->typeList['story']    = 'Story';
-$lang->todo->typeList['testtask'] = 'Testtask';
+$lang->todo->typeList['custom']      = 'Custom';
+$lang->todo->typeList['cycle']       = 'Recur';
+$lang->todo->typeList['bug']         = 'Bug';
+$lang->todo->typeList['task']        = 'Task';
+$lang->todo->typeList['story']       = 'Story';
+if($config->enableER) $lang->todo->typeList['epic']        = $lang->ERCommon;
+if($config->URAndSR)  $lang->todo->typeList['requirement'] = $lang->URCommon;
+$lang->todo->typeList['testtask']    = 'Testtask';
 
 $lang->todo->fromList['bug']   = 'Related Bug';
 $lang->todo->fromList['task']  = 'Related Task';

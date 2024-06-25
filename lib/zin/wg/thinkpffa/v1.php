@@ -32,7 +32,7 @@ class thinkPffa extends thinkModel
 
         return div
         (
-            setClass('w-full h-full px-5 py-2.5 outline overflow-auto col justify-between gap-2 bg-opacity-20 bg-' . $blockColor, $blockColor . '-outline'),
+            setClass('w-full h-full px-5 py-2.5 outline overflow-auto col justify-between gap-2 bg-' . $blockColor . '-100', $blockColor . '-outline'),
             div
             (
                 setClass('col gap-2'),

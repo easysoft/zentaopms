@@ -40,6 +40,7 @@ $lang->custom->setStoryConcept      = "设置需求概念";
 $lang->custom->setDefaultConcept    = "设置默认概念";
 $lang->custom->browseStoryConcept   = "需求概念列表";
 $lang->custom->deleteStoryConcept   = "删除需求概念";
+$lang->custom->ERConcept            = "业需概念";
 $lang->custom->URConcept            = "用需概念";
 $lang->custom->SRConcept            = "软需概念";
 $lang->custom->reviewRule           = "评审规则";
@@ -63,7 +64,14 @@ $lang->custom->setPercent           = "是否启用{$lang->stage->percent}";
 $lang->custom->beginAndEndDate      = '起止日期';
 $lang->custom->beginAndEndDateRange = '起止日期范围';
 $lang->custom->limitTaskDateAction  = '设置起止日期必填';
+$lang->custom->closeGrade           = '停用需求层级';
+$lang->custom->activateGrade        = '启用需求层级';
+$lang->custom->deleteGrade          = '删除需求层级';
 $lang->custom->closeSetting         = '关闭设置';
+$lang->custom->gradeRule            = '是否允许跨层级细分';
+
+$lang->custom->gradeRuleList['cross']    = '是';
+$lang->custom->gradeRuleList['stepwise'] = '否';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
@@ -95,6 +103,9 @@ $lang->custom->closedExecution = '已关闭' . $lang->custom->executionCommon;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
+$lang->custom->gradeStatusList['enable']  = '正常';
+$lang->custom->gradeStatusList['disable'] = '停用';
+
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -124,6 +135,9 @@ $lang->custom->story->fields['statusList']       = '状态';
 $lang->custom->story->fields['reviewRules']      = '评审规则';
 $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
+
+$lang->custom->epic        = clone $lang->custom->story;
+$lang->custom->requirement = clone $lang->custom->story;
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['required']      = $lang->custom->required;
@@ -214,6 +228,11 @@ $lang->custom->notice->selectAllTip        = '勾选所有人员后，会清空�
 $lang->custom->notice->repeatKey           = '%s键重复';
 $lang->custom->notice->readOnlyOfCode      = "代号是一种管理话术，主要便于保密或作为别名存在。启用代号管理后，系统中的{$lang->productCommon}、{$lang->projectCommon}、执行在创建、编辑、详情、列表等页面均会展示代号信息。";
 $lang->custom->notice->readOnlyOfPercent   = "工作量占比用于划分{$lang->projectCommon}中存在多个阶段时的工作量的占比，同一级阶段的百分比之和最高为100%。启用工作量占比后，系统中的瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}模型中设置阶段时需要维护阶段的工作量占比。";
+$lang->custom->notice->closeGrade          = "停用后，该层级无法再创建新需求。";
+$lang->custom->notice->activateGrade       = "启用后，该层级可以创建新需求。";
+$lang->custom->notice->gradeNotEmpty       = '系统内存在该层级的需求，不能删除！';
+$lang->custom->notice->deleteGrade         = '层级删除后无法恢复！';
+$lang->custom->notice->gradeRule           = '跨层细分：可从任意需求层级创建需求，并支持跨层级关联父子关系。例如：您可以在第一层需求下直接创建第三层需求。';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了{$lang->projectCommon}主页视图，是否默认进入{$lang->projectCommon}主页？";

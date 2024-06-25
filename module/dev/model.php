@@ -410,6 +410,7 @@ class devModel extends model
                 $originalLangs['productCommon'] = $this->config->productCommonList[$language][PRODUCT_KEY];
                 $originalLangs['projectCommon'] = $this->config->projectCommonList[$language][PROJECT_KEY];
                 $originalLangs['executionCommon'] = $this->config->executionCommonList[$language][$projectKey];
+                $originalLangs['ERCommon']        = $this->lang->dev->ER;
                 $originalLangs['URCommon']        = $this->lang->dev->UR;
                 $originalLangs['SRCommon']        = $this->lang->dev->SR;
 
@@ -419,10 +420,12 @@ class devModel extends model
                 if($URSRList)
                 {
                     $URSRList = json_decode($URSRList->value);
+                    $originalLangs['ERCommon'] = isset($URSRList->defaultERName) ? $URSRList->defaultERName : $URSRList->ERName;
                     $originalLangs['URCommon'] = isset($URSRList->defaultURName) ? $URSRList->defaultURName : $URSRList->URName;
                     $originalLangs['SRCommon'] = isset($URSRList->defaultSRName) ? $URSRList->defaultSRName : $URSRList->SRName;
                 }
-                if(!$this->config->URAndSR) unset($originalLangs['URCommon']);
+                if(!$this->config->URAndSR)  unset($originalLangs['URCommon']);
+                if(!$this->config->enableER) unset($originalLangs['ERCommon']);
             }
             else
             {
@@ -507,12 +510,15 @@ class devModel extends model
                 if($URSRList)
                 {
                     $URSRList = json_decode($URSRList->value);
+                    $defaultERName = isset($URSRList->defaultERName) ? $URSRList->defaultERName : $URSRList->ERName;
                     $defaultURName = isset($URSRList->defaultURName) ? $URSRList->defaultURName : $URSRList->URName;
                     $defaultSRName = isset($URSRList->defaultSRName) ? $URSRList->defaultSRName : $URSRList->SRName;
+                    $customedLangs['ERCommon'] = $defaultERName == $URSRList->ERName ? '' : $URSRList->ERName;
                     $customedLangs['URCommon'] = $defaultURName == $URSRList->URName ? '' : $URSRList->URName;
                     $customedLangs['SRCommon'] = $defaultSRName == $URSRList->SRName ? '' : $URSRList->SRName;
                 }
-                if(!$this->config->URAndSR) unset($customedLangs['URCommon']);
+                if(!$this->config->enableER) unset($customedLangs['ERCommon']);
+                if(!$this->config->URAndSR)  unset($customedLangs['URCommon']);
                 break;
             case 'first':
                 $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=mainNav&vision={$this->config->vision}");
@@ -591,6 +597,7 @@ class devModel extends model
         if(empty($langFilesToLoad)) return false;
 
         $lang = $module == 'common' ? new language() : $this->defaultLang;
+        $lang->ERCommon        = '$ERCOMMON';
         $lang->URCommon        = '$URCOMMON';
         $lang->SRCommon        = '$SRCOMMON';
         $lang->productCommon   = '$PRODUCTCOMMON';
@@ -1014,7 +1021,6 @@ class devModel extends model
         $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}{$key}");
 
         $data = fixer::input('post')->get();
-        if($type == 'common') unset($data->common_SRCommon, $data->common_URCommon);
         foreach($data as $langKey => $customedLang)
         {
             if(strpos($langKey, "{$moduleName}_") !== 0) continue;
@@ -1044,7 +1050,8 @@ class devModel extends model
 
             $setting = array(
                 'SRName' => $this->post->common_SRCommon !== false ? $this->post->common_SRCommon : zget($oldValue, 'defaultSRName', $oldValue->SRName),
-                'URName' => $this->post->common_URCommon !== false ? $this->post->common_URCommon : zget($oldValue, 'defaultURName', $oldValue->URName)
+                'URName' => $this->post->common_URCommon !== false ? $this->post->common_URCommon : zget($oldValue, 'defaultURName', $oldValue->URName),
+                'ERName' => $this->post->common_ERCommon !== false ? $this->post->common_ERCommon : zget($oldValue, 'defaultERName', $oldValue->ERName)
             );
             $this->custom->updateURAndSR($this->config->custom->URSR, $language, $setting);
         }

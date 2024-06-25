@@ -168,6 +168,7 @@ if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($sto
 
 detailHeader
 (
+    setClass('mx-3'),
     to::prefix($lang->story->changed),
     to::title
     (
@@ -185,6 +186,7 @@ detailHeader
 detailBody
 (
     setID('dataform'),
+    setClass('mx-3'),
     set::isForm(true),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::actions(array
@@ -195,7 +197,7 @@ detailBody
     )),
     sectionList($formItems),
     h::hr(),
-    history()
+    history(set::objectID($story->id))
 );
 
 render();

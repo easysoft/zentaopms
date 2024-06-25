@@ -65,7 +65,7 @@ function loadMembers()
 function loadProjectExecutions(projectID)
 {
     projectID = parseInt(projectID) ? projectID : $('#copyExecutionModal input[name=project]').val();
-    projectID = parseInt(projectID);
+    projectID = projectID == undefined ? 0 : parseInt(projectID);
     loadTarget($.createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&copyExecutionID=' + copyExecutionID), '#copyExecutions');
 }
 

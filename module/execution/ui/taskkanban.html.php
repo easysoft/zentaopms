@@ -66,6 +66,7 @@ jsVar('lanePairs', $lanePairs);
 jsVar('colPairs', $colPairs);
 jsVar('vision', $config->vision);
 jsVar('colorList', $config->kanban->cardColorList);
+jsVar('ERURColumn', array_keys($lang->kanban->ERURColumn));
 jsVar('executionID', $executionID);
 jsVar('productID', $productID);
 jsVar('kanbanGroup', $kanbanGroup);
@@ -137,13 +138,22 @@ jsVar('canImportBug', $features['qa']);
 jsVar('canChangeObject', common::canModify('execution', $execution));
 
 $canCreateObject = ($canCreateTask or $canBatchCreateTask or $canCreateRisk or $canBatchCreateRisk or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
+if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')))
+{
+    unset($lang->kanban->type['epic'], $lang->kanban->type['requirement']);
+}
+else
+{
+    if(strpos($project->storyType, 'epic') === false)        unset($lang->kanban->type['epic']);
+    if(strpos($project->storyType, 'requirement') === false) unset($lang->kanban->type['requirement']);
+}
 row
 (
     setClass('items-center justify-between mb-3'),
     cell
     (
         setClass('flex'),
-        $features['qa'] ? inputControl
+        inputControl
         (
             setClass('c-type'),
             picker
@@ -155,7 +165,7 @@ row
                 set::required(true),
                 set::onchange('changeBrowseType()')
             )
-        ) : null,
+        ),
         $browseType != 'all' ? inputControl
         (
             setClass('c-group ml-5'),
@@ -248,7 +258,10 @@ div
     (
         set::key('kanban'),
         set::items($kanbanGroup),
-        set::height('calc(100vh - 120px)')
+        set::height('calc(100vh - 120px)'),
+        set::links($links),
+        set::selectable(true),
+        set::showLinkOnSelected(true)
     )
 );
 

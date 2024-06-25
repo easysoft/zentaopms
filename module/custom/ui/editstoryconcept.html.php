@@ -16,10 +16,20 @@ formPanel
     set::title($lang->custom->editStoryConcept),
     formRow
     (
+        $config->enableER ? formGroup
+        (
+            set::width('1/3'),
+            setClass('justify-center'),
+            span
+            (
+                setClass('text-md font-bold'),
+                $lang->custom->ERConcept
+            )
+        ) : null,
         $config->URAndSR ? formGroup
         (
-            set::width('1/2'),
-            setClass('justify-center mr-8'),
+            set::width('1/3'),
+            setClass('justify-center'),
             span
             (
                 setClass('text-md font-bold'),
@@ -28,7 +38,7 @@ formPanel
         ) : null,
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             setClass('justify-center'),
             span
             (
@@ -41,15 +51,23 @@ formPanel
     (
         formGroup
         (
-            setClass('mr-8'),
+            set::width('1/3'),
+            setClass('mr-2'),
+            set::name('ERName'),
+            set::value($URSR->ERName),
+            setClass(!$this->config->enableER ? 'hidden' : '')
+        ),
+        formGroup
+        (
+            setClass('mr-2'),
             setClass(!$this->config->URAndSR ? 'hidden' : ''),
-            set::width('1/2'),
+            set::width('1/3'),
             set::name('URName'),
             set::value($URSR->URName)
         ),
         formGroup
         (
-            set::width('1/2'),
+            set::width('1/3'),
             set::name('SRName'),
             set::value($URSR->SRName)
         )

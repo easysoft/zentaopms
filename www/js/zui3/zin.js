@@ -51,7 +51,11 @@
 
             if(title) document.title = title;
 
-            if(oldState && oldState.url === url) return;
+            if(oldState && oldState.url === url)
+            {
+                if(DEBUG) console.log('[APP]', 'skip update:', {oldState, state, code, url, title});
+                return;
+            }
 
             window.history.pushState(state, title, url);
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
@@ -454,8 +458,6 @@
         var $target = $(target);
 
         loadingClass = loadingClass || 'loading';
-        $loginPanel = $target.find('#loginPanel');
-        if($loginPanel.length > 0) $target = $loginPanel;
 
         const position = $target.css('position');
         if(!['relative', 'absolute', 'fixed'].includes(position)) $target.css('position', 'relative');
@@ -488,7 +490,6 @@
         const selectors = (Array.isArray(options.selector) ? options.selector : options.selector.split(',')).map(selector => selector.replace(':component', ':type=json&data=props'));
         const url       = options.url;
 
-        if(DEBUG) console.log('[APP]', 'request', options);
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
@@ -496,7 +497,7 @@
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
         if(!options.cache && options.cache !== false) options.cache = requestMethod === 'GET' ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
-        if(!window.config || !window.config.clientCache) options.cache = false;
+        options.cache = false; // Disable local cache for 20.1.
         const cacheKey = options.cache;
         let cache;
         const renderPageData = (data, onlyZinDebug) =>
@@ -547,8 +548,10 @@
                 if(!rawData && !ajax.sendedAgain)
                 {
                     ajax.sendedAgain = true;
-                    headers['X-Zin-Debug'] = true;
-                    ajax.send({headers: headers});
+                    ajax.setting.headers['X-Zin-Debug'] = true;
+                    delete ajax.data;
+                    delete ajax.error;
+                    ajax.send();
                     ajax.canceled = true;
                     return;
                 }
@@ -570,13 +573,13 @@
                 {
                     updatePerfInfo(options, 'renderBegin');
                     if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
-                    let newCacheData = cacheKey ? rawData : null;
+                    let newCacheData = (cacheKey && !hasFatal) ? rawData : null;
                     if(newCacheData && DEBUG)
                     {
                         const parts = newCacheData.split(',["zinDebug:<BEGIN>",');
                         if(parts.length > 1) newCacheData = parts[0] + ']';
                     }
-                    const cacheHit = cache && newCacheData === cache.data.data;
+                    const cacheHit = !hasFatal && cache && newCacheData === cache.data.data;
                     if(!cacheHit)
                     {
                         renderPageData(data);
@@ -643,11 +646,28 @@
             },
             error: (error, type) =>
             {
+                const data = ajax.data;
+                if(!data && !ajax.sendedAgain)
+                {
+                    ajax.sendedAgain = true;
+                    ajax.setting.headers['X-Zin-Debug'] = true;
+                    delete ajax.data;
+                    delete ajax.error;
+                    ajax.send();
+                    ajax.canceled = true;
+                    return;
+                }
+                else if(data)
+                {
+                    showFatalError(data, null, options);
+                    ajax.canceled = false;
+                }
+
                 if(ajax.canceled) return;
                 updatePerfInfo(options, 'requestEnd', {error: error});
-                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});;
+                if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {type, error});
-                zui.Messager.show('ZIN: Fetch data failed from ' + url);
+                if(!data) zui.Messager.show('ZIN: Fetch data failed from ' + url);
                 if(options.error) options.error(data, error);
                 if(onFinish) onFinish(error);
             },
@@ -665,6 +685,7 @@
                 }
             }
         });
+        if(DEBUG) console.log('[APP]', 'request', options);
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
         {
@@ -734,9 +755,12 @@
             task.timerID = 0;
             task.xhr = requestContent(options, () =>
             {
-                const runID = task.xhr.getResponseHeader('Xhprof-RunID');
-                updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
-                task.xhr = null;
+                if(task.xhr)
+                {
+                    const runID = task.xhr.getResponseHeader('Xhprof-RunID');
+                    updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
+                    task.xhr = null;
+                }
                 fetchTasks.delete(id);
             });
         }, options.delayTime || 0);
@@ -1091,6 +1115,7 @@
             partial:       options.partial,
             loadingTarget: loadingTarget,
             loadingClass:  'pointer-events-none',
+            cache:         false,
             success:       () =>
             {
                 let updateActionUrl = options.updateActionUrl;
@@ -1653,6 +1678,8 @@
 
     if(!isInAppTab && !isIndexPage)
     {
+        const initialState = {url: currentAppUrl, title: document.title};
+        window.history.pushState(initialState, initialState.title, initialState.url);
         $(window).on('popstate', function(event)
         {
             const state = event.state;

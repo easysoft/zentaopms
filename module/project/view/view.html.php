@@ -247,7 +247,7 @@
             <div class="detail-content">
               <table class="table table-data data-basic">
                 <tbody>
-                  <?php if(empty($project->hasProduct) and !empty($config->URAndSR) and $project->model !== 'kanban' and isset($lang->project->menu->storyGroup)):?>
+                  <?php if(empty($project->hasProduct) and !empty($config->URAndSR) and $project->model !== 'kanban'):?>
                   <tr>
                     <th><?php echo $lang->story->common;?></th>
                     <td title="<?php echo $statData->storyCount;?>"><?php echo $statData->storyCount;?></td>

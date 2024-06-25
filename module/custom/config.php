@@ -1,21 +1,25 @@
 <?php
 $config->custom = new stdClass();
-$config->custom->canAdd['story']    = 'reasonList,sourceList,priList,categoryList';
-$config->custom->canAdd['task']     = 'priList,typeList,reasonList';
-$config->custom->canAdd['bug']      = 'priList,severityList,osList,browserList,typeList,resolutionList';
-$config->custom->canAdd['testcase'] = 'priList,typeList,stageList,resultList,statusList';
-$config->custom->canAdd['testtask'] = 'priList,typeList';
-$config->custom->canAdd['todo']     = 'priList,typeList';
-$config->custom->canAdd['user']     = 'roleList';
-$config->custom->canAdd['block']    = '';
-$config->custom->canAdd['project']  = 'unitList';
+$config->custom->canAdd['epic']        = 'reasonList,sourceList,priList,categoryList';
+$config->custom->canAdd['story']       = 'reasonList,sourceList,priList,categoryList';
+$config->custom->canAdd['requirement'] = 'reasonList,sourceList,priList,categoryList';
+$config->custom->canAdd['task']        = 'priList,typeList,reasonList';
+$config->custom->canAdd['bug']         = 'priList,severityList,osList,browserList,typeList,resolutionList';
+$config->custom->canAdd['testcase']    = 'priList,typeList,stageList,resultList,statusList';
+$config->custom->canAdd['testtask']    = 'priList,typeList';
+$config->custom->canAdd['todo']        = 'priList,typeList';
+$config->custom->canAdd['user']        = 'roleList';
+$config->custom->canAdd['block']       = '';
+$config->custom->canAdd['project']     = 'unitList';
 
 $config->custom->noModuleMenu = array();
 
-$config->custom->requiredModules[10] = 'product';
-$config->custom->requiredModules[15] = 'story';
-$config->custom->requiredModules[20] = 'productplan';
-$config->custom->requiredModules[25] = 'release';
+$config->custom->requiredModules[5]  = 'product';
+$config->custom->requiredModules[10] = 'epic';
+$config->custom->requiredModules[15] = 'requirement';
+$config->custom->requiredModules[20] = 'story';
+$config->custom->requiredModules[25] = 'productplan';
+$config->custom->requiredModules[30] = 'release';
 
 $config->custom->requiredModules[30] = 'project';
 $config->custom->requiredModules[35] = 'execution';
@@ -23,7 +27,7 @@ $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[45] = 'build';
 
 $config->custom->allFeatures   = array('program', 'productRR', 'productUR', 'productLine', 'projectScrum', 'projectWaterfall', 'projectKanban', 'projectAgileplus', 'projectWaterfallplus', 'execution', 'qa', 'devops', 'ai', 'report', 'kanban', 'doc', 'system', 'admin', 'vision');
-$config->custom->dataFeatures  = array('productUR', 'waterfall', 'waterfallplus');
+$config->custom->dataFeatures  = array('productER', 'productUR', 'waterfall', 'waterfallplus');
 $config->custom->scrumFeatures = array();
 
 $config->custom->requiredModules[50] = 'bug';
@@ -32,9 +36,7 @@ $config->custom->requiredModules[60] = 'testsuite';
 $config->custom->requiredModules[65] = 'testreport';
 $config->custom->requiredModules[70] = 'caselib';
 $config->custom->requiredModules[75] = 'testtask';
-
 $config->custom->requiredModules[80] = 'doc';
-
 $config->custom->requiredModules[85] = 'user';
 
 $config->custom->fieldList['program']['create']      = 'budget,PM,desc';
@@ -43,10 +45,18 @@ $config->custom->fieldList['project']['create']      = 'budget,PM,desc';
 $config->custom->fieldList['project']['edit']        = 'budget,PM,desc';
 $config->custom->fieldList['product']['create']      = 'PO,QD,RD,type,desc';
 $config->custom->fieldList['product']['edit']        = 'PO,QD,RD,type,desc,status';
+$config->custom->fieldList['epic']['create']         = 'module,plan,source,pri,estimate,keywords,spec,verify';
+$config->custom->fieldList['epic']['change']         = 'comment,spec,verify';
+$config->custom->fieldList['epic']['close']          = 'comment';
+$config->custom->fieldList['epic']['review']         = 'reviewedDate,comment';
 $config->custom->fieldList['story']['create']        = 'module,plan,source,pri,estimate,keywords,spec,verify';
 $config->custom->fieldList['story']['change']        = 'comment,spec,verify';
 $config->custom->fieldList['story']['close']         = 'comment';
 $config->custom->fieldList['story']['review']        = 'reviewedDate,comment';
+$config->custom->fieldList['requirement']['create']  = 'module,plan,source,pri,estimate,keywords,spec,verify';
+$config->custom->fieldList['requirement']['change']  = 'comment,spec,verify';
+$config->custom->fieldList['requirement']['close']   = 'comment';
+$config->custom->fieldList['requirement']['review']  = 'reviewedDate,comment';
 $config->custom->fieldList['productplan']            = 'begin,end,desc';
 $config->custom->fieldList['release']['create']      = 'desc';
 $config->custom->fieldList['release']['edit']        = 'desc';

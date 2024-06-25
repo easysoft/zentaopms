@@ -69,6 +69,8 @@ class transferModel extends model
     {
         if($module)
         {
+            if(in_array($module, array('epic', 'requirement'))) $module = 'story';
+
             $this->loadModel($module);
             $this->moduleConfig     = $this->config->$module;
             $this->moduleLang       = $this->lang->$module;
@@ -619,10 +621,6 @@ class transferModel extends model
         /* 设置子数据。*/
         /* Deal children datas and multiple tasks. */
         if($moduleDatas) $moduleDatas = $this->transferTao->updateChildDatas($moduleDatas);
-
-        /* 设置导出用户需求相关相关研发需求数据。*/
-        /* Deal linkStories datas. */
-        if($moduleDatas and isset($fieldList['linkStories'])) $moduleDatas = $this->transferTao->processLinkStories($moduleDatas);
 
         return $moduleDatas;
     }

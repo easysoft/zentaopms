@@ -17,6 +17,7 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
+if(empty($executionID)) $executionID = 0;
 
 /* 版本列表。Version list. */
 $versions = array();
@@ -36,7 +37,7 @@ for($i = $story->version; $i >= 1; $i--)
 }
 
 /* 根据需求类型，设置要激活的导航项。Active navbar item by story type. */
-setPageData('activeMenuID', $story->type);
+if($app->tab == 'product') setPageData('activeMenuID', $story->type);
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
@@ -49,7 +50,7 @@ if(!$isInModal && hasPriv('story', 'create'))
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->story->create,
-        'url'  => createLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type")
+        'url'  => createLink($story->type, 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type")
     );
 }
 
@@ -87,9 +88,10 @@ if($story->children)
     $cols['estimate']   = $config->story->dtable->fieldList['estimate'];
     $cols['status']     = $config->story->dtable->fieldList['status'];
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
+    $cols['title']['title']        = $lang->story->name;
     $cols['id']['checkbox']        = false;
     $cols['title']['nestedToggle'] = false;
-    $cols['actions']['minWidth']   = 190;
+    $cols['actions']['minWidth']   = 200;
     if($isInModal)
     {
         $cols['title']['data-toggle'] = 'modal';
@@ -99,11 +101,11 @@ if($story->children)
     foreach(array_keys($cols) as $fieldName) $cols[$fieldName]['sortType'] = false;
 
     $options = array('users' => $users);
-    foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options);
+    foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options, $child->type, $maxGradeGroup);
 
     $sections[] = array
     (
-        'title'          => $isRequirement ? $lang->story->story : $lang->story->children,
+        'title'          => $lang->story->children,
         'control'        => 'dtable',
         'id'             => 'table-story-children',
         'cols'           => $cols,
@@ -139,11 +141,11 @@ if($twins)
         ->items($twins);
 }
 
-if($this->config->URAndSR && !$hiddenURS && !in_array($config->vision, array('lite', 'or')))
+if(!in_array($config->vision, array('lite', 'or')))
 {
     $tabs[] = setting()
         ->group('relatives')
-        ->title($isStoryType ? $lang->story->requirement : $lang->story->story)
+        ->title($lang->story->linkStories)
         ->control('linkedStoryList')
         ->items($relations)
         ->story($story);
@@ -168,7 +170,7 @@ if($config->vision != 'lite')
 }
 
 $parentTitle = $story->parent > 0 ? set::parentTitle($story->parentName) : null;
-$parentUrl   = $story->parent > 0 ? set::parentUrl(createLink('story', 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
+$parentUrl   = $story->parent > 0 ? set::parentUrl(createLink($story->parentType, 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
 
 $versionBtn = count($versions) > 1 ? to::title(dropdown
 (
@@ -197,6 +199,29 @@ foreach($actions as $key => $action)
     {
         unset($actions[$key]);
         continue;
+    }
+
+    if(isset($action['icon']) && $action['icon'] == 'split')
+    {
+        $canBatchCreateStory = $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+        $objectID = $app->tab == 'project' ? $projectID : $executionID;
+        if($canBatchCreateStory)
+        {
+            $action['url'] = createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+        }
+        elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+        {
+            $action['url'] = createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+        }
+        elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+        {
+            $action['url'] = createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+        }
+        else
+        {
+            unset($actions[$key]);
+            continue;
+        }
     }
 
     if($isInModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))

@@ -32,7 +32,7 @@ foreach($kanbanList as $current => $region)
             $group['maxLaneHeight'] = $execution->displayCards * 70;
         }
 
-        if(common::canModify('execution', $execution))
+        if($canModifyExecution)
         {
             $group['canDrop'] = jsRaw('window.canDrop');
             $group['onDrop']  = jsRaw('window.onDrop');
@@ -42,6 +42,7 @@ foreach($kanbanList as $current => $region)
     }
 
     $laneCount += isset($region['laneCount']) ? $region['laneCount'] : 0;
+    $links      = isset($region['links']) ? $region['links'] : array();
 }
 
 $operationMenu = array();
@@ -62,22 +63,23 @@ $canBatchCreateBug   = $features['qa'] && $canModifyExecution && common::hasPriv
 $canImportBug        = $features['qa'] && $canModifyExecution && common::hasPriv('execution', 'importBug') && $execution->multiple && $productID && $this->config->vision != 'lite';
 $hasBugButton        = $canCreateBug || $canBatchCreateBug;
 
-$canCreateStory      = $features['story'] && $canModifyExecution && common::hasPriv('story', 'create') && $productID && $this->config->vision != 'lite';
-$canBatchCreateStory = $features['story'] && $canModifyExecution && common::hasPriv('story', 'batchCreate') && $productID && $this->config->vision != 'lite';
-$canLinkStory        = $features['story'] && $canModifyExecution && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct) && $productID && $this->config->vision != 'lite';
-$canLinkStoryByPlan  = $features['story'] && $canModifyExecution && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct) && $productID && $this->config->vision != 'lite';
-$hasStoryButton      = $canCreateStory || $canBatchCreateStory || $canLinkStory || $canLinkStoryByPlan;
+$canCreateStory      = $features['story'] && $canModifyExecution && common::hasPriv('story', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canBatchCreateStory = $features['story'] && $canModifyExecution && common::hasPriv('story', 'batchCreate') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+
+$canLinkStory        = $features['story'] && $canModifyExecution && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct) && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canLinkStoryByPlan  = $features['story'] && $canModifyExecution && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct) && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$hasStoryButton      = $features['story'] && ($canCreateStory || $canBatchCreateStory || $canLinkStory || $canLinkStoryByPlan);
 
 $hasTaskButton = $canCreateTask || $canBatchCreateTask || $canImportBug;
 
 $createMenu = array();
 $modal      = $productID ? 'modal' : false;
-if($canCreateStory) $createMenu[] = array('text' => $lang->story->create, 'url' => $productID ? helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
-if($canBatchCreateStory) $createMenu[] = array('text' => $lang->story->batchCreate, 'url' => $productID ? (count($productNames) > 1 ? '#batchCreateStory' : helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id")) : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
-if($canLinkStory) $createMenu[] = array('text' => $lang->execution->linkStory, 'url' => $productID ? helper::createLink('execution', 'linkStory', "execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
-if($canLinkStoryByPlan) $createMenu[] = array('text' => $lang->execution->linkStoryByPlan, 'url' => $productID ? "#linkStoryByPlan" : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'sm', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canCreateStory)                   $createMenu[] = array('text' => $lang->story->create, 'url' => $productID ? helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canBatchCreateStory)              $createMenu[] = array('text' => $lang->story->batchCreate, 'url' => $productID ? (count($productNames) > 1 ? '#batchCreateStory' : helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id")) : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canLinkStory)                     $createMenu[] = array('text' => $lang->execution->linkStory, 'url' => $productID ? helper::createLink('execution', 'linkStory', "execution=$execution->id") : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'lg', 'data-on' => 'click', 'data-call' => 'checkProducts');
+if($canLinkStoryByPlan)               $createMenu[] = array('text' => $lang->execution->linkStoryByPlan, 'url' => $productID ? "#linkStoryByPlan" : 'javascript:;', 'data-toggle' => $modal, 'data-size' => 'sm', 'data-on' => 'click', 'data-call' => 'checkProducts');
 if($hasStoryButton && $hasTaskButton) $createMenu[] = array('type' => 'divider');
-if($canCreateBug) $createMenu[] = array('text' => $lang->bug->create, 'url' => helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
+if($canCreateBug)                     $createMenu[] = array('text' => $lang->bug->create, 'url' => helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
 if($canBatchCreateBug)
 {
     if(count($productNames) > 1)
@@ -101,6 +103,7 @@ jsVar('storyLang', $lang->story);
 jsVar('executionLang', $lang->execution);
 jsVar('laneLang', $lang->kanbanlane);
 jsVar('cardLang', $lang->kanbancard);
+jsVar('ERURColumn', array_keys($lang->kanban->ERURColumn));
 jsVar('bugLang', $lang->bug);
 jsVar('taskLang', $lang->task);
 jsVar('executionID', $execution->id);
@@ -114,49 +117,50 @@ jsVar('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $exe
 jsVar('maxColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 jsVar('priv',
     array(
-        'canCreateTask'         => $canCreateTask,
-        'canBatchCreateTask'    => $canBatchCreateTask,
-        'canImportBug'          => $canImportBug,
-        'canCreateBug'          => $canCreateBug,
-        'canBatchCreateBug'     => $canBatchCreateBug,
-        'canCreateStory'        => $canCreateStory,
-        'canBatchCreateStory'   => $canBatchCreateStory,
-        'canLinkStory'          => $canLinkStory,
-        'canLinkStoryByPlan'    => $canLinkStoryByPlan,
-        'canViewBug'            => common::hasPriv('bug', 'view'),
-        'canAssignBug'          => Common::hasPriv('bug', 'assignto') && $canModifyExecution,
-        'canConfirmBug'         => Common::hasPriv('bug', 'confirm')  && $canModifyExecution,
-        'canResolveBug'         => Common::hasPriv('bug', 'resolve')  && $canModifyExecution,
-        'canCopyBug'            => Common::hasPriv('bug', 'create')   && $canModifyExecution,
-        'canEditBug'            => Common::hasPriv('bug', 'edit')     && $canModifyExecution,
-        'canDeleteBug'          => Common::hasPriv('bug', 'delete')   && $canModifyExecution,
-        'canActivateBug'        => Common::hasPriv('bug', 'activate') && $canModifyExecution,
-        'canViewTask'           => common::hasPriv('task', 'view'),
-        'canAssignTask'         => common::hasPriv('task', 'assignto') && $canModifyExecution,
-        'canFinishTask'         => common::hasPriv('task', 'finish')   && $canModifyExecution,
-        'canPauseTask'          => common::hasPriv('task', 'pause')    && $canModifyExecution,
-        'canCancelTask'         => common::hasPriv('task', 'cancel')   && $canModifyExecution,
-        'canCloseTask'          => common::hasPriv('task', 'close')    && $canModifyExecution,
-        'canActivateTask'       => common::hasPriv('task', 'activate')       && $canModifyExecution,
-        'canActivateStory'      => common::hasPriv('story', 'activate')      && $canModifyExecution,
-        'canStartTask'          => common::hasPriv('task', 'start')          && $canModifyExecution,
-        'canRestartTask'        => common::hasPriv('task', 'restart')        && $canModifyExecution,
-        'canEditTask'           => common::hasPriv('task', 'edit')           && $canModifyExecution,
-        'canDeleteTask'         => common::hasPriv('task', 'delete')         && $canModifyExecution,
-        'canRecordWorkhourTask' => common::hasPriv('task', 'recordWorkhour') && $canModifyExecution,
-        'canToStoryBug'         => common::hasPriv('story', 'create')        && $canModifyExecution,
-        'canAssignStory'        => common::hasPriv('story', 'assignto')      && $canModifyExecution,
-        'canEditStory'          => common::hasPriv('story', 'edit')          && $canModifyExecution,
-        'canDeleteStory'        => common::hasPriv('story', 'delete')        && $canModifyExecution,
-        'canChangeStory'        => common::hasPriv('story', 'change')        && $canModifyExecution,
-        'canCloseStory'         => common::hasPriv('story', 'close')         && $canModifyExecution,
-        'canUnlinkStory'        => (common::hasPriv('execution', 'unlinkStory') && !empty($execution->hasProduct)) && $canModifyExecution,
-        'canViewStory'          => common::hasPriv('execution', 'storyView')
+        'canCreateTask'             => $canCreateTask,
+        'canBatchCreateTask'        => $canBatchCreateTask,
+        'canImportBug'              => $canImportBug,
+        'canCreateBug'              => $canCreateBug,
+        'canBatchCreateBug'         => $canBatchCreateBug,
+        'canCreateStory'            => $canCreateStory,
+        'canBatchCreateStory'       => $canBatchCreateStory,
+        'canLinkStory'              => $canLinkStory,
+        'canLinkStoryByPlan'        => $canLinkStoryByPlan,
+        'canViewBug'                => common::hasPriv('bug', 'view'),
+        'canAssignBug'              => common::hasPriv('bug', 'assignto') && $canModifyExecution,
+        'canConfirmBug'             => common::hasPriv('bug', 'confirm') && $canModifyExecution,
+        'canResolveBug'             => common::hasPriv('bug', 'resolve') && $canModifyExecution,
+        'canCopyBug'                => common::hasPriv('bug', 'create') && $canModifyExecution,
+        'canEditBug'                => common::hasPriv('bug', 'edit') && $canModifyExecution,
+        'canDeleteBug'              => common::hasPriv('bug', 'delete') && $canModifyExecution,
+        'canActivateBug'            => common::hasPriv('bug', 'activate') && $canModifyExecution,
+        'canViewTask'               => common::hasPriv('task', 'view'),
+        'canAssignTask'             => common::hasPriv('task', 'assignto') && $canModifyExecution,
+        'canFinishTask'             => common::hasPriv('task', 'finish') && $canModifyExecution,
+        'canPauseTask'              => common::hasPriv('task', 'pause') && $canModifyExecution,
+        'canCancelTask'             => common::hasPriv('task', 'cancel') && $canModifyExecution,
+        'canCloseTask'              => common::hasPriv('task', 'close'),
+        'canActivateTask'           => common::hasPriv('task', 'activate') && $canModifyExecution,
+        'canActivateStory'          => common::hasPriv('story', 'activate') && $canModifyExecution,
+        'canStartTask'              => common::hasPriv('task', 'start') && $canModifyExecution,
+        'canRestartTask'            => common::hasPriv('task', 'restart') && $canModifyExecution,
+        'canEditTask'               => common::hasPriv('task', 'edit') && $canModifyExecution,
+        'canDeleteTask'             => common::hasPriv('task', 'delete') && $canModifyExecution,
+        'canRecordWorkhourTask'     => common::hasPriv('task', 'recordWorkhour') && $canModifyExecution,
+        'canToStoryBug'             => common::hasPriv('story', 'create') && $canModifyExecution,
+        'canAssignStory'            => common::hasPriv('story', 'assignto') && $canModifyExecution,
+        'canEditStory'              => common::hasPriv('story', 'edit') && $canModifyExecution,
+        'canDeleteStory'            => common::hasPriv('story', 'delete') && $canModifyExecution,
+        'canChangeStory'            => common::hasPriv('story', 'change') && $canModifyExecution,
+        'canCloseStory'             => common::hasPriv('story', 'close'),
+        'canUnlinkStory'            => (common::hasPriv('execution', 'unlinkStory') && !empty($execution->hasProduct)) && $canModifyExecution,
+        'canViewStory'              => common::hasPriv('execution', 'storyView')
     )
 );
 
 if(!$features['story']) unset($lang->kanban->type['story']);
 if(!$features['qa'])    unset($lang->kanban->type['bug']);
+unset($lang->kanban->type['epic'], $lang->kanban->type['requirement']);
 
 $executionItems = array();
 foreach($executionList as $childExecution) $executionItems[] = array('text' => $childExecution->name, 'url' => createLink('execution', 'kanban', "kanbanID={$childExecution->id}"));
@@ -291,7 +295,10 @@ div
     (
         set::key('kanban'),
         set::items($kanbanList),
-        set::height('calc(100vh - 120px)')
+        set::height('calc(100vh - 120px)'),
+        set::links($links),
+        set::selectable(true),
+        set::showLinkOnSelected(true)
     )
 );
 

@@ -519,8 +519,8 @@ class control extends baseControl
         if($this->config->edition == 'open') return $fields;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $fields;
 
-        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
-        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
+        $methodName = $methodName ? $moduleName : $this->app->rawMethod;
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $fields;
@@ -546,8 +546,8 @@ class control extends baseControl
         if($this->config->edition == 'open') return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
-        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
-        $methodName = $methodName ? $methodName : $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
+        $methodName = $methodName ? $methodName : $this->app->rawMethod;
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return '';
@@ -585,8 +585,8 @@ class control extends baseControl
         if($this->config->edition == 'open') return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
-        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
-        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
+        $methodName = $methodName ? $moduleName : $this->app->rawMethod;
 
         if(!$object) $object = new stdclass();
 

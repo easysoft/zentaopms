@@ -57,6 +57,7 @@ class customZen extends custom
         }
         $this->view->fieldList = $fieldList;
         $this->view->dbFields  = $dbFields;
+        $this->view->lang2Set  = str_replace('_', '-', $lang);
     }
 
     /**
@@ -80,18 +81,27 @@ class customZen extends custom
             $this->view->unitList        = explode(',', $unitList);
             $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
         }
-        if(in_array($module, array('story', 'demand')) && $field == 'reviewRules')
+        if(in_array($module, array('story', 'demand', 'requirement', 'epic')) && $field == 'reviewRules')
         {
             $this->app->loadConfig($module);
             $this->view->reviewRule     = zget($this->config->$module, 'reviewRules', 'allpass');
             $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
             $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
         }
-        if(in_array($module, array('story', 'testcase', 'demand')) && $field == 'review')
+        if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'gradeRule')
+        {
+            $this->app->loadConfig($module);
+            $this->view->gradeRule = zget($this->config->$module, 'gradeRule', '');
+        }
+        if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
+        {
+            $this->view->storyGrades = $this->loadModel('story')->getGradeList($module);
+        }
+        if(in_array($module, array('story', 'testcase', 'demand', 'requirement', 'epic')) && $field == 'review')
         {
             $this->app->loadConfig($module);
             $this->loadModel('user');
-            if(in_array($module, array('story', 'demand')))
+            if(in_array($module, array('story', 'requirement', 'demand', 'epic')))
             {
                 $this->view->depts               = $this->loadModel('dept')->getDeptPairs();
                 $this->view->forceReviewRoles    = zget($this->config->$module, 'forceReviewRoles', '');
@@ -142,11 +152,19 @@ class customZen extends custom
             $data['unitList'] = implode(',', $data['unitList']);
             $this->loadModel('setting')->setItems("system.$module", $data);
         }
-        elseif(($module == 'story' || $module == 'demand') && $field == 'review')
+        elseif(in_array($module, array('story', 'demand', 'requirement', 'epic')) && $field == 'review')
         {
             $this->setStoryReview($module, $data);
         }
-        elseif(($module == 'story' || $module == 'demand') && $field == 'reviewRules')
+        elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'gradeRule')
+        {
+            $this->setGradeRule($module, $data);
+        }
+        elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
+        {
+            $this->custom->setStoryGrade($module, $data);
+        }
+        elseif(in_array($module, array('story', 'demand', 'requirement', 'epic')) && $field == 'reviewRules')
         {
             if(!isset($data['superReviewers'])) $data['superReviewers'] = array();
             $data['superReviewers'] = implode(',', $data['superReviewers']);
@@ -328,6 +346,21 @@ class customZen extends custom
 
         $this->loadModel('setting')->setItems("system.{$module}@{$this->config->vision}", $data);
 
+        return !dao::isError();
+    }
+
+    /**
+     * 设置需求细分流程。
+     * Set the rule of story grade.
+     *
+     * @param  string    $module
+     * @param  array     $data
+     * @access protected
+     * @return bool
+     */
+    public function setGradeRule(string $module, array $data): bool
+    {
+        $this->loadModel('setting')->setItems("system.{$module}", $data);
         return !dao::isError();
     }
 

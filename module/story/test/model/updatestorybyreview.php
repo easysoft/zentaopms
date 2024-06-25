@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->updateStoryByReview();
+timeout=0
 cid=0
 
 - 执行storyModel模块的updateStoryByReview方法，参数是1, $oldStory, $story 属性status @draft
@@ -28,6 +29,7 @@ $storyModel = $tester->loadModel('story');
 
 $story = new stdclass();
 $story->status     = 'draft';
+$story->reviewedBy = 'admin,user1';
 
 $oldStory = new stdclass();
 $oldStory->status  = 'draft';

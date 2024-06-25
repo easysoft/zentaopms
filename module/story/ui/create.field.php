@@ -5,6 +5,7 @@ global $lang, $config;
 $fields       = defineFieldList('story.create');
 $createFields = data('fields');
 $type         = data('type');
+$gradeRule    = data('gradeRule');
 $isSR         = $type == 'story';
 $isBranchUR   = isset($createFields['branch']) && $type != 'story';
 $isKanban     = data('executionType') == 'kanban';
@@ -42,6 +43,17 @@ if(isset($createFields['branch']) && $type == 'story')
         ));
 }
 
+$fields->field('parent')
+    ->hidden(data('hiddenParent'))
+    ->items($createFields['parent']['options'])
+    ->value($createFields['parent']['default']);
+
+$fields->field('grade')
+    ->hidden(data('hiddenGrade'))
+    ->disabled($gradeRule == 'stepwise')
+    ->required()
+    ->items($createFields['grade']['options'])
+    ->value($createFields['grade']['default']);
 if(isset($createFields['URS']))
 {
     $fields->field('URS')
@@ -87,7 +99,7 @@ $fields->field('assignedTo')
 
 $fields->field('category')
     ->required($createFields['category']['required'])
-    ->items($createFields['category']['options'])
+    ->items($lang->{$type}->categoryList)
     ->value($createFields['category']['default']);
 
 if($isKanban)
@@ -115,12 +127,11 @@ $fields->field('pri')
     ->width('1/4')
     ->required($createFields['pri']['required'])
     ->control('priPicker')
-    ->items($createFields['pri']['options'])
+    ->items($lang->{$type}->priList)
     ->value($createFields['pri']['default']);
 
 $fields->field('estimate')
     ->width('1/4')
-    ->control(array('control' => 'number'))
     ->required($createFields['estimate']['required'])
     ->label($lang->story->estimateAB . $lang->story->estimateUnit)
     ->value($createFields['estimate']['default']);
@@ -140,14 +151,14 @@ $fields->field('verify')
 
 $fields->field('files')->width('full')->control('fileSelector');
 
-if(!isset($createFields['branch']) && $type == 'story' and isset($createFields['plan']))
+if(!(isset($createFields['branch']) && $type == 'story') && isset($createFields['plan']))
 {
     $fields->field('plan')
         ->foldable()
         ->required($createFields['plan']['required'])
         ->control('inputGroup')
         ->items(false)
-        ->itemBegin('plan')->control('picker')->id('planIdBox')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->itemEnd()
+        ->itemBegin('plan')->control('picker')->id('planIdBox')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->multiple($type != 'story')->itemEnd()
         ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('plus')->url(createLink('productplan', 'create', 'productID=' . data('productID') . '&branch=' . data('branch')))->set(array('data-toggle' => 'modal', 'data-size' => 'lg'))->set('title', $lang->productplan->create) : null)
         ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('refresh')->id("loadProductPlans")->set('title', $lang->refresh) : null);
 }
@@ -156,7 +167,7 @@ $fields->field('source')
     ->foldable()
     ->width('1/4')
     ->required($createFields['source']['required'])
-    ->items($createFields['source']['options'])
+    ->items($lang->{$type}->sourceList)
     ->value($createFields['source']['default']);
 
 $fields->field('sourceNote')

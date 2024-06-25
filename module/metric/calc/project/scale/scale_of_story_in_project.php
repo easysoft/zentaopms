@@ -20,9 +20,9 @@
  */
 class scale_of_story_in_project extends baseCalc
 {
-    public $dataset = 'getDevStoriesWithProject';
+    public $dataset = 'getAllStoriesWithProject';
 
-    public $fieldList = array('t3.project', 't1.estimate', 't1.parent');
+    public $fieldList = array('t3.project', 't1.estimate', 't1.isParent');
 
     public $result = array();
 
@@ -30,9 +30,9 @@ class scale_of_story_in_project extends baseCalc
     {
         $project  = $row->project;
         $estimate = $row->estimate;
-        $parent   = $row->parent;
+        $isParent = $row->isParent;
 
-        if($parent == '-1') return false;
+        if($isParent == '1') return false;
 
         if(!isset($this->result[$project])) $this->result[$project] = 0;
         $this->result[$project] += $estimate;

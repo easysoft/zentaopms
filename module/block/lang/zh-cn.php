@@ -541,9 +541,10 @@ $lang->block->welcome->reviewList['reviewByMe'] = '待我评审数';
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task'] = '任务数';
 if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'BUG数';
-if($config->vision != 'or') $lang->block->welcome->assignList['story'] = $lang->SRCommon . '数';
+if($config->vision != 'or') $lang->block->welcome->assignList['story'] = "{$lang->SRCommon}数";
 $lang->block->welcome->assignList['testcase'] = '用例数';
-if($config->vision != 'or') $lang->block->welcome->assignList['requirement'] = $lang->URCommon . '数';
+if($config->URAndSR && $config->vision != 'or')  $lang->block->welcome->assignList['requirement'] = "{$lang->URCommon}数";
+if($config->enableER && $config->vision != 'or') $lang->block->welcome->assignList['epic']        = "{$lang->ERCommon}数";
 
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';
@@ -571,7 +572,7 @@ $lang->block->projectoverview->thisYear      = '今年完成';
 $lang->block->projectoverview->lastThreeYear = '近三年完成的项目数量分布';
 
 $lang->block->projectstatistic = new stdclass();
-$lang->block->projectstatistic->story            = $lang->SRCommon;
+$lang->block->projectstatistic->story            = '需求';
 $lang->block->projectstatistic->cost             = '投入';
 $lang->block->projectstatistic->task             = '任务';
 $lang->block->projectstatistic->bug              = 'Bug';

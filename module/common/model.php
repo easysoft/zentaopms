@@ -2446,7 +2446,7 @@ eof;
     {
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $moduleName = $actionData['url']['module'];
+            $moduleName = ($actionData['url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['url']['module'];
             $methodName = $actionData['url']['method'];
             $params     = $actionData['url']['params'];
             if(!common::hasPriv($moduleName, $methodName)) return false;
@@ -2454,7 +2454,7 @@ eof;
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
-            $moduleName = $actionData['data-url']['module'];
+            $moduleName = ($actionData['data-url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['data-url']['module'];
             $methodName = $actionData['data-url']['method'];
             $params     = $actionData['data-url']['params'];
             if(!common::hasPriv($moduleName, $methodName)) return false;

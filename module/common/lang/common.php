@@ -14,6 +14,7 @@ $lang->scrum       = new stdclass();
 $lang->waterfall   = new stdclass();
 $lang->execution   = new stdclass();
 $lang->kanban      = new stdclass();
+$lang->epic        = new stdclass();
 $lang->story       = new stdclass();
 $lang->requirement = new stdclass();
 $lang->release     = new stdclass();

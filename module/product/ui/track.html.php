@@ -12,232 +12,129 @@ declare(strict_types=1);
 
 namespace zin;
 
-if($config->URAndSR && $this->app->rawModule == 'projectstory' && $this->session->hasProduct)
+$viewByTypePairs = array();
+foreach($storyTypeList as $type => $typeName) $viewByTypePairs[$type] = sprintf($lang->story->viewByType, $typeName);
+
+$storyTypeLang = $storyTypeList[$storyType];
+$paramTemplate = "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=allstory&param=0&storyType=%s&orderBy=%s";
+if($app->rawModule == 'projectstory') $paramTemplate = "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=allstory&param=0&storyType=%s&orderBy=%s";
+
+$orderByItems = array();
+$orderByTitle = '';
+if($storyType != 'story') unset($lang->story->trackOrderByList['stage']);
+foreach($lang->story->trackOrderByList as $orderByType => $orderByName)
 {
-    $productItems = array();
-    foreach($projectProducts as $id => $name)
+    $item = array();
+    $item['text']     = $orderByName;
+    $item['selected'] = strpos($orderBy, $orderByType) === 0;
+    $item['items']    = array();
+    $item['items'][]  = array('text' => $lang->story->trackSortList['asc'],  'selected' => $orderBy == "{$orderByType}_asc",  'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_asc")));
+    $item['items'][]  = array('text' => $lang->story->trackSortList['desc'], 'selected' => $orderBy == "{$orderByType}_desc", 'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_desc")));
+    $orderByItems[]   = $item;
+
+    if($item['selected'])
     {
-        $productItems[] = array('text' => $name, 'url' => createLink('projectstory', 'track', "projectID={$this->session->project}&productID={$id}"), 'active' => $productID == $id);
+        $orderByTitle = $orderByName;
+        if($orderBy == "{$orderByType}_asc")  $orderByTitle .= $lang->story->trackSortList['asc'];
+        if($orderBy == "{$orderByType}_desc") $orderByTitle .= $lang->story->trackSortList['desc'];
     }
 }
 
-$getRequirements = function($tracks)
-{
-    global $app, $config, $lang;
-    $requirementItems = array();
-    $tab              = $app->rawModule == 'projectstory' ? 'project' : 'product';
-    $module           = $app->rawModule == 'projectstory' ? 'projectstory' : 'story';
-    foreach($tracks as $key => $requirement)
-    {
-        $track   = ($key == 'noRequirement') ? $requirement : $requirement->track;
-        $rowspan = count($track);
-        $title   = $lang->story->noRequirement;
-        if($config->URAndSR && $key != 'noRequirement') $title = common::hasPriv($requirement->type, 'view') ? a(
-            set('href', createLink('story', 'view', "storyID={$requirement->id}")),
-            set('title', $requirement->title),
-            set('data-app', $tab),
-            $requirement->title
-       ) : $requirement->title;
+$dropdownItems = array();
+foreach($viewByTypePairs as $type => $typeName) $dropdownItems[] = array('text' => $typeName, 'selected' => $storyType == $type, 'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $type, ($type != 'story' && strpos($orderBy, 'stage') === 0) ? 'id_desc' : $orderBy)));
 
-        $requirementItems[] = h::tr(
-            $config->URAndSR ? h::td(
-                $rowspan != 0 ? set('rowspan', $rowspan) : null,
-                setClass('requirement'),
-                $key != 'noRequirement' ? label(
-                    setClass('primary-pale ring-primary mr-1'),
-                    zget($lang->story->statusList, $requirement->status)
-                ) : null,
-                set('title', $key != 'noRequirement' ? $requirement->title : $lang->story->noRequirement),
-                $title
-            ) : null,
-            count($track) != 0 ? getStoryTrack($track, $tab, $module) : null
-            );
-    }
-    return $requirementItems;
-};
-
-function getStoryTrack($track, $tab, $module)
-{
-    $i          = 0;
-    $storyItems = array();
-    foreach($track as $storyID => $story)
-    {
-        if($i > 0)
-        {
-            $storyItems[] = h::tr(getTrackTd($storyID, $story, $tab, $module));
-        }
-        else
-        {
-            $storyItems[] = getTrackTd($storyID, $story, $tab, $module);
-        }
-        $i ++;
-    }
-    return $storyItems;
-};
-
-function getTrackTd($storyID, $story, $tab, $module)
-{
-    global $lang, $config;
-    $trackItem = array();
-
-    /* Story. */
-    $trackItem[] = h::td(
-        isset($story->parent) && $story->parent > 0 ? label(
-            setClass('rounded-full light mr-1'),
-            set('title', $lang->story->children),
-            $lang->story->childrenAB
-        ) : null,
-        a(
-            set('href', createLink($module, 'view', "storyID={$storyID}")),
-            set('title', $story->title),
-            set('data-app', $tab),
-            $story->title
-        )
-    );
-
-    $trackItem[] = h::td(getTaskTd($story->tasks)); // Task
-
-    if(in_array($config->edition, array('max', 'ipd'))) $trackItem[] = h::td(getDesignTd($story->designs)); // Design
-
-    $trackItem[] = h::td(getCaseTd($story->cases)); // Case
-
-    if(in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('devops')) $trackItem[] = h::td(getRevisionTd($story->revisions)); // Revision
-
-    $trackItem[] = h::td(getBugTd($story->bugs)); // Bug
-
-    return $trackItem;
-};
-
-function getTaskTd($tasks)
-{
-    $taskItems = array();
-    foreach($tasks as $task)
-    {
-        $taskItems[] = a(
-            set('href', createLink('task', 'view', "taskID={$task->id}")),
-            set('title', $task->name),
-            $task->name
-        );
-        $taskItems[] = br();
-    }
-    return $taskItems;
-};
-
-function getDesignTd($designs)
-{
-    $designItems = array();
-    foreach($designs as $design)
-    {
-        $designItems[] = a(
-            set('href', createLink('design', 'view', "designID={$design->id}")),
-            set('title', $design->name),
-            $design->name
-        );
-        $designItems[] = br();
-    }
-    return $designItems;
-};
-
-function getCaseTd($cases)
-{
-    $caseItems = array();
-    foreach($cases as $case)
-    {
-        $caseItems[] = a(
-            set('href', createLink('testcase', 'view', "caseID={$case->id}")),
-            set('title', $case->title),
-            $case->title
-        );
-        $caseItems[] = br();
-    }
-    return $caseItems;
-};
-
-function getRevisionTd($revisions)
-{
-    $revisionItems = array();
-    foreach($revisions as $revision => $repoComment)
-    {
-        $revisionItems[] = a(
-            set('href', createLink('design', 'revision', "revisionID={$revision}")),
-            set('title', $repoComment),
-            '#'. $revision . '-' . $repoComment
-        );
-        $revisionItems[] = br();
-    }
-    return $revisionItems;
-};
-
-function getBugTd($bugs)
-{
-    $bugItems = array();
-    foreach($bugs as $bug)
-    {
-        $bugItems[] = a(
-            set('href', createLink('bug', 'view', "bugID={$bug->id}")),
-            set('title', $bug->title),
-            $bug->title
-        );
-        $bugItems[] = br();
-    }
-    return $bugItems;
-};
-
-$colspan = 4;
-if($config->URAndSR) $colspan ++;
-if(in_array($config->edition, array('max', 'ipd'))) $colspan ++;
-if(in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('devops')) $colspan ++;
-div
+featureBar
 (
-    setClass('main-col'),
-    div(
-        setClass('main-table'),
-        h::table
+    to::leading
+    (
+        ($app->rawModule == 'projectstory' && count($projectProducts) > 1) ? picker
         (
-            setID('trackList'),
-            setClass('table table-bordered'),
-            h::thead
-            (
-                $config->URAndSR ? h::th(
-                    !empty($productItems) ? dropdown(
-                        btn(
-                            setClass('ghost btn square btn-default'),
-                            set::icon('product'),
-                            $projectProducts[$productID]
-                        ),
-                        set::items($productItems),
-                        set::placement('bottom-start')
-                    ) : $lang->story->requirement
-                ) : null,
-                h::th($lang->story->story),
-                h::th($lang->story->tasks),
-                in_array($config->edition, array('max', 'ipd')) ? h::th($lang->story->design) : null,
-                h::th($lang->story->case),
-                in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('devops') ? h::th($lang->story->repoCommit) : null,
-                h::th($lang->story->bug)
-            ),
-            h::tbody
-            (
-                !empty($tracks) ? $getRequirements($tracks) : h::tr
-                (
-                    h::td
-                    (
-                        setClass('text-gray text-center empty-tip'),
-                        set::colspan($colspan),
-                        $lang->product->noData
-                    )
-                )
-            )
-        ),
-        !empty($tracks) ? div
+            setID('switchProduct'),
+            set::name('switchProduct'),
+            set::items(array(0 => $this->lang->product->all) + $projectProducts),
+            set::value($productID),
+            set::required(true),
+            on::change('changeProduct'),
+            set::width(145)
+        ) : null,
+        count($viewByTypePairs) > 1 ? dropdown
         (
-            setClass('table-footer'),
-            pager(
-                set::_className('flex justify-end items-center'),
-                set::linkCreator(createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&projectID={$projectID}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pagerID={page}"))
-            )
+            to('trigger', btn(setClass('switchBtn'), $viewByTypePairs[$storyType])),
+            set::items($dropdownItems),
         ) : null
+    ),
+    li(searchToggle(set::open($browseType == 'bysearch'), set::module($config->product->search['module']), set::text($lang->searchAB . $storyTypeLang)))
+);
+
+toolbar
+(
+    formSettingBtn
+    (
+        set::customFields($customFields),
+        set::noCancel(true),
+        set::canGlobal(commonModel::hasPriv('datatable', 'setGlobal')),
+        set::urlParams("module=product&section=trackFields&key={$storyType}"),
+        set::submitCallback("loadCurrentPage"),
+        set::restoreCallback("loadCurrentPage"),
+        set::text($lang->settings)
     )
 );
 
-render();
+$privs['epic']        = commonModel::hasPriv('epic',        'view');
+$privs['requirement'] = commonModel::hasPriv('requirement', 'view');
+$privs['story']       = commonModel::hasPriv('story',       'view');
+$privs['project']     = commonModel::hasPriv('project',     'view');
+$privs['execution']   = commonModel::hasPriv('execution',   'task');
+$privs['task']        = commonModel::hasPriv('task',        'view');
+$privs['bug']         = commonModel::hasPriv('bug',         'view');
+$privs['case']        = commonModel::hasPriv('testcase',    'view');
+$privs['design']      = commonModel::hasPriv('design',      'view');
+$privs['commit']      = commonModel::hasPriv('repo',        'revision');
+
+$app->loadLang('epic');
+$app->loadLang('requirement');
+$app->loadLang('project');
+$app->loadLang('task');
+$app->loadLang('bug');
+$app->loadLang('testcase');
+jsVar('langStoryPriList',      array('epic' => $lang->epic->priList,    'requirement' => $lang->requirement->priList,    'story' => $lang->story->priList));
+jsVar('langStoryStatusList',   array('epic' => $lang->epic->statusList, 'requirement' => $lang->requirement->statusList, 'story' => $lang->story->statusList));
+jsVar('langStoryStageList',    array('epic' => $lang->epic->stageList,  'requirement' => $lang->requirement->stageList,  'story' => $lang->story->stageList));
+jsVar('langProjectStatusList', $lang->project->statusList);
+jsVar('langTaskPriList',       $lang->task->priList);
+jsVar('langTaskStatusList',    $lang->task->statusList);
+jsVar('langChildren',          $lang->task->childrenAB);
+jsVar('langBugPriList',        $lang->bug->priList);
+jsVar('langBugSeverityList',   $lang->bug->severityList);
+jsVar('langCasePriList',       $lang->testcase->priList);
+jsVar('langCaseResultList',    $lang->testcase->resultList);
+jsVar('langUnexecuted',        $lang->testcase->unexecuted);
+
+jsVar('storyIdList',  $storyIdList);
+jsVar('projectID',    $projectID);
+jsVar('mergeCells',   $mergeCells);
+jsVar('orderByItems', $orderByItems);
+jsVar('orderByTitle', $orderByTitle);
+jsVar('storyType',    $storyType);
+jsVar('users',        $users);
+jsVar('privs',        $privs);
+
+empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass('text-gray'), $lang->noData)) : div
+(
+    set::id('track'),
+    zui::kanbanList
+    (
+        set::key('kanban'),
+        set::items(array(array(
+            'data'        => $tracks,
+            'getLaneCol'  => jsRaw('window.getLaneCol'),
+            'getCol'      => jsRaw('window.getCol'),
+            'getItem'     => jsRaw('window.getItem'),
+            'itemRender'  => jsRaw('window.itemRender'),
+            'afterRender' => jsRaw('window.afterRender'),
+            'draggable'   => false
+        ))),
+        set::height('calc(100vh - 130px)')
+    ),
+    pager(setClass('justify-end'))
+);

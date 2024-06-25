@@ -1,7 +1,9 @@
 body {background: var(--color-primary-500) linear-gradient(-90deg, var(--color-primary-600) 0%, var(--color-primary-500) 100%); background-color: var(--color-primary-500);}
 #main {min-height:0px;}
+#main.loading::before {display: none!important;}
 #login {max-width: 720px !important; margin: 0 auto; margin-top: 5%; padding: 0 40px;}
-#loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
+#loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px; position: relative;}
+#main.loading #loginPanel::before {content: ' '; display: block; position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: rgba(var(--color-canvas-rgb),.7); border-radius: inherit; z-index: 1;}
 #loginPanel .header {position: relative;}
 #loginPanel .header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: calc(100% - 90px); display: inline-block;}
 
@@ -42,5 +44,3 @@ input[name="captcha"] {border-bottom-right-radius: var(--radius-none) !important
 .table-row-extension .alert {margin-bottom: 0px !important;}
 .table-row-extension .content {color: #3c4353;}
 .table-row-extension .expired-tips {cursor: pointer;}
-
-.load-indicator.loading:after, .load-indicator.loading:before {opacity: 0;}

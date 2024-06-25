@@ -412,7 +412,7 @@ class holidayTest
     public function getHolidayByAPITest(string $year): int|array
     {
         global $app;
-        $app->wwwRoot = dirname(__FILE__, 4) . DS . 'www' . DS;
+        $app->wwwRoot = dirname(__FILE__, 5) . DS . 'www' . DS;
         common::$httpClient = new httpClient();
 
         if($year == 'this year') $year = '2023';

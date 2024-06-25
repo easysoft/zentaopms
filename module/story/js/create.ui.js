@@ -98,3 +98,15 @@ $(document).on('click', 'form.form-setting-form .row label.state', function()
     })
     formSettingLabelClicked = false;
 });
+
+window.loadGrade = function(e)
+{
+    const parent = e.target.value;
+    const link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + storyType);
+    $.getJSON(link, function(data)
+    {
+        const $grade = $('[name=grade]').zui('picker');
+        $grade.render({items: data.items});
+        $grade.$.setValue(data.default);
+    })
+}

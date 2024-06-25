@@ -191,7 +191,7 @@ class dev extends control
         }
 
         $key = '';
-        if($type == 'common') $key = '&key=projectCommon,productCommon,executionCommon';
+        if($type == 'common') $key = '&key=projectCommon,productCommon,executionCommon,ERCommon,URCommon,SRCommon';
 
         $this->loadModel('custom')->deleteItems("lang={$language}&module={$module}&vision={$this->config->vision}{$section}{$key}");
         if($this->config->vision == 'rnd' and $type == 'common' and $this->config->custom->URSR)
@@ -201,6 +201,7 @@ class dev extends control
             {
                 $oldValue = json_decode($oldValue);
                 $setting = array(
+                    'ERName' => zget($oldValue, 'defaultERName', $oldValue->ERName),
                     'SRName' => zget($oldValue, 'defaultSRName', $oldValue->SRName),
                     'URName' => zget($oldValue, 'defaultURName', $oldValue->URName)
                 );

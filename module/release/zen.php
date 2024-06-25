@@ -156,6 +156,32 @@ class releaseZen extends release
     }
 
     /**
+     * 获取发布不可关联的需求ID列表。
+     * Get the story id list that can not be linked to the release.
+     *
+     * @param  object    $release
+     * @access protected
+     * @return array
+     */
+    public function getExcludeStoryIdList(object $release): array
+    {
+        $parentIdList = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($release->product)
+            ->andWhere('type')->eq('story')
+            ->andWhere('isParent')->eq('1')
+            ->andWhere('status')->notIN('draft,reviewing,changing')
+            ->fetchPairs();
+
+        foreach(explode(',', $release->stories) as $storyID)
+        {
+            if(!$storyID) continue;
+            if(!isset($parentIdList[$storyID])) $parentIdList[$storyID] = $storyID;
+        }
+
+        return $parentIdList;
+    }
+
+    /**
      * 生成的发布详情页面的需求数据。
      * Generate the story data for the release view page.
      *
@@ -195,6 +221,8 @@ class releaseZen extends release
         $this->view->orderBy      = $orderBy;
         $this->view->type         = $type;
         $this->view->link         = $link;
+        $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->showGrade    = $this->config->edition == 'ipd';
         $this->view->param        = $param;
         $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
         $this->view->summary      = $this->product->summary($stories);
@@ -228,8 +256,10 @@ class releaseZen extends release
 
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
+        unset($this->config->product->search['fields']['grade']);
         unset($this->config->product->search['params']['product']);
         unset($this->config->product->search['params']['project']);
+        unset($this->config->product->search['params']['grade']);
 
         $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;

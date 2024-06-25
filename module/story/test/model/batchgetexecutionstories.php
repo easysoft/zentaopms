@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->batchGetExecutionStories();
+timeout=0
 cid=0
 
 - 不传入数据。 @0
@@ -12,7 +13,7 @@ cid=0
 - 传入有关联需求的项目数据，传入无需求的产品数据。 @0
 - 传入有关联需求的项目数据，不传入产品数据。 @25
 - 传入有关联需求的项目数据，传入有需求的产品数据。 @25
-- 传入有关联需求的项目数据，传入无需求的产品数据。 @25
+- 传入有关联需求的项目数据，传入无需求的产品数据。 @0
 - 传入分页。 @5
 
 */
@@ -42,7 +43,7 @@ r(count($storyModel->batchGetExecutionStories('11,12', 1))) && p() && e('25'); /
 r(count($storyModel->batchGetExecutionStories('11,12', 2))) && p() && e('0');  //传入有关联需求的项目数据，传入无需求的产品数据。
 r(count($storyModel->batchGetExecutionStories('36,37', 0))) && p() && e('25'); //传入有关联需求的项目数据，不传入产品数据。
 r(count($storyModel->batchGetExecutionStories('36,37', 1))) && p() && e('25'); //传入有关联需求的项目数据，传入有需求的产品数据。
-r(count($storyModel->batchGetExecutionStories('36,37', 2))) && p() && e('25');  //传入有关联需求的项目数据，传入无需求的产品数据。
+r(count($storyModel->batchGetExecutionStories('36,37', 2))) && p() && e('0');  //传入有关联需求的项目数据，传入无需求的产品数据。
 
 $storyModel->app->loadClass('pager', $static = true);
 $storyModel->app->moduleName = 'product';

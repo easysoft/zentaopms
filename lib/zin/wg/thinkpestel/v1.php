@@ -40,7 +40,7 @@ class thinkPestel extends thinkModel
                 $mode === 'preview' ? div(setClass('w-full text-center text-sm leading-tight text-gray-400'), $lang->thinkwizard->block . $lang->thinkwizard->blockList[$blockIndex]) : null,
                 div
                 (
-                    setClass('h-full mt-1 mx-px bg-opacity-20 model-block bg-' . $blockColor),
+                    setClass('h-full mt-1 mx-px model-block bg-' . $blockColor . '-100'),
                     div
                     (
                         setClass('h-16 px-2 py-3 w-full relative z-10 flex justify-center', 'text-' . $blockColor),

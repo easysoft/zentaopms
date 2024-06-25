@@ -18,6 +18,8 @@ jsVar('rawModule', $this->app->rawModule);
 jsVar('isMultiple', count($reviewers) > 1);
 jsVar('isLastOne', $isLastOne);
 
+if($story->isParent == '1') $fields['estimate']['readonly'] = true;
+
 $formItems = array();
 foreach($fields as $field => $attr)
 {
@@ -29,8 +31,8 @@ foreach($fields as $field => $attr)
 
     $formItems[$field] = formRow
     (
-        in_array($field, array('assignedTo', 'duplicateStory', 'pri', 'estimate', 'childStories')) ? setID($field . 'Box') : null,
-        in_array($field, array('closedReason', 'duplicateStory', 'pri', 'estimate', 'childStories', 'status')) ? set::hidden(true) : null,
+        in_array($field, array('assignedTo', 'duplicateStory', 'pri', 'estimate')) ? setID($field . 'Box') : null,
+        in_array($field, array('closedReason', 'duplicateStory', 'pri', 'estimate', 'status')) ? set::hidden(true) : null,
 
         $field == 'closedReason' ? setID('rejectedReasonBox') : null,
         $field == 'assignedTo'   ? set::hidden(!$isLastOne) : null,
@@ -44,7 +46,8 @@ foreach($fields as $field => $attr)
             set::label($attr['title']),
             set::control($control),
             set::value($attr['default']),
-            set::required($attr['required'])
+            set::required($attr['required']),
+            set::readonly(!empty($attr['readonly']))
         )
     );
 }
@@ -56,7 +59,7 @@ panel
     setClass('panel-form mx-auto'),
     form($formItems),
     h::hr(setClass('mt-6 mb-6')),
-    history()
+    history(set::objectID($story->id))
 );
 
 render();

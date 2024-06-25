@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace zin;
 
 $canEditContent = str_contains(',draft,changing,', ",{$story->status},");
-$forceReview    = $this->story->checkForceReview();
+$forceReview    = $this->story->checkForceReview($story->type);
 $assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $users;
 
 $planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;
-$multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1);
+$multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1) || ($story->type != 'story');
 
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
@@ -34,17 +34,24 @@ if(!empty($story->stages) && isset($fields['stage']['options']))
     }
 }
 
-data('activeMenuID', $story->type);
+unset($fields['stage']['options']['defining']);
+unset($fields['stage']['options']['planning']);
+unset($fields['stage']['options']['delivering']);
+
+if($app->tab == 'product') data('activeMenuID', $story->type);
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
 jsVar('storyStatus', $story->status);
+jsVar('isParent', $story->isParent);
+jsVar('oldProductID', $story->product);
+jsVar('oldGrade', $story->grade);
+jsVar('oldParent', $story->parent);
 jsVar('lastReviewer', explode(',', $lastReviewer));
 jsVar('storyReviewers', $storyReviewers);
 jsVar('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);
-jsVar('oldProductID', $story->product);
 jsVar('twins', $story->twins);
 jsVar('relievedTwinsTip', $lang->story->relievedTwinsTip);
-jsVar('parentStory', !empty($story->children));
+jsVar('changeProductTips', $lang->story->changeProductTips);
 jsVar('moveChildrenTips', $lang->story->moveChildrenTips);
 jsVar('executionID', isset($objectID) ? $objectID : 0);
 jsVar('langTreeManage', $lang->tree->manage);
@@ -71,6 +78,7 @@ detailBody
     setID('dataform'),
     set::isForm(true),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
+    on::change('[name=parent]', 'loadGrade'),
     $canEditContent ? set::actions(array
     (
         array('btnType' => 'submit', 'class' => 'primary',   'data-status' => 'active', 'text' => $lang->save),
@@ -189,7 +197,7 @@ detailBody
             formGroup(editor(set::name('comment')))
         )
     ),
-    history(),
+    history(set::objectID($story->id)),
     detailSide
     (
         set::isForm(true),
@@ -197,7 +205,7 @@ detailBody
         (
             setClass('mt-5'),
             set::title($lang->story->legendBasicInfo),
-            $story->parent <= 0 && !$product->shadow ? item
+            !$product->shadow ? item
             (
                 set::trClass(zget($fields['product'], 'className', '')),
                 set::name($lang->story->product),
@@ -241,13 +249,18 @@ detailBody
                     set::manageLink(createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}"))
                 )
             ),
-            $story->parent >= 0 && $story->type == 'story' ? item
+            ($story->parent >= 0 && ($showGrade || $story->type != 'epic')) ? item
             (
                 set::trClass($app->tab == 'product' ? zget($fields['parent'], 'className', '') : 'hidden'),
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
-            ) : formHidden('parent', $story->parent),
-            $story->type == 'story' && $story->parent >= 0 ? item
+            ) : null,
+            $showGrade ? item
+            (
+                set::name($lang->story->grade),
+                picker(setID('grade'), set::name('grade'), set::required(true), set::items($fields['grade']['options']), set::value($story->grade), set::disabled($gradeRule == 'stepwise'))
+            ) : picker(setID('grade'), set::name('grade'), set::required(true), set::items($fields['grade']['options']), set::value($story->grade), set::hidden(true)),
+            item
             (
                 set::trClass(zget($fields['plan'], 'className', '')),
                 set::name($lang->story->plan),
@@ -261,12 +274,12 @@ detailBody
                     empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), setData(array('toggle' => 'modal')), icon('plus')) : null,
                     empty($fields['plan']['options']) ? btn(set('onclick', "loadProductPlans({$story->product}, {$story->branch})"), setClass('refresh'), icon('refresh')) : null
                 )
-            ) : null,
+            ),
             item
             (
                 set::trClass('sourceBox'),
                 set::name($lang->story->source),
-                picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['default']), on::change('window.toggleFeedback(e.target)'))
+                picker(setID('source'), set::name('source'), set::items($lang->{$story->type}->sourceList), set::value($fields['source']['default']), on::change('window.toggleFeedback(e.target)'))
             ),
             item
             (
@@ -280,25 +293,25 @@ detailBody
                 span(setClass("status-{$story->status}"), $this->processStatus('story', $story)),
                 formHidden('status', $story->status)
             ),
-            $story->type == 'story' ? item
+            ($story->type == 'story' && $story->isParent == '0') ? item
             (
                 set::name($lang->story->stage),
                 picker(setID('stage'), set::name('stage'), set::items($fields['stage']['options']), set::value($minStage))
-            ) : null,
+            ) : formHidden('stage', $story->stage),
             item
             (
                 set::name($lang->story->category),
-                picker(setID('category'), set::name('category'), set::items($fields['category']['options']), set::value($fields['category']['default']))
+                picker(setID('category'), set::name('category'), set::items($lang->{$story->type}->categoryList), set::value($fields['category']['default']))
             ),
             item
             (
                 set::name($lang->story->pri),
-                priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value($fields['pri']['default']))
+                priPicker(set::name('pri'), set::items($lang->{$story->type}->priList), set::value($fields['pri']['default']))
             ),
             item
             (
                 set::name($lang->story->estimate),
-                $story->parent >= 0 ? input(set::name('estimate'), set::value($story->estimate)) : $story->estimate
+                $story->isParent == '0' ? input(set::name('estimate'), set::value($story->estimate)) : $story->estimate
             ),
             item
             (
@@ -366,56 +379,16 @@ detailBody
                 picker(setID('closedReason'), set::name('closedReason'), set::items($fields['closedReason']['options']), set::value($fields['closedReason']['default']), on::change('setStory'))
             ) : null,
         ),
-        tableData
+        $story->status == 'closed' ? tableData
         (
             set::title($lang->story->legendMisc),
-            $story->status == 'closed' ? item
+            item
             (
                 set::trClass('duplicateStoryBox'),
                 set::name($lang->story->duplicateStory),
                 picker(setID('duplicateStory'), set::name('duplicateStory'), set::items($fields['duplicateStory']['options']), set::value($fields['duplicateStory']['default']), set::placeholder($lang->bug->placeholder->duplicate))
-            ) : null,
-            item
-            (
-                set::name($story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory),
-                ($story->type == 'story' && common::hasPriv('story', 'linkStories')) ? btn
-                (
-                    setClass('secondary'),
-                    setID('linkStoriesLink'),
-                    setData(array('toggle' => 'modal', 'size' => 'lg')),
-                    on::click('linkStories'),
-                    $lang->story->linkStoriesAB
-                ) : null,
-                ($story->type == 'requirement' && common::hasPriv('requirement', 'linkRequirements')) ? btn
-                (
-                    setClass('secondary'),
-                    setID('linkStoriesLink'),
-                    setData(array('toggle' => 'modal', 'size' => 'lg')),
-                    on::click('linkStories'),
-                    $lang->story->linkRequirementsAB
-                ) : null
             ),
-            item
-            (
-                set::name(' '),
-                !empty($story->linkStoryTitles) ? div
-                (
-                    setID('linkedStories'),
-                    array_values(array_map(function($linkStoryID, $linkStoryTitle) use($story)
-                    {
-                        $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
-                        return div
-                        (
-                            set::title($linkStoryTitle),
-                            checkbox(set::name($linkStoryField . '[]'), set::rootClass('inline'), set::value($linkStoryID), set::checked(true)),
-                            label(setClass('circle size-sm'), $linkStoryID),
-                            span(setClass('linkStoryTitle'), $linkStoryTitle)
-                        );
-                    }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
-                ) : null,
-                div(setID('linkStoriesBox'))
-            )
-        )
+        ) : null
     )
 );
 

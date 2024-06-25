@@ -352,6 +352,8 @@ class productplan extends control
      */
     public function view(int $planID = 0, string $type = 'story', string $orderBy = 'order_desc', string $link = 'false', string $param = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
+        $this->app->loadLang('requirement');
+        $this->app->loadLang('epic');
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan)
         {
@@ -389,7 +391,7 @@ class productplan extends control
         $this->view->modulePairs  = $modulePairs;
         $this->view->planStories  = $planStories;
         $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
-        $this->view->summary      = $this->product->summary($planStories);
+        $this->view->summary      = $this->productplanZen->buildViewSummary($planStories);
         $this->view->type         = $type;
         $this->view->orderBy      = $orderBy;
         $this->view->link         = $link;
@@ -578,11 +580,11 @@ class productplan extends control
         $planStories = $this->loadModel('story')->getPlanStories($planID);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, 'id', 0, 'story', array_keys($planStories), '', $pager);
+            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, 'id_desc', 0, 'all', array_keys($planStories), '', $pager);
         }
         else
         {
-            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing', 'story', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
+            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing,launched', 'all', 'id_desc', true, array_keys($planStories), $pager);
         }
 
         $modules = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');

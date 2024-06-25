@@ -84,10 +84,11 @@ class datatableModel extends model
         if(!$method) $method = $this->app->getMethodName();
         $datatableId = $module . ucfirst($method);
 
-        /* Split story and requirement custom fields. */
-        if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement,', $extra) !== false) $datatableId .= ucfirst($extra);
+        /* Split story,requirement and epic custom fields. */
+        if(("$module-$method" == 'product-browse') && in_array($extra, array('story', 'requirement', 'epic'))) $datatableId .= ucfirst($extra);
 
         $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+        if($module == 'story' && $extra && $module != $extra) $module = $extra;
 
         if(!isset($this->config->$module)) $this->loadModel($module);
         if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols, true);

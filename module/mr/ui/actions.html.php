@@ -12,6 +12,7 @@ namespace zin;
 
 $hasNoChange       = $MR->synced && empty($rawMR->changes_count) ? true : false;
 $hasConflict       = $MR->synced === '1' ? $rawMR->has_conflicts : !$MR->hasNoConflict;
+$mergeStatus       = !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus;
 $compileNotSuccess = !empty($compile->id) && $compile->status != 'success';
 
 $mainActions   = array();
@@ -47,7 +48,7 @@ foreach($config->mr->view->operateList as $operate)
 
         if($operate == 'approval')
         {
-            if($hasNoChange || $hasConflict || $compileNotSuccess || $MR->approvalStatus == 'approved')
+            if($hasNoChange || $hasConflict || $compileNotSuccess || $MR->approvalStatus == 'approved' || $mergeStatus == 'cannot_be_merged')
             {
                 $action['disabled'] = true;
                 if($compileNotSuccess) $action['hint'] = $lang->mr->compileTip;

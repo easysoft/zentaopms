@@ -711,6 +711,44 @@ class myModel extends model
     }
 
     /**
+     * 构建业务需求搜索表单。
+     * Build epic search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildEpicSearchForm(int $queryID, string $actionURL): void
+    {
+        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+
+        $productIdList = array_keys($products);
+        $queryName     = $this->app->rawMethod . 'Epic';
+        $this->app->loadConfig('product');
+        $this->config->product->search['module']                      = $queryName;
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['actionURL']                   = $actionURL;
+        $this->config->product->search['params']['product']['values'] = $products;
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList);
+
+        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $this->lang->story->title);
+        $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $this->lang->story->create);
+        $this->config->product->search['fields']['title'] = $this->lang->story->title;
+
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['fields']['stage']);
+        unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['fields']['branch']);
+
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
+
+    /**
      * 构建用户需求搜索表单。
      * Build Requirement search form.
      *
@@ -778,6 +816,48 @@ class myModel extends model
     }
 
     /**
+     * 通过搜索获取业务需求。
+     * Get epics by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getEpicsBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    {
+        $queryName = $type == 'contribute' ? 'contributeEpicQuery' : 'workEpicQuery';
+        $queryForm = $type == 'contribute' ? 'contributeEpicForm' : 'workEpicForm';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $myEpicQuery = $this->session->{$queryName};
+        $myEpicQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myEpicQuery);
+
+        $epicsAssignedByMe = $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'epic') : array();
+        $epicIdList        = array_keys($epicsAssignedByMe);
+
+        return $this->myTao->fetchEpicsBySearch($myEpicQuery, $type, $orderBy, $pager, $epicIdList, 'epic');
+    }
+
+    /**
      * 通过搜索获取用户需求。
      * Get requirements by search.
      *
@@ -830,7 +910,9 @@ class myModel extends model
     {
         $typeList = array();
         if($this->config->edition == 'ipd' && $this->getReviewingDemands('id_desc', true)) $typeList[] = 'demand';
-        if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
+        if($this->getReviewingStories('id_desc', true, 'story'))       $typeList[] = 'story';
+        if($this->getReviewingStories('id_desc', true, 'epic'))        $typeList[] = 'epic';
+        if($this->getReviewingStories('id_desc', true, 'requirement')) $typeList[] = 'requirement';
         if($this->config->vision != 'or' && $this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
@@ -865,6 +947,8 @@ class myModel extends model
         $reviewList = array();
         if($browseType == 'all' || $browseType == 'demand')                                       $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' || $browseType == 'story')                                        $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($browseType == 'all' || $browseType == 'epic')                                         $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'epic'));
+        if($browseType == 'all' || $browseType == 'requirement')                                  $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'requirement'));
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase'))                $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                 $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($browseType == 'all' || $browseType == 'feedback')                                     $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
@@ -954,7 +1038,7 @@ class myModel extends model
      * @access public
      * @return array|bool
      */
-    public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
+    public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
     {
         if(!common::hasPriv('story', 'review')) return array();
 
@@ -965,6 +1049,7 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
             ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.type')->eq($type)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.status')->eq('reviewing')
             ->orderBy($orderBy)
