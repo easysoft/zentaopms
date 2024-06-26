@@ -525,7 +525,7 @@ class baseRouter
      * @param string $mode      应用模式。  The mode of the app. running|installing|upgrading
      * @static
      * @access public
-     * @return static   the app object
+     * @return baseRouter
      */
     public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '', string $mode = 'running')
     {
@@ -1578,7 +1578,7 @@ class baseRouter
      *  This method should called manually in the router file(www/index.php) after the $lang, $config, $dbh loaded.
      *
      * @access public
-     * @return object|bool  the common model object or false if not exits.
+     * @return commonModel|extcommonModel|object|bool  the common model object or false if not exits.
      */
     public function loadCommon(): object|bool
     {
