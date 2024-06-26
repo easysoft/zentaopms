@@ -277,6 +277,12 @@ class pivotState
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
     }
 
+    /**
+     * Clear properies before query sql.
+     *
+     * @access public
+     * @return void
+     */
     public function beforeQuerySql()
     {
         $this->error         = false;
