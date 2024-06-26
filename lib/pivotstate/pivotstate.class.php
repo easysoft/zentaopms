@@ -232,4 +232,15 @@ class pivotState
         $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
         $this->setPager();
     }
+
+    /**
+     * Update from $_POST.
+     *
+     * @param  array    $post
+     * @access public
+     * @return void
+     */
+    public function updateFromPost($post)
+    {
+    }
 }
