@@ -9009,6 +9009,19 @@ class upgradeModel extends model
         /* Get all IPD projects that have been set up to phase. */
         $projects = $this->dao->select('t1.project')->from(TABLE_OBJECT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t2.model')->eq('ipd')->fetchPairs('project');
 
+        $data = new stdclass();
+        $data->title    = $this->lang->review->reviewPoint->titleList['TR4A'];
+        $data->category = 'TR4A';
+        $data->type     = 'reviewed';
+        $data->enabled  = 0;
+        $data->range    = 'all';
+
+        foreach($projects as $projectID)
+        {
+            $data->project = $projectID;
+            $this->dao->replace(TABLE_OBJECT)->data($data)->exec();
+        }
+
         return true;
     }
 
