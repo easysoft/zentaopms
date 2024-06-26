@@ -318,6 +318,13 @@ class pivotState
         $this->fieldSettings = $fieldSettings;
     }
 
+    /**
+     * Build cols for query sql with lang.
+     *
+     * @param  string    $lang
+     * @access public
+     * @return object
+     */
     public function buildQuerySqlCols($lang)
     {
         $cols = array();
