@@ -276,4 +276,16 @@ class pivotState
         $this->fieldSettings = $fieldSettings;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
     }
+
+    public function beforeQuerySql()
+    {
+        $this->error         = false;
+        $this->errorMsg      = '';
+        $this->queryCols     = array();
+        $this->queryData     = array();
+        $this->pivotCols     = array();
+        $this->pivotData     = array();
+        $this->pivotCellSpan = array();
+        $this->setPager();
+    }
 }
