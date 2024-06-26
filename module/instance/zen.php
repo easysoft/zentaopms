@@ -8,6 +8,8 @@ declare(strict_types=1);
  * @author      Ke Zhao<zhaoke@easycorp.ltd>
  * @package     instance
  * @link        https://www.zentao.net
+ * @property    instanceModel $instance
+ * @property    cneModel $cne
  */
 class instanceZen extends instance
 {
