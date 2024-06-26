@@ -160,4 +160,20 @@ class pivotState
      * @access public
      */
     public $errorMsg = '';
+
+    /**
+     * queryCols
+     *
+     * @var array
+     * @access public
+     */
+    public $queryCols = array();
+
+    /**
+     * queryData
+     *
+     * @var array
+     * @access public
+     */
+    public $queryData = array();
 }
