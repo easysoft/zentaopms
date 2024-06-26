@@ -294,4 +294,20 @@ class pivotState
         $this->pivotCellSpan = array();
         $this->setPager();
     }
+
+    public function setFieldSettings($settings)
+    {
+        $settings      = (array)$settings;
+        $fieldSettings = array();
+
+        foreach($settings as $field => $setting)
+        {
+            if(isset($this->fieldSettings[$field]))
+            {
+                $fieldSettings[$field] = array_merge($this->fieldSettings[$field], array('name' => $field));
+            }
+        }
+
+        $this->fieldSettings = $fieldSettings;
+    }
 }
