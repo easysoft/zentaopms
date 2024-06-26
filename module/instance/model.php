@@ -331,15 +331,16 @@ class instanceModel extends model
      * @param  int          $id
      * @param  object|array $newInstance
      * @access public
-     * @return void
+     * @return int
      */
     public function updateByID(int $id, object|array $newInstance)
     {
-        return $this->dao->update(TABLE_INSTANCE)->data($newInstance)
+        return $this->dao->update(TABLE_INSTANCE)->data($newInstance, 'memory_kb,cpu')
             ->autoCheck()
             ->checkIF(isset($newInstance->name), 'name', 'notempty')
             ->checkIF(isset($newInstance->status), 'status', 'in', array_keys($this->lang->instance->statusList))
-            ->where('id')->eq($id)->exec();
+            ->where('id')->eq($id)
+            ->exec();
     }
 
     /**
