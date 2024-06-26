@@ -341,16 +341,36 @@ class pivotState
         return $this;
     }
 
+    /**
+     * Set action.
+     *
+     * @param  string    $action
+     * @access public
+     * @return void
+     */
     public function setAction($action)
     {
         $this->action = $action;
     }
 
+    /**
+     * Set step.
+     *
+     * @param  int    $step
+     * @access public
+     * @return void
+     */
     public function setStep($step)
     {
         $this->step = $step;
     }
 
+    /**
+     * Judge is publish action.
+     *
+     * @access public
+     * @return bool
+     */
     public function isPublish()
     {
         return $this->action == 'publish';
