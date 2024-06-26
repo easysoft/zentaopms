@@ -12,15 +12,10 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function confirmBug($project = array(), $bug = array())
+    public function confirmBug($project, $bug)
     {
         $this->login();
-        $list = $this->initForm('bug', 'browse',$project, 'appIframe-qa');
-        $list->dom->btn($this->lang->bug->search)->click();
-        $list->dom->field1->picker($bug['search']);
-        $list->dom->value1->picker($bug['isConfirm']);
-        $list->dom->searchButton->click();
-        $this->webdriver->wait(1);
+        $list = $this->searchBug($bug, $project);
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->confirmButton->click();
         $this->webdriver->wait(1);
@@ -36,6 +31,25 @@ class confirmBugTester extends tester
         return $this->bugAssert($bugTitle, $list);
     }
 
+    public function searchBug(array $bug, array $project = array())
+    {
+        if(empty($project)) $project['project'] = 1;
+        $list = $this->initForm('bug', 'browse',$project, 'appIframe-qa');
+        $list->dom->btn($this->lang->bug->search)->click();
+        if(count($bug['search']) > 2) $list->dom->more->click();
+        foreach($bug['search'] as $searchList)
+        {
+            foreach($searchList as $key=>$value)
+            {
+                $list->dom->{$key}->picker($value);
+                $this->webdriver->wait(1);
+            }
+        }
+        $list->dom->searchButton->click();
+        $this->webdriver->wait(1);
+        return $list;
+    }
+
     /**
      * 解决bug。
      * Resolve a bug.
@@ -45,15 +59,10 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function resolveBug($project = array(), $bug = array())
+    public function resolveBug($project, $bug)
     {
         $this->login();
-        $list = $this->initForm('bug', 'browse',$project, 'appIframe-qa');
-        $list->dom->btn($this->lang->bug->search)->click();
-        $list->dom->field1->picker($bug['search']);
-        $list->dom->value1->picker($bug['isResolved']);
-        $list->dom->searchButton->click();
-        $this->webdriver->wait(1);
+        $list = $this->searchBug($bug, $project);
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->resolveButton->click();
         $this->webdriver->wait(1);
@@ -77,15 +86,10 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function closeBug($project = array(), $bug = array())
+    public function closeBug($project, $bug)
     {
         $this->login();
-        $list = $this->initForm('bug', 'browse',$project, 'appIframe-qa');
-        $list->dom->btn($this->lang->bug->search)->click();
-        $list->dom->field1->picker($bug['search']);
-        $list->dom->value1->picker($bug['isResolved']);
-        $list->dom->searchButton->click();
-        $this->webdriver->wait(1);
+        $list = $this->searchBug($bug, $project);
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->closeButton->click();
         $this->webdriver->wait(1);
@@ -107,7 +111,7 @@ class confirmBugTester extends tester
      */
     public function bugAssert(string $bugTitle = '', object $list = null)
     {
-        if(!isset($bugTitle) || !is_object($list)) return $this->failed('获取bug标题失败');
+        if(empty($bugTitle) || !is_object($list)) return $this->failed('获取bug标题失败');
 
         $bugTitleLists = $list->dom->bugTitleList->getElementList($list->dom->page->xpath['bugTitleList']);
         $bugList = array_map(function($element){return $element->getText();}, $bugTitleLists->element);
