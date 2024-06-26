@@ -202,6 +202,14 @@ class pivotState
     public $pivotCellSpan = array();
 
     /**
+     * pivotFilters
+     *
+     * @var array
+     * @access public
+     */
+    public $pivotFilters = array();
+
+    /**
      * pager
      *
      * @var int
@@ -272,6 +280,7 @@ class pivotState
         $this->pivotCols     = $pivotCols;
         $this->pivotData     = $pivotData;
         $this->pivotCellSpan = $pivotCellSpan;
+        $this->pivotFilters  = $pivotFilters;
 
         $this->fieldSettings = $fieldSettings;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
