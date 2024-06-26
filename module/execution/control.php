@@ -1631,7 +1631,7 @@ class execution extends control
         $programList = $execution->projectInfo ? array_filter(explode(',', $execution->projectInfo->path)) : array();
         array_pop($programList);
 
-        if(!empty($execution->projectInfo->hasProduct)) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
+        if(empty($execution->projectInfo->hasProduct)) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
         $this->executionZen->assignViewVars($executionID);
 
