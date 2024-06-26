@@ -87,6 +87,7 @@ dtable
     set::sortLink(createLink('company', 'browse', "browseType={$browseType}&param={$param}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::cols($this->config->company->user->dtable->fieldList),
     set::data($tableData),
+    set::userMap($userPairs),
     set::checkable(common::hasPriv('user', 'batchEdit')),
     set::fixedLeftWidth('0.2'),
     set::footToolbar($footToolbar),

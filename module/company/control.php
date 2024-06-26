@@ -76,6 +76,7 @@ class company extends control
         $this->view->title      = $this->lang->company->index . $this->lang->hyphen . $this->lang->dept->common;
         $this->view->users      = array_map(function($user){unset($user->password);return $user;}, $users);
         $this->view->deptTree   = $this->dept->getTreeMenu(0, array('deptModel', 'createMemberLink'));
+        $this->view->userPairs  = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->orderBy    = $orderBy;
         $this->view->deptID     = $deptID;
         $this->view->pager      = $pager;
