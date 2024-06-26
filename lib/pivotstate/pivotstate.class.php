@@ -242,5 +242,21 @@ class pivotState
      */
     public function updateFromPost($post)
     {
+        if(!isset($post['pivotState'])) return;
+        $json = $post['pivotState'];
+        $array = json_decode($json, true);
+
+        extract($array);
+
+        $this->id        = $id;
+        $this->dimension = $dimension;
+        $this->group     = $group;
+        $this->code      = $code;
+        $this->driver    = $driver;
+        $this->name      = $name;
+        $this->desc      = $desc;
+        $this->sql       = $sql;
+        $this->step      = $step;
+        $this->stage     = $stage;
     }
 }
