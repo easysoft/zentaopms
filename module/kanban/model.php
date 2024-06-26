@@ -2443,6 +2443,8 @@ class kanbanModel extends model
                 }
             }
         }
+
+        return true;
     }
 
     /**
