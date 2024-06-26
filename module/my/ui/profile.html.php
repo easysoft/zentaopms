@@ -78,7 +78,7 @@ div
     formRowGroup(set::title($lang->my->form->lblBasic)),
     div
     (
-        set::className('py-2'),
+        set::className('py-2 basic-info'),
         $getItems(array($lang->user->realname => $user->realname,         $lang->user->gender => zget($lang->user->genderList, $user->gender))),
         $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email, set::target('_self')) : '')),
         $getItems(array($lang->user->dept     => html($deptName),         $lang->user->role   => zget($lang->user->roleList, $user->role, ''))),
@@ -87,7 +87,7 @@ div
     formRowGroup(set::title($lang->my->form->lblContact)),
     div
     (
-        set::className('py-2'),
+        set::className('py-2 contact-info'),
         $getItems(array($lang->user->mobile  => $user->mobile,  $lang->user->weixin    => $user->weixin)),
         $getItems(array($lang->user->phone   => $user->phone,   $lang->user->qq        => $user->qq)),
         $getItems(array($lang->user->zipcode => $user->zipcode, $lang->user->abbr->address => $user->address))
@@ -95,7 +95,7 @@ div
     formRowGroup(set::title($lang->my->form->lblAccount)),
     div
     (
-        set::className('py-2'),
+        set::className('py-2 account-info'),
         $getItems(array($lang->user->commiter => $user->commiter, $lang->user->skype    => $user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : '')),
         $getItems(array($lang->user->visits   => $user->visits,   $lang->user->whatsapp => $user->whatsapp)),
         $getItems(array($lang->user->last     => $user->last,     $lang->user->slack    => $user->slack)),
