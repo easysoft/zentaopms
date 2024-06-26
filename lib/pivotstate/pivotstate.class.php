@@ -376,16 +376,34 @@ class pivotState
         return $this->action == 'publish';
     }
 
+    /**
+     * Judge is design action.
+     *
+     * @access public
+     * @return bool
+     */
     public function isDesign()
     {
         return $this->action == 'design';
     }
 
+    /**
+     * Judge is first design action.
+     *
+     * @access public
+     * @return bool
+     */
     public function isFirstDesign()
     {
         return $this->isDesign() && empty($this->sql);
     }
 
+    /**
+     * Judge is error.
+     *
+     * @access public
+     * @return bool
+     */
     public function isError()
     {
         return $this->error;
