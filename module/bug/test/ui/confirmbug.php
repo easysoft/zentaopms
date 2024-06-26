@@ -5,8 +5,7 @@ include '../lib/confirmbug.ui.class.php';
 $tester = new confirmBugTester();
 
 $bug = array();
-$bug['search']     = '是否确认';
-$bug['isConfirm']  = '未确认';
+$bug['search'][0]  = array('field1' => '是否确认', 'operator1' => '=', 'value1' => '未确认');
 $bug['assignedTo'] = 'admin';
 $bug['type']       = '其他';
 $bug['pri']        = '2';
