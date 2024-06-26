@@ -115,3 +115,19 @@ function isHTML(string $string): bool
 {
     return $string !== strip_tags($string) ? true : false;
 }
+
+/**
+ * Check if any element in an array passes a test.
+ *
+ * @param array $array
+ * @param callable $fn
+ * @return bool
+ */
+function array_some(array $array, callable $fn): bool
+{
+    foreach ($array as $value)
+    {
+        if($fn($value)) return true;
+    }
+    return false;
+}
