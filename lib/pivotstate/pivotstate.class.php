@@ -258,5 +258,22 @@ class pivotState
         $this->sql       = $sql;
         $this->step      = $step;
         $this->stage     = $stage;
+
+        $this->fields    = $fields;
+        $this->langs     = $langs;
+        $this->vars      = $vars;
+        $this->objects   = $objects;
+        $this->settings  = $settings;
+        $this->filters   = $filters;
+
+        $this->action        = $action;
+        $this->queryCols     = $queryCols;
+        $this->queryData     = $queryData;
+        $this->pivotCols     = $pivotCols;
+        $this->pivotData     = $pivotData;
+        $this->pivotCellSpan = $pivotCellSpan;
+
+        $this->fieldSettings = $fieldSettings;
+        $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
     }
 }
