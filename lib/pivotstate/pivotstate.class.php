@@ -128,4 +128,20 @@ class pivotState
      * @access public
      */
     public $step;
+
+    /**
+     * Pivot state stage.
+     *
+     * @var string
+     * @access public
+     */
+    public $stage;
+
+    /**
+     * Pivot stage action.
+     *
+     * @var string
+     * @access public
+     */
+    public $action = 'design';
 }
