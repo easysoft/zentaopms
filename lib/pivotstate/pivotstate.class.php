@@ -208,4 +208,18 @@ class pivotState
      * @access public
      */
     public $pager;
+
+    public function __construct($pivot)
+    {
+        $this->id        = $pivot->id;
+        $this->dimension = $pivot->dimension;
+        $this->group     = $pivot->group;
+        $this->code      = $pivot->code;
+        $this->driver    = $pivot->driver;
+        $this->name      = $pivot->name;
+        $this->desc      = $pivot->desc;
+        $this->sql       = $pivot->sql;
+        $this->step      = 1;
+        $this->stage     = $pivot->stage;
+    }
 }
