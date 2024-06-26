@@ -80,4 +80,20 @@ class pivotState
      * @access public
      */
     public $fieldSettings;
+
+    /**
+     * Pivot state languages.
+     *
+     * @var array
+     * @access public
+     */
+    public $langs;
+
+    /**
+     * Pivot state variables.
+     *
+     * @var array
+     * @access public
+     */
+    public $vars;
 }
