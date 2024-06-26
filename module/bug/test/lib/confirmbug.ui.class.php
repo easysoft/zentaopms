@@ -68,6 +68,15 @@ class confirmBugTester extends tester
         return $this->bugAssert($bugTitle, $list);
     }
 
+    /**
+     * 关闭bug。
+     * Close a bug.
+     *
+     * @param  array  $project
+     * @param  array  $bug
+     * @access public
+     * @return object
+     */
     public function closeBug($project = array(), $bug = array())
     {
         $this->login();
