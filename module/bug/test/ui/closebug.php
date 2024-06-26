@@ -5,8 +5,7 @@ include '../lib/confirmbug.ui.class.php';
 $tester = new confirmBugTester();
 
 $bug = array();
-$bug['search']        = 'Bug状态';
-$bug['isResolved']    = '已解决';
+$bug['search'][0] = array('field1' => 'Bug状态', 'operator1' => '=', 'value1' => '已解决');
 $project = array();
 $project['productID'] = 1;
 
