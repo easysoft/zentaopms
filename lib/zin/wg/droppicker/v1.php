@@ -9,4 +9,17 @@ namespace zin;
  */
 class dropPicker extends wg
 {
+    /**
+     * Define the properties.
+     *
+     * @var array
+     * @access protected
+     */
+    protected static array $defineProps = array
+    (
+        'text'  => 'string',
+        'value' => 'string',
+        'name'  => 'string',
+        'items' => 'array'
+    );
 }
