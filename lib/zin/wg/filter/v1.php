@@ -21,7 +21,8 @@ class filter extends wg
         'value?: string',                   // 控件默认值。
         'items?: array',                    // picker 列表项或表项获取方法。
         'menu?: array',                     // picker 附加的菜单选项。
-        'multiple?: boolean|number=false'   // picker 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
+        'multiple?: boolean|number=false',  // picker 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
+        'onChange?: function'
     );
 
     protected function buildPicker(): picker
@@ -91,7 +92,8 @@ class filter extends wg
         (
             setClass("filter filter-{$type} pr-4 mb-2 {$class}"),
             $this->prop('title'),
-            $this->buildControl($type)
+            $this->buildControl($type),
+            on::change($this->prop('onChange'))
         );
     }
 }
