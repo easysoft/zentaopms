@@ -37,6 +37,24 @@ class dropPicker extends wg
                 h::formHidden($name, $value)
             ),
             set::items($items),
+            set::menu
+            (
+                array
+                (
+                    'onClickItem' => jsRaw(<<<JS
+                        function(e)
+                        {
+                            if(e.item.value === undefined) return;
+                            const btn = document.getElementById('$btnID');
+                            const input = btn.querySelector('input');
+                            btn.querySelector('.text').innerText = e.item.text;
+                            input.value = e.item.value;
+                            $(input).trigger('change');
+                        }
+                        JS
+                    )
+                )
+            ),
             set($this->getRestProps())
         );
     }
