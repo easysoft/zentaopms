@@ -1001,14 +1001,14 @@ class biModel extends model
     public function query($stateObj, $driver = 'mysql')
     {
         $dbh = $this->app->loadDriver($driver);
-        $sql = $this->processVars($stateObj->sql, $stateObj->filters);
+        $stateObj->sql = $this->processVars($stateObj->sql, $stateObj->filters);
 
         $stateObj->beforeQuerySql();
 
-        $statement = $this->sql2Statement($sql);
+        $statement = $this->sql2Statement($stateObj->sql);
         if(is_string($statement)) return $stateObj->setError($statement);
 
-        $checked = $this->validateSql($sql);
+        $checked = $this->validateSql($stateObj->sql);
         if($checked !== true) return $stateObj->setError($checked);
 
         $recPerPage = $stateObj->pager->recPerPage;
@@ -1016,7 +1016,7 @@ class biModel extends model
         $limitSql   = $this->prepareSqlPager($statement, $recPerPage, $pageID, $driver);
 
         $mysqlCountSql  = "SELECT FOUND_ROWS() AS count";
-        $duckdbCountSql = "SELECT COUNT(1) AS count FROM ($sql)";
+        $duckdbCountSql = "SELECT COUNT(1) AS count FROM ($stateObj->sql)";
 
         try
         {
