@@ -408,4 +408,17 @@ class pivotState
     {
         return $this->error;
     }
+
+    public function getError()
+    {
+        return $this->errorMsg;
+    }
+
+    public function setError($msg)
+    {
+        $this->errror   = true;
+        $this->errorMsg = $msg;
+
+        return $this;
+    }
 }
