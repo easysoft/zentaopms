@@ -41,6 +41,15 @@ class dropPicker extends wg
             (
                 array
                 (
+                    'getItem' => jsRaw(<<<JS
+                        function(item)
+                        {
+                            const selected = document.getElementById('$btnID').querySelector('input').value;
+                            item.selected = String(item.value) === selected;
+                            return item;
+                        }
+                        JS
+                    ),
                     'onClickItem' => jsRaw(<<<JS
                         function(e)
                         {
