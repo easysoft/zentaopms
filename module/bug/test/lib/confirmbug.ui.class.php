@@ -24,15 +24,8 @@ class confirmBugTester extends tester
         $list->dom->btn($this->lang->bug->confirm)->click();
         $this->webdriver->wait(1);
 
-        $bugTitleLists = $list->dom->bugTitleList->getElementList($list->dom->page->xpath['bugTitleList']);
-        $bugList = [];
-        foreach($bugTitleLists->element as $bugTitleList)
-        {
-           $bugList[] = $bugTitleList->getText();
-        }
+        return $this->bugAssert();
 
-        if(!in_array($bugTitle, $bugList)) return $this->success('确认bug成功');
-        return $this->failed('确认bug失败');
     }
 
     public function resolveBug($project = array(), $bug = array())
@@ -44,6 +37,7 @@ class confirmBugTester extends tester
         $list->dom->value1->picker($bug['isResolved']);
         $list->dom->searchButton->click();
         $this->webdriver->wait(1);
+        return $this->bugAssert();
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->resolveButton->click();
         $this->webdriver->wait(1);
@@ -52,6 +46,24 @@ class confirmBugTester extends tester
         if(isset($bug['resolvedBuild'])) $list->dom->resolvedBuild->picker($bug['resolvedBuild']);
         if(isset($bug['resolvedDate']))  $list->dom->resolvedDate->datePicker($bug['resolvedDate']);
         if(isset($bug['assignedTo']))    $list->dom->assignedTo->picker($bug['assignedTo']);
+        $list->dom->btn($this->lang->bug->resolve)->click();
         $this->webdriver->wait(1);
+
+        return $this->bugAssert();
+    }
+
+    public function bugAssert(string $bugTitle = '', object $list = null)
+    {
+        if(!isset($bugTitle) || !is_object($list)) return $this->failed('获取bug标题失败');
+
+        $bugTitleLists = $list->dom->bugTitleList->getElementList($list->dom->page->xpath['bugTitleList']);
+        $bugList = [];
+        foreach($bugTitleLists->element as $bugTitleList)
+        {
+           $bugList[] = $bugTitleList->getText();
+        }
+
+        if(!in_array($bugTitle, $bugList)) return $this->success('操作bug成功');
+        return $this->failed('操作bug失败');
     }
 }
