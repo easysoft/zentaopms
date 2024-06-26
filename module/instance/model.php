@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package   instance
  * @version   $Id$
  * @link      https://www.zentao.net
+ * @property  actionModel $action
  */
 class instanceModel extends model
 {
