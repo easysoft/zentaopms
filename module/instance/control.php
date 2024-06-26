@@ -110,12 +110,9 @@ class instance extends control
             }
 
             $cpu = $newInstance->cpu;
-            if($currentResource->max->cpu != $cpu)
+            if($currentResource->max->cpu != $cpu && !$this->instance->updateCpuSize($instance, $cpu))
             {
-                if(!$this->instance->updateCpuSize($instance, $cpu))
-                {
-                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                }
+                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             $this->instance->updateByID($id, $newInstance);
