@@ -64,4 +64,20 @@ class pivotState
      * @access public
      */
     public $sql;
+
+    /**
+     * Pivot state fields.
+     *
+     * @var array
+     * @access public
+     */
+    public $fields;
+
+    /**
+     * Pivot state fieldSettings.
+     *
+     * @var array
+     * @access public
+     */
+    public $fieldSettings;
 }
