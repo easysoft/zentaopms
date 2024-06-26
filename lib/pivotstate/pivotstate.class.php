@@ -451,4 +451,20 @@ class pivotState
         $this->pager->recPerPage = $recPerPage;
         $this->pager->pageID     = $pageID;
     }
+
+    /**
+     * Convert json string to array.
+     *
+     * @param  string|object|array|null    $json
+     * @access public
+     * @return array
+     */
+    private function json2Array(string|object|array|null $json): array
+    {
+        if(empty($json)) return array();
+        if(is_string($json)) return json_decode($json, true);
+        if(is_object($json)) return json_decode(json_encode($json), true);
+
+        return $json;
+    }
 }
