@@ -33,6 +33,19 @@ formPanel
     (
         formGroup
         (
+            set::name('cpu'),
+            set::width('250px'),
+            set::control('picker'),
+            set::required(true),
+            set::label($lang->instance->adjustCPU),
+            set::value($currentResource->max->cpu),
+            set::items($lang->instance->cpuOptions)
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
             set::name('memory_kb'),
             set::width('250px'),
             set::control('picker'),
