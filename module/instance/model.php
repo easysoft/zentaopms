@@ -282,6 +282,33 @@ class instanceModel extends model
     }
 
     /**
+     * 更新应用的CPU大小。
+     * Update instance CPU size.
+     *
+     * @param  object     $instance
+     * @param  int|string $size     CPU core number
+     * @access public
+     * @return bool
+     */
+    public function updateCpuSize(object $instance, int|string $size = 0): bool
+    {
+        $settings = new stdclass;
+        $settings->settings_map = new stdclass;
+        $settings->settings_map->resources = new stdclass;
+        $settings->settings_map->resources->cpu = $size;
+
+        $success = $this->cne->updateConfig($instance, $settings);
+        if($success)
+        {
+            $this->action->create('instance', $instance->id, 'adjustCPU', '', (string)$size);
+            return true;
+        }
+
+        dao::$errors[] = $this->lang->instance->errors->failToAdjustCPU;
+        return false;
+    }
+
+    /**
      * 更新应用实例的状态。
      * Update instance status.
      *
