@@ -83,6 +83,7 @@ function header(): header {return createWg('header', func_get_args());}
 function heading(): heading {return createWg('heading', func_get_args());}
 function navbar(): navbar {return createWg('navbar', func_get_args());}
 function dropmenu(): dropmenu {return createWg('dropmenu', func_get_args());}
+function dropPicker(): dropPicker {return createWg('droppicker', func_get_args());}
 function main(): main {return createWg('main', func_get_args());}
 function sidebar(): sidebar {return createWg('sidebar', func_get_args());}
 function featureBar(): featureBar {return createWg('featureBar', func_get_args());}
