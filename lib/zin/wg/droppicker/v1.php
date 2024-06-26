@@ -11,6 +11,10 @@ declare(strict_types=1);
  */
 
 namespace zin;
+
+require_once dirname(__DIR__) . DS . 'dropdown' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
+
 /**
  * 下拉菜单形式的选择器。
  * The dropPicker widget class.
