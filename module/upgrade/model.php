@@ -8994,6 +8994,25 @@ class upgradeModel extends model
     }
 
     /**
+     * 为IPD项目开发阶段追加TR4A评审点
+     * Add TR4A points to the development phase of IPD project
+     *
+     * @access public
+     * @return bool
+     */
+    public function addTR4APoint(): bool
+    {
+        if($this->config->edition != 'ipd') return true;
+        $this->loadModel('review');
+
+        /* 获取所有已经设置过阶段的IPD项目。*/
+        /* Get all IPD projects that have been set up to phase. */
+        $projects = $this->dao->select('t1.project')->from(TABLE_OBJECT)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t2.model')->eq('ipd')->fetchPairs('project');
+
+        return true;
+    }
+
+    /**
      * 更新升级BI内置数据。
      * Import BI data.
      *
