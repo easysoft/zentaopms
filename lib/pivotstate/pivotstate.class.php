@@ -340,4 +340,19 @@ class pivotState
         $this->queryCols = $cols;
         return $this;
     }
+
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+
+    public function setStep($step)
+    {
+        $this->step = $step;
+    }
+
+    public function isPublish()
+    {
+        return $this->action == 'publish';
+    }
 }
