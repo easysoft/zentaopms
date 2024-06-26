@@ -153,6 +153,7 @@ $config->bi->columnTypes->duckdb['VARCHAR']   = 'string';
 $config->bi->columnTypes->duckdb['DATE']      = 'date';
 $config->bi->columnTypes->duckdb['TIMESTAMP'] = 'date';
 $config->bi->columnTypes->duckdb['TIME']      = 'date';
+$config->bi->columnTypes->duckdb['DECIMAL']   = 'number';
 
 $config->bi->columnTypes->INTEGER   = 'number';
 $config->bi->columnTypes->UINTEGER  = 'number';

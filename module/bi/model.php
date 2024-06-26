@@ -229,6 +229,7 @@ class biModel extends model
         {
             $field      = $column['name'];
             $nativeType = $column['native_type'];
+            $nativeType = strpos($nativeType, 'DECIMAL') === 0 ? 'DECIMAL' : $nativeType;
             $type       = $this->config->bi->columnTypes->$driverName[$nativeType];
 
             if(isset($columnTypes->$field)) $field = $column['table'] . $field;
@@ -931,7 +932,7 @@ class biModel extends model
      * @access public
      * @return string
      */
-    public function prepareSqlPager($statement, $recPerPage, $pageID)
+    public function prepareSqlPager($statement, $recPerPage, $pageID, $driver)
     {
         if(!$statement->limit)
         {
@@ -940,7 +941,7 @@ class biModel extends model
         $statement->limit->offset   = $recPerPage * ($pageID - 1);
         $statement->limit->rowCount = $recPerPage;
 
-        $statement->options->options[] = 'SQL_CALC_FOUND_ROWS';
+        if($driver == 'mysql') $statement->options->options[] = 'SQL_CALC_FOUND_ROWS';
 
         $limitSql = $statement->build();
 
@@ -955,13 +956,10 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function prepareColumns($sql, $statement)
+    public function prepareColumns($sql, $statement, $driver)
     {
         $this->loadModel('chart');
         $this->loadModel('dataview');
-
-        // TODO 需要替换成实际图表或者透视表的driver。
-        $driver = 'mysql';
 
         $sqlColumns   = $this->getColumns($sql, $driver);
         $columnTypes  = $this->getColumnsType($sql, $driver, $sqlColumns);
@@ -1000,70 +998,60 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function query($sql, $recPerPage = 100, $pageID = 1, $driver = 'mysql')
+    public function query($stateObj, $driver = 'mysql')
     {
         $dbh = $this->app->loadDriver($driver);
-        $queryResult = new stdclass();
-        $queryResult->error    = false;
-        $queryResult->errorMsg = '';
-        $queryResult->cols     = array();
-        $queryResult->rows     = array();
-        $queryResult->sql      = '';
-        $queryResult->fieldSettings = array();
+        $sql = $this->processVars($stateObj->sql, $stateObj->filters);
+
+        $stateObj->beforeQuerySql();
 
         $statement = $this->sql2Statement($sql);
-        if(is_string($statement))
-        {
-            $queryResult->error    = true;
-            $queryResult->errorMsg = $statement;
-
-            return $queryResult;
-        }
+        if(is_string($statement)) return $stateObj->setError($statement);
 
         $checked = $this->validateSql($sql);
-        if($checked !== true)
-        {
-            $queryResult->error    = true;
-            $queryResult->errorMsg = $checked;
+        if($checked !== true) return $stateObj->setError($checked);
 
-            return $queryResult;
-        }
-
-        $limitSql = $this->prepareSqlPager($statement, $recPerPage, $pageID);
+        $recPerPage = $stateObj->pager->recPerPage;
+        $pageID     = $stateObj->pager->pageID;
+        $limitSql   = $this->prepareSqlPager($statement, $recPerPage, $pageID, $driver);
 
         $mysqlCountSql  = "SELECT FOUND_ROWS() AS count";
         $duckdbCountSql = "SELECT COUNT(1) AS count FROM ($sql)";
 
         try
         {
-            $queryResult->rows      = $dbh->query($limitSql)->fetchAll();
-            $queryResult->rowsCount = $dbh->query($driver == 'mysql' ? $mysqlCountSql : $duckdbCountSql)->fetch()->count;
+            $stateObj->queryData = $dbh->query($limitSql)->fetchAll();
+            $total               = $dbh->query($driver == 'mysql' ? $mysqlCountSql : $duckdbCountSql)->fetch()->count;
+
+            $columns = $this->prepareColumns($limitSql, $statement, $driver);
+            $columns = $this->fillWithClientLang($columns);
+
+            $stateObj->setPager($total);
+            $stateObj->setFieldSettings($columns);
+            $stateObj->buildQuerySqlCols($this->app->getClientLang());
         }
         catch(Exception $e)
         {
-            $queryResult->error = true;
-            $queryResult->errorMsg = $e;
-
-            return $queryResult;
+            return $stateObj->setError($e);
         }
 
-        $columns    = $this->prepareColumns($limitSql, $statement);
-        $clientLang = $this->app->getClientLang();
+        return $stateObj;
+    }
 
-        $fieldSettings = array();
+    public function fillWithClientLang($columns)
+    {
+        $fillColumns = array();
+        $clientLang  = $this->app->getClientLang();
+
         foreach($columns as $field => $settings)
         {
             $title = $settings['name'];
 
             if(!isset($settings[$clientLang]) || empty($settings[$clientLang])) $settings[$clientLang] = $title;
-            $fieldSettings[$field] = $settings;
+            $fillColumns[$field] = $settings;
         }
 
-        $queryResult->cols          = $this->buildQueryResultTableColumns($fieldSettings);
-        $queryResult->fieldSettings = $fieldSettings;
-        $queryResult->sql           = $limitSql;
-
-        return $queryResult;
+        return $fillColumns;
     }
 
     /**
