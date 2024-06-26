@@ -32,4 +32,20 @@ class pivotState
      * @access public
      */
     public $code;
+
+    /**
+     * Pivot state driver.
+     *
+     * @var string
+     * @access public
+     */
+    public $driver;
+
+    /**
+     * Pivot state name.
+     *
+     * @var string
+     * @access public
+     */
+    public $name;
 }
