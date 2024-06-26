@@ -455,7 +455,7 @@ class instanceModel extends model
      * @access private
      * @return object
      */
-    private function installationSettingsMap(object $customData, object $dbInfo, object $instance): object
+    public function installationSettingsMap(object $customData, object $dbInfo, object $instance): object
     {
         $settingsMap = new stdclass;
         if($customData->customDomain)
