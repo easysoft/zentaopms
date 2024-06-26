@@ -375,4 +375,19 @@ class pivotState
     {
         return $this->action == 'publish';
     }
+
+    public function isDesign()
+    {
+        return $this->action == 'design';
+    }
+
+    public function isFirstDesign()
+    {
+        return $this->isDesign() && empty($this->sql);
+    }
+
+    public function isError()
+    {
+        return $this->error;
+    }
 }
