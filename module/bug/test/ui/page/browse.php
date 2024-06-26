@@ -11,6 +11,7 @@ class browsePage extends page
             'confirmButton' => '(//a[@title="确认"]/i)[1]',
             'resolveButton' => '(//a[@title="解决"]/i)[1]',
             'closeButton'   => '(//a[@title="关闭"]/i)[1]',
+            'more'          => "//*[@id='mainContentCell']//button[text()='保存搜索条件']/following-sibling::button/i",
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
