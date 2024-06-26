@@ -216,6 +216,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `node` varchar(100) NOT NULL DEFAULT '',
   `reviewType` varchar(100)  NOT NULL DEFAULT 'manual',
   `multipleType` enum('and','or') NOT NULL DEFAULT 'and',
+  `sequential` enum('0','1') NOT NULL DEFAULT '0',
   `prev` mediumtext NULL,
   `next` mediumtext NULL,
   `status` varchar(20) NOT NULL DEFAULT 'wait',

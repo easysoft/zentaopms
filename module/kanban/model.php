@@ -2727,6 +2727,8 @@ class kanbanModel extends model
 
             $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
         }
+
+        return true;
     }
 
     /**

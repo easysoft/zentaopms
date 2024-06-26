@@ -99,3 +99,5 @@ ALTER TABLE `zt_chart` ADD `driver` enum('mysql', 'duckdb') not NULL default 'my
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('*/10', '*', '*', '*', '*', 'moduleName=bi&methodName=syncParquetFile', '生成parquet文件', 'zentao', 1, 'normal');
 
 ALTER TABLE `zt_user` ADD `superior` char(30) NULL DEFAULT '' AFTER `realname`;
+
+ALTER TABLE `zt_approvalnode` ADD `sequential` enum('0','1') NOT NULL DEFAULT '0' AFTER `multipleType`;
