@@ -5,7 +5,7 @@ include '../lib/confirmbug.ui.class.php';
 $tester = new confirmBugTester();
 
 $bug = array();
-$bug['search']        = 'Bug状态';
+$bug['search'][0]     = array('field1' => 'Bug状态', 'operator1' => '=', 'value1' => '激活');
 $bug['isResolved']    = '激活';
 $bug['assignedTo']    = 'admin';
 $bug['resolution']    = '已解决';
