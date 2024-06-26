@@ -57,7 +57,7 @@ function refreshStatus()
                     }
                     if(currentStatus != instance.status)
                     {
-                        loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#instanceInfoContainer');
+                        loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '.progress-container,.store-info');
                         currentStatus = instance.status;
                         return;
                     }
