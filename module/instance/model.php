@@ -301,7 +301,7 @@ class instanceModel extends model
         $success = $this->cne->updateConfig($instance, $settings);
         if($success)
         {
-            $this->action->create('instance', $instance->id, 'adjustCPU', '', (string)$size);
+            $this->action->create('instance', $instance->id, 'adjustCPU', (string)$size);
             return true;
         }
 
