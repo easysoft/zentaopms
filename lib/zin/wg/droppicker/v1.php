@@ -85,6 +85,7 @@ class dropPicker extends wg
                     )
                 )
             ),
+            set::width('100%'),
             set($this->getRestProps())
         );
     }
