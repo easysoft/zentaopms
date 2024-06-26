@@ -73,8 +73,7 @@ class thinkStepBase extends wg
                 setClass('flex items-start justify-between mb-2 step-title'),
                 $step->type == 'question' ? div
                 (
-                    setStyle(array('font-size' => '1.25rem')),
-                    setClass('h-full text-fore'),
+                    setClass('h-full text-fore text-lg'),
                     $requiredSymbal,
                     $step->title,
                     $questionTips,
@@ -87,7 +86,7 @@ class thinkStepBase extends wg
             ),
             div
             (
-                setClass('run-desc mb-2.5'),
+                setClass('run-desc mb-3.5'),
                 setStyle(array('margin-top' => '-28px')),
                 section
                 (
@@ -166,7 +165,7 @@ class thinkStepBase extends wg
     {
         $content = $this->prop('isRun') ? div
         (
-            setClass('w-full col bg-white items-center py-10 px-8 mb-4'),
+            setClass('w-full col bg-white items-center pt-4 pb-10 px-8 mb-4'),
             div
             (
                 setStyle(array('max-width' => '878px')),

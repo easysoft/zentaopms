@@ -54,21 +54,21 @@ class thinkBaseCheckbox extends wg
         $props = $this->props->pick(['primary', 'type', 'name', 'disabled']);
         if(!empty($props['name']) && !empty($item['value'])) $props['id'] = $props['name'] . $item['value'];
 
-        $itemClass = $this->prop('type') === 'checkbox' ? 'gap-4 px-4' : 'gap-3 px-3';
+        $itemClass = '';
         $text      = $item['text'];
         unset($item['text']);
-        if(isset($item['checked']) && $item['checked']) $itemClass .= ' is-checked';
+        if(isset($item['checked']) && $item['checked']) $itemClass = 'is-checked';
 
         if(!empty($item['isOther']))
         {
             return div
             (
-                setClass('item-control has-input w-full py-3 flex items-center justify-between border cursor-pointer ' . $itemClass),
+                setClass('item-control has-input w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer ' . $itemClass),
                 setData('type', $this->prop('type')),
                 on::click('toggleChecked'),
                 div
                 (
-                    setClass('flex items-start text-lg gap-1.5 flex-1'),
+                    setClass('flex items-start text-md gap-1.5 flex-1'),
                     div(setStyle(array('min-width' => '60px')), setClass('mt-1'), $text),
                     new textarea
                     (
@@ -96,8 +96,8 @@ class thinkBaseCheckbox extends wg
         (
             setData('type', $this->prop('type')),
             on::click('toggleChecked'),
-            setClass('item-control w-full py-3 flex items-center justify-between border cursor-pointer ' . $itemClass),
-            div(setClass('text-lg flex-1'), $text),
+            setClass('item-control w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer ' . $itemClass),
+            div(setClass('text-md flex-1'), $text),
             new checkbox
             (
                 set($props),

@@ -1,9 +1,11 @@
+.think-check-list.check-list {padding-top: 0;}
 .think-check-list .item-control.is-checked {border: 1px solid var(--color-primary-500); color: var(--color-primary-500);}
-.think-check-list .item-control.is-checked textarea.form-control {color: var(--color-fore);}
+.think-check-list .item-control.is-checked textarea.form-control {color: var(--color-fore); min-height: 30px;}
 .think-check-list .item-control:hover {border: 1px solid var(--color-primary-500);}
-.think-check-list .checkbox-primary {--checkbox-size: 16px; width: 16px;}
-.think-check-list .checkbox-primary>input[type=checkbox]:checked+label:after {top: 0; left: 1px; --tw-content: "\e5ca"; color: var(--color-primary-500); font-weight: 600;}
+.think-check-list .checkbox-primary, .think-check-list .radio-primary {min-height: 16px;}
+.think-check-list .checkbox-primary {--checkbox-size: 14px; width: 14px;}
+.think-check-list .checkbox-primary>input[type=checkbox]:checked+label:after {top: 1px; left: 1px; --tw-content: "\e5ca"; color: var(--color-primary-500); font-weight: 600; font-size: 12px;}
 .think-check-list .checkbox-primary.checked>label:before, .think-check-list .checkbox-primary>input[type=checkbox]:checked+label:before {background-color: unset; border-color: var(--color-primary-500); color: var(--color-primary-500);}
-.think-check-list .checkbox-primary.checked>label, .think-check-list .radio-primary>label {font-family: ZentaoIcon !important;}
+.think-check-list .checkbox-primary.checked>label, .think-check-list .radio-primary>label {font-family: ZentaoIcon !important; padding-left: 14px;}
 .think-check-list .radio-primary>label:before, .think-check-list .radio-primary.checked>label:before, .think-check-list .radio-primary>input[type=radio]:checked+label:before {display: none;}
-.think-check-list .radio-primary>label:after {--tw-content: "\e5ca"; color: var(--color-primary-500); font-size: 16px; background-color: unset; top: -2px; left: 2px; font-weight: 600;}
+.think-check-list .radio-primary>label:after {--tw-content: "\e5ca"; color: var(--color-primary-500); font-size: 14px; background-color: unset; top: -2px; left: 2px; font-weight: 600;}

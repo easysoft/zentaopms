@@ -65,7 +65,7 @@ class thinkTableInput extends thinkQuestion
                 (
                     set::rows('2'),
                     set::name('result[' . $index . ']'),
-                    setClass('mt-2 result-width'),
+                    setClass('result-width', $index == 0 ? '' : 'mt-2'),
                     set::value(!empty($result) && isset($result[$index]) ? $result[$index] : ''),
                     set::placeholder($lang->thinkrun->pleaseInput)
                 ),
