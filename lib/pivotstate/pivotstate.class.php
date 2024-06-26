@@ -112,4 +112,20 @@ class pivotState
      * @access public
      */
     public $settings;
+
+    /**
+     * Pivot state filters.
+     *
+     * @var array
+     * @access public
+     */
+    public $filters;
+
+    /**
+     * Pivot state step.
+     *
+     * @var int
+     * @access public
+     */
+    public $step;
 }
