@@ -48,4 +48,20 @@ class pivotState
      * @access public
      */
     public $name;
+
+    /**
+     * Pivot state description.
+     *
+     * @var string
+     * @access public
+     */
+    public $desc;
+
+    /**
+     * Pivot state SQL.
+     *
+     * @var string
+     * @access public
+     */
+    public $sql;
 }
