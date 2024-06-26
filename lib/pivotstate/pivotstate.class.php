@@ -332,7 +332,6 @@ class pivotState
         {
             $settings = (array)$settings;
             $title    = isset($settings[$lang]) ? $settings[$lang] : $field;
-            $type     = $settings['type'];
 
             $cols[] = array('name' => $field, 'title' => $title, 'sortType' => false);
         }
