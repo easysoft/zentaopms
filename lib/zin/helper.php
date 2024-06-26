@@ -131,3 +131,19 @@ function array_some(array $array, callable $fn): bool
     }
     return false;
 }
+
+/**
+ * Check if all elements in an array pass a test.
+ *
+ * @param array $array
+ * @param callable $fn
+ * @return bool
+ */
+function array_every(array $array, callable $fn): bool
+{
+    foreach ($array as $value)
+    {
+        if(!$fn($value)) return false;
+    }
+    return true;
+}
