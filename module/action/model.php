@@ -2079,7 +2079,7 @@ class actionModel extends model
         {
             $projectID  = (int)$projectID;
             $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            $executions = $this->loadModel('execution')->fetchPairs($projectID, $type = 'all', $filterMulti = false) + array(0);
+            $executions = $this->loadModel('execution')->fetchPairs($projectID, 'all', false) + array(0);
 
             $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), is_array($grantedProducts) ? $grantedProducts : explode(',', $grantedProducts)) : array_keys($products);
             $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), is_array($grantedExecutions) ? $grantedExecutions : explode(',', $grantedExecutions)) : array_keys($executions);
