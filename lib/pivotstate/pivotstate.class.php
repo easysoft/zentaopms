@@ -176,4 +176,20 @@ class pivotState
      * @access public
      */
     public $queryData = array();
+
+    /**
+     * pivotCols
+     *
+     * @var array
+     * @access public
+     */
+    public $pivotCols = array();
+
+    /**
+     * pivotData
+     *
+     * @var array
+     * @access public
+     */
+    public $pivotData = array();
 }
