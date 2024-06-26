@@ -758,6 +758,8 @@ class actionModel extends model
             $item->action  = $action->action;
             $item->content = $this->renderAction($action);
 
+            if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu'))) unset($item->comment);
+
             $list[] = $item;
         }
         return $list;
