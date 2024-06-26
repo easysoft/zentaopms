@@ -144,4 +144,20 @@ class pivotState
      * @access public
      */
     public $action = 'design';
+
+    /**
+     * error
+     *
+     * @var bool
+     * @access public
+     */
+    public $error = false;
+
+    /**
+     * errorMsg
+     *
+     * @var string
+     * @access public
+     */
+    public $errorMsg = '';
 }
