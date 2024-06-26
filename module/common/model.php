@@ -1152,6 +1152,8 @@ eof;
                 $method = $this->app->rawMethod;
             }
 
+            if($module == 'product' and $method == 'browse' and !empty($this->app->params['storyType']) and $this->app->params['storyType'] != 'story') $method = $this->app->params['storyType'];
+
             $openMethods = array(
                 'user'    => array('deny', 'logout'),
                 'my'      => array('changepassword'),
@@ -1282,6 +1284,8 @@ eof;
 
         $module = strtolower($module);
         $method = strtolower($method);
+
+        if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] != 'story') $method = $app->params['storyType'];
 
         global $config;
         if(isset($config->{$module}->groupPrivs[$method]))

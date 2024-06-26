@@ -337,7 +337,18 @@ class customModel extends model
             {
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
-                $hasPriv = commonModel::hasPriv($module, $method, null, zget($link, 3, ''));
+
+                $methodName = $method;
+
+                /* 需求列表按照对应的需求模块鉴权。 */
+                if($module == 'product' && $method == 'browse')
+                {
+                    $params = zget($link, 3, '');
+                    preg_match('/storyType=([^&]*)/', $params, $matches);
+                    $methodName = !empty($matches[1]) ? $matches[1] : $methodName;
+                }
+
+                $hasPriv = commonModel::hasPriv($module, $methodName, null, zget($link, 3, ''));
 
                 /* Fix bug #20464 */
                 if(isset($vars)) unset($vars);
