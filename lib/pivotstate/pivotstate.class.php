@@ -221,5 +221,15 @@ class pivotState
         $this->sql       = $pivot->sql;
         $this->step      = 1;
         $this->stage     = $pivot->stage;
+
+        $this->fields    = $this->json2Array($pivot->fieldSettings);
+        $this->langs     = $this->json2Array($pivot->langs);
+        $this->vars      = $this->json2Array($pivot->vars);
+        $this->objects   = $this->json2Array($pivot->objects);
+        $this->settings  = $this->json2Array($pivot->settings);
+        $this->filters   = $this->json2Array($pivot->filters);
+
+        $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
+        $this->setPager();
     }
 }
