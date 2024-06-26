@@ -317,4 +317,20 @@ class pivotState
 
         $this->fieldSettings = $fieldSettings;
     }
+
+    public function buildQuerySqlCols($lang)
+    {
+        $cols = array();
+        foreach($this->fieldSettings as $field => $settings)
+        {
+            $settings = (array)$settings;
+            $title    = isset($settings[$lang]) ? $settings[$lang] : $field;
+            $type     = $settings['type'];
+
+            $cols[] = array('name' => $field, 'title' => $title, 'sortType' => false);
+        }
+
+        $this->queryCols = $cols;
+        return $this;
+    }
 }
