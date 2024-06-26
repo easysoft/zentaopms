@@ -434,4 +434,21 @@ class pivotState
 
         return $this;
     }
+
+    /**
+     * Set pager
+     *
+     * @param  int    $total
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function setPager($total = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->pager = new stdclass();
+        $this->pager->total      = $total;
+        $this->pager->recPerPage = $recPerPage;
+        $this->pager->pageID     = $pageID;
+    }
 }
