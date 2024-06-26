@@ -409,11 +409,24 @@ class pivotState
         return $this->error;
     }
 
+    /**
+     * Get error message.
+     *
+     * @access public
+     * @return string
+     */
     public function getError()
     {
         return $this->errorMsg;
     }
 
+    /**
+     * Set error.
+     *
+     * @param  string    $msg
+     * @access public
+     * @return object
+     */
     public function setError($msg)
     {
         $this->errror   = true;
