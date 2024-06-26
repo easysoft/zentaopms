@@ -452,7 +452,7 @@ class instanceModel extends model
      * @param  object  $customData
      * @param  object  $dbInfo
      * @param  object  $instance
-     * @access private
+     * @access public
      * @return object
      */
     public function installationSettingsMap(object $customData, object $dbInfo, object $instance): object
