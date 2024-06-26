@@ -3684,7 +3684,14 @@ class storyModel extends model
 
         if($action == 'batchcreate')
         {
-            if($config->vision == 'or') return false;
+            if($config->vision == 'or')
+            {
+                $myself = new self();
+                static $getMaxGradeGroup;
+                if(empty($getMaxGradeGroup)) $getMaxGradeGroup = $myself->getMaxGradeGroup();
+                if(!empty($story->grade) && $story->grade >= $getMaxGradeGroup[$story->type]) return false;
+            }
+
             if(!empty($story->twins))   return false;
             if(strpos('active,launched', $story->status) === false) return false;
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
@@ -5235,10 +5242,13 @@ class storyModel extends model
             $menu[] = array('text' => $this->lang->preview . $this->lang->URCommon, 'value' => 'requirement', 'items' => $items);
         }
 
-        $items = array();
-        $gradePairs = $this->getGradePairs('story', 'all');
-        foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "story{$grade}");
-        $menu[] = array('text' => $this->lang->preview . $this->lang->SRCommon, 'value' => 'story', 'items' => $items);
+        if($this->config->vision != 'or')
+        {
+            $items = array();
+            $gradePairs = $this->getGradePairs('story', 'all');
+            foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "story{$grade}");
+            $menu[] = array('text' => $this->lang->preview . $this->lang->SRCommon, 'value' => 'story', 'items' => $items);
+        }
 
         return $menu;
     }
