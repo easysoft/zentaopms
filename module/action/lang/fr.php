@@ -329,6 +329,7 @@ $lang->action->desc->editname                = '$date, updated from <strong>$old
 $lang->action->desc->upgrade                 = '$date, upgraded from <strong>$oldVersion</strong> to <strong>$newVersion</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->backup                  = '$date, backuped by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->adjustmemory            = '$date, resized to <strong>$newMemory</strong> of memory by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->adjustcpu               = '$date, resized to <strong>$newMemory</strong> of CPU by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->enableldap              = '$date, enabled by <strong>$actor</strong> of LDAP。' . "\n";
 $lang->action->desc->disableldap             = '$date, disabled by <strong>$actor</strong> of LDAP。' . "\n";
 $lang->action->desc->enablesmtp              = '$date, enabled by <strong>$actor</strong> of SMTP。' . "\n";

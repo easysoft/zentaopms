@@ -537,10 +537,10 @@ class actionModel extends model
             {
                 $desc  = $this->lang->action->desc->{$actionType};
                 $extra = json_decode($action->extra);
-                if($actionType == 'adjustmemory')
+                if(in_array($actionType, array('adjustmemory', 'adjustcpu')))
                 {
-                    $action->newMemory = $action->comment;
-                    $action->comment = '';
+                    $action->newValue = $action->comment;
+                    $action->comment  = '';
                 }
 
                 if(!empty($extra))
