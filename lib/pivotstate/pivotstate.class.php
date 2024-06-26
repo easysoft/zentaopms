@@ -96,4 +96,20 @@ class pivotState
      * @access public
      */
     public $vars;
+
+    /**
+     * Pivot state objects.
+     *
+     * @var array
+     * @access public
+     */
+    public $objects;
+
+    /**
+     * Pivot state settings.
+     *
+     * @var array
+     * @access public
+     */
+    public $settings;
 }
