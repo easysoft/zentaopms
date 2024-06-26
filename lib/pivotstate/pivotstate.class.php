@@ -192,4 +192,20 @@ class pivotState
      * @access public
      */
     public $pivotData = array();
+
+    /**
+     * pivotCellSpan
+     *
+     * @var array
+     * @access public
+     */
+    public $pivotCellSpan = array();
+
+    /**
+     * pager
+     *
+     * @var int
+     * @access public
+     */
+    public $pager;
 }
