@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @package   instance
  * @version   $Id$
  * @link      https://www.zentao.net
+ * @property  instanceModel $instance
+ * @property  instanceZen $instanceZen
+ * @property  cneModel $cne
  */
 class instance extends control
 {
@@ -85,14 +88,12 @@ class instance extends control
     public function setting(int $id)
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
-        $currentResource = new stdclass;
         $instance        = $this->instance->getByID($id);
         $currentResource = $this->cne->getAppConfig($instance);
         if(!empty($_POST))
         {
             $newInstance = fixer::input('post')->trim('name')->get();
             $memoryKb    = $newInstance->memory_kb;
-            unset($newInstance->memory_kb);
 
             if(intval($currentResource->max->memory / 1024) != $memoryKb)
             {
@@ -108,11 +109,20 @@ class instance extends control
                 }
             }
 
+            $cpu = $newInstance->cpu;
+            if($currentResource->max->cpu != $cpu)
+            {
+                if(!$this->instance->updateCpuSize($instance, $cpu))
+                {
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
+            }
+
             $this->instance->updateByID($id, $newInstance);
             if(dao::isError())  return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($newInstance->name != $instance->name)
             {
-                $this->action->create('instance', $instance->id, 'editname', '', json_encode(array('result' => array('result' => 'success'), 'data' => array('oldName' => $instance->name, 'newName' => $newInstance->name))));
+                $this->action->create('instance', $instance->id, 'editName', '', json_encode(array('result' => array('result' => 'success'), 'data' => array('oldName' => $instance->name, 'newName' => $newInstance->name))));
             }
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
@@ -124,7 +134,8 @@ class instance extends control
     }
 
     /**
-     * Upgrade instnace
+     * 升级一个应用。
+     * Upgrade a instance.
      *
      * @param  int    $id
      * @access public
@@ -194,7 +205,7 @@ class instance extends control
      *
      * @param  string $type
      * @access public
-     * @return viod
+     * @return void
      */
     public function createExternalApp(string $type)
     {
@@ -223,7 +234,7 @@ class instance extends control
      *
      * @param  int    $externalID
      * @access public
-     * @return viod
+     * @return void
      */
     public function editExternalApp(int $externalID)
     {
@@ -259,7 +270,7 @@ class instance extends control
      *
      * @param  int    $externalID
      * @access public
-     * @return viod
+     * @return void
      */
     public function deleteExternalApp(int $externalID)
     {
