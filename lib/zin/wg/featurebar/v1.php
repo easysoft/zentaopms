@@ -74,7 +74,7 @@ class featureBar extends wg
                 $activeText = $item->text;
 
                 $subItems = array();
-                $callback = $this->prop($item->name == 'more' ? 'moreMenuLinkCallback' : 'queryMenuLinkCallback');
+                $callback = $this->prop(in_array($item->name, array('more', 'status')) ? 'moreMenuLinkCallback' : 'queryMenuLinkCallback');
                 $callback = isset($callback[0]) ? $callback[0] : null;
 
                 foreach($moreSelects as $key => $text)
