@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formpanel' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'pastedialog' . DS . 'v1.php';
 
 /**
  * 批量编辑表单面板（formBatchPanel）部件类。
@@ -76,29 +77,29 @@ class formBatchPanel extends formPanel
         'shadow'       => true
     );
 
-    protected function buildHeadingActions(): ?node
+    protected function getHeadingActions(): array
     {
         global $lang;
 
-        $headingActions = $this->prop('headingActions');
-        if(!$headingActions) $headingActions = array();
-
+        $actions      = parent::getHeadingActions();
         $uploadImage  = $this->prop('uploadParams') && hasPriv('file', 'uploadImages');
         $pasteField   = $this->prop('pasteField');
 
         /* Upload images. */
-        if($uploadImage) $headingActions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
+        if($uploadImage) $actions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
 
         /* Multi-input. */
         if($pasteField)
         {
-            $headingActions[] = array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText, 'data-backdrop' => 'static');
+            array_unshift($actions, array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText, 'data-backdrop' => 'static'));
 
-            $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
+            $headingActionsBlock = $this->block('headingActions');
+            if(empty($headingActionsBlock) || array_every($headingActionsBlock, function($item){return !($item instanceof pasteDialog);}))
+            {
+                $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
+            }
         }
 
-        $this->setProp('headingActions', $headingActions);
-
-        return parent::buildHeadingActions();
+        return $actions;
     }
 }

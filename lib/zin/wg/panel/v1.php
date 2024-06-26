@@ -33,10 +33,15 @@ class panel extends wg
         'footer'         => array('map' => 'nav')
     );
 
+    protected function getHeadingActions(): array
+    {
+        return $this->prop('headingActions', array());
+    }
+
     protected function buildHeadingActions(): ?node
     {
         $actionsBlock        = $this->block('headingActions');
-        $actions             = $this->prop('headingActions');
+        $actions             = $this->getHeadingActions();
         $headingActionsClass = $this->prop('headingActionsClass');
 
         if(empty($actions) && empty($actionsBlock)) return null;

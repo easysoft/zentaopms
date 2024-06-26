@@ -136,16 +136,9 @@ class formPanel extends panel
         }
     }
 
-    /**
-     * Build heading actions.
-     *
-     * @access protected
-     * @return ?wg
-     */
-    protected function buildHeadingActions(): ?node
+    protected function getHeadingActions(): array
     {
-        $headingActions = $this->prop('headingActions');
-        if(!$headingActions) $headingActions = array();
+        $actions = parent::getHeadingActions();
 
         /* Custom fields. */
         $customFields = $this->prop('customFields', array());
@@ -160,17 +153,15 @@ class formPanel extends panel
             {
                 /* Custom button submit params. */
                 $urlParams        = $this->prop('customUrlParams') ? $this->prop('customUrlParams') : "module={$app->rawModule}&section=custom&key={$key}";
-                $headingActions[] = formSettingBtn
+                $actions[] = formSettingBtn
                 (
                     set::customFields(array('list' => $listFields, 'show' => $showFields)),
                     set::urlParams(zget($customFields, 'urlParams', $urlParams)),
                 );
-
-                $this->setProp('headingActions', $headingActions);
             }
         }
 
-        return parent::buildHeadingActions();
+        return $actions;
     }
 
     protected function buildExtraMain()
