@@ -295,6 +295,13 @@ class pivotState
         $this->setPager();
     }
 
+    /**
+     * Set fieldSettings with merge.
+     *
+     * @param  array    $settings
+     * @access public
+     * @return void
+     */
     public function setFieldSettings($settings)
     {
         $settings      = (array)$settings;
