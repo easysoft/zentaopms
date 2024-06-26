@@ -1199,11 +1199,12 @@ class my extends control
             $user->last = $user->last ? date(DT_DATETIME1, $user->last) : '';
         }
 
-        $this->view->title   = $this->lang->my->team;
-        $this->view->users   = $users;
-        $this->view->deptID  = $deptID;
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+        $this->view->title     = $this->lang->my->team;
+        $this->view->users     = $users;
+        $this->view->userPairs = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->deptID    = $deptID;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
         $this->display();
     }
 

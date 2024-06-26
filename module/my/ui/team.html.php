@@ -30,6 +30,7 @@ dtable
     set::data($users),
     set::checkable(false),
     set::orderBy($orderBy),
+    set::userMap($userPairs),
     set::sortLink(inlink('team', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::fixedLeftWidth('0.2'),
     set::footPager(usePager())
