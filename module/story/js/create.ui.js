@@ -27,6 +27,7 @@ window.toggleFeedback = function(obj)
 {
     const $this  = $(obj);
     const source = $this.val();
+    if(!source) return;
     $('.feedbackBox').toggleClass('hidden', !feedbackSource.includes(source));
 }
 waitDom('[name=source]', function(){toggleFeedback($('[name=source]'));});
