@@ -16,4 +16,20 @@ class pivotState
      * @access public
      */
     public $dimension;
+
+    /**
+     * Pivot state group.
+     *
+     * @var string
+     * @access public
+     */
+    public $group;
+
+    /**
+     * Pivot state code.
+     *
+     * @var string
+     * @access public
+     */
+    public $code;
 }
