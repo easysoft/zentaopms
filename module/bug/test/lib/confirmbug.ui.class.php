@@ -68,6 +68,25 @@ class confirmBugTester extends tester
         return $this->bugAssert($bugTitle, $list);
     }
 
+    public function closeBug($project = array(), $bug = array())
+    {
+        $this->login();
+        $list = $this->initForm('bug', 'browse',$project, 'appIframe-qa');
+        $list->dom->btn($this->lang->bug->search)->click();
+        $list->dom->field1->picker($bug['search']);
+        $list->dom->value1->picker($bug['isResolved']);
+        $list->dom->searchButton->click();
+        $this->webdriver->wait(1);
+        $bugTitle = $list->dom->bugTitle->getText();
+        $list->dom->closeButton->click();
+        $this->webdriver->wait(1);
+
+        $list->dom->btn($this->lang->bug->close)->click();
+        $this->webdriver->wait(1);
+
+        return $this->bugAssert($bugTitle, $list);
+    }
+
     /**
      * 给bug列表上的操作增加断言。
      * Add a assertion on bug list.
