@@ -31,10 +31,12 @@ class dropPicker extends wg
      */
     protected static array $defineProps = array
     (
-        'text'  => 'string',
-        'value' => 'string',
-        'name'  => 'string',
-        'items' => 'array'
+        'btnClass' => 'string="w-full"',
+        'text'     => 'string',
+        'value'    => 'string',
+        'name'     => 'string',
+        'items'    => 'array',
+        'menu'     => 'array'
     );
 
     /**
@@ -45,47 +47,43 @@ class dropPicker extends wg
      */
     protected function build()
     {
-        list($items, $text, $value, $name) = $this->prop(array('items', 'text', 'value', 'name'));
+        list($items, $text, $value, $name, $btnClass, $menu) = $this->prop(array('items', 'text', 'value', 'name', 'btnClass', 'menu'));
         $btnID = $this->gid;
+
+        $menuProps = array();
+        $menuProps['getItem'] = jsRaw(<<<JS
+        function(item)
+        {
+            const selected = document.getElementById('$btnID').querySelector('input').value;
+            item.selected = String(item.value) === selected;
+            return item;
+        }
+        JS);
+        $menuProps['onClickItem'] = jsRaw(<<<JS
+        function(e)
+        {
+            if(e.item.value === undefined) return;
+            const btn = document.getElementById('$btnID');
+            const input = btn.querySelector('input');
+            btn.querySelector('.text').innerText = e.item.text;
+            input.value = e.item.value;
+            $(input).trigger('change');
+        }
+        JS);
+        if(is_array($menu)) $menuProps = array_merge($menuProps, $menu);
 
         return new dropdown
         (
             new btn
             (
                 $text,
-                setClass('w-full justify-between'),
+                setClass('justify-between', $btnClass),
                 setID($btnID),
                 h::formHidden($name, $value)
             ),
             set::items($items),
-            set::menu
-            (
-                array
-                (
-                    'getItem' => jsRaw(<<<JS
-                        function(item)
-                        {
-                            const selected = document.getElementById('$btnID').querySelector('input').value;
-                            item.selected = String(item.value) === selected;
-                            return item;
-                        }
-                        JS
-                    ),
-                    'onClickItem' => jsRaw(<<<JS
-                        function(e)
-                        {
-                            if(e.item.value === undefined) return;
-                            const btn = document.getElementById('$btnID');
-                            const input = btn.querySelector('input');
-                            btn.querySelector('.text').innerText = e.item.text;
-                            input.value = e.item.value;
-                            $(input).trigger('change');
-                        }
-                        JS
-                    )
-                )
-            ),
             set::width('100%'),
+            set::menu($menuProps),
             set($this->getRestProps())
         );
     }
