@@ -18,6 +18,7 @@ class thinkStepMenu extends wg
         'preserve?: string|bool',
         'checkOnClick?: bool|string',
         'defaultNestedShow?: bool=true',
+        'hidden?: bool=false',
         'onCheck?: function'
     );
 
@@ -39,6 +40,7 @@ class thinkStepMenu extends wg
 
         $activeKey         = $this->prop('activeKey');
         $toggleNonNodeShow = $this->prop('toggleNonNodeShow');
+        $hidden            = $this->prop('hidden');
         $parentItems       = array();
         foreach($items as $setting)
         {
@@ -59,6 +61,7 @@ class thinkStepMenu extends wg
                 'disabled'    => $unClickable,
                 'actions'     => $this->prop('showAction') ? $this->getActions($setting) : null,
                 'data-wizard' => $setting->wizard,
+                'class'       => $unClickable && $hidden ? 'hidden': ''
             );
 
             $children = zget($setting, 'children', array());
