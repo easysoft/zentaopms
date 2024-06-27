@@ -103,6 +103,8 @@ $config->custom->customFields['execution']   = array('custom' => array('createFi
 $config->custom->customFields['product']     = array('custom' => array('createFields', 'batchEditFields'));
 $config->custom->customFields['programplan'] = array('custom' => array('createWaterfallFields', 'createIpdFields', 'createWaterfallplusFields'), 'customAgilePlus' => array('createFields'));
 $config->custom->customFields['story']       = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
+$config->custom->customFields['epic']        = $config->custom->customFields['story'];
+$config->custom->customFields['requirement'] = $config->custom->customFields['story'];
 $config->custom->customFields['task']        = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
 $config->custom->customFields['testcase']    = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
 $config->custom->customFields['todo']        = array('custom' => array('batchCreateFields', 'batchEditFields'));
