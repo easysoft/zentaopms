@@ -268,6 +268,17 @@ class pivotState
     }
 
     /**
+     * Complete settings.
+     *
+     * @access public
+     * @return void
+     */
+    public function completeSettings()
+    {
+        if(!isset($this->settings['summary'])) $this->settings['summary'] = 'use';
+    }
+
+    /**
      * Update from $_POST.
      *
      * @param  array    $post
