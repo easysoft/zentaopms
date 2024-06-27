@@ -276,6 +276,13 @@ class pivotState
         return $filters;
     }
 
+    /**
+     * Convert filters to where conditions.
+     *
+     * @param  array    $filters
+     * @access public
+     * @return array
+     */
     public function convertFiltersToWhere($filters)
     {
         $filterWheres = array();
