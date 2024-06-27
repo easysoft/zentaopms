@@ -485,7 +485,7 @@ class personnelModel extends model
 
         /* Append object count. */
         if($objectType == 'sprint') $objectType = 'execution';
-        $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
+        $countPairs = $this->dao->select('root, COUNT(1) AS count')->from(TABLE_TEAM)
             ->where('type')->eq($objectType)
             ->andWhere('root')->in(array_keys($objects))
             ->beginIF($objectType == 'execution')->orWhere('(type')->eq('project')->andWhere('root')->eq($parentID)->markRight(1)->fi()

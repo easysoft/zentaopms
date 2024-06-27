@@ -1421,7 +1421,7 @@ class blockZen extends block
         $productIdList = array_keys($products);
         if(!empty($productIdList))
         {
-            $fields   = 'product, count(*) as total';
+            $fields   = 'product, COUNT(1) AS total';
             $stories  = $this->dao->select($fields)->from(TABLE_STORY)->where('product')->in($productIdList)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs();
             $bugs     = $this->dao->select($fields)->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs();
             $releases = $this->dao->select($fields)->from(TABLE_RELEASE)->where('product')->in($productIdList)->andWhere('deleted')->eq('0')->groupBy('product')->fetchPairs();
@@ -1949,7 +1949,7 @@ class blockZen extends block
      */
     protected function printQaOverviewBlock(object $block): void
     {
-        $casePairs = $this->dao->select('lastRunResult, COUNT(*) AS count')->from(TABLE_CASE)
+        $casePairs = $this->dao->select('lastRunResult, COUNT(1) AS count')->from(TABLE_CASE)
             ->where('1=1')
             ->beginIF($block->module != 'my' && $this->session->project)->andWhere('project')->eq((int)$this->session->project)->fi()
             ->groupBy('lastRunResult')

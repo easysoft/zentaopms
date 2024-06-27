@@ -1862,7 +1862,7 @@ class docModel extends model
     {
         $today     = date('Y-m-d');
         $statistic = new stdclass();
-        $statistic->totalDocs = $this->dao->select('count(*) as count')->from(TABLE_DOC)
+        $statistic->totalDocs = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('type')->in($this->config->doc->docTypes)
             ->andWhere('vision')->eq($this->config->vision)
@@ -1890,7 +1890,7 @@ class docModel extends model
             ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
 
-        $myStatistic = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
+        $myStatistic = $this->dao->select("COUNT(1) AS myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
             ->where('addedBy')->eq($this->app->user->account)
             ->andWhere('type')->in($this->config->doc->docTypes)
             ->andWhere('deleted')->eq(0)
@@ -2513,7 +2513,7 @@ class docModel extends model
         if($action == 'view' && $docStatus == 'normal') $this->dao->update(TABLE_DOC)->set('views = views + 1')->where('id')->eq($docID)->exec();
         if($action == 'collect')
         {
-            $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
+            $collectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
             $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($docID)->exec();
         }
 
@@ -2552,7 +2552,7 @@ class docModel extends model
         $this->dao->delete()->from(TABLE_DOCACTION)->where('id')->eq($actionID)->exec();
         if($action->action == 'collect')
         {
-            $collectCount = $this->dao->select('count(*) as count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
+            $collectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
             $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($action->doc)->exec();
         }
         return !dao::isError();

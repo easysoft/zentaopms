@@ -20,8 +20,8 @@ CREATE FUNCTION qc_cminited($project int, $category varchar(30)) returns int
 begin
     declare products int default 0__DELIMITER__
     declare objects  int default 0__DELIMITER__
-    select count(*) from zt_projectproduct where project = $project into products__DELIMITER__
-    select count(distinct product) from zt_object where project = $project and category = $category and type = 'taged' and product in (select product from zt_projectproduct where project = $project) into objects__DELIMITER__
+    select COUNT(1) from zt_projectproduct where project = $project into products__DELIMITER__
+    select COUNT(DISTINCT product) from zt_object where project = $project and category = $category and type = 'taged' and product in (select product from zt_projectproduct where project = $project) into objects__DELIMITER__
     IF products = objects THEN
     return 1__DELIMITER__
     ELSEIF products != objects THEN
@@ -98,9 +98,9 @@ DROP FUNCTION IF EXISTS `qc_pgmallrequirementstage`;
 CREATE FUNCTION `qc_pgmallrequirementstage`($project int) RETURNS int(1)
 BEGIN
     -- 获取项目产品总数
-    select count(*) as products from zt_projectproduct where project = $project into @totalproduct__DELIMITER__
+    select COUNT(1) AS products from zt_projectproduct where project = $project into @totalproduct__DELIMITER__
     -- 获取已经设置需求阶段的产品总数
-    select count(*) as product from (select product from zt_projectproduct where project in (select id from zt_project where project = $project and type = 'stage' and attribute = 'request' and deleted = '0') GROUP BY product) as product into @product__DELIMITER__
+    select COUNT(1) AS product from (select product from zt_projectproduct where project in (select id from zt_project where project = $project and type = 'stage' and attribute = 'request' and deleted = '0') GROUP BY product) as product into @product__DELIMITER__
     -- 让项目产品总数和已设置需求阶段产品总数比较,都设置返回1,否则返回0
     if @totalproduct = @product then return 1__DELIMITER__
     end if__DELIMITER__
@@ -153,9 +153,9 @@ DROP FUNCTION IF EXISTS `qc_pgmspecifiedtypeactualdays`;
 CREATE FUNCTION `qc_pgmspecifiedtypeactualdays`($project int,$attribute varchar(50)) RETURNS int(10)
 BEGIN
     -- 查询某类型的阶段总数
-    select count(*) from zt_project where project = $project and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @totalstory__DELIMITER__
+    select COUNT(1) from zt_project where project = $project and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @totalstory__DELIMITER__
     -- 查询某类型已设置实际工期的阶段总数
-    select count(*) from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @setstory__DELIMITER__
+    select COUNT(1) from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @setstory__DELIMITER__
     -- 查询项目下某类型阶段实际工期总数
     select sum(realDuration) as realDuration from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @days__DELIMITER__
     -- 判断项目下某类型的阶段是否都已设置实际工期
@@ -176,9 +176,9 @@ DROP FUNCTION IF EXISTS `qc_pgmstageactualduration`;
 CREATE FUNCTION `qc_pgmstageactualduration`($product int, $attribute varchar(50)) RETURNS int(10)
 BEGIN
     -- 查找某类型的阶段总数
-    select count(*) as totalduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) into @totalduration__DELIMITER__
+    select COUNT(1) as totalduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) into @totalduration__DELIMITER__
     -- 查某类型阶段已设置实际工期的总数
-    select count(*) as setduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @setduration__DELIMITER__
+    select COUNT(1) as setduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @setduration__DELIMITER__
     -- 指定产品下某类型的阶段实际工期总和
     select sum(realDuration) as duration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @duration__DELIMITER__
     -- 需要判断该类型阶段都已设置实际工期,否则不统计

@@ -322,7 +322,7 @@ class programplanTao extends programplanModel
      */
     protected function getStageCount(int $planID, string $mode = ''): int
     {
-        return $this->dao->select('COUNT(*) AS count')->from(TABLE_PROJECT)
+        return $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)
             ->where('parent')->eq($planID)
             ->andWhere('type')->eq('stage')
             ->beginIF($mode == 'milestone')->andWhere('milestone')->eq(1)->fi()

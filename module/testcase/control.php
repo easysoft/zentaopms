@@ -1555,7 +1555,7 @@ class testcase extends control
     public function deleteScene(int $sceneID, string $confirm = 'no')
     {
         $scene = $this->testcase->getSceneByID($sceneID);
-        $count = $this->dao->select('COUNT(*) AS count')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('parent')->eq($sceneID)->fetch('count');
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('parent')->eq($sceneID)->fetch('count');
         if($count)
         {
             if($confirm != 'yes')

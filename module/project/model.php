@@ -540,7 +540,7 @@ class projectModel extends model
              ->andWhere('deleted')->eq(0)
              ->fetch('bugCount');
 
-        $taskCount = $this->dao->select('count(*) as count,
+        $taskCount = $this->dao->select('COUNT(1) AS count,
             sum(case when status = "wait" then 1 else 0 end) as waitCount,
             sum(case when status = "doing" then 1 else 0 end) as doingCount,
             sum(case when finishedBy != "" then 1 else 0 end) as finishedCount')->from(TABLE_TASK)
@@ -1154,7 +1154,7 @@ class projectModel extends model
      */
     public function checkDates($projectID, $project): bool
     {
-        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
+        $executionsCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)
             ->where('project') ->eq($projectID)
             ->andWhere('deleted') ->eq('0')
             ->fetch('count');

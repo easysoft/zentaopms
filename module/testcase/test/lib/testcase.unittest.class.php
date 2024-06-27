@@ -946,7 +946,7 @@ class testcaseTest
 
         if(dao::isError()) return false;
 
-        return $tester->dao->select('count(*) AS count')->from(TABLE_TESTRUN)->where('`case`')->eq($caseID)->andWhere('task')->in(array_keys($testtasks))->fetch('count');
+        return $tester->dao->select('COUNT(1) AS count')->from(TABLE_TESTRUN)->where('`case`')->eq($caseID)->andWhere('task')->in(array_keys($testtasks))->fetch('count');
     }
 
     /**

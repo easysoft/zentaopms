@@ -240,7 +240,7 @@ class reportsEntry extends entry
         $this->app->loadLang('product');
         $this->app->loadLang('story');
 
-        $storyStatusStat = $this->dao->select('t1.product,t2.name,t2.status,t1.status as storyStatus,count(*) as storyCount')->from(TABLE_STORY)->alias('t1')
+        $storyStatusStat = $this->dao->select('t1.product, t2.name, t2.status, t1.status AS storyStatus, COUNT(1) AS storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.deleted')->eq(0)
@@ -312,7 +312,7 @@ class reportsEntry extends entry
         $this->app->loadLang('product');
         $this->app->loadLang('bug');
 
-        $bugStatusStat = $this->dao->select('t1.product,t2.name,t2.status,t1.status as bugStatus,count(*) as bugCount')->from(TABLE_BUG)->alias('t1')
+        $bugStatusStat = $this->dao->select('t1.product, t2.name, t2.status, t1.status AS bugStatus, COUNT(1) AS bugCount')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.deleted')->eq(0)

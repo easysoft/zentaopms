@@ -3480,7 +3480,7 @@ class storyModel extends model
      */
     public function getDataOfStoriesPerChange(string $storyType = 'story'): array
     {
-        return $this->dao->select('(version-1) as name, count(*) as value')->from(TABLE_STORY)
+        return $this->dao->select('(version-1) as name, COUNT(1) AS value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
             ->groupBy('version')->orderBy('value')
             ->fetchAll();
@@ -3496,7 +3496,7 @@ class storyModel extends model
      */
     public function getDataOfStoriesPerGrade(string $storyType = 'story'): array
     {
-        $datas = $this->dao->select('type, grade as name, count(*) as count')->from(TABLE_STORY)
+        $datas = $this->dao->select('type, grade as name, COUNT(1) AS count')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
             ->groupBy('type,name')
             ->fetchGroup('type', 'name');

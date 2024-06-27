@@ -497,7 +497,7 @@ class testcaseModel extends model
     {
         if(empty($stories)) return array();
 
-        $caseCounts = $this->dao->select('story, COUNT(*) AS cases')
+        $caseCounts = $this->dao->select('story, COUNT(1) AS cases')
             ->from(TABLE_CASE)
             ->where('story')->in($stories)
             ->andWhere('deleted')->eq(0)
@@ -1342,13 +1342,13 @@ class testcaseModel extends model
         /* 查询用例的 bugs 和结果。 */
         /* Get bugs and results. */
         $queryField = $type == 'case' ? '`case`' : '`result`';
-        $caseBugs   = $this->dao->select('COUNT(*) AS count, `case`')->from(TABLE_BUG)->where($queryField)->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
-        $results    = $this->dao->select('COUNT(*) AS count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
+        $caseBugs   = $this->dao->select('COUNT(1) AS count, `case`')->from(TABLE_BUG)->where($queryField)->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
+        $results    = $this->dao->select('COUNT(1) AS count, `case`')->from(TABLE_TESTRESULT)->where('`case`')->in($caseIdList)->groupBy('`case`')->fetchPairs('case', 'count');
 
         /* 查询用例的失败结果。 */
         /* Get result fails of the the testcases. */
         if($type != 'case') $queryField = '`run`';
-        $caseFails  = $this->dao->select('COUNT(*) AS count, `case`')->from(TABLE_TESTRESULT)
+        $caseFails  = $this->dao->select('COUNT(1) AS count, `case`')->from(TABLE_TESTRESULT)
             ->where('caseResult')->eq('fail')
             ->andWhere($queryField)->in($caseIdList)
             ->groupBy('`case`')
@@ -2520,7 +2520,7 @@ class testcaseModel extends model
      */
     public function appendCaseFails(object $case, string $from, int $taskID): object
     {
-        $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)
+        $caseFails = $this->dao->select('COUNT(1) AS count')->from(TABLE_TESTRESULT)
             ->where('caseResult')->eq('fail')
             ->andwhere('`case`')->eq($case->id)
             ->beginIF($from == 'testtask')->andwhere('`run`')->eq($taskID)->fi()

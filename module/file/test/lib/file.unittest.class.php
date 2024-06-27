@@ -373,13 +373,13 @@ class fileTest
     public function autoDeleteTest(string $uid): int
     {
         $this->objectModel->autoDelete($uid);
-        return $this->objectModel->dao->select('count(*) AS count')->from(TABLE_FILE)->fetch('count');
+        return $this->objectModel->dao->select('COUNT(1) AS count')->from(TABLE_FILE)->fetch('count');
     }
 
     public function processFile4ObjectTest(string $objectType, object $oldObject, object $newObject): array
     {
         $this->objectModel->processFile4Object($objectType, $oldObject, $newObject);
-        $count = $this->objectModel->dao->select('count(*) AS count')->from(TABLE_FILE)->fetch('count');
+        $count = $this->objectModel->dao->select('COUNT(1) AS count')->from(TABLE_FILE)->fetch('count');
 
         return array('old' => $oldObject, 'new' => $newObject, 'count' => $count);
     }

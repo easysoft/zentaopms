@@ -81,7 +81,7 @@ class reportTao extends reportModel
             ->andWhere('t2.multiple')->eq('1')
             ->andWhere('LEFT(`join`, 4)')->eq($year)
             ->fetchPairs();
-        $taskStats = $this->dao->select('execution, count(*) as finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
+        $taskStats = $this->dao->select('execution, COUNT(1) AS finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('(finishedBy', true)->ne('')
             ->andWhere('LEFT(finishedDate, 4)')->eq($year)
@@ -110,7 +110,7 @@ class reportTao extends reportModel
             ->orderBy('`order` desc')
             ->fetchAll('id');
         /* Get resolved bugs in this year. */
-        $resolvedBugs = $this->dao->select('t2.execution, count(*) as count')->from(TABLE_BUG)->alias('t1')
+        $resolvedBugs = $this->dao->select('t2.execution, COUNT(1) AS count')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.resolvedBuild=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.execution')->in(array_keys($executions))
@@ -236,7 +236,7 @@ class reportTao extends reportModel
             ->andWhere('t2.case')->ne('0')
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->fetch('count');
-        $outputData['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
+        $outputData['case']['run'] = $this->dao->select('COUNT(1) AS count')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t2.deleted')->eq(0)

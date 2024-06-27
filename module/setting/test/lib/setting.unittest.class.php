@@ -96,7 +96,7 @@ class settingTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('count(*) as count')->from(TABLE_CONFIG)->fetch('count');
+        return $this->objectModel->dao->select('COUNT(1) AS count')->from(TABLE_CONFIG)->fetch('count');
     }
 
     /**

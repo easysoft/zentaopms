@@ -2821,7 +2821,7 @@ class upgradeModel extends model
      */
     public function addUniqueKeyToTeam()
     {
-        $members = $this->dao->select('root, type, account')->from(TABLE_TEAM)->groupBy('root, type, account')->having('count(*)')->gt(1)->fetchAll();
+        $members = $this->dao->select('root, type, account')->from(TABLE_TEAM)->groupBy('root, type, account')->having('count(1)')->gt(1)->fetchAll();
 
         foreach($members as $member)
         {
@@ -3054,7 +3054,7 @@ class upgradeModel extends model
      */
     public function adjustWebhookType()
     {
-        $bearychatCount = $this->dao->select('count(*) as count')->from(TABLE_WEBHOOK)->where('type')->eq('bearychat')->fetch('count');
+        $bearychatCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_WEBHOOK)->where('type')->eq('bearychat')->fetch('count');
         if($bearychatCount)
         {
             $item = new stdclass();
@@ -8390,7 +8390,7 @@ class upgradeModel extends model
      */
     public function getNoMergedProductCount(): int
     {
-        return (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
+        return (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
     }
 
     /**
@@ -8402,7 +8402,7 @@ class upgradeModel extends model
      */
     public function getNoMergedSprintCount(): int
     {
-        return (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq('0')->fetch('count');
+        return (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq('0')->fetch('count');
     }
 
     /**
@@ -8606,7 +8606,7 @@ class upgradeModel extends model
      */
     public function update18101(): void
     {
-        $count = $this->dao->select('COUNT(*) AS count')->from('information_schema.TABLES')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq(str_replace('`', '', TABLE_AI_MODEL))->fetch('count');
+        $count = $this->dao->select('COUNT(1) AS count')->from('information_schema.TABLES')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq(str_replace('`', '', TABLE_AI_MODEL))->fetch('count');
         if($count) return;
 
         /* Execute open edition. */

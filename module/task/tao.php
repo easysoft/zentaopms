@@ -244,7 +244,7 @@ class taskTao extends taskModel
      */
     protected function checkHasChildren(int $taskID): bool
     {
-        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
+        $childrenCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('count');
         if(!$childrenCount) return false;
         return true;
     }

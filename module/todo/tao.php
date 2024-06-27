@@ -47,7 +47,7 @@ class todoTao extends todoModel
      */
     protected function getCountByAccount(string $account, string $vision = 'rnd'): int
     {
-        return $this->dao->select('COUNT(*) AS count')->from(TABLE_TODO)
+        return $this->dao->select('COUNT(1) AS count')->from(TABLE_TODO)
             ->where('cycle')->eq('0')
             ->andWhere('deleted')->eq('0')
             ->andWhere('vision')->eq($vision)
@@ -364,7 +364,7 @@ class todoTao extends todoModel
      */
     protected function getTodoCountByAccount(string $account): int
     {
-        return $this->dao->select('COUNT(*) AS count')->from(TABLE_TODO)
+        return $this->dao->select('COUNT(1) AS count')->from(TABLE_TODO)
             ->where('cycle')->eq('0')
             ->andWhere('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)

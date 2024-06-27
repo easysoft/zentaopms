@@ -157,7 +157,7 @@ class instanceModel extends model
     {
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
-        $count = $this->dao->select('count(*) as qty')->from(TABLE_INSTANCE)->alias('instance')
+        $count = $this->dao->select('COUNT(1) AS qty')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
             ->where('instance.deleted')->eq(0)
             ->andWhere('space.id')->eq($defaultSpace->id)
@@ -177,7 +177,7 @@ class instanceModel extends model
     {
         /* REPLACE(domain, .$sysDomain, '') used for special case: new domain is a.com and old domain is b.a.com, domain of instance is c.b.a.com, */
         $sysDomain = $this->loadModel('cne')->sysDomain();
-        $result = $this->dao->select('count(*) as qty')->from(TABLE_INSTANCE)
+        $result = $this->dao->select('COUNT(1) AS qty')->from(TABLE_INSTANCE)
             ->where('deleted')->eq(0)
             ->andWhere("REPLACE(domain, '.$sysDomain', '')")->like("%.%")
             ->fetch();

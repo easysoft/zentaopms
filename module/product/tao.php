@@ -244,7 +244,7 @@ class productTao extends productModel
         $this->app->loadClass('date', true);
         $weekDate = date::getThisWeek();
 
-        $fields    = 'product,count(*) AS count';
+        $fields    = 'product,COUNT(1) AS count';
         $tableName = zget($this->config->objectTables, $type, TABLE_BUG);
         if($type == 'plans')    $tableName = TABLE_PRODUCTPLAN;
         if($type == 'releases') $tableName = TABLE_RELEASE;
@@ -531,22 +531,22 @@ class productTao extends productModel
         {
             case TABLE_PRODUCTPLAN:
                 /* Get unclosed plans count. */
-                return $this->dao->select('COUNT(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->andWhere('end')->gt(helper::now())->fetch('count');
+                return $this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->andWhere('end')->gt(helper::now())->fetch('count');
             case TABLE_BUILD:
                 /* Get builds count. */
-                return $this->dao->select('COUNT(*) AS count')->from(TABLE_BUILD)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+                return $this->dao->select('COUNT(1) AS count')->from(TABLE_BUILD)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
             case TABLE_CASE:
                 /* Get cases count. */
-                return $this->dao->select('COUNT(*) AS count')->from(TABLE_CASE)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+                return $this->dao->select('COUNT(1) AS count')->from(TABLE_CASE)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
             case TABLE_BUG:
                 /* Get bugs count. */
-                return $this->dao->select('COUNT(*) AS count')->from(TABLE_BUG)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+                return $this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
             case TABLE_DOC:
                 /* Get docs count. */
-                return $this->dao->select('COUNT(*) AS count')->from(TABLE_DOC)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+                return $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
             case TABLE_RELEASE:
                 /* Get releases count. */
-                return $this->dao->select('COUNT(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->fetch('count');
+                return $this->dao->select('COUNT(1) AS count')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->fetch('count');
             case TABLE_PROJECTPRODUCT:
                 return $this->dao->select('COUNT(DISTINCT(t1.project)) AS count')
                     ->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -556,7 +556,7 @@ class productTao extends productModel
                     ->andWhere('t2.type')->eq('project')
                     ->fetch('count');
             case 'executions':
-                return $this->dao->select('COUNT(*) AS count')
+                return $this->dao->select('COUNT(1) AS count')
                     ->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                     ->where('t2.deleted')->eq('0')
@@ -689,7 +689,7 @@ class productTao extends productModel
      */
     protected function getExecutionCountPairs(array $productIdList): array
     {
-        return $this->dao->select('t1.product, COUNT(*) AS count')
+        return $this->dao->select('t1.product, COUNT(1) AS count')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq('0')
@@ -710,7 +710,7 @@ class productTao extends productModel
      */
     protected function getProjectCountPairs(array $productIdList): array
     {
-        return $this->dao->select('t1.product, COUNT(*) AS count')
+        return $this->dao->select('t1.product, COUNT(1) AS count')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq('0')
@@ -731,7 +731,7 @@ class productTao extends productModel
      */
     protected function getCaseCountByStoryIdList(array $storyIdList): array
     {
-        return $this->dao->select('story, COUNT(*) AS count')
+        return $this->dao->select('story, COUNT(1) AS count')
             ->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->andWhere('story')->in($storyIdList)

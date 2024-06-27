@@ -24,9 +24,9 @@ class count_of_application extends baseCalc
 
     public function getStatement()
     {
-        $count = (int)$this->dao->select('count(*) as count')->from(TABLE_INSTANCE)->where('deleted')->eq(0)->fetch('count');
+        $count = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_INSTANCE)->where('deleted')->eq(0)->fetch('count');
 
-        return $this->dao->select("count(*) as count, {$count} as instanceCount")->from(TABLE_PIPELINE)
+        return $this->dao->select("COUNT(1) AS count, {$count} as instanceCount")->from(TABLE_PIPELINE)
             ->where('deleted')->eq(0);
     }
 

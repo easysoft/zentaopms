@@ -238,7 +238,7 @@ class reportModel extends model
      */
     public function getUserYearLogins(array $accounts, string $year): int
     {
-        return $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->in($accounts)->andWhere('LEFT(date, 4)')->eq($year)->andWhere('action')->eq('login')->fetch('count');
+        return $this->dao->select('COUNT(1) AS count')->from(TABLE_ACTION)->where('actor')->in($accounts)->andWhere('LEFT(date, 4)')->eq($year)->andWhere('action')->eq('login')->fetch('count');
     }
 
     /**
@@ -252,7 +252,7 @@ class reportModel extends model
      */
     public function getUserYearActions(array $accounts, string $year): int
     {
-        return $this->dao->select('count(*) as count')->from(TABLE_ACTION)
+        return $this->dao->select('COUNT(1) AS count')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
             ->fetch('count');
@@ -308,7 +308,7 @@ class reportModel extends model
                 $contributions[$type][$actionName] += 1;
             }
         }
-        $contributions['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
+        $contributions['case']['run'] = $this->dao->select('COUNT(1) AS count')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t2.deleted')->eq(0)
@@ -328,7 +328,7 @@ class reportModel extends model
      */
     public function getUserYearTodos(array $accounts, string $year): object
     {
-        return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
+        return $this->dao->select("COUNT(1) AS count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
@@ -347,7 +347,7 @@ class reportModel extends model
      */
     public function getUserYearEfforts(array $accounts, string $year): object
     {
-        $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_EFFORT)
+        $effort = $this->dao->select('COUNT(1) AS count, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()

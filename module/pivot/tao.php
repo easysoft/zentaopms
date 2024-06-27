@@ -294,7 +294,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
      */
     protected function getAssignBugGroup(): array
     {
-        return $this->dao->select('product, assignedTo, COUNT(*) AS bugCount')->from(TABLE_BUG)
+        return $this->dao->select('product, assignedTo, COUNT(1) AS bugCount')->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('active')
             ->andWhere('assignedTo')->ne('')

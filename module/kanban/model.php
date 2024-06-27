@@ -3436,7 +3436,7 @@ class kanbanModel extends model
 
         $kanbanIDList = array();
         foreach($spaceList as $kanbanList) $kanbanIDList = array_merge_recursive($kanbanIDList, array_keys($kanbanList));
-        $cardsCount = $this->dao->select('kanban, COUNT(*) as count')->from(TABLE_KANBANCARD)
+        $cardsCount = $this->dao->select('kanban, COUNT(1) AS count')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->in($kanbanIDList)
             ->groupBy('kanban')

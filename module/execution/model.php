@@ -3181,7 +3181,7 @@ class executionModel extends model
             ->limit('11')
             ->fetchPairs();
 
-        $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
+        $countPairs = $this->dao->select('root, COUNT(1) AS count')->from(TABLE_TEAM)
             ->where('( type')->eq('project')
             ->andWhere('root')->eq($projectID)
             ->markRight(1)

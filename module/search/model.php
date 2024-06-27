@@ -486,7 +486,7 @@ class searchModel extends model
             $filterObjects[] = $object;
         }
 
-        $typeCount = $this->dao->select("objectType, count(*) AS objectCount")->from(TABLE_SEARCHINDEX)
+        $typeCount = $this->dao->select("objectType, COUNT(1) AS objectCount")->from(TABLE_SEARCHINDEX)
             ->where('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)

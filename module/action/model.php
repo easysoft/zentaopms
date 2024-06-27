@@ -1492,7 +1492,7 @@ class actionModel extends model
         /* 移除搜索中的时间筛选条件。 */
         /* Remove time filter from search. */
         $condition = preg_replace("/AND +date[\<\>]'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
-        $count     = $this->dao->select('count(*) as count')
+        $count     = $this->dao->select('COUNT(1) AS count')
             ->from(TABLE_ACTION)
             ->where($condition)
             ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
@@ -1942,7 +1942,7 @@ class actionModel extends model
         if($action->objectType == 'execution')
         {
             if($object->deleted && empty($object->project)) return $this->lang->action->undeletedTips;
-            $projectCount = $this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->eq($object->project)->andWhere('deleted')->eq('0')->fetch('count');
+            $projectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('id')->eq($object->project)->andWhere('deleted')->eq('0')->fetch('count');
             if((int)$projectCount == 0) return $this->lang->action->executionNoProject;
         }
         elseif($action->objectType == 'repo' && in_array($object->SCM, array('Gitlab', 'Gitea', 'Gogs')))

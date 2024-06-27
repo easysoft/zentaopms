@@ -126,7 +126,7 @@ class searchTest
 
         global $tester;
         $table = $tester->config->objectTables[$objectType];
-        $query->queryCount = $tester->dao->select('count(*) AS count')->from($table)->where($query->sql)->fetch('count');
+        $query->queryCount = $tester->dao->select('COUNT(1) AS count')->from($table)->where($query->sql)->fetch('count');
 
         if(dao::isError()) return dao::getError();
 
@@ -203,7 +203,7 @@ class searchTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $count = $tester->dao->select('count(*) AS count')->from(TABLE_USERQUERY)->fetch('count');
+        $count = $tester->dao->select('COUNT(1) AS count')->from(TABLE_USERQUERY)->fetch('count');
         if(dao::isError()) return dao::getError();
         return $count;
     }
@@ -401,7 +401,7 @@ class searchTest
         $this->objectModel->deleteIndex($objectType, $objectID);
 
         global $tester;
-        return $tester->dao->select('count(*) AS count')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch('count');
+        return $tester->dao->select('COUNT(1) AS count')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch('count');
     }
 
     /**

@@ -728,7 +728,7 @@ class control extends baseControl
                         if(!empty($_POST[$field->field]))
                         {
                             $sqlClass = new sql();
-                            $sql      = "SELECT COUNT(*) AS count FROM $flow->table WHERE `$field->field` = " . $sqlClass->quote(fixer::input('post')->get($field->field));
+                            $sql      = "SELECT COUNT(1) AS count FROM $flow->table WHERE `$field->field` = " . $sqlClass->quote(fixer::input('post')->get($field->field));
                             if(isset($_POST['id'])) $sql .= ' AND `id` != ' . (int)$_POST['id'];
 
                             $row = $this->dbh->query($sql)->fetch();

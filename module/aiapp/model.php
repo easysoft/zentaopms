@@ -59,7 +59,7 @@ class aiappModel extends model
      */
     private function countLatestMiniPrograms()
     {
-        return (int)$this->dao->select('COUNT(*) as count')
+        return (int)$this->dao->select('COUNT(1) AS count')
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')

@@ -185,7 +185,7 @@ class kanbanTao extends kanbanModel
      */
     protected function updateColumnParent(object $column)
     {
-        $children = $this->dao->select('count(*) as count')->from(TABLE_KANBANCOLUMN)
+        $children = $this->dao->select('COUNT(1) AS count')->from(TABLE_KANBANCOLUMN)
             ->where('parent')->eq($column->parent)
             ->andWhere('id')->ne($column->id)
             ->andWhere('deleted')->eq('0')

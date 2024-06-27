@@ -182,7 +182,7 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $run    = $this->objectModel->dao->select('COUNT(*) AS count')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('count');
+        $run    = $this->objectModel->dao->select('COUNT(1) AS count')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch('count');
         $cases  = $this->objectModel->dao->select('project, `case`')->from(TABLE_PROJECTCASE)->fetchAll();
         $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
 

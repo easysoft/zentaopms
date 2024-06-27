@@ -439,7 +439,7 @@ class programModel extends model
         $executions = $this->loadModel('project')->getExecutionList(array_keys($projects));
         if($this->cookie->projectType && $this->cookie->projectType == 'bycard')
         {
-            $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+            $leftTasks = $this->dao->select('t2.parent as project, COUNT(1) AS tasks')->from(TABLE_TASK)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
                 ->where('t1.execution')->in(array_keys($executions))
                 ->andWhere('t1.status')->notIn('cancel,closed')

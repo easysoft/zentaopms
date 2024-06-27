@@ -2694,37 +2694,37 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
 CREATE UNIQUE INDEX `code` ON `zt_report`(`code`);
 
 -- DROP VIEW IF EXISTS `ztv_executionsummary`;
-CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
+CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,COUNT(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
 -- DROP VIEW IF EXISTS `ztv_projectsummary`;
-CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`estimate`,0)) AS `estimate`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0)) AS `consumed`,sum(if((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0'),`zt_task`.`left`,0)) AS `left`,count(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;
+CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`estimate`,0)) AS `estimate`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0)) AS `consumed`,sum(if((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0'),`zt_task`.`left`,0)) AS `left`,COUNT(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;
 -- DROP VIEW IF EXISTS `ztv_projectstories`;
-CREATE OR REPLACE VIEW `ztv_projectstories` AS select `t1`.`project` AS `execution`,count('*') AS `stories`,sum(if((`t2`.`status` = 'closed'),0,1)) AS `undone` from ((`zt_projectstory` `t1` left join `zt_story` `t2` on((`t1`.`story` = `t2`.`id`))) left join `zt_project` `t3` on((`t1`.`project` = `t3`.`id`))) where ((`t2`.`deleted` = '0') and (`t3`.`type` in ('sprint','stage'))) group by `t1`.`project`;
+CREATE OR REPLACE VIEW `ztv_projectstories` AS select `t1`.`project` AS `execution`,COUNT(1) AS `stories`,sum(if((`t2`.`status` = 'closed'),0,1)) AS `undone` from ((`zt_projectstory` `t1` left join `zt_story` `t2` on((`t1`.`story` = `t2`.`id`))) left join `zt_project` `t3` on((`t1`.`project` = `t3`.`id`))) where ((`t2`.`deleted` = '0') and (`t3`.`type` in ('sprint','stage'))) group by `t1`.`project`;
 -- DROP VIEW IF EXISTS `ztv_projectteams`;
-CREATE OR REPLACE VIEW `ztv_projectteams` AS select `zt_team`.`root` AS `execution`,count('*') AS `teams` from `zt_team` where (`zt_team`.`type` = 'execution') group by `zt_team`.`root`;
+CREATE OR REPLACE VIEW `ztv_projectteams` AS select `zt_team`.`root` AS `execution`,COUNT(1) AS `teams` from `zt_team` where (`zt_team`.`type` = 'execution') group by `zt_team`.`root`;
 -- DROP VIEW IF EXISTS `ztv_projectbugs`;
-CREATE OR REPLACE VIEW `ztv_projectbugs` AS select `zt_bug`.`execution` AS `execution`,count(0) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`execution`;
+CREATE OR REPLACE VIEW `ztv_projectbugs` AS select `zt_bug`.`execution` AS `execution`,COUNT(1) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`execution`;
 -- DROP VIEW IF EXISTS `ztv_productbugs`;
-CREATE OR REPLACE VIEW `ztv_productbugs` AS select `zt_bug`.`product` AS `product`,count(0) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`product`;
+CREATE OR REPLACE VIEW `ztv_productbugs` AS select `zt_bug`.`product` AS `product`,COUNT(1) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`product`;
 -- DROP VIEW IF EXISTS `ztv_productstories`;
-CREATE OR REPLACE VIEW `ztv_productstories` AS select `zt_story`.`product` AS `product`,count('*') AS `stories`,sum(if((`zt_story`.`status` = 'closed'),0,1)) AS `undone` from `zt_story` where (`zt_story`.`deleted` = '0') group by `zt_story`.`product`;
+CREATE OR REPLACE VIEW `ztv_productstories` AS select `zt_story`.`product` AS `product`,COUNT(1) AS `stories`,sum(if((`zt_story`.`status` = 'closed'),0,1)) AS `undone` from `zt_story` where (`zt_story`.`deleted` = '0') group by `zt_story`.`product`;
 -- DROP VIEW IF EXISTS `ztv_dayuserlogin`;
-CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS select count(*) AS `userlogin`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'user') and (`zt_action`.`action` = 'login')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS select COUNT(1) AS `userlogin`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'user') and (`zt_action`.`action` = 'login')) group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_dayeffort`;
 CREATE OR REPLACE VIEW `ztv_dayeffort` AS select round(sum(`zt_effort`.`consumed`),1) AS `consumed`,`zt_effort`.`date` AS `date` from `zt_effort` group by `zt_effort`.`date`;
 -- DROP VIEW IF EXISTS `ztv_daystoryopen`;
-CREATE OR REPLACE VIEW `ztv_daystoryopen` AS select count(*) AS `storyopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daystoryopen` AS select COUNT(1) AS `storyopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_daystoryclose`;
-CREATE OR REPLACE VIEW `ztv_daystoryclose` AS select count(*) AS `storyclose`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'closed')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daystoryclose` AS select COUNT(1) AS `storyclose`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'closed')) group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_daytaskopen`;
-CREATE OR REPLACE VIEW `ztv_daytaskopen` AS select count(*) AS `taskopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daytaskopen` AS select COUNT(1) AS `taskopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_daytaskfinish`;
-CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS select count(*) AS `taskfinish`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'finished')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS select COUNT(1) AS `taskfinish`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'finished')) group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_daybugopen`;
-CREATE OR REPLACE VIEW `ztv_daybugopen` AS select count(*) AS `bugopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daybugopen` AS select COUNT(1) AS `bugopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_daybugresolve`;
-CREATE OR REPLACE VIEW `ztv_daybugresolve` AS select count(*) AS `bugresolve`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'resolved')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daybugresolve` AS select COUNT(1) AS `bugresolve`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'resolved')) group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_dayactions`;
-CREATE OR REPLACE VIEW `ztv_dayactions` AS select count(*) AS `actions`,left(`zt_action`.`date`,10) AS `day` from `zt_action` group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_dayactions` AS select COUNT(1) AS `actions`,left(`zt_action`.`date`,10) AS `day` from `zt_action` group by left(`zt_action`.`date`,10);
 -- DROP VIEW IF EXISTS `ztv_normalproduct`;
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 
@@ -15750,8 +15750,8 @@ CREATE FUNCTION qc_cminited($project int, $category varchar(30)) returns int REA
 begin
     declare products int default 0__DELIMITER__
     declare objects  int default 0__DELIMITER__
-    select count(*) from zt_projectproduct where project = $project into products__DELIMITER__
-    select count(distinct product) from zt_object where project = $project and category = $category and type = 'taged' and product in (select product from zt_projectproduct where project = $project) into objects__DELIMITER__
+    select COUNT(1) from zt_projectproduct where project = $project into products__DELIMITER__
+    select COUNT(DISTINCT product) from zt_object where project = $project and category = $category and type = 'taged' and product in (select product from zt_projectproduct where project = $project) into objects__DELIMITER__
     IF products = objects THEN
     return 1__DELIMITER__
     ELSEIF products != objects THEN
@@ -15828,9 +15828,9 @@ DROP FUNCTION IF EXISTS `qc_pgmallrequirementstage`;
 CREATE FUNCTION `qc_pgmallrequirementstage`($project int) RETURNS int(1) READS SQL DATA
 BEGIN
     -- 获取项目产品总数
-    select count(*) as products from zt_projectproduct where project = $project into @totalproduct__DELIMITER__
+    select COUNT(1) AS products from zt_projectproduct where project = $project into @totalproduct__DELIMITER__
     -- 获取已经设置需求阶段的产品总数
-    select count(*) as product from (select product from zt_projectproduct where project in (select id from zt_project where project = $project and type = 'stage' and attribute = 'request' and deleted = '0') GROUP BY product) as product into @product__DELIMITER__
+    select COUNT(1) AS product from (select product from zt_projectproduct where project in (select id from zt_project where project = $project and type = 'stage' and attribute = 'request' and deleted = '0') GROUP BY product) as product into @product__DELIMITER__
     -- 让项目产品总数和已设置需求阶段产品总数比较,都设置返回1,否则返回0
     if @totalproduct = @product then return 1__DELIMITER__
     end if__DELIMITER__
@@ -15883,9 +15883,9 @@ DROP FUNCTION IF EXISTS `qc_pgmspecifiedtypeactualdays`;
 CREATE FUNCTION `qc_pgmspecifiedtypeactualdays`($project int,$attribute varchar(50)) RETURNS int(11) READS SQL DATA
 BEGIN
     -- 查询某类型的阶段总数
-    select count(*) from zt_project where project = $project and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @totalstory__DELIMITER__
+    select COUNT(1) from zt_project where project = $project and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @totalstory__DELIMITER__
     -- 查询某类型已设置实际工期的阶段总数
-    select count(*) from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @setstory__DELIMITER__
+    select COUNT(1) from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @setstory__DELIMITER__
     -- 查询项目下某类型阶段实际工期总数
     select sum(realDuration) as realDuration from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @days__DELIMITER__
     -- 判断项目下某类型的阶段是否都已设置实际工期
@@ -15906,9 +15906,9 @@ DROP FUNCTION IF EXISTS `qc_pgmstageactualduration`;
 CREATE FUNCTION `qc_pgmstageactualduration`($product int, $attribute varchar(50)) RETURNS int(11) READS SQL DATA
 BEGIN
     -- 查找某类型的阶段总数
-    select count(*) as totalduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) into @totalduration__DELIMITER__
+    select COUNT(1) AS totalduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) into @totalduration__DELIMITER__
     -- 查某类型阶段已设置实际工期的总数
-    select count(*) as setduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @setduration__DELIMITER__
+    select COUNT(1) AS setduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @setduration__DELIMITER__
     -- 指定产品下某类型的阶段实际工期总和
     select sum(realDuration) as duration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @duration__DELIMITER__
     -- 需要判断该类型阶段都已设置实际工期,否则不统计

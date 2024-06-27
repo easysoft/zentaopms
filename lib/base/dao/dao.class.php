@@ -1327,7 +1327,7 @@ class baseDAO
         if($funcName == 'unique')
         {
             $args = func_get_args();
-            $sql  = "SELECT COUNT(*) AS `count` FROM $this->table WHERE `$fieldName` = " . $this->sqlobj->quote($value);
+            $sql  = "SELECT COUNT(1) AS `count` FROM $this->table WHERE `$fieldName` = " . $this->sqlobj->quote($value);
             if($condition) $sql .= ' AND ' . $condition;
             try
             {

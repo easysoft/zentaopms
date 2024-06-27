@@ -577,7 +577,7 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerType(int $taskID): array
     {
-        $datas = $this->dao->select('t2.type AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t2.type AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
@@ -601,7 +601,7 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerModule(int $taskID): array
     {
-        $datas = $this->dao->select('t2.module AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t2.module AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
@@ -626,7 +626,7 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerRunner($taskID)
     {
-        $datas = $this->dao->select('t1.lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t1.lastRunner AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')

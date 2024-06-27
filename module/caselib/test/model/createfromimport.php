@@ -38,7 +38,7 @@ $_POST = array(
 
 $caselib->createFromImportTest(201);
 unset($_POST);
-$total = $tester->dao->select('count(*) total')->from(TABLE_CASE)->where( 'lib')->eq(201)->fetch('total');
+$total = $tester->dao->select('COUNT(1) AS total')->from(TABLE_CASE)->where( 'lib')->eq(201)->fetch('total');
 $cases = $tester->dao->select('*')->from(TABLE_CASE)->where( 'lib')->eq(201)->fetchAll('id');
 
 r($total) && p()                     && e('2');                       //添加两条数据之后查询数据条数是否正确
