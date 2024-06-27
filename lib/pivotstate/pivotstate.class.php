@@ -276,6 +276,22 @@ class pivotState
         return $filters;
     }
 
+    public function convertFiltersToWhere($filters)
+    {
+        $filterWheres = array();
+        foreach($filters as $filter)
+        {
+            $field   = $filter['field'];
+            $default = zget($filter, 'default', '');
+            $from    = zget($filter, 'from', 'result');
+            $type    = $filter['type'];
+
+            if($from == 'query' || empty($default)) continue;
+        }
+
+        return $filterWheres;
+    }
+
     /**
      * Complete settings.
      *
@@ -399,6 +415,7 @@ class pivotState
         $settings      = (array)$settings;
         $fromCreate    = empty($this->fieldSettings);
         $fieldSettings = !$fromCreate ? array() : $settings;
+        $lang          = $this->clientLang;
 
         if(!$fromCreate)
         {
@@ -406,7 +423,9 @@ class pivotState
             {
                 if(isset($this->fieldSettings[$field]))
                 {
-                    $fieldSettings[$field] = array_merge($this->fieldSettings[$field], array('name' => $field));
+                    $completeFields = array('name' => $field);
+                    if(isset($this->fieldSettings[$field]['name'])) $completeFields[$lang] = $this->fieldSettings[$field]['name'];
+                    $fieldSettings[$field] = array_merge($this->fieldSettings[$field], $completeFields);
                 }
             }
         }
