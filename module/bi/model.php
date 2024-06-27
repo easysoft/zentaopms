@@ -1028,7 +1028,7 @@ class biModel extends model
 
             $stateObj->setPager($total);
             $stateObj->setFieldSettings($columns);
-            $stateObj->buildQuerySqlCols($this->app->getClientLang());
+            $stateObj->buildQuerySqlCols();
         }
         catch(Exception $e)
         {

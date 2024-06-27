@@ -90,6 +90,14 @@ class pivotState
     public $langs;
 
     /**
+     * client languages.
+     *
+     * @var array
+     * @access public
+     */
+    public $clientLang;
+
+    /**
      * Pivot state variables.
      *
      * @var array
@@ -283,13 +291,13 @@ class pivotState
     /**
      * Get field options.
      *
-     * @param  string    $lang
      * @access public
      * @return array
      */
-    public function getFieldOptions($lang)
+    public function getFieldOptions()
     {
         $options = array();
+        $lang    = $this->clientLang;
         foreach($this->fieldSettings as $settings)
         {
             $options[] = array('text' => isset($settings[$lang]) ? $settings[$lang] : $settings['name'], 'value' => $settings['name'], 'key' => $settings['name']);
@@ -407,13 +415,13 @@ class pivotState
     /**
      * Build cols for query sql with lang.
      *
-     * @param  string    $lang
      * @access public
      * @return object
      */
-    public function buildQuerySqlCols($lang)
+    public function buildQuerySqlCols()
     {
         $cols = array();
+        $lang = $this->clientLang;
         foreach($this->fieldSettings as $field => $settings)
         {
             $settings = (array)$settings;
@@ -424,6 +432,18 @@ class pivotState
 
         $this->queryCols = $cols;
         return $this;
+    }
+
+    /**
+     * Set clientLang.
+     *
+     * @param  string    $clientLang
+     * @access public
+     * @return void
+     */
+    public function setClientLang($clientLang)
+    {
+        $this->clientLang = $clientLang;
     }
 
     /**
