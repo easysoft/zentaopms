@@ -1330,7 +1330,7 @@ class pivotModel extends model
         $cols   = $this->generateTableCols($fields, $groups, $langs);
 
         /* Replace the variable with the default value. */
-        $sql = $this->initVarFilter($filters, $sql);
+        $sql = $this->bi->processVars($sql, $filters);
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters);
 
