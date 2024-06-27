@@ -40,6 +40,7 @@
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
     let historyState  = parent.window.history.state;
+    const hasZinBar   = DEBUG && window.zin && window.zin.zinTool && !isIndexPage;
 
     $.apps = $.extend(
     {
@@ -103,7 +104,7 @@
 
     function initZinbar()
     {
-        if(!DEBUG || !window.zin || !window.zin.zinTool || isIndexPage) return;
+        if(!hasZinBar) return;
         let $bar = $('#zinbar');
         if($bar.length) return;
 
@@ -157,7 +158,7 @@
 
     function updateZinbar(perf, errors, basePath)
     {
-        if(!DEBUG) return;
+        if(!hasZinBar) return;
 
         if(zinbar && zinbar.$) zinbar.$.update(perf, errors, basePath);
         else requestAnimationFrame(() => updateZinbar(perf, errors, basePath));
@@ -165,7 +166,7 @@
 
     function updatePerfInfo(options, stage, info)
     {
-        if(!DEBUG) return;
+        if(!hasZinBar) return;
 
         const perf = {id: options.id, url: options.url || currentAppUrl};
         perf[stage] = performance.now();
