@@ -247,6 +247,7 @@ class pivotState
 
         $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
         $this->setPager();
+        $this->standardParams();
     }
 
     /**
@@ -376,6 +377,17 @@ class pivotState
     }
 
     /**
+     * Get setting columns.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSettingColumns()
+    {
+        return $this->settings->columns;
+    }
+
+    /**
      * Update from $_POST.
      *
      * @param  array    $post
@@ -418,6 +430,7 @@ class pivotState
 
         $this->fieldSettings = $fieldSettings;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
+        $this->standardParams();
     }
 
     /**
