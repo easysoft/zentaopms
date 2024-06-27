@@ -242,6 +242,17 @@ class pivotState
     }
 
     /**
+     * Get filters.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFilters()
+    {
+        if(empty($this->pivotFilters)) return $this->filters;
+    }
+
+    /**
      * Update from $_POST.
      *
      * @param  array    $post
