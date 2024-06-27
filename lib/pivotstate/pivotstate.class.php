@@ -297,6 +297,22 @@ class pivotState
     }
 
     /**
+     * Get setting groups.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSettingGroups()
+    {
+        $groups   = array();
+        $settings = $this->settings;
+        $keys     = array_keys($settings);
+        foreach($keys as $key) if(strpos($key, 'group') === 0) $groups[$key] = $settings[$key];
+
+        return $groups;
+    }
+
+    /**
      * Update from $_POST.
      *
      * @param  array    $post
