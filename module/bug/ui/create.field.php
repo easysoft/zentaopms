@@ -41,7 +41,7 @@ if(common::hasPriv('release', 'create'))
     $fields->field('openedBuild')
         ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'data-size' => 'lg','id' => 'createRelease'))
         ->text($lang->release->create)->hint($lang->release->create)
-        ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch')))
+        ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch') . '&status=normal'))
         ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
         ->itemEnd();
 }

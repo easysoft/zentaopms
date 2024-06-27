@@ -31,5 +31,6 @@ $lang->projectrelease->product          = "所属{$lang->productCommon}";
 $lang->projectrelease->name             = "发布名称";
 
 $lang->projectrelease->featureBar['browse']['all']       = '全部';
+$lang->projectrelease->featureBar['browse']['wait']      = '未开始';
 $lang->projectrelease->featureBar['browse']['normal']    = '已发布';
 $lang->projectrelease->featureBar['browse']['terminate'] = '停止维护';

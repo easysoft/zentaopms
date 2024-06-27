@@ -151,6 +151,7 @@ class projectrelease extends control
         $this->view->builds      = $builds;
         $this->view->lastRelease = $this->projectrelease->getLast($projectID);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->status      = 'wait';
         $this->display('release', 'create');
     }
 
