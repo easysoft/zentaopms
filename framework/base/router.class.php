@@ -1657,17 +1657,16 @@ class baseRouter
     }
 
     /**
-     * 获取要被调用的方法的参数和类型。
-     * Get the default valve and param type of the method calling.
+     * 引入 control 文件。
+     * Import control file.
      *
+     * @param  string $moduleName
      * @access public
-     * @return array
+     * @return string
      */
-    public function getDefaultParams()
+    public function importControlFile($moduleName)
     {
-        $appName    = $this->appName;
         $moduleName = $this->moduleName;
-        $methodName = $this->methodName;
 
         /**
          * 引入该模块的control文件。
@@ -1687,21 +1686,24 @@ class baseRouter
         chdir(dirname($file2Included));
         helper::import($file2Included);
 
-        /* Check file is encode by ioncube. */
-        $isEncrypted = false;
-        if(preg_match('/extension\\' . DS . '(custom|xuan|biz|max|ipd|or)\\' . DS . '/', $file2Included))
-        {
-            $fp    = fopen($file2Included, 'r');
-            $line1 = fgets($fp);
-            fclose($fp);
-            if(strpos($line1, '<?php //') === 0) $isEncrypted = true;
-        }
+        return $file2Included;
+    }
 
-        /**
-         * 设置control的类名。
-         * Set the class name of the control.
-         */
-        $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
+    /**
+     * 获取要被调用的方法的参数和类型。
+     * Get the default valve and param type of the method calling.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDefaultParams()
+    {
+        $appName    = $this->appName;
+        $moduleName = $this->moduleName;
+        $methodName = $this->methodName;
+
+        $file2Included = $this->importControlFile($moduleName);
+        $className     = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
         if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, true);
 
         /**
@@ -1711,6 +1713,16 @@ class baseRouter
         $module = new $className();
         if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, true);
         $this->control = $module;
+
+        /* Check file is encode by ioncube. */
+        $isEncrypted = false;
+        if(preg_match('/extension\\' . DS . '(custom|xuan|biz|max|ipd|or)\\' . DS . '/', $file2Included))
+        {
+            $fp    = fopen($file2Included, 'r');
+            $line1 = fgets($fp);
+            fclose($fp);
+            if(strpos($line1, '<?php //') === 0) $isEncrypted = true;
+        }
 
         /* include default value for module. */
         $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");

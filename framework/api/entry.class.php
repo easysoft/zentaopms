@@ -284,9 +284,9 @@ class baseEntry
     {
         ob_start();
 
+        global $app;
         if(!class_exists($moduleName) and !class_exists("my$moduleName"))
         {
-            global $app;
             $app->setModuleName($moduleName);
             $app->setMethodName($methodName);
             $app->viewType = 'json';
@@ -295,24 +295,7 @@ class baseEntry
             $this->checkPriv();
 
             $app->setControlFile();
-
-            /*
-             * 引入该模块的control文件。
-             * Include the control file of the module.
-             **/
-            $isExt = $app->setActionExtFile();
-            if($isExt)
-            {
-                $controlFile = $app->controlFile;
-                spl_autoload_register(function($class) use ($moduleName, $controlFile)
-                {
-                    if($class == $moduleName) include $controlFile;
-                });
-            }
-
-            $file2Included = $isExt ? $app->extActionFile : $app->controlFile;
-            chdir(dirname((string) $file2Included));
-            helper::import($file2Included);
+            $app->importControlFile($moduleName);
         }
 
         /*
@@ -324,6 +307,7 @@ class baseEntry
 
         $controller = new $className();
         $controller->viewType = 'json';
+        $app->control = $controller;
 
         return $controller;
     }
