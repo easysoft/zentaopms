@@ -43,7 +43,7 @@ class thinkPffa extends thinkModel
                     set::title(!empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : null),
                     !empty($blocks[$blockIndex]->text) ? $blocks[$blockIndex]->text : $defaultTitle
                 ),
-                div(setClass('flex flex-wrap gap-2.5'), !isset($blocks[$blockIndex]->steps) ? null : $this->buildQuestion($blocks[$blockIndex]->steps)),
+                div(setClass('w-full flex flex-wrap gap-2.5'), !isset($blocks[$blockIndex]->steps) ? null : $this->buildQuestion($blocks[$blockIndex]->steps)),
             ),
             div(setClass('item-desc text-center leading-tight text-canvas', $descFontSize), $lang->thinkwizard->pffaGroundText[$blockIndex])
         );

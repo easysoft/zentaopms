@@ -97,7 +97,7 @@ class thinkBaseCheckbox extends wg
             setData('type', $this->prop('type')),
             on::click('toggleChecked'),
             setClass('item-control w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer ' . $itemClass),
-            div(setClass('text-md flex-1'), $text),
+            div(setClass('text-md flex-1 break-all'), $text),
             new checkbox
             (
                 set($props),
