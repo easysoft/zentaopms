@@ -85,20 +85,21 @@ class formBatchPanel extends formPanel
         $uploadImage  = $this->prop('uploadParams') && hasPriv('file', 'uploadImages');
         $pasteField   = $this->prop('pasteField');
 
-        /* Upload images. */
-        if($uploadImage) $actions[] = array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages);
-
         /* Multi-input. */
         if($pasteField)
         {
             array_unshift($actions, array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText, 'data-backdrop' => 'static'));
 
             $headingActionsBlock = $this->block('headingActions');
+            d('hasPasteDialog', empty($headingActionsBlock) || array_every($headingActionsBlock, function($item){return !($item instanceof pasteDialog);}));
             if(empty($headingActionsBlock) || array_every($headingActionsBlock, function($item){return !($item instanceof pasteDialog);}))
             {
-                $this->addToBlock('headingActions', pasteDialog(set::field($pasteField)));
+                $this->addToBlock('headingActions', new pasteDialog(set::field($pasteField)));
             }
         }
+
+        /* Upload images. */
+        if($uploadImage) array_unshift($actions, array('url' => createLink('file', 'uploadImages', $this->prop('uploadParams')), 'class' => 'btn primary-pale mr-4', 'data-toggle' => 'modal', 'data-width' => '0.7', 'text' => $lang->uploadImages));
 
         return $actions;
     }
