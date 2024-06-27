@@ -250,6 +250,21 @@ class pivotState
     public function getFilters()
     {
         if(empty($this->pivotFilters)) return $this->filters;
+
+        $pivotFilters = array();
+        foreach($this->pivotFilters as $pivotFilter) $pivotFilters = array_merge($pivotFilters, $pivotFilter);
+
+        $filterValues = array();
+        foreach($pivotFilters as $pivotFilter) $filterValues[$pivotFilter['name']] = $pivotFilter['value'];
+
+        $filters = array();
+        foreach($this->filters as $filter)
+        {
+            if(isset($filterValues[$filter['field']])) $filter['default'] = $filterValues[$filter['field']];
+            $filters[] = $filter;
+        }
+
+        return $filters;
     }
 
     /**
