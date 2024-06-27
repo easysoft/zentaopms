@@ -4,6 +4,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'sidebar' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'dropdown' . DS . 'v1.php';
 
 class moduleMenu extends wg
 {
@@ -228,17 +229,17 @@ class moduleMenu extends wg
         if(empty($items)) return null;
         if(empty($this->prop('items'))) return $items;
 
-        return dropdown
+        return new dropdown
         (
-            btn
+            new btn
             (
-                setClass('ghost absolute right-1.5 top-1'),
+                set::type('ghost'),
                 set::icon('cog-outline'),
                 set::size('sm'),
                 set::caret(false)
             ),
             set::items($items),
-            set::placement('bottom-end')
+            set::placement('top-end')
         );
     }
 
@@ -289,6 +290,10 @@ class moduleMenu extends wg
             $this->buildCloseBtn()
         ) : null;
 
+        $actions           = $this->buildActions();
+        $hasActionDropdown = $actions && $actions instanceof dropdown;
+        $hasToggleBtn      = $this->prop('toggleSidebar');
+
         return array
         (
             $isInSidebar ? $header : null,
@@ -301,7 +306,7 @@ class moduleMenu extends wg
                 zui::tree
                 (
                     set::_tag('menu'),
-                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden pr-2 pl-4'),
+                    set::_class('tree tree-lines col flex-auto scrollbar-hover overflow-y-auto overflow-x-hidden pr-2 pl-4'),
                     set::defaultNestedShow(true),
                     set::hover(true),
                     set::lines(true),
@@ -309,19 +314,20 @@ class moduleMenu extends wg
                     set($treeProps),
                     set($userTreeProps)
                 ),
-                $this->buildActions(),
+                $hasActionDropdown ? null : $actions,
                 $this->block('footer'),
-                $this->prop('toggleSidebar') ? row
+                ($hasActionDropdown || $hasToggleBtn) ? row
                 (
                     setClass('justify-end p-1 flex-none'),
-                    btn
+                    $hasActionDropdown ? $actions : div(),
+                    $hasToggleBtn ? btn
                     (
                         set::type('ghost'),
                         set::size('sm'),
                         set::icon('menu-arrow-left text-gray'),
                         set::hint($app->lang->collapse),
                         on::click()->do('$this.closest(".sidebar").sidebar("toggle");')
-                    )
+                    ) : null
                 ) : null,
                 $isInSidebar && !empty($header) ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
             ),
