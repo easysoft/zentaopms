@@ -1636,6 +1636,7 @@ class repoModel extends model
             ->andWhere('objectID')->eq($action->objectID)
             ->andWhere('extra')->eq($action->extra)
             ->andWhere('action')->eq($action->action)
+            ->andWhere('comment')->eq($action->comment)
             ->fetch();
         if($record)
         {

@@ -13,7 +13,7 @@ cid=1
 - 保存一条记录
  - 属性action @gitcommited
  - 属性extra @61e51cadb1
-- 更新已有记录属性actor @admin
+- 更新已有记录属性actor @user4
 - 查看历史记录属性field @git
 
 */
@@ -49,6 +49,6 @@ $repo = new repoTest();
 r($repo->saveRecordTest($action, $log, $repoRoot, $scm)) && p('action,extra') && e('gitcommited,61e51cadb1'); //保存一条记录
 
 $action->actor = 'admin';
-r($repo->saveRecordTest($action, $log, $repoRoot, $scm)) && p('actor') && e('admin'); //更新已有记录
+r($repo->saveRecordTest($action, $log, $repoRoot, $scm)) && p('actor') && e('user4'); //更新已有记录
 
 r($repo->saveRecordTest($action, $log, $repoRoot, $scm, true)) && p('field') && e('git'); //查看历史记录
