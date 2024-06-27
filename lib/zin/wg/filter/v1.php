@@ -27,7 +27,7 @@ class filter extends wg
 
     protected function buildPicker(): picker
     {
-        list($name, $value, $items, $menu, $multiple) = $this->prop(array('name', 'value', 'items', 'menu', 'multiple'));
+        list($name, $value, $items, $menu, $multiple, $onChange) = $this->prop(array('name', 'value', 'items', 'menu', 'multiple', 'onChange'));
 
         return picker
         (
@@ -36,42 +36,46 @@ class filter extends wg
             set::value($value),
             set::items($items),
             set::menu($menu),
-            set::multiple($multiple)
+            set::multiple($multiple),
+            on::change("$onChange(e, '$name')")
         );
     }
 
     protected function buildDatePicker(): datePicker|array
     {
-        list($name, $value) = $this->prop(array('name', 'value'));
+        list($name, $value, $onChange) = $this->prop(array('name', 'value', 'onChange'));
 
         return datePicker
         (
             setClass('w-full'),
             set::name($name),
-            set::value($value)
+            set::value($value),
+            on::change("$onChange(e, '$name')")
         );
     }
 
     protected function buildDatetimePicker(): datetimePicker|array
     {
-        list($name, $value) = $this->prop(array('name', 'value'));
+        list($name, $value, $onChange) = $this->prop(array('name', 'valuea', 'onChange'));
 
         return datetimePicker
         (
             setClass('w-full'),
             set::name($name),
-            set::value($value)
+            set::value($value),
+            on::change("$onChange(e, '$name')")
         );
     }
 
     protected function buildInput(): input
     {
-        list($name, $value) = $this->prop(array('name', 'value'));
+        list($name, $value, $onChange) = $this->prop(array('name', 'value', 'onChange'));
 
         return input
         (
             set::name($name),
-            set::value($value)
+            set::value($value),
+            on::change("$onChange(e, '$name')")
         );
     }
 
@@ -92,8 +96,7 @@ class filter extends wg
         (
             setClass("filter filter-{$type} pr-4 mb-2 {$class}"),
             $this->prop('title'),
-            $this->buildControl($type),
-            on::change($this->prop('onChange'))
+            $this->buildControl($type)
         );
     }
 }

@@ -24,7 +24,7 @@ class resultFilter extends filter
     {
         global $lang;
 
-        list($name, $value) = $this->prop(array('name', 'value'));
+        list($name, $value, $onChange) = $this->prop(array('name', 'value', 'onChange'));
 
         return array
         (
@@ -32,14 +32,16 @@ class resultFilter extends filter
             (
                 setClass('w-full'),
                 set::name($name . '_begin'),
-                set::value(zget($value, 'begin', ''))
+                set::value(zget($value, 'begin', '')),
+                on::change("$onChange(e, '{$name}_begin')")
             ),
             $lang->to,
             datePicker
             (
                 setClass('w-full'),
-                set::name($name . '_begin'),
-                set::value(zget($value, 'end', ''))
+                set::name($name . '_end'),
+                set::value(zget($value, 'end', '')),
+                on::change("$onChange(e, '{$name}_end')")
             )
         );
     }
@@ -48,7 +50,7 @@ class resultFilter extends filter
     {
         global $lang;
 
-        list($name, $value) = $this->prop(array('name', 'value'));
+        list($name, $value, $onChange) = $this->prop(array('name', 'value', 'onChange'));
 
         return array
         (
@@ -56,14 +58,16 @@ class resultFilter extends filter
             (
                 setClass('w-full'),
                 set::name($name . '_begin'),
-                set::value(zget($value, 'begin', ''))
+                set::value(zget($value, 'begin', '')),
+                on::change("$onChange(e, '{$name}_begin')")
             ),
             $lang->to,
             datetimePicker
             (
                 setClass('w-full'),
                 set::name($name . '_end'),
-                set::value(zget($value, 'end', ''))
+                set::value(zget($value, 'end', '')),
+                on::change("$onChange(e, '{$name}_end')")
             )
         );
     }
