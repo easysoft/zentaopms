@@ -249,19 +249,20 @@ class pivotState
      */
     public function getFilters()
     {
-        if(empty($this->pivotFilters)) return $this->filters;
-
-        $pivotFilters = array();
-        foreach($this->pivotFilters as $pivotFilter) $pivotFilters = array_merge($pivotFilters, $pivotFilter);
-
-        $filterValues = array();
-        foreach($pivotFilters as $pivotFilter) $filterValues[$pivotFilter['name']] = $pivotFilter['value'];
-
         $filters = array();
+        $filterValues = array();
+
+        if(!empty($this->pivotFilters))
+        {
+            $pivotFilters = array();
+            foreach($this->pivotFilters as $pivotFilter) $pivotFilters = array_merge($pivotFilters, $pivotFilter);
+            foreach($pivotFilters as $pivotFilter) $filterValues[$pivotFilter['name']] = $pivotFilter['value'];
+        }
+
         foreach($this->filters as $filter)
         {
             if(isset($filterValues[$filter['field']])) $filter['default'] = $filterValues[$filter['field']];
-            $filters[] = $filter;
+            $filters[$filter['field']] = $filter;
         }
 
         return $filters;
@@ -275,7 +276,8 @@ class pivotState
      */
     public function completeSettings()
     {
-        if(!isset($this->settings['summary'])) $this->settings['summary'] = 'use';
+        $settings = $this->settings;
+        if(!isset($settings['summary']) || $settings['summary'] !== 'notuse') $this->settings['summary'] = 'use';
     }
 
     /**
