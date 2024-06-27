@@ -81,7 +81,7 @@ class testresultsEntry extends entry
                 $results[$stepID] = $step->result;
                 $reals[$stepID]   = $step->real;
             }
-            $this->setPost('steps',  $results);
+            $this->setPost('result',  $results);
             $this->setPost('reals',  $reals);
         }
 
@@ -115,6 +115,7 @@ class testresultsEntry extends entry
             $run->case = $this->loadModel('testcase')->getById($caseID, $version);
         }
 
+        $caseIDList = array();
         foreach($run->case->steps as $key => $step)
         {
             /* Unset step if step is a group. */
@@ -122,8 +123,9 @@ class testresultsEntry extends entry
             {
                 unset($run->case->steps[$key]);
             }
+            $caseIDList[] = $step->id;
         }
 
-        return array($run->id, array_keys($run->case->steps));
+        return array($run->id, $caseIDList);
     }
 }
