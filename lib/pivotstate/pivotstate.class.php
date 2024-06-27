@@ -317,6 +317,8 @@ class pivotState
                     if( empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => '<',       'value' => "'{$end}'");
                     if(!empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => 'BETWEEN', 'value' => "'{$begin}' AND '{$end}'");
                     break;
+                default:
+                    break;
             }
         }
 
