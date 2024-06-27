@@ -262,8 +262,9 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     unset($plans[''], $lang->story->stageList[''], $users['']);
 
     /* Generate dropdown menu items for the DataTable footer toolbar.*/
-    $planItems  = $planItems ?? array();
-    $gradeItems = array();
+    $planItems    = $planItems ?? array();
+    $gradeItems   = array();
+    $roadmapItems = array();
     foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=$key"));
     foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeGrade', "result=$key"));
     foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=reject&reason=$key"));
