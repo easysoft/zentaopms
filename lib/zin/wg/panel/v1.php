@@ -40,9 +40,9 @@ class panel extends wg
 
     protected function buildHeadingActions(): ?node
     {
-        $actionsBlock        = $this->block('headingActions');
         $actions             = $this->getHeadingActions();
         $headingActionsClass = $this->prop('headingActionsClass');
+        $actionsBlock        = $this->block('headingActions');
 
         if(empty($actions) && empty($actionsBlock)) return null;
 
