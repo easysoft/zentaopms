@@ -1,7 +1,9 @@
 .think-result-content .form-control {background: #fff; cursor: unset !important;}
 .think-result-content .step-title>div>*, .think-result-content .form-group .icon {display: none;}
-.think-result-content .think-check-list .item-control {cursor: unset;}
+.think-result-content .think-check-list .item-control,
+.think-result-content .think-check-list .item-control input {cursor: unset !important;}
 .think-result-content .think-check-list .item-control:not(.is-checked):hover {border-color: inherit;}
+.think-result-content .think-check-list .item-control textarea {resize: none;}
 
 .think-result-content .bg-think-blue-100 {background-color: #cfe7fe;}
 .think-result-content .text-think-blue {color: #2294FB;}
