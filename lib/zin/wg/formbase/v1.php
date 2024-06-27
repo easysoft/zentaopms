@@ -45,7 +45,7 @@ class formBase extends wg
         $this->setDefaultProps(array('actions' => $actions));
     }
 
-    protected function buildActions(): node|null
+    protected function buildActions(): node|array|null
     {
         if($this->hasBlock('actions')) return $this->block('actions');
 
