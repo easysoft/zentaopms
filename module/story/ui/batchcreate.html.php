@@ -90,6 +90,7 @@ if($storyID > 0 && $story->type != 'story' && $config->{$story->type}->gradeRule
 
     if($story->type == 'epic')        unset($lang->story->typeList['story']);
     if($story->type == 'requirement') unset($lang->story->typeList['epic']);
+    if($story->type == 'requirement' && $config->vision == 'or') unset($lang->story->typeList['story']);
 
     $storyTypeRadio = radioList
     (

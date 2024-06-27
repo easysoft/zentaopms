@@ -3689,7 +3689,7 @@ class storyModel extends model
                 $myself = new self();
                 static $getMaxGradeGroup;
                 if(empty($getMaxGradeGroup)) $getMaxGradeGroup = $myself->getMaxGradeGroup();
-                if(!empty($story->grade) && $story->grade >= $getMaxGradeGroup[$story->type]) return false;
+                if(!empty($story->grade) && $story->type == 'requirement' && $story->grade >= $getMaxGradeGroup[$story->type]) return false;
             }
 
             if(!empty($story->twins))   return false;

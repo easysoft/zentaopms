@@ -253,7 +253,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent');
     $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchChangeRoadmap = $canBeChanged && hasPriv('story', 'batchChangeRoadmap') && $config->vision == 'or';
+    $canBatchChangeRoadmap = $canBeChanged && hasPriv('story', 'batchChangeRoadmap') && $config->vision == 'or' && $storyType == 'requirement';
     $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
 
     /* Remove empty data from data list. */
