@@ -553,6 +553,29 @@ class cneModel extends model
     }
 
     /**
+     * 查询应用的数据卷。
+     * Get app volumes.
+     *
+     * @link   https://yapi.qc.oop.cc/project/21/interface/api/168
+     * @param  object $instance
+     * @return object|false
+     */
+    public function getAppVolumes(object $instance): object|false
+    {
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+        $apiParams->channel   = $this->config->CNE->api->channel;
+
+        $apiUrl = "/api/cne/app/volumes";
+        $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        if(!$result || $result->code != 200) return false;
+
+        return $result->data;
+    }
+
+    /**
      * 按实例获取设置映射。
      * Get settings mapping by instance.
      *
