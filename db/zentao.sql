@@ -16201,7 +16201,7 @@ CREATE TABLE `zt_demand` (
   `reviewedBy` text NULL,
   `reviewedDate` datetime NULL,
   `status` char(30) NOT NULL DEFAULT '',
-  `stage` enum('wait','distributed','inroadmap','projected','developing','delivering','delivered','closed') NOT NULL DEFAULT 'wait',
+  `stage` enum('wait','distributed','inroadmap','incharter','developing','delivering','delivered','closed') NOT NULL DEFAULT 'wait',
   `duration` char(30) NOT NULL DEFAULT '',
   `BSA` char(30) NOT NULL DEFAULT '',
   `story` mediumint(8) NOT NULL DEFAULT '0',

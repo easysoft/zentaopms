@@ -91,7 +91,7 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 
 UPDATE `zt_workflowdatasource` SET `datasource` = 'select id,title from zt_story where deleted=\"0\" and type=\"story\"' WHERE `code` = 'stories';
 
-ALTER TABLE `zt_demand` ADD `stage` enum('wait','distributed','inroadmap','projected','developing','delivering','delivered','closed') NOT NULL DEFAULT 'wait' AFTER `status`;
+ALTER TABLE `zt_demand` ADD `stage` enum('wait','distributed','inroadmap','incharter','developing','delivering','delivered','closed') NOT NULL DEFAULT 'wait' AFTER `status`;
 
 ALTER TABLE `zt_pivot` ADD `driver` enum('mysql', 'duckdb') not NULL default 'mysql' AFTER `code`;
 ALTER TABLE `zt_chart` ADD `driver` enum('mysql', 'duckdb') not NULL default 'mysql' AFTER `code`;
