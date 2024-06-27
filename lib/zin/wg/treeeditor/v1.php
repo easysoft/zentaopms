@@ -63,7 +63,8 @@ class treeEditor extends wg
 
         foreach($items as $key => $item)
         {
-            $item = (array)$item;
+            $item         = (array)$item;
+            $itemCanSplit = isset($item['canSplit']) ? $item['canSplit'] : $canSplit;
             if(!isset($item['content']))
             {
                 if(!isset($item['text'])) $item['text'] = $item['name'];
@@ -86,8 +87,8 @@ class treeEditor extends wg
                     $item['actions'] = array();
                     $item['actions']['items'] = array();
 
-                    if($canEdit)  $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . ($viewType ? $viewType : $item['type'])));
-                    if($canSplit) $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
+                    if($canEdit)      $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . ($viewType ? $viewType : $item['type'])));
+                    if($itemCanSplit) $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }
                 else
                 {
@@ -96,9 +97,9 @@ class treeEditor extends wg
                     if(!isset($item['actions']))          $item['actions']          = array();
                     if(!isset($item['actions']['items'])) $item['actions']['items'] = array();
 
-                    if($canEdit)   $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . $item['type']));
-                    if($canDelete) $item['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'url' => createLink('tree', 'delete', 'module=' . $item['id']));
-                    if($canSplit)  $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
+                    if($canEdit)       $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . $item['type']));
+                    if($canDelete)     $item['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'url' => createLink('tree', 'delete', 'module=' . $item['id']));
+                    if($itemCanSplit)  $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }
             }
 
