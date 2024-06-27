@@ -387,13 +387,17 @@ class pivotState
     public function setFieldSettings($settings)
     {
         $settings      = (array)$settings;
-        $fieldSettings = array();
+        $fromCreate    = empty($this->fieldSettings);
+        $fieldSettings = !$fromCreate ? array() : $settings;
 
-        foreach($settings as $field => $setting)
+        if(!$fromCreate)
         {
-            if(isset($this->fieldSettings[$field]))
+            foreach($settings as $field => $setting)
             {
-                $fieldSettings[$field] = array_merge($this->fieldSettings[$field], array('name' => $field));
+                if(isset($this->fieldSettings[$field]))
+                {
+                    $fieldSettings[$field] = array_merge($this->fieldSettings[$field], array('name' => $field));
+                }
             }
         }
 
