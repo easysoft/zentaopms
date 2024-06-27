@@ -287,6 +287,18 @@ class pivotState
             $type    = $filter['type'];
 
             if($from == 'query' || empty($default)) continue;
+
+            switch($type)
+            {
+                case 'select':
+                    if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
+                    $value = "('" . $default . "')";
+                    $filterWheres[$field] = array('operator' => 'IN', 'value' => $value);
+                    break;
+                case 'input':
+                    $filterWheres[$field] = array('operator' => 'LIKE', 'value' => "'%$default%'");
+                    break;
+            }
         }
 
         return $filterWheres;
