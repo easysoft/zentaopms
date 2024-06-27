@@ -86,7 +86,7 @@ $lang->release->exportTypeList['story']   = $lang->release->stories;
 $lang->release->exportTypeList['bug']     = $lang->release->bugs;
 $lang->release->exportTypeList['leftbug'] = $lang->release->leftBugs;
 
-$lang->release->statusList['']          = '';
+$lang->release->statusList['wait']      = '未开始';
 $lang->release->statusList['normal']    = '已发布';
 $lang->release->statusList['terminate'] = '停止维护';
 
@@ -106,6 +106,7 @@ $lang->release->notifyList['PT'] = "所在{$lang->projectCommon}团队成员";
 $lang->release->notifyList['CT'] = "抄送给";
 
 $lang->release->featureBar['browse']['all']       = '全部';
+$lang->release->featureBar['browse']['wait']      = $lang->release->statusList['wait'];
 $lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
 $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];
 

@@ -93,6 +93,18 @@ formPanel
             set::control('date')
         )
     ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/4'),
+            set::name('status'),
+            set::label($lang->release->status),
+            set::control(array('control' => 'picker', 'required' => true)),
+            set::value($status),
+            set::items($lang->release->statusList)
+        )
+    ),
     formGroup
     (
         set::label($lang->release->desc),

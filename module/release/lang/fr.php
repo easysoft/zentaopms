@@ -86,7 +86,7 @@ $lang->release->exportTypeList['story']   = $lang->release->stories;
 $lang->release->exportTypeList['bug']     = $lang->release->bugs;
 $lang->release->exportTypeList['leftbug'] = $lang->release->leftBugs;
 
-$lang->release->statusList['']          = '';
+$lang->release->statusList['wait']      = 'Wait';
 $lang->release->statusList['normal']    = 'Released';
 $lang->release->statusList['terminate'] = 'Terminée';
 
@@ -106,6 +106,7 @@ $lang->release->notifyList['PT'] = "{$lang->projectCommon} Team Members";
 $lang->release->notifyList['CT'] = "Copy To";
 
 $lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['wait']      = $lang->release->statusList['wait'];
 $lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
 $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];
 

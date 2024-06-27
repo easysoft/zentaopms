@@ -94,10 +94,11 @@ class release extends control
      *
      * @param  int    $productID
      * @param  string $branch
+     * @param  string $status
      * @access public
      * @return void
      */
-    public function create(int $productID, string $branch = 'all')
+    public function create(int $productID, string $branch = 'all', string $status = 'wait')
     {
         if(!empty($_POST))
         {
@@ -132,6 +133,7 @@ class release extends control
         $this->view->builds      = $builds;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease = $this->release->getLast($productID, (int)$branch);
+        $this->view->status      = $status;
 
         $this->display();
     }

@@ -69,6 +69,7 @@ formPanel
             set::width('1/4'),
             set::name('status'),
             set::label($lang->release->status),
+            set::control(array('control' => 'picker', 'required' => true)),
             set::value($release->status),
             set::items($lang->release->statusList)
         )
