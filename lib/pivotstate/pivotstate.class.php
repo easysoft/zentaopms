@@ -434,6 +434,26 @@ class pivotState
     }
 
     /**
+     * Standard params.
+     *
+     * @access public
+     * @return void
+     */
+    public function standardParams()
+    {
+        if(!empty($this->settings))
+        {
+            foreach($this->settings as $id => $setting)
+            {
+                $setting['monopolize'] = (int)$setting['monopolize'];
+                $setting['showOrigin'] = (int)$setting['showOrigin'];
+
+                $this->settings[$id] = $setting;
+            }
+        }
+    }
+
+    /**
      * Clear properies before query sql.
      *
      * @access public
