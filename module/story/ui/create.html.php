@@ -97,6 +97,8 @@ jsVar('langSource', $lang->story->source);
 jsVar('langSourceNote', $lang->story->sourceNote);
 jsVar('feedbackSource', $config->story->feedbackSource);
 
+$pinnedItems = !empty($this->config->{$type}->custom->createFields) ? $this->config->{$type}->custom->createFields : array();
+
 formGridPanel
 (
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
@@ -113,7 +115,7 @@ formGridPanel
         !isInModal() ? array('text' => $lang->goback, 'back' => true) : null
     )),
     set::fields($createFields),
-    set::pinnedItems($this->config->{$type}->custom->createFields),
+    set::pinnedItems($pinnedItems),
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=module]', 'loadURS'),
     on::change('[name=parent]', 'loadGrade'),
