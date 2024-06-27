@@ -65,9 +65,9 @@ class affected extends wg
                     set::active(true),
                     empty($affectedProjects) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : $affectedProjects
                 ),
-                empty($stories) ? null : tabPane
+                tabPane
                 (
-                    to::suffix(label(count($stories))),
+                    to::suffix(label(empty($stories) ? 0 : count($stories))),
                     set::key('affectedStories'),
                     set::title($lang->story->affectedStories),
                     empty($stories) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
@@ -79,7 +79,7 @@ class affected extends wg
                 ),
                 tabPane
                 (
-                    to::suffix(label(count($bugs))),
+                    to::suffix(label(empty($bugs) ? 0 : count($bugs))),
                     set::key('affectedBugs'),
                     set::title($lang->story->affectedBugs),
                     empty($bugs) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
@@ -91,7 +91,7 @@ class affected extends wg
                 ),
                 tabPane
                 (
-                    to::suffix(label(count($cases))),
+                    to::suffix(label(empty($cases) ? 0 : count($cases))),
                     set::key('affectedCases'),
                     set::title($lang->story->affectedCases),
                     empty($cases) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
