@@ -286,6 +286,8 @@ class pivotState
     {
         $settings = $this->settings;
         if(!isset($settings['summary']) || $settings['summary'] !== 'notuse') $this->settings['summary'] = 'use';
+        if(!isset($settings['group1']))  $this->settings['group1'] = '';
+        if(!isset($settings['columns'])) $this->settings['columns'][] = array('field' => '', 'slice' => 'noSlice', 'stat' => '', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
     }
 
     /**
