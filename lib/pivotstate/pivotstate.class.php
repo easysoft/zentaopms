@@ -269,7 +269,9 @@ class pivotState
 
         foreach($this->filters as $filter)
         {
-            if(isset($filterValues[$filter['field']])) $filter['default'] = $filterValues[$filter['field']];
+            $value = $filterValues[$filter['field']];
+            if(is_array($value)) $value = array_filter($value);
+            if(isset($filterValues[$filter['field']])) $filter['default'] = $value;
             $filters[$filter['field']] = $filter;
         }
 
