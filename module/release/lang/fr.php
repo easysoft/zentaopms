@@ -70,7 +70,7 @@ $lang->release->mailto         = 'Mailto';
 $lang->release->mailContent    = '<p>Dear users,</p><p style="margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
 $lang->release->storyList      = '<p style="margin-left: 30px;">Story List：%s。</p>';
 $lang->release->bugList        = '<p style="margin-left: 30px;">Bug List：%s。</p>';
-$lang->release->pageAllSummary = 'Total releases: <strong>%s</strong>, Normal: <strong>%s</strong>, Terminate: <strong>%s</strong>.';
+$lang->release->pageAllSummary = 'Total releases: <strong>%s</strong>, Released: <strong>%s</strong>, Terminate: <strong>%s</strong>.';
 $lang->release->pageSummary    = "Total releases: <strong>%s</strong>.";
 $lang->release->fileName       = 'File name';
 $lang->release->exportRange    = 'Data to export';
@@ -87,7 +87,7 @@ $lang->release->exportTypeList['bug']     = $lang->release->bugs;
 $lang->release->exportTypeList['leftbug'] = $lang->release->leftBugs;
 
 $lang->release->statusList['']          = '';
-$lang->release->statusList['normal']    = 'Normale';
+$lang->release->statusList['normal']    = 'Released';
 $lang->release->statusList['terminate'] = 'Terminée';
 
 $lang->release->changeStatusList['normal']    = 'Active';

@@ -31,5 +31,5 @@ $lang->projectrelease->product          = $lang->productCommon;
 $lang->projectrelease->name             = "Name";
 
 $lang->projectrelease->featureBar['browse']['all']       = 'All';
-$lang->projectrelease->featureBar['browse']['normal']    = 'Active';
+$lang->projectrelease->featureBar['browse']['normal']    = 'Released';
 $lang->projectrelease->featureBar['browse']['terminate'] = 'Terminated';
