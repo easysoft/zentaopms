@@ -29,8 +29,8 @@ class story extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
-        $this->loadModel('requirement');
         $this->loadModel('epic');
+        $this->loadModel('requirement');
 
         if($this->app->rawModule == 'projectstory') $this->app->tab = 'project';
     }
@@ -53,6 +53,8 @@ class story extends control
      */
     public function create(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
     {
+        $this->app->loadConfig($storyType, '', true);
+
         /* Set menu. */
         $this->story->replaceURLang($storyType);
         $copyStoryID = $storyID;
@@ -132,6 +134,7 @@ class story extends control
      */
     public function batchCreate(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $executionID = 0, int $plan = 0, string $storyType = 'story', string $extra = '')
     {
+        $this->app->loadConfig($storyType, '', true);
         $this->story->replaceURLang($storyType);
 
         if(!empty($_POST))
@@ -177,7 +180,7 @@ class story extends control
 
         /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
         $customFields = $this->storyZen->getCustomFields($this->config, $storyType, $this->view->hiddenPlan, $product);
-        $showFields   = $this->storyZen->getShowFields($this->config->story->custom->batchCreateFields, $storyType, $product);
+        $showFields   = $this->storyZen->getShowFields($this->config->{$storyType}->custom->batchCreateFields, $storyType, $product);
 
         $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID, $storyType);
         $fields = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '');

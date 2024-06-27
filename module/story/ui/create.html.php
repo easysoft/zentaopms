@@ -28,7 +28,7 @@ if((isset($fields['branch']) && $type == 'story') || $type != 'story')
     $createFields->field('sourceNote')->width('1/2');
 }
 
-if(isset($this->config->story->custom->createFields));
+if(isset($this->config->{$type}->custom->createFields));
 {
     $customCreateFields = ',' . $this->config->story->custom->createFields . ',';
     if(str_contains($customCreateFields, ',source,')) $createFields->field('sourceNote')->pinned();
@@ -113,6 +113,7 @@ formGridPanel
         !isInModal() ? array('text' => $lang->goback, 'back' => true) : null
     )),
     set::fields($createFields),
+    set::pinnedItems($this->config->{$type}->custom->createFields),
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=module]', 'loadURS'),
     on::change('[name=parent]', 'loadGrade'),

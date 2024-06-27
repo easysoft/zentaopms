@@ -25,7 +25,7 @@ data('gradeRule', $gradeRule);
 
 !isAjaxRequest() && dropmenu();
 
-foreach(explode(',', $this->config->story->create->requiredFields) as $requiredField)
+foreach(explode(',', $this->config->{$type}->create->requiredFields) as $requiredField)
 {
     if(isset($customFields[$requiredField]) and strpos(",{$showFields},", ",{$requiredField},") === false) $showFields .= ',' . $requiredField;
 }

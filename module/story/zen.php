@@ -1864,11 +1864,11 @@ class storyZen extends story
 
         if($product->type != 'normal')
         {
-            $config->story->custom->batchCreateFields = sprintf($config->story->custom->batchCreateFields, $product->type);
+            $config->{$storyType}->custom->batchCreateFields = sprintf($config->story->custom->batchCreateFields, $product->type);
         }
         else
         {
-            $config->story->custom->batchCreateFields = trim(sprintf($config->story->custom->batchCreateFields, ''), ',');
+            $config->{$storyType}->custom->batchCreateFields = trim(sprintf($config->story->custom->batchCreateFields, ''), ',');
         }
 
         return $customFields;

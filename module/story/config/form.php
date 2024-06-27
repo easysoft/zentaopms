@@ -75,7 +75,7 @@ $config->story->form->edit['duplicateStory'] = array('type' => 'int',     'contr
 $config->story->form->batchCreate = array();
 $config->story->form->batchCreate['branch']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['module']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
-$config->story->form->batchCreate['plan']       = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['plan']       = array('ditto' => true,  'type' => 'array',  'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array(), 'filter' => 'join');
 $config->story->form->batchCreate['parent']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['grade']      = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '136px', 'default' => 1,  'options' => array());
 $config->story->form->batchCreate['assignedTo'] = array('ditto' => false, 'type' => 'string', 'control' => 'select',    'required' => false, 'width' => '136px', 'default' => '', 'options' => 'users');
