@@ -441,14 +441,14 @@ class pivotState
      */
     public function standardParams()
     {
-        if(!empty($this->settings))
+        if(!empty($this->settings->columns))
         {
-            foreach($this->settings as $id => $setting)
+            foreach($this->settings->columns as $id => $column)
             {
-                $setting['monopolize'] = (int)$setting['monopolize'];
-                $setting['showOrigin'] = (int)$setting['showOrigin'];
+                $column['monopolize'] = (int)$column['monopolize'];
+                $column['showOrigin'] = (int)$column['showOrigin'];
 
-                $this->settings[$id] = $setting;
+                $this->settings->columns[$id] = $column;
             }
         }
     }
