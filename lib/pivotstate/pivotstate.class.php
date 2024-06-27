@@ -279,6 +279,24 @@ class pivotState
     }
 
     /**
+     * Get field options.
+     *
+     * @param  string    $lang
+     * @access public
+     * @return array
+     */
+    public function getFieldOptions($lang)
+    {
+        $options = array();
+        foreach($this->fieldSettings as $settings)
+        {
+            $options[] = array('text' => isset($settings[$lang]) ? $settings[$lang] : $settings['name'], 'value' => $settings['name'], 'key' => $settings['name']);
+        }
+
+        return $options;
+    }
+
+    /**
      * Update from $_POST.
      *
      * @param  array    $post
