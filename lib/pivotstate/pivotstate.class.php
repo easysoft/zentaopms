@@ -384,7 +384,7 @@ class pivotState
      */
     public function getSettingColumns()
     {
-        return $this->settings->columns;
+        return $this->settings['columns'];
     }
 
     /**
