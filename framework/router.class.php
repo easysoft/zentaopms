@@ -395,12 +395,13 @@ class router extends baseRouter
      *
      * @param   string $moduleName     module name
      * @param   string $appName        app name
+     * @param   bool   $force          force to load
      * @access  public
      * @return  void
      */
-    public function loadModuleConfig($moduleName, $appName = '')
+    public function loadModuleConfig($moduleName, $appName = '', $force = false)
     {
-        if(isset(self::$loadedConfigs[$moduleName])) return false;
+        if(isset(self::$loadedConfigs[$moduleName]) && !$force) return false;
 
         self::$loadedConfigs[$moduleName] = $moduleName;
 
@@ -457,12 +458,13 @@ class router extends baseRouter
      *
      * @param  string $moduleName
      * @param  string $appName
+     * @param  bool   $force
      * @access public
      * @return void
      */
-    public function loadConfig($moduleName, $appName = '')
+    public function loadConfig($moduleName, $appName = '', $force = false)
     {
-        return $this->loadModuleConfig($moduleName);
+        return $this->loadModuleConfig($moduleName, $appName, $force);
     }
 
     /**
