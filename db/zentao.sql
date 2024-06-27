@@ -3002,7 +3002,7 @@ CREATE TABLE IF NOT EXISTS `zt_attend` (
   `signIn` time NULL,
   `signOut` time NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
-  `ip` varchar(15) NOT NULL DEFAULT '',
+  `ip` varchar(100) NOT NULL DEFAULT '',
   `device` varchar(30) NOT NULL DEFAULT '',
   `client` varchar(20) NOT NULL DEFAULT '',
   `manualIn` time NULL,
