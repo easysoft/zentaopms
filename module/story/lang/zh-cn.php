@@ -252,6 +252,8 @@ if($config->systemMode == 'PLM')
 $lang->story->stageList['']           = '';
 $lang->story->stageList['defining']   = '定义中';
 $lang->story->stageList['wait']       = '未开始';
+$lang->story->stageList['inroadmap']  = '已设路标';
+$lang->story->stageList['incharter']  = 'Charter立项';
 $lang->story->stageList['planning']   = '规划中';
 $lang->story->stageList['planned']    = "已计划";
 $lang->story->stageList['projected']  = '已立项';

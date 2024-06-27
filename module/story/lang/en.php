@@ -252,6 +252,8 @@ if($config->systemMode == 'PLM')
 $lang->story->stageList['']           = '';
 $lang->story->stageList['defining']   = 'Defining';
 $lang->story->stageList['wait']       = 'Waiting';
+$lang->story->stageList['inroadmap']  = 'In Roadmap';
+$lang->story->stageList['incharter']  = 'In Charter';
 $lang->story->stageList['planning']   = 'Planning';
 $lang->story->stageList['planned']    = 'Planned';
 $lang->story->stageList['projected']  = 'Projected';

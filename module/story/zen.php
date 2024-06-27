@@ -628,6 +628,8 @@ class storyZen extends story
         /* 设置默认值。 */
         if(empty($fields['reviewer']['default'])) $fields['reviewer']['default'] = implode(',', array_keys($reviewerList));
 
+        if($story->type == 'story') unset($fields['stage']['options']['inroadmap'], $fields['stage']['options']['incharter']);
+
         $this->view->users          = $users;
         $this->view->storyReviewers = array_keys($reviewerList);
         $this->view->gradeRule      = $this->config->{$story->type}->gradeRule;
