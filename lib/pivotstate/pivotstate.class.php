@@ -280,6 +280,22 @@ class pivotState
     }
 
     /**
+     * Complete filters default.
+     *
+     * @access public
+     * @return void
+     */
+    public function completeFiltersDefault()
+    {
+        $queryDefaults  = array('select' => '', 'input' => '', 'date' => '', 'datetime' => '');
+        $resultDefaults = array('select' => array(), 'input' => '', 'date' => array('begin' => '', 'end' => ''), 'datetime' => array('begin' => '', 'end' => ''));
+        foreach($this->filters as $index => $filter)
+        {
+            if(isset($filter['default'])) continue;
+        }
+    }
+
+    /**
      * Convert filters to where conditions.
      *
      * @param  array    $filters
@@ -432,6 +448,7 @@ class pivotState
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
+        $this->completeFiltersDefault();
     }
 
     /**
