@@ -1660,11 +1660,10 @@ class baseRouter
      * 引入 control 文件。
      * Import control file.
      *
-     * @param  string $moduleName
      * @access public
      * @return string
      */
-    public function importControlFile($moduleName)
+    public function importControlFile()
     {
         $moduleName = $this->moduleName;
 
@@ -1702,7 +1701,7 @@ class baseRouter
         $moduleName = $this->moduleName;
         $methodName = $this->methodName;
 
-        $file2Included = $this->importControlFile($moduleName);
+        $file2Included = $this->importControlFile();
         $className     = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
         if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, true);
 

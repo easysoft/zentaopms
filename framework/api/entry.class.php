@@ -295,7 +295,7 @@ class baseEntry
             $this->checkPriv();
 
             $app->setControlFile();
-            $app->importControlFile($moduleName);
+            $app->importControlFile();
         }
 
         /*
