@@ -664,9 +664,10 @@ class releaseModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'notify') return $release->bugs || $release->stories;
-        if($action == 'play')   return $release->status == 'terminate';
-        if($action == 'pause')  return $release->status == 'normal';
+        if($action == 'notify')  return $release->bugs || $release->stories;
+        if($action == 'play')    return $release->status == 'terminate';
+        if($action == 'pause')   return $release->status == 'normal';
+        if($action == 'publish') return $release->status == 'wait';
         return true;
     }
 

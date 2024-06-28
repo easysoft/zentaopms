@@ -31,6 +31,7 @@ $lang->release->noRelease          = 'Keine Releases. ';
 $lang->release->errorDate          = 'The release date should not be greater than today.';
 $lang->release->confirmActivate    = 'Do you want to activate this release?';
 $lang->release->confirmTerminate   = 'Do you want to pause this release?';
+$lang->release->confirmPublish     = 'Do you want to publish this release?';
 
 $lang->release->basicInfo = 'Basis Info';
 
@@ -90,6 +91,7 @@ $lang->release->statusList['wait']      = 'Wait';
 $lang->release->statusList['normal']    = 'Released';
 $lang->release->statusList['terminate'] = 'Terminiert';
 
+$lang->release->changeStatusList['wait']      = 'Release';
 $lang->release->changeStatusList['normal']    = 'Aktiviert';
 $lang->release->changeStatusList['terminate'] = 'Terminiert';
 

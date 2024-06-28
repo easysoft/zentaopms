@@ -30,6 +30,14 @@ $config->release->actionList['unlinkLeftBug']['icon'] = 'unlink';
 $config->release->actionList['unlinkLeftBug']['hint'] = $lang->release->unlinkBug;
 $config->release->actionList['unlinkLeftBug']['url']  = 'javascript: unlinkObject("leftBug", "{id}")';
 
+$config->release->actionList['publish']['icon']         = 'publish';
+$config->release->actionList['publish']['text ']        = $this->lang->release->changeStatusList['wait'];
+$config->release->actionList['publish']['hint']         = $this->lang->release->changeStatusList['wait'];
+$config->release->actionList['publish']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&status=normal');
+$config->release->actionList['publish']['notLoadModel'] = true;
+$config->release->actionList['publish']['className']    = 'ajax-submit';
+$config->release->actionList['publish']['data-confirm'] = array('message' => $lang->release->confirmPublish, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
 $config->release->actionList['play']['icon']         = 'play';
 $config->release->actionList['play']['text ']        = $this->lang->release->changeStatusList['normal'];
 $config->release->actionList['play']['hint']         = $this->lang->release->changeStatusList['normal'];
@@ -83,5 +91,5 @@ $config->release->search['params']['marker']  = array('operator' => '=',       '
 
 $config->release->actions = new stdclass();
 $config->release->actions->view = array();
-$config->release->actions->view['mainActions']   = array('play', 'pause');
+$config->release->actions->view['mainActions']   = array('publish', 'play', 'pause');
 $config->release->actions->view['suffixActions'] = array('edit', 'delete');

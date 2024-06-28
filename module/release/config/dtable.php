@@ -50,7 +50,7 @@ $config->release->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->release->dtable->fieldList['actions']['name']  = 'actions';
 $config->release->dtable->fieldList['actions']['type']  = 'actions';
 $config->release->dtable->fieldList['actions']['list']  = $config->release->actionList;
-$config->release->dtable->fieldList['actions']['menu']  = array('linkStory', 'linkBug', 'play|pause', 'edit', 'notify', 'delete');
+$config->release->dtable->fieldList['actions']['menu']  = array('linkStory', 'linkBug', 'publish|play|pause', 'edit', 'notify', 'delete');
 
 $config->release->dtable->story->fieldList['id']['title']    = $lang->idAB;
 $config->release->dtable->story->fieldList['id']['name']     = 'id';

@@ -31,6 +31,7 @@ $lang->release->noRelease          = '暂时没有发布。';
 $lang->release->errorDate          = '发布日期不能大于今天。';
 $lang->release->confirmActivate    = '您确认激活该发布吗？';
 $lang->release->confirmTerminate   = '您确认停止维护该发布吗？';
+$lang->release->confirmPublish     = '您确认发布该发布吗？';
 
 $lang->release->basicInfo = '基本信息';
 
@@ -90,6 +91,7 @@ $lang->release->statusList['wait']      = '未开始';
 $lang->release->statusList['normal']    = '已发布';
 $lang->release->statusList['terminate'] = '停止维护';
 
+$lang->release->changeStatusList['wait']      = '发布';
 $lang->release->changeStatusList['normal']    = '激活';
 $lang->release->changeStatusList['terminate'] = '停止维护';
 
