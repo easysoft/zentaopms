@@ -354,7 +354,7 @@ class pivotState
         $lang    = $this->clientLang;
         foreach($this->fieldSettings as $settings)
         {
-            $options[] = array('text' => isset($settings[$lang]) ? $settings[$lang] : $settings['name'], 'value' => $settings['name'], 'key' => $settings['name']);
+            $options[] = array('text' => isset($settings[$lang]) ? $settings[$lang] : $settings['name'], 'value' => $settings['field'], 'key' => $settings['field']);
         }
 
         return $options;
