@@ -13,15 +13,24 @@ $config->projectrelease->actionList['linkBug']['icon'] = 'bug';
 $config->projectrelease->actionList['linkBug']['hint'] = $lang->release->linkBug;
 $config->projectrelease->actionList['linkBug']['url']  = helper::createLink('projectrelease', 'view', 'releaseID={id}&type=bug&link=true');
 
+$config->projectrelease->actionList['publish']['icon']         = 'publish';
+$config->projectrelease->actionList['publish']['hint']         = $this->lang->release->changeStatusList['wait'];
+$config->projectrelease->actionList['publish']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&status=normal');
+$config->projectrelease->actionList['publish']['notLoadModel'] = true;
+$config->projectrelease->actionList['publish']['className']    = 'ajax-submit';
+$config->projectrelease->actionList['publish']['data-confirm'] = array('message' => $lang->release->confirmPublish, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
 $config->projectrelease->actionList['play']['icon']         = 'play';
 $config->projectrelease->actionList['play']['hint']         = $lang->release->changeStatusList['normal'];
 $config->projectrelease->actionList['play']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=normal');
+$config->projectrelease->actionList['play']['notLoadModel'] = true;
 $config->projectrelease->actionList['play']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->actionList['pause']['icon']         = 'pause';
 $config->projectrelease->actionList['pause']['hint']         = $lang->release->changeStatusList['terminate'];
 $config->projectrelease->actionList['pause']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=terminate');
+$config->projectrelease->actionList['pause']['notLoadModel'] = true;
 $config->projectrelease->actionList['pause']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
@@ -82,4 +91,4 @@ $config->projectrelease->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->projectrelease->dtable->fieldList['actions']['name']  = 'actions';
 $config->projectrelease->dtable->fieldList['actions']['type']  = 'actions';
 $config->projectrelease->dtable->fieldList['actions']['list']  = $config->projectrelease->actionList;
-$config->projectrelease->dtable->fieldList['actions']['menu']  = array('linkStory', 'linkBug', 'play|pause', 'edit', 'notify', 'delete');
+$config->projectrelease->dtable->fieldList['actions']['menu']  = array('linkStory', 'linkBug', 'publish|play|pause', 'edit', 'notify', 'delete');
