@@ -256,7 +256,7 @@ class thinkStepMenu extends wg
                             set::size('sm'),
                             set::icon('menu-arrow-left text-gray'),
                             set::hint($this->lang->collapse),
-                            on::click()->do('$this.closest(".sidebar").sidebar("toggle");')
+                            on::click('hiddenTree')
                         )
                     ),
                     h::js("$('#mainContainer').addClass('has-sidebar');$('#mainContainer .sidebar').addClass('relative');")
