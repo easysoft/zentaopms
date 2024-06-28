@@ -34,10 +34,6 @@ if(!empty($story->stages) && isset($fields['stage']['options']))
     }
 }
 
-unset($fields['stage']['options']['defining']);
-unset($fields['stage']['options']['planning']);
-unset($fields['stage']['options']['delivering']);
-
 if($app->tab == 'product') data('activeMenuID', $story->type);
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
@@ -293,11 +289,12 @@ detailBody
                 span(setClass("status-{$story->status}"), $this->processStatus('story', $story)),
                 formHidden('status', $story->status)
             ),
-            ($story->type == 'story' && $story->isParent == '0') ? item
+            item
             (
                 set::name($lang->story->stage),
-                picker(setID('stage'), set::name('stage'), set::items($fields['stage']['options']), set::value($minStage))
-            ) : formHidden('stage', $story->stage),
+                $story->isParent == '0' ? picker(setID('stage'), set::name('stage'), set::items($fields['stage']['options']), set::value($minStage)) : formHidden('stage', $story->stage),
+                $story->isParent == '0' ? null : zget($fields['stage']['options'], $story->stage)
+            ),
             item
             (
                 set::name($lang->story->category),
