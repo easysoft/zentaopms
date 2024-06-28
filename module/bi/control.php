@@ -52,4 +52,20 @@ class bi extends control
 
         echo($output);
     }
+
+    /**
+     * Ajax: get object options.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetScopeOptions($type)
+    {
+        $scopeOptions = $this->bi->getScopeOptions($type);
+
+        $items = array();
+        foreach($scopeOptions as $key => $option) $items[] = array('text' => $option, 'value' => $key, 'keys' => $option);
+
+        return print(json_encode($items));
+    }
 }
