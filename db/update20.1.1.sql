@@ -100,7 +100,6 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 
 ALTER TABLE `zt_user` ADD `superior` char(30) NULL DEFAULT '' AFTER `realname`;
 
-ALTER TABLE `zt_approvalnode` ADD `sequential` enum('0','1') NOT NULL DEFAULT '0' AFTER `multipleType`;
-ALTER TABLE `zt_approvalnode` ADD `percent` smallint(6) NOT NULL DEFAULT '0' AFTER `sequential`;
+ALTER TABLE `zt_approvalnode` ADD `percent` smallint(6) NOT NULL DEFAULT '0' AFTER `multipleType`;
 
 ALTER TABLE `zt_attend` MODIFY `ip` varchar(100) NOT NULL DEFAULT '';
