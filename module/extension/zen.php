@@ -157,6 +157,14 @@ class extensionZen extends extension
         return $return;
     }
 
+    /**
+     * 插件插件的hook文件到禅道目录。
+     * Copy hookFiles to zentao.
+     *
+     * @param  string $extension
+     * @access public
+     * @return void
+     */
     public function copyHookFiles(string $extension)
     {
         $extHookPath = $this->extension->pkgRoot . $extension . DS . 'hook' . DS;
