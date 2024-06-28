@@ -247,7 +247,7 @@ class pivotState
 
         $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
         $this->setPager();
-        $this->standardParams();
+        $this->formatSettingColumns();
     }
 
     /**
@@ -430,7 +430,7 @@ class pivotState
 
         $this->fieldSettings = $fieldSettings;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
-        $this->standardParams();
+        $this->formatSettingColumns();
     }
 
     /**
@@ -439,7 +439,7 @@ class pivotState
      * @access public
      * @return void
      */
-    public function standardParams()
+    public function formatSettingColumns()
     {
         if(!empty($this->settings->columns))
         {
