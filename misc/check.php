@@ -170,7 +170,10 @@ $lang->repocode           = new stdclass();
 $lang->projectbuild       = new stdclass();
 $lang->projectrelease     = new stdclass();
 $lang->projectstory       = new stdclass();
+$lang->epic               = new stdclass();
 
+$lang->ERCommon        = '';
+$lang->enableER        = '';
 $lang->projectCommon   = '';
 $lang->storyCommon     = '';
 $lang->SRCommon        = '';
@@ -188,6 +191,7 @@ $config->projectLink      = 'project-browse';
 $config->executionLink    = 'execution-all';
 $config->systemMode       = 'ALM';
 $config->edition          = 'open';
+$config->enableER         = '';
 
 $config->featureGroup = new stdclass();
 $config->featureGroup->my            = array('score');
