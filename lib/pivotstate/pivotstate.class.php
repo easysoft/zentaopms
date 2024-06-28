@@ -495,6 +495,12 @@ class pivotState
         $this->fieldSettings = $fieldSettings;
     }
 
+    /**
+     * Process fieldSettings lang.
+     *
+     * @access public
+     * @return void
+     */
     public function processFieldSettingsLang()
     {
         if(empty($this->fieldSettings)) return;
@@ -504,6 +510,14 @@ class pivotState
         }
     }
 
+    /**
+     * Process fieldSetting lang.
+     *
+     * @param  string  $field
+     * @param  array   $fieldSetting
+     * @access public
+     * @return array
+     */
     public function processFieldSettingLang($field, $fieldSetting)
     {
         $lang = $this->clientLang;
