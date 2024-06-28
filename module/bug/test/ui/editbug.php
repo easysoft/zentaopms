@@ -6,8 +6,10 @@ $tester = new confirmBugTester();
 
 $bug = array();
 $bug['search'][] = array('field1' => 'Bug状态', 'operator1' => '=', 'value1' => '激活');
-$bug['bugName']  = 'bug' . time();
 $project = array();
 $project['productID'] = 1;
 
-r($tester->editBug($project, $bug)) && p('message,status') && e('解决bug成功'); //验证bug表单页必填项校验
+r($tester->editBug($project, $bug)) && p('message,status') && e('编辑bug成功'); //验证直接编辑bug是否成功
+
+$bug['bugName']  = 'bug' . time();
+r($tester->editBug($project, $bug)) && p('message,status') && e('编辑bug名称成功'); //验证编辑bug名称是否成功
