@@ -25,13 +25,13 @@ class batchActions extends wg
                 (
                     setClass('ghost add-btn'),
                     set::icon('plus icon-lg'),
-                    on::click('addItem')
+                    bind::click('addItem(event)')
                 ),
                 btn
                 (
                     setClass('ghost del-btn'),
                     set::icon('close icon-lg'),
-                    on::click('removeItem')
+                    bind::click('removeItem(event)')
                 )
             )
         );
