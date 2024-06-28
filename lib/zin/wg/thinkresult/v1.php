@@ -49,7 +49,7 @@ class thinkResult extends wg
             setClass('think-result-content col items-center px-12 py-6 gap-4 mx-auto'),
             div
             (
-                setClass('w-full flex items-center justify-center'),
+                setClass('w-full flex items-center justify-center text-left'),
                 setStyle(array('font-size' => '20px')),
                 set::title($wizard->introduction),
                 $introduction
@@ -63,12 +63,12 @@ class thinkResult extends wg
             ),
             div
             (
-                setClass('w-full text-center text-base py-2.5 leading-5'),
+                setClass('w-full text-left text-base py-2.5 leading-5'),
                 html($suggestion)
             ),
             div
             (
-                setClass('w-full text-center text-base leading-5'),
+                setClass('w-full text-left text-base leading-5'),
                 $conclusion
             )
         );
