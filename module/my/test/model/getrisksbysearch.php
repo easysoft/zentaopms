@@ -14,7 +14,23 @@ su('admin');
 
 title=测试 myModel->getRisksBySearch();
 cid=1
-pid=1
+
+- 测试通过搜索获取 query id 0 类型 work id_desc 风险id @19,16,13,10,7,4,1
+- 测试通过搜索获取 query id 0 类型 work id_desc 风险数量 @7
+- 测试通过搜索获取 query id 0 类型 work id_asc 风险id @1,4,7,10,13,16,19
+- 测试通过搜索获取 query id 0 类型 work id_asc 风险数量 @7
+- 测试通过搜索获取 query id 0 类型 contribute id_desc 风险id @19,17,15,13,11,9,7,5,3,1
+- 测试通过搜索获取 query id 0 类型 contribute id_desc 风险数量 @10
+- 测试通过搜索获取 query id 0 类型 contribute id_asc 风险id @1,3,5,7,9,11,13,15,17,19
+- 测试通过搜索获取 query id 0 类型 contribute id_asc 风险数量 @10
+- 测试通过搜索获取 query id 5 类型 work id_desc 风险id @19,16,13,10,7,4,1
+- 测试通过搜索获取 query id 5 类型 work id_desc 风险数量 @7
+- 测试通过搜索获取 query id 5 类型 work id_asc 风险id @1,4,7,10,13,16,19
+- 测试通过搜索获取 query id 5 类型 work id_asc 风险数量 @7
+- 测试通过搜索获取 query id 5 类型 contribute id_desc 风险id @19,17,15,13,11,9,7,5,3,1
+- 测试通过搜索获取 query id 5 类型 contribute id_desc 风险数量 @10
+- 测试通过搜索获取 query id 5 类型 contribute id_asc 风险id @1,3,5,7,9,11,13,15,17,19
+- 测试通过搜索获取 query id 5 类型 contribute id_asc 风险数量 @10
 
 */
 
