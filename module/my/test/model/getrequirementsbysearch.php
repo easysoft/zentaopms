@@ -17,8 +17,18 @@ su('admin');
 /**
 
 title=测试 myModel->getRequirementsBySearch();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取 queryID 0 类型 other 排序 id_desc 的需求。 @19,10,4
+
+- 测试获取 queryID 0 类型 other 排序 id_asc 的需求。 @4,10,19
+
+- 测试获取 queryID 1 类型 contribute 排序 id_desc 的需求。 @0
+- 测试获取 queryID 1 类型 contribute 排序 id_asc 的需求。 @0
+- 测试获取 queryID 1 类型 other 排序 id_desc 的需求。 @19,10
+
+- 测试获取 queryID 1 类型 other 排序 id_asc 的需求。 @10,19
 
 */
 

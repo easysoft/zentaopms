@@ -14,8 +14,16 @@ su('admin');
 /**
 
 title=测试 myModel->getReviewedList();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取排序 browse all id_desc 的审批列表。 @10,9
+
+- 测试获取排序 browse all id_asc 的审批列表。 @9,10
+
+- 测试获取排序 browse createdbyme id_desc 的审批列表。 @4,3,2,1
+
+- 测试获取排序 browse createdbyme id_asc 的审批列表。 @1,2,3,4
 
 */
 

@@ -20,12 +20,12 @@ $tester->loadModel('program')->refreshStats(true);
 /**
 
 title=测试 myModel->getOverview();
+timeout=0
 cid=1
-pid=1
 
-projectTotal数据获取 >> 4
-allConsumed数据获取 >> 33
-thisYearConsumed数据获取 >> 1
+- projectTotal数据获取 @4
+- allConsumed数据获取 @33
+- thisYearConsumed数据获取 @1
 
 */
 
