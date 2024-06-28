@@ -264,7 +264,7 @@ class buildModel extends model
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
         {
-            $releases = $this->getRelatedReleases($productIdList, $buildIdList, $shadows, $objectType, $objectID);
+            $releases = $this->getRelatedReleases($productIdList, $buildIdList, $shadows, $objectType, $objectID, $params);
             $builds   = $this->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
         }
 
@@ -397,10 +397,11 @@ class buildModel extends model
      * @param  array|bool $shadows
      * @param  string     $objectType
      * @param  int        $objectID
+     * @param  string     $params
      * @access public
      * @return array
      */
-    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0): array
+    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
     {
         $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
@@ -409,6 +410,7 @@ class buildModel extends model
             ->where('t1.product')->in($productIdList)
             ->beginIF($objectType === 'project' && $objectID)->andWhere("(FIND_IN_SET('$objectID', t1.project)")->orWhere('t1.project')->eq('0')->markRight(1)->fi()
             ->beginIF($objectType === 'execution' && $objectID)->andWhere('t2.execution')->eq($objectID)->fi()
+            ->beginIF(strpos($params, 'nowaitrelease') !== false)->andWhere('t1.status')->ne('wait')->fi()
             ->andWhere('((t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->ne(0)
             ->markRight(true)

@@ -984,20 +984,18 @@ class bugZen extends bug
         if(!empty($bug->allBuilds))
         {
             $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased', 0, '');
-            return $this->updateBug($bug, array('builds' => $builds));
         }
-
-        if($executionID)
+        elseif($executionID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitrelease', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitrelease', $projectID, 'project');
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitrelease');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
