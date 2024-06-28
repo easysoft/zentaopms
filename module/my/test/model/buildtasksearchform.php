@@ -11,8 +11,17 @@ su('admin');
 /**
 
 title=测试 myModel->buildTaskSearchForm();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取queryID 1 actionURL actionURL1 的搜索表单
+ - 属性module @Task
+ - 属性queryID @0
+ - 属性actionURL @actionURL1
+- 测试获取queryID 0 actionURL actionURL2 的搜索表单
+ - 属性module @Task
+ - 属性queryID @1
+ - 属性actionURL @actionURL2
 
 */
 
