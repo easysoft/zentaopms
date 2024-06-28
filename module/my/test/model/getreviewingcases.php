@@ -10,8 +10,19 @@ zenData('user')->gen('2');
 /**
 
 title=测试 myModel->getReviewingCases();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取用户 admin 排序 id_desc 的需求id。 @17,13,9,5,1
+
+- 测试获取用户 admin 排序 id_desc 的需求是否存在。 @exist
+- 测试获取用户 admin 排序 id_asc 的需求id。 @1,5,9,13,17
+
+- 测试获取用户 admin 排序 id_asc 的需求是否存在。 @exist
+- 测试获取用户 user1 排序 id_desc 的需求id。 @empty
+- 测试获取用户 user1 排序 id_desc 的需求是否存在。 @empty
+- 测试获取用户 user1 排序 id_asc 的需求id。 @empty
+- 测试获取用户 user1 排序 id_asc 的需求是否存在。 @empty
 
 */
 
