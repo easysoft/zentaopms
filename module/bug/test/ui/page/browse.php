@@ -13,6 +13,8 @@ class browsePage extends page
             'closeButton'   => '(//a[@title="关闭"]/i)[1]',
             'editButton'    => '(//a[@title="编辑Bug"]/i)[1]',
             'more'          => "//*[@id='mainContentCell']//button[text()='保存搜索条件']/following-sibling::button/i",
+            'successTag'    => '//*[contains(@id,"messager")]//div[text() = "保存成功"]',
+            'bugName'       => '//*[@id="mainContent"]//span[contains(text(), "bug")]',
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
