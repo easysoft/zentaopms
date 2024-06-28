@@ -1341,13 +1341,15 @@ class storyTao extends storyModel
      *   All children stages are closed.
      *
      * @param  object    $story
-     * @access protected
-     * @return void
+     * @access public
+     * @return array
      */
-    protected function computeParentStage(object $story)
+    public function computeParentStage(object $story)
     {
+        static $demandList;
+
         $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
-        if(empty($parent)) return;
+        if(empty($parent)) return array();
 
         $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
             ->where('parent')->eq($story->parent)
@@ -1436,9 +1438,12 @@ class storyTao extends storyModel
 
         if($parentStage != $parent->stage)
         {
+            $demandList[$story->demand] = $story->demand;
             $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
             if($parent->parent > 0) $this->computeParentStage($parent);
         }
+
+        return $demandList;
     }
 
     /**
