@@ -13,8 +13,17 @@ su('admin');
 /**
 
 title=测试 myModel->getReviewingDemands();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取用户 account 排序 id_desc 的需求池需求id。 @empty
+- 测试获取用户 account 排序 id_desc 的需求池需求是否存在。 @empty
+- 测试获取用户 account 排序 id_asc 的需求池需求id。 @empty
+- 测试获取用户 account 排序 id_asc 的需求池需求是否存在。 @empty
+- 测试获取用户 account 排序 id_desc 的需求池需求id。 @empty
+- 测试获取用户 account 排序 id_desc 的需求池需求是否存在。 @empty
+- 测试获取用户 account 排序 id_asc 的需求池需求id。 @empty
+- 测试获取用户 account 排序 id_asc 的需求池需求是否存在。 @empty
 
 */
 
