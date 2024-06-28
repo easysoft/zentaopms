@@ -478,6 +478,8 @@ class baseRouter
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
 
+        if($this->config->redis) $this->redis = self::connectToRedis();
+
         $this->setupProfiling();
         $this->setupXhprof();
 
@@ -3470,6 +3472,45 @@ class baseRouter
         if(!isset($_SESSION['installing']) && !$installed && !empty($this->installing)) $_SESSION['installing'] = true;
 
         return $installed;
+    }
+
+    /**
+     * Connect to Redis Server.
+     * @link https://pecl.php.net/package/redis
+     * @link https://github.com/phpredis/phpredis/
+     * @return Redis|object|false
+     */
+    public function connectToRedis()
+    {
+        if(!extension_loaded('redis')) return false;
+
+        global $config;
+
+        if(empty($config->redis)) return false;
+
+        try
+        {
+            $redis = new Redis();
+
+            $version = phpversion('redis');
+            if(version_compare($version, '5.3.0', 'ge'))
+            {
+                $redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0, ['auth' => [$config->redis->username, $config->redis->password]]);
+            }
+            else
+            {
+                $redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0);
+                $redis->auth(['pass' => $config->redis->password]);
+            }
+
+            if(!$redis->ping()) return false;
+        }
+        catch(RedisException $e)
+        {
+            static::triggerError($e->getMessage(), __FILE__, __LINE__, true);
+        }
+
+        if($redis) return $redis;
     }
 }
 
