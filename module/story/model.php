@@ -3683,7 +3683,7 @@ class storyModel extends model
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
-        $storyType        = $app->methodName == 'audit' ? $story->storyType : $story->type;
+        $storyType        = $app->methodName == 'audit' ? zget($story, 'storyType', $story->type) : $story->type;
         $isSuperReviewer  = isset($config->{$storyType}) ? strpos(',' . trim(zget($config->{$storyType}, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',') : false;
 
         if($action == 'change')       return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');

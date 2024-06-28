@@ -26,7 +26,7 @@ window.onRenderCell = function(result, {row, col})
     if(result && col.name == 'title')
     {
         if(row.data.module == 'review') result[0].props['data-toggle'] = '';
-        if(!viewPrivs[row.data.module])
+        if(!reviewPrivs[row.data.module])
         {
             result[0].props['data-toggle'] = '';
             delete result[0].props['href'];
