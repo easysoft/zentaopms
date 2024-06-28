@@ -349,6 +349,7 @@ $lang->action->label->stop                    = 'stop ';
 $lang->action->label->editname                = 'edit name ';
 $lang->action->label->backup                  = 'backup ';
 $lang->action->label->adjustmemory            = 'adjust memory ';
+$lang->action->label->adjustcpu               = 'adjust CPU';
 $lang->action->label->enableldap              = 'enable LDAP ';
 $lang->action->label->disableldap             = 'disable LDAP ';
 $lang->action->label->enablesmtp              = 'enable SMTP ';
