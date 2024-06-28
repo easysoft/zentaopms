@@ -23,7 +23,7 @@ formPanel
             set::inline(true)
         )
     ),
-    helper::isAPCuEnabled() ? formRow
+    helper::isAPCuEnabled() && $this->config->cache->dao->driver == 'Apcu' ? formRow
     (
         formGroup
         (
