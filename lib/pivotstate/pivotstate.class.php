@@ -431,6 +431,7 @@ class pivotState
         $this->fieldSettings = $fieldSettings;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
         $this->formatSettingColumns();
+        $this->processFieldSettingsLang();
     }
 
     /**
@@ -482,18 +483,36 @@ class pivotState
         $settings      = (array)$settings;
         $fromCreate    = empty($this->fieldSettings);
         $fieldSettings = !$fromCreate ? $this->fieldSettings : $settings;
-        $lang          = $this->clientLang;
 
         if(!$fromCreate)
         {
             foreach($settings as $field => $setting)
             {
-                $postField = $fieldSettings[$field];
-                if(isset($postField['name']) && !isset($postField[$lang])) $fieldSettings[$field][$lang] = $fieldSettings[$field]['name'];
+                $fieldSettings[$field] = $this->processFieldSettingLang($field, $fieldSettings[$field]);
             }
         }
 
         $this->fieldSettings = $fieldSettings;
+    }
+
+    public function processFieldSettingsLang()
+    {
+        if(empty($this->fieldSettings)) return;
+        foreach($this->fieldSettings as $field => $fieldSetting)
+        {
+            $this->fieldSettings[$field] = $this->processFieldSettingLang($field, $fieldSetting);
+        }
+    }
+
+    public function processFieldSettingLang($field, $fieldSetting)
+    {
+        $lang = $this->clientLang;
+        if(isset($fieldSetting[$lang])) return $fieldSetting;
+
+        $fieldSetting[$lang]  = $fieldSetting['name'];
+        $fieldSetting['name'] = $field;
+
+        return $fieldSetting;
     }
 
     /**
