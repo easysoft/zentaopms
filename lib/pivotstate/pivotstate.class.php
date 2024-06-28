@@ -482,19 +482,15 @@ class pivotState
     {
         $settings      = (array)$settings;
         $fromCreate    = empty($this->fieldSettings);
-        $fieldSettings = !$fromCreate ? array() : $settings;
+        $fieldSettings = !$fromCreate ? $this->fieldSettings : $settings;
         $lang          = $this->clientLang;
 
         if(!$fromCreate)
         {
             foreach($settings as $field => $setting)
             {
-                if(isset($this->fieldSettings[$field]))
-                {
-                    $completeFields = array('name' => $field);
-                    if(isset($this->fieldSettings[$field]['name'])) $completeFields[$lang] = $this->fieldSettings[$field]['name'];
-                    $fieldSettings[$field] = array_merge($this->fieldSettings[$field], $completeFields);
-                }
+                $postField = $fieldSettings[$field];
+                if(isset($postField['name']) && !isset($postField[$lang])) $fieldSettings[$field][$lang] = $fieldSettings[$field]['name'];
             }
         }
 

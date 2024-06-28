@@ -980,10 +980,11 @@ class biModel extends model
 
         list($fields, $objects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
 
-        $columns = array();
-        foreach($fields as $field => $name)
+        $columns     = array();
+        $clientLang  = $this->app->getClientLang();
+        foreach($fields as $field => $langName)
         {
-            $columns[$field] = array('name' => $name, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $objects[$field]);
+            $columns[$field] = array('name' => $field, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $objects[$field], $clientLang => $langName);
         }
 
         return $columns;
@@ -1024,7 +1025,6 @@ class biModel extends model
             $total               = $dbh->query($driver == 'mysql' ? $mysqlCountSql : $duckdbCountSql)->fetch()->count;
 
             $columns = $this->prepareColumns($limitSql, $statement, $driver);
-            $columns = $this->fillWithClientLang($columns);
 
             $stateObj->setPager($total);
             $stateObj->setFieldSettings($columns);
@@ -1036,22 +1036,6 @@ class biModel extends model
         }
 
         return $stateObj;
-    }
-
-    public function fillWithClientLang($columns)
-    {
-        $fillColumns = array();
-        $clientLang  = $this->app->getClientLang();
-
-        foreach($columns as $field => $settings)
-        {
-            $title = $settings['name'];
-
-            if(!isset($settings[$clientLang]) || empty($settings[$clientLang])) $settings[$clientLang] = $title;
-            $fillColumns[$field] = $settings;
-        }
-
-        return $fillColumns;
     }
 
     /**
