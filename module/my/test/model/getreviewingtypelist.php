@@ -14,8 +14,12 @@ zenData('user')->gen('10');
 /**
 
 title=测试 myModel->getReviewingTypeList();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取用户 admin 的待评审类型。 @all,story,requirement,testcase
+
+- 测试获取用户 user1 的待评审类型。 @all
 
 */
 
@@ -23,8 +27,9 @@ global $config;
 $config->edition = 'open';
 
 $my = new myTest();
+$my->objectModel->setUser('admin');
 
 $account = array('admin', 'user1');
 
-r($my->getReviewingTypeListTest($account[0])) && p() && e('all:全部,story:需求,testcase:用例'); // 测试获取用户 admin 的待评审类型。
-r($my->getReviewingTypeListTest($account[1])) && p() && e('all:全部');                                            // 测试获取用户 user1 的待评审类型。
+r($my->getReviewingTypeListTest($account[0])) && p() && e('all,story,requirement,testcase'); // 测试获取用户 admin 的待评审类型。
+r($my->getReviewingTypeListTest($account[1])) && p() && e('all');                            // 测试获取用户 user1 的待评审类型。
