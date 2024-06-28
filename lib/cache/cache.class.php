@@ -13,6 +13,7 @@ helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheInterface.ph
 helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheException.php');
 helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'InvalidArgumentException.php');
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'ApcuDriver.php');
+helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'RedisDriver.php');
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'YacDriver.php');
 helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'FileDriver.php');
 
@@ -25,6 +26,8 @@ class cache
     const DRIVER_FILE = 'File';
 
     const DRIVER_YAC = 'Yac';
+
+    const DRIVER_REDIS = 'Redis';
 
     /**
      * @var ZenTao\Cache\SimpleCache\CacheInterface
@@ -44,6 +47,9 @@ class cache
                 break;
             case self::DRIVER_FILE:
                 $className = 'ZenTao\Cache\Driver\FileDriver';
+                break;
+            case self::DRIVER_REDIS:
+                $className = 'ZenTao\Cache\Driver\RedisDriver';
                 break;
             default:
                 throw new InvalidArgumentException("Driver {$driver} is not supported.");
