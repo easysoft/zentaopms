@@ -76,7 +76,8 @@ class RedisDriver implements CacheInterface
      *
      * @link   https://github.com/phpredis/phpredis?tab=readme-ov-file#del-delete-unlink
      * @param  mixed $key
-     * @return void
+     * @param  bool  $prefix
+     * @return int
      */
     public function delete($key, $prefix = true)
     {
@@ -92,7 +93,7 @@ class RedisDriver implements CacheInterface
      * Remove all keys from the current database.
      *
      * @link   https://github.com/phpredis/phpredis?tab=readme-ov-file#flushdb
-     * @return Redis|bool
+     * @return bool
      */
     public function clear()
     {
