@@ -11,8 +11,19 @@ zenData('user')->gen('5');
 /**
 
 title=测试 myModel->getReviewingStories();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取用户 account 排序 id_desc 的需求id。 @8,6,2
+
+- 测试获取用户 account 排序 id_desc 的需求是否存在。 @exist
+- 测试获取用户 account 排序 id_asc 的需求id。 @2,6,8
+
+- 测试获取用户 account 排序 id_asc 的需求是否存在。 @exist
+- 测试获取用户 account 排序 id_desc 的需求id。 @empty
+- 测试获取用户 account 排序 id_desc 的需求是否存在。 @empty
+- 测试获取用户 account 排序 id_asc 的需求id。 @empty
+- 测试获取用户 account 排序 id_asc 的需求是否存在。 @empty
 
 */
 
@@ -21,11 +32,11 @@ $orderBy    = array('id_desc', 'id_asc');
 $checkExist = array(false, true);
 
 $my = new myTest();
-r($my->getReviewingStoriesTest($account[0], $orderBy[0], $checkExist[0])) && p() && e('10,8,6,4,2'); // 测试获取用户 account 排序 id_desc 的需求id。
-r($my->getReviewingStoriesTest($account[0], $orderBy[0], $checkExist[1])) && p() && e('exist');      // 测试获取用户 account 排序 id_desc 的需求是否存在。
-r($my->getReviewingStoriesTest($account[0], $orderBy[1], $checkExist[0])) && p() && e('2,4,6,8,10'); // 测试获取用户 account 排序 id_asc 的需求id。
-r($my->getReviewingStoriesTest($account[0], $orderBy[1], $checkExist[1])) && p() && e('exist');      // 测试获取用户 account 排序 id_asc 的需求是否存在。
-r($my->getReviewingStoriesTest($account[1], $orderBy[0], $checkExist[0])) && p() && e('empty');      // 测试获取用户 account 排序 id_desc 的需求id。
-r($my->getReviewingStoriesTest($account[1], $orderBy[0], $checkExist[1])) && p() && e('empty');      // 测试获取用户 account 排序 id_desc 的需求是否存在。
-r($my->getReviewingStoriesTest($account[1], $orderBy[1], $checkExist[0])) && p() && e('empty');      // 测试获取用户 account 排序 id_asc 的需求id。
-r($my->getReviewingStoriesTest($account[1], $orderBy[1], $checkExist[1])) && p() && e('empty');      // 测试获取用户 account 排序 id_asc 的需求是否存在。
+r($my->getReviewingStoriesTest($account[0], $orderBy[0], $checkExist[0])) && p() && e('8,6,2'); // 测试获取用户 account 排序 id_desc 的需求id。
+r($my->getReviewingStoriesTest($account[0], $orderBy[0], $checkExist[1])) && p() && e('exist'); // 测试获取用户 account 排序 id_desc 的需求是否存在。
+r($my->getReviewingStoriesTest($account[0], $orderBy[1], $checkExist[0])) && p() && e('2,6,8'); // 测试获取用户 account 排序 id_asc 的需求id。
+r($my->getReviewingStoriesTest($account[0], $orderBy[1], $checkExist[1])) && p() && e('exist'); // 测试获取用户 account 排序 id_asc 的需求是否存在。
+r($my->getReviewingStoriesTest($account[1], $orderBy[0], $checkExist[0])) && p() && e('empty'); // 测试获取用户 account 排序 id_desc 的需求id。
+r($my->getReviewingStoriesTest($account[1], $orderBy[0], $checkExist[1])) && p() && e('empty'); // 测试获取用户 account 排序 id_desc 的需求是否存在。
+r($my->getReviewingStoriesTest($account[1], $orderBy[1], $checkExist[0])) && p() && e('empty'); // 测试获取用户 account 排序 id_asc 的需求id。
+r($my->getReviewingStoriesTest($account[1], $orderBy[1], $checkExist[1])) && p() && e('empty'); // 测试获取用户 account 排序 id_asc 的需求是否存在。

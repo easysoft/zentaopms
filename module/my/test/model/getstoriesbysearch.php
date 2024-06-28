@@ -5,6 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 myModel->getStoriesBySearch();
+timeout=0
 cid=1
 
 - 测试获取 queryID 0 类型 contribute 排序 id_desc 的需求。 @17,13,8,7,6,3,2,1
