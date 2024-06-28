@@ -217,6 +217,7 @@ class extension extends control
         }
 
         /* 安装插件。 */
+        $this->extensionZen->copyHookFiles($extension);
         $this->extensionZen->installExtension($extension, $type, $upgrade);
         $this->display();
     }
@@ -254,6 +255,7 @@ class extension extends control
         }
 
         /* 卸载前的钩子加载。 */
+        $this->extensionZen->copyHookFiles($extension);
         $preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall');
         if($preUninstallHook && $info->status == 'installed') include $preUninstallHook;
 

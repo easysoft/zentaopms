@@ -157,6 +157,17 @@ class extensionZen extends extension
         return $return;
     }
 
+    public function copyHookFiles(string $extension)
+    {
+        $extHookPath = $this->extension->pkgRoot . $extension . DS . 'hook' . DS;
+        $hookPath    = $this->app->getBasePath() . DS . 'hook' . DS;
+        if(!is_dir($extHookPath)) return;
+        if(!is_dir($hookPath)) return;
+
+        foreach(glob($hookPath . '*') as $hookFile) $this->extension->classFile->removeFile($hookFile);
+        $this->extension->classFile->copyDir($extHookPath, $hookPath);
+    }
+
     /**
      * 执行插件安装程序。
      * Install extension.
@@ -397,7 +408,7 @@ class extensionZen extends extension
         $paths   = $this->extension->getPathsFromPackage($extension);
         foreach($paths as $path)
         {
-            if($path == 'db' || $path == 'doc' || $path == 'hook') continue;
+            if($path == 'db' || $path == 'doc') continue;
 
             $path = rtrim($appRoot . $path, '/');
             if(is_dir($path))

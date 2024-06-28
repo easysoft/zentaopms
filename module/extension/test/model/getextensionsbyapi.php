@@ -20,10 +20,10 @@ cid=1
  -  @id
  - 属性2 @code
  - 属性5 @keyword
- - 属性10 @addedTime
- - 属性15 @status
- - 属性20 @images
- - 属性25 @objectID
+ - 属性10 @account
+ - 属性15 @grade
+ - 属性20 @color
+ - 属性25 @langID
 - 检查是否按照要求分页。属性recPerPage @15
 
 */
