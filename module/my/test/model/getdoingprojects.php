@@ -12,8 +12,8 @@ su('admin');
 /**
 
 title=测试 myModel->getDoingProjects();
+timeout=0
 cid=1
-pid=1
 
 - 获取doingcount数据 @5
 - 获取doing状态的项目

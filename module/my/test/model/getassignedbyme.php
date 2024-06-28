@@ -17,8 +17,12 @@ su('admin');
 /**
 
 title=测试 myModel->getAssignedByMe();
+timeout=0
 cid=1
-pid=1
+
+- 当插入一条action为admin指派了task的动态时，查询结果为1条数据 @0
+- 当插入一条action为admin指派了bug的动态时，查询结果为1条数据 @4
+- 当插入一条action为admin指派了需求的动态时，查询结果为0条数据 @0
 
 */
 

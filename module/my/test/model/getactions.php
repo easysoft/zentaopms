@@ -5,6 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 myModel->getActions();
+timeout=0
 cid=1
 
 - 正常查询action @96,64,32,95,63

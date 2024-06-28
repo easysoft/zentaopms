@@ -17,8 +17,18 @@ su('admin');
 /**
 
 title=测试 myModel->getEpicsBySearch();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取 queryID 0 类型 other 排序 id_desc 的需求。 @15,13,11
+
+- 测试获取 queryID 0 类型 other 排序 id_asc 的需求。 @11,13,15
+
+- 测试获取 queryID 1 类型 contribute 排序 id_desc 的需求。 @13
+- 测试获取 queryID 1 类型 contribute 排序 id_asc 的需求。 @13
+- 测试获取 queryID 1 类型 other 排序 id_desc 的需求。 @15,13,11
+
+- 测试获取 queryID 1 类型 other 排序 id_asc 的需求。 @11,13,15
 
 */
 

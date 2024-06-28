@@ -18,15 +18,15 @@ su('admin');
 /**
 
 title=测试 myModel->getContribute();
-cid=1
-pid=1
+timeout=0
+cid=0
 
-myTaskTotal数据获取 >> 0
-myStoryTotal数据获取 >> 0
-myBugTotal数据获取 >> 85
-docCreatedTotal数据获取 >> 900
-ownerProductTotal数据获取 >> 0
-involvedProjectTotal数据获取 >> 1
+- myTaskTotal数据获取 @5
+- myStoryTotal数据获取 @4
+- myBugTotal数据获取 @20
+- docCreatedTotal数据获取 @20
+- ownerProductTotal数据获取 @10
+- involvedProjectTotal数据获取 @1
 
 */
 
