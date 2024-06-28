@@ -434,22 +434,21 @@ class pivotState
     }
 
     /**
-     * Standard params.
+     * Format setting columns.
      *
      * @access public
      * @return void
      */
     public function formatSettingColumns()
     {
-        if(!empty($this->settings->columns))
-        {
-            foreach($this->settings->columns as $id => $column)
-            {
-                $column['monopolize'] = (int)$column['monopolize'];
-                $column['showOrigin'] = (int)$column['showOrigin'];
+        if(empty($this->settings->columns)) return;
 
-                $this->settings->columns[$id] = $column;
-            }
+        foreach($this->settings->columns as $id => $column)
+        {
+            $column['monopolize'] = (int)$column['monopolize'];
+            $column['showOrigin'] = (int)$column['showOrigin'];
+
+            $this->settings->columns[$id] = $column;
         }
     }
 
