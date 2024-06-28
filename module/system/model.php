@@ -82,8 +82,6 @@ class systemModel extends model
             }
         }
 
-        $oldSettings = $this->getDomainSettings();
-        if($settings->customDomain == $oldSettings->customDomain)  dao::$errors[] = $this->lang->system->errors->newDomainIsSameWithOld;
         if(stripos($settings->customDomain, 'haogs.cn') !== false) dao::$errors[] = $this->lang->system->errors->forbiddenOriginalDomain;
         if(dao::isError()) return false;
 
