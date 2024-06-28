@@ -88,7 +88,7 @@ $lang->pivot->recPerPageTip  = "每页 <strong>%s</strong> 项";
 
 $lang->pivot->showOriginPlaceholder = new stdclass();
 $lang->pivot->showOriginPlaceholder->slice    = '展示原始条目后无需配置切片';
-$lang->pivot->showOriginPlaceholder->calcMode = '展示原始条目后无需配置计算方式';
+$lang->pivot->showOriginPlaceholder->stat     = '展示原始条目后无需配置计算方式';
 $lang->pivot->showOriginPlaceholder->showMode = '展示原始条目后无需配置显示方式';
 
 $lang->pivot->colors[] = 'AFD8F8';
@@ -186,8 +186,8 @@ $lang->pivot->showProject = '所有' . $lang->projectCommon . '统计数据';
 $lang->pivot->columnIndex  = '第 %s 列';
 $lang->pivot->deleteColumn = '您确认删除该列吗？';
 $lang->pivot->addColumn    = '添加列';
-$lang->pivot->sliceField   = '选择切片字段';
-$lang->pivot->calcMode     = '值的计算方式';
+$lang->pivot->slice        = '选择切片字段';
+$lang->pivot->stat         = '值的计算方式';
 $lang->pivot->showMode     = '值的显示方式';
 $lang->pivot->showTotal    = '显示行的汇总';
 $lang->pivot->colLabel     = '{$field}的{$stat}';
@@ -365,7 +365,7 @@ $lang->pivot->step2->add         = '添加';
 $lang->pivot->step2->delete      = '删除';
 $lang->pivot->step2->groupField  = '分组字段';
 $lang->pivot->step2->columnField = '字段';
-$lang->pivot->step2->calcMode    = '计算方式';
+$lang->pivot->step2->stat        = '计算方式';
 
 $lang->pivot->step2->moreThanOne = '至少选择一个分组字段。';
 $lang->pivot->step2->summaryTip  = '勾选后，可配置行分组、列设置、显示列的汇总。';
