@@ -88,7 +88,7 @@ $lang->pivot->recPerPageTip  = " <strong>%s</strong> per page";
 
 $lang->pivot->showOriginPlaceholder = new stdclass();
 $lang->pivot->showOriginPlaceholder->slice    = 'No need to configure';
-$lang->pivot->showOriginPlaceholder->calcMode = 'No need to configure';
+$lang->pivot->showOriginPlaceholder->stat     = 'No need to configure';
 $lang->pivot->showOriginPlaceholder->showMode = 'No need to configure';
 
 $lang->pivot->colors[] = 'AFD8F8';
@@ -186,8 +186,8 @@ $lang->pivot->showProject = 'All' . $lang->projectCommon . 'Statistics';
 $lang->pivot->columnIndex  = 'col.%s';
 $lang->pivot->deleteColumn = 'Are you sure to delete this column?';
 $lang->pivot->addColumn    = 'Add column';
-$lang->pivot->sliceField   = 'Select slice field';
-$lang->pivot->calcMode     = 'Calculate value';
+$lang->pivot->slice        = 'Select slice field';
+$lang->pivot->stat         = 'Calculate value';
 $lang->pivot->showMode     = 'Display value';
 $lang->pivot->showTotal    = 'Display row sum';
 $lang->pivot->colLabel     = '{$stat} of {$field}';
@@ -365,7 +365,7 @@ $lang->pivot->step2->add         = 'Add';
 $lang->pivot->step2->delete      = 'Delete';
 $lang->pivot->step2->groupField  = 'Grouping field';
 $lang->pivot->step2->columnField = 'Field';
-$lang->pivot->step2->calcMode    = 'Calc Mode';
+$lang->pivot->step2->stat        = 'Calc Mode';
 
 $lang->pivot->step2->moreThanOne = 'Select at least one group field.';
 $lang->pivot->step2->summaryTip  = 'After this parameter is selected, you can configure Row Grouping, Column Settings, and Show column totals';
