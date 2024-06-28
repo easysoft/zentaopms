@@ -292,6 +292,13 @@ class pivotState
         foreach($this->filters as $index => $filter)
         {
             if(isset($filter['default'])) continue;
+
+            $from     = zget($filter, 'from', 'result');
+            $type     = $filter['type'];
+            $defaults = $from == 'query' ? $queryDefaults : $resultDefaults;
+
+            $filter['default'] = $defaults[$type];
+            $this->filters[$index] = $filter;
         }
     }
 
