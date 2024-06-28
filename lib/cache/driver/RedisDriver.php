@@ -78,8 +78,10 @@ class RedisDriver implements CacheInterface
      * @param  mixed $key
      * @return void
      */
-    public function delete($key)
+    public function delete($key, $prefix = true)
     {
+        if(!$prefix) return $this->redis->del($key);
+
         $this->assertKeyName($key);
         $key = $this->buildKeyName($key);
 
@@ -94,7 +96,24 @@ class RedisDriver implements CacheInterface
      */
     public function clear()
     {
-        return $this->redis->flushDb();
+        global $config;
+
+        /* With Redis::SCAN_RETRY enabled */
+        $this->redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
+        $it = NULL;
+
+        while($cachedKeys = $this->redis->scan($it))
+        {
+            foreach ($cachedKeys as $key)
+            {
+                if(strpos($key, $config->db->name) !== false)
+                {
+                    $this->delete($key, false);
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
