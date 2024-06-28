@@ -3204,7 +3204,7 @@ class baseRouter
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
 
         /* Only show error when debug is open. */
-        if(!$this->config->debug) helper::end();
+        if(!$this->config->debug) die;
 
         $log  = (new Exception())->getTraceAsString(); /* Print a backtrace like debug_print_backtrace(). */
         $log  = str_replace($this->basePath, '', $log); /* Remove the base path from the backtrace. */
