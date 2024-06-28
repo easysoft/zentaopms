@@ -22,6 +22,7 @@ class filter extends wg
         'items?: array',                    // picker 列表项或表项获取方法。
         'menu?: array',                     // picker 附加的菜单选项。
         'multiple?: boolean|number=false',  // picker 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
+        'layout?: string="horz"',             // 使用的方式，默认是水平使用，还可以指定为normal正常布局。
         'onChange?: function'
     );
 
@@ -89,12 +90,12 @@ class filter extends wg
 
     protected function build()
     {
-        $type  = $this->prop('type');
-        $class = $this->prop('class', 'w-1/4');
+        list($type, $layout) = $this->prop(array('type', 'layout'));
+        $class = $this->prop('class', $layout === 'horz' ? 'w-1/4' : '');
 
         return inputGroup
         (
-            setClass("filter filter-{$type} pr-4 mb-2 {$class}"),
+            setClass("filter filter-{$type} {$class}" . ($layout === 'horz' ? ' mb-2 pr-4' : '')),
             $this->prop('title'),
             $this->buildControl($type)
         );

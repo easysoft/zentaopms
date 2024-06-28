@@ -74,9 +74,9 @@ class resultFilter extends filter
 
     protected function build()
     {
-        $type  = $this->prop('type');
+        list($type, $layout)  = $this->prop(array('type', 'layout'));
         $class = $this->prop('class');
-        if(($type == 'date' || $type == 'datetime') && empty($class)) $this->setProp('class', 'w-1/2');
+        if(($type == 'date' || $type == 'datetime') && empty($class)) $this->setProp('class', $layout === 'horz' ? 'w-1/4' : '');
 
         return parent::build();
     }
