@@ -573,7 +573,7 @@ class myTest
         if(dao::isError()) return dao::getError();
 
         $return = '';
-        foreach($menu as $menuKey => $menuName) $return .= "{$menuKey}:{$menuName},";
+        foreach($menu as $menuKey => $menuName) $return .= "{$menuKey},";
         return trim($return, ',');
     }
 
