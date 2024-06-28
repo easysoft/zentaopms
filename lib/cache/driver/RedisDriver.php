@@ -214,10 +214,7 @@ class RedisDriver implements CacheInterface
      */
     private function buildKeyNames(array $keys)
     {
-        return array_map(function($key) {
-            return $this->buildKeyName($key);
-        }, $keys);
-
+        return array_map(function($key){return $this->buildKeyName($key);}, $keys);
     }
 
     /**
@@ -237,8 +234,6 @@ class RedisDriver implements CacheInterface
      */
     private function assertKeyNames(array $keys)
     {
-        array_map(function ($value) {
-            $this->assertKeyName($value);
-        }, $keys);
+        array_map(function ($value){$this->assertKeyName($value);}, $keys);
     }
 }
