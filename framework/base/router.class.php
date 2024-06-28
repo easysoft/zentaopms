@@ -478,7 +478,7 @@ class baseRouter
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
 
-        if($this->config->redis) $this->redis = static::connectToRedis();
+        if($this->config->redis) $this->redis = $this->connectToRedis();
 
         $this->setupProfiling();
         $this->setupXhprof();
@@ -3480,7 +3480,7 @@ class baseRouter
      * @link https://github.com/phpredis/phpredis/
      * @return Redis|object|false
      */
-    static public function connectToRedis()
+    public function connectToRedis()
     {
         if(!extension_loaded('redis')) return false;
 
@@ -3507,7 +3507,7 @@ class baseRouter
         }
         catch(RedisException $e)
         {
-            static::triggerError($e->getMessage(), __FILE__, __LINE__, true);
+            $this->triggerError($e->getMessage(), __FILE__, __LINE__, true);
         }
 
         if($redis) return $redis;
