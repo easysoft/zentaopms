@@ -12,7 +12,7 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function confirmBug($project, $bug)
+    public function confirmBug(array $project, array $bug)
     {
         $this->login();
         $list = $this->searchBug($bug, $project);
@@ -59,7 +59,7 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function resolveBug($project, $bug)
+    public function resolveBug(array $project, array $bug)
     {
         $this->login();
         $list = $this->searchBug($bug, $project);
@@ -86,7 +86,7 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function closeBug($project, $bug)
+    public function closeBug(array $project, array $bug)
     {
         $this->login();
         $list = $this->searchBug($bug, $project);
@@ -117,5 +117,25 @@ class confirmBugTester extends tester
         $bugList = array_map(function($element){return $element->getText();}, $bugTitleLists->element);
         if(!in_array($bugTitle, $bugList)) return $this->success('操作bug成功');
         return $this->failed('操作bug失败');
+    }
+
+    /**
+     * 编辑一个bug。
+     * Edit a bug.
+     *
+     * @param  array  $project
+     * @param  array  $bug
+     * @access public
+     * @return object
+     */
+    public function editBug(array $project, array $bug)
+    {
+        $this->login();
+        $list = $this->searchBug($bug, $project);
+        $bugTitle = $list->dom->bugTitle->getText();
+        $list->dom->editButton->click();
+        $this->webdriver->wait(1);
+        if(isset($bug['bugName'])) $list->dom->title->setValue($bug['bugName']);
+        $list->dom->btn($this->lang->save)->click();
     }
 }
