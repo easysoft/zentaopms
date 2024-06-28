@@ -98,7 +98,7 @@ class thinkOptions extends wg
                 div
                 (
                     setClass('h-full flex items-center pr-2.5'),
-                    setStyle(array('width' => '60px', 'background' => 'rgba(244, 245, 247, .7)')),
+                    setStyle(array('min-width' => '60px', 'background' => 'rgba(244, 245, 247, .7)')),
                     checkbox
                     (
                         set::name($otherName),

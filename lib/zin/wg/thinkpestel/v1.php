@@ -47,9 +47,9 @@ class thinkPestel extends thinkModel
                         setClass('h-16 px-2 py-3 w-full relative z-10 flex justify-center', 'text-' . $blockColor),
                         span
                         (
-                            setClass('item-step-title overflow-y-hidden'),
+                            setClass('item-step-title overflow-hidden'),
                             setStyle(array('max-height' => '40px')),
-                            set::title($block->text ? $block->text : null),
+                            set::title($block->text ? $block->text : $defaultTitle),
                             $block->text ? $block->text : $defaultTitle
                         )
                     ),
