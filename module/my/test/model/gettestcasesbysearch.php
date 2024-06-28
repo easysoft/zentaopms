@@ -13,8 +13,17 @@ su('admin');
 /**
 
 title=测试 myModel->getTestcasesBySearch();
+timeout=0
 cid=1
-pid=1
+
+- 测试通过搜索获取用例 1 的当前用例名称和状态
+ - 属性title @这个是测试用例19
+ - 属性status @blocked
+- 测试通过搜索获取用例 1 的用例数量 @10
+- 测试通过搜索获取用例 2 的当前用例名称和状态
+ - 属性title @这个是测试用例17
+ - 属性status @wait
+- 测试通过搜索获取用例 2 的用例数量 @5
 
 */
 
