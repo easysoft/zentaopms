@@ -1024,6 +1024,7 @@ class dom
 
             $pickerID = substr($picker->getAttribute('id'), 5);
             $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+            $pickerInput->clear();
         }
     }
 
