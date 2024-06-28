@@ -137,5 +137,12 @@ class confirmBugTester extends tester
         $this->webdriver->wait(1);
         if(isset($bug['bugName'])) $list->dom->title->setValue($bug['bugName']);
         $list->dom->btn($this->lang->save)->click();
+        $this->webdriver->wait(1);
+
+        $alertTitle   = $list->dom->successTag->getText();
+        $bugEditTitle = $list->dom->bugName->getText();
+        if(empty($alertTitle)) return $this->failed('编辑bug失败');
+        if($bugEditTitle == $bugTitle) return $this->success('编辑bug成功');
+        return $this->success('编辑bug名称成功');
     }
 }
