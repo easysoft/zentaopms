@@ -1438,7 +1438,7 @@ class storyTao extends storyModel
 
         if($parentStage != $parent->stage)
         {
-            $demandList[$story->demand] = $story->demand;
+            $demandList[$parent->demand] = $parent->demand;
             $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
             if($parent->parent > 0) $this->computeParentStage($parent);
         }
