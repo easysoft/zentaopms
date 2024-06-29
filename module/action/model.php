@@ -662,6 +662,15 @@ class actionModel extends model
             }
         }
 
+        if($action->objectType == 'story' && $action->action == 'closed')
+        {
+            if(!empty($extra) && strpos($extra, '|') !== false)
+            {
+                list($extra, $status) = explode('|', $extra);
+                $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+            }
+        }
+
         if($action->objectType == 'module' && strpos(',created,moved,', $action->action) !== false)
         {
             $moduleNames = $this->loadModel('tree')->getOptionMenu($action->objectID, 'story', 0, 'all', '');
