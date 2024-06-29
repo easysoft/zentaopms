@@ -1023,7 +1023,7 @@ class bugZen extends bug
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, 'full', 'story', false);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, '', 'story', false);
         }
         if(!isset($stories[$bug->storyID]))
         {
@@ -1243,7 +1243,7 @@ class bugZen extends bug
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, 'full', 'story', false);
+            $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, '', 'story', false);
         }
 
         $resolvedBuildPairs = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
