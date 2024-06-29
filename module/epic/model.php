@@ -7,4 +7,9 @@ class epicModel extends model
         $app->control->loadModel('story');
         return call_user_func_array(array('storyModel', 'isClickable'), array($data, $action));
     }
+
+    public function getToAndCcList(object $story, string $actionType)
+    {
+        $this->loadModel('story')->getToAndCcList($story, $actionType);
+    }
 }
