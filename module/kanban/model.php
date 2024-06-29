@@ -2613,6 +2613,8 @@ class kanbanModel extends model
 
         $this->createRDLane((int)$execution->id, $regionID);
         if(dao::isError()) return false;
+
+        return true;
     }
 
     /**
@@ -2679,6 +2681,8 @@ class kanbanModel extends model
 
             $index ++;
         }
+
+        return true;
     }
 
     /**
