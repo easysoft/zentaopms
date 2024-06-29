@@ -1175,7 +1175,6 @@ class storyZen extends story
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
-            ->setIF($storyType != 'story', 'stage', 'defining')
             ->get();
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
@@ -1499,10 +1498,6 @@ class storyZen extends story
             if(in_array($this->app->tab, array('project', 'execution')))
             {
                 $story->stage = $storyType == 'story' ? 'projected' : 'planning';
-            }
-            else
-            {
-                $story->stage = $storyType == 'story' ? 'wait' : 'defining';
             }
 
             !empty($story->assignedTo) && $story->assignedDate = $now;
