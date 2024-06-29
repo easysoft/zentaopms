@@ -13,8 +13,10 @@ $lang->requirement->common = $lang->URCommon;
 
 $lang->requirement->stageList = array();
 $lang->requirement->stageList[''] = '';
-$lang->requirement->stageList['defining']   = 'Defining';
-$lang->requirement->stageList['planning']   = 'Planning';
+$lang->requirement->stageList['wait']       = 'Wait';
+$lang->requirement->stageList['planned']    = 'Planned';
+$lang->requirement->stageList['projected']  = 'Projected';
 $lang->requirement->stageList['developing'] = 'Developing';
 $lang->requirement->stageList['delivering'] = 'Delivering';
+$lang->requirement->stageList['delivered']  = 'Delivered';
 $lang->requirement->stageList['closed']     = 'Closed';

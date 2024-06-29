@@ -13,8 +13,10 @@ $lang->epic->common = $lang->ERCommon;
 
 $lang->epic->stageList = array();
 $lang->epic->stageList[''] = '';
-$lang->epic->stageList['defining']   = '定义中';
-$lang->epic->stageList['planning']   = '规划中';
+$lang->epic->stageList['wait']       = '未开始';
+$lang->epic->stageList['planned']    = '已计划';
+$lang->epic->stageList['projected']  = '研发立项';
 $lang->epic->stageList['developing'] = '研发中';
 $lang->epic->stageList['delivering'] = '交付中';
+$lang->epic->stageList['delivered']  = '已交付';
 $lang->epic->stageList['closed']     = '已关闭';
