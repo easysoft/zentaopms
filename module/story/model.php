@@ -3831,6 +3831,7 @@ class storyModel extends model
         if($children)
         {
             $children = $this->storyTao->mergePlanTitleAndChildren($productID, $children, $storyType);
+            $children = $this->mergeReviewer($children);
             return array_merge($stories, $children);
         }
 
