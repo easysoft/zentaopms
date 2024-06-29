@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\wg;
+
 /**
  * The control file of story module of ZenTaoPMS.
  *
@@ -350,6 +353,7 @@ class story extends control
      */
     public function batchEdit(int $productID = 0, int $executionID = 0, string $branch = '', string $storyType = 'story', string $from = '')
     {
+        $this->app->loadConfig($storyType, '', true);
         $this->story->replaceURLang($storyType);
         $this->storyZen->setMenuForBatchEdit($productID, $executionID, $storyType, $from);
 
@@ -377,7 +381,7 @@ class story extends control
         $product = $this->product->getByID($productID);
         if($product && $product->type == 'normal') unset($customFields['branch']);
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->story->custom->batchEditFields;
+        $this->view->showFields   = $this->config->{$storyType}->custom->batchEditFields;
 
         $this->storyZen->setFormOptionsForBatchEdit($productID, $executionID, $stories);
 
