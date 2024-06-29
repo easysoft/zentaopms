@@ -218,7 +218,7 @@ class story extends control
         $this->view->type          = $storyType;
         $this->view->fields        = $fields;
         $this->view->planID        = $plan;
-        $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
+        $this->view->maxGradeGroup = $this->story->getMaxGradeGroup('all');
         $this->view->stories       = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
         $this->view->storyTitle    = isset($story->title) ? $story->title : '';
         $this->view->forceReview   = $this->story->checkForceReview($storyType);

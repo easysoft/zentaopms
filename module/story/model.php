@@ -2748,8 +2748,8 @@ class storyModel extends model
         {
             $maxGradeGroup = $this->getMaxGradeGroup();
             $lastGrade     = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
-            $SRGradePairs  = $this->getGradePairs('story');
-            $URGradePairs  = $this->getGradePairs('requirement');
+            $SRGradePairs  = $this->getGradePairs('story', 'all');
+            $URGradePairs  = $this->getGradePairs('requirement', 'all');
             $requirements  = $this->dao->select('id, parent, grade, title, status')->from(TABLE_STORY)
                 ->where('deleted')->eq('0')
                 ->andWhere('product')->eq($productID)
@@ -2807,8 +2807,8 @@ class storyModel extends model
     {
         $maxGradeGroup = $this->getMaxGradeGroup();
         $lastGrade     = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
-        $ERGradePairs  = $this->getGradePairs('epic');
-        $URGradePairs  = $this->getGradePairs('requirement');
+        $ERGradePairs  = $this->getGradePairs('epic', 'all');
+        $URGradePairs  = $this->getGradePairs('requirement', 'all');
 
         $epics = $this->dao->select('id, parent, grade, title, status')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
@@ -2864,7 +2864,7 @@ class storyModel extends model
     public function getEpicParents(int $productID, string|int $appendedStories = '', string $storyType = 'epic', int $storyID = 0): array
     {
         $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
-        $ERGradePairs = $this->getGradePairs('epic');
+        $ERGradePairs = $this->getGradePairs('epic', 'all');
         $childIdList  = $this->getAllChildId($storyID);
 
         $allRequirementParents = $this->dao->select('parent')->from(TABLE_STORY)
@@ -5294,13 +5294,15 @@ class storyModel extends model
      * 按照类型分组，获取需求最大层级。
      * Get max grade group by story type.
      *
+     * @param  string $status all|enable
      * @access public
      * @return array
      */
-    public function getMaxGradeGroup()
+    public function getMaxGradeGroup($status = 'enable')
     {
         return $this->dao->select('type, max(grade) as maxGrade')->from(TABLE_STORYGRADE)
-            ->where('status')->eq('enable')
+            ->where('1 = 1')
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->groupBy('type')
             ->fetchPairs();
     }
