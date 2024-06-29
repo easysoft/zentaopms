@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$canModifyExecution = common::canModify('execution', $execution);
+
 $laneCount = 0;
 foreach($kanbanList as $current => $region)
 {
@@ -53,7 +55,6 @@ if($this->execution->isClickable($execution, 'close'))    $operationMenu[] = arr
 if($this->execution->isClickable($execution, 'activate')) $operationMenu[] = array('text' => $lang->execution->activate, 'url' => inlink('activate', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'off');
 if($this->execution->isClickable($execution, 'delete'))   $operationMenu[] = array('text' => $lang->delete, 'url' => inlink('delete', "id=$execution->id&confirm=no"), 'innerClass' => 'ajax-submit', 'icon' => 'trash');
 
-$canModifyExecution = common::canModify('execution', $execution);
 $canCreateTask      = $canModifyExecution && common::hasPriv('task', 'create');
 $canBatchCreateTask = $canModifyExecution && common::hasPriv('task', 'batchCreate');
 $canImportTask      = $canModifyExecution && common::hasPriv('execution', 'importTask') && $execution->multiple && $this->config->vision != 'lite';
