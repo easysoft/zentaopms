@@ -11,16 +11,22 @@ declare(strict_types=1);
 namespace zin;
 
 $reviewPrivs = array();
+$viewPrivs   = array();
 foreach(array_keys($lang->my->featureBar['audit']) as $type)
 {
-    $priv = hasPriv($type, 'review');
+    $priv     = hasPriv($type, 'review');
+    $viewPriv = hasPriv($type, 'view');
     if(!in_array($type, $config->my->noFlowAuditModules)) $priv = hasPriv($type, 'approvalreview');
     $reviewPrivs[$type] = $priv;
+    $viewPrivs[$type]   = $viewPriv;
 }
+$reviewPrivs['review'] = hasPriv('review', 'access');
+$viewPrivs['review']   = hasPriv('review', 'view');
 
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('flowReviewLink', createLink('{module}', 'approvalreview', 'id={id}'));
 jsVar('reviewPrivs', $reviewPrivs);
+jsVar('viewPrivs', $viewPrivs);
 jsVar('noFlowAuditModules', $config->my->noFlowAuditModules);
 jsVar('projectPriv', hasPriv('review', 'assess'));
 jsVar('projectReviewLink', createLink('review', 'assess', 'reviewID={id}'));

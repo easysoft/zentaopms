@@ -29,7 +29,7 @@ window.onRenderCell = function(result, {row, col})
         if(!viewPrivs[row.data.module])
         {
             result[0].props['data-toggle'] = '';
-            result[0].props['href'] = '#';
+            delete result[0].props['href'];
         }
     }
     return result;
