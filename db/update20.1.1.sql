@@ -42,10 +42,9 @@ ALTER TABLE `zt_story` ADD `parentVersion` smallint NOT NULL DEFAULT '0' AFTER `
 ALTER TABLE `zt_story` CHANGE `stage` `stage` enum('','wait','defining','inroadmap','incharter','planning','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','delivering','released','closed') NOT NULL DEFAULT 'wait';
 ALTER TABLE `zt_story` DROP `childStories`;
 CREATE INDEX `root` ON `zt_story` (`root`);
-UPDATE `zt_story` SET stage = 'defining'   WHERE stage = 'wait' AND (parent = -1 OR type != 'story');
-UPDATE `zt_story` SET stage = 'planning'   WHERE stage in ('planned', 'projected') AND (parent = -1 OR type != 'story');
 UPDATE `zt_story` SET stage = 'developing' WHERE stage in ('developed', 'testing', 'tested') AND (parent = -1 OR type != 'story');
-UPDATE `zt_story` SET stage = 'delivering' WHERE stage in ('verified', 'released') AND (parent = -1 OR type != 'story');
+UPDATE `zt_story` SET stage = 'delivering' WHERE stage = 'verified' AND (parent = -1 OR type != 'story');
+UPDATE `zt_story` SET stage = 'delivered'  WHERE stage = 'released' AND (parent = -1 OR type != 'story');
 UPDATE `zt_story` SET isParent = '1' WHERE parent = -1;
 UPDATE `zt_story` SET grade = 1, parent = 0, root = id, path = concat(',', id, ',') WHERE type != 'story';
 UPDATE `zt_story` SET grade = 1, parent = 0, root = id, path = concat(',', id, ',') WHERE type = 'story' AND parent <= 0;
