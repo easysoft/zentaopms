@@ -94,6 +94,7 @@ $lang->execution->progress            = ' Progress';
 $lang->execution->hours               = 'Estimates: %s, Cost: %s, Left: %s.';
 $lang->execution->viewBug             = 'Bugs';
 $lang->execution->noProduct           = "No {$lang->productCommon} yet.";
+$lang->execution->noStory             = "No Stories yet.";
 $lang->execution->createStory         = "Create Story";
 $lang->execution->storyTitle          = "Story Name";
 $lang->execution->storyView           = "Story Detail";

@@ -94,6 +94,7 @@ $lang->execution->progress            = '进度';
 $lang->execution->hours               = '预计 %s 消耗 %s 剩余 %s';
 $lang->execution->viewBug             = '查看bug';
 $lang->execution->noProduct           = "无{$lang->executionCommon}";
+$lang->execution->noStory             = "暂时没有需求";
 $lang->execution->createStory         = "提{$lang->SRCommon}";
 $lang->execution->storyTitle          = "{$lang->SRCommon}名称";
 $lang->execution->storyView           = "{$lang->SRCommon}详情";

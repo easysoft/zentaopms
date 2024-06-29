@@ -94,6 +94,7 @@ $lang->execution->progress            = 'Fortschritt';
 $lang->execution->hours               = '%s geplant, %s verbraucht, %s Rest.';
 $lang->execution->viewBug             = 'Bugs';
 $lang->execution->noProduct           = "Kein {$lang->productCommon}";
+$lang->execution->noStory             = "No Stories yet.";
 $lang->execution->createStory         = "Story erstellen";
 $lang->execution->storyTitle          = "Story Name";
 $lang->execution->storyView           = "Story Detail";
