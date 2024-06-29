@@ -250,11 +250,9 @@ if($config->systemMode == 'PLM')
 }
 
 $lang->story->stageList['']           = '';
-$lang->story->stageList['defining']   = 'Defining';
 $lang->story->stageList['wait']       = 'En Attente';
 $lang->story->stageList['inroadmap']  = 'In Roadmap';
 $lang->story->stageList['incharter']  = 'In Charter';
-$lang->story->stageList['planning']   = 'Planning';
 $lang->story->stageList['planned']    = 'Plannifée';
 $lang->story->stageList['projected']  = 'Projetée';
 $lang->story->stageList['designing']  = 'Designing';
@@ -266,6 +264,7 @@ $lang->story->stageList['tested']     = 'Testée';
 $lang->story->stageList['verified']   = 'Acceptée';
 $lang->story->stageList['rejected']   = 'Verify Rejected';
 $lang->story->stageList['delivering'] = 'Delivering';
+$lang->story->stageList['delivered']  = 'Delivered';
 $lang->story->stageList['released']   = 'Versionnée';
 $lang->story->stageList['closed']     = 'Fermée';
 
