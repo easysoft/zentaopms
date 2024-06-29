@@ -358,7 +358,7 @@ jsVar('checkedSummary', $checkedSummary);
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
-    ($showGrade && ($storyType != 'story' || $isProjectStory)) ? to::leading
+    $showGrade ? to::leading
     (
         picker
         (
