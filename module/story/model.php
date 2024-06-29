@@ -2780,7 +2780,8 @@ class storyModel extends model
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll('id');
 
-            return array_merge($this->addGradeLabel($requirements), $this->addGradeLabel($stories));
+            $parents = $requirements + $stories;
+            return $this->addGradeLabel($parents);
         }
         elseif($storyType == 'requirement')
         {
@@ -2847,7 +2848,8 @@ class storyModel extends model
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
 
-        return array_merge($this->addGradeLabel($epics), $this->addGradeLabel($requirements));
+        $parents = $epics + $requirements;
+        return $this->addGradeLabel($parents);
     }
 
     /**
