@@ -2234,7 +2234,7 @@ class execution extends control
         /* 通过objectID获取符合项目、执行、阶段和看板类型的对象。*/
         $object = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
 
-        $browseLink = $this->createLink('execution', 'story', "executionID=$objectID&storyType=$storyType");
+        $browseLink = $this->createLink('execution', 'story', "executionID=$objectID");
         if($this->app->tab == 'project' and $object->multiple) $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
 
         if($object->type == 'kanban' && !$object->hasProduct) $this->lang->productCommon = $this->lang->project->common;
