@@ -2520,7 +2520,7 @@ class storyModel extends model
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
-            ->andWhere('stage')->in('developed,released')
+            ->andWhere('stage')->in('developed,released,delivered')
             ->andWhere('status')->ne('closed')
             ->orderBy($orderBy)
             ->page($pager)
