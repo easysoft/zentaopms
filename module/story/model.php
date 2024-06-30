@@ -3674,7 +3674,7 @@ class storyModel extends model
             }
 
             if(!empty($story->twins))   return false;
-            if(strpos('active,launched', $story->status) === false) return false;
+            if(strpos('reviewing,closed', $story->status) !== false) return false;
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]))) return false;
