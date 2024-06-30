@@ -261,10 +261,12 @@ $lang->kanban->laneTypeList['bug']         = 'Bug';
 $lang->kanban->laneTypeList['task']        = '任务';
 
 $lang->kanban->ERURColumn = array();
-$lang->kanban->ERURColumn['defining']   = '定义中';
-$lang->kanban->ERURColumn['planning']   = '规划中';
+$lang->kanban->ERURColumn['wait']       = '未开始';
+$lang->kanban->ERURColumn['planned']    = '已计划';
+$lang->kanban->ERURColumn['projected']  = '已立项';
 $lang->kanban->ERURColumn['developing'] = '研发中';
 $lang->kanban->ERURColumn['delivering'] = '交付中';
+$lang->kanban->ERURColumn['delivered']  = '已交付';
 $lang->kanban->ERURColumn['closed']     = '已关闭';
 
 $lang->kanban->storyColumn = array();

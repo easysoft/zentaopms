@@ -1638,8 +1638,7 @@ class storyModel extends model
             /* Change stage. */
             if($planID)
             {
-                if($oldStory->stage == 'wait')     $story->stage = 'planned';
-                if($oldStory->stage == 'defining') $story->stage = 'planning';
+                if($oldStory->stage == 'wait') $story->stage = 'planned';
                 if($productType != 'normal' and $oldStory->branch == 0)
                 {
                     if(!empty($oldPlanID) && $oldStory->type == 'story') $story->plan = trim("{$story->plan},{$planID}", ',');

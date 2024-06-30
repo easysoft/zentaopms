@@ -261,10 +261,12 @@ $lang->kanban->laneTypeList['bug']         = 'Bug';
 $lang->kanban->laneTypeList['task']        = 'Task';
 
 $lang->kanban->ERURColumn = array();
-$lang->kanban->ERURColumn['defining']   = 'Defining';
-$lang->kanban->ERURColumn['planning']   = 'Planning';
+$lang->kanban->ERURColumn['wait']       = 'Wait';
+$lang->kanban->ERURColumn['planned']    = 'Planned';
+$lang->kanban->ERURColumn['projected']  = 'Projected';
 $lang->kanban->ERURColumn['developing'] = 'Developing';
 $lang->kanban->ERURColumn['delivering'] = 'Delivering';
+$lang->kanban->ERURColumn['delivered']  = 'Delivered';
 $lang->kanban->ERURColumn['closed']     = 'Closed';
 
 $lang->kanban->storyColumn = array();
