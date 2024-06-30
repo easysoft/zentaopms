@@ -1,8 +1,5 @@
 <?php
 declare(strict_types=1);
-
-use function zin\wg;
-
 /**
  * The control file of story module of ZenTaoPMS.
  *
