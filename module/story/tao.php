@@ -1454,6 +1454,22 @@ class storyTao extends storyModel
                             if($child->stage != 'released') $allReleased = false;
                         }
 
+                        if($hasDelivering && !$allReleased)
+                        {
+                            $parentStage = 'delivering';
+                        }
+                        else
+                        {
+                            /* Delivered. */
+                            $allDelivered = true;
+                            foreach($children as $child)
+                            {
+                                if($child->stage == 'closed' && $child->closedReason != 'done') continue;
+                                if(!in_array($child->stage, array('released', 'delivered'))) $allDelivered = false;
+                            }
+
+                            if($allDelivered) $parentStage = 'delivered';
+                        }
                     }
                 }
             }
