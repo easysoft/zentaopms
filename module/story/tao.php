@@ -1312,33 +1312,41 @@ class storyTao extends storyModel
 
     /**
      * 通过子需求更新父需求的阶段。
-     * 子需求阶段范围：未开始、已计划、已立项、设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败、待发布、已发布、已关闭。
-     * 父需求阶段范围：定义中、规划中、研发中、交付中、已关闭。
+     * 子需求阶段范围：未开始、已计划、研发立项、设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败、已发布、已关闭。
+     * 父需求阶段范围：未开始、已计划、研发立项、研发中、交付中、已交付、已关闭。
      *
      * 父需求阶段由子需求阶段决定，规则如下：
-     * 1. 定义中:
-     *   排除已关闭（关闭原因不是已完成）后，所有子需求阶段仅为定义中、未开始。
-     * 2. 规划中:
-     *   排除已关闭（关闭原因不是已完成）后，至少有一个子级需求为规划中、已立项、已计划， 其他子需求阶段仅为定义中、未开始。
-     * 3. 研发中:
+     * 1.未开始:
+     *   所有子需求都未开始。
+     * 2.已计划:
+     *   父需求主动关联计划，或有子需求是已计划、其余子需求未开始。
+     * 3.研发立项:
+     *   父需求主动关联项目，或有子需求是研发立项、其余子需求阶段小于研发立项。
+     * 4. 研发中:
      *   排除已关闭（关闭原因不是已完成）后，至少有一个子级需求为设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败， 其他子需求阶段仅为未开始、规划中、已立项、已计划。
-     * 4. 交付中:
-     *   至少有一个子级需求为交付中、已发布；或者有一个子级需求为已关闭（关闭原因是已完成）。
-     * 5. 已关闭:
+     * 5. 交付中:
+     *   部分子级需求为已发布; 其余子级需求在已发布之前的阶段。
+     * 6. 已交付:
+     *   所有子需求都已发布; 或部分已发布，其余已关闭（关闭原因是已完成）。
+     * 7. 已关闭:
      *   所有子需求都已关闭。
      *
      * Update parent stage by children.
      * Parent stage is decided by children stage, the rules are as follows:
-     * 1. Defining:
-     *   All children stages are defining or wait, and no children stage is closed and closedReason is not done.
-     * 2. Planning:
-     *   At least one child stage is planning, planned or projected, and all other children stages are defining or wait, and no children stage is closed and closedReason is not done.
-     * 3. Developing:
-     *   At least one child stage is designing, designed, developing, developed, testing, tested, verified or rejected, and all other children stages are defining, planning, planned or projected, and no children stage is closed and closedReason is not done.
-     * 4. Delivering:
-     *   At least one child stage is delivering, released, or at least one child stage is closed and closedReason is done.
-     * 5. Closed:
-     *   All children stages are closed.
+     * 1. Wait:
+     *   All child stories are in wait.
+     * 2. Planned:
+     *   Parent story is linked to plan, or at least one child story is in planned, and the others are in wait.
+     * 3. Projected:
+     *   Parent story is linked to project, or at least one child story is in projected, and the others are in wait or planned.
+     * 4. Developing:
+     *   At least one child story is in designing, designed, developing, developed, testing, tested, verified, rejected, and the others are in wait, defining, planning, planned.
+     * 5. Delivering:
+     *  Some child stories are released, and the others are in the stage before released.
+     * 6. Delivered:
+     *  All child stories are released, or some are released and the others are closed with reason done.
+     * 7. Closed:
+     * All child stories are closed.
      *
      * @param  object    $story
      * @access public
@@ -1356,12 +1364,12 @@ class storyTao extends storyModel
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
-        $allDefining = true;
+        $allWait     = true;
         $allClosed   = true;
         foreach($children as $child)
         {
             if($child->stage == 'closed' && $child->closedReason != 'done') continue;
-            if(!in_array($child->stage, array('wait', 'defining'))) $allDefining = false;
+            if($child->stage != 'wait')   $allWait   = false;
             if($child->stage != 'closed') $allClosed = false;
         }
 
@@ -1370,68 +1378,70 @@ class storyTao extends storyModel
         {
             $parentStage = 'closed';
         }
-        elseif($allDefining)
+        elseif($allWait)
         {
-            $parentStage = 'defining';
+            $parentStage = 'wait';
         }
         else
         {
-            $hasPlanning = false;
-            $allClosedOrDefining = true;
+            $hasPlanned       = false;
+            $allBeforePlanned = true;
             foreach($children as $child)
             {
-                /* Planning. */
+                /* Planned. */
                 if($child->stage == 'closed' && $child->closedReason != 'done') continue;
-                if(in_array($child->stage, array('planning', 'planned', 'projected')))
+                if($child->stage == 'planned')
                 {
-                    $hasPlanning = true;
+                    $hasPlanned = true;
                 }
-                elseif(!in_array($child->stage, array('wait', 'defining')))
+                elseif(!in_array($child->stage, array('wait', 'planned')))
                 {
-                    $allClosedOrDefining = false;
+                    $allBeforePlanned = false;
                 }
             }
 
-            if($hasPlanning && $allClosedOrDefining)
+            if($hasPlanned && $allBeforePlanned)
             {
-                $parentStage = 'planning';
+                $parentStage = 'planned';
             }
             else
             {
-                /* Developing. */
-                $hasDeveloping = false;
-                $allClosedOrDefiningOrPlanning = true;
+                /* Projected. */
+                $hasProjected       = false;
+                $allBeforeProjected = true;
                 foreach($children as $child)
                 {
                     if($child->stage == 'closed' && $child->closedReason != 'done') continue;
-                    if(in_array($child->stage, array('designing', 'designed', 'developing', 'developed', 'testing', 'tested', 'verified', 'rejected')))
-                    {
-                        $hasDeveloping = true;
-                    }
-                    elseif(!in_array($child->stage, array('wait', 'defining', 'planning', 'planned', 'projected')))
-                    {
-                        $allClosedOrDefiningOrPlanning = false;
-                    }
+                    if($child->stage == 'projected') $hasProjected = true;
+                    if(!in_array($child->stage, array('wait', 'planned', 'projected'))) $allBeforeProjected = false;
                 }
 
-                if($hasDeveloping && $allClosedOrDefiningOrPlanning)
+                if($hasProjected && $allBeforeProjected)
                 {
-                    $parentStage = 'developing';
+                    $parentStage = 'projected';
                 }
                 else
                 {
-                    /* Delivering. */
-                    $hasDelivering = false;
+                    /* Developing. */
+                    $hasDeveloping       = false;
+                    $allBeforeDeveloping = true;
                     foreach($children as $child)
                     {
-                        if(in_array($child->stage, array('delivering', 'released')) || ($child->stage == 'closed' && $child->closedReason == 'done'))
+                        if($child->stage == 'closed' && $child->closedReason != 'done') continue;
+                        if(in_array($child->stage, array('designing', 'designed', 'developing', 'developed', 'testing', 'tested', 'verified', 'rejected')))
                         {
-                            $hasDelivering = true;
-                            break;
+                            $hasDeveloping = true;
+                        }
+                        if(in_array($child->stage, array('released', 'delivering', 'delivered')))
+                        {
+                            $allBeforeDeveloping = false;
                         }
                     }
 
-                    if($hasDelivering) $parentStage = 'delivering';
+                    if($hasDeveloping && $allBeforeDeveloping)
+                    {
+                        $parentStage = 'developing';
+                    }
                 }
             }
         }
