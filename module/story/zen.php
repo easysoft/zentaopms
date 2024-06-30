@@ -1497,7 +1497,7 @@ class storyZen extends story
 
             if(in_array($this->app->tab, array('project', 'execution')))
             {
-                $story->stage = $storyType == 'story' ? 'projected' : 'planning';
+                $story->stage = 'projected';
             }
 
             !empty($story->assignedTo) && $story->assignedDate = $now;

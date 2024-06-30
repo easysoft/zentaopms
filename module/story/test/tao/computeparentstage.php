@@ -3,26 +3,26 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$product = zdTable('product')->gen(1);
+$product = zenData('product')->gen(1);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('11-20');
 $project->type->range('project,project,sprint,kanban');
 $project->model->range('scrum,kanban');
 $project->gen(10);
 
-$projectStory = zdTable('projectstory');
+$projectStory = zenData('projectstory');
 $projectStory->story->range('6-20');
 $projectStory->product->range('1');
 $projectStory->project->range('11-20');
 $projectStory->gen(15);
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->product->range('1');
 $projectProduct->project->range('11-20');
 $projectProduct->gen(10);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1');
 $story->plan->range('`1,2`,2,3,4,5');
 $story->type->range('story');
@@ -32,13 +32,13 @@ $story->isParent->range('1{5},0{15}');
 $story->stage->range('wait,planned,developing,tested,released');
 $story->gen(20)->fixPath();
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->story->range('6-20');
 $task->execution->range('11-20');
 $task->type->range('devel,test,design');
 $task->gen(100);
 
-$release = zdTable('release');
+$release = zenData('release');
 $release->stories->range('6-10');
 $release->gen(5);
 
