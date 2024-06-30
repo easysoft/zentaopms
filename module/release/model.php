@@ -382,6 +382,8 @@ class releaseModel extends model
 
         if(dao::isError()) return false;
 
+        if($oldRelease->status != $release->status && $release->status == 'normal') $this->setStoriesStage($oldRelease->id);
+
         $shadowBuild = array();
         if($release->name != $oldRelease->name)   $shadowBuild['name']   = $release->name;
         if($release->build != $oldRelease->build) $shadowBuild['builds'] = $release->build;
@@ -648,6 +650,7 @@ class releaseModel extends model
     public function changeStatus(int $releaseID, string $status): bool
     {
         $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
+        if($status == 'normal') $this->setStoriesStage($releaseID);
         return !dao::isError();
     }
 
@@ -1071,5 +1074,17 @@ class releaseModel extends model
         }
 
         return !dao::isError();
+    }
+
+    public function setStoriesStage(int $releaseID): void
+    {
+        $release = $this->getByID($releaseID);
+        if(!$release) return;
+
+        $storyIDList = array_filter(explode(',', $release->stories));
+        if(empty($storyIDList)) return;
+
+        $this->loadModel('story');
+        foreach($storyIDList as $storyID) $this->story->setStage((int)$storyID);
     }
 }
