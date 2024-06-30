@@ -1076,6 +1076,14 @@ class releaseModel extends model
         return !dao::isError();
     }
 
+    /*
+     * 当发布的状态变为正常时，设置需求的阶段。
+     * Set the stage of the stories when the release status is normal.
+     *
+     * @param  int $releaseID
+     * @access public
+     * @return void
+     */
     public function setStoriesStage(int $releaseID): void
     {
         $release = $this->getByID($releaseID);
