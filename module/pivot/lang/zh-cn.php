@@ -415,3 +415,7 @@ $lang->datepicker->dpText->TEXT_WEEK_MONDAY = '本周一';
 $lang->datepicker->dpText->TEXT_WEEK_SUNDAY = '本周日';
 $lang->datepicker->dpText->TEXT_MONTH_BEGIN = '本月初';
 $lang->datepicker->dpText->TEXT_MONTH_END   = '本月末';
+
+$lang->pivot->drill = new stdclass();
+$lang->pivot->drill->InDrillField = '下钻查询表中的';
+$lang->pivot->drill->InQueryField = '查询结果字段';

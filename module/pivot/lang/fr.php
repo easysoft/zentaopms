@@ -415,3 +415,7 @@ $lang->datepicker->dpText->TEXT_WEEK_MONDAY = 'Monday';
 $lang->datepicker->dpText->TEXT_WEEK_SUNDAY = 'Sunday';
 $lang->datepicker->dpText->TEXT_MONTH_BEGIN = 'Begin Month';
 $lang->datepicker->dpText->TEXT_MONTH_END   = 'End Month';
+
+$lang->pivot->drill = new stdclass();
+$lang->pivot->drill->InDrillField = 'Drill table field';
+$lang->pivot->drill->InQueryField = 'Query field';
