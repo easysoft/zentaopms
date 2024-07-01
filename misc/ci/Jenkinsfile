@@ -35,7 +35,7 @@ pipeline {
     string description: '指定收费版全量降级 revision', name: 'fulldown_ext_version', trim: true
 
     separator(name: "other", sectionHeader: "其它")
-    booleanParam defaultValue: false, description: '制作英文版', name: 'publish_en'
+    booleanParam defaultValue: true, description: '制作英文版', name: 'publish_en'
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
   }
 
@@ -304,7 +304,7 @@ pipeline {
             axes {
               axis {
                 name "ZLANG"
-                values "cn"
+                values "cn", "en"
               }
               axis {
                 name "PHPVERSION"
@@ -472,7 +472,12 @@ pipeline {
                         }
                         script {
                           if (env.PUBLISH_ENGLISH=="true") {
-                            // do copy release/en/
+                            container('docker') {
+                              sh "mv `find release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
+                              sh "mv `find release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_BIZ_MAIN_VERSION"
+                              sh "mv `find release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
+                              sh "mv `find release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
+                            }
                           }
                         }
                         container('jnlp') {
@@ -527,7 +532,12 @@ pipeline {
                         }
                         script {
                           if (env.PUBLISH_ENGLISH=="true") {
-                            // do copy release/en/
+                            container('docker') {
+                              sh "mv `find release/en/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
+                              sh "mv `find release/en/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_BIZ_MAIN_VERSION"
+                              sh "mv `find release/en/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
+                              sh "mv `find release/en/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
+                            }
                           }
                         }
                         container('jnlp') {
