@@ -219,6 +219,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `multipleType` enum('and','or') NOT NULL DEFAULT 'and',
   `percent` smallint(6) NOT NULL DEFAULT 0,
   `needAll` enum('0', '1') NOT NULL DEFAULT '0',
+  `solicit` enum('0','1') NOT NULL DEFAULT '0',
   `prev` mediumtext NULL,
   `next` mediumtext NULL,
   `status` varchar(20) NOT NULL DEFAULT 'wait',
