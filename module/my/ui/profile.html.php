@@ -26,32 +26,28 @@ if($deptPath)
 $getItems = function($datas)
 {
     $cells = array();
-    foreach($datas as $label => $value)
+    foreach($datas as $field => $data)
     {
         $cells[] = cell
         (
             set::width('50%'),
-            set::className('flex'),
+            set::className('flex py-2 ' . $field),
             cell
             (
                 set::width('70px'),
                 set::className('text-right'),
-                span(set::className('text-gray'), $label)
+                span(set::className('text-gray'), $data['label'])
             ),
             cell
             (
                 set::flex('1'),
                 set::className('ml-2'),
-                $value
+                $data['value']
             )
         );
     }
 
-    return div
-    (
-        set::className('flex py-2'),
-        $cells
-    );
+    return $cells;
 };
 
 
@@ -78,32 +74,43 @@ div
     formRowGroup(set::title($lang->my->form->lblBasic)),
     div
     (
-        set::className('py-2 basic-info'),
-        $getItems(array($lang->user->realname => $user->realname,         $lang->user->gender => zget($lang->user->genderList, $user->gender))),
-        $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email, set::target('_self')) : '')),
-        $getItems(array($lang->user->dept     => html($deptName),         $lang->user->role   => zget($lang->user->roleList, $user->role, ''))),
-        $getItems(array($lang->user->abbr->join   => formatTime($user->join), $lang->user->priv   => trim($groupName)))
+        set::className('py-2 flex flex-wrap basic-info'),
+        $getItems(array('realname' => array('label' => $lang->user->realname,   'value' => $user->realname))),
+        $getItems(array('gender'   => array('label' => $lang->user->gender,     'value' => zget($lang->user->genderList, $user->gender)))),
+        $getItems(array('account'  => array('label' => $lang->user->account,    'value' => $user->account))),
+        $getItems(array('email'    => array('label' => $lang->user->email,      'value' => $user->email ? a(set::href("mailto:{$user->email}"), $user->email, set::target('_self')) : ''))),
+        $getItems(array('dept'     => array('label' => $lang->user->dept,       'value' => html($deptName)))),
+        $getItems(array('role'     => array('label' => $lang->user->role,       'value' => zget($lang->user->roleList, $user->role, '')))),
+        $getItems(array('join'     => array('label' => $lang->user->abbr->join, 'value' => formatTime($user->join)))),
+        $getItems(array('priv'     => array('label' => $lang->user->priv,       'value' => trim($groupName))))
     ),
     formRowGroup(set::title($lang->my->form->lblContact)),
     div
     (
-        set::className('py-2 contact-info'),
-        $getItems(array($lang->user->mobile  => $user->mobile,  $lang->user->weixin    => $user->weixin)),
-        $getItems(array($lang->user->phone   => $user->phone,   $lang->user->qq        => $user->qq)),
-        $getItems(array($lang->user->zipcode => $user->zipcode, $lang->user->abbr->address => $user->address))
+        set::className('py-2 flex flex-wrap contact-info'),
+        $getItems(array('mobile'  => array('label' => $lang->user->mobile,        'value' => $user->mobile))),
+        $getItems(array('weixin'  => array('label' => $lang->user->weixin,        'value' => $user->weixin))),
+        $getItems(array('phone'   => array('label' => $lang->user->phone,         'value' => $user->phone))),
+        $getItems(array('qq'      => array('label' => $lang->user->qq,            'value' => $user->qq))),
+        $getItems(array('zipcode' => array('label' => $lang->user->zipcode,       'value' => $user->zipcode))),
+        $getItems(array('address' => array('label' => $lang->user->abbr->address, 'value' => $user->address)))
     ),
     formRowGroup(set::title($lang->my->form->lblAccount)),
     div
     (
-        set::className('py-2 account-info'),
-        $getItems(array($lang->user->commiter => $user->commiter, $lang->user->skype    => $user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : '')),
-        $getItems(array($lang->user->visits   => $user->visits,   $lang->user->whatsapp => $user->whatsapp)),
-        $getItems(array($lang->user->last     => $user->last,     $lang->user->slack    => $user->slack)),
-        $getItems(array($lang->user->ip       => $user->ip,       $lang->user->dingding => $user->dingding))
+        set::className('py-2 flex flex-wrap account-info'),
+        $getItems(array('commiter' => array('label' => $lang->user->commiter, 'value' => $user->commiter))),
+        $getItems(array('skype'    => array('label' => $lang->user->skype,    'value' => $user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : ''))),
+        $getItems(array('visits'   => array('label' => $lang->user->visits,   'value' => $user->visits))),
+        $getItems(array('whatsapp' => array('label' => $lang->user->whatsapp, 'value' => $user->whatsapp))),
+        $getItems(array('last'     => array('label' => $lang->user->last,     'value' => $user->last))),
+        $getItems(array('slack'    => array('label' => $lang->user->slack,    'value' => $user->slack))),
+        $getItems(array('ip'       => array('label' => $lang->user->ip,       'value' => $user->ip))),
+        $getItems(array('dingding' => array('label' => $lang->user->dingding, 'value' => $user->dingding)))
     ),
     center
     (
-        setClass('w-full fixed actions-menu my-profile'),
+        setClass('w-full actions-menu my-profile'),
         floatToolbar
         (
             set::object($user),
