@@ -294,6 +294,20 @@ class pivotState
     }
 
     /**
+     * Judge is query filter or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isQueryFilter()
+    {
+        if(empty($this->filters)) return false;
+        $filter = current($this->filters);
+
+        return isset($filter['from']) && $filter['from'] == 'query';
+    }
+
+    /**
      * Complete filters default.
      *
      * @access public
