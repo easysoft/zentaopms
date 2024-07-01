@@ -538,7 +538,7 @@ class pivotState
 
         foreach($settings as $field => $setting)
         {
-            $oldSetting = isset($fieldSettings[$field]) ? $fieldSettings[$field] : array();
+            $oldSetting = isset($oldFieldSettings[$field]) ? $oldFieldSettings[$field] : array();
             if(!empty($oldSetting) && $oldSetting['object'] == $setting['object'] && $oldSetting['field'] == $setting['field'])
             {
                 $newFieldSettings[$field] = $this->processFieldSettingLang($field, $oldSetting);
