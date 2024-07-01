@@ -289,6 +289,7 @@ $lang->pivot->clearSettings   = 'The configuration of the query data has been mo
 $lang->pivot->draftSave       = 'The pivot table has been published and will be in draft state. Do you want to continue?';
 $lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
 $lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
+$lang->pivot->drillingTip     = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
 
 $lang->pivot->confirm = new stdclass();
 $lang->pivot->confirm->design  = 'This pivot table is referenced by a published screen. Do you want to continue?';
