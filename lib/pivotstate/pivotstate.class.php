@@ -390,7 +390,7 @@ class pivotState
         $settings = $this->settings;
         if(!isset($settings['summary']) || $settings['summary'] !== 'notuse') $this->settings['summary'] = 'use';
         if(!isset($settings['group1']))  $this->settings['group1'] = '';
-        if(!isset($settings['columns'])) $this->settings['columns'][] = array('field' => '', 'slice' => 'noSlice', 'stat' => '', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
+        if(!isset($settings['columns'])) $this->addColumn();
     }
 
     /**
@@ -446,9 +446,18 @@ class pivotState
      */
     public function addColumn()
     {
-        $firstField = current($this->fieldSettings);
+        $this->settings['columns'][] = $this->getDefaultColumn();
+    }
 
-        $this->settings['columns'][] = array('field' => $firstField['name'], 'slice' => 'noSlice', 'stat' => 'count', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
+    public function getDefaultColumn($field = null)
+    {
+        if(empty($field))
+        {
+            $firstField = current($this->fieldSettings);
+            $field = $firstField['name'];
+        }
+
+        return array('field' => $field, 'slice' => 'noSlice', 'stat' => 'count', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
     }
 
     /**
