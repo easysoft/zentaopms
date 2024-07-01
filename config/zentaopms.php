@@ -350,7 +350,6 @@ $config->logonMethods[] = 'zanode.nodelist';
 $config->openModules = array();
 $config->openModules[] = 'install';
 $config->openModules[] = 'upgrade';
-$config->openModules[] = 'im';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
