@@ -1,5 +1,5 @@
 <?php
-global $app;
+global $app, $config;
 $app->loadLang('story');
 $lang->epic = clone $lang->story;
 
@@ -14,9 +14,13 @@ $lang->epic->common = $lang->ERCommon;
 $lang->epic->stageList = array();
 $lang->epic->stageList[''] = '';
 $lang->epic->stageList['wait']       = '未开始';
+$lang->epic->stageList['inroadmap']  = '已设路标';
+$lang->epic->stageList['incharter']  = 'Charter立项';
 $lang->epic->stageList['planned']    = '已计划';
 $lang->epic->stageList['projected']  = '研发立项';
 $lang->epic->stageList['developing'] = '研发中';
 $lang->epic->stageList['delivering'] = '交付中';
 $lang->epic->stageList['delivered']  = '已交付';
 $lang->epic->stageList['closed']     = '已关闭';
+
+if($config->edition != 'ipd') unset($lang->epic->stageList['inroadmap'], $lang->epic->stageList['incharter']);
