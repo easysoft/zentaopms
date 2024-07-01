@@ -23,6 +23,7 @@ $lang->pivot->browseAction = 'Design in Pivot Table';
 $lang->pivot->designAB     = 'Design';
 $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
+$lang->pivot->drill        = 'Drill';
 
 $lang->pivot->deleteTip = 'Are you sure you want to delete it ?';
 
