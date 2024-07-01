@@ -172,6 +172,7 @@ div
                             $lang->instance->setting,
                             setClass('btn ghost'),
                             set::disabled($instance->status != 'running'),
+                            set::id('setting'),
                             set::icon('backend'),
                             setData('toggle', 'modal'),
                             setData('size', 'sm'),
