@@ -215,6 +215,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `account` char(30) NOT NULL DEFAULT '',
   `node` varchar(100) NOT NULL DEFAULT '',
   `reviewType` varchar(100)  NOT NULL DEFAULT 'manual',
+  `agentType` varchar(100)  NOT NULL DEFAULT 'pass',
   `multipleType` enum('and','or') NOT NULL DEFAULT 'and',
   `percent` smallint(6) NOT NULL DEFAULT 0,
   `needAll` enum('0', '1') NOT NULL DEFAULT '0',

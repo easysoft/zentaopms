@@ -101,5 +101,6 @@ ALTER TABLE `zt_user` ADD `superior` char(30) NULL DEFAULT '' AFTER `realname`;
 
 ALTER TABLE `zt_approvalnode` ADD `percent` smallint(6) NOT NULL DEFAULT '0' AFTER `multipleType`;
 ALTER TABLE `zt_approvalnode` ADD `needAll` enum('0', '1') NOT NULL DEFAULT '0' AFTER `percent`;
+ALTER TABLE `zt_approvalnode` ADD `agentType` varchar(100) NOT NULL DEFAULT 'pass' AFTER `reviewType`;
 
 ALTER TABLE `zt_attend` MODIFY `ip` varchar(100) NOT NULL DEFAULT '';
