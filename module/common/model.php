@@ -783,7 +783,7 @@ class commonModel extends model
      */
     public static function createChanges(mixed $old, mixed $new, string $moduleName = ''): array
     {
-        global $app, $config;
+        global $app, $config, $dao;
 
         /**
          * 当主状态改变并且未设置子状态的值时把子状态的值设置为默认值并记录日志。
@@ -799,12 +799,12 @@ class commonModel extends model
 
             if($oldID and $oldStatus and $newStatus and !$newSubStatus and $oldStatus != $newStatus)
             {
-                $field = $app->dbQuery('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
+                $field = $dao->select('options')->from(TABLE_WORKFLOWFIELD)->where('`module`')->eq($moduleName)->andWhere('`field`')->eq('subStatus')->fetch();
                 if(!empty($field->options)) $field->options = json_decode($field->options, true);
 
                 if(!empty($field->options[$newStatus]['default']))
                 {
-                    $flow    = $app->dbQuery('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
+                    $flow    = $dao->select('`table`')->from(TABLE_WORKFLOW)->where('`module`')->eq($moduleName)->fetch();
                     $default = $field->options[$newStatus]['default'];
 
                     $common = new self();
@@ -815,8 +815,7 @@ class commonModel extends model
             }
 
             $dateFields = array();
-            $sql        = "SELECT `field` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `control` in ('date', 'datetime')";
-            $stmt       = $app->dbQuery($sql);
+            $stmt       = $dao->select('`field`')->from(TABLE_WORKFLOWFIELD)->where('`module`')->eq($moduleName)->andWhere('`control`')->in(array('data', 'datetime'));
             while($row = $stmt->fetch()) $dateFields[$row->field] = $row->field;
         }
 
@@ -2790,19 +2789,22 @@ eof;
      */
     public static function buildMoreButton(int $executionID, bool $printHtml = true): string
     {
-        global $lang, $app;
+        global $lang, $app, $dao;
 
         if(commonModel::isTutorialMode()) return '';
 
-        $object = $app->dbQuery('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        $object = $dao->select('project,`type`')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
         if(empty($object)) return '';
 
         $executionPairs = array();
-        $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
-        $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
+        $executionList  = $dao->select('id,name,parent,project')->from(TABLE_EXECUTION)
+            ->where('project')->eq($object->project)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$app->user->admin)->andWhere('id')->in($app->user->view->sprints)->fi()
+            ->orderBy($object->type == 'stage' ? 'id_asc' : 'id_desc')->fi()
+            ->fetchAll();
 
-        $executionList  = $app->dbQuery("SELECT id,name,parent,project FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
-        $executions     = array();
+        $executions = array();
         foreach($executionList as $execution) $executions[$execution->id] = $execution;
 
         $executionList = $app->control->loadModel('execution')->resetExecutionSorts($executions);
@@ -2893,7 +2895,7 @@ eof;
      */
     public static function printCreateList()
     {
-        global $app, $config, $lang;
+        global $app, $config, $lang, $dao;
 
         $html = "<ul class='dropdown-menu pull-right create-list'>";
 
@@ -2904,21 +2906,24 @@ eof;
         $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
         if($productID)
         {
-            $product = $app->dbQuery("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
+            $product = $dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('vision')->eq($config->vision)->andWhere('id')->eq($productID)->fetch();
             if(empty($product)) $productID = 0;
         }
         if(!$productID and $app->user->view->products)
         {
-            $product = $app->dbQuery("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
+            $product = $dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('vision')->eq($config->vision)->andWhere('id')->in($app->user->view->products)->orderBy('order desc')->limit(1)->fetch();
             if($product) $productID = $product->id;
         }
 
         if($config->vision == 'lite')
         {
-            $condition  = " WHERE `deleted` = '0' AND `vision` = 'lite' AND `model` = 'kanban'";
-            if(!$app->user->admin) $condition .= " AND `id` " . helper::dbIN($app->user->view->projects);
-
-            $object = $app->dbQuery("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
+            $object = $dao->select('id')->from(TABLE_PROJECT)
+                ->where('deleted')->eq('0')
+                ->andWhere('vision')->eq('lite')
+                ->andWhere('model')->eq('kanban')
+                ->beginIF(!$app->user->admin)->andWhere('id')->in($app->user->view->projects)->fi()
+                ->limit(1)
+                ->fetch();
             if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
         }
 
@@ -2988,7 +2993,13 @@ eof;
                         if($config->vision == 'lite')
                         {
                             $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                            $projects  = $app->dbQuery("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
+                            $projects  = $dao->select('t2.id')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                                ->where('t1.product')->eq($productID)
+                                ->andWhere('t2.type')->eq('project')
+                                ->andWhere('t2.id')->in($app->user->view->projects)
+                                ->orderBy('order desc')
+                                ->fetchAll();
 
                             $projectIdList = array();
                             foreach($projects as $project) $projectIdList[$project->id] = $project->id;
