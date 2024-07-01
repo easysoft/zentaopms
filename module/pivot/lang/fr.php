@@ -279,6 +279,7 @@ $lang->pivot->nameEmpty     = '『Name』should not be blank';
 $lang->pivot->noPivotTip      = 'After you save the Settings, you can display the pivot table';
 $lang->pivot->noQueryTip      = 'No filter.';
 $lang->pivot->noPivot         = 'No Pivot table';
+$lang->pivot->noDrillTip      = 'No Data Drill';
 $lang->pivot->dataError       = '"%s" is not valid';
 $lang->pivot->noChartSelected = 'Please select one pivot table.';
 $lang->pivot->beginGtEnd      = 'Begin time should not be >= end time.';
@@ -403,6 +404,10 @@ $lang->pivot->step2->statList['avg']      = 'Average';
 $lang->pivot->step2->statList['sum']      = 'Sum';
 $lang->pivot->step2->statList['max']      = 'Max';
 $lang->pivot->step2->statList['min']      = 'Min';
+
+$lang->pivot->step3 = new stdclass();
+$lang->pivot->step3->drill    = 'Data Drill';
+$lang->pivot->step3->addDrill = 'Data Drill';
 
 $lang->datepicker->dpText->TEXT_WEEK_MONDAY = 'Monday';
 $lang->datepicker->dpText->TEXT_WEEK_SUNDAY = 'Sunday';

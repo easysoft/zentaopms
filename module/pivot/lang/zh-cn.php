@@ -278,6 +278,7 @@ $lang->pivot->nameEmpty     = '『名称』不能为空';
 
 $lang->pivot->noPivotTip      = '保存设置后，即可显示透视表';
 $lang->pivot->noQueryTip      = '暂时没有筛选器。';
+$lang->pivot->noDrillTip      = '未配置数据下钻。';
 $lang->pivot->noPivot         = '暂时没有透视表';
 $lang->pivot->dataError       = '"%s" 填写的不是合法的值';
 $lang->pivot->noChartSelected = '请选择至少一个图表。';
@@ -403,6 +404,10 @@ $lang->pivot->step2->statList['avg']      = '平均值';
 $lang->pivot->step2->statList['sum']      = '求和';
 $lang->pivot->step2->statList['max']      = '最大值';
 $lang->pivot->step2->statList['min']      = '最小值';
+
+$lang->pivot->step3 = new stdclass();
+$lang->pivot->step3->drill    = '数据下钻';
+$lang->pivot->step3->addDrill = '数据下钻';
 
 $lang->datepicker->dpText->TEXT_WEEK_MONDAY = '本周一';
 $lang->datepicker->dpText->TEXT_WEEK_SUNDAY = '本周日';
