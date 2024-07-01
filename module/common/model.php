@@ -443,8 +443,6 @@ class commonModel extends model
     {
         if(in_array("$module.$method", $this->config->openMethods)) return true;
 
-        if($module == 'block' and $method == 'main' and isset($_GET['hash'])) return true;
-
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
