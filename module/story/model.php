@@ -843,11 +843,8 @@ class storyModel extends model
         $parentChanged = $story->parent != $oldStory->parent;
         if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory);
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
-        if($story->parent > 0)
-        {
-            $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
-            $this->storyTao->computeParentStage($story);
-        }
+        if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
+        $this->storyTao->computeParentStage($story);
 
         /* Set new stage and update story sort of plan when story plan has changed. */
         if($oldStory->plan != $story->plan)
@@ -1616,6 +1613,7 @@ class storyModel extends model
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
+            $story->demand         = $oldStory->demand;
 
             /* Remove old plan from the plan field. */
             if($oldPlanID) $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
@@ -1660,7 +1658,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
 
             if(!$planID) $this->setStage((int)$storyID);
-            if(isset($story->stage) && $story->stage != $oldStory->stage && $oldStory->parent > 0)
+            if(isset($story->stage) && $story->stage != $oldStory->stage)
             {
                 $story->parent = $oldStory->parent;
                 $this->storyTao->computeParentStage($story);

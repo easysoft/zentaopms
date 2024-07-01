@@ -1245,7 +1245,7 @@ class storyTao extends storyModel
         }
 
         if($story->stage != 'closed') $this->updateLinkedLane($storyID, $linkedProjects);
-        if($story->parent > 0) $this->computeParentStage($story);
+        $this->computeParentStage($story);
         return true;
     }
 
@@ -1266,7 +1266,7 @@ class storyTao extends storyModel
         if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
         if(empty($stages))
         {
-            if($story->parent > 0) $this->computeParentStage($story);
+            $this->computeParentStage($story);
             return false;
         }
 
@@ -1305,7 +1305,7 @@ class storyTao extends storyModel
         if($story->stage != $stage)
         {
             $this->updateLinkedLane($storyID, $linkedProjects);
-            if($story->parent > 0) $this->computeParentStage($story);
+            $this->computeParentStage($story);
         }
         return true;
     }
@@ -1357,7 +1357,11 @@ class storyTao extends storyModel
         static $demandList;
 
         $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
-        if(empty($parent)) return array();
+        if(empty($parent))
+        {
+            if(!empty($story->demand)) $demandList[$story->demand] = $story->demand;
+            return $demandList;
+        }
 
         $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
             ->where('parent')->eq($story->parent)

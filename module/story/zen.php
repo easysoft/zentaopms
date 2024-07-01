@@ -1238,6 +1238,7 @@ class storyZen extends story
         $storyData = form::data($fields)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->add('demand', $oldStory->demand)
             ->setDefault('deleteFiles', array())
             ->setDefault('reviewedBy', $oldStory->reviewedBy)
             ->setDefault('deleteFiles', array())
