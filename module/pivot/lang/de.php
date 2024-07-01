@@ -333,14 +333,16 @@ $lang->pivot->dateList['year']  = 'YEAR';
 $lang->pivot->designStepNav = array();
 $lang->pivot->designStepNav['1'] = 'Query Data';
 $lang->pivot->designStepNav['2'] = 'Design table';
-$lang->pivot->designStepNav['3'] = 'Set Filter';
-$lang->pivot->designStepNav['4'] = 'Release';
+$lang->pivot->designStepNav['3'] = 'Data Drilling';
+$lang->pivot->designStepNav['4'] = 'Set Filter';
+$lang->pivot->designStepNav['5'] = 'Release';
 
 $lang->pivot->nextButton = array();
 $lang->pivot->nextButton['1'] = 'To Design';
-$lang->pivot->nextButton['2'] = 'To Configurate';
-$lang->pivot->nextButton['3'] = 'To Release';
-$lang->pivot->nextButton['4'] = 'Release';
+$lang->pivot->nextButton['2'] = 'To Drilling';
+$lang->pivot->nextButton['3'] = 'To Configurate';
+$lang->pivot->nextButton['4'] = 'To Release';
+$lang->pivot->nextButton['5'] = 'Release';
 
 $lang->pivot->displayList = array();
 $lang->pivot->displayList['value']   = 'Display value';

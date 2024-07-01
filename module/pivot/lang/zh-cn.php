@@ -333,14 +333,16 @@ $lang->pivot->dateList['year']  = '年';
 $lang->pivot->designStepNav = array();
 $lang->pivot->designStepNav['1'] = '查询数据';
 $lang->pivot->designStepNav['2'] = '设计透视表';
-$lang->pivot->designStepNav['3'] = '配置筛选器';
-$lang->pivot->designStepNav['4'] = '准备发布';
+$lang->pivot->designStepNav['3'] = '数据下钻';
+$lang->pivot->designStepNav['4'] = '配置筛选器';
+$lang->pivot->designStepNav['5'] = '准备发布';
 
 $lang->pivot->nextButton = array();
 $lang->pivot->nextButton['1'] = '去设计';
-$lang->pivot->nextButton['2'] = '去配置';
-$lang->pivot->nextButton['3'] = '去准备';
-$lang->pivot->nextButton['4'] = '发布';
+$lang->pivot->nextButton['2'] = '去下钻';
+$lang->pivot->nextButton['3'] = '去配置';
+$lang->pivot->nextButton['4'] = '去准备';
+$lang->pivot->nextButton['5'] = '发布';
 
 $lang->pivot->displayList = array();
 $lang->pivot->displayList['value']   = '显示值';
