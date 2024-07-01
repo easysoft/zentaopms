@@ -28,8 +28,7 @@ div
     setClass('alert secondary-pale'),
     div
     (
-        div($lang->metric->tips->noticeRecalculateConfig),
-        div($lang->metric->tips->noticeRepublish)
+        $lang->metric->tips->noticeRecalculateConfig
     )
 );
 

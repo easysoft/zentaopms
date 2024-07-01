@@ -2237,14 +2237,14 @@ class metricModel extends model
      * @access public
      * @return object|array
      */
-    public function parseDateStr($date, $dateType = 'all', $isWeekWithYear = true)
+    public function parseDateStr($date, $dateType = 'all')
     {
         $timestamp = strtotime($date);
 
         $year  = date('Y', $timestamp);
         $month = date('m', $timestamp);
         $day   = date('d', $timestamp);
-        $week  = $isWeekWithYear ? date('oW', $timestamp) : date('W', $timestamp);
+        $week  = date('oW', $timestamp);
         $week  = substr($week, -2);
 
         $dateValues = new stdClass();
@@ -2392,9 +2392,22 @@ class metricModel extends model
         return true;
     }
 
+    public function getStartAndEndOfWeek($year, $week)
+    {
+        $firstDayOfYear = date('Y-01-01', strtotime("$year-01-01"));
+        $firstDayOfWeek = date('N', strtotime($firstDayOfYear));
+        $offsetDays = ($week - 1) * 7 - ($firstDayOfWeek - 1);
+        $firstDayOfWeek = date('Y-m-d', strtotime("$firstDayOfYear +$offsetDays days"));
+        $lastDayOfWeek = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
+
+        return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
+    }
+
     public function isCalcByCron($code, $date, $dateType)
     {
-        $parsedDate = $this->parseDateStr($date, $dateType, false);
+        $startDate = '';
+        $endDate   = '';
+        $parsedDate = $this->parseDateStr($date, $dateType);
         if($dateType == 'year')
         {
             $startDate = "{$parsedDate['year']}-01-01 00:00:00";
@@ -2413,6 +2426,7 @@ class metricModel extends model
             $startDate = "{$parsedDate['year']}-{$parsedDate['month']}-{$parsedDate['day']} 00:00:00";
             $endDate   = "{$parsedDate['year']}-{$parsedDate['month']}-{$parsedDate['day']} 23:59:59";
         }
+        if($dateType == 'week') list($startDate, $endDate) = $this->getStartAndEndOfWeek($parsedDate['year'], $parsedDate['week']);
 
         $record = $this->dao->select('id')->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
@@ -2422,7 +2436,7 @@ class metricModel extends model
             ->limit(1)
             ->fetch();
 
-        return !empty($record) ? true : false;
+        return !empty($record);
     }
 
     /**

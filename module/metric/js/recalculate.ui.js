@@ -18,6 +18,7 @@ function recalculateAll(startDate, endDate)
         if(index >= dateRange.length) 
         {
             $('.recalculate-log').append(`<p>${noticeDeduplication}</p>`);
+            scrollLog();
 
             var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
@@ -48,6 +49,7 @@ function recalculateSingle(code, dateType, startDate, endDate)
         if(index >= dateRange.length) 
         {
             $('.recalculate-log').append(`<p>${noticeDeduplication}</p>`);
+            scrollLog();
 
             var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
@@ -78,10 +80,15 @@ function recalculateLog(date)
     html += '  <i class="icon icon-check success"></i>';
     html += '</p>';
 
-    var logContainer = document.getElementById('recalculate-log');
-    logContainer.scrollTop = logContainer.scrollHeight;
+    scrollLog();
 
     return html;
+}
+
+function scrollLog()
+{
+    var logContainer = document.getElementById('recalculate-log');
+    logContainer.scrollTop = logContainer.scrollHeight;
 }
 
 function getDateRange(startDate, endDate, dateType = 'day')
