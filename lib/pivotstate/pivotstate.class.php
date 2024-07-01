@@ -439,6 +439,19 @@ class pivotState
     }
 
     /**
+     * Add column.
+     *
+     * @access public
+     * @return void
+     */
+    public function addColumn()
+    {
+        $firstField = current($this->fieldSettings);
+
+        $this->settings['columns'][] = array('field' => $firstField['name'], 'slice' => 'noSlice', 'stat' => 'count', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
+    }
+
+    /**
      * Update from $_POST.
      *
      * @param  array    $post
