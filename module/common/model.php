@@ -445,6 +445,8 @@ class commonModel extends model
 
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
+            if(in_array("$module.$method", $this->config->logonMethods)) return true;
+
             if(stripos($method, 'ajax') !== false) return true;
             if($module == 'block' && stripos(',dashboard,printblock,create,edit,delete,close,reset,layout,', ",{$method},") !== false) return true;
             if($module == 'index'    and $method == 'app') return true;
@@ -1352,6 +1354,7 @@ eof;
 
         /* Check the method is openMethod. */
         if(in_array("$module.$method", $app->config->openMethods)) return true;
+        if(in_array("$module.$method", $app->config->logonMethods)) return true;
 
         /* If is the program/project/product/execution admin, have all program privileges. */
         if($app->config->vision != 'lite' && commonTao::isProjectAdmin($module)) return true;
@@ -2715,7 +2718,7 @@ eof;
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         $currentModule = strtolower($module);
         $currentMethod = strtolower($method);
-        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
+        if(!commonModel::hasPriv($module, $method, $object, $vars) && !in_array("$currentModule.$currentMethod", $config->openMethods) && !in_array("$currentModule.$currentMethod", $config->logonMethods)) return false;
 
         $link = helper::createLink($module, $method, $vars, '', $onlyBody ? true : false);
 
@@ -3574,7 +3577,7 @@ eof;
         $currentMethod = strtolower($method);
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
-        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
+        if(!commonModel::hasPriv($module, $method, $object, $vars) && !in_array("$currentModule.$currentMethod", $config->openMethods) && !in_array("$currentModule.$currentMethod", $config->logonMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
     }

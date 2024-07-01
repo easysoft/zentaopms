@@ -1,4 +1,4 @@
 <?php
-$config->openMethods[] = 'setting.downloadxxd';
-$config->openMethods[] = 'file.uploadchatavatar';
-$config->openMethods[] = 'integration.wopi';
+$config->logonMethods[] = 'setting.downloadxxd';
+$config->logonMethods[] = 'file.uploadchatavatar';
+$config->logonMethods[] = 'integration.wopi';

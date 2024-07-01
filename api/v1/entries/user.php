@@ -142,7 +142,7 @@ class userEntry extends entry
                 case 'execution':
                     $info->execution = array('total' => 0, 'executions' => array());
                     if(!common::hasPriv('my', 'work')) break;
-                    $this->config->openMethods[] = 'my.execution';
+                    $this->config->logonMethods[] = 'my.execution';
 
                     $control = $this->loadController('my', 'execution');
                     $control->execution($this->param('type', 'undone'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -195,7 +195,7 @@ class userEntry extends entry
                 case 'task':
                     $info->task = array('total' => 0, 'tasks' => array());
                     if(!common::hasPriv('my', 'work')) break;
-                    $this->config->openMethods[] = 'my.task';
+                    $this->config->logonMethods[] = 'my.task';
 
                     global $app;
                     $app->rawMethod = 'work';
@@ -213,7 +213,7 @@ class userEntry extends entry
                 case 'bug':
                     $info->bug = array('total' => 0, 'bugs' => array());
                     if(!common::hasPriv('my', 'work')) break;
-                    $this->config->openMethods[] = 'my.bug';
+                    $this->config->logonMethods[] = 'my.bug';
 
                     global $app;
                     $app->rawMethod = 'work';
@@ -272,7 +272,7 @@ class userEntry extends entry
                 case 'story':
                     $info->story = array('total' => 0, 'stories' => array());
                     if(!common::hasPriv('my', 'work')) break;
-                    $this->config->openMethods[] = 'my.story';
+                    $this->config->logonMethods[] = 'my.story';
 
                     global $app;
                     $app->rawMethod = 'work';
@@ -302,7 +302,7 @@ class userEntry extends entry
                     {
                         global $app;
                         $app->rawMethod = 'work';
-                        $this->config->openMethods[] = 'my.issue';
+                        $this->config->logonMethods[] = 'my.issue';
                         $control = $this->loadController('my', 'issue');
                         $control->issue('createdBy', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
@@ -322,7 +322,7 @@ class userEntry extends entry
                     {
                         global $app;
                         $app->rawMethod = 'work';
-                        $this->config->openMethods[] = 'my.risk';
+                        $this->config->logonMethods[] = 'my.risk';
                         $control = $this->loadController('my', 'risk');
                         $control->risk('assignedTo', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
@@ -342,7 +342,7 @@ class userEntry extends entry
                     {
                         global $app;
                         $app->rawMethod = 'work';
-                        $this->config->openMethods[] = 'my.myMeeting';
+                        $this->config->logonMethods[] = 'my.myMeeting';
                         $control = $this->loadController('my', 'myMeeting');
                         $control->myMeeting('futureMeeting', '', 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
