@@ -39,3 +39,5 @@ $config->cache->dao->driver   = 'Apcu';             // 缓存驱动，可以为 
 
 $config->cache->client = new stdClass();
 $config->cache->client->enable = false; // 是否开启客户端缓存。Enable client cache or not.
+
+$config->redis = null;
