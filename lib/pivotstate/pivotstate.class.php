@@ -532,19 +532,24 @@ class pivotState
      */
     public function setFieldSettings($settings)
     {
-        $settings      = (array)$settings;
-        $fromCreate    = empty($this->fieldSettings);
-        $fieldSettings = !$fromCreate ? $this->fieldSettings : $settings;
+        $settings         = (array)$settings;
+        $oldFieldSettings = empty($this->fieldSettings) ? $this->fieldSettings : array();
+        $newFieldSettings = array();
 
-        if(!$fromCreate)
+        foreach($settings as $field => $setting)
         {
-            foreach($settings as $field => $setting)
+            $oldSetting = isset($fieldSettings[$field]) ? $fieldSettings[$field] : array();
+            if(!empty($oldSetting) && $oldSetting['object'] == $setting['object'] && $oldSetting['field'] == $setting['field'])
             {
-                $fieldSettings[$field] = $this->processFieldSettingLang($field, $fieldSettings[$field]);
+                $newFieldSettings[$field] = $this->processFieldSettingLang($field, $oldSetting);
+            }
+            else
+            {
+                $newFieldSettings[$field] = $setting;
             }
         }
 
-        $this->fieldSettings = $fieldSettings;
+        $this->fieldSettings = $newFieldSettings;
     }
 
     /**
