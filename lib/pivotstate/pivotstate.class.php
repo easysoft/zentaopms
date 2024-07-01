@@ -1,4 +1,4 @@
-<?php
+n<?php
 class pivotState
 {
     /**
@@ -277,6 +277,20 @@ class pivotState
         }
 
         return $filters;
+    }
+
+    /**
+     * Add filter.
+     *
+     * @access public
+     * @return void
+     */
+    public function addFilter()
+    {
+        $firstField = current($this->fieldSettings);
+        $lang       = $this->clientLang;
+
+        $this->filters[] = array('field' => $firstField['name'], 'saveAs' => '', 'type' => 'input', 'name' => $firstField[$lang], 'defualt' => '');
     }
 
     /**
