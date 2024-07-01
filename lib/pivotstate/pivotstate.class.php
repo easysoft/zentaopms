@@ -130,6 +130,14 @@ class pivotState
     public $filters;
 
     /**
+     * Pivot state drills.
+     *
+     * @var array
+     * @access public
+     */
+    public $drills;
+
+    /**
      * Pivot state step.
      *
      * @var int
@@ -468,6 +476,17 @@ class pivotState
     public function addColumn()
     {
         $this->settings['columns'][] = $this->getDefaultColumn();
+    }
+
+    /**
+     * Add drill.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDrill($type = 'auto')
+    {
+        $this->drills[] = array('type' => $type);
     }
 
     /**
