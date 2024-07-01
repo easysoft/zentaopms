@@ -716,8 +716,8 @@ if($config->systemMode == 'PLM')
 
     foreach($actions['mainActions'] as $key => $action)
     {
-        if($action['icon'] == 'start' && $canStart['disabled']) unset($actions['mainActions'][$key]);
-        if($action['icon'] == 'off'   && $canClose['disabled']) unset($actions['mainActions'][$key]);
+        if(isset($action['icon']) && $action['icon'] == 'start' && $canStart['disabled']) unset($actions['mainActions'][$key]);
+        if(isset($action['icon']) && $action['icon'] == 'off'   && $canClose['disabled']) unset($actions['mainActions'][$key]);
     }
 }
 
