@@ -393,6 +393,21 @@ class pivotState
         if(!isset($settings['columns'])) $this->addColumn();
     }
 
+    public function processColumnShowOrigin()
+    {
+        if(empty($this->settings['columns'])) return;
+
+        $columns = $this->settings['columns'];
+        foreach($columns as $index => $column)
+        {
+            $showOrigin      = $column['showOrigin'];
+            $defaultColumn   = $this->getDefaultColumn();
+            $columns[$index] = $showOrigin ? array('field' => $column['field'], 'showOrigin' => 1) : array_merge($defaultColumn, $column);
+        }
+
+        $this->settings['columns'] = $columns;
+    }
+
     /**
      * Get field options.
      *
