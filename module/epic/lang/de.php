@@ -13,14 +13,15 @@ $lang->epic->common = $lang->ERCommon;
 
 $lang->epic->stageList = array();
 $lang->epic->stageList[''] = '';
-$lang->epic->stageList['wait']       = 'Wait';
-$lang->epic->stageList['inroadmap']  = 'In Roadmap';
-$lang->epic->stageList['incharter']  = 'In Charter';
+$lang->epic->stageList['wait'] = 'Wait';
+if($config->edition == 'ipd')
+{
+    $lang->epic->stageList['inroadmap'] = 'In Roadmap';
+    $lang->epic->stageList['incharter'] = 'In Charter';
+}
 $lang->epic->stageList['planned']    = 'Planned';
 $lang->epic->stageList['projected']  = 'Projected';
 $lang->epic->stageList['developing'] = 'Developing';
 $lang->epic->stageList['delivering'] = 'Delivering';
 $lang->epic->stageList['delivered']  = 'Delivered';
 $lang->epic->stageList['closed']     = 'Closed';
-
-if($config->edition != 'ipd') unset($lang->epic->stageList['inroadmap'], $lang->epic->stageList['incharter']);
