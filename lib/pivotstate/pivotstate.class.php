@@ -393,6 +393,12 @@ class pivotState
         if(!isset($settings['columns'])) $this->addColumn();
     }
 
+    /**
+     * Process column show origin.
+     *
+     * @access public
+     * @return void
+     */
     public function processColumnShowOrigin()
     {
         if(empty($this->settings['columns'])) return;
@@ -464,6 +470,13 @@ class pivotState
         $this->settings['columns'][] = $this->getDefaultColumn();
     }
 
+    /**
+     * Get defualt column.
+     *
+     * @param  string|null $field
+     * @access public
+     * @return void
+     */
     public function getDefaultColumn($field = null)
     {
         if(empty($field))
