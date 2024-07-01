@@ -350,11 +350,6 @@ $config->openModules = array();
 $config->openModules[] = 'install';
 $config->openModules[] = 'upgrade';
 $config->openModules[] = 'im';
-$config->openModules[] = 'gitlab';
-$config->openModules[] = 'gogs';
-$config->openModules[] = 'gitea';
-$config->openModules[] = 'jenkins';
-$config->openModules[] = 'sonarqube';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
