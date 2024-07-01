@@ -80,12 +80,6 @@ class pageBase extends wg
             if(!empty($extraCSS)) $headImports[] = h::importCss($webRoot . 'js/zui3/' . $extraCSS);
         }
         $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
-        if($setXuanClass) $headImports[] = h::importCss($config->webRoot . 'zentaoclient.css', setID('zentaoclient'));
-        if($zui)
-        {
-            $extraJS = isset($config->zin->extraJS) ? $config->zin->extraJS : 'zin.js';
-            if(!empty($extraJS)) $headImports[] = h::importJs($webRoot . 'js/zui3/' . $extraJS);
-        }
 
         if($config->debug)
         {
@@ -100,13 +94,20 @@ class pageBase extends wg
                     $zinDebugData['wgBlockMap']   = wg::$blockMap;
                 }
             }
-            $js[] = 'window.zin = ' . js::value($zinDebugData) . ';';
-            $js[] = 'console.log("[ZIN] ", window.zin);';
+            $headImports[] = h::js('window.zin = ' . js::value($zinDebugData) . ';');
         }
         else
         {
-            $js[] = 'window.zin = {};';
+            $headImports[] = h::js('window.zin = {};');
         }
+
+        if($setXuanClass) $headImports[] = h::importCss($config->webRoot . 'zentaoclient.css', setID('zentaoclient'));
+        if($zui)
+        {
+            $extraJS = isset($config->zin->extraJS) ? $config->zin->extraJS : 'zin.js';
+            if(!empty($extraJS)) $headImports[] = h::importJs($webRoot . 'js/zui3/' . $extraJS);
+        }
+
         if($zui) array_unshift($js, 'zui.defineFn();');
 
         $currentLang = $this->props->get('lang');
