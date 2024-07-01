@@ -1,4 +1,4 @@
-n<?php
+<?php
 class pivotState
 {
     /**
