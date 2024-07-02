@@ -715,6 +715,17 @@ class pivotState
     }
 
     /**
+     * Judge is queried.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isQueried()
+    {
+        return !empty($this->queryCols);
+    }
+
+    /**
      * Set clientLang.
      *
      * @param  string    $clientLang
