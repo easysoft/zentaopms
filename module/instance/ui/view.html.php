@@ -22,6 +22,7 @@ jsVar('inQuickon',      $config->inQuickon);
 $instance->appName = strtolower($instance->appName);
 $cpuInfo    = $this->instance->printCpuUsage($instance, (object)$instanceMetric->cpu);
 $memoryInfo = $this->instance->printMemUsage($instance, (object)$instanceMetric->memory);
+$volumeInfo = $this->instance->printVolUsage($instance, (object)$instanceMetric->disk);
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
 
 if($type !== 'store')
@@ -140,6 +141,27 @@ div
                                             setData('load', $instance->status == 'running' && $memoryInfo['rate'] == '0%'),
                                             setClass('progress-bar ' . $memoryInfo['color']),
                                             setStyle('width', $memoryInfo['rate'])
+                                        )
+                                    ),
+                                    icon('memory text-' . $volumeInfo['color']),
+                                    $lang->instance->volUsage,
+                                    span
+                                    (
+                                        setClass('text-gray'),
+                                        sprintf($lang->instance->volTotal, helper::formatKB($instanceMetric->disk->limit))
+                                    ),
+                                    div
+                                    (
+                                        setClass('progress rounded-lg'),
+                                        set::title($volumeInfo['tip']),
+                                        setStyle('background', "var(--color-{$volumeInfo['color']}-50)"),
+                                        div
+                                        (
+                                            setID('volumeRate'),
+                                            set::role('progressbar'),
+                                            setData('load', $instance->status == 'running' && $volumeInfo['rate'] == '0%'),
+                                            setClass('progress-bar ' . $volumeInfo['color']),
+                                            setStyle('width', $volumeInfo['rate'])
                                         )
                                     )
                                 ) : null
