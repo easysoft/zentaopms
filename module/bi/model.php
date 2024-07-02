@@ -47,10 +47,11 @@ class biModel extends model
      *
      * @param  object $statment
      * @param  bool   $deep
+     * @param  bool   $withAlias
      * @access public
      * @return array
      */
-    public function getTables(object $statement, bool $deep = false): array
+    public function getTables(object $statement, bool $deep = false, bool $withAlias = false): array
     {
         $tables = array();
         if($statement->from)
@@ -59,7 +60,7 @@ class biModel extends model
             {
                 if($fromInfo->table)
                 {
-                    $tables[] = $fromInfo->table;
+                    $tables[$fromInfo->alias] = $fromInfo->table;
                 }
                 elseif($deep && $fromInfo->subquery)
                 {
@@ -76,7 +77,7 @@ class biModel extends model
             {
                 if($joinInfo->expr->table)
                 {
-                    $tables[] = $joinInfo->expr->table;
+                    $tables[$fromInfo->expr->alias] = $joinInfo->expr->table;
                 }
                 elseif($deep && $joinInfo->expr->subquery)
                 {
@@ -87,6 +88,7 @@ class biModel extends model
             }
         }
 
+        if(!$withAlias) $tables = array_values($tables);
         return array_filter(array_unique($tables));
     }
 
