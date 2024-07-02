@@ -1274,6 +1274,7 @@ class storyTao extends storyModel
         }
 
         if(empty($story)) return false;
+        $stage   = current($stages);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         if($product and $product->type != 'normal' and empty($story->branch))
         {
@@ -1296,15 +1297,18 @@ class storyTao extends storyModel
                     $minStagePos = $position;
                 }
             }
-            $this->dao->update(TABLE_STORY)->set('stage')->eq($minStage)->where('id')->eq($storyID)->exec();
             $stage = $minStage;
         }
-        else
+
+        /* 如果是IPD项目，则stage有可能是已设路标或Charter立项。 */
+        if($this->config->edition == 'ipd' && $story->type != 'story' && $story->roadmap && $stage == 'wait')
         {
-            $stage = current($stages);
-            $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
+            $stage   = 'inroadmap';
+            $roadmap = $this->loadModel('roadmap')->getByID($story->roadmap);
+            if($roadmap->status == 'launched') $stage = 'incharter';
         }
 
+        $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
         if($story->stage != $stage)
         {
             $this->updateLinkedLane($storyID, $linkedProjects);
