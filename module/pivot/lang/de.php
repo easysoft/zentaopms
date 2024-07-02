@@ -288,7 +288,16 @@ $lang->pivot->clearSettings   = 'The configuration of the query data has been mo
 $lang->pivot->draftSave       = 'The pivot table has been published and will be in draft state. Do you want to continue?';
 $lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
 $lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
-$lang->pivot->drillingTip     = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
+
+$lang->pivot->drillModalTip       = <<<EOT
+1. Select the columns to be drilled and the target objects to be drilled. The system automatically generates SQL statements based on your selection.
+2. Adjust the automatically generated SQL statement according to the query statement displayed in the gray panel below (the SQL query statement in the first step [Query data]), and configure the corresponding query conditions.
+3. Click Preview to view the drill-down data for your configuration.
+4. Click Save to complete the drill down configuration.
+EOT;
+$lang->pivot->drillingTip         = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
+$lang->pivot->drillConditionTip   = 'For subsequent configuration data, ensure that the id field of the query object is included in the query result set.';
+$lang->pivot->drillResultEmptyTip = 'Select the target object associated with the column to drill down, and set the query conditions for drilling down, click the "preview" button, you can view the drill down results here.';
 
 $lang->pivot->emptyGroupError       = 'The group cannot be empty.';
 $lang->pivot->emptyColumnFieldError = 'Column fields cannot be null.';
@@ -420,10 +429,14 @@ $lang->datepicker->dpText->TEXT_MONTH_BEGIN = 'Begin Month';
 $lang->datepicker->dpText->TEXT_MONTH_END   = 'End Month';
 
 $lang->pivot->drill = new stdclass();
-$lang->pivot->drill->common       = 'Pivot Drill';
-$lang->pivot->drill->selectField  = 'Select Drill Field';
-$lang->pivot->drill->selectObject = 'Select Link Object';
-$lang->pivot->drill->setCondition = 'Set Drill Condition';
-$lang->pivot->drill->equal        = '=';
-$lang->pivot->drill->inDrillField = 'Drill table field';
-$lang->pivot->drill->inQueryField = 'Query field';
+$lang->pivot->drill->common         = 'Pivot Drill';
+$lang->pivot->drill->queryCondition = 'Query Condition';
+$lang->pivot->drill->drillResult    = 'Drill Result';
+$lang->pivot->drill->selectField    = 'Select Drill Field';
+$lang->pivot->drill->selectObject   = 'Select Link Object';
+$lang->pivot->drill->setCondition   = 'Set Drill Condition';
+$lang->pivot->drill->equal          = '=';
+$lang->pivot->drill->inDrillField   = 'Drill table field';
+$lang->pivot->drill->inQueryField   = 'Query field';
+$lang->pivot->drill->preview        = 'Preview';
+$lang->pivot->drill->save           = 'Save';
