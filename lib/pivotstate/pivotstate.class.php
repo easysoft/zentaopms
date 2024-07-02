@@ -233,7 +233,7 @@ class pivotState
      */
     public $pager;
 
-    public function __construct($pivot, $drills)
+    public function __construct($pivot, $drills = array())
     {
         $this->id        = $pivot->id;
         $this->dimension = $pivot->dimension;
