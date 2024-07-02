@@ -1130,7 +1130,7 @@ class storyTao extends storyModel
         if($this->config->vision == 'lite') return true;
         if($story->type != 'story') return true;
 
-        if(!in_array($story->status, array('launched', 'developing', 'active'))) return false;
+        if(in_array($story->status, array('reviewing', 'closed'))) return false;
         if($story->isParent == '1') return true;
         if(!$isShadowProduct && !in_array($story->stage, array('wait', 'planned', 'projected'))) return false;
         if($isShadowProduct && $story->stage != 'projected') return false;
