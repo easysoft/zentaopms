@@ -958,11 +958,9 @@ class storyModel extends model
         }
         $this->computeEstimate($parentID);
 
-        if(isset($oldParentStory->type) && $childStory->type != $oldParentStory->type) return false;
-
         $status = $oldParentStory->status;
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed') $status = current($childrenStatus); // Close parent story.
-        if($oldParentStory->status == 'closed' && $childStory->status == 'active') $status = $this->getActivateStatus($parentID); // Activate parent story.
+        if($oldParentStory->status == 'closed' && in_array($childStory->status, array('launched', 'active'))) $status = $this->getActivateStatus($parentID); // Activate parent story.
 
         $action    = '';
         $preStatus = '';
@@ -1460,10 +1458,9 @@ class storyModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        /* Update parent story status and stage. */
-        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
         if(!dao::isError())
         {
+            if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
             $this->setStage($storyID);
             $this->loadModel('score')->create('story', 'close', $storyID);
 
@@ -1511,8 +1508,7 @@ class storyModel extends model
                 return false;
             }
 
-            /* Update parent story status. */
-            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+            if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
             $this->setStage($storyID);
 
             $changes = common::createChanges($oldStory, $story);
@@ -2261,6 +2257,29 @@ class storyModel extends model
 
         if(!$stories) return array();
         return $this->formatStories($stories, $type, $limit);
+    }
+
+    /**
+     * 关闭父需求的所有子需求。
+     * Close all children of a story.
+     *
+     * @param  int    $storyID
+     * @param  string closedReason
+     * @access public
+     * @return void
+     */
+    public function closeAllChildren(int $storyID, string $closedReason)
+    {
+        $childIdList = $this->getAllChildId($storyID, false);
+        $this->dao->update(TABLE_STORY)
+             ->set('status')->eq('closed')
+             ->set('stage')->eq('closed')
+             ->set('closedReason')->eq($closedReason)
+             ->where('id')->in($childIdList)
+             ->exec();
+
+        $this->loadModel('action');
+        foreach($childIdList as $childID) $this->action->create('story', $childID, 'closedbyparent');
     }
 
     /**
