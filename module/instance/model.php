@@ -311,6 +311,40 @@ class instanceModel extends model
     }
 
     /**
+     * 更新应用的存储空间大小。
+     * Update the storage size of the instance.
+     *
+     * @param  object     $instance
+     * @param  int|string $size 10737418240|10Gi
+     * @param  string     $name
+     * @return bool
+     */
+    public function updateVolSize(object $instance, int|string $size, string $name): bool
+    {
+        $size = is_numeric($size) ? intval($size / 1073741824) : (int)$size;
+        if($size == 0) return false;
+        $size = $size . 'Gi';
+
+        $setting = new stdclass();
+        $setting->key   = $name;
+        $setting->value = $size;
+
+        $settings = new stdclass;
+        $settings->settings = array();
+        $settings->settings[] = $setting;
+
+        $success = $this->cne->updateConfig($instance, $settings);
+        if($success)
+        {
+            $this->action->create('instance', $instance->id, 'adjustVol', (int)$size . 'G');
+            return true;
+        }
+
+        dao::$errors[] = $this->lang->instance->errors->failToAdjustVol;
+        return false;
+    }
+
+    /**
      * 更新应用实例的状态。
      * Update instance status.
      *
