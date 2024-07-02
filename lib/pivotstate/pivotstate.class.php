@@ -812,7 +812,7 @@ class pivotState
      */
     public function setError($msg)
     {
-        $this->errror   = true;
+        $this->error    = true;
         $this->errorMsg = $msg;
 
         return $this;
