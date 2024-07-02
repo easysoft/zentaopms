@@ -2760,7 +2760,7 @@ class storyModel extends model
             {
                 if(isset($parents[$requirement->id])) unset($requirements[$id]);
                 if(!isset($URGradePairs[$requirement->grade])) unset($requirements[$id]);
-                if($requirement->status != 'active' && $requirement->status != 'launched') unset($requirements[$id]);
+                if(in_array($requirement->status, array('reviewing', 'closed'))) unset($requirements[$id]);
             }
 
             $childIdList = $this->getAllChildId($storyID);
@@ -2768,7 +2768,7 @@ class storyModel extends model
                 ->where('deleted')->eq('0')
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('story')
-                ->andWhere('status')->eq('active')
+                ->andWhere('status')->notin('reviewing,closed')
                 ->andWhere('twins')->eq('')
                 ->andWhere('grade')->ne($lastGrade)
                 ->andWhere('grade')->in(array_keys($SRGradePairs))
@@ -2821,7 +2821,7 @@ class storyModel extends model
         {
             if(isset($parents[$epic->id])) unset($epics[$id]);
             if(!isset($ERGradePairs[$epic->grade])) unset($epics[$id]);
-            if($epic->status != 'active') unset($epics[$id]);
+            if(in_array($epic->status, array('reviewing', 'closed'))) unset($epics[$id]);
         }
 
         $childIdList     = $this->getAllChildId($storyID);
@@ -2836,7 +2836,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('requirement')
-            ->andWhere('status')->in('active,launched')
+            ->andWhere('status')->notin('reviewing,closed')
             ->andWhere('grade')->in(array_keys($URGradePairs))
             ->andWhere('grade')->ne($lastGrade)
             ->andWhere('id')->notIN($allStoryParents)
@@ -2875,7 +2875,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('epic')
-            ->andWhere('status')->eq('active')
+            ->andWhere('status')->notin('reviewing,closed')
             ->andWhere('grade')->in(array_keys($ERGradePairs))
             ->andWhere('grade')->ne($lastGrade)
             ->andWhere('id')->notIN($allRequirementParents)
