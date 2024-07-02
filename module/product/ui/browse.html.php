@@ -435,7 +435,7 @@ dtable
     set::footToolbar($footToolbar),
     set::emptyTip($emptyTip),
     set::createTip($lang->story->create),
-    set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
+    set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
 );
 
 modal(set::id('#batchUnlinkStoryBox'));
