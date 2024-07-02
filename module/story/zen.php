@@ -1528,6 +1528,7 @@ class storyZen extends story
 
         $stories    = form::batchData($fields)->get();
         $oldStories = $this->story->getByList(array_keys($stories));
+        $roadmaps   = $this->loadModel('roadmap')->getList();
         foreach($stories as $storyID => $story)
         {
             $oldStory = $oldStories[$storyID];
@@ -1548,6 +1549,11 @@ class storyZen extends story
             if($story->closedBy && empty($story->closedReason)) dao::$errors['closedReason'] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
             if($story->closedReason == 'done' && empty($story->stage)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
             if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+            if($this->config->vision == 'or')
+            {
+                if($story->stage == 'wait' && !empty($story->roadmap) && isset($roadmaps[$story->roadmap])) $story->stage = $roadmaps[$story->roadmap]->status == 'launched' ? 'incharter' : 'inroadmap';
+                if(empty($story->roadmap)) $story->stage = 'wait';
+            }
         }
 
         return $stories;

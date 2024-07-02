@@ -1358,13 +1358,13 @@ class storyTao extends storyModel
     {
         static $demandList;
 
-        $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
-        if(empty($parent))
+        if(empty($story->parent))
         {
             if(!empty($story->demand)) $demandList[$story->demand] = $story->demand;
             return $demandList;
         }
 
+        $parent   = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
         $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
             ->where('parent')->eq($story->parent)
             ->andWhere('deleted')->eq(0)
