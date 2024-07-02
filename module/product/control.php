@@ -886,7 +886,14 @@ class product extends control
      */
     public function ajaxSetShowGrades(string $module, string $showGrades)
     {
-        if($showGrades) $this->loadModel('setting')->updateItem("{$this->app->user->account}.$module.showGrades", $showGrades);
+        if(strpos($showGrades, $module) === false)
+        {
+            $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module={$module}&key=showGrades", $showGrades);
+        }
+        else
+        {
+            $this->loadModel('setting')->updateItem("{$this->app->user->account}.$module.showGrades", $showGrades);
+        }
     }
 
     /**
