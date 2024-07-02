@@ -458,15 +458,18 @@ class storyTao extends storyModel
         $storyQuery = preg_replace_callback("/t2.`grade` (=|!=) '(\w+)(\d+)'/", function($matches){return "t2.`grade` {$matches[1]} '" . $matches[3] . "' AND t2.`type` = '" . $matches[2] . "'";}, $storyQuery);
         if(strpos($storyQuery, 'result') !== false) $storyQuery = str_replace('t2.`result`', 't4.`result`', $storyQuery);
 
+        $hasExecution = strpos($storyQuery, 't2.`execution`') !== false;
+        if($hasExecution) $storyQuery = str_replace('t2.`execution`', 't1.`project`', $storyQuery);
+
         return $this->dao->select("distinct t1.*, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
             ->where($storyQuery)
-            ->andWhere('t1.project')->eq($executionID)
+            ->beginIF(!$hasExecution)->andWhere('t1.project')->eq($executionID)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t2.type')->in($storyType)
+            ->beginIF($storyType != 'all')->andWhere('t2.type')->in($storyType)->fi()
             ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
             ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
             ->orderBy($orderBy)

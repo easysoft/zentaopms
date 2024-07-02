@@ -807,6 +807,13 @@ class product extends control
         $branch     = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         if(is_bool($branch)) $branch = (string)(int)$branch;
 
+        $rawModule = $this->app->rawModule;
+        if($browseType == 'bysearch' && isset($_SESSION[$rawModule . 'TrackQuery']))
+        {
+            if($rawModule == 'product')      $this->session->set('storyQuery', $_SESSION[$rawModule . 'TrackQuery']);
+            if($rawModule == 'projectstory') $this->session->set('projectstoryQuery', $_SESSION[$rawModule . 'TrackQuery']);
+        }
+
         /* Set menu. The projectstory module does not execute. */
         $this->productZen->setTrackMenu($productID, $branch, $projectID);
 
