@@ -695,6 +695,23 @@ class pivotState
         return $type == 'object' ? $fields : json_encode($fields);
     }
 
+    public function getLangs($type = 'object')
+    {
+        $fieldSettings = $this->fieldSettings;
+
+        $langs = array();
+        $keys  = array('name', 'object', 'field', 'type');
+        foreach($fieldSettings as $fieldSetting)
+        {
+            $lang = array();
+            foreach($fieldSetting as $key => $value) if(!in_array($key, $keys)) $lang[$key] = $value;
+
+            $langs[$fieldSetting['name']] = $lang;
+        }
+
+        return $type == 'object' ? $langs : json_encode($langs);
+    }
+
     /**
      * Set clientLang.
      *
