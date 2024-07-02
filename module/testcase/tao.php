@@ -734,5 +734,25 @@ class testcaseTao extends testcaseModel
      * */
     public function getExecutionCasesBySearch(int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $paramID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
+        if($paramID)
+        {
+            $query = $this->loadModel('search')->getQuery($paramID);
+            if($query)
+            {
+                $this->session->set('executionCaseQuery', $query->sql);
+                $this->session->set('executionCaseForm', $query->form);
+            }
+        }
+        if($this->session->executionCaseQuery === false) $this->session->set('executionCaseQuery', ' 1 = 1');
+        $caseQuery = '(' . $this->session->executionCaseQuery;
+        $caseQuery .= ')';
+        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->where('t1.project')->eq($executionID)
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere($caseQuery)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 }
