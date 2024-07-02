@@ -417,6 +417,9 @@ $lang->datepicker->dpText->TEXT_MONTH_END   = 'End Month';
 
 $lang->pivot->drill = new stdclass();
 $lang->pivot->drill->common       = 'Pivot Drill';
+$lang->pivot->drill->selectField  = 'Select Drill Field';
+$lang->pivot->drill->selectObject = 'Select Link Object';
+$lang->pivot->drill->setCondition = 'Set Drill Condition';
 $lang->pivot->drill->equal        = '=';
 $lang->pivot->drill->inDrillField = 'Drill table field';
 $lang->pivot->drill->inQueryField = 'Query field';

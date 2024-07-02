@@ -417,6 +417,9 @@ $lang->datepicker->dpText->TEXT_MONTH_END   = '本月末';
 
 $lang->pivot->drill = new stdclass();
 $lang->pivot->drill->common       = '数据下钻';
+$lang->pivot->drill->selectField  = '选择要下钻的列';
+$lang->pivot->drill->selectObject = '关联目标对象';
+$lang->pivot->drill->setCondition = '设置下钻的查询条件';
 $lang->pivot->drill->equal        = '=';
 $lang->pivot->drill->inDrillField = '下钻查询表中的';
 $lang->pivot->drill->inQueryField = '查询结果字段';
