@@ -1370,13 +1370,17 @@ class storyTao extends storyModel
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
 
-        $allWait     = true;
-        $allClosed   = true;
+        $allWait      = true;
+        $allClosed    = true;
+        $hasInRoadmap = false;
+        $hasInCharter = false;
         foreach($children as $child)
         {
             if($child->stage == 'closed' && $child->closedReason != 'done') continue;
             if($child->stage != 'wait')   $allWait   = false;
             if($child->stage != 'closed') $allClosed = false;
+            if($child->stage == 'inroadmap') $hasInRoadmap = true;
+            if($child->stage == 'incharter') $hasInCharter = true;
         }
 
         $parentStage = $parent->stage;
@@ -1481,9 +1485,15 @@ class storyTao extends storyModel
             }
         }
 
+        if($parentStage == 'wait')
+        {
+            if($hasInRoadmap) $parentStage = 'inroadmap';
+            if($hasInCharter) $parentStage = 'incharter';
+        }
+
         if($parentStage != $parent->stage)
         {
-            $demandList[$parent->demand] = $parent->demand;
+            if(!empty($parent->demand)) $demandList[$parent->demand] = $parent->demand;
             $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
             if($parent->parent > 0) $this->computeParentStage($parent);
         }
