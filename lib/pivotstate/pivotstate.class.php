@@ -242,6 +242,8 @@ class pivotState
         $this->driver    = $pivot->driver;
         $this->name      = $pivot->name;
         $this->desc      = $pivot->desc;
+        $this->names     = $pivot->names;
+        $this->descs     = $pivot->descs;
         $this->sql       = $pivot->sql;
         $this->step      = 1;
         $this->stage     = $pivot->stage;
@@ -675,6 +677,22 @@ class pivotState
 
         $this->queryCols = $cols;
         return $this;
+    }
+
+    public function getFields($type = 'object')
+    {
+        $fieldSettings = $this->fieldSettings;
+
+        $fields = array();
+        $keys   = array('name', 'object', 'field', 'type');
+        foreach($fieldSettings as $fieldSetting)
+        {
+            $field = array();
+            foreach($keys as $key) if(isset($fieldSetting[$key])) $field[$key] = $fieldSetting[$key];
+            $fields[$fieldSetting['name']] = $field;
+        }
+
+        return $type == 'object' ? $fields : json_encode($fields);
     }
 
     /**
