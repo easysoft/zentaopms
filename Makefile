@@ -41,6 +41,7 @@ common:
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/
+	mkdir zentaopms/tmp/duckdb/
 	mkdir zentaopms/tmp/extension/
 	mkdir zentaopms/tmp/log/
 	mkdir zentaopms/tmp/model/
