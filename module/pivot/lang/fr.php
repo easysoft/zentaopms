@@ -290,6 +290,10 @@ $lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cann
 $lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
 $lang->pivot->drillingTip     = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
 
+$lang->pivot->emptyGroupError       = 'The group cannot be empty.';
+$lang->pivot->emptyColumnFieldError = 'Column fields cannot be null.';
+$lang->pivot->emptyColumnStatError  = 'The calculation mode cannot be null.';
+
 $lang->pivot->confirm = new stdclass();
 $lang->pivot->confirm->design  = 'This pivot table is referenced by a published screen. Do you want to continue?';
 $lang->pivot->confirm->publish = 'This pivot table is referenced by a published screen and will be displayed as a modified pivot table after publication. Do you want to continue?';

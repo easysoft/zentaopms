@@ -290,6 +290,10 @@ $lang->pivot->cannotAddQuery  = '已添加结果筛选器，无法添加查询�
 $lang->pivot->cannotAddResult = '已添加查询筛选器，无法添加结果筛选器';
 $lang->pivot->drillingTip     = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
 
+$lang->pivot->emptyGroupError       = '分组不能为空。';
+$lang->pivot->emptyColumnFieldError = '列字段不能为空。';
+$lang->pivot->emptyColumnStatError  = '计算方式不能为空。';
+
 $lang->pivot->confirm = new stdclass();
 $lang->pivot->confirm->design  = '该透视表被已发布的大屏引用，是否继续？';
 $lang->pivot->confirm->publish = '该透视表被已发布的大屏引用，发布后将在大屏上显示为修改后的透视表，是否继续？';
