@@ -749,6 +749,15 @@ class pivotState
                 $errors[$key] = 'emptyGroupError';
                 continue;
             }
+
+            if($key === 'columns')
+            {
+                foreach($value as $index => $column)
+                {
+                    if(empty($column['field'])) $errors[$key][$index]['field'] = 'emptyColumnFieldError';
+                    if($column['showOrigin'] === 0 && empty($column['stat']))  $errors[$key][$index]['stat'] = 'emptyColumnStatError';
+                }
+            }
         }
 
         return $errors;
