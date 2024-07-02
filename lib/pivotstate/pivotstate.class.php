@@ -739,6 +739,12 @@ class pivotState
         return !empty($this->queryCols);
     }
 
+    /**
+     * Check settings.
+     *
+     * @access public
+     * @return array
+     */
     public function checkSettings()
     {
         $errors = array();
