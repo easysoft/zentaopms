@@ -813,10 +813,9 @@ class commonModel extends model
                     $new->subStatus = $default;
                 }
             }
-
             $dateFields = array();
-            $stmt       = $dao->select('`field`')->from(TABLE_WORKFLOWFIELD)->where('`module`')->eq($moduleName)->andWhere('`control`')->in(array('data', 'datetime'));
-            while($row = $stmt->fetch()) $dateFields[$row->field] = $row->field;
+            $rows       = $dao->select('`field`')->from(TABLE_WORKFLOWFIELD)->where('`module`')->eq($moduleName)->andWhere('`control`')->in(array('data', 'datetime'))->fetchAll();
+            foreach($rows as $row) $dateFields[$row->field] = $row->field;
         }
 
         $changes = array();
