@@ -681,6 +681,13 @@ class pivotState
         return $this;
     }
 
+    /**
+     * Get langs.
+     *
+     * @param  string $type
+     * @access public
+     * @return object|string
+     */
     public function getFields($type = 'object')
     {
         $fieldSettings = $this->fieldSettings;
@@ -697,6 +704,13 @@ class pivotState
         return $type == 'object' ? $fields : json_encode($fields);
     }
 
+    /**
+     * Get langs.
+     *
+     * @param  string $type
+     * @access public
+     * @return object|string
+     */
     public function getLangs($type = 'object')
     {
         $fieldSettings = $this->fieldSettings;
