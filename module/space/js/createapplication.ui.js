@@ -73,9 +73,9 @@ window.onChangeAppType = function(event)
     }
 }
 
-function onChangeStoreAppType(event)
+window.onChangeStoreAppType = function(event)
 {
-    var storeApp = appID;
+    let storeApp = appID;
     if(!storeApp)
     {
         if(typeof(event) == 'undefined')
@@ -91,9 +91,7 @@ function onChangeStoreAppType(event)
     $('#createStoreAppForm').data('appid', storeApp);
     $('#createStoreAppForm').attr('action', $.createLink('instance', 'install', 'appID=' + storeApp));
 
-    var storeAppName = apps[storeApp];
-
-    if(externalApps.indexOf(storeAppName) !== -1)
+    if(externalApps.indexOf(apps[storeApp]) !== -1)
     {
         $('#createStoreAppForm input[name=type][value=external]').prop('disabled', false);
     }
@@ -106,10 +104,8 @@ function onChangeStoreAppType(event)
     toggleLoading('#dbService', true);
     if(storeApp)
     {
-        $.get($.createLink('space', 'getStoreAppInfo', 'appID=' + storeApp), function(response)
+        $.getJSON($.createLink('space', 'getStoreAppInfo', 'appID=' + storeApp), function(app)
         {
-            var app = JSON.parse(response);
-
             $('#app_version').val(app.app_version);
             if(showVersion === true)
             {
@@ -128,8 +124,8 @@ function onChangeStoreAppType(event)
                 $('div.dbType').removeClass('hidden');
                 $('[name=dbService]').prop('disabled', false);
 
-                var dbServiceItems = [];
-                var dbService = (app.dependencies.mysql && mysqlList) ? mysqlList : pgList;
+                const dbServiceItems = [];
+                const dbService = (app.dependencies.mysql && mysqlList) ? mysqlList : pgList;
                 for(i in dbService)
                 {
                     dbServiceItems.push({'text': dbService[i].alias, 'value': dbService[i].name});
