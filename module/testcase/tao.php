@@ -718,4 +718,21 @@ class testcaseTao extends testcaseModel
 
         return $scene;
     }
+
+    /**
+     * 通过搜索获取执行的用例。
+     * Get execution cases by search.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $branchID
+     * @param  int    $paramID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     * */
+    public function getExecutionCasesBySearch(int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $paramID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
+    {
+    }
 }

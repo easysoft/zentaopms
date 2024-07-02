@@ -385,18 +385,19 @@ class executionZen extends execution
      * @param  int       $productID
      * @param  string    $branchID
      * @param  int       $moduleID
+     * @param  int       $param
      * @param  string    $orderBy
      * @param  string    $type
      * @param  object    $pager
      * @access protected
      * @return void
      */
-    protected function assignTestcaseVars(int $executionID, int $productID, string $branchID, int $moduleID, string $orderBy, string $type, object $pager)
+    protected function assignTestcaseVars(int $executionID, int $productID, string $branchID, int $moduleID, int $param, string $orderBy, string $type, object $pager)
     {
         $this->loadModel('tree');
 
         /* Get cases. */
-        $cases = $this->loadModel('testcase')->getExecutionCases($type, $executionID, $productID, $branchID, $moduleID, $orderBy, $pager);
+        $cases = $this->loadModel('testcase')->getExecutionCases($type, $executionID, $productID, $branchID, $moduleID, $param, $orderBy, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);

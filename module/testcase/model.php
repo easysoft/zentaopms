@@ -119,12 +119,13 @@ class testcaseModel extends model
      * @param  int    $productID
      * @param  int    $branchID
      * @param  int    $moduleID
+     * @param  int    $paramID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionCases(string $browseType = 'all', int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getExecutionCases(string $browseType = 'all', int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, int $paramID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         if($browseType == 'needconfirm')
         {
@@ -143,6 +144,7 @@ class testcaseModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
+        if($browseType == 'bysearch') return $this->testcaseTao->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy, $pager);
 
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
