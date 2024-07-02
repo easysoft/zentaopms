@@ -590,9 +590,9 @@ class cneModel extends model
      *
      * @link   https://yapi.qc.oop.cc/project/21/interface/api/168
      * @param  object $instance
-     * @return object|false
+     * @return object|array|false
      */
-    public function getAppVolumes(object $instance): object|false
+    public function getAppVolumes(object $instance): object|array|false
     {
         $apiParams = new stdclass();
         $apiParams->cluster   = '';
