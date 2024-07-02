@@ -90,6 +90,25 @@ class biModel extends model
         return array_filter(array_unique($tables));
     }
 
+    public function getTableByAlias($statement, $alias)
+    {
+        $table = false;
+
+        if($statement->from)
+        {
+            foreach($statement->from as $fromInfo)
+            {
+                if($fromInfo->alias == $alias)
+                {
+                    $table = $fromInfo->table;
+                    continue;
+                }
+            }
+        }
+
+        return $table;
+    }
+
     /**
      * Try to explain sql.
      *
