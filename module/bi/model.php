@@ -106,6 +106,18 @@ class biModel extends model
             }
         }
 
+        if($statement->join)
+        {
+            foreach($statement->join as $joinInfo)
+            {
+                if($joinInfo->expr->alias == $alias)
+                {
+                    $table = $joinInfo->expr->table;
+                    continue;
+                }
+            }
+        }
+
         return $table;
     }
 
