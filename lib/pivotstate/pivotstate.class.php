@@ -753,7 +753,7 @@ class pivotState
         {
             if(strpos($key, 'group') === 0 && empty($value))
             {
-                $errors[$key] = 'emptyGroupError';
+                $errors[$key] = true;
                 continue;
             }
 
@@ -761,8 +761,8 @@ class pivotState
             {
                 foreach($value as $index => $column)
                 {
-                    if(empty($column['field'])) $errors[$key][$index]['field'] = 'emptyColumnFieldError';
-                    if($column['showOrigin'] === 0 && empty($column['stat']))  $errors[$key][$index]['stat'] = 'emptyColumnStatError';
+                    if(empty($column['field']))                                $errors[$key][$index]['field'] = true;
+                    if($column['showOrigin'] === 0 && empty($column['stat']))  $errors[$key][$index]['stat']  = true;
                 }
             }
         }
