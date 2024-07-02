@@ -93,7 +93,7 @@ class projectStory extends control
      */
     public function track(int $projectID = 0, int $productID = 0, string $branch = '', string $browseType = 'allstory', int $param = 0, string $storyType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->loadConfig('product');
+        $this->loadModel('product');
         $this->app->loadLang('story');
 
         $project = $this->loadModel('project')->getByID($projectID);
