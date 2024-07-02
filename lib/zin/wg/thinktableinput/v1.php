@@ -52,6 +52,7 @@ class thinkTableInput extends thinkQuestion
         $index = 0;
         foreach($fields as $item)
         {
+            $value = !empty($result) && isset($result[$index]) ? $result[$index] : '';
             $tableInputItems[] = formGroup
             (
                 setClass('flex items-center'),
@@ -61,13 +62,17 @@ class thinkTableInput extends thinkQuestion
                     $item,
                     set::title($item)
                 ),
-                textarea
+                div
                 (
-                    set::rows('2'),
-                    set::name('result[' . $index . ']'),
+                    set::title($value),
                     setClass('result-width', $index == 0 ? '' : 'mt-2'),
-                    set::value(!empty($result) && isset($result[$index]) ? $result[$index] : ''),
-                    set::placeholder($lang->thinkrun->pleaseInput)
+                    textarea
+                    (
+                        set::rows('2'),
+                        set::name('result[' . $index . ']'),
+                        set::value($value),
+                        set::placeholder($lang->thinkrun->pleaseInput)
+                    )
                 ),
                 div
                 (
@@ -88,26 +93,35 @@ class thinkTableInput extends thinkQuestion
         {
             foreach($customFields as $item)
             {
+                $customValue = !empty($result) && isset($result[$index]) ? $result[$index] : '';
                 $tableInputItems[] = formGroup
                 (
                     setClass('flex rows-group flex-nowrap items-center'),
-                    textarea
+                    div
                     (
-                        set::rows('2'),
+                        set::title($item),
                         setClass('mt-2 w-1/5'),
-                        setID('customFields'),
-                        set::name('customFields[' . $index . ']'),
-                        set::value($item),
-                        set::placeholder($lang->thinkrun->placeholder->rowTitle)
+                        textarea
+                        (
+                            set::rows('2'),
+                            setID('customFields'),
+                            set::name('customFields[' . $index . ']'),
+                            set::value($item),
+                            set::placeholder($lang->thinkrun->placeholder->rowTitle)
+                        )
                     ),
-                    textarea
+                    div
                     (
-                        set::rows('2'),
+                        set::title($customValue),
                         setClass('mt-2 ml-2 result-width'),
-                        setID('result'),
-                        set::name('result[' . $index .']'),
-                        set::value(!empty($result) && isset($result[$index]) ? $result[$index] : ''),
-                        set::placeholder($lang->thinkrun->placeholder->rowContent)
+                        textarea
+                        (
+                            set::rows('2'),
+                            setID('result'),
+                            set::name('result[' . $index .']'),
+                            set::value($customValue),
+                            set::placeholder($lang->thinkrun->placeholder->rowContent)
+                        )
                     ),
                     div
                     (
