@@ -542,16 +542,36 @@ class release extends control
      * Change status.
      *
      * @param  int    $releaseID
-     * @param  string $status    normal|terminate
+     * @param  string $action    publish|play|pause
      * @access public
      * @return void
      */
-    public function changeStatus(int $releaseID, string $status)
+    public function changeStatus(int $releaseID, string $action)
     {
+        $status = 'normal';
+        if($action == 'pause') $status = 'terminate';
+        if($action == 'active')
+        {
+            $hasOld  = false;
+            $actions = $this->loadModel('action')->getList('release', $releaseID);
+            foreach(array_reverse($actions) as $releaseAction)
+            {
+                foreach($releaseAction->history as $history)
+                {
+                    if($history->field == 'status')
+                    {
+                        $status = $history->old;
+                        $hasOld = true;
+                        break;
+                    }
+                }
+                if($hasOld) break;
+            }
+        }
         $this->release->changeStatus($releaseID, $status);
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
+        $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $action);
         return $this->sendSuccess(array('load' => true));
     }
 }
