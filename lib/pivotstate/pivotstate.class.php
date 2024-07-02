@@ -301,7 +301,7 @@ class pivotState
         $firstField = current($this->fieldSettings);
         $lang       = $this->clientLang;
 
-        $this->filters[] = array('field' => $firstField['name'], 'saveAs' => '', 'type' => 'input', 'name' => $firstField[$lang], 'defualt' => '');
+        $this->filters[] = array('field' => $firstField['name'], 'saveAs' => '', 'type' => 'input', 'name' => $firstField[$lang], 'default' => '');
     }
 
     /**
@@ -494,7 +494,7 @@ class pivotState
     }
 
     /**
-     * Get defualt column.
+     * Get default column.
      *
      * @param  string|null $field
      * @access public
