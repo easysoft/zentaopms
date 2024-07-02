@@ -288,7 +288,16 @@ $lang->pivot->clearSettings   = '查询数据的配置已修改，是否清空�
 $lang->pivot->draftSave       = '该透视表已发布，将变为草稿态，是否继续？';
 $lang->pivot->cannotAddQuery  = '已添加结果筛选器，无法添加查询筛选器';
 $lang->pivot->cannotAddResult = '已添加查询筛选器，无法添加结果筛选器';
-$lang->pivot->drillingTip     = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
+
+$lang->pivot->drillModalTip       = <<<EOT
+1.请先选择需要下钻的列及其下钻的目标对象，系统将根据您的选择自动生成下钻SQL语句。
+2.请对照下方灰色面板展示的查询语句（第一步【查询数据】的SQL查询语句）调整自动生成的下钻SQL语句，并配置对应的查询条件。
+3.点击预览，查看您配置的下钻数据。
+4.点击保存，完成此条下钻配置。
+EOT;
+$lang->pivot->drillingTip         = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
+$lang->pivot->drillConditionTip   = '为后续配置数据下钻，请确保查询结果集中包含查询对象的id字段。';
+$lang->pivot->drillResultEmptyTip = '选择要下钻的列关联目标对象，并设置下钻的查询条件后，点击“预览”按钮，即可在此查看下钻结果。';
 
 $lang->pivot->emptyGroupError       = '分组不能为空。';
 $lang->pivot->emptyColumnFieldError = '列字段不能为空。';
@@ -420,10 +429,14 @@ $lang->datepicker->dpText->TEXT_MONTH_BEGIN = '本月初';
 $lang->datepicker->dpText->TEXT_MONTH_END   = '本月末';
 
 $lang->pivot->drill = new stdclass();
-$lang->pivot->drill->common       = '数据下钻';
-$lang->pivot->drill->selectField  = '选择要下钻的列';
-$lang->pivot->drill->selectObject = '关联目标对象';
-$lang->pivot->drill->setCondition = '设置下钻的查询条件';
-$lang->pivot->drill->equal        = '=';
-$lang->pivot->drill->inDrillField = '下钻查询表中的';
-$lang->pivot->drill->inQueryField = '查询结果字段';
+$lang->pivot->drill->common         = '数据下钻';
+$lang->pivot->drill->queryCondition = '查询条件';
+$lang->pivot->drill->drillResult    = '下钻结果';
+$lang->pivot->drill->selectField    = '选择要下钻的列';
+$lang->pivot->drill->selectObject   = '关联目标对象';
+$lang->pivot->drill->setCondition   = '设置下钻的查询条件';
+$lang->pivot->drill->equal          = '=';
+$lang->pivot->drill->inDrillField   = '下钻查询表中的';
+$lang->pivot->drill->inQueryField   = '查询结果字段';
+$lang->pivot->drill->preview        = '预览';
+$lang->pivot->drill->save           = '保存';
