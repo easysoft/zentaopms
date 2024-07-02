@@ -93,9 +93,25 @@ class projectStory extends control
      */
     public function track(int $projectID = 0, int $productID = 0, string $branch = '', string $browseType = 'allstory', int $param = 0, string $storyType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->app->loadConfig('product');
+        $this->app->loadLang('story');
+
         $project = $this->loadModel('project')->getByID($projectID);
         $this->session->set('hasProduct', $project->hasProduct);
         $this->config->project->showGrades = null;
+
+        /* Insert execution field. */
+        $insertIndex  = array_search('plan', array_keys($this->config->product->search['fields']));
+        $searchFields = array_chunk($this->config->product->search['fields'], $insertIndex + 1, true);
+        $searchFields[0]['execution'] = $this->lang->story->execution;
+        $this->config->product->search['fields'] = array();
+        foreach($searchFields as $fields) $this->config->product->search['fields'] += $fields;
+
+        $insertIndex  = array_search('plan', array_keys($this->config->product->search['params']));
+        $searchParams = array_chunk($this->config->product->search['params'], $insertIndex + 1, true);
+        $searchParams[0]['execution'] = array('operator' => '=', 'control' => 'select',  'values' => array('' => '') + $this->loadModel('execution')->getPairs($projectID));
+        $this->config->product->search['params'] = array();
+        foreach($searchParams as $params) $this->config->product->search['params'] += $params;
 
         echo $this->fetch('product', 'track', "productID=$productID&branch=$branch&projectID=$projectID&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
