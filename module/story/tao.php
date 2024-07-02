@@ -1485,7 +1485,7 @@ class storyTao extends storyModel
             }
         }
 
-        if($parentStage == 'wait')
+        if($parentStage == 'wait' || $parentStage == 'inroadmap')
         {
             if($hasInRoadmap) $parentStage = 'inroadmap';
             if($hasInCharter) $parentStage = 'incharter';
