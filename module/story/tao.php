@@ -1267,14 +1267,9 @@ class storyTao extends storyModel
     {
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
-        if(empty($stages))
-        {
-            $this->computeParentStage($story);
-            return false;
-        }
-
         if(empty($story)) return false;
-        $stage   = current($stages);
+
+        $stage   = empty($stages) ? $story->stage : current($stages);
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         if($product and $product->type != 'normal' and empty($story->branch))
         {
@@ -1297,7 +1292,7 @@ class storyTao extends storyModel
                     $minStagePos = $position;
                 }
             }
-            $stage = $minStage;
+            if($minStage) $stage = $minStage;
         }
 
         /* 如果是IPD项目，则stage有可能是已设路标或Charter立项。 */
