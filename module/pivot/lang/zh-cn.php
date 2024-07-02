@@ -417,5 +417,6 @@ $lang->datepicker->dpText->TEXT_MONTH_END   = '本月末';
 
 $lang->pivot->drill = new stdclass();
 $lang->pivot->drill->common       = '数据下钻';
-$lang->pivot->drill->InDrillField = '下钻查询表中的';
-$lang->pivot->drill->InQueryField = '查询结果字段';
+$lang->pivot->drill->equal        = '=';
+$lang->pivot->drill->inDrillField = '下钻查询表中的';
+$lang->pivot->drill->inQueryField = '查询结果字段';
