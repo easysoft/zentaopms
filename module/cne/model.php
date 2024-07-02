@@ -272,9 +272,9 @@ class cneModel extends model
     public function getVolumesMetrics(object $instance): object
     {
         $metric = new stdclass;
-        $metric->limit   = 0;
-        $metric->usage   = 0;
-        $metric->rate    = 0;
+        $metric->limit = 0;
+        $metric->usage = 0;
+        $metric->rate  = 0;
 
         $volumes = $this->getAppVolumes($instance);
         if($volumes)
@@ -282,8 +282,8 @@ class cneModel extends model
             foreach($volumes as $volume)
             {
                 if(!$volume->is_block_device) return $metric;
-                $metric->limit    = $volume->size;
-                $metric->usage    = $volume->actual_size;
+                $metric->limit = $volume->size;
+                $metric->usage = $volume->actual_size;
                 break;
             }
         }
