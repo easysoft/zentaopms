@@ -1387,7 +1387,7 @@ class storyTao extends storyModel
         $parentStage = $parent->stage;
         if($allClosed)
         {
-            $parentStage = 'closed';
+            $parentStage = 'delivered';
         }
         elseif($allWait)
         {
