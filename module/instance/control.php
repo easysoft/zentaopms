@@ -62,6 +62,7 @@ class instance extends control
             $instanceMetric = new stdclass();
             $instanceMetric->cpu    = 0;
             $instanceMetric->memory = 0;
+            $instanceMetric->disk   = 0;
 
             $this->view->title           = $instance->name;
             $this->view->instance        = $instance;

@@ -288,7 +288,7 @@ class cneModel extends model
             }
         }
 
-        $metric->rate  = $metric->limit != 0 ? $metric->used / $metric->limit : 0.01;
+        $metric->rate  = $metric->limit != 0 ? $metric->usage / $metric->limit : 0.01;
 
         return $metric;
     }
