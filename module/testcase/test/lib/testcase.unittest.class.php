@@ -1850,4 +1850,24 @@ class testcaseTest
         foreach($objects as $caseID => $modules) $return .= $caseID . ':' . implode(',', array_keys($modules)) . ';';
         return $return;
     }
+
+    /**
+     * 测试通过搜索获取执行用例。
+     * Test get execution cases by search.
+     *
+     * @param  int         $executionID
+     * @param  int         $productID
+     * @param  int|string  $branchID
+     * @param  int         $paramID
+     * @param  string      $query
+     * @param  string      $orderBy
+     * @access public
+     * @return string
+     */
+    public function getExecutionCasesBySearchTest(int $executionID, int $productID, int|string $branchID, int $paramID, string|bool $query, string $orderBy): string
+    {
+        $_SESSION['executionCaseQuery'] = $query;
+        $cases = $this->objectModel->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy);
+        return is_array($cases) ? implode(';', array_keys($cases)) : '0';
+    }
 }
