@@ -105,3 +105,5 @@ ALTER TABLE `zt_approvalnode` ADD `solicit` enum('0','1') NOT NULL DEFAULT '0' A
 ALTER TABLE `zt_approvalnode` ADD `agentType` varchar(100) NOT NULL DEFAULT 'pass' AFTER `reviewType`;
 
 ALTER TABLE `zt_attend` MODIFY `ip` varchar(100) NOT NULL DEFAULT '';
+
+update zt_workflowaction set linkages = '' where action = 'approvalreview' and linkages = '[{"sources":[{"field":"reviewResult","operator":"==","value":"pass"}],"targets":[{"field":"reviewOpinion","status":"hide"}]}]';
