@@ -220,6 +220,24 @@ class tester extends result
     }
 
     /**
+     * Switch a zentao vision.
+     *
+     * @param  string    $vision
+     * @access public
+     * @return object
+     */
+    public function switchVision($vision)
+    {
+        $currentVision = $this->page->getCookie('vision');
+        if($currentVision) $this->page->deleteCookie('vision');
+
+        $this->page->addCookie(array('name' => 'vision', 'value' => $vision));
+        $this->page->wait(1)->refresh();
+
+        return $this;
+    }
+
+    /**
      * Get cookie value in cookie file.
      *
      * @param  string    $cookieName

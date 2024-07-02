@@ -466,7 +466,7 @@ class dom
             $id = $element->getAttribute('id');
             $tips[$id] = $text;
 
-            $value = $element->findElement(WebDriverBy::xpath('../*'))->getAttribute('value');
+            $value = $element->findElement(WebDriverBy::xpath('./parent::*//input'))->getAttribute('value');
             if($value) $tips[$id] .= '|' . $value;
         }
 
