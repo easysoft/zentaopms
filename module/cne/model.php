@@ -264,6 +264,36 @@ class cneModel extends model
     }
 
     /**
+     * Get the volumes metrics of the instance.
+     *
+     * @param  object $instance
+     * @return object
+     */
+    public function getVolumesMetrics(object $instance): object
+    {
+        $metric = new stdclass;
+        $metric->limit   = 0;
+        $metric->usage   = 0;
+        $metric->rate    = 0;
+
+        $volumes = $this->getAppVolumes($instance);
+        if($volumes)
+        {
+            foreach($volumes as $volume)
+            {
+                if(!$volume->is_block_device) return $metric;
+                $metric->limit    = $volume->size;
+                $metric->usage    = $volume->actual_size;
+                break;
+            }
+        }
+
+        $metric->rate  = $metric->limit != 0 ? $metric->used / $metric->limit : 0.01;
+
+        return $metric;
+    }
+
+    /**
      * 获取平台实例的度量。
      * Get instance metrics.
      *
@@ -299,6 +329,8 @@ class cneModel extends model
             $instanceMetric->memory->limit = 0;
             $instanceMetric->memory->usage = 0;
             $instanceMetric->memory->rate  = 0;
+
+            $instanceMetric->disk = $this->getVolumesMetrics($instance);
 
             $instancesMetrics[$instance->k8name] = $instanceMetric;
         }
