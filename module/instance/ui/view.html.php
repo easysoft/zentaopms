@@ -107,6 +107,7 @@ div
                                 ),
                                 $type === 'store' ? div
                                 (
+                                    setID('systemLoad'),
                                     setClass('flex progress-container'),
                                     icon('cpu text-' . $cpuInfo['color']),
                                     $lang->instance->cpuUsage,

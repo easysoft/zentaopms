@@ -50,13 +50,7 @@ function refreshStatus()
 
                 if(currentStatus != res.data[0].status)
                 {
-                    loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), 'pageJS/.zin-page-js,#instanceInfoContainer');
-                    currentStatus = res.data[0].status;
-                    return false;
-                }
-                else if(res.data[0].status === 'running' && ($('#statusTD').data('reload') === true || $('#memoryRate').data('load') === true))
-                {
-                    loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), 'pageJS/.zin-page-js,#instanceInfoContainer');
+                    loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#statusTD,#systemLoad,.float-toolbar');
                     currentStatus = res.data[0].status;
                     return false;
                 }
