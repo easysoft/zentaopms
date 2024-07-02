@@ -41,6 +41,7 @@ class cneModel extends model
      * 更新实例配置。例如：cpu、内存大小、LDAP设置...
      * Update instance config. For example: cpu, memory size, LDAP settings...
      *
+     * @link   https://yapi.qc.oop.cc/project/21/interface/api/725
      * @param  object $instance
      * @param  object $settings
      * @access public
@@ -57,6 +58,7 @@ class cneModel extends model
 
         if(isset($instance->version))           $apiParams['version']           = $instance->version;
         if(isset($settings->force_restart))     $apiParams['force_restart']     = $settings->force_restart;
+        if(isset($settings->settings))          $apiParams['settings']          = $settings->settings;
         if(isset($settings->settings_map))      $apiParams['settings_map']      = $settings->settings_map;
         if(isset($settings->settings_snippets)) $apiParams['settings_snippets'] = $settings->settings_snippets;
 
