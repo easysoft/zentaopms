@@ -91,9 +91,12 @@ $lang->release->statusList['wait']      = 'Wait';
 $lang->release->statusList['normal']    = 'Released';
 $lang->release->statusList['terminate'] = 'Terminée';
 
-$lang->release->changeStatusList['wait']      = 'Release';
+$lang->release->changeStatusList['wait']      = 'Publish';
 $lang->release->changeStatusList['normal']    = 'Active';
 $lang->release->changeStatusList['terminate'] = 'Terminée';
+$lang->release->changeStatusList['publish']   = 'Publish';
+$lang->release->changeStatusList['active']    = 'Active';
+$lang->release->changeStatusList['pause']     = 'Terminée';
 
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, $extra by  <strong>$actor</strong>.', 'extra' => 'changeStatusList');

@@ -94,6 +94,9 @@ $lang->release->statusList['terminate'] = '停止维护';
 $lang->release->changeStatusList['wait']      = '发布';
 $lang->release->changeStatusList['normal']    = '激活';
 $lang->release->changeStatusList['terminate'] = '停止维护';
+$lang->release->changeStatusList['publish']   = '发布';
+$lang->release->changeStatusList['active']    = '激活';
+$lang->release->changeStatusList['pause']     = '停止维护';
 
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');

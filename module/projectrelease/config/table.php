@@ -15,21 +15,21 @@ $config->projectrelease->actionList['linkBug']['url']  = helper::createLink('pro
 
 $config->projectrelease->actionList['publish']['icon']         = 'publish';
 $config->projectrelease->actionList['publish']['hint']         = $this->lang->release->changeStatusList['wait'];
-$config->projectrelease->actionList['publish']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&status=normal');
+$config->projectrelease->actionList['publish']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=publish');
 $config->projectrelease->actionList['publish']['notLoadModel'] = true;
 $config->projectrelease->actionList['publish']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['publish']['data-confirm'] = array('message' => $lang->release->confirmPublish, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->actionList['play']['icon']         = 'play';
 $config->projectrelease->actionList['play']['hint']         = $lang->release->changeStatusList['normal'];
-$config->projectrelease->actionList['play']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=normal');
+$config->projectrelease->actionList['play']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&action=active');
 $config->projectrelease->actionList['play']['notLoadModel'] = true;
 $config->projectrelease->actionList['play']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->actionList['pause']['icon']         = 'pause';
 $config->projectrelease->actionList['pause']['hint']         = $lang->release->changeStatusList['terminate'];
-$config->projectrelease->actionList['pause']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=terminate');
+$config->projectrelease->actionList['pause']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&action=pause');
 $config->projectrelease->actionList['pause']['notLoadModel'] = true;
 $config->projectrelease->actionList['pause']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');

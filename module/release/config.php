@@ -33,7 +33,7 @@ $config->release->actionList['unlinkLeftBug']['url']  = 'javascript: unlinkObjec
 $config->release->actionList['publish']['icon']         = 'publish';
 $config->release->actionList['publish']['text ']        = $this->lang->release->changeStatusList['wait'];
 $config->release->actionList['publish']['hint']         = $this->lang->release->changeStatusList['wait'];
-$config->release->actionList['publish']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&status=normal');
+$config->release->actionList['publish']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=publish');
 $config->release->actionList['publish']['notLoadModel'] = true;
 $config->release->actionList['publish']['className']    = 'ajax-submit';
 $config->release->actionList['publish']['data-confirm'] = array('message' => $lang->release->confirmPublish, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
@@ -41,7 +41,7 @@ $config->release->actionList['publish']['data-confirm'] = array('message' => $la
 $config->release->actionList['play']['icon']         = 'play';
 $config->release->actionList['play']['text ']        = $this->lang->release->changeStatusList['normal'];
 $config->release->actionList['play']['hint']         = $this->lang->release->changeStatusList['normal'];
-$config->release->actionList['play']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&status=normal');
+$config->release->actionList['play']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=active');
 $config->release->actionList['play']['notLoadModel'] = true;
 $config->release->actionList['play']['className']    = 'ajax-submit';
 $config->release->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
@@ -49,7 +49,7 @@ $config->release->actionList['play']['data-confirm'] = array('message' => $lang-
 $config->release->actionList['pause']['icon']         = 'pause';
 $config->release->actionList['pause']['text']         = $this->lang->release->changeStatusList['terminate'];
 $config->release->actionList['pause']['hint']         = $this->lang->release->changeStatusList['terminate'];
-$config->release->actionList['pause']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&status=terminate');
+$config->release->actionList['pause']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=pause');
 $config->release->actionList['pause']['notLoadModel'] = true;
 $config->release->actionList['pause']['className']    = 'ajax-submit';
 $config->release->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
