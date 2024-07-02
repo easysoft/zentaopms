@@ -23,7 +23,6 @@ $lang->pivot->browseAction = '进入透视表设计';
 $lang->pivot->designAB     = '设计';
 $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
-$lang->pivot->drill        = '数据下钻';
 
 $lang->pivot->deleteTip = '您确认要删除吗？';
 
@@ -417,5 +416,6 @@ $lang->datepicker->dpText->TEXT_MONTH_BEGIN = '本月初';
 $lang->datepicker->dpText->TEXT_MONTH_END   = '本月末';
 
 $lang->pivot->drill = new stdclass();
+$lang->pivot->drill->common       = '数据下钻';
 $lang->pivot->drill->InDrillField = '下钻查询表中的';
 $lang->pivot->drill->InQueryField = '查询结果字段';

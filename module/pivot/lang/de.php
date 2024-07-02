@@ -23,7 +23,6 @@ $lang->pivot->browseAction = 'Design in Pivot Table';
 $lang->pivot->designAB     = 'Design';
 $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
-$lang->pivot->drill        = 'Drill';
 
 $lang->pivot->deleteTip = 'Are you sure you want to delete it ?';
 
@@ -417,5 +416,6 @@ $lang->datepicker->dpText->TEXT_MONTH_BEGIN = 'Begin Month';
 $lang->datepicker->dpText->TEXT_MONTH_END   = 'End Month';
 
 $lang->pivot->drill = new stdclass();
+$lang->pivot->drill->common       = 'Pivot Drill';
 $lang->pivot->drill->InDrillField = 'Drill table field';
 $lang->pivot->drill->InQueryField = 'Query field';
