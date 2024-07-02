@@ -90,6 +90,15 @@ class biModel extends model
         return array_filter(array_unique($tables));
     }
 
+    /**
+     * 根据表的别名获取其在sql语句中的表名。
+     * Get table name by it's alias.
+     *
+     * @param  object $statment
+     * @param  string $alias
+     * @access public
+     * @return string|false
+     */
     public function getTableByAlias($statement, $alias)
     {
         $table = false;
