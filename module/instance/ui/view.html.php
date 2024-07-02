@@ -108,12 +108,12 @@ div
                                 $type === 'store' ? div
                                 (
                                     setClass('flex progress-container'),
-                                    set::title($cpuInfo['tip']),
                                     icon('cpu text-' . $cpuInfo['color']),
                                     $lang->instance->cpuUsage,
                                     div
                                     (
                                         setClass('progress rounded-lg'),
+                                        set::title($cpuInfo['tip']),
                                         setStyle('background', "var(--color-{$cpuInfo['color']}-50)"),
                                         div
                                         (
