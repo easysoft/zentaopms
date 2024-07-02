@@ -106,4 +106,5 @@ ALTER TABLE `zt_approvalnode` ADD `agentType` varchar(100) NOT NULL DEFAULT 'pas
 
 ALTER TABLE `zt_attend` MODIFY `ip` varchar(100) NOT NULL DEFAULT '';
 
-update zt_workflowaction set linkages = '' where action = 'approvalreview' and linkages = '[{"sources":[{"field":"reviewResult","operator":"==","value":"pass"}],"targets":[{"field":"reviewOpinion","status":"hide"}]}]';
+UPDATE zt_workflowaction SET linkages = '[]' WHERE action = 'approvalreview' AND linkages = '[{"sources":[{"field":"reviewResult","operator":"==","value":"pass"}],"targets":[{"field":"reviewOpinion","status":"hide"}]}]';
+UPDATE zt_workflowlayout SET layoutRules = '' WHERE action = 'approvalreview' AND field = 'reviewOpinion';
