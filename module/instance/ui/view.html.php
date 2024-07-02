@@ -143,7 +143,7 @@ div
                                             setStyle('width', $memoryInfo['rate'])
                                         )
                                     ),
-                                    icon('memory text-' . $volumeInfo['color']),
+                                    icon('db text-' . $volumeInfo['color']),
                                     $lang->instance->volUsage,
                                     span
                                     (
