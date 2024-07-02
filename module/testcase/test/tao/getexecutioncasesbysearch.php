@@ -16,6 +16,15 @@ title=测试 testcaseModel->getExecutionCasesBySearch();
 timeout=0
 cid=1
 
+- 测试获取执行 101 产品 0 分支 all paramID 0 query 查所有 id 倒序排序的用例 @4;3;2;1
+- 测试获取执行 101 产品 0 分支 all paramID 0 query 查所有 id 正序排序的用例 @1;2;3;4
+- 测试获取执行 101 产品 0 分支 all paramID 0 query 标题内含2 id 倒序排序的用例 @1
+- 测试获取执行 101 产品 0 分支 all paramID 1 query 查所有 id 倒序排序的用例 @2
+- 测试获取执行 101 产品 0 分支 0 paramID 0 query 查所有 id 倒序排序的用例 @4;3;2;1
+- 测试获取执行 101 产品 1 分支 all paramID 0 query 查所有 id 倒序排序的用例 @4;3;2;1
+- 测试获取执行 102 产品 0 分支 all paramID 0 query 查所有 id 倒序排序的用例 @8;7;6;5
+- 测试获取执行 102 产品 1 分支 1 paramID 1 query 标题内含 2 id 正序排序的用例 @0
+
 */
 
 $executionID = array(101, 102, 103, 104, 105);
