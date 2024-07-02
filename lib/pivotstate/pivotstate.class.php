@@ -233,7 +233,7 @@ class pivotState
      */
     public $pager;
 
-    public function __construct($pivot)
+    public function __construct($pivot, $drills)
     {
         $this->id        = $pivot->id;
         $this->dimension = $pivot->dimension;
@@ -247,6 +247,7 @@ class pivotState
         $this->sql       = $pivot->sql;
         $this->step      = 1;
         $this->stage     = $pivot->stage;
+        $this->drills    = $drills;
 
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
@@ -540,6 +541,7 @@ class pivotState
         $this->vars      = $vars;
         $this->objects   = $objects;
         $this->settings  = $settings;
+        $this->drills    = $drills;
         $this->filters   = $filters;
 
         $this->action        = $action;
