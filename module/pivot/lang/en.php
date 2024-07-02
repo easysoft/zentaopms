@@ -274,6 +274,7 @@ $lang->pivot->pastDays   = 'Past Days';
 $lang->pivot->saveAsDataview = 'Save as Custom Table';
 
 $lang->pivot->confirmDelete = 'Do you want to delete this pivot table?';
+$lang->pivot->confirmLeave  = 'The current step is not saved. Are you sure you want to leave?';
 $lang->pivot->nameEmpty     = '『Name』should not be blank';
 
 $lang->pivot->noPivotTip      = 'After you save the Settings, you can display the pivot table';

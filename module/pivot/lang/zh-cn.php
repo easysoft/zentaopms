@@ -274,6 +274,7 @@ $lang->pivot->pastDays   = '距今天数';
 $lang->pivot->saveAsDataview = '存为中间表';
 
 $lang->pivot->confirmDelete = '您确认要删除吗?';
+$lang->pivot->confirmLeave  = '当前步骤未保存,确认要离开吗？';
 $lang->pivot->nameEmpty     = '『名称』不能为空';
 
 $lang->pivot->noPivotTip      = '保存设置后，即可显示透视表';

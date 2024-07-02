@@ -233,6 +233,14 @@ class pivotState
      */
     public $pager;
 
+    /**
+     * changedWithoutSave
+     *
+     * @var bool
+     * @access public
+     */
+    public $changedWithoutSave = false;
+
     public function __construct($pivot, $drills = array())
     {
         $this->id        = $pivot->id;
