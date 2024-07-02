@@ -292,8 +292,8 @@ detailBody
             item
             (
                 set::name($lang->story->stage),
-                $story->isParent == '0' ? picker(setID('stage'), set::name('stage'), set::items($fields['stage']['options']), set::value($minStage)) : formHidden('stage', $story->stage),
-                $story->isParent == '0' ? null : zget($fields['stage']['options'], $story->stage)
+                $story->isParent == '0' && $story->type == 'story' ? picker(setID('stage'), set::name('stage'), set::items($fields['stage']['options']), set::value($minStage)) : formHidden('stage', $story->stage),
+                $story->isParent == '0' && $story->type == 'story' ? null : zget($fields['stage']['options'], $story->stage)
             ),
             item
             (
