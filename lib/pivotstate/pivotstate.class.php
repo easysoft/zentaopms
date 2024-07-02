@@ -739,6 +739,21 @@ class pivotState
         return !empty($this->queryCols);
     }
 
+    public function checkSettings()
+    {
+        $errors = array();
+        foreach($this->settings as $key => $value)
+        {
+            if(strpos($key, 'group') === 0 && empty($value))
+            {
+                $errors[$key] = 'emptyGroupError';
+                continue;
+            }
+        }
+
+        return $errors;
+    }
+
     /**
      * Set clientLang.
      *
