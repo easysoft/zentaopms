@@ -24,21 +24,20 @@ $('#mainContent').on('click', '.db-management', function()
     );
 });
 
-var refreshTime   = 0;
-var timer         = null;
 var currentStatus = instanceStatus;
 const postData = new FormData();
 postData.append('idList[]', instanceID);
-window.afterPageUpdate = function()
+$(function()
 {
-    if(inQuickon) refreshStatus();
-}
+    if(inQuickon)
+    {
+        if(typeof timer !== 'undefined') clearInterval(timer);
+        timer = setInterval(refreshStatus, 5000);
+    }
+})
 
 function refreshStatus()
 {
-    if(new Date().getTime() - refreshTime < 4000) return;
-    refreshTime = new Date().getTime();
-
     $.ajaxSubmit({
         url: $.createLink('instance', 'ajaxStatus'),
         method: 'POST',
@@ -47,32 +46,24 @@ function refreshStatus()
         {
             if(res.result === 'success')
             {
-                $.each(res.data, function(index, instance)
+                if(res.data.length == 0) return false;
+
+                if(currentStatus != res.data[0].status)
                 {
-                    if(instance.status === 'running' && ($('#statusTD').data('reload') === true || $('#memoryRate').data('load') === true))
-                    {
-                        setTimeout(() => {loadCurrentPage();}, 3000);
-                        currentStatus = instance.status;
-                        return;
-                    }
-                    if(currentStatus != instance.status)
-                    {
-                        loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '.progress-container,.store-info');
-                        currentStatus = instance.status;
-                        return;
-                    }
-                });
+                    loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), 'pageJS/.zin-page-js,#instanceInfoContainer');
+                    currentStatus = res.data[0].status;
+                    return false;
+                }
+                else if(res.data[0].status === 'running' && ($('#statusTD').data('reload') === true || $('#memoryRate').data('load') === true))
+                {
+                    loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), 'pageJS/.zin-page-js,#instanceInfoContainer');
+                    currentStatus = res.data[0].status;
+                    return false;
+                }
             }
 
-            timer = setTimeout(() => {refreshStatus()}, 5000);
         }
     });
-}
-
-window.onPageUnmount = function()
-{
-    if(!timer) return;
-    clearTimeout(timer);
 }
 
 $('.copy-btn').on('click', function()
