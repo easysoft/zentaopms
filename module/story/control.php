@@ -1199,15 +1199,16 @@ class story extends control
      * Batch change the grade of story.
      *
      * @param  int    $grade
+     * @param  string $storyType story|requirement|epic
      * @access public
      * @return void
      */
-    public function batchChangeGrade(int $grade)
+    public function batchChangeGrade(int $grade, string $storyType = 'story')
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
         $storyIdList = array_unique($this->post->storyIdList);
-        $message = $this->story->batchChangeGrade($storyIdList, $grade);
+        $message     = $this->story->batchChangeGrade($storyIdList, $grade, $storyType);
 
         $response = array();
         $response['result'] = 'success';

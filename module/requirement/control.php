@@ -352,10 +352,11 @@ class requirement extends control
      * Batch change grade.
      *
      * @param  int    $grade
+     * @param  string $storyType requirement|story|epic
      * @access public
      * @return void
      */
-    public function batchChangeGrade(int $grade)
+    public function batchChangeGrade(int $grade, string $storyType = 'requirement')
     {
         echo $this->fetch('story', 'batchChangeGrade', "grade=$grade&storyType=requirement");
     }

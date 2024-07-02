@@ -1837,11 +1837,12 @@ class storyModel extends model
      *
      * @param array        $storyIdList
      * @param int          $grade
+     * @param string       $storyType
      *
      * @access public
      * @return string|null
      */
-    public function batchChangeGrade(array $storyIdList, int $grade): string|null
+    public function batchChangeGrade(array $storyIdList, int $grade, string $storyType = 'story'): string|null
     {
         $now           = helper::now();
         $account       = $this->app->user->account;
@@ -1861,10 +1862,12 @@ class storyModel extends model
         $sameRootList      = '';
         $gradeGtParentList = '';
         $gradeOverflowList = '';
+
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($grade == $oldStory->grade) continue;
+            if($oldStory->type != $storyType) continue;
 
             if($rootGroup[$oldStory->root] > 1)
             {

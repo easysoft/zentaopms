@@ -397,12 +397,13 @@ class epic extends control
      * Batch change grade.
      *
      * @param  int    $grade
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function batchChangeGrade(int $grade)
+    public function batchChangeGrade(int $grade, string $storyType = 'epic')
     {
-        echo $this->fetch('story', 'batchChangeGrade', "grade=$grade&storyType=requirement");
+        echo $this->fetch('story', 'batchChangeGrade', "grade=$grade&storyType=epic");
     }
 
     /**
