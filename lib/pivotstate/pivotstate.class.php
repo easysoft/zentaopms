@@ -358,7 +358,9 @@ class pivotState
      */
     public function addVariableToSql()
     {
+        $variable = $this->addQueryFilter['field'];
 
+        $this->sql .= "\$$variable";
     }
 
     /**
