@@ -2093,10 +2093,10 @@ class storyModel extends model
 
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
-        $this->setStage($storyID);
-
         /* Update parent story status. */
         if(!empty($oldStory->parent) && $oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+
+        $this->setStage($storyID);
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Activated');
