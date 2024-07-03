@@ -353,6 +353,13 @@ class misc extends control
         echo 'Cleaned cache files.';
     }
 
+    /**
+     * 向官网发送安装事件。
+     * Send event to website with step.
+     *
+     * @param  string $step  start|success
+     * @return void
+     */
     public function ajaxSendEvent(string $step): void
     {
         session_write_close();
