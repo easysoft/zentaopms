@@ -54,5 +54,21 @@ formPanel
             set::value(intval($currentResource->max->memory / 1024)),
             set::items($this->instance->filterMemOptions($currentResource))
         )
+    ),
+    !$diskSettings->resizable ? null : formRow
+    (
+        formGroup
+        (
+            set::type('number'),
+            set::name('disk_gb'),
+            set::title($lang->instance->tips->resizeDisk),
+            set::width('250px'),
+            set::required(true),
+            set::label($lang->instance->adjustVol),
+            set::value($diskSettings->size),
+            set::placeholder($lang->instance->tips->resizeDisk),
+            set::min($diskSettings->used),
+            set::max($diskSettings->limit)
+        )
     )
 );
