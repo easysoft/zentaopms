@@ -591,6 +591,8 @@ class pivotState
         $this->pivotCellSpan = $pivotCellSpan;
         $this->pivotFilters  = $pivotFilters;
 
+        $this->addQueryFilter = $addQueryFilter;
+
         $this->fieldSettings = $fieldSettings;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
         $this->formatSettingColumns();
