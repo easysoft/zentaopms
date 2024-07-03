@@ -150,6 +150,7 @@ window.getColActions = function(col)
 window.buildColCardActions = function(col)
 {
     let actions = [];
+    if(col.group == 'parentStory') return actions;
     if(col.type == 'backlog')
     {
         if(priv.canCreateStory)      actions.push({text: storyLang.create, url:$.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
