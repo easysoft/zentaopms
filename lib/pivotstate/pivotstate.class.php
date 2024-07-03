@@ -835,6 +835,16 @@ class pivotState
         return $errors;
     }
 
+    public function checkQueryFilter()
+    {
+        $errors = array();
+        foreach($this->filters as $index => $filter)
+        {
+            if(empty($filter['field'])) $errors[$index]['field'] = true;
+            if(empty($filter['name']))  $errors[$index]['name'] = true;
+        }
+    }
+
     /**
      * Set clientLang.
      *
