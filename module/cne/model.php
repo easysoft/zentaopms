@@ -302,7 +302,7 @@ class cneModel extends model
      * @param  object $instance
      * @return object
      */
-    public function getDiskSettings(object $instance): object
+    public function getDiskSettings(object $instance, bool|string $component = false): object
     {
         $diskSetting = new stdclass;
         $diskSetting->resizable = false;
@@ -311,7 +311,7 @@ class cneModel extends model
         $diskSetting->limit     = 0;
         $diskSetting->name      = '';
 
-        $volumes = $this->getAppVolumes($instance);
+        $volumes = $this->getAppVolumes($instance, $component);
         if($volumes)
         {
             foreach($volumes as $volume)
@@ -639,7 +639,7 @@ class cneModel extends model
         $apiParams->channel   = $this->config->CNE->api->channel;
 
         if($component === true)   $apiParams->component = 'mysql';
-        if(is_string($component)) $apiParams->component = $component;
+        if(!empty($component) && is_string($component)) $apiParams->component = $component;
 
         $apiUrl = "/api/cne/app/volumes";
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
