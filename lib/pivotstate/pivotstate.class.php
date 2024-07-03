@@ -257,7 +257,7 @@ class pivotState
         $this->stage     = $pivot->stage;
 
         $this->drills       = $drills;
-        $this->defaultDrill = array('field' => '', 'object' => '', 'sql' => '', 'conditions' => array($this->addCondition()));
+        $this->defaultDrill = array('field' => '', 'object' => '', 'referSQL' => '', 'whereSQL' => '', 'conditions' => array($this->addCondition()));
 
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
