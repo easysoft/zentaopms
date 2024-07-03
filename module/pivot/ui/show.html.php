@@ -46,7 +46,26 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
     $clickable = !$pivot->builtin;
     list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
 
-    return array
+    /* TODO demo data. */
+    foreach($cols as $colKey => $col)
+    {
+        if($col['name'] == 'field2')
+        {
+            $cols[$colKey]['isDrilling']     = true;
+            $cols[$colKey]['drillingObject'] = 'story';
+            $cols[$colKey]['drillingDatas']  = $this->dao->select('*')->from(TABLE_STORY)->fetchAll();
+        }
+    }
+
+    $drillingModals = array();
+    foreach($cols as $col)
+    {
+        if(!$col['isDrilling']) continue;
+
+        $drillingModals[] = modal();
+    }
+
+    return $drillingModals + array
     (
         panel
         (
