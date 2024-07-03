@@ -51,6 +51,7 @@ foreach($reviewList as $review)
 {
     $type       = $review->type == 'projectreview' ? 'review' : $review->type;
     $isOAObject =  strpos(",{$config->my->oaObjectType},", ",$type,") !== false ? true : false;
+    $this->app->loadLang($type);
 
     $review->module = $type;
 
