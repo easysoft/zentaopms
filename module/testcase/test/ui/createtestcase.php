@@ -5,10 +5,16 @@ include '../lib/testcase.ui.class.php';
 $tester = new testcase();
 
 $testcase = array(
-    'caseName'  => 'testcase' . time(),
-    'type'  => '安装部署',
-    'stage' => array('单元测试阶段', '功能测试阶段', '集成测试阶段', '系统测试阶段', '冒烟测试阶段', '版本验证阶段'),
-    'pri'   => '2',
+    'caseName'       => 'testcase' . time(),
+    'type'           => '安装部署',
+    'stage'          => array('单元测试阶段', '功能测试阶段', '集成测试阶段', '系统测试阶段', '冒烟测试阶段', '版本验证阶段'),
+    'pri'            => '2',
+    'precondition'   => '前置条件测试',
+    'steps'          => array(
+        'step1'  => 'expect1',
+        'group2' => array('step2.1' => 'expect2.1', 'step2.2' => 'expect2.2'),
+        'group3' => array('group3.1' => array('step3.3.1' => 'expect3.3.1', 'step3.3.2' => 'expect3.3.2'), 'step3.2' => 'expect3.2')
+    ),
 );
 
 $project  = array(
