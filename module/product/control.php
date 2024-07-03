@@ -886,7 +886,7 @@ class product extends control
      */
     public function ajaxSetShowGrades(string $module, string $showGrades)
     {
-        if(strpos($showGrades, $module) === false)
+        if(strpos($showGrades, $module) === false && in_array($module, array('story', 'epic', 'requirement')))
         {
             $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module={$module}&key=showGrades", $showGrades);
         }
