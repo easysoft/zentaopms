@@ -820,12 +820,12 @@ class kanbanTao extends kanbanModel
             if($laneType == 'parentStory' && $story->isParent != '1') continue;
             foreach($this->lang->kanban->ERURColumn as $stage => $langItem)
             {
-                if($story->stage != $stage and strpos($cardPairs[$stage], ",$storyID,") !== false)
+                if($story->stage != $stage and strpos((string)$cardPairs[$stage], ",$storyID,") !== false)
                 {
                     $cardPairs[$stage] = str_replace(",$storyID,", ',', $cardPairs[$stage]);
                 }
 
-                if($story->stage == $stage and strpos($cardPairs[$stage], ",$storyID,") === false)
+                if($story->stage == $stage and strpos((string)$cardPairs[$stage], ",$storyID,") === false)
                 {
                     $cardPairs[$stage] = empty($cardPairs[$stage]) ? ",$storyID," : ",$storyID" . $cardPairs[$stage];
                 }
