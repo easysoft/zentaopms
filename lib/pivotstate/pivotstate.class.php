@@ -351,6 +351,17 @@ class pivotState
     }
 
     /**
+     * Add variable to sql.
+     *
+     * @access public
+     * @return void
+     */
+    public function addVariableToSql()
+    {
+
+    }
+
+    /**
      * Complete filters default.
      *
      * @access public
