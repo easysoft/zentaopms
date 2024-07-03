@@ -373,8 +373,14 @@ class dom
         if(!empty($this->xpath)) $xpathNameList = array_keys($this->xpath);
         if(in_array($name, $xpathNameList))
         {
-            $xpath = $this->xpath[$name];
-            $this->waitElement($xpath)->getElement($xpath);
+            try
+            {
+                $this->waitElement($this->xpath[$name])->getElement($this->xpath[$name]);
+            }
+            catch (Exception $e)
+            {
+                return false;
+            }
         }
         else
         {
@@ -393,7 +399,7 @@ class dom
             }
         }
 
-        if(!$this->xpath[$name]) echo 'Not found element';
+        if(!$this->xpath[$name]) return false;
         return $this;
     }
 
