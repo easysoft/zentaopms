@@ -37,7 +37,7 @@ class thinkStep  extends wg
         $basicType = $item->type ?? '';
         $typeLang  = $action . 'Step';
         $type      = $addType ? $addType : ($basicType == 'question' ? $item->options->questionType : $basicType);
-        $title     = $action == 'detail' ? ($lang->thinkstep->$basicType . $lang->thinkstep->info) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
+        $title     = $action == 'detail' ? sprintf($lang->thinkstep->info, $lang->thinkstep->$basicType) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
         $canEdit   = common::hasPriv('thinkstep', 'edit');
         $canDelete = common::hasPriv('thinkstep', 'delete');
 
