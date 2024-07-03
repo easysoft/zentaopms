@@ -421,8 +421,9 @@ $lang->pivot->step2->statList['max']      = 'Max';
 $lang->pivot->step2->statList['min']      = 'Min';
 
 $lang->pivot->step3 = new stdclass();
-$lang->pivot->step3->drill    = 'Data Drill';
-$lang->pivot->step3->addDrill = 'Data Drill';
+$lang->pivot->step3->drill     = 'Data Drill';
+$lang->pivot->step3->addDrill  = 'Data Drill';
+$lang->pivot->step3->drillView = 'Drill View';
 
 $lang->datepicker->dpText->TEXT_WEEK_MONDAY = 'Monday';
 $lang->datepicker->dpText->TEXT_WEEK_SUNDAY = 'Sunday';
