@@ -99,7 +99,7 @@
 
     function showFatalError(data, _info, options)
     {
-        zui.Modal.showError({error: `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg'})
+        zui.Modal.showError({error: data.startsWith('<!DOCTYPE html') ? data : `<b>URL</b>: ${options.url}<br>${data}`, size: 'lg'})
     }
 
     function initZinbar()
