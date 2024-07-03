@@ -75,6 +75,12 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 $objectCols['id']['type']     = 'id';
                 $objectCols['id']['checkbox'] = false;
             }
+
+            if(isset($fieldSetting['link']) && is_array($fieldSetting['link']))
+            {
+                $fieldSetting['link']['target'] = '_blank';
+                $objectCols[$fieldKey] = $fieldSetting;
+            }
         }
 
         $drillingModals[] = modal
