@@ -274,8 +274,6 @@ class pivotState
         $this->settings  = $this->json2Array($pivot->settings);
         $this->filters   = $this->json2Array($pivot->filters);
 
-        $this->addQueryFilter = $this->getDefaultQueryFilter();
-
         $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
         $this->setPager();
         $this->formatSettingColumns();
