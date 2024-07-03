@@ -422,7 +422,7 @@ class testcaseZen extends testcase
 
         /* 获取未关闭的需求。 */
         /* Get the status of stories are not closed. */
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, $modules, 'active,reviewing', 'id_desc', 50, 'full', 'story', false);
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, $modules, 'active,reviewing', 'id_desc', 50, '', 'story', false);
         if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
@@ -913,16 +913,14 @@ class testcaseZen extends testcase
         if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
 
         $storyStatus = $this->loadModel('story')->getStatusList('noclosed');
-        if($this->app->tab == 'execution')
+        if(in_array($this->app->tab, array('project', 'execution')))
         {
             $stories = $this->loadModel('story')->getExecutionStoryPairs($case->execution, $case->product, $case->branch, $moduleIdList, 'full', 'all', 'story', false);
         }
         else
         {
-            $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, $storyStatus,'id_desc', 0, 'full', 'story', false);
+            $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, $storyStatus,'id_desc', 0, '', 'story', false);
         }
-
-        if(!in_array($this->app->tab, array('execution', 'project')) && empty($stories)) $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', false);
 
         $this->view->stories = $this->story->addGradeLabel($stories);
     }
