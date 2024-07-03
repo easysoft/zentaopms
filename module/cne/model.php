@@ -626,16 +626,20 @@ class cneModel extends model
      * Get app volumes.
      *
      * @link   https://yapi.qc.oop.cc/project/21/interface/api/168
-     * @param  object $instance
+     * @param  object     $instance
+     * @param bool|string $component true|'mysql'
      * @return object|array|false
      */
-    public function getAppVolumes(object $instance): object|array|false
+    public function getAppVolumes(object $instance, bool|string $component = false): object|array|false
     {
         $apiParams = new stdclass();
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
         $apiParams->channel   = $this->config->CNE->api->channel;
+
+        if($component === true)   $apiParams->component = 'mysql';
+        if(is_string($component)) $apiParams->component = $component;
 
         $apiUrl = "/api/cne/app/volumes";
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
