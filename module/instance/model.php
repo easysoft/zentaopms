@@ -322,7 +322,11 @@ class instanceModel extends model
     public function updateVolSize(object $instance, int|string $size, string $name): bool
     {
         $size = is_numeric($size) ? intval($size / 1073741824) : (int)$size;
-        if($size == 0) return false;
+        if($size == 0)
+        {
+            dao::$errors[] = $this->lang->instance->errors->failToAdjustVol;
+            return false;
+        }
         $size = $size . 'Gi';
 
         $setting = new stdclass();
@@ -336,7 +340,7 @@ class instanceModel extends model
         $success = $this->cne->updateConfig($instance, $settings);
         if($success)
         {
-            $this->action->create('instance', $instance->id, 'adjustVol', (int)$size . 'G');
+            $this->action->create('instance', $instance->id, 'adjustVol', str_replace('Gi', '', $size));
             return true;
         }
 
