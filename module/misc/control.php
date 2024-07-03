@@ -352,4 +352,12 @@ class misc extends control
 
         echo 'Cleaned cache files.';
     }
+
+    public function ajaxSendEvent(string $step): void
+    {
+        session_write_close();
+        $this->loadModel('common');
+        $api = $this->config->misc->sendEventAPI . '?action=' . $step . '&version=' . $this->config->version;
+        commonModel::http($api, null, array(), array(), 'data', 'GET', $timeout = 2);
+    }
 }
