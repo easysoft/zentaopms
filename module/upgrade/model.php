@@ -9235,4 +9235,24 @@ class upgradeModel extends model
         }
         return !dao::isError();
     }
+
+    /**
+     * 升级推算已关闭需求池需求阶段。
+     * Process demand stage.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processDemandStage()
+    {
+        $closedDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('status')->eq('closed')->fetchPairs();
+        if(empty($closedDemands)) return true;
+
+        $this->dao->update(TABLE_DEMAND)->set('stage')->eq('closed')->where('id')->in(array_keys($closedDemands))->exec();
+
+        $this->loadModel('demand');
+        foreach($closedDemands as $demandParent) $this->demand->updateParentDemandStage($demandParent);
+
+        return true;
+    }
 }

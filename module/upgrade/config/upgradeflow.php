@@ -134,6 +134,11 @@ if($config->edition != 'open')
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';
 
+if($config->edition == 'ipd')
+{
+    $config->upgrade->execFlow['20_1_1']['functions'] .= ',processDemandStage';
+}
+
 $config->upgrade->execFlow['pro3_2_1']    = array('functions' => 'recordFinished');
 $config->upgrade->execFlow['pro3_3']      = array('functions' => 'toLowerTable', 'params' => array('toLowerTable' => array('pro')));
 $config->upgrade->execFlow['pro4_0']      = array('functions' => 'fixRepo');
