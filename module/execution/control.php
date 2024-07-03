@@ -2077,6 +2077,7 @@ class execution extends control
             {
                 $locate = $this->config->vision == 'lite' ? $this->createLink('project', 'execution', "status=all&projectID=$execution->project") : $this->createLink('execution', 'all');
             }
+            if($this->app->tab == 'project' && $this->session->executionList) $locate = $this->session->executionList;
             return $this->send(array('result' => 'success', 'load' => $locate));
         }
     }
