@@ -358,7 +358,7 @@ class biModel extends model
             $fieldShow   = isset($schema->fields[$field]['show']) ? explode('.', $schema->fields[$field]['show']) : array();
 
             if($fieldObject) $useTable = $fieldObject;
-            if(count($fieldShow) == 2) $useField = $show[1];
+            if(count($fieldShow) == 2) $useField = $fieldShow[1];
         }
 
         $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
