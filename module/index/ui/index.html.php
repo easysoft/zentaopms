@@ -38,7 +38,7 @@ if(!empty($latestVersionList))
     $lastVersionList = (array)$latestVersionList;
     $lastVersion     = end($lastVersionList);
     $versionItems    = array();
-    foreach($latestVersionList as $versionNumber => $version)
+    foreach($latestVersionList as $versionNumber => $versionInfo)
     {
         $versionItems[] = div
         (
@@ -47,12 +47,12 @@ if(!empty($latestVersionList))
             (
                 setClass('version-name flex h-6 items-center'),
                 icon('version', setClass('version-upgrade')),
-                h5($version['name'])
+                h5($versionInfo['name'])
             ),
             div
             (
                 setClass('version-detail text-gray my-2'),
-                $version['explain']
+                $versionInfo['explain']
             ),
             div
             (
@@ -67,13 +67,13 @@ if(!empty($latestVersionList))
                 btn
                 (
                     setClass('primary upgrade-now'),
-                    set::url($version['link']),
+                    set::url($versionInfo['link']),
                     set::target('_blank'),
                     $lang->index->upgradeNow
                 )
             )
         );
-        if($version['name'] != $lastVersion['name']) $versionItems[] = h::hr(setClass('version-hr'));
+        if($versionInfo['name'] != $lastVersion['name']) $versionItems[] = h::hr(setClass('version-hr'));
     }
     $upgradeContent = div
     (
