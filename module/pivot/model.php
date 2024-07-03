@@ -36,7 +36,10 @@ class pivotModel extends model
      */
     public function getByID(int $pivotID, bool $processDateVar = false): object|bool
     {
-        $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
+        $pivot = $this->dao->select('*')->from(TABLE_PIVOT)
+            ->where('id')->eq($pivotID)
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
         if(!$pivot) return false;
 
         $pivot->fieldSettings = array();
