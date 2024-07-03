@@ -337,6 +337,17 @@ class pivotState
     }
 
     /**
+     * Save query filter.
+     *
+     * @access public
+     * @return void
+     */
+    public function saveQueryFilter()
+    {
+
+    }
+
+    /**
      * Complete filters default.
      *
      * @access public
