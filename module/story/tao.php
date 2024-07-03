@@ -1457,14 +1457,25 @@ class storyTao extends storyModel
                         /* Delivering. */
                         $hasDelivering = false;
                         $allReleased   = true;
+                        $hasDone       = false;
                         foreach($children as $child)
                         {
-                            if($child->stage == 'closed' && $child->closedReason != 'done') continue;
+                            if($child->stage == 'closed')
+                            {
+                                if($child->closedReason != 'done')
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    $hasDone = true;
+                                }
+                            }
                             if(in_array($child->stage, array('released', 'delivering'))) $hasDelivering = true;
                             if($child->stage != 'released') $allReleased = false;
                         }
 
-                        if($hasDelivering && !$allReleased)
+                        if(($hasDelivering && !$allReleased) || $hasDone)
                         {
                             $parentStage = 'delivering';
                         }
