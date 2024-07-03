@@ -835,6 +835,12 @@ class pivotState
         return $errors;
     }
 
+    /**
+     * Check query filter.
+     *
+     * @access public
+     * @return array
+     */
     public function checkQueryFilter()
     {
         $errors = array();
@@ -843,6 +849,12 @@ class pivotState
             if(empty($filter['field'])) $errors[$index]['field'] = true;
             if(empty($filter['name']))  $errors[$index]['name'] = true;
         }
+
+        $addFilter = $this->addQueryFilter;
+        if(empty($addFilter['field'])) $errors[$index]['field'] = true;
+        if(empty($addFilter['name'])) $errors[$index]['name'] = true;
+
+        return $errors;
     }
 
     /**
