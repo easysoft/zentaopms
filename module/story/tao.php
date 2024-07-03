@@ -1374,6 +1374,7 @@ class storyTao extends storyModel
         $allClosed    = true;
         $hasInRoadmap = false;
         $hasInCharter = false;
+        $allIpdStage  = true;
         foreach($children as $child)
         {
             if($child->stage == 'closed' && $child->closedReason != 'done') continue;
@@ -1381,6 +1382,7 @@ class storyTao extends storyModel
             if($child->stage != 'closed') $allClosed = false;
             if($child->stage == 'inroadmap') $hasInRoadmap = true;
             if($child->stage == 'incharter') $hasInCharter = true;
+            if(strpos(',wait,inroadmap,incharter,', ",{$child->stage},") === false) $allIpdStage = false;
         }
 
         $parentStage = $parent->stage;
@@ -1391,6 +1393,11 @@ class storyTao extends storyModel
         elseif($allWait)
         {
             $parentStage = 'wait';
+        }
+        elseif(!$allWait && $allIpdStage)
+        {
+            if($hasInRoadmap) $parentStage = 'inroadmap';
+            if($hasInCharter) $parentStage = 'incharter';
         }
         else
         {
@@ -1494,12 +1501,6 @@ class storyTao extends storyModel
                     }
                 }
             }
-        }
-
-        if($parentStage == 'wait' || $parentStage == 'inroadmap')
-        {
-            if($hasInRoadmap) $parentStage = 'inroadmap';
-            if($hasInCharter) $parentStage = 'incharter';
         }
 
         if($parentStage != $parent->stage)
