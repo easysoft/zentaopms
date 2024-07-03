@@ -444,11 +444,6 @@ class kanbanTao extends kanbanModel
             $lane = current($lanes);
             if($lane['type'] == 'parentStory')
             {
-                if(empty($items))
-                {
-                    unset($this->lang->kanban->type['parentStory']);
-                    continue;
-                }
                 $fromKanbanID = $kanbanID;
             }
             elseif($lane['type'] == 'story')
