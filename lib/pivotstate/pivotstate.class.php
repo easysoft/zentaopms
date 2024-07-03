@@ -241,6 +241,14 @@ class pivotState
      */
     public $changedWithoutSave = false;
 
+    /**
+     * addQueryFilter
+     *
+     * @var array
+     * @access public
+     */
+    public $addQueryFilter = array();
+
     public function __construct($pivot, $drills = array())
     {
         $this->id        = $pivot->id;
@@ -265,6 +273,8 @@ class pivotState
         $this->objects   = $this->json2Array($pivot->objects);
         $this->settings  = $this->json2Array($pivot->settings);
         $this->filters   = $this->json2Array($pivot->filters);
+
+        $this->addQueryFilter = $this->getDefaultQueryFilter();
 
         $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
         $this->setPager();
@@ -524,6 +534,11 @@ class pivotState
         }
 
         return array('field' => $field, 'slice' => 'noSlice', 'stat' => 'count', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
+    }
+
+    public function getDefaultQueryFilter()
+    {
+        return array('field' => '', 'name' => '', 'type' => 'input', 'typeOption' => '', 'default' => '');
     }
 
     /**
