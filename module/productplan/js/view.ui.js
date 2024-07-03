@@ -77,7 +77,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
             if(story.data.type == 'story')
             {
                 total += 1;
-                checkedEstimate += parseFloat(story.data.estimate);
+                if(story.data.isParent == '0') checkedEstimate += parseFloat(story.data.estimate);
                 if(cases[row.id]) checkedCase += 1;
             }
         }
