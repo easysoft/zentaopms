@@ -93,8 +93,8 @@ class instance extends control
         $currentResource = $this->cne->getAppConfig($instance);
         $diskSettings    = $this->cne->getDiskSettings($instance);
 
-        $this->lang->instance->errors->invalidDiskSize = sprintf($this->lang->instance->errors->invalidDiskSize, $diskSettings->used, $diskSettings->limit);
-        $this->lang->instance->tips->resizeDisk        = sprintf($this->lang->instance->tips->resizeDisk, $diskSettings->used, $diskSettings->limit);
+        $this->lang->instance->errors->invalidDiskSize = sprintf($this->lang->instance->errors->invalidDiskSize, $diskSettings->size, $diskSettings->limit);
+        $this->lang->instance->tips->resizeDisk        = sprintf($this->lang->instance->tips->resizeDisk, $diskSettings->size, $diskSettings->limit);
 
         if(!empty($_POST))
         {
@@ -124,7 +124,7 @@ class instance extends control
             $disk = $newInstance->disk_gb;
             if(is_numeric($disk) && $disk != $diskSettings->size)
             {
-                if($disk < $diskSettings->used || $disk > $diskSettings->limit)  return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->invalidDiskSize));
+                if($disk < $diskSettings->size || $disk > $diskSettings->limit)  return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->invalidDiskSize));
                 if(!$this->instance->updateVolSize($instance, $disk . 'Gi', $diskSettings->name)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 

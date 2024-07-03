@@ -67,7 +67,7 @@ formPanel
             set::label($lang->instance->adjustVol),
             set::value($diskSettings->size),
             set::placeholder($lang->instance->tips->resizeDisk),
-            set::min($diskSettings->used),
+            set::min($diskSettings->size),
             set::max($diskSettings->limit)
         )
     )
