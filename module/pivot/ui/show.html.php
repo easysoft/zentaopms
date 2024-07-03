@@ -62,6 +62,21 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
     {
         if(!$col['isDrilling']) continue;
 
+        $drillingObject = $col['drillingObject'];
+        $this->loadModel($drillingObject);
+
+        $objectCols = $this->config->$drillingObject->dtable->fieldList;
+        foreach($objectCols as $fieldKey => $fieldSetting)
+        {
+            if(!in_array($fieldKey, $this->config->pivot->drillingObjectFields[$drillingObject])) unset($objectCols[$fieldKey]);
+
+            if($fieldKey == 'id')
+            {
+                $objectCols['id']['type']     = 'id';
+                $objectCols['id']['checkbox'] = false;
+            }
+        }
+
         $drillingModals[] = modal();
     }
 
