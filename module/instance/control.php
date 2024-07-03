@@ -83,15 +83,18 @@ class instance extends control
      * Setting instance.
      *
      * @param  int    $id
+     * @param  string $component 0|mysql
      * @access public
      * @return void
      */
-    public function setting(int $id)
+    public function setting(int $id, string $component = '0')
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance        = $this->instance->getByID($id);
         $currentResource = $this->cne->getAppConfig($instance);
-        $diskSettings    = $this->cne->getDiskSettings($instance);
+
+        if(empty($component)) $component = false;
+        $diskSettings = $this->cne->getDiskSettings($instance, $component);
 
         $this->lang->instance->errors->invalidDiskSize = sprintf($this->lang->instance->errors->invalidDiskSize, $diskSettings->size, $diskSettings->limit);
         $this->lang->instance->tips->resizeDisk        = sprintf($this->lang->instance->tips->resizeDisk, $diskSettings->size, $diskSettings->limit);
@@ -128,11 +131,14 @@ class instance extends control
                 if(!$this->instance->updateVolSize($instance, $disk . 'Gi', $diskSettings->name)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
-            $this->instance->updateByID($id, $newInstance);
-            if(dao::isError())  return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($newInstance->name != $instance->name)
+            if(empty($component))
             {
-                $this->action->create('instance', $instance->id, 'editName', '', json_encode(array('result' => array('result' => 'success'), 'data' => array('oldName' => $instance->name, 'newName' => $newInstance->name))));
+                $this->instance->updateByID($id, $newInstance);
+                if(dao::isError())  return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if($newInstance->name != $instance->name)
+                {
+                    $this->action->create('instance', $instance->id, 'editName', '', json_encode(array('result' => array('result' => 'success'), 'data' => array('oldName' => $instance->name, 'newName' => $newInstance->name))));
+                }
             }
 
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
