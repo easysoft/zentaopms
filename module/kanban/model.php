@@ -1613,6 +1613,7 @@ class kanbanModel extends model
             $objects  = zget($objectGroup, $laneType, array());
             $object   = zget($objects, $cardID, array());
 
+            if($laneType == 'story' && $object->isParent == '1') continue;
             if(empty($object)) continue;
             $cardData = $this->buildExecutionCard($object, $column, $laneType, $searchValue, $menus);
             if(empty($cardData)) continue;
