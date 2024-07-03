@@ -77,7 +77,18 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             }
         }
 
-        $drillingModals[] = modal();
+        $drillingModals[] = modal
+        (
+            setID('drilling-' . $col['name']),
+            set::title($this->lang->pivot->step3->drillView),
+            dtable
+            (
+                set::striped(true),
+                set::bordered(true),
+                set::cols(array_values($objectCols)),
+                set::data($col['drillingDatas'])
+            )
+        );
     }
 
     return $drillingModals + array
