@@ -8854,6 +8854,15 @@ class upgradeModel extends model
             ->orderBy('AID asc')
             ->fetchGroup('AID', 'BID');
 
+        $requirementRoadmaps = $this->dao->select('id,roadmap')->from(TABLE_STORY)
+            ->where('id')->notin(array_keys($relations))
+            ->andWhere('roadmap')->ne(0)
+            ->andWhere('type')->eq('requirement')
+            ->andWhere('stage')->eq('wait')
+            ->andWhere('linkStories')->eq('')
+            ->andWhere('linkRequirements')->eq('')
+            ->fetchPairs('id');
+
         $processd = array(); // 记录已处理的软件需求，一个软件需求只能有一个父需求。
         foreach($relations as $AID => $storyList)
         {
@@ -8903,6 +8912,15 @@ class upgradeModel extends model
                 $this->story->setStage($lastChildID);
                 $this->story->updateParentStatus($lastChildID, $AID, false);
             }
+        }
+
+        $roadmapList = $this->dao->select('id,status')->from(TABLE_ROADMAP)->where('id')->in(array_values($requirementRoadmaps))->fetchPairs('id');
+        foreach($requirementRoadmaps as $requirementID => $roadmapID)
+        {
+            if(!isset($roadmapList[$roadmapID])) continue;
+            $roadmapStatus    = $roadmapList[$roadmapID];
+            $requirementStage = $roadmapStatus == 'launched' ? 'incharter' : 'inroadmap';
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($requirementStage)->where('id')->eq($requirementID)->exec();
         }
 
         /* 其它没被处理成父子关系的细分关系，变成关联关系。 */
