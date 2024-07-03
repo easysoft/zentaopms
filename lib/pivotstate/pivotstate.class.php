@@ -536,6 +536,12 @@ class pivotState
         return array('field' => $field, 'slice' => 'noSlice', 'stat' => 'count', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
     }
 
+    /**
+     * Get default query filter.
+     *
+     * @access public
+     * @return array
+     */
     public function getDefaultQueryFilter()
     {
         return array('field' => '', 'name' => '', 'type' => 'input', 'typeOption' => '', 'default' => '');
