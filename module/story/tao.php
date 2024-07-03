@@ -1504,7 +1504,7 @@ class storyTao extends storyModel
 
         if($parentStage == 'wait' && !empty($parent->roadmap))
         {
-            $roadmapStatus = $this->dao->select('status')->from(TABLE_DEMAND)->where('id')->eq($parent->roadmap)->fetch('status');
+            $roadmapStatus = $this->dao->select('status')->from(TABLE_ROADMAP)->where('id')->eq($parent->roadmap)->fetch('status');
             $parentStage = $roadmapStatus == 'launched' ? 'incharter' : 'inroadmap';
         }
 
