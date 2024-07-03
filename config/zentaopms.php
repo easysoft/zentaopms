@@ -478,15 +478,16 @@ if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db-
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
-define('TABLE_SCREEN',    '`' . $config->db->prefix . 'screen`');
-define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
-define('TABLE_PIVOT',     '`' . $config->db->prefix . 'pivot`');
-define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
-define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
-define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
-define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
-define('TABLE_SCENE',     '`' . $config->db->prefix . 'scene`');
-define('VIEW_SCENECASE',  '`ztv_scenecase`');
+define('TABLE_SCREEN',     '`' . $config->db->prefix . 'screen`');
+define('TABLE_CHART',      '`' . $config->db->prefix . 'chart`');
+define('TABLE_PIVOT',      '`' . $config->db->prefix . 'pivot`');
+define('TABLE_PIVOTDRILL', '`' . $config->db->prefix . 'pivotdrill`');
+define('TABLE_DASHBOARD',  '`' . $config->db->prefix . 'dashboard`');
+define('TABLE_DATASET',    '`' . $config->db->prefix . 'dataset`');
+define('TABLE_DATAVIEW',   '`' . $config->db->prefix . 'dataview`');
+define('TABLE_DIMENSION',  '`' . $config->db->prefix . 'dimension`');
+define('TABLE_SCENE',      '`' . $config->db->prefix . 'scene`');
+define('VIEW_SCENECASE',   '`ztv_scenecase`');
 
 define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
 define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');

@@ -108,3 +108,11 @@ ALTER TABLE `zt_attend` MODIFY `ip` varchar(100) NOT NULL DEFAULT '';
 
 UPDATE zt_workflowaction SET linkages = '[]' WHERE action = 'approvalreview' AND linkages = '[{"sources":[{"field":"reviewResult","operator":"==","value":"pass"}],"targets":[{"field":"reviewOpinion","status":"hide"}]}]';
 UPDATE zt_workflowlayout SET layoutRules = '' WHERE action = 'approvalreview' AND field = 'reviewOpinion';
+
+CREATE TABLE `zt_pivotdrill` (
+  `pivot`     mediumint    NOT NULL,
+  `field`     varchar(255) NOT NULL,
+  `object`    varchar(40)  NOT NULL,
+  `sql`       mediumtext   NOT NULL,
+  `condition` mediumtext   NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

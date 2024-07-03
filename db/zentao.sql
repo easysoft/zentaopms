@@ -15571,6 +15571,14 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
 
+CREATE TABLE `zt_pivotdrill` (
+  `pivot`     mediumint    NOT NULL,
+  `field`     varchar(255) NOT NULL,
+  `object`    varchar(40)  NOT NULL,
+  `sql`       mediumtext   NOT NULL,
+  `condition` mediumtext   NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_sqlview`;
 CREATE TABLE IF NOT EXISTS `zt_sqlview` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
