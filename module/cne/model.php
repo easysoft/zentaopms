@@ -296,6 +296,41 @@ class cneModel extends model
     }
 
     /**
+     * 获取磁盘配置信息。
+     * Get the disk settings.
+     *
+     * @param  object $instance
+     * @return object
+     */
+    public function getDiskSettings(object $instance): object
+    {
+        $diskSetting = new stdclass;
+        $diskSetting->resizable = false;
+        $diskSetting->size      = 0;
+        $diskSetting->used      = 0;
+        $diskSetting->limit     = 0;
+        $diskSetting->name      = '';
+
+        $volumes = $this->getAppVolumes($instance);
+        if($volumes)
+        {
+            foreach($volumes as $volume)
+            {
+                if(!$volume->is_block_device) return $diskSetting;
+
+                $diskSetting->resizable = true;
+                $diskSetting->size      = ceil($volume->size / 1073741824);
+                $diskSetting->used      = ceil($volume->actual_size / 1073741824);
+                $diskSetting->limit     = floor($volume->max_increase_size / 1073741824);
+                $diskSetting->name      = $volume->setting_keys->size->path;
+                break;
+            }
+        }
+
+        return $diskSetting;
+    }
+
+    /**
      * 获取平台实例的度量。
      * Get instance metrics.
      *
