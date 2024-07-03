@@ -544,7 +544,7 @@ $lang->story->recallTip['actived'] = "该需求未发起评审流程，无需撤
 
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['notWait']    = "该需求%s，无法进行拆分操作";
-$lang->story->subDivideTip['notActive']  = "需求不是激活状态，无法进行拆分操作";
+$lang->story->subDivideTip['notActive']  = "评审中和已关闭的需求，无法进行拆分操作";
 $lang->story->subDivideTip['twinsSplit'] = '孪生需求不可拆分';
 
 $lang->story->featureBar['browse']['all']       = '全部';
