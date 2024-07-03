@@ -1662,9 +1662,10 @@ class executionModel extends model
 
         if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
-        $parentList = array();
-        $today      = helper::today();
-        $burns      = $this->getBurnData($executions);
+        $parentList       = array();
+        $today            = helper::today();
+        $burns            = $this->getBurnData($executions);
+        $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
         foreach($executions as $execution)
         {
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
@@ -1672,7 +1673,7 @@ class executionModel extends model
             $execution->productID   = $productID;
             if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
 
-            if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
+            if(isset($parentExecutions[$execution->id])) $executions[$execution->id]->isParent = 1;
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
 
             /* Judge whether the execution is delayed. */
