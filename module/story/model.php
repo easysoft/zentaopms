@@ -3366,7 +3366,7 @@ class storyModel extends model
             ->groupBy('stage')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $stage => $data) $data->name = $this->lang->story->stageList[$stage] != '' ? $this->lang->story->stageList[$stage] : $this->lang->report->undefined;
+        foreach($datas as $stage => $data) $data->name = $this->lang->{$storyType}->stageList[$stage] != '' ? $this->lang->{$storyType}->stageList[$stage] : $this->lang->report->undefined;
         return $datas;
     }
 

@@ -44,7 +44,7 @@ class reportModel extends model
         $totalPercent = 0;
         foreach($datas as $i => $data)
         {
-            $data->percent = round($data->value / $sum, 4);
+            $data->percent = $data->value ? round($data->value / $sum, 4) : 0;
             $totalPercent += $data->percent;
         }
         if(isset($i)) $datas[$i]->percent = round(1 - $totalPercent + $datas[$i]->percent, 4);
