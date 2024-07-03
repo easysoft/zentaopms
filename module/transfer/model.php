@@ -650,6 +650,12 @@ class transferModel extends model
         {
             if($module == 'story') $queryCondition = str_replace('`story`', '`id`', $queryCondition);
 
+            /* 业需用需列表也可能选中软需进行导出。 */
+            if(in_array($module, array('epic', 'requirement')))
+            {
+                $queryCondition = str_replace("`type` = '$module'", '1 = 1', $queryCondition);
+            }
+
             $table = zget($this->config->objectTables, $module); //获取对应的表
             $sql   = $this->dao->select('t1.*')->from($table)->alias('t1');
             if($module == 'task' && strpos($queryCondition, '`assignedTo`') !== false)
