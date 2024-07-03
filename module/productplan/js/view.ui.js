@@ -83,7 +83,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         }
     });
 
-    const rate = Math.round(checkedCase / total * 10000) / 100 + '' + '%';
+    const rate = total == 0 ? '0%' : Math.round(checkedCase / total * 10000) / 100 + '' + '%';
     return {html: checkedSummary.replace('%total%', total)
         .replace('%estimate%', checkedEstimate.toFixed(1))
         .replace('%rate%', rate)};
