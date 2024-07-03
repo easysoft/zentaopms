@@ -2946,7 +2946,7 @@ class executionModel extends model
                 {
                     if(!in_array($story->status, array('active', 'launched')) || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
                     if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
-                    if(!in_array($execution->attribute, array('mix', 'request', 'design')) && $story->type != 'story') unset($planStories[$id]);
+                    if(!in_array($execution->attribute, array('mix', 'request', 'design')) && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
                 }
                 $stories = array_merge($stories, array_keys($planStories));
             }
@@ -4934,6 +4934,8 @@ class executionModel extends model
             $execution = $this->fetchById($executionID);
             $this->loadModel('kanban')->createRDKanban($execution);
         }
+
+        $this->linkStories($executionID);
 
         return $executionID;
     }
