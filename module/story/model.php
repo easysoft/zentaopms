@@ -192,7 +192,7 @@ class storyModel extends model
     {
         $users = $this->loadModel('user')->getPairs('pofirst|nodeleted', "{$story->lastEditedBy},{$story->openedBy},{$story->assignedTo}");
 
-        if($story->type == 'story')
+        if($story->type == 'story' && $story->isParent == '0')
         {
             $story = $this->storyTao->getAffectedProjects($story, $users);
             $story = $this->storyTao->getAffectedBugs($story, $users);
