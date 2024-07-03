@@ -249,6 +249,13 @@ class pivotZen extends pivot
             $columns[$field]['minWidth'] = 128;
             $columns[$field]['align']    = 'center';
 
+            /* TODO demo data. */
+            if($index == 2)
+            {
+                $columns[$field]['data-toggle'] = 'modal';
+                $columns[$field]['link']        = '#drilling-' . $field;
+            }
+
             $columnMaxLen[$field] = mb_strlen($column->label);
 
             if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
