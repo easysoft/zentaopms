@@ -246,7 +246,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         $canBatchChangePlan = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
     }
 
-    $canBatchChangeGrade   = $canBeChanged && hasPriv($storyType, 'batchChangeGrade') && count($gradePairs) > 1 && $config->{$storyType}->gradeRule == 'cross';
+    $canBatchChangeGrade   = $canBeChanged && hasPriv($storyType, 'batchChangeGrade') && count($gradePairs) > 1 && $config->{$storyType}->gradeRule == 'cross' && !$isProjectStory;
     $canBatchChangeStage   = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
     $canBatchChangeBranch  = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule  = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
