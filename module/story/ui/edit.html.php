@@ -34,6 +34,9 @@ if(!empty($story->stages) && isset($fields['stage']['options']))
     }
 }
 
+unset($fields['stage']['options']['delivered']);
+unset($fields['stage']['options']['delivering']);
+
 if($app->tab == 'product') data('activeMenuID', $story->type);
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);

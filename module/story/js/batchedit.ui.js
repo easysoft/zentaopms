@@ -72,9 +72,7 @@ window.renderRowData = function($row, index, story)
             if(story.type == 'story' && story.isParent == '0')
             {
                 /* 叶子需求删除父需求的阶段。*/
-                items.splice(0, 1);
-                items.splice(1, 1);
-                items.splice(11, 1);
+                items.splice(11, 2);
                 options.items = items;
             }
             else if(story.type != 'story' || story.isParent == '1')
