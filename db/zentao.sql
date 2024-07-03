@@ -2194,6 +2194,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `password` char(32) NOT NULL DEFAULT '',
   `role` char(10) NOT NULL DEFAULT '',
   `realname` varchar(100) NOT NULL DEFAULT '',
+  `superior` char(30) NULL DEFAULT '',
   `pinyin` varchar(255) NOT NULL DEFAULT '',
   `nickname` char(60) NOT NULL DEFAULT '',
   `commiter` varchar(100) NOT NULL DEFAULT '',
