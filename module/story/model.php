@@ -3805,7 +3805,7 @@ class storyModel extends model
             {
                 if(!$grade) continue;
                 if(strpos($grade, 'requirement') !== false) $requirementGrades[] = str_replace('requirement', '', $grade);
-                if(strpos($grade, 'story') !== false)       $storyGrades[]       = str_replace('story', '', $grade);
+                if(strpos($grade, 'story') !== false && $this->config->vision != 'or') $storyGrades[] = str_replace('story', '', $grade);
             }
         }
 
