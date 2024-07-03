@@ -3997,6 +3997,8 @@ class storyModel extends model
      */
     public function getMergeTrackCells(array $tracks, array $showCols): array
     {
+        if(empty($tracks)) return array();
+
         $storyCols = array();
         foreach($showCols as $colType)
         {
