@@ -42,6 +42,7 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($allStories)),
+    set::noNestedCheck(),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::extraHeight('+144'),
     set::loadPartial(true),

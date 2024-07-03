@@ -492,6 +492,7 @@ dtable
     set::groupDivider(true),
     set::cols($cols),
     set::data($data),
+    set::noNestedCheck(),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::orderBy($orderBy),

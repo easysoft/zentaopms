@@ -427,6 +427,7 @@ dtable
     set::checkable(!empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),
+    set::noNestedCheck(),
     set::sortLink($sortLink),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),

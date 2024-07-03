@@ -272,6 +272,7 @@ detailBody
                     set::bordered(true),
                     set::cols($storyCols),
                     set::data(array_values($planStories)),
+                    set::noNestedCheck(),
                     set::checkable($canBatchActionStory),
                     set::onRenderCell(jsRaw('window.renderStoryCell')),
                     set::footToolbar($storyFootToolbar),
