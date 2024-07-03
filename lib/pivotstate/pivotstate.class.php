@@ -255,7 +255,9 @@ class pivotState
         $this->sql       = $pivot->sql;
         $this->step      = 1;
         $this->stage     = $pivot->stage;
-        $this->drills    = $drills;
+
+        $this->drills       = $drills;
+        $this->defaultDrill = array('field' => '', 'object' => '', 'sql' => '', 'conditions' => array($this->addCondition()));
 
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
@@ -501,6 +503,11 @@ class pivotState
         $this->drills[] = array('type' => $type);
     }
 
+    public function addCondition()
+    {
+        return array('drillField' => '', 'queryField' => '');
+    }
+
     /**
      * Get default column.
      *
@@ -550,8 +557,10 @@ class pivotState
         $this->vars      = $vars;
         $this->objects   = $objects;
         $this->settings  = $settings;
-        $this->drills    = $drills;
         $this->filters   = $filters;
+
+        $this->drills       = $drills;
+        $this->defaultDrill = $defaultDrill;
 
         $this->action        = $action;
         $this->queryCols     = $queryCols;
