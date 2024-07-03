@@ -344,7 +344,10 @@ class pivotState
      */
     public function saveQueryFilter()
     {
-
+        $filter = $this->addQueryFilter;
+        $filter['from'] = 'query';
+        $this->filters[] = $filter;
+        $this->addQueryFilter = array();
     }
 
     /**
