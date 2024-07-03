@@ -3811,6 +3811,8 @@ class storyModel extends model
 
         $rootIdList = array();
         foreach($stories as $story) $rootIdList[$story->root] = $story->root;
+        if(empty($rootIdList)) return $stories;
+
         $children = $this->dao->select('*')->from(TABLE_STORY)
             ->where('root')->in($rootIdList)
             ->andWhere('product')->eq($productID)
