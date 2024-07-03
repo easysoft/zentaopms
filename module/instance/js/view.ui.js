@@ -50,7 +50,7 @@ function refreshStatus()
 
                 if(currentStatus != res.data[0].status)
                 {
-                    loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#setting,#statusTD,#systemLoad,.float-toolbar');
+                    loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#setting,#statusTD,#dbStatusTD,#systemLoad,.float-toolbar');
                     currentStatus = res.data[0].status;
                     return false;
                 }

@@ -46,6 +46,7 @@ foreach($dbList as $db)
         h::td($db->db_type),
         h::td
         (
+            setID('dbStatusTD'),
             $db->ready ? $lang->instance->dbReady : $lang->instance->dbWaiting,
             setClass('text-' . ($db->ready ? 'success' : 'danger'))
         ),
