@@ -81,6 +81,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
         (
             setID('drilling-' . $col['name']),
             set::title($this->lang->pivot->step3->drillView),
+            set::size('lg'),
             dtable
             (
                 set::striped(true),
