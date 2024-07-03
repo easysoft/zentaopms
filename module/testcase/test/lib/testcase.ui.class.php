@@ -24,6 +24,23 @@ class testcase extends tester
                     $form->dom->{"steps[$fatherGroup]"}->setValue($fatherSteps);
                     $form->dom->{"expects[$fatherGroup]"}->setValue($fatherExpects);
                 }
+                else
+                {
+                    $group = 0;
+                    $subButton = "//textarea[@name = 'steps[$fatherGroup]']/../..//button[@data-action='sub']/i";
+                    $this->page->scrollToElement($subButton);
+                    $this->page->click($subButton);
+                    foreach($fatherExpects as $steps => $expects)
+                    {
+                        $group++;
+                        if(!is_array($expects))
+                        {
+                            $form->dom->{"steps[$fatherGroup.$group]"}->scrollToElement();
+                            $form->dom->{"steps[$fatherGroup.$group]"}->setValue($steps);
+                            $form->dom->{"expects[$fatherGroup.$group]"}->setValue($expects);
+                        }
+                    }
+                }
             }
         }
         $form->dom->btn($this->lang->save)->click();
