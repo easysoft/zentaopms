@@ -1304,11 +1304,10 @@ class storyTao extends storyModel
         }
 
         $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
-        if($story->stage != $stage)
-        {
-            $this->updateLinkedLane($storyID, $linkedProjects);
-            $this->computeParentStage($story);
-        }
+
+        if($story->stage != $stage) $this->updateLinkedLane($storyID, $linkedProjects);
+        $this->computeParentStage($story);
+
         return true;
     }
 
