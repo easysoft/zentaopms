@@ -381,7 +381,7 @@ featureBar
     li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module'])))
 );
 
-$canExport = $isProjectStory ? hasPriv('projectstory', 'export') : hasPriv($storyType, 'export');
+$canExport = $isProjectStory ? hasPriv('projectstory', 'export') && $productID : hasPriv($storyType, 'export');
 $canReport = $isProjectStory ? hasPriv('projectstory', 'report') : hasPriv($storyType, 'report');
 $reportUrl = $isProjectStory ? helper::createLink('projectstory', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") : helper::createLink($storyType, 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID");
 $exportUrl = $isProjectStory ? helper::createLink('projectstory', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType") : helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");
