@@ -2273,11 +2273,16 @@ class storyModel extends model
      */
     public function closeAllChildren(int $storyID, string $closedReason)
     {
+        $now         = helper::now();
         $childIdList = $this->getAllChildId($storyID, false);
         $this->dao->update(TABLE_STORY)
              ->set('status')->eq('closed')
              ->set('stage')->eq('closed')
              ->set('closedReason')->eq($closedReason)
+             ->set('closedBy')->eq($this->app->user->account)
+             ->set('closedDate')->eq($now)
+             ->set('lastEditedBy')->eq($this->app->user->account)
+             ->set('lastEditedDate')->eq($now)
              ->where('id')->in($childIdList)
              ->exec();
 
