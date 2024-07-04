@@ -53,14 +53,17 @@ $config->story->dtable->fieldList['branch']['group']      = 4;
 $config->story->dtable->fieldList['branch']['control']    = 'select';
 $config->story->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
 
-$config->story->dtable->fieldList['plan']['name']       = 'plan';
-$config->story->dtable->fieldList['plan']['title']      = $lang->story->planAB;
-$config->story->dtable->fieldList['plan']['sortType']   = true;
-$config->story->dtable->fieldList['plan']['width']      = '136';
-$config->story->dtable->fieldList['plan']['show']       = true;
-$config->story->dtable->fieldList['plan']['control']    = 'multiple';
-$config->story->dtable->fieldList['plan']['group']      = 4;
-$config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
+if($config->vision == 'rnd')
+{
+    $config->story->dtable->fieldList['plan']['name']       = 'plan';
+    $config->story->dtable->fieldList['plan']['title']      = $lang->story->planAB;
+    $config->story->dtable->fieldList['plan']['sortType']   = true;
+    $config->story->dtable->fieldList['plan']['width']      = '136';
+    $config->story->dtable->fieldList['plan']['show']       = true;
+    $config->story->dtable->fieldList['plan']['control']    = 'multiple';
+    $config->story->dtable->fieldList['plan']['group']      = 4;
+    $config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
+}
 
 if($config->edition == 'ipd')
 {
