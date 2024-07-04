@@ -1456,9 +1456,8 @@ class storyTao extends storyModel
                     {
                         /* Delivering. */
                         $hasDelivering = false;
-                        $allReleased   = true;
                         $hasDone       = false;
-                        $allClosed     = true;
+                        $allDelivered  = true;
                         foreach($children as $child)
                         {
                             if($child->stage == 'closed')
@@ -1472,29 +1471,17 @@ class storyTao extends storyModel
                                     $hasDone = true;
                                 }
                             }
-                            else
-                            {
-                                $allClosed = false;
-                            }
                             if(in_array($child->stage, array('released', 'delivering'))) $hasDelivering = true;
-                            if($child->stage != 'released') $allReleased = false;
+                            if(!in_array($child->stage, array('released', 'closed', 'delivered'))) $allDelivered = false;
                         }
 
-                        if(($hasDelivering && !$allReleased) || ($hasDone && !$allClosed))
+                        if($allDelivered)
+                        {
+                            $parentStage = 'delivered';
+                        }
+                        elseif($hasDelivering || $hasDone)
                         {
                             $parentStage = 'delivering';
-                        }
-                        else
-                        {
-                            /* Delivered. */
-                            $allDelivered = true;
-                            foreach($children as $child)
-                            {
-                                if($child->stage == 'closed' && $child->closedReason != 'done') continue;
-                                if(!in_array($child->stage, array('released', 'delivered', 'closed'))) $allDelivered = false;
-                            }
-
-                            if($allDelivered) $parentStage = 'delivered';
                         }
                     }
                 }
