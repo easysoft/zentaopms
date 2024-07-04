@@ -250,7 +250,7 @@ detailBody
             ),
             ($story->parent >= 0 && ($showGrade || $story->type != 'epic')) ? item
             (
-                set::trClass($app->tab == 'product' ? zget($fields['parent'], 'className', '') : 'hidden'),
+                set::trClass(zget($fields['parent'], 'className', '')),
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
             ) : null,
