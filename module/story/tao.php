@@ -2439,12 +2439,14 @@ class storyTao extends storyModel
      */
     public function getTasksForTrack(array $storyIdList): array
     {
-        $stmt  = $this->dao->select('id,project,execution,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution')->query();
+        $stmt  = $this->dao->select('id,project,execution,mode,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution')->query();
         $tasks = array();
+        $multiTasks = array();
         while($task = $stmt->fetch())
         {
             $task->progress = 0;
             if($task->consumed + $task->left) $task->progress = round(($task->consumed / ($task->consumed + $task->left)) * 100, 2);
+            if($task->mode == 'multi') $multiTasks[$task->id] = $task->id;
 
             if($task->parent > 0 && isset($tasks[$task->parent]))
             {
@@ -2456,6 +2458,7 @@ class storyTao extends storyModel
             }
         }
 
+        $taskTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($multiTasks)->fetchGroup('task', 'account');
         $taskGroup = array();
         foreach($tasks as $task)
         {
@@ -2463,7 +2466,12 @@ class storyTao extends storyModel
             unset($task->children);
 
             $taskGroup[$task->story][$task->id] = $task;
-            foreach($children as $subTask) $taskGroup[$subTask->story][$subTask->id] = $subTask;
+            if(isset($taskTeams[$task->id][$this->app->user->account]) && empty($task->assignedTo)) $task->assignedTo = $this->app->user->account;
+            foreach($children as $subTask)
+            {
+                if(isset($taskTeams[$subTask->id][$this->app->user->account]) && empty($subTask->assignedTo)) $subTask->assignedTo = $this->app->user->account;
+                $taskGroup[$subTask->story][$subTask->id] = $subTask;
+            }
         }
         return $taskGroup;
     }
