@@ -139,6 +139,7 @@ $config->story->dtable->fieldList['reviewedDate']['sortType'] = true;
 $config->story->dtable->fieldList['reviewedDate']['type']     = 'date';
 $config->story->dtable->fieldList['reviewedDate']['group']    = 5;
 
+$app->loadLang('requirement');
 $config->story->dtable->fieldList['stage']['name']      = 'stage';
 $config->story->dtable->fieldList['stage']['title']     = $lang->story->stageAB;
 $config->story->dtable->fieldList['stage']['sortType']  = true;

@@ -624,7 +624,7 @@ class storyZen extends story
         $fields['grade']['options']          = $grades;
         $fields['duplicateStory']['options'] = $productStories;
         $fields['assignedTo']['options']    += array('closed' => 'Closed');
-        $fields['stage']['options']          = $story->type == 'story' ? $this->lang->story->stageList : $this->lang->{$story->type}->stageList;
+        $fields['stage']['options']          = $this->lang->{$story->type}->stageList;
 
         /* 设置默认值。 */
         if(empty($fields['reviewer']['default'])) $fields['reviewer']['default'] = implode(',', array_keys($reviewerList));
