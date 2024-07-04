@@ -2467,4 +2467,22 @@ class storyTao extends storyModel
         }
         return $taskGroup;
     }
+
+    public function getSearchedStoriesForTrack(array $allStories, array $stories): array
+    {
+        $newStories     = array();
+        $newAllStories  = array();
+        $searchedIdList = array_keys($stories);
+        foreach($allStories as $storyID => $story)
+        {
+            $isChild = false;
+            array_map(function($searchedID) use($story, &$isChild){ if(str_contains($story->path, ",{$searchedID},")) $isChild = true; }, $searchedIdList);
+            if(!$isChild) continue;
+
+            $story->parent = explode(',', trim(str_replace(",{$storyID},", ',', $story->path), ','));
+            $newStories[$storyID]    = $story;
+            $newAllStories[$storyID] = $story;
+        }
+        return array($newAllStories, $newStories);
+    }
 }

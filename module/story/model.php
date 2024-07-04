@@ -3923,13 +3923,15 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getTracksByStories(array $stories, string $storyType): array
+    public function getTracksByStories(array $stories, string $storyType, string $browseType, string $orderBy): array
     {
         if(empty($stories)) return array();
 
         $rootIdList = array_unique(array_column($stories, 'root'));
-        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $leafNodes  = $this->storyTao->getLeafNodes($stories);
+        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
+        if($browseType == 'bysearch')list($allStories, $stories) = $this->storyTao->getSearchedStoriesForTrack($allStories, $stories);
+
+        $leafNodes = $this->storyTao->getLeafNodes($stories);
 
         $tracks = array();
         $lanes  = $this->storyTao->buildTrackLanes($leafNodes, $storyType);
