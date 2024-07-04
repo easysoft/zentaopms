@@ -939,21 +939,14 @@ class biModel extends model
      * @access public
      * @return string|true
      */
-    public function validateSql($sql)
+    public function validateSql($sql, $driver = 'mysql')
     {
         $this->loadModel('dataview');
 
-        $driver = 'mysql';
-
         if(empty($sql)) return $this->lang->dataview->empty;
-        try
-        {
-            $rows = $this->dbh->query("EXPLAIN $sql")->fetchAll();
-        }
-        catch(Exception $e)
-        {
-            return $e->getMessage();
-        }
+
+        $result = $this->explainSQL($sql, $driver);
+        if($result['result'] === 'fail') return $result['message'];
 
         $sqlColumns = $this->getColumns($sql, $driver);
         list($isUnique, $repeatColumn) = $this->dataview->checkUniColumn($sql, $driver, true, $sqlColumns);
@@ -1042,14 +1035,14 @@ class biModel extends model
     public function query($stateObj, $driver = 'mysql')
     {
         $dbh = $this->app->loadDriver($driver);
-        $sql = $this->processVars($stateObj->sql, $stateObj->filters);
+        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
 
         $stateObj->beforeQuerySql();
 
         $statement = $this->sql2Statement($sql);
         if(is_string($statement)) return $stateObj->setError($statement);
 
-        $checked = $this->validateSql($sql);
+        $checked = $this->validateSql($sql, $driver);
         if($checked !== true) return $stateObj->setError($checked);
 
         $recPerPage = $stateObj->pager->recPerPage;
