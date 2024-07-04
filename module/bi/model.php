@@ -105,26 +105,12 @@ class biModel extends model
 
         if($statement->from)
         {
-            foreach($statement->from as $fromInfo)
-            {
-                if($fromInfo->alias == $alias)
-                {
-                    $table = $fromInfo->table;
-                    continue;
-                }
-            }
+            foreach($statement->from as $fromInfo) if($fromInfo->alias == $alias) $table = $fromInfo->table;
         }
 
         if($statement->join)
         {
-            foreach($statement->join as $joinInfo)
-            {
-                if($joinInfo->expr->alias == $alias)
-                {
-                    $table = $joinInfo->expr->table;
-                    continue;
-                }
-            }
+            foreach($statement->join as $joinInfo) if($joinInfo->expr->alias == $alias) $table = $joinInfo->expr->table;
         }
 
         return $table;
