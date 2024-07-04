@@ -279,6 +279,12 @@ class pivotState
         $this->formatSettingColumns();
     }
 
+    /**
+     * Clear fieldSettings.
+     *
+     * @access public
+     * @return void
+     */
     public function clearFieldSettings()
     {
         $this->fields        = array();
@@ -286,12 +292,25 @@ class pivotState
         $this->fieldSettings = array();
     }
 
+    /**
+     * Clear settings.
+     *
+     * @param  int    $init
+     * @access public
+     * @return void
+     */
     public function clearSettings($init = false)
     {
         $this->settings = array();
         if($init) $this->completeSettings();
     }
 
+    /**
+     * Clear filters.
+     *
+     * @access public
+     * @return void
+     */
     public function clearFilters()
     {
         $this->filters      = array();
