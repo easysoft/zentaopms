@@ -87,6 +87,7 @@ $lang->story->relieved           = 'Relieved';
 $lang->story->relievedTwins      = 'Relieved Twins';
 $lang->story->loadAllStories     = 'All';
 $lang->story->hasDividedTask     = 'has divided task';
+$lang->story->hasDividedCase     = 'has divided case';
 $lang->story->viewAllGrades      = 'View All Grades';
 $lang->story->codeBranch         = 'Code branch';
 $lang->story->unlinkBranch       = 'Unlink code branch';

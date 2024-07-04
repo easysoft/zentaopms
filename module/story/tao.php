@@ -1935,6 +1935,7 @@ class storyTao extends storyModel
         }
 
         static $taskGroups = array();
+        static $caseGroups = array();
 
         $actSubmitreview = array();
         $actReview       = array();
@@ -2034,6 +2035,7 @@ class storyTao extends storyModel
         if(!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow)
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
+            if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($story->id)->fetch('id');
 
             /*
              * 需求的拆分按钮分为两种情况：
@@ -2059,7 +2061,8 @@ class storyTao extends storyModel
                 $title = $this->lang->story->split;
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
-                if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                if(!empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
                 if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
                 if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                 $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
@@ -2127,7 +2130,8 @@ class storyTao extends storyModel
                         $title = $this->lang->story->split;
                         if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                         if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
-                        if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                        if(!empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                        if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
                         if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
                         if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                         $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');

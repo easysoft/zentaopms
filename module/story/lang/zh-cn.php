@@ -87,6 +87,7 @@ $lang->story->relieved           = '解除';
 $lang->story->relievedTwins      = '解除孪生需求';
 $lang->story->loadAllStories     = '所有';
 $lang->story->hasDividedTask     = '已经分解任务';
+$lang->story->hasDividedCase     = '已经创建用例';
 $lang->story->viewAllGrades      = '查看所有层级';
 $lang->story->codeBranch         = '代码分支';
 $lang->story->unlinkBranch       = '解除关联代码分支';
