@@ -1407,7 +1407,6 @@ class storyModel extends model
         /* Set childStories. */
         $newStory     = new stdClass();
         $newStory->isParent       = '1';
-        $newStory->plan           = '';
         $newStory->lastEditedBy   = $this->app->user->account;
         $newStory->lastEditedDate = $now;
         $this->dao->update(TABLE_STORY)->data($newStory)->autoCheck()->where('id')->eq($storyID)->exec();
