@@ -294,8 +294,18 @@ class productplanZen extends productplan
             $this->config->product->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
 
-        unset($this->config->product->search['fields']['grade']);
-        unset($this->config->product->search['params']['grade']);
+        $gradeList = $this->loadModel('story')->getGradeList('');
+        foreach($gradeList as $grade)
+        {
+            if(!$this->config->URAndSR  && $grade->type == 'requirement') continue;
+            if(!$this->config->enableER && $grade->type == 'epic') continue;
+
+            $key = (string)$grade->type . (string)$grade->grade;
+            $gradePairs[$key] = $grade->name;
+        }
+        asort($gradePairs);
+        $this->config->product->search['params']['grade']['values'] = $gradePairs;
+
         unset($this->config->product->search['fields']['product']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
