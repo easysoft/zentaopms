@@ -887,7 +887,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   `license` text NULL,
   `type` varchar(20) NOT NULL default 'extension',
   `site` varchar(150) NOT NULL DEFAULT '',
-  `zentaoCompatible` varchar(100) NOT NULL DEFAULT '',
+  `zentaoCompatible` text NULL,
   `installedTime` datetime NULL,
   `depends` varchar(100) NOT NULL DEFAULT '',
   `dirs` mediumtext NULL,

@@ -116,3 +116,5 @@ CREATE TABLE `zt_pivotdrill` (
   `sql`       mediumtext   NOT NULL,
   `condition` mediumtext   NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_extension` MODIFY `zentaoCompatible` text NULL;
