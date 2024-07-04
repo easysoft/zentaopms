@@ -508,6 +508,7 @@ $lang->action->label->boot                    = '启动了';
 $lang->action->label->destroy                 = '关闭了';
 $lang->action->label->getvnc                  = '远程操控了';
 $lang->action->label->synctwins               = '同步修改了';
+$lang->action->label->closedbyparent          = '同步关闭了';
 $lang->action->label->relieved                = '解除了';
 $lang->action->label->switchtolight           = '从全生命周期管理模式切换为轻量管理模式';
 $lang->action->label->linkedrepo              = '关联代码库到';
