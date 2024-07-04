@@ -67,7 +67,7 @@ window.renderRowData = function($row, index, story)
         {
             let $picker = info[0];
             let options = $picker.options;
-            let items   = options.items;
+            let items   = story.type == 'story' ? options.items : URStageOptions;
 
             if(story.type == 'story' && story.isParent == '0')
             {
@@ -79,6 +79,7 @@ window.renderRowData = function($row, index, story)
             {
                 options.disabled = true;
             }
+            options.items = items;
 
             $picker.render(options);
         })
