@@ -84,20 +84,34 @@ class datatable extends control
             $rawModule  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
             if($rawModule == 'story' && $extra && $rawModule != $extra) $rawModule = $extra;
 
-            $fieldList  = $this->datatable->getFieldList($rawModule, $method);
+            $cols       = $this->datatable->getSetting($module, $method, true, $extra);
             $postFields = json_decode($this->post->fields);
 
             /* 生成配置信息。 */
             $fields = array();
+            $attrs  = array('order', 'width', 'show', 'extraWidth', 'border'); // 需要保存的配置属性。
+            foreach($cols as $id => $col)
+            {
+                $fields[$id] = array();
+                foreach($attrs as $attr)
+                {
+                    if($attr == 'show' && isset($col['required']) && $col['required']) $col['show'] = true;
+                    if(!isset($col[$attr])) continue;
+                    $fields[$id][$attr] = $col[$attr];
+                }
+            }
             foreach($postFields as $field)
             {
                 $id = $field->id;
                 if($module == 'testcase' && $id == 'caseID') $id = 'id';
-                if(!isset($fieldList[$id])) continue;
+                if(!isset($fields[$id])) continue;
 
-                $fields[$id]['order'] = $field->order;
-                $fields[$id]['width'] = $field->width;
-                $fields[$id]['show']  = $field->show ? true : false;
+                foreach($attrs as $attr)
+                {
+                    if(!isset($field->$attr)) continue;
+                    if($attr == 'show') $field->$attr = $field->$attr ? true : false;
+                    $fields[$id][$attr] = $field->$attr;
+                }
             }
 
             $name  = 'datatable.' . $module . ucfirst($method) . '.cols';
