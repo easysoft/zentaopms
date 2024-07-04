@@ -143,7 +143,7 @@ $config->story->dtable->fieldList['stage']['name']      = 'stage';
 $config->story->dtable->fieldList['stage']['title']     = $lang->story->stageAB;
 $config->story->dtable->fieldList['stage']['sortType']  = true;
 $config->story->dtable->fieldList['stage']['type']      = 'status';
-$config->story->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList;
+$config->story->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList + $lang->requirement->stageList;
 $config->story->dtable->fieldList['stage']['show']      = true;
 $config->story->dtable->fieldList['stage']['group']     = 6;
 

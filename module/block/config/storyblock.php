@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $app->loadLang('story');
+$app->loadLang('requirement');
 
 $config->block->story = new stdclass();
 $config->block->story->dtable = new stdclass();
@@ -11,7 +12,7 @@ $config->block->story->dtable->fieldList['pri']      = array('name' => 'pri',   
 $config->block->story->dtable->fieldList['status']   = array('name' => 'status',   'title' => $this->lang->story->statusAB,   'type' => 'status',   'sort' => true, 'statusMap' => $lang->story->statusList);
 $config->block->story->dtable->fieldList['category'] = array('name' => 'category', 'title' => $this->lang->story->category,   'type' => 'category', 'sort' => true, 'map' => $lang->story->categoryList);
 $config->block->story->dtable->fieldList['estimate'] = array('name' => 'estimate', 'title' => $this->lang->story->estimateAB, 'type' => 'estimate', 'sort' => 'number');
-$config->block->story->dtable->fieldList['stage']    = array('name' => 'stage',    'title' => $this->lang->story->stageAB,    'type' => 'stage',    'sort' => true, 'map' => $lang->story->stageList);
+$config->block->story->dtable->fieldList['stage']    = array('name' => 'stage',    'title' => $this->lang->story->stageAB,    'type' => 'stage',    'sort' => true, 'map' => $lang->story->stageList + $lang->requirement->stageList);
 
 $config->block->story->dtable->short = new stdclass();
 $config->block->story->dtable->short->fieldList['id']    = $config->block->story->dtable->fieldList['id'];
