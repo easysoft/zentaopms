@@ -11,3 +11,11 @@ $story->parent->range('0,1{3},2{3},3{3},0');
 $story->isParent->range('1{3},0,0{3},0{3},0');
 $story->type->range('epic,requirement{3},story{6},epic');
 $story->gen(11)->fixPath();
+
+su('admin');
+
+global $tester;
+$tester->loadModel('story');
+
+$stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('3')->orderBy('id_desc')->fetchAll('id');
+$allStories     = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
