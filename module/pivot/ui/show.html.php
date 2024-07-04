@@ -82,6 +82,10 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 }
             }
         }
+        elseif($drillingObject == 'productline')
+        {
+            $objectCols = $this->config->pivot->productLineObjectCols;
+        }
         else
         {
             $this->loadModel($drillingObject);
