@@ -59,16 +59,22 @@ formPanel
     (
         formGroup
         (
-            set::type('number'),
-            set::name('disk_gb'),
             set::title($lang->instance->tips->resizeDisk),
-            set::width('250px'),
             set::required(true),
             set::label($lang->instance->adjustVol),
-            set::value($diskSettings->size),
-            set::placeholder($lang->instance->tips->resizeDisk),
-            set::min($diskSettings->size),
-            set::max($diskSettings->limit)
+            inputGroup
+            (
+                input
+                (
+                    set::type('number'),
+                    set::name('disk_gb'),
+                    set::value($diskSettings->size),
+                    set::placeholder($lang->instance->tips->resizeDisk),
+                    set::min($diskSettings->size),
+                    set::max($diskSettings->limit)
+                ),
+                span('GB', set::className('input-group-addon'))
+            )
         )
     )
 );
