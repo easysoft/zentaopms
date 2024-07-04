@@ -299,7 +299,7 @@ class pivotState
 
         foreach($this->filters as $filter)
         {
-            $value = $filterValues[$filter['field']];
+            $value = zget($filterValues, $filter['field'], $filter['default']);
             if(is_array($value)) $value = array_filter($value);
             if(isset($filterValues[$filter['field']])) $filter['default'] = $value;
             $filters[$filter['field']] = $filter;
@@ -826,7 +826,7 @@ class pivotState
      */
     public function isQueried()
     {
-        return !empty($this->queryCols);
+        return !empty($this->sql) && !$this->isError() && !empty($this->queryCols);
     }
 
     /**
