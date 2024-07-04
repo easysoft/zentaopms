@@ -9245,7 +9245,7 @@ class upgradeModel extends model
      */
     public function processDemandStage()
     {
-        $demands = $this->doa->select('id')->from(TABLE_DEMAND)->fetchPairs('id');
+        $demands = $this->dao->select('id')->from(TABLE_DEMAND)->fetchPairs('id');
         if(empty($demands)) return true;
 
         $this->dao->update(TABLE_DEMAND)->set('stage')->eq('closed')->where('status')->eq('closed')->exec();
