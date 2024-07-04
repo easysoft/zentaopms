@@ -256,6 +256,7 @@ class biModel extends model
             $field      = $column['name'];
             $nativeType = $column['native_type'];
             $nativeType = strpos($nativeType, 'DECIMAL') === 0 ? 'DECIMAL' : $nativeType;
+            $nativeType = strpos($nativeType, 'NUMERIC') === 0 ? 'NUMERIC' : $nativeType;
             $type       = $this->config->bi->columnTypes->$driverName[$nativeType];
 
             if(isset($columnTypes->$field)) $field = $column['table'] . $field;
