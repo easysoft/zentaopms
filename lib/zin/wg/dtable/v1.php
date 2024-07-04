@@ -123,8 +123,10 @@ class dtable extends wg
                 'resetGlobal' => array(
                     'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1"),
                     'text' => $app->lang->datatable->resetGlobal
-                )
+                ),
+                'saveFieldsUrl' => createLink('datatable', 'ajaxSaveFields', "module={$app->moduleName}&method={$app->methodName}&extra="),
             ));
+            $this->setProp('customCol', true);
         }
     }
 
