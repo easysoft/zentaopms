@@ -19,7 +19,9 @@ class thinkStepMenu extends wg
         'checkOnClick?: bool|string',
         'defaultNestedShow?: bool=true',
         'hidden?: bool=false',
-        'onCheck?: function'
+        'onCheck?: function',
+        'sortable?: array',
+        'onSort?: function'
     );
 
     public static function getPageCSS(): ?string
@@ -41,6 +43,7 @@ class thinkStepMenu extends wg
         $activeKey         = $this->prop('activeKey');
         $toggleNonNodeShow = $this->prop('toggleNonNodeShow');
         $hidden            = $this->prop('hidden');
+        $sortTree          = $this->prop('sortable') || $this->prop('onSort');
         $parentItems       = array();
         foreach($items as $setting)
         {
@@ -64,6 +67,7 @@ class thinkStepMenu extends wg
                 'class'       => $unClickable && $hidden ? 'hidden': ''
             );
 
+            if($sortTree) $item['trailingIcon'] = 'move muted cursor-move';
             $children = zget($setting, 'children', array());
             if(!empty($children))
             {
@@ -226,15 +230,16 @@ class thinkStepMenu extends wg
     protected function build(): array
     {
         $this->setMenuTreeProps();
-        $treeProps   = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck')));
+        $treeProps   = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck', 'sortable', 'onSort'));
         $isInSidebar = $this->parent instanceof sidebar;
+        $treeType    = (!empty($treeProps['onSort']) || !empty($treeProps['sortable'])) ? 'sortableTree' : 'tree';
 
         return array
         (
             div
             (
                 setClass('think-node-menu rounded bg-white col bg-canvas ml-4 pb-3 h-full'),
-                zui::tree
+                zui::$treeType
                 (
                     set::_tag('menu'),
                     set::defaultNestedShow(true),
@@ -242,7 +247,7 @@ class thinkStepMenu extends wg
                     set::collapsedIcon('caret-right cursor-pointer'),
                     set::expandedIcon('caret-down cursor-pointer'),
                     set::className('tree-lines bg-canvas col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden'),
-                    $treeProps
+                    set($treeProps)
                 ),
                 $isInSidebar ? array
                 (
