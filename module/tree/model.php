@@ -533,9 +533,10 @@ class treeModel extends model
             if($productNum > 1)
             {
                 $menuItem = new stdclass();
-                $menuItem->id   = $id;
-                $menuItem->name = $product;
-                $menuItem->url  = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
+                $menuItem->id     = $id;
+                $menuItem->name   = $product;
+                $menuItem->parent = 0;
+                $menuItem->url    = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
                 $menu[] = $menuItem;
             }
 
