@@ -9245,13 +9245,12 @@ class upgradeModel extends model
      */
     public function processDemandStage()
     {
-        $closedDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('status')->eq('closed')->fetchPairs();
-        if(empty($closedDemands)) return true;
+        $demands = $this->doa->select('id')->from(TABLE_DEMAND)->fetchPairs('id');
+        if(empty($demands)) return true;
 
-        $this->dao->update(TABLE_DEMAND)->set('stage')->eq('closed')->where('id')->in(array_keys($closedDemands))->exec();
+        $this->dao->update(TABLE_DEMAND)->set('stage')->eq('closed')->where('status')->eq('closed')->exec();
 
-        $this->loadModel('demand');
-        foreach($closedDemands as $demandParent) $this->demand->updateParentDemandStage($demandParent);
+        $this->loadModel('demand')->updateDemandStage($demands);
 
         return true;
     }
