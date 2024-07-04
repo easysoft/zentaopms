@@ -923,6 +923,20 @@ class pivotState
         return $errors;
     }
 
+    public function matchQueryFilterFromSql()
+    {
+        if(!$this->isQueryFilter()) return;
+
+        $keepFilters = array();
+        foreach($this->filters as $filter)
+        {
+            $field = $filter['field'];
+            if(strpos($this->sql, "\$$field") !== false) $keepFilters[] = $filter;
+        }
+
+        $this->filters = $keepFilters;
+    }
+
     /**
      * Set clientLang.
      *
