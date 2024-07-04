@@ -69,7 +69,7 @@ class moduleMenu extends wg
 
     private function buildMenuTree(int|string $parentID = 0): array
     {
-        $children = $this->getChildModule($parentID);
+        $children = zget($this->modules, $parentID, []);
         if(count($children) === 0) return [];
 
         global $app;
@@ -102,25 +102,14 @@ class moduleMenu extends wg
         return $treeItems;
     }
 
-    private function getChildModule(int|string $id): array
-    {
-        return array_filter($this->modules, function($module) use($id)
-        {
-            if(!isset($module->parent)) return false;
-
-            /* Remove the rendered module. */
-            if(isset(static::$filterMap["{$module->parent}-{$module->id}"])) return false;
-
-            if((string)$module->parent != (string)$id) return false;
-
-            static::$filterMap["{$module->parent}-{$module->id}"] = true;
-            return true;
-        });
-    }
-
     private function setMenuTreeProps(): void
     {
-        $this->modules = $this->prop('modules');
+        $modules = $this->prop('modules');
+        if($modules)
+        {
+            foreach($modules as $module) $this->modules[$module->parent][] = $module;
+        }
+
         $this->setProp('items', $this->buildMenuTree());
     }
 
