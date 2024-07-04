@@ -19,3 +19,19 @@ $tester->loadModel('story');
 
 $stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('3')->orderBy('id_desc')->fetchAll('id');
 $allStories     = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
+
+list($newAllStories, $newStories) = $tester->story->getSearchedStoriesForTrack(array(), array());
+r(count($newAllStories)) && p() && e('0');  //全部传入空参数，检查newAllStories。
+r(count($newStories))    && p() && e('0');  //全部传入空参数，检查newStories。
+
+list($newAllStories, $newStories) = $tester->story->getSearchedStoriesForTrack(array(), $stories);
+r(count($newAllStories)) && p() && e('0');  //allStories传入空参数，检查newAllStories。
+r(count($newStories))    && p() && e('0');  //allStories传入空参数，检查newStories。
+
+list($newAllStories, $newStories) = $tester->story->getSearchedStoriesForTrack($allStories, array());
+r(count($newAllStories)) && p() && e('0');  //stories传入空参数，检查newAllStories。
+r(count($newStories))    && p() && e('0');  //stories传入空参数，检查newStories。
+
+list($newAllStories, $newStories) = $tester->story->getSearchedStoriesForTrack($allStories, $stories);
+r(implode(';', array_keys($newAllStories))) && p() && e('10;9;8;3');  //传入正常参数，检查newAllStories。
+r(implode(';', array_keys($newStories)))    && p() && e('10;9;8;3');  //传入正常参数，检查newStories。
