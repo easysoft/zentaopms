@@ -444,8 +444,22 @@ class install extends control
         if(file_exists($errorFile))   unlink($errorFile);
         if(file_exists($successFile)) unlink($successFile);
 
+        $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
+        if(!file_exists($installFile))
+        {
+            global $oldRequestType;
+            if($oldRequestType == 'PATH_INFO')
+            {
+                $this->config->requestType = 'PATH_INFO';
+                $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
+                $this->config->requestType = 'GET';
+            }
+            if($oldRequestType == 'GET') $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
+        }
+
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
+        $this->view->sendEventLink      = $sendEventLink;
         $this->display();
     }
 

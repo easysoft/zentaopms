@@ -1,1 +1,1 @@
-$.ajax({url: $.createLink('misc', 'ajaxSendEvent', "step=success"), timeout: 2000});
+$.ajax({url: sendEventLink, timeout: 2000});

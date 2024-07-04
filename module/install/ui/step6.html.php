@@ -14,6 +14,7 @@ set::zui(true);
 
 $joinZentao = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel) . $lang->install->joinZentao;
 
+jsVar('sendEventLink', $sendEventLink);
 div
 (
     setID('main'),
