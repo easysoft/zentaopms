@@ -448,6 +448,11 @@ class pivotState
         if(!isset($settings['group1']))  $this->settings['group1'] = '';
         if(!isset($settings['columns'])) $this->addColumn();
         if(!isset($settings['columnTotal'])) $this->settings['columnTotal'] = 'noShow';
+
+        foreach($this->settings['columns'] as $index => $column)
+        {
+            $this->settings['columns'][$index] = array_merge($this->getDefaultColumn(), $column);
+        }
     }
 
     /**
