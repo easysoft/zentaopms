@@ -2879,12 +2879,15 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('requirement')
+            ->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")
             ->andWhere('parent')->gt('0')
             ->fetchPairs();
+
         $epics = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('epic')
+            ->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")
             ->andWhere('status')->notin('reviewing,closed')
             ->andWhere('grade')->in(array_keys($ERGradePairs))
             ->andWhere('grade')->ne($lastGrade)
