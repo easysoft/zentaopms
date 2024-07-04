@@ -140,7 +140,14 @@ if($this->config->inQuickon)
     $data = null;
     if(!empty($backups)) $data = initTableData($backups, $config->system->dtable->backup->fieldList, $this->system);
 
-    foreach($data as &$backup) foreach($backup->actions as &$action) $action['disabled'] = !empty($operating);
+    foreach($data as &$backup)
+    {
+        foreach($backup->actions as &$action)
+        {
+            $action['disabled'] = !empty($operating);
+            if($action['name'] == 'restore' && $backup->status == 'failed') $action['disabled'] = true;
+        }
+    }
 
     dtable
     (
