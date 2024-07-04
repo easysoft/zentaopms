@@ -63,23 +63,23 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
         if(!$col['isDrilling']) continue;
 
         $drillingObject = $col['drillingObject'];
-        $this->loadModel($drillingObject);
-
-        $objectCols = $this->config->$drillingObject->dtable->fieldList;
-        foreach($objectCols as $fieldKey => $fieldSetting)
+        $objectCols     = array();
+        if(isset($this->config->pivot->drillingObjectFields[$drillingObject]))
         {
-            if(!in_array($fieldKey, $this->config->pivot->drillingObjectFields[$drillingObject])) unset($objectCols[$fieldKey]);
+            $this->loadModel($drillingObject);
 
-            if($fieldKey == 'id')
+            $objectCols = $this->config->$drillingObject->dtable->fieldList;
+            foreach($objectCols as $fieldKey => $fieldSetting)
             {
-                $objectCols['id']['type']     = 'id';
-                $objectCols['id']['checkbox'] = false;
-            }
+                if(!in_array($fieldKey, $this->config->pivot->drillingObjectFields[$drillingObject])) unset($objectCols[$fieldKey]);
 
-            if(isset($fieldSetting['link']) && is_array($fieldSetting['link']))
-            {
-                $fieldSetting['link']['target'] = '_blank';
-                $objectCols[$fieldKey] = $fieldSetting;
+                if(isset($fieldSetting['checkbox']) && $fieldSetting['checkbox']) $objectCols[$fieldKey]['checkbox'] = false;
+
+                if(isset($fieldSetting['link']) && is_array($fieldSetting['link']))
+                {
+                    $fieldSetting['link']['target'] = '_blank';
+                    $objectCols[$fieldKey] = $fieldSetting;
+                }
             }
         }
 
@@ -92,7 +92,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             (
                 set::striped(true),
                 set::bordered(true),
-                set::cols(array_values($objectCols)),
+                set::cols($objectCols),
                 set::data($col['drillingDatas'])
             )
         );
