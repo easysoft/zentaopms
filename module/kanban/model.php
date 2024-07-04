@@ -1435,10 +1435,12 @@ class kanbanModel extends model
     {
         if($groupBy != 'default') return array($this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy), array());
 
-        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
+        $execution = $this->loadModel('execution')->fetchByID($executionID);
+        $lanes     = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
+            ->beginIF(isset($execution->attribute) && !in_array($execution->attribute, array('mix', 'request', 'design')))->andWhere('type')->notIn('epic,requirement')->fi()
             ->orderBy('order_asc')
             ->fetchAll('id');
 
