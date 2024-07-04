@@ -16,7 +16,7 @@ window.getItem = function(info)
         info.item.title      = {html: `<div class="line-clamp-2"><span class="align-sub pri-${info.item.pri}">${storyPriList[info.item.pri]}</span> ${titleHtml}</div>`}
         info.item.titleAttrs = {'title' : title};
 
-        info.item.content.push({html: `<div class="status-${info.item.status}">${storyStatusList[info.item.status]}</div>`});
+        if(storyStatusList[info.item.status]) info.item.content.push({html: `<div class="status-${info.item.status}">${storyStatusList[info.item.status]}</div>`});
         info.item.content.push({html: `<div style="color:var(--color-gray-600)">${storyStageList[info.item.stage]}</div>`})
     }
     else if(col == 'project' || col == 'execution')
@@ -52,7 +52,7 @@ window.getItem = function(info)
 
         severity     = info.item.severity;
         severityHtml = `<div class="severity" data-severity="${severity}"></div>`;
-        if(!langBugSeverityList[severity] || langBugSeverityList[severity] != severity) severityHtml = `<div class="severity">${severity}</div>`;
+        if(!langBugSeverityList[severity] || langBugSeverityList[severity] != severity) severityHtml = `<div>${langBugSeverityList[severity]}</div>`;
 
         info.item.content.push({html: severityHtml});
         if(info.item.assignedTo) info.item.content.push({html: "<i class='icon icon-hand-right'></i> " + (users[info.item.assignedTo] ? users[info.item.assignedTo] : info.item.assignedTo)});
