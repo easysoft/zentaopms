@@ -2819,6 +2819,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('epic')
+            ->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")
             ->beginIF($this->config->epic->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['epic'])->fi()
             ->fetchAll('id');
 
@@ -2844,6 +2845,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('requirement')
+            ->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")
             ->andWhere('status')->notin('reviewing,closed')
             ->andWhere('grade')->in(array_keys($URGradePairs))
             ->andWhere('grade')->ne($lastGrade)
