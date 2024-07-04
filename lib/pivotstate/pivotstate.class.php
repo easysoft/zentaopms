@@ -615,7 +615,9 @@ class pivotState
         $this->code      = $code;
         $this->driver    = $driver;
         $this->name      = $name;
+        $this->names     = $names;
         $this->desc      = $desc;
+        $this->descs     = $descs;
         $this->sql       = $sql;
         $this->step      = $step;
         $this->stage     = $stage;
