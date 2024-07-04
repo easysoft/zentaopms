@@ -13,7 +13,7 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 include './affected.html.php';
 
-data('activeMenuID', $story->type);
+if($app->tab == 'product') data('activeMenuID', $story->type);
 jsVar('lastReviewer', explode(',', $lastReviewer));
 jsVar('storyID', $story->id);
 jsVar('oldStoryTitle', $story->title);

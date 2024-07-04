@@ -283,7 +283,7 @@ $lang->scrum->menu->devops['menuOrder'][15] = 'mr';
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index      = array('link' => "$lang->dashboard|project|index|project=%s");
 $lang->waterfall->menu->execution  = array('link' => "{$lang->stage->common}|project|execution|status=undone&projectID=%s", 'subModule' => 'programplan,task');
-$lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story', 'exclude' => 'projectstory-track,tree-browse');
+$lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,epic,requirement', 'alias' => 'story', 'exclude' => 'projectstory-track,tree-browse');
 $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
 $lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s");
