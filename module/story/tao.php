@@ -2337,7 +2337,6 @@ class storyTao extends storyModel
                 if(!isset($allStories[$storyID])) continue;
                 $story = clone $allStories[$storyID];
 
-                //unset($allStories[$storyID]);
                 if($storyType == 'requirement' && $story->type == 'epic') continue;
                 if($storyType == 'story' && ($story->type == 'requirement' || $story->type == 'epic')) continue;
                 if(!isset($storyGrade[$story->type][$story->grade])) continue;

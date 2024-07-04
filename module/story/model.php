@@ -3967,7 +3967,7 @@ class storyModel extends model
 
         $leafNodes  = $tracks['leafNodes'];
         $mergeCells = array();
-        $preParent  = array();
+        $preParents = array();
         foreach($tracks['lanes'] as $lane)
         {
             $laneName = $lane['name'];
@@ -3978,14 +3978,14 @@ class storyModel extends model
 
             foreach($storyCols as $i => $col)
             {
-                if(!isset($preParent[$i]) || !isset($story->parent[$i]) || $preParent[$i] != $story->parent[$i]) continue;
+                if(!isset($preParents[$i]) || !isset($story->parent[$i]) || $preParents[$i] != $story->parent[$i]) continue;
 
                 $colName = $col['name'];
                 if(!empty($tracks['items'][$laneName][$colName])) $tracks['items'][$laneName][$colName] = array();
 
                 $mergeCells[$laneName][$colName] = true;
             }
-            $preParent = $story->parent;
+            $preParents = $story->parent;
         }
 
         return $mergeCells;
