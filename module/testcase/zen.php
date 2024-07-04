@@ -915,7 +915,8 @@ class testcaseZen extends testcase
         $storyStatus = $this->loadModel('story')->getStatusList('noclosed');
         if(in_array($this->app->tab, array('project', 'execution')))
         {
-            $stories = $this->loadModel('story')->getExecutionStoryPairs($case->execution, $case->product, $case->branch, $moduleIdList, 'full', 'all', 'story', false);
+            $objectID = $this->app->tab == 'project' ? $case->project : $case->execution;
+            $stories  = $this->loadModel('story')->getExecutionStoryPairs($objectID, $case->product, $case->branch, $moduleIdList, 'full', 'all', 'story', false);
         }
         else
         {
