@@ -899,8 +899,8 @@ class storyZen extends story
             }
         }
 
-        $URStageOptions = array();
-        foreach($this->lang->requirement->stageList as $stageKey => $stageLang) $URStageOptions[] = array('text' => $stageLang, 'value' => $stageKey);
+        $urStageOptions = array();
+        foreach($this->lang->requirement->stageList as $stageKey => $stageLang) $urStageOptions[] = array('text' => $stageLang, 'value' => $stageKey);
 
         $this->view->users            = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->branchTagOption  = $branchTagOption;
@@ -908,7 +908,7 @@ class storyZen extends story
         $this->view->productStoryList = $productStoryList;
         $this->view->plans            = $plans;
         $this->view->branchProduct    = $branchProduct;
-        $this->view->URStageOptions   = $URStageOptions;
+        $this->view->urStageOptions   = $urStageOptions;
     }
 
     /**

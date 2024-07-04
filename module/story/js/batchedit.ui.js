@@ -67,7 +67,7 @@ window.renderRowData = function($row, index, story)
         {
             let $picker = info[0];
             let options = $picker.options;
-            let items   = story.type == 'story' ? options.items : URStageOptions;
+            let items   = story.type == 'story' ? options.items : urStageOptions;
 
             if(story.type == 'story' && story.isParent == '0')
             {
