@@ -832,6 +832,7 @@ class storyModel extends model
 
         if($story->product != $oldStory->product)
         {
+            $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
             $childStories = $this->getAllChildId($storyID, false);
             $story->id    = $storyID;
             foreach($childStories as $childStoryID)
