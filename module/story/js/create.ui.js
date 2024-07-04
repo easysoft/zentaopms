@@ -48,24 +48,18 @@ window.loadProductPlans = function(productID, branch)
     if(!branch) branch = 0;
 
     let planID     = $('[name=plan]').val();
-    let param      = config.currentMethod == 'edit' ? 'skipParent|forStory' : 'skipParent';
-    let expired    = config.currentMethod == 'create' ? 'unexpired' : '';
-    let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + planID + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,forStory,' + config.currentMethod);
+    let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + planID + '&fieldID=&needCreate=true&expired=unexpired&param=skipParent,forStory,' + config.currentMethod);
     let $planIdBox = $('#planIdBox');
 
-    $.get(planLink, function(data)
+    $.getJSON(planLink, function(items)
     {
-        let items = JSON.parse(data);
         if(items.length == 0) return;
 
-        let $inputGroup = $planIdBox.closest('.input-group');
-        $inputGroup.html("<div id='planIdBox' class='picker-box w-full'></div>")
-        new zui.Picker('#planIdBox.picker-box', {items: items, name: 'plan', defaultValue: planID.toString()});
-        if(items.length == 0)
-        {
-            $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
-            $inputGroup.append('<button class="refresh btn" type="button" onclick="loadProductPlans(' + productID + ')"><i class="icon icon-refresh"></i></button>');
-        }
+        const $planPicker = $('#planIdBox [name^=plan]').zui('picker');
+        $planPicker.render({items: items});
+        $planPicker.$.setValue(planID);
+
+        $('#planIdBox + .btn.square, #planIdBox + .btn.square + .btn.square').addClass('hidden');
     })
 };
 
