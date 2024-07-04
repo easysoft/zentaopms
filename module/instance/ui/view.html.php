@@ -145,14 +145,14 @@ div
                                             setStyle('width', $memoryInfo['rate'])
                                         )
                                     ),
-                                    icon('db text-' . $volumeInfo['color']),
-                                    $lang->instance->volUsage,
-                                    span
+                                    !empty($diskSettings) ? icon('db text-' . $volumeInfo['color']) : null,
+                                    !empty($diskSettings) ? $lang->instance->volUsage: null,
+                                    !empty($diskSettings) ? span
                                     (
                                         setClass('text-gray'),
                                         sprintf($lang->instance->volTotal, helper::formatKB($instanceMetric->disk->limit))
-                                    ),
-                                    div
+                                    ) : null,
+                                    !empty($diskSettings) ? div
                                     (
                                         setClass('progress rounded-lg'),
                                         set::title($volumeInfo['tip']),
@@ -165,7 +165,7 @@ div
                                             setClass('progress-bar ' . $volumeInfo['color']),
                                             setStyle('width', $volumeInfo['rate'])
                                         )
-                                    )
+                                    ) : null
                                 ) : null
                             )
                         ),
