@@ -392,7 +392,11 @@ class productZen extends product
         }
 
         $fieldPairs = array();
-        foreach($fieldList as $fieldKey => $field) $fieldPairs[$fieldKey] = $field['title'];
+        foreach($fieldList as $fieldKey => $field)
+        {
+            if(isset($field['headerGroup'])) $field['title'] = $field['headerGroup'] . ' - ' . $field['title'];
+            $fieldPairs[$fieldKey] = $field['title'];
+        }
         if($this->config->systemMode == 'light') unset($fieldPairs['productLine'], $fieldPairs['program']);
 
         return $fieldPairs;
