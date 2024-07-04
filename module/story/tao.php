@@ -2220,26 +2220,15 @@ class storyTao extends storyModel
      * @access public
      * @return array
      */
-    public function getLeafNodes(array $stories, array $allStoryIdList): array
+    public function getLeafNodes(array $stories): array
     {
-        $parent    = array();
         $leafNodes = array();
-        $stmt      = $this->dao->select('id,parent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('id')->in($allStoryIdList)->andWhere('deleted')->eq(0)->orderBy('type_desc,grade_desc,id_desc')->query();
-        while($story = $stmt->fetch())
-        {
-            $parent[$story->parent] = true;
-
-            if(isset($parent[$story->id])) continue;
-            $leafNodes[$story->root][$story->id] = $story;
-        }
-
-        $sortLeafNodes = array();
         foreach($stories as $story)
         {
-            if(isset($leafNodes[$story->root])) $sortLeafNodes += $leafNodes[$story->root];
+            if(empty($story->isParent)) $leafNodes[$story->id] = $story;
         }
 
-        return $sortLeafNodes;
+        return $leafNodes;
     }
 
     /**
@@ -2346,9 +2335,9 @@ class storyTao extends storyModel
             foreach(explode(',', trim($node->path, ',')) as $storyID)
             {
                 if(!isset($allStories[$storyID])) continue;
-                $story = $allStories[$storyID];
+                $story = clone $allStories[$storyID];
 
-                unset($allStories[$storyID]);
+                //unset($allStories[$storyID]);
                 if($storyType == 'requirement' && $story->type == 'epic') continue;
                 if($storyType == 'story' && ($story->type == 'requirement' || $story->type == 'epic')) continue;
                 if(!isset($storyGrade[$story->type][$story->grade])) continue;

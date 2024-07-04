@@ -3916,55 +3916,6 @@ class storyModel extends model
     }
 
     /**
-     * 根据产品或项目，获取需求跟踪矩阵。
-     * Get tracks by producr or project.
-     *
-     * @param  int        $productID
-     * @param  string|int $branch
-     * @param  int        $projectID
-     * @param  object     $pager
-     * @access public
-     * @return array|false
-     */
-    public function getTracks(int $productID = 0, string|int $branch = 0, int $projectID = 0, object|null $pager = null): array|false
-    {
-        /* 获取从用户需求开始的跟踪矩阵信息。 */
-        $tracks = $this->getRequirements4Track($productID, $branch, $projectID, $pager);
-        if(count($tracks) >= $pager->recPerPage) return $tracks;
-
-        /* 如果没有用户需求，或者需求不满一页，用非细分的研发需求补充。 */
-        $excludeStories = $this->storyTao->getSubdividedStoriesByProduct($productID);
-        if($projectID)
-        {
-            $stories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', '0', 'story', $excludeStories, $this->config->URAndSR ? null : $pager);
-        }
-        else
-        {
-            $stories = $this->getProductStories($productID, $branch, '', 'all', 'story', 'id_desc', true, $excludeStories, $this->config->URAndSR ? null : $pager);
-        }
-        if(empty($stories)) return $tracks;
-
-        /* 展开子需求。 */
-        $expandedStories = array();
-        foreach($stories as $id => $story)
-        {
-            $expandedStories[$id] = $story;
-
-            if(!isset($story->children) or count($story->children) == 0) continue;
-            foreach($story->children as $childID => $child) $expandedStories[$childID] = $child;
-        }
-
-        /* 获取需求的跟踪矩阵信息。 */
-        foreach($expandedStories as $id => $story) $expandedStories[$id] = $this->storyTao->buildStoryTrack($story, $projectID);
-
-        /* 跟踪列表中追加 noRequirement 项。如果设置了用户需求，跟踪总条目加1。 */
-        $tracks['noRequirement'] = $expandedStories;
-        if($this->config->URAndSR) $pager->recTotal += 1;
-
-        return $tracks;
-    }
-
-    /**
      * 根据传入的需求获取跟踪矩阵，返回看板格式数据。
      * Get track by stories, return kanban format.
      *
@@ -3978,8 +3929,8 @@ class storyModel extends model
         if(empty($stories)) return array();
 
         $rootIdList = array_unique(array_column($stories, 'root'));
-        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
-        $leafNodes  = $this->storyTao->getLeafNodes($stories, array_keys($allStories));
+        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $leafNodes  = $this->storyTao->getLeafNodes($stories);
 
         $tracks = array();
         $lanes  = $this->storyTao->buildTrackLanes($leafNodes, $storyType);
@@ -3998,7 +3949,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getMergeTrackCells(array $tracks, array $showCols): array
+    public function getMergeTrackCells(array &$tracks, array $showCols): array
     {
         if(empty($tracks)) return array();
 
@@ -4014,10 +3965,9 @@ class storyModel extends model
             }
         }
 
-        $firstCol   = zget(reset($storyCols), 'name', '');
         $leafNodes  = $tracks['leafNodes'];
         $mergeCells = array();
-        $preRoot    = 0;
+        $preParent  = array();
         foreach($tracks['lanes'] as $lane)
         {
             $laneName = $lane['name'];
@@ -4026,20 +3976,16 @@ class storyModel extends model
             $story    = zget($leafNodes, $storyID, '');
             if(empty($story)) continue;
 
-            if($preRoot != $story->root)
+            foreach($storyCols as $i => $col)
             {
-                $preRoot = $story->root;
-                continue;
-            }
-            if(!empty($tracks['items'][$laneName][$firstCol])) continue;
+                if(!isset($preParent[$i]) || !isset($story->parent[$i]) || $preParent[$i] != $story->parent[$i]) continue;
 
-            foreach($storyCols as $col)
-            {
                 $colName = $col['name'];
-                if(!empty($tracks['items'][$laneName][$colName])) break;
+                if(!empty($tracks['items'][$laneName][$colName])) $tracks['items'][$laneName][$colName] = array();
 
                 $mergeCells[$laneName][$colName] = true;
             }
+            $preParent = $story->parent;
         }
 
         return $mergeCells;

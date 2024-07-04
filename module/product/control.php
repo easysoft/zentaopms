@@ -824,7 +824,7 @@ class product extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, $orderBy, $pager);
+        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, "type_desc,grade_desc,{$orderBy}", $pager);
         $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
 
         $customFields = $this->productZen->getCustomFieldsForTrack($storyType);
