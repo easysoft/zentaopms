@@ -27,8 +27,10 @@ window.getItem = function(info)
         titleHtml = `<span${color} class="title">${title}</span>`;
         if(col == 'project'   && privs['project'])   titleHtml = "<a class='title' href='" + $.createLink('project', 'view', `projectID=${info.item.id}`) + "'>" + title + "</a>";
         if(col == 'execution' && privs['execution']) titleHtml = "<a class='title' href='" + $.createLink('execution', 'task', `executionID=${info.item.id}`) + "'>" + title + "</a>";
-        info.item.title      = {html: `<div class="relative"><div class="line-clamp-2">${titleHtml}${delayHtml}</div></div>`}
-        info.item.titleAttrs = {'title' : title};
+        info.item.title = [];
+        info.item.title.push({html: `<div class="line-clamp-2">${titleHtml}</div>`});
+        info.item.title.push({html: `<div>${delayHtml}</div>`, 'class': 'delayBox gap-x-2'});
+        info.item.titleAttrs = {'title' : title, 'class': 'card-title flex'};
 
         info.item.content.push({html: `<div class="status-${info.item.status}">${langProjectStatusList[info.item.status]}</div>`});
         info.item.content.push({component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}});
@@ -103,15 +105,6 @@ window.itemRender = function(info)
     {
         if(info.item.parent > '0') info.item.className.push('hidden childTask parent-' + info.item.parent);
         if(info.item.parent == '-1') info.item.className.push('parentTask');
-    }
-    if(col == 'project' || col == 'execution')
-    {
-        $delayed = $('.kanban-lane-col[z-lane="' + info.lane + '"][z-col="' + col + '"] .kanban-item[z-key="' + info.item.id + '"] .delayed');
-        if($delayed.length > 0)
-        {
-            let $relative = $delayed.closest('.relative');
-            if($relative.find('.line-clamp-2').height() < $relative.find('.title').height()) $delayed.addClass('absolute bottom-0 right-0');
-        }
     }
 
     if(config.rawModule == 'projectstory' && (col.indexOf('epic') != -1 || col.indexOf('requirement') != -1 || col.indexOf('story') != -1))
