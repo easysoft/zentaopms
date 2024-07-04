@@ -82,6 +82,19 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 }
             }
         }
+        else
+        {
+            $this->loadModel($drillingObject);
+
+            $table     = $this->config->objectTables[$drillingObject];
+            $tableCols = $this->dao->query('DESC ' . $table)->fetchAll();
+            foreach($tableCols as $tableCol)
+            {
+                $field = $tableCol->Field;
+                $objectCols[$field]['title'] = isset($this->lang->$drillingObject->$field) ? $this->lang->$drillingObject->$field : $field;
+                $objectCols[$field]['type']  = 'text';
+            }
+        }
 
         $drillingModals[] = modal
         (
