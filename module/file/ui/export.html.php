@@ -115,6 +115,9 @@ if($isCustomExport)
     );
 }
 
+if($app->rawModule == 'epic')        $lang->exportTypeList['all'] = $lang->ERCommon . ' - ' . $lang->exportTypeList['all'];
+if($app->rawModule == 'requirement') $lang->exportTypeList['all'] = $lang->URCommon . ' - ' . $lang->exportTypeList['all'];
+
 $isNotZh = strpos($app->getClientLang(), 'zh-') === false;
 formPanel
 (
