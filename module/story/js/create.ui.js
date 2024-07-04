@@ -59,7 +59,7 @@ window.loadProductPlans = function(productID, branch)
         $planPicker.render({items: items});
         $planPicker.$.setValue(planID);
 
-        $('#planIdBox + .btn.square, #planIdBox + .btn.square + .btn.square').addClass('hidden');
+        $('#planIdBox + .btn.square, #loadProductPlans').addClass('hidden');
     })
 };
 
