@@ -923,6 +923,12 @@ class pivotState
         return $errors;
     }
 
+    /**
+     * Match query filte from sql.
+     *
+     * @access public
+     * @return void
+     */
     public function matchQueryFilterFromSql()
     {
         if(!$this->isQueryFilter()) return;
