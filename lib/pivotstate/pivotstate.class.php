@@ -292,6 +292,12 @@ class pivotState
         if($init) $this->completeSettings();
     }
 
+    public function clearFilters()
+    {
+        $this->filters      = array();
+        $this->pivotFilters = array();
+    }
+
     /**
      * Get filters.
      *
