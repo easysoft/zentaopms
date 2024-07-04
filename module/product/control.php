@@ -803,6 +803,7 @@ class product extends control
      */
     public function track(int $productID, string $branch = '', int $projectID = 0, string $browseType = 'allstory', int $param = 0, string $storyType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $trackOrder = "type_desc,grade_desc,{$orderBy}";
         $browseType = strtolower($browseType);
         $branch     = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         if(is_bool($branch)) $branch = (string)(int)$branch;
@@ -824,8 +825,8 @@ class product extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, "type_desc,grade_desc,{$orderBy}", $pager);
-        $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
+        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, $trackOrder, $pager);
+        $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType, $browseType, $trackOrder);
 
         $customFields = $this->productZen->getCustomFieldsForTrack($storyType);
         $mergeCells   = $this->story->getMergeTrackCells($tracks, $customFields['show']);

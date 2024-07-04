@@ -2468,6 +2468,15 @@ class storyTao extends storyModel
         return $taskGroup;
     }
 
+    /**
+     * 根据搜索内容，查询并合并子需求，返回新的需求列表。
+     * Get with children stories by searched stories.
+     *
+     * @param  array  $allStories
+     * @param  array  $stories
+     * @access public
+     * @return array
+     */
     public function getSearchedStoriesForTrack(array $allStories, array $stories): array
     {
         $newStories     = array();
