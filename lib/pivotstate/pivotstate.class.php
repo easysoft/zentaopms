@@ -549,11 +549,17 @@ class pivotState
      * @access public
      * @return void
      */
-    public function addDrill($type = 'auto')
+    public function addDrill($drill)
     {
-        $this->drills[] = array('type' => $type);
+        $this->drills[] = $drill;
     }
 
+    /**
+     * Add condition.
+     *
+     * @access public
+     * @return void
+     */
     public function addCondition()
     {
         return array('drillField' => '', 'queryField' => '');
