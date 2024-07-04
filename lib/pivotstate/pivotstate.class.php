@@ -265,7 +265,7 @@ class pivotState
         $this->stage     = $pivot->stage;
 
         $this->drills       = $drills;
-        $this->defaultDrill = array('field' => '', 'object' => '', 'referSQL' => '', 'whereSQL' => '', 'conditions' => array($this->addCondition()));
+        $this->defaultDrill = $this->initDrill();
 
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
@@ -525,6 +525,17 @@ class pivotState
     public function addColumn()
     {
         $this->settings['columns'][] = $this->getDefaultColumn();
+    }
+
+    /**
+     * Init drill.
+     *
+     * @access public
+     * @return void
+     */
+    public function initDrill($type = 'auto')
+    {
+        return array('field' => '', 'object' => '', 'referSQL' => '', 'whereSQL' => '', 'conditions' => array($this->addCondition()));
     }
 
     /**
