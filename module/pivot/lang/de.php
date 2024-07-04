@@ -299,7 +299,7 @@ $lang->pivot->drillModalTip       = <<<EOT
 EOT;
 $lang->pivot->drillingTip         = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
 $lang->pivot->drillConditionTip   = 'For subsequent configuration data, ensure that the id field of the query object is included in the query result set.';
-$lang->pivot->drillResultEmptyTip = 'Select the target object associated with the column to drill down, and set the query conditions for drilling down, click the "preview" button, you can view the drill down results here.';
+$lang->pivot->drillResultEmptyTip = 'Click the "preview" button, you can view the drill down results here.';
 
 $lang->pivot->emptyGroupError       = 'The group cannot be empty.';
 $lang->pivot->emptyColumnFieldError = 'Column fields cannot be null.';

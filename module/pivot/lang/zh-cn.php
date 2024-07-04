@@ -299,7 +299,7 @@ $lang->pivot->drillModalTip       = <<<EOT
 EOT;
 $lang->pivot->drillingTip         = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
 $lang->pivot->drillConditionTip   = '为后续配置数据下钻，请确保查询结果集中包含查询对象的id字段。';
-$lang->pivot->drillResultEmptyTip = '选择要下钻的列关联目标对象，并设置下钻的查询条件后，点击“预览”按钮，即可在此查看下钻结果。';
+$lang->pivot->drillResultEmptyTip = '点击“预览”按钮，即可在此查看下钻结果。';
 
 $lang->pivot->emptyGroupError       = '分组不能为空。';
 $lang->pivot->emptyColumnFieldError = '列字段不能为空。';
