@@ -207,15 +207,15 @@ foreach($actions as $key => $action)
         $objectID = $app->tab == 'project' ? $projectID : $executionID;
         if($canBatchCreateStory)
         {
-            $action['url'] = createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+            $actions[$key]['url'] = createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
         }
         elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
         {
-            $action['url'] = createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+            $actions[$key]['url'] = createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
         }
         elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
         {
-            $action['url'] = createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
+            $actions[$key]['url'] = createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");
         }
         else
         {
