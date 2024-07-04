@@ -3644,11 +3644,7 @@ class storyModel extends model
         global $app, $config;
         $action = strtolower($action);
 
-        if($action == 'subdivide')
-        {
-            if(helper::isAjaxRequest('modal')) return false;
-            $action = 'batchcreate';
-        }
+        if($action == 'subdivide') $action = 'batchcreate';
 
         if($action == 'recall')   return $story->status == 'reviewing' || $story->status == 'changing';
         if($action == 'close')    return $story->status != 'closed';

@@ -479,7 +479,11 @@ class kanbanTao extends kanbanModel
                 }
             }
 
-            foreach($cols as $colIndex => $col) $cols[$colIndex]['cards'] = isset($columnCount[$col['id']]) ? $columnCount[$col['id']] : 0;
+            foreach($cols as $colIndex => $col)
+            {
+                $cols[$colIndex]['cards']    = isset($columnCount[$col['id']]) ? $columnCount[$col['id']] : 0;
+                $cols[$colIndex]['laneType'] = $lane['type'];
+            }
 
             $lanes = array_values($lanes);
             $laneCount += count($lanes);

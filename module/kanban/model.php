@@ -1405,7 +1405,7 @@ class kanbanModel extends model
 
                     if(empty($object)) continue;
                     if($cell->type == 'parentStory' && $object->isParent != '1') continue;
-                    if($cell->type == 'story' && $object->isParent == '1') continue;
+                    if($cell->type == 'story'       && $object->isParent == '1') continue;
 
                     $cardData = $this->kanbanTao->initCardItem($object, $cell, $order, $avatarPairs, $users);
                     $cardData['acl'] = 'open';

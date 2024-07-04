@@ -109,6 +109,8 @@ window.buildColCardActions = function(col)
     let laneID  = 0;
     if($group.length) laneID = $group.find('.kanban-lane.is-first').attr('z-lane');
 
+    if(col.laneType == 'parentStory') return [];
+
     if(col.type == 'backlog')
     {
         if(priv.canCreateStory)
