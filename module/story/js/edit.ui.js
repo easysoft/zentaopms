@@ -166,3 +166,17 @@ window.loadGrade = function(e)
         });
     })
 }
+
+window.checkGrade = function(e)
+{
+    const grade = e.target.value;
+    const checkLink = $.createLink('story', 'ajaxCheckGrade', 'id=' + storyID + '&grade=' + grade);
+    $.getJSON(checkLink, function(data){
+        if(!data.result)
+        {
+            zui.Modal.alert(data.message.grade);
+            const $grade = $('[name=grade]').zui('picker');
+            $grade.$.setValue(oldGrade, true);
+        }
+    });
+}

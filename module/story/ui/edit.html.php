@@ -78,6 +78,7 @@ detailBody
     set::isForm(true),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     on::change('[name=parent]', 'loadGrade'),
+    on::change('[name=grade]', 'checkGrade'),
     $canEditContent ? set::actions(array
     (
         array('btnType' => 'submit', 'class' => 'primary',   'data-status' => 'active', 'text' => $lang->save),
