@@ -74,7 +74,7 @@ ADD `closedEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `finishedEpics`,
 ADD `totalEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `closedEpics`;
 
 ALTER TABLE `zt_project` ADD `storyType` char(30) NULL DEFAULT 'story' AFTER `auth`;
-UPDATE `zt_project` SET storyType = 'story' WHERE storyType = '';
+UPDATE `zt_project` SET storyType = 'story,requirement';
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
