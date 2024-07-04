@@ -14,8 +14,6 @@ include $this->app->getConfigRoot() . 'timezones.php';
 
 set::zui(true);
 
-unset($lang->install->dbDriverList['dm']); // hide the dm driver in 20.
-
 div
 (
     setID('main'),
