@@ -1341,3 +1341,14 @@ if(!function_exists('getallheaders'))
         return $headers;
     }
 }
+
+if(!interface_exists('JsonSerializable'))
+{
+    interface JsonSerializable
+    {
+        /**
+         * @return mixed
+         */
+        public function jsonSerialize();
+    }
+}
