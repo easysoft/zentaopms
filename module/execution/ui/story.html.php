@@ -16,6 +16,7 @@ jsVar('executionID', $execution->id);
 jsVar('childrenAB',  $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
 jsVar('oldShowGrades', $showGrades);
+jsVar('showGrade', $showGrade);
 jsVar('gradeGroup', $gradeGroup);
 jsVar('hasProduct',  $execution->hasProduct);
 jsVar('linkedTaskStories',  $linkedTaskStories);

@@ -285,6 +285,7 @@ class executionZen extends execution
         $this->view->maxGradeGroup     = $this->story->getMaxGradeGroup();
         $this->view->gradeGroup        = $gradeGroup;
         $this->view->showGrades        = isset($this->config->execution->showGrades) ? $this->config->execution->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
+        $this->view->showGrade         = $this->config->edition == 'ipd';
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->branchPairs       = $this->loadModel('branch')->getPairs($productID, 'withClosed');
         $this->view->linkedTaskStories = $this->loadModel('story')->getIdListWithTask($execution->id);
