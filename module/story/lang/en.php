@@ -114,14 +114,15 @@ $lang->story->storyRound       = '%s time estimation';
 $lang->story->float            = "『%s』should have positive number, or decimals.";
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 
-$lang->story->changeSyncTip       = "The modification of this story will be synchronized to the following twin requirements";
-$lang->story->syncTip             = "The twin story are synchronized except for {$lang->productCommon}, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
-$lang->story->relievedTip         = "The twin relationship cannot be restored after dissolving, the content of the demand is no longer synchronized, whether to dissolving?";
-$lang->story->assignSyncTip       = "Both twin stories modify the assignor synchronously";
-$lang->story->closeSyncTip        = "Twin stories are closed synchronously";
-$lang->story->activateSyncTip     = "Twin stories are activated synchronously";
-$lang->story->relievedTwinsTip    = "After {$lang->productCommon} adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
-$lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
+$lang->story->changeSyncTip    = "The modification of this story will be synchronized to the following twin requirements";
+$lang->story->syncTip          = "The twin story are synchronized except for {$lang->productCommon}, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
+$lang->story->relievedTip      = "The twin relationship cannot be restored after dissolving, the content of the demand is no longer synchronized, whether to dissolving?";
+$lang->story->assignSyncTip    = "Both twin stories modify the assignor synchronously";
+$lang->story->closeSyncTip     = "Twin stories are closed synchronously";
+$lang->story->activateSyncTip  = "Twin stories are activated synchronously";
+$lang->story->relievedTwinsTip = "After {$lang->productCommon} adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
+$lang->story->batchEditTip     = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
+$lang->story->planTip          = "{$lang->SRCommon} only supports single selection plan, other requirements can select multiple plans.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
