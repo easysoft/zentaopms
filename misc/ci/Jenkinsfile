@@ -592,9 +592,9 @@ pipeline {
           }
 
           steps {
-            checkout scmGit(branches: [[name: "master"]],
+            checkout scmGit(branches: [[name: "main"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                  userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/app/zentao.git"]]
+                  userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/app/zentao.git"]]
                 )
             script {
               dockerBuildx(host=env.REGISTRY_HOST, credentialsId=env.DOCKER_CREDENTIALS_ID) {
