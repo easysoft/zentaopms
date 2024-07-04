@@ -770,6 +770,15 @@
     function loadOldPage(url)
     {
         let $page = $('#oldPage');
+        const clearTimer = () =>
+        {
+            const timer = $page.data('timer');
+            if(timer)
+            {
+                clearTimeout(timer);
+                $page.data('timer', 0);
+            }
+        };
         if(!$page.length)
         {
             $page = $('<div/>')
@@ -786,13 +795,21 @@
                     $(document).trigger('pageload.app');
                     const iframeWindow = $iframe[0].contentWindow;
                     iframeWindow.$(iframeWindow.document).on('click', () => window.parent.$('body').trigger('click'));
+                    clearTimer();
                 });
         }
+
+        clearTimer();
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
         const $iframe = $page.find('iframe').removeClass('in').addClass('invisible');
         if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
         currentAppUrl = url;
+        $page.data('timer', setTimeout(() =>
+        {
+            if($page.hasClass('loading')) $page.trigger('oldPageLoad.app');
+            else clearTimer();
+        }, 1500));
     }
 
     /** Hide old page content. */
