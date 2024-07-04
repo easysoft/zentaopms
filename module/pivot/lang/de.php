@@ -422,9 +422,13 @@ $lang->pivot->step2->statList['max']      = 'Max';
 $lang->pivot->step2->statList['min']      = 'Min';
 
 $lang->pivot->step3 = new stdclass();
-$lang->pivot->step3->drill     = 'Data Drill';
-$lang->pivot->step3->addDrill  = 'Data Drill';
-$lang->pivot->step3->drillView = 'Drill View';
+$lang->pivot->step3->drill       = 'Data Drill';
+$lang->pivot->step3->addDrill    = 'Data Drill';
+$lang->pivot->step3->drillView   = 'Drill View';
+$lang->pivot->step3->fieldEmpty  = 'Field can not be empty';
+$lang->pivot->step3->objectEmpty = 'Object can not be empty';
+$lang->pivot->step3->drillEmpty  = 'Drill Field can not be empty';
+$lang->pivot->step3->queryEmpty  = 'Query Field can not be empty';
 
 $lang->datepicker->dpText->TEXT_WEEK_MONDAY = 'Monday';
 $lang->datepicker->dpText->TEXT_WEEK_SUNDAY = 'Sunday';
