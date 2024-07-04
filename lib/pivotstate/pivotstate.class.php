@@ -279,6 +279,19 @@ class pivotState
         $this->formatSettingColumns();
     }
 
+    public function clearFieldSettings()
+    {
+        $this->fields        = array();
+        $this->langs         = array();
+        $this->fieldSettings = array();
+    }
+
+    public function clearSettings($init = false)
+    {
+        $this->settings = array();
+        if($init) $this->completeSettings();
+    }
+
     /**
      * Get filters.
      *
@@ -782,6 +795,8 @@ class pivotState
     {
         $fieldSettings = $this->fieldSettings;
 
+        if(empty($fieldSettings)) return null;
+
         $fields = array();
         $keys   = array('name', 'object', 'field', 'type');
         foreach($fieldSettings as $fieldSetting)
@@ -804,6 +819,8 @@ class pivotState
     public function getLangs($type = 'object')
     {
         $fieldSettings = $this->fieldSettings;
+
+        if(empty($fieldSettings)) return null;
 
         $langs = array();
         $keys  = array('name', 'object', 'field', 'type');
