@@ -359,3 +359,5 @@ $lang->instance->errors->invalidDiskSize      = '磁盘空间大小必须是介�
 $lang->instance->tips = new stdclass;
 $lang->instance->tips->resizeDisk         = '填写%s~%s的整数，单位GB';
 $lang->instance->tips->resizeDiskDisabled = '该应用的磁盘空间不可调整';
+$lang->instance->tips->fSettingsAttention = '修改CPU、内存、磁盘等设置会重启应用，且磁盘空间大小只能增加不可减少，请谨慎操作！';
+$lang->instance->tips->pSettingsAttention = '修改CPU、内存等设置会重启应用，请谨慎操作！';

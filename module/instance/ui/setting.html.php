@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace zin;
 
+if(!$diskSettings->resizable) $lang->instance->tips->fSettingsAttention = $lang->instance->tips->pSettingsAttention;
+
 formPanel
 (
+    set::ajax(array('beforeSubmit' => jsRaw("() => zui.Modal.confirm({message: '{$lang->instance->tips->fSettingsAttention}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'})"))),
     set::id('instanceSettingForm'),
     set::title($lang->instance->setting),
     set::submitBtnText($lang->save),
