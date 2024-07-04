@@ -15571,6 +15571,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
 
+-- DROP TABLE IF EXISTS `zt_pivotdrill`;
 CREATE TABLE `zt_pivotdrill` (
   `pivot`     mediumint    NOT NULL,
   `field`     varchar(255) NOT NULL,
