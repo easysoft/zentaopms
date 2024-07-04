@@ -1342,6 +1342,10 @@ if(!function_exists('getallheaders'))
     }
 }
 
+/*
+ * 兼容json扩展不存在的情况。
+ * Initialization without JSON extension.
+ */
 if(!interface_exists('JsonSerializable'))
 {
     interface JsonSerializable
@@ -1350,5 +1354,15 @@ if(!interface_exists('JsonSerializable'))
          * @return mixed
          */
         public function jsonSerialize();
+    }
+
+    function json_encode($data)
+    {
+        return $data;
+    }
+
+    function json_decode($data)
+    {
+        return $data;
     }
 }
