@@ -106,10 +106,11 @@ class dtable extends wg
             global $app;
             $app->loadLang('datatable');
             $customUrl = is_bool($customColsProp) || empty($customColsProp['url']) ? null : $customColsProp['url'];
+            $customUrl = $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName");
             $globalUrl = is_bool($customColsProp) || empty($customColsProp['globalUrl']) ? null : $customColsProp['globalUrl'];
             $this->setProp('customCols', array(
                 'custom' => array(
-                    'url' => $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
+                    'url' => $customUrl,
                     'text' => $app->lang->datatable->custom
                 ),
                 'setGlobal' => array(
@@ -124,7 +125,7 @@ class dtable extends wg
                     'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1"),
                     'text' => $app->lang->datatable->resetGlobal
                 ),
-                'saveFieldsUrl' => createLink('datatable', 'ajaxSaveFields', "module={$app->moduleName}&method={$app->methodName}&extra="),
+                'saveFieldsUrl' => str_replace('ajaxcustom', 'ajaxsavefields', $customUrl)
             ));
             $this->setProp('customCol', true);
         }
