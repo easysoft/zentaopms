@@ -255,6 +255,7 @@ class biModel extends model
         {
             $field      = $column['name'];
             $nativeType = $column['native_type'];
+            /* DuckDB DECIMAL(prec, scale), NUMERIC(prec, scale), process it to DECIMAL and NUMERIC */
             $nativeType = strpos($nativeType, 'DECIMAL') === 0 ? 'DECIMAL' : $nativeType;
             $nativeType = strpos($nativeType, 'NUMERIC') === 0 ? 'NUMERIC' : $nativeType;
             $type       = $this->config->bi->columnTypes->$driverName[$nativeType];
