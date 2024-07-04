@@ -2216,7 +2216,6 @@ class storyTao extends storyModel
      * Get leaf node by all stories, and sort by base nodes.
      *
      * @param  array    $stories
-     * @param  array    $allStoryIdList
      * @access public
      * @return array
      */
