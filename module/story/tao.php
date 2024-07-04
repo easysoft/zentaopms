@@ -1370,7 +1370,6 @@ class storyTao extends storyModel
             ->fetchAll('id');
 
         $allWait      = true;
-        $allClosed    = true;
         $hasInRoadmap = false;
         $hasInCharter = false;
         $allIpdStage  = true;
@@ -1378,18 +1377,13 @@ class storyTao extends storyModel
         {
             if($child->stage == 'closed' && $child->closedReason != 'done') continue;
             if($child->stage != 'wait')   $allWait   = false;
-            if($child->stage != 'closed') $allClosed = false;
             if($child->stage == 'inroadmap') $hasInRoadmap = true;
             if($child->stage == 'incharter') $hasInCharter = true;
             if(strpos(',wait,inroadmap,incharter,', ",{$child->stage},") === false) $allIpdStage = false;
         }
 
         $parentStage = $parent->stage;
-        if($allClosed)
-        {
-            $parentStage = 'delivered';
-        }
-        elseif($allWait)
+        if($allWait)
         {
             $parentStage = 'wait';
         }
@@ -1464,6 +1458,7 @@ class storyTao extends storyModel
                         $hasDelivering = false;
                         $allReleased   = true;
                         $hasDone       = false;
+                        $allClosed     = true;
                         foreach($children as $child)
                         {
                             if($child->stage == 'closed')
@@ -1477,11 +1472,15 @@ class storyTao extends storyModel
                                     $hasDone = true;
                                 }
                             }
+                            else
+                            {
+                                $allClosed = false;
+                            }
                             if(in_array($child->stage, array('released', 'delivering'))) $hasDelivering = true;
                             if($child->stage != 'released') $allReleased = false;
                         }
 
-                        if(($hasDelivering && !$allReleased) || $hasDone)
+                        if(($hasDelivering && !$allReleased) || ($hasDone && !$allClosed))
                         {
                             $parentStage = 'delivering';
                         }
@@ -1492,7 +1491,7 @@ class storyTao extends storyModel
                             foreach($children as $child)
                             {
                                 if($child->stage == 'closed' && $child->closedReason != 'done') continue;
-                                if(!in_array($child->stage, array('released', 'delivered'))) $allDelivered = false;
+                                if(!in_array($child->stage, array('released', 'delivered', 'closed'))) $allDelivered = false;
                             }
 
                             if($allDelivered) $parentStage = 'delivered';
