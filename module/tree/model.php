@@ -771,7 +771,7 @@ class treeModel extends model
             if($productNum > 1)
             {
                 $data = new stdclass();
-                $data->id     = (string)$id;
+                $data->id     = "p_{$id}";
                 $data->parent = '0';
                 $data->name   = $product;
                 $data->url    = $link;
@@ -799,7 +799,7 @@ class treeModel extends model
                     if(!isset($executionModules[$module->id]) && $this->config->vision != 'lite') continue;
 
                     $treeMenu = $this->buildTree($module, 'story', '0', $userFunc, $extra);
-                    if($productNum > 1 && $module->parent == 0) $treeMenu->parent = $module->root;
+                    if($productNum > 1 && $module->parent == 0) $treeMenu->parent = "p_{$module->root}";
                     $menu[] = $treeMenu;
                 }
             }

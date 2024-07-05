@@ -127,12 +127,11 @@ class moduleMenu extends wg
             return $allText;
         }
 
-        foreach($this->modules as $module)
-        {
-            if($module->id == $activeKey) return $module->name;
-        }
+        $modules    = $this->prop('modules');
+        $moduleName = '';
+        if($modules) array_map(function($module) use(&$moduleName, $activeKey) { if($module->id == $activeKey) $moduleName = $module->name; }, $modules);
 
-        return '';
+        return $moduleName;
     }
 
     private function buildActions(): node|array|null
