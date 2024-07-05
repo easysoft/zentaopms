@@ -54,6 +54,7 @@ if(($project->model == 'kanban' && $app->rawModule == 'projectbuild') || !$proje
     unset($fieldList['actions']['list']['createTest']['data-app']);
     $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['projectBugList']['url'];
 }
+unset($fieldList['actions']['list'][$app->tab == 'project' ? 'linkStory' : 'linkProjectStory']);
 if(!$project->multiple) unset($fieldList['execution']);
 $builds = initTableData($builds, $fieldList, $this->build);
 
