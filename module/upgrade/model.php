@@ -7856,7 +7856,7 @@ class upgradeModel extends model
         $columnFields = array();
         foreach($columns as $column => $type) $columnFields[$column] = $column;
 
-        $tableAndFields = $this->chart->getTables($sql);
+        $tableAndFields = $this->bi->getTableAndFields($sql);
         $tables         = $tableAndFields['tables'];
         $fields         = $tableAndFields['fields'];
 
