@@ -82,6 +82,15 @@ class pivotState
     public $fieldSettings;
 
     /**
+     * Pivot state relatedObject.
+     * e.g array('id' => 'action')
+     *
+     * @var array
+     * @access public
+     */
+    public $relatedObject;
+
+    /**
      * Pivot state languages.
      *
      * @var array
@@ -249,7 +258,7 @@ class pivotState
      */
     public $addQueryFilter = array();
 
-    public function __construct($pivot, $drills = array())
+    public function __construct($pivot, $drills = array(), $clientLang = 'zh-cn')
     {
         $this->id        = $pivot->id;
         $this->dimension = $pivot->dimension;
@@ -274,6 +283,7 @@ class pivotState
         $this->settings  = $this->json2Array($pivot->settings);
         $this->filters   = $this->json2Array($pivot->filters);
 
+        $this->clientLang    = $clientLang;
         $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
         $this->setPager();
         $this->formatSettingColumns();
@@ -354,10 +364,11 @@ class pivotState
      */
     public function addFilter()
     {
+        $firstKey   = key($this->fieldSettings);
         $firstField = current($this->fieldSettings);
         $lang       = $this->clientLang;
 
-        $this->filters[] = array('field' => $firstField['name'], 'saveAs' => '', 'type' => 'input', 'name' => $firstField[$lang], 'default' => '');
+        $this->filters[] = array('field' => $firstKey, 'saveAs' => '', 'type' => 'input', 'name' => $firstField[$lang], 'default' => '');
     }
 
     /**
@@ -524,9 +535,9 @@ class pivotState
     {
         $options = array();
         $lang    = $this->clientLang;
-        foreach($this->fieldSettings as $settings)
+        foreach($this->fieldSettings as $field => $settings)
         {
-            $options[] = array('text' => isset($settings[$lang]) ? $settings[$lang] : $settings['name'], 'value' => $settings['name'], 'key' => $settings['name']);
+            $options[] = array('text' => isset($settings[$lang]) ? $settings[$lang] : $settings['name'], 'value' => $field, 'key' => $field);
         }
 
         return $options;
@@ -614,8 +625,7 @@ class pivotState
     {
         if(empty($field))
         {
-            $firstField = current($this->fieldSettings);
-            $field = $firstField['name'];
+            $field = key($this->fieldSettings);
         }
 
         return array('field' => $field, 'slice' => 'noSlice', 'stat' => 'count', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0);
@@ -681,6 +691,7 @@ class pivotState
         $this->addQueryFilter = $addQueryFilter;
 
         $this->fieldSettings = $fieldSettings;
+        $this->relatedObject = $relatedObject;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
@@ -740,7 +751,7 @@ class pivotState
         foreach($settings as $field => $setting)
         {
             $oldSetting = isset($oldFieldSettings[$field]) ? $oldFieldSettings[$field] : array();
-            if(!empty($oldSetting) && $oldSetting['object'] == $setting['object'] && $oldSetting['field'] == $setting['field'])
+            if(!empty($oldSetting))
             {
                 $newFieldSettings[$field] = $this->processFieldSettingLang($field, $oldSetting);
             }
@@ -751,6 +762,18 @@ class pivotState
         }
 
         $this->fieldSettings = $newFieldSettings;
+    }
+
+    /**
+     * Set field related object.
+     *
+     * @param  array  $relatedObject
+     * @access public
+     * @return void
+     */
+    public function setFieldRelatedObject($relatedObject)
+    {
+        $this->relatedObject = $relatedObject;
     }
 
     /**
@@ -781,8 +804,7 @@ class pivotState
         $lang = $this->clientLang;
         if(isset($fieldSetting[$lang])) return $fieldSetting;
 
-        $fieldSetting[$lang]  = $fieldSetting['name'];
-        $fieldSetting['name'] = $field;
+        $fieldSetting[$lang] = $fieldSetting['name'];
 
         return $fieldSetting;
     }
@@ -941,18 +963,6 @@ class pivotState
         }
 
         $this->filters = $keepFilters;
-    }
-
-    /**
-     * Set clientLang.
-     *
-     * @param  string    $clientLang
-     * @access public
-     * @return void
-     */
-    public function setClientLang($clientLang)
-    {
-        $this->clientLang = $clientLang;
     }
 
     /**

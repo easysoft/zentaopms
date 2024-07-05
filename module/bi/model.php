@@ -1000,16 +1000,16 @@ class biModel extends model
             $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
         }
 
-        list($fields, $objects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
+        list($fields, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
 
         $columns     = array();
         $clientLang  = $this->app->getClientLang();
         foreach($fields as $field => $langName)
         {
-            $columns[$field] = array('name' => $field, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $objects[$field], $clientLang => $langName);
+            $columns[$field] = array('name' => $field, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $relatedObjects[$field], $clientLang => $langName);
         }
 
-        return $columns;
+        return array($columns, $relatedObjects);
     }
 
     /**
@@ -1046,10 +1046,11 @@ class biModel extends model
             $stateObj->queryData = $dbh->query($limitSql)->fetchAll();
             $total               = $dbh->query($driver == 'mysql' ? $mysqlCountSql : $duckdbCountSql)->fetch()->count;
 
-            $columns = $this->prepareColumns($limitSql, $statement, $driver);
+            list($columns, $relatedObject) = $this->prepareColumns($limitSql, $statement, $driver);
 
             $stateObj->setPager($total);
             $stateObj->setFieldSettings($columns);
+            $stateObj->setFieldRelatedObject($relatedObject);
             $stateObj->buildQuerySqlCols();
         }
         catch(Exception $e)
