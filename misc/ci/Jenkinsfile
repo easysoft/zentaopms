@@ -230,41 +230,17 @@ pipeline {
               steps {
                 container('package') {
                     sh '''${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -n safe -s -i \
-                      -p 8.1,7.2,7.1,7.0 \
+                      -p 7.2,7.1,7.0 \
                       -c ${PWD}/misc -r $SRC_ZENTAOEXT_PATH/zentaopro -o ${ZENTAO_BUILD_PATH} \
                       safe '''
                     sh 'cp -v ${ZENTAO_BUILD_PATH}/safe-*.zip ${ZENTAO_RELEASE_PATH}/'
+                    sh 'cp ${ZENTAO_BUILD_PATH}/safe.zip ${ZENTAO_BUILD_PATH}/safe-php8.1.zip'
+                    sh 'cp ${ZENTAO_BUILD_PATH}/safe.zip ${ZENTAO_RELEASE_PATH}/safe-php8.1.zip'
                     sh 'cd $SRC_ZENTAOEXT_PATH && make encrypt-safe-all'
                 }
                 script {
                   env.UPLOADED_PLUGIN_SAFE = 'true'
                   buildPkg.uploadSAFe(["php7.0", "php7.1", "php7.2_7.4", "php8.1"])
-                }
-
-              }
-            }
-
-            stage("DevOps") {
-              when {
-                allOf {
-                  expression { return params.publish_plugin_devops }
-                }
-              }
-              steps {
-                container('package') {
-                    sh 'cd $SRC_ZENTAO_DEVOPS_PATH && make package'
-                    sh '''${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -n devops -s -i \
-                      -p 7.2,7.1,7.0 \
-                      -c ${PWD}/misc -r $SRC_ZENTAO_DEVOPS_PATH -o ${ZENTAO_BUILD_PATH} \
-                      devops '''
-                    sh 'cp -v ${ZENTAO_BUILD_PATH}/devops-*.zip ${ZENTAO_RELEASE_PATH}/'
-                    sh 'cd $SRC_ZENTAO_DEVOPS_PATH && make encrypt-devops-all'
-                    sh 'ls -l ${ZENTAO_RELEASE_PATH}/'
-                }
-                script {
-                  env.UPLOADED_PLUGIN_DEVOPS = 'true'
-                  env.DEVOPS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAO_DEVOPS_PATH}/VERSION').trim()
-                  buildPkg.uploadDevOps(["php7.0", "php7.1", "php7.2_7.4", "php8.1"])
                 }
 
               }
