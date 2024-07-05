@@ -2544,7 +2544,6 @@ class pivotModel extends model
             $fieldSetting->drillDatas = $this->getDrillDatas($drill->object, $drill->sql);
         }
     }
-
 }
 
 /**
