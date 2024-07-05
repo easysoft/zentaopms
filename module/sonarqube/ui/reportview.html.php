@@ -19,8 +19,8 @@ $report->coverage                   = zget($measures, 'coverage', '0.0%');
 $report->duplicated_lines_density   = zget($measures, 'duplicated_lines_density', 0);
 $report->ncloc                      = zget($measures, 'ncloc', 0);
 
-$status      = zget($lang->sonarqube->qualitygateList, $qualitygate->projectStatus->status);
-$statusClass = zget($config->sonarqube->projectStatusClass, $qualitygate->projectStatus->status);
+$status      = zget($lang->sonarqube->qualitygateList, $qualitygate ? $qualitygate->projectStatus->status : 'OK');
+$statusClass = zget($config->sonarqube->projectStatusClass, $qualitygate ? $qualitygate->projectStatus->status : 'OK');
 
 div
 (
@@ -30,7 +30,7 @@ div
         setClass('text-md font-bold'),
         set('data-close-modal', true),
         $projectName,
-        hasPriv('instance', 'manage') ? set::href(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . str_replace('-', '*', $projectKey))) : null
+        $qualitygate && hasPriv('instance', 'manage') ? set::href(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . str_replace('-', '*', $projectKey))) : null
     ),
     label
     (
