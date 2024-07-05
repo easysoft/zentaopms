@@ -804,7 +804,7 @@ class pivotState
         $lang = $this->clientLang;
         if(isset($fieldSetting[$lang])) return $fieldSetting;
 
-        $fieldSetting[$lang] = $fieldSetting['name'];
+        $fieldSetting[$lang] = isset($fieldSetting['name']) ? $fieldSetting['name'] : $field;
 
         return $fieldSetting;
     }
