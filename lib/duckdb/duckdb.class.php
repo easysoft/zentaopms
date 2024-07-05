@@ -130,6 +130,13 @@ class duckdb
         $this->binPath = $zboxPath . $file;
     }
 
+    /**
+     * 获取duckdb的bin目录配置。
+     * Get bin config.
+     *
+     * @access public
+     * @return void
+     */
     public function getBinConfig()
     {
         global $config;
