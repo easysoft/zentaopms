@@ -651,7 +651,7 @@ class transferModel extends model
             if($module == 'story') $queryCondition = str_replace('`story`', '`id`', $queryCondition);
 
             /* 业需用需列表也可能选中软需进行导出。 */
-            if(in_array($module, array('epic', 'requirement')))
+            if(in_array($module, array('epic', 'requirement')) && $this->post->exportType == 'selected')
             {
                 $queryCondition = str_replace("`type` = '$module'", '1 = 1', $queryCondition);
             }
