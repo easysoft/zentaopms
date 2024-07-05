@@ -15576,7 +15576,7 @@ CREATE TABLE `zt_pivotdrill` (
   `pivot`     mediumint    NOT NULL,
   `field`     varchar(255) NOT NULL,
   `object`    varchar(40)  NOT NULL,
-  `sql`       mediumtext   NOT NULL,
+  `whereSql`  mediumtext   NOT NULL,
   `condition` mediumtext   NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
