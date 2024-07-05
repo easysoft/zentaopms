@@ -223,7 +223,7 @@ window.changeRepo = function()
     {
         if(data)
         {
-            $productPicker = $('#product').zui('picker');
+            $productPicker = $('input[name="product"]').zui('picker');
             data = JSON.parse(data);
 
             $productPicker.render({items: data});
