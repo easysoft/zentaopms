@@ -921,7 +921,7 @@ class story extends control
         $branch         = $product->type == 'branch' ? $storyBranch : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
         $children       = $this->story->getAllChildId($storyID);
-        foreach(array_keys($productStories) as $otherStoryID) if(isset(array_flip($children)[$otherStoryID])) unset($productStories[$otherStoryID]);
+        $productStories = array_diff_key($productStories, array_flip($children));
         if(isset($productStories[$storyID])) unset($productStories[$storyID]);
 
         $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
