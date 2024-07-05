@@ -491,7 +491,7 @@ class releaseModel extends model
                 $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
                 if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
 
-                $this->story->setStage($storyID);
+                if($release->status != 'wait') $this->story->setStage($storyID);
 
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
             }
