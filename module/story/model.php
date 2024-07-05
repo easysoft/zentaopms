@@ -3804,6 +3804,10 @@ class storyModel extends model
      */
     public function appendChildren(int $productID, array $stories, string $storyType): array
     {
+        /* 如果是OR界面的用户需求，则不需要追加子需求（研发需求）。 */
+        /* If it is the OR interface for user requirements, no need to add sub requirements.*/
+        if($storyType == 'requirement' && $this->config->vision == 'or') return $stories;
+
         $storyGrades       = array();
         $requirementGrades = array();
 
