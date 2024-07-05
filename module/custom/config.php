@@ -126,3 +126,6 @@ $config->custom->browseStoryConcept->actionList['delete']['hint']         = $lan
 $config->custom->browseStoryConcept->actionList['delete']['url']          = array('module' => 'custom', 'method' => 'deleteStoryConcept', 'params' => 'id={key}');
 $config->custom->browseStoryConcept->actionList['delete']['className']    = 'ajax-submit';
 $config->custom->browseStoryConcept->actionList['delete']['data-confirm'] = array('message' => $lang->custom->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
+$config->custom->nonInterface = new stdclass();
+$config->custom->nonInterface->lang = array('epic-stageList', 'requirement-stageList');

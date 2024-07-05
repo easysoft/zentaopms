@@ -88,7 +88,11 @@ class customModel extends model
         $item->value   = $value;
         $item->system  = $system;
 
-        if(!$this->app->upgrading) $item->vision = $this->config->vision;
+        if(!$this->app->upgrading)
+        {
+            $item->vision = $this->config->vision;
+            if(in_array("{$item->module}-{$item->section}", $this->config->custom->nonInterface->lang)) $item->vision = 'all';
+        }
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
 
         return !dao::isError();
@@ -162,7 +166,7 @@ class customModel extends model
             ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
             ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi()
-            ->beginIF($params['vision'])->andWhere('`vision`')->eq($params['vision'])->fi();
+            ->beginIF($params['vision'])->andWhere('`vision`')->in('all,' . $params['vision'])->fi();
     }
 
     /**

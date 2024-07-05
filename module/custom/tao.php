@@ -53,7 +53,7 @@ class customTao extends customModel
 
         try
         {
-            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
+            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->in("{$this->config->vision},all")->orderBy('lang,id')->get();
             $stmt = $this->app->dbQuery($sql);
 
             $allCustomLang = array();
