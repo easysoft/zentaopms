@@ -734,7 +734,7 @@ class pivotState
     public function setFieldSettings($settings)
     {
         $settings         = (array)$settings;
-        $oldFieldSettings = empty($this->fieldSettings) ? $this->fieldSettings : array();
+        $oldFieldSettings = !empty($this->fieldSettings) ? $this->fieldSettings : array();
         $newFieldSettings = array();
 
         foreach($settings as $field => $setting)
