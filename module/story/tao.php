@@ -1210,6 +1210,19 @@ class storyTao extends storyModel
     {
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($story)) return false;
+
+        /* 当需求有子需求时，需要通过子需求推算当前需求的阶段。*/
+        if(!empty($story->isParent))
+        {
+            $children = $this->dao->select('*')->from(TABLE_STORY)
+                ->where('parent')->eq($storyID)
+                ->andWhere('deleted')->eq(0)
+                ->fetch();
+
+            $this->computeParentStage($children);
+            return true;
+        }
+
         if(empty($story->plan))
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('wait')->where('id')->eq($storyID)->exec();

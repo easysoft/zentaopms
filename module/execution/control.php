@@ -2386,8 +2386,6 @@ class execution extends control
             if(empty($executionStories)) $this->execution->unlinkStory($execution->parent, $storyID, $laneID, $columnID);
         }
 
-        $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-        $execGroupBy  = $this->session->execGroupBy  ? $this->session->execGroupBy : 'default';
         if($this->app->tab == 'execution' and $execution->type == 'kanban' or $from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));

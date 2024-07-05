@@ -73,6 +73,7 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderLinkStoryCell')),
     set::showToolbarOnChecked(false),
     set::footToolbar($footToolbar),
+    set::noNestedCheck(),
     set::footPager(usePager(array(
         'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra&storyType={$storyType}") . "#app={$app->tab}"
     )))
