@@ -433,4 +433,17 @@ class epic extends control
     {
         echo $this->fetch('story', 'ajaxGetUserStories', "userID=$userID&id=$id&appendID=$appendID&storyType=epic");
     }
+
+    /**
+     * 需求的父需求变更时，子需求确认变更。
+     * Confirm the change of the parent story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function processStoryChange(int $storyID)
+    {
+        echo $this->fetch('story', 'processStoryChange', "storyID=$storyID");
+    }
 }
