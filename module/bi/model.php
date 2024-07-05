@@ -773,8 +773,7 @@ class biModel extends model
 
         if($checkSourceCode !== false) return $checkSourceCode;
 
-        $checkZbox = $this->checkDuckDBFile($duckdbBin['path'], $duckdbBin);
-        return $checkZbox;
+        return $this->checkDuckDBFile($duckdbBin['path'], $duckdbBin);
     }
 
     /**
