@@ -299,7 +299,7 @@ window.goDiff = function()
         return false;
     }
 
-    if(isBranchOrTag)
+    if(isBranchOrTag == '1')
     {
         oldRevision = btoa(encodeURIComponent(oldRevision));
         newRevision = btoa(encodeURIComponent(newRevision));
