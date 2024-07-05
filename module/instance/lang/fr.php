@@ -357,7 +357,7 @@ $lang->instance->errors->failedToUpdateDomain = 'Failed to update domain name';
 $lang->instance->errors->invalidDiskSize      = 'The disk space size must be an integer between %s and %s';
 
 $lang->instance->tips = new stdclass;
-$lang->instance->tips->resizeDisk         = 'Fill in an integer from %s to %y with unit GB';
+$lang->instance->tips->resizeDisk         = 'Fill in an integer from %s to %s with unit GB';
 $lang->instance->tips->resizeDiskDisabled = 'The disk space not adjustable';
 $lang->instance->tips->fSettingsAttention = 'Changing the Settings of CPU, memory, disk, etc. will restart the application, and the disk space size can only be increased, not reduced, please be careful!';
 $lang->instance->tips->pSettingsAttention = 'Changing the CPU, memory, and other Settings will restart the application, please be careful!';
