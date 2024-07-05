@@ -145,14 +145,14 @@ div
                                             setStyle('width', $memoryInfo['rate'])
                                         )
                                     ),
-                                    !empty($diskSettings) ? icon('db text-' . $volumeInfo['color']) : null,
-                                    !empty($diskSettings) ? $lang->instance->volUsage: null,
-                                    !empty($diskSettings) ? span
+                                    !empty($diskSettings->resizable) ? icon('db text-' . $volumeInfo['color']) : null,
+                                    !empty($diskSettings->resizable) ? $lang->instance->volUsage: null,
+                                    !empty($diskSettings->resizable) ? span
                                     (
                                         setClass('text-gray'),
                                         sprintf($lang->instance->volTotal, helper::formatKB($instanceMetric->disk->limit))
                                     ) : null,
-                                    !empty($diskSettings) ? div
+                                    !empty($diskSettings->resizable) ? div
                                     (
                                         setClass('progress rounded-lg'),
                                         set::title($volumeInfo['tip']),
