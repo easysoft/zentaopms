@@ -44,23 +44,12 @@ foreach($pivot->filters as $filter)
 $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs)
 {
     $clickable = !$pivot->builtin;
-    list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
-
-    /* TODO demo data. */
-    foreach($cols as $colKey => $col)
-    {
-        if($col['name'] == 'field2')
-        {
-            $cols[$colKey]['isDrilling']     = true;
-            $cols[$colKey]['drillingObject'] = 'story';
-            $cols[$colKey]['drillingDatas']  = $this->dao->select('*')->from(TABLE_STORY)->fetchAll();
-        }
-    }
+    list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs);
 
     $drillingModals = array();
     foreach($cols as $col)
     {
-        if(!$col['isDrilling']) continue;
+        if(!isset($col['isDrilling']) || !$col['isDrilling']) continue;
 
         $drillingModals[] = modal
         (
@@ -71,7 +60,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             (
                 set::striped(true),
                 set::bordered(true),
-                set::cols($this->pivot->getDrillCols($col['drillingObject'])),
+                set::cols($col['drillingCols']),
                 set::data($col['drillingDatas'])
             )
         );

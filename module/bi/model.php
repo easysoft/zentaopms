@@ -1164,6 +1164,15 @@ class biModel extends model
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
 
+                    if(isset($column->isDrilling) && $column->isDrilling)
+                    {
+                        $columns[$field]['isDrilling']    = true;
+                        $columns[$field]['drillingCols']  = $column->drillingCols;
+                        $columns[$field]['drillingDatas'] = $column->drillingDatas;
+                        $columns[$field]['data-toggle']   = 'modal';
+                        $columns[$field]['link']          = '#drilling-' . $field;
+                    }
+
                     $columnMaxLen[$field] = mb_strlen($column->label);
 
                     /* 把被切片的字段名设置为数据表格的列配置的 headerGroup 属性。*/
@@ -1187,6 +1196,15 @@ class biModel extends model
             $columns[$field]['width']    = 16 * mb_strlen($column->label);
             $columns[$field]['minWidth'] = 128;
             $columns[$field]['align']    = 'center';
+
+            if(isset($column->isDrilling) && $column->isDrilling)
+            {
+                $columns[$field]['isDrilling']    = true;
+                $columns[$field]['drillingCols']  = $column->drillingCols;
+                $columns[$field]['drillingDatas'] = $column->drillingDatas;
+                $columns[$field]['data-toggle']   = 'modal';
+                $columns[$field]['link']          = '#drilling-' . $field;
+            }
 
             $columnMaxLen[$field] = mb_strlen($column->label);
 
