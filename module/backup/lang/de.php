@@ -65,3 +65,4 @@ $lang->backup->notice->higherVersion     = 'The version of the backup is higher 
 $lang->backup->notice->lowerVersion      = 'The version of the backup is lower than the current version, and the upgrade process will be performed after restoration.';
 $lang->backup->notice->unknownVersion    = 'The version information not found. Do you want to restore this backup anyway?';
 $lang->backup->notice->settingsInQuickon = 'You are currently using ZenTao DevOps Platform Edition, there is no need to set additional options.';
+$lang->backup->notice->gotoUpgrade       = 'Restore successful, will jump to the upgrade page, if not jump, please manually refresh the page';

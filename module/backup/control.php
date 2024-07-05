@@ -249,6 +249,8 @@ class backup extends control
         $result = $this->backupZen->restoreFile($fileName);
         if($result['result'] == 'fail') return $this->send($result);
 
+        if($_SESSION['gotoUpgrade']) $this->send(array('result' => 'success', 'message' => $this->lang->backup->notice->gotoUpgrade, 'load' => true));
+
         return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}').then(() => {loadCurrentPage()})"));
     }
 
@@ -435,11 +437,12 @@ class backup extends control
         $matched = preg_match('/\d{15}(.*)$/', $name, $matches);
         if ($matched == 1 && !empty($matches[1]))
         {
-            $backupVersion = str_replace('_', '.', $matches[1]);
+            $backupVersion = str_replace('_', '.', explode('.', $matches[1])[0]);
             $compareResult = version_compare($backupVersion, $this->config->version);
             switch($compareResult)
             {
                 case -1:
+                    $_SESSION['gotoUpgrade'] = common::getSysURL() . '/upgrade.php';
                     $message = $this->lang->backup->notice->lowerVersion;
                     break;
                 case  1:

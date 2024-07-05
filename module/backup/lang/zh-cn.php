@@ -65,3 +65,4 @@ $lang->backup->notice->higherVersion     = '还原的版本高于当前运行版
 $lang->backup->notice->lowerVersion      = '还原的版本低于当前运行版本，还原后会执行升级流程。';
 $lang->backup->notice->unknownVersion    = '未从当前备份中读取到版本信息，是否还原该备份？';
 $lang->backup->notice->settingsInQuickon = '您目前使用的是禅道DevOps平台版，无需设置其他选项。';
+$lang->backup->notice->gotoUpgrade       = '还原成功，即将跳转到升级页面，如未跳转请手动刷新页面';

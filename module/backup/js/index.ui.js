@@ -83,7 +83,7 @@ window.restore = function(name)
         {
             if(res && data.canRestore)
             {
-                $.ajaxSubmit({url: $.createLink('backup', 'restore', 'file=' + name)});
+                $.ajaxSubmit({url: $.createLink('backup', 'restore', 'file=' + name)}).then(() => loadCurrentPage());
 
                 zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
                 $('#waiting').addClass('show');
