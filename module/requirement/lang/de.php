@@ -1,5 +1,5 @@
 <?php
-global $app;
+gobal $app, $config;
 $app->loadLang('story');
 $lang->requirement = clone $lang->story;
 
