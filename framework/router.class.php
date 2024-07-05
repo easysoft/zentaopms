@@ -476,17 +476,13 @@ class router extends baseRouter
      */
     public function loadDriver($driverName = 'mysql')
     {
-        if($driverName == 'mysql')
-        {
-            return $this->dbh;
-        }
-        elseif($driverName == 'duckdb')
+        if($driverName == 'duckdb')
         {
             $this->loadClass('duckdb');
-            $duckdb = new duckdb();
-
-            return $duckdb;
+            return new duckdb();
         }
+
+        return $this->dbh;
     }
 
     /**
