@@ -38,7 +38,7 @@ class messageModel extends model
      */
     public function getObjectTypes(): array
     {
-        $this->app->loadLang('action');
+        $this->loadModel('action');
         $objectTypes = array();
         foreach($this->config->message->objectTypes as $objectType => $actions) $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
         return $objectTypes;
