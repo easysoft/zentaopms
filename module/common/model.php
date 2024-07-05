@@ -1427,6 +1427,19 @@ eof;
             if(isset($projectRights['kanban']) and !isset($recomputedRights['project']['kanban'])) $recomputedRights['project']['kanban'] = 1;
             if(isset($projectRights['index'])  and !isset($recomputedRights['project']['index']))  $recomputedRights['project']['index']  = 1;
 
+            if(isset($projectPrivs->execution->linkStory))      $recomputedRights['execution']['linkstory']      = 1;
+            if(isset($projectPrivs->execution->batchLinkStory)) $recomputedRights['execution']['batchlinkstory'] = 1;
+            if(isset($projectPrivs->execution->unLinkStory))    $recomputedRights['execution']['unlinkstory']    = 1;
+
+            if(isset($projectPrivs->story))
+            {
+                foreach($projectPrivs->story as $method => $label)
+                {
+                    $method = strtolower($method);
+                    $recomputedRights['story'][$method] = 1;
+                }
+            }
+
             $this->app->user->rights['rights'] = $recomputedRights;
         }
     }

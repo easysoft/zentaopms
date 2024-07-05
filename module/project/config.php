@@ -116,7 +116,7 @@ $config->project->noSprintPriv['auditplan']  = array('browse', 'create', 'edit',
 $config->project->includedPriv = $config->project->noSprintPriv;
 $config->project->includedPriv['project'][]   = 'execution';
 $config->project->includedPriv['task']        = array('create');
-$config->project->includedPriv['story']       = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'batchChangeStage', 'assignTo', 'activate', 'zeroCase', 'importToLib', 'batchImportToLib');
+$config->project->includedPriv['story']       = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'batchChangeStage', 'batchEdit', 'assignTo', 'activate', 'zeroCase', 'importToLib', 'batchImportToLib');
 $config->project->includedPriv['requirement'] = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate');
 $config->project->includedPriv['epic']        = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate');
 $config->project->includedPriv['bug']         = array('create', 'confirm', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplate');
@@ -126,7 +126,7 @@ $config->project->includedPriv['doc']         = array('createLib', 'editLib', 'd
 $config->project->includedPriv['repo']        = array('create', 'showSyncCommit', 'browse', 'view', 'diff', 'log', 'revision', 'blame', 'download', 'apiGetRepoByUrl', 'review', 'addBug', 'deleteBug', 'addComment', 'editComment', 'deleteComment');
 $config->project->includedPriv['testreport']  = array('create', 'view', 'delete', 'edit', 'export');
 $config->project->includedPriv['auditplan']   = array('browse', 'create', 'edit', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo');
-$config->project->includedPriv['execution']   = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt');
+$config->project->includedPriv['execution']   = array('create', 'start', 'delete', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt', 'linkStory', 'unlinkStory', 'batchUnlinkStory');
 if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');
 
 $config->project->browseTable = new stdClass();
