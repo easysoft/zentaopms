@@ -16,7 +16,6 @@ jsVar('executionID', $execution->id);
 jsVar('childrenAB',  $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
 jsVar('oldShowGrades', $showGrades);
-jsVar('showGrade', $showGrade);
 jsVar('gradeGroup', $gradeGroup);
 jsVar('hasProduct',  $execution->hasProduct);
 jsVar('linkedTaskStories',  $linkedTaskStories);
@@ -29,7 +28,7 @@ jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRe
 /* Show feature bar. */
 featureBar
 (
-    $config->edition == 'ipd' ? to::leading
+    to::leading
     (
         picker
         (
@@ -45,7 +44,7 @@ featureBar
             set::value($showGrades),
             set::onPopHidden(jsRaw('setShowGrades'))
         )
-    ) : null,
+    ),
     set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
     li(searchToggle(set::module('executionStory'), set::open($type == 'bysearch')))

@@ -16,7 +16,6 @@ data('storyType', $storyType);
 data('activeMenuID', $storyType);
 jsVar('URChanged', $this->lang->story->URChanged);
 jsVar('gradeGroup', $gradeGroup);
-jsVar('showGrade', $showGrade);
 jsVar('oldShowGrades', $showGrades);
 jsVar('storyType', $storyType);
 jsVar('tab', $app->tab);
@@ -30,6 +29,8 @@ $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 $storyProductIds   = array();
+
+$hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2);
 
 jsVar('projectHasProduct', $projectHasProduct);
 
@@ -358,7 +359,7 @@ jsVar('checkedSummary', $checkedSummary);
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
-    $showGrade ? to::leading
+    $hideGrade ? null : to::leading
     (
         picker
         (
@@ -374,7 +375,7 @@ featureBar
             set::value($showGrades),
             set::onPopHidden(jsRaw('setShowGrades'))
         )
-    ) : null,
+    ),
     set::current($storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),

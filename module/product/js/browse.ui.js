@@ -96,7 +96,15 @@ window.renderCell = function(result, info)
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
 
         let gradeLabel = '';
-        if(showGrade || story.grade >= 2) gradeLabel = gradeGroup[story.type][story.grade];
+        let showGrade  = false;
+
+        if(story.type != storyType) showGrade = true;
+        if((story.type == 'epic' || story.type == 'requirement') && Object.keys(gradeGroup[story.type]).length >= 2) showGrade = true;
+        if(story.type == 'story' && Object.keys(gradeGroup[story.type]).length >= 3) showGrade = true;
+        if(story.grade > 1) showGrade  = true;
+        if(tab != 'product') showGrade = true;
+
+        if(showGrade) gradeLabel = gradeGroup[story.type][story.grade];
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});

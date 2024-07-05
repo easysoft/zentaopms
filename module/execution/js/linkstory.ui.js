@@ -35,12 +35,13 @@ window.onRenderLinkStoryCell = function(result, {row, col})
 {
     if(col.name == 'title')
     {
-        const story = row.data;
-        const gradeLabel = (showGrade || story.grade >= 2) ? gradeGroup[story.type][story.grade] : '';
-
-        let html = '';
-        if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
-        if(html) result.unshift({html});
+        const story      = row.data;
+        const gradeLabel = gradeGroup[story.type][story.grade];
+        if(typeof gradeLabel != 'undefined')
+        {
+            const html = "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+            if(html) result.unshift({html});
+        }
     }
 
     if(col.name !== 'branch')
