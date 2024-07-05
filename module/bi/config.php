@@ -12,7 +12,7 @@ $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpTy
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
 
 $config->bi->duckdbBin = array();
-$config->bi->duckdbBin['win']   = array('path' => './bin/duckdb/', 'file' => 'duckdb.exe', 'extension' => 'mysql_scanner.duckdb_extension');
+$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/', 'file' => 'duckdb.exe', 'extension' => 'mysql_scanner.duckdb_extension');
 $config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb', 'extension' => 'mysql_scanner.duckdb_extension');
 
 $charts = array();
@@ -91,12 +91,7 @@ $pivots['100'] = array("root" => 3, "name" => "Bug", "grade" => 2);
 $config->bi->builtin->modules->charts = $charts;
 $config->bi->builtin->modules->pivots = $pivots;
 
-$config->bi->duckSQLTemp = <<<EOT
-LOAD '{EXTENSIONPATH}';
-ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);
-USE mysqldb;
-{COPYSQL}
-EOT;
+$config->bi->duckSQLTemp = "LOAD '{EXTENSIONPATH}';ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);USE mysqldb;{COPYSQL}";
 
 $config->bi->drivers = array('mysql', 'duckdb');
 
