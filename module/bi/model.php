@@ -766,11 +766,10 @@ class biModel extends model
      */
     public function getDuckDBPath()
     {
-        $os = PHP_OS == 'WINNT' ? 'win' : 'linux';
-        $duckdbBin = $this->config->bi->duckdbBin[$os];
-        $binPath   = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
+        $duckdbBin  = $this->getDuckdbBinConfig();
+        $sourcePath = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
 
-        $checkSourceCode = $this->checkDuckDBFile($binPath, $duckdbBin);
+        $checkSourceCode = $this->checkDuckDBFile($sourcePath, $duckdbBin);
 
         if($checkSourceCode !== false) return $checkSourceCode;
 
@@ -794,7 +793,17 @@ class biModel extends model
 
         if(!file_exists($file) && !file_exists($extension) && !is_executable($file)) return false;
 
-        return (object)array($file, $extension);
+        return (object)array('bin' => $file, 'extension' => $extension);
+    }
+
+    public function getDuckdbBinConfig()
+    {
+        $os        = PHP_OS == 'WINNT' ? 'win' : 'linux';
+        $duckdbBin = $this->config->bi->duckdbBin[$os];
+
+        if($os == 'win') $duckdbBin['path'] = dirname(dirname($this->app->getBasePath())) . $duckdbBin['path'];
+
+        return $duckdbBin;
     }
 
     /**
@@ -836,7 +845,7 @@ class biModel extends model
             $sql   = str_replace('zt_', $tablePrefix, $sql);
 
             $tablePath = $duckdbTmpPath . $table;
-            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';";
         }
 
         foreach($ztvtables as $table => $sql)
@@ -844,7 +853,7 @@ class biModel extends model
             $table = $ztvPrefix . $table;
 
             $tablePath = $duckdbTmpPath . $table;
-            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';\n";
+            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';";
         }
 
         return $copySQL;
