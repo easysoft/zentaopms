@@ -807,7 +807,7 @@
         currentAppUrl = url;
         $page.data('timer', setTimeout(() =>
         {
-            if($page.hasClass('loading')) $page.trigger('oldPageLoad.app');
+            if($page.hasClass('loading') || $iframe.hasClass('invisible')) $page.trigger('oldPageLoad.app');
             else clearTimer();
         }, 1500));
     }
