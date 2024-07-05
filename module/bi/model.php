@@ -766,14 +766,26 @@ class biModel extends model
      */
     public function getDuckDBPath()
     {
+        $os = PHP_OS == 'WINNT' ? 'win' : 'linux';
+        $duckdbBin = $this->config->bi->duckdbBin[$os];
         $binPath   = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
-        if(isset($this->config->duckdbBinPath)) $binPath = $this->config->duckdbBinPath;
-        $file      = $binPath . 'duckdb';
-        $extension = $binPath . 'mysql_scanner.duckdb_extension';
+
+        $checkSourceCode = $this->checkDuckDBFile($binPath, $duckdbBin);
+
+        if($checkSourceCode !== false) return $checkSourceCode;
+
+        $checkZbox = $this->checkDuckDBFile($duckdbBin['path'], $duckdbBin);
+        return $checkZbox;
+    }
+
+    public function checkDuckDBFile($path, $bin)
+    {
+        $file      = $path . $bin['file'];
+        $extension = $path . $bin['extension'];
 
         if(!file_exists($file) && !file_exists($extension) && !is_executable($file)) return false;
 
-        return (object)array('bin' => $file, 'extension' => $extension);
+        return (object)array($file, $extension);
     }
 
     /**
