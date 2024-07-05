@@ -4091,20 +4091,6 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按人员统计的被指派的用户需求数',
-    'alias'      => '被指派的用需数',
-    'code'       => 'count_of_assigned_requirement_in_user',
-    'purpose'    => 'scale',
-    'scope'      => 'user',
-    'object'     => 'requirement',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按人员统计的被指派的用户需求数表示每个人待处理的用户需求数量之和。反映了每个人员需要处理的用户需求数量的规模。该数值越大，说明需要投入越多的时间处理用户需求。',
-    'definition' => "所有用户需求个数求和\n指派给为某人\n过滤已删除的用户需求\n过滤已删除产品的用户需求"
-);
-
-$config->bi->builtin->metrics[] = array
-(
     'name'       => '按人员统计的被指派的需求池需求数',
     'alias'      => '待处理需求池需求数',
     'code'       => 'count_of_assigned_demand_in_user',
