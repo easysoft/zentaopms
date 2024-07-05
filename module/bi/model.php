@@ -796,6 +796,13 @@ class biModel extends model
         return (object)array('bin' => $file, 'extension' => $extension);
     }
 
+    /**
+     * 获取ducbDB的bin目录配置。
+     * Get duckdb bin config.
+     *
+     * @access public
+     * @return array
+     */
     public function getDuckdbBinConfig()
     {
         $os        = PHP_OS == 'WINNT' ? 'win' : 'linux';
