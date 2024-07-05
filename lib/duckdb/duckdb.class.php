@@ -118,7 +118,16 @@ class duckdb
      */
     public function setBinPath()
     {
-        $this->binPath = $this->baseRoot . 'bin' . DS . 'duckdb' . DS . 'duckdb';
+        $duckdbBin  = $this->getBinConfig();
+        $sourcePath = $this->baseRoot . 'bin' . DS . 'duckdb' . DS;
+        $zboxPath   = $duckdbBin['path'];
+
+        $file = $duckdbBin['file'];
+        $this->binPath = $sourcePath . $file;
+
+        if(file_exists($this->binPath) && is_executable($this->binPath)) return;
+
+        $this->binPath = $zboxPath . $file;
     }
 
     /**
@@ -192,10 +201,10 @@ class duckdb
 
         foreach($this->tables as $table)
         {
-            $pattern = "/\b{$table}\b/";
+            $pattern = " {$table} ";
             $replace = "'{$this->tmpPath}{$table}.parquet'";
 
-            $sql = preg_replace($pattern, $replace, $sql);
+            $sql = str_replace($pattern, $replace, $sql);
         }
 
         return $sql;
