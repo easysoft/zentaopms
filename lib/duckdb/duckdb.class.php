@@ -130,6 +130,17 @@ class duckdb
         $this->binPath = $zboxPath . $file;
     }
 
+    public function getBinConfig()
+    {
+        global $config;
+        $os        = PHP_OS == 'WINNT' ? 'win' : 'linux';
+        $duckdbBin = $config->bi->duckdbBin[$os];
+
+        if($os == 'win') $duckdbBin['path'] = dirname(dirname($this->baseRoot)) . $duckdbBin['path'];
+
+        return $duckdbBin;
+    }
+
     /**
      * 设置 duckdb tmp parquet 文件路径。
      * Set duckdb tmp parquet file path.
