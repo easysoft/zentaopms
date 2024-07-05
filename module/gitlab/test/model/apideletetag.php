@@ -43,7 +43,8 @@ $result = $gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
 r($result) && p('message') && e('You are not allowed to create this tag as it is protected.'); //删除受保护的标签
 
 $tag = (object)array('tag_name' => 'test_tag17', 'ref' => 'master');
-$gitlab->createTag($gitlabID, $projectID, $tag);
+$url = sprintf($gitlab->getApiRoot($gitlabID), "/projects/" . $projectID . '/repository/tags');
+commonModel::http($url, $tag);
 $result = $gitlab->apiDeleteTag($gitlabID, $projectID, $tag->tag_name);
 if(!$result or substr($result->message, 0, 2) == '20') $result = 'return true';
 r($result) && p('message') && e('return true'); //成功删除标签

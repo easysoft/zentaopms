@@ -40,7 +40,7 @@ $scmList = array('Gitlab', '');
 
 $repo = new repoTest();
 r($repo->batchCreateTest(array((object)$repo1), $serviceHosts[0], $scmList[0]))                 && p('1:name,SCM')           && e('imortRepo1,Gitlab');                                                                              //批量创建一个版本库
-r($repo->batchCreateTest(array((object)$repo2, (object)$repo3), $serviceHosts[0], $scmList[0])) && p('3:name,SCM')           && e('imortRepo3,GitFox');                                                                              //批量创建二个版本库
+r($repo->batchCreateTest(array((object)$repo2, (object)$repo3), $serviceHosts[0], $scmList[0])) && p('3:name,SCM')           && e('imortRepo3,Gitlab');                                                                              //批量创建二个版本库
 r($repo->batchCreateTest(array((object)$repo2), $serviceHosts[0], $scmList[0]))                 && p('name:0')               && e('『名称』已经有『imortRepo2』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); //批量创建已存在版本库
 r($repo->batchCreateTest(array((object)$repo3), $serviceHosts[0], $scmList[0]))                 && p('serviceProject:0')     && e('『仓库』已经有『3』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');          //批量创建已存在仓库
 r($repo->batchCreateTest(array((object)$repo4, (object)$repo5), $serviceHosts[0], $scmList[0])) && p('5:name:projects', ':') && e('imortRepo5:5,6,7');                                                                               //批量创建二个版本库,关联多项目
