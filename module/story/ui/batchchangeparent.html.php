@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace zin;
 
 modalHeader(set::title($lang->story->batchChangeParent));
-unset($parents[0]);
 formPanel
 (
     formGroup
@@ -22,7 +21,8 @@ formPanel
         picker
         (
             set::name('parent'),
-            set::items($parents)
+            set::items($parents),
+            set::required(true)
         )
     ),
 );
