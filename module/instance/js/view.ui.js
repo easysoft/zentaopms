@@ -25,16 +25,22 @@ $('#mainContent').on('click', '.db-management', function()
 });
 
 var currentStatus = instanceStatus;
+var timer      = null;
 const postData = new FormData();
 postData.append('idList[]', instanceID);
-$(function()
+window.afterPageUpdate = function()
 {
     if(inQuickon)
     {
-        if(typeof timer !== 'undefined') clearInterval(timer);
+        if(timer) clearInterval(timer);
         timer = setInterval(refreshStatus, 5000);
     }
-})
+}
+
+window.onPageUnmount = function()
+{
+    if(timer) clearInterval(timer);
+}
 
 function refreshStatus()
 {
