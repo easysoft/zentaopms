@@ -1931,7 +1931,7 @@ class storyTao extends storyModel
         if(!isset($story->from)) $story->from = '';
 
         $closeLink               = helper::createLink($story->type, 'close', $params . "&from=$story->from");
-        $processStoryChangeLink  = helper::createLink('story', 'processStoryChange', $params);
+        $processStoryChangeLink  = helper::createLink($story->type, 'processStoryChange', $params);
         $changeLink              = helper::createLink($story->type, 'change', $params . "&from=$story->from");
         $submitReviewLink        = helper::createLink($story->type, 'submitReview', "storyID=$story->id");
         $reviewLink              = helper::createLink($story->type, 'review', $params . "&from=$story->from") . ($this->app->tab == 'project' ? '#app=project' : '');
@@ -1943,7 +1943,7 @@ class storyTao extends storyModel
         /* If the story cannot be changed, render the close button. */
         $canClose = common::hasPriv($story->type, 'close') && $this->isClickable($story, 'close');
         if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
-        $canProcessChange = common::hasPriv('story', 'processStoryChange');
+        $canProcessChange = common::hasPriv($story->type, 'processStoryChange');
         if(!empty($story->parentChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
 
         /* Change button. */

@@ -805,6 +805,7 @@ $config->group->package->manageRequirement->privs['requirement-linkRequirements'
 $config->group->package->manageRequirement->privs['requirement-batchEdit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 110, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-batchChangeRoadmap'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 125, 'depend' => array('product-requirement'), 'recommend' => array('requirement-batchCreate', 'requirement-create', 'requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-relation']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 130, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageRequirement->privs['requirement-processStoryChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 19, 'depend' => array('product-requirement'), 'recommend' => array());
 
 $config->group->package->importRequirement = new stdclass();
 $config->group->package->importRequirement->order  = 20;
@@ -853,6 +854,7 @@ $config->group->package->manageEpic->privs['epic-batchChangeGrade']   = array('e
 $config->group->package->manageEpic->privs['epic-batchChangePlan']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 103, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
 $config->group->package->manageEpic->privs['epic-batchEdit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 110, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
 $config->group->package->manageEpic->privs['epic-batchChangeRoadmap'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 125, 'depend' => array('product-epic'), 'recommend' => array('epic-batchCreate', 'epic-create', 'epic-edit'));
+$config->group->package->manageEpic->privs['epic-processStoryChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 19, 'depend' => array('product-epic'), 'recommend' => array());
 
 $config->group->package->importEpic = new stdclass();
 $config->group->package->importEpic->order  = 20;
