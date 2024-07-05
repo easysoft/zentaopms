@@ -1927,6 +1927,9 @@ class story extends control
         /* Unset branch field.  */
         if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
 
+        /* If or vision, unset plan field. */
+        if($this->config->vision == 'or') $this->config->story->exportFields = str_replace(', plan,', ',', $this->config->story->exportFields);
+
         /* Unset product field when in single project.  */
         if(isset($project->hasProduct) && !$project->hasProduct)
         {

@@ -17,6 +17,7 @@ $assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $us
 
 $planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;
 $multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1) || ($story->type != 'story');
+$showPlan     = $config->vision == 'or' ? false : true;
 
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
@@ -260,7 +261,7 @@ detailBody
                 set::name($lang->story->grade),
                 picker(setID('grade'), set::name('grade'), set::required(true), set::items($fields['grade']['options']), set::value($story->grade), set::disabled($gradeRule == 'stepwise'))
             ) : picker(setID('grade'), set::name('grade'), set::required(true), set::items($fields['grade']['options']), set::value($story->grade), set::hidden(true)),
-            item
+            $showPlan ? item
             (
                 set::trClass(zget($fields['plan'], 'className', '')),
                 set::name($lang->story->plan),
@@ -274,7 +275,7 @@ detailBody
                     empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), setData(array('toggle' => 'modal')), icon('plus')) : null,
                     empty($fields['plan']['options']) ? btn(set('onclick', "loadProductPlans({$story->product}, {$story->branch})"), setClass('refresh'), icon('refresh')) : null
                 )
-            ),
+            ) : null,
             item
             (
                 set::trClass('sourceBox'),

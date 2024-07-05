@@ -542,6 +542,7 @@ class storyZen extends story
 
         /* 删除不需要的字段。 */
         if(empty($branches)) unset($fields['branch'], $fields['branches'], $fields['modules'], $fields['plans']);
+        if($this->config->vision == 'or') unset($fields['plan']);
 
         $this->view->productID   = $productID;
         $this->view->product     = $product;

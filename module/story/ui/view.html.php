@@ -122,7 +122,7 @@ $tabs = array();
 $tabs[] = setting()
     ->group('basic')
     ->title($lang->story->legendBasicInfo)
-    ->control('storyBasicInfo')
+    ->control(array('control' => 'storyBasicInfo', 'hiddenPlan' => $config->vision == 'or' ? true : false))
     ->statusText($story->URChanged ? $lang->story->URChanged : $this->processStatus('story', $story));
 
 /* 需求一生。Legend life items. */
