@@ -8907,8 +8907,15 @@ class upgradeModel extends model
 
             if($hasChild)
             {
-                /* 如果用需成为了父需求，则需要通过它最后一个子需求计算它的阶段、工时、状态等信息。 */
                 $this->dao->update(TABLE_STORY)->set('isParent')->eq('1')->where('id')->eq($AID)->exec();
+                $status = $this->dao->select('status')->from(TABLE_STORY)->where('id')->eq($AID)->fetch('status');
+                if($status == 'closed')
+                {
+                    $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($AID)->exec();
+                    continue;
+                }
+
+                /* 如果用需成为了父需求且状态不是关闭，则需要通过它最后一个子需求计算它的阶段、工时、状态等信息。 */
                 $this->story->setStage($lastChildID);
                 $this->story->updateParentStatus($lastChildID, $AID, false);
             }
