@@ -11,6 +11,10 @@ $config->bi->default->status  = json_decode('{"lock":false,"hide":false}');
 $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestInterval":null,"requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
 
+$config->bi->duckdbBin = array();
+$config->bi->duckdbBin['win']   = array('path' => './bin/duckdb/', 'file' => 'duckdb.exe', 'extension' => 'mysql_scanner.duckdb_extension');
+$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb', 'extension' => 'mysql_scanner.duckdb_extension');
+
 $charts = array();
 $charts['32'] = array("root" => 1, "name" => "产品", "grade" => 1);
 $charts['33'] = array("root" => 1, "name" => "项目", "grade" => 1);
