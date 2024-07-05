@@ -40,8 +40,8 @@ class installModel extends model
      */
     public function getDatabaseVersion()
     {
-        if($this->config->db->driver != 'mysql') return 8;
         if(empty($this->dbh)) $this->dbh = $this->connectDB();
+        if($this->config->db->driver != 'mysql') return 8;
 
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
