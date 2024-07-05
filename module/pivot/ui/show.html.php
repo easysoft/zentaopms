@@ -62,44 +62,6 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
     {
         if(!$col['isDrilling']) continue;
 
-        $drillingObject = $col['drillingObject'];
-        $objectCols     = array();
-        if(isset($this->config->pivot->drillingObjectFields[$drillingObject]))
-        {
-            $this->loadModel($drillingObject);
-
-            $objectCols = $this->config->$drillingObject->dtable->fieldList;
-            foreach($objectCols as $fieldKey => $fieldSetting)
-            {
-                if(!in_array($fieldKey, $this->config->pivot->drillingObjectFields[$drillingObject])) unset($objectCols[$fieldKey]);
-
-                if(isset($fieldSetting['checkbox']) && $fieldSetting['checkbox']) $objectCols[$fieldKey]['checkbox'] = false;
-
-                if(isset($fieldSetting['link']) && is_array($fieldSetting['link']))
-                {
-                    $fieldSetting['link']['target'] = '_blank';
-                    $objectCols[$fieldKey] = $fieldSetting;
-                }
-            }
-        }
-        elseif($drillingObject == 'productline')
-        {
-            $objectCols = $this->config->pivot->productLineObjectCols;
-        }
-        else
-        {
-            $this->loadModel($drillingObject);
-
-            $table     = $this->config->objectTables[$drillingObject];
-            $tableCols = $this->dao->query('DESC ' . $table)->fetchAll();
-            foreach($tableCols as $tableCol)
-            {
-                $field = $tableCol->Field;
-                $objectCols[$field]['title'] = isset($this->lang->$drillingObject->$field) ? $this->lang->$drillingObject->$field : $field;
-                $objectCols[$field]['type']  = 'text';
-            }
-        }
-
         $drillingModals[] = modal
         (
             setID('drilling-' . $col['name']),
@@ -109,7 +71,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             (
                 set::striped(true),
                 set::bordered(true),
-                set::cols($objectCols),
+                set::cols($this->pivot->getDrillCols($col['drillingObject'])),
                 set::data($col['drillingDatas'])
             )
         );
