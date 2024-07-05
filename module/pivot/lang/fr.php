@@ -298,7 +298,7 @@ $lang->pivot->drillModalTip       = <<<EOT
 4. Click Save to complete the drill down configuration.
 EOT;
 $lang->pivot->drillingTip         = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
-$lang->pivot->drillConditionTip   = 'For subsequent configuration data, ensure that the id field of the query object is included in the query result set.';
+$lang->pivot->drillConditionTip   = 'According to the SQL query in step 1, adjust the query conditions in the drill statement.';
 $lang->pivot->drillResultEmptyTip = 'Click the "preview" button, you can view the drill down results here.';
 
 $lang->pivot->emptyGroupError       = 'The group cannot be empty.';
