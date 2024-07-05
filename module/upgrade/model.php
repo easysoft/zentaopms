@@ -8996,6 +8996,10 @@ class upgradeModel extends model
      */
     public function addERName()
     {
+        /* If the mode is light, disable the epic story. */
+        /* 如果是轻量模式，禁用业务需求。 */
+        if($this->config->mode == 'light') $this->loadModel('setting')->setItem('system.common.enableER', '0');
+
         $lang = $this->app->getClientLang();
 
         $URSRList = $this->dao->select('*')->from(TABLE_LANG)
