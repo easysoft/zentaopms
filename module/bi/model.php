@@ -778,6 +778,15 @@ class biModel extends model
         return $checkZbox;
     }
 
+    /**
+     * 检查duckDB引擎文件是否存在。
+     * Check duckDB bin file exists or not.
+     *
+     * @param  string $path
+     * @param  array  $bin
+     * @access public
+     * @return false|object
+     */
     public function checkDuckDBFile($path, $bin)
     {
         $file      = $path . $bin['file'];
