@@ -920,6 +920,8 @@ class story extends control
         $storyBranch    = $story->branch > 0 ? $story->branch : '0';
         $branch         = $product->type == 'branch' ? $storyBranch : 'all';
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
+        $children       = $this->story->getAllChildId($storyID);
+        foreach(array_keys($productStories) as $otherStoryID) if(isset(array_flip($children)[$otherStoryID])) unset($productStories[$otherStoryID]);
         if(isset($productStories[$storyID])) unset($productStories[$storyID]);
 
         $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
