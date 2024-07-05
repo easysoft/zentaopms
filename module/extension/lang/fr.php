@@ -67,6 +67,7 @@ $lang->extension->compatibleList[1] = 'Compatible';
 
 $lang->extension->obtainOfficial[0] = 'Third-party';
 $lang->extension->obtainOfficial[1] = 'Officiel';
+$lang->extension->obtainOfficial[2] = 'Certification Officielle';
 
 $lang->extension->byDownloads   = 'Téléchargements';
 $lang->extension->byAddedTime   = 'Derniers Ajouts';
