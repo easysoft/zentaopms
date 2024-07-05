@@ -290,6 +290,7 @@ $lang->custom->modeIntroductionList['ALM']   = 'The concept is more complete and
 $lang->custom->features['program']              = 'Program';
 $lang->custom->features['productRR']            = $lang->productCommon . ' - R&D Requirements';
 $lang->custom->features['productUR']            = $lang->productCommon . ' - User Requirements';
+$lang->custom->features['productER']            = $lang->productCommon . ' - Epic';
 $lang->custom->features['productLine']          = $lang->productCommon . ' - Product Line';
 $lang->custom->features['projectScrum']         = $lang->projectCommon . ' - Scrum Model';
 $lang->custom->features['projectWaterfall']     = $lang->projectCommon . ' - Waterfall Model';

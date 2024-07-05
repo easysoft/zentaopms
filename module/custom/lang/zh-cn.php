@@ -290,6 +290,7 @@ $lang->custom->modeIntroductionList['ALM']   = '概念更加完整、严谨，�
 $lang->custom->features['program']              = '项目集';
 $lang->custom->features['productRR']            = "{$lang->productCommon}-研发需求";
 $lang->custom->features['productUR']            = "{$lang->productCommon}-用户需求";
+$lang->custom->features['productER']            = "{$lang->productCommon}-业务需求";
 $lang->custom->features['productLine']          = "{$lang->productCommon}-产品线";
 $lang->custom->features['projectScrum']         = "{$lang->projectCommon}-敏捷模型";
 $lang->custom->features['projectWaterfall']     = "{$lang->projectCommon}-瀑布模型";
