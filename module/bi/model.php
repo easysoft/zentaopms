@@ -767,6 +767,7 @@ class biModel extends model
     public function getDuckDBPath()
     {
         $binPath   = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
+        if(isset($this->config->duckdbBinPath)) $binPath = $this->config->duckdbBinPath;
         $file      = $binPath . 'duckdb';
         $extension = $binPath . 'mysql_scanner.duckdb_extension';
 
