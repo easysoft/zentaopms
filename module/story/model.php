@@ -3662,10 +3662,11 @@ class storyModel extends model
 
         if($action == 'subdivide') $action = 'batchcreate';
 
-        if($action == 'recall')   return $story->status == 'reviewing' || $story->status == 'changing';
-        if($action == 'close')    return $story->status != 'closed';
-        if($action == 'activate') return $story->status == 'closed';
-        if($action == 'assignto') return $story->status != 'closed';
+        if($action == 'recall')             return $story->status == 'reviewing' || $story->status == 'changing';
+        if($action == 'close')              return $story->status != 'closed';
+        if($action == 'activate')           return $story->status == 'closed';
+        if($action == 'assignto')           return $story->status != 'closed';
+        if($action == 'processstorychange') return !empty($story->parentChanged);
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->isParent == '0' && $story->type == 'story';
 
