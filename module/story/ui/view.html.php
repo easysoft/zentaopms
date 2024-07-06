@@ -224,7 +224,7 @@ foreach($actions as $key => $action)
         }
     }
 
-    if($isInModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
+    if($isInModal && isset($actions[$key]) && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
     {
         $actions[$key]['data-load'] = 'modal';
         $actions[$key]['data-size'] = 'lg';
