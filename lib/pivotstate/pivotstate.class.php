@@ -258,6 +258,23 @@ class pivotState
      */
     public $addQueryFilter = array();
 
+    /**
+     * step2 finish with Sql
+     *
+     * @var string
+     * @access public
+     */
+    public $step2FinishSql = ''
+
+    /**
+     * __construct method.
+     *
+     * @param  pivot      object
+     * @param  drills     array
+     * @param  clientLang string
+     * @access public
+     * @return void
+     */
     public function __construct($pivot, $drills = array(), $clientLang = 'zh-cn')
     {
         $this->id        = $pivot->id;
