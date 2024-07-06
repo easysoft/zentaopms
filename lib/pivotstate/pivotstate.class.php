@@ -723,6 +723,7 @@ class pivotState
 
         $this->fieldSettings  = $fieldSettings;
         $this->relatedObject  = $relatedObject;
+        $this->step2FinishSql = $step2FinishSql;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
@@ -815,7 +816,18 @@ class pivotState
      */
     public function setStep2FinishSql()
     {
-        if(empty($this->checkSettings())) $this->setStep2FinishSql = $this->sql;
+        if($this->issetSettings()) $this->step2FinishSql = $this->sql;
+    }
+
+    public function issetSettings()
+    {
+        if($this->isSummaryNotUse()) return true;
+
+        if(empty($this->getSettingGroups())) return false;
+        $columns = $this->getSettingColumns();
+        if(count($columns) == 1 && empty($columns[0]['field'])) return false;
+
+        return true;
     }
 
     /**
