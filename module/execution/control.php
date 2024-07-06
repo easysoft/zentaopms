@@ -1999,7 +1999,14 @@ class execution extends control
         /* Get execution's product. */
         $productID = 0;
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
-        if($productPairs) $productID = key($productPairs);
+        if($productPairs)
+        {
+            $productID = key($productPairs);
+        }
+        else
+        {
+            return $this->sendError($this->lang->execution->errorNoLinkedProducts, $this->createLink('execution', 'manageproducts', "executionID=$executionID"));
+        }
 
         $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
