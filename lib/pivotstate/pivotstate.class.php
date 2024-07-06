@@ -510,7 +510,7 @@ class pivotState
      */
     public function isSummaryNotUse()
     {
-        return (isset($this->settings['summary']) && $this->settings['summary'] == 'notuse');
+        return (isset($this->settings['summary']) && $this->settings['summary'] === 'notuse');
     }
 
     /**
@@ -721,8 +721,8 @@ class pivotState
 
         $this->addQueryFilter = $addQueryFilter;
 
-        $this->fieldSettings = $fieldSettings;
-        $this->relatedObject = $relatedObject;
+        $this->fieldSettings  = $fieldSettings;
+        $this->relatedObject  = $relatedObject;
         $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
@@ -805,6 +805,17 @@ class pivotState
     public function setFieldRelatedObject($relatedObject)
     {
         $this->relatedObject = $relatedObject;
+    }
+
+    /**
+     * Set step2 finishsql.
+     *
+     * @access public
+     * @return void
+     */
+    public function setStep2FinishSql()
+    {
+        if(empty($this->checkSettings())) $this->setStep2FinishSql = $this->sql;
     }
 
     /**
