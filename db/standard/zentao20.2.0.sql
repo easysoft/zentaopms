@@ -1330,7 +1330,7 @@ CREATE TABLE `zt_extension` (
   `license` text DEFAULT NULL,
   `type` varchar(20) NOT NULL DEFAULT 'extension',
   `site` varchar(150) NOT NULL DEFAULT '',
-  `zentaoCompatible` varchar(100) NOT NULL DEFAULT '',
+  `zentaoCompatible` text DEFAULT NULL,
   `installedTime` datetime DEFAULT NULL,
   `depends` varchar(100) NOT NULL DEFAULT '',
   `dirs` mediumtext DEFAULT NULL,
@@ -2509,6 +2509,13 @@ CREATE TABLE `zt_pivot` (
   PRIMARY KEY (`id`),
   KEY `dimension` (`dimension`),
   KEY `group` (`group`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_pivotdrill` (
+  `pivot` mediumint(9) NOT NULL,
+  `field` varchar(255) NOT NULL,
+  `object` varchar(40) NOT NULL,
+  `whereSql` mediumtext NOT NULL,
+  `condition` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_planstory` (
   `plan` mediumint(8) unsigned NOT NULL DEFAULT 0,
@@ -3937,6 +3944,7 @@ CREATE TABLE `zt_user` (
   `password` char(32) NOT NULL DEFAULT '',
   `role` char(10) NOT NULL DEFAULT '',
   `realname` varchar(100) NOT NULL DEFAULT '',
+  `superior` char(30) DEFAULT '',
   `pinyin` varchar(255) NOT NULL DEFAULT '',
   `nickname` char(60) NOT NULL DEFAULT '',
   `commiter` varchar(100) NOT NULL DEFAULT '',
