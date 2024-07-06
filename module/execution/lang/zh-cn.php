@@ -388,9 +388,9 @@ $lang->execution->copyTeamTitle        = "选择一个{$lang->project->common}�
 /* 交互提示。*/
 $lang->execution->confirmDelete                = "您确定删除{$lang->executionCommon}[%s]吗？";
 $lang->execution->confirmUnlinkMember          = "您确定从该{$lang->executionCommon}中移除该用户吗？";
-$lang->execution->confirmUnlinkStory           = "移除该{$lang->SRCommon}后，该{$lang->SRCommon}关联的用例将被移除，该{$lang->SRCommon}关联的任务将被取消，请确认。";
+$lang->execution->confirmUnlinkStory           = "移除该需求后，该需求关联的用例将被移除，该需求关联的任务将被取消，请确认。";
 $lang->execution->confirmSync                  = "修改所属{$lang->projectCommon}后,为了保持数据的一致性，该执行所关联的{$lang->productCommon}、{$lang->SRCommon}、团队和白名单数据将会同步到新的{$lang->projectCommon}中，请知悉。";
-$lang->execution->confirmUnlinkExecutionStory  = "您确定从该{$lang->projectCommon}中移除该{$lang->SRCommon}吗？";
+$lang->execution->confirmUnlinkExecutionStory  = "您确定从该{$lang->projectCommon}中移除该需求吗？";
 $lang->execution->notAllowedUnlinkStory        = "该{$lang->SRCommon}已经与{$lang->projectCommon}下{$lang->executionCommon}相关联，请从{$lang->executionCommon}中移除后再操作。";
 $lang->execution->notAllowRemoveProducts       = "该{$lang->productCommon}中的{$lang->SRCommon}%s已与该{$lang->executionCommon}进行了关联，请取消关联后再操作。";
 $lang->execution->errorNoLinkedProducts        = "该{$lang->executionCommon}没有关联的{$lang->productCommon}，系统将转到{$lang->productCommon}关联页面";

@@ -31,7 +31,7 @@ h::table
     h::tr
     (
         h::th(set::width('60px'), $lang->idAB),
-        h::th($lang->story->title),
+        h::th($lang->story->name),
         h::th($lang->story->link . $lang->execution->common)
     ),
     $tableTR,
