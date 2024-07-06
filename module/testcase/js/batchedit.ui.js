@@ -43,5 +43,24 @@ window.loadStoriesForBatch = function(productID, moduleID, num, $currentRow = nu
     const storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&objectID=0&number=' + num);
     $.getJSON(storyLink, function(stories)
     {
+        if(!stories) return;
+
+        /* Append case's stories. */
+        var storyIdList = stories.map(function(story) { return story.value; });
+        let mergeStories = caseStories.filter(function(story){return storyIdList.some(function(id){return id != story.value;});});
+
+        stories.append(mergeStories);
+
+        let $row = $currentRow;
+        while($row.length)
+        {
+            const $story = $row.find('.form-batch-control[data-name="story"] .picker').zui('picker');
+            $story.render({items: stories});
+            $story.$.setValue($story.$.value);
+
+            $row = $row.next('tr');
+
+            if(($row.find('td[data-name="branch"]').length && !$row.find('td[data-name="branch"][data-ditto="on"]').length) || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+        }
     });
 }
