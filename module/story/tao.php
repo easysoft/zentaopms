@@ -2470,7 +2470,7 @@ class storyTao extends storyModel
             unset($task->children);
 
             $taskGroup[$task->story][$task->id] = $task;
-            if(isset($taskTeams[$task->id]) && empty($task->assignedTo)) $task->assignedTo = isset($taskTeams[$task->id][$account]) ? $account : $this->lang->task->team;
+            if(isset($taskTeams[$task->id])) $task->assignedTo = isset($taskTeams[$task->id][$account]) ? $account : $this->lang->task->team;
             foreach($children as $subTask)
             {
                 if(isset($taskTeams[$subTask->id]) && empty($subTask->assignedTo)) $subTask->assignedTo = isset($taskTeams[$task->id][$account]) ? $account : $this->lang->task->team;
