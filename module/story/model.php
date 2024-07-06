@@ -3952,7 +3952,7 @@ class storyModel extends model
         $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
         if($browseType == 'bysearch')list($allStories, $stories) = $this->storyTao->getSearchedStoriesForTrack($allStories, $stories);
 
-        $leafNodes = $this->storyTao->getLeafNodes($stories);
+        $leafNodes = $this->storyTao->getLeafNodes($stories, $storyType);
 
         $tracks = array();
         $lanes  = $this->storyTao->buildTrackLanes($leafNodes, $storyType);

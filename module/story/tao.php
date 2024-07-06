@@ -2218,14 +2218,18 @@ class storyTao extends storyModel
      * Get leaf node by all stories, and sort by base nodes.
      *
      * @param  array    $stories
+     * @param  string   $storyType  epic|requirement|story
      * @access public
      * @return array
      */
-    public function getLeafNodes(array $stories): array
+    public function getLeafNodes(array $stories, string $storyType = 'epic'): array
     {
         $leafNodes = array();
         foreach($stories as $story)
         {
+            if($storyType == 'requirement' && $story->type == 'epic') continue;
+            if($storyType == 'story' && ($story->type == 'epic' || $story->type == 'requirement')) continue;
+
             if(empty($story->isParent)) $leafNodes[$story->id] = $story;
         }
 
