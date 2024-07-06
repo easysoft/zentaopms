@@ -54,7 +54,7 @@ window.getItem = function(info)
 
         severity     = info.item.severity;
         severityHtml = `<div class="severity" data-severity="${severity}"></div>`;
-        if(!langBugSeverityList[severity] || langBugSeverityList[severity] != severity) severityHtml = `<div>${langBugSeverityList[severity]}</div>`;
+        if(!langBugSeverityList[severity] || langBugSeverityList[severity] != severity) severityHtml = `<div class='severity severity-label' data-severity="${severity}">${langBugSeverityList[severity]}</div>`;
 
         info.item.content.push({html: severityHtml});
         if(info.item.assignedTo) info.item.content.push({html: "<i class='icon icon-hand-right'></i> " + (users[info.item.assignedTo] ? users[info.item.assignedTo] : info.item.assignedTo)});
