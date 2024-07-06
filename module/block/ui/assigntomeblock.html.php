@@ -98,8 +98,14 @@ foreach($hasViewPriv as $type => $bool)
 
             $typeName = '';
             if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-            if($reviewType == 'story')                $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
-            if($review->type == 'projectreview')      $typeName = $lang->project->common;
+            if($reviewType == 'story')
+            {
+                if($review->storyType == 'story')       $typeName = $lang->SRCommon;
+                if($review->storyType == 'requirement') $typeName = $lang->URCommon;
+                if($review->storyType == 'epic')        $typeName = $lang->ERCommon;
+            }
+            if($review->type == 'projectreview') $typeName = $lang->project->common;
+            if(in_array($reviewType, array('story', 'epic', 'requirement'))) $config->block->review->dtable->fieldList['title']['link']['method'] = 'storyView';
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);
@@ -110,6 +116,8 @@ foreach($hasViewPriv as $type => $bool)
         $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
     if($type == 'requirement') $config->block->story->dtable->fieldList['title']['title']    = str_replace($lang->story->story, $lang->story->requirement, $lang->story->title);
+    if($type == 'epic')        $config->block->story->dtable->fieldList['title']['title']    = str_replace($lang->story->story, $lang->story->epic, $lang->story->title);
+    if(in_array($type, array('story', 'epic', 'requirement'))) $config->block->story->dtable->fieldList['title']['link']['module'] = $type;
     if($type == 'ticket')      $config->block->ticket->dtable->fieldList['product']['map']   = $products;
     if($type == 'feedback')    $config->block->feedback->dtable->fieldList['product']['map'] = $products;
     if($type == 'meeting')     $config->block->meeting->dtable->fieldList['dept']['map']     = $depts;
