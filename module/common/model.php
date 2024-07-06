@@ -1495,14 +1495,14 @@ eof;
         if(empty($object)) return true;
 
         $account = $app->user->account;
-        if(!empty($object->openedBy))     return $object->openedBy     == $account;
-        if(!empty($object->addedBy))      return $object->addedBy      == $account;
-        if(!empty($object->account))      return $object->account      == $account;
-        if(!empty($object->assignedTo))   return $object->assignedTo   == $account;
-        if(!empty($object->finishedBy))   return $object->finishedBy   == $account;
-        if(!empty($object->canceledBy))   return $object->canceledBy   == $account;
-        if(!empty($object->closedBy))     return $object->closedBy     == $account;
-        if(!empty($object->lastEditedBy)) return $object->lastEditedBy == $account;
+        if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
+        if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
+        if(!empty($object->account)      && $object->account      == $account) return true;
+        if(!empty($object->assignedTo)   && $object->assignedTo   == $account) return true;
+        if(!empty($object->finishedBy)   && $object->finishedBy   == $account) return true;
+        if(!empty($object->canceledBy)   && $object->canceledBy   == $account) return true;
+        if(!empty($object->closedBy)     && $object->closedBy     == $account) return true;
+        if(!empty($object->lastEditedBy) && $object->lastEditedBy == $account) return true;
 
         return false;
     }
@@ -2474,7 +2474,7 @@ eof;
             $moduleName = ($actionData['url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['url']['module'];
             $methodName = $actionData['url']['method'];
             $params     = $actionData['url']['params'];
-            if(!common::hasPriv($moduleName, $methodName)) return false;
+            if(!common::hasPriv($moduleName, $methodName, $data)) return false;
             $actionData['url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['url']['onlybody']) ? true : false);
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
@@ -2482,7 +2482,7 @@ eof;
             $moduleName = ($actionData['data-url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['data-url']['module'];
             $methodName = $actionData['data-url']['method'];
             $params     = $actionData['data-url']['params'];
-            if(!common::hasPriv($moduleName, $methodName)) return false;
+            if(!common::hasPriv($moduleName, $methodName, $data)) return false;
             $actionData['data-url'] = helper::createLink($moduleName, $methodName, $params, '', !empty($actionData['data-url']['onlybody']) ? true : false);
         }
         elseif(empty($actionData['url']))
@@ -2491,7 +2491,7 @@ eof;
         }
         else
         {
-            if(!common::hasPriv($moduleName, $action)) return false;
+            if(!common::hasPriv($moduleName, $action, $data)) return false;
         }
 
         if(!isset($this->$moduleName)) $this->loadModel($moduleName);
