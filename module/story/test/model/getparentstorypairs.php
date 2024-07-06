@@ -7,9 +7,9 @@ title=测试 storyModel->getParentStoryPairs();
 timeout=0
 cid=0
 
-- 获取ID为3的父需求的标题第3条的keys属性 @用户需求9
-- 获取符合条件的需求数 @3
-- 测试附加的需求ID1，需求1以数字1结尾第0条的keys属性 @软件需求2
+- 获取ID为3的父需求的标题第3条的keys属性 @用户需求5
+- 获取符合条件的需求数 @8
+- 测试附加的需求ID3第0条的keys属性 @用户需求3
 
 */
 
@@ -44,10 +44,10 @@ global $tester;
 $tester->loadModel('story');
 $stories = $tester->story->getParentStoryPairs(1);
 
-r($stories) && p('3:keys') && e('用户需求9'); // 获取ID为3的父需求的标题
+r($stories) && p('3:keys') && e('用户需求5'); // 获取ID为3的父需求的标题
 
 array_pop($stories); /* remove empty item at array top. */
-r(count($stories)) && p() && e(3);  // 获取符合条件的需求数
+r(count($stories)) && p() && e(8);  // 获取符合条件的需求数
 
-$storiesWithAppended = $tester->story->getParentStoryPairs(5, 2);
-r($storiesWithAppended) && p('0:keys') && e('软件需求2'); // 测试附加的需求ID1，需求1以数字1结尾
+$storiesWithAppended = $tester->story->getParentStoryPairs(5, '3');
+r($storiesWithAppended) && p('0:keys') && e('用户需求3'); // 测试附加的需求ID3
