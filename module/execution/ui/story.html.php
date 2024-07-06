@@ -237,7 +237,7 @@ sidebar
 (
     moduleMenu(set(array(
         'modules'     => $moduleTree,
-        'activeKey'   => $param,
+        'activeKey'   => $type == 'byproduct' ? "p_$param" : $param,
         'settingLink' => !$execution->hasProduct && !$execution->multiple ? createLink('tree', 'browse', "rootID={$product->id}&viewType=story") : null,
         'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0"),
         'app'         => !$execution->hasProduct && !$execution->multiple ? 'project' : '',

@@ -1667,11 +1667,9 @@ class executionZen extends execution
             helper::setcookie('storyProductParam', '0');
             helper::setcookie('storyBranchParam',  $param);
         }
-        else
-        {
-            $this->session->set('executionStoryBrowseType', $type);
-            $this->session->set('storyBrowseType',          $type, 'execution');
-        }
+
+        $this->session->set('executionStoryBrowseType', $type);
+        $this->session->set('storyBrowseType',          $type, 'execution');
 
         $uri = $this->app->getURI(true);
         $this->session->set('storyList',          $uri, $this->app->tab);
