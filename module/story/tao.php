@@ -1677,15 +1677,15 @@ class storyTao extends storyModel
             $hasDoingTestTask = $statusList['test']['doing'] > 0 || $statusList['test']['pause'] > 0;
             $notDoingTestTask = $statusList['test']['doing'] == 0;
 
-            if($doingDesignTask && $notStartDevTask)  $stage = 'designing';  //设计任务没有全部完成，开发任务还没有开始，阶段为设计中。
-            if($doneDesignTask  && $notStartDevTask)  $stage = 'designed';   //设计任务全部完成，开发任务还没有开始，阶段为设计完成。
-            if($doingDevelTask  && $notStartTestTask) $stage = 'developing'; //开发任务没有全部完成，测试任务没有开始，阶段为开发中。
-            if($doingDevelTask  && $notDoingTestTask) $stage = 'developing'; //开发任务没有全部完成，没有测试中的测试任务，阶段为开发中。
-            if($doingDevelTask  && $doneTestTask)     $stage = 'testing';    //开发任务没有全部完成，测试任务已经完成，阶段为测试中。
-            if($doneDevelTask   && $notStartTestTask) $stage = 'developed';  //开发任务已经完成，测试任务还没有开始，阶段为开发完成。
-            if($doneDevelTask   && $doingTestTask)    $stage = 'testing';    //开发任务已经完成，测试任务已经开始，阶段为测试中。
-            if($hasDoingTestTask)                     $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
-            if($doneDevelTask && $doneTestTask)       $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
+            if($doingDesignTask && $notStartDevTask)                    $stage = 'designing';  //设计任务没有全部完成，开发任务还没有开始，阶段为设计中。
+            if($doneDesignTask  && $notStartDevTask)                    $stage = 'designed';   //设计任务全部完成，开发任务还没有开始，阶段为设计完成。
+            if($doingDevelTask  && $notStartTestTask)                   $stage = 'developing'; //开发任务没有全部完成，测试任务没有开始，阶段为开发中。
+            if($doingDevelTask  && $notDoingTestTask)                   $stage = 'developing'; //开发任务没有全部完成，没有测试中的测试任务，阶段为开发中。
+            if(($notStartDevTask || $doingDevelTask)  && $doneTestTask) $stage = 'testing';    //开发任务没有全部完成，测试任务已经完成，阶段为测试中。
+            if($doneDevelTask   && $notStartTestTask)                   $stage = 'developed';  //开发任务已经完成，测试任务还没有开始，阶段为开发完成。
+            if($doneDevelTask   && $doingTestTask)                      $stage = 'testing';    //开发任务已经完成，测试任务已经开始，阶段为测试中。
+            if($hasDoingTestTask)                                       $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
+            if($doneDevelTask && $doneTestTask)                         $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
 
             $stages[(int)$branch] = $stage;
         }
