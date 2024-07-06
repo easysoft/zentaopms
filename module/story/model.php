@@ -3987,27 +3987,41 @@ class storyModel extends model
             }
         }
 
-        $leafNodes  = $tracks['leafNodes'];
-        $mergeCells = array();
-        $preParents = array();
+        /* 比较前一行的单元格，是否需要合并。
+           如果是相同的需求，则合并单元格。
+           如果没有需求，则根据前面的单元格的合并情况判断是否合并。
+           如果前面的单元格没有合并，则不合并。
+           但是第一列仅根据有无需求和需求是否相同，判断是否合并。
+        */
+        $mergeCells   = array();
+        $preRowIdList = array();
+        $preRowColID  = null;
         foreach($tracks['lanes'] as $lane)
         {
-            $laneName = $lane['name'];
-
-            $storyID  = substr($laneName, 5);
-            $story    = zget($leafNodes, $storyID, '');
-            if(empty($story)) continue;
+            $laneName  = $lane['name'];
+            $preMerged = false;
 
             foreach($storyCols as $i => $col)
             {
-                if(!isset($preParents[$i]) || !isset($story->parent[$i]) || $preParents[$i] != $story->parent[$i]) continue;
-
                 $colName = $col['name'];
+                $story   = isset($tracks['items'][$laneName][$colName]) ? reset($tracks['items'][$laneName][$colName]) : 0;
+                $storyID = $story ? $story->id : 0;
+
+                if(isset($preRowIdList[$i])) $preRowColID = $preRowIdList[$i];
+                $preRowIdList[$i] = $storyID;
+                if($preRowColID === null || $preRowColID != $storyID)
+                {
+                    $preMerged = false;
+                    continue;
+                }
+                if($i > 0 && !$preMerged && empty($storyID)) continue;
+
                 if(!empty($tracks['items'][$laneName][$colName])) $tracks['items'][$laneName][$colName] = array();
 
                 $mergeCells[$laneName][$colName] = true;
+                $preMerged = true;
             }
-            $preParents = $story->parent;
+
         }
 
         return $mergeCells;
