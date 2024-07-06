@@ -1944,6 +1944,7 @@ class storyTao extends storyModel
         if(!isset($story->from)) $story->from = '';
 
         $closeLink               = helper::createLink($story->type, 'close', $params . "&from=$story->from");
+        $activateLink            = helper::createLink($story->type, 'activate', $params . "&from=$story->from");
         $processStoryChangeLink  = helper::createLink($story->type, 'processStoryChange', $params);
         $changeLink              = helper::createLink($story->type, 'change', $params . "&from=$story->from");
         $submitReviewLink        = helper::createLink($story->type, 'submitReview', "storyID=$story->id");
@@ -1954,7 +1955,8 @@ class storyTao extends storyModel
         $createCaseLink          = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */
-        $canClose = common::hasPriv($story->type, 'close') && $this->isClickable($story, 'close');
+        $canClose    = common::hasPriv($story->type, 'close')    && $this->isClickable($story, 'close');
+        $canActivate = common::hasPriv($story->type, 'activate') && $this->isClickable($story, 'activate');
         if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
         $canProcessChange = common::hasPriv($story->type, 'processStoryChange');
         if(!empty($story->parentChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
@@ -2015,7 +2017,8 @@ class storyTao extends storyModel
             $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall + array('innerClass' => 'ajax-submit')));
         }
 
-        if($this->config->vision != 'lite') $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal', 'disabled' => !$canClose);
+        if($this->config->vision != 'lite' && $story->status != 'closed') $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal');
+        if($this->config->vision != 'lite' && $story->status == 'closed') $actions[] = array('name' => 'activate', 'url' => $canActivate ? $activateLink : null, 'data-toggle' => 'modal');
 
         /* Render divider line. */
         $actions[] = array('name' => 'divider', 'type'=>'divider');
