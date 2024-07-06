@@ -1419,7 +1419,7 @@ class productZen extends product
         $this->view->projectProducts = $projectProducts;
 
         $module = $this->app->tab == 'product' ? $storyType : $this->app->tab;
-        $this->view->showGrades = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
+        $this->view->showGrades = !empty($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
 
         $storyType = $isProjectStory ? 'all' : $storyType;
         $this->view->summary    = $this->product->summary($stories, $storyType);
