@@ -156,10 +156,10 @@ foreach($planStories as $story) $story->estimate = $story->estimate . $config->h
 
 $createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
-$createRequirementLink      = common::hasPriv('requirement', 'create') ? $this->createLink('requirement', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
-$batchCreateRequirementLink = common::hasPriv('requirement', 'batchCreate') ? $this->createLink('requirement', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
-$createEpicLink             = common::hasPriv('epic', 'create') ? $this->createLink('epic', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
-$batchCreateEpicLink        = common::hasPriv('epic', 'batchCreate')  ? $this->createLink('epic', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createRequirementLink      = common::hasPriv('requirement', 'create') && $this->config->URAndSR ? $this->createLink('requirement', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateRequirementLink = common::hasPriv('requirement', 'batchCreate') && $this->config->URAndSR ? $this->createLink('requirement', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createEpicLink             = common::hasPriv('epic', 'create') && $this->config->enableER ? $this->createLink('epic', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateEpicLink        = common::hasPriv('epic', 'batchCreate') && $this->config->enableER ? $this->createLink('epic', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
 
 $branchNames = '';
 if($product->type != 'normal')
