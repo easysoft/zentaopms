@@ -1558,11 +1558,10 @@ class story extends control
      * @param  int    $hasParent   0|1
      * @param  int    $objectID    projectID|executionID
      * @param  int    $isHTML      0|1
-     * @param  string $appendStories
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories(int $productID, int $branch = 0, int $moduleID = 0, int $storyID = 0, string $onlyOption = 'false', string $status = '', int $limit = 0, string $type = 'full', int $hasParent = 1, int $objectID = 0, int $isHTML = 1, string $appendStories)
+    public function ajaxGetProductStories(int $productID, int $branch = 0, int $moduleID = 0, int $storyID = 0, string $onlyOption = 'false', string $status = '', int $limit = 0, string $type = 'full', int $hasParent = 1, int $objectID = 0, int $isHTML = 1)
     {
         $hasParent = $hasParent >= 1 ? true : false;
 
