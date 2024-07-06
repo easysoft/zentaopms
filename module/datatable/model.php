@@ -111,6 +111,7 @@ class datatableModel extends model
         }
         else
         {
+            $order = 0;
             foreach($fieldSetting as $field => $set)
             {
                 if(!$showAll && empty($set['required']) && empty($set['show']))
@@ -142,6 +143,9 @@ class datatableModel extends model
                 if(!isset($set['name'])) $fieldSetting[$field]['name'] = $field;
                 if($module == 'testcase' && $field == 'id') $fieldSetting[$field]['name'] = 'caseID';
                 if($field == 'actions' && empty($fieldSetting[$field]['width'])) $fieldSetting[$field]['width'] = $fieldList[$field]['width'];
+
+                if(!isset($set['order'])) $fieldSetting[$field]['order'] = $order;
+                $order++;
             }
 
             if(in_array($module, array('product', 'project', 'execution')) and empty($this->config->setCode)) unset($fieldSetting['code']);
