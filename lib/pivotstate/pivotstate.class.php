@@ -955,7 +955,7 @@ class pivotState
      */
     public function checkSettings()
     {
-        if($this->isSummaryNotUse()) array();
+        if($this->isSummaryNotUse()) return array();
 
         $errors = array();
         foreach($this->settings as $key => $value)
