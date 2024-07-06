@@ -920,7 +920,7 @@ class testcaseZen extends testcase
         }
         else
         {
-            $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, $storyStatus,'id_desc', 0, '', 'story', false);
+            $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, $storyStatus, 'id_desc', 0, '', 'story', false);
         }
         if(!isset($stories[$case->story]))
         {

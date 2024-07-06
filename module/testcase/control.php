@@ -585,7 +585,7 @@ class testcase extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
 
         $caseStories = $this->story->getByList(array_column($cases, 'story'));
         $caseStories = $this->story->formatStories($caseStories, 'story');
@@ -1262,7 +1262,7 @@ class testcase extends control
         $this->testcaseZen->assignShowImportVars($productID, $branch, $data['caseData'], isset($stepVars) ? $stepVars : 0, $pagerID, $maxImport);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->showImport;
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
         $this->view->cases      = $this->testcase->getByProduct($productID);
         $this->view->stepData   = array_values($data['stepData']);
         $this->view->productID  = $productID;

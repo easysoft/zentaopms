@@ -251,7 +251,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $canBatchChangeStage   = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
     $canBatchChangeBranch  = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule  = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
-    $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent') && !($storyType == 'epic' && count($gradeGroup['epic']) < 2);
+    $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent') && !($storyType == 'epic' && count($gradeGroup['epic']) < 2) && $app->tab == 'product';
     $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
     $canBatchChangeRoadmap = $canBeChanged && hasPriv('story', 'batchChangeRoadmap') && $config->vision == 'or' && $storyType == 'requirement';
