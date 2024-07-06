@@ -1356,7 +1356,7 @@ class testcaseZen extends testcase
 
         /* 设置需求键对。 */
         /* Set story pairs. */
-        $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
+        $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
         $story       = $storyID ? $this->story->getByID($storyID) : '';
         $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
         if($storyID && empty($moduleID)) $moduleID = $story->module;
@@ -2475,7 +2475,7 @@ class testcaseZen extends testcase
             $productList = array();
             $productList['all'] = $this->lang->all;
             if(isset($products[$productID])) $productList[$productID] = $products[$productID];
-            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
         }
 
         /* 获取模块列表。*/
