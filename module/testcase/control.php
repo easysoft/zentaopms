@@ -587,12 +587,16 @@ class testcase extends control
 
         $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
 
+        $caseStories = $this->story->getByList(array_column($cases, 'story'));
+        $caseStories = $this->story->formatStories($caseStories, 'story');
+
         /* 展示变量. */
         /* Show the variables. */
         $this->view->stories         = $this->story->addGradeLabel($stories);
         $this->view->caseIdList      = $caseIdList;
         $this->view->productID       = $productID;
         $this->view->cases           = $cases;
+        $this->view->caseStories     = $this->story->addGradeLabel($caseStories);
         $this->view->forceNotReview  = $this->testcase->forceNotReview();
         $this->view->testtasks       = $testtasks;
         $this->view->isLibCase       = $type == 'lib' ? true : false;

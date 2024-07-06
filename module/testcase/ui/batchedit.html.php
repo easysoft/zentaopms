@@ -17,6 +17,7 @@ jsVar('scenePairs',    $scenePairs);
 jsVar('productID',     $productID);
 jsVar('products',      $products);
 jsVar('cases',         $cases);
+jsVar('caseStories',   $caseStories);
 
 if(isset($suhosinInfo))
 {

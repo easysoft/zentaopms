@@ -922,6 +922,11 @@ class testcaseZen extends testcase
         {
             $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, $storyStatus,'id_desc', 0, '', 'story', false);
         }
+        if(!isset($stories[$case->story]))
+        {
+            $story = $this->story->fetchByID($case->story);
+            $stories = $stories + array($story->id => $story->id . ':' . $story->title);
+        }
 
         $this->view->stories = $this->story->addGradeLabel($stories);
     }
