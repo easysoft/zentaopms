@@ -358,6 +358,7 @@ $lang->story->errorCannotSplit       = "This requirement has been split into sub
 $lang->story->errorParentSplitTask   = "Parent requirements cannot be transferred to tasks, this operation has been filtered.";
 $lang->story->errorERURSplitTask     = "Parent requirements,{$lang->ERCommon} and {$lang->URCommon}cannot be transferred to tasks, this operation has been filtered.";
 $lang->story->errorEmptyReviewedBy   = "『{$lang->story->reviewers}』canot be blank.";
+$lang->story->errorEmptyStory        = "There has same title story or null title story, please check it.";
 $lang->story->mustChooseResult       = 'Select Result';
 $lang->story->mustChoosePreVersion   = 'Select a version to revert to.';
 $lang->story->noEpic                 = "No Epics.";
