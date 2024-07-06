@@ -490,7 +490,16 @@ class commonModel extends model
         }
         $denyLink = helper::createLink('user', 'deny', $vars);
 
-        echo json_encode(array('load' => $denyLink));
+        if(helper::isAjaxRequest())
+        {
+            echo json_encode(array('load' => $denyLink));
+        }
+        else
+        {
+            header("Location: $denyLink");
+        }
+
+
         helper::end();
     }
 
