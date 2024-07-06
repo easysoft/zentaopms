@@ -997,7 +997,6 @@ class myModel extends model
      */
     public function getReviewingDemands(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if(!common::hasPriv('demand', 'review')) return array();
         if($this->config->edition != 'ipd') return array();
 
         $this->app->loadLang('demand');
@@ -1040,9 +1039,7 @@ class myModel extends model
      */
     public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
     {
-        if(!common::hasPriv('story', 'review')) return array();
-
-        $this->app->loadLang('story');
+        $this->app->loadLang($type);
         $stmt = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
@@ -1087,8 +1084,6 @@ class myModel extends model
      */
     public function getReviewingCases(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if(!common::hasPriv('testcase', 'review')) return array();
-
         $stmt = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('wait')
@@ -1123,7 +1118,6 @@ class myModel extends model
      */
     public function getReviewingApprovals(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if(!common::hasPriv('review', 'assess')) return array();
         if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
@@ -1212,7 +1206,6 @@ class myModel extends model
      */
     public function getReviewingFeedbacks(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if(!common::hasPriv('feedback', 'review')) return array();
         if($this->config->edition == 'open') return array();
 
         $this->session->set('feedbackProduct', 'all');
