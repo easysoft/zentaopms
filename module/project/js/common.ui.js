@@ -19,12 +19,10 @@ function changeType()
     {
         $('.productsBox').addClass('hidden');
         $('.stageByBox').addClass('hidden');
-        $('[data-name=storyType]').addClass('hidden');
     }
     else
     {
         $('.productsBox').removeClass('hidden');
-        $('[data-name=storyType]').removeClass('hidden');
     }
 }
 
