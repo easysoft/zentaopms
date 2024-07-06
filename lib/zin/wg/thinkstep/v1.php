@@ -34,6 +34,7 @@ class thinkStep  extends wg
         list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
         if(!$item && !$addType) return array();
 
+        $marketID  = data('marketID');
         $basicType = $item->type ?? '';
         $typeLang  = $action . 'Step';
         $type      = $addType ? $addType : ($basicType == 'question' ? $item->options->questionType : $basicType);
@@ -60,13 +61,13 @@ class thinkStep  extends wg
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),
-                                set::url(createLink('thinkstep', 'edit', "stepID={$item->id}")),
+                                set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")),
                             ) : null,
                             $canDelete ? (!$item->existNotNode ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
-                                setData('url', createLink('thinkstep', 'delete', "stepID={$item->id}")),
+                                setData('url', createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}")),
                                 setData('confirm',  $lang->thinkstep->deleteTips[$basicType])
                             ) : btn
                             (

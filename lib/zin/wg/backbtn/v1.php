@@ -85,8 +85,6 @@ class backBtn extends btn
             'deploy'         => 'deploy-browse,deploy-steps,deploy-scope,deploy-view,deploy-cases',
             'service'        => 'service-browse,service-manage,service-view',
             'domain'         => 'domain-browse,domain-view',
-            'thinkwizard'    => 'thinkwizard-browse',
-            'thinkrun'       => 'thinkrun-browse',
             'researchtask'   => 'marketresearch-task,my-index'
         );
 

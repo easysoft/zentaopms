@@ -161,19 +161,20 @@ class thinkStepMenu extends wg
             );
         }
 
+        $marketID = data('marketID');
         $menus = array_merge($menus, array(
             $canEdit ? array(
                 'key'  => 'editNode',
                 'icon' => 'edit',
                 'text' => $this->lang->thinkstep->actions['edit'],
-                'url'  => createLink('thinkstep', 'edit', "stepID={$item->id}")
+                'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
             ) : null,
             $canDelete ? (!$item->existNotNode ? array(
                 'key'          => 'deleteNode',
                 'icon'         => 'trash',
                 'text'         => $this->lang->thinkstep->actions['delete'],
                 'innerClass'   => 'ajax-submit',
-                'data-url'     => createLink('thinkstep', 'delete', "stepID={$item->id}"),
+                'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}"),
                 'data-confirm' => $confirmTips,
             ) : array(
                 'key'            => 'deleteNode',
