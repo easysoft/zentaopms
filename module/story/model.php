@@ -1717,6 +1717,7 @@ class storyModel extends model
         $this->loadModel('action');
         foreach($stories as $storyID => $story)
         {
+            if(!empty($story->twins)) continue;
             if($story->parent == $parentID) continue;
             if($story->id == $parentID)
             {
