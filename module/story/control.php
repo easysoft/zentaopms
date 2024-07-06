@@ -1575,7 +1575,7 @@ class story extends control
 
         if($objectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $moduleID, $type, 'all', '', $hasParent);
+            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $moduleID, $type, 'all', 'story', $hasParent);
         }
         else
         {
