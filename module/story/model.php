@@ -704,7 +704,13 @@ class storyModel extends model
                 }
             }
 
-            $this->setStage($storyID);
+            /* 拆分时，如果父需求已经在已计划、研发立项阶段，则不需要通过拆分的子需求推算父需求的阶段。*/
+            if(!empty($story->parent))
+            {
+                $parentStage = $this->dao->select('stage')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch('stage');
+                if(!in_array($parentStage, array('planned', 'projected'))) $this->setStage($storyID);
+            }
+
             $this->executeHooks($storyID);
 
             $this->action->create('story', $storyID, 'Opened', '');
