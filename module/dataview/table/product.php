@@ -13,8 +13,8 @@ $schema->tables['program']   = 'zt_project';
 $schema->tables['line']      = 'zt_module';
 
 $schema->joins = array();
-$schema->joins['program']   = 'product.program = program.id';
-$schema->joins['line']      = 'product.line    = line.id';
+$schema->joins['program']   = '`product`.`program` = `program`.`id`';
+$schema->joins['line']      = '`product`.`line`    = `line`.`id`';
 
 $schema->fields = array();
 $schema->fields['id']          = array('type' => 'number', 'name' => $this->lang->product->id);

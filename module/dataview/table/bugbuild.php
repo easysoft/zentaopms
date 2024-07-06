@@ -24,14 +24,14 @@ $schema->tables['module']       = 'zt_module';
 $schema->tables['casemodule']   = 'zt_module';
 
 $schema->joins = array();
-$schema->joins['product']     = 'product.id = bug.product';
-$schema->joins['testtask']    = 'testtask.id = bug.testtask';
-$schema->joins['build']       = 'build.id = testtask.build';
-$schema->joins['execution']   = 'execution.id = build.execution';
-$schema->joins['project']     = 'project.id = build.project';
-$schema->joins['module']      = 'module.id = bug.module';
-$schema->joins['testcase']    = 'testcase.id = bug.case';
-$schema->joins['casemodule']  = 'casemodule.id = testcase.module';
+$schema->joins['product']     = '`product`.`id` = `bug`.`product`';
+$schema->joins['testtask']    = '`testtask`.`id` = `bug`.`testtask`';
+$schema->joins['build']       = '`build`.`id` = `testtask`.`build`';
+$schema->joins['execution']   = '`execution`.`id` = `build`.`execution`';
+$schema->joins['project']     = '`project`.`id` = `build`.`project`';
+$schema->joins['module']      = '`module`.`id` = `bug`.`module`';
+$schema->joins['testcase']    = '`testcase`.`id` = `bug`.`case`';
+$schema->joins['casemodule']  = '`casemodule`.`id` = `testcase`.`module`';
 
 $schema->fields = array();
 $schema->fields['id']           = array('type' => 'number',   'name' => $this->lang->bug->id);

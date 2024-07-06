@@ -21,9 +21,9 @@ $schema->tables['storymodule']  = 'zt_module';
 $schema->tables['storyspec']    = 'zt_storyspec';
 
 $schema->joins = array();
-$schema->joins['product']     = 'product.id = story.product';
-$schema->joins['storymodule'] = 'storymodule.id = story.module';
-$schema->joins['storyspec']   = 'storyspec.story = story.id';
+$schema->joins['product']     = '`product`.`id` = `story`.`product`';
+$schema->joins['storymodule'] = '`storymodule`.`id` = `story`.`module`';
+$schema->joins['storyspec']   = '`storyspec`.`story` = `story`.`id`';
 
 $schema->fields = array();
 $schema->fields['id']           = array('type' => 'number', 'name' => $this->lang->story->id);

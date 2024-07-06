@@ -15,7 +15,7 @@ $schema->tables['casestep'] = 'zt_casestep';
 $schema->tables['testcase'] = 'zt_case';
 
 $schema->joins = array();
-$schema->joins['testcase'] = 'testcase.id = casestep.`case`';
+$schema->joins['testcase'] = '`testcase`.`id` = `casestep`.`case`';
 
 $schema->fields = array();
 $schema->fields['case']    = array('type' => 'object', 'name' => $this->lang->testcase->common, 'object' => 'testcase', 'show' => 'testcase.title');

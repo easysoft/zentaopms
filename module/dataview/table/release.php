@@ -15,9 +15,9 @@ $schema->tables['project'] = 'zt_project';
 $schema->tables['build']   = 'zt_build';
 
 $schema->joins = array();
-$schema->joins['product'] = 'release.product = product.id';
-$schema->joins['project'] = 'release.project = project.id';
-$schema->joins['build']   = 'release.build   = build.id';
+$schema->joins['product'] = '`release`.`product` = `product`.`id`';
+$schema->joins['project'] = '`release`.`project` = `project`.`id`';
+$schema->joins['build']   = '`release`.`build`   = `build`.`id`';
 
 $schema->fields = array();
 $schema->fields['id']       = array('type' => 'number', 'name' => $this->lang->release->id);

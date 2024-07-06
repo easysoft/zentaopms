@@ -20,9 +20,9 @@ $schema->tables['execution'] = 'zt_project';
 $schema->tables['task']      = 'zt_task';
 
 $schema->joins = array();
-$schema->joins['execution'] = 'team.root = execution.id';
-$schema->joins['project']   = 'team.root = project.id';
-$schema->joins['task']      = 'team.root = task.id';
+$schema->joins['execution'] = '`team`.`root` = `execution`.`id`';
+$schema->joins['project']   = '`team`.`root` = `project`.`id`';
+$schema->joins['task']      = '`team`.`root` = `task`.`id`';
 
 $schema->fields = array();
 $schema->fields['root']     = array('type' => 'object', 'name' => $this->lang->execution->common,  'object' => 'execution', 'show' => 'execution.name');

@@ -12,7 +12,7 @@ $schema->tables['project']   = 'zt_project';
 $schema->tables['execution'] = 'zt_project';
 
 $schema->joins = array();
-$schema->joins['project'] = 'execution.project = project.id';
+$schema->joins['project'] = '`execution`.`project` = `project`.`id`';
 
 $schema->fields = array();
 $schema->fields['project']     = array('type' => 'object', 'name' => $this->lang->project->name, 'object' => 'project', 'show' => 'project.name');

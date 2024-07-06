@@ -17,10 +17,10 @@ $schema->tables['build']     = 'zt_build';
 $schema->tables['testtask']  = 'zt_testtask';
 
 $schema->joins = array();
-$schema->joins['product']   = 'product.id   = testtask.product';
-$schema->joins['project']   = 'project.id   = testtask.project';
-$schema->joins['execution'] = 'execution.id = testtask.execution';
-$schema->joins['build']     = 'build.id     = testtask.build';
+$schema->joins['product']   = '`product`.`id`   = `testtask`.`product`';
+$schema->joins['project']   = '`project`.`id`   = `testtask`.`project`';
+$schema->joins['execution'] = '`execution`.`id` = `testtask`.`execution`';
+$schema->joins['build']     = '`build`.`id`     = `testtask`.`build`';
 
 $schema->fields = array();
 $schema->fields['product']        = array('type' => 'object', 'name' => $this->lang->testtask->product, 'object' => 'product', 'show' => 'product.name');

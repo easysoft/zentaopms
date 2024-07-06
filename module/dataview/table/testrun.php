@@ -23,19 +23,19 @@ $schema->tables['build']      = 'zt_build';
 $schema->tables['product']    = 'zt_product';
 
 $schema->joins = array();
-$schema->joins['testcase']   = 'testcase.id   = testrun.case';
-$schema->joins['product']    = 'product.id    = testcase.product';
-$schema->joins['testtask']   = 'testtask.id   = testrun.task';
-$schema->joins['casemodule'] = 'casemodule.id = testcase.module';
-$schema->joins['project']    = 'project.id    = testtask.project';
-$schema->joins['execution']  = 'execution.id  = testtask.execution';
-$schema->joins['build']      = 'build.id      = testtask.build';
+$schema->joins['testcase']   = '`testcase`.`id`   = `testrun`.`case`';
+$schema->joins['product']    = '`product`.`id`    = `testcase`.`product`';
+$schema->joins['testtask']   = '`testtask`.`id`   = `testrun`.`task`';
+$schema->joins['casemodule'] = '`casemodule`.`id` = `testcase`.`module`';
+$schema->joins['project']    = '`project`.`id`    = `testtask`.`project`';
+$schema->joins['execution']  = '`execution`.`id`  = `testtask`.`execution`';
+$schema->joins['build']      = '`build`.`id`      = `testtask`.`build`';
 
 $schema->fields = array();
 $schema->fields['testtask']      = array('type' => 'object', 'name' => $this->lang->testtask->common, 'object' => 'testtask', 'show' => 'testtask.name');
 $schema->fields['testcase']      = array('type' => 'object', 'name' => $this->lang->testcase->common, 'object' => 'testcase', 'show' => 'testcase.title');
 $schema->fields['assignedTo']    = array('type' => 'user',   'name' => $this->lang->testcase->assignedTo);
-$schema->fields['project']       = array('type' => 'object', 'name' => $this->lang->project->common, 'object' => 'project', 'show' => 'execution.name');
+$schema->fields['project']       = array('type' => 'object', 'name' => $this->lang->project->common, 'object' => 'project', 'show' => 'project.name');
 $schema->fields['build']         = array('type' => 'object', 'name' => $this->lang->build->common, 'object' => 'build', 'show' => 'build.name');
 $schema->fields['execution']     = array('type' => 'object', 'name' => $this->lang->execution->common, 'object' => 'execution', 'show' => 'execution.name');
 $schema->fields['casemodule']    = array('type' => 'object', 'name' => $this->lang->tree->common, 'object' => 'casemodule', 'show' => 'casemodule.name');

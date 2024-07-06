@@ -18,10 +18,10 @@ $schema->tables['story']      = 'zt_story';
 $schema->tables['taskmodule'] = 'zt_module';
 
 $schema->joins = array();
-$schema->joins['execution']  = 'task.execution = execution.id';
-$schema->joins['project']    = 'task.project   = project.id';
-$schema->joins['story']      = 'task.story     = story.id';
-$schema->joins['taskmodule'] = 'task.module    = taskmodule.id';
+$schema->joins['execution']  = '`task`.`execution` = `execution`.`id`';
+$schema->joins['project']    = '`task`.`project`   = `project`.`id`';
+$schema->joins['story']      = '`task`.`story`     = `story`.`id`';
+$schema->joins['taskmodule'] = '`task`.`module`    = `taskmodule`.`id`';
 
 $schema->fields = array();
 $schema->fields['project']      = array('type' => 'object', 'name' => $this->lang->task->project, 'object' => 'project', 'show' => 'project.name');

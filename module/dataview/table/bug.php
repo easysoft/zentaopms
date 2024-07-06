@@ -19,12 +19,12 @@ $schema->tables['project']     = 'zt_project';
 $schema->tables['bugmodule']   = 'zt_module';
 
 $schema->joins = array();
-$schema->joins['product']     = 'product.id = bug.product';
-$schema->joins['story']       = 'story.id = bug.story';
-$schema->joins['productline'] = 'productline.id = product.line';
-$schema->joins['program']     = 'program.id = product.program';
-$schema->joins['project']     = 'project.id = bug.project';
-$schema->joins['bugmodule']   = 'bugmodule.id = bug.module';
+$schema->joins['product']     = '`product`.`id` = `bug`.`product`';
+$schema->joins['story']       = '`story`.`id` = `bug`.`story`';
+$schema->joins['productline'] = '`productline`.`id` = `product`.`line`';
+$schema->joins['program']     = '`program`.`id` = `product`.`program`';
+$schema->joins['project']     = '`project`.`id` = `bug`.`project`';
+$schema->joins['bugmodule']   = '`bugmodule`.`id` = `bug`.`module`';
 
 $schema->fields = array();
 $schema->fields['id']           = array('type' => 'number', 'name' => $this->lang->bug->id);

@@ -11,7 +11,7 @@ $schema->tables['productplan'] = 'zt_productplan';
 $schema->tables['product']     = 'zt_product';
 
 $schema->joins = array();
-$schema->joins['product'] = 'productplan.product = product.id';
+$schema->joins['product'] = '`productplan`.`product` = `product`.`id`';
 
 $schema->fields = array();
 $schema->fields['product'] = array('type' => 'object', 'name' => $this->lang->productplan->product, 'object' => 'product', 'show' => 'product.name');

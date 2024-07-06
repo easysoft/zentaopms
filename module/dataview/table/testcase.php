@@ -18,10 +18,10 @@ $schema->tables['story']      = 'zt_story';
 $schema->tables['casestep']   = 'zt_casestep';
 
 $schema->joins = array();
-$schema->joins['product']    = 'product.id = testcase.product';
-$schema->joins['casemodule'] = 'casemodule.id = testcase.module';
-$schema->joins['story']      = 'story.id = testcase.story';
-$schema->joins['casestep']   = 'casestep.case = testcase.id';
+$schema->joins['product']    = '`product`.`id` = `testcase`.`product`';
+$schema->joins['casemodule'] = '`casemodule`.`id` = `testcase`.`module`';
+$schema->joins['story']      = '`story`.`id` = `testcase`.`story`';
+$schema->joins['casestep']   = '`casestep`.`case` = `testcase`.`id`';
 
 $schema->fields = array();
 $schema->fields['id']           = array('type' => 'number', 'name' => $this->lang->testcase->id);
