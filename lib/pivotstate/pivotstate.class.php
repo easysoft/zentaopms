@@ -259,12 +259,12 @@ class pivotState
     public $addQueryFilter = array();
 
     /**
-     * step2 finish with Sql
+     * step2 finish with Sql, used to judge if step1 sql changed
      *
      * @var string
      * @access public
      */
-    public $step2FinishSql = ''
+    public $step2FinishSql = '';
 
     /**
      * __construct method.
@@ -304,6 +304,7 @@ class pivotState
         $this->fieldSettings = array_merge_recursive($this->fields, $this->langs);
         $this->setPager();
         $this->formatSettingColumns();
+        $this->setStep2FinishSql();
     }
 
     /**
@@ -507,8 +508,21 @@ class pivotState
      * @access public
      * @return void
      */
+    public function isSummaryNotUse()
+    {
+        return (isset($this->settings['summary']) && $this->settings['summary'] == 'notuse');
+    }
+
+    /**
+     * Complete settings.
+     *
+     * @access public
+     * @return void
+     */
     public function completeSettings()
     {
+        if($this->isSummaryNotUse()) return;
+
         $settings = $this->settings;
         if(!isset($settings['summary']) || $settings['summary'] !== 'notuse') $this->settings['summary'] = 'use';
         if(!isset($settings['group1']))  $this->settings['group1'] = '';
@@ -918,6 +932,8 @@ class pivotState
      */
     public function checkSettings()
     {
+        if($this->isSummaryNotUse()) array();
+
         $errors = array();
         foreach($this->settings as $key => $value)
         {
