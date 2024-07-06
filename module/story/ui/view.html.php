@@ -195,6 +195,12 @@ foreach($actions as $key => $action)
         continue;
     }
 
+    if(isset($action['key']) && $action['key'] == 'testcase' && ($story->type != 'story' || $story->isParent == '1'))
+    {
+        unset($actions[$key]);
+        continue;
+    }
+
     if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
     {
         unset($actions[$key]);

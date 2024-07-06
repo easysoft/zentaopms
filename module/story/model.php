@@ -2792,6 +2792,14 @@ class storyModel extends model
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll('id');
 
+            $storyIdList = array_keys($stories);
+            $casePairs   = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            $taskPairs   = $this->dao->select('story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            foreach($stories as $story)
+            {
+                if(isset($casePairs[$story->id]) || isset($taskPairs[$story->id])) unset($stories[$story->id]);
+            }
+
             $parents = $requirements + $stories;
             return $this->addGradeLabel($parents);
         }
@@ -3659,7 +3667,7 @@ class storyModel extends model
         if($action == 'activate') return $story->status == 'closed';
         if($action == 'assignto') return $story->status != 'closed';
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
-        if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
+        if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->isParent == '0' && $story->type == 'story';
 
         if($action == 'createtask')
         {
