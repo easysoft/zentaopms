@@ -925,7 +925,7 @@ class testcaseZen extends testcase
         if(!isset($stories[$case->story]))
         {
             $story = $this->story->fetchByID($case->story);
-            $stories = $stories + array($story->id => $story->id . ':' . $story->title);
+            if($story) $stories = $stories + array($story->id => $story->id . ':' . $story->title);
         }
 
         $this->view->stories = $this->story->addGradeLabel($stories);
