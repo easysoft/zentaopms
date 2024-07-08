@@ -99,6 +99,10 @@ class install extends control
         $this->view->dataRootResult = $this->installZen->checkDataRoot();
         $this->view->iniInfo        = $this->install->getIniInfo();
 
+        $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->updateDownloadingTagFile('extension', 'check');
+        $this->view->duckdbResult = $checkDuckdb == 'ok' && $checkExtension == 'ok' ? 'ok' : 'fail';
+
         $checkSession = ini_get('session.save_handler') == 'files';
         $this->view->sessionResult = 'ok';
         $this->view->checkSession  = $checkSession;
@@ -621,5 +625,16 @@ class install extends control
 
         $result = $this->loadModel('cne')->tryAllocate($resources);
         return $this->send(array('result' => 'success', 'message' => '', 'code' => $result->code));
+    }
+
+    public function installDuckdb($download = false)
+    {
+        $this->updateDownloadingTagFile('file', 'remove');
+        $this->updateDownloadingTagFile('extension', 'remove');
+
+        $this->view->title           = $lang->install->installDuckdb;
+        $this->view->duckdbStatus    = 'loading';
+        $this->view->extensionStatus = 'loading';
+        $this->display();
     }
 }
