@@ -4229,7 +4229,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-select year(t2.closeddate) as year, t1.id, t1.name as product, round(sum(t2.estimate), 1) as story
+select year(cast(t2.closeddate as date)) as year, t1.id, t1.name as product, round(sum(cast(t2.estimate as float)), 1) as story
 from zt_product as t1
 left join zt_story as t2 on t1.id = t2.product and t2.deleted = '0' and t2.closedreason = 'done'
 where t1.deleted = '0' and t1.shadow = '0' and t1.vision = 'rnd' and t2.id is not null
@@ -4337,7 +4337,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '44',
     'sql'       => <<<EOT
-select year(t2.closeddate) as year, t1.id, t1.name as product, count(1) as bug
+select year(cast(t2.closeddate as date)) as year, t1.id, t1.name as product, count(1) as bug
 from zt_product as t1
 left join zt_bug as t2 on t1.id = t2.product and t2.deleted = '0' and t2.resolution = 'fixed' and t2.status = 'closed'
 where t1.deleted = '0'
