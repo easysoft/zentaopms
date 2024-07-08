@@ -638,11 +638,33 @@ class install extends control
         $this->display();
     }
 
+    /**
+     * 安装DuckDB引擎。
+     * AJAX: Install duckdb.
+     *
+     * @access public
+     * @return void
+     */
     public function ajaxInstallDuckdb()
     {
         ignore_user_abort(true);
         set_time_limit(0);
         session_write_close();
         $this->installZen->downloadDuckdb();
+    }
+
+    /**
+     * 检查duckdb文件是否下载完成。
+     * AJAX: Check duckdb.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckDuckdb()
+    {
+        $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->updateDownloadingTagFile('extension', 'check');
+
+        echo(json_encode(array('duckdb' => $checkDuckdb, 'extension' => $checkExtension)));
     }
 }
