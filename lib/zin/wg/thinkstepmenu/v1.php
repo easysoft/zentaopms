@@ -59,6 +59,7 @@ class thinkStepMenu extends wg
                 'data-id'     => $setting->id,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
+                'data-order'  => $setting->order,
                 'data-level'  => $setting->grade,
                 'selected'    => $setting->id == $activeKey,
                 'disabled'    => $unClickable,
