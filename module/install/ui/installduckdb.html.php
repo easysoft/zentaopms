@@ -37,3 +37,17 @@ $extension = array
     'ok'      => $lang->install->installedExtension,
     'fail'    => $lang->install->installedFail,
 );
+
+$fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass, $duckdb, $extension)
+{
+    return p
+    (
+        setClass("$type-$stus" . ($show ? '' : ' hidden')),
+        icon
+        (
+            setClass($iconClass[$stus]),
+            $icons[$stus]
+        ),
+        $$type[$stus]
+    );
+};
