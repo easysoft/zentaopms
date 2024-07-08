@@ -627,7 +627,15 @@ class install extends control
         return $this->send(array('result' => 'success', 'message' => '', 'code' => $result->code));
     }
 
-    public function installDuckdb($download = false)
+    /**
+     * 安装DuckDB引擎界面。
+     * Install duckdb.
+     *
+     * @param  int    $download
+     * @access public
+     * @return void
+     */
+    public function installDuckdb()
     {
         $this->updateDownloadingTagFile('file', 'remove');
         $this->updateDownloadingTagFile('extension', 'remove');
