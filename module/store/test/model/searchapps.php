@@ -26,7 +26,7 @@ su('admin');
 
 $orderBy    = array('', 'update_time', 'create_time');
 $keyword    = array('', '禅道');
-$categories = array();
+$categories = 0;
 $page       = array(1, 2);
 $pageSize   = array(5, 10);
 

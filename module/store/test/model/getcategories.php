@@ -8,7 +8,7 @@ title=测试 storeModel->getCategories().
 timeout=0
 cid=1
 
-- 测试获取类别列表 @数据库 项目管理 企业IM 持续集成 企业管理 DevOps 代码检查 文档系统 网盘服务 安全 搜索引擎 网站分析 内容管理
+- 测试获取类别列表 @数据库 项目管理 企业IM 持续集成 企业管理 DevOps 代码检查 文档系统 网盘服务 安全 搜索引擎 网站分析 内容管理 人工智能
 
 */
 
@@ -19,4 +19,4 @@ zenData('user')->gen(5);
 su('admin');
 
 $store = new storeTest();
-r($store->getCategoriesTest()) && p() && e('数据库 项目管理 企业IM 持续集成 企业管理 DevOps 代码检查 文档系统 网盘服务 安全 搜索引擎 网站分析 内容管理'); //测试获取类别列表
+r($store->getCategoriesTest()) && p() && e('数据库 项目管理 企业IM 持续集成 企业管理 DevOps 代码检查 文档系统 网盘服务 安全 搜索引擎 网站分析 内容管理 人工智能'); //测试获取类别列表

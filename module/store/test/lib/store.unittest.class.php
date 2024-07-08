@@ -42,13 +42,13 @@ class storeTest
      *
      * @param  string $orderBy
      * @param  string $keyword
-     * @param  array  $categories
+     * @param  int    $categories
      * @param  int    $page
      * @param  int    $pageSize
      * @access public
      * @return array|string
      */
-    public function searchAppsTest(string $orderBy = '', string $keyword = '', array $categories = array(), int $page = 1, int $pageSize = 20): array|string|int
+    public function searchAppsTest(string $orderBy = '', string $keyword = '', int $categories = 0, int $page = 1, int $pageSize = 20): array|string|int
     {
          $searchResult = $this->searchApps($orderBy, $keyword, $categories, $page, $pageSize);
 
