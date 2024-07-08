@@ -173,7 +173,7 @@ div
                         (
                             $lang->instance->setting,
                             setClass('btn ghost'),
-                            set::disabled($instance->status != 'running'),
+                            set::disabled(in_array($instance->status, array('installing', 'initializing', 'uninstalling', 'destroying'))),
                             set::id('setting'),
                             set::icon('backend'),
                             setData('toggle', 'modal'),
