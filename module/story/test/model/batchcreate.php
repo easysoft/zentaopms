@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->batchCreate();
+timeout=0
 cid=0
 
 - 插入两条软件需求，判断返回的需求总量 @3
@@ -14,7 +15,7 @@ cid=0
  - 第1条的pri属性 @1
  - 第1条的spec属性 @测试需求描述1
  - 第1条的estimate属性 @1
- - 第1条的stage属性 @planned
+ - 第1条的stage属性 @wait
  - 第1条的module属性 @2221
 - 插入两条用户需求，判断返回的title、type等信息
  - 第6条的title属性 @测试需求3
@@ -61,5 +62,5 @@ $result2 = $story->batchCreateTest(2, 0, 'requirement', $stories);
 
 r(count($result1)) && p() && e('3'); // 插入两条软件需求，判断返回的需求总量
 r(count($result2)) && p() && e('3'); // 插入两条用户需求，判断返回的需求总量
-r($result1) && p('1:title,type,pri,spec,estimate,stage,module') && e('测试需求1,story,1,测试需求描述1,1,planned,2221');    // 插入两条软件需求，判断返回的title、type等信息
+r($result1) && p('1:title,type,pri,spec,estimate,stage,module') && e('测试需求1,story,1,测试需求描述1,1,wait,2221');       // 插入两条软件需求，判断返回的title、type等信息
 r($result2) && p('6:title,type,pri,spec,estimate,stage,module') && e('测试需求3,requirement,3,测试需求描述3,3,wait,2223'); // 插入两条用户需求，判断返回的title、type等信息
