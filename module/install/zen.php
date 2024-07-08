@@ -266,6 +266,20 @@ class installZen extends install
             return 'ok';
         }
 
+        if($action == 'check')
+        {
+            $tagFileExists = file_exists($tagFile);
+            $fileExists    = file_exists($file);
+
+            if($fileExists) return 'ok';
+            if($tagFileExists) return 'loading';
+            return 'fail';
+        }
+        if($action == 'remove')
+        {
+            if(!file_exists($tagFile)) return 'fail';
+            unlink($tagFile);
+        }
         return 'ok';
     }
 
