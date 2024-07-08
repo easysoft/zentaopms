@@ -325,7 +325,16 @@ class installZen extends install
         return 'ok';
     }
 
-    protected function unzipFile($path, $file): bool
+    /**
+     * 解压文件。
+     * Unzip file.
+     *
+     * @param  string    $path
+     * @param  string    $file
+     * @access protected
+     * @return bool
+     */
+    protected function unzipFile(string $path, string $file): bool
     {
         /* 解压文件到指定目录。 */
         $this->app->loadClass('pclzip', true);
