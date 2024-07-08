@@ -119,7 +119,7 @@ class duckdb
     public function setBinPath()
     {
         $duckdbBin  = $this->getBinConfig();
-        $sourcePath = $this->baseRoot . 'bin' . DS . 'duckdb' . DS;
+        $sourcePath = $this->tmpRoot . 'duckdb' . DS;
         $zboxPath   = $duckdbBin['path'];
 
         $file = $duckdbBin['file'];
