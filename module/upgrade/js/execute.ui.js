@@ -43,3 +43,22 @@ function ajaxInstallDuckdb()
     let url = $.createLink('bi', 'ajaxInstallDuckdb');
     $.get(url);
 }
+
+function ajaxCheckDuckdb()
+{
+    let url = $.createLink('bi', 'ajaxCheckDuckdb');
+    $.get(url, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.duckdb == 'loading' || resp.extension == 'loading')
+        {
+            setTimeout(() => {ajaxCheckDuckdb()}, 500);
+        }
+
+        $('#installDuckdb p').addClass('hidden');
+        $('#installDuckdb p.duckdb-' + resp.duckdb).removeClass('hidden');
+        $('#installDuckdb p.extension-' + resp.extension).removeClass('hidden');
+
+        if(resp.duckdb == 'fail' || resp.extension == 'fail') $('#installDuckdb .help').removeClass('hidden');
+    });
+}
