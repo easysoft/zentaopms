@@ -11,10 +11,20 @@ $config->bi->default->status  = json_decode('{"lock":false,"hide":false}');
 $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestInterval":null,"requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
 
+$config->bi->cdnUrl     = 'https://dl.zentao.net/duckdb/';
+$config->bi->duckdbHelp = 'https://www.zentao.net/book/zentaopms/1313.html';
+
 $config->bi->duckdbBin = array();
-$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/', 'file' => 'duckdb.exe', 'extension' => 'sync2parquet.exe');
-$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb', 'extension' => 'sync2parquet', 'fileUrl' => 'https://dl.zentao.net/duckdb/linux/amd64/duckdb.zip', 'extensionUrl' => 'https://dl.zentao.net/duckdb/linux/amd64/sync2parquet');
-$config->bi->duckdbHelp         = 'https://www.zentao.net/book/zentaopms/1313.html';
+$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/',   'file' => 'duckdb.exe', 'fileUrl' => 'win/duckdb.zip');
+$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb',     'fileUrl' => 'linux/amd64/duckdb.zip');
+
+$config->bi->duckdbExt = array();
+$config->bi->duckdbExt['dm']    = array('win' => 'sync2parquet.exe',               'linux' => 'sync2parquet');
+$config->bi->duckdbExt['mysql'] = array('win' => 'mysql_scanner.duckdb_extension', 'linux' => 'mysql_scanner.duckdb_extension');
+
+$config->bi->duckdbExtUrl = array();
+$config->bi->duckdbExtUrl['dm']    = array('win' => 'win/sync2parquet.exe',               'linux' => 'linux/amd64/sync2parquet');
+$config->bi->duckdbExtUrl['mysql'] = array('win' => 'win/mysql_scanner.duckdb_extension.zip', 'linux' => 'linux/amd64/mysql_scanner.duckdb_extension.zip');
 
 $charts = array();
 $charts['32'] = array("root" => 1, "name" => "产品", "grade" => 1);
@@ -92,7 +102,9 @@ $pivots['100'] = array("root" => 3, "name" => "Bug", "grade" => 2);
 $config->bi->builtin->modules->charts = $charts;
 $config->bi->builtin->modules->pivots = $pivots;
 
-$config->bi->duckSQLTemp = '{EXTENSIONPATH} --driver="{DRIVER}" --db="host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}" --copy="{COPYSQL}"';
+$config->bi->duckSQLTemp = array();
+$config->bi->duckSQLTemp['mysql'] = "LOAD '{EXTENSIONPATH}';ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);USE mysqldb;{COPYSQL}";
+$config->bi->duckSQLTemp['dm']    = '{EXTENSIONPATH} --driver="{DRIVER}" --db="host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}" --copy="{COPYSQL}"';
 
 $config->bi->drivers = array('mysql', 'duckdb');
 
