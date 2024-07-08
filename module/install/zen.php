@@ -448,7 +448,6 @@ class installZen extends install
         return $return;
     }
 
-
     /**
      * DevOps平台版将配置信息写入my.php。
      * Save config file when inQuickon is true.

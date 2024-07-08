@@ -1,7 +1,7 @@
 $(document).ready(function()
 {
-  ajaxInstallDuckdb();
-  setTimeout(() => {ajaxCheckDuckdb()}, 1000);
+    ajaxInstallDuckdb();
+    setTimeout(() => {ajaxCheckDuckdb()}, 1000);
 });
 
 /**
@@ -13,8 +13,8 @@ $(document).ready(function()
  */
 function ajaxInstallDuckdb()
 {
-  let url = $.createLink('install', 'ajaxInstallDuckdb');
-  $.get(url);
+    let url = $.createLink('install', 'ajaxInstallDuckdb');
+    $.get(url);
 }
 
 /**
@@ -26,22 +26,22 @@ function ajaxInstallDuckdb()
  */
 function ajaxCheckDuckdb()
 {
-  let url = $.createLink('install', 'ajaxCheckDuckdb');
-  $.get(url, function(resp)
-  {
-    resp = JSON.parse(resp);
-    if(resp.duckdb == 'loading' || resp.extension == 'loading')
+    let url = $.createLink('install', 'ajaxCheckDuckdb');
+    $.get(url, function(resp)
     {
-      setTimeout(() => {ajaxCheckDuckdb()}, 500);
-    }
+        resp = JSON.parse(resp);
+        if(resp.duckdb == 'loading' || resp.extension == 'loading')
+        {
+            setTimeout(() => {ajaxCheckDuckdb()}, 500);
+        }
 
-    $('#installDuckdb p').addClass('hidden');
-    $('#installDuckdb p.duckdb-' + resp.duckdb).removeClass('hidden');
-    $('#installDuckdb p.extension-' + resp.extension).removeClass('hidden');
+        $('#installDuckdb p').addClass('hidden');
+        $('#installDuckdb p.duckdb-' + resp.duckdb).removeClass('hidden');
+        $('#installDuckdb p.extension-' + resp.extension).removeClass('hidden');
 
-    if(resp.duckdb == 'fail' || resp.extension == 'fail')
-    {
-      $('#installDuckdb .help').removeClass('hidden');
-    }
-  });
+        if(resp.duckdb == 'fail' || resp.extension == 'fail')
+        {
+            $('#installDuckdb .help').removeClass('hidden');
+        }
+    });
 }
