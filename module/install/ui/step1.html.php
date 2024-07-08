@@ -74,6 +74,20 @@ $checkTrs[] = h::tr
     (
         setClass('duckdbResult text-white' . ($duckdbResult == 'ok' ? ' bg-success' : ' bg-danger')),
         $lang->install->{$duckdbResult}
+    ),
+    h::td
+    (
+        setClass('text-left'),
+        $duckdbResult == 'fail' ? modalTrigger
+        (
+            btn
+            (
+                set::size('sm'),
+                set::type('primary'),
+                $lang->install->installDuckdb
+            ),
+            set::url(createLink('install', 'installDuckdb')),
+        ) : null
     )
 );
 
