@@ -598,11 +598,6 @@ class pivotState
         $keys     = array_keys($settings);
         foreach($keys as $key) if(strpos($key, 'group') === 0) $groups[$key] = $settings[$key];
 
-        if(count($groups) > 1)
-        {
-            foreach($groups as $key => $group) if(empty($group)) unset($groups[$key]);
-        }
-
         return $groups;
     }
 

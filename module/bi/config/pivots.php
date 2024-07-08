@@ -1657,7 +1657,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
