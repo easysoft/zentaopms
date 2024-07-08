@@ -249,6 +249,23 @@ class installZen extends install
         return is_dir($dataRoot) && is_writable($dataRoot) ? 'ok' : 'fail';
     }
 
+    protected function downloadDuckdb(): string
+    {
+        $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->updateDownloadingTagFile('extension', 'check');
+
+        if($checkDuckdb == 'loading' || $checkExtension == 'loading') return 'loading';
+
+        $this->loadModel('bi');
+        $binRoot   = $this->app->getTmpRoot() . 'duckdb' . DS;
+        $duckdbBin = $this->bi->getDuckdbBinConfig();
+
+        $duckdbUrl    = $duckdbBin['fileUrl'];
+        $extensionUrl = $duckdbBin['extensionUrl'];
+
+        return $downloadDuckdb && $downloadExtension ? 'ok' : 'fail';
+    }
+
     protected function updateDownloadingTagFile($type = 'file', $action = 'create'): string
     {
         $this->loadModel('bi');
