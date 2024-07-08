@@ -310,11 +310,8 @@ class installZen extends install
 
         if($action == 'check')
         {
-            $tagFileExists = file_exists($tagFile);
-            $fileExists    = file_exists($file);
-
-            if($fileExists) return 'ok';
-            if($tagFileExists) return 'loading';
+            if(file_exists($file)) return 'ok';
+            if(file_exists($tagFile)) return 'loading';
             return 'fail';
         }
         if($action == 'remove')
@@ -356,6 +353,8 @@ class installZen extends install
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         $fileContents = curl_exec($ch);
 
         if (curl_errno($ch))
