@@ -328,15 +328,19 @@ class installZen extends install
      *
      * @param  string    $path
      * @param  string    $file
+     * @param  string    $extractFile
      * @access protected
      * @return bool
      */
-    protected function unzipFile(string $path, string $file): bool
+    protected function unzipFile(string $path, string $file, string $extractFile): bool
     {
         $this->app->loadClass('pclzip', true);
         $zip = new pclzip($file);
 
-        return $zip->extract(PCLZIP_OPT_PATH, $path) === 0;
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array($extractFile);
+        return $zip->extract(PCLZIP_OPT_PATH, $path, PCLZIP_OPT_BY_NAME, $extractFiles) === 0;
     }
 
     /**
@@ -384,7 +388,7 @@ class installZen extends install
 
         if(pathinfo($filename, PATHINFO_EXTENSION) === 'zip')
         {
-            $this->unzipFile($savePath, $filename);
+            $this->unzipFile($savePath, $filename, $finalFile);
             unlink($filename);
         }
 
