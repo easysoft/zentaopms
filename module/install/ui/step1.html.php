@@ -65,6 +65,18 @@ foreach($dirItems as $dirItem)
     );
 }
 
+/* Check duckdb bin. */
+$checkTrs[] = h::tr
+(
+    h::th($lang->install->duckdb),
+    h::td($duckdbResult == 'ok' ? $lang->install->loaded : $lang->install->unloaded),
+    h::td
+    (
+        setClass('duckdbResult text-white' . ($duckdbResult == 'ok' ? ' bg-success' : ' bg-danger')),
+        $lang->install->{$duckdbResult}
+    )
+);
+
 div
 (
     setID('main'),
@@ -140,7 +152,7 @@ div
                 && $tmpRootResult == 'ok' && $dataRootResult == 'ok' && $sessionResult  == 'ok'
                 && $jsonResult    == 'ok' && $opensslResult  == 'ok' && $mbstringResult == 'ok'
                 && $zlibResult    == 'ok' && $curlResult     == 'ok' && $filterResult   == 'ok'
-                && $iconvResult   == 'ok' ? btn
+                && $iconvResult   == 'ok' && $duckdbResult   == 'ok' ? btn
                 (
                     setClass('px-6 mx-4'),
                     set::url(inlink('step2')),
