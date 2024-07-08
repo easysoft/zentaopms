@@ -1040,14 +1040,20 @@ class pivotState
     {
         if(!$this->isQueryFilter()) return;
 
-        $keepFilters = array();
-        foreach($this->filters as $filter)
+        $keepFilters      = array();
+        $keepPivotFilters = array();
+        foreach($this->filters as $index => $filter)
         {
             $field = $filter['field'];
-            if(strpos($this->sql, "\$$field") !== false) $keepFilters[] = $filter;
+            if(strpos($this->sql, "\$$field") !== false)
+            {
+                $keepFilters[]      = $filter;
+                $keepPivotFilters[] = $this->pivotFilters[0][$index];
+            }
         }
 
-        $this->filters = $keepFilters;
+        $this->filters      = $keepFilters;
+        $this->pivotFilters[0] = $keepPivotFilters;
     }
 
     /**

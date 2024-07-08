@@ -23,7 +23,7 @@ $config->bi->duckdbExt['dm']    = array('win' => 'sync2parquet.exe',            
 $config->bi->duckdbExt['mysql'] = array('win' => 'mysql_scanner.duckdb_extension', 'linux' => 'mysql_scanner.duckdb_extension');
 
 $config->bi->duckdbExtUrl = array();
-$config->bi->duckdbExtUrl['dm']    = array('win' => 'win/sync2parquet.exe',               'linux' => 'linux/amd64/sync2parquet');
+$config->bi->duckdbExtUrl['dm']    = array('win' => 'win/sync2parquet.exe',                   'linux' => 'linux/amd64/sync2parquet');
 $config->bi->duckdbExtUrl['mysql'] = array('win' => 'win/mysql_scanner.duckdb_extension.zip', 'linux' => 'linux/amd64/mysql_scanner.duckdb_extension.zip');
 
 $charts = array();
