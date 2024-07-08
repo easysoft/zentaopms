@@ -99,8 +99,9 @@ class install extends control
         $this->view->dataRootResult = $this->installZen->checkDataRoot();
         $this->view->iniInfo        = $this->install->getIniInfo();
 
-        $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->updateDownloadingTagFile('extension', 'check');
+        $this->loadModel('bi');
+        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
         $this->view->duckdbResult = $checkDuckdb == 'ok' && $checkExtension == 'ok' ? 'ok' : 'fail';
 
         $checkSession = ini_get('session.save_handler') == 'files';
@@ -637,8 +638,9 @@ class install extends control
      */
     public function installDuckdb()
     {
-        $this->updateDownloadingTagFile('file', 'remove');
-        $this->updateDownloadingTagFile('extension', 'remove');
+        $this->loadModel('bi');
+        $this->bi->updateDownloadingTagFile('file', 'remove');
+        $this->bi->updateDownloadingTagFile('extension', 'remove');
 
         $this->view->title           = $this->lang->install->installDuckdb;
         $this->view->duckdbStatus    = 'loading';
@@ -658,7 +660,7 @@ class install extends control
         ignore_user_abort(true);
         set_time_limit(0);
         session_write_close();
-        $this->installZen->downloadDuckdb();
+        $this->loadModel('bi')->downloadDuckdb();
     }
 
     /**
@@ -670,8 +672,9 @@ class install extends control
      */
     public function ajaxCheckDuckdb()
     {
-        $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->updateDownloadingTagFile('extension', 'check');
+        $this->loadModel('bi');
+        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
 
         echo(json_encode(array('duckdb' => $checkDuckdb, 'extension' => $checkExtension)));
     }

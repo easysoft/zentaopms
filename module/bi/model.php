@@ -1367,79 +1367,148 @@ class biModel extends model
     }
 
     /**
-     * Query sql.
+     * 下载duckdb引擎。
+     * Download duckdb.
      *
-     * @param  string    $sql
-     * @param  int    $recPerPage
-     * @param  int    $pageID
      * @access public
-     * @return object
+     * @return string
      */
-    /*
-    public function querySql($sql, $recPerPage = 100, $pageID = 1)
+    public function downloadDuckdb(): string
     {
-        $queryResult = new stdclass();
-        $queryResult->error    = false;
-        $queryResult->errorMsg = '';
-        $queryResult->cols     = array();
-        $queryResult->rows     = array();
-        $queryResult->sql      = '';
-        $queryResult->fieldSettings = array();
+        $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->updateDownloadingTagFile('extension', 'check');
 
-        $sql = $this->processVars($sql);
+        if($checkDuckdb == 'loading' || $checkExtension == 'loading') return 'loading';
 
-        $statement = $this->sql2Statement($sql);
-        if(is_string($statement))
-        {
-            $queryResult->error    = true;
-            $queryResult->errorMsg = $statement;
+        $this->loadModel('bi');
+        $binRoot   = $this->app->getTmpRoot() . 'duckdb' . DS;
+        $duckdbBin = $this->getDuckdbBinConfig();
 
-            return $queryResult;
-        }
+        $duckdbUrl    = $duckdbBin['fileUrl'];
+        $extensionUrl = $duckdbBin['extensionUrl'];
 
-        $checked = $this->validateSql($sql);
-        if($checked !== true)
-        {
-            $queryResult->error    = true;
-            $queryResult->errorMsg = $checked;
+        $this->updateDownloadingTagFile('file', 'create');
+        $this->updateDownloadingTagFile('extension', 'create');
 
-            return $queryResult;
-        }
+        $downloadDuckdb    = $this->downloadFile($duckdbUrl, $binRoot, $duckdbBin['file']);
+        $downloadExtension = $this->downloadFile($extensionUrl, $binRoot, $duckdbBin['extension']);
 
-        $limitSql = $this->prepareSqlPager($statement, $recPerPage, $pageID);
+        $this->updateDownloadingTagFile('file', 'remove');
+        $this->updateDownloadingTagFile('extension', 'remove');
 
-        try
-        {
-            $queryResult->rows      = $this->dbh->query($limitSql)->fetchAll();
-            $queryResult->rowsCount = $this->dbh->query("SELECT FOUND_ROWS() as count")->fetch()->count;
-        }
-        catch(Exception $e)
-        {
-            $queryResult->error = true;
-            $queryResult->errorMsg = $e;
-
-            return $queryResult;
-        }
-
-        $columns    = $this->prepareColumns($limitSql, $statement);
-        $clientLang = $this->app->getClientLang();
-
-        $fieldSettings = array();
-        foreach($columns as $field => $settings)
-        {
-            $title = $settings['name'];
-
-            if(!isset($settings[$clientLang]) || empty($settings[$clientLang])) $settings[$clientLang] = $title;
-            $fieldSettings[$field] = $settings;
-        }
-
-        $queryResult->cols          = $this->buildQueryResultTableColumns($fieldSettings);
-        $queryResult->fieldSettings = $fieldSettings;
-        $queryResult->sql           = $limitSql;
-
-        return $queryResult;
+        return $downloadDuckdb && $downloadExtension ? 'ok' : 'fail';
     }
-    */
+
+    /**
+     * 更新tab文件下载状态。
+     * Update downloading tab file status.
+     *
+     * @param  string $type
+     * @param  string $action
+     * @access public
+     * @return string
+     */
+    public function updateDownloadingTagFile(string $type = 'file', string $action = 'create'): string
+    {
+        $downloading = '.downloading';
+        $binRoot     = $this->app->getTmpRoot() . 'duckdb' . DS;
+        $duckdbBin   = $this->getDuckdbBinConfig();
+        $file        = $binRoot . $duckdbBin[$type];
+        $tagFile     = $file . $downloading;
+
+        if($action == 'create')
+        {
+            if(file_exists($tagFile)) return 'fail';
+            file_put_contents($tagFile, 'Downloading...');
+            return 'ok';
+        }
+
+        if($action == 'check')
+        {
+            if(file_exists($file)) return 'ok';
+            if(file_exists($tagFile)) return 'loading';
+            return 'fail';
+        }
+        if($action == 'remove')
+        {
+            if(!file_exists($tagFile)) return 'fail';
+            unlink($tagFile);
+        }
+        return 'ok';
+    }
+
+    /**
+     * 解压文件。
+     * Unzip file.
+     *
+     * @param  string    $path
+     * @param  string    $file
+     * @param  string    $extractFile
+     * @access public
+     * @return bool
+     */
+    public function unzipFile(string $path, string $file, string $extractFile): bool
+    {
+        $this->app->loadClass('pclzip', true);
+        $zip = new pclzip($file);
+
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array($extractFile);
+        return $zip->extract(PCLZIP_OPT_PATH, $path, PCLZIP_OPT_BY_NAME, $extractFiles) === 0;
+    }
+
+    /**
+     * 下载文件。
+     * Download file.
+     *
+     * @param  string    $url
+     * @param  string    $savePath
+     * @param  string    $finalFile
+     * @access public
+     * @return bool
+     */
+    public function downloadFile(string $url, string $savePath, string $finalFile): bool
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $fileContents = curl_exec($ch);
+
+        if (curl_errno($ch))
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        $result = json_decode($fileContents, true);
+        if(isset($result['error']))
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        $filename = basename($url);
+        $filename = $savePath . $filename;
+        $result   = file_put_contents($filename, $fileContents);
+        if($result === false)
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        curl_close($ch);
+        chmod($filename, 0755);
+
+        if(pathinfo($filename, PATHINFO_EXTENSION) === 'zip')
+        {
+            $this->unzipFile($savePath, $filename, $finalFile);
+            unlink($filename);
+        }
+
+        return chmod($savePath . $finalFile, 0755);
+    }
 
     /**
      * Encode json.
