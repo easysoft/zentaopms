@@ -59,7 +59,7 @@ class pivotModel extends model
             $pivot->filters = array();
         }
 
-        $this->getPivotDrills($pivot);
+        //$this->getPivotDrills($pivot);
 
         return $this->processPivot($pivot);
     }
