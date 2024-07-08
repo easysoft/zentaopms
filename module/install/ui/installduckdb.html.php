@@ -16,3 +16,17 @@ $icons = array
     'ok'      => 'check-circle',
     'fail'    => 'close'
 );
+
+$iconClass = array
+(
+    'loading' => 'spin',
+    'ok'      => 'text-success',
+    'fail'    => 'text-danger'
+);
+
+$duckdb = array
+(
+    'loading' => $lang->install->installingDuckdb,
+    'ok'      => $lang->install->installedDuckdb,
+    'fail'    => $lang->install->installedFail,
+);
