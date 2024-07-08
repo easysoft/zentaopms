@@ -8997,10 +8997,15 @@ class upgradeModel extends model
     public function addERName()
     {
         /* If the mode is light, disable the epic story. */
-        /* 如果是轻量模式，禁用业务需求。 */
+        /* 如果是轻量模式，禁用业务需求和用户需求。 */
         if(zget($this->config->global, 'mode', 'light') == 'light')
         {
             $this->loadModel('setting')->setItem('system.custom.enableER', '0');
+
+            $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&key=closedFeatures');
+            if(strpos($closedFeatures, 'productUR') === false) $closedFeatures .= ',productUR';
+            if(strpos($closedFeatures, 'productER') === false) $closedFeatures .= ',productER';
+            $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
         }
         else
         {
