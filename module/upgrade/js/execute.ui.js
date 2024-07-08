@@ -40,7 +40,7 @@ function initStatus()
  */
 function ajaxInstallDuckdb()
 {
-    let url = $.createLink('bi', 'ajaxInstallDuckdb');
+    let url = $.createLink('upgrade', 'ajaxInstallDuckdb');
     $.get(url);
 }
 
@@ -53,7 +53,7 @@ function ajaxInstallDuckdb()
  */
 function ajaxCheckDuckdb()
 {
-    let url = $.createLink('bi', 'ajaxCheckDuckdb');
+    let url = $.createLink('upgrade', 'ajaxCheckDuckdb');
     $.get(url, function(resp)
     {
         resp = JSON.parse(resp);
