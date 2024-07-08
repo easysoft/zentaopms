@@ -4,12 +4,26 @@ $(document).ready(function()
   ajaxCheckDuckdb();
 });
 
+/**
+ * 安装duckdb。
+ * Ajax install duckdb.
+ *
+ * @access public
+ * @return void
+ */
 function ajaxInstallDuckdb()
 {
   let url = $.createLink('install', 'ajaxInstallDuckdb');
   $.get(url);
 }
 
+/**
+ * 检查duckdb。
+ * Ajax check duckdb.
+ *
+ * @access public
+ * @return void
+ */
 function ajaxCheckDuckdb()
 {
   let url = $.createLink('install', 'ajaxCheckDuckdb');
