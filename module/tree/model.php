@@ -1161,6 +1161,17 @@ class treeModel extends model
         return $data;
     }
 
+    /**
+     * 生成业务需求链接。
+     * Create link of epic for waterfall.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  array  $extra
+     * @access public
+     * @return object
+     */
     public function createEpicLink(string $type, object $module, string $parent = '0', array $extra = array()): object
     {
         $data = new stdclass();
