@@ -249,6 +249,22 @@ class installZen extends install
         return is_dir($dataRoot) && is_writable($dataRoot) ? 'ok' : 'fail';
     }
 
+    protected function downloadFile($url, $savePath, $finalFile): bool
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $fileContents = curl_exec($ch);
+        $info         = curl_getinfo($ch);
+
+        if (curl_errno($ch))
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        return chmod($savePath . $finalFile, 0755);
+    }
+
     /**
      * 检查数据库配置信息的正确性。
      * Check config ok or not.
@@ -304,6 +320,7 @@ class installZen extends install
 
         return $return;
     }
+
 
     /**
      * DevOps平台版将配置信息写入my.php。
