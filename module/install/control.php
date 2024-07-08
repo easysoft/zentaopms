@@ -640,7 +640,7 @@ class install extends control
         $this->updateDownloadingTagFile('file', 'remove');
         $this->updateDownloadingTagFile('extension', 'remove');
 
-        $this->view->title           = $lang->install->installDuckdb;
+        $this->view->title           = $this->lang->install->installDuckdb;
         $this->view->duckdbStatus    = 'loading';
         $this->view->extensionStatus = 'loading';
         $this->display();

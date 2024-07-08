@@ -337,8 +337,7 @@ class installZen extends install
     protected function unzipFile(string $path, string $file): bool
     {
         $this->app->loadClass('pclzip', true);
-        $zip   = new pclzip($file);
-        $files = $zip->listContent();
+        $zip = new pclzip($file);
 
         return $zip->extract(PCLZIP_OPT_PATH, $path) === 0;
     }

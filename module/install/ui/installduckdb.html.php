@@ -48,7 +48,8 @@ $fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass,
             setClass($iconClass[$stus]),
             $icons[$stus]
         ),
-        $$type[$stus]
+        $type == 'duckdb' ? $duckdb[$stus] : null,
+        $type == 'extension' ? $extension[$stus] : null,
     );
 };
 
