@@ -82,6 +82,7 @@ class bi extends control
         set_time_limit(0);
         session_write_close();
         $this->bi->downloadDuckdb();
+        echo 'success';
     }
 
 }
