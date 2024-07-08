@@ -249,6 +249,26 @@ class installZen extends install
         return is_dir($dataRoot) && is_writable($dataRoot) ? 'ok' : 'fail';
     }
 
+    protected function updateDownloadingTagFile($type = 'file', $action = 'create'): string
+    {
+        $this->loadModel('bi');
+
+        $downloading = '.downloading';
+        $binRoot     = $this->app->getTmpRoot() . 'duckdb' . DS;
+        $duckdbBin   = $this->bi->getDuckdbBinConfig();
+        $file        = $binRoot . $duckdbBin[$type];
+        $tagFile     = $file . $downloading;
+
+        if($action == 'create')
+        {
+            if(file_exists($tagFile)) return 'fail';
+            file_put_contents($tagFile, 'Downloading...');
+            return 'ok';
+        }
+
+        return 'ok';
+    }
+
     protected function unzipFile($path, $file): bool
     {
         /* 解压文件到指定目录。 */
