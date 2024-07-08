@@ -1161,6 +1161,23 @@ class treeModel extends model
         return $data;
     }
 
+    public function createEpicLink(string $type, object $module, string $parent = '0', array $extra = array()): object
+    {
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : (string)$module->id;
+        $data->parent = $parent ? $parent : (string)$module->parent;
+        $data->name   = $module->name;
+
+        if(isset($extra['projectID']) && !empty($extra['projectID']))
+        {
+            $productID = zget($extra, 'productID', 0);
+            $projectID = $extra['projectID'];
+            $data->url = helper::createLink('projectstory', 'story', "projectID=$projectID&productID=$productID&branch=&browseType=byModule&param={$module->id}&storyType=epic");
+        }
+
+        return $data;
+    }
+
     /**
      * 生成任务链接。
      * Create link of a task.
