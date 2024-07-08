@@ -190,10 +190,12 @@ class duckdb
     {
         $ztpattern  = "/\b{$this->prefix}([a-zA-Z0-9_]+)\b/";
         $ztvpattern = "/\bztv_([a-zA-Z0-9_]+)\b/";
-        $replace    = "'{$this->tmpPath}$0.parquet'";
+        $replace    = "'__biPath__$0.parquet'";
 
         $sql = preg_replace($ztpattern, $replace, $sql);
         $sql = preg_replace($ztvpattern, $replace, $sql);
+
+        $sql = str_replace('__biPath__', $this->tmpPath, $sql);
         return $sql;
     }
 
