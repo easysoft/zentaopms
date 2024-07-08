@@ -87,7 +87,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '0',
     'sql'       => <<<EOT
 select
-    round(sum(t2.consumed)) as consumed,
+    round(sum(cast(t2.consumed as float))) as consumed,
     "year",
     t1.account,
     realname
@@ -3464,7 +3464,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-select year(t3.openedDate) as year, t1.id, t1.name as program, count(1) as story
+select year(cast(t3.openedDate as date)) as year, t1.id, t1.name as program, count(1) as story
 from zt_project as t1
 left join zt_product as t2 on t1.id = t2.program and t2.deleted = '0'
 left join zt_story as t3 on t2.id = t3.product and t3.deleted = '0'
@@ -3522,7 +3522,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-select year(t3.openedDate) as year, t1.id, t1.name as program, round(sum(t3.estimate), 2) as story
+select year(cast(t3.openedDate as date)) as year, t1.id, t1.name as program, round(sum(cast(t3.estimate as float)), 2) as story
 from zt_project as t1
 left join zt_product as t2 on t1.id = t2.program and t2.deleted = '0'
 left join zt_story as t3 on t2.id = t3.product and t3.deleted = '0'
@@ -3580,7 +3580,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '44',
     'sql'       => <<<EOT
-select year(t3.openedDate) as `year`, t1.id, t1.name as program, count(1) as bug
+select year(cast(t3.openedDate as date)) as `year`, t1.id, t1.name as program, count(1) as bug
 from zt_project as t1
     left join zt_product as t2 on t1.id = t2.program and t2.deleted = '0'
     left join zt_bug as t3 on t2.id = t3.product and t3.deleted = '0'
@@ -3635,7 +3635,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '43',
     'sql'       => <<<EOT
-select year(t3.closedDate) as year, t1.id, t1.name as program, count(1) as story
+select year(cast(t3.closedDate as date)) as year, t1.id, t1.name as program, count(1) as story
 from zt_project as t1
 left join zt_product as t2 on t1.id = t2.program and t2.deleted = '0'
 left join zt_story as t3 on t2.id = t3.product and t3.deleted = '0' and t3.closedReason = 'done'
@@ -3693,7 +3693,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-select year(t3.closedDate) as year, t1.id, t1.name as program, round(sum(t3.estimate), 2) as story
+select year(cast(t3.closedDate as date)) as year, t1.id, t1.name as program, round(sum(cast(t3.estimate as float)), 2) as story
 from zt_project as t1
 left join zt_product as t2 on t1.id = t2.program and t2.deleted = '0'
 left join zt_story as t3 on t2.id = t3.product and t3.deleted = '0' and t3.closedReason = 'done'
@@ -3751,7 +3751,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '44',
     'sql'       => <<<EOT
-select year(t3.closedDate) as `year`, t1.id, t1.name as program, count(1) as bug
+select year(cast(t3.closedDate as date)) as `year`, t1.id, t1.name as program, count(1) as bug
 from zt_project as t1
 left join zt_product as t2 on t1.id = t2.program and t2.deleted = '0'
 left join zt_bug as t3 on t2.id = t3.product and t3.deleted = '0' and t3.resolution = 'fixed' and t3.status = 'closed'
@@ -3999,7 +3999,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '41',
     'sql'       => <<<EOT
-select year(t4.date) as year, t1.id, t1.name as project, round(sum(t4.consumed), 2) as consumed
+select year(t4.date) as year, t1.id, t1.name as project, round(sum(cast(t4.consumed as float)), 2) as consumed
 from zt_project as t1
 left join zt_project as t2 on t1.id = t2.parent and t2.deleted = '0' and t2.type in ('sprint', 'stage', 'kanban')
 left join zt_task as t3 on t2.id = t3.execution and t3.deleted = '0' and t3.status != 'cancel'
@@ -4116,7 +4116,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '43',
     'sql'       => <<<EOT
-select year(cast(t1.closeddate as date)) as year, t1.id, t1.project, round(sum(t1.estimate), 2) as story
+select year(cast(t1.closeddate as date)) as year, t1.id, t1.project, round(sum(cast(t1.estimate as float)), 2) as story
     from (
         select distinct t1.id, t1.name as project, t4.id as story, t4.estimate, t4.closeddate
         from zt_project as t1
@@ -4394,7 +4394,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-select year(t3.openeddate) as year, t2.realname, count(1) as count
+select year(cast(t3.openeddate as date)) as year, t2.realname, count(1) as count
 from zt_action as t1
 right join zt_user as t2 on t1.actor = t2.account
 left join zt_story as t3 on t1.objectid = t3.id
@@ -4447,7 +4447,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-select year(t3.openeddate) as year, t2.realname, count(1) as count
+select year(cast(t3.openeddate as date)) as year, t2.realname, count(1) as count
 from zt_action as t1
 right join zt_user as t2 on t1.actor = t2.account
 left join zt_case as t3 on t1.objectid = t3.id
@@ -4502,7 +4502,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-select year(t3.openeddate) as year, t2.realname, count(1) as count
+select year(cast(t3.openeddate as date)) as year, t2.realname, count(1) as count
 from zt_action as t1
 right join zt_user as t2 on t1.actor = t2.account
 left join zt_bug as t3 on t1.objectid = t3.id
@@ -4557,7 +4557,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-select year(t3.openeddate) as year, t2.realname, count(distinct t3.id) as count
+select year(cast(t3.openeddate as date)) as year, t2.realname, count(distinct t3.id) as count
 from zt_action as t1
 right join zt_user as t2 on t1.actor = t2.account
 left join zt_bug as t3 on t1.objectid = t3.id
@@ -4610,7 +4610,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-select year(t1.date) as year, t2.realname, round(sum(t1.consumed), 1) as consumed
+select year(t1.date) as year, t2.realname, round(sum(cast(t1.consumed as float)), 1) as consumed
 from zt_effort as t1
 left join zt_user as t2 on t1.account = t2.account
 where t1.deleted = '0'
@@ -5272,12 +5272,12 @@ from (
 select
 t1.name as project,
 (
-	select round(sum(t3.estimate), 1) from zt_projectstory t2
+	select round(sum(cast(t3.estimate as float)), 1) from zt_projectstory t2
 	left join zt_story t3 on t3.id= t2.story and t3.status='closed' and t3.closedReason = 'done'
 	where t2.project = t1.id
 ) as "故事点",
 (
-	select round(sum(t5.consumed), 1) from zt_project t4
+	select round(sum(cast(t5.consumed as float)), 1) from zt_project t4
 	left join zt_task t5 on t5.execution = t4.id and t5.deleted = '0' and t5.parent in (0, -1)
   where t4.project = t1.id and t4.type = 'sprint'
 ) as "工时"
