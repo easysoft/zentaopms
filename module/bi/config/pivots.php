@@ -380,7 +380,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -479,7 +478,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -570,7 +568,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -661,7 +658,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -1712,7 +1708,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -1836,7 +1831,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'account',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -2005,7 +1999,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'resolvedBy',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
