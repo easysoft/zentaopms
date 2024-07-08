@@ -922,7 +922,7 @@ class pivotState
         if(empty($fieldSettings)) return null;
 
         $fields = array();
-        $keys   = array('name', 'object', 'field', 'type');
+        $keys   = array('object', 'field', 'type');
         foreach($fieldSettings as $fieldKey => $fieldSetting)
         {
             $field = array();
@@ -950,13 +950,16 @@ class pivotState
         if(empty($fieldSettings)) return null;
 
         $langs = array();
-        $keys  = array('name', 'object', 'field', 'type');
-        foreach($fieldSettings as $fieldSetting)
+        $keys  = array('object', 'field', 'type');
+        foreach($fieldSettings as $fieldKey => $fieldSetting)
         {
             $lang = array();
-            foreach($fieldSetting as $key => $value) if(!in_array($key, $keys)) $lang[$key] = $value;
+            foreach($fieldSetting as $key => $value)
+            {
+                if(!in_array($key, $keys)) $lang[$key] = $value;
+            }
 
-            $langs[$fieldSetting['name']] = $lang;
+            $langs[$fieldKey] = $lang;
         }
 
         return $type == 'object' ? $langs : json_encode($langs);
