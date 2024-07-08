@@ -4057,7 +4057,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-select year(t1.closeddate) as year, t1.id, t1.project, count(1) as story
+select year(cast(t1.closeddate as date)) as year, t1.id, t1.project, count(1) as story
     from (
         select distinct t1.id, t1.name as project, t4.id as story, t4.closeddate
         from zt_project as t1
@@ -4116,7 +4116,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '43',
     'sql'       => <<<EOT
-select year(t1.closeddate) as year, t1.id, t1.project, round(sum(t1.estimate), 2) as story
+select year(cast(t1.closeddate as date)) as year, t1.id, t1.project, round(sum(t1.estimate), 2) as story
     from (
         select distinct t1.id, t1.name as project, t4.id as story, t4.estimate, t4.closeddate
         from zt_project as t1
@@ -4175,7 +4175,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '36',
     'sql'       => <<<EOT
-select year(t2.openeddate) as year, t1.id, t1.name as product, count(1) as story
+select year(cast(t2.openeddate as date)) as year, t1.id, t1.name as product, count(1) as story
 from zt_product as t1
 left join zt_story as t2 on t1.id = t2.product and t2.deleted = '0'
 where t1.deleted = '0' and t1.shadow = '0' and t1.vision = 'rnd' and t2.id is not null
@@ -4283,7 +4283,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '44',
     'sql'       => <<<EOT
-select year(t2.openeddate) as year, t1.id, t1.name as product, count(1) as bug
+select year(cast(t2.openeddate as date)) as year, t1.id, t1.name as product, count(1) as bug
 from zt_product as t1
 left join zt_bug as t2 on t1.id = t2.product and t2.deleted = '0'
 where t1.deleted = '0' and t1.shadow = '0' and t1.vision = 'rnd' and t2.id is not null
