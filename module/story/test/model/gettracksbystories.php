@@ -4,7 +4,11 @@
 /**
 
 title=测试 storyModel->getTracksByStories();
+timeout=0
 cid=0
+
+- 传入空参数。 @1
+- 检查返回数据的 lanes，cols，items。 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -20,9 +24,9 @@ $tester->story->lang->ERCommon = '业务需求';
 $tester->story->lang->URCommon = '用户需求';
 $tester->story->lang->SRCommon = '研发需求';
 
-$tracks = $tester->story->getTracksByStories(array(), 'epic');
+$tracks = $tester->story->getTracksByStories(array(), 'epic', 'allstory', 'id_desc');
 r(empty($tracks)) && p() && e('1');  //传入空参数。
 
 $stories = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in(array('2,3,4,5'))->fetchAll('id');
-$tracks = $tester->story->getTracksByStories($stories, 'epic');
+$tracks = $tester->story->getTracksByStories($stories, 'epic', 'allstory', 'id_desc');
 r(isset($tracks['lanes']) && isset($tracks['cols']) && isset($tracks['items'])) && p() && e('1'); //检查返回数据的 lanes，cols，items。
