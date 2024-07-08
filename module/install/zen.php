@@ -249,6 +249,13 @@ class installZen extends install
         return is_dir($dataRoot) && is_writable($dataRoot) ? 'ok' : 'fail';
     }
 
+    /**
+     * 下载duckdb引擎。
+     * Download duckdb.
+     *
+     * @access protected
+     * @return string
+     */
     protected function downloadDuckdb(): string
     {
         $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
