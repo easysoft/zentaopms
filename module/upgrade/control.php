@@ -164,6 +164,22 @@ class upgrade extends control
             return $this->display();
         }
 
+        /* 检查 Duckdb 引擎是否正确安装。*/
+        /* Check Duckdb is installed. */
+        $this->loadModel('bi');
+        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
+        if($checkDuckdb === 'fail' || $checkExtension === 'fail')
+        {
+            $this->app->loadLang('install');
+            $this->view->result    = 'duckdbFail';
+            $this->view->duckdb    = 'loading';
+            $this->view->extension = 'loading';
+
+            return $this->display();
+        }
+
+
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
 
