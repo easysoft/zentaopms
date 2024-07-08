@@ -17,6 +17,13 @@ $(document).ready(function()
     }
 });
 
+/**
+ * 初始化状态。
+ * Init status.
+ *
+ * @access public
+ * @return void
+ */
 function initStatus()
 {
     $('#installDuckdb p').addClass('hidden');
