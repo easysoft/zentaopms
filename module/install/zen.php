@@ -336,7 +336,6 @@ class installZen extends install
      */
     protected function unzipFile(string $path, string $file): bool
     {
-        /* 解压文件到指定目录。 */
         $this->app->loadClass('pclzip', true);
         $zip   = new pclzip($file);
         $files = $zip->listContent();
@@ -359,7 +358,6 @@ class installZen extends install
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $fileContents = curl_exec($ch);
-        $info         = curl_getinfo($ch);
 
         if (curl_errno($ch))
         {
