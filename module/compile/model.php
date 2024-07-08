@@ -340,9 +340,10 @@ class compileModel extends model
         $compileID = $compile->id;
         $repo      = $this->loadModel('repo')->getByID($job->repo);
 
+        $this->loadModel('job');
         if($job->triggerType == 'tag')
         {
-            $lastTag = $this->loadModel('job')->getLastTagByRepo($repo, $job);
+            $lastTag = $this->job->getLastTagByRepo($repo, $job);
             if($lastTag)
             {
                 $job->lastTag = $lastTag;
@@ -353,9 +354,9 @@ class compileModel extends model
         }
 
         $method = 'exec' . ucfirst($job->engine) . 'Pipeline';
-        if(!method_exists($this, $method)) return false;
+        if(!method_exists($this->job, $method)) return false;
 
-        $result = $this->loadModel('job')->$method($job, $repo, $compileID, $result);
+        $result = $this->job->$method($job, $repo, $compileID);
 
         $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)

@@ -28,6 +28,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 
 zenData('compile')->gen(0);
+zenData('user')->gen(10);
 su('admin');
 
 $compile = new compileTest();
