@@ -767,7 +767,7 @@ class biModel extends model
     public function getDuckDBPath()
     {
         $duckdbBin  = $this->getDuckdbBinConfig();
-        $sourcePath = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
+        $sourcePath = $this->app->getTmpRoot() . 'duckdb' . DS;
 
         $checkSourceCode = $this->checkDuckDBFile($sourcePath, $duckdbBin);
 
@@ -879,8 +879,10 @@ class biModel extends model
     {
         $sqlContent = $this->config->bi->duckSQLTemp;
         $dbConfig   = $this->config->db;
+        $driver     = $dbConfig->driver;
         $variables  = array(
             '{EXTENSIONPATH}' => $extensionPath,
+            '{DRIVER}'        => $driver,
             '{DATABASE}'      => $dbConfig->name,
             '{USER}'          => $dbConfig->user,
             '{PASSWORD}'      => $dbConfig->password,
@@ -894,7 +896,7 @@ class biModel extends model
             $sqlContent = str_replace($key, $value, $sqlContent);
         }
 
-        return "$binPath :memory: \"$sqlContent\" 2>&1";
+        return "$sqlContent 2>&1";
     }
 
     /**
