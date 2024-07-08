@@ -923,13 +923,16 @@ class pivotState
 
         $fields = array();
         $keys   = array('name', 'object', 'field', 'type');
-        foreach($fieldSettings as $fieldSetting)
+        foreach($fieldSettings as $fieldKey => $fieldSetting)
         {
             $field = array();
-            foreach($keys as $key) if(isset($fieldSetting[$key])) $field[$key] = $fieldSetting[$key];
-            $fields[$fieldSetting['name']] = $field;
-        }
+            foreach($keys as $key)
+            {
+                if(isset($fieldSetting[$key])) $field[$key] = $fieldSetting[$key];
+            }
 
+            $fields[$fieldKey] = $field;
+        }
         return $type == 'object' ? $fields : json_encode($fields);
     }
 
