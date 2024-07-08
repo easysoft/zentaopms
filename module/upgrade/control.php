@@ -807,4 +807,20 @@ class upgrade extends control
         $this->bi->downloadDuckdb();
         echo 'success';
     }
+
+    /**
+     * 检查duckdb文件是否下载完成。
+     * AJAX: Check duckdb.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckDuckdb()
+    {
+        $this->loadModel('bi');
+        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
+        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
+
+        echo(json_encode(array('duckdb' => $checkDuckdb, 'extension' => $checkExtension)));
+    }
 }
