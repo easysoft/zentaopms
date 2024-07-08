@@ -249,6 +249,16 @@ class installZen extends install
         return is_dir($dataRoot) && is_writable($dataRoot) ? 'ok' : 'fail';
     }
 
+    protected function unzipFile($path, $file): bool
+    {
+        /* 解压文件到指定目录。 */
+        $this->app->loadClass('pclzip', true);
+        $zip   = new pclzip($file);
+        $files = $zip->listContent();
+
+        return $zip->extract(PCLZIP_OPT_PATH, $path) === 0;
+    }
+
     protected function downloadFile($url, $savePath, $finalFile): bool
     {
         $ch = curl_init($url);
