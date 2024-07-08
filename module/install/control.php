@@ -637,4 +637,12 @@ class install extends control
         $this->view->extensionStatus = 'loading';
         $this->display();
     }
+
+    public function ajaxInstallDuckdb()
+    {
+        ignore_user_abort(true);
+        set_time_limit(0);
+        session_write_close();
+        $this->installZen->downloadDuckdb();
+    }
 }
