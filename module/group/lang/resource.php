@@ -2177,7 +2177,6 @@ if(!$inUpgrade)
     if(!$config->URAndSR)
     {
         unset($lang->resource->product->requirement);
-        unset($lang->resource->story->linkStory);
         unset($lang->resource->requirement);
     }
     if(!$config->enableER)
