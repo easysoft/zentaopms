@@ -58,7 +58,7 @@ class thinkTableInput extends thinkQuestion
                 setClass('flex items-center'),
                 div
                 (
-                    setClass('text-right mr-2 w-1/5 line-clamp-2'),
+                    setClass('text-right mr-2 w-24 line-clamp-2'),
                     $item,
                     set::title($item)
                 ),
