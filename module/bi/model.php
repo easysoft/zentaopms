@@ -806,6 +806,16 @@ class biModel extends model
     {
         $os        = PHP_OS == 'WINNT' ? 'win' : 'linux';
         $duckdbBin = $this->config->bi->duckdbBin[$os];
+        $driver    = $this->config->db->driver;
+
+        /* 如果不是mysql数据库，那么统一使用达梦的扩展配置。*/
+        /* If it is not a mysql database, then use the same extension configuration of Dameng. */
+        if($driver !== 'mysql') $driver = 'dm';
+
+        $cdnUrl = $this->config->bi->cdnUrl;
+        $duckdbBin['fileUrl']      = $cdnUrl . $duckdbBin['fileUrl'];
+        $duckdbBin['extensionUrl'] = $cdnUrl . $this->config->bi->duckdbExtUrl[$driver][$os];
+        $duckdbBin['extension']    = $this->config->bi->duckdbExt[$driver][$os];
 
         if($os == 'win') $duckdbBin['path'] = dirname(dirname($this->app->getBasePath())) . $duckdbBin['path'];
 
@@ -877,9 +887,9 @@ class biModel extends model
      */
     public function prepareSyncCommand($binPath, $extensionPath, $copySQL)
     {
-        $sqlContent = $this->config->bi->duckSQLTemp;
         $dbConfig   = $this->config->db;
         $driver     = $dbConfig->driver;
+        $sqlContent = $this->config->bi->duckSQLTemp[$driver];
         $variables  = array(
             '{EXTENSIONPATH}' => $extensionPath,
             '{DRIVER}'        => $driver,
