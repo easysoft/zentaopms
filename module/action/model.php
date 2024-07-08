@@ -667,7 +667,7 @@ class actionModel extends model
             if(!empty($extra) && strpos($extra, '|') !== false)
             {
                 list($extra, $status) = explode('|', $extra);
-                $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+                if(!empty($desc['extra'][$extra])) $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
             }
         }
 
