@@ -1384,6 +1384,8 @@ class biModel extends model
         $binRoot   = $this->app->getTmpRoot() . 'duckdb' . DS;
         $duckdbBin = $this->getDuckdbBinConfig();
 
+        if(!is_dir($binRoot)) !mkdir($binRoot, 0755, true);
+
         $duckdbUrl    = $duckdbBin['fileUrl'];
         $extensionUrl = $duckdbBin['extensionUrl'];
 
