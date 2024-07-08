@@ -2881,9 +2881,9 @@ $config->bi->builtin->charts[] = array
     'group'     => '36',
     'sql'       => <<<EOT
 select t1.yearmonth, t1.year, t1.month as "month", ifnull(t2.story, 0) as newStory, ifnull(t3.story, 0) as closedStory
-from (select distinct printf('%04d-%02d', year(date), month(date)) yearmonth, year(date) as "year", month(date) as "month" from zt_action) as t1
-left join (select year(openedDate) as "year", month(openedDate) as "month", count(1) as story from zt_story where deleted = '0' group by "year", "month") as t2 on t1.year = t2.year and t1.month = t2.month
-left join (select year(closedDate) as "year", month(closedDate) as "month", count(1) as story from zt_story where deleted = '0' and closedReason = 'done' group by "year", "month") as t3 on t1.year = t3.year and t1.month = t3.month
+from (select distinct printf('%04d-%02d', year(cast(date as date)), month(cast(date as date))) yearmonth, year(cast(date as date)) as "year", month(cast(date as date)) as "month" from zt_action) as t1
+left join (select year(cast(openedDate as date)) as "year", month(cast(openedDate as date)) as "month", count(1) as story from zt_story where deleted = '0' group by "year", "month") as t2 on t1.year = t2.year and t1.month = t2.month
+left join (select year(cast(closedDate as date)) as "year", month(cast(closedDate as date)) as "month", count(1) as story from zt_story where deleted = '0' and closedReason = 'done' group by "year", "month") as t3 on t1.year = t3.year and t1.month = t3.month
 order by t1."year", t1."month"
 EOT,
     'settings'  => array
@@ -3164,8 +3164,8 @@ $config->bi->builtin->charts[] = array
     'group'     => '37',
     'sql'       => <<<EOT
 select yearmonth, t1.year, t1.month || '月' as "month", ifnull(t2.release, 0) as "release"
-from (select distinct printf('%04d-%02d', year(date), month(date)) yearmonth, year(date) as "year", month(date) as "month" from zt_action) as t1
-left join (select year(createdDate) as "year", month(createdDate) as "month", count(1) as "release" from zt_release where deleted = '0' group by "year", "month") as t2 on t1.year = t2.year and t1.month = t2.month
+from (select distinct printf('%04d-%02d', year(cast(date as date)), month(cast(date as date))) yearmonth, year(cast(date as date)) as "year", month(cast(date as date)) as "month" from zt_action) as t1
+left join (select year(cast(createdDate as date)) as "year", month(cast(createdDate as date)) as "month", count(1) as "release" from zt_release where deleted = '0' group by "year", "month") as t2 on t1.year = t2.year and t1.month = t2.month
 order by t1."year", t1."month"
 EOT,
     'settings'  => array
