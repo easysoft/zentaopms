@@ -278,6 +278,15 @@ class installZen extends install
             return false;
         }
 
+        curl_close($ch);
+        chmod($filename, 0755);
+
+        if(pathinfo($filename, PATHINFO_EXTENSION) === 'zip')
+        {
+            $this->unzipFile($savePath, $filename);
+            unlink($filename);
+        }
+
         return chmod($savePath . $finalFile, 0755);
     }
 
