@@ -139,7 +139,7 @@ window.closeRelation = function()
  */
 window.getIframeHeight = function()
 {
-    if(iframeHeight) return iframeHeight;
+    if(typeof(iframeHeight) != 'undefined' && iframeHeight) return iframeHeight;
 
     var windowHeight   = $(window).height();
     var headerHeight   = parseInt($('#header').height());
