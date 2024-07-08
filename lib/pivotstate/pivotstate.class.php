@@ -346,6 +346,17 @@ class pivotState
     }
 
     /**
+     * Clear drills.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearDrills()
+    {
+        $this->drills = array();
+    }
+
+    /**
      * Get filters.
      *
      * @access public
