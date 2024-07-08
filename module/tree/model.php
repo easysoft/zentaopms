@@ -1185,6 +1185,16 @@ class treeModel extends model
             $projectID = $extra['projectID'];
             $data->url = helper::createLink('projectstory', 'story', "projectID=$projectID&productID=$productID&branch=&browseType=byModule&param={$module->id}&storyType=epic");
         }
+        elseif(isset($extra['executionID']) && !empty($extra['executionID']))
+        {
+            $executionID = $extra['executionID'];
+            $data->url   = helper::createLink('execution', 'story', "executionID=$executionID&storyType=epic&orderBy=order_desc&type=byModule&param={$module->id}");
+        }
+        else
+        {
+            $branch = isset($extra['branchID']) ? $extra['branchID'] : 'all';
+            $data->url = helper::createLink('product', 'browse', "root={$module->root}&branch=$branch&type=byModule&param={$module->id}&storyType=epic");
+        }
 
         return $data;
     }
