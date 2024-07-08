@@ -1909,7 +1909,7 @@ class taskZen extends task
         /* Set Menu. */
         if($this->app->tab == 'project' || (!empty($execution) && !$execution->multiple))
         {
-            $this->project->setMenu((int)$execution->project);
+            $this->project->setMenu(isset($execution) ? (int)$execution->project : $this->session->project);
             $this->view->projectID = $execution->project;
         }
         else
