@@ -12,8 +12,9 @@ $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpTy
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
 
 $config->bi->duckdbBin = array();
-$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/', 'file' => 'duckdb.exe', 'extension' => 'mysql_scanner.duckdb_extension');
-$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb', 'extension' => 'mysql_scanner.duckdb_extension');
+$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/', 'file' => 'duckdb.exe', 'extension' => 'sync2parquet.exe');
+$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb', 'extension' => 'sync2parquet', 'fileUrl' => 'https://dl.zentao.net/duckdb/linux/amd64/duckdb.zip', 'extensionUrl' => 'https://dl.zentao.net/duckdb/linux/amd64/sync2parquet');
+$config->bi->duckdbHelp         = 'https://www.zentao.net/book/zentaopms/1313.html';
 
 $charts = array();
 $charts['32'] = array("root" => 1, "name" => "产品", "grade" => 1);
@@ -91,7 +92,7 @@ $pivots['100'] = array("root" => 3, "name" => "Bug", "grade" => 2);
 $config->bi->builtin->modules->charts = $charts;
 $config->bi->builtin->modules->pivots = $pivots;
 
-$config->bi->duckSQLTemp = "LOAD '{EXTENSIONPATH}';ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);USE mysqldb;{COPYSQL}";
+$config->bi->duckSQLTemp = '{EXTENSIONPATH} --driver="{DRIVER}" --db="host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}" --copy="{COPYSQL}"';
 
 $config->bi->drivers = array('mysql', 'duckdb');
 
@@ -186,7 +187,7 @@ $config->bi->columnTypes->DATE      = 'date';
 $config->bi->duckdb = new stdclass();
 $config->bi->duckdb->tables = array();
 $config->bi->duckdb->tables['action'] = <<<EOT
-SELECT id,objectType,objectID,product,project,execution,actor,action,date,read,vision,efforted FROM zt_action
+SELECT id,objectType,objectID,product,project,execution,actor,`action`,`date`,`read`,`vision`,`efforted` FROM zt_action
 EOT;
 $config->bi->duckdb->tables['account'] = <<<EOT
 SELECT * FROM zt_account
