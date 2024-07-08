@@ -906,6 +906,7 @@ class biModel extends model
             $sqlContent = str_replace($key, $value, $sqlContent);
         }
 
+        if($driver == 'mysql') return "$binPath :memory: \"$sqlContent\" 2>&1";
         return "$sqlContent 2>&1";
     }
 
