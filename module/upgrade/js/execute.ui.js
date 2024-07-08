@@ -44,6 +44,13 @@ function ajaxInstallDuckdb()
     $.get(url);
 }
 
+/**
+ * 检查duckdb。
+ * Ajax check duckdb.
+ *
+ * @access public
+ * @return void
+ */
 function ajaxCheckDuckdb()
 {
     let url = $.createLink('bi', 'ajaxCheckDuckdb');
@@ -59,6 +66,9 @@ function ajaxCheckDuckdb()
         $('#installDuckdb p.duckdb-' + resp.duckdb).removeClass('hidden');
         $('#installDuckdb p.extension-' + resp.extension).removeClass('hidden');
 
-        if(resp.duckdb == 'fail' || resp.extension == 'fail') $('#installDuckdb .help').removeClass('hidden');
+        if(resp.duckdb == 'fail' || resp.extension == 'fail')
+        {
+            $('#installDuckdb .help').removeClass('hidden');
+        }
     });
 }
