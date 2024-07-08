@@ -344,7 +344,17 @@ class installZen extends install
         return $zip->extract(PCLZIP_OPT_PATH, $path) === 0;
     }
 
-    protected function downloadFile($url, $savePath, $finalFile): bool
+    /**
+     * 下载文件。
+     * Download file.
+     *
+     * @param  string    $url
+     * @param  string    $savePath
+     * @param  string    $finalFile
+     * @access protected
+     * @return bool
+     */
+    protected function downloadFile(string $url, string $savePath, string $finalFile): bool
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
