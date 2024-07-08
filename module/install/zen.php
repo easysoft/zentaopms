@@ -282,7 +282,16 @@ class installZen extends install
         return $downloadDuckdb && $downloadExtension ? 'ok' : 'fail';
     }
 
-    protected function updateDownloadingTagFile($type = 'file', $action = 'create'): string
+    /**
+     * 更新tab文件下载状态。
+     * Update downloading tab file status.
+     *
+     * @param  string $type
+     * @param  string $action
+     * @access protected
+     * @return string
+     */
+    protected function updateDownloadingTagFile(string $type = 'file', string $action = 'create'): string
     {
         $this->loadModel('bi');
 
