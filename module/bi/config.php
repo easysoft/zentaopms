@@ -187,7 +187,7 @@ $config->bi->columnTypes->DATE      = 'date';
 $config->bi->duckdb = new stdclass();
 $config->bi->duckdb->tables = array();
 $config->bi->duckdb->tables['action'] = <<<EOT
-SELECT id,objectType,objectID,product,project,execution,actor,`action`,`date`,`read`,`vision`,`efforted` FROM zt_action
+SELECT id,objectType,objectID,product,project,execution,actor,action,date,vision,efforted FROM zt_action
 EOT;
 $config->bi->duckdb->tables['account'] = <<<EOT
 SELECT * FROM zt_account
