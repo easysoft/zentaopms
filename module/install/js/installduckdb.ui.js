@@ -1,7 +1,7 @@
 $(document).ready(function()
 {
   ajaxInstallDuckdb();
-  ajaxCheckDuckdb();
+  setTimeout(() => {ajaxCheckDuckdb()}, 1000);
 });
 
 /**
@@ -30,7 +30,10 @@ function ajaxCheckDuckdb()
   $.get(url, function(resp)
   {
     resp = JSON.parse(resp);
-    if(resp.duckdb == 'loading' || resp.extension == 'loading') setTimeout(() => {ajaxCheckDuckdb()}, 500);
+    if(resp.duckdb == 'loading' || resp.extension == 'loading')
+    {
+      setTimeout(() => {ajaxCheckDuckdb()}, 500);
+    }
 
     $('#installDuckdb p').addClass('hidden');
     $('#installDuckdb p.duckdb-' + resp.duckdb).removeClass('hidden');
