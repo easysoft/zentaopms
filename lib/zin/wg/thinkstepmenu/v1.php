@@ -157,7 +157,7 @@ class thinkStepMenu extends wg
             $transitionAction[] = array(
                 'key'     => 'transition',
                 'icon'    => 'transition',
-                'text'    => $this->lang->thinkstep->actions['transition'],
+                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['transition'],
                 'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'transition')"),
             );
         }
@@ -193,25 +193,25 @@ class thinkStepMenu extends wg
             array(
                 'key'     => 'radio',
                 'icon'    => 'radio',
-                'text'    => $this->lang->thinkstep->actions['radio'],
+                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['radio'],
                 'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'radio')"),
             ),
             array(
                 'key'     => 'checkbox',
                 'icon'    => 'checkbox',
-                'text'    => $this->lang->thinkstep->actions['checkbox'],
+                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['checkbox'],
                 'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'checkbox')"),
             ),
             array(
                 'key'     => 'input',
                 'icon'    => 'input',
-                'text'    => $this->lang->thinkstep->actions['input'],
+                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['input'],
                 'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'input')"),
             ),
             array(
                 'key'     => 'tableInput',
                 'icon'    => 'cell-input',
-                'text'    => $this->lang->thinkstep->actions['tableInput'],
+                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'],
                 'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'tableInput')"),
             ),
         ));
