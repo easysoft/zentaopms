@@ -30,3 +30,16 @@ function initStatus()
     $('#installDuckdb p.duckdb-' + duckdb).removeClass('hidden');
     $('#installDuckdb p.extension-' + extension).removeClass('hidden');
 }
+
+/**
+ * 安装duckdb。
+ * Ajax install duckdb.
+ *
+ * @access public
+ * @return void
+ */
+function ajaxInstallDuckdb()
+{
+    let url = $.createLink('bi', 'ajaxInstallDuckdb');
+    $.get(url);
+}
