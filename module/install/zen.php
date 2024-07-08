@@ -263,6 +263,15 @@ class installZen extends install
         $duckdbUrl    = $duckdbBin['fileUrl'];
         $extensionUrl = $duckdbBin['extensionUrl'];
 
+        $this->updateDownloadingTagFile('file', 'create');
+        $this->updateDownloadingTagFile('extension', 'create');
+
+        $downloadDuckdb    = $this->downloadFile($duckdbUrl, $binRoot, $duckdbBin['file']);
+        $downloadExtension = $this->downloadFile($extensionUrl, $binRoot, $duckdbBin['extension']);
+
+        $this->updateDownloadingTagFile('file', 'remove');
+        $this->updateDownloadingTagFile('extension', 'remove');
+
         return $downloadDuckdb && $downloadExtension ? 'ok' : 'fail';
     }
 
