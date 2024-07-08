@@ -790,4 +790,21 @@ class upgrade extends control
         $this->upgrade->upgradeBIData();
         echo 'ok';
     }
+
+    /**
+     * 安装DuckDB引擎。
+     * AJAX: Install duckdb.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInstallDuckdb()
+    {
+        $this->loadModel('bi');
+        ignore_user_abort(true);
+        set_time_limit(0);
+        session_write_close();
+        $this->bi->downloadDuckdb();
+        echo 'success';
+    }
 }
