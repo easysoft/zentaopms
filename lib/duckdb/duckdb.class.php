@@ -74,24 +74,6 @@ class duckdb
     public $tmpPath;
 
     /**
-     * 全局变量$fields
-     * The global fields variable.
-     *
-     * @var object
-     * @access public
-     */
-    public $fields;
-
-    /**
-     * 全局变量$tables
-     * The global fields variable.
-     *
-     * @var object
-     * @access public
-     */
-    public $tables;
-
-    /**
      * 构造方法。
      * The construct method.
      *
@@ -170,15 +152,6 @@ class duckdb
      */
     public function query($sql = '')
     {
-        $sqlparser = dirname(dirname(__FILE__)) . '/sqlparser/sqlparser.class.php';
-        include_once $sqlparser;
-
-        $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0];
-        if(isset($statement->bodyParser->statements[0])) $statement = $statement->bodyParser->statements[0];
-        $this->fields = $this->getFields($statement);
-        $this->tables = $this->getTables($statement);
-
         $sql = $this->replaceBackQuote($sql);
         $sql = $this->replaceTable2Parquet($sql);
         $sql = $this->standLimit($sql);
@@ -215,16 +188,12 @@ class duckdb
      */
     private function replaceTable2Parquet($sql)
     {
-        if(empty($this->tables)) return $sql;
+        $ztpattern  = "/\b{$this->prefix}([a-zA-Z0-9_]+)\b/";
+        $ztvpattern = "/\bztv_([a-zA-Z0-9_]+)\b/";
+        $replace    = "'{$this->tmpPath}$0.parquet'";
 
-        foreach($this->tables as $table)
-        {
-            $pattern = " {$table} ";
-            $replace = "'{$this->tmpPath}{$table}.parquet'";
-
-            $sql = str_replace($pattern, $replace, $sql);
-        }
-
+        $sql = preg_replace($ztpattern, $replace, $sql);
+        $sql = preg_replace($ztvpattern, $replace, $sql);
         return $sql;
     }
 
@@ -249,53 +218,6 @@ class duckdb
             }
         }
         return $fields;
-    }
-
-    /**
-     * 获取sql中的表名。
-     * Get tables form sqlparser statment.
-     *
-     * @param  object $statment
-     * @access public
-     * @return array
-     */
-    private function getTables(object $statement)
-    {
-        $tables = array();
-        if($statement->from)
-        {
-            foreach($statement->from as $fromInfo)
-            {
-                if($fromInfo->table)
-                {
-                    $tables[] = $fromInfo->table;
-                }
-                elseif($fromInfo->subquery)
-                {
-                    $parser = new sqlparser($fromInfo->expr);
-                    $subTables = $this->getTables($parser->statements[0]);
-                    $tables = array_merge($tables, $subTables);
-                }
-            }
-        }
-        if($statement->join)
-        {
-            foreach($statement->join as $joinInfo)
-            {
-                if($joinInfo->expr->table)
-                {
-                    $tables[] = $joinInfo->expr->table;
-                }
-                elseif($joinInfo->expr->subquery)
-                {
-                    $parser = new sqlparser($joinInfo->expr->expr);
-                    $subTables = $this->getTables($parser->statements[0]);
-                    $tables = array_merge($tables, $subTables);
-                }
-            }
-        }
-
-        return array_filter(array_unique($tables));
     }
 
     /**
@@ -326,8 +248,6 @@ class duckdb
      */
     public function getResult()
     {
-        $this->checkFieldNamesMatch();
-
         $exec   = "$this->binPath :memory: \"$this->sql\" -json 2>&1";
         $output = shell_exec($exec);
 
@@ -341,23 +261,6 @@ class duckdb
         else
         {
             return $rows ? $rows : array();
-        }
-    }
-
-    /**
-     * 检查sql返回的字段不能与表名同名。
-     * Check sql fields can not same as table name.
-     *
-     * @access public
-     * @return this.
-     */
-    public function checkFieldNamesMatch()
-    {
-        $flipTable = array_flip($this->tables);
-        foreach($this->fields as $field)
-        {
-            if(isset($flipTable[$field['column']])) return throw new Exception("sql fields can not named {$field['column']}");
-            if(isset($flipTable[$field['alias']]))  return throw new Exception("sql fields can not named {$field['alias']}");
         }
     }
 
