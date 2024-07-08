@@ -51,3 +51,20 @@ $fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass,
         $$type[$stus]
     );
 };
+
+div
+(
+    setID('installDuckdb'),
+    $fnGenerateInfo('duckdb', 'loading', $duckdbStatus == 'loading'),
+    $fnGenerateInfo('duckdb', 'ok', $duckdbStatus == 'ok'),
+    $fnGenerateInfo('duckdb', 'fail', $duckdbStatus == 'fail'),
+    $fnGenerateInfo('extension', 'loading', $extensionStatus == 'loading'),
+    $fnGenerateInfo('extension', 'ok', $extensionStatus == 'ok'),
+    $fnGenerateInfo('extension', 'fail', $extensionStatus == 'fail'),
+    span
+    (
+        setClass('help text-warning hidden'),
+        $lang->install->duckdbFail,
+        a(set::href($config->bi->duckdbHelp), $config->bi->duckdbHelp)
+    )
+);
