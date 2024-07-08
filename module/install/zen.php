@@ -262,6 +262,22 @@ class installZen extends install
             return false;
         }
 
+        $result = json_decode($fileContents, true);
+        if(isset($result['error']))
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        $filename = basename($url);
+        $filename = $savePath . $filename;
+        $result   = file_put_contents($filename, $fileContents);
+        if($result === false)
+        {
+            curl_close($ch);
+            return false;
+        }
+
         return chmod($savePath . $finalFile, 0755);
     }
 
