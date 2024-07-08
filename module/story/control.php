@@ -53,8 +53,6 @@ class story extends control
      */
     public function create(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
     {
-        $this->app->loadConfig($storyType, '', true);
-
         /* Set menu. */
         $this->story->replaceURLang($storyType);
         $copyStoryID = $storyID;
@@ -134,7 +132,6 @@ class story extends control
      */
     public function batchCreate(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $executionID = 0, int $plan = 0, string $storyType = 'story', string $extra = '')
     {
-        $this->app->loadConfig($storyType, '', true);
         $this->story->replaceURLang($storyType);
 
         if(!empty($_POST))
@@ -350,7 +347,6 @@ class story extends control
      */
     public function batchEdit(int $productID = 0, int $executionID = 0, string $branch = '', string $storyType = 'story', string $from = '')
     {
-        $this->app->loadConfig($storyType, '', true);
         $this->story->replaceURLang($storyType);
         $this->storyZen->setMenuForBatchEdit($productID, $executionID, $storyType, $from);
 
