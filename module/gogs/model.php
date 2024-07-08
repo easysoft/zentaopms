@@ -160,7 +160,7 @@ class gogsModel extends model
 
         $url      = sprintf($apiRoot, "/users/{$user->username}/repos");
         $projects = array();
-        $results  = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+        $results  = json_decode(commonModel::http($url));
         if(!is_array($results) || empty($results)) return array();
 
         if(!empty($results)) $projects = array_merge($projects, $results);
