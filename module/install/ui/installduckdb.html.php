@@ -30,3 +30,10 @@ $duckdb = array
     'ok'      => $lang->install->installedDuckdb,
     'fail'    => $lang->install->installedFail,
 );
+
+$extension = array
+(
+    'loading' => $lang->install->installingExtension,
+    'ok'      => $lang->install->installedExtension,
+    'fail'    => $lang->install->installedFail,
+);
