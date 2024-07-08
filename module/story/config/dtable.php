@@ -337,8 +337,9 @@ $config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['icon'] 
 $config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['hint']     = $lang->story->subdivide;
 $config->story->dtable->fieldList['actions']['actionsMap']['subdivide']['data-app'] = $app->tab;
 
-$config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['icon'] = 'ok';
-$config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['hint'] = $lang->story->processStoryChange;
+$config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['icon']     = 'ok';
+$config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['hint']     = $lang->story->processStoryChange;
+$config->story->dtable->fieldList['actions']['actionsMap']['processStoryChange']['data-app'] = $app->tab;
 
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon']     = 'split';
 $config->story->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint']     = $lang->story->subdivide;
