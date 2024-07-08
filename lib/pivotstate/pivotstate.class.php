@@ -357,6 +357,18 @@ class pivotState
     }
 
     /**
+     * Sql changed.
+     *
+     * @access public
+     * @return void
+     */
+    public function sqlChanged()
+    {
+        $this->queryCols = array();
+        $this->queryData = array();
+    }
+
+    /**
      * Get filters.
      *
      * @access public
