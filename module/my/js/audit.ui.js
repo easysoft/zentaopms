@@ -20,7 +20,7 @@ window.onRenderCell = function(result, {row, col})
         }
         else
         {
-            delete result[0].props.items[0];
+            if(result[0].length) delete result[0].props.items[0];
         }
     }
     if(result && col.name == 'title')
