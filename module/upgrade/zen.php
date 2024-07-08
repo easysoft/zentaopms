@@ -34,7 +34,6 @@ class upgradeZen extends upgrade
         if(version_compare($openVersion, '15_0_rc1', '>=') && $systemMode == 'new')
         {
             $this->setting->setItem('system.common.global.mode', 'ALM');
-            if(empty($this->config->URAndSR)) $this->setting->setItem('system.common.closedFeatures', 'productUR');
             $selectMode = false;
         }
         if(version_compare($openVersion, '18_0_beta1', '>=')) $selectMode = false;

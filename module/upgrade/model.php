@@ -8998,7 +8998,17 @@ class upgradeModel extends model
     {
         /* If the mode is light, disable the epic story. */
         /* 如果是轻量模式，禁用业务需求。 */
-        if(zget($this->config->global, 'mode', 'light') == 'light') $this->loadModel('setting')->setItem('system.custom.enableER', '0');
+        if(zget($this->config->global, 'mode', 'light') == 'light')
+        {
+            $this->loadModel('setting')->setItem('system.custom.enableER', '0');
+        }
+        else
+        {
+            /* 开启用户需求。*/
+            $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&key=closedFeatures');
+            if(strpos($closedFeatures, 'productUR') !== false) $closedFeatures = str_replace('productUR', '', $closedFeatures);
+            $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
+        }
 
         $lang = $this->app->getClientLang();
 
