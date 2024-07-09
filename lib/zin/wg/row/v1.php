@@ -13,14 +13,14 @@ class row extends wg
     protected function build()
     {
         $classList = 'row';
-        list($justify, $align) = $this->prop(array('justify', 'align'));
+        list($justify, $align, $gap) = $this->prop(array('justify', 'align', 'gap'));
         if(!empty($justify)) $classList .= ' justify-' . $justify;
         if(!empty($align))   $classList .= ' items-' . $align;
 
         return div
         (
             setClass($classList),
-            zui::gap($this->prop('gap')),
+            is_numeric($gap) ? setClass("gap-$gap") : setStyle('gap', $gap),
             set($this->getRestProps()),
             $this->children()
         );
