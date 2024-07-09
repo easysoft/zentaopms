@@ -3433,7 +3433,7 @@ select
   t1.id,
   t1.name as program,
   round(
-    sum(cast(t5.consumed as date)),
+    sum(cast(t5.consumed as float)),
     2
   ) as consumed
 from
