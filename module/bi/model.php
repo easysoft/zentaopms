@@ -1536,6 +1536,13 @@ class biModel extends model
         return $downloadDuckdb && $downloadExtDM && $downloadExtMysql ? 'ok' : 'fail';
     }
 
+    /**
+     * 检查 DuckDB 安装状态。
+     * Check duckdb install status.
+     *
+     * @access public
+     * @return array
+     */
     public function checkDuckdbInstall()
     {
         $checkDuckdb   = $this->updateDownloadingTagFile('file', 'check');
