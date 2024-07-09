@@ -1154,7 +1154,7 @@ class upgradeModel extends model
                 $this->saveLogs($sql);
 
                 /* Calculate the number of sql runs completed. */
-                if(is_writable($this->app->getTmpRoot()))
+                if(is_writable($this->app->getTmpRoot()) && is_file($this->app->getTmpRoot() . 'upgradeSqlLines'))
                 {
                     $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
                     $sqlLines    = explode('-', $sqlLines);
