@@ -113,7 +113,7 @@ window.addGrade = function()
 
     newRow.find('input').val('');
     newRow.find('.btn-delete-grade').attr('href', 'javascript:void').removeClass('ajax-submit hidden').on('click', deleteGrade);
-    newRow.find('.btn-close').remove();
+    newRow.find('.btn-close, .btn-active').remove();
     newRow.find("input[type=hidden]").val(newIndex);
     newRow.find('td.index').text(newIndex);
     newRow.find('td.grade-status').text(enableLang);
