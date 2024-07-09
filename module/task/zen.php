@@ -568,6 +568,7 @@ class taskZen extends task
         {
             $formConfig['story']['skipRequired'] = true;
             $formConfig['module']['skipRequired'] = true;
+            if($this->post->selectTestStory == 'on') $formConfig['estStarted']['skipRequired'] = $formConfig['deadline']['skipRequired'] = $formConfig['estimate']['skipRequired'] = true;
         }
 
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
@@ -1050,12 +1051,13 @@ class taskZen extends task
      */
     protected function checkCreateTestTasks(array $tasks): bool
     {
-        foreach($tasks as $task)
+        foreach($tasks as $rowID => $task)
         {
+            $index = $rowID + 1;
             /* Check if the estimate is positive. */
             if($task->estimate < 0)
             {
-                dao::$errors['message'] = "ID: {$task->story} {$this->lang->task->error->recordMinus}";
+                dao::$errors["testEstimate[{$index}]"] = sprintf($this->lang->task->error->recordMinus, $this->lang->task->estimate);
                 return false;
             }
 
@@ -1066,7 +1068,7 @@ class taskZen extends task
                 if(dao::isError())
                 {
                     $error = current(dao::getError());
-                    dao::$errors['message'] = "ID: {$task->story} {$error}";
+                    dao::$errors["testDeadline[{$index}]"] = $error;
                     return false;
                 }
             }
@@ -1074,7 +1076,7 @@ class taskZen extends task
             /* Check start and end date. */
             if($task->estStarted > $task->deadline)
             {
-                dao::$errors['message'] = "ID: {$task->story} {$this->lang->task->error->deadlineSmall}";
+                dao::$errors["testDeadline[{$index}]"] = $this->lang->task->error->deadlineSmall;
                 return false;
             }
 
@@ -1082,8 +1084,12 @@ class taskZen extends task
             $this->dao->insert(TABLE_TASK)->data($task)->batchCheck($this->config->task->create->requiredFields, 'notempty');
             if(dao::isError())
             {
-                $error = current(dao::getError());
-                dao::$errors['message'] = "ID: {$task->story} {$error}";
+                $errors = dao::getError();
+                foreach($errors as $field => $error)
+                {
+                    $fieldName = 'test' . ucfirst($field);
+                    dao::$errors["{$fieldName}[{$index}]"] = $error;
+                }
                 return false;
             }
         }
