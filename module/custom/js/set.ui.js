@@ -94,6 +94,15 @@ window.deleteGrade = function()
 {
     $(this).closest('tr').remove();
     $('#gradeList tbody').find('tr').last().find('.btn-add-grade').removeClass('hidden');
+
+    /* compute grade. */
+    let index = 1;
+    $('#gradeList tbody').find('.gradeTr').each(function()
+    {
+        $(this).find('td.index').text(index);
+        $(this).find('input[type=hidden]').val(index);
+        index ++;
+    });
 }
 
 window.addGrade = function()
