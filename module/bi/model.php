@@ -950,6 +950,7 @@ class biModel extends model
             if(!isset($filter['from']) || $filter['from'] != 'query') continue;
 
             $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
+            if($filters[$index]['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
         }
         $sql = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $sql = trim($sql, ';');
