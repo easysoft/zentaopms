@@ -32,6 +32,7 @@ $schema->fields['status']       = array('type' => 'option', 'name' => $this->lan
 $schema->fields['stage']        = array('type' => 'option', 'name' => $this->lang->story->stage, 'options' => $this->lang->story->stageList);
 $schema->fields['pri']          = array('type' => 'option', 'name' => $this->lang->story->pri, 'options' => $this->lang->story->priList);
 $schema->fields['source']       = array('type' => 'option', 'name' => $this->lang->story->source, 'options' => $this->lang->story->sourceList);
+$schema->fields['type']         = array('type' => 'option', 'name' => $this->lang->story->type, 'options' => $this->lang->story->typeList);
 $schema->fields['category']     = array('type' => 'option', 'name' => $this->lang->story->category, 'options' => $this->lang->story->categoryList);
 $schema->fields['product']      = array('type' => 'object', 'name' => $this->lang->story->product, 'object' => 'product', 'show' => 'product.name');
 $schema->fields['storymodule']  = array('type' => 'object', 'name' => $this->lang->story->module, 'object' => 'storymodule', 'show' => 'storymodule.name');
