@@ -162,20 +162,7 @@ class backupModel extends model
         $return->result = true;
         $return->error  = '';
 
-        if(is_file($backupFile))
-        {
-            $oldDir = getcwd();
-            chdir($this->app->getTmpRoot());
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($backupFile);
-            if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON) == 0)
-            {
-                $return->result = false;
-                $return->error  = $zip->errorInfo();
-            }
-            chdir($oldDir);
-        }
-        elseif(is_dir($backupFile))
+        if(is_dir($backupFile))
         {
             $zfile = $this->app->loadClass('zfile');
             $zfile->copyDir($backupFile, $this->app->getAppRoot() . 'www/data/', $showDetails = false);
@@ -299,9 +286,7 @@ class backupModel extends model
         }
         else
         {
-            if(file_exists($backupPath . $name . ".{$type}"))         return $backupPath . $name . ".{$type}";
-            if(file_exists($backupPath . $name . ".{$type}.zip"))     return $backupPath . $name . ".{$type}.zip";
-            if(file_exists($backupPath . $name . ".{$type}.zip.php")) return $backupPath . $name . ".{$type}.zip.php";
+            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
         }
 
         return false;
