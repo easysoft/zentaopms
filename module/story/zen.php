@@ -1365,6 +1365,10 @@ class storyZen extends story
         $stories    = array();
         if(!empty($syncFields)) $stories = empty($_POST['story']) ? array() : $this->story->getByList($_POST['story']);
 
+        $this->lang->story->estimate   = $this->lang->task->estimateAB;
+        $this->lang->story->deadline   = $this->lang->task->deadline;
+        $this->lang->story->estStarted = $this->lang->task->estStarted;
+
         $tasks     = form::batchData($fields)->get();
         $taskNames = array();
         foreach($tasks as $task)
