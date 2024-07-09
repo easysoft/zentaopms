@@ -829,9 +829,10 @@ class biModel extends model
      * @access public
      * @return string|false
      */
-    public function getDuckDBTmpDir()
+    public function getDuckDBTmpDir($static = false)
     {
         $duckdbTmpPath = $this->app->getTmpRoot() . 'duckdb' . DS . 'bi' . DS;
+        if($static) return $duckdbTmpPath;
         if(!is_dir($duckdbTmpPath) && !mkdir($duckdbTmpPath, 0755, true)) return false;
 
         return $duckdbTmpPath;
@@ -908,6 +909,22 @@ class biModel extends model
 
         if($driver == 'mysql') return "$binPath :memory: \"$sqlContent\" 2>&1";
         return "$sqlContent 2>&1";
+    }
+
+    public function generateParquetFile()
+    {
+        $duckdb = $this->getDuckDBPath();
+        if(!$duckdb) return $this->lang->bi->binNotExists;
+
+        $duckdbTmpPath = $this->getDuckDBTmpDir();
+        if(!$duckdbTmpPath) return sprintf($this->lang->bi->tmpPermissionDenied, $this->getDuckDBTmpDir(true), $this->getDuckDBTmpDir(true));
+
+        $copySQL = $this->prepareCopySQL($duckdbTmpPath);
+        $command = $this->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
+        $output  = shell_exec($command);
+        if(!empty($output)) return $output;
+
+        return true;
     }
 
     /**

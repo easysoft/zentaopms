@@ -22,35 +22,17 @@ class bi extends control
     public function syncParquetFile()
     {
         $startTime = microtime(true);
-        $duckdb = $this->bi->getDuckDBPath();
-        if(!$duckdb)
-        {
-            echo("DuckDB bin path not exists.");
-            return;
-        }
-
-        $duckdbTmpPath = $this->bi->getDuckDBTmpDir();
-        if(!$duckdbTmpPath)
-        {
-            echo("Create DuckDB tmp dir permission denied.");
-            return;
-        }
-
-        $copySQL = $this->bi->prepareCopySQL($duckdbTmpPath);
-        $command = $this->bi->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
-
-        $output = shell_exec($command);
-        $endTime = microtime(true);
-        $runTime = $endTime - $startTime;
+        $result    = $this->bi->generateParquetFile();
+        $endTime   = microtime(true);
+        $runTime   = $endTime - $startTime;
         echo "$runTime \n";
 
-        if(empty($output))
+        if($result !== true)
         {
-            echo('success');
+            echo $result;
             return;
         }
-
-        echo($output);
+        echo 'success';
     }
 
     /**
