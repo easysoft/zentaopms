@@ -945,7 +945,7 @@ class biModel extends model
      * @access public
      * @return string
      */
-    public function processVars($sql, $filters = array())
+    public function processVars($sql, $filters = array(), $emptyValue = false)
     {
         foreach($filters as $index => $filter)
         {
@@ -954,6 +954,8 @@ class biModel extends model
 
             $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
             if($filters[$index]['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
+
+            if($emptyValue) $filters[$index]['default'] = '';
         }
         $sql = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $sql = trim($sql, ';');
@@ -1131,7 +1133,7 @@ class biModel extends model
     public function query($stateObj, $driver = 'mysql')
     {
         $dbh = $this->app->loadDriver($driver);
-        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
+        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters(), true);
 
         $stateObj->beforeQuerySql();
 
@@ -1140,6 +1142,8 @@ class biModel extends model
 
         $checked = $this->validateSql($sql, $driver);
         if($checked !== true) return $stateObj->setError($checked);
+
+        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
 
         $recPerPage = $stateObj->pager->recPerPage;
         $pageID     = $stateObj->pager->pageID;
