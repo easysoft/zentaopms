@@ -394,7 +394,7 @@ class dbh
                 $result = $this->processReplace($sql);
                 if($result != $sql) return $result;
 
-                $sql    = str_replace(array('REPLACE INTO', 'REPLACE'), 'INSERT', $sql);
+                $sql    = str_replace('REPLACE', 'INSERT', $sql);
                 $action = 'INSERT';
             case 'INSERT':
             case 'UPDATE':
