@@ -1061,19 +1061,7 @@ class biModel extends model
         $columnFields = array();
         foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
 
-        $tableAndFields = $this->getTableAndFields($sql);
-        $tables   = $tableAndFields['tables'];
-        $fields   = $tableAndFields['fields'];
-
-        $moduleNames = array();
-        $aliasNames  = array();
-        if($tables)
-        {
-            $moduleNames = $this->dataview->getModuleNames($tables);
-            $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
-        }
-
-        list($fieldPairs, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
+        list($moduleNames, $aliasNames, $fieldPairs, $relatedObjects) = $this->getParams4Rebuild($sql, $statement, $columnFields);
 
         $columns     = array();
         $clientLang  = $this->app->getClientLang();
@@ -1086,6 +1074,33 @@ class biModel extends model
         $columns = $this->rebuildFieldSettings($fieldPairs, $columnTypes, $relatedObjects, $columns, $objectFields);
 
         return array($columns, $relatedObjects);
+    }
+
+    /**
+     * Get moduleNames and aliasNames.
+     *
+     * @param  string $sql
+     * @param  object $statement
+     * @param  array  $columnFields
+     * @access public
+     * @return array
+     */
+    public function getParams4Rebuild($sql, $statement, $columnFields)
+    {
+        $tableAndFields = $this->getTableAndFields($sql);
+        $tables   = $tableAndFields['tables'];
+        $fields   = $tableAndFields['fields'];
+
+        $moduleNames = array();
+        $aliasNames  = array();
+        if($tables)
+        {
+            $moduleNames = $this->dataview->getModuleNames($tables);
+            $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
+        }
+        list($fieldPairs, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
+
+        return array($moduleNames, $aliasNames, $fieldPairs, $relatedObjects);
     }
 
     /**
