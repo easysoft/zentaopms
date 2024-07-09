@@ -726,10 +726,11 @@ class pivotModel extends model
      *
      * @param  string   $sql
      * @param  array    $filters
+     * @param  array    $driver
      * @access public
      * @return string
      */
-    public function appendWhereFilterToSql(string $sql, array $filters): string
+    public function appendWhereFilterToSql(string $sql, array $filters, string $driver): string
     {
         $connectSQL = '';
         if(!empty($filters) && !isset($filters[0]['from']))
@@ -737,7 +738,8 @@ class pivotModel extends model
             $wheres = array();
             foreach($filters as $field => $filter)
             {
-                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
+                $fieldSQL = $this->getFilterFieldSQL($filter, $field, $driver);
+                $wheres[] = "$fieldSQL {$filter['operator']} {$filter['value']}";
             }
 
             $whereStr    = implode(' and ', $wheres);
@@ -747,6 +749,22 @@ class pivotModel extends model
         $sql = "select * from ( $sql ) tt" . $connectSQL;
 
         return $sql;
+    }
+
+    public function getFilterFieldSQL(array $filter, string $field, string $driver)
+    {
+        $fieldSql = "tt.`{$field}`";
+
+        if($driver == 'duckdb')
+        {
+            $type = $filter['type'];
+            if($type == 'input')
+            {
+                $fieldSql = " cast($fieldSql as varchar) ";
+            }
+        }
+
+        return $fieldSql;
     }
 
     /**
@@ -1275,7 +1293,7 @@ class pivotModel extends model
         /* Replace the variable with the default value. */
         $sql = $this->bi->processVars($sql, $filters);
         $sql = $this->trimSemicolon($sql);
-        $sql = $this->appendWhereFilterToSql($sql, $filters);
+        $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
         $dbh     = $this->app->loadDriver($driver);
         $records = $dbh->query($sql)->fetchAll();

@@ -501,10 +501,10 @@ class pivotState
                 case 'select':
                     if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
                     $value = "('" . $default . "')";
-                    $filterWheres[$field] = array('operator' => 'IN', 'value' => $value);
+                    $filterWheres[$field] = array('operator' => 'IN', 'type' => $type, 'value' => $value);
                     break;
                 case 'input':
-                    $filterWheres[$field] = array('operator' => 'LIKE', 'value' => "'%$default%'");
+                    $filterWheres[$field] = array('operator' => 'LIKE', 'type' => $type, 'value' => "'%$default%'");
                     break;
                 case 'date':
                 case 'datetime':
@@ -514,9 +514,9 @@ class pivotState
                     if(!empty($begin)) $begin = date('Y-m-d 00:00:00', strtotime($begin));
                     if(!empty($end))   $end   = date('Y-m-d 23:59:59', strtotime($end));
 
-                    if(!empty($begin) &&  empty($end)) $filterWheres[$field] = array('operator' => '>',       'value' => "'{$begin}'");
-                    if( empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => '<',       'value' => "'{$end}'");
-                    if(!empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => 'BETWEEN', 'value' => "'{$begin}' AND '{$end}'");
+                    if(!empty($begin) &&  empty($end)) $filterWheres[$field] = array('operator' => '>',       'type' => $type, 'value' => "'{$begin}'");
+                    if( empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => '<',       'type' => $type, 'value' => "'{$end}'");
+                    if(!empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => 'BETWEEN', 'type' => $type, 'value' => "'{$begin}' AND '{$end}'");
                     break;
                 default:
                     break;
