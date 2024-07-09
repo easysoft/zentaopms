@@ -1053,14 +1053,7 @@ class biModel extends model
      */
     public function prepareColumns($sql, $statement, $driver)
     {
-        $this->loadModel('chart');
-        $this->loadModel('dataview');
-
-        $sqlColumns   = $this->getColumns($sql, $driver);
-        $columnTypes  = $this->getColumnsType($sql, $driver, $sqlColumns);
-        $columnFields = array();
-        foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
-
+        list($columnTypes, $columnFields) = $this->getSqlTypeAndFields($sql, $driver);
         list($moduleNames, $aliasNames, $fieldPairs, $relatedObjects) = $this->getParams4Rebuild($sql, $statement, $columnFields);
 
         $columns     = array();
@@ -1077,7 +1070,25 @@ class biModel extends model
     }
 
     /**
-     * Get moduleNames and aliasNames.
+     * Get sql columnTypes and columnFields.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @access public
+     * @return array
+     */
+    public function getSqlTypeAndFields($sql, $driver)
+    {
+        $sqlColumns   = $this->getColumns($sql, $driver);
+        $columnTypes  = $this->getColumnsType($sql, $driver, $sqlColumns);
+        $columnFields = array();
+        foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
+
+        return array($columnTypes, $columnFields);
+    }
+
+    /**
+     * Get params for rebuild fieldSetting.
      *
      * @param  string $sql
      * @param  object $statement
