@@ -1867,7 +1867,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '56',
     'sql'       => <<<EOT
 select if(t3.id is not null, t3."name", '空') as deptName, count(1) as count,
-if(t3.id is not null, t3."order", 9999) as deptOrder
+if(t3.id is not null, cast(t3."order" as integer), 9999) as deptOrder
 from zt_user as t1
 left join zt_dept as t2 on t1.dept = t2.id
 left join zt_dept as t3 on (t2.path like '%' || t3.path || '%') and t3.grade = '1'
@@ -1980,22 +1980,22 @@ $config->bi->builtin->charts[] = array
     'id'        => 1051,
     'name'      => '宏观数据-人员工龄分布图',
     'code'      => 'macro_workingStatus',
-    'driver'    => 'duckdb',
+    'driver'    => 'mysql',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-select count(1) as count, '0-1年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '1 year')
+SELECT count(1) as count, "0-1年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 1 YEAR)
 union
-select count(1) as count, '1-3年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '3 year') and "join" <= (current_date() - interval '1 year')
+SELECT count(1) as count, "1-3年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 3 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 1 YEAR)
 union
-select count(1) as count, '3-5年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '5 year') and "join" <= (current_date() - interval '3 year')
+SELECT count(1) as count, "3-5年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 5 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 3 YEAR)
 union
-select count(1) as count, '5-10年' as joindate from zt_user where deleted = '0' and "join" > (current_date() - interval '10 year') and "join" <= (current_date() - interval '5 year')
+SELECT count(1) as count, "5-10年" as joinDate FROM zt_user WHERE deleted = '0' AND `join` > DATE_SUB(NOW(), INTERVAL 10 YEAR) AND `join` <= DATE_SUB(NOW(), INTERVAL 5 YEAR)
 union
-select count(1) as count, '10年以上' as joindate from zt_user where deleted = '0' and "join" < (current_date() - interval '10 year') and date_part('year', "join") != '0000'
+SELECT count(1) as count, "10年以上" as joinDate FROM zt_user WHERE deleted = '0' AND `join` < DATE_SUB(NOW(), INTERVAL 10 YEAR) AND LEFT(`join`, 4) != '0000'
 union
-select count(1) as count, '未知' as joindate from zt_user where deleted = '0' and date_part('year', "join") = '0000'
+SELECT count(1) as count, "未知" as joinDate FROM zt_user WHERE deleted = '0' AND LEFT(`join`, 4) = '0000'
 EOT,
     'settings'  => array
     (
@@ -3387,7 +3387,7 @@ select
   t1.id,
   t1.name as program,
   round(
-    sum(t5.consumed),
+    sum(cast(t5.consumed as date)),
     2
   ) as consumed
 from
@@ -3804,22 +3804,14 @@ $config->bi->builtin->charts[] = array
     'id'        => 1094,
     'name'      => '年度排行-项目-工期榜',
     'code'      => 'annualRank_projectDuration',
-    'driver'    => 'duckdb',
+    'driver'    => 'mysql',
     'dimension' => '1',
     'type'      => 'cluBarY',
     'group'     => '42',
     'sql'       => <<<EOT
-select year, id, name, status, realBegan, realEnd,
-    if(status = 'closed', datediff('day', realBegan, realEnd), datediff('day', realBegan, current_date())) as duration
-from (select distinct year(cast(date as date)) as year from zt_action) as t1
-left join zt_project as t2 on 1 = 1
-where deleted = '0'
-and type = 'project'
-and year(cast(realBegan as date)) <= year
-and year(cast(realBegan as date)) is not null
-and (status ='doing' or (status = 'suspended' and year(cast(suspendedDate as date)) >= year)
-or (status = 'closed' and year(cast(realEnd as date)) >= year))
-order by year, duration desc
+SELECT `year`, id,name,status,realBegan,realEnd,IF(status = 'closed', DATEDIFF(realEnd, realBegan), DATEDIFF(NOW(),realBegan)) as duration
+FROM (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) AS t1
+LEFT JOIN zt_project AS t2 ON 1 = 1 WHERE deleted = '0' AND type = 'project' AND YEAR(realBegan) <= `year` AND LEFT(realBegan, 4) != '0000' AND (status ='doing' OR (status = 'suspended' AND YEAR(suspendedDate) >= `year`) OR (status = 'closed' AND YEAR(realEnd) >= `year`)) HAVING 1=1 ORDER BY `year`, duration desc
 EOT,
     'settings'  => array
     (
@@ -3869,22 +3861,20 @@ $config->bi->builtin->charts[] = array
     'id'        => 1096,
     'name'      => '年度排行-项目-工期偏差榜',
     'code'      => 'annualRank_projectDurationDeviation',
-    'driver'    => 'duckdb',
     'dimension' => '1',
+    'driver'    => 'mysql',
     'type'      => 'cluBarY',
     'group'     => '42',
     'sql'       => <<<EOT
-select `year`, id, name, status, begin, "end", realBegan, realEnd,
-    round((if(year(cast(realEnd as date)) is not null,
-    datediff('day', realBegan, realEnd),
-    datediff('day', realBegan, current_date())) - datediff('day', begin, "end")) / datediff('day', begin, "end") * 100) as duration
-from (select distinct year(cast(date as date)) as year from zt_action) as t1
-left join zt_project as t2 on 1=1
-where deleted = '0' and t2.type = 'project'
-and (year(cast(realBegan as date)) <= year and year(cast(realBegan as date)) is not null)
-and (year(cast(realEnd as date)) >= year and year(cast(realEnd as date)) is not null)
-and year(cast("end" as date)) != '2059'
-order by duration asc
+SELECT `year`, id,name,status,`begin`,`end`,realBegan,realEnd,
+ROUND((IF(LEFT(realEnd,4) != '0000', DATEDIFF(realEnd, realBegan), DATEDIFF(NOW(),realBegan)) - DATEDIFF(`end`, `begin`)) / DATEDIFF(`end`,`begin`) * 100) as duration
+FROM (SELECT DISTINCT YEAR(`date`) as 'year' FROM zt_action) AS t1
+LEFT JOIN zt_project AS t2 ON 1 = 1
+WHERE deleted = '0' AND type = 'project'
+AND YEAR(realBegan) <= `year` AND LEFT(realBegan, 4) != '0000'
+AND (YEAR(realEnd) >= `year` OR LEFT(realEnd, 4) = '0000') AND YEAR(`end`) != '2059'
+HAVING 1=1
+ORDER BY duration ASC
 EOT,
     'settings'  => array
     (
