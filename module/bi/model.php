@@ -1519,8 +1519,6 @@ class biModel extends model
 
         if(!is_dir($binRoot)) mkdir($binRoot, 0755, true);
 
-        $duckdbUrl    = $duckdbBin['fileUrl'];
-
         $this->updateDownloadingTagFile('file', 'create');
         $this->updateDownloadingTagFile('extension_dm', 'create');
         $this->updateDownloadingTagFile('extension_mysql', 'create');
@@ -1539,7 +1537,7 @@ class biModel extends model
     /**
      * 检查 DuckDB 安装状态。
      * Check duckdb install status.
-     *
+     *﹡
      * @access public
      * @return array
      */
