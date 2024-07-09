@@ -374,7 +374,7 @@ class dataviewModel extends model
     public function getObjectFields()
     {
         $objectFields = array();
-        foreach(array_keys($this->lang->dataview->objects) as $object) $objectFields[$object] = $this->dataview->getTypeOptions($object);
+        foreach(array_keys($this->lang->dataview->objects) as $object) $objectFields[$object] = $this->getTypeOptions($object);
 
         return $objectFields;
     }

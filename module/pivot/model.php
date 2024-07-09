@@ -194,7 +194,7 @@ class pivotModel extends model
     public function processFieldSettings(object $pivot): void
     {
         $this->loadModel('dataview');
-        $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
+        $fieldSettings = $pivot->fieldSettings;
         if(empty($fieldSettings)) return;
 
         $sql     = isset($pivot->sql) ? $pivot->sql : '';
@@ -219,75 +219,13 @@ class pivotModel extends model
         $moduleNames = $tables ? $this->dataview->getModuleNames($tables) : array();
         list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
 
-        $objectFields = array();
-        foreach(array_keys($this->lang->dataview->objects) as $object) $objectFields[$object] = $this->dataview->getTypeOptions($object);
+        $objectFields = $this->loadModel('dataview')->getObjectFields();
 
         /* 重建fieldSettings字段。 */
         /* Rebuild fieldSettings field. */
-        $pivot->fieldSettings = $this->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields);
+        $pivot->fieldSettings = $this->bi->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields);
     }
 
-    /**
-     * 重建透视表filedSettings字段
-     * Rebuild fieldSettings field of pivot.
-     *
-     * @param  object  $pivot
-     * @param  array   $fieldPairs
-     * @param  object  $columns
-     * @param  array   $relatedObject
-     * @param  object  $fieldSettings
-     * @param  array   $objectFields
-     * @access private
-     * @return object
-     */
-    public function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings, array $objectFields): object
-    {
-        $fieldSettingsNew = new stdclass();
-
-        foreach($fieldPairs as $index => $field)
-        {
-            $defaultType   = $columns->{$index};
-            $defaultObject = $relatedObject[$index];
-
-            if(isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
-
-            if(!isset($fieldSettings->{$index}))
-            {
-                /* 如果字段设置中没有该字段，则使用默认的配置。 */
-                /* If the field is not set in the field settings, use the default value. */
-                $fieldItem = new stdclass();
-                $fieldItem->name   = $field;
-                $fieldItem->object = $defaultObject;
-                $fieldItem->field  = $index;
-                $fieldItem->type   = $defaultType;
-
-                $fieldSettingsNew->{$index} = $fieldItem;
-            }
-            else
-            {
-                /* 兼容旧版本的字段设置，当为空或者为布尔值时，使用默认值 */
-                /* Compatible with old version of field settings, use default value when empty or boolean. */
-                if(!isset($fieldSettings->{$index}->object) || is_bool($fieldSettings->{$index}->object) || strlen($fieldSettings->{$index}->object) == 0) $fieldSettings->{$index}->object = $defaultObject;
-
-                /* 当字段设置中没有字段名时，使用默认的字段名配置。 */
-                /* When there is no field name in the field settings, use the default field name configuration. */
-                if(!isset($fieldSettings->{$index}->field) || strlen($fieldSettings->{$index}->field) == 0)
-                {
-                    $fieldSettings->{$index}->field  = $index;
-                    $fieldSettings->{$index}->object = $defaultObject;
-                    $fieldSettings->{$index}->type   = 'string';
-                }
-
-                $object = $fieldSettings->{$index}->object;
-                $type   = $fieldSettings->{$index}->type;
-                if($object == $defaultObject && $type != $defaultType) $fieldSettings->{$index}->type = $defaultType;
-
-                $fieldSettingsNew->{$index} = $fieldSettings->{$index};
-            }
-        }
-
-        return $fieldSettingsNew;
-    }
 
     /**
      * 获取执行。
