@@ -284,10 +284,8 @@ class backupModel extends model
             if(file_exists($backupPath . $name . ".{$type}"))     return $backupPath . $name . ".{$type}";
             if(file_exists($backupPath . $name . ".{$type}.php")) return $backupPath . $name . ".{$type}.php";
         }
-        else
-        {
-            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
-        }
+
+        if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
 
         return false;
     }
