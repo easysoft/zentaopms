@@ -1906,6 +1906,7 @@ class pivotModel extends model
         $col->label = $colLabel;
 
         $slice = zget($column, 'slice', 'noSlice');
+        $col->isSlice = $slice != 'noSlice';
         if($slice != 'noSlice' && !$showOrigin)
         {
             if(!isset($cols[1]))
