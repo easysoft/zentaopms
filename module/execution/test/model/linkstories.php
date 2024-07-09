@@ -3,9 +3,21 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
+/**
+
+title=测试 executionModel::linkStories();
+cid=1
+
+- 敏捷执行关联需求 @1
+- 瀑布执行关联需求 @0
+- 看板执行关联需求 @1
+
+*/
+
 $execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
+$execution->project->range('0,0,1,1,2');
 $execution->type->range('project{2},sprint,waterfall,kanban');
 $execution->status->range('doing{3},closed,doing');
 $execution->parent->range('0,0,1,1,2');
