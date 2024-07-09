@@ -493,7 +493,13 @@ class pivotState
             $from    = zget($filter, 'from', 'result');
             $type    = $filter['type'];
 
-            if($from == 'query' || empty($default)) continue;
+            if(empty($default)) continue;
+
+            if($from == 'query')
+            {
+                $filterWheres[] = $filter;
+                continue;
+            }
 
             switch($type)
             {
