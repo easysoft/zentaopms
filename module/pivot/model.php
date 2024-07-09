@@ -1434,7 +1434,7 @@ class pivotModel extends model
      */
     public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql')
     {
-        $sql = $this->initVarFilter($filters, $sql);
+        $sql = $this->bi->processVars($sql, $filters);
 
         /* Process rows. */
         $connectSQL = '';
