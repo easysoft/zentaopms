@@ -2,7 +2,7 @@ version: 1
 kind: pipeline
 spec:
   stages:
-    - name: prepare
+    - name: 质量检查
       type: ci
       spec:
         steps:
