@@ -51,7 +51,8 @@ r($tester->install->fetchByID(1, 'stage')) && p('id,name,type') && e('1,需求,r
 r($tester->install->fetchByID(1, 'lang'))  && p('id,value') && e('1,支持过程');         // 检查lang表的语言项是否变更成对应的中文语言项。
 r($tester->install->fetchByID(1, 'cron'))  && p('id,remark') && e('1,更新燃尽图');      // 检查cron表的语言项是否变更成对应的中文语言项。
 
-$app->clientLang = 'en';
+$app::$loadedLangs = array();
+$app->clientLang   = 'en';
 $app->loadLang('install');
 $tester->install->updateLang();
 r($tester->install->fetchByID(1, 'stage')) && p('id,name,type') && e('1,Story,request');       // 检查stage表的语言项是否变更成对应的英文语言项。
