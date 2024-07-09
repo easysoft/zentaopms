@@ -2416,17 +2416,17 @@ class pivotModel extends model
         $width = 128;
 
         /* Init table. */
-        $table  = "<div class='reportData'><table class='table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
+        $table = "<div class='reportData'><table class='table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
 
         $showOrigins = array();
         $hasShowOrigin = false;
 
         foreach($data->cols[0] as $col)
         {
-            $colspan = zget($col, 'colspan', 1);
-            $showOrigin = isset($col->showOrigin) ? $col->showOrigin : false;
+            $colspan       = zget($col, 'colspan', 1);
+            $showOrigin    = isset($col->showOrigin) ? $col->showOrigin : false;
             $colShowOrigin = array_fill(0, $colspan, $showOrigin);
-            $showOrigins = array_merge($showOrigins, $colShowOrigin);
+            $showOrigins   = array_merge($showOrigins, $colShowOrigin);
             if($showOrigin) $hasShowOrigin = true;
         }
 
@@ -2437,10 +2437,10 @@ class pivotModel extends model
             $table .= "<tr>";
             foreach($lineCols as $col)
             {
-                $isGroup = $col->isGroup;
                 $thName  = $col->label;
                 $colspan = zget($col, 'colspan', 1);
                 $rowspan = zget($col, 'rowspan', 1);
+                $isGroup = zget($col, 'isGroup', false);
 
                 if($isGroup) $thHtml = "<th data-flex='false' rowspan='$rowspan' colspan='$colspan' data-width='auto' class='text-center'>$thName</th>";
                 else         $thHtml = "<th data-flex='true' rowspan='$rowspan' colspan='$colspan' data-type='number' data-width=$width class='text-center'>$thName</th>";
@@ -2470,7 +2470,7 @@ class pivotModel extends model
             $table .= "<tr class='text-center'>";
             for($j = 0; $j < count($line); $j ++)
             {
-                $isGroup = !empty($data->cols[0][$j]) ? $data->cols[0][$j]->isGroup : false;
+                $isGroup = !empty($data->cols[0][$j]->isGroup) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
                 $hidden  = isset($configs[$i][$j]) ? false : (!$isGroup ? false : true);
 
@@ -2482,10 +2482,6 @@ class pivotModel extends model
                 }
 
                 $lineValue = $line[$j];
-                if($isGroup)
-                {
-                    $groupName = $data->cols[0][$j]->name;
-                }
                 if(is_numeric($lineValue)) $lineValue = round($lineValue, 2);
 
                 if(!$hidden) $table .= "<td rowspan='$rowspan'>$lineValue</td>";
