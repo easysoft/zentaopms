@@ -485,21 +485,16 @@ class pivotState
      */
     public function convertFiltersToWhere($filters)
     {
+        if($this->isQueryFilter($filters)) return array_values($filters);
+
         $filterWheres = array();
         foreach($filters as $filter)
         {
             $field   = $filter['field'];
             $default = zget($filter, 'default', '');
-            $from    = zget($filter, 'from', 'result');
             $type    = $filter['type'];
 
             if(empty($default)) continue;
-
-            if($from == 'query')
-            {
-                $filterWheres[] = $filter;
-                continue;
-            }
 
             switch($type)
             {
