@@ -16,7 +16,8 @@ jsVar('result', $result);
 if($result == 'duckdbFail')
 {
     jsVar('duckdb',    $duckdb);
-    jsVar('extension', $extension);
+    jsVar('ext_dm',    $ext_dm);
+    jsVar('ext_mysql', $ext_mysql);
     include $this->app->getBasePath() . "module/install/ui/installduckdb.html.php";
 }
 

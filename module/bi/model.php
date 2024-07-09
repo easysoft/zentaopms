@@ -800,6 +800,7 @@ class biModel extends model
      * 获取ducbDB的bin目录配置。
      * Get duckdb bin config.
      *
+     * @param string  $driver
      * @access public
      * @return array
      */
@@ -813,10 +814,12 @@ class biModel extends model
         /* If it is not a mysql database, then use the same extension configuration of Dameng. */
         if($driver !== 'mysql') $driver = 'dm';
 
-        $cdnUrl = $this->config->bi->cdnUrl;
-        $duckdbBin['fileUrl']      = $cdnUrl . $duckdbBin['fileUrl'];
-        $duckdbBin['extensionUrl'] = $cdnUrl . $this->config->bi->duckdbExtUrl[$driver][$os];
-        $duckdbBin['extension']    = $this->config->bi->duckdbExt[$driver][$os];
+        $duckdbBin['extension'] = $this->config->bi->duckdbExt[$os][$driver];
+
+        $duckdbBin['extension_dm']       = $this->config->bi->duckdbExt[$os]['dm'];
+        $duckdbBin['extension_mysql']    = $this->config->bi->duckdbExt[$os]['mysql'];
+        $duckdbBin['extensionUrl_dm']    = $this->config->bi->duckdbExtUrl[$os]['dm'];
+        $duckdbBin['extensionUrl_mysql'] = $this->config->bi->duckdbExtUrl[$os]['mysql'];
 
         if($os == 'win') $duckdbBin['path'] = dirname(dirname($this->app->getBasePath())) . $duckdbBin['path'];
 
@@ -1506,10 +1509,9 @@ class biModel extends model
      */
     public function downloadDuckdb(): string
     {
-        $checkDuckdb    = $this->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->updateDownloadingTagFile('extension', 'check');
+        $check = $this->checkDuckdbInstall();
 
-        if($checkDuckdb == 'loading' || $checkExtension == 'loading') return 'loading';
+        if($check['loading']) return 'loading';
 
         $this->loadModel('bi');
         $binRoot   = $this->app->getTmpRoot() . 'duckdb' . DS;
@@ -1518,18 +1520,33 @@ class biModel extends model
         if(!is_dir($binRoot)) mkdir($binRoot, 0755, true);
 
         $duckdbUrl    = $duckdbBin['fileUrl'];
-        $extensionUrl = $duckdbBin['extensionUrl'];
 
         $this->updateDownloadingTagFile('file', 'create');
-        $this->updateDownloadingTagFile('extension', 'create');
+        $this->updateDownloadingTagFile('extension_dm', 'create');
+        $this->updateDownloadingTagFile('extension_mysql', 'create');
 
-        $downloadDuckdb    = $this->downloadFile($duckdbUrl, $binRoot, $duckdbBin['file']);
-        $downloadExtension = $this->downloadFile($extensionUrl, $binRoot, $duckdbBin['extension']);
+        $downloadDuckdb   = $this->downloadFile($duckdbBin['fileUrl'],            $binRoot, $duckdbBin['file']);
+        $downloadExtDM    = $this->downloadFile($duckdbBin['extensionUrl_dm'],    $binRoot, $duckdbBin['extension_dm']);
+        $downloadExtMysql = $this->downloadFile($duckdbBin['extensionUrl_mysql'], $binRoot, $duckdbBin['extension_mysql']);
 
         $this->updateDownloadingTagFile('file', 'remove');
-        $this->updateDownloadingTagFile('extension', 'remove');
+        $this->updateDownloadingTagFile('extension_dm', 'remove');
+        $this->updateDownloadingTagFile('extension_mysql', 'remove');
 
-        return $downloadDuckdb && $downloadExtension ? 'ok' : 'fail';
+        return $downloadDuckdb && $downloadExtDM && $downloadExtMysql ? 'ok' : 'fail';
+    }
+
+    public function checkDuckdbInstall()
+    {
+        $checkDuckdb   = $this->updateDownloadingTagFile('file', 'check');
+        $checkExtDM    = $this->updateDownloadingTagFile('extension_dm', 'check');
+        $checkExtMysql = $this->updateDownloadingTagFile('extension_mysql', 'check');
+
+        $loading = $checkDuckdb == 'loading' || $checkExtDM == 'loading' || $checkExtMysql == 'loading';
+        $ok      = $checkDuckdb == 'ok' && $checkExtDM == 'ok' && $checkExtMysql == 'ok';
+        $fail    = $checkDuckdb == 'fail' || $checkExtDM == 'fail' || $checkExtMysql == 'fail';
+
+        return array('loading' => $loading, 'ok' => $ok, 'fail' => $fail, 'duckdb' => $checkDuckdb, 'ext_dm' => $checkExtDM, 'ext_mysql' => $checkExtMysql);
     }
 
     /**

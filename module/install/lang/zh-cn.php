@@ -127,8 +127,8 @@ $lang->install->duckdbFail    = '安装duckdb引擎失败，请参考手册进�
 $lang->install->installDuckdb       = '安装DuckDB';
 $lang->install->installingDuckdb    = '正在安装duckdb引擎...';
 $lang->install->installedDuckdb     = '安装duckdb引擎成功！';
-$lang->install->installingExtension = '正在安装duckdb引擎扩展...';
-$lang->install->installedExtension  = '安装duckdb引擎扩展成功！';
+$lang->install->installingExtension = '正在安装duckdb引擎扩展[%s]...';
+$lang->install->installedExtension  = '安装duckdb引擎扩展[%s]成功！';
 $lang->install->installedFail       = '安装失败';
 
 $lang->install->timezone       = '时区设置';

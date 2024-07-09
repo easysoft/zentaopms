@@ -24,21 +24,21 @@ $iconClass = array
     'fail'    => 'text-danger'
 );
 
-$duckdb = array
+$duckdbLang = array
 (
     'loading' => $lang->install->installingDuckdb,
     'ok'      => $lang->install->installedDuckdb,
     'fail'    => $lang->install->installedFail,
 );
 
-$extension = array
+$extLang = array
 (
     'loading' => $lang->install->installingExtension,
     'ok'      => $lang->install->installedExtension,
     'fail'    => $lang->install->installedFail,
 );
 
-$fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass, $duckdb, $extension)
+$fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass, $duckdbLang, $extLang)
 {
     return p
     (
@@ -48,20 +48,28 @@ $fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass,
             setClass($iconClass[$stus]),
             $icons[$stus]
         ),
-        $type == 'duckdb' ? $duckdb[$stus] : null,
-        $type == 'extension' ? $extension[$stus] : null,
+        $type == 'duckdb'    ? $duckdbLang[$stus] : null,
+        $type == 'ext_dm' || $type == 'ext_mysql' ? sprintf($extLang[$stus], $type) : null,
     );
+};
+
+$fnGenerateItems = function() use ($icons, $fnGenerateInfo, $duckdb, $ext_dm, $ext_mysql)
+{
+    $items = array();
+    foreach(array_keys($icons) as $stus)
+    {
+        $items[] = $fnGenerateInfo('duckdb',    $stus, $stus == $duckdb);
+        $items[] = $fnGenerateInfo('ext_dm',    $stus, $stus == $ext_dm);
+        $items[] = $fnGenerateInfo('ext_mysql', $stus, $stus == $ext_mysql);
+    }
+
+    return $items;
 };
 
 div
 (
     setID('installDuckdb'),
-    $fnGenerateInfo('duckdb', 'loading', $duckdbStatus == 'loading'),
-    $fnGenerateInfo('duckdb', 'ok', $duckdbStatus == 'ok'),
-    $fnGenerateInfo('duckdb', 'fail', $duckdbStatus == 'fail'),
-    $fnGenerateInfo('extension', 'loading', $extensionStatus == 'loading'),
-    $fnGenerateInfo('extension', 'ok', $extensionStatus == 'ok'),
-    $fnGenerateInfo('extension', 'fail', $extensionStatus == 'fail'),
+    $fnGenerateItems(),
     span
     (
         setClass('help text-warning hidden'),

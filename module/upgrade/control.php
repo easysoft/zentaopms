@@ -166,15 +166,14 @@ class upgrade extends control
 
         /* 检查 Duckdb 引擎是否正确安装。*/
         /* Check Duckdb is installed. */
-        $this->loadModel('bi');
-        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
-        if($checkDuckdb === 'fail' || $checkExtension === 'fail')
+        $checkDuckdb = $this->loadModel('bi')->checkDuckdbInstall();
+        if($checkDuckdb['fail'])
         {
             $this->app->loadLang('install');
             $this->view->result    = 'duckdbFail';
             $this->view->duckdb    = 'loading';
-            $this->view->extension = 'loading';
+            $this->view->ext_dm    = 'loading';
+            $this->view->ext_mysql = 'loading';
 
             return $this->display();
         }
@@ -817,10 +816,7 @@ class upgrade extends control
      */
     public function ajaxCheckDuckdb()
     {
-        $this->loadModel('bi');
-        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
-
-        echo(json_encode(array('duckdb' => $checkDuckdb, 'extension' => $checkExtension)));
+        $check = $this->loadModel('bi')->checkDuckdbInstall();
+        echo(json_encode($check));
     }
 }

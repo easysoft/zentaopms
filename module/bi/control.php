@@ -76,9 +76,7 @@ class bi extends control
      */
     public function ajaxCheckDuckdb()
     {
-        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
-
-        echo(json_encode(array('duckdb' => $checkDuckdb, 'extension' => $checkExtension)));
+        $check = $this->bi->checkDuckdbInstall();
+        echo(json_encode($check));
     }
 }

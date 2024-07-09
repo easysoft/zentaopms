@@ -15,16 +15,16 @@ $config->bi->cdnUrl     = 'https://dl.zentao.net/duckdb/';
 $config->bi->duckdbHelp = 'https://www.zentao.net/book/zentaopms/1313.html';
 
 $config->bi->duckdbBin = array();
-$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/',   'file' => 'duckdb.exe', 'fileUrl' => 'win/duckdb.zip');
-$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb',     'fileUrl' => 'linux/amd64/duckdb.zip');
+$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/',   'file' => 'duckdb.exe', 'fileUrl' => $config->bi->cdnUrl . 'win/duckdb.zip');
+$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb',     'fileUrl' => $config->bi->cdnUrl . 'linux/amd64/duckdb.zip');
 
 $config->bi->duckdbExt = array();
-$config->bi->duckdbExt['dm']    = array('win' => 'sync2parquet.exe',               'linux' => 'sync2parquet');
-$config->bi->duckdbExt['mysql'] = array('win' => 'mysql_scanner.duckdb_extension', 'linux' => 'mysql_scanner.duckdb_extension');
+$config->bi->duckdbExt['win']   = array('dm' => 'sync2parquet.exe', 'mysql' => 'mysql_scanner.duckdb_extension');
+$config->bi->duckdbExt['linux'] = array('dm' => 'sync2parquet',     'mysql' => 'mysql_scanner.duckdb_extension');
 
 $config->bi->duckdbExtUrl = array();
-$config->bi->duckdbExtUrl['dm']    = array('win' => 'win/sync2parquet.exe',                   'linux' => 'linux/amd64/sync2parquet');
-$config->bi->duckdbExtUrl['mysql'] = array('win' => 'win/mysql_scanner.duckdb_extension.zip', 'linux' => 'linux/amd64/mysql_scanner.duckdb_extension.zip');
+$config->bi->duckdbExtUrl['win']   = array('dm' => $config->bi->cdnUrl . 'win/sync2parquet.exe',     'mysql' => $config->bi->cdnUrl . 'win/mysql_scanner.duckdb_extension.zip');
+$config->bi->duckdbExtUrl['linux'] = array('dm' => $config->bi->cdnUrl . 'linux/amd64/sync2parquet', 'mysql' => $config->bi->cdnUrl . 'linux/amd64/mysql_scanner.duckdb_extension.zip');
 
 $charts = array();
 $charts['32'] = array("root" => 1, "name" => "产品", "grade" => 1);

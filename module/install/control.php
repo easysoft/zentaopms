@@ -100,9 +100,8 @@ class install extends control
         $this->view->iniInfo        = $this->install->getIniInfo();
 
         $this->loadModel('bi');
-        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
-        $this->view->duckdbResult = $checkDuckdb == 'ok' && $checkExtension == 'ok' ? 'ok' : 'fail';
+        $checkDuckdb    = $this->bi->checkDuckdbInstall();
+        $this->view->duckdbResult = $checkDuckdb['ok'] ? 'ok' : 'fail';
 
         $checkSession = ini_get('session.save_handler') == 'files';
         $this->view->sessionResult = 'ok';
@@ -640,11 +639,13 @@ class install extends control
     {
         $this->loadModel('bi');
         $this->bi->updateDownloadingTagFile('file', 'remove');
-        $this->bi->updateDownloadingTagFile('extension', 'remove');
+        $this->bi->updateDownloadingTagFile('extension_dm', 'remove');
+        $this->bi->updateDownloadingTagFile('extension_mysql', 'remove');
 
-        $this->view->title           = $this->lang->install->installDuckdb;
-        $this->view->duckdbStatus    = 'loading';
-        $this->view->extensionStatus = 'loading';
+        $this->view->title     = $this->lang->install->installDuckdb;
+        $this->view->duckdb    = 'loading';
+        $this->view->ext_dm    = 'loading';
+        $this->view->ext_mysql = 'loading';
         $this->display();
     }
 
@@ -672,10 +673,7 @@ class install extends control
      */
     public function ajaxCheckDuckdb()
     {
-        $this->loadModel('bi');
-        $checkDuckdb    = $this->bi->updateDownloadingTagFile('file', 'check');
-        $checkExtension = $this->bi->updateDownloadingTagFile('extension', 'check');
-
-        echo(json_encode(array('duckdb' => $checkDuckdb, 'extension' => $checkExtension)));
+        $check = $this->loadModel('bi')->checkDuckdbInstall();
+        echo(json_encode($check));
     }
 }
