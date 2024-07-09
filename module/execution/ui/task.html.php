@@ -128,12 +128,13 @@ toolbar
 );
 
 /* zin: Define the sidebar in main content. */
+$activeKey = $browseType == 'byproduct' ? $productID : $moduleID;
 sidebar
 (
     moduleMenu
     (
         set::modules($moduleTree),
-        set::activeKey($moduleID),
+        set::activeKey($activeKey),
         set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
         set::settingApp($execution->multiple ? 'execution' : 'project'),
         set::closeLink(createLink('execution', 'task', "executionID={$executionID}")),
