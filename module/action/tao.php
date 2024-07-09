@@ -527,6 +527,9 @@ class actionTao extends actionModel
             case 'roadmap':
                 $paramString = "roadmapID={$action->extra}";
                 break;
+            case 'assetlib':
+                $paramString = "libID={$action->extra}";
+                break;
             case 'demand':
                 $paramString = "demandID={$action->extra}";
                 break;
