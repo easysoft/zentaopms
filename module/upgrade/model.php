@@ -9001,19 +9001,11 @@ class upgradeModel extends model
         if(zget($this->config->global, 'mode', 'light') == 'light')
         {
             $this->loadModel('setting')->setItem('system.custom.enableER', '0');
+        }
 
-            $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&key=closedFeatures');
-            if(strpos($closedFeatures, 'productUR') === false) $closedFeatures .= ',productUR';
-            if(strpos($closedFeatures, 'productER') === false) $closedFeatures .= ',productER';
-            $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
-        }
-        else
-        {
-            /* 开启用户需求。*/
-            $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&key=closedFeatures');
-            if(strpos($closedFeatures, 'productUR') !== false) $closedFeatures = str_replace('productUR', '', $closedFeatures);
-            $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
-        }
+        $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&key=closedFeatures');
+        if(strpos($closedFeatures, 'productUR') !== false) $closedFeatures .= ',productER,';
+        $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
 
         $lang = $this->app->getClientLang();
 
