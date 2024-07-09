@@ -11,8 +11,8 @@ title=测试 kanbanModel->getPageToolBar();
 timeout=0
 cid=1
 
-- 查看普通用户获取操作按钮的长度 @161
-- 查看管理员获取操作按钮的长度 @1282
+- 查看普通用户获取操作按钮的字符长度 @161
+- 查看管理员获取操作按钮的字符长度 @1282
 
 */
 global $tester;

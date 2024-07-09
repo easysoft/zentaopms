@@ -27,11 +27,11 @@ cid=1
 - 查看复制出来的区域下的分组数量 @5
 - 查看复制出来的区域下的分组数量 @5
 - 查看复制出来的区域下的分组数量 @5
-- 查看复制出来的区域下的泳道数量 @26
-- 查看复制出来的区域下的泳道数量 @26
-- 查看复制出来的区域下的泳道数量 @26
-- 查看复制出来的区域下的泳道数量 @26
-- 查看复制出来的区域下的泳道数量 @26
+- 查看复制出来的区域下的泳道数量 @28
+- 查看复制出来的区域下的泳道数量 @28
+- 查看复制出来的区域下的泳道数量 @28
+- 查看复制出来的区域下的泳道数量 @28
+- 查看复制出来的区域下的泳道数量 @28
 - 查看复制出来的区域下的看板列数量 @178
 - 查看复制出来的区域下的看板列数量 @178
 - 查看复制出来的区域下的看板列数量 @178
@@ -63,11 +63,11 @@ r(count($tester->kanban->getGroupGroupByRegions(array(8)),  true)) && p() && e('
 r(count($tester->kanban->getGroupGroupByRegions(array(9)),  true)) && p() && e('5'); // 查看复制出来的区域下的分组数量
 r(count($tester->kanban->getGroupGroupByRegions(array(10)), true)) && p() && e('5'); // 查看复制出来的区域下的分组数量
 
-r(count($tester->kanban->getLaneGroupByRegions(array(6)),  true)) && p() && e('26'); // 查看复制出来的区域下的泳道数量
-r(count($tester->kanban->getLaneGroupByRegions(array(7)),  true)) && p() && e('26'); // 查看复制出来的区域下的泳道数量
-r(count($tester->kanban->getLaneGroupByRegions(array(8)),  true)) && p() && e('26'); // 查看复制出来的区域下的泳道数量
-r(count($tester->kanban->getLaneGroupByRegions(array(9)),  true)) && p() && e('26'); // 查看复制出来的区域下的泳道数量
-r(count($tester->kanban->getLaneGroupByRegions(array(10)), true)) && p() && e('26'); // 查看复制出来的区域下的泳道数量
+r(count($tester->kanban->getLaneGroupByRegions(array(6)),  true)) && p() && e('28'); // 查看复制出来的区域下的泳道数量
+r(count($tester->kanban->getLaneGroupByRegions(array(7)),  true)) && p() && e('28'); // 查看复制出来的区域下的泳道数量
+r(count($tester->kanban->getLaneGroupByRegions(array(8)),  true)) && p() && e('28'); // 查看复制出来的区域下的泳道数量
+r(count($tester->kanban->getLaneGroupByRegions(array(9)),  true)) && p() && e('28'); // 查看复制出来的区域下的泳道数量
+r(count($tester->kanban->getLaneGroupByRegions(array(10)), true)) && p() && e('28'); // 查看复制出来的区域下的泳道数量
 
 r(count($tester->kanban->getColumnGroupByRegions(array(6)),  true)) && p() && e('178'); // 查看复制出来的区域下的看板列数量
 r(count($tester->kanban->getColumnGroupByRegions(array(7)),  true)) && p() && e('178'); // 查看复制出来的区域下的看板列数量
