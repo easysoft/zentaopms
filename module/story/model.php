@@ -3944,20 +3944,19 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getTracksByStories(array $stories, string $storyType, string $browseType, string $orderBy): array
+    public function getTracksByStories(array $stories, string $storyType): array
     {
         if(empty($stories)) return array();
 
         $rootIdList = array_unique(array_column($stories, 'root'));
-        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy($orderBy)->fetchAll('id');
-        if($browseType == 'bysearch')list($allStories, $stories) = $this->storyTao->getSearchedStoriesForTrack($allStories, $stories);
-
-        $leafNodes = $this->storyTao->getLeafNodes($stories, $storyType);
+        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('id');
+        $stories    = $this->storyTao->mergeChildrenForTrack($allStories, $stories, $storyType);
+        $leafNodes  = $this->storyTao->getLeafNodes($stories, $storyType);
 
         $tracks = array();
         $lanes  = $this->storyTao->buildTrackLanes($leafNodes, $storyType);
         $cols   = $this->storyTao->buildTrackCols($storyType);
-        $items  = $this->storyTao->buildTrackItems($allStories, $leafNodes, $storyType);
+        $items  = $this->storyTao->buildTrackItems($stories, $leafNodes, $storyType);
 
         return array('lanes' => $lanes, 'cols' => $cols, 'items' => $items, 'leafNodes' => $leafNodes);
     }
@@ -4021,7 +4020,6 @@ class storyModel extends model
                 $mergeCells[$laneName][$colName] = true;
                 $preMerged = true;
             }
-
         }
 
         return $mergeCells;
