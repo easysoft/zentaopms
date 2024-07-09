@@ -1455,7 +1455,7 @@ class storyTao extends storyModel
                         {
                             $hasDeveloping = true;
                         }
-                        if(in_array($child->stage, array('released', 'delivering', 'delivered')))
+                        if(in_array($child->stage, array('released', 'delivering', 'delivered', 'closed')))
                         {
                             $allBeforeDeveloping = false;
                         }
