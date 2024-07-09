@@ -189,7 +189,7 @@ class props extends \zin\utils\dataset
             }
 
             /* Convert non-string to json */
-            if($value === true && !str_starts_with($name, 'data-'))
+            if(($value === true || $value === '') && !str_starts_with($name, 'data-'))
             {
                 $pairs[] = $name;
             }
