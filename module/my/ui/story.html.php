@@ -99,6 +99,18 @@ if($canBatchAction) $config->my->story->dtable->fieldList['id']['type'] = 'check
 
 $stories = initTableData($stories, $config->my->story->dtable->fieldList, $this->story);
 
+/* 父需求去掉创建用例按钮。 */
+foreach($stories as $id => $story)
+{
+    if(isset($story->actions))
+    {
+        foreach($story->actions as $key => $action)
+        {
+            if($action['name'] == 'create' && $story->isParent == '1') $stories[$id]->actions[$key]['disabled'] = 1;
+        }
+    }
+}
+
 if($viewType == 'tiled') $config->my->story->dtable->fieldList['title']['nestedToggle'] = false;
 $cols = array_values($config->my->story->dtable->fieldList);
 $data = array_values($stories);
