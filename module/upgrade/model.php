@@ -9075,12 +9075,17 @@ class upgradeModel extends model
 
         $this->dao->clearTablesDescCache();
         /* Prepare built-in sqls of bi. */
-        $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
-        $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL('update');
-        $metricSQLs = $this->bi->prepareBuiltinMetricSQL('update');
-        $screenSQLs = $this->bi->prepareBuiltinScreenSQL('update');
 
-        $upgradeSqls = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
+        $upgradeSqls = array();
+        if($this->config->db->driver == 'mysql')
+        {
+            $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
+            $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
+            $upgradeSqls = array_merge($upgradeSqls, $chartSQLs, $pivotSQLs);
+        }
+        $metricSQLs  = $this->bi->prepareBuiltinMetricSQL('update');
+        $screenSQLs  = $this->bi->prepareBuiltinScreenSQL('update');
+        $upgradeSqls = array_merge($upgradeSqls, $metricSQLs, $screenSQLs);
 
         try
         {
