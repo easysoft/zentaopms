@@ -385,12 +385,18 @@ class installModel extends model
         $this->loadModel('bi');
 
         /* Prepare built-in sqls of bi. */
-        $chartSQLs  = $this->bi->prepareBuiltinChartSQL();
-        $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL();
-        $metricSQLs = $this->bi->prepareBuiltinMetricSQL();
-        $screenSQLs = $this->bi->prepareBuiltinScreenSQL();
 
-        $insertTables = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
+        $insertTables = array();
+        if($this->config->db->driver == 'mysql')
+        {
+            $chartSQLs    = $this->bi->prepareBuiltinChartSQL();
+            $pivotSQLs    = $this->bi->prepareBuiltinPivotSQL();
+            $insertTables = array_merge($insertTables, $chartSQLs, $pivotSQLs);
+        }
+
+        $metricSQLs   = $this->bi->prepareBuiltinMetricSQL();
+        $screenSQLs   = $this->bi->prepareBuiltinScreenSQL();
+        $insertTables = array_merge($insertTables, $metricSQLs, $screenSQLs);
 
         try
         {
