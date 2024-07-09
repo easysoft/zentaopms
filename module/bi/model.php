@@ -584,6 +584,7 @@ class biModel extends model
             if(isset($chart->filters))  $chart->filters  = $this->jsonEncode($chart->filters);
             if(isset($chart->fields))   $chart->fields   = $this->jsonEncode($chart->fields);
             if(isset($chart->langs))    $chart->langs    = $this->jsonEncode($chart->langs);
+            if(!isset($chart->driver))  $chart->driver   = 'mysql';
 
             $exists = $this->dao->select('id')->from(TABLE_CHART)->where('id')->eq($chart->id)->fetch();
             if(!$exists) $currentOperate = 'insert';
@@ -911,6 +912,12 @@ class biModel extends model
         return "$sqlContent 2>&1";
     }
 
+    /**
+     * Generate parquet file.
+     *
+     * @access public
+     * @return string|true
+     */
     public function generateParquetFile()
     {
         $duckdb = $this->getDuckDBPath();
