@@ -303,6 +303,7 @@ $lang->pivot->step1QueryTip       = '为后续配置数据下钻，请确保查�
 $lang->pivot->drillingTip         = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
 $lang->pivot->drillConditionTip   = '根据步骤一中的SQL查询语句，调整下钻语句中的查询条件。';
 $lang->pivot->drillResultEmptyTip = '点击“预览”按钮，即可在此查看下钻结果。';
+$lang->pivot->previewResultTip    = '下钻结果将显示对象相关字段，默认只显示10行数据。';
 
 $lang->pivot->emptyGroupError       = '分组不能为空。';
 $lang->pivot->emptyColumnFieldError = '列字段不能为空。';

@@ -303,6 +303,7 @@ $lang->pivot->step1QueryTip       = 'For subsequent configuration data, ensure t
 $lang->pivot->drillingTip         = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
 $lang->pivot->drillConditionTip   = 'According to the SQL query in step 1, adjust the query conditions in the drill statement.';
 $lang->pivot->drillResultEmptyTip = 'Click the "preview" button, you can view the drill down results here.';
+$lang->pivot->previewResultTip    = 'The drill results will display the object-related fields, and only 10 rows of data are displayed by default.';
 
 $lang->pivot->emptyGroupError       = 'The group cannot be empty.';
 $lang->pivot->emptyColumnFieldError = 'Column fields cannot be null.';
