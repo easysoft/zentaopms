@@ -1035,13 +1035,14 @@ $config->my->execution->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->my->execution->dtable->fieldList['id']['type']  = 'id';
 $config->my->execution->dtable->fieldList['id']['group'] = '1';
 
-$config->my->execution->dtable->fieldList['name']['name']  = 'name';
-$config->my->execution->dtable->fieldList['name']['title'] = $lang->execution->name;
-$config->my->execution->dtable->fieldList['name']['type']  = 'title';
-$config->my->execution->dtable->fieldList['name']['link']  = 'RAWJS<function(info){ if(info.row.data.isParent) return false; else return \'' . helper::createLink('execution', 'browse', 'id={id}&from=my') . '\'; }>RAWJS';
-$config->my->execution->dtable->fieldList['name']['fixed'] = 'left';
-$config->my->execution->dtable->fieldList['name']['group'] = '1';
-$config->my->execution->dtable->fieldList['name']['show']  = true;
+$config->my->execution->dtable->fieldList['name']['name']         = 'name';
+$config->my->execution->dtable->fieldList['name']['title']        = $lang->execution->name;
+$config->my->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
+$config->my->execution->dtable->fieldList['name']['link']         = 'RAWJS<function(info){ if(info.row.data.isParent) return false; else return \'' . helper::createLink('execution', 'browse', 'id={id}&from=my') . '\'; }>RAWJS';
+$config->my->execution->dtable->fieldList['name']['fixed']        = 'left';
+$config->my->execution->dtable->fieldList['name']['group']        = '1';
+$config->my->execution->dtable->fieldList['name']['nestedToggle'] = true;
+$config->my->execution->dtable->fieldList['name']['show']         = true;
 
 $config->my->execution->dtable->fieldList['code']['name']   = 'code';
 $config->my->execution->dtable->fieldList['code']['title']  = $lang->execution->code;

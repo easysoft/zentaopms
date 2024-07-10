@@ -47,7 +47,7 @@ fields:
     format: ""
   - field: relation
     note: "关联关系"
-    range: subdivideinto,subdividedfrom
+    range: linkedto,linkedfrom
     prefix: ""
     postfix: ""
     loop: 0

@@ -268,16 +268,6 @@ class backup extends control
             $this->backup->removeFileHeader($this->backupPath . $fileName . '.sql.php');
             rename($this->backupPath . $fileName . '.sql.php', $this->backupPath . $fileName . '.sql');
         }
-        if(file_exists($this->backupPath . $fileName . '.file.zip.php'))
-        {
-            $this->backup->removeFileHeader($this->backupPath . $fileName . '.file.zip.php');
-            rename($this->backupPath . $fileName . '.file.zip.php', $this->backupPath . $fileName . '.file.zip');
-        }
-        if(file_exists($this->backupPath . $fileName . '.code.zip.php'))
-        {
-            $this->backup->removeFileHeader($this->backupPath . $fileName . '.code.zip.php');
-            rename($this->backupPath . $fileName . '.code.zip.php', $this->backupPath . $fileName . '.code.zip');
-        }
 
         return $this->send(array('result' => 'success', 'load' => true));
     }

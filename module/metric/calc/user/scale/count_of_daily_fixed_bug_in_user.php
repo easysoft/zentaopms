@@ -34,7 +34,7 @@ class count_of_daily_fixed_bug_in_user extends baseCalc
         return $this->dao->select($select)->from($this->getSingleSql())
             ->where('`resolvedBy`')->ne('')
             ->andWhere('`resolvedBy` IS NOT NULL')
-            ->groupBy("`user`, `year`, `month`, `day`")
+            ->groupBy("`resolvedBy`, YEAR(`resolvedDate`), MONTH(`resolvedDate`), DAY(`resolvedDate`)")
             ->fetchAll();
     }
 

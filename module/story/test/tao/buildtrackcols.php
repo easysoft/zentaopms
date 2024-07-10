@@ -65,9 +65,9 @@ cid=0
  - 属性parent @story
  - 属性parentName @story
 - 执行$epicCols[0]
- - 属性name @epic_1
+ - 属性name @epic
  - 属性title @业务需求
- - 属性parent @0
+ - 属性parent @-1
 - 执行$epicCols[1]
  - 属性name @requirement
  - 属性title @用户需求
@@ -129,7 +129,7 @@ r($storyCols[9]) && p('name,title,parent,parentName') && e('story_2,SR2,story,st
 $tester->story->dao->delete()->from(TABLE_STORYGRADE)->where('type')->eq('epic')->andWhere('grade')->gt('1')->exec();
 
 $epicCols = $tester->story->buildTrackCols('epic');
-r($epicCols[0]) && p('name,title,parent') && e('epic_1,业务需求,0');
+r($epicCols[0]) && p('name,title,parent') && e('epic,业务需求,-1');
 r($epicCols[1]) && p('name,title,parent') && e('requirement,用户需求,-1');
 r($epicCols[2]) && p('name,title,parent') && e('story,研发需求,-1');
 r($epicCols[10]) && p('name,title,parent,parentName') && e('story_1,SR1,story,story');

@@ -22,35 +22,17 @@ class bi extends control
     public function syncParquetFile()
     {
         $startTime = microtime(true);
-        $duckdb = $this->bi->getDuckDBPath();
-        if(!$duckdb)
-        {
-            echo("DuckDB bin path not exists.");
-            return;
-        }
-
-        $duckdbTmpPath = $this->bi->getDuckDBTmpDir();
-        if(!$duckdbTmpPath)
-        {
-            echo("Create DuckDB tmp dir permission denied.");
-            return;
-        }
-
-        $copySQL = $this->bi->prepareCopySQL($duckdbTmpPath);
-        $command = $this->bi->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
-
-        $output = shell_exec($command);
-        $endTime = microtime(true);
-        $runTime = $endTime - $startTime;
+        $result    = $this->bi->generateParquetFile();
+        $endTime   = microtime(true);
+        $runTime   = $endTime - $startTime;
         echo "$runTime \n";
 
-        if(empty($output))
+        if($result !== true)
         {
-            echo('success');
+            echo $result;
             return;
         }
-
-        echo($output);
+        echo 'success';
     }
 
     /**
@@ -67,5 +49,34 @@ class bi extends control
         foreach($scopeOptions as $key => $option) $items[] = array('text' => $option, 'value' => $key, 'keys' => $option);
 
         return print(json_encode($items));
+    }
+
+    /**
+     * 安装DuckDB引擎。
+     * AJAX: Install duckdb.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInstallDuckdb()
+    {
+        ignore_user_abort(true);
+        set_time_limit(0);
+        session_write_close();
+        $this->bi->downloadDuckdb();
+        echo 'success';
+    }
+
+    /**
+     * 检查duckdb文件是否下载完成。
+     * AJAX: Check duckdb.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckDuckdb()
+    {
+        $check = $this->bi->checkDuckdbInstall();
+        echo(json_encode($check));
     }
 }

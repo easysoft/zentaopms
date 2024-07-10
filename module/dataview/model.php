@@ -364,6 +364,21 @@ class dataviewModel extends model
         if(count($paths) > 1) return $this->genTreeOptions($child, $values, array_slice($paths, 1));
     }
 
+    /**
+     * 获取默认的对象和对象的字段列表。
+    * Get default object and object fields.
+    *
+    * @access public
+    * @return array
+    */
+    public function getObjectFields()
+    {
+        $objectFields = array();
+        foreach(array_keys($this->lang->dataview->objects) as $object) $objectFields[$object] = $this->getTypeOptions($object);
+
+        return $objectFields;
+    }
+
    /**
     * 检查按钮是否可以点击。
     * Adjust the action is clickable.

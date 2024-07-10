@@ -1,16 +1,19 @@
+const today = zui.formatDate(new Date(), 'yyyy-MM-dd');
 window.onRenderExecutionCell = function(result, info)
 {
     if(info.col.name === 'name' && systemMode == 'ALM')
     {
-        if(typeof result[0] == 'string')
-        {
-            result[0] = {html: result[0], className: 'flex-1 w-0'};
-        }
-        else
-        {
-            result[0].props.className = 'flex-1 w-0';
-        }
-        result.push({html: '<span class="label size-sm circle ' + (info.row.data.type == 'stage' ? 'warning' : 'secondary') + '-pale">' + typeList[info.row.data.type] + '</span>'}, {className:'row-reverse'});
+        const executionLink = $.createLink('execution', 'task', `executionID=${info.id}`);
+        const executionType = typeList[info.row.data.type];
+
+        let executionName   = `<span class='label secondary-pale flex-none'>${executionType}</span> `;
+        executionName      += '<div class="ml-1 clip" style="width: max-content;">';
+        executionName      += (!info.row.data.isParent && typeof result[0] != 'string') ? `<a href="${executionLink}" class="text-primary">${info.row.data.name}</a>` : info.row.data.name;
+        executionName      += '</div>';
+        executionName      += (!['done', 'closed', 'suspended'].includes(info.row.data.status) && today > info.row.data.end) ? `<span class="label danger-pale ml-1 flex-none">${delayed}</span>` : '';
+        result[0] = {html: executionName, className: 'w-full flex items-center'};
+
+        return result;
     }
 
     return result;

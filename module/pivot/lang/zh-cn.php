@@ -24,6 +24,8 @@ $lang->pivot->designAB     = '设计';
 $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
 
+$lang->pivot->cancelAndBack = '取消保存并返回';
+
 $lang->pivot->deleteTip = '您确认要删除吗？';
 
 $lang->pivot->rangeList['current'] = '当前页';
@@ -297,6 +299,7 @@ $lang->pivot->drillModalTip       = <<<EOT
 3.点击预览，查看您配置的下钻数据。
 4.点击保存，完成此条下钻配置。
 EOT;
+$lang->pivot->step1QueryTip       = '为后续配置数据下钻，请确保查询结果集中包含查询对象的id字段。';
 $lang->pivot->drillingTip         = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
 $lang->pivot->drillConditionTip   = '根据步骤一中的SQL查询语句，调整下钻语句中的查询条件。';
 $lang->pivot->drillResultEmptyTip = '点击“预览”按钮，即可在此查看下钻结果。';

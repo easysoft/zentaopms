@@ -572,6 +572,7 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
         if(common::hasPriv('custom', 'deleteGrade')) $items[] = array('icon' => 'trash', 'class' => "btn ghost btn-delete-grade ajax-submit $hidden", 'url' => inlink('deleteGrade', "type={$module}&id={$grade->grade}"));
 
         $tbody[] = h::tr(
+            setClass('gradeTr'),
             formHidden('grade[]', $grade->grade),
             h::td($grade->grade, set::width('100px'), setClass('index')),
             h::td(input(set::name('gradeName[]'), set::value($grade->name))),

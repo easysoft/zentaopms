@@ -94,12 +94,14 @@ $lang->todo->beforeDays   = "%s<span class='input-group-addon'>early in advance 
 $lang->todo->dayNames     = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
 $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
-$lang->todo->confirmBug     = 'Dieser Todo steht in Beziehung mit Bug #%s. Möchten Sie das bearbeiten?';
-$lang->todo->confirmTask    = 'Dieser Todo steht in Beziehung mit Task #%s， Möchten Sie das bearbeiten?';
-$lang->todo->confirmStory   = 'Dieser Todo steht in Beziehung mit Story #%s， Möchten Sie das bearbeiten?';
-$lang->todo->noOptions      = 'You have no %s todo at the moment. Please reselect the Todo type.';
-$lang->todo->summary        = 'Total todos: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>.';
-$lang->todo->checkedSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>.';
+$lang->todo->confirmBug         = 'Dieser Todo steht in Beziehung mit Bug #%s. Möchten Sie das bearbeiten?';
+$lang->todo->confirmTask        = 'Dieser Todo steht in Beziehung mit Task #%s， Möchten Sie das bearbeiten?';
+$lang->todo->confirmStory       = 'Dieser Todo steht in Beziehung mit Story #%s， Möchten Sie das bearbeiten?';
+$lang->todo->confirmEpic        = $lang->todo->confirmStory;
+$lang->todo->confirmRequirement = $lang->todo->confirmStory;
+$lang->todo->noOptions          = 'You have no %s todo at the moment. Please reselect the Todo type.';
+$lang->todo->summary            = 'Total todos: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>.';
+$lang->todo->checkedSummary     = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>.';
 
 $lang->todo->abbr = new stdclass();
 $lang->todo->abbr->start  = 'Start';

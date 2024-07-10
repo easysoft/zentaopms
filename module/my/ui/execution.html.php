@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('systemMode', $config->systemMode);
 jsVar('typeList', $lang->execution->typeList);
+jsVar('delayed', $lang->execution->delayed);
 
 featurebar
 (

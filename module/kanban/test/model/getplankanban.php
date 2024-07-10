@@ -15,7 +15,7 @@ timeout=0
 cid=1
 
 - 测试获取产品1的计划看板
- - 第0条的name属性 @all
+ - 第0条的name属性 @laneall
  - 第0条的title属性 @所有
 - 测试获取产品2的计划看板
  - 第1条的name属性 @5

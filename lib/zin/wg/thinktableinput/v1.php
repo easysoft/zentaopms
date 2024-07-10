@@ -58,7 +58,7 @@ class thinkTableInput extends thinkQuestion
                 setClass('flex items-center'),
                 div
                 (
-                    setClass('text-right mr-2 w-1/5 line-clamp-2'),
+                    setClass('text-right mr-2 w-24 line-clamp-2'),
                     $item,
                     set::title($item)
                 ),
@@ -100,7 +100,7 @@ class thinkTableInput extends thinkQuestion
                     div
                     (
                         set::title($item),
-                        setClass('mt-2 w-1/5'),
+                        setClass('mt-2 w-24'),
                         textarea
                         (
                             set::rows('2'),
@@ -154,7 +154,7 @@ class thinkTableInput extends thinkQuestion
                 (
                     set::rows('2'),
                     setID('customFields'),
-                    setClass('mt-2 w-1/5'),
+                    setClass('mt-2 w-24'),
                     set::value(''),
                     set::placeholder($lang->thinkrun->placeholder->rowTitle)
                 ),

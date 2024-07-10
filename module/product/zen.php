@@ -833,7 +833,10 @@ class productZen extends product
     protected function getModuleTree(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): array|string
     {
         /* Set moduleTree. */
-        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+        $createModuleLink = 'createStoryLink';
+        if($storyType == 'requirement') $createModuleLink = 'createRequirementLink';
+        if($storyType == 'epic')        $createModuleLink = 'createEpicLink';
+
         if($browseType == '')
         {
             $browseType = 'unclosed';

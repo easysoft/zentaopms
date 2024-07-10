@@ -510,7 +510,7 @@ class programplanModel extends model
     public function getParentStageList(int $executionID, int $planID, int $productID): array
     {
         $parentStage = $this->programplanTao->getParentStages($executionID, $planID, $productID);
-        if(!$parentStage) return array();
+        if(!$parentStage) return array(0 => $this->lang->programplan->emptyParent);
 
         $plan = $this->getByID($planID);
         foreach($parentStage as $key => $stage)

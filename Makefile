@@ -17,6 +17,7 @@ clean:
 	rm -fr zentaotask
 	rm -fr zentaotest
 	rm -fr *.tar.gz
+	rm -fr *.tar.xz
 	rm -fr *.zip
 	rm -fr build/linux/lampp
 	rm -rf buildroot/
@@ -84,7 +85,6 @@ zentaoxx:
 	cp -r xuan/xxb/module/client zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/conference zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/integration zentaoxx/extension/xuan/
-	cp -r xuan/xxb/module/license zentaoxx/extension/xuan/
 	mkdir -p zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/extension/xuan/common/view
@@ -207,7 +207,7 @@ package:
 	mkdir zentaopms/misc; cp misc/cn2tw.php zentaopms/misc; cd zentaopms/misc; php cn2tw.php
 	#rm -r zentaopms/module/misc/ext
 	rm -rf zentaopms/misc
-	rm -rf extension/xuanxuan
+	rm -rf zentaopms/extension/xuanxuan
 	find zentaopms/module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +
 pms:
 	make common
@@ -316,7 +316,7 @@ ciCommon:
 	rm -fr zentaoalm
 
 	# move pms zip to build and release path.
-	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
+	rm -f $(BUILD_PATH)/ZenTao*.zip $(BUILD_PATH)/ZenTao*.tar.xz $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).tar.xz $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.tar.xz
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
 	cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 cizip:

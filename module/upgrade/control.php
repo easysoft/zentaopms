@@ -164,6 +164,21 @@ class upgrade extends control
             return $this->display();
         }
 
+        /* 检查 Duckdb 引擎是否正确安装。*/
+        /* Check Duckdb is installed. */
+        $checkDuckdb = $this->loadModel('bi')->checkDuckdbInstall();
+        if($checkDuckdb['fail'])
+        {
+            $this->app->loadLang('install');
+            $this->view->result    = 'duckdbFail';
+            $this->view->duckdb    = 'loading';
+            $this->view->ext_dm    = 'loading';
+            $this->view->ext_mysql = 'loading';
+
+            return $this->display();
+        }
+
+
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
 
@@ -773,5 +788,35 @@ class upgrade extends control
     {
         $this->upgrade->upgradeBIData();
         echo 'ok';
+    }
+
+    /**
+     * 安装DuckDB引擎。
+     * AJAX: Install duckdb.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInstallDuckdb()
+    {
+        $this->loadModel('bi');
+        ignore_user_abort(true);
+        set_time_limit(0);
+        session_write_close();
+        $this->bi->downloadDuckdb();
+        echo 'success';
+    }
+
+    /**
+     * 检查duckdb文件是否下载完成。
+     * AJAX: Check duckdb.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckDuckdb()
+    {
+        $check = $this->loadModel('bi')->checkDuckdbInstall();
+        echo(json_encode($check));
     }
 }

@@ -94,12 +94,14 @@ $lang->todo->beforeDays   = "<span class='input-group-addon'>Créer automatiquem
 $lang->todo->dayNames     = array(1 => 'Lundi', 2 => 'Mardi', 3 => 'Mercredi', 4 => 'Jeudi', 5 => 'Vendredi', 6 => 'Samedi', 0 => 'Dimanche');
 $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
 
-$lang->todo->confirmBug     = "Cette action est liée au Bug #%s. Voulez-vous l'éditer ?";
-$lang->todo->confirmTask    = "Cette action est liée à la Tâche #%s. Voulez-vous l'éditer ?";
-$lang->todo->confirmStory   = "Cette action est liée à la Story #%s. Voulez-vous l'éditer ?";
-$lang->todo->noOptions      = 'Vous n\'avez pas de %s en attente pour le moment. Veuillez sélectionner le type de Todo.';
-$lang->todo->summary        = 'Total todos: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>.';
-$lang->todo->checkedSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>.';
+$lang->todo->confirmBug         = "Cette action est liée au Bug #%s. Voulez-vous l'éditer ?";
+$lang->todo->confirmTask        = "Cette action est liée à la Tâche #%s. Voulez-vous l'éditer ?";
+$lang->todo->confirmStory       = "Cette action est liée à la Story #%s. Voulez-vous l'éditer ?";
+$lang->todo->confirmEpic        = $lang->todo->confirmStory;
+$lang->todo->confirmRequirement = $lang->todo->confirmStory;
+$lang->todo->noOptions          = 'Vous n\'avez pas de %s en attente pour le moment. Veuillez sélectionner le type de Todo.';
+$lang->todo->summary            = 'Total todos: <strong>%s</strong>, Wait: <strong>%s</strong>, Doing: <strong>%s</strong>.';
+$lang->todo->checkedSummary     = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Doing: <strong>%doing%</strong>.';
 
 $lang->todo->abbr = new stdclass();
 $lang->todo->abbr->start  = 'Start';

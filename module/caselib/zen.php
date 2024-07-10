@@ -365,11 +365,12 @@ class caselibZen extends caselib
      */
     protected function getFieldsForImport(): array
     {
-        $fields = explode(',', $this->config->testcase->exportFields);
+        $fields    = explode(',', $this->config->testcase->exportFields);
+        $libFields = array_flip($this->config->caselib->exportTemplateFields);
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
-            $fields[$fieldName] = zget($this->lang->testcase, $fieldName);
+            if(isset($libFields[$fieldName])) $fields[$fieldName] = zget($this->lang->testcase, $fieldName);
             unset($fields[$key]);
         }
 
@@ -396,10 +397,10 @@ class caselibZen extends caselib
         }
 
         $columns = array();
-        foreach($header as $title)
+        foreach($header as $i => $title)
         {
             if(!isset($fields[$title])) continue;
-            $columns[] = $fields[$title];
+            $columns[$i] = $fields[$title];
         }
 
         return $columns;

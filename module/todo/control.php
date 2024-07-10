@@ -393,13 +393,15 @@ class todo extends control
             $message     = sprintf($this->lang->todo->{$confirmNote}, $todo->objectID);
 
             $tab = $this->app->tab;
-            if($todo->type == 'bug')      $tab = 'qa';
-            if($todo->type == 'task')     $tab = 'execution';
-            if($todo->type == 'story')    $tab = 'product';
-            if($todo->type == 'feedback') $tab = 'feedback';
+            if($todo->type == 'bug')         $tab = 'qa';
+            if($todo->type == 'task')        $tab = 'execution';
+            if($todo->type == 'story')       $tab = 'product';
+            if($todo->type == 'epic')        $tab = 'product';
+            if($todo->type == 'requirement') $tab = 'product';
+            if($todo->type == 'feedback')    $tab = 'feedback';
             if(in_array($todo->type, array('issue', 'risk'))) $tab = 'project';
 
-            return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$tab}'); else loadCurrentPage();});"));
+            return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$tab}'); else reloadPage();});"));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')

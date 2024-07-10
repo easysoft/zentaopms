@@ -2020,7 +2020,15 @@ class executionZen extends execution
                 $multiBranchProduct   = false;
                 array_map(function($executionProduct) use(&$multiBranchProduct){if($executionProduct->type != 'normal') $multiBranchProduct = true;}, $executionProductList);
 
-                $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
+                $storyType = '';
+                $project   = $this->loadModel('project')->fetchByID($projectID);
+                if($project)
+                {
+                    $this->loadModel('story');
+                    foreach(explode(',', $project->storyType) as $type) $storyType .= $this->lang->story->typeList[$type] . ', ';
+                }
+                if(empty($storyType)) $storyType = $this->lang->story->common;
+                $importPlanStoryTips = sprintf($multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory, trim($storyType, ', '));
                 if($execution->type == 'stage') $importPlanStoryTips = str_replace($this->lang->executionCommon, $this->lang->execution->stage, $importPlanStoryTips);
                 $confirmURL = inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes");
                 $cancelURL  = inlink('create', "projectID=$projectID&executionID=$executionID");
@@ -2048,10 +2056,10 @@ class executionZen extends execution
      */
     protected function updateLinkedPlans(int $executionID, string $newPlans = '', string $confirm = 'no')
     {
+        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         if(!empty($newPlans) and $confirm == 'yes')
         {
             $newPlans = explode(',', $newPlans);
-            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
             $this->loadModel('productplan')->linkProject($executionID, $newPlans);
             $this->productplan->linkProject($projectID, $newPlans);
             return $this->send(array('result' => 'success', 'load' => inlink('view', "executionID=$executionID")));
@@ -2069,7 +2077,15 @@ class executionZen extends execution
                 }
             }
 
-            $linkPlanMsg = $multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory;
+            $storyType = '';
+            $project   = $this->loadModel('project')->fetchByID($projectID);
+            if($project)
+            {
+                $this->loadModel('story');
+                foreach(explode(',', $project->storyType) as $type) $storyType .= $this->lang->story->typeList[$type] . ', ';
+            }
+            if(empty($storyType)) $storyType = $this->lang->story->common;
+            $linkPlanMsg = sprintf($multiBranchProduct ? $this->lang->execution->importBranchEditPlanStory : $this->lang->execution->importEditPlanStory, trim($storyType, ', '));
             $confirmURL  = inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes");
             $cancelURL   = inlink('view', "executionID=$executionID");
             return $this->send(array('result' => 'success', 'load' => array('confirm' => $linkPlanMsg, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));

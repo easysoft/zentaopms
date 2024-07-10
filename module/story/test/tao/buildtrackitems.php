@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->buildTrackItems();
+timeout=0
 cid=0
 
 - 执行$epicItems['lane_11']['epic_1'][0]属性id @11
@@ -99,7 +100,7 @@ r((array)$epicItems['lane_4']['case'][0])           && p('id') && e('4');
 
 $allStoryIdList = array(2,3,4,5,6,7,8,9,10);
 $stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('2,3,4')->orderBy('id_desc')->fetchAll('id');
-$leafNodes      = $tester->story->getLeafNodes($stories, $allStoryIdList);
+$leafNodes      = $tester->story->getLeafNodes($stories, 'epic');
 $allStories     = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in('1')->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
 
 $requirementItems = $tester->story->buildTrackItems($allStories, $leafNodes, 'requirement');
@@ -111,7 +112,7 @@ r((array)$epicItems['lane_4']['case'][0])           && p('id') && e('4');
 
 $allStoryIdList = array(5,6,7,8,9,10);
 $stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('5,6,7,8,9,10')->orderBy('id_desc')->fetchAll('id');
-$leafNodes      = $tester->story->getLeafNodes($stories, $allStoryIdList);
+$leafNodes      = $tester->story->getLeafNodes($stories, 'epic');
 $allStories     = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in('1')->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
 
 $storyItems = $tester->story->buildTrackItems($allStories, $leafNodes, 'story');

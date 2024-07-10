@@ -7,7 +7,7 @@ title=测试 storyModel->getDesignsForTrack();
 timeout=0
 cid=0
 
-- 传入空参数。 @0
+- 传入空参数。 @2
 - 执行$designs['design'] @6;7;8;9;10
 - 执行$designs['commit'] @6;7;8;9;10
 - 执行$designs['design'][6] @1
@@ -41,7 +41,7 @@ su('admin');
 global $tester;
 $tester->loadModel('story');
 
-r(count($tester->story->getDesignsForTrack(array()))) && p() && e('0');  //传入空参数。
+r(count($tester->story->getDesignsForTrack(array()))) && p() && e('2');  //传入空参数。
 
 $designs = $tester->story->getDesignsForTrack(array(5,6,7,8,9,10));
 r(implode(';', array_keys($designs['design'])))    && p() && e('6;7;8;9;10');

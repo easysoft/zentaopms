@@ -29,7 +29,7 @@ $generateCharts = function() use($charts, $lang)
             if($type == 'select' && !isset($options[$field]))
             {
                 $fieldSetting = $chart->fieldSettings[$field];
-                $options[$field] = $this->chart->getSysOptions($fieldSetting['type'], $fieldSetting['object'], $fieldSetting['field'], $chart->sql, zget($filter, 'saveAs', ''));
+                $options[$field] = $this->chart->getSysOptions($fieldSetting['type'], $fieldSetting['object'], $fieldSetting['field'], $chart->sql, zget($filter, 'saveAs', ''), $chart->driver);
             }
             $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
         }

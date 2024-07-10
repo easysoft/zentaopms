@@ -8,26 +8,31 @@
 function previewCharts()
 {
     const checkedList = $('#moduleMenu menu').zui('tree').$.getChecks();
-    if(checkedList.length > 0)
-    {
-        if(checkedList.length > maxPreviewCount)
+
+    const checkedCharts = [];
+    checkedList.forEach((itemKey, index) => {
+        if(itemKey.includes(':') && itemKey.includes('_'))
         {
-            zui.Modal.alert(maxPreviewTips);
-            return false;
+            const keys = itemKey.split(':')[1].split('_');
+            checkedCharts.push({index, keys});
         }
+    });
 
-        const form = new FormData();
-        checkedList.forEach((itemKey, index) => {
-            if(itemKey.includes(':') && itemKey.includes('_'))
-            {
-                const keys = itemKey.split(':')[1].split('_');
-                form.append('charts[' + index + '][groupID]', keys[0]);
-                form.append('charts[' + index + '][chartID]', keys[1]);
-            }
-        });
-
-        postAndLoadPage(previewUrl, form, '#chartPanel');
+    if(checkedCharts.length == 0) return;
+    if(checkedCharts.length > maxPreviewCount)
+    {
+        zui.Modal.alert(maxPreviewTips);
+        return false;
     }
+
+    const form = new FormData();
+    checkedCharts.forEach(chart => {
+      const {index, keys} = chart;
+      form.append('charts[' + index + '][groupID]', keys[0]);
+      form.append('charts[' + index + '][chartID]', keys[1]);
+    });
+
+    postAndLoadPage(previewUrl, form, '#chartPanel');
 }
 
 /**

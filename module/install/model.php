@@ -232,7 +232,7 @@ class installModel extends model
         $admin->password = md5($data->password);
         $admin->gender   = 'f';
         $admin->visions  = $visions;
-        $this->dao->replace(TABLE_USER)->data($admin)->exec();
+        $this->dao->insert(TABLE_USER)->data($admin)->exec();
 
         return !dao::isError();
     }
@@ -385,12 +385,18 @@ class installModel extends model
         $this->loadModel('bi');
 
         /* Prepare built-in sqls of bi. */
-        $chartSQLs  = $this->bi->prepareBuiltinChartSQL();
-        $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL();
-        $metricSQLs = $this->bi->prepareBuiltinMetricSQL();
-        $screenSQLs = $this->bi->prepareBuiltinScreenSQL();
 
-        $insertTables = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
+        $insertTables = array();
+        if($this->config->db->driver == 'mysql')
+        {
+            $chartSQLs    = $this->bi->prepareBuiltinChartSQL();
+            $pivotSQLs    = $this->bi->prepareBuiltinPivotSQL();
+            $insertTables = array_merge($insertTables, $chartSQLs, $pivotSQLs);
+        }
+
+        $metricSQLs   = $this->bi->prepareBuiltinMetricSQL();
+        $screenSQLs   = $this->bi->prepareBuiltinScreenSQL();
+        $insertTables = array_merge($insertTables, $metricSQLs, $screenSQLs);
 
         try
         {
@@ -406,6 +412,14 @@ class installModel extends model
         catch(Error $e)
         {
             a($e->getMessage());
+            die;
+        }
+
+        /* Generate parquet file. */
+        $result = $this->bi->generateParquetFile();
+        if($result !== true)
+        {
+            a($result);
             die;
         }
 

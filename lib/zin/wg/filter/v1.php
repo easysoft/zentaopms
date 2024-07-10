@@ -57,7 +57,7 @@ class filter extends wg
 
     protected function buildDatetimePicker(): datetimePicker|array
     {
-        list($name, $value, $onChange) = $this->prop(array('name', 'valuea', 'onChange'));
+        list($name, $value, $onChange) = $this->prop(array('name', 'value', 'onChange'));
 
         return datetimePicker
         (

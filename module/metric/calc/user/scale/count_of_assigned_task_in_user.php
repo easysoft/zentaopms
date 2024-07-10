@@ -38,7 +38,7 @@ class count_of_assigned_task_in_user extends baseCalc
             ->andWhere("(`mode` = 'multi' and `teamStatus` != 'done')", true)
             ->orWhere('`mode`')->ne('multi')
             ->markRight(1)
-            ->groupBy('`user`')
+            ->groupBy('`assignedTo`')
             ->fetchAll();
     }
 

@@ -59,7 +59,7 @@ class pivotModel extends model
             $pivot->filters = array();
         }
 
-        $this->getPivotDrills($pivot);
+        //$this->getPivotDrills($pivot);
 
         return $this->processPivot($pivot);
     }
@@ -194,7 +194,7 @@ class pivotModel extends model
     public function processFieldSettings(object $pivot): void
     {
         $this->loadModel('dataview');
-        $fieldSettings = $pivot->fieldSettings ?? $this->getFieldsFromPivot($pivot, 'fields', array(), true);
+        $fieldSettings = $pivot->fieldSettings;
         if(empty($fieldSettings)) return;
 
         $sql     = isset($pivot->sql) ? $pivot->sql : '';
@@ -219,75 +219,13 @@ class pivotModel extends model
         $moduleNames = $tables ? $this->dataview->getModuleNames($tables) : array();
         list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
 
-        $objectFields = array();
-        foreach(array_keys($this->lang->dataview->objects) as $object) $objectFields[$object] = $this->dataview->getTypeOptions($object);
+        $objectFields = $this->loadModel('dataview')->getObjectFields();
 
         /* 重建fieldSettings字段。 */
         /* Rebuild fieldSettings field. */
-        $pivot->fieldSettings = $this->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields);
+        $pivot->fieldSettings = $this->bi->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields);
     }
 
-    /**
-     * 重建透视表filedSettings字段
-     * Rebuild fieldSettings field of pivot.
-     *
-     * @param  object  $pivot
-     * @param  array   $fieldPairs
-     * @param  object  $columns
-     * @param  array   $relatedObject
-     * @param  object  $fieldSettings
-     * @param  array   $objectFields
-     * @access private
-     * @return object
-     */
-    public function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object $fieldSettings, array $objectFields): object
-    {
-        $fieldSettingsNew = new stdclass();
-
-        foreach($fieldPairs as $index => $field)
-        {
-            $defaultType   = $columns->{$index};
-            $defaultObject = $relatedObject[$index];
-
-            if(isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
-
-            if(!isset($fieldSettings->{$index}))
-            {
-                /* 如果字段设置中没有该字段，则使用默认的配置。 */
-                /* If the field is not set in the field settings, use the default value. */
-                $fieldItem = new stdclass();
-                $fieldItem->name   = $field;
-                $fieldItem->object = $defaultObject;
-                $fieldItem->field  = $index;
-                $fieldItem->type   = $defaultType;
-
-                $fieldSettingsNew->{$index} = $fieldItem;
-            }
-            else
-            {
-                /* 兼容旧版本的字段设置，当为空或者为布尔值时，使用默认值 */
-                /* Compatible with old version of field settings, use default value when empty or boolean. */
-                if(!isset($fieldSettings->{$index}->object) || is_bool($fieldSettings->{$index}->object) || strlen($fieldSettings->{$index}->object) == 0) $fieldSettings->{$index}->object = $defaultObject;
-
-                /* 当字段设置中没有字段名时，使用默认的字段名配置。 */
-                /* When there is no field name in the field settings, use the default field name configuration. */
-                if(!isset($fieldSettings->{$index}->field) || strlen($fieldSettings->{$index}->field) == 0)
-                {
-                    $fieldSettings->{$index}->field  = $index;
-                    $fieldSettings->{$index}->object = $defaultObject;
-                    $fieldSettings->{$index}->type   = 'string';
-                }
-
-                $object = $fieldSettings->{$index}->object;
-                $type   = $fieldSettings->{$index}->type;
-                if($object == $defaultObject && $type != $defaultType) $fieldSettings->{$index}->type = $defaultType;
-
-                $fieldSettingsNew->{$index} = $fieldSettings->{$index};
-            }
-        }
-
-        return $fieldSettingsNew;
-    }
 
     /**
      * 获取执行。
@@ -788,10 +726,11 @@ class pivotModel extends model
      *
      * @param  string   $sql
      * @param  array    $filters
+     * @param  array    $driver
      * @access public
      * @return string
      */
-    public function appendWhereFilterToSql(string $sql, array $filters): string
+    public function appendWhereFilterToSql(string $sql, array $filters, string $driver): string
     {
         $connectSQL = '';
         if(!empty($filters) && !isset($filters[0]['from']))
@@ -799,7 +738,8 @@ class pivotModel extends model
             $wheres = array();
             foreach($filters as $field => $filter)
             {
-                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
+                $fieldSQL = $this->getFilterFieldSQL($filter, $field, $driver);
+                $wheres[] = "$fieldSQL {$filter['operator']} {$filter['value']}";
             }
 
             $whereStr    = implode(' and ', $wheres);
@@ -809,6 +749,22 @@ class pivotModel extends model
         $sql = "select * from ( $sql ) tt" . $connectSQL;
 
         return $sql;
+    }
+
+    public function getFilterFieldSQL(array $filter, string $field, string $driver)
+    {
+        $fieldSql = "tt.`{$field}`";
+
+        if($driver == 'duckdb')
+        {
+            $type = $filter['type'];
+            if($type == 'input')
+            {
+                $fieldSql = " cast($fieldSql as varchar) ";
+            }
+        }
+
+        return $fieldSql;
     }
 
     /**
@@ -1337,7 +1293,7 @@ class pivotModel extends model
         /* Replace the variable with the default value. */
         $sql = $this->bi->processVars($sql, $filters);
         $sql = $this->trimSemicolon($sql);
-        $sql = $this->appendWhereFilterToSql($sql, $filters);
+        $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
         $dbh     = $this->app->loadDriver($driver);
         $records = $dbh->query($sql)->fetchAll();
@@ -1496,7 +1452,7 @@ class pivotModel extends model
      */
     public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql')
     {
-        $sql = $this->initVarFilter($filters, $sql);
+        $sql = $this->bi->processVars($sql, $filters);
 
         /* Process rows. */
         $connectSQL = '';
@@ -1906,6 +1862,7 @@ class pivotModel extends model
         $col->label = $colLabel;
 
         $slice = zget($column, 'slice', 'noSlice');
+        $col->isSlice = $slice != 'noSlice';
         if($slice != 'noSlice' && !$showOrigin)
         {
             if(!isset($cols[1]))
@@ -2416,17 +2373,17 @@ class pivotModel extends model
         $width = 128;
 
         /* Init table. */
-        $table  = "<div class='reportData'><table class='table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
+        $table = "<div class='reportData'><table class='table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
 
         $showOrigins = array();
         $hasShowOrigin = false;
 
         foreach($data->cols[0] as $col)
         {
-            $colspan = zget($col, 'colspan', 1);
-            $showOrigin = isset($col->showOrigin) ? $col->showOrigin : false;
+            $colspan       = zget($col, 'colspan', 1);
+            $showOrigin    = isset($col->showOrigin) ? $col->showOrigin : false;
             $colShowOrigin = array_fill(0, $colspan, $showOrigin);
-            $showOrigins = array_merge($showOrigins, $colShowOrigin);
+            $showOrigins   = array_merge($showOrigins, $colShowOrigin);
             if($showOrigin) $hasShowOrigin = true;
         }
 
@@ -2437,10 +2394,10 @@ class pivotModel extends model
             $table .= "<tr>";
             foreach($lineCols as $col)
             {
-                $isGroup = $col->isGroup;
                 $thName  = $col->label;
                 $colspan = zget($col, 'colspan', 1);
                 $rowspan = zget($col, 'rowspan', 1);
+                $isGroup = zget($col, 'isGroup', false);
 
                 if($isGroup) $thHtml = "<th data-flex='false' rowspan='$rowspan' colspan='$colspan' data-width='auto' class='text-center'>$thName</th>";
                 else         $thHtml = "<th data-flex='true' rowspan='$rowspan' colspan='$colspan' data-type='number' data-width=$width class='text-center'>$thName</th>";
@@ -2470,7 +2427,7 @@ class pivotModel extends model
             $table .= "<tr class='text-center'>";
             for($j = 0; $j < count($line); $j ++)
             {
-                $isGroup = !empty($data->cols[0][$j]) ? $data->cols[0][$j]->isGroup : false;
+                $isGroup = !empty($data->cols[0][$j]->isGroup) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
                 $hidden  = isset($configs[$i][$j]) ? false : (!$isGroup ? false : true);
 
@@ -2482,10 +2439,6 @@ class pivotModel extends model
                 }
 
                 $lineValue = $line[$j];
-                if($isGroup)
-                {
-                    $groupName = $data->cols[0][$j]->name;
-                }
                 if(is_numeric($lineValue)) $lineValue = round($lineValue, 2);
 
                 if(!$hidden) $table .= "<td rowspan='$rowspan'>$lineValue</td>";
@@ -2544,7 +2497,6 @@ class pivotModel extends model
             $fieldSetting->drillDatas = $this->getDrillDatas($drill->object, $drill->sql);
         }
     }
-
 }
 
 /**

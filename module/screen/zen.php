@@ -36,7 +36,7 @@ class screenZen extends screen
             $screen->actions = array();
             if($screen->builtin == '1') continue;
             if($canDesign) $screen->actions[] = array('icon' => 'design', 'text' => $this->lang->screen->design, 'url' => $this->createLink('screen', 'design', "screenID={$screen->id}"));
-            if($canEdit)   $screen->actions[] = array('icon' => 'edit', 'text' => $this->lang->screen->edit, 'url' => $this->createLink('screen', 'edit', "screenID={$screen->id}", '', true), 'data-toggle' => 'modal', 'data-type' => 'iframe');
+            if($canEdit)   $screen->actions[] = array('icon' => 'edit', 'text' => $this->lang->screen->edit, 'url' => $this->createLink('screen', 'edit', "screenID={$screen->id}"), 'data-toggle' => 'modal');
             if($canDelete) $screen->actions[] = array('icon' => 'trash', 'text' => $this->lang->screen->delete, 'url' => $this->createLink('screen', 'delete', "screenID={$screen->id}&confirm=yes"), 'data-confirm' => $this->lang->screen->confirmDelete);
         }
 

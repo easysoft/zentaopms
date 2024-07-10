@@ -24,8 +24,8 @@ foreach(array(1,2,3,4) as $storyID)
     $story->id = $storyID;
     $leafNodes[$storyID] = $story;
 }
-r(count($tester->story->buildTrackLanes(array()))) && p() && e('0');  //传入空参数。
+r(count($tester->story->buildTrackLanes(array(), 'epic'))) && p() && e('0');  //传入空参数。
 
-$lanes = $tester->story->buildTrackLanes($leafNodes);
+$lanes = $tester->story->buildTrackLanes($leafNodes, 'epic');
 r(count($lanes)) && p() && e('4');          //检查泳道数。
 r($lanes[0]['name']) && p() && e('lane_1'); //检查第一个泳道的name参数。

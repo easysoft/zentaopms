@@ -1162,6 +1162,44 @@ class treeModel extends model
     }
 
     /**
+     * 生成业务需求链接。
+     * Create link of epic for waterfall.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  array  $extra
+     * @access public
+     * @return object
+     */
+    public function createEpicLink(string $type, object $module, string $parent = '0', array $extra = array()): object
+    {
+        $data = new stdclass();
+        $data->id     = $parent ? uniqid() : (string)$module->id;
+        $data->parent = $parent ? $parent : (string)$module->parent;
+        $data->name   = $module->name;
+
+        if(isset($extra['projectID']) && !empty($extra['projectID']))
+        {
+            $productID = zget($extra, 'productID', 0);
+            $projectID = $extra['projectID'];
+            $data->url = helper::createLink('projectstory', 'story', "projectID=$projectID&productID=$productID&branch=&browseType=byModule&param={$module->id}&storyType=epic");
+        }
+        elseif(isset($extra['executionID']) && !empty($extra['executionID']))
+        {
+            $executionID = $extra['executionID'];
+            $data->url   = helper::createLink('execution', 'story', "executionID=$executionID&storyType=epic&orderBy=order_desc&type=byModule&param={$module->id}");
+        }
+        else
+        {
+            $branch = isset($extra['branchID']) ? $extra['branchID'] : 'all';
+            $data->url = helper::createLink('product', 'browse', "root={$module->root}&branch=$branch&type=byModule&param={$module->id}&storyType=epic");
+        }
+
+        return $data;
+    }
+
+    /**
      * 生成任务链接。
      * Create link of a task.
      *

@@ -4,12 +4,13 @@
 /**
 
 title=测试 storyModel->extractParents();
+timeout=0
 cid=0
 
 - 执行storyModel模块的extractParents方法，参数是array  @0
-- 执行storyModel模块的extractParents方法，参数是$stories
- -  @3
- - 属性1 @8
+- 执行storyModel模块的extractParents方法，参数是$stories 
+ -  @8
+ - 属性1 @~~
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
@@ -27,4 +28,4 @@ $stories[3]->parent = -1;
 $stories[4] = new stdclass();
 $stories[4]->id = 4;
 $stories[4]->parent = 8;
-r($storyModel->extractParents($stories)) && p('0,1') && e('3,8');
+r($storyModel->extractParents($stories)) && p('0,1') && e('8,~~');

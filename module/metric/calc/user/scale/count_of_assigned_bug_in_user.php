@@ -35,7 +35,7 @@ class count_of_assigned_bug_in_user extends baseCalc
             ->where('`assignedTo`')->ne('')
             ->andWhere('`assignedTo`')->ne('closed')
             ->andWhere('`assignedTo` IS NOT NULL')
-            ->groupBy('`user`')
+            ->groupBy('`assignedTo`')
             ->fetchAll();
     }
 

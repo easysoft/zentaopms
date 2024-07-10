@@ -11,7 +11,7 @@ title=测试 devModel']']saveCustomedLang();
 cid=1
 pid=1
 
-自定义公共语言项 >> 产品2|项目2|迭代2
+自定义公共语言项 >> 产品2|项目2|迭代2|软需2|用需2
 自定义一级菜单语言项 >> 我的地盘
 重置一级导航语言项 >> null
 自定义二级导航语言项 >> 仪表盘
@@ -34,7 +34,7 @@ $_POST['common_projectCommon']   = '项目2';
 $_POST['common_executionCommon'] = '迭代2';
 $_POST['common_URCommon']        = '用需2';
 $_POST['common_SRCommon']        = '软需2';
-r($devTester->saveCustomedLangTest('common', 'common', '', 'zh-cn')) && p()  && e("产品2|项目2|迭代2|");    // 自定义公共语言项
+r($devTester->saveCustomedLangTest('common', 'common', '', 'zh-cn')) && p()  && e("产品2|项目2|迭代2|软需2|用需2");    // 自定义公共语言项
 
 $_POST = array();
 $_POST['common_mainNav_my'] = '我的地盘';

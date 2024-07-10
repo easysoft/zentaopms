@@ -72,7 +72,6 @@ $doclib  = $tester->dao->select('*')->from('zt_doclib')->where('type')->eq('exec
 r($result && strpos($userView->products . ',', ',1,') !== false && !$doclib->deleted) && p('') && e('1');                                 // 测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。
 
 $result   = $action->undeleteTest($actionIDList[4]);
-unset(dao::$cache['zt_userview']);
 $userView = $tester->dao->select('*')->from('zt_userview')->where('account')->eq('admin')->fetch();
 r($result && strpos($userView->products . ',', ',1,') !== false && strpos($userView->sprints . ',', ',4,') !== false) && p('') && e('1'); // 测试还原action 3, objectType execution 的数据,并且测试是否恢复了用户访问权限。
 
@@ -83,7 +82,6 @@ r($action->undeleteTest($actionIDList[7])) && p('') && e('1');                  
 $tester->dao->update('zt_userview')->set('sprints')->eq('')->set('programs')->eq('')->set('products')->eq('')->set('projects')->eq('')->where('account')->eq('admin')->exec();
 
 $result   = $action->undeleteTest($actionIDList[8]);
-unset(dao::$cache['zt_userview']);
 $userView = $tester->dao->select('*')->from('zt_userview')->where('account')->eq('admin')->fetch();
 r($result && strpos($userView->products . ',', ',1,') !== false) && p('') && e('0');                                                      // 测试还原action 8, objectType program 的数据,并且测试是否恢复了用户访问权限。
 

@@ -35,7 +35,7 @@ class count_of_assigned_case_in_user extends baseCalc
             ->where('`status`')->ne('done')
             ->andWhere('`assignedTo` IS NOT NULL')
             ->andWhere('`assignedTo`')->ne('closed')
-            ->groupBy('`user`')
+            ->groupBy('`assignedTo`')
             ->fetchAll();
     }
 

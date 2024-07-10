@@ -800,8 +800,8 @@ class projectZen extends project
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
         }
 
-        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
+        $storyList = $storyIdList ? $this->loadModel('story')->getPairsByList($storyIdList) : array();
+        $taskList  = $taskIdList  ? $this->loadModel('task')->getPairsByIdList($taskIdList) : array();
 
         $this->view->title            = $project->name . $this->lang->hyphen . $this->lang->bug->common;
         $this->view->bugs             = $bugs;

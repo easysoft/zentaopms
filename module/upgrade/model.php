@@ -1154,7 +1154,7 @@ class upgradeModel extends model
                 $this->saveLogs($sql);
 
                 /* Calculate the number of sql runs completed. */
-                if(is_writable($this->app->getTmpRoot()))
+                if(is_writable($this->app->getTmpRoot()) && is_file($this->app->getTmpRoot() . 'upgradeSqlLines'))
                 {
                     $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
                     $sqlLines    = explode('-', $sqlLines);
@@ -8997,18 +8997,15 @@ class upgradeModel extends model
     public function addERName()
     {
         /* If the mode is light, disable the epic story. */
-        /* 如果是轻量模式，禁用业务需求。 */
+        /* 如果是轻量模式，禁用业务需求和用户需求。 */
         if(zget($this->config->global, 'mode', 'light') == 'light')
         {
             $this->loadModel('setting')->setItem('system.custom.enableER', '0');
         }
-        else
-        {
-            /* 开启用户需求。*/
-            $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&key=closedFeatures');
-            if(strpos($closedFeatures, 'productUR') !== false) $closedFeatures = str_replace('productUR', '', $closedFeatures);
-            $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
-        }
+
+        $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&key=closedFeatures');
+        if(strpos($closedFeatures, 'productUR') !== false) $closedFeatures .= ',productER,';
+        $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures, ','));
 
         $lang = $this->app->getClientLang();
 
@@ -9078,12 +9075,17 @@ class upgradeModel extends model
 
         $this->dao->clearTablesDescCache();
         /* Prepare built-in sqls of bi. */
-        $chartSQLs  = $this->bi->prepareBuiltinChartSQL('update');
-        $pivotSQLs  = $this->bi->prepareBuiltinPivotSQL('update');
-        $metricSQLs = $this->bi->prepareBuiltinMetricSQL('update');
-        $screenSQLs = $this->bi->prepareBuiltinScreenSQL('update');
 
-        $upgradeSqls = array_merge($chartSQLs, $pivotSQLs, $metricSQLs, $screenSQLs);
+        $upgradeSqls = array();
+        if($this->config->db->driver == 'mysql')
+        {
+            $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
+            $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
+            $upgradeSqls = array_merge($upgradeSqls, $chartSQLs, $pivotSQLs);
+        }
+        $metricSQLs  = $this->bi->prepareBuiltinMetricSQL('update');
+        $screenSQLs  = $this->bi->prepareBuiltinScreenSQL('update');
+        $upgradeSqls = array_merge($upgradeSqls, $metricSQLs, $screenSQLs);
 
         try
         {
@@ -9102,6 +9104,14 @@ class upgradeModel extends model
         catch(Error $e)
         {
             a($e->getMessage());
+            die;
+        }
+
+        /* Generate parquet file. */
+        $result = $this->bi->generateParquetFile();
+        if($result !== true)
+        {
+            a($result);
             die;
         }
 

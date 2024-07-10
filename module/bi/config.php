@@ -11,9 +11,20 @@ $config->bi->default->status  = json_decode('{"lock":false,"hide":false}');
 $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestInterval":null,"requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
 
+$config->bi->cdnUrl     = 'https://dl.zentao.net/duckdb/';
+$config->bi->duckdbHelp = 'https://www.zentao.net/book/zentaopms/1313.html';
+
 $config->bi->duckdbBin = array();
-$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/', 'file' => 'duckdb.exe', 'extension' => 'mysql_scanner.duckdb_extension');
-$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb', 'extension' => 'mysql_scanner.duckdb_extension');
+$config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/',   'file' => 'duckdb.exe', 'fileUrl' => $config->bi->cdnUrl . 'win/duckdb.zip');
+$config->bi->duckdbBin['linux'] = array('path' => '/opt/zbox/bin/', 'file' => 'duckdb',     'fileUrl' => $config->bi->cdnUrl . 'linux/amd64/duckdb.zip');
+
+$config->bi->duckdbExt = array();
+$config->bi->duckdbExt['win']   = array('dm' => 'sync2parquet.exe', 'mysql' => 'mysql_scanner.duckdb_extension');
+$config->bi->duckdbExt['linux'] = array('dm' => 'sync2parquet',     'mysql' => 'mysql_scanner.duckdb_extension');
+
+$config->bi->duckdbExtUrl = array();
+$config->bi->duckdbExtUrl['win']   = array('dm' => $config->bi->cdnUrl . 'win/sync2parquet.exe',     'mysql' => $config->bi->cdnUrl . 'win/mysql_scanner.duckdb_extension.zip');
+$config->bi->duckdbExtUrl['linux'] = array('dm' => $config->bi->cdnUrl . 'linux/amd64/sync2parquet', 'mysql' => $config->bi->cdnUrl . 'linux/amd64/mysql_scanner.duckdb_extension.zip');
 
 $charts = array();
 $charts['32'] = array("root" => 1, "name" => "产品", "grade" => 1);
@@ -91,7 +102,9 @@ $pivots['100'] = array("root" => 3, "name" => "Bug", "grade" => 2);
 $config->bi->builtin->modules->charts = $charts;
 $config->bi->builtin->modules->pivots = $pivots;
 
-$config->bi->duckSQLTemp = "LOAD '{EXTENSIONPATH}';ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);USE mysqldb;{COPYSQL}";
+$config->bi->duckSQLTemp = array();
+$config->bi->duckSQLTemp['mysql'] = "LOAD '{EXTENSIONPATH}';ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);USE mysqldb;{COPYSQL}";
+$config->bi->duckSQLTemp['dm']    = '{EXTENSIONPATH} --driver="{DRIVER}" --db="host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}" --copy="{COPYSQL}"';
 
 $config->bi->drivers = array('mysql', 'duckdb');
 
@@ -186,7 +199,7 @@ $config->bi->columnTypes->DATE      = 'date';
 $config->bi->duckdb = new stdclass();
 $config->bi->duckdb->tables = array();
 $config->bi->duckdb->tables['action'] = <<<EOT
-SELECT id,objectType,objectID,product,project,execution,actor,action,date,read,vision,efforted FROM zt_action
+SELECT id,objectType,objectID,product,project,execution,actor,action,date,vision,efforted FROM zt_action
 EOT;
 $config->bi->duckdb->tables['account'] = <<<EOT
 SELECT * FROM zt_account

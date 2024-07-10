@@ -2258,8 +2258,9 @@ class aiModel extends model
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
-        /* Override method for story drafts. */
+        /* Overrides for stories. */
         if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
+        if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->type == 'epic')    $module = 'epic';
 
         return array(helper::createLink($module, $method, $linkVars) . (empty($varsConfig->app) ? '' : "#app=$varsConfig->app"), false);
     }

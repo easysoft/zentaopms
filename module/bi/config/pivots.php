@@ -380,7 +380,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -479,7 +478,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -570,7 +568,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -661,7 +658,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -700,7 +696,7 @@ select
     (case when t3.multiple='1' then t1.name else '' end) as execution,
     t2.id as taskID,
     t1.status as projectstatus,
-    (case when t2.deadline < current_date()
+    (case when cast(t2.deadline as date) < current_date()
          and t2.deadline is not null
          and t2.status != 'closed'
          and t2.status != 'done'
@@ -1657,7 +1653,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -1713,7 +1708,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'name',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -1765,8 +1759,8 @@ select
     cast(date as date) as day
 from zt_action
 where "action"='login'
-and (case when \$startDate='' then 1 else date>=cast(\$startDate as date) end)
-and (case when \$endDate='' then 1 else date<=cast(\$endDate as date) end)
+and (case when \$startDate='' then 1 else cast(date as date)>=cast(\$startDate as date) end)
+and (case when \$endDate='' then 1 else cast(date as date)<=cast(\$endDate as date) end)
 order by date asc, actor asc
 EOT,
     'settings'  => array
@@ -1827,8 +1821,8 @@ from zt_effort as t1
 left join zt_user as t2 on t1.account = t2.account
 left join zt_dept as t3 on t2.dept = t3.id
 where t1.`deleted` = '0'
-and (case when \$startDate='' then 1 else t1.`date` >= cast(\$startDate as date) end)
-and (case when \$endDate='' then 1 else t1.`date` <= cast(\$endDate as date) end)
+and (case when \$startDate='' then 1 else cast(t1.`date` as date) >= cast(\$startDate as date) end)
+and (case when \$endDate='' then 1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)
 and (case when \$dept='' then 1
 else t3.path like concat((select path from zt_dept where id=coalesce(cast(nullif(\$dept, '') as integer), 0)), '%')
 end)
@@ -1837,7 +1831,6 @@ EOT,
     'settings'  => array
     (
         'group1'      => 'account',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -1993,20 +1986,19 @@ $config->bi->builtin->pivots[] = array
     'sql'       => <<<EOT
 select
     t1.*,
-    (case when \$product='' then 0 else t1.product end) as customproduct
+    (case when \$product='' then 0 else cast(t1.product as integer) end) as customproduct
 from zt_bug as t1
 left join zt_product as t2 on t1.product = t2.id
 where t1.deleted='0'
 and t2.deleted='0'
 and t1.resolution!=''
-and (case when \$startDate='' then 1 else t1.resolvedDate>=cast(\$startDate as date) end)
-and (case when \$endDate='' then 1 else t1.resolvedDate<=cast(\$endDate as date) end)
+and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
+and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
 and (case when \$product = '' then 1 else customproduct=\$product end)
 EOT,
     'settings'  => array
     (
         'group1'      => 'resolvedBy',
-        'group2'      => '',
         'columnTotal' => 'sum',
         'columns'     => array
         (

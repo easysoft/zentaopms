@@ -584,6 +584,7 @@ class biModel extends model
             if(isset($chart->filters))  $chart->filters  = $this->jsonEncode($chart->filters);
             if(isset($chart->fields))   $chart->fields   = $this->jsonEncode($chart->fields);
             if(isset($chart->langs))    $chart->langs    = $this->jsonEncode($chart->langs);
+            if(!isset($chart->driver))  $chart->driver   = 'mysql';
 
             $exists = $this->dao->select('id')->from(TABLE_CHART)->where('id')->eq($chart->id)->fetch();
             if(!$exists) $currentOperate = 'insert';
@@ -767,7 +768,7 @@ class biModel extends model
     public function getDuckDBPath()
     {
         $duckdbBin  = $this->getDuckdbBinConfig();
-        $sourcePath = $this->app->getBasePath() . 'bin' . DS . 'duckdb' . DS;
+        $sourcePath = $this->app->getTmpRoot() . 'duckdb' . DS;
 
         $checkSourceCode = $this->checkDuckDBFile($sourcePath, $duckdbBin);
 
@@ -799,6 +800,7 @@ class biModel extends model
      * 获取ducbDB的bin目录配置。
      * Get duckdb bin config.
      *
+     * @param string  $driver
      * @access public
      * @return array
      */
@@ -806,6 +808,18 @@ class biModel extends model
     {
         $os        = PHP_OS == 'WINNT' ? 'win' : 'linux';
         $duckdbBin = $this->config->bi->duckdbBin[$os];
+        $driver    = $this->config->db->driver;
+
+        /* 如果不是mysql数据库，那么统一使用达梦的扩展配置。*/
+        /* If it is not a mysql database, then use the same extension configuration of Dameng. */
+        if($driver !== 'mysql') $driver = 'dm';
+
+        $duckdbBin['extension'] = $this->config->bi->duckdbExt[$os][$driver];
+
+        $duckdbBin['extension_dm']       = $this->config->bi->duckdbExt[$os]['dm'];
+        $duckdbBin['extension_mysql']    = $this->config->bi->duckdbExt[$os]['mysql'];
+        $duckdbBin['extensionUrl_dm']    = $this->config->bi->duckdbExtUrl[$os]['dm'];
+        $duckdbBin['extensionUrl_mysql'] = $this->config->bi->duckdbExtUrl[$os]['mysql'];
 
         if($os == 'win') $duckdbBin['path'] = dirname(dirname($this->app->getBasePath())) . $duckdbBin['path'];
 
@@ -819,9 +833,10 @@ class biModel extends model
      * @access public
      * @return string|false
      */
-    public function getDuckDBTmpDir()
+    public function getDuckDBTmpDir($static = false)
     {
         $duckdbTmpPath = $this->app->getTmpRoot() . 'duckdb' . DS . 'bi' . DS;
+        if($static) return $duckdbTmpPath;
         if(!is_dir($duckdbTmpPath) && !mkdir($duckdbTmpPath, 0755, true)) return false;
 
         return $duckdbTmpPath;
@@ -877,10 +892,12 @@ class biModel extends model
      */
     public function prepareSyncCommand($binPath, $extensionPath, $copySQL)
     {
-        $sqlContent = $this->config->bi->duckSQLTemp;
         $dbConfig   = $this->config->db;
+        $driver     = $dbConfig->driver;
+        $sqlContent = $this->config->bi->duckSQLTemp[$driver];
         $variables  = array(
             '{EXTENSIONPATH}' => $extensionPath,
+            '{DRIVER}'        => $driver,
             '{DATABASE}'      => $dbConfig->name,
             '{USER}'          => $dbConfig->user,
             '{PASSWORD}'      => $dbConfig->password,
@@ -894,7 +911,30 @@ class biModel extends model
             $sqlContent = str_replace($key, $value, $sqlContent);
         }
 
-        return "$binPath :memory: \"$sqlContent\" 2>&1";
+        if($driver == 'mysql') return "$binPath :memory: \"$sqlContent\" 2>&1";
+        return "$sqlContent 2>&1";
+    }
+
+    /**
+     * Generate parquet file.
+     *
+     * @access public
+     * @return string|true
+     */
+    public function generateParquetFile()
+    {
+        $duckdb = $this->getDuckDBPath();
+        if(!$duckdb) return $this->lang->bi->binNotExists;
+
+        $duckdbTmpPath = $this->getDuckDBTmpDir();
+        if(!$duckdbTmpPath) return sprintf($this->lang->bi->tmpPermissionDenied, $this->getDuckDBTmpDir(true), $this->getDuckDBTmpDir(true));
+
+        $copySQL = $this->prepareCopySQL($duckdbTmpPath);
+        $command = $this->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
+        $output  = shell_exec($command);
+        if(!empty($output)) return $output;
+
+        return true;
     }
 
     /**
@@ -905,7 +945,7 @@ class biModel extends model
      * @access public
      * @return string
      */
-    public function processVars($sql, $filters = array())
+    public function processVars($sql, $filters = array(), $emptyValue = false)
     {
         foreach($filters as $index => $filter)
         {
@@ -913,6 +953,9 @@ class biModel extends model
             if(!isset($filter['from']) || $filter['from'] != 'query') continue;
 
             $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
+            if($filters[$index]['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
+
+            if($emptyValue) $filters[$index]['default'] = '';
         }
         $sql = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $sql = trim($sql, ';');
@@ -1016,14 +1059,51 @@ class biModel extends model
      */
     public function prepareColumns($sql, $statement, $driver)
     {
-        $this->loadModel('chart');
-        $this->loadModel('dataview');
+        list($columnTypes, $columnFields) = $this->getSqlTypeAndFields($sql, $driver);
+        list($moduleNames, $aliasNames, $fieldPairs, $relatedObjects) = $this->getParams4Rebuild($sql, $statement, $columnFields);
 
+        $columns     = array();
+        $clientLang  = $this->app->getClientLang();
+        foreach($fieldPairs as $field => $langName)
+        {
+            $columns[$field] = array('name' => $field, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $relatedObjects[$field], $clientLang => $langName);
+        }
+
+        $objectFields = $this->loadModel('dataview')->getObjectFields();
+        $columns = $this->rebuildFieldSettings($fieldPairs, $columnTypes, $relatedObjects, $columns, $objectFields);
+
+        return array($columns, $relatedObjects);
+    }
+
+    /**
+     * Get sql columnTypes and columnFields.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @access public
+     * @return array
+     */
+    public function getSqlTypeAndFields($sql, $driver)
+    {
         $sqlColumns   = $this->getColumns($sql, $driver);
         $columnTypes  = $this->getColumnsType($sql, $driver, $sqlColumns);
         $columnFields = array();
         foreach($columnTypes as $column => $type) $columnFields[$column] = $column;
 
+        return array($columnTypes, $columnFields);
+    }
+
+    /**
+     * Get params for rebuild fieldSetting.
+     *
+     * @param  string $sql
+     * @param  object $statement
+     * @param  array  $columnFields
+     * @access public
+     * @return array
+     */
+    public function getParams4Rebuild($sql, $statement, $columnFields)
+    {
         $tableAndFields = $this->getTableAndFields($sql);
         $tables   = $tableAndFields['tables'];
         $fields   = $tableAndFields['fields'];
@@ -1032,20 +1112,13 @@ class biModel extends model
         $aliasNames  = array();
         if($tables)
         {
+            $this->loadModel('dataview');
             $moduleNames = $this->dataview->getModuleNames($tables);
             $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
         }
+        list($fieldPairs, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
 
-        list($fields, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
-
-        $columns     = array();
-        $clientLang  = $this->app->getClientLang();
-        foreach($fields as $field => $langName)
-        {
-            $columns[$field] = array('name' => $field, 'field' => $field, 'type' => $columnTypes->$field, 'object' => $relatedObjects[$field], $clientLang => $langName);
-        }
-
-        return array($columns, $relatedObjects);
+        return array($moduleNames, $aliasNames, $fieldPairs, $relatedObjects);
     }
 
     /**
@@ -1060,7 +1133,7 @@ class biModel extends model
     public function query($stateObj, $driver = 'mysql')
     {
         $dbh = $this->app->loadDriver($driver);
-        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
+        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters(), true);
 
         $stateObj->beforeQuerySql();
 
@@ -1069,6 +1142,9 @@ class biModel extends model
 
         $checked = $this->validateSql($sql, $driver);
         if($checked !== true) return $stateObj->setError($checked);
+
+        $sql       = $this->processVars($stateObj->sql, $stateObj->getFilters());
+        $statement = $this->sql2Statement($sql);
 
         $recPerPage = $stateObj->pager->recPerPage;
         $pageID     = $stateObj->pager->pageID;
@@ -1160,6 +1236,71 @@ class biModel extends model
     }
 
     /**
+     * 重建透视表filedSettings字段
+     * Rebuild fieldSettings field of pivot.
+     *
+     * @param  object  $pivot
+     * @param  array   $fieldPairs
+     * @param  object  $columns
+     * @param  array   $relatedObject
+     * @param  object  $fieldSettings
+     * @param  array   $objectFields
+     * @access private
+     * @return object
+     */
+    public function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object|array $fieldSettings, array $objectFields): object|array
+    {
+        $isArray          = is_array($fieldSettings);
+        if($isArray) $fieldSettings = json_decode(json_encode($fieldSettings));
+        $fieldSettingsNew = new stdclass();
+
+        foreach($fieldPairs as $index => $field)
+        {
+            $defaultType   = $columns->{$index};
+            $defaultObject = $relatedObject[$index];
+
+            if(isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
+
+            if(!isset($fieldSettings->{$index}))
+            {
+                /* 如果字段设置中没有该字段，则使用默认的配置。 */
+                /* If the field is not set in the field settings, use the default value. */
+                $fieldItem = new stdclass();
+                $fieldItem->name   = $field;
+                $fieldItem->object = $defaultObject;
+                $fieldItem->field  = $index;
+                $fieldItem->type   = $defaultType;
+
+                $fieldSettingsNew->{$index} = $fieldItem;
+            }
+            else
+            {
+                /* 兼容旧版本的字段设置，当为空或者为布尔值时，使用默认值 */
+                /* Compatible with old version of field settings, use default value when empty or boolean. */
+                if(!isset($fieldSettings->{$index}->object) || is_bool($fieldSettings->{$index}->object) || strlen($fieldSettings->{$index}->object) == 0) $fieldSettings->{$index}->object = $defaultObject;
+
+                /* 当字段设置中没有字段名时，使用默认的字段名配置。 */
+                /* When there is no field name in the field settings, use the default field name configuration. */
+                if(!isset($fieldSettings->{$index}->field) || strlen($fieldSettings->{$index}->field) == 0)
+                {
+                    $fieldSettings->{$index}->field  = $index;
+                    $fieldSettings->{$index}->object = $defaultObject;
+                    $fieldSettings->{$index}->type   = 'string';
+                }
+
+                $object = $fieldSettings->{$index}->object;
+                $type   = $fieldSettings->{$index}->type;
+                if($object == $defaultObject && $type != $defaultType) $fieldSettings->{$index}->type = $defaultType;
+
+                $fieldSettingsNew->{$index} = $fieldSettings->{$index};
+            }
+        }
+
+        if($isArray) $fieldSettingsNew = json_decode(json_encode($fieldSettingsNew), true);
+        return $fieldSettingsNew;
+    }
+
+    /**
      * 把自定义透视表的数据转换为数据表格可以使用的格式。
      * Convert the data of custom pivot to the format that can be used by data table.
      *
@@ -1183,9 +1324,9 @@ class biModel extends model
         $index = 0;
         foreach($headerRow1 as $column)
         {
-            /* 如果 colspan 属性不为空则且存在第二行表头表示该列包含切片字段。*/
+            /* 如果 colspan 属性不为空则且isSlice标记列为true且存在第二行表头表示该列包含切片字段。*/
             /* If the colspan attribute is not empty, it means that the column contains slice fields. */
-            if(!empty($column->colspan) && $column->colspan > 1 && !empty($headerRow2))
+            if(!empty($column->colspan) && $column->isSlice && !empty($headerRow2))
             {
                 /* 找到实际切片的字段。*/
                 /* Find the actual sliced field. */
@@ -1245,7 +1386,7 @@ class biModel extends model
 
             $columnMaxLen[$field] = mb_strlen($column->label);
 
-            if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
+            if(isset($column->colspan) && $column->isSlice) $columns[$field]['colspan'] = $column->colspan;
 
             // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
 
@@ -1365,79 +1506,169 @@ class biModel extends model
     }
 
     /**
-     * Query sql.
+     * 下载duckdb引擎。
+     * Download duckdb.
      *
-     * @param  string    $sql
-     * @param  int    $recPerPage
-     * @param  int    $pageID
      * @access public
-     * @return object
+     * @return string
      */
-    /*
-    public function querySql($sql, $recPerPage = 100, $pageID = 1)
+    public function downloadDuckdb(): string
     {
-        $queryResult = new stdclass();
-        $queryResult->error    = false;
-        $queryResult->errorMsg = '';
-        $queryResult->cols     = array();
-        $queryResult->rows     = array();
-        $queryResult->sql      = '';
-        $queryResult->fieldSettings = array();
+        $check = $this->checkDuckdbInstall();
 
-        $sql = $this->processVars($sql);
+        if($check['loading']) return 'loading';
 
-        $statement = $this->sql2Statement($sql);
-        if(is_string($statement))
-        {
-            $queryResult->error    = true;
-            $queryResult->errorMsg = $statement;
+        $this->loadModel('bi');
+        $binRoot   = $this->app->getTmpRoot() . 'duckdb' . DS;
+        $duckdbBin = $this->getDuckdbBinConfig();
 
-            return $queryResult;
-        }
+        if(!is_dir($binRoot)) mkdir($binRoot, 0755, true);
 
-        $checked = $this->validateSql($sql);
-        if($checked !== true)
-        {
-            $queryResult->error    = true;
-            $queryResult->errorMsg = $checked;
+        $this->updateDownloadingTagFile('file', 'create');
+        $this->updateDownloadingTagFile('extension_dm', 'create');
+        $this->updateDownloadingTagFile('extension_mysql', 'create');
 
-            return $queryResult;
-        }
+        $downloadDuckdb   = $this->downloadFile($duckdbBin['fileUrl'],            $binRoot, $duckdbBin['file']);
+        $downloadExtDM    = $this->downloadFile($duckdbBin['extensionUrl_dm'],    $binRoot, $duckdbBin['extension_dm']);
+        $downloadExtMysql = $this->downloadFile($duckdbBin['extensionUrl_mysql'], $binRoot, $duckdbBin['extension_mysql']);
 
-        $limitSql = $this->prepareSqlPager($statement, $recPerPage, $pageID);
+        $this->updateDownloadingTagFile('file', 'remove');
+        $this->updateDownloadingTagFile('extension_dm', 'remove');
+        $this->updateDownloadingTagFile('extension_mysql', 'remove');
 
-        try
-        {
-            $queryResult->rows      = $this->dbh->query($limitSql)->fetchAll();
-            $queryResult->rowsCount = $this->dbh->query("SELECT FOUND_ROWS() as count")->fetch()->count;
-        }
-        catch(Exception $e)
-        {
-            $queryResult->error = true;
-            $queryResult->errorMsg = $e;
-
-            return $queryResult;
-        }
-
-        $columns    = $this->prepareColumns($limitSql, $statement);
-        $clientLang = $this->app->getClientLang();
-
-        $fieldSettings = array();
-        foreach($columns as $field => $settings)
-        {
-            $title = $settings['name'];
-
-            if(!isset($settings[$clientLang]) || empty($settings[$clientLang])) $settings[$clientLang] = $title;
-            $fieldSettings[$field] = $settings;
-        }
-
-        $queryResult->cols          = $this->buildQueryResultTableColumns($fieldSettings);
-        $queryResult->fieldSettings = $fieldSettings;
-        $queryResult->sql           = $limitSql;
-
-        return $queryResult;
+        return $downloadDuckdb && $downloadExtDM && $downloadExtMysql ? 'ok' : 'fail';
     }
-    */
+
+    /**
+     * 检查 DuckDB 安装状态。
+     * Check duckdb install status.
+     *﹡
+     * @access public
+     * @return array
+     */
+    public function checkDuckdbInstall()
+    {
+        $checkDuckdb   = $this->updateDownloadingTagFile('file', 'check');
+        $checkExtDM    = $this->updateDownloadingTagFile('extension_dm', 'check');
+        $checkExtMysql = $this->updateDownloadingTagFile('extension_mysql', 'check');
+
+        $loading = $checkDuckdb == 'loading' || $checkExtDM == 'loading' || $checkExtMysql == 'loading';
+        $ok      = $checkDuckdb == 'ok' && $checkExtDM == 'ok' && $checkExtMysql == 'ok';
+        $fail    = $checkDuckdb == 'fail' || $checkExtDM == 'fail' || $checkExtMysql == 'fail';
+
+        return array('loading' => $loading, 'ok' => $ok, 'fail' => $fail, 'duckdb' => $checkDuckdb, 'ext_dm' => $checkExtDM, 'ext_mysql' => $checkExtMysql);
+    }
+
+    /**
+     * 更新tab文件下载状态。
+     * Update downloading tab file status.
+     *
+     * @param  string $type
+     * @param  string $action
+     * @access public
+     * @return string
+     */
+    public function updateDownloadingTagFile(string $type = 'file', string $action = 'create'): string
+    {
+        $downloading = '.downloading';
+        $binRoot     = $this->app->getTmpRoot() . 'duckdb' . DS;
+        $duckdbBin   = $this->getDuckdbBinConfig();
+        $file        = $binRoot . $duckdbBin[$type];
+        $tagFile     = $file . $downloading;
+
+        if($action == 'create')
+        {
+            if(file_exists($tagFile)) return 'fail';
+            file_put_contents($tagFile, 'Downloading...');
+            return 'ok';
+        }
+
+        if($action == 'check')
+        {
+            if(file_exists($file)) return 'ok';
+            if(file_exists($tagFile)) return 'loading';
+            return 'fail';
+        }
+        if($action == 'remove')
+        {
+            if(!file_exists($tagFile)) return 'fail';
+            unlink($tagFile);
+        }
+        return 'ok';
+    }
+
+    /**
+     * 解压文件。
+     * Unzip file.
+     *
+     * @param  string    $path
+     * @param  string    $file
+     * @param  string    $extractFile
+     * @access public
+     * @return bool
+     */
+    public function unzipFile(string $path, string $file, string $extractFile): bool
+    {
+        $this->app->loadClass('pclzip', true);
+        $zip = new pclzip($file);
+
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array($extractFile);
+        return $zip->extract(PCLZIP_OPT_PATH, $path, PCLZIP_OPT_BY_NAME, $extractFiles) === 0;
+    }
+
+    /**
+     * 下载文件。
+     * Download file.
+     *
+     * @param  string    $url
+     * @param  string    $savePath
+     * @param  string    $finalFile
+     * @access public
+     * @return bool
+     */
+    public function downloadFile(string $url, string $savePath, string $finalFile): bool
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $fileContents = curl_exec($ch);
+
+        if (curl_errno($ch))
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        $result = json_decode($fileContents, true);
+        if(isset($result['error']))
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        $filename = basename($url);
+        $filename = $savePath . $filename;
+        $result   = file_put_contents($filename, $fileContents);
+        if($result === false)
+        {
+            curl_close($ch);
+            return false;
+        }
+
+        curl_close($ch);
+        chmod($filename, 0755);
+
+        if(pathinfo($filename, PATHINFO_EXTENSION) === 'zip')
+        {
+            $this->unzipFile($savePath, $filename, $finalFile);
+            unlink($filename);
+        }
+
+        return chmod($savePath . $finalFile, 0755);
+    }
 
     /**
      * Encode json.

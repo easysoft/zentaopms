@@ -1455,7 +1455,7 @@ class storyTao extends storyModel
                         {
                             $hasDeveloping = true;
                         }
-                        if(in_array($child->stage, array('released', 'delivering', 'delivered')))
+                        if(in_array($child->stage, array('released', 'delivering', 'delivered', 'closed')))
                         {
                             $allBeforeDeveloping = false;
                         }
@@ -2485,29 +2485,42 @@ class storyTao extends storyModel
     }
 
     /**
-     * 根据搜索内容，查询并合并子需求，返回新的需求列表。
-     * Get with children stories by searched stories.
+     * 根据给出需求，查询并合并子需求，返回新的需求列表。
+     * Get with children stories by given stories.
      *
      * @param  array  $allStories
      * @param  array  $stories
      * @access public
      * @return array
      */
-    public function getSearchedStoriesForTrack(array $allStories, array $stories): array
+    public function mergeChildrenForTrack(array $allStories, array $stories, string $storyType): array
     {
-        $newStories     = array();
-        $newAllStories  = array();
-        $searchedIdList = array_keys($stories);
-        foreach($allStories as $storyID => $story)
-        {
-            $isChild = false;
-            array_map(function($searchedID) use($story, &$isChild){ if(str_contains($story->path, ",{$searchedID},")) $isChild = true; }, $searchedIdList);
-            if(!$isChild) continue;
+        $newStories  = array();
+        $parentGroup = array();
+        foreach($allStories as $storyID => $story) $parentGroup[$story->parent][$storyID] = $story;
 
+        $appendChildren = function($parentID) use($parentGroup, &$newStories, &$appendChildren)
+        {
+            if(!isset($parentGroup[$parentID])) return;
+            foreach($parentGroup[$parentID] as $storyID => $story)
+            {
+                $story->parent = explode(',', trim(str_replace(",{$storyID},", ',', $story->path), ','));
+                $newStories[$storyID] = $story;
+                $appendChildren($storyID);
+            }
+        };
+
+        foreach($stories as $storyID => $story)
+        {
+            if(isset($newStories[$storyID])) continue;
+            if($storyType == 'requirement' && $story->type == 'epic') continue;
+            if($storyType == 'story' && ($story->type == 'epic' || $story->type == 'requirement')) continue;
+
+            $story = zget($allStories, $storyID, $story);
             $story->parent = explode(',', trim(str_replace(",{$storyID},", ',', $story->path), ','));
-            $newStories[$storyID]    = $story;
-            $newAllStories[$storyID] = $story;
+            $newStories[$storyID] = $story;
+            $appendChildren($storyID);
         }
-        return array($newAllStories, $newStories);
+        return $newStories;
     }
 }

@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->getRelation();
+timeout=0
 cid=1
 
 - 执行storyModel模块的getRelation方法，参数是0, 'requirement'  @0

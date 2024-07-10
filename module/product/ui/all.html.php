@@ -129,7 +129,6 @@ $canUpdateOrder = hasPriv('product', 'updateOrder')  && $orderBy == 'order_asc';
 dtable
 (
     set::id('products'),
-    set::plugins(array('sortable')),
     set::sortable($canUpdateOrder),
     set::onSortEnd($canUpdateOrder ? jsRaw('window.onSortEnd') : null),
     set::canSortTo($canUpdateOrder ? jsRaw('window.canSortTo') : null),
@@ -140,7 +139,7 @@ dtable
     set::checkable($canBatchEdit),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::orderBy($orderBy),
-    set::plugins(array('header-group')),
+    set::plugins(array('header-group', 'sortable')),
     $canBatchEdit ? set::footToolbar
     (
         item

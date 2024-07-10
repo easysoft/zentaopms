@@ -91,7 +91,6 @@ $version = $tester->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq
 $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[0]);
 r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('8');  //测试升级中的并且版本号小于18.7的情况，不创建actionrecent
 
-unset(dao::$cache['zt_actionrecent']);
 $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[1]);
 r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('9'); //测试升级中的并且版本号大于18.7的情况，创建actionrecent
 
