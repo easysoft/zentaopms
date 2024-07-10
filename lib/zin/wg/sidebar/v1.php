@@ -38,7 +38,7 @@ class sidebar extends wg
         return div
         (
             setClass('sidebar'),
-            setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent, 'maxWidth' => $maxWidth, 'minWidth' => $minWidth, 'width' => $width, 'dragToResize' => $dragToResize, 'onToggle' => $onToggle, 'toggleBtn' => $toggleBtn)),
+            zui::create('sidebar', array('side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent, 'maxWidth' => $maxWidth, 'minWidth' => $minWidth, 'width' => $width, 'dragToResize' => $dragToResize, 'onToggle' => $onToggle, 'toggleBtn' => $toggleBtn)),
             set($this->getRestProps()),
             $this->children()
         );
