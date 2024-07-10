@@ -35,7 +35,7 @@ class count_of_daily_finished_task_in_user extends baseCalc
             ->where('`projectStatus`')->ne('suspended')
             ->andWhere('`executionStatus`')->ne('suspended')
             ->andWhere('`finishedDate` IS NOT NULL')
-            ->groupBy("`finishedBy`, `year`, `month`, `day`")
+            ->groupBy("`finishedBy`, YEAR(`finishedDate`), MONTH(`finishedDate`), DAY(`finishedDate`)")
             ->fetchAll();
     }
 

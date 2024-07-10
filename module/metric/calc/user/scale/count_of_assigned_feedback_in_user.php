@@ -32,7 +32,7 @@ class count_of_assigned_feedback_in_user extends baseCalc
         return $this->dao->select($select)->from($this->getSingleSql())
             ->where('`assignedTo` IS NOT NULL')
             ->andWhere('`assignedTo`')->ne('closed')
-            ->groupBy('`user`')
+            ->groupBy('`assignedTo`')
             ->fetchAll();
     }
 
