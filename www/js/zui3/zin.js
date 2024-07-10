@@ -35,12 +35,57 @@
     const currentCode = (window.frameElement ? window.frameElement.name : window.name).split('-')[1];
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
-    const startTime   = performance.now();
     const timers      = {timeout: [], interval: []};
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
     let historyState  = parent.window.history.state;
     const hasZinBar   = DEBUG && window.zin && window.zin.zinTool && !isIndexPage;
+
+    function getUrlID(url)
+    {
+        const info = $.parseLink(url || currentAppUrl);
+        return info.moduleName ? `${info.moduleName}-${info.methodName}` : '';
+    }
+
+    function showLog(name, moreTitles, trace, moreInfos)
+    {
+        const titles = [`%c APP • ${currentCode.toUpperCase()} `];
+        const titleColors = ['color:#fff;font-weight:bold;background:#2196f3'];
+        const urlID = getUrlID();
+        if(urlID)
+        {
+            titles.push(`%c ${urlID} `);
+            titleColors.push('background:rgba(33, 150, 243, 0.2);color:#2196f3;');
+        }
+        if(name)
+        {
+            titles.push(`%c ${name} `);
+            titleColors.push('color:#2196f3;font-weight:bold;');
+        }
+        if(!Array.isArray(moreTitles)) moreTitles = [moreTitles];
+        if(typeof moreTitles[0] === 'string' && (moreTitles[0].startsWith('success:') || moreTitles[0].startsWith('error:')))
+        {
+            const message = moreTitles.shift();
+            const [type, content] = message.split(':', 2);
+            titles.push(`%c ${content} `);
+            titleColors.push(`color:${type === 'error' ? '#f56c6c' : '#67c23a'};`);
+        }
+        if(trace || moreInfos)
+        {
+            console.groupCollapsed(titles.join(''), ...titleColors, ...moreTitles);
+            if(trace) console.trace(trace);
+            if(moreInfos)
+            {
+                if($.isPlainObject(moreInfos)) Object.keys(moreInfos).forEach((infoName) => console.log(infoName, moreInfos[infoName]));
+                else console.log(moreInfos);
+            }
+            console.groupEnd();
+        }
+        else
+        {
+            console.log(titles.join(''), ...titleColors, ...moreTitles);
+        }
+    }
 
     $.apps = $.extend(
     {
@@ -54,12 +99,12 @@
 
             if(oldState && oldState.url === url)
             {
-                if(DEBUG) console.log('[APP]', 'skip update:', {oldState, state, code, url, title});
+                if(DEBUG) showLog('Update skipped', [code, title], {oldState, state, code, url, title});
                 return;
             }
 
             window.history.pushState(state, title, url);
-            if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
+            if(DEBUG) showLog('Update', [code, title], {state, code, url, title});
             return state;
         },
         updateAppUrl:      function(url, title){return $.apps.updateApp(currentCode, url, title)},
@@ -188,7 +233,7 @@
             window.zinDebug = data.debug;
             data.debug.forEach(dump =>
             {
-                console.groupCollapsed('%c ZIN %c debug %c' + dump.name, 'color:#fff;font-weight:bold;background:#ec4899', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
+                console.groupCollapsed(`%c ${currentCode.toUpperCase()} %c ${getUrlID()} %c DEBUG %c${dump.name}`, 'color:#fff;font-weight:bold;background:#ec4899', 'background:rgba(233,30,99,0.2);color:#ec4899;font-weight:bold', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
                 dump.data.forEach(item =>
                 {
                     if(typeof item === 'string') console.log('%c' + item, 'font-family:ui-monospace,monospace; padding:0 4px;border-left:1px solid #ff0000;opacity:0.8');
@@ -402,9 +447,19 @@
         }
 
         /* Common render */
-        if(!selector) return console.warn('[APP] ', 'cannot render partial content with data', info);
+        if(!selector)
+        {
+            if(DEBUG) showLog('Render partial', 'error:cannot render partial content without selector.', {info, options});
+            else console.warn('[APP] ', 'cannot render partial content with data', info);
+            return;
+        }
 
-        if(!$target.length) return console.warn('[APP] ', 'cannot find target element with selector', selector);
+        if(!$target.length)
+        {
+            if(DEBUG) showLog('Render partial', 'cannot find target element with selector.', {info, selector, options});
+            else console.warn('[APP] ', 'cannot find target element with selector.', info);
+            return;
+        }
         if(selector.first) $target = $target.first();
         if(selector.type === 'json')
         {
@@ -435,7 +490,7 @@
 
     function renderPage(list, options)
     {
-        if(DEBUG) console.log('[APP] ', 'render:', list);
+        if(DEBUG) showLog('Render', [options.id, list.length], list, {options});
         let hasUpdatePage = false;
         list.forEach(item =>
         {
@@ -563,7 +618,7 @@
                 }
                 catch(e)
                 {
-                    if(DEBUG) console.error('[APP] ', 'Parse data failed from ' + url, {error: e, data: rawData});
+                    if(DEBUG) showLog('Request', 'error:parse data failed', e, {url, options, rawData});
                     if(!isInAppTab && config.zin) return;
                     hasFatal = rawData.includes('Fatal error') || rawData.includes('Uncaught TypeError:') || rawData.startsWith('<!DOCTYPE html');
                     ;
@@ -586,7 +641,7 @@
                     }
                     else if(DEBUG)
                     {
-                        console.log('%c[APP] Skip render with effective caching', 'color:green', cacheKey);
+                        showLog('Request', 'success:skip render with effective caching', {cacheKey, data})
                         renderPageData(data, true);
                     }
                     updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
@@ -685,7 +740,7 @@
                 }
             }
         });
-        if(DEBUG) console.log('[APP]', 'request', options);
+        if(DEBUG) showLog('Request', getUrlID(url), options);
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
         {
@@ -700,20 +755,20 @@
                         try
                         {
                             const data = $.parseRawData(cache.data.data);
-                            if(DEBUG) console.log('%c[APP] Render with cache', 'color:green', cacheKey);
+                            if(DEBUG) showLog('Request', 'success:render with cache', {url, cacheKey, data, options});
                             if(!cache.data.partial) currentAppUrl = cache.data.url;
                             renderPageData(data);
                             $(document).data('zinCache', [cache.key, cache.time].join('#')).trigger('pagecaheload.app');
                         }
                         catch(error)
                         {
-                            if(DEBUG) console.error('[APP] ', 'Parse cache data failed from ' + url, {error: error, cache: cache});
+                            if(DEBUG) showLog('Request', 'error:Parse cache data failed', {url, cacheKey, data, options});
                             $.db.setCacheData(cacheKey, null, cache.time, 'zinFetch');
                         }
                     }
                     else
                     {
-                        if(DEBUG) console.log('%c[APP] Skip render data with same cache', 'color:green', cacheKey);
+                        if(DEBUG) showLog('Request', 'success:skip render data with same cache', {url, cacheKey, data, options});
                     }
                 }
                 ajax.send();
@@ -867,12 +922,7 @@
             const newOptions = window.beforePageLoad(options);
             if(newOptions) $.extend(options, newOptions);
         }
-        if(DEBUG)
-        {
-            console.groupCollapsed('[APP] ', 'load:', options.url);
-            console.trace('options', options);
-            console.groupEnd();
-        }
+        if(DEBUG) showLog('Load', getUrlID(options.url), options);
         fetchContent(options.url, options.selector, options);
     }
 
@@ -1111,13 +1161,7 @@
             data[key] = value;
         });
 
-        if(DEBUG)
-        {
-            console.groupCollapsed('[APP] ', 'loadForm:', id);
-            console.log('options', options);
-            console.trace('data', data);
-            console.groupEnd();
-        }
+        if(DEBUG) showLog('Load form', id, {options, data});
 
         const $oldItems = $form.children('.form-group[data-name]');
         let items = options.items || [];
@@ -1208,7 +1252,7 @@
 
     function openPage(url, appCode, options)
     {
-        if(DEBUG) console.log('[APP] ', 'open:', url, appCode);
+        if(DEBUG) showLog('Open page', url, {appCode, options});
         if(!window.config.zin)
         {
             location.href = $.createLink('index', 'app', 'url=' + btoa(url));
@@ -1275,7 +1319,7 @@
             options.url = url;
         }
 
-        if(DEBUG) console.log('[APP] open url', url, options);
+        if(DEBUG) showLog('Open url', url, options);
 
         if(options.app === 'current') options.app = currentCode;
         if(options.confirm)
@@ -1700,7 +1744,7 @@
         $(window).on('popstate', function(event)
         {
             const state = event.state;
-            if(DEBUG) console.log('[APP]', 'popstate:', state);
+            if(DEBUG) showLog(state ? state.code : null, 'Popstate', state ? state.url : null, state);
             if(state && state.url) openPage(state.url);
         });
     }

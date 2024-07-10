@@ -12,14 +12,59 @@ const apps =
     oldPages: new Set(oldPages)
 };
 
-const debug = config.debug;
+const DEBUG = config.debug;
+
+function getUrlID(url)
+{
+    const info = $.parseLink(url);
+    return info.moduleName ? `${info.moduleName}-${info.methodName}` : '';
+}
+
+function showLog(code, name, moreTitles, trace, moreInfos)
+{
+    const titles = ['%c HOME '];
+    const titleColors = ['color:#fff;font-weight:bold;background:#009688'];
+    if(code)
+    {
+        titles.push(`%c ${code} `);
+        titleColors.push('background:rgba(0,150,136,0.2);color:#009688;');
+    }
+    if(name)
+    {
+        titles.push(`%c ${name} `);
+        titleColors.push('color:#009688;font-weight:bold;');
+    }
+    if(!Array.isArray(moreTitles)) moreTitles = [moreTitles];
+    if(typeof moreTitles[0] === 'string' && (moreTitles[0].startsWith('success:') || moreTitles[0].startsWith('error:')))
+    {
+        const message = moreTitles.shift();
+        const [type, content] = message.split(':', 2);
+        titles.push(`%c ${content} `);
+        titleColors.push(`color:${type === 'error' ? '#f56c6c' : '#67c23a'};`);
+    }
+    if(trace || moreInfos)
+    {
+        console.groupCollapsed(titles.join(''), ...titleColors, ...moreTitles);
+        if(trace) console.trace(trace);
+        if(moreInfos)
+        {
+            if($.isPlainObject(moreInfos)) Object.keys(moreInfos).forEach((infoName) => console.log(infoName, moreInfos[infoName]));
+            else console.log(moreInfos);
+        }
+        console.groupEnd();
+    }
+    else
+    {
+        console.log(titles.join(''), ...titleColors, ...moreTitles);
+    }
+}
 
 function triggerAppEvent(code, event, args)
 {
     const app = apps.openedMap[code];
     if(!app) return;
 
-    if(debug) console.log('[APPS]', 'event:', event, code, args);
+    if(DEBUG) showLog(code, 'Event', event, {args});
     event = event + '.apps';
     if(!Array.isArray(args)) args = [args];
     if(app.$app) app.$app.trigger(event, args);
@@ -78,7 +123,7 @@ function openApp(url, code, options)
     const app = apps.map[code];
     if(!app)
     {
-        if(debug) console.log('[APPS]', 'App not found.', code, {url, options});
+        if(DEBUG) showLog(code, 'APP NOT FOUND!', url, options);
         return zui.Messager.show('App not found.', {type: 'danger', time: 2000});
     }
 
@@ -190,7 +235,7 @@ function openApp(url, code, options)
         $tabs.find('li[data-app="' + code + '"]>a').addClass('active');
     }
 
-    if(debug) console.log('[APPS]', 'open:', code, {url, options, needLoad, forceReload});
+    if(DEBUG) showLog(code, 'Open', getUrlID(url), openedApp, {options, forceReload, needLoad});
     triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
     return openedApp;
@@ -224,7 +269,8 @@ function reloadApp(code, url, options)
     {
         if(app.external) iframe.src = url;
         else if(iframe.contentWindow.loadPage) iframe.contentWindow.loadPage(url, $.extend({updateHeading: true}, options));
-        else console.error('[APPS]', 'reload: Cannot load page when iframe is not ready.');
+        else if(DEBUG) showLog(code, 'Reload', 'error:Cannot load page when iframe is not ready.', {options});
+        else console.error('[APPS]', 'Reload failed: Cannot load page when iframe is not ready.');
     }
     catch(error)
     {
@@ -259,7 +305,7 @@ function updateApp(code, url, title, type)
     window.history.pushState(state, title, url);
     zui.store.session.set('lastOpenApp', {code, url});
     triggerAppEvent(code, 'updateapp', [code, url, title, type]);
-    if(debug) console.log('[APPS]', 'update:', {code, url, title, type});
+    if(DEBUG) showLog(code, 'Update', title || getUrlID(url), state, {url, title, type});
     return state;
 }
 
@@ -473,7 +519,7 @@ function goBack(target, url, startState)
 {
     const currentState = window.history.state;
     const preState = currentState && currentState.prev;
-    if(debug) console.log('[APPS] go back', {target, url, startState, currentState, preState});
+    if(DEBUG) showLog(null, 'Go back', target, null, {url, startState, currentState, preState});
     if(target && startState && currentState && preState)
     {
         startState = startState.prev || (currentState && currentState.prev);
@@ -809,7 +855,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
 $(window).on('popstate', function(event)
 {
     const state = event.state;
-    if(debug) console.log('[APPS]', 'popstate:', state);
+    if(DEBUG) showLog(state ? state.code : null, 'Popstate', state ? state.url : null, state);
     if(state) openApp(state.url, state.code, false);
 });
 
