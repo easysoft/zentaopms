@@ -2501,11 +2501,16 @@ class baseSQL
     public function groupBy($groupBy)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
+
+        //The dm database cannot use alias for group by
+        /*
         if(!preg_match('/^\w+[a-zA-Z0-9_`.]+$/', $groupBy))
         {
             $groupBy = htmlspecialchars($groupBy);
             helper::end("Group is bad query, The group is $groupBy");
         }
+         */
+
         $this->sql .= ' ' . DAO::GROUPBY . " $groupBy";
         return $this;
     }
