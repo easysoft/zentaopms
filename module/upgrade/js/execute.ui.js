@@ -26,6 +26,7 @@ $(document).ready(function()
  */
 function initStatus()
 {
+    $('#refreshBtn').addClass('hidden');
     $('#installDuckdb p').addClass('hidden');
     $('#installDuckdb p.duckdb-' + duckdb).removeClass('hidden');
     $('#installDuckdb p.ext_dm-' + ext_dm).removeClass('hidden');
@@ -54,12 +55,18 @@ function ajaxInstallDuckdb()
  */
 function ajaxCheckDuckdb()
 {
-    let url = $.createLink('install', 'ajaxCheckDuckdb');
+    let url = $.createLink('upgrade', 'ajaxCheckDuckdb');
     $.get(url, function(resp)
     {
         resp = JSON.parse(resp);
         const {loading, ok, fail, duckdb, ext_dm, ext_mysql} = resp;
         if(loading) setTimeout(() => {ajaxCheckDuckdb()}, 500);
+
+        if(!loading)
+        {
+            $('#refreshBtn').removeClass('hidden');
+            $('.after-duckdb').addClass('hidden');
+        }
 
         $('#installDuckdb p').addClass('hidden');
         $('#installDuckdb p.duckdb-' + duckdb).removeClass('hidden');

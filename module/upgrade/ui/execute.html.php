@@ -57,7 +57,7 @@ div
             $result == 'duckdbFail' ? div
             (
                 setID('duckdbInfo'),
-                setClass('h-10')
+                setClass('h-auto')
             ) : null,
             form
             (
@@ -70,10 +70,11 @@ div
                 (
                     setClass('mt-4'),
                     $result == 'sqlFail' ? $lang->upgrade->afterExec : null,
-                    $result == 'duckdbFail' ? $lang->upgrade->afterDuckdb : null,
+                    $result == 'duckdbFail' ? span(setClass('after-duckdb'), $lang->upgrade->afterDuckdb) : null,
                     $result == 'fail' ? $lang->upgrade->afterDeleted : null,
                     btn
                     (
+                        setID('refreshBtn'),
                         set::btnType($this->app->rawMethod == 'execute' ? 'submit' : 'button'),
                         $lang->refresh
                     )

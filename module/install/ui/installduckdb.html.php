@@ -38,7 +38,7 @@ $extLang = array
     'fail'    => $lang->install->installedFail,
 );
 
-$fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass, $duckdbLang, $extLang)
+$fnGenerateInfo = function($type, $stus, $show = false) use ($lang, $icons, $iconClass, $duckdbLang, $extLang)
 {
     return p
     (
@@ -48,7 +48,7 @@ $fnGenerateInfo = function($type, $stus, $show = false) use ($icons, $iconClass,
             setClass($iconClass[$stus]),
             $icons[$stus]
         ),
-        $type == 'duckdb'    ? $duckdbLang[$stus] : null,
+        $type == 'duckdb'    ? sprintf($duckdbLang[$stus], $lang->install->duckdb) : null,
         $type == 'ext_dm' || $type == 'ext_mysql' ? sprintf($extLang[$stus], $type) : null,
     );
 };
@@ -74,6 +74,12 @@ div
     (
         setClass('help text-warning hidden'),
         $lang->install->duckdbFail,
-        a(set::href($config->bi->duckdbHelp), $config->bi->duckdbHelp)
+        btn
+        (
+            set::type('link'),
+            set::url($config->bi->duckdbHelp),
+            set::target('blank'),
+            $config->bi->duckdbHelp
+        )
     )
 );

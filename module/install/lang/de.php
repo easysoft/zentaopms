@@ -129,7 +129,7 @@ $lang->install->installingDuckdb    = 'Installing duckdb engine...';
 $lang->install->installedDuckdb     = 'Duckdb engine installed successfully!';
 $lang->install->installingExtension = 'Installing the duckdb Engine extension [%s]...';
 $lang->install->installedExtension  = 'Duckdb Engine extension [%s] installed!';
-$lang->install->installedFail       = 'Installation failed';
+$lang->install->installedFail       = '[%s] Installation failed';
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Standard Sprache';
