@@ -232,7 +232,7 @@ class installModel extends model
         $admin->password = md5($data->password);
         $admin->gender   = 'f';
         $admin->visions  = $visions;
-        $this->dao->replace(TABLE_USER)->data($admin)->exec();
+        $this->dao->insert(TABLE_USER)->data($admin)->exec();
 
         return !dao::isError();
     }
