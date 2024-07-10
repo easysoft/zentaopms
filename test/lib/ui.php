@@ -303,16 +303,27 @@ class tester extends result
      *
      * @param  string  $module
      * @param  string  $method
+     * @param  string  $ext
      * @access public
      * @return object
      */
-    public function loadPage($module = '', $method = '')
+    public function loadPage($module = '', $method = '', $ext = '')
     {
         if($this->module && !$module) $module = $this->module;
         if($this->method && !$method) $method = $this->method;
 
         $pageClass = "{$method}Page";
-        if(!class_exists($pageClass)) include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
+        if(!class_exists($pageClass))
+        {
+            if($ext)
+            {
+                include dirname(__FILE__, 3). "/extension/$ext/$module/ext/test/ui/page/$method.php";
+            }
+            else
+            {
+                include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
+            }
+        }
 
         $methodPage = new $pageClass($this->webdriver);
         $this->pageObject = $methodPage;
