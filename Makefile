@@ -316,9 +316,9 @@ ciCommon:
 	rm -fr zentaoalm
 
 	# move pms zip to build and release path.
-	#rm -f $(BUILD_PATH)/ZenTao*.zip $(BUILD_PATH)/ZenTao*.tar.xz $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).tar.xz $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.tar.xz
-	#cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
-	#cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
+	rm -f $(BUILD_PATH)/ZenTao*.zip $(BUILD_PATH)/ZenTao*.tar.xz $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).tar.xz $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.tar.xz
+	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
+	cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 cizip:
 	make common
 
