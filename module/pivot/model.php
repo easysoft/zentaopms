@@ -939,13 +939,29 @@ class pivotModel extends model
         return $columnRecords;
     }
 
-    public function addDrillData(array $sliceRecord, object $record, int $rowNo, string $field, string $slice, array $groups): array
+    /**
+     * 添加下钻所需数据。
+     * Add drill data.
+     *
+     * @param  array  $sliceRecord
+     * @param  object $record
+     * @param  int    $rowNo
+     * @param  string $field
+     * @param  string $slice
+     * @param  array  $groups
+     * @access public
+     * @return array
+     */
+    public function addDrillData(array $sliceRecord, object $record, int $rowNo, string $slice, array $groups): array
     {
-        /* add rowNo. */
+        /* 添加下钻所需原数据行号。*/
+        /* add rowNo for drill. */
         $sliceRecord['rows'][] = $rowNo;
 
         $drills = $sliceRecord['drillFields'];
         if($slice != 'noSlice') $groups[] = $slice;
+
+        /* 添加下钻所需字段值。*/
         /* add dirll field value. */
         foreach($groups as $drillField) $drills[$drillField] = $record->{$drillField . '_origin'};
 
