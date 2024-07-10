@@ -59,7 +59,7 @@ class node implements \JsonSerializable
 
     public function __construct(mixed ...$args)
     {
-        $this->gid   = 'zin_' . uniqid();
+        $this->gid   = static::nextGid();
         $this->props = new props();
 
         disableGlobalRender();
@@ -685,6 +685,12 @@ class node implements \JsonSerializable
 
     public static function nextGid($prefix = 'zin_', $type = null): string
     {
+        global $config;
+        if(!isset($config->clientCache) || !$config->clientCache)
+        {
+            return $prefix . uniqid();
+        }
+
         if($type === null)
         {
             $type = get_called_class();
