@@ -1143,7 +1143,8 @@ class biModel extends model
         $checked = $this->validateSql($sql, $driver);
         if($checked !== true) return $stateObj->setError($checked);
 
-        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
+        $sql       = $this->processVars($stateObj->sql, $stateObj->getFilters());
+        $statement = $this->sql2Statement($sql);
 
         $recPerPage = $stateObj->pager->recPerPage;
         $pageID     = $stateObj->pager->pageID;
