@@ -785,6 +785,7 @@ class pivotModel extends model
         {
             foreach($record as $field => $value)
             {
+                $record["{$field}_origin"] = $value;
                 $tableField = !isset($fields[$field]) ? '' : $fields[$field]['object'] . '-' . $fields[$field]['field'];
                 $withComma  = in_array($tableField, $this->config->dataview->multipleMappingFields);
 
@@ -929,13 +930,27 @@ class pivotModel extends model
 
             foreach($sliceKeys as $sliceKey)
             {
-                $columnRecord->$sliceKey = array('count' => 0, 'distinct' => array(), 'sum' => 0, 'avg' => array(), 'max' => array(), 'min' => array());
+                $columnRecord->$sliceKey = array('count' => 0, 'distinct' => array(), 'sum' => 0, 'avg' => array(), 'max' => array(), 'min' => array(), 'rows' => array(), 'drillFields' => array());
             }
 
             $columnRecords[$groupUnionKey] = $columnRecord;
         }
 
         return $columnRecords;
+    }
+
+    public function addDrillData(array $sliceRecord, object $record, int $rowNo, string $field, string $slice, array $groups): array
+    {
+        /* add rowNo. */
+        $sliceRecord['rows'][] = $rowNo;
+
+        $drills = $sliceRecord['drillFields'];
+        if($slice != 'noSlice') $groups[] = $slice;
+        /* add dirll field value. */
+        foreach($groups as $drillField) $drills[$drillField] = $record->{$drillField . '_origin'};
+
+        $sliceRecord['drillFields'] = $drills;
+        return $sliceRecord;
     }
 
     /**
@@ -953,7 +968,7 @@ class pivotModel extends model
     public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records): array
     {
         $sliceRecords = $this->initSliceColumnRecords($index, $field, $slice, $groups, $records);
-        foreach($records as $record)
+        foreach($records as $rowNo => $record)
         {
             $groupUnionKey = $this->getGroupsKey($groups, $record);
             $fieldKey  = $this->getSliceFieldKey($index, $slice, $field, $record);
