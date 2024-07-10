@@ -338,13 +338,14 @@ class tester extends result
      * @param  int    $method
      * @param  array  $params
      * @param  string $iframeID
+     * @param  string $ext
      * @access public
      * @return object
      */
-    public function initForm($module, $method, $params = array(), $iframeID = '')
+    public function initForm($module, $method, $params = array(), $iframeID = '', $ext = '')
     {
         $this->openURL($module, $method, $params, $iframeID);
-        return $this->loadPage();
+        return $this->loadPage($module, $method, $ext);
     }
 
     /**
