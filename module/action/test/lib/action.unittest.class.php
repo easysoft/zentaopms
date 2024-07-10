@@ -410,13 +410,14 @@ class actionTest
      * @param  string $objectType
      * @param  int    $objectID
      * @param  string $actionType
-     * @param  array $requirements
+     * @param  array  $requirements
+     * @param  array  $epics
      * @access public
      * @return string
      */
-    public function getObjectLabelTest($objectType, $objectID, $actionType, $requirements)
+    public function getObjectLabelTest($objectType, $objectID, $actionType, $requirements, $epics)
     {
-        $object = $this->objectModel->getObjectLabel($objectType, $objectID, $actionType, $requirements);
+        $object = $this->objectModel->getObjectLabel($objectType, $objectID, $actionType, $requirements, $epics);
 
         if(dao::isError()) return dao::getError();
 
