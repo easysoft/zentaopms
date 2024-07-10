@@ -1573,8 +1573,9 @@ class biModel extends model
         $downloading = '.downloading';
         $binRoot     = $this->app->getTmpRoot() . 'duckdb' . DS;
         $duckdbBin   = $this->getDuckdbBinConfig();
-        $file        = $binRoot . $duckdbBin[$type];
-        $tagFile     = $file . $downloading;
+        $binFile     = $binRoot . $duckdbBin[$type];
+        $zboxFile    = $duckdbBin['path'] . $duckdbBin[$type];
+        $tagFile     = $binFile . $downloading;
 
         if($action == 'create')
         {
@@ -1585,7 +1586,7 @@ class biModel extends model
 
         if($action == 'check')
         {
-            if(file_exists($file)) return 'ok';
+            if(file_exists($binFile) || file_exists($zboxFile)) return 'ok';
             if(file_exists($tagFile)) return 'loading';
             return 'fail';
         }
