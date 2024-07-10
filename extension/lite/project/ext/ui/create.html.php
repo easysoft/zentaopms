@@ -39,7 +39,7 @@ formPanel
             setClass('primary-pale'),
             set::icon('copy'),
             set::url('#copyProjectModal'),
-            set('data-destoryOnHide', true),
+            set('data-destroyOnHide', true),
             set('data-toggle', 'modal'),
             set('data-size', 'sm'),
             $lang->project->copy

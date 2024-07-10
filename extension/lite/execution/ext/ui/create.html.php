@@ -30,7 +30,7 @@ formPanel
             setClass('primary-pale'),
             set::icon('copy'),
             set::url('#copyExecutionModal'),
-            set('data-destoryOnHide', true),
+            set('data-destroyOnHide', true),
             set('data-toggle', 'modal'),
             $lang->execution->copy
         )
