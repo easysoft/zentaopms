@@ -361,3 +361,4 @@ $lang->instance->tips->resizeDisk         = 'Fill in an integer from %s to %s wi
 $lang->instance->tips->resizeDiskDisabled = 'The disk space not adjustable';
 $lang->instance->tips->fSettingsAttention = 'Changing the Settings of CPU, memory, disk, etc. will restart the application, and the disk space size can only be increased, not reduced, please be careful!';
 $lang->instance->tips->pSettingsAttention = 'Changing the CPU, memory, and other Settings will restart the application, please be careful!';
+$lang->instance->tips->diskAdjusting      = 'The disk cannot be adjusted during disk expansion';
