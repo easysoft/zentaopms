@@ -800,7 +800,7 @@ class baseDAO
             foreach($desc as $field)
             {
                 if(strtolower($field->null) == 'yes') continue;
-                if(strtolower($field->extra) == 'auto_increment') continue;
+                if($field->field == 'id') continue;
                 if($field->default !== '') continue;
 
                 $values[$field->field] = "''";
