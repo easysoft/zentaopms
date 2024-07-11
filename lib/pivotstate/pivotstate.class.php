@@ -644,7 +644,7 @@ class pivotState
      */
     public function initDrill()
     {
-        return array('field' => '', 'object' => '', 'referSQL' => '', 'whereSQL' => '', 'conditions' => array($this->addCondition()));
+        return array('field' => '', 'object' => '', 'referSQL' => '', 'whereSQL' => '', 'condition' => array($this->addCondition()));
     }
 
     /**
