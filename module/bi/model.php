@@ -318,10 +318,11 @@ class biModel extends model
         if(is_file($path))
         {
             include $path;
-            $options = $schema->fields[$field]['options'];
+            $fieldConfig = zget($schema->fields, $field, array());
+            $options = zget($fieldConfig, 'options', array());
         }
 
-        return $options;
+        return is_array($options) ? $options : array();
     }
 
     /**
