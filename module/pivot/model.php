@@ -103,7 +103,7 @@ class pivotModel extends model
         foreach($pivots as $pivot)
         {
             $this->completePivot($pivot, $screenList);
-            $this->addDrills($pivot);
+            if($isObject) $this->addDrills($pivot);
         }
 
         // if($isObject && isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);

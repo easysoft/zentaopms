@@ -1463,7 +1463,7 @@ class biModel extends model
      */
     public function processDrills(int $rowIndex, array $rowData, array $drills, array $columns): array
     {
-        if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array());
+        if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array(), array());
 
         $drills = $drills[$rowIndex];
 
