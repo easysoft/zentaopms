@@ -1193,9 +1193,7 @@ class storyZen extends story
         /* Need and force review, then set status to reviewing. */
         if($storyData->status != 'draft' and $this->story->checkForceReview($storyType) and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
-        /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' && $storyData->type == 'requirement' && $storyData->status == 'active' && $this->config->vision == 'rnd') $storyData->status = 'launched';
-        if($storyData->status == 'launched' && $this->app->tab != 'product') $storyData->status = 'developing';
+        if($storyData->status == 'active' && $this->app->tab != 'product') $storyData->status = 'developing';
 
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
@@ -1310,9 +1308,6 @@ class storyZen extends story
             ->setDefault('lastEditedDate', $now)
             ->setDefault('version', $oldStory->version)
             ->get();
-
-        /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $this->config->vision == 'rnd' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
 
         $specChanged        = false;
         $oldStoryReviewers  = array_keys($this->story->getReviewerPairs($storyID, $oldStory->version));
@@ -1513,9 +1508,6 @@ class storyZen extends story
 
             !empty($story->assignedTo) && $story->assignedDate = $now;
             if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
-
-            /* If in ipd mode, set requirement status = 'launched'. */
-            if($this->config->systemMode == 'PLM' and $this->config->vision == 'rnd' and $storyType == 'requirement' and $story->status == 'active') $story->status = 'launched';
         }
 
         return $stories;
