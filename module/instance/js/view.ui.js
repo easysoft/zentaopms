@@ -24,9 +24,9 @@ $('#mainContent').on('click', '.db-management', function()
     );
 });
 
-var currentStatus = instanceStatus;
-var currentDiskStatus = null;
-var timer      = null;
+var currentStatus             = instanceStatus;
+let currentDiskStatus = null;
+var timer             = null;
 const postData = new FormData();
 postData.append('idList[]', instanceID);
 window.afterPageUpdate = function()
