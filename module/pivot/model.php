@@ -158,6 +158,7 @@ class pivotModel extends model
     private function addDrills(object $pivot): void
     {
         $settings = $pivot->settings;
+        if(!is_array($settings) || !isset($settings['columns'])) return;
         $columns  = $settings['columns'];
         foreach($columns as $index => $column) $pivot->settings['columns'][$index]['drill'] = $this->pivotTao->fetchPivotDrill($pivot->id, $column['field']);
     }
