@@ -1392,34 +1392,20 @@ class biModel extends model
         $hasGroup       = isset($data->groups);
         $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
 
+        $drills = array_values($data->drills);
         foreach($data->array as $rowKey => $rowData)
         {
-            if(isset($rowData['rows']))
-            {
-                $originRows = $rowData['rows'];
-                unset($rowData['rows']);
-            }
-
-            if(isset($rowData['drillFields']))
-            {
-                $drillFields = $rowData['drillFields'];
-                unset($rowData['drillFields']);
-            }
+            list($originRows, $drillFields) = $this->processDrills($rowKey, $rowData, $drills);
 
             $index   = 0;
             $rowDataKeys  = array_keys($rowData);
             $rowData = array_values($rowData);
 
-            $convertedOriginRows  = array();
-            $convertedDrillFields = array();
             for($i = 0; $i < count($rowData); $i++)
             {
                 $field = 'field' . $index;
                 $value = $rowData[$i];
                 $originRowKey = $rowDataKeys[$i];
-
-                if(isset($originRows[$originRowKey]))  $convertedOriginRows[$field]  = $originRows[$originRowKey];
-                if(isset($drillFields[$originRowKey])) $convertedDrillFields[$field] = $drillFields[$originRowKey];
 
                 if(!empty($columns[$field]['colspan']))
                 {
@@ -1454,14 +1440,37 @@ class biModel extends model
                 $index++;
             }
 
-            $rows[$rowKey]['originRows']  = $convertedOriginRows;
-            $rows[$rowKey]['drillFields'] = $convertedDrillFields;
+            $rows[$rowKey]['originRows']  = $originRows;
+            $rows[$rowKey]['drillFields'] = $drillFields;
             $rows[$rowKey]['ROW_ID']      = $rowKey;
         }
 
         foreach($columns as $field => $column) $columns[$field]['width'] = 16 * $columnMaxLen[$field];
 
         return array($columns, $rows, $cellSpan);
+    }
+
+    public function processDrills($rowIndex, $rowData, $drills)
+    {
+        if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array());
+
+        $drills = $drills[$rowIndex];
+
+        $index              = 0;
+        $rebuildOriginRows  = array();
+        $rebuildDrillFields = array();
+
+        list($originRows, $drillFields) = array_values($drills);
+        foreach($rowData as $column => $value)
+        {
+            $field = 'field' . $index;
+
+            if(isset($originRows[$column]))  $rebuildOriginRows[$field]  = $originRows[$column];
+            if(isset($drillFields[$column])) $rebuildDrillFields[$field] = $drillFields[$column];
+            $index++;
+        }
+
+        return array($rebuildOriginRows, $rebuildDrillFields);
     }
 
     /**
