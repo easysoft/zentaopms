@@ -31,9 +31,9 @@ $waterfall = array(
     array('name' => '项目型瀑布项目'.time(), 'end' => date('Y-m-d', strtotime('+30 days')), 'PM' => 'admin'),
 );
 
-r($tester->createdefault($waterfall['0']))        && p('message,status')  && e('创建瀑布项目成功，success');                // 缺少项目名称，创建失败
-r($tester->createDefault($waterfall['1']))        && p('status')          && e('SUCCESS');                                  // 使用默认选项创建瀑布项目
-r($tester->createDefault($waterfall['1']))        && p('message')         && e('创建瀑布项目表单页提示信息正确');           // 创建重复项目名称
-r($tester->checkLocating($waterfall['2']))        && p('module,method')   && e('programplan','create');                         // 创建项目型瀑布项目后的跳转
+r($tester->createdefault($waterfall['0'])) && p('message,status') && e('创建瀑布项目成功，success');                // 缺少项目名称，创建失败
+r($tester->createDefault($waterfall['1'])) && p('status')         && e('SUCCESS');                                  // 使用默认选项创建瀑布项目
+r($tester->createDefault($waterfall['1'])) && p('message')        && e('创建瀑布项目表单页提示信息正确');           // 创建重复项目名称
+r($tester->checkLocating($waterfall['2'])) && p('module,method')  && e('programplan','create');                         // 创建项目型瀑布项目后的跳转
 
 $tester->closeBrowser();
