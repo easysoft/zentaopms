@@ -381,7 +381,6 @@ class branchTest
      */
     public function changeBranchLanguageTest($productID)
     {
-        global $tester;
         global $lang;
 
         $filePath = dirname(__FILE__, 2) . DS . 'lang' . DS . 'zh-cn.php';
@@ -389,7 +388,7 @@ class branchTest
 
         $this->objectModel->changeBranchLanguage($productID);
 
-        $createLang = $tester->lang->branch->create;
+        $createLang = $lang->branch->create;
 
         if(dao::isError()) return dao::getError();
 
