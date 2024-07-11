@@ -817,6 +817,7 @@ class pivotState
             }
         }
 
+        $this->fields        = $this->json2Array($newFieldSettings);
         $this->fieldSettings = $newFieldSettings;
     }
 
