@@ -59,8 +59,6 @@ class pivotModel extends model
             $pivot->filters = array();
         }
 
-        //$this->getPivotDrills($pivot);
-
         return $this->processPivot($pivot);
     }
 
@@ -928,10 +926,7 @@ class pivotModel extends model
             $columnRecord = new stdclass();
             foreach($groups as $group) $columnRecord->$group = $groupUnique[$groupUnionKey]->$group;
 
-            foreach($sliceKeys as $sliceKey)
-            {
-                $columnRecord->$sliceKey = array('count' => 0, 'distinct' => array(), 'sum' => 0, 'avg' => array(), 'max' => array(), 'min' => array(), 'rows' => array(), 'drillFields' => array());
-            }
+            foreach($sliceKeys as $sliceKey) $columnRecord->$sliceKey = array('count' => 0, 'distinct' => array(), 'sum' => 0, 'avg' => array(), 'max' => array(), 'min' => array(), 'rows' => array(), 'drillFields' => array());
 
             $columnRecords[$groupUnionKey] = $columnRecord;
         }
@@ -993,6 +988,8 @@ class pivotModel extends model
             $value            = $record->$field;
             $floatValue       = is_numeric($value) ? (float)$value : 0;
 
+            $sliceGroupRecord->{$fieldKey} = $this->addDrillData($sliceGroupRecord->{$fieldKey}, $record, $rowNo, $slice, $groups);
+
             switch($stat)
             {
                 case 'sum':
@@ -1014,12 +1011,18 @@ class pivotModel extends model
 
         foreach($sliceRecords as $groupUnionKey => $sliceRecord)
         {
+            $rows        = array();
+            $drillFields = array();
+
             $sliceFields = array_keys((array)$sliceRecord);
             foreach($sliceFields as $sliceField)
             {
                 /* 分组字段直接跳过。*/
                 /* Skip the group field directly. */
                 if(in_array($sliceField, $groups)) continue;
+
+                $rows[$sliceField]        = $sliceRecord->{$sliceField}['rows'];
+                $drillFields[$sliceField] = $sliceRecord->{$sliceField}['drillFields'];
 
                 $sliceStat = $sliceRecord->{$sliceField}[$stat];
                 switch($stat)
@@ -1046,6 +1049,9 @@ class pivotModel extends model
                         break;
                 }
             }
+
+            $sliceRecord->rows        = $rows;
+            $sliceRecord->drillFields = $drillFields;
         }
 
         return $sliceRecords;
@@ -1328,6 +1334,7 @@ class pivotModel extends model
 
         $dbh     = $this->app->loadDriver($driver);
         $records = $dbh->query($sql)->fetchAll();
+
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
 
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
@@ -1351,7 +1358,7 @@ class pivotModel extends model
                     $columnRecords = $this->processColumnOriginal($columnIndex, $columnField, $groups, $records);
                     if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
-                    $columnSetting['records']    = $columnRecords;
+                    $columnSetting['records'] = $columnRecords;
                     $mergeRecords = $this->mergeOriginRecords(array($columnSetting), $mergeRecords);
                 }
                 elseif(!empty($columnStat))
@@ -1359,7 +1366,7 @@ class pivotModel extends model
                     $columnRecords = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records);
                     if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
-                    $columnSetting['records']  = $columnRecords;
+                    $columnSetting['records'] = $columnRecords;
                     $mergeRecords = $this->mergeStatRecords(array($columnSetting), $groups, $mergeRecords);
                 }
             }
@@ -1376,23 +1383,6 @@ class pivotModel extends model
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
 
         $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
-
-        $cols = $data->cols;
-        foreach($cols as $groupKey => $groupCols)
-        {
-            foreach($groupCols as $colKey => $col)
-            {
-                if(isset($fields[$col->name]['isDrilling']))
-                {
-                    $col->isDrilling    = true;
-                    $col->drillingCols  = $fields[$col->name]['drillingCols'];
-                    $col->drillingDatas = $fields[$col->name]['drillingDatas'];
-                    $cols[$groupKey][$colKey] = $col;
-                }
-            }
-        }
-
-        $data->cols = $cols;
 
         /* $data->groups  array 代表分组，最多三个
          * $data->cols    array thead数据，其中对象有三个属性：name：分组，label：列的名字，isGroup：标识是不是分组
@@ -2504,29 +2494,6 @@ class pivotModel extends model
         }
 
         echo $table;
-    }
-
-    /**
-     * Get pivot drills.
-     *
-     * @param  object $pivot
-     * @access public
-     * @return void
-     */
-    public function getPivotDrills($pivot)
-    {
-        $pivotDrills = $this->dao->select('*')->from(TABLE_PIVOTDRILL)->where('pivot')->eq($pivot->id)->fetchAll('field');
-
-        foreach($pivot->fieldSettings as $fieldSetting)
-        {
-            if(!isset($pivotDrills[$fieldSetting->name])) continue;
-
-            $drill = $pivotDrills[$fieldSetting->name];
-
-            $fieldSetting->isDrill    = true;
-            $fieldSetting->drillCols  = $this->getDrillCols($drill->object);
-            $fieldSetting->drillDatas = $this->getDrillDatas($drill->object, $drill->sql);
-        }
     }
 }
 
