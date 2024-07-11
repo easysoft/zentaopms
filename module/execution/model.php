@@ -2944,7 +2944,7 @@ class executionModel extends model
 
                 foreach($planStories as $id => $story)
                 {
-                    if($story->status != 'active') || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
+                    if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
                     if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
                     if(!in_array($execution->attribute, array('mix', 'request', 'design')) && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
                 }
