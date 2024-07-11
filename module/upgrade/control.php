@@ -120,7 +120,6 @@ class upgrade extends control
         $this->view->fromVersion = $fromVersion;
 
         if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
-        if(strpos($fromVersion, 'ipd') !== false)  $fromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
 
         if($_POST) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
 
