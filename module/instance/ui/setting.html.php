@@ -72,7 +72,6 @@ formPanel
                     set::type('number'),
                     set::name('disk_gb'),
                     set::value($diskSettings->requestSize),
-                    set::placeholder($lang->instance->tips->resizeDisk),
                     set::min($diskSettings->size),
                     set::max($diskSettings->limit),
                     set::disabled($diskSettings->requestSize != $diskSettings->size)
