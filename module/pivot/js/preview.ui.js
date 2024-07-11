@@ -237,7 +237,7 @@ renderCell = function(result, {row, col})
     return result;
 }
 
-window.clickCell = function({colName, rowInfo})
+window.clickCell = function(col, {colName, rowInfo})
 {
     const drillFields = rowInfo.data.drillFields[colName];
 
