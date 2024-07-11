@@ -979,6 +979,7 @@ class pivotModel extends model
     public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records): array
     {
         $sliceRecords = $this->initSliceColumnRecords($index, $field, $slice, $groups, $records);
+        $drillRecords = array();
         foreach($records as $rowNo => $record)
         {
             $groupUnionKey = $this->getGroupsKey($groups, $record);
@@ -1050,11 +1051,11 @@ class pivotModel extends model
                 }
             }
 
-            $sliceRecord->rows        = $rows;
-            $sliceRecord->drillFields = $drillFields;
+            $drillRecords[$groupUnionKey]['rows']        = $rows;
+            $drillRecords[$groupUnionKey]['drillFields'] = $drillFields;
         }
 
-        return $sliceRecords;
+        return array($sliceRecords, $drillRecords);
     }
 
     /**
@@ -1339,7 +1340,8 @@ class pivotModel extends model
 
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
 
-        $mergeRecords  = array();
+        $mergeRecords = array();
+        $drillRecords = array();
 
         if(isset($settings['columns']))
         {
@@ -1363,7 +1365,7 @@ class pivotModel extends model
                 }
                 elseif(!empty($columnStat))
                 {
-                    $columnRecords = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records);
+                    list($columnRecords, $drillRecords) = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records);
                     if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
                     $columnSetting['records'] = $columnRecords;
@@ -1381,6 +1383,7 @@ class pivotModel extends model
         $data->array       = json_decode(json_encode($mergeRecords), true);
         if($showColTotal == 'sum' && count($data->array)) $this->processLastRow($data->array[count($data->array) - 1]);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
+        $data->drills      = $drillRecords;
 
         $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
 
