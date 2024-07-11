@@ -100,7 +100,11 @@ class pivotModel extends model
         if($isObject) $pivots = array($pivots);
 
         $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
-        foreach($pivots as $pivot) $this->completePivot($pivot, $screenList);
+        foreach($pivots as $pivot)
+        {
+            $this->completePivot($pivot, $screenList);
+            $this->addDrills($pivot);
+        }
 
         // if($isObject && isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);
 
@@ -1859,10 +1863,15 @@ class pivotModel extends model
         $showMode   = zget($column, 'showMode', 'default');
         $monopolize = $showMode == 'default' ? '' : zget($column, 'monopolize', '');
 
+        $isDrilling = isset($column['drill']) && isset($column['drill']->condition);
+        $drillField = $isDrilling ? $column['drill']->field : '';
+
         $col = new stdclass();
         $col->name       = $column['field'];
         $col->isGroup    = false;
         $col->showOrigin = $showOrigin;
+        $col->isDrilling = $isDrilling;
+        $col->drillField = $drillField;
 
         $fieldObject  = $fields[$column['field']]['object'];
         $relatedField = $fields[$column['field']]['field'];
@@ -1901,10 +1910,12 @@ class pivotModel extends model
             foreach($sliceList as $field)
             {
                 $childCol = new stdclass();
-                $childCol->name    = $field;
-                $childCol->isGroup = false;
-                $childCol->label   = isset($optionList[$field]) ? $optionList[$field] : $field;
-                $childCol->colspan = $monopolize ? 2 : 1;
+                $childCol->name       = $field;
+                $childCol->isGroup    = false;
+                $childCol->label      = isset($optionList[$field]) ? $optionList[$field] : $field;
+                $childCol->colspan    = $monopolize ? 2 : 1;
+                $childCol->isDrilling = $isDrilling;
+                $childCol->drillField = $drillField;
                 $cols[1][] = $childCol;
             }
             $col->colspan = count($sliceList);
@@ -1913,10 +1924,12 @@ class pivotModel extends model
             if(zget($column, 'showTotal', 'noShow') !== 'noShow')
             {
                 $childCol = new stdclass();
-                $childCol->name    = 'sum';
-                $childCol->isGroup = false;
-                $childCol->label   = $this->lang->pivot->step2->total;
-                $childCol->colspan = $monopolize ? 2 : 1;
+                $childCol->name       = 'sum';
+                $childCol->isGroup    = false;
+                $childCol->label      = $this->lang->pivot->step2->total;
+                $childCol->colspan    = $monopolize ? 2 : 1;
+                $childCol->isDrilling = $isDrilling;
+                $childCol->drillField = $drillField;
                 $cols[1][] = $childCol;
                 $col->colspan += $childCol->colspan;
             }

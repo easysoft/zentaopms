@@ -240,10 +240,11 @@ renderCell = function(result, {row, col})
 window.clickCell = function(col, {colName, rowInfo})
 {
     const drillFields = rowInfo.data.drillFields[colName];
+    const originField = rowInfo.data.originFields[colName];
 
     if(typeof(drillFields) == 'undefined') return false;
 
-    const drillModalLink = $.createLink('pivot', 'drillModal', 'pivotID=' + pivotID + '&colName=' + colName + '&drillFields=' + btoa(JSON.stringify(drillFields)));
+    const drillModalLink = $.createLink('pivot', 'drillModal', 'pivotID=' + pivotID + '&colName=' + originField + '&drillFields=' + btoa(JSON.stringify(drillFields)));
 
     zui.Modal.open({url: drillModalLink, size: 'lg'});
 }
