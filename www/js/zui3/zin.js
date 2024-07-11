@@ -47,9 +47,14 @@
         return info.moduleName ? `${info.moduleName}-${info.methodName}` : '';
     }
 
+    function isDiffPage(newUrl, oldUrl)
+    {
+        return getUrlID(newUrl) !== getUrlID(oldUrl || currentAppUrl);
+    }
+
     function showLog(name, moreTitles, trace, moreInfos)
     {
-        const titles = [`%c APP • ${currentCode.toUpperCase()} `];
+        const titles = [`%c APP • ${currentCode} `];
         const titleColors = ['color:#fff;font-weight:bold;background:#2196f3'];
         const urlID = getUrlID();
         if(urlID)
@@ -122,9 +127,7 @@
         html:          updatePageWithHtml,
         body:          (data) => $('body').html(data),
         title:         (data) => document.title = data,
-        main:          (data) => $('#main').html(data),
         featureBar:    updateFeatureBar,
-        moduleMenu:    updateModuleMenu,
         pageCSS:       (data) => $('style.zin-page-css').html(data),
         pageJS:        updatePageJS,
         configJS:      updateConfigJS,
@@ -343,25 +346,6 @@
         }
     }
 
-    function updateModuleMenu(data, info, options)
-    {
-        const selector = parseSelector(info.selector);
-        let $target    = $(selector.select);
-        if(!$target.length) return;
-
-        $target.css('min-height', $target.height());
-        if(selector.inner)
-        {
-            $target.html(info.data);
-        }
-        else
-        {
-            $target.replaceWith(info.data);
-            $target = $(selector.select);
-        }
-
-    }
-
     function updateHeading(data, options)
     {
         const $data = $(data);
@@ -437,7 +421,7 @@
         const render   = (options.renders ? options.renders[info.name] : null) || renderMap[info.name];
         const isHtml   = info.type === 'html';
         const selector = parseSelector(info.selector);
-        let $target    = $(selector.select);
+        let $target    = selector ? $(selector.select) : null;
         if(render)
         {
             if(isHtml) beforeUpdate($target, info, options);
@@ -478,11 +462,19 @@
         beforeUpdate($target, info, options);
         if(selector.inner)
         {
-            $target.html(info.data);
+            if(options.isDiffPage)
+            {
+                $target.html(info.data);
+            }
+            else
+            {
+                const tagName = $target.prop('tagName').toLowerCase();
+                $target.morphInner(`<${tagName}>${info.data}</${tagName}>`);
+            }
         }
         else
         {
-            $target.replaceWith(info.data);
+            if(options.isDiffPage) $target.replaceWith(info.data); else $target.morph(info.data);
             $target = $(selector.select);
         }
         afterUpdate($target, info, options);
@@ -552,6 +544,7 @@
         const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode, 'X-Zin-Cache-Time': 0};
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
+        options.isDiffPage = isDiffPage(url);
         if(!options.cache && options.cache !== false) options.cache = (requestMethod === 'GET' && config.clientCache) ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
         const cacheKey = options.cache;
         let cache;
@@ -740,7 +733,7 @@
                 }
             }
         });
-        if(DEBUG) showLog('Request', getUrlID(url), options);
+        if(DEBUG) showLog('Request', getUrlID(url), options, {cacheKey});
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
         {
@@ -758,6 +751,7 @@
                             if(DEBUG) showLog('Request', 'success:render with cache', {url, cacheKey, data, options});
                             if(!cache.data.partial) currentAppUrl = cache.data.url;
                             renderPageData(data);
+                            options.isDiffPage = false;
                             $(document).data('zinCache', [cache.key, cache.time].join('#')).trigger('pagecaheload.app');
                         }
                         catch(error)
@@ -768,8 +762,12 @@
                     }
                     else
                     {
-                        if(DEBUG) showLog('Request', 'success:skip render data with same cache', {url, cacheKey, data, options});
+                        if(DEBUG) showLog('Request', 'success:skip render data with same cache', {url, cacheKey, options});
                     }
+                }
+                else
+                {
+                    if(DEBUG) showLog('Request', 'cannot find local cache', {url, cacheKey, options});
                 }
                 ajax.send();
             });
@@ -877,7 +875,7 @@
 
     function getLoadSelector(selector)
     {
-        if(!selector) return $('#main').length ? '#configJS,#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),title>*,#heading>*,#navbar>*,#pageToolbar>*' : '#configJS,body>*,title>*';
+        if(!selector) return $('#main').length ? '#configJS,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),title>*,#heading>*,#navbar>*,#pageToolbar>*,#main>*,' : '#configJS,title>*,body>*';
         if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
         return selector;
     }
@@ -1766,7 +1764,7 @@
 
         if(DEBUG)
         {
-            if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
+            // if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
         }
     });
 }());
