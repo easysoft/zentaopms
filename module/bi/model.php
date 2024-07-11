@@ -1450,7 +1450,16 @@ class biModel extends model
         return array($columns, $rows, $cellSpan);
     }
 
-    public function processDrills($rowIndex, $rowData, $drills)
+    /**
+     * Process dirlls.
+     *
+     * @param  int $rowIndex
+     * @param  array $rowData
+     * @param  array $drills
+     * @access public
+     * @return array
+     */
+    public function processDrills(int $rowIndex, array $rowData, array $drills): array
     {
         if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array());
 
