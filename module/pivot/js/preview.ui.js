@@ -245,7 +245,7 @@ window.clickCell = function(col, {colName, rowInfo})
 
     const drillModalLink = $.createLink('pivot', 'drillModal', 'pivotID=' + pivotID + '&colName=' + colName + '&drillFields=' + btoa(JSON.stringify(drillFields)));
 
-    zui.Modal.open({url: drillModalLink, size: 'lg', title: drillModalTitle, replace: false});
+    zui.Modal.open({url: drillModalLink, size: 'lg'});
 }
 
 /**
