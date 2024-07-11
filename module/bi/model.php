@@ -1385,7 +1385,7 @@ class biModel extends model
         $hasGroup       = isset($data->groups);
         $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
 
-        $drills = array_values($data->drills);
+        $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
         {
             list($originRows, $drillFields) = $this->processDrills($rowKey, $rowData, $drills);
