@@ -2067,4 +2067,22 @@ class bugModel extends model
             ->page($pager)
             ->fetchAll();
     }
+
+    /**
+     * 为 datatable 获取模块。
+     * Get modules for datatable.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function getDatatableModules(int $productID): array
+    {
+        $branches = $this->loadModel('branch')->getPairs($productID);
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug', 0);
+        if(count($branches) <= 1) return $modules;
+
+        foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'bug', 0, (string)$branchID);
+        return $modules;
+    }
 }
