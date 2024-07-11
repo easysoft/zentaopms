@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+modalHeader
+(
+    set::titleClass('text-lg font-bold'),
+    set::title($lang->pivot->step3->drillView)
+);
+
 dtable
 (
     set::striped(true),
