@@ -1193,8 +1193,6 @@ class storyZen extends story
         /* Need and force review, then set status to reviewing. */
         if($storyData->status != 'draft' and $this->story->checkForceReview($storyType) and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
-        if($storyData->status == 'active' && $this->app->tab != 'product') $storyData->status = 'developing';
-
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
