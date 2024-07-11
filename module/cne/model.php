@@ -305,7 +305,7 @@ class cneModel extends model
     public function getDiskSettings(object $instance, bool|string $component = false): object
     {
         $diskSetting = new stdclass;
-        $diskSetting->resizable = false;
+        $diskSetting->resizable     = false;
         $diskSetting->size          = 0;
         $diskSetting->used          = 0;
         $diskSetting->limit         = 0;
@@ -319,7 +319,7 @@ class cneModel extends model
             {
                 if(!$volume->is_block_device) return $diskSetting;
 
-                $diskSetting->resizable = true;
+                $diskSetting->resizable     = true;
                 $diskSetting->size          = ceil($volume->size / 1073741824);
                 $diskSetting->used          = ceil($volume->actual_size / 1073741824);
                 $diskSetting->limit         = floor($volume->max_increase_size / 1073741824);
