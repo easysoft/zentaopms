@@ -46,27 +46,6 @@ class storyTao extends storyModel
     }
 
     /**
-     * 获取产品下细分的研发需求。
-     * Get subdivided stories by product
-     *
-     * @param  int       $productID
-     * @access protected
-     * @return array
-     */
-    protected function getSubdividedStoriesByProduct(int $productID): array
-    {
-        if(empty($this->config->URAndSR)) return array();
-        return $this->dao->select('t1.BID')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on("t1.AID=t2.id")
-            ->where('t2.deleted')->eq('0')
-            ->andWhere('t1.AType')->eq('requirement')
-            ->andWhere('t1.BType')->eq('story')
-            ->andWhere('t1.relation')->eq('subdivideinto')
-            ->andWhere('t1.product')->eq($productID)
-            ->fetchPairs('BID', 'BID');
-    }
-
-    /**
      * 获取需求主动关联、被动关联的需求。
      * Get linked stories.
      *
@@ -92,50 +71,6 @@ class storyTao extends storyModel
             ->fetchPairs();
 
         return $linkedToList + $linkedFromList;
-    }
-
-    /**
-     * 批量获取用户需求细分的研发需求，或者研发需求关联的用户需求。
-     * Batch get relations.
-     *
-     * @param  array     $storyIdList
-     * @param  string    $storyType
-     * @param  array     $fields
-     * @access protected
-     * @return array
-     */
-    protected function batchGetRelations(array $storyIdList, string $storyType, array $fields = array()): array
-    {
-        if(empty($storyIdList)) return array();
-
-        /* 初始化查询条件变量。*/
-        $BType       = $storyType == 'story' ? 'requirement' : 'story';
-        $relation    = $storyType == 'story' ? 'subdividedfrom' : 'subdivideinto';
-        $queryFields = empty($fields) ? 'id,title' : implode(',', $fields);
-
-        /* 获取对应的关联数据。*/
-        $relations = $this->dao->select('AID,BID')->from(TABLE_RELATION)
-            ->where('AType')->eq($storyType)
-            ->andWhere('BType')->eq($BType)
-            ->andWhere('relation')->eq($relation)
-            ->andWhere('AID')->in($storyIdList)
-            ->fetchAll();
-
-        if(empty($relations)) return array();
-
-        /* 获取BID列表。*/
-        $storyIdList = array();
-        foreach($relations as $relation) $storyIdList[$relation->BID] = $relation->BID;
-
-        /* 根据关联数据查询详细信息。 */
-        $query   = $this->dao->select($queryFields)->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('deleted')->eq(0);
-        $stories = empty($fields) ? $query->fetchPairs() : $query ->fetchAll('id');
-
-        /* 将查询的信息合并到关联分组中。 */
-        $relationGroup = array();
-        foreach($relations as $relation) $relationGroup[$relation->AID][$relation->BID] = zget($stories, $relation->BID, null);
-
-        return $relationGroup;
     }
 
     /**
