@@ -137,7 +137,8 @@ $config->upgrade->bizVersion['biz8_11']         = '18_11';
 $config->upgrade->bizVersion['biz8_12']         = '18_12';
 $config->upgrade->bizVersion['biz10_0_0_beta1'] = '20_1_0';
 $config->upgrade->bizVersion['biz10_0_0']       = '20_1_1';
-$config->upgrade->bizVersion['biz10_1_0']       = '20_2_0'; // max insert position.
+$config->upgrade->bizVersion['biz10_1_0']       = '20_2_0';
+$config->upgrade->bizVersion['biz10_2_0']       = '20_2_0'; // max insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';

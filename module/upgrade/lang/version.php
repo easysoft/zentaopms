@@ -389,7 +389,8 @@ $lang->upgrade->fromVersions['biz8_11']         = 'Biz8.11';
 $lang->upgrade->fromVersions['biz8_12']         = 'Biz8.12';
 $lang->upgrade->fromVersions['biz10_0_0_beta1'] = 'Biz10.0.0.beta1';
 $lang->upgrade->fromVersions['biz10_0_0']       = 'Biz10.0.0';
-$lang->upgrade->fromVersions['biz10_1_0']       = 'Biz10.1.0'; // biz insert position.
+$lang->upgrade->fromVersions['biz10_1_0']       = 'Biz10.1.0';
+$lang->upgrade->fromVersions['biz10_2_0']       = 'Biz10.2.0'; // biz insert position.
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4']   = 'Max2.0.beta4';
