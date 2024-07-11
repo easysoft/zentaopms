@@ -148,6 +148,21 @@ class pivotModel extends model
     }
 
     /**
+     * 添加下钻信息到透视表。
+     * Add drills to pivot.
+     *
+     * @param  object $pivot
+     * @access private
+     * @return void
+     */
+    private function addDrills(object $pivot): void
+    {
+        $settings = $pivot->settings;
+        $columns  = $settings['columns'];
+        foreach($columns as $index => $column) $pivot->settings['columns'][$index]['drill'] = $this->pivotTao->fetchPivotDrill($pivot->id, $column['field']);
+    }
+
+    /**
      * 检测图表是否在使用。
      * Check if the Chart is in use.
      *
