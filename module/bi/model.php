@@ -1344,7 +1344,11 @@ class biModel extends model
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
 
-                    if(isset($column->isDrilling) && $column->isDrilling) $columns[$field]['link'] = '#';
+                    if(isset($column->isDrilling) && $column->isDrilling)
+                    {
+                        $columns[$field]['link']       = '#';
+                        $columns[$field]['drillField'] = $column->drillField;
+                    }
 
                     $columnMaxLen[$field] = mb_strlen($column->label);
 
@@ -1370,7 +1374,11 @@ class biModel extends model
             $columns[$field]['minWidth'] = 128;
             $columns[$field]['align']    = 'center';
 
-            if(isset($column->isDrilling) && $column->isDrilling) $columns[$field]['link'] = '#';
+            if(isset($column->isDrilling) && $column->isDrilling)
+            {
+                $columns[$field]['link'] = '#';
+                $columns[$field]['drillField'] = $column->drillField;
+            }
 
             $columnMaxLen[$field] = mb_strlen($column->label);
 
@@ -1388,7 +1396,7 @@ class biModel extends model
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
         {
-            list($originRows, $drillFields) = $this->processDrills($rowKey, $rowData, $drills);
+            list($originRows, $drillFields, $originFields) = $this->processDrills($rowKey, $rowData, $drills, $columns);
 
             $index   = 0;
             $rowDataKeys  = array_keys($rowData);
@@ -1433,9 +1441,10 @@ class biModel extends model
                 $index++;
             }
 
-            $rows[$rowKey]['originRows']  = $originRows;
-            $rows[$rowKey]['drillFields'] = $drillFields;
-            $rows[$rowKey]['ROW_ID']      = $rowKey;
+            $rows[$rowKey]['originRows']   = $originRows;
+            $rows[$rowKey]['originFields'] = $originFields;
+            $rows[$rowKey]['drillFields']  = $drillFields;
+            $rows[$rowKey]['ROW_ID']       = $rowKey;
         }
 
         foreach($columns as $field => $column) $columns[$field]['width'] = 16 * $columnMaxLen[$field];
@@ -1452,7 +1461,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function processDrills(int $rowIndex, array $rowData, array $drills): array
+    public function processDrills(int $rowIndex, array $rowData, array $drills, array $columns): array
     {
         if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array());
 
@@ -1461,18 +1470,21 @@ class biModel extends model
         $index              = 0;
         $rebuildOriginRows  = array();
         $rebuildDrillFields = array();
+        $originFields       = array();
 
         list($originRows, $drillFields) = array_values($drills);
         foreach($rowData as $column => $value)
         {
             $field = 'field' . $index;
 
-            if(isset($originRows[$column]))  $rebuildOriginRows[$field]  = $originRows[$column];
-            if(isset($drillFields[$column])) $rebuildDrillFields[$field] = $drillFields[$column];
+            if(isset($originRows[$column]))           $rebuildOriginRows[$field]  = $originRows[$column];
+            if(isset($drillFields[$column]))          $rebuildDrillFields[$field] = $drillFields[$column];
+            if(isset($columns[$field]['drillField'])) $originFields[$field]       = $columns[$field]['drillField'];
+
             $index++;
         }
 
-        return array($rebuildOriginRows, $rebuildDrillFields);
+        return array($rebuildOriginRows, $rebuildDrillFields, $originFields);
     }
 
     /**
