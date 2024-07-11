@@ -1344,11 +1344,7 @@ class biModel extends model
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
 
-                    if(isset($column->isDrilling) && $column->isDrilling)
-                    {
-                        $columns[$field]['data-toggle'] = 'modal';
-                        $columns[$field]['link']        = '#';
-                    }
+                    if((isset($column->isDrilling) && $column->isDrilling)) $columns[$field]['link'] = '#';
 
                     $columnMaxLen[$field] = mb_strlen($column->label);
 
@@ -1374,11 +1370,7 @@ class biModel extends model
             $columns[$field]['minWidth'] = 128;
             $columns[$field]['align']    = 'center';
 
-            if(isset($column->isDrilling) && $column->isDrilling)
-            {
-                $columns[$field]['data-toggle'] = 'modal';
-                $columns[$field]['link']        = '#';
-            }
+            if((isset($column->isDrilling) && $column->isDrilling)) $columns[$field]['link'] = '#';
 
             $columnMaxLen[$field] = mb_strlen($column->label);
 
