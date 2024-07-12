@@ -223,7 +223,9 @@ renderCell = function(result, {row, col})
 {
     if(result && col.setting.colspan)
     {
-        const values = result.shift();
+        let values = result.shift();
+        if(typeof(values.type) != 'undefined' && values.type == 'a') values = values.props['children'];
+
         result.push({className: 'gap-0 px-0'});
         values.forEach((value, index) =>
           result.push({
