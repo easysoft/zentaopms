@@ -6,6 +6,7 @@ $config->pivot->widthDate  = 248;
 $config->pivot->maxFeatureItem = 5;
 
 $config->pivot->fileType =  array('xlsx' => 'xlsx', 'xls' => 'xls', 'html' => 'html', 'mht' => 'mht');
+$config->pivot->realStep = array('1' => '1', '2' => '2', '3' => '4', '4' => '3', '5' => '5');
 
 $config->pivot->create = new stdclass();
 $config->pivot->create->requiredFields = 'type,group';
