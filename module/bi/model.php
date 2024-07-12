@@ -584,7 +584,7 @@ class biModel extends model
             if(isset($chart->filters))  $chart->filters  = $this->jsonEncode($chart->filters);
             if(isset($chart->fields))   $chart->fields   = $this->jsonEncode($chart->fields);
             if(isset($chart->langs))    $chart->langs    = $this->jsonEncode($chart->langs);
-            if(!isset($chart->driver))  $chart->driver   = 'mysql';
+            if(!isset($chart->driver))  $chart->driver   = $this->config->bi->defaultDriver;
 
             $exists = $this->dao->select('id')->from(TABLE_CHART)->where('id')->eq($chart->id)->fetch();
             if(!$exists) $currentOperate = 'insert';
@@ -636,7 +636,7 @@ class biModel extends model
             if(isset($pivot->fields))   $pivot->fields   = $this->jsonEncode($pivot->fields);
             if(isset($pivot->langs))    $pivot->langs    = $this->jsonEncode($pivot->langs);
             if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
-            if(!isset($pivot->driver))  $pivot->driver   = 'mysql';
+            if(!isset($pivot->driver))  $pivot->driver   = $this->config->bi->defaultDriver;
 
             $exists = $this->dao->select('id')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
             if(!$exists) $currentOperate = 'insert';
