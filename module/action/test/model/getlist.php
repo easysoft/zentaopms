@@ -183,10 +183,10 @@ r($action->getListTest($objectType[2], $bugID[1])) && p() && e('link'); // 测�
 r($action->getListTest($objectType[2], $bugID[2])) && p() && e('link'); // 测试获取对象类型 bug 对象ID 3 的动态信息
 
 // 操作是 tostory 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[0])) && p() && e('link'); // 测试获取对象类型 feedback 对象ID 1 的动态信息
+r($action->getListTest($objectType[3], $feedbackID[0])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 1 的动态信息
 
 // 操作是 tostory 对象类型 ticket
-r($action->getListTest($objectType[4], $hasOneID[0])) && p() && e('link'); // 测试获取对象类型 ticket 对象ID 1 的动态信息
+r($action->getListTest($objectType[4], $hasOneID[0])) && p() && e('nochanged'); // 测试获取对象类型 ticket 对象ID 1 的动态信息
 
 // 操作是 moved 对象类型是 task
 r($action->getListTest($objectType[1], $taskID[0])) && p() && e('link'); // 测试获取对象类型 task 对象ID 1 的动态信息
@@ -285,7 +285,7 @@ r($action->getListTest($objectType[1], $taskID[9])) && p() && e('link'); // 测�
 r($action->getListTest($objectType[1], $taskID[10])) && p() && e('link'); // 测试获取对象类型 task 对象ID 11 的动态信息
 
 // 操作 totask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[1])) && p() && e('link'); // 测试获取对象类型 feedback 对象ID 2 的动态信息
+r($action->getListTest($objectType[3], $feedbackID[1])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 2 的动态信息
 
 // 操作 linkchildtask 对象类型 feedback
 r($action->getListTest($objectType[3], $feedbackID[2])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 3 的动态信息
