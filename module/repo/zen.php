@@ -1254,27 +1254,50 @@ class repoZen extends repo
      */
     protected function checkDeleteError(int $repoID): string
     {
-        $relationID = $this->dao->select('id')->from(TABLE_RELATION)
+        $relationIds = $this->dao->select('distinct AID as AID')->from(TABLE_RELATION)
             ->where('extra')->eq($repoID)
             ->andWhere('AType')->eq('design')
-            ->fetch();
-        $error = $relationID ? $this->lang->repo->error->deleted : '';
-
+            ->fetchAll();
+        $error = '';
+        if($relationIds){
+            $designLinks = '';
+            foreach ($relationIds as $value){
+                $designLinks .= html::a($this->createLink('design','view','designID='.$value->AID), $value->AID, '_blank', '', false).'、';
+            }
+            $error .= sprintf(
+                $this->lang->repo->error->deleted,
+                trim($designLinks,'、 ')
+            );
+        }
         $linkBranchs = $this->repo->getLinkedBranch(0, '', $repoID);
         if(!empty($linkBranchs))
         {
-            $error .= $error ? '\n' : '';
-            $linkType = array_unique(array_column($linkBranchs, 'AType'));
-            foreach($linkType as $type) $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common) . '\n';
+            $tmpLinkBranchs = [];
+            foreach($linkBranchs as $value){
+                if(!array_key_exists($value->AType, $tmpLinkBranchs)) $tmpLinkBranchs[$value->AType] = [];
+
+                if(!in_array($value->BType ,$tmpLinkBranchs[$value->AType])) array_push($tmpLinkBranchs[$value->AType], $value->BType);
+            }
+            foreach($tmpLinkBranchs as $type=>$value) {
+                $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
+                    $this->createLink('repo','browse','repoID='.$repoID),
+                    implode('、',$value),
+                    '_blank',
+                    '',
+                    false
+                ));
+            }
         }
-
-        $relationID = $this->dao->select('id')->from(TABLE_RELATION)
-            ->where('extra')->eq($repoID)
-            ->andWhere('AType')->eq('design')
-            ->fetch();
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
-
+        if($jobs) $error .=  sprintf(
+            $this->lang->repo->error->linkedJob, html::a(
+                $this->createLink('job','browse'),
+                implode('、',array_column($jobs, 'id')),
+                '_blank',
+                '',
+                false
+            )
+        );
         return $error;
     }
 
