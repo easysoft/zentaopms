@@ -99,10 +99,6 @@ class install extends control
         $this->view->dataRootResult = $this->installZen->checkDataRoot();
         $this->view->iniInfo        = $this->install->getIniInfo();
 
-        $this->loadModel('bi');
-        $checkDuckdb    = $this->bi->checkDuckdbInstall();
-        $this->view->duckdbResult = $checkDuckdb['ok'] ? 'ok' : 'fail';
-
         $checkSession = ini_get('session.save_handler') == 'files';
         $this->view->sessionResult = 'ok';
         $this->view->checkSession  = $checkSession;

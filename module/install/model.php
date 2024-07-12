@@ -415,14 +415,6 @@ class installModel extends model
             die;
         }
 
-        /* Generate parquet file. */
-        $result = $this->bi->generateParquetFile();
-        if($result !== true)
-        {
-            a($result);
-            die;
-        }
-
         return true;
     }
 

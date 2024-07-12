@@ -11,15 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 set::zui(true);
-jsVar('result', $result);
-
-if($result == 'duckdbFail')
-{
-    jsVar('duckdb',    $duckdb);
-    jsVar('ext_dm',    $ext_dm);
-    jsVar('ext_mysql', $ext_mysql);
-    include $this->app->getBasePath() . "module/install/ui/installduckdb.html.php";
-}
 
 div
 (
@@ -54,11 +45,6 @@ div
                     implode("\n", $errors)
                 )
             ) : null,
-            $result == 'duckdbFail' ? div
-            (
-                setID('duckdbInfo'),
-                setClass('h-auto')
-            ) : null,
             form
             (
                 on::click('button[type=submit]', "submitConfirm"),
@@ -70,7 +56,6 @@ div
                 (
                     setClass('mt-4'),
                     $result == 'sqlFail' ? $lang->upgrade->afterExec : null,
-                    $result == 'duckdbFail' ? span(setClass('after-duckdb'), $lang->upgrade->afterDuckdb) : null,
                     $result == 'fail' ? $lang->upgrade->afterDeleted : null,
                     btn
                     (
