@@ -217,8 +217,9 @@
         if(!hasZinBar) return;
 
         const perf = {id: options.id, url: options.url || currentAppUrl};
-        perf[stage] = performance.now();
-        if(stage === 'requestBegin') $.extend(perf, {requestEnd: undefined, renderBegin: undefined, renderEnd: undefined});
+        perf[stage] = options.time || performance.now();
+        if(stage === 'requestBegin') $.extend(perf, {requestEnd: undefined});
+        else if(stage === 'renderBegin') zinbar.waitZUI = {time: perf[stage], id: options.id, url: options.url};
         if(info)
         {
             if(info.perf) $.extend(perf, info.perf);
@@ -759,7 +760,7 @@
                         }
                         catch(error)
                         {
-                            if(DEBUG) showLog('Request', 'error:Parse cache data failed', {url, cacheKey, data, options});
+                            if(DEBUG) showLog('Request', 'error:Parse cache data failed', {url, cacheKey, options});
                             $.db.setCacheData(cacheKey, null, cache.time, 'zinFetch');
                         }
                     }
