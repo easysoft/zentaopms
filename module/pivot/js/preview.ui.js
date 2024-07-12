@@ -234,6 +234,8 @@ renderCell = function(result, {row, col})
         );
     }
 
+    if(typeof(row.data['field0_colspan']) != 'undefined') result[0] = row.data[col.name];
+
     return result;
 }
 
