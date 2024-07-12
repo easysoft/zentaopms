@@ -242,7 +242,7 @@ window.clickCell = function(col, {colName, rowInfo})
     const drillFields = rowInfo.data.drillFields[colName];
     const originField = rowInfo.data.originFields[colName];
 
-    if(typeof(drillFields) == 'undefined') return false;
+    if(typeof(originField) == 'undefined') return false;
 
     const drillModalLink = $.createLink('pivot', 'drillModal', 'pivotID=' + pivotID + '&colName=' + originField + '&drillFields=' + btoa(JSON.stringify(drillFields)));
 
