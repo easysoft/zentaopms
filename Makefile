@@ -4,6 +4,7 @@ XVERSION       = $(shell jq -r .pkg.xuanxuan.version < ci.json)
 XHPROF_VERSION = 2.3.9
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
+BUILD_KIND    := $(if $(BUILD_KIND),$(BUILD_KIND),auto)
 BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
@@ -301,6 +302,9 @@ ciCommon:
 
 	make package
 	make cleanAssets
+
+	find zentaopms -name "*.php" | xargs sed -i '/^declare(strict_types/d'
+
 	cp -a zentaopms zentaoalm
 	sed -i '/^\s*$$config->langs\['"'"'de'"'"']/d' zentaopms/config/config.php
 	sed -i '/^\s*$$config->langs\['"'"'fr'"'"']/d' zentaopms/config/config.php
