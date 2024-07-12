@@ -135,13 +135,15 @@ class pivot extends control
      * @param  int    $pivotID
      * @param  string $colName
      * @param  string $drillFields
+     * @param  string $filterValues
      * @access public
      * @return void
      */
-    public function drillModal(int $pivotID, string $colName, string $drillFields)
+    public function drillModal(int $pivotID, string $colName, string $drillFields, string $filterValues)
     {
-        $drill       = $this->pivot->fetchPivotDrill($pivotID, $colName);
-        $drillFields = json_decode(base64_decode($drillFields), true);
+        $drill        = $this->pivot->fetchPivotDrill($pivotID, $colName);
+        $drillFields  = json_decode(base64_decode($drillFields), true);
+        $filterValues = json_decode(base64_decode($filterValues), true);
 
         $this->view->title = $this->lang->pivot->step3->drillView;
         $this->view->cols  = $this->pivot->getDrillCols($drill->object);

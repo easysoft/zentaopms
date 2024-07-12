@@ -102,7 +102,8 @@ function toggleShowMode(showMode = 'group')
  */
 function loadCustomPivot(showMode = 'group')
 {
-    const form = getFilterForm();
+    const filterValues = getFilterValues();
+    const form = zui.createFormData({filterValues});
     if(showMode == 'origin') form.append('summary', 'notuse');
 
     const params = window.btoa('groupID=' + currentGroup + '&pivotID=' + pivotID);
@@ -117,44 +118,36 @@ function loadCustomPivot(showMode = 'group')
  * @access public
  * @return object
  */
-function getFilterForm()
+window.getFilterValues = function()
 {
-    const form = new FormData();
+    const filterValues = {};
     $('#conditions .filter').each(function(index)
     {
         const $filter = $(this);
         if ($filter.hasClass('filter-input'))
         {
-            form.append('filterValues[' + index + ']', $filter.find('input').val());
+            filterValues[index] = $filter.find('input').val();
         }
         else if($filter.hasClass('filter-select'))
         {
             const value = $filter.find('.pick-value').val();
-            if(Array.isArray(value))
-            {
-                value.filter(Boolean).forEach((item) => form.append('filterValues[' + index + '][]', item));
-            }
-            else
-            {
-                form.append('filterValues[' + index + ']', value);
-            }
+            filterValues[index] = Array.isArray(value) ? value.reduce((obj, value, index) => ({...obj,[index]: value}), {}) : value;
         }
         else if($filter.hasClass('filter-date') || $filter.hasClass('filter-datetime'))
         {
             const $pickValue = $filter.find('.pick-value');
             if($pickValue.length == 1)
             {
-                form.append('filterValues[' + index + ']', $pickValue.val());
+                filterValues[index] = $pickValue.val();
             }
             else if($pickValue.length == 2)
             {
-                form.append('filterValues[' + index + '][begin]', $pickValue.eq(0).val());
-                form.append('filterValues[' + index + '][end]', $pickValue.eq(1).val());
+                filterValues[index] = {begin: $pickValue.eq(0).val(), end: $pickValue.eq(1).val()};
             }
         }
     });
 
-    return form;
+    return filterValues;
 }
 
 /**
@@ -243,12 +236,13 @@ renderCell = function(result, {row, col})
 
 window.clickCell = function(col, {colName, rowInfo})
 {
-    const drillFields = rowInfo.data.drillFields[colName];
-    const originField = rowInfo.data.originFields[colName];
+    const drillFields  = rowInfo.data.drillFields[colName];
+    const originField  = rowInfo.data.originFields[colName];
+    const filterValues = getFilterValues();
 
     if(typeof(originField) == 'undefined' || typeof(drillFields) == 'undefined') return false;
 
-    const drillModalLink = $.createLink('pivot', 'drillModal', 'pivotID=' + pivotID + '&colName=' + originField + '&drillFields=' + btoa(JSON.stringify(drillFields)));
+    const drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${btoa(JSON.stringify(drillFields))}&filterValues=${btoa(JSON.stringify(filterValues))}`);
 
     zui.Modal.open({url: drillModalLink, size: 'lg'});
 }
