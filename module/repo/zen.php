@@ -1284,7 +1284,7 @@ class repoZen extends repo
             foreach($tmpLinkBranchs as $type=>$value)
             {
                 $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
-                    $this->createLink('repo', 'browse', 'repoID='.$repoID),
+                    $this->createLink('repo', 'browse', 'repoID=' . $repoID),
                     implode(', ', $value),
                     '_blank',
                     '',
