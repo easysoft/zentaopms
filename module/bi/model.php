@@ -636,6 +636,7 @@ class biModel extends model
             if(isset($pivot->fields))   $pivot->fields   = $this->jsonEncode($pivot->fields);
             if(isset($pivot->langs))    $pivot->langs    = $this->jsonEncode($pivot->langs);
             if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
+            if(!isset($pivot->driver))  $pivot->driver   = 'mysql';
 
             $exists = $this->dao->select('id')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
             if(!$exists) $currentOperate = 'insert';
