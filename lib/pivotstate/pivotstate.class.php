@@ -854,6 +854,19 @@ class pivotState
         if($this->issetSettings()) $this->step2FinishSql = $this->sql;
     }
 
+    /**
+     * Set use groupBy.
+     *
+     * @access public
+     * @return void
+     */
+    public function setUseGroupBy()
+    {
+        $pattern = '/\bgroup by\b/i';
+
+        $this->useGroupBy = preg_match($pattern, $this->sql) ? true : false;
+    }
+
 
     public function issetSettings()
     {
