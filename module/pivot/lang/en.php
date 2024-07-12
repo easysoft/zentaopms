@@ -291,8 +291,8 @@ $lang->pivot->beginGtEnd      = 'Begin time should not be >= end time.';
 $lang->pivot->resetSettings   = 'The configuration of the query data has been modified, requiring redesign of the pivot table, whether to continue.';
 $lang->pivot->clearSettings   = 'The configuration of the query data has been modified, whether to clear the pivot table and save.';
 $lang->pivot->draftSave       = 'The pivot table has been published and will be in draft state. Do you want to continue?';
-$lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
-$lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
+$lang->pivot->cannotAddQuery  = 'Result filter has been added or configure data drill, query filter cannot be added.';
+$lang->pivot->cannotAddResult = 'Query filter has been added or configure data drill, result filter cannot be added.';
 $lang->pivot->cannotAddDrill  = 'GROUP BY exists in the query statement or filters are configured. Therefore, data cannot be configured to drill down';
 
 $lang->pivot->drillModalTip       = <<<EOT
