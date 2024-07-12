@@ -336,9 +336,9 @@ pipeline {
                         sh 'rm -f ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-20.2*'
                         sh 'rm -f ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-max*'
                         sh 'rm -f ${OUTPUT_PKG_PATH}/${ZT_PMS_MAIN_VERSION}/${ARTIFACT_NAME}-ipd*'
-                        sh 'rm -f ${OUTPUT_PKG_PATH}/20.*'
-                        sh 'rm -f ${OUTPUT_PKG_PATH}/ipd*'
-                        sh 'rm -f ${OUTPUT_PKG_PATH}/max*'
+                        sh 'rm -rf ${OUTPUT_PKG_PATH}/20.*'
+                        sh 'rm -rf ${OUTPUT_PKG_PATH}/ipd*'
+                        sh 'rm -rf ${OUTPUT_PKG_PATH}/max*'
                       }
 
 
