@@ -1344,10 +1344,10 @@ class biModel extends model
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
 
-                    if(isset($column->isDrilling) && $column->isDrilling)
+                    if(isset($subColumn->isDrilling) && $subColumn->isDrilling)
                     {
                         $columns[$field]['link']       = '#';
-                        $columns[$field]['drillField'] = $column->drillField;
+                        $columns[$field]['drillField'] = $subColumn->drillField;
                     }
 
                     $columnMaxLen[$field] = mb_strlen($column->label);
