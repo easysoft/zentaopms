@@ -2265,7 +2265,7 @@ class pivotModel extends model
                     $options = array();
                     if(is_array($source))
                     {
-                        foreach($source as $row) $options["{$row->$field}"] = $row->$field;
+                        foreach($source as $row) if(isset($row->$field)) $options["{$row->$field}"] = $row->$field;
                     }
                     else
                     {
