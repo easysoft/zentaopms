@@ -267,6 +267,14 @@ class pivotState
     public $step2FinishSql = '';
 
     /**
+     * useGroupBy
+     *
+     * @var    bool
+     * @access public
+     */
+    public $useGroupBy = false;
+
+    /**
      * __construct method.
      *
      * @param  pivot      object
@@ -305,6 +313,7 @@ class pivotState
         $this->setPager();
         $this->formatSettingColumns();
         $this->setStep2FinishSql();
+        $this->setUseGroupBy();
     }
 
     /**
@@ -752,6 +761,7 @@ class pivotState
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
         $this->completeFiltersDefault();
+        $this->setUseGroupBy();
     }
 
     /**
@@ -843,6 +853,7 @@ class pivotState
     {
         if($this->issetSettings()) $this->step2FinishSql = $this->sql;
     }
+
 
     public function issetSettings()
     {
