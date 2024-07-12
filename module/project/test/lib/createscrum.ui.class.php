@@ -5,7 +5,7 @@ class createScrumTester extends tester
     /**
      * Check the page jump after creating the product.
      *
-     * @param  string    $scrum
+     * @param  string $scrum
      * @access public
      * @return object
      */
@@ -24,7 +24,7 @@ class createScrumTester extends tester
     /**
      * Create the scrum project.
      *
-     * @param  string    $scrum
+     * @param  string $scrum
      * @access public
      * @return object
      */
