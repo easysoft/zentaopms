@@ -14,7 +14,7 @@ $config->bug->dtable->fieldList['product']['display']    = false;
 $config->bug->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 
 $config->bug->dtable->fieldList['module']['display']    = false;
-$config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => ['rootID' => (int)'$productID', 'type' => 'bug', 'startModule' => 0, 'branch' => 'all']);
+$config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'bug', 'method' => 'getDatatableModules', 'params' => ['productID' => '$productID']);
 
 $config->bug->dtable->fieldList['title']['title']    = $lang->bug->title;
 $config->bug->dtable->fieldList['title']['type']     = 'title';

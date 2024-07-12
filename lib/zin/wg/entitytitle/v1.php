@@ -85,7 +85,7 @@ class entityTitle extends wg
             $this->buildParentTitle(),
             is_string($url) ?
                 a(
-                    setClass('entity-title-link', $titleClass),
+                    setClass('entity-title-link max-w-lg', $titleClass),
                     set::href($url),
                     set($titleProps),
                     set($this->prop('linkProps')),

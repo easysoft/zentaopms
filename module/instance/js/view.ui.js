@@ -24,8 +24,9 @@ $('#mainContent').on('click', '.db-management', function()
     );
 });
 
-var currentStatus = instanceStatus;
-var timer      = null;
+var currentStatus     = instanceStatus;
+let currentDiskStatus = null;
+var timer             = null;
 const postData = new FormData();
 postData.append('idList[]', instanceID);
 window.afterPageUpdate = function()
@@ -54,10 +55,11 @@ function refreshStatus()
             {
                 if(res.data.length == 0) return false;
 
-                if(currentStatus != res.data[0].status)
+                if(currentStatus != res.data[0].status || currentDiskStatus != res.data[0].diskStatus)
                 {
                     loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#setting,#statusTD,#dbStatusTD,#systemLoad,.float-toolbar');
                     currentStatus = res.data[0].status;
+                    currentDiskStatus = res.data[0].diskStatus;
                     return false;
                 }
             }

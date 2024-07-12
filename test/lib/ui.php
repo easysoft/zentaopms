@@ -303,16 +303,28 @@ class tester extends result
      *
      * @param  string  $module
      * @param  string  $method
+     * @param  string  $ext
      * @access public
      * @return object
      */
-    public function loadPage($module = '', $method = '')
+    public function loadPage($module = '', $method = '', $ext = '')
     {
         if($this->module && !$module) $module = $this->module;
         if($this->method && !$method) $method = $this->method;
 
         $pageClass = "{$method}Page";
-        if(!class_exists($pageClass)) include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
+        if(!class_exists($pageClass))
+        {
+            if($ext)
+            {
+                $extDir = is_dir(dirname(__FILE__, 3). "/extension/$ext/$module/ext/test") ? dirname(__FILE__, 3). "/extension/$ext/$module/ext/test" : dirname(__FILE__, 3). "/extension/$ext/$module/test";
+                include dirname(__FILE__, 3). "$extDir/ui/page/$method.php";
+            }
+            else
+            {
+                include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
+            }
+        }
 
         $methodPage = new $pageClass($this->webdriver);
         $this->pageObject = $methodPage;
@@ -327,13 +339,14 @@ class tester extends result
      * @param  int    $method
      * @param  array  $params
      * @param  string $iframeID
+     * @param  string $ext
      * @access public
      * @return object
      */
-    public function initForm($module, $method, $params = array(), $iframeID = '')
+    public function initForm($module, $method, $params = array(), $iframeID = '', $ext = '')
     {
         $this->openURL($module, $method, $params, $iframeID);
-        return $this->loadPage();
+        return $this->loadPage($module, $method, $ext);
     }
 
     /**

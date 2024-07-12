@@ -1344,11 +1344,8 @@ class biModel extends model
 
                     if(isset($column->isDrilling) && $column->isDrilling)
                     {
-                        $columns[$field]['isDrilling']    = true;
-                        $columns[$field]['drillingCols']  = $column->drillingCols;
-                        $columns[$field]['drillingDatas'] = $column->drillingDatas;
-                        $columns[$field]['data-toggle']   = 'modal';
-                        $columns[$field]['link']          = '#drilling-' . $field;
+                        $columns[$field]['data-toggle'] = 'modal';
+                        $columns[$field]['link']        = '#';
                     }
 
                     $columnMaxLen[$field] = mb_strlen($column->label);
@@ -1377,11 +1374,8 @@ class biModel extends model
 
             if(isset($column->isDrilling) && $column->isDrilling)
             {
-                $columns[$field]['isDrilling']    = true;
-                $columns[$field]['drillingCols']  = $column->drillingCols;
-                $columns[$field]['drillingDatas'] = $column->drillingDatas;
-                $columns[$field]['data-toggle']   = 'modal';
-                $columns[$field]['link']          = '#drilling-' . $field;
+                $columns[$field]['data-toggle'] = 'modal';
+                $columns[$field]['link']        = '#';
             }
 
             $columnMaxLen[$field] = mb_strlen($column->label);
@@ -1396,15 +1390,35 @@ class biModel extends model
         $lastRow        = count($data->array) - 1;
         $hasGroup       = isset($data->groups);
         $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
+
         foreach($data->array as $rowKey => $rowData)
         {
+            if(isset($rowData['rows']))
+            {
+                $originRows = $rowData['rows'];
+                unset($rowData['rows']);
+            }
+
+            if(isset($rowData['drillFields']))
+            {
+                $drillFields = $rowData['drillFields'];
+                unset($rowData['drillFields']);
+            }
+
             $index   = 0;
+            $rowDataKeys  = array_keys($rowData);
             $rowData = array_values($rowData);
 
+            $convertedOriginRows  = array();
+            $convertedDrillFields = array();
             for($i = 0; $i < count($rowData); $i++)
             {
                 $field = 'field' . $index;
                 $value = $rowData[$i];
+                $originRowKey = $rowDataKeys[$i];
+
+                if(isset($originRows[$originRowKey]))  $convertedOriginRows[$field]  = $originRows[$originRowKey];
+                if(isset($drillFields[$originRowKey])) $convertedDrillFields[$field] = $drillFields[$originRowKey];
 
                 if(!empty($columns[$field]['colspan']))
                 {
@@ -1438,12 +1452,13 @@ class biModel extends model
 
                 $index++;
             }
+
+            $rows[$rowKey]['originRows']  = $convertedOriginRows;
+            $rows[$rowKey]['drillFields'] = $convertedDrillFields;
+            $rows[$rowKey]['ROW_ID']      = $rowKey;
         }
 
-        foreach($columns as $field => $column)
-        {
-            $columns[$field]['width'] = 16 * $columnMaxLen[$field];
-        }
+        foreach($columns as $field => $column) $columns[$field]['width'] = 16 * $columnMaxLen[$field];
 
         return array($columns, $rows, $cellSpan);
     }
@@ -1573,8 +1588,9 @@ class biModel extends model
         $downloading = '.downloading';
         $binRoot     = $this->app->getTmpRoot() . 'duckdb' . DS;
         $duckdbBin   = $this->getDuckdbBinConfig();
-        $file        = $binRoot . $duckdbBin[$type];
-        $tagFile     = $file . $downloading;
+        $binFile     = $binRoot . $duckdbBin[$type];
+        $zboxFile    = $duckdbBin['path'] . $duckdbBin[$type];
+        $tagFile     = $binFile . $downloading;
 
         if($action == 'create')
         {
@@ -1585,7 +1601,7 @@ class biModel extends model
 
         if($action == 'check')
         {
-            if(file_exists($file)) return 'ok';
+            if(file_exists($binFile) || file_exists($zboxFile)) return 'ok';
             if(file_exists($tagFile)) return 'loading';
             return 'fail';
         }

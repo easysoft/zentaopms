@@ -160,7 +160,7 @@ class build extends control
         }
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $sort = common::appendOrder($orderBy);
@@ -179,17 +179,17 @@ class build extends control
         $this->executeHooks($buildID);
 
         /* Assign. */
-        $this->view->canBeChanged  = common::canBeChanged('build', $build); // Determines whether an object is editable.
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
-        $this->view->build         = $build;
-        $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
-        $this->view->link          = $link;
-        $this->view->orderBy       = $orderBy;
-        $this->view->grades        = $this->loadModel('story')->getGradePairs('story', 'all');
-        $this->view->showGrade     = $this->config->edition == 'ipd';
-        $this->view->execution     = $this->loadModel('execution')->getByID((int)$build->execution);
-        $this->view->childBuilds   = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
-        $this->view->productID     = $build->product;
+        $this->view->canBeChanged = common::canBeChanged('build', $build); // Determines whether an object is editable.
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->build        = $build;
+        $this->view->actions      = $this->loadModel('action')->getList('build', $buildID);
+        $this->view->link         = $link;
+        $this->view->orderBy      = $orderBy;
+        $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->showGrade    = $this->config->edition == 'ipd';
+        $this->view->execution    = $this->loadModel('execution')->getByID((int)$build->execution);
+        $this->view->childBuilds  = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
+        $this->view->productID    = $build->product;
 
         $this->display();
     }

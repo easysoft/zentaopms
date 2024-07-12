@@ -18,6 +18,7 @@ class tabs extends wg
         'direction?:string="h"',
         'collapse?: bool=false',
         'headerClass?:string=""',
+        'navClass?:string=""',
         'titleClass?:string="font-bold text-md"'
     );
 
@@ -38,16 +39,17 @@ class tabs extends wg
 
     protected function buildTitleView(tabPane $tabPane, string $titleClass = ""): node
     {
-        $key    = $tabPane->prop('key');
-        $title  = $tabPane->prop('title');
-        $active = $tabPane->prop('active');
-        $param  = $tabPane->prop('param');
-        $prefix = $tabPane->block('prefix');
-        $suffix = $tabPane->block('suffix');
+        $key      = $tabPane->prop('key');
+        $title    = $tabPane->prop('title');
+        $active   = $tabPane->prop('active');
+        $param    = $tabPane->prop('param');
+        $prefix   = $tabPane->block('prefix');
+        $suffix   = $tabPane->block('suffix');
+        $navClass = $this->prop('navClass');
 
         return li
         (
-            setClass('nav-item'),
+            setClass('nav-item', $navClass),
             a
             (
                 set('data-toggle', 'tab'),

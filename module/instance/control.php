@@ -44,7 +44,6 @@ class instance extends control
     public function view(int $id, string $type = 'store', string $tab = 'baseinfo')
     {
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
-
         if($type === 'store')
         {
             $this->instanceZen->storeView($id, $tab);
@@ -92,10 +91,8 @@ class instance extends control
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         $instance        = $this->instance->getByID($id);
         $currentResource = $this->cne->getAppConfig($instance);
-
         if(empty($component)) $component = false;
         $diskSettings = $this->cne->getDiskSettings($instance, $component);
-
         $this->lang->instance->errors->invalidDiskSize = sprintf($this->lang->instance->errors->invalidDiskSize, $diskSettings->size, $diskSettings->limit);
         $this->lang->instance->tips->resizeDisk        = sprintf($this->lang->instance->tips->resizeDisk, $diskSettings->size, $diskSettings->limit);
 
@@ -125,7 +122,7 @@ class instance extends control
             }
 
             $disk = $newInstance->disk_gb;
-            if(is_numeric($disk) && $disk != $diskSettings->size)
+            if(is_numeric($disk) && $disk != $diskSettings->size && $disk != $diskSettings->requestSize)
             {
                 if($disk < $diskSettings->size || $disk > $diskSettings->limit)  return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->invalidDiskSize));
                 if(!$this->instance->updateVolSize($instance, $disk . 'Gi', $diskSettings->name)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

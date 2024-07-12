@@ -2797,7 +2797,7 @@ class baseRouter
     {
         if(!$this->checkInstalled()) return false;
 
-        $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
+        $globalCache = $this->dbQuery("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
         if(!$globalCache) return false;
 
         $caches = json_decode($globalCache->value);

@@ -4022,57 +4022,6 @@ class storyModel extends model
     }
 
     /**
-     * 获取产品或项目关联的用户需求跟踪矩阵。
-     * Get requirements track.
-     *
-     * @param  int         $productID
-     * @param  string|int  $branch
-     * @param  int         $projectID
-     * @param  object      $pager
-     * @access public
-     * @return int[]
-     */
-    public function getRequirements4Track(int $productID, string|int $branch, int $projectID, object $pager): array
-    {
-        if(empty($this->config->URAndSR)) return array();
-
-        /* 获取关联产品或项目的用户需求。 */
-        $rawPageID = $pager->pageID;
-        if(empty($projectID))  $requirements = $this->getProductStories($productID, $branch, '0', 'all', 'requirement', 'id_desc', true, '', $pager);
-        if(!empty($projectID)) $requirements = $this->storyTao->getProjectRequirements($productID, $projectID, $pager);
-
-        /* 如果页码发生变化，说明查出的用户需求还是上一页的数据。当前页没有用户需求数据。 */
-        if($pager->pageID != $rawPageID)
-        {
-            $pager->pageID = $rawPageID;
-            return array();
-        }
-
-        /* 获取关联项目的研发需求。*/
-        $projectStories = array();
-        if($projectID) $projectStories = $this->getExecutionStories($projectID, $productID, '`order`_desc', 'all', '0', 'story');
-
-        /* 获取用户需求细分的研发需求。 */
-        $requirementStories = $this->storyTao->batchGetRelations(array_keys($requirements), 'requirement', array('id', 'title', 'parent'));
-
-        /* 根据用户需求，构造跟踪矩阵信息。*/
-        foreach($requirements as $requirement)
-        {
-            $stories      = zget($requirementStories, $requirement->id, array());
-            $trackStories = array();
-            foreach($stories as $id => $story)
-            {
-                if(empty($story)) continue;
-                if($projectStories and !isset($projectStories[$id])) continue;
-                $trackStories[$id] = $this->storyTao->buildStoryTrack($story, $projectID);
-            }
-            $requirement->track = $trackStories;
-        }
-
-        return $requirements;
-    }
-
-    /**
      * 获取需求关联的需求列表。
      * Get story relation.
      *

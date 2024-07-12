@@ -83,7 +83,7 @@ formGridPanel
         (
             set::icon('copy'),
             setClass('primary-ghost size-md'),
-            toggle::modal(array('target' => '#copyExecutionModal', 'destoryOnHide' => true, 'size' => 'sm')),
+            toggle::modal(array('target' => '#copyExecutionModal', 'destroyOnHide' => true, 'size' => 'sm')),
             $lang->execution->copyExec
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))

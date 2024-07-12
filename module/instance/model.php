@@ -868,10 +868,11 @@ class instanceModel extends model
                 if($instance->status == 'running') $this->saveAuthInfo($instance);
             }
 
+            $diskSettings = $this->cne->getDiskSettings($instance);
             $status = new stdclass;
-            $status->id     = $instance->id;
-            $status->status = $instance->status;
-
+            $status->id         = $instance->id;
+            $status->status     = $instance->status;
+            $status->diskStatus = $diskSettings->requestSize != $diskSettings->size ? 'adjust' : 'normal';
             $newStatusList[] = $status;
         }
 

@@ -71,13 +71,16 @@ formPanel
                 (
                     set::type('number'),
                     set::name('disk_gb'),
-                    set::value($diskSettings->size),
-                    set::placeholder($lang->instance->tips->resizeDisk),
+                    set::value($diskSettings->requestSize),
                     set::min($diskSettings->size),
-                    set::max($diskSettings->limit)
+                    set::max($diskSettings->limit),
+                    set::disabled($diskSettings->requestSize != $diskSettings->size)
                 ),
                 span('GB', set::className('input-group-addon'))
-            )
+            ),
+            $diskSettings->size != $diskSettings->requestSize ?
+                span($lang->instance->tips->diskAdjusting,set::className('form-tip text-warning')) :
+                span($lang->instance->tips->resizeDisk,set::className('form-tip text-info'))
         )
     )
 );

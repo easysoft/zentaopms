@@ -237,6 +237,17 @@ renderCell = function(result, {row, col})
     return result;
 }
 
+window.clickCell = function({colName, rowInfo})
+{
+    const drillFields = rowInfo.data.drillFields[colName];
+
+    if(typeof(drillFields) == 'undefined') return false;
+
+    const drillModalLink = $.createLink('pivot', 'drillModal', 'pivotID=' + pivotID + '&colName=' + colName + '&drillFields=' + btoa(JSON.stringify(drillFields)));
+
+    zui.Modal.open({url: drillModalLink, size: 'lg', title: drillModalTitle, replace: false});
+}
+
 /**
  * 合并单元格。
  * Merge cell.

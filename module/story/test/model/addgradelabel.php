@@ -19,6 +19,8 @@ $story = zenData('story');
 $story->version->range(1);
 $story->gen(5);
 zenData('storyspec')->gen(5);
+zenData('storygrade')->gen(6);
+zenData('product')->gen(1);
 
 global $tester;
 $stories = $tester->loadModel('story')->getProductStories(1);

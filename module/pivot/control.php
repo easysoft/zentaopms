@@ -127,4 +127,29 @@ class pivot extends control
 
         $this->pivot->buildPivotTable($data, $configs, $page);
     }
+
+    /**
+     * Drill data modal.
+     * 下钻数据的弹窗。
+     *
+     * @param  int    $pivotID
+     * @param  string $colName
+     * @param  string $drillFields
+     * @access public
+     * @return void
+     */
+    public function drillModal(int $pivotID, string $colName, string $drillFields)
+    {
+        $drill = $this->dao->select('*')->from(TABLE_PIVOTDRILL)->where('pivot')->eq($pivotID)->andWhere('field')->eq($colName)->fetch();
+        $drillFields = json_decode(base64_decode($drillFields), true);
+
+        $conditions = json_decode($drill->conditions, true);
+        foreach($conditions as $drillField => $queryField) $conditions[$drillField] = $drillFields[$queryField];
+        $drill->conditions = $conditions;
+
+        $this->view->title = $this->lang->pivot->step3->drillView;
+        $this->view->cols  = $this->pivot->getDrillCols($drill->object);
+        $this->view->datas = $this->pivot->getDrillDatas($drill);
+        $this->display();
+    }
 }

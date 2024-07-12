@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('currentGroup', $currentGroup);
 jsVar('pivotID', $pivot->id);
+jsVar('drillModalTitle', $this->lang->pivot->step3->drillView);
 
 $filters = array();
 $options = array();
@@ -46,27 +47,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
     $clickable = !$pivot->builtin;
     list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs);
 
-    $drillingModals = array();
-    foreach($cols as $col)
-    {
-        if(!isset($col['isDrilling']) || !$col['isDrilling']) continue;
-
-        $drillingModals[] = modal
-        (
-            setID('drilling-' . $col['name']),
-            set::title($this->lang->pivot->step3->drillView),
-            set::size('lg'),
-            dtable
-            (
-                set::striped(true),
-                set::bordered(true),
-                set::cols($col['drillingCols']),
-                set::data($col['drillingDatas'])
-            )
-        );
-    }
-
-    return $drillingModals + array
+    return array
     (
         panel
         (
@@ -148,6 +129,8 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 set::data($rows),
                 set::emptyTip($lang->error->noData),
                 set::onRenderCell(jsRaw('renderCell')),
+                set::onCellClick(jsRaw('clickCell')),
+                set::rowKey('ROW_ID'),
                 set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
                 $cellSpan ? set::getCellSpan(jsRaw('getCellSpan')) : null,
                 $cellSpan ? set::cellSpanOptions($cellSpan) : null

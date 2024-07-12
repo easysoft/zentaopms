@@ -70,7 +70,7 @@ toolbar
 );
 
 $config->testcase->actionList['runCase']['url']             = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={id}&caseID={case}&version={version}');
-$config->testcase->actionList['edit']['url']                = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={case}&comment=false&executionID=%executionID%');
+$config->testcase->actionList['edit']['url']                = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={case}&comment=false&executionID={execution}');
 $config->testcase->actionList['unlinkCase']['url']          = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'caseID={id}');
 $config->testcase->actionList['unlinkCase']['class']        = 'ajax-submit';
 $config->testcase->actionList['unlinkCase']['data-confirm'] = $lang->testtask->confirmUnlinkCase;

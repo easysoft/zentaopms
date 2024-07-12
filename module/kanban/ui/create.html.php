@@ -28,7 +28,7 @@ formPanel
             setClass('primary-pale'),
             set::icon('copy'),
             set::url('#copyKanbanModal'),
-            setData(array('destoryOnHide' => true, 'toggle' => 'modal')),
+            setData(array('destroyOnHide' => true, 'toggle' => 'modal')),
             $lang->kanban->copy . $lang->kanban->common
         )
     ),
