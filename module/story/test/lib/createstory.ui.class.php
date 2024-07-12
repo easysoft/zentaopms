@@ -31,5 +31,25 @@ class createStoryTester extends tester
         );
         $form = $this->initForm('story','create', $createStoryParam, 'appIframe-product');
         $form->dom->title->setValue($storyName);
+        $form->dom->assignedTo->picker('admin');
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'browse')
+        {
+            if($this->checkFormTips('story')) return $this->success('创建需求表单页面提示正确');
+            return $this->failed('创建需求表单页面提示信息不正确');
+        }
+
+        /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
+        $browsePage = $this->loadPage('product','browse');
+        $browsePage->dom->search($searchList = array("研发需求名称,包含,$storyName"));
+        $form->wait(1);
+        $browsePage->dom->browseStoryName->click();
+        $form->wait(1);
+
+        $viewPafe = $this->loadPage('story','view');
+        if($viewPafe->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
+        if($viewPafe->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
 }
 }
