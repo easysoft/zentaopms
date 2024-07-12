@@ -1261,14 +1261,14 @@ class repoZen extends repo
         $error = '';
         if($relationIds)
         {
-            $designLinks = '';
+            $tmpDesignLinks = [];
             foreach ($relationIds as $value)
             {
-                $designLinks .= html::a($this->createLink('design','view','designID='.$value->AID), $value->AID, '_blank', '', false).'、';
+                array_push($tmpDesignLinks, html::a($this->createLink('design','view','designID='.$value->AID), $value->AID, '_blank', '', false));
             }
             $error .= sprintf(
                 $this->lang->repo->error->deleted,
-                trim($designLinks,'、 ')
+                implode(', ', $tmpDesignLinks)
             );
         }
         $linkBranchs = $this->repo->getLinkedBranch(0, '', $repoID);
@@ -1285,7 +1285,7 @@ class repoZen extends repo
             {
                 $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
                     $this->createLink('repo','browse','repoID='.$repoID),
-                    implode('、',$value),
+                    implode(', ',$value),
                     '_blank',
                     '',
                     false
@@ -1296,7 +1296,7 @@ class repoZen extends repo
         if($jobs) $error .=  sprintf(
             $this->lang->repo->error->linkedJob, html::a(
                 $this->createLink('job','browse'),
-                implode('、',array_column($jobs, 'id')),
+                implode(', ',array_column($jobs, 'id')),
                 '_blank',
                 '',
                 false
