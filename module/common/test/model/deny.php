@@ -9,7 +9,7 @@ timeout=0
 cid=1
 
 - deny中鉴权，有权限时返回TRUE @1
-- deny中鉴权，无权限时返回跳转的URL @{"load":"-deny.php?m=user&f=deny&module=execution&method=create"}0
+- deny中鉴权，无权限时返回0 @0
 
 */
 su('admin');
@@ -33,4 +33,4 @@ try{
     $result2 = $e->getMessage();
 }
 
-r($result2) && p() && e('{"load":"user-deny-execution-create.html"}0'); // deny中鉴权，无权限时返回跳转的URL
+r($result2) && p() && e('0'); // deny中鉴权，无权限时返回0
