@@ -12,4 +12,24 @@ declare(strict_types=1);
 include dirname(__FILE__, 5).'/test/lib/ui.php';
 class createStoryTester extends tester
 {
+    /**
+     * Create a default story.
+     *
+     * @param   string $storyName
+     * @access  public
+     * @return  object
+     */
+    public function createDefault($storyName)
+    {
+        /* 提交表单 */
+        $createStoryParam = array(
+            'product'  => '4',
+            'branch'   => 'all',
+            'moduleID' => '0',
+            'storyID'  => '0',
+            'project'  => '0',
+        );
+        $form = $this->initForm('story','create', $createStoryParam, 'appIframe-product');
+        $form->dom->title->setValue($storyName);
+}
 }
