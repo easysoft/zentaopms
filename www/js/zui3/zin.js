@@ -133,7 +133,7 @@
         configJS:      updateConfigJS,
         activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
-        heading:       (data, _info, options) => updateHeading(data, options),
+        heading:       updateHeading,
         fatal:         showFatalError,
         hookCode:      updateHookCode,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
@@ -347,49 +347,10 @@
         }
     }
 
-    function updateHeading(data, options)
+    function updateHeading(data, info)
     {
-        const $data = $(data);
-        const $heading = $('#heading');
-        const $toolbar = $heading.children('.toolbar');
-        if($toolbar.length && !options.updateHeading)
-        {
-            $heading.children('[data-zui-dropmenu]').each(function()
-            {
-                const $dropmenu = $(this);
-                const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
-                if(!$nextDropmenu.length) return $dropmenu.remove();
-                const options = $nextDropmenu.data();
-                const oldOptions = $dropmenu.data();
-                if([options.fetcher, options.url, options.text, options.defaultValue].join() === [oldOptions.fetcher, oldOptions.url, oldOptions.text, oldOptions.defaultValue].join()) return;
-                const oldDropmenu = $dropmenu.zui('dropmenu');
-                if(oldDropmenu)
-                {
-                    oldDropmenu.render(options);
-                    $dropmenu.data(options);
-                    const newState = {};
-                    if(options.defaultValue !== undefined) newState.value = options.defaultValue;
-                    if(options.text !== undefined) newState.text = options.text;
-                    oldDropmenu.$.setState(newState);
-                }
-                else
-                {
-                    $dropmenu.replaceWith($nextDropmenu);
-                }
-            });
-            $data.filter('[data-fetcher]').each(function()
-            {
-                const $nextDropmenu = $(this);
-                const $dropmenu = $heading.children(`#${$nextDropmenu.attr('id')}`);
-                if(!$dropmenu.length) return $heading.append($nextDropmenu);
-            });
-            const $nextToolbar = $data.filter('.toolbar');
-            if($nextToolbar.text().trim() !== $toolbar.text().trim()) $toolbar.replaceWith($nextToolbar);
-        }
-        else
-        {
-            $heading.html(data).zuiInit();
-        }
+        const selector = parseSelector(info.selector);
+        renderWithHtml($('#heading'), data, selector.inner);
         layoutNavbar();
     }
 
@@ -411,6 +372,28 @@
     function afterUpdate($target, info, options)
     {
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
+    }
+
+    function renderWithHtml($target, html, inner, noMorph)
+    {
+        if(inner)
+        {
+            if(noMorph)
+            {
+                $target.html(html).zuiInit();
+            }
+            else
+            {
+                const tagName = $target.prop('tagName').toLowerCase();
+                $target.morphInner(`<${tagName}>${html}</${tagName}>`);
+            }
+        }
+        else
+        {
+            if(noMorph) $target.replaceWith(html).zuiInit(); else $target.morph(html);
+            $target = $(selector.select);
+        }
+        return $target;
     }
 
     function renderPartial(info, options)
@@ -460,23 +443,7 @@
         }
 
         beforeUpdate($target, info, options);
-        if(selector.inner)
-        {
-            if(options.isDiffPage)
-            {
-                $target.html(info.data).zuiInit();
-            }
-            else
-            {
-                const tagName = $target.prop('tagName').toLowerCase();
-                $target.morphInner(`<${tagName}>${info.data}</${tagName}>`);
-            }
-        }
-        else
-        {
-            if(options.isDiffPage) $target.replaceWith(info.data).zuiInit(); else $target.morph(info.data);
-            $target = $(selector.select);
-        }
+        $target = renderWithHtml($target, info.data, selector.inner, options.isDiffPage);
         afterUpdate($target, info, options);
     }
 
