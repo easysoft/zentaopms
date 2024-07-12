@@ -1266,10 +1266,7 @@ class repoZen extends repo
             {
                 array_push($tmpDesignLinks, html::a($this->createLink('design', 'view', 'designID=' . $value->AID), $value->AID, '_blank', '', false));
             }
-            $error .= sprintf(
-                $this->lang->repo->error->deleted,
-                implode(', ', $tmpDesignLinks)
-            );
+            $error .= sprintf($this->lang->repo->error->deleted, implode(', ', $tmpDesignLinks));
         }
         $linkBranchs = $this->repo->getLinkedBranch(0, '', $repoID);
         if(!empty($linkBranchs))
@@ -1285,23 +1282,12 @@ class repoZen extends repo
             {
                 $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
                     $this->createLink('repo', 'browse', 'repoID=' . $repoID),
-                    implode(', ', $value),
-                    '_blank',
-                    '',
-                    false
+                    implode(', ', $value), '_blank', '', false
                 ));
             }
         }
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) $error .= sprintf(
-            $this->lang->repo->error->linkedJob, html::a(
-                $this->createLink('job', 'browse'),
-                implode(', ', array_column($jobs, 'id')),
-                '_blank',
-                '',
-                false
-            )
-        );
+        if($jobs) $error .= sprintf($this->lang->repo->error->linkedJob, html::a($this->createLink('job', 'browse'), implode(', ', array_column($jobs, 'id')), '_blank', '', false));
         return $error;
     }
 
