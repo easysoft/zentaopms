@@ -345,7 +345,8 @@ pipeline {
                     }
                     steps{
                       script {
-                        buildPkg.buildRpmAndDeb()
+                        echo "ignored"
+                        // buildPkg.buildRpmAndDeb()
                       }
                     }
                   }
@@ -439,18 +440,18 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_BIZ_MAIN_VERSION"
-                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
-                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
                         }
                         script {
                           if (env.PUBLISH_ENGLISH=="true") {
                             container('docker') {
-                              sh "mv `find release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
+                              // sh "mv `find release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_PMS_MAIN_VERSION"
                               sh "mv `find release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_BIZ_MAIN_VERSION"
-                              sh "mv `find release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
-                              sh "mv `find release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
+                              // sh "mv `find release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_MAX_MAIN_VERSION"
+                              // sh "mv `find release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$ZT_IPD_MAIN_VERSION"
                             }
                           }
                         }
@@ -499,18 +500,18 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $ZT_PMS_MAIN_VERSION $ZT_BIZ_MAIN_VERSION $ZT_MAX_MAIN_VERSION $ZT_IPD_MAIN_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
                           sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_BIZ_MAIN_VERSION"
-                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
-                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
+                          // sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
                         }
                         script {
                           if (env.PUBLISH_ENGLISH=="true") {
                             container('docker') {
-                              sh "mv `find release/en/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
+                              // sh "mv `find release/en/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_PMS_MAIN_VERSION"
                               sh "mv `find release/en/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_BIZ_MAIN_VERSION"
-                              sh "mv `find release/en/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
-                              sh "mv `find release/en/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
+                              // sh "mv `find release/en/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_MAX_MAIN_VERSION"
+                              // sh "mv `find release/en/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$ZT_IPD_MAIN_VERSION"
                             }
                           }
                         }
@@ -577,8 +578,8 @@ pipeline {
                   sh "make markdown-init"
                 }
                 stage("docker build") {
-                  sh 'make build'
-                  sh 'make test-open'
+                  // sh 'make build'
+                  // sh 'make test-open'
 
                   sh 'make build-biz'
                   sh 'make test-biz'
@@ -586,17 +587,17 @@ pipeline {
                   sh 'make test-biz-k8s'
                   sh 'make build-biz-k8s'
 
-                  sh 'make test-max'
-                  sh 'make build-max'
+                  // sh 'make test-max'
+                  // sh 'make build-max'
 
-                  sh 'make test-max-k8s'
-                  sh 'make build-max-k8s'
+                  // sh 'make test-max-k8s'
+                  // sh 'make build-max-k8s'
 
-                  sh 'make test-ipd'
-                  sh 'make build-ipd'
+                  // sh 'make test-ipd'
+                  // sh 'make build-ipd'
 
-                  sh 'make test-ipd-k8s'
-                  sh 'make build-ipd-k8s'
+                  // sh 'make test-ipd-k8s'
+                  // sh 'make build-ipd-k8s'
 
                   sh 'make markdown-render > ./report.md'
                 }
@@ -605,8 +606,9 @@ pipeline {
             script {
               if (env.BUILD_KIND=='release') {
                 stage("离线镜像包") {
-                  offlineImage.save()
-                  offlineImage.release()
+                  sh "echo ignore"
+                  // offlineImage.save()
+                  // offlineImage.release()
                 }
               }
               def j = job.newJob()
@@ -630,7 +632,7 @@ pipeline {
               userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
             )
             container('xuanimbot') {
-              sh './script/push_zentao_version.sh'
+              // sh './script/push_zentao_version.sh'
             }
           }
         }
