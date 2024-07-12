@@ -3842,6 +3842,7 @@ class storyModel extends model
             ->where('root')->in($rootIdList)
             ->andWhere('product')->eq($productID)
             ->andWhere('deleted')->eq('0')
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->beginIF($storyType == 'requirement')
             ->andWhere('type')->eq('story')
             ->beginIF($showGrades && isset($storyGrades))->andWhere('grade')->in($storyGrades)->fi()
