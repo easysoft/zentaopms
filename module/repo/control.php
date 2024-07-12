@@ -337,7 +337,7 @@ class repo extends control
     public function delete(int $repoID)
     {
         $error = $this->repoZen->checkDeleteError($repoID);
-        if($error) return $this->send(array('result' => 'fail', 'message' => $error));
+        if($error) return $this->send(array('result' => 'fail', 'callback' => 'zui.Modal.alert({content: {html: "'.$error.'"}})'));
 
         $this->repo->deleteRepo($repoID);
         if(dao::isError()) return $this->sendError(dao::getError());
