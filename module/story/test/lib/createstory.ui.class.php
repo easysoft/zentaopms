@@ -29,7 +29,7 @@ class createStoryTester extends tester
             'storyID'  => '0',
             'project'  => '0',
         );
-        $form = $this->initForm('story','create', $createStoryParam, 'appIframe-product');
+        $form = $this->initForm('story', 'create', $createStoryParam, 'appIframe-product');
         $form->dom->title->setValue($storyName);
         $form->dom->assignedTo->picker('admin');
         $form->dom->btn($this->lang->save)->click();
@@ -42,13 +42,13 @@ class createStoryTester extends tester
         }
 
         /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
-        $browsePage = $this->loadPage('product','browse');
-        $browsePage->dom->search($searchList = array("研发需求名称,包含,$storyName"));
+        $browsePage = $this->loadPage('product', 'browse');
+        $browsePage->dom->search($searchList = array("研发需求名称, 包含, $storyName"));
         $form->wait(1);
         $browsePage->dom->browseStoryName->click();
         $form->wait(1);
 
-        $viewPafe = $this->loadPage('story','view');
+        $viewPafe = $this->loadPage('story', 'view');
         if($viewPafe->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
         if($viewPafe->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
         if($viewPafe->dom->historyOpenedBy->getText() != 'admin') return $this->failed('创建人不正确');
