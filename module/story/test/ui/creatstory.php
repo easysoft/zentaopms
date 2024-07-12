@@ -28,7 +28,7 @@ $storys['null']       = '';
 $storys['default']    = '默认需求';
 $storys['childStory'] = '子需求';
 
-r($tester->createDefault($storys['null']))       && p('message,status') && e('创建需求页面名称为空提示正确,SUCCESS'); // 缺少需求名称，创建失败
-r($tester->createDefault($storys['default']))    && p('status')         && e('SUCCESS');                              // 使用默认选项创建需求,搜索后详情页信息对应
+r($tester->createDefault($storys['null']))    && p('message,status') && e('创建需求页面名称为空提示正确,SUCCESS'); // 缺少需求名称，创建失败
+r($tester->createDefault($storys['default'])) && p('status')         && e('SUCCESS');                              // 使用默认选项创建需求,搜索后详情页信息对应
 
 $tester->closeBrowser();
