@@ -287,3 +287,10 @@ window.getHeight = function(height = 800)
 
     return Math.min(windowHeight - offsetTop - paddingBottom * 2 - 10, height);
 }
+
+window.renderDrillResult = function(result, {col, row})
+{
+    if(col.name == 'name' && row.data.type == 'program') result[0].props.href = $.createLink('program', 'kanban');
+
+    return result;
+}

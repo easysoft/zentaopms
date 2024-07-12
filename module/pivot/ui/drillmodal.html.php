@@ -21,5 +21,6 @@ dtable
     set::striped(true),
     set::bordered(true),
     set::cols($cols),
-    set::data($datas)
+    set::data($datas),
+    set::onRenderCell(jsRaw('window.renderDrillResult'))
 );
