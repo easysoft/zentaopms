@@ -996,10 +996,9 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records): array
+    public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records, array $drillRecords): array
     {
         $sliceRecords = $this->initSliceColumnRecords($index, $field, $slice, $groups, $records);
-        $drillRecords = array();
         foreach($records as $rowNo => $record)
         {
             $groupUnionKey = $this->getGroupsKey($groups, $record);
@@ -1071,8 +1070,9 @@ class pivotModel extends model
                 }
             }
 
-            $drillRecords[$groupUnionKey]['rows']        = $rows;
-            $drillRecords[$groupUnionKey]['drillFields'] = $drillFields;
+            if(!isset($drillRecords[$groupUnionKey])) $drillRecords[$groupUnionKey] = array('rows' => $rows, 'drillFields' => $drillFields);
+            if(!empty($rows))        $drillRecords[$groupUnionKey]['rows']        += $rows;
+            if(!empty($drillFields)) $drillRecords[$groupUnionKey]['drillFields'] += $drillFields;
         }
 
         return array($sliceRecords, $drillRecords);
@@ -1385,7 +1385,7 @@ class pivotModel extends model
                 }
                 elseif(!empty($columnStat))
                 {
-                    list($columnRecords, $drillRecords) = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records);
+                    list($columnRecords, $drillRecords) = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records, $drillRecords);
                     if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
                     $columnSetting['records'] = $columnRecords;
