@@ -1455,9 +1455,9 @@ class biModel extends model
     /**
      * Process dirlls.
      *
-     * @param  int $rowIndex
-     * @param  array $rowData
-     * @param  array $drills
+     * @param  int    $rowIndex
+     * @param  array  $rowData
+     * @param  array  $drills
      * @access public
      * @return array
      */
@@ -1466,20 +1466,25 @@ class biModel extends model
         if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array(), array());
 
         $drills = $drills[$rowIndex];
+        list($originRows, $drillFields) = array_values($drills);
 
-        $index              = 0;
         $rebuildOriginRows  = array();
         $rebuildDrillFields = array();
         $originFields       = array();
 
-        list($originRows, $drillFields) = array_values($drills);
+        $index = 0;
         foreach($rowData as $column => $value)
         {
             $field = 'field' . $index;
+            if(!isset($columns[$field]['drillField']))
+            {
+                $index++;
+                continue;
+            }
 
-            if(isset($originRows[$column]))           $rebuildOriginRows[$field]  = $originRows[$column];
-            if(isset($drillFields[$column]))          $rebuildDrillFields[$field] = $drillFields[$column];
-            if(isset($columns[$field]['drillField'])) $originFields[$field]       = $columns[$field]['drillField'];
+            $originFields[$field] = $columns[$field]['drillField'];
+            if(isset($originRows[$column]))  $rebuildOriginRows[$field]  = $originRows[$column];
+            if(isset($drillFields[$column])) $rebuildDrillFields[$field] = $drillFields[$column];
 
             $index++;
         }
