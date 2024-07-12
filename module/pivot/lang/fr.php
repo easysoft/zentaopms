@@ -284,7 +284,7 @@ $lang->pivot->notEmpty      = 'Can\'t be empty.';
 $lang->pivot->noPivotTip      = 'After you save the Settings, you can display the pivot table';
 $lang->pivot->noQueryTip      = 'No filter.';
 $lang->pivot->noPivot         = 'No Pivot table';
-$lang->pivot->noDrillTip      = 'No Data Drill';
+$lang->pivot->noDrillTip      = 'No Data Drill.';
 $lang->pivot->dataError       = '"%s" is not valid';
 $lang->pivot->noChartSelected = 'Please select one pivot table.';
 $lang->pivot->beginGtEnd      = 'Begin time should not be >= end time.';
