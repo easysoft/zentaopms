@@ -16671,7 +16671,6 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '7', '*', '*', '*', 'moduleName=effort&methodName=remindNotRecord', '提醒录入日志', 'zentao', '1', 'stop');
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NUll);
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('0', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NUll);
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('*/10', '*', '*', '*', '*', 'moduleName=bi&methodName=syncParquetFile', '生成parquet文件', 'zentao', 1, 'normal');
 
 UPDATE `zt_chart` SET `createdBy` = 'system' where `createdBy` = 'admin';
 UPDATE `zt_pivot` SET `createdBy` = 'system' where `createdBy` = 'admin';

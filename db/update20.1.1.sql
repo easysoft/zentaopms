@@ -95,8 +95,6 @@ ALTER TABLE `zt_demand` ADD `stage` enum('wait','distributed','inroadmap','incha
 ALTER TABLE `zt_pivot` ADD `driver` enum('mysql', 'duckdb') not NULL default 'mysql' AFTER `code`;
 ALTER TABLE `zt_chart` ADD `driver` enum('mysql', 'duckdb') not NULL default 'mysql' AFTER `code`;
 
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('*/10', '*', '*', '*', '*', 'moduleName=bi&methodName=syncParquetFile', '生成parquet文件', 'zentao', 1, 'normal');
-
 ALTER TABLE `zt_user` ADD `superior` char(30) NULL DEFAULT '' AFTER `realname`;
 
 ALTER TABLE `zt_approvalnode` ADD `percent` smallint(6) NOT NULL DEFAULT '0' AFTER `multipleType`;
