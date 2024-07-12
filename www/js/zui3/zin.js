@@ -548,8 +548,10 @@
         if(!options.cache && options.cache !== false) options.cache = (requestMethod === 'GET' && config.clientCache) ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
         const cacheKey = options.cache;
         let cache;
+        let cacheHit;
         const renderPageData = (data, onlyZinDebug) =>
         {
+            if(!onlyZinDebug) updatePerfInfo(options, 'renderBegin');
             renderPage(data.reduce((list, item, idx) =>
             {
                 if(Array.isArray(item)) item = {name: item[0].split(':')[0], data: item[1], type: item[2] || 'data'};
@@ -557,7 +559,9 @@
                 if(!onlyZinDebug || item.name === 'zinDebug') list.push(item);
                 return list;
             }, []), options);
+            if(!onlyZinDebug) updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
         };
+        updatePerfInfo(options, 'requestBegin', {perf: {renderBegin: undefined, renderEnd: undefined}});
         const ajax = new zui.Ajax(
         {
             url:         url + (url.includes('?') ? '&zin=1' : '?zin=1'),
@@ -619,7 +623,7 @@
                 }
                 if(Array.isArray(data))
                 {
-                    updatePerfInfo(options, 'renderBegin');
+
                     if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
                     let newCacheData = (cacheKey && !hasFatal) ? rawData : null;
                     if(newCacheData && DEBUG)
@@ -627,7 +631,7 @@
                         const parts = newCacheData.split(',["zinDebug:<BEGIN>",');
                         if(parts.length > 1) newCacheData = parts[0] + ']';
                     }
-                    const cacheHit = !hasFatal && cache && newCacheData === cache.data.data;
+                    cacheHit = !hasFatal && cache && newCacheData === cache.data.data;
                     if(!cacheHit)
                     {
                         renderPageData(data);
@@ -637,7 +641,6 @@
                         showLog('Request', 'success:skip render with effective caching', {cacheKey, data})
                         renderPageData(data, true);
                     }
-                    updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
                     $(document).trigger('pagerender.app');
                     if(options.success) options.success(data);
                     if(onFinish) onFinish(null, data);
@@ -1764,7 +1767,23 @@
 
         if(DEBUG)
         {
-            // if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
+            if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
+            if(zinbar)
+            {
+                $(document).on('inited.zt', () =>
+                {
+                    const now = performance.now();
+                    if(zinbar.waitZUI && (now - zinbar.waitZUI.time) <= 100)
+                    {
+                        zinbar.waitZUI.time = now;
+                        updatePerfInfo(zinbar.waitZUI, 'renderEnd');
+                    }
+                    else
+                    {
+                        zinbar.waitZUI = null;
+                    }
+                });
+            }
         }
     });
 }());
