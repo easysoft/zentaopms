@@ -12,8 +12,8 @@ class sidebar extends wg
         'showToggle?:bool=true',
         'parent?:string',
         'preserve?:string',
-        'dragToResize?:bool',
-        'toggleBtn?:bool',
+        'dragToResize?:bool=true',
+        'toggleBtn?:bool=true',
         'onToggle?:function'
     );
 
