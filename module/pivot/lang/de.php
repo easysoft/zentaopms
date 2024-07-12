@@ -23,6 +23,7 @@ $lang->pivot->browseAction = 'Design in Pivot Table';
 $lang->pivot->designAB     = 'Design';
 $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
+$lang->pivot->story        = 'Story';
 
 $lang->pivot->cancelAndBack = 'Cancel save and back';
 
