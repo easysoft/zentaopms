@@ -160,7 +160,7 @@ class build extends control
         }
 
         /* Load pager. */
-        $this->app->loadClass('pager');
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $sort = common::appendOrder($orderBy);
