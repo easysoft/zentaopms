@@ -20,7 +20,6 @@ cid=80
 chdir(__DIR__);
 include '../lib/createstory.ui.class.php';
 
-//zendata('story')->loadYaml('story', false, 2)->gen(10);
 $tester = new createStoryTester();
 $tester->login();
 
