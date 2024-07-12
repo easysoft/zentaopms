@@ -1259,9 +1259,11 @@ class repoZen extends repo
             ->andWhere('AType')->eq('design')
             ->fetchAll();
         $error = '';
-        if($relationIds){
+        if($relationIds)
+        {
             $designLinks = '';
-            foreach ($relationIds as $value){
+            foreach ($relationIds as $value)
+            {
                 $designLinks .= html::a($this->createLink('design','view','designID='.$value->AID), $value->AID, '_blank', '', false).'、';
             }
             $error .= sprintf(
@@ -1273,12 +1275,14 @@ class repoZen extends repo
         if(!empty($linkBranchs))
         {
             $tmpLinkBranchs = [];
-            foreach($linkBranchs as $value){
+            foreach($linkBranchs as $value)
+            {
                 if(!array_key_exists($value->AType, $tmpLinkBranchs)) $tmpLinkBranchs[$value->AType] = [];
 
                 if(!in_array($value->BType ,$tmpLinkBranchs[$value->AType])) array_push($tmpLinkBranchs[$value->AType], $value->BType);
             }
-            foreach($tmpLinkBranchs as $type=>$value) {
+            foreach($tmpLinkBranchs as $type=>$value)
+            {
                 $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
                     $this->createLink('repo','browse','repoID='.$repoID),
                     implode('、',$value),
