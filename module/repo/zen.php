@@ -1264,7 +1264,7 @@ class repoZen extends repo
             $tmpDesignLinks = [];
             foreach ($relationIds as $value)
             {
-                array_push($tmpDesignLinks, html::a($this->createLink('design','view','designID='.$value->AID), $value->AID, '_blank', '', false));
+                array_push($tmpDesignLinks, html::a($this->createLink('design', 'view', 'designID=' . $value->AID), $value->AID, '_blank', '', false));
             }
             $error .= sprintf(
                 $this->lang->repo->error->deleted,
@@ -1279,13 +1279,13 @@ class repoZen extends repo
             {
                 if(!array_key_exists($value->AType, $tmpLinkBranchs)) $tmpLinkBranchs[$value->AType] = [];
 
-                if(!in_array($value->BType ,$tmpLinkBranchs[$value->AType])) array_push($tmpLinkBranchs[$value->AType], $value->BType);
+                if(!in_array($value->BType, $tmpLinkBranchs[$value->AType])) array_push($tmpLinkBranchs[$value->AType], $value->BType);
             }
             foreach($tmpLinkBranchs as $type=>$value)
             {
                 $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
-                    $this->createLink('repo','browse','repoID='.$repoID),
-                    implode(', ',$value),
+                    $this->createLink('repo', 'browse', 'repoID='.$repoID),
+                    implode(', ', $value),
                     '_blank',
                     '',
                     false
@@ -1293,10 +1293,10 @@ class repoZen extends repo
             }
         }
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) $error .=  sprintf(
+        if($jobs) $error .= sprintf(
             $this->lang->repo->error->linkedJob, html::a(
-                $this->createLink('job','browse'),
-                implode(', ',array_column($jobs, 'id')),
+                $this->createLink('job', 'browse'),
+                implode(', ', array_column($jobs, 'id')),
                 '_blank',
                 '',
                 false
