@@ -1476,6 +1476,8 @@ class biModel extends model
         foreach($rowData as $column => $value)
         {
             $field = 'field' . $index;
+            // 判断该列是否设置了下钻。
+            // Determine whether the column is drilled.
             if(!isset($columns[$field]['drillField']))
             {
                 $index++;
