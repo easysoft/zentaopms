@@ -65,32 +65,6 @@ foreach($dirItems as $dirItem)
     );
 }
 
-/* Check duckdb bin. */
-$checkTrs[] = h::tr
-(
-    h::th($lang->install->duckdb),
-    h::td($duckdbResult == 'ok' ? $lang->install->loaded : $lang->install->unloaded),
-    h::td
-    (
-        setClass('duckdbResult text-white' . ($duckdbResult == 'ok' ? ' bg-success' : ' bg-danger')),
-        $lang->install->{$duckdbResult}
-    ),
-    h::td
-    (
-        setClass('text-left'),
-        $duckdbResult == 'fail' ? modalTrigger
-        (
-            btn
-            (
-                set::size('sm'),
-                set::type('primary'),
-                $lang->install->installDuckdb
-            ),
-            set::url(createLink('install', 'installDuckdb')),
-        ) : null
-    )
-);
-
 div
 (
     setID('main'),
@@ -166,7 +140,7 @@ div
                 && $tmpRootResult == 'ok' && $dataRootResult == 'ok' && $sessionResult  == 'ok'
                 && $jsonResult    == 'ok' && $opensslResult  == 'ok' && $mbstringResult == 'ok'
                 && $zlibResult    == 'ok' && $curlResult     == 'ok' && $filterResult   == 'ok'
-                && $iconvResult   == 'ok' && $duckdbResult   == 'ok' ? btn
+                && $iconvResult   == 'ok' ? btn
                 (
                     setClass('px-6 mx-4'),
                     set::url(inlink('step2')),
