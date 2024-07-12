@@ -125,7 +125,7 @@
     const renderMap =
     {
         html:          updatePageWithHtml,
-        body:          (data) => $('body').html(data),
+        body:          (data) => $('body').html(data).zuiInit(),
         title:         (data) => document.title = data,
         featureBar:    updateFeatureBar,
         pageCSS:       (data) => $('style.zin-page-css').html(data),
@@ -265,7 +265,7 @@
             else if(skipTags.has(nodeName)) return;
             else html.push(node.outerHTML);
         });
-        $('body').html(html.join(''));
+        $('body').html(html.join('')).zuiInit();
         window.zin = {config: window.config};
         if(DEBUG) console.log('[ZIN] ', window.zin);
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
@@ -336,7 +336,7 @@
     {
         const $featureBar = $('#featureBar');
         const isOpenSearch = $featureBar.find('.search-form-toggle.active').length && $featureBar.closest('.show-search-form').length;
-        $featureBar.html(data);
+        $featureBar.html(data).zuiInit();
         if(isOpenSearch)
         {
             const $searchToggle = $featureBar.find('.search-form-toggle');
@@ -388,7 +388,7 @@
         }
         else
         {
-            $heading.html(data);
+            $heading.html(data).zuiInit();
         }
         layoutNavbar();
     }
@@ -410,7 +410,6 @@
 
     function afterUpdate($target, info, options)
     {
-        $target.zuiInit();
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
     }
 
@@ -465,7 +464,7 @@
         {
             if(options.isDiffPage)
             {
-                $target.html(info.data);
+                $target.html(info.data).zuiInit();
             }
             else
             {
@@ -475,7 +474,7 @@
         }
         else
         {
-            if(options.isDiffPage) $target.replaceWith(info.data); else $target.morph(info.data);
+            if(options.isDiffPage) $target.replaceWith(info.data).zuiInit(); else $target.morph(info.data);
             $target = $(selector.select);
         }
         afterUpdate($target, info, options);
