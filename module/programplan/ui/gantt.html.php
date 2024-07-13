@@ -26,3 +26,14 @@ $ganttLang->errorPlanDrag    = $lang->programplan->error->planDrag;
 $ganttLang->edit             = $lang->programplan->edit;
 $ganttLang->submit           = $lang->programplan->submit;
 $ganttLang->today            = $lang->programplan->today;
+
+$typeHtml  = '<a data-toggle="dropdown" href="#browseTypeList"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span><span class="caret"></span></a>';
+$typeHtml .= '<menu class="dropdown-menu menu" id="browseTypeList">';
+foreach($lang->programplan->ganttBrowseType as $browseType => $typeName)
+{
+    $link = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType");
+    if($app->rawModule == 'review' and $app->rawMethod == 'assess') $this->createLink('review', 'assess', "reivewID=$reviewID&from=&type=$browseType");
+
+    $typeHtml .= '<li class="menu-item' . ($ganttType == $browseType ? " active" : '') . '">' . html::a($link, $typeName) . '</li>';
+}
+$typeHtml .= '</menu>';
