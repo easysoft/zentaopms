@@ -66,5 +66,14 @@ class gantt extends wg
         $selectCustom = data('selectCustom');
         $showFields   = data('showFields');
         $reviewPoints = ($project && $project->model == 'ipd') ? data('reviewPoints') : array();
+
+        return div
+        (
+            h::import($cssFile),
+            h::import($jsFile),
+            setID('ganttContainer'),
+            div(setID($id), setClass('gantt')),
+            div(setID('myCover'), div(setID('gantt_here')))
+        );
     }
 }
