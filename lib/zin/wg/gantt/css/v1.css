@@ -32,3 +32,19 @@
 #ganttContainer .gantt_task_link.start_to_finish .gantt_line_wrapper div { background-color: #975000; }
 #ganttContainer .gantt_task_link.start_to_finish:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #975000; }
 #ganttContainer .gantt_task_link.start_to_finish .gantt_link_arrow_left { border-right-color: #975000; }
+
+#ganttContainer .gantt_critical_link .gantt_line_wrapper>div {background-color: #e63030 !important;}
+#ganttContainer .gantt_critical_link.start_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
+#ganttContainer .gantt_critical_link.finish_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
+#ganttContainer .gantt_critical_link.start_to_finish .gantt_link_arrow_left {border-right-color: #e63030 !important;}
+#ganttContainer .gantt_critical_link.finish_to_finish .gantt_link_arrow_left {border-right-color: #e63030 !important;}
+#ganttContainer .gantt_critical_task{background:#e63030 !important; border-color:#9d3a3a !important;}
+#ganttContainer .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
+
+#ganttContainer .submitBtn{display:none}
+#ganttContainer .editDeadline {display: none; line-height: normal !important; padding: 2px 6px; color: #fff !important;}
+#ganttContainer td:hover > .editDeadline {display: inline-block !important;}
+#ganttContainer .icon-confirm {color: #18a6fd; font-size: 18px;}
+#ganttContainer .icon-seal{font-size: 18px;}
+#ganttContainer div.delayed {background: #FFEBEB; color: #FB2B2B;}
+#ganttContainer [class*=" pri-"] {max-width:unset;}
