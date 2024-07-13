@@ -37,3 +37,22 @@ foreach($lang->programplan->ganttBrowseType as $browseType => $typeName)
     $typeHtml .= '<li class="menu-item' . ($ganttType == $browseType ? " active" : '') . '">' . html::a($link, $typeName) . '</li>';
 }
 $typeHtml .= '</menu>';
+
+$ganttFields = array();
+$ganttFields['column_text']         = $typeHtml;
+$ganttFields['column_owner_id']     = $lang->programplan->PMAB;
+$ganttFields['column_status']       = $lang->statusAB;
+$ganttFields['column_percent']      = $lang->programplan->percentAB;
+$ganttFields['column_taskProgress'] = $lang->programplan->taskProgress;
+$ganttFields['column_begin']        = $lang->programplan->begin;
+$ganttFields['column_start_date']   = $lang->programplan->begin;
+$ganttFields['column_deadline']     = $lang->programplan->end;
+$ganttFields['column_end_date']     = $lang->programplan->end;
+$ganttFields['column_realBegan']    = $lang->programplan->realBegan;
+$ganttFields['column_realEnd']      = $lang->programplan->realEnd;
+$ganttFields['column_duration']     = $lang->programplan->duration;
+$ganttFields['column_estimate']     = $lang->programplan->estimate;
+$ganttFields['column_consumed']     = $lang->programplan->consumed;
+$ganttFields['column_delay']        = $lang->programplan->delay;
+$ganttFields['column_delayDays']    = $lang->programplan->delayDays;
+;
