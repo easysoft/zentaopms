@@ -48,3 +48,10 @@
 #ganttContainer .icon-seal{font-size: 18px;}
 #ganttContainer div.delayed {background: #FFEBEB; color: #FB2B2B;}
 #ganttContainer [class*=" pri-"] {max-width:unset;}
+
+#mainContent.loading {overflow: hidden;}
+#mainContent.loading .scrollVer_cell {display: none;}
+.gantt-fullscreen #header,
+.gantt-fullscreen #mainMenu,
+.gantt-fullscreen #footer {display: none!important;}
+.gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
