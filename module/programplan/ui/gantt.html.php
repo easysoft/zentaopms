@@ -13,3 +13,16 @@ declare(strict_types=1);
 namespace zin;
 
 data('fileName', 'gantt-export-' . $projectID);
+
+$ganttLang = new stdclass();
+$ganttLang->exporting        = $lang->programplan->exporting;
+$ganttLang->exportFail       = $lang->programplan->exportFail;
+$ganttLang->zooming          = $lang->execution->gantt->zooming;
+$ganttLang->hideCriticalPath = $lang->programplan->hideCriticalPath;
+$ganttLang->showCriticalPath = $lang->programplan->showCriticalPath;
+$ganttLang->taskStatusList   = $lang->task->statusList;
+$ganttLang->errorTaskDrag    = $lang->programplan->error->taskDrag;
+$ganttLang->errorPlanDrag    = $lang->programplan->error->planDrag;
+$ganttLang->edit             = $lang->programplan->edit;
+$ganttLang->submit           = $lang->programplan->submit;
+$ganttLang->today            = $lang->programplan->today;
