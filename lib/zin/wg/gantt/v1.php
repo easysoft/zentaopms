@@ -63,7 +63,6 @@ class gantt extends wg
         $fileName     = data('fileName');
         $ganttType    = data('ganttType');
         $project      = data('project');
-        $selectCustom = data('selectCustom');
         $showFields   = data('showFields');
         $reviewPoints = ($project && $project->model == 'ipd') ? data('reviewPoints') : array();
 
@@ -75,7 +74,6 @@ class gantt extends wg
             jsVar('projectID',       $project ? $project->id : 0),
             jsVar('module',          $app->rawModule),
             jsVar('method',          $app->rawMethod),
-            jsVar('selectCustom',    $selectCustom),
             jsVar('jsRoot',          $app->getWebRoot()),
             jsVar('fileName',        $fileName),
             jsVar('reviewPoints',    $reviewPoints),
