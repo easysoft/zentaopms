@@ -51,4 +51,20 @@ class gantt extends wg
         }
         return $userList;
     }
+
+    protected function build()
+    {
+        global $app;
+        $cssFile = $app->getWebRoot() . 'js/dhtmlxgantt/min.css';
+        $jsFile  = $app->getWebRoot() . 'js/dhtmlxgantt/min.js';
+
+        $id           = $this->prop('id') ? $this->prop('id') : 'ganttView';
+        $zooming      = $this->prop('zooming') ? $this->prop('zooming') : 'day';
+        $fileName     = data('fileName');
+        $ganttType    = data('ganttType');
+        $project      = data('project');
+        $selectCustom = data('selectCustom');
+        $showFields   = data('showFields');
+        $reviewPoints = ($project && $project->model == 'ipd') ? data('reviewPoints') : array();
+    }
 }
