@@ -96,3 +96,15 @@ if($app->rawModule == 'programplan')
         (common::hasPriv('programplan', 'create') && empty($product->deleted)) ? btn(set::url($this->createLink('programplan', 'create', "projectID=$projectID")), icon('plus'), $lang->programplan->create, setClass('primary')) : null
     );
 }
+
+gantt
+(
+    setID('ganttView'),
+    set('ganttLang', $ganttLang),
+    set('canEdit', common::hasPriv('programplan', 'ganttEdit')),
+    set('canEditDeadline', common::hasPriv('review', 'edit')),
+    set('ganttFields', $ganttFields),
+    set('showChart', !(($app->rawModule == 'review' && $app->rawMethod == 'assess') || $dateDetails)),
+    set('zooming', isset($zooming) ? $zooming : 'day'),
+    set('options', $plans)
+);
