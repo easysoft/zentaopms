@@ -55,4 +55,24 @@ $ganttFields['column_estimate']     = $lang->programplan->estimate;
 $ganttFields['column_consumed']     = $lang->programplan->consumed;
 $ganttFields['column_delay']        = $lang->programplan->delay;
 $ganttFields['column_delayDays']    = $lang->programplan->delayDays;
-;
+
+if($app->rawModule == 'programplan')
+{
+    if($project->stageBy == 'product')
+    {
+        $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;
+        $items    = array();
+        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), 'active' => $productID == $key);
+        featureBar(
+            dropdown
+            (
+                btn(set::type('link'), setClass('no-underline'), $viewName),
+                set::items($items)
+            )
+        );
+    }
+    else
+    {
+        featureBar(span(setClass('text font-bold'), $lang->programplan->gantt));
+    }
+}
