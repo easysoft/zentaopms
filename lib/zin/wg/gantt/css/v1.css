@@ -17,6 +17,7 @@
 
 #ganttContainer .gantt_task_content span.task-label, .gantt_task_content span.label-pri{display: none;}
 #ganttContainer .gantt_task_content .icon-seal{display: none;}
+#ganttContainer .gantt_task_line {overflow:visible;}
 #ganttContainer .gantt_task_line.gantt_selected {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
 #ganttContainer .gantt_task_line.gantt_task_inline_color{border:0px;}
 #ganttContainer .gantt_task_link .gantt_line_wrapper div{background-color: #2196F3;}
