@@ -35,4 +35,20 @@ class gantt extends wg
         if($currentLang != 'en' && file_exists($langJSFile)) $js .= "\nwaitGantt(function(){\n" . file_get_contents($langJSFile) . "\n});\n";
         return $js;
     }
+
+    public function getUserList(): array
+    {
+        $users = data('users');
+        if(empty($users)) return array();
+
+        $userList = array();
+        foreach($users as $account => $realname)
+        {
+            $user = array();
+            $user['key']   = $account;
+            $user['label'] = $realname;
+            $userList[]    = $user;
+        }
+        return $userList;
+    }
 }
