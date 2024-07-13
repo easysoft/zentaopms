@@ -1,0 +1,16 @@
+#myCover {display:none;left:12px!important;z-index:10!important;top:9px!important;height:unset!important;}
+
+#ganttContainer .gantt_message_area{display:none;}
+#ganttContainer .gantt_grid_head_owner_id {text-align: left}
+#ganttContainer .gantt_grid_head_cell.gantt_grid_head_text{overflow:visible;}
+#ganttContainer .gantt_grid_head_cell, .gantt_scale_cell{color:#000000 !important;}
+#ganttContainer .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}
+#ganttContainer .gantt_row{cursor: pointer;}
+#ganttContainer .gantt_row > div:first-child .gantt_tree_content{color:#3C4353;}
+#ganttContainer .gantt_row_task:hover .submitBtn{ display: inline-block;}
+#ganttContainer .gantt_link_arrow_right {border-left-color: #2196F3;}
+#ganttContainer .gantt_link_arrow_left {border-right-color: #2196F3;}
+
+#ganttContainer .gantt_tree_content table {width: 100%;}
+#ganttContainer .gantt_tree_content table td {padding: 0 !important;}
+#ganttContainer .gantt_tree_content{color:#838A9D;}
