@@ -425,4 +425,24 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->orderBy('id_desc')
             ->fetchAll();
     }
+
+    /**
+     * 获取透视表汇总列的下钻配置。
+     * Get drill config of pivot summary column field.
+     *
+     * @param  int $pivotID
+     * @param  string $field
+     * @access public
+     * @return object
+     */
+    public function fetchPivotDrill(int $pivotID, string $field): object|bool
+    {
+        $record = $this->dao->select('*')->from(TABLE_PIVOTDRILL)
+            ->where('pivot')->eq($pivotID)
+            ->andWhere('field')->eq($field)
+            ->fetch();
+
+        if($record) $record->condition = json_decode($record->condition, true);
+        return $record;
+    }
 }

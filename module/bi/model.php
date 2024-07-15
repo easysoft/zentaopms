@@ -318,10 +318,11 @@ class biModel extends model
         if(is_file($path))
         {
             include $path;
-            $options = $schema->fields[$field]['options'];
+            $fieldConfig = zget($schema->fields, $field, array());
+            $options = zget($fieldConfig, 'options', array());
         }
 
-        return $options;
+        return is_array($options) ? $options : array();
     }
 
     /**
@@ -1343,10 +1344,10 @@ class biModel extends model
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
 
-                    if(isset($column->isDrilling) && $column->isDrilling)
+                    if(isset($subColumn->isDrilling) && $subColumn->isDrilling)
                     {
-                        $columns[$field]['data-toggle'] = 'modal';
-                        $columns[$field]['link']        = '#';
+                        $columns[$field]['link']       = '#';
+                        $columns[$field]['drillField'] = $subColumn->drillField;
                     }
 
                     $columnMaxLen[$field] = mb_strlen($column->label);
@@ -1375,8 +1376,8 @@ class biModel extends model
 
             if(isset($column->isDrilling) && $column->isDrilling)
             {
-                $columns[$field]['data-toggle'] = 'modal';
-                $columns[$field]['link']        = '#';
+                $columns[$field]['link'] = '#';
+                $columns[$field]['drillField'] = $column->drillField;
             }
 
             $columnMaxLen[$field] = mb_strlen($column->label);
@@ -1392,34 +1393,20 @@ class biModel extends model
         $hasGroup       = isset($data->groups);
         $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
 
+        $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
         {
-            if(isset($rowData['rows']))
-            {
-                $originRows = $rowData['rows'];
-                unset($rowData['rows']);
-            }
-
-            if(isset($rowData['drillFields']))
-            {
-                $drillFields = $rowData['drillFields'];
-                unset($rowData['drillFields']);
-            }
+            list($originRows, $drillFields, $originFields) = $this->processDrills($rowKey, $rowData, $drills, $columns);
 
             $index   = 0;
             $rowDataKeys  = array_keys($rowData);
             $rowData = array_values($rowData);
 
-            $convertedOriginRows  = array();
-            $convertedDrillFields = array();
             for($i = 0; $i < count($rowData); $i++)
             {
                 $field = 'field' . $index;
                 $value = $rowData[$i];
                 $originRowKey = $rowDataKeys[$i];
-
-                if(isset($originRows[$originRowKey]))  $convertedOriginRows[$field]  = $originRows[$originRowKey];
-                if(isset($drillFields[$originRowKey])) $convertedDrillFields[$field] = $drillFields[$originRowKey];
 
                 if(!empty($columns[$field]['colspan']))
                 {
@@ -1454,14 +1441,57 @@ class biModel extends model
                 $index++;
             }
 
-            $rows[$rowKey]['originRows']  = $convertedOriginRows;
-            $rows[$rowKey]['drillFields'] = $convertedDrillFields;
-            $rows[$rowKey]['ROW_ID']      = $rowKey;
+            $rows[$rowKey]['originRows']   = $originRows;
+            $rows[$rowKey]['originFields'] = $originFields;
+            $rows[$rowKey]['drillFields']  = $drillFields;
+            $rows[$rowKey]['ROW_ID']       = $rowKey;
         }
 
         foreach($columns as $field => $column) $columns[$field]['width'] = 16 * $columnMaxLen[$field];
 
         return array($columns, $rows, $cellSpan);
+    }
+
+    /**
+     * Process dirlls.
+     *
+     * @param  int    $rowIndex
+     * @param  array  $rowData
+     * @param  array  $drills
+     * @access public
+     * @return array
+     */
+    public function processDrills(int $rowIndex, array $rowData, array $drills, array $columns): array
+    {
+        if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array(), array());
+
+        $drills = $drills[$rowIndex];
+        list($originRows, $drillFields) = array_values($drills);
+
+        $rebuildOriginRows  = array();
+        $rebuildDrillFields = array();
+        $originFields       = array();
+
+        $index = 0;
+        foreach($rowData as $column => $value)
+        {
+            $field = 'field' . $index;
+            // 判断该列是否设置了下钻。
+            // Determine whether the column is drilled.
+            if(!isset($columns[$field]['drillField']))
+            {
+                $index++;
+                continue;
+            }
+
+            $originFields[$field] = $columns[$field]['drillField'];
+            if(isset($originRows[$column]))  $rebuildOriginRows[$field]  = $originRows[$column];
+            if(isset($drillFields[$column])) $rebuildDrillFields[$field] = $drillFields[$column];
+
+            $index++;
+        }
+
+        return array($rebuildOriginRows, $rebuildDrillFields, $originFields);
     }
 
     /**

@@ -267,6 +267,14 @@ class pivotState
     public $step2FinishSql = '';
 
     /**
+     * useGroupBy
+     *
+     * @var    bool
+     * @access public
+     */
+    public $useGroupBy = false;
+
+    /**
      * __construct method.
      *
      * @param  pivot      object
@@ -305,6 +313,7 @@ class pivotState
         $this->setPager();
         $this->formatSettingColumns();
         $this->setStep2FinishSql();
+        $this->setUseGroupBy();
     }
 
     /**
@@ -644,7 +653,7 @@ class pivotState
      */
     public function initDrill()
     {
-        return array('field' => '', 'object' => '', 'referSQL' => '', 'whereSQL' => '', 'conditions' => array($this->addCondition()));
+        return array('field' => '', 'object' => '', 'referSQL' => '', 'whereSQL' => '', 'condition' => array($this->addCondition()));
     }
 
     /**
@@ -752,6 +761,7 @@ class pivotState
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
         $this->completeFiltersDefault();
+        $this->setUseGroupBy();
     }
 
     /**
@@ -817,6 +827,7 @@ class pivotState
             }
         }
 
+        $this->fields        = $this->json2Array($newFieldSettings);
         $this->fieldSettings = $newFieldSettings;
     }
 
@@ -842,6 +853,20 @@ class pivotState
     {
         if($this->issetSettings()) $this->step2FinishSql = $this->sql;
     }
+
+    /**
+     * Set use groupBy.
+     *
+     * @access public
+     * @return void
+     */
+    public function setUseGroupBy()
+    {
+        $pattern = '/\bgroup by\b/i';
+
+        $this->useGroupBy = preg_match($pattern, $this->sql) ? true : false;
+    }
+
 
     public function issetSettings()
     {

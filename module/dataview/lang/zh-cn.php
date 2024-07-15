@@ -140,6 +140,7 @@ $lang->dataview->groupList['project']   = '项目';
 $lang->dataview->groupList['execution'] = $lang->execution->common;
 $lang->dataview->groupList['kanban']    = '看板';
 $lang->dataview->groupList['qa']        = '测试';
+$lang->dataview->groupList['feedback']  = '反馈';
 $lang->dataview->groupList['doc']       = '文档';
 $lang->dataview->groupList['assetlib']  = '资产库';
 $lang->dataview->groupList['report']    = '统计';

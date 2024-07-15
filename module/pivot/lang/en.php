@@ -23,6 +23,7 @@ $lang->pivot->browseAction = 'Design in Pivot Table';
 $lang->pivot->designAB     = 'Design';
 $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
+$lang->pivot->story        = 'Story';
 
 $lang->pivot->cancelAndBack = 'Cancel save and back';
 
@@ -283,15 +284,16 @@ $lang->pivot->notEmpty      = 'Can\'t be empty.';
 $lang->pivot->noPivotTip      = 'After you save the Settings, you can display the pivot table';
 $lang->pivot->noQueryTip      = 'No filter.';
 $lang->pivot->noPivot         = 'No Pivot table';
-$lang->pivot->noDrillTip      = 'No Data Drill';
+$lang->pivot->noDrillTip      = 'No Data Drill.';
 $lang->pivot->dataError       = '"%s" is not valid';
 $lang->pivot->noChartSelected = 'Please select one pivot table.';
 $lang->pivot->beginGtEnd      = 'Begin time should not be >= end time.';
 $lang->pivot->resetSettings   = 'The configuration of the query data has been modified, requiring redesign of the pivot table, whether to continue.';
 $lang->pivot->clearSettings   = 'The configuration of the query data has been modified, whether to clear the pivot table and save.';
 $lang->pivot->draftSave       = 'The pivot table has been published and will be in draft state. Do you want to continue?';
-$lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
-$lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
+$lang->pivot->cannotAddQuery  = 'Result filter has been added or configure data drill, query filter cannot be added.';
+$lang->pivot->cannotAddResult = 'Query filter has been added or configure data drill, result filter cannot be added.';
+$lang->pivot->cannotAddDrill  = 'GROUP BY exists in the query statement or filters are configured. Therefore, data cannot be configured to drill down';
 
 $lang->pivot->drillModalTip       = <<<EOT
 1. Select the columns to be drilled and the target objects to be drilled. The system automatically generates SQL statements based on your selection.
@@ -301,7 +303,7 @@ $lang->pivot->drillModalTip       = <<<EOT
 EOT;
 $lang->pivot->step1QueryTip       = 'For subsequent configuration data, ensure that the id field of the query object is included in the query result set.';
 $lang->pivot->drillingTip         = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
-$lang->pivot->drillConditionTip   = 'According to the SQL query in step 1, adjust the query conditions in the drill statement.';
+$lang->pivot->drillConditionTip   = 'According to the SQL query in step 1, adjust the query conditions in the drill statement (A maximum of six search conditions can be added).';
 $lang->pivot->drillResultEmptyTip = 'Click the "preview" button, you can view the drill down results here.';
 $lang->pivot->previewResultTip    = 'The drill results will display the object-related fields, and only 10 rows of data are displayed by default.';
 
@@ -440,7 +442,7 @@ $lang->datepicker->dpText->TEXT_MONTH_BEGIN = 'Begin Month';
 $lang->datepicker->dpText->TEXT_MONTH_END   = 'End Month';
 
 $lang->pivot->drill = new stdclass();
-$lang->pivot->drill->common         = 'Pivot Drill';
+$lang->pivot->drill->common         = 'Data Drill';
 $lang->pivot->drill->queryCondition = 'Query Condition';
 $lang->pivot->drill->drillResult    = 'Drill Result';
 $lang->pivot->drill->selectField    = 'Select Drill Field';

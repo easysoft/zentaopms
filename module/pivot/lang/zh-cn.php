@@ -23,6 +23,7 @@ $lang->pivot->browseAction = '进入透视表设计';
 $lang->pivot->designAB     = '设计';
 $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
+$lang->pivot->story        = '需求';
 
 $lang->pivot->cancelAndBack = '取消保存并返回';
 
@@ -290,8 +291,9 @@ $lang->pivot->beginGtEnd      = '开始时间不得大于结束时间。';
 $lang->pivot->resetSettings   = '查询数据的配置已修改，是否清空透视表设计，重新设计。';
 $lang->pivot->clearSettings   = '查询数据的配置已修改，是否清空透视表设计并保存。';
 $lang->pivot->draftSave       = '该透视表已发布，将变为草稿态，是否继续？';
-$lang->pivot->cannotAddQuery  = '已添加结果筛选器，无法添加查询筛选器';
-$lang->pivot->cannotAddResult = '已添加查询筛选器，无法添加结果筛选器';
+$lang->pivot->cannotAddQuery  = '已添加结果筛选器或配置了数据下钻，无法添加查询筛选器';
+$lang->pivot->cannotAddResult = '已添加查询筛选器或配置了数据下钻，无法添加结果筛选器';
+$lang->pivot->cannotAddDrill  = '查询语句中存在GROUP BY或配置了筛选器，暂时无法配置数据下钻';
 
 $lang->pivot->drillModalTip       = <<<EOT
 1.请先选择需要下钻的列及其下钻的目标对象，系统将根据您的选择自动生成下钻SQL语句。
@@ -301,7 +303,7 @@ $lang->pivot->drillModalTip       = <<<EOT
 EOT;
 $lang->pivot->step1QueryTip       = '为后续配置数据下钻，请确保查询结果集中包含查询对象的id字段。';
 $lang->pivot->drillingTip         = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
-$lang->pivot->drillConditionTip   = '根据步骤一中的SQL查询语句，调整下钻语句中的查询条件。';
+$lang->pivot->drillConditionTip   = '根据步骤一中的SQL查询语句，调整下钻语句中的查询条件（查询条件最多支持添加6条）。';
 $lang->pivot->drillResultEmptyTip = '点击“预览”按钮，即可在此查看下钻结果。';
 $lang->pivot->previewResultTip    = '下钻结果将显示对象相关字段，默认只显示10行数据。';
 
