@@ -125,7 +125,7 @@ class dropdown extends wg
             list($id, $menuProps, $menuClass) = $this->prop(array('id', 'menu', 'menuClass'));
             $menu->setProp('id', $id);
             $menu->setProp('class', $menuClass);
-            $menu->setProp($menuProps);
+            if($menuProps) $menu->setProp($menuProps);
             if($this->hasIcons()) $menu->setProp('class', 'has-icons');
         }
 
