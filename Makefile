@@ -303,7 +303,9 @@ ciCommon:
 	make package
 	make cleanAssets
 
-	find zentaopms -name "*.php" | xargs sed -i '/^declare(strict_types/d'
+	ifeq ($(BUILD_KIND),release)
+	    find zentaopms -name "*.php" | xargs sed -i '/^declare(strict_types/d'
+	endif
 
 	cp -a zentaopms zentaoalm
 	sed -i '/^\s*$$config->langs\['"'"'de'"'"']/d' zentaopms/config/config.php
