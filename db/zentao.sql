@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `opinion` mediumtext NULL,
   `extra` mediumtext NULL,
   `revertTo` char(30) NOT NULL DEFAULT '',
-  `forwardTo` char(30) NOT NULL DEFAULT '',
+  `forwardBy` char(30) NOT NULL DEFAULT '',
   `reviewedBy` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
   PRIMARY KEY (`id`)
