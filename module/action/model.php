@@ -1349,6 +1349,11 @@ class actionModel extends model
 
         $this->recoverRelatedData($action, $object);
 
+        /* 还原已删除的需求时重算OR需求和业用研需的阶段。 */
+        /* The stage of recalculating OR requirements and industrial research needs when restoring deleted requirements. */
+        if(in_array($action->objectType, array('story', 'epic', 'requirement'))) $this->loadModel('story')->setStage($action->objectID);
+        if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
+
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($actionID)->exec();
