@@ -152,10 +152,12 @@ formPanel
     ),
     formRow
     (
+        set::id('buildDateRow'),
         formGroup
         (
             set::width('1/2'),
             set::name('date'),
+            set::id('buildDate'),
             set::label($lang->build->date),
             set::control('date'),
             set::value($build->date)
@@ -183,6 +185,7 @@ formPanel
     ),
     formRow
     (
+        set::id('buildFiles'),
         formGroup
         (
             set::label($lang->build->files),
