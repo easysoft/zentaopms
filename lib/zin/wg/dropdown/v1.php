@@ -7,7 +7,8 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class dropdown extends wg
 {
-    protected static array $defineProps = array(
+    protected static array $defineProps = array
+    (
         'items?:array',
         'placement?:string',
         'strategy?:string',
@@ -22,7 +23,7 @@ class dropdown extends wg
         'hasIcons?: bool',
         'staticMenu?: bool',
         'triggerProps?: array',
-        'caret?: bool'
+        'caret?: bool=true'
     );
 
     protected static array $defineBlocks = array
@@ -32,143 +33,145 @@ class dropdown extends wg
         'items'   => array('map' => 'item')
     );
 
-    protected function build(): array
+    protected function buildTrigger(bool $dynamicMenu)
     {
-        list($items, $placement, $strategy, $offset, $flip, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu, $triggerProps, $caret) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu', 'triggerProps', 'caret'));
+        list($placement, $strategy, $offset, $flip, $arrow, $trigger, $target, $id, $triggerProps, $caret) = $this->prop(array('placement', 'strategy', 'offset', 'flip', 'arrow', 'trigger', 'target', 'id', 'triggerProps', 'caret'));
 
         $triggerBlock = $this->block('trigger');
-        $menu         = $this->block('menu');
-        $itemsList    = $this->block('items');
-
-        if(empty($id))                      $id        = $this->gid;
-        if(empty($target) && empty($items)) $target    = "#$id";
-        if(empty($menuProps))               $menuProps = array();
-        if(is_null($caret))                 $caret     = true;
-
         if(empty($triggerBlock))        $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
-        $triggerID = '';
-        if($triggerBlock instanceof node)
+
+        if(!($triggerBlock instanceof node)) return null;
+
+        if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => $caret));
+        $triggerOptions = $triggerBlock->prop('zui-toggle-dropdown', array());
+        $triggerOptions = array_merge(array
+        (
+            'placement'      => $placement,
+            'strategy'       => $strategy,
+            'arrow'          => $arrow,
+            'flip'           => $flip,
+            'offset'         => $offset,
+            'target'         => $target
+        ), $triggerOptions, is_array($triggerProps) ? $triggerProps : array());
+
+        if($dynamicMenu)
         {
-            if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => $caret));
-            $triggerProps = array_merge(array
+            $itemsList = $this->block('items');
+            $items     = $this->prop('items', array());
+            $menuProps = $this->prop('menu', array());
+
+            if(!empty($itemsList))
+            {
+                foreach($itemsList as $item)
+                {
+                    if(!($item instanceof item)) continue;
+                    $items[] = $item->props->toJSON();
+                }
+            }
+            foreach($items as $index => $item)
+            {
+                if(!($item instanceof setting)) continue;
+                $item = $item->toArray();
+                $items[$index] = $item;
+            }
+
+            $menuProps = array_merge(array
             (
-                'data-target'         => $triggerBlock->hasProp('target', 'href') ? null : $target,
-                'data-toggle'         => 'dropdown',
-                'data-placement'      => $placement,
-                'data-strategy'       => $strategy,
-                'data-offset'         => $offset,
-                'data-flip'           => $flip,
-                'data-arrow'          => $arrow,
-                'data-trigger'        => $trigger
-            ), is_array($triggerProps) ? $triggerProps : array());
-            $triggerBlock->setProp($triggerProps);
-
-            $triggerID = $triggerBlock->id();
-            if(empty($triggerID))
-            {
-                $triggerID = "$id-toggle";
-                $triggerBlock->setProp('id', $triggerID);
-            }
+                'items'    => $items,
+                'id'       => $id,
+                'class'    => $this->prop('menuClass'),
+                'hasIcons' => $this->prop('hasIcons')
+            ), $menuProps);
+            $triggerOptions['menu'] = array_filter_null($menuProps);
         }
 
-        if(empty($menu))
+        $triggerBlock->setProp('data-toggle', 'dropdown');
+        $triggerBlock->setProp('data-trigger', $trigger);
+        $triggerBlock->setProp('zui-toggle-dropdown', js::value(array_filter_null($triggerOptions)));
+        if($id) $triggerBlock->setProp('id', "$id-toggle");
+
+        return $triggerBlock;
+    }
+
+    protected function buildStaticMenu()
+    {
+        $itemsList = $this->block('items');
+        $items     = $this->prop('items');
+        $menuProps = $this->prop('menu');
+
+        return new menu
+        (
+            setClass('dropdown-menu'),
+            set::items($items),
+            divorce($itemsList),
+            set($menuProps)
+        );
+    }
+
+    protected function buildMenu()
+    {
+        $menu = $this->block('menu');
+
+        if(!$menu)
         {
-            if($staticMenu)
-            {
-                $menu = new menu
-                (
-                    setClass('dropdown-menu'),
-                    set::items($items),
-                    divorce($itemsList)
-                );
-
-                if($hasIcons === null)
-                {
-                    if(is_array($items))
-                    {
-                        foreach($items as $item)
-                        {
-                            if((is_array($item) and isset($item['icon'])) || (($item instanceof node) && $item->hasProp('icon')))
-                            {
-                                $hasIcons = true;
-                                break;
-                            }
-                        }
-                    }
-                    if(!$hasIcons)
-                    {
-                        foreach($itemsList as $item)
-                        {
-                            if(($item instanceof node) && $item->hasProp('icon'))
-                            {
-                                $hasIcons = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if(empty($items)) $items = array();
-                if(!empty($itemsList))
-                {
-                    foreach($itemsList as $item)
-                    {
-                        if(!($item instanceof item)) continue;
-                        $items[] = $item->props->toJSON();
-                    }
-                }
-                foreach($items as $index => $item)
-                {
-                    if($item instanceof setting)
-                    {
-                        $item = $item->toArray();
-                        $items[$index] = $item;
-                    }
-                    if(!isset($item['icon']) || empty($item['icon']) || str_starts_with($item['icon'], 'icon-')) continue;
-                    $items[$index]['icon'] = 'icon-' . $item['icon'];
-                }
-
-                $menuProps['items'] = $items;
-
-                $dropdownOptions = array_merge(array
-                (
-                    'placement'      => $placement,
-                    'strategy'       => $strategy,
-                    'arrow'          => $arrow,
-                    'flip'           => $flip,
-                    'offset'         => $offset,
-                    'target'         => $target,
-                    'className'      => $menuClass,
-                    'hasIcons'       => $hasIcons,
-                    'menu'           => $menuProps
-                ), $this->getRestProps());
-                if($triggerBlock instanceof node)
-                {
-                    $triggerBlock->add(on::init()->call('zui.create', 'dropdown', jsRaw('$element'), $dropdownOptions));
-                }
-                else
-                {
-                    $dropdownOptions['_to']     = "#$triggerID";
-                    $dropdownOptions['trigger'] = $trigger;
-                    $menu = zui::dropdown(set($dropdownOptions));
-                }
-            }
+            if($this->prop('staticMenu')) $menu = $this->buildStaticMenu();
         }
-        elseif(is_array($menu))
-        {
-            $menu = $menu[0];
-        }
+
+        if(is_array($menu) && $menu) $menu = $menu[0];
 
         if($menu instanceof menu)
         {
-            $menu->setProp($menuProps);
+            list($id, $menuProps, $menuClass) = $this->prop(array('id', 'menu', 'menuClass'));
+            $menu->setProp('id', $id);
             $menu->setProp('class', $menuClass);
-            $menu->setProp('id',    $id);
-            if($hasIcons) $menu->setProp('class', 'has-icons');
+            $menu->setProp($menuProps);
+            if($this->hasIcons()) $menu->setProp('class', 'has-icons');
         }
+
+        return $menu;
+    }
+
+    protected function hasIcons()
+    {
+        $hasIcons  = $this->prop('hasIcons');
+
+        if($hasIcons === null)
+        {
+            $itemsList = $this->block('items');
+            $items     = $this->prop('items');
+
+            if(is_array($items))
+            {
+                foreach($items as $item)
+                {
+                    if((is_array($item) and isset($item['icon'])) || (($item instanceof node) && $item->hasProp('icon')))
+                    {
+                        $hasIcons = true;
+                        break;
+                    }
+                }
+            }
+            if(!$hasIcons)
+            {
+                foreach($itemsList as $item)
+                {
+                    if(($item instanceof node) && $item->hasProp('icon'))
+                    {
+                        $hasIcons = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $hasIcons;
+    }
+
+    protected function build(): array
+    {
+        $menu         = $this->buildMenu();
+        $triggerBlock = $this->buildTrigger(empty($menu));
 
         return array($triggerBlock, $menu);
     }
