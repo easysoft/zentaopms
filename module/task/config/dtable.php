@@ -7,6 +7,7 @@ $config->task->dtable->fieldList['id']['sortType'] = true;
 $config->task->dtable->fieldList['id']['checkbox'] = true;
 $config->task->dtable->fieldList['id']['required'] = true;
 
+$config->task->dtable->fieldList['name']['title']        = $lang->task->name;
 $config->task->dtable->fieldList['name']['fixed']        = 'left';
 $config->task->dtable->fieldList['name']['flex']         = 1;
 $config->task->dtable->fieldList['name']['type']         = 'nestedTitle';
@@ -51,6 +52,7 @@ $config->task->dtable->fieldList['openedDate']['type']     = 'date';
 $config->task->dtable->fieldList['openedDate']['sortType'] = true;
 $config->task->dtable->fieldList['openedDate']['group']    = 2;
 
+$config->task->dtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
 $config->task->dtable->fieldList['assignedTo']['type']        = 'assign';
 $config->task->dtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
 $config->task->dtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
@@ -121,6 +123,7 @@ $config->task->dtable->fieldList['closedDate']['type']     = 'datetime';
 $config->task->dtable->fieldList['closedDate']['sortType'] = true;
 $config->task->dtable->fieldList['closedDate']['group']    = 6;
 
+$config->task->dtable->fieldList['closedReason']['title']    = $lang->task->closedReason;
 $config->task->dtable->fieldList['closedReason']['type']     = 'category';
 $config->task->dtable->fieldList['closedReason']['map']      = $lang->task->reasonList;
 $config->task->dtable->fieldList['closedReason']['sortType'] = true;

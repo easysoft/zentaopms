@@ -100,9 +100,13 @@ class pivotModel extends model
         if($isObject) $pivots = array($pivots);
 
         $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
-        foreach($pivots as $pivot) $this->completePivot($pivot, $screenList);
+        foreach($pivots as $pivot)
+        {
+            $this->completePivot($pivot, $screenList);
+            if($isObject) $this->addDrills($pivot);
+        }
 
-        if($isObject && isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);
+        // if($isObject && isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);
 
         return $isObject ? $pivot : $pivots;
     }
@@ -141,6 +145,22 @@ class pivotModel extends model
 
             $pivot->used = $this->checkIFChartInUse($pivot->id, 'pivot', $screenList);
         }
+    }
+
+    /**
+     * 添加下钻信息到透视表。
+     * Add drills to pivot.
+     *
+     * @param  object $pivot
+     * @access private
+     * @return void
+     */
+    private function addDrills(object $pivot): void
+    {
+        $settings = $pivot->settings;
+        if(!is_array($settings) || !isset($settings['columns'])) return;
+        $columns  = $settings['columns'];
+        foreach($columns as $index => $column) $pivot->settings['columns'][$index]['drill'] = $this->pivotTao->fetchPivotDrill($pivot->id, $column['field']);
     }
 
     /**
@@ -976,7 +996,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records): array
+    public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records, array $drillRecords): array
     {
         $sliceRecords = $this->initSliceColumnRecords($index, $field, $slice, $groups, $records);
         foreach($records as $rowNo => $record)
@@ -1050,11 +1070,12 @@ class pivotModel extends model
                 }
             }
 
-            $sliceRecord->rows        = $rows;
-            $sliceRecord->drillFields = $drillFields;
+            if(!isset($drillRecords[$groupUnionKey])) $drillRecords[$groupUnionKey] = array('rows' => $rows, 'drillFields' => $drillFields);
+            if(!empty($rows))        $drillRecords[$groupUnionKey]['rows']        += $rows;
+            if(!empty($drillFields)) $drillRecords[$groupUnionKey]['drillFields'] += $drillFields;
         }
 
-        return $sliceRecords;
+        return array($sliceRecords, $drillRecords);
     }
 
     /**
@@ -1339,7 +1360,8 @@ class pivotModel extends model
 
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
 
-        $mergeRecords  = array();
+        $mergeRecords = array();
+        $drillRecords = array();
 
         if(isset($settings['columns']))
         {
@@ -1363,7 +1385,7 @@ class pivotModel extends model
                 }
                 elseif(!empty($columnStat))
                 {
-                    $columnRecords = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records);
+                    list($columnRecords, $drillRecords) = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records, $drillRecords);
                     if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
                     $columnSetting['records'] = $columnRecords;
@@ -1381,6 +1403,7 @@ class pivotModel extends model
         $data->array       = json_decode(json_encode($mergeRecords), true);
         if($showColTotal == 'sum' && count($data->array)) $this->processLastRow($data->array[count($data->array) - 1]);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
+        $data->drills      = $drillRecords;
 
         $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
 
@@ -1856,10 +1879,15 @@ class pivotModel extends model
         $showMode   = zget($column, 'showMode', 'default');
         $monopolize = $showMode == 'default' ? '' : zget($column, 'monopolize', '');
 
+        $isDrilling = isset($column['drill']) && isset($column['drill']->condition);
+        $drillField = $isDrilling ? $column['drill']->field : '';
+
         $col = new stdclass();
         $col->name       = $column['field'];
         $col->isGroup    = false;
         $col->showOrigin = $showOrigin;
+        $col->isDrilling = $isDrilling;
+        $col->drillField = $drillField;
 
         $fieldObject  = $fields[$column['field']]['object'];
         $relatedField = $fields[$column['field']]['field'];
@@ -1898,10 +1926,12 @@ class pivotModel extends model
             foreach($sliceList as $field)
             {
                 $childCol = new stdclass();
-                $childCol->name    = $field;
-                $childCol->isGroup = false;
-                $childCol->label   = isset($optionList[$field]) ? $optionList[$field] : $field;
-                $childCol->colspan = $monopolize ? 2 : 1;
+                $childCol->name       = $field;
+                $childCol->isGroup    = false;
+                $childCol->label      = isset($optionList[$field]) ? $optionList[$field] : $field;
+                $childCol->colspan    = $monopolize ? 2 : 1;
+                $childCol->isDrilling = $isDrilling;
+                $childCol->drillField = $drillField;
                 $cols[1][] = $childCol;
             }
             $col->colspan = count($sliceList);
@@ -2233,7 +2263,7 @@ class pivotModel extends model
                     $options = array();
                     if(is_array($source))
                     {
-                        foreach($source as $row) $options["{$row->$field}"] = $row->$field;
+                        foreach($source as $row) if(isset($row->$field)) $options["{$row->$field}"] = $row->$field;
                     }
                     else
                     {
