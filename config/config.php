@@ -38,7 +38,8 @@ $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。   
 $config->visions     = ',rnd,lite,or,';           // 支持的界面类型。                       Supported vision formats.
 
 /* ZIN 设置。 ZIN settings. */
-$config->zin = new stdclass();
+$config->zin         = new stdclass();
+$config->clientCache = true; // 启用客户端缓存。
 
 /* 支持的主题和语言。Supported themes and languages. */
 $config->themes['default'] = 'default';
