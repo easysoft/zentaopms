@@ -541,6 +541,13 @@ class actionModel extends model
                 {
                     $action->newValue = $action->comment;
                     $action->comment  = '';
+                    if(!empty($action->history))
+                    {
+                        $itemHistory = current($action->history);
+                        $action->newValue = $itemHistory->new;
+                        $action->oldValue = $itemHistory->old;
+                        $desc  = $this->lang->action->desc->{$actionType . 'change'};
+                    }
                 }
 
                 if(!empty($extra))
