@@ -147,3 +147,17 @@ function array_every(array $array, callable $fn): bool
     }
     return true;
 }
+
+/**
+ * Filter null values from an array.
+ *
+ * @param array $array
+ * @return array
+ */
+function array_filter_null(array $array): array
+{
+    return array_filter($array, function($value)
+    {
+        return $value !== null;
+    });
+}
