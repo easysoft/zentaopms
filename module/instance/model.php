@@ -272,10 +272,14 @@ class instanceModel extends model
         $settings->settings_map->resources = new stdclass;
         $settings->settings_map->resources->memory = $size;
 
+        $oldVal = helper::formatKB($instance->oldVal);
+        $newVal = helper::formatKB(intval($size));
+        unset($instance->oldVal);
         $success = $this->cne->updateConfig($instance, $settings);
         if($success)
         {
-            $this->action->create('instance', $instance->id, 'adjustMemory', helper::formatKB(intval($size)));
+            $actionID = $this->action->create('instance', $instance->id, 'adjustMemory', $newVal);
+            $this->action->logHistory($actionID, [['field' => 'adjustmemory', 'old' => $oldVal, 'new' => $newVal, 'diff' => '']]);
             return true;
         }
 
@@ -299,10 +303,14 @@ class instanceModel extends model
         $settings->settings_map->resources = new stdclass;
         $settings->settings_map->resources->cpu = $size;
 
+        $oldVal = $instance->oldVal;
+        $newVal = (string)$size;
+        unset($instance->oldVal);
         $success = $this->cne->updateConfig($instance, $settings);
         if($success)
         {
-            $this->action->create('instance', $instance->id, 'adjustCPU', (string)$size);
+            $actionID = $this->action->create('instance', $instance->id, 'adjustCPU', $newVal);
+            $this->action->logHistory($actionID, [['field' => 'adjustcpu', 'old' => $oldVal, 'new' => $newVal, 'diff' => '']]);
             return true;
         }
 
@@ -337,10 +345,14 @@ class instanceModel extends model
         $settings->settings = array();
         $settings->settings[] = $setting;
 
+        $oldVal = $instance->oldVal;
+        $newVal = str_replace('Gi', '', $size);
+        unset($instance->oldVal);
         $success = $this->cne->updateConfig($instance, $settings);
         if($success)
         {
-            $this->action->create('instance', $instance->id, 'adjustVol', str_replace('Gi', '', $size));
+            $actionID = $this->action->create('instance', $instance->id, 'adjustVol', $newVal);
+            $this->action->logHistory($actionID, [['field' => 'adjustvol', 'old' => $oldVal, 'new' => $newVal, 'diff' => '']]);
             return true;
         }
 
