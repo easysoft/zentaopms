@@ -9,7 +9,7 @@ window.renderCell = function(result, {col, row})
             let scmPathHtml  = '';
             scmPathHtml += "<div><i class='icon icon-file-code' " + colorStyle + "title='" +  scmPathTip + "'></i> ";
             scmPathHtml += "<span title='" + row.data.scmPath + "'>";
-            scmPathHtml += colorStyle.length ? "<a target='_blank' " + colorStyle + " href='" + row.data.filePath + "'>" + row.data.scmPath + "</a>" : row.data.scmPath;
+            scmPathHtml += colorStyle.length ? "<a target='_blank' " + colorStyle + " href='" + row.data.scmPath + "'>" + row.data.scmPath + "</a>" : row.data.scmPath;
             scmPathHtml += '</span></div>';
 
             result[result.length] = {html: scmPathHtml};
