@@ -113,10 +113,7 @@ class dropdown extends wg
     {
         $menu = $this->block('menu');
 
-        if(!$menu)
-        {
-            if($this->prop('staticMenu')) $menu = $this->buildStaticMenu();
-        }
+        if(!$menu && $this->prop('staticMenu')) $menu = $this->buildStaticMenu();
 
         if(is_array($menu) && $menu) $menu = $menu[0];
 
