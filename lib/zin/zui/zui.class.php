@@ -82,7 +82,7 @@ class zui extends wg
         return array
         (
             set('zui-create', ''),
-            set("zui-create-$name", js::value($options))
+            set("zui-create-$name", is_array($options) ? js::value(array_filter_null($options)) : '')
         );
     }
 
