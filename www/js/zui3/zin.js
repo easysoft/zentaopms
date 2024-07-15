@@ -350,7 +350,7 @@
     function updateHeading(data, info)
     {
         const selector = parseSelector(info.selector);
-        renderWithHtml($('#heading'), data, selector.inner);
+        renderWithHtml($('#heading'), data, selector);
         layoutNavbar();
     }
 
@@ -374,9 +374,10 @@
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
     }
 
-    function renderWithHtml($target, html, inner, noMorph)
+    function renderWithHtml($target, html, selector, noMorph)
     {
-        if(inner)
+        if(typeof selector === 'string') selector = parseSelector(selector);
+        if(selector.inner)
         {
             if(noMorph)
             {
@@ -443,7 +444,7 @@
         }
 
         beforeUpdate($target, info, options);
-        $target = renderWithHtml($target, info.data, selector.inner, options.isDiffPage);
+        $target = renderWithHtml($target, info.data, selector, options.isDiffPage);
         afterUpdate($target, info, options);
     }
 
