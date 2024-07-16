@@ -679,8 +679,8 @@ class pivotModel extends model
                 switch($filter['type'])
                 {
                     case 'select':
-                        if(empty($default)) break;
                         if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
+                        if(empty($default)) break;
                         $value = "('" . $default . "')";
                         $filterFormat[$field] = array('operator' => 'IN', 'value' => $value);
                         break;
@@ -957,19 +957,14 @@ class pivotModel extends model
      *
      * @param  array  $sliceRecord
      * @param  object $record
-     * @param  int    $rowNo
      * @param  string $field
      * @param  string $slice
      * @param  array  $groups
      * @access public
      * @return array
      */
-    public function addDrillData(array $sliceRecord, object $record, int $rowNo, string $slice, array $groups): array
+    public function addDrillData(array $sliceRecord, object $record, string $slice, array $groups): array
     {
-        /* 添加下钻所需原数据行号。*/
-        /* add rowNo for drill. */
-        $sliceRecord['rows'][] = $rowNo;
-
         $drills = $sliceRecord['drillFields'];
         if($slice != 'noSlice') $groups[] = $slice;
 
@@ -996,7 +991,7 @@ class pivotModel extends model
     public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records, array $drillRecords): array
     {
         $sliceRecords = $this->initSliceColumnRecords($index, $field, $slice, $groups, $records);
-        foreach($records as $rowNo => $record)
+        foreach($records as $record)
         {
             $groupUnionKey = $this->getGroupsKey($groups, $record);
             $fieldKey  = $this->getSliceFieldKey($index, $slice, $field, $record);
@@ -1005,7 +1000,7 @@ class pivotModel extends model
             $value            = $record->$field;
             $floatValue       = is_numeric($value) ? (float)$value : 0;
 
-            $sliceGroupRecord->{$fieldKey} = $this->addDrillData($sliceGroupRecord->{$fieldKey}, $record, $rowNo, $slice, $groups);
+            $sliceGroupRecord->{$fieldKey} = $this->addDrillData($sliceGroupRecord->{$fieldKey}, $record, $slice, $groups);
 
             switch($stat)
             {
@@ -1038,7 +1033,6 @@ class pivotModel extends model
                 /* Skip the group field directly. */
                 if(in_array($sliceField, $groups)) continue;
 
-                $rows[$sliceField]        = $sliceRecord->{$sliceField}['rows'];
                 $drillFields[$sliceField] = $sliceRecord->{$sliceField}['drillFields'];
 
                 $sliceStat = $sliceRecord->{$sliceField}[$stat];
@@ -1067,8 +1061,7 @@ class pivotModel extends model
                 }
             }
 
-            if(!isset($drillRecords[$groupUnionKey])) $drillRecords[$groupUnionKey] = array('rows' => $rows, 'drillFields' => $drillFields);
-            if(!empty($rows))        $drillRecords[$groupUnionKey]['rows']        += $rows;
+            if(!isset($drillRecords[$groupUnionKey])) $drillRecords[$groupUnionKey] = array('drillFields' => $drillFields);
             if(!empty($drillFields)) $drillRecords[$groupUnionKey]['drillFields'] += $drillFields;
         }
 
@@ -1827,6 +1820,7 @@ class pivotModel extends model
 
         $isDrilling = isset($column['drill']) && isset($column['drill']->condition);
         $drillField = $isDrilling ? $column['drill']->field : '';
+        $condition  = $isDrilling ? $column['drill']->condition : '';
 
         $col = new stdclass();
         $col->name       = $column['field'];
@@ -1834,6 +1828,7 @@ class pivotModel extends model
         $col->showOrigin = $showOrigin;
         $col->isDrilling = $isDrilling;
         $col->drillField = $drillField;
+        $col->condition  = $condition;
 
         $fieldObject  = $fields[$column['field']]['object'];
         $relatedField = $fields[$column['field']]['field'];
@@ -1878,6 +1873,7 @@ class pivotModel extends model
                 $childCol->colspan    = $monopolize ? 2 : 1;
                 $childCol->isDrilling = $isDrilling;
                 $childCol->drillField = $drillField;
+                $childCol->condition  = $condition;
                 $cols[1][] = $childCol;
             }
             $col->colspan = count($sliceList);
@@ -2269,6 +2265,18 @@ class pivotModel extends model
         }
 
         return $filters;
+    }
+
+    public function setConditionValueWithFilters(array $condition, array $filters): string
+    {
+        $field = $condition['queryField'];
+        if(!isset($filters[$field])) return '';
+
+        $filter     = $filters[$field];
+        $drillField = $condition['drillField'];
+        extract($filter);
+
+        return "t1.{$drillField} $operator $value";
     }
 
     /**
