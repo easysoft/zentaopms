@@ -529,6 +529,22 @@ class pivotState
         return $filterWheres;
     }
 
+    public function setFiltersDefaultValue($filterValues)
+    {
+        $filters = array();
+        foreach($this->filters as $index => $filter)
+        {
+            if(!isset($filterValues[$index])) continue;
+
+            $default = $filterValues[$index];
+            if($filter['type'] == 'select' && is_array($default)) $default = array_filter($default);
+            $filter['default'] = $default;
+            $filters[] = $filter;
+        }
+
+        return $filters;
+    }
+
     /**
      * Complete settings.
      *
