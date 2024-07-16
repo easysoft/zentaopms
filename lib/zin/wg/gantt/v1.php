@@ -58,8 +58,11 @@ class gantt extends wg
         $cssFile = $app->getWebRoot() . 'js/dhtmlxgantt/min.css';
         $jsFile  = $app->getWebRoot() . 'js/dhtmlxgantt/min.js';
 
-        $id           = $this->prop('id') ? $this->prop('id') : 'ganttView';
-        $zooming      = $this->prop('zooming') ? $this->prop('zooming') : 'day';
+        list($id, $zooming, $colsWidth) = $this->prop(array('id', 'zooming', 'colsWidth'));
+        if(empty($id)) $id = 'ganttView';
+        if(empty($zooming)) $zooming = 'day';
+        if(empty($colsWidth)) $colsWidth = '600';
+
         $fileName     = data('fileName');
         $ganttType    = data('ganttType');
         $project      = data('project');
@@ -79,6 +82,7 @@ class gantt extends wg
             jsVar('reviewPoints',    $reviewPoints),
             jsVar('ganttType',       $ganttType),
             jsVar('showFields',      $showFields),
+            jsVar('colsWidth',       $colsWidth),
             jsVar('userList',        $this->getUserList()),
             jsVar('ganttLang',       $this->prop('ganttLang')),
             jsVar('canGanttEdit',    $this->prop('canEdit')),
