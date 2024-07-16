@@ -146,8 +146,15 @@ class pivot extends control
         $filterValues = json_decode(base64_decode($filterValues), true);
 
         $this->view->title = $this->lang->pivot->step3->drillView;
-        $this->view->cols  = $this->pivot->getDrillCols($drill->object);
-        $this->view->datas = $this->pivot->getDrillDatas($drill, $drillFields);
+        $cols  = $this->pivot->getDrillCols($drill->object);
+        $datas = $this->pivot->getDrillDatas($drill, $drillFields);
+
+        $result = $this->pivot->processColData($drill->object, $cols, $datas);
+        $cols  = $result['cols'];
+        $datas = $result['data'];
+
+        $this->view->cols  = $cols;
+        $this->view->datas = $datas;
         $this->display();
     }
 }

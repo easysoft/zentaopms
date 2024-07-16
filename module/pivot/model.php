@@ -2525,6 +2525,134 @@ class pivotModel extends model
 
         echo $table;
     }
+
+
+    /* Data Drill */
+
+    /**
+     * Get cols for preview data table.
+     *
+     * @param  string $objectTable
+     * @access public
+     * @return array
+     */
+    public function getDrillCols($object)
+    {
+        if($object == 'case') $object = 'testcase';
+
+        $cols = array();
+        if(isset($this->config->pivot->drillObjectFields[$object]))
+        {
+            $this->loadModel($object);
+            if(!isset($this->config->$object->dtable->fieldList)) return $this->config->pivot->objectTableFields->$object;
+
+            $fieldList         = $object == 'product' ? $this->config->product->all->dtable->fieldList : $this->config->$object->dtable->fieldList;
+            $userTypeCols      = $this->config->pivot->userTypeCols;
+            $nameTypeCols      = $this->config->pivot->nameTypeCols;
+            $reuseDtableFields = $this->config->pivot->reuseDtableFields;
+            $userPairs         = $this->loadModel('user')->getPairs('noletter|noclosed');
+            foreach($this->config->pivot->drillObjectFields[$object] as $fieldKey)
+            {
+                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : $this->config->pivot->objectTableFields->$object[$fieldKey];
+                $fieldSetting['sortType'] = false;
+                if(isset($fieldSetting['checkbox']) && $fieldSetting['checkbox']) $fieldSetting['checkbox'] = false;
+                if(isset($fieldSetting['link']))
+                {
+                    if(is_string($fieldSetting['link']))
+                    {
+                        $fieldSettingLink = $fieldSetting['link'];
+
+                        $fieldSetting['link'] = array();
+                        $fieldSetting['link']['url']    = $fieldSettingLink;
+                    }
+                    $fieldSetting['link']['target'] = '_blank';
+                }
+
+                if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], $userTypeCols))
+                {
+                    $fieldSetting['type'] = 'user';
+                    $fieldSetting['map']  = $userPairs;
+                }
+
+                foreach(array_keys($fieldSetting) as $settingKey)
+                {
+                    if(!in_array($settingKey, $reuseDtableFields)) unset($fieldSetting[$settingKey]);
+                    if((!in_array($fieldKey, $nameTypeCols) && $settingKey == 'link') || $object == 'doc') unset($fieldSetting['link']);
+                    if(isset($this->config->pivot->objectTableFields->$object[$fieldKey][$settingKey])) $fieldSetting[$settingKey] = $this->config->pivot->objectTableFields->$object[$fieldKey][$settingKey];
+                }
+                $cols[$fieldKey] = $fieldSetting;
+            }
+        }
+        else
+        {
+            $this->app->loadLang($object);
+            $table     = isset($this->config->objectTables[$object]) ? $this->config->objectTables[$object] : $this->config->db->prefix . $object;
+            $table     = str_replace('`', '', $table);
+            $fieldList = $this->loadModel('dev')->getFields($table);
+
+            foreach($fieldList as $fieldName => $field)
+            {
+                $fieldLabel = $fieldName;
+                if(!empty($field['name'])) $fieldLabel = $field['name'];
+                if(isset($this->lang->$object->$fieldName)) $fieldLabel = $this->lang->$object->$fieldName;
+
+                $cols[$fieldName] = array('name' => $fieldName, 'title' => $fieldLabel);
+            }
+        }
+
+        return $cols;
+    }
+
+    /**
+     * Get drill datas.
+     *
+     * @param  array  $drill
+     * @access public
+     * @return array
+     */
+    public function getDrillDatas(object $drill, array $drillFields): array
+    {
+        $conditionSQL = ' WHERE 1=1';
+        foreach($drill->condition as $condition)
+        {
+            extract($condition);
+            if(!isset($drillFields[$queryField])) continue;
+            $conditionSQL .= " AND t1.{$drillField}='{$drillFields[$queryField]}'";
+        }
+
+        $drillSQL = $this->getDrillSQL($drill->object, $drill->whereSQL, $conditionSQL);
+
+        $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
+
+        if($queryResult['result'] != 'success') return array();
+
+        return $queryResult['rows'];
+    }
+
+    /**
+     * 根据objectTableFieldMap对应的语言项，更新data中对象的字段。
+     * Process data field by col.
+     *
+     * @param  string $object
+     * @param  array  $cols
+     * @param  array  $data
+     * @access public
+     * @return array
+     */
+    public function processColData($object, $cols, $data)
+    {
+        $objectFieldMap = $this->config->pivot->objectTableFieldMap;
+        foreach($cols as $field => $col)
+        {
+            $objectField = $object . '.' . $field;
+            if(!isset($objectFieldMap[$objectField])) continue;
+
+            $fieldMap = $objectFieldMap[$objectField];
+            foreach($data as $index => $obj) $data[$index]->$field = zget($fieldMap, $obj->$field, $obj->$field);
+        }
+
+        return array('cols' => $cols, 'data' => $data);
+    }
 }
 
 /**
