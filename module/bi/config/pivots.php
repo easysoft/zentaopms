@@ -42,7 +42,8 @@ from
 zt_project
 where type='program' and grade=1) t2
 on t1.program1=t2.programid
-EOT,
+EOT
+,
     'settings'  => array
     (
         'columns'  => array
@@ -155,7 +156,8 @@ from
 zt_project
 where type='program' and grade=1) t4
 on t1.program1=t4.programid
-EOT,
+EOT
+,
     'settings'  => array
     (
         'columns'     => array
@@ -257,7 +259,8 @@ FROM
      on t1.id=t10.product
 WHERE t1.deleted = '0' AND t1.status != 'closed' AND t1.shadow = '0'AND t1.vision = 'rnd'
 ORDER BY t1.order
-EOT,
+EOT
+,
     'settings'  => array
     (
         'columns'     => array
@@ -316,7 +319,8 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'name',
@@ -410,7 +414,8 @@ select t1.*,t2.name from zt_story as t1
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'name',
@@ -496,7 +501,8 @@ select t1.*,t2.name from zt_story as t1
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'name',
@@ -582,7 +588,8 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t2.line desc, t2.`order` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'name',
@@ -620,7 +627,8 @@ select t1.id,t3.name as project,t1.name,t2.status,IF(t3.multiple="1",t1.name,"")
  left join zt_task as t2 on t1.id=t2.execution
  left join zt_project as t3 on t3.id=t1.project
  where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -679,7 +687,8 @@ select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.t
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -741,7 +750,8 @@ select t1.id,t4.name as project,IF(t4.multiple="1",t1.name,"") as execution,if(t
  left join zt_team as t3 on t3.type='task' && t3.root=t2.id
 left join zt_project as t4 on t1.project=t4.id
 where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and if(\$project='',1,t4.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -798,7 +808,8 @@ select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.f
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t1.project=t3.id
 where t1.deleted='0' and t1.type in ('sprint','stage') and t2.deleted='0' and t2.finishedBy!='' and if(\$project='',1,t3.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -858,7 +869,8 @@ left join ztv_projectstories as t3 on t1.id=t3.execution
  left join ztv_executionsummary as t4 on t1.id=t4.execution
 left join zt_project as t5 on t1.project=t5.id
 where t1.deleted='0' and t1.type in ('sprint','stage') and if(\$project='',1,t5.id=\$project) and if(\$status='',1,t1.status=\$status) and if(\$beginDate='',1,t1.begin>=\$beginDate) and if(\$endDate='',1,t1.end<=\$endDate)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -927,7 +939,8 @@ left join zt_project as t2 on t1.project=t2.id
 left join zt_story as t3 on t1.story=t3.id
 left join zt_project as t4 on t4.id=t2.project
 where t2.deleted='0' and t2.type in('sprint', 'stage') and if(\$project='',1,t4.id=\$project) and if(\$execution='',1,t2.id=\$execution) and if(\$status='',1,t2.status=\$status)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -982,7 +995,8 @@ left join zt_project as t2 on t1.project=t2.id
 left join zt_story as t3 on t1.story=t3.id
 left join zt_project as t4 on t4.id=t2.project
 where t2.deleted='0' and t2.type in('sprint', 'stage') and if(\$project='',1,t4.id=\$project) and if(\$execution='',1,t2.id=\$execution) and if(\$status='',1,t2.status=\$status)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1038,7 +1052,8 @@ select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,""
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
  where t1.deleted='0' and t2.deleted='0' and t2.resolution!='' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1093,7 +1108,8 @@ select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,""
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' having bugID!=' ' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1148,7 +1164,8 @@ select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,""
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1203,7 +1220,8 @@ select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,""
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' and t2.status!='active' and t2.resolvedBy!='' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1258,7 +1276,8 @@ select t1.id,t3.name as project,t3.id as projectID,IF(t3.multiple="1",t1.name,""
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' having bugID!='' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1315,7 +1334,8 @@ left join ztv_executionsummary as t3 on t1.id=t3.execution
 left join ztv_projectbugs as t4 on t1.id=t4.execution
 left join zt_project as t5 on t5.id=t1.project
 where t1.deleted='0' and t1.type in ('sprint','stage') and t1.grade='1' and if(\$project='',1,t5.id=\$project) and if(\$execution='',1,t1.id=\$execution)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1396,7 +1416,8 @@ left join zt_bug as t2 on t1.id=t2.product
 left join zt_project as t3 on t1.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 order by t3.`order` asc, t1.line desc, t1.`order` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'name',
@@ -1442,7 +1463,8 @@ left join ztv_productbugs as t3 on t1.id=t3.product
 left join zt_project as t4 on t1.program=t4.id
 where t1.deleted='0' and t1.vision like '%rnd%'
 order by t4.`order` asc, t1.line desc, t1.`order` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'name',
@@ -1493,7 +1515,8 @@ $config->bi->builtin->pivots[] = array
     'group'     => '62',
     'sql'       => <<<EOT
 select actor,LEFT(`date`,10) as `day` from zt_action where `action`='login' and if(\$startDate='',1,`date`>=\$startDate) and if(\$endDate='',1,`date`<=\$endDate) order by `date` asc, actor asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'actor',
@@ -1543,7 +1566,8 @@ $config->bi->builtin->pivots[] = array
     'group'     => '62',
     'sql'       => <<<EOT
 select t1.account, t1.consumed, t1.`date`, if(\$dept='', 0, t2.dept) as dept from zt_effort as t1 left join zt_user as t2 on t1.account = t2.account left join zt_dept as t3 on t2.dept = t3.id where t1.`deleted` = '0' and if(\$startDate='', 1, t1.`date` >= \$startDate) and if(\$endDate='', 1, t1.`date` <= \$endDate) and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0) order by t1.`date` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'account',
@@ -1688,7 +1712,8 @@ from (
 ) as t1
 group by t1.day
 order by t1.day desc limit 99999999
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'day',
@@ -1760,7 +1785,8 @@ $config->bi->builtin->pivots[] = array
     'group'     => '61',
     'sql'       => <<<EOT
 select t1.*,if(\$product='',0,t1.product) as customproduct from zt_bug as t1 left join zt_product as t2 on t1.product = t2.id where t1.deleted='0' and t2.deleted='0' and t1.resolution!='' and if(\$startDate='',1,t1.resolvedDate>=\$startDate) and if(\$endDate='',1,t1.resolvedDate<=\$endDate) having customproduct=\$product
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'resolvedBy',
@@ -1875,7 +1901,8 @@ left join ztv_executionsummary as t2 on t1.id=t2.execution
 left join ztv_projectstories as t3 on t1.id=t3.execution
 left join zt_project as t4 on t4.id=t1.project
 where t1.deleted='0' and t1.type in ('sprint','stage') and if(\$project='',1,t4.id=\$project) and if(\$execution='',1,t1.id=\$execution) and if(\$status='',1,t1.status=\$status)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -1948,7 +1975,8 @@ select t1.id,t3.name as project,IF(t3.multiple="1",t1.name,"") as execution,t2.i
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0' and t2.deleted='0' and if(\$project='',1,t3.id=\$project) and if(\$execution='',1,t1.id=\$execution)
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'project',
@@ -2015,7 +2043,8 @@ left join zt_project as t3 on t1.program=t3.id
 where t1.deleted='0' and t2.deleted='0'
 and t2.resolution != ''
 order by t3.`order` asc, t1.line desc, t1.`order` asc
-EOT,
+EOT
+,
     'settings'  => array
     (
         'group1'      => 'name',
