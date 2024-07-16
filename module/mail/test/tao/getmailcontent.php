@@ -55,6 +55,6 @@ r($mail->getMailContentTest('story', 1, 20)) && p() && e('0'); //传入的action
 r($mail->objectModel->getMailContent('mr', new stdclass(), new stdclass())) && p() && e('0'); //传入的objectType=mr
 
 $storyContent = $mail->getMailContentTest('story', 1, 1);
-r(strpos($storyContent, "<a href='/story-view-1.html' style='color: #333; text-decoration: underline;' >STORY #1 用户需求版本一1</a>") !== false) && p() && e('1'); //检查邮件内容包含需求名称
-r(strpos($storyContent, "<div style='padding:5px;'>这是一个软件需求描述1</div>") !== false) && p() && e('1');                                                       //检查邮件内容包含需求描述
-r(strpos($storyContent, '<div style="padding:5px;">这是一个系统日志测试备注1</div>') !== false) && p() && e('1');                                                   //检查邮件内容包含备注
+r(strpos($storyContent, "<a href='/requirement-view-1.html' style='color: #333; text-decoration: underline;' >REQUIREMENT #1 用户需求版本一1</a>") !== false) && p() && e('1'); //检查邮件内容包含需求名称
+r(strpos($storyContent, "<div style='padding:5px;'>这是一个软件需求描述1</div>") !== false)                                                                   && p() && e('1'); //检查邮件内容包含需求描述
+r(strpos($storyContent, '<div style="padding:5px;">这是一个系统日志测试备注1</div>') !== false)                                                               && p() && e('1'); //检查邮件内容包含备注
