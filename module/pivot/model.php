@@ -49,14 +49,11 @@ class pivotModel extends model
             $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
         }
 
+        $pivot->filters = array();
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
             $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
-        }
-        else
-        {
-            $pivot->filters = array();
         }
 
         return $this->processPivot($pivot);
