@@ -453,3 +453,4 @@ $lang->pivot->drill->inDrillField   = 'Drill table field';
 $lang->pivot->drill->inQueryField   = 'Query field';
 $lang->pivot->drill->preview        = 'Preview';
 $lang->pivot->drill->save           = 'Save';
+$lang->pivot->drill->drillFieldText = "%s(%s).%s";
