@@ -1023,7 +1023,6 @@ class pivotModel extends model
 
         foreach($sliceRecords as $groupUnionKey => $sliceRecord)
         {
-            $rows        = array();
             $drillFields = array();
 
             $sliceFields = array_keys((array)$sliceRecord);

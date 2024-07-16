@@ -1117,7 +1117,9 @@ class biModel extends model
     public function prepareColumns($sql, $statement, $driver)
     {
         list($columnTypes, $columnFields) = $this->getSqlTypeAndFields($sql, $driver);
-        list($moduleNames, $aliasNames, $fieldPairs, $relatedObjects) = $this->getParams4Rebuild($sql, $statement, $columnFields);
+        $rebuildParams  = $this->getParams4Rebuild($sql, $statement, $columnFields);
+        $fieldPairs     = $rebuildParams[2];
+        $relatedObjects = $rebuildParams[3];
 
         $columns     = array();
         $clientLang  = $this->app->getClientLang();
@@ -1463,7 +1465,6 @@ class biModel extends model
             {
                 $field = 'field' . $index;
                 $value = $rowData[$i];
-                $originRowKey = $rowDataKeys[$i];
 
                 if(!empty($columns[$field]['colspan']))
                 {
