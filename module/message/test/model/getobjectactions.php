@@ -34,9 +34,9 @@ r($objectActions) && p('bug:closed')         && e('关闭');       //查询objec
 r($objectActions) && p('case:opened')        && e('创建');       //查询objectType为case的action是opended的lab标签
 r($objectActions) && p('testtask:started')   && e('开始');       //查询objectType为testtask的action是starteded的lab标签
 r($objectActions) && p('todo:edited')        && e('编辑');       //查询objectType为todo的action是edited的lab标签
-r($objectActions) && p('doc:created')        && e('创建');       //查询objectType为doc的action是created的lab标签
+r($objectActions) && p('doc:releaseddoc')    && e('发布');       //查询objectType为doc的action是releaseddoc的lab标签
 
-r(implode(',', array_keys($objectActions))) && p() && e('product,story,productplan,project,task,bug,case,testtask,todo,doc,kanbancard'); // 查询有动作的对象类型
+r(implode(',', array_keys($objectActions))) && p() && e('product,epic,story,productplan,project,task,bug,case,testtask,todo,doc,kanbancard'); // 查询有动作的对象类型
 
 r(implode(',', array_keys($objectActions['product'])))   && p() && e('opened,edited,closed,undeleted'); // 查询 product 的对象操作 key
 r(implode(',', array_values($objectActions['product']))) && p() && e('创建,编辑,关闭,还原');            // 查询 product 的对象操作 value
@@ -65,5 +65,5 @@ r(implode(',', array_values($objectActions['testtask']))) && p() && e('创建,�
 r(implode(',', array_keys($objectActions['todo'])))   && p() && e('opened,edited'); // 查询 todo 的对象操作 key
 r(implode(',', array_values($objectActions['todo']))) && p() && e('创建,编辑');     // 查询 todo 的对象操作 value
 
-r(implode(',', array_keys($objectActions['doc'])))   && p() && e('created,edited'); // 查询 doc 的对象操作 key
-r(implode(',', array_values($objectActions['doc']))) && p() && e('创建,编辑');      // 查询 doc 的对象操作 value
+r(implode(',', array_keys($objectActions['doc'])))   && p() && e('releaseddoc,edited'); // 查询 doc 的对象操作 key
+r(implode(',', array_values($objectActions['doc']))) && p() && e('发布,编辑');          // 查询 doc 的对象操作 value
