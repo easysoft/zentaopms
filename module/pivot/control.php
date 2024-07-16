@@ -88,10 +88,6 @@ class pivot extends control
         $cols  = $this->pivot->getDrillCols($drill->object);
         $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $conditions, $filterValues);
 
-        $result = $this->pivot->processColData($drill->object, $cols, $datas);
-        $cols  = isset($result['cols']) ? $result['cols'] : array();
-        $datas = isset($result['data']) ? $result['data'] : array();
-
         $this->view->title = $this->lang->pivot->step3->drillView;
         $this->view->cols  = $cols;
         $this->view->datas = $datas;
