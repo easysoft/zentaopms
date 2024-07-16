@@ -264,13 +264,17 @@ class storyTao extends storyModel
                  ->fetchPairs();
         }
 
+        $demands = $this->dao->select('id,version')->from(TABLE_DEMAND)->where('deleted')->eq(0)->fetchPairs();
         foreach($stories as $story)
         {
             /* Judge parent story has changed. */
-            if($story->parent > 0 and isset($parents[$story->parent]))
+            if($story->parent > 0 && isset($parents[$story->parent]))
             {
                 if($parents[$story->parent]->version > $story->parentVersion && $story->parentVersion > 0 && $parents[$story->parent]->status == 'active') $story->parentChanged = true;
             }
+
+            /* Judge demand has changed. */
+            if($story->demand && $story->parent == 0 && isset($demands[$story->demand]) && $demands[$story->demand] > $story->demandVersion) $story->demandChanged = true;
 
             /* Judge parent story if has same type child or other type child. */
             if($story->type != 'story' && $story->isParent == '1')
@@ -1894,7 +1898,7 @@ class storyTao extends storyModel
         $canActivate = common::hasPriv($story->type, 'activate') && $this->isClickable($story, 'activate');
         if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
         $canProcessChange = common::hasPriv($story->type, 'processStoryChange');
-        if(!empty($story->parentChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
+        if(!empty($story->parentChanged) || !empty($story->demandChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
 
         /* Change button. */
         $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change');
