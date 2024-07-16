@@ -2563,40 +2563,6 @@ class pivotModel extends model
 
         return $queryResult['rows'];
     }
-
-    /**
-     * 根据objectTableFieldMap对应的语言项，更新data中对象的字段。
-     * Process data field by col.
-     *
-     * @param  string $object
-     * @param  array  $cols
-     * @param  array  $data
-     * @access public
-     * @return array
-     */
-    public function processColData(string $object, array $cols, array $data): array
-    {
-        $objectFieldMap = $this->config->pivot->objectTableFieldMap;
-        foreach($cols as $field => $col)
-        {
-            $objectField = $object . '.' . $field;
-            if(!isset($objectFieldMap[$objectField])) continue;
-
-            $fieldMap = $this->getFieldMap($objectFieldMap[$objectField]);
-            foreach($data as $index => $obj) $data[$index]->$field = zget($fieldMap, $obj->$field, $obj->$field);
-        }
-
-        return array('cols' => $cols, 'data' => $data);
-    }
-
-    public function getFieldMap(array $moduleAndVar)
-    {
-        $module   = $moduleAndVar['module'];
-        $variable = $moduleAndVar['variable'];
-        $this->app->loadLang($module);
-
-        return $this->lang->$module->$variable;
-    }
 }
 
 /**
