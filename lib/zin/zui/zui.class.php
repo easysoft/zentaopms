@@ -49,10 +49,10 @@ class zui extends wg
         }
 
         if(is_array($userOptions)) $options = array_merge($options, $userOptions);
-        if(empty($call)) $call = '~zui.create';
 
         if($target)
         {
+            if(empty($call)) $call = '~zui.create';
             return array
             (
                 h::jsCall($call, $name, $target, $options),
