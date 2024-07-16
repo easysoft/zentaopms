@@ -2639,7 +2639,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function processColData($object, $cols, $data)
+    public function processColData(string $object, array $cols, array $data): array
     {
         $objectFieldMap = $this->config->pivot->objectTableFieldMap;
         foreach($cols as $field => $col)
@@ -2647,11 +2647,20 @@ class pivotModel extends model
             $objectField = $object . '.' . $field;
             if(!isset($objectFieldMap[$objectField])) continue;
 
-            $fieldMap = $objectFieldMap[$objectField];
+            $fieldMap = $this->getFieldMap($objectFieldMap[$objectField]);
             foreach($data as $index => $obj) $data[$index]->$field = zget($fieldMap, $obj->$field, $obj->$field);
         }
 
         return array('cols' => $cols, 'data' => $data);
+    }
+
+    public function getFieldMap(array $moduleAndVar)
+    {
+        $module   = $moduleAndVar['module'];
+        $variable = $moduleAndVar['variable'];
+        $this->app->loadLang($module);
+
+        return $this->lang->$module->$variable;
     }
 }
 

@@ -150,8 +150,8 @@ class pivot extends control
         $datas = $this->pivot->getDrillDatas($drill, $drillFields);
 
         $result = $this->pivot->processColData($drill->object, $cols, $datas);
-        $cols  = $result['cols'];
-        $datas = $result['data'];
+        $cols   = $result['cols'];
+        $datas  = $result['data'];
 
         $this->view->cols  = $cols;
         $this->view->datas = $datas;

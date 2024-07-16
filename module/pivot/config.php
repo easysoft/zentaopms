@@ -1,7 +1,13 @@
 <?php
+global $config;
 $config->pivot = new stdclass();
-$config->pivot->widthInput = 128;
-$config->pivot->widthDate  = 248;
+$config->pivot->objectTableFieldMap = array();
+$config->pivot->objectTableFieldMap['user.gender'] = array('module' => 'user', 'variable' => 'genderList');
+
+if($config->edition != 'open')
+{
+    $config->pivot->objectTableFieldMap['feedback.solution'] = array('module' => 'feedback', 'variable' => 'solutionList');
+}
 
 $config->pivot->maxFeatureItem = 5;
 
