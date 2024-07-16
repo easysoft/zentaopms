@@ -124,6 +124,7 @@ class formBatch extends formBase
             if($actionsText === null) $actionsText = data('lang.actions');
             $headItems[] = h::th
             (
+                zui::width($this->prop('actionsWidth')),
                 set('data-name', 'ACTIONS'),
                 setClass('form-batch-head'),
                 span(setClass('form-label form-batch-label'), $actionsText)
