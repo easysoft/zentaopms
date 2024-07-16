@@ -1538,6 +1538,15 @@ class biModel extends model
         return $drillConditions;
     }
 
+    /**
+     * Prepare drill conditions.
+     *
+     * @param  array $drillFields
+     * @param  array $conditions
+     * @param  string $originField
+     * @access public
+     * @return array
+     */
     public function prepareDrillConditions(array $drillFields, array $conditions, string $originField): array
     {
         foreach($conditions as $index => $condition)

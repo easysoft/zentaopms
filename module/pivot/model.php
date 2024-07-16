@@ -2267,6 +2267,15 @@ class pivotModel extends model
         return $filters;
     }
 
+    /**
+     * 将筛选器的值填写到查询条件中并返回sql。
+     * Set condition value with filters.
+     *
+     * @param  array $condition
+     * @param  array $filters
+     * @access public
+     * @return string
+     */
     public function setConditionValueWithFilters(array $condition, array $filters): string
     {
         $field = $condition['queryField'];
