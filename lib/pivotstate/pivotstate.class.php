@@ -529,6 +529,13 @@ class pivotState
         return $filterWheres;
     }
 
+    /**
+     * Set filters default value.
+     *
+     * @param  array    $filterValues
+     * @access public
+     * @return void
+     */
     public function setFiltersDefaultValue($filterValues)
     {
         $filters = array();
