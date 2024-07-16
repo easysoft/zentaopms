@@ -90,6 +90,13 @@ class biModel extends model
         return array_filter(array_unique($tables));
     }
 
+    public function parseTableList($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+    }
+
     /**
      * 根据表的别名获取其在sql语句中的表名。
      * Get table name by it's alias.
