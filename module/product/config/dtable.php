@@ -234,7 +234,7 @@ if($config->enableER)
     $config->product->all->dtable->fieldList['reviewingEpics']['headerGroup'] = $lang->ERCommon;
 
     $config->product->all->dtable->fieldList['totalEpics']['name']        = 'totalEpics';
-    $config->product->all->dtable->fieldList['totalEpics']['title']       = $lang->product->totalStories;
+    $config->product->all->dtable->fieldList['totalEpics']['title']       = $lang->product->totalEpics;
     $config->product->all->dtable->fieldList['totalEpics']['width']       = 92;
     $config->product->all->dtable->fieldList['totalEpics']['minWidth']    = 100;
     $config->product->all->dtable->fieldList['totalEpics']['type']        = 'number';
@@ -291,7 +291,7 @@ if($config->URAndSR)
     $config->product->all->dtable->fieldList['reviewingRequirements']['headerGroup'] = $lang->URCommon;
 
     $config->product->all->dtable->fieldList['totalRequirements']['name']        = 'totalRequirements';
-    $config->product->all->dtable->fieldList['totalRequirements']['title']       = $lang->product->totalStories;
+    $config->product->all->dtable->fieldList['totalRequirements']['title']       = $lang->product->totalRequirements;
     $config->product->all->dtable->fieldList['totalRequirements']['width']       = 92;
     $config->product->all->dtable->fieldList['totalRequirements']['minWidth']    = 100;
     $config->product->all->dtable->fieldList['totalRequirements']['type']        = 'number';
