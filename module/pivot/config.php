@@ -1,7 +1,6 @@
 <?php
+global $config;
 $config->pivot = new stdclass();
-$config->pivot->widthInput = 128;
-$config->pivot->widthDate  = 248;
 
 $config->pivot->maxFeatureItem = 5;
 
@@ -94,3 +93,94 @@ $config->pivot->transTypes['float']    = 'number';
 $config->pivot->transTypes['double']   = 'number';
 $config->pivot->transTypes['datetime'] = 'date';
 $config->pivot->transTypes['date']     = 'date';
+
+global $app, $lang;
+$config->pivot->drillObjectFields = array();
+$config->pivot->drillObjectFields['program']     = array('id', 'name', 'status', 'PM', 'budget', 'progress', 'begin', 'end');
+$config->pivot->drillObjectFields['project']     = array('id', 'name', 'status', 'PM', 'model', 'budget', 'progress', 'estimate', 'consumed', 'begin', 'end');
+$config->pivot->drillObjectFields['execution']   = array('id', 'name', 'status', 'PM', 'budget', 'progress', 'estimate', 'consumed', 'begin', 'end');
+$config->pivot->drillObjectFields['product']     = array('id', 'name', 'status', 'PO', 'totalEpics', 'totalRequirements', 'totalStories', 'unresolvedBugs', 'plans', 'releases');
+$config->pivot->drillObjectFields['productplan'] = array('id', 'title', 'status', 'begin', 'end');
+$config->pivot->drillObjectFields['release']     = array('id', 'name', 'status', 'date', 'stories', 'bugs', 'leftBugs');
+$config->pivot->drillObjectFields['story']       = array('id', 'title', 'pri', 'status', 'stage', 'estimate', 'openedBy', 'reviewedBy', 'assignedTo');
+$config->pivot->drillObjectFields['task']        = array('id', 'name', 'pri', 'status', 'type', 'estimate', 'consumed', 'left', 'assignedTo', 'closedReason');
+$config->pivot->drillObjectFields['bug']         = array('id', 'title', 'severity', 'pri', 'status', 'confirmed', 'resolution', 'resolvedBy', 'openedBy', 'assignedTo');
+$config->pivot->drillObjectFields['testcase']    = array('id', 'title', 'lastRunner', 'lastRunResult', 'pri', 'status', 'openedBy', 'reviewedBy');
+$config->pivot->drillObjectFields['doc']         = array('id', 'title', 'addedBy', 'addedDate', 'editedBy', 'editedDate');
+$config->pivot->drillObjectFields['feedback']    = array('id', 'title', 'pri', 'status', 'type', 'assignedTo', 'solution', 'openedBy');
+$config->pivot->drillObjectFields['ticket']      = array();
+$config->pivot->drillObjectFields['productLine'] = array();
+$config->pivot->drillObjectFields['user']        = array();
+
+$app->loadLang('product');
+$app->loadLang('user');
+$app->loadLang('ticket');
+
+$config->pivot->objectTableFields = new stdclass();
+$config->pivot->objectTableFields->productLine = array();
+$config->pivot->objectTableFields->productLine['id']['title']   = $lang->idAB;
+$config->pivot->objectTableFields->productLine['id']['type']    = 'id';
+$config->pivot->objectTableFields->productLine['name']['title'] = $lang->product->line;
+$config->pivot->objectTableFields->productLine['name']['type']  = 'title';
+$config->pivot->objectTableFields->productLine['root']['title'] = $this->lang->product->program;
+$config->pivot->objectTableFields->productLine['root']['type']  = 'title';
+$config->pivot->objectTableFields->productLine['root']['link']  = array('url' => array('module' => 'program', 'method' => 'project', "programID={root}"), 'target' => '_blank');
+
+$config->pivot->objectTableFields->user = array();
+$config->pivot->objectTableFields->user['id']['title']       = $lang->idAB;
+$config->pivot->objectTableFields->user['id']['type']        = 'id';
+$config->pivot->objectTableFields->user['realname']['title'] = $lang->user->realname;
+$config->pivot->objectTableFields->user['realname']['type']  = 'title';
+$config->pivot->objectTableFields->user['account']['title']  = $lang->user->account;
+$config->pivot->objectTableFields->user['gender']['title']   = $lang->user->gender;
+$config->pivot->objectTableFields->user['gender']['map']     = $lang->user->genderList;
+$config->pivot->objectTableFields->user['role']['title']     = $lang->user->role;
+
+$config->pivot->objectTableFields->ticket = array();
+$config->pivot->objectTableFields->ticket['id']['name']  = 'id';
+$config->pivot->objectTableFields->ticket['id']['title'] = $lang->idAB;
+$config->pivot->objectTableFields->ticket['id']['type']  = 'checkID';
+
+$config->pivot->objectTableFields->ticket['title']['name']  = 'title';
+$config->pivot->objectTableFields->ticket['title']['title'] = $lang->ticket->title;
+$config->pivot->objectTableFields->ticket['title']['link']  = array('module' => 'ticket', 'method' => 'view', 'params' => "ticketID={id}");
+
+$config->pivot->objectTableFields->ticket['pri']['name']  = 'pri';
+$config->pivot->objectTableFields->ticket['pri']['title'] = $lang->ticket->pri;
+
+$config->pivot->objectTableFields->ticket['status']['name']      = 'status';
+$config->pivot->objectTableFields->ticket['status']['title']     = $lang->ticket->status;
+$config->pivot->objectTableFields->ticket['status']['type']      = 'status';
+$config->pivot->objectTableFields->ticket['status']['statusMap'] = $lang->ticket->statusList;
+
+$config->pivot->objectTableFields->ticket['type']['name']  = 'type';
+$config->pivot->objectTableFields->ticket['type']['title'] = $lang->ticket->type;
+$config->pivot->objectTableFields->ticket['type']['type']  = 'category';
+$config->pivot->objectTableFields->ticket['type']['map']   = $lang->ticket->typeList;
+
+$config->pivot->objectTableFields->ticket['assignedTo']['name']  = 'assignedTo';
+$config->pivot->objectTableFields->ticket['assignedTo']['title'] = $lang->ticket->assignedTo;
+$config->pivot->objectTableFields->ticket['assignedTo']['type']  = 'text';
+
+$config->pivot->objectTableFields->ticket['estimate']['title'] = $lang->ticket->estimate;
+$config->pivot->objectTableFields->ticket['estimate']['type']  = 'number';
+
+$config->pivot->objectTableFields->ticket['openedBy']['name']  = 'openedBy';
+$config->pivot->objectTableFields->ticket['openedBy']['title'] = $lang->ticket->openedBy;
+$config->pivot->objectTableFields->ticket['openedBy']['type']  = 'user';
+
+$config->pivot->objectTableFields->story = array();
+$config->pivot->objectTableFields->story['title']['link'] = array('url' => helper::createLink('{type}', 'view', 'storyID={id}'), 'target' => '_blank');
+
+$config->pivot->objectTableFields->testcase = array();
+$config->pivot->objectTableFields->testcase['id']['name']    = 'id';
+$config->pivot->objectTableFields->testcase['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+
+$config->pivot->objectTableFields->product = array();
+$config->pivot->objectTableFields->product['id']['name']          = 'id';
+$config->pivot->objectTableFields->product['id']['title']         = $lang->idAB;
+$config->pivot->objectTableFields->product['id']['type']          = 'id';
+$config->pivot->objectTableFields->product['status']['name']      = 'status';
+$config->pivot->objectTableFields->product['status']['title']     = $lang->statusAB;
+$config->pivot->objectTableFields->product['status']['type']      = 'status';
+$config->pivot->objectTableFields->product['status']['statusMap'] = $lang->product->statusList;

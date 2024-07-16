@@ -178,7 +178,7 @@
         $body.attr('class', classList.join(' '));
     }
 
-    function updatePageJS(data)
+    function updatePageJS(data, _info, options)
     {
         if(window.onPageUnmount) window.onPageUnmount();
 
@@ -193,7 +193,7 @@
         timers.interval = [];
         timers.timeout = [];
 
-        zui.Modal.getAll().forEach(m => !m.options.modal && m.hide());
+        if(!options.modal) zui.Modal.getAll().forEach(m => !m.options.modal && m.hide());
         $('script.zin-page-js').replaceWith(data);
     }
 
@@ -349,8 +349,10 @@
 
     function updateHeading(data, info)
     {
+        const $heading = $('#heading');
+        if(!$heading.length) return;
         const selector = parseSelector(info.selector);
-        renderWithHtml($('#heading'), data, selector);
+        renderWithHtml($heading, data, selector);
         layoutNavbar();
     }
 
@@ -704,7 +706,7 @@
                 }
             }
         });
-        if(DEBUG) showLog('Request', getUrlID(url), options, {cacheKey});
+        if(DEBUG) showLog('Request', `${ajax.setting.type}:${getUrlID(url)}`, options, {cacheKey, ajax});
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
         {
@@ -846,7 +848,7 @@
 
     function getLoadSelector(selector)
     {
-        if(!selector) return $('#main').length ? '#configJS,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),title>*,#heading>*,#navbar>*,#pageToolbar>*,#main>*,' : '#configJS,title>*,body>*';
+        if(!selector) return $('#main').length ? `#configJS,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),title>*,${$('#header').length ? '#heading>*,#navbar>*,#pageToolbar>*,' : ''}#main>*,` : '#configJS,title>*,body>*';
         if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
         return selector;
     }

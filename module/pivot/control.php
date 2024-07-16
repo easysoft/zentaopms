@@ -69,66 +69,6 @@ class pivot extends control
     }
 
     /**
-     * Ajax get sys options.
-     *
-     * @param  string $type
-     * @param  string $object
-     * @param  string $field
-     * @param  string $saveAs
-     * @access public
-     * @return string
-     */
-    public function ajaxGetSysOptions($type, $object = '', $field = '', $saveAs = '')
-    {
-        $sql     = isset($_POST['sql'])     ? $_POST['sql']     : '';
-        $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
-
-        $sql     = $this->loadModel('chart')->parseSqlVars($sql, $filters);
-        $options = $this->pivot->getSysOptions($type, $object, $field, $sql, $saveAs);
-        return print(html::select('default[]', array('' => '') + $options, '', "class='form-control form-select picker-select' multiple"));
-    }
-
-    /**
-     * Ajax get pivot table.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPivot()
-    {
-        $post = fixer::input('post')->skipSpecial('settings,filters,sql,langs')->get();
-
-        $pivotID    = $post->id;
-        $settings   = $post->settings;
-        $filters    = isset($_POST['searchFilters']) ? $_POST['searchFilters'] : (isset($_POST['filters']) ? $post->filters : array());
-        $page       = isset($_POST['page']) ? $_POST['page'] : 0;
-        $filterType = 'result';
-
-        $pivot = $this->pivot->getById($pivotID);
-
-        list($sql, $filterFormat) = $this->pivot->getFilterFormat($post->sql, $filters);
-        $post->sql = $sql;
-
-        $settings['filterType'] = $filterType;
-
-        $sql    = str_replace(';', '', "$post->sql");
-        $driver = $pivot->driver;
-        $fields = $post->fieldSettings;
-        $langs  = isset($post->langs) ? (is_array($post->langs) ? $post->langs : json_decode($post->langs, true)) : array();
-
-        if(isset($settings['summary']) and $settings['summary'] == 'notuse')
-        {
-            list($data, $configs) = $this->pivot->genOriginSheet($fields, $settings, $sql, $filterFormat, $langs, $driver);
-        }
-        else
-        {
-            list($data, $configs) = $this->pivot->genSheet($fields, $settings, $sql, $filterFormat, $langs, $driver);
-        }
-
-        $this->pivot->buildPivotTable($data, $configs, $page);
-    }
-
-    /**
      * Drill data modal.
      * 下钻数据的弹窗。
      *
@@ -146,8 +86,15 @@ class pivot extends control
         $filterValues = json_decode(base64_decode($filterValues), true);
 
         $this->view->title = $this->lang->pivot->step3->drillView;
-        $this->view->cols  = $this->pivot->getDrillCols($drill->object);
-        $this->view->datas = $this->pivot->getDrillDatas($drill, $drillFields);
+        $cols  = $this->pivot->getDrillCols($drill->object);
+        $datas = $this->pivot->getDrillDatas($drill, $drillFields);
+
+        $result = $this->pivot->processColData($drill->object, $cols, $datas);
+        $cols  = $result['cols'];
+        $datas = $result['data'];
+
+        $this->view->cols  = $cols;
+        $this->view->datas = $datas;
         $this->display();
     }
 }

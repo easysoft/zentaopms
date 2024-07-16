@@ -262,7 +262,7 @@ detail
     set::actions(array_values($actions)),
     $parentTitle,
     $parentUrl,
-    $versionBtn,
+    $versionBtn
 );
 
 /**

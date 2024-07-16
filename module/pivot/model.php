@@ -1433,57 +1433,6 @@ class pivotModel extends model
     }
 
     /**
-     * 通过合并单元格的数据对透视表进行分页
-     * Page pivot by configs merge cell data.
-     *
-     * @param  array $configs
-     * @param  int   $page
-     * @param  bool  $useColumnTotal
-     * @static
-     * @access public
-     * @return bool
-     */
-    public function pagePivot($configs, $page, $useColumnTotal)
-    {
-        $configs = array_values($configs);
-        // 当前在第几页
-        $nowPage   = 1;
-        // 一共多少行
-        $pageCount = 0;
-        // 当前页目前多少行
-        $nowCount  = 0;
-        // 记录当前第几个分组(项)，共有多少行
-        $itemRow   = array(0 => 0);
-        // 目标分页的起始行和结束行
-        $start = $end = -1;
-        foreach($configs as $key => $config)
-        {
-            if($nowPage == $page and $start == -1)   $start = $pageCount;
-            if($nowPage == $page + 1 and $end == -1) $end   = $pageCount;
-
-            $pageCount += $config[0];
-            $nowCount  += $config[0];
-            $itemRow[]  = $pageCount;
-            // 如果当前页超过了50行，换一页
-            if($nowCount >= $this->config->pivot->recPerPage)
-            {
-                $nowCount = 0;
-                if(isset($configs[$key + 1])) $nowPage += 1;
-            }
-        }
-        if($start == -1) $start = 0;
-        if($end == -1)   $end   = $pageCount;
-
-        // 获得当前页面有多少"项"
-        $endKey    = array_search($end, $itemRow);
-        $startKey  = array_search($start, $itemRow);
-        $itemCount = $endKey - $startKey;
-        // 如果是最后一页且使用了显示列的汇总，项数-1，
-        if($page == $nowPage and $useColumnTotal) $itemCount --;
-        return array($start, $end - 1, $itemCount, $nowPage);
-    }
-
-    /**
      * Gen sheet by origin sql.
      *
      * @param  array  $fields
@@ -2414,12 +2363,11 @@ class pivotModel extends model
      *
      * @param  object $data
      * @param  array  $configs
-     * @param  int    $page
      * @access public
      * @return void
      *
      */
-    public function buildPivotTable($data, $configs, $page = 0)
+    public function buildPivotTable($data, $configs)
     {
         $width = 128;
 
@@ -2464,13 +2412,10 @@ class pivotModel extends model
         $rowCount = 0;
 
         $useColumnTotal = (!empty($data->columnTotal) and $data->columnTotal === 'sum');
-        if($page) list($start, $end, $itemCount, $pageTotal) = $this->pagePivot($configs, $page, $useColumnTotal);
 
         for($i = 0; $i < count($data->array); $i ++)
         {
             $rowCount ++;
-
-            if($page and ($i < $start or $i > $end)) continue;
 
             if($useColumnTotal and $rowCount == count($data->array)) continue;
 
@@ -2497,8 +2442,7 @@ class pivotModel extends model
             $table .= "</tr>";
         }
 
-        /* Add column total. 如果分页了，只在最后一页展示 */
-        if($useColumnTotal and !empty($data->array) and (!$page or $page == $pageTotal))
+        if($useColumnTotal and !empty($data->array))
         {
             $table .= "<tr class='text-center'>";
             $table .= "<td colspan='" . count($data->groups) . "'>{$this->lang->pivot->step2->total}</td>";
@@ -2514,16 +2458,110 @@ class pivotModel extends model
         $table .= "</tbody>";
         $table .= "</table></div>";
 
-        if($page)
-        {
-            $recTotal  = $end - $start + 1;
-            $leftPage  = $page - 1;
-            $rightPage = $page + 1;
+        echo $table;
+    }
 
-            if($recTotal) $table .= $this->getTablePager($itemCount, $leftPage, $rightPage, $page, $pageTotal);
+
+    /* Data Drill */
+
+    /**
+     * Get cols for preview data table.
+     *
+     * @param  string $objectTable
+     * @access public
+     * @return array
+     */
+    public function getDrillCols($object)
+    {
+        if($object == 'case') $object = 'testcase';
+
+        $cols = array();
+        if(isset($this->config->pivot->drillObjectFields[$object]))
+        {
+            $this->loadModel($object);
+            if(!isset($this->config->$object->dtable->fieldList)) return $this->config->pivot->objectTableFields->$object;
+
+            $fieldList         = $object == 'product' ? $this->config->product->all->dtable->fieldList : $this->config->$object->dtable->fieldList;
+            $userTypeCols      = $this->config->pivot->userTypeCols;
+            $nameTypeCols      = $this->config->pivot->nameTypeCols;
+            $reuseDtableFields = $this->config->pivot->reuseDtableFields;
+            $userPairs         = $this->loadModel('user')->getPairs('noletter|noclosed');
+            foreach($this->config->pivot->drillObjectFields[$object] as $fieldKey)
+            {
+                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : $this->config->pivot->objectTableFields->$object[$fieldKey];
+                $fieldSetting['sortType'] = false;
+                if(isset($fieldSetting['checkbox']) && $fieldSetting['checkbox']) $fieldSetting['checkbox'] = false;
+                if(isset($fieldSetting['link']))
+                {
+                    if(is_string($fieldSetting['link']))
+                    {
+                        $fieldSettingLink = $fieldSetting['link'];
+
+                        $fieldSetting['link'] = array();
+                        $fieldSetting['link']['url']    = $fieldSettingLink;
+                    }
+                    $fieldSetting['link']['target'] = '_blank';
+                }
+
+                if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], $userTypeCols))
+                {
+                    $fieldSetting['type'] = 'user';
+                    $fieldSetting['map']  = $userPairs;
+                }
+
+                foreach(array_keys($fieldSetting) as $settingKey)
+                {
+                    if(!in_array($settingKey, $reuseDtableFields)) unset($fieldSetting[$settingKey]);
+                    if((!in_array($fieldKey, $nameTypeCols) && $settingKey == 'link') || $object == 'doc') unset($fieldSetting['link']);
+                    if(isset($this->config->pivot->objectTableFields->$object[$fieldKey][$settingKey])) $fieldSetting[$settingKey] = $this->config->pivot->objectTableFields->$object[$fieldKey][$settingKey];
+                }
+                $cols[$fieldKey] = $fieldSetting;
+            }
+        }
+        else
+        {
+            $this->app->loadLang($object);
+            $table     = isset($this->config->objectTables[$object]) ? $this->config->objectTables[$object] : $this->config->db->prefix . $object;
+            $table     = str_replace('`', '', $table);
+            $fieldList = $this->loadModel('dev')->getFields($table);
+
+            foreach($fieldList as $fieldName => $field)
+            {
+                $fieldLabel = $fieldName;
+                if(!empty($field['name'])) $fieldLabel = $field['name'];
+                if(isset($this->lang->$object->$fieldName)) $fieldLabel = $this->lang->$object->$fieldName;
+
+                $cols[$fieldName] = array('name' => $fieldName, 'title' => $fieldLabel);
+            }
         }
 
-        echo $table;
+        return $cols;
+    }
+
+    /**
+     * Get drill datas.
+     *
+     * @param  array  $drill
+     * @access public
+     * @return array
+     */
+    public function getDrillDatas(object $drill, array $drillFields): array
+    {
+        $conditionSQL = ' WHERE 1=1';
+        foreach($drill->condition as $condition)
+        {
+            extract($condition);
+            if(!isset($drillFields[$queryField])) continue;
+            $conditionSQL .= " AND t1.{$drillField}='{$drillFields[$queryField]}'";
+        }
+
+        $drillSQL = $this->getDrillSQL($drill->object, $drill->whereSQL, $conditionSQL);
+
+        $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
+
+        if($queryResult['result'] != 'success') return array();
+
+        return $queryResult['rows'];
     }
 }
 

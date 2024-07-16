@@ -25,6 +25,6 @@ $body1 = '<img src="{1.png}" />';
 $body2 = '<img src="data/upload/1/1.png" />';
 $body3 = '<img src="/file-read-1.png" />';
 
-r($mailModel->replaceImageURL($body1)) && p() && e('<img src="http://pms.zentao.net/file-read-1.png" />');     //图片链接为 {1.png}
-r($mailModel->replaceImageURL($body2)) && p() && e('<img  src="http://pms.zentao.net/data/upload/1/1.png" />'); //图片链接为 data/upload
-r($mailModel->replaceImageURL($body3)) && p() && e('<img src="http://pms.zentao.net/file-read-1.png" />');     //图片链接为 /file-read-1.png
+r($mailModel->replaceImageURL($body1, array())) && p() && e('<img src="{1.png}" />');             //图片链接为 {1.png}
+r($mailModel->replaceImageURL($body2, array())) && p() && e('<img src="data/upload/1/1.png" />'); //图片链接为 data/upload
+r($mailModel->replaceImageURL($body3, array())) && p() && e('<img src="/file-read-1.png" />');    //图片链接为 /file-read-1.png

@@ -99,6 +99,7 @@ class detail extends wg
         'header'   => array(),
         'title'    => array(),
         'main'     => array('map' => 'content,section'),
+        'sections' => array(),
         'side'     => array('map' => 'tabs'),
         'actions'  => array('map' => 'btn'),
         'toolbar'  => array('map' => 'btnGroup,toolbar')
@@ -365,6 +366,7 @@ CSS;
                 $this->buildMainSections(),
                 $this->block('main')
             ),
+            $this->block('sections'),
             $this->buildHistory(),
             $this->buildActions()
         );

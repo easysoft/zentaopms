@@ -392,10 +392,7 @@ class upgradeModel extends model
         catch(PDOException $e)
         {
             $message = $e->getMessage();
-            if($message)
-            {
-                if(strpos($message, '1146') !== false) return array($sql);
-            }
+            if($message && strpos($message, '1146') !== false) return array($sql);
         }
 
         if(empty($fields)) return $changes;

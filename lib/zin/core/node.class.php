@@ -370,7 +370,11 @@ class node implements \JsonSerializable
         if(empty($events)) return null;
 
         $id   = $this->id();
-        $code = array($this->type() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");if(!ele)return;const $ele = $(ele); const events = new Set(($ele.attr("data-zin-events") || "").split(" ").filter(Boolean));');
+        $code = array
+        (
+            '$(function(){',
+            $this->type() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");if(!ele)return;const $ele = $(ele); const events = new Set(($ele.attr("data-zin-events") || "").split(" ").filter(Boolean));'
+        );
         foreach($events as $event => $bindingList)
         {
             $code[]   = "\$ele.on('$event.on.zin', function(e){";
@@ -398,7 +402,8 @@ class node implements \JsonSerializable
             $code[] = "});events.add('$event');";
         }
         $code[] = '$ele.attr("data-zin-events", Array.from(events).join(" "));';
-        return js::scope($code);
+        $code[] = '});';
+        return implode("\n", $code);
     }
 
     public function render(): string

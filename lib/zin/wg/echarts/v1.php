@@ -67,14 +67,13 @@ class echarts extends wg
             }
         }
 
-        $files = json_encode($files);
         return zui::echarts
         (
             set::_id('zin_echart_' . uniqid()),
             set::responsive($responsive),
             set::theme($theme),
             set::_style(array('width' => is_int($width) ? "{$width}px" : $width, 'height' => is_int($height) ? "{$height}px" : $height)),
-            set::_call("~((name,selector,options) => $.getLib({check: 'echarts', src: $files, root: false}, () => zui.create(name,selector,options)))"),
+            set('$lib', array('check' => 'echarts', 'src' => $files, 'root' => false)),
             set($this->getRestProps()),
             $this->children()
         );
