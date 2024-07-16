@@ -91,7 +91,6 @@ class formBatchPanel extends formPanel
             array_unshift($actions, array('class' => 'btn primary-pale mr-2', 'data-toggle' => 'modal', 'data-target' => '#paste-dialog', 'text' => $lang->pasteText, 'data-backdrop' => 'static'));
 
             $headingActionsBlock = $this->block('headingActions');
-            d('hasPasteDialog', empty($headingActionsBlock) || array_every($headingActionsBlock, function($item){return !($item instanceof pasteDialog);}));
             if(empty($headingActionsBlock) || array_every($headingActionsBlock, function($item){return !($item instanceof pasteDialog);}))
             {
                 $this->addToBlock('headingActions', new pasteDialog(set::field($pasteField)));
