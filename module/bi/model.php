@@ -1531,7 +1531,7 @@ class biModel extends model
             $column = $columns[$field];
             // 判断该列是否设置了下钻。
             // Determine whether the column is drilled.
-            if(isset($column['drillField'])) $drillConditions[$field] = $this->prepareDrillConditions($drillFields[$columnKey], $column['condition'], $column['drillField']);
+            if(isset($column['drillField']) && isset($drillFields[$columnKey])) $drillConditions[$field] = $this->prepareDrillConditions($drillFields[$columnKey], $column['condition'], $column['drillField']);
             $index++;
         }
 
