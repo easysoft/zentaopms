@@ -2555,22 +2555,40 @@ class pivotModel extends model
     /**
      * Get drill datas.
      *
-     * @param  array  $drill
+     * @param  int $pivotID
+     * @param  object $drill
+     * @param  array $conditions
+     * @param  array $filterValues
      * @access public
      * @return array
      */
-    public function getDrillDatas(object $drill, array $drillFields): array
+    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filterValues): array
     {
-        $conditionSQL = ' WHERE 1=1';
-        foreach($drill->condition as $condition)
+        $this->app->loadClass('pivotstate', true);
+        $pivot      = $this->getById($pivotID);
+        $pivotState = new pivotState($pivot, array(), $this->app->getClientLang());
+
+        $filters = $pivotState->setFiltersDefaultValue($filterValues);
+        $filters = $pivotState->convertFiltersToWhere($filters);
+
+        $conditionSQLs = array('1=1');
+        foreach($conditions as $condition)
         {
-            extract($condition);
-            if(!isset($drillFields[$queryField])) continue;
-            $conditionSQL .= " AND t1.{$drillField}='{$drillFields[$queryField]}'";
+            if(!isset($condition['value']))
+            {
+                $conditionSQLs[] = $this->setConditionValueWithFilters($condition, $filters);
+            }
+            else
+            {
+                extract($condition);
+                $conditionSQLs[] = "t1.{$drillField}='{$value}'";
+            }
         }
 
-        $drillSQL = $this->getDrillSQL($drill->object, $drill->whereSQL, $conditionSQL);
+        $conditionSQLs = array_filter($conditionSQLs);
+        $conditionSQL  = 'WHERE ' . implode(' AND ', $conditionSQLs);
 
+        $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSQL, $conditionSQL);
         $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
 
         if($queryResult['result'] != 'success') return array();
