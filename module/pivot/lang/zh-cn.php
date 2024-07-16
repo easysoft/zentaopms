@@ -453,4 +453,4 @@ $lang->pivot->drill->inDrillField   = '下钻查询表中的';
 $lang->pivot->drill->inQueryField   = '查询结果字段';
 $lang->pivot->drill->preview        = '预览';
 $lang->pivot->drill->save           = '保存';
-$lang->pivot->drill->drillFieldText = "%s（%s）.%s";
+$lang->pivot->drill->drillFieldText = "%s(%s).%s";
