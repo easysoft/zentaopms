@@ -109,7 +109,7 @@ class instance extends control
                 if($memoryKb * 1024 > $freeMemory) $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->notEnoughResource));
 
                 /* Request CNE to adjust memory size. */
-                $instance->oldVal = $currentResource->max->memory;
+                $instance->oldValue = $currentResource->max->memory;
                 if(!$this->instance->updateMemorySize($instance, $memoryKb * 1024))
                 {
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -119,7 +119,7 @@ class instance extends control
             $cpu = $newInstance->cpu;
             if($currentResource->max->cpu != $cpu)
             {
-                $instance->oldVal = $currentResource->max->cpu;
+                $instance->oldValue = $currentResource->max->cpu;
                 if(!$this->instance->updateCpuSize($instance, $cpu))
                 {
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -130,7 +130,7 @@ class instance extends control
             if(is_numeric($disk) && $disk != $diskSettings->size && $disk != $diskSettings->requestSize)
             {
                 if($disk < $diskSettings->size || $disk > $diskSettings->limit)  return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->invalidDiskSize));
-                $instance->oldVal = $diskSettings->size;
+                $instance->oldValue = $diskSettings->size;
                 if(!$this->instance->updateVolSize($instance, $disk . 'Gi', $diskSettings->name)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
