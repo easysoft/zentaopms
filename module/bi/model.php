@@ -1458,7 +1458,6 @@ class biModel extends model
             $drillConditions = $this->processDrills($rowKey, $rowData, $drills, $columns);
 
             $index   = 0;
-            $rowDataKeys  = array_keys($rowData);
             $rowData = array_values($rowData);
 
             for($i = 0; $i < count($rowData); $i++)
