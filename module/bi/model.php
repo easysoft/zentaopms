@@ -115,6 +115,26 @@ class biModel extends model
                 }
             }
         }
+        if($statement->join)
+        {
+            foreach($statement->join as $joinInfo)
+            {
+                if(!empty($joinInfo->expr->alias) && $joinInfo->expr->subquery == 'SELECT')
+                {
+                    $tableList[$joinInfo->expr->alias] = $joinInfo->expr->expr;
+                }
+                elseif(!empty($joinInfo->expr->alias) && !empty($joinInfo->expr->table))
+                {
+                    $tableList[$joinInfo->expr->alias] = $joinInfo->expr->table;
+                }
+                elseif(empty($joinInfo->expr->alias) && !empty($joinInfo->expr->table))
+                {
+                    $tableList[$joinInfo->expr->table] = $joinInfo->expr->table;
+                }
+            }
+        }
+
+        return $tableList;
     }
 
     /**
