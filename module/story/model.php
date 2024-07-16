@@ -2733,6 +2733,15 @@ class storyModel extends model
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
+
+            $story->parent = array();
+            foreach(explode(',', trim((string)$story->path, ',')) as $parentID)
+            {
+                if(!$parentID) continue;
+                if($parentID == $story->id) continue;
+                $story->parent[] = (int)$parentID;
+            }
+
             $stories[$story->id] = $story;
         }
 
