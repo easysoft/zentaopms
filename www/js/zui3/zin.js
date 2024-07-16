@@ -178,7 +178,7 @@
         $body.attr('class', classList.join(' '));
     }
 
-    function updatePageJS(data)
+    function updatePageJS(data, _info, options)
     {
         if(window.onPageUnmount) window.onPageUnmount();
 
@@ -193,7 +193,7 @@
         timers.interval = [];
         timers.timeout = [];
 
-        zui.Modal.getAll().forEach(m => !m.options.modal && m.hide());
+        if(!options.modal) zui.Modal.getAll().forEach(m => !m.options.modal && m.hide());
         $('script.zin-page-js').replaceWith(data);
     }
 
@@ -704,7 +704,7 @@
                 }
             }
         });
-        if(DEBUG) showLog('Request', getUrlID(url), options, {cacheKey});
+        if(DEBUG) showLog('Request', `${ajax.setting.type}:${getUrlID(url)}`, options, {cacheKey, ajax});
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
         {
