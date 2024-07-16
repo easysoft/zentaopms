@@ -274,7 +274,7 @@ class storyTao extends storyModel
             }
 
             /* Judge demand has changed. */
-            if($story->demand && $story->parent == 0 && isset($demands[$story->demand]) && $demands[$story->demand] > $story->demandVersion) $story->demandChanged = true;
+            if($story->demand && $story->parent <= 0 && isset($demands[$story->demand]) && $demands[$story->demand] > $story->demandVersion) $story->demandChanged = true;
 
             /* Judge parent story if has same type child or other type child. */
             if($story->type != 'story' && $story->isParent == '1')
