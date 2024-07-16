@@ -58,12 +58,10 @@ if($app->rawModule == 'programplan')
 
 gantt
 (
-    setID('ganttView'),
     set('ganttLang', $ganttLang),
+    set('ganttFields', $ganttFields),
     set('canEdit', common::hasPriv('programplan', 'ganttEdit')),
     set('canEditDeadline', common::hasPriv('review', 'edit')),
-    set('ganttFields', $ganttFields),
-    set('showChart', true),
     set('zooming', isset($zooming) ? $zooming : 'day'),
     set('options', $plans)
 );

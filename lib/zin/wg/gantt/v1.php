@@ -58,10 +58,11 @@ class gantt extends wg
         $cssFile = $app->getWebRoot() . 'js/dhtmlxgantt/min.css';
         $jsFile  = $app->getWebRoot() . 'js/dhtmlxgantt/min.js';
 
-        list($id, $zooming, $colsWidth) = $this->prop(array('id', 'zooming', 'colsWidth'));
-        if(empty($id)) $id = 'ganttView';
-        if(empty($zooming)) $zooming = 'day';
-        if(empty($colsWidth)) $colsWidth = '600';
+        list($id, $zooming, $colsWidth, $showChart) = $this->prop(array('id', 'zooming', 'colsWidth', 'showChart'));
+        if(empty($id))           $id        = 'ganttView';
+        if(empty($zooming))      $zooming   = 'day';
+        if(empty($colsWidth))    $colsWidth = '600';
+        if($showChart !== false) $showChart = true;
 
         $fileName     = data('fileName');
         $ganttType    = data('ganttType');
@@ -83,14 +84,15 @@ class gantt extends wg
             jsVar('ganttType',       $ganttType),
             jsVar('showFields',      $showFields),
             jsVar('colsWidth',       $colsWidth),
+            jsVar('showChart',       $showChart),
             jsVar('userList',        $this->getUserList()),
             jsVar('ganttLang',       $this->prop('ganttLang')),
             jsVar('canGanttEdit',    $this->prop('canEdit')),
             jsVar('canEditDeadline', $this->prop('canEditDeadline')),
             jsVar('ganttFields',     $this->prop('ganttFields')),
-            jsVar('showChart',       $this->prop('showChart')),
             jsVar('zooming',         $this->prop('zooming')),
             jsVar('options',         $this->prop('options')),
+            jsVar('height',          (int)$this->prop('height')),
             setID('ganttContainer'),
             div(setID($id), setClass('gantt')),
             div(setID('myCover'), div(setID('gantt_here')))
