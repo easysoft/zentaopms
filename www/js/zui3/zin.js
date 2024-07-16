@@ -738,7 +738,7 @@
                 }
                 else
                 {
-                    if(DEBUG) showLog('Request', 'cannot find local cache', {url, cacheKey, options});
+                    if(DEBUG) showLog('Request', 'no local cache', {url, cacheKey, options});
                 }
                 ajax.send();
             });
