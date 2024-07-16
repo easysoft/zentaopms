@@ -349,9 +349,9 @@
 
     function updateHeading(data, info)
     {
+        const $heading = $('#heading');
         if(!$heading.length) return;
         const selector = parseSelector(info.selector);
-        const $heading = $('#heading');
         renderWithHtml($heading, data, selector);
         layoutNavbar();
     }
