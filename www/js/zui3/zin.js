@@ -349,8 +349,10 @@
 
     function updateHeading(data, info)
     {
+        if(!$heading.length) return;
         const selector = parseSelector(info.selector);
-        renderWithHtml($('#heading'), data, selector);
+        const $heading = $('#heading');
+        renderWithHtml($heading, data, selector);
         layoutNavbar();
     }
 
@@ -846,7 +848,7 @@
 
     function getLoadSelector(selector)
     {
-        if(!selector) return $('#main').length ? '#configJS,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),title>*,#heading>*,#navbar>*,#pageToolbar>*,#main>*,' : '#configJS,title>*,body>*';
+        if(!selector) return $('#main').length ? `#configJS,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),title>*,${$('#header').length ? '#heading>*,#navbar>*,#pageToolbar>*,' : ''}#main>*,` : '#configJS,title>*,body>*';
         if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
         return selector;
     }
