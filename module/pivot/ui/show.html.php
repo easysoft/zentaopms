@@ -82,15 +82,15 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     set::text($lang->pivot->showPivot),
                     on::click("toggleShowMode('group')"),
                 ),
-                $this->config->edition != 'open' ? array(
-                (hasPriv('pivot', 'design') && $clickable) ? item(set(array
+                $this->config->edition != 'open' && $clickable ? array(
+                hasPriv('pivot', 'design') ? item(set(array
                 (
                     'text'  => $lang->pivot->designAB,
                     'icon'  => 'design',
                     'class' => 'ghost',
                     'url'   => inlink('design', "id=$pivot->id"),
                 ))) : null,
-                (hasPriv('pivot', 'edit') && $clickable) ? item(set(array
+                hasPriv('pivot', 'edit') ? item(set(array
                 (
                     'text'  => $lang->edit,
                     'icon'  => 'edit',
@@ -99,7 +99,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     'data-toggle' => 'modal',
                     'data-size'  => 'sm'
                 ))) : null,
-                (hasPriv('pivot', 'delete') and $clickable) ? item(set(array
+                hasPriv('pivot', 'delete') ? item(set(array
                 (
                     'text'  => $lang->delete,
                     'icon'  => 'trash',
