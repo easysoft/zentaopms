@@ -95,6 +95,26 @@ class biModel extends model
         $this->app->loadClass('sqlparser', true);
         $parser    = new sqlparser($sql);
         $statement = $parser->statements[0];
+
+        $tableList = array();
+        if($statement->from)
+        {
+            foreach($statement->from as $fromInfo)
+            {
+                if(!empty($fromInfo->alias) && $fromInfo->subquery == 'SELECT')
+                {
+                    $tableList[$fromInfo->alias] = $fromInfo->expr;
+                }
+                elseif(!empty($fromInfo->alias) && !empty($fromInfo->table))
+                {
+                    $tableList[$fromInfo->alias] = $fromInfo->table;
+                }
+                elseif(empty($fromInfo->alias) && !empty($fromInfo->table))
+                {
+                    $tableList[$fromInfo->table] = $fromInfo->table;
+                }
+            }
+        }
     }
 
     /**
