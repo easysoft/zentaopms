@@ -115,6 +115,7 @@ $config->pivot->drillObjectFields['user']        = array();
 $app->loadLang('product');
 $app->loadLang('user');
 $app->loadLang('ticket');
+$app->loadLang('release');
 
 $config->pivot->objectTableFields = new stdclass();
 $config->pivot->objectTableFields->productLine = array();
@@ -176,6 +177,14 @@ $config->pivot->objectTableFields->story['title']['link']  = array('url' => help
 $config->pivot->objectTableFields->testcase = array();
 $config->pivot->objectTableFields->testcase['id']['name']    = 'id';
 $config->pivot->objectTableFields->testcase['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+
+$config->pivot->objectTableFields->release = array();
+$config->pivot->objectTableFields->release['stories']['name']   = 'stories';
+$config->pivot->objectTableFields->release['stories']['title']  = $lang->pivot->drill->releaseStories;
+$config->pivot->objectTableFields->release['bugs']['name']      = 'bugs';
+$config->pivot->objectTableFields->release['bugs']['title']     = $lang->release->bugs;
+$config->pivot->objectTableFields->release['leftBugs']['name']  = 'leftBugs';
+$config->pivot->objectTableFields->release['leftBugs']['title'] = $lang->release->leftBugs;
 
 $config->pivot->objectTableFields->product = array();
 $config->pivot->objectTableFields->product['id']['name']          = 'id';
