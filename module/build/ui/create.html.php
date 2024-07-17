@@ -223,6 +223,7 @@ formPanel
     ),
     formRow
     (
+        set::id('buildFiles'),
         formGroup
         (
             set::label($lang->build->files),

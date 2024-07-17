@@ -91,6 +91,61 @@ class biModel extends model
     }
 
     /**
+     * 解析sql语句，返回sql中出现的表别名和表名的键值对列表。
+     * Parse sql to alias => table list.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function parseTableList($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+
+        $tableList = array();
+        if($statement->from)
+        {
+            foreach($statement->from as $fromInfo)
+            {
+                if(!empty($fromInfo->alias) && $fromInfo->subquery == 'SELECT')
+                {
+                    $tableList[$fromInfo->alias] = $fromInfo->expr;
+                }
+                elseif(!empty($fromInfo->alias) && !empty($fromInfo->table))
+                {
+                    $tableList[$fromInfo->alias] = $fromInfo->table;
+                }
+                elseif(empty($fromInfo->alias) && !empty($fromInfo->table))
+                {
+                    $tableList[$fromInfo->table] = $fromInfo->table;
+                }
+            }
+        }
+        if($statement->join)
+        {
+            foreach($statement->join as $joinInfo)
+            {
+                if(!empty($joinInfo->expr->alias) && $joinInfo->expr->subquery == 'SELECT')
+                {
+                    $tableList[$joinInfo->expr->alias] = $joinInfo->expr->expr;
+                }
+                elseif(!empty($joinInfo->expr->alias) && !empty($joinInfo->expr->table))
+                {
+                    $tableList[$joinInfo->expr->alias] = $joinInfo->expr->table;
+                }
+                elseif(empty($joinInfo->expr->alias) && !empty($joinInfo->expr->table))
+                {
+                    $tableList[$joinInfo->expr->table] = $joinInfo->expr->table;
+                }
+            }
+        }
+
+        return $tableList;
+    }
+
+    /**
      * 根据表的别名获取其在sql语句中的表名。
      * Get table name by it's alias.
      *
@@ -1062,7 +1117,9 @@ class biModel extends model
     public function prepareColumns($sql, $statement, $driver)
     {
         list($columnTypes, $columnFields) = $this->getSqlTypeAndFields($sql, $driver);
-        list($moduleNames, $aliasNames, $fieldPairs, $relatedObjects) = $this->getParams4Rebuild($sql, $statement, $columnFields);
+        $rebuildParams  = $this->getParams4Rebuild($sql, $statement, $columnFields);
+        $fieldPairs     = $rebuildParams[2];
+        $relatedObjects = $rebuildParams[3];
 
         $columns     = array();
         $clientLang  = $this->app->getClientLang();
@@ -1339,7 +1396,7 @@ class biModel extends model
 
                     $field = 'field' . $index;
                     $columns[$field]['name']     = $field;
-                    $columns[$field]['title']    = $subColumn->label;
+                    $columns[$field]['title']    = empty($subColumn->label) ? ' ' : $subColumn->label;
                     $columns[$field]['width']    = 16 * mb_strlen($subColumn->label);
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
@@ -1348,6 +1405,7 @@ class biModel extends model
                     {
                         $columns[$field]['link']       = '#';
                         $columns[$field]['drillField'] = $subColumn->drillField;
+                        $columns[$field]['condition']  = $subColumn->condition;
                     }
 
                     $columnMaxLen[$field] = mb_strlen($column->label);
@@ -1369,7 +1427,7 @@ class biModel extends model
 
             $field = 'field' . $index;
             $columns[$field]['name']     = $field;
-            $columns[$field]['title']    = $column->label;
+            $columns[$field]['title']    = empty($column->label) ? ' ' : $column->label;
             $columns[$field]['width']    = 16 * mb_strlen($column->label);
             $columns[$field]['minWidth'] = 128;
             $columns[$field]['align']    = 'center';
@@ -1378,6 +1436,7 @@ class biModel extends model
             {
                 $columns[$field]['link'] = '#';
                 $columns[$field]['drillField'] = $column->drillField;
+                $columns[$field]['condition']  = $column->condition;
             }
 
             $columnMaxLen[$field] = mb_strlen($column->label);
@@ -1396,17 +1455,15 @@ class biModel extends model
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
         {
-            list($originRows, $drillFields, $originFields) = $this->processDrills($rowKey, $rowData, $drills, $columns);
+            $drillConditions = $this->processDrills($rowKey, $rowData, $drills, $columns);
 
             $index   = 0;
-            $rowDataKeys  = array_keys($rowData);
             $rowData = array_values($rowData);
 
             for($i = 0; $i < count($rowData); $i++)
             {
                 $field = 'field' . $index;
                 $value = $rowData[$i];
-                $originRowKey = $rowDataKeys[$i];
 
                 if(!empty($columns[$field]['colspan']))
                 {
@@ -1441,10 +1498,8 @@ class biModel extends model
                 $index++;
             }
 
-            $rows[$rowKey]['originRows']   = $originRows;
-            $rows[$rowKey]['originFields'] = $originFields;
-            $rows[$rowKey]['drillFields']  = $drillFields;
-            $rows[$rowKey]['ROW_ID']       = $rowKey;
+            $rows[$rowKey]['conditions'] = $drillConditions;
+            $rows[$rowKey]['ROW_ID']     = $rowKey;
         }
 
         foreach($columns as $field => $column) $columns[$field]['width'] = 16 * $columnMaxLen[$field];
@@ -1466,32 +1521,42 @@ class biModel extends model
         if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array(), array());
 
         $drills = $drills[$rowIndex];
-        list($originRows, $drillFields) = array_values($drills);
+        list($drillFields) = array_values($drills);
 
-        $rebuildOriginRows  = array();
-        $rebuildDrillFields = array();
-        $originFields       = array();
-
-        $index = 0;
-        foreach($rowData as $column => $value)
+        $drillConditions = array();
+        $index           = 0;
+        foreach($rowData as $columnKey => $value)
         {
-            $field = 'field' . $index;
+            $field  = 'field' . $index;
+            $column = $columns[$field];
             // 判断该列是否设置了下钻。
             // Determine whether the column is drilled.
-            if(!isset($columns[$field]['drillField']))
-            {
-                $index++;
-                continue;
-            }
-
-            $originFields[$field] = $columns[$field]['drillField'];
-            if(isset($originRows[$column]))  $rebuildOriginRows[$field]  = $originRows[$column];
-            if(isset($drillFields[$column])) $rebuildDrillFields[$field] = $drillFields[$column];
-
+            if(isset($column['drillField']) && isset($drillFields[$columnKey])) $drillConditions[$field] = $this->prepareDrillConditions($drillFields[$columnKey], $column['condition'], $column['drillField']);
             $index++;
         }
 
-        return array($rebuildOriginRows, $rebuildDrillFields, $originFields);
+        return $drillConditions;
+    }
+
+    /**
+     * Prepare drill conditions.
+     *
+     * @param  array $drillFields
+     * @param  array $conditions
+     * @param  string $originField
+     * @access public
+     * @return array
+     */
+    public function prepareDrillConditions(array $drillFields, array $conditions, string $originField): array
+    {
+        foreach($conditions as $index => $condition)
+        {
+            extract($condition);
+            if(!isset($drillFields[$queryField])) continue;
+            $conditions[$index]['value'] = $drillFields[$queryField];
+        }
+
+        return array($originField, $conditions);
     }
 
     /**

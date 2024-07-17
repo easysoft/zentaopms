@@ -393,8 +393,15 @@
         }
         else
         {
-            if(noMorph) $target.replaceWith(html).zuiInit(); else $target.morph(html);
-            $target = $(selector.select);
+            if(noMorph)
+            {
+                $target.replaceWith(html);
+                $target = $(selector.select).zuiInit();
+            }
+            else
+            {
+                $target.morph(html);
+            }
         }
         return $target;
     }
@@ -446,7 +453,7 @@
         }
 
         beforeUpdate($target, info, options);
-        $target = renderWithHtml($target, info.data, selector, options.isDiffPage);
+        $target = renderWithHtml($target, info.data, selector, !options.partial && options.isDiffPage);
         afterUpdate($target, info, options);
     }
 
@@ -515,7 +522,7 @@
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
         options.isDiffPage = isDiffPage(url);
-        if(!options.cache && options.cache !== false) options.cache = (requestMethod === 'GET' && config.clientCache) ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
+        if(!options.cache && options.cache !== false) options.cache = (requestMethod === 'GET' && config.clientCache && !options.partial) ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
         const cacheKey = options.cache;
         let cache;
         let cacheHit;

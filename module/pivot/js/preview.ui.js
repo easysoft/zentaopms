@@ -236,13 +236,14 @@ renderCell = function(result, {row, col})
 
 window.clickCell = function(col, {colName, rowInfo})
 {
-    const drillFields  = rowInfo.data.drillFields[colName];
-    const originField  = rowInfo.data.originFields[colName];
+    const drillConditions = rowInfo.data.conditions[colName];
+    const value           = rowInfo.data[colName];
+    if(!Array.isArray(drillConditions)) return false;
+
+    const [originField, conditions] = drillConditions;
     const filterValues = getFilterValues();
 
-    if(typeof(originField) == 'undefined' || typeof(drillFields) == 'undefined') return false;
-
-    const drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${btoa(JSON.stringify(drillFields))}&filterValues=${btoa(JSON.stringify(filterValues))}`);
+    const drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${btoa(JSON.stringify(conditions))}&filterValues=${btoa(JSON.stringify(filterValues))}&value=${value}`);
 
     zui.Modal.open({url: drillModalLink, size: 'lg'});
 }

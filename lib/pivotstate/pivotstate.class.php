@@ -415,13 +415,15 @@ class pivotState
     /**
      * Judge is query filter or not.
      *
+     * @param array  $filters
      * @access public
      * @return bool
      */
-    public function isQueryFilter()
+    public function isQueryFilter($filters = array())
     {
-        if(empty($this->filters)) return false;
-        $filter = current($this->filters);
+        $filters = empty($filters) ? $this->filters : $filters;
+        if(empty($filters)) return false;
+        $filter = current($filters);
 
         return isset($filter['from']) && $filter['from'] == 'query';
     }
@@ -500,6 +502,7 @@ class pivotState
             {
                 case 'select':
                     if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
+                    if(empty($default)) break;
                     $value = "('" . $default . "')";
                     $filterWheres[$field] = array('operator' => 'IN', 'type' => $type, 'value' => $value);
                     break;
@@ -524,6 +527,29 @@ class pivotState
         }
 
         return $filterWheres;
+    }
+
+    /**
+     * Set filters default value.
+     *
+     * @param  array    $filterValues
+     * @access public
+     * @return void
+     */
+    public function setFiltersDefaultValue($filterValues)
+    {
+        $filters = array();
+        foreach($this->filters as $index => $filter)
+        {
+            if(!isset($filterValues[$index])) continue;
+
+            $default = $filterValues[$index];
+            if($filter['type'] == 'select' && is_array($default)) $default = array_filter($default);
+            $filter['default'] = $default;
+            $filters[] = $filter;
+        }
+
+        return $filters;
     }
 
     /**
