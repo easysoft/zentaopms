@@ -301,9 +301,15 @@ $lang->pivot->drillModalTip       = <<<EOT
 3. Click Preview to view the drill-down data for your configuration.
 4. Click Save to complete the drill down configuration.
 EOT;
+$lang->pivot->drillConditionTip = <<<EOT
+1.Configure search conditions based on the row group field and slice column field configured in Step 2 and the filter field configured in Step 3.
+2.The query result field drop-down list displays the result set field in Query Data in the first step.
+EOT;
+
 $lang->pivot->step1QueryTip       = 'For subsequent configuration data, ensure that the id field of the query object is included in the query result set.';
 $lang->pivot->drillingTip         = 'The system will automatically configure some drilling columns for you and display them here. You can check and adjust them, or add data drilling configuration for other columns.';
-$lang->pivot->drillConditionTip   = 'According to the SQL query in step 1, adjust the query conditions in the drill statement (A maximum of six search conditions can be added).';
+$lang->pivot->queryConditionTip   = 'According to the SQL in Step 1, adjust the query conditions in drill down; Ensure that the id field of the query object is included in the query result set to display the drill down content correctly.';
+$lang->pivot->drillSQLTip         = 'You can copy the query from step 1 on the right here and modify it';
 $lang->pivot->drillResultEmptyTip = 'Click the "preview" button, you can view the drill down results here.';
 $lang->pivot->previewResultTip    = 'The drill results will display the object-related fields, and only 10 rows of data are displayed by default.';
 
@@ -443,7 +449,7 @@ $lang->datepicker->dpText->TEXT_MONTH_END   = 'End Month';
 
 $lang->pivot->drill = new stdclass();
 $lang->pivot->drill->common         = 'Data Drill';
-$lang->pivot->drill->queryCondition = 'Query Condition';
+$lang->pivot->drill->drillCondition = 'Drill Condition';
 $lang->pivot->drill->drillResult    = 'Drill Result';
 $lang->pivot->drill->selectField    = 'Select Drill Field';
 $lang->pivot->drill->selectObject   = 'Select Link Object';

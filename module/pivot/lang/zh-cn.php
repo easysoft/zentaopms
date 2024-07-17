@@ -301,9 +301,15 @@ $lang->pivot->drillModalTip       = <<<EOT
 3.点击预览，查看您配置的下钻数据。
 4.点击保存，完成此条下钻配置。
 EOT;
+$lang->pivot->drillConditionTip = <<<EOT
+1.请根据第二步中配置的行分组字段和切片列字段以及第三步配置的筛选器字段配置相应查询条件。
+2.查询结果字段下拉菜单中展示的是第一步“查询数据”中的结果集字段。
+EOT;
+
 $lang->pivot->step1QueryTip       = '为后续配置数据下钻，请确保查询结果集中包含查询对象的id字段。';
 $lang->pivot->drillingTip         = '系统会为您自动配置一些可下钻的列并展示在此，您可检查调整，或为其他列添加数据下钻配置。';
-$lang->pivot->drillConditionTip   = '根据步骤一中的SQL查询语句，调整下钻语句中的查询条件（查询条件最多支持添加6条）。';
+$lang->pivot->queryConditionTip   = '根据步骤一中的SQL查询语句，调整下钻语句中的查询条件；请确保查询结果集中包含查询对象的id字段以便正确展示下钻内容。';
+$lang->pivot->drillSQLTip         = '您可以将右侧第一步的查询语句复制到此处，并做相应的修改。';
 $lang->pivot->drillResultEmptyTip = '点击“预览”按钮，即可在此查看下钻结果。';
 $lang->pivot->previewResultTip    = '下钻结果将显示对象相关字段，默认只显示10行数据。';
 
@@ -443,7 +449,7 @@ $lang->datepicker->dpText->TEXT_MONTH_END   = '本月末';
 
 $lang->pivot->drill = new stdclass();
 $lang->pivot->drill->common         = '数据下钻';
-$lang->pivot->drill->queryCondition = '查询条件';
+$lang->pivot->drill->drillCondition = '下钻条件';
 $lang->pivot->drill->drillResult    = '下钻结果';
 $lang->pivot->drill->selectField    = '选择要下钻的列';
 $lang->pivot->drill->selectObject   = '关联目标对象';
