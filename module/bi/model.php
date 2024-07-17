@@ -1455,15 +1455,17 @@ class biModel extends model
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
         {
-            $drillConditions = $this->processDrills($rowKey, $rowData, $drills, $columns);
 
-            $index   = 0;
-            $rowData = array_values($rowData);
+            $index           = 0;
+            $columnKeys      = array_keys($rowData);
+            $rowData         = array_values($rowData);
+            $drillConditions = array();
 
             for($i = 0; $i < count($rowData); $i++)
             {
-                $field = 'field' . $index;
-                $value = $rowData[$i];
+                $field     = 'field' . $index;
+                $value     = $rowData[$i];
+                $columnKey = $columnKeys[$i];
 
                 if(!empty($columns[$field]['colspan']))
                 {
@@ -1471,11 +1473,14 @@ class biModel extends model
                     $value   = array_slice($rowData, $i, $colspan);
 
                     $i += $colspan - 1;
+                    $columnKey = $columnKeys[$i];
                 }
 
                 /* 定义数据表格的行数据。*/
                 /* Defind row data of the data table. */
-                $rows[$rowKey][$field] = $value;
+                $rows[$rowKey][$field]   = $value;
+                $drillFields             = $this->getDrillFields($rowKey, $columnKey, $drills);
+                $drillConditions[$field] = $this->processDrills($field, $drillFields, $columns);
 
                 if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
 
@@ -1507,6 +1512,14 @@ class biModel extends model
         return array($columns, $rows, $cellSpan);
     }
 
+    public function getDrillFields(int $rowIndex, string $columnKey, array $drills): array
+    {
+        if(empty($drills) || !isset($drills[$rowIndex]) || !isset($drills[$rowIndex]['drillFields'][$columnKey])) return array();
+
+        list($drillFields) = array_values($drills[$rowIndex]);
+        return $drillFields[$columnKey];
+    }
+
     /**
      * Process dirlls.
      *
@@ -1516,26 +1529,13 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function processDrills(int $rowIndex, array $rowData, array $drills, array $columns): array
+    public function processDrills(string $field, array $drillFields, array $columns): array
     {
-        if(empty($drills) || !isset($drills[$rowIndex])) return array(array(), array(), array());
+        if(empty($drillFields)) return array();
+        $column = $columns[$field];
+        if(!isset($column['drillField'])) return array();
 
-        $drills = $drills[$rowIndex];
-        list($drillFields) = array_values($drills);
-
-        $drillConditions = array();
-        $index           = 0;
-        foreach($rowData as $columnKey => $value)
-        {
-            $field  = 'field' . $index;
-            $column = $columns[$field];
-            // 判断该列是否设置了下钻。
-            // Determine whether the column is drilled.
-            if(isset($column['drillField']) && isset($drillFields[$columnKey])) $drillConditions[$field] = $this->prepareDrillConditions($drillFields[$columnKey], $column['condition'], $column['drillField']);
-            $index++;
-        }
-
-        return $drillConditions;
+        return $this->prepareDrillConditions($drillFields, $column['condition'], $column['drillField']);
     }
 
     /**

@@ -237,8 +237,9 @@ renderCell = function(result, {row, col})
 window.clickCell = function(col, {colName, rowInfo})
 {
     const drillConditions = rowInfo.data.conditions[colName];
-    const value           = rowInfo.data[colName];
-    if(!Array.isArray(drillConditions)) return false;
+    let value             = rowInfo.data[colName];
+    if(!Array.isArray(drillConditions) || !drillConditions.length) return false;
+    if(Array.isArray(value)) value = value[0];
 
     const [originField, conditions] = drillConditions;
     const filterValues = getFilterValues();
