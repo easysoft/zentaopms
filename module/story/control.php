@@ -1486,7 +1486,10 @@ class story extends control
      */
     public function processStoryChange(int $storyID)
     {
-        $story  = $this->story->fetchByID($storyID);
+        $story = $this->story->fetchByID($storyID);
+
+        if($story->parent <= 0 && $this->config->edition == 'ipd') return $this->fetch('demand', 'processDemandChange', "objectID=$storyID&type=story");
+
         $parent = $this->story->fetchByID($story->parent);
 
         $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parent->version)->where('id')->eq($storyID)->exec();

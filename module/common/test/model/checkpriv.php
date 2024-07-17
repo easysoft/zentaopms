@@ -23,6 +23,8 @@ $app->methodName     = 'create';
 $config->webRoot     = '';
 $config->requestType = 'PATH_INFO';
 
+$_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+
 try
 {
     $result = $tester->loadModel('common')->checkPriv();
@@ -47,3 +49,5 @@ catch (Exception $e)
 }
 
 r($result) && p() && e('1'); // 用户有权限时，返回TRUE
+
+unset($_SERVER['HTTP_X_REQUESTED_WITH']);
