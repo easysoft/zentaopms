@@ -692,7 +692,7 @@ class pivotState
      */
     public function addCondition()
     {
-        return array('drillField' => '', 'queryField' => '');
+        return array('drillObject' => '', 'drillAlias' => '', 'drillField' => '', 'queryField' => '');
     }
 
     /**
