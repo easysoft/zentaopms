@@ -308,26 +308,11 @@ else
             div
             (
                 setClass('main main-content canvas'),
-                div
-                (
-                    setClass('btn-group'),
-                    a
-                    (
-                        setClass('btn switchBtn text-primary'),
-                        set::href(inlink('managePriv', "type=byPackage&param=$groupID&nav=$nav&version=$version")),
-                        html("<i class='icon-has-authority-pack'></i>")
-                    ),
-                    a
-                    (
-                        setClass('btn switchBtn'),
-                        set::href(inlink('managePriv', "type=byGroup&param=$groupID&nav=$nav&version=$version")),
-                        html("<i class='icon-without-authority-pack'></i>")
-                    )
-                ),
                 h::table
                 (
                     setID('privPackageList'),
                     setClass('table table-striped table-bordered'),
+                    on::click()->call('handlePrivPackageListClick', jsRaw('event')),
                     h::thead
                     (
                         h::tr
@@ -349,7 +334,25 @@ else
             ),
             div
             (
-                setClass('side'),
+                setClass('side relative'),
+                on::click('.recommend input[type=checkbox]')->call('handleSideRecommentCheckClick', jsRaw('$this')),
+                div
+                (
+                    setClass('btn-group absolute top-0.5 right-full z-10 mr-8'),
+                    setID('switchBtnGroup'),
+                    a
+                    (
+                        setClass('btn switchBtn text-primary'),
+                        set::href(inlink('managePriv', "type=byPackage&param=$groupID&nav=$nav&version=$version")),
+                        html("<i class='icon-has-authority-pack'></i>")
+                    ),
+                    a
+                    (
+                        setClass('btn switchBtn'),
+                        set::href(inlink('managePriv', "type=byGroup&param=$groupID&nav=$nav&version=$version")),
+                        html("<i class='icon-without-authority-pack'></i>")
+                    )
+                ),
                 div
                 (
                     setClass('priv-panel'),
