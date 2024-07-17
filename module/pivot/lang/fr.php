@@ -24,7 +24,6 @@ $lang->pivot->designAB     = 'Design';
 $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
 $lang->pivot->story        = 'Story';
-$lang->pivot->storyName    = 'Story Name';
 
 $lang->pivot->cancelAndBack = 'Cancel save and back';
 
@@ -461,4 +460,5 @@ $lang->pivot->drill->inQueryField   = 'Query field';
 $lang->pivot->drill->preview        = 'Preview';
 $lang->pivot->drill->save           = 'Save';
 $lang->pivot->drill->drillFieldText = "%s(%s).%s";
+$lang->pivot->drill->storyName      = 'Story Name';
 $lang->pivot->drill->releaseStories = "Finished Stories";

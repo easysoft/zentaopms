@@ -24,7 +24,6 @@ $lang->pivot->designAB     = '设计';
 $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
 $lang->pivot->story        = '需求';
-$lang->pivot->storyName    = '需求名称';
 
 $lang->pivot->cancelAndBack = '取消保存并返回';
 
@@ -461,4 +460,5 @@ $lang->pivot->drill->inQueryField   = '查询结果字段';
 $lang->pivot->drill->preview        = '预览';
 $lang->pivot->drill->save           = '保存';
 $lang->pivot->drill->drillFieldText = "%s(%s).%s";
+$lang->pivot->drill->storyName      = '需求名称';
 $lang->pivot->drill->releaseStories = "完成的需求";
