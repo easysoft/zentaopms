@@ -24,6 +24,7 @@ $lang->pivot->designAB     = '设计';
 $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
 $lang->pivot->story        = '需求';
+$lang->pivot->storyName    = '需求名称';
 
 $lang->pivot->cancelAndBack = '取消保存并返回';
 

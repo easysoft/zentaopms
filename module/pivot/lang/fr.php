@@ -24,6 +24,7 @@ $lang->pivot->designAB     = 'Design';
 $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
 $lang->pivot->story        = 'Story';
+$lang->pivot->storyName    = 'Story Name';
 
 $lang->pivot->cancelAndBack = 'Cancel save and back';
 
