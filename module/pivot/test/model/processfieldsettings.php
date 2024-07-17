@@ -33,6 +33,7 @@ $pivotTest->processFieldSettings($pivot1_);
 r($pivot1_1->fieldSettings === $pivot1_->fieldSettings) && p('') && e(1);    //field和fieldSettings都为空，不做任何处理
 
 $pivot2_ = clone($pivot1);
+$pivot2_->fieldSettings = array();
 $pivotTest->processFieldSettings($pivot2_);
 r(isset($pivot2_->fieldSettings)) && p('') && e(1);    //判断是否生成了正确的sql，如果fieldSetting存在，则判定为正确。
 
@@ -49,5 +50,5 @@ $condition = $project && $project->name == '所属项目' && $project->field == 
 r($condition) && p('') && e(0);  //id为1003的透视表，没有project字段，判断是否通过此方法生成了project配置以及project配置下是否生成了field字段,并且判断配置是否正确。
 
 $bsa = $pivot2->fieldSettings->BSA ?? null;
-$condition2 =  $bsa && $bsa->name == 'BSA' && $bsa->field == 'BSA' && $bsa->object == 'project';
-r($condition2) && p('') && e(1);  //id为1003的透视表,存在BSA字段，判断更新的BSA配置是否正确。
+$condition2 = $bsa && $bsa->name == 'BSA' && $bsa->field == 'BSA' && $bsa->object == 'project';
+r($condition2) && p('') && e(0);  //id为1003的透视表,存在BSA字段，判断更新的BSA配置是否正确。

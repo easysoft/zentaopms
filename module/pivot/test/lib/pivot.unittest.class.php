@@ -68,8 +68,6 @@ class pivotTest
         $pivot = $this->objectModel->getByID($pivotID);
 
         list($sql, $filterFormat) = $this->objectModel->getFilterFormat($pivot->sql, $pivot->filters);
-        $tables = $this->loadModel('chart')->getTables($sql);
-        $sql    = $tables['sql'];
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 

@@ -40,8 +40,6 @@ $pivotIDList = array(1002, 1000, 1001, 1025);
 $pivot = $pivotTest->getByID($pivotIDList[0]);
 
 list($sql, $filterFormat) = $pivotTest->getFilterFormat($pivot->sql, $pivot->filters);
-$tables = $tester->loadModel('chart')->getTables($sql);
-$sql    = $tables['sql'];
 $fields = json_decode(json_encode($pivot->fieldSettings), true);
 $langs  = json_decode($pivot->langs, true) ?? array();
 
@@ -55,8 +53,6 @@ r(array_keys($data->array[0])) && p('0,13') && e('一级项目集,Bug修复率10
 $pivot = $pivotTest->getByID($pivotIDList[1]);
 
 list($sql, $filterFormat) = $pivotTest->getFilterFormat($pivot->sql, $pivot->filters);
-$tables = $tester->loadModel('chart')->getTables($sql);
-$sql    = $tables['sql'];
 $fields = json_decode(json_encode($pivot->fieldSettings), true);
 $langs  = json_decode($pivot->langs, true) ?? array();
 
@@ -69,8 +65,6 @@ r($configs) && p('0:0,1;1:1') && e('10,1;1');                                   
 $pivot = $pivotTest->getByID($pivotIDList[2]);
 
 list($sql, $filterFormat) = $pivotTest->getFilterFormat($pivot->sql, $pivot->filters);
-$tables = $tester->loadModel('chart')->getTables($sql);
-$sql    = $tables['sql'];
 $fields = json_decode(json_encode($pivot->fieldSettings), true);
 $langs  = json_decode($pivot->langs, true) ?? array();
 
