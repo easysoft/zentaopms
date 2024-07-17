@@ -272,8 +272,9 @@ class instanceModel extends model
         $settings->settings_map->resources = new stdclass;
         $settings->settings_map->resources->memory = $size;
 
-        $oldValue = helper::formatKB($instance->oldVal);
+        $oldValue = empty($instance->oldValue) ? '不限制' : helper::formatKB($instance->oldValue);
         $newValue = helper::formatKB(intval($size));
+
         unset($instance->oldValue);
         $success = $this->cne->updateConfig($instance, $settings);
         if($success)
@@ -303,7 +304,7 @@ class instanceModel extends model
         $settings->settings_map->resources = new stdclass;
         $settings->settings_map->resources->cpu = $size;
 
-        $oldValue = $instance->oldValue;
+        $oldValue = empty($instance->oldValue) ? '不限制' : $instance->oldValue;
         $newValue = (string)$size;
         unset($instance->oldValue);
         $success = $this->cne->updateConfig($instance, $settings);
@@ -345,7 +346,7 @@ class instanceModel extends model
         $settings->settings = array();
         $settings->settings[] = $setting;
 
-        $oldValue = $instance->oldValue;
+        $oldValue = empty($instance->oldValue) ? '不限制' : $instance->oldValue;
         $newValue = str_replace('Gi', '', $size);
         unset($instance->oldValue);
         $success = $this->cne->updateConfig($instance, $settings);
