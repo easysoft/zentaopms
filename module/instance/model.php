@@ -304,7 +304,7 @@ class instanceModel extends model
         $settings->settings_map->resources = new stdclass;
         $settings->settings_map->resources->cpu = $size;
 
-        $oldValue = helper::formatKB($instance->oldVal);
+        $oldValue = $instance->oldValue;
         $newValue = (string)$size;
         unset($instance->oldValue);
         $success = $this->cne->updateConfig($instance, $settings);
