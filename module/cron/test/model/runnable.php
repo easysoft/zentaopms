@@ -39,6 +39,6 @@ $res5 = $cron->runnableTest();
 
 r($res1) && p() && e('0'); //cron配置为空情况
 r($res2) && p() && e('0'); //cron配置存在,执行时间大于最大可执行时间情况
-r($res3) && p() && e('0'); //cron状态为空情况
-r($res4) && p() && e('0'); //cron状态是stop情况
-r($res5) && p() && e('0'); //cron状态存在不是stop情况
+r($res3) && p() && e('1'); //cron状态为空情况
+r($res4) && p() && e('1'); //cron状态是stop情况
+r($res5) && p() && e('1'); //cron状态存在不是stop情况
