@@ -459,7 +459,7 @@
 
     function renderPage(list, options)
     {
-        if(DEBUG) showLog('Render', [options.id, list.length], list, {options});
+        if(DEBUG) showLog('Render', [options.id, list.length, (!options.partial && options.isDiffPage) ? 'html' : 'morph'], list, {options});
         let hasUpdatePage = false;
         list.forEach(item =>
         {
