@@ -293,6 +293,7 @@ $lang->pivot->clearSettings   = '查询数据的配置已修改，是否清空�
 $lang->pivot->draftSave       = '该透视表已发布，将变为草稿态，是否继续？';
 $lang->pivot->cannotAddQuery  = '已添加结果筛选器，无法添加查询筛选器';
 $lang->pivot->cannotAddResult = '已添加查询筛选器，无法添加结果筛选器';
+$lang->pivot->emptyDrillField = '设计变更，请检查';
 //$lang->pivot->cannotAddDrill  = '查询语句中存在GROUP BY或配置了筛选器，暂时无法配置数据下钻';
 
 $lang->pivot->drillModalTip       = <<<EOT
