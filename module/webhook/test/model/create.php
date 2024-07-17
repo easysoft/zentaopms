@@ -15,12 +15,12 @@ cid=1
 - 测试全部传入的正常创建 @8
 - 测试不传type的情况 @9
 - 测试不传name的情况第name条的0属性 @『名称』不能为空。
-- 测试不传url的情况第url条的0属性 @『Hook地址』不能为空。
-- 测试不传secret的情况 @10
-- 测试不传domain的情况 @11
+- 测试不传url的情况第url条的0属性 @10
+- 测试不传secret的情况 @11
+- 测试不传domain的情况 @12
 - 测试不传sendType的情况第sendType条的0属性 @『发送方式』不符合格式，应当为:『/sync|async/』。
-- 测试不传products的情况 @12
-- 测试不传executions的情况 @13
+- 测试不传products的情况 @13
+- 测试不传executions的情况 @14
 
 */
 
@@ -86,10 +86,10 @@ $result10 = $webhookTest->createTest($webhook9);
 r($result1)  && p()             && e('8');                                                 //测试全部传入的正常创建
 r($result2)  && p()             && e('9');                                                 //测试不传type的情况
 r($result3)  && p('name:0')     && e('『名称』不能为空。');                                //测试不传name的情况
-r($result4)  && p('url:0')      && e('『Hook地址』不能为空。');                            //测试不传url的情况
-r($result5)  && p()             && e('10');                                                //测试不传secret的情况
-r($result6)  && p()             && e('11');                                                //测试不传domain的情况
+r($result4)  && p('url:0')      && e('10');                                                //测试不传url的情况
+r($result5)  && p()             && e('11');                                                //测试不传secret的情况
+r($result6)  && p()             && e('12');                                                //测试不传domain的情况
 r($result7)  && p('sendType:0') && e('『发送方式』不符合格式，应当为:『/sync|async/』。'); //测试不传sendType的情况
-r($result8)  && p()             && e('12');                                                //测试不传products的情况
-r($result9)  && p()             && e('13');                                                //测试不传executions的情况
-R($result10) && p()             && e('14');                                                //测试不传desc的情况
+r($result8)  && p()             && e('13');                                                //测试不传products的情况
+r($result9)  && p()             && e('14');                                                //测试不传executions的情况
+R($result10) && p()             && e('15');                                                //测试不传desc的情况
