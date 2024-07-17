@@ -114,17 +114,11 @@ class formBase extends wg
                 'data-method'  => $method
             ));
         }
-        return $props;
-    }
-
-    protected function buildAfter(): array
-    {
-        $after = parent::buildAfter();
-        if($this->prop('target') === 'ajax')
+        if($target === 'ajax')
         {
-            $after[] = zui::ajaxForm(set::_to('#' . $this->id()), set($this->prop('ajax')));
+            $props = array_merge($props, zui::create('ajaxForm', $this->prop('ajax')));
         }
-        return $after;
+        return $props;
     }
 
     protected function build()

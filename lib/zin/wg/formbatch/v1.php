@@ -156,28 +156,12 @@ class formBatch extends formBase
     protected function buildProps(): array
     {
         $props = parent::buildProps();
-        list($mode, $minRows, $maxRows) = $this->prop(array('mode', 'minRows', 'maxRows'));
 
         $props[] = setClass('form-batch');
-        $props[] = set('data-mode', $mode);
-        $props[] = set('data-min-rows', $minRows);
-        $props[] = set('data-max-rows', $maxRows);
+
+        $batchFormOptions = $this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey', 'onRenderRow', 'onRenderRowCol', 'addRowIcon', 'deleteRowIcon', 'sortRowIcon', 'sortable'));
+        $props = array_merge($props, zui::create('batchForm', $batchFormOptions));
 
         return $props;
-    }
-
-    /**
-     * Build content after current widget.
-     */
-    protected function buildAfter(): array
-    {
-        $after = parent::buildAfter();
-
-        $after[] = zui::batchForm
-        (
-            set::_to('#' . $this->id()),
-            set($this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey', 'onRenderRow', 'onRenderRowCol', 'addRowIcon', 'deleteRowIcon', 'sortRowIcon', 'sortable')))
-        );
-        return $after;
     }
 }
