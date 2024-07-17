@@ -52,3 +52,5 @@ fields:
     range: 0,1
   - field: multiple
     range: 1{10},0{10}
+  - field: storyType
+    range: "`story,requirement,epic`"
