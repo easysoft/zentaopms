@@ -377,7 +377,7 @@ class node implements \JsonSerializable
         );
         foreach($events as $event => $bindingList)
         {
-            $code[]   = "\$ele.on('$event.on.zin', function(e){";
+            $code[]   = "\$ele.on('$event.zin.on', function(e){";
             foreach($bindingList as $binding)
             {
                 if(is_string($binding)) $binding = (object)array('handler' => $binding);

@@ -367,7 +367,7 @@
 
     function beforeUpdate($target, info, options)
     {
-        if($target && $target.length) $target.find('[data-zin-events]').off('.on.zin');
+        if($target && $target.length) $target.find('[data-zin-events]').off('.zin.on');
         if(window.beforePageUpdate) window.beforePageUpdate($target, info, options);
     }
 
