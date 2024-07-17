@@ -114,7 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['biz10.2.0']   = '2024-07-12';
+$lang->misc->releaseDate['20.3.0']      = '2024-07-19';
 $lang->misc->releaseDate['20.2.0']      = '2024-07-10';
 $lang->misc->releaseDate['20.1.1']      = '2024-06-21';
 $lang->misc->releaseDate['20.1.0']      = '2024-06-03';
@@ -231,7 +231,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['biz10.2.0'][]   = array('title' => 'Custom Drilldown on Pivot Table.', 'desc' => '');
+$lang->misc->feature->all['20.3.0'][]      = array('title' => 'Custom Drilldown on Pivot Table.', 'desc' => '');
 $lang->misc->feature->all['20.2.0'][]      = array('title' => "This release included optimizations to the product matrix, new features to configure platform-level application settings, improvements to the approval process workflow, additions to the OR interface to capture more business requirements, the ability to track new roadmaps and the Charter projected phase for user stories, support for unlimited levels of business requirements split, new estimation capabilities for the development stage of business requirements, support for estimating delivery stage when distributing or decomposing OR requirements, the option to distribute OR requirements as business requirements, estimation for OR requirements and user requirements during upgrades, and a new TR4A review point added to the development stage.", 'desc' => '');
 $lang->misc->feature->all['20.1.1'][]      = array('title' => "We've completely refactored the core PHP and UI frameworks, streamlining forms and dashboards for a whole new user experience. Plus, APCu caching delivers a significant performance boost. The baseline review list now boasts a search function, making it a breeze to find what you need. And the OR interface enhancements include a dedicated pending tasks feature, along with the ability to customize IPD project stages and review points for maximum flexibility, and a search function within the baseline review list.", 'desc' => '');
 $lang->misc->feature->all['20.1.0'][]      = array('title' => 'Leverages APCu caching to significantly boost system performance. Fine-tuned the interaction design for an optimized user experience. Implemented bug fixes.', 'desc' => '');
