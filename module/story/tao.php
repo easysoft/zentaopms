@@ -1302,7 +1302,7 @@ class storyTao extends storyModel
      *
      * @param  object    $story
      * @access public
-     * @return array
+     * @return void
      */
     public function computeParentStage(object $story)
     {
@@ -1311,7 +1311,7 @@ class storyTao extends storyModel
         if(empty($story->parent))
         {
             if(!empty($story->demand)) $demandList[$story->demand] = $story->demand;
-            return $demandList;
+            if($this->config->edition == 'ipd') $this->loadModel('demand')->updateDemandStage($demandList);
         }
 
         $parent   = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
@@ -1452,7 +1452,7 @@ class storyTao extends storyModel
             if($parent->parent > 0) $this->computeParentStage($parent);
         }
 
-        return $demandList;
+        if($this->config->edition == 'ipd') $this->loadModel('demand')->updateDemandStage($demandList);
     }
 
     /**
