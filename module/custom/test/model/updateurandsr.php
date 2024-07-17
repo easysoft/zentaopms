@@ -18,9 +18,9 @@ su('admin');
 $key    = array(1, 0);
 $SRName = array('', '软件需求', '软件需求1');
 
-$dataList[] = array('SRName' => $SRName[0], 'URName' => '用户需求');
-$dataList[] = array('SRName' => $SRName[1], 'URName' => '用户需求');
-$dataList[] = array('SRName' => $SRName[2], 'URName' => '用户需求');
+$dataList[] = array('SRName' => $SRName[0], 'URName' => '用户需求', 'ERName' => '业务需求');
+$dataList[] = array('SRName' => $SRName[1], 'URName' => '用户需求', 'ERName' => '业务需求');
+$dataList[] = array('SRName' => $SRName[2], 'URName' => '用户需求', 'ERName' => '业务需求');
 
 $customTester = new customTest();
 r($customTester->updateURAndSRTest($key[0], $dataList[2])) && p('SRName') && e('软件需求1'); // 测试修改key为1，SRName值更改为软件需求1

@@ -78,12 +78,12 @@ $openFeatures = $customTester->computeFeaturesTest($editionList[0]);
 $ipdFeatures  = $customTester->computeFeaturesTest($editionList[1]);
 $maxFeatures  = $customTester->computeFeaturesTest($editionList[2]);
 
-r($openFeatures[0]) && p('0,1,2,3,4') && e('program,productLine,productUR,projectWaterfall,projectWaterfallplus'); // 计算无相关数据时，开源版不启用的功能
-r($openFeatures[1]) && p()            && e('0');                                                                   // 计算无相关数据时，开源版敏捷项目启用的功能
-r($openFeatures[2]) && p()            && e('0');                                                                   // 计算无相关数据时，开源版敏捷项目不启用的功能
-r($ipdFeatures[0])  && p('0,1,2,3,4') && e('program,productLine,productUR,projectWaterfall,projectWaterfallplus'); // 计算无相关数据时，ipd版不启用的功能
-r($ipdFeatures[1])  && p()            && e('0');                                                                   // 计算无相关数据时，ipd版敏捷项目启用的功能
-r($ipdFeatures[2])  && p()            && e('0');                                                                   // 计算无相关数据时，ipd版敏捷项目不启用的功能
-r($maxFeatures[0])  && p('0,1,2,3,4') && e('program,productLine,productUR,projectWaterfall,projectWaterfallplus'); // 计算无相关数据时，旗舰版不启用的功能
-r($maxFeatures[1])  && p()            && e('0');                                                                   // 计算无相关数据时，旗舰版敏捷项目启用的功能
-r($maxFeatures[2])  && p()            && e('0');                                                                   // 计算无相关数据时，旗舰版敏捷项目不启用的功能
+r($openFeatures[0]) && p('0,1,2,3,4') && e('program,productLine,productER,productUR,projectWaterfall'); // 计算无相关数据时，开源版不启用的功能
+r($openFeatures[1]) && p()            && e('0');                                                        // 计算无相关数据时，开源版敏捷项目启用的功能
+r($openFeatures[2]) && p()            && e('0');                                                        // 计算无相关数据时，开源版敏捷项目不启用的功能
+r($ipdFeatures[0])  && p('0,1,2,3,4') && e('program,productLine,productER,productUR,projectWaterfall'); // 计算无相关数据时，ipd版不启用的功能
+r($ipdFeatures[1])  && p()            && e('0');                                                        // 计算无相关数据时，ipd版敏捷项目启用的功能
+r($ipdFeatures[2])  && p()            && e('0');                                                        // 计算无相关数据时，ipd版敏捷项目不启用的功能
+r($maxFeatures[0])  && p('0,1,2,3,4') && e('program,productLine,productER,productUR,projectWaterfall'); // 计算无相关数据时，旗舰版不启用的功能
+r($maxFeatures[1])  && p()            && e('0');                                                        // 计算无相关数据时，旗舰版敏捷项目启用的功能
+r($maxFeatures[2])  && p()            && e('0');                                                        // 计算无相关数据时，旗舰版敏捷项目不启用的功能
