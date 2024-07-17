@@ -1240,13 +1240,14 @@ class taskModel extends model
      * @access public
      * @return false|object
      */
-    public function getByID(int $taskID, bool $setImgSize = false): false|object
+    public function getByID(int $taskID, bool $setImgSize = false, $vision = ''): false|object
     {
+        if($vision == '') $vision = $this->config->vision; // TODO: $vision is for compatibling with viewing drill data.
         $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.id')->eq($taskID)
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIf($vision != 'all')->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->fetch();
         if(!$task) return false;
 

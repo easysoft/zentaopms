@@ -334,7 +334,7 @@ class task extends control
      */
     public function view(int $taskID)
     {
-        $task = $this->task->getById($taskID, true);
+        $task = $this->task->getById($taskID, true, $vision = 'all'); // TODO: $vision is for compatibling with viewing drill data.
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
@@ -343,7 +343,7 @@ class task extends control
         if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return $this->sendError($this->lang->execution->accessDenied, $this->createLink('execution', 'all'));
 
         /* 为视图设置常用的公共变量和设置菜单为任务所属执行. Set common variables to view and set menu to the execution of the task. */
-        $this->taskZen->commonAction($taskID);
+        $this->taskZen->commonAction($taskID, $vision = 'all');
 
         /* 如果当前主导航是项目，则设置菜单为会话中保存的项目. Set menu to project which saved in session if current app tab is project. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);

@@ -889,9 +889,9 @@ class taskZen extends task
      * @access protected
      * @return void
      */
-    protected function commonAction(int $taskID): void
+    protected function commonAction(int $taskID, string $vision = ''): void
     {
-        $this->view->task      = $this->task->getByID($taskID);
+        $this->view->task      = $this->task->getByID($taskID, true, $vision);
         $this->view->execution = $this->execution->getByID($this->view->task->execution);
         $this->view->members   = $this->loadModel('user')->getTeamMemberPairs($this->view->execution->id, 'execution','nodeleted');
         $this->view->actions   = $this->loadModel('action')->getList('task', $taskID);
