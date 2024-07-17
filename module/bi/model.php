@@ -1512,6 +1512,15 @@ class biModel extends model
         return array($columns, $rows, $cellSpan);
     }
 
+    /**
+     * Get drill fields.
+     *
+     * @param  int     $rowIndex
+     * @param  string  $columnKey
+     * @param  array   $drills
+     * @access public
+     * @return array
+     */
     public function getDrillFields(int $rowIndex, string $columnKey, array $drills): array
     {
         if(empty($drills) || !isset($drills[$rowIndex]) || !isset($drills[$rowIndex]['drillFields'][$columnKey])) return array();
