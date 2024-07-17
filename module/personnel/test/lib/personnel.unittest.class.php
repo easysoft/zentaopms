@@ -364,7 +364,6 @@ class personnelTest
 
         if(dao::isError()) return -1;
 
-        unset(dao::$cache[TABLE_ACL]);
         global $tester;
         $whitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch('whitelist');
 
