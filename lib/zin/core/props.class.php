@@ -201,7 +201,7 @@ class props extends \zin\utils\dataset
             }
         }
 
-        if($initCode) $pairs[] = 'zui-init="' . static::encodeValue(implode(';', $initCode)) . '"';
+        if($initCode) $pairs[] = 'zui-init="$element.off(\'.zin.on\');' . static::encodeValue(implode(';', $initCode)) . '"';
 
         return implode(' ', $pairs);
     }
