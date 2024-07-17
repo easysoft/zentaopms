@@ -235,7 +235,14 @@ $lang->action->desc->backup                  = '$date, 由 <strong>$actor</stron
 $lang->action->desc->adjustmemory            = '$date, 由 <strong>$actor</strong> 調整內存到 <strong>$newValue</strong> 。' . "\n";
 $lang->action->desc->adjustvol               = '$date, 由 <strong>$actor</strong> 調整磁盤空間到 <strong>$newValue</strong> GB。' . "\n";
 $lang->action->desc->adjustmemorychange      = '$date, 由 <strong>$actor</strong> 修改內存，從 <strong>$oldValue</strong> 修改為 <strong>$newValue</strong>。' . "\n";
-$lang->action->desc->adjustcpuchange         = '$date, 由 <strong>$actor</strong> 修改CPU，從 <strong>$oldValue</strong>核 修改為 <strong>$newValue</strong>核。' . "\n";
+if(empty($oldValue))
+{
+    $lang->action->desc->adjustcpuchange     = '$date, 由 <strong>$actor</strong> 修改CPU，从 <strong>不限制</strong> 修改为 <strong>$newValue</strong>核。' . "\n";
+}
+else
+{
+    $lang->action->desc->adjustcpuchange     = '$date, 由 <strong>$actor</strong> 修改CPU，从 <strong>$oldValue</strong>核 修改为 <strong>$newValue</strong>核。' . "\n";
+}
 $lang->action->desc->adjustvolchange         = '$date, 由 <strong>$actor</strong> 修改磁盤空間，從 <strong>$oldValue</strong>GB 修改為 <strong>$newValue</strong>GB。' . "\n";
 $lang->action->desc->enableldap              = '$date, 由 <strong>$actor</strong> 启用了LDAP。' . "\n";
 $lang->action->desc->disableldap             = '$date, 由 <strong>$actor</strong> 禁用了LDAP。' . "\n";
