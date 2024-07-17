@@ -136,6 +136,7 @@ $config->pivot->objectTableFields->user['account']['title']  = $lang->user->acco
 $config->pivot->objectTableFields->user['gender']['title']   = $lang->user->gender;
 $config->pivot->objectTableFields->user['gender']['map']     = $lang->user->genderList;
 $config->pivot->objectTableFields->user['role']['title']     = $lang->user->role;
+$config->pivot->objectTableFields->user['role']['map']       = $lang->user->roleList;
 
 $config->pivot->objectTableFields->ticket = array();
 $config->pivot->objectTableFields->ticket['id']['name']  = 'id';
