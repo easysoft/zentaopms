@@ -12,6 +12,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+h::css("#browseTypeList .menu-item .item-content{height:30px;}");
+h::css("#browseTypeList .menu-item.active .item-content{color: var(--menu-selected-color); font-weight: 700;}");
+h::css("#browseTypeList .menu-item.active .item-content:hover{color: #fff;}");
+
 $ganttLang = new stdclass();
 $ganttLang->exporting        = $lang->programplan->exporting;
 $ganttLang->exportFail       = $lang->programplan->exportFail;
@@ -32,7 +36,7 @@ foreach($lang->programplan->ganttBrowseType as $browseType => $typeName)
     $link = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType");
     if($app->rawModule == 'review' and $app->rawMethod == 'assess') $this->createLink('review', 'assess', "reivewID=$reviewID&from=&type=$browseType");
 
-    $typeHtml .= '<li class="menu-item' . ($ganttType == $browseType ? " active" : '') . '">' . html::a($link, $typeName) . '</li>';
+    $typeHtml .= '<li class="menu-item' . ($ganttType == $browseType ? " active" : '') . '">' . html::a($link, $typeName, '', "class='item-content'") . '</li>';
 }
 $typeHtml .= '</menu>';
 

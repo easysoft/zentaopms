@@ -36,23 +36,23 @@ if($app->rawModule == 'programplan')
     }
     toolbar
     (
-        div
+        btnGroup
         (
-            btn(setClass('primary switchBtn'), set::title($lang->programplan->gantt), icon('gantt-alt')),
-            btn(setClass('switchBtn'), set::title($lang->project->bylist), set::url($this->createLink('project', 'execution', "status=all&projectID=$projectID")), icon('list'))
+            btn(setClass('square switchBtn text-primary'), set::title($lang->programplan->gantt), icon('gantt-alt')),
+            btn(setClass('square switchBtn'), set::title($lang->project->bylist), set::url($this->createLink('project', 'execution', "status=all&projectID=$projectID")), icon('list'))
         ),
-        btn(setClass('no-underline'), set::type('link'), setID('fullScreenBtn'), icon('fullscreen'), $lang->programplan->full),
+        btn(setClass('no-underline'), set::type('link'), setID('fullScreenBtn'), set::icon('fullscreen'), $lang->programplan->full),
         dropdown
         (
-            btn(set::type('link'), setClass('no-underline'), $lang->export),
+            btn(set::type('link'), setClass('no-underline'), set::icon('export'), $lang->export),
             set::items(array
             (
                 array('text' => $lang->execution->gantt->exportImg, 'url' => 'javascript:exportGantt()'),
                 array('text' => $lang->execution->gantt->exportPDF, 'url' => 'javascript:exportGantt("pdf")')
             ))
         ),
-        btn(set::url($this->createLink('programplan', 'ajaxcustom')), icon('cog-outline'), $lang->settings, setClass('no-underline'), set::type('link'), set('data-toggle', 'modal'), set('data-size', 'sm')),
-        (common::hasPriv('programplan', 'create') && empty($product->deleted)) ? btn(set::url($this->createLink('programplan', 'create', "projectID=$projectID")), icon('plus'), $lang->programplan->create, setClass('primary')) : null
+        btn(set::url($this->createLink('programplan', 'ajaxcustom')), set::icon('cog-outline'), $lang->settings, setClass('no-underline'), set::type('link'), set('data-toggle', 'modal'), set('data-size', 'sm')),
+        (common::hasPriv('programplan', 'create') && empty($product->deleted)) ? btn(set::url($this->createLink('programplan', 'create', "projectID=$projectID")), set::icon('plus'), $lang->programplan->create, setClass('primary')) : null
     );
 }
 
