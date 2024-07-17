@@ -587,6 +587,13 @@ class fileModel extends model
             return $this->loadModel($groupName)->checkPriv((int)$groupID);
         }
 
+        if($objectType == 'build')
+        {
+            $build = $this->dao->findByID('project,execution')->from(TABLE_BUILD)->fetch();
+            if($build->execution) return $this->loadModel('execution')->checkPriv($build->execution);
+            return $this->loadModel('project')->checkPriv($build->project);
+        }
+
         if($objectType == 'release')
         {
             $release = $this->dao->select('project,product')->from(TABLE_RELEASE)->where('id')->eq($objectID)->fetch();

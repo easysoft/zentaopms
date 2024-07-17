@@ -27,4 +27,3 @@ $config->file->objectGroup['bug']         = 'product';
 $config->file->objectGroup['testcase']    = 'product';
 $config->file->objectGroup['testtask']    = 'product';
 $config->file->objectGroup['task']        = 'execution';
-$config->file->objectGroup['build']       = 'execution';
