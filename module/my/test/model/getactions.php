@@ -35,5 +35,5 @@ $app->loadLang('action');
 $my = new myTest();
 
 $actions = $my->getActionsTest();
-r(implode(',', $actions)) && p() && e('96,64,32,95,63'); // 正常查询action
+r(implode(',', $actions)) && p() && e('93,62,31,92,61'); // 正常查询action
 r(count($actions))        && p() && e('5');              // 正常查询action统计

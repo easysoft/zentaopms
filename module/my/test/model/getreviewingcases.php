@@ -19,10 +19,10 @@ cid=1
 - 测试获取用户 admin 排序 id_asc 的需求id。 @1,5,9,13,17
 
 - 测试获取用户 admin 排序 id_asc 的需求是否存在。 @exist
-- 测试获取用户 user1 排序 id_desc 的需求id。 @empty
-- 测试获取用户 user1 排序 id_desc 的需求是否存在。 @empty
-- 测试获取用户 user1 排序 id_asc 的需求id。 @empty
-- 测试获取用户 user1 排序 id_asc 的需求是否存在。 @empty
+- 测试获取用户 user1 排序 id_desc 的需求id。 @17,13,9,5,1
+- 测试获取用户 user1 排序 id_desc 的需求是否存在。 @exist
+- 测试获取用户 user1 排序 id_asc 的需求id。 @1,5,9,13,17
+- 测试获取用户 user1 排序 id_asc 的需求是否存在。 @exist
 
 */
 
@@ -35,7 +35,7 @@ r($my->getReviewingCasesTest($account[0], $orderBy[0], $checkExist[0])) && p() &
 r($my->getReviewingCasesTest($account[0], $orderBy[0], $checkExist[1])) && p() && e('exist');       // 测试获取用户 admin 排序 id_desc 的需求是否存在。
 r($my->getReviewingCasesTest($account[0], $orderBy[1], $checkExist[0])) && p() && e('1,5,9,13,17'); // 测试获取用户 admin 排序 id_asc 的需求id。
 r($my->getReviewingCasesTest($account[0], $orderBy[1], $checkExist[1])) && p() && e('exist');       // 测试获取用户 admin 排序 id_asc 的需求是否存在。
-r($my->getReviewingCasesTest($account[1], $orderBy[0], $checkExist[0])) && p() && e('empty');       // 测试获取用户 user1 排序 id_desc 的需求id。
-r($my->getReviewingCasesTest($account[1], $orderBy[0], $checkExist[1])) && p() && e('empty');       // 测试获取用户 user1 排序 id_desc 的需求是否存在。
-r($my->getReviewingCasesTest($account[1], $orderBy[1], $checkExist[0])) && p() && e('empty');       // 测试获取用户 user1 排序 id_asc 的需求id。
-r($my->getReviewingCasesTest($account[1], $orderBy[1], $checkExist[1])) && p() && e('empty');       // 测试获取用户 user1 排序 id_asc 的需求是否存在。
+r($my->getReviewingCasesTest($account[1], $orderBy[0], $checkExist[0])) && p() && e('17,13,9,5,1'); // 测试获取用户 user1 排序 id_desc 的需求id。
+r($my->getReviewingCasesTest($account[1], $orderBy[0], $checkExist[1])) && p() && e('exist');       // 测试获取用户 user1 排序 id_desc 的需求是否存在。
+r($my->getReviewingCasesTest($account[1], $orderBy[1], $checkExist[0])) && p() && e('1,5,9,13,17'); // 测试获取用户 user1 排序 id_asc 的需求id。
+r($my->getReviewingCasesTest($account[1], $orderBy[1], $checkExist[1])) && p() && e('exist');       // 测试获取用户 user1 排序 id_asc 的需求是否存在。

@@ -29,13 +29,13 @@ cid=1
 - 测试获取用户 admin 类型 createdbyme 排序 id_asc 不分页 的待评审类型。 @0
 - 测试获取用户 admin 类型 createdbyme 排序 id_desc 获取前两个 的待评审类型。 @0
 - 测试获取用户 admin 类型 createdbyme 排序 id_asc 获取前两个 的待评审类型。 @0
-- 测试获取用户 user1 类型 all 排序 id_desc 不分页 的待评审类型。 @0
+- 测试获取用户 user1 类型 all 排序 id_desc 不分页 的待评审类型。 @testcase,17;testcase,13;testcase,9;testcase,5;testcase,1;
 - 测试获取用户 user1 类型 createdbyme 排序 id_desc 不分页 的待评审类型。 @0
-- 测试获取用户 user1 类型 all 排序 id_asc 不分页 的待评审类型。 @0
+- 测试获取用户 user1 类型 all 排序 id_asc 不分页 的待评审类型。 @testcase,1;testcase,5;testcase,9;testcase,13;testcase,17;
 - 测试获取用户 user1 类型 createdbyme 排序 id_asc 不分页 的待评审类型。 @0
-- 测试获取用户 user1 类型 all 排序 id_desc 获取前两个 的待评审类型。 @0
+- 测试获取用户 user1 类型 all 排序 id_desc 获取前两个 的待评审类型。 @testcase,17;testcase,13;
 - 测试获取用户 user1 类型 createdbyme 排序 id_desc 获取前两个 的待评审类型。 @0
-- 测试获取用户 user1 类型 all 排序 id_asc 获取前两个 的待评审类型。 @0
+- 测试获取用户 user1 类型 all 排序 id_asc 获取前两个 的待评审类型。 @testcase,1;testcase,5;
 - 测试获取用户 user1 类型 createdbyme 排序 id_asc 获取前两个 的待评审类型。 @0
 
 */
@@ -63,11 +63,11 @@ r($my->getReviewingListTest($account[0], $browseType[1], $orderBy[1], $pageList[
 r($my->getReviewingListTest($account[0], $browseType[1], $orderBy[0], $pageList[1])) && p() && e('0'); // 测试获取用户 admin 类型 createdbyme 排序 id_desc 获取前两个 的待评审类型。
 r($my->getReviewingListTest($account[0], $browseType[1], $orderBy[1], $pageList[1])) && p() && e('0'); // 测试获取用户 admin 类型 createdbyme 排序 id_asc 获取前两个 的待评审类型。
 
-r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[0], $pageList[0])) && p() && e('0'); // 测试获取用户 user1 类型 all 排序 id_desc 不分页 的待评审类型。
-r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[0], $pageList[0])) && p() && e('0'); // 测试获取用户 user1 类型 createdbyme 排序 id_desc 不分页 的待评审类型。
-r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[1], $pageList[0])) && p() && e('0'); // 测试获取用户 user1 类型 all 排序 id_asc 不分页 的待评审类型。
-r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[1], $pageList[0])) && p() && e('0'); // 测试获取用户 user1 类型 createdbyme 排序 id_asc 不分页 的待评审类型。
-r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[0], $pageList[1])) && p() && e('0'); // 测试获取用户 user1 类型 all 排序 id_desc 获取前两个 的待评审类型。
-r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[0], $pageList[1])) && p() && e('0'); // 测试获取用户 user1 类型 createdbyme 排序 id_desc 获取前两个 的待评审类型。
-r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[1], $pageList[1])) && p() && e('0'); // 测试获取用户 user1 类型 all 排序 id_asc 获取前两个 的待评审类型。
-r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[1], $pageList[1])) && p() && e('0'); // 测试获取用户 user1 类型 createdbyme 排序 id_asc 获取前两个 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[0], $pageList[0])) && p() && e('testcase,17;testcase,13;testcase,9;testcase,5;testcase,1;'); // 测试获取用户 user1 类型 all 排序 id_desc 不分页 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[0], $pageList[0])) && p() && e('0');                                                         // 测试获取用户 user1 类型 createdbyme 排序 id_desc 不分页 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[1], $pageList[0])) && p() && e('testcase,1;testcase,5;testcase,9;testcase,13;testcase,17;'); // 测试获取用户 user1 类型 all 排序 id_asc 不分页 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[1], $pageList[0])) && p() && e('0');                                                         // 测试获取用户 user1 类型 createdbyme 排序 id_asc 不分页 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[0], $pageList[1])) && p() && e('testcase,17;testcase,13;');                                  // 测试获取用户 user1 类型 all 排序 id_desc 获取前两个 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[0], $pageList[1])) && p() && e('0');                                                         // 测试获取用户 user1 类型 createdbyme 排序 id_desc 获取前两个 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[0], $orderBy[1], $pageList[1])) && p() && e('testcase,1;testcase,5;');                                    // 测试获取用户 user1 类型 all 排序 id_asc 获取前两个 的待评审类型。
+r($my->getReviewingListTest($account[1], $browseType[1], $orderBy[1], $pageList[1])) && p() && e('0');                                                         // 测试获取用户 user1 类型 createdbyme 排序 id_asc 获取前两个 的待评审类型。

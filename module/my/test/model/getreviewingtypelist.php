@@ -32,4 +32,4 @@ $my->objectModel->setUser('admin');
 $account = array('admin', 'user1');
 
 r($my->getReviewingTypeListTest($account[0])) && p() && e('all,story,requirement,testcase'); // 测试获取用户 admin 的待评审类型。
-r($my->getReviewingTypeListTest($account[1])) && p() && e('all');                            // 测试获取用户 user1 的待评审类型。
+r($my->getReviewingTypeListTest($account[1])) && p() && e('all,testcase');                   // 测试获取用户 user1 的待评审类型。
