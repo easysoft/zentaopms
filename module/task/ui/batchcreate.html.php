@@ -15,8 +15,6 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 /* ====== Preparing and processing page data ====== */
 jsVar('executionID', $execution->id);
 jsVar('storyTasks', $storyTasks);
-jsVar('taskConsumed', $taskConsumed);
-jsVar('addChildTask', $lang->task->addChildTask);
 
 /* zin: Set variables to define picker options for form. */
 $storyItem         = '';
@@ -145,13 +143,15 @@ formBatchPanel
     set::title($lang->task->batchCreate),
     set::pasteField('name'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
-    set::headingActionsClass('flex-auto'),
+    set::headingActionsClass('flex-auto row-reverse justify-between w-11/12'),
+    $taskConsumed > 0 ? on::inited()->call('zui.Modal.alert', $lang->task->addChildTask) : null,
     to::headingActions
     (
         checkbox
         (
             setID('zeroTaskStory'),
             set::text($lang->story->zeroTask),
+            set::rootClass('items-center'),
             on::change('toggleZeroTaskStory')
         )
     ),

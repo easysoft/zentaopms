@@ -113,7 +113,7 @@ formBatchPanel
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->hyphen . $this->lang->story->subdivide : $this->lang->story->batchCreate),
-    $storyTypeRadio ? set::headingActionsClass('flex-auto') : null,
+    $storyTypeRadio ? set::headingActionsClass('flex-auto row-reverse justify-between w-11/12') : null,
     $storyTypeRadio ? to::headingActions($storyTypeRadio) : null,
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan={$planID}&type=$type")),
     set::pasteField('title'),

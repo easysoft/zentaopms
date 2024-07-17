@@ -1,5 +1,3 @@
-$('input[name=typeSwitcher]').closest('.panel-actions').addClass('row-reverse justify-between w-11/12');
-
 window.setModuleAndPlanByBranch = function(e)
 {
     const $branch  = $(e.target);
