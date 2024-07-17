@@ -4,8 +4,9 @@ $config->doc->dtable = new stdclass();
 $config->doc->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->doc->dtable->fieldList['id']['type']  = 'id';
 
-$config->doc->dtable->fieldList['title']['type'] = 'title';
-$config->doc->dtable->fieldList['title']['link'] = array('module' => 'doc', 'method' => 'view', 'params' => 'docID={id}');
+$config->doc->dtable->fieldList['title']['title'] = $lang->doc->title;
+$config->doc->dtable->fieldList['title']['type']  = 'title';
+$config->doc->dtable->fieldList['title']['link']  = array('module' => 'doc', 'method' => 'view', 'params' => 'docID={id}');
 
 $config->doc->dtable->fieldList['objectName']['title']      = $lang->doc->object;
 $config->doc->dtable->fieldList['objectName']['type']       = 'desc';
@@ -19,11 +20,14 @@ $config->doc->dtable->fieldList['module']['sortType'] = true;
 $config->doc->dtable->fieldList['addedBy']['title'] = $lang->doc->addedByAB;
 $config->doc->dtable->fieldList['addedBy']['type']  = 'user';
 
-$config->doc->dtable->fieldList['addedDate']['type'] = 'date';
+$config->doc->dtable->fieldList['addedDate']['title'] = $lang->doc->addedDate;
+$config->doc->dtable->fieldList['addedDate']['type']  = 'date';
 
+$config->doc->dtable->fieldList['editedBy']['title'] = $lang->doc->editedBy;
 $config->doc->dtable->fieldList['editedBy']['type']  = 'user';
 
-$config->doc->dtable->fieldList['editedDate']['type'] = 'date';
+$config->doc->dtable->fieldList['editedDate']['title'] = $lang->doc->editedDate;
+$config->doc->dtable->fieldList['editedDate']['type']  = 'date';
 
 $config->doc->dtable->fieldList['actions']['type'] = 'actions';
 $config->doc->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
