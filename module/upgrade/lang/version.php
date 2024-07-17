@@ -194,7 +194,8 @@ $lang->upgrade->fromVersions['20_0_beta2']  = '20.0.beta2';
 $lang->upgrade->fromVersions['20_0']        = '20.0';
 $lang->upgrade->fromVersions['20_1_0']      = '20.1.0';
 $lang->upgrade->fromVersions['20_1_1']      = '20.1.1';
-$lang->upgrade->fromVersions['20_2_0']      = '20.2.0'; // pms insert position.
+$lang->upgrade->fromVersions['20_2_0']      = '20.2.0';
+$lang->upgrade->fromVersions['20_3_0']      = '20.3.0'; // pms insert position.
 
 global $config;
 /* Lite. */
@@ -443,7 +444,8 @@ $lang->upgrade->fromVersions['max4_11']        = 'Max4.11';
 $lang->upgrade->fromVersions['max4_12']        = 'Max4.12';
 $lang->upgrade->fromVersions['max5_0_0_beta1'] = 'Max5.0.0.beta1';
 $lang->upgrade->fromVersions['max5_0_0']       = 'Max5.0.0';
-$lang->upgrade->fromVersions['max5_1_0']       = 'Max5.1.0'; // max insert position.
+$lang->upgrade->fromVersions['max5_1_0']       = 'Max5.1.0';
+$lang->upgrade->fromVersions['max5_2_0']       = 'Max5.2.0'; // max insert position.
 
 /* Ipd */
 $lang->upgrade->fromVersions['ipd1_0_beta1']   = 'Ipd1.0.beta1';
@@ -457,4 +459,5 @@ $lang->upgrade->fromVersions['ipd1_2']         = 'Ipd1.2';
 $lang->upgrade->fromVersions['ipd1_3']         = 'Ipd1.3';
 $lang->upgrade->fromVersions['ipd1_4']         = 'Ipd1.4';
 $lang->upgrade->fromVersions['ipd2_0_0_beta1'] = 'Ipd2.0.0.beta1';
-$lang->upgrade->fromVersions['ipd2_0_0']       = 'Ipd2.0.0'; // ipd insert position.
+$lang->upgrade->fromVersions['ipd2_0_0']       = 'Ipd2.0.0';
+$lang->upgrade->fromVersions['ipd2_1_0']       = 'Ipd2.1.0'; // ipd insert position.
