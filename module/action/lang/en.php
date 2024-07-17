@@ -332,7 +332,14 @@ $lang->action->desc->adjustmemory            = '$date, resized to <strong>$newVa
 $lang->action->desc->adjustcpu               = '$date, resized to <strong>$newValue</strong> CPU by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->adjustvol               = '$date, resized to <strong>$newValue</strong> GB disk space by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->adjustmemorychange      = '$date, modify the memory from <strong>$oldValue</strong> to <strong>$newValue</strong> by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->adjustcpuchange         = '$date, modify CPU from <strong>$oldValue</strong>-core to <strong>$newValue</strong>-core by <strong>$actor</strong>.' . "\n";
+if(empty($oldValue))
+{
+    $lang->action->desc->adjustcpuchange     = '$date, modify CPU from <strong>unlimit</strong> to <strong>$newValue</strong>-core by <strong>$actor</strong>.' . "\n";
+}
+else
+{
+    $lang->action->desc->adjustcpuchange     = '$date, modify CPU from <strong>$oldValue</strong>-core to <strong>$newValue</strong>-core by <strong>$actor</strong>.' . "\n";
+}
 $lang->action->desc->adjustvolchange         = '$date, modify this disk space from <strong>oldValue</strong>GB to <strong>newValue</strong>GB。' . "\n";
 $lang->action->desc->enableldap              = '$date, enabled by <strong>$actor</strong> of LDAP。' . "\n";
 $lang->action->desc->disableldap             = '$date, disabled by <strong>$actor</strong> of LDAP。' . "\n";
