@@ -1155,7 +1155,6 @@ class storyTao extends storyModel
         {
             $children = $this->dao->select('*')->from(TABLE_STORY)
                 ->where('parent')->eq($storyID)
-                ->andWhere('deleted')->eq(0)
                 ->fetch();
 
             $this->computeParentStage($children);
@@ -1446,7 +1445,7 @@ class storyTao extends storyModel
             $parentStage = $roadmapStatus == 'launched' ? 'incharter' : 'inroadmap';
         }
 
-        if($parentStage != $parent->stage)
+        if($parentStage != $parent->stage && $parent->status != 'closed')
         {
             if(!empty($parent->demand)) $demandList[$parent->demand] = $parent->demand;
             $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();

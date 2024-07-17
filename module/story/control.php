@@ -652,6 +652,8 @@ class story extends control
                 $this->action->create('story', $story->parent, 'deleteChildrenStory', '', $storyID);
             }
 
+            $this->story->setStage($story->id);
+
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));

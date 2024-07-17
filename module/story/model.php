@@ -4826,6 +4826,9 @@ class storyModel extends model
             $status      = $this->getActivateStatus((int)$syncStoryID, false);
         }
 
+        /* Change status of launched and projected to active. */
+        if(in_array($status, array('launched', 'projected'))) $status = 'active';
+
         return $status;
     }
 
