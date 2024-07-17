@@ -101,7 +101,7 @@ detailBody
             h::table
             (
                 setStyle('min-width', '600px'),
-                setClass('table w-auto max-w-full bordered mt-4'),
+                setClass('table w-auto max-w-full bordered mt-4 text-center store-info'),
                 h::tr
                 (
                     h::th($lang->store->appVersion),
