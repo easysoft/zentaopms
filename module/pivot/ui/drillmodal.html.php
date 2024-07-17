@@ -22,5 +22,6 @@ dtable
     set::bordered(true),
     set::cols($cols),
     set::data($datas),
+    set::userMap($users),
     set::onRenderCell(jsRaw('window.renderDrillResult'))
 );

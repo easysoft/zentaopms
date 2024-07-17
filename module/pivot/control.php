@@ -91,6 +91,7 @@ class pivot extends control
         $this->view->title = $this->lang->pivot->step3->drillView;
         $this->view->cols  = $cols;
         $this->view->datas = $datas;
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 }

@@ -2500,7 +2500,6 @@ class pivotModel extends model
             $userTypeCols      = $this->config->pivot->userTypeCols;
             $nameTypeCols      = $this->config->pivot->nameTypeCols;
             $reuseDtableFields = $this->config->pivot->reuseDtableFields;
-            $userPairs         = $this->loadModel('user')->getPairs('noletter|noclosed');
             foreach($this->config->pivot->drillObjectFields[$object] as $fieldKey)
             {
                 $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : $this->config->pivot->objectTableFields->$object[$fieldKey];
@@ -2518,11 +2517,7 @@ class pivotModel extends model
                     $fieldSetting['link']['target'] = '_blank';
                 }
 
-                if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], $userTypeCols))
-                {
-                    $fieldSetting['type'] = 'user';
-                    $fieldSetting['map']  = $userPairs;
-                }
+                if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], $userTypeCols)) $fieldSetting['type'] = 'user';
 
                 foreach(array_keys($fieldSetting) as $settingKey)
                 {
