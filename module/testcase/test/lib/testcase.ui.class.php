@@ -14,30 +14,30 @@ class testcase extends tester
         if(isset($testcase['prediction'])) $form->dom->prediction->setValue($testcase['prediction']);
         if(isset($testcase['steps']))
         {
-            $fatherGroup = 0;
-            foreach($testcase['steps'] as $fatherSteps => $fatherExpects)
+            $parentGroup = 0;
+            foreach($testcase['steps'] as $parentSteps => $parentExpects)
             {
-                $fatherGroup++;
-                if(!is_array($fatherExpects))
+                $parentGroup++;
+                if(!is_array($parentExpects))
                 {
-                    $form->dom->{"steps[$fatherGroup]"}->scrollToElement();
-                    $form->dom->{"steps[$fatherGroup]"}->setValue($fatherSteps);
-                    $form->dom->{"expects[$fatherGroup]"}->setValue($fatherExpects);
+                    $form->dom->{"steps[$parentGroup]"}->scrollToElement();
+                    $form->dom->{"steps[$parentGroup]"}->setValue($parentSteps);
+                    $form->dom->{"expects[$parentGroup]"}->setValue($parentExpects);
                 }
                 else
                 {
                     $group = 0;
-                    $subButton = "//textarea[@name = 'steps[$fatherGroup]']/../..//button[@data-action='sub']/i";
+                    $subButton = "//textarea[@name = 'steps[$parentGroup]']/../..//button[@data-action='sub']/i";
                     $this->page->scrollToElement($subButton);
                     $this->page->click($subButton);
-                    foreach($fatherExpects as $steps => $expects)
+                    foreach($parentExpects as $steps => $expects)
                     {
                         $group++;
                         if(!is_array($expects))
                         {
-                            $form->dom->{"steps[$fatherGroup.$group]"}->scrollToElement();
-                            $form->dom->{"steps[$fatherGroup.$group]"}->setValue($steps);
-                            $form->dom->{"expects[$fatherGroup.$group]"}->setValue($expects);
+                            $form->dom->{"steps[$parentGroup.$group]"}->scrollToElement();
+                            $form->dom->{"steps[$parentGroup.$group]"}->setValue($steps);
+                            $form->dom->{"expects[$parentGroup.$group]"}->setValue($expects);
                         }
                     }
                 }
