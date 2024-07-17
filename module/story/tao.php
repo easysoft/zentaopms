@@ -1450,12 +1450,17 @@ class storyTao extends storyModel
 
         if($parentStage != $parent->stage && $parent->status != 'closed')
         {
-            if(!empty($parent->demand)) $demandList[$parent->demand] = $parent->demand;
             $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
+
+            if($this->config->edition == 'ipd')
+            {
+                if(!empty($parent->demand)) $demandList[$parent->demand] = $parent->demand;
+                if(!empty($story->demand))  $demandList[$story->demand]  = $story->demand;
+                if(!empty($demandList)) $this->loadModel('demand')->updateDemandStage($demandList);
+            }
+
             if($parent->parent > 0) $this->computeParentStage($parent);
         }
-
-        if($this->config->edition == 'ipd' && !empty($demandList)) $this->loadModel('demand')->updateDemandStage($demandList);
     }
 
     /**
