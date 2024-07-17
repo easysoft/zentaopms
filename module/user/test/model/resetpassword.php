@@ -41,8 +41,8 @@ $user4    = (object)array('account' => 'admin', 'password' => $password, 'passwo
 $user5    = (object)array('account' => 'user1', 'password' => $password, 'password1' => $password, 'password2' => $password, 'passwordStrength' => 0, 'passwordLength' => 6);
 
 $result = $userTest->resetPasswordTest($user1);
-r($result) && p('result')   && e(0);            // user2 用户不存在，返回 false。
-r($result) && p('errors:0') && e('用户不存在'); // user2 用户不存在，提示错误信息。
+r($result) && p('result')         && e(0);            // user2 用户不存在，返回 false。
+r($result) && p('errors:account') && e('用户不存在'); // user2 用户不存在，提示错误信息。
 
 $result = $userTest->resetPasswordTest($user2);
 r($result) && p('result')           && e(0);                    // admin 用户存在，但密码为空，返回 false。
