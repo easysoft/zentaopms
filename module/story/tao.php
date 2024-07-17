@@ -1306,12 +1306,15 @@ class storyTao extends storyModel
      */
     public function computeParentStage(object $story)
     {
-        static $demandList;
-
+        $demandList = array();
         if(empty($story->parent))
         {
-            if(!empty($story->demand)) $demandList[$story->demand] = $story->demand;
-            if($this->config->edition == 'ipd') $this->loadModel('demand')->updateDemandStage($demandList);
+            if($this->config->edition == 'ipd' && !empty($story->demand))
+            {
+                $demandList[$story->demand] = $story->demand;
+                if($this->config->edition == 'ipd') $this->loadModel('demand')->updateDemandStage($demandList);
+            }
+            return;
         }
 
         $parent   = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
@@ -1452,7 +1455,7 @@ class storyTao extends storyModel
             if($parent->parent > 0) $this->computeParentStage($parent);
         }
 
-        if($this->config->edition == 'ipd') $this->loadModel('demand')->updateDemandStage($demandList);
+        if($this->config->edition == 'ipd' && !empty($demandList)) $this->loadModel('demand')->updateDemandStage($demandList);
     }
 
     /**
