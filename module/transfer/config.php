@@ -34,6 +34,7 @@ $config->transfer->lazyLoading     = false;
 $config->transfer->showImportCount = 20;
 
 $config->transfer->convertInt['branch']['getPairs']['productID']                = true;
+$config->transfer->convertInt['bug']['getDatatableModules']['productID']        = true;
 $config->transfer->convertInt['tree']['getOptionMenu']['libID']                 = true;
 $config->transfer->convertInt['tree']['getOptionMenu']['rootID']                = true;
 $config->transfer->convertInt['tree']['getOptionMenu']['caselib']               = true;
