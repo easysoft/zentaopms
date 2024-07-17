@@ -3983,7 +3983,7 @@ class storyModel extends model
         $storyCols = array();
         foreach($showCols as $colType)
         {
-            if(!in_array($colType, array('epic', 'requirement', 'story'))) continue;
+            if(!in_array($colType, array('demand', 'epic', 'requirement', 'story'))) continue;
             foreach($tracks['cols'] as $col)
             {
                 $colName = $col['name'];
