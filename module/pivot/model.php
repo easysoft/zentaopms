@@ -2591,6 +2591,24 @@ class pivotModel extends model
 
         return $queryResult['rows'];
     }
+
+    /**
+     * Process task datas in Drill modal.
+     *
+     * @param  array  $datas
+     * @access public
+     * @return array
+     */
+    public function processTaskDatas(array $datas): array
+    {
+        $kanbanExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('kanban')->fetchPairs();
+        foreach($datas as $data)
+        {
+            if($data->execution && isset($kanbanExecutions[$data->execution])) $data->isModal = true;
+        }
+
+        return $datas;
+    }
 }
 
 /**
