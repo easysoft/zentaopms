@@ -966,8 +966,8 @@ class storyModel extends model
         $this->computeEstimate($parentID);
 
         $status = $oldParentStory->status;
-        if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed') $status = current($childrenStatus); // Close parent story.
-        if($oldParentStory->status == 'closed' && in_array($childStory->status, array('launched', 'active'))) $status = $this->getActivateStatus($parentID); // Activate parent story.
+        if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed')   $status = current($childrenStatus); // Close parent story.
+        if($oldParentStory->status == 'closed' && $childStory->status == 'active') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
         $action    = '';
         $preStatus = '';
@@ -977,7 +977,7 @@ class storyModel extends model
             if(dao::isError()) return false;
             if(!$createAction) return $story;
 
-            if(strpos('launched,active,draft,changing', $status) !== false) $action = 'Activated';
+            if(strpos('active,draft,changing', $status) !== false) $action = 'Activated';
             if($status == 'closed')
             {
                 /* Record the status before closed. */
@@ -1336,7 +1336,7 @@ class storyModel extends model
             $story = new stdclass();
             $story->title   = $titleList[$twinID]->title;
             $story->version = $oldStory->version - 1;
-            $story->status  = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $this->config->vision == 'rnd') ? 'launched' : 'active';
+            $story->status  = 'active';
             $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
         }
 
@@ -1373,7 +1373,6 @@ class storyModel extends model
 
         $story->reviewer = implode(',', $story->reviewer);
         if($story->reviewer) $story->status = 'reviewing';
-        if($this->config->systemMode == 'PLM' && $this->config->vision == 'rnd' && $oldStory->type == 'requirement' && $story->status == 'active') $story->status = 'launched';
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->in($twinsIdList)->exec();
 
@@ -2095,9 +2094,6 @@ class storyModel extends model
         $story = $postData;
         $story->status = $this->getActivateStatus($storyID);
 
-        /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
-
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
         /* Update parent story status. */
@@ -2737,6 +2733,15 @@ class storyModel extends model
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
+
+            $story->parent = array();
+            foreach(explode(',', trim((string)$story->path, ',')) as $parentID)
+            {
+                if(!$parentID) continue;
+                if($parentID == $story->id) continue;
+                $story->parent[] = (int)$parentID;
+            }
+
             $stories[$story->id] = $story;
         }
 
@@ -3846,6 +3851,7 @@ class storyModel extends model
             ->where('root')->in($rootIdList)
             ->andWhere('product')->eq($productID)
             ->andWhere('deleted')->eq('0')
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->beginIF($storyType == 'requirement')
             ->andWhere('type')->eq('story')
             ->beginIF($showGrades && isset($storyGrades))->andWhere('grade')->in($storyGrades)->fi()
@@ -3977,7 +3983,7 @@ class storyModel extends model
         $storyCols = array();
         foreach($showCols as $colType)
         {
-            if(!in_array($colType, array('epic', 'requirement', 'story'))) continue;
+            if(!in_array($colType, array('demand', 'epic', 'requirement', 'story'))) continue;
             foreach($tracks['cols'] as $col)
             {
                 $colName = $col['name'];
@@ -4441,9 +4447,6 @@ class storyModel extends model
         }
 
         $story->finalResult = $result;
-
-        /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
 
         return $story;
     }

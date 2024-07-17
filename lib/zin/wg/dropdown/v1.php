@@ -117,6 +117,8 @@ class dropdown extends wg
 
         if(is_array($menu) && $menu) $menu = $menu[0];
 
+        if(is_array($menu) && $menu) $menu = $menu[0];
+
         if($menu instanceof menu)
         {
             list($id, $menuProps, $menuClass) = $this->prop(array('id', 'menu', 'menuClass'));

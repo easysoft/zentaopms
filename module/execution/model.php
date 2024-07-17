@@ -2944,7 +2944,7 @@ class executionModel extends model
 
                 foreach($planStories as $id => $story)
                 {
-                    if(!in_array($story->status, array('active', 'launched')) || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
+                    if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
                     if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
                     if(!in_array($execution->attribute, array('mix', 'request', 'design')) && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
                 }
@@ -2980,9 +2980,6 @@ class executionModel extends model
             if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
-
-        /* In ipd project, unlink stories change it's status to launched. */
-        if($execution->model == 'ipd' and $storyType == 'requirement') $this->dao->update(TABLE_STORY)->set('status')->eq('launched')->where('id')->eq($storyID)->exec();
 
         /* Resolve TABLE_KANBANCELL's field cards. */
         if($execution->type == 'kanban')

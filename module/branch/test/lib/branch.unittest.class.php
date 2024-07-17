@@ -382,10 +382,10 @@ class branchTest
     public function changeBranchLanguageTest($productID)
     {
         global $tester;
-        global $lang;
+        global $app;
 
-        $filePath = dirname(__FILE__, 2) . DS . 'lang' . DS . 'zh-cn.php';
-        include $filePath;
+        $app::$loadedLangs = array();
+        $app->loadLang('branch');
 
         $this->objectModel->changeBranchLanguage($productID);
 

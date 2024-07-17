@@ -663,7 +663,14 @@ class productModel extends model
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            return $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
+            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
+            foreach($stories as $storyID => $story)
+            {
+                if($story->type != 'story' && $story->stage == 'closed') unset($stories[$storyID]);
+            }
+            $this->app->loadClass('pager', true);
+            $pager = new pager(count($stories), $pager->recPerPage, $pager->pageID);
+            return $stories ? current(array_chunk($stories, $pager->recPerPage, true)) : array();
         }
 
         /* Set default function called, when browseType is (draftstory, activestory, changingstory, reviewingstory, closedstory, developingstory, launchedstory). */
