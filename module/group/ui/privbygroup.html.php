@@ -245,13 +245,13 @@ else
         {
             $subsetTitle = isset($lang->$subsetName) && isset($lang->$subsetName->common) ? $lang->$subsetName->common : $subsetName;
 
-            $privBodyHtml[] = '<tr>';
+            $privBodyHtml[] = "<tr zui-key='$packageID'>";
             if($i == 1)
             {
                 $rowspan = count($packages[$subsetName]) ? count($packages[$subsetName]) : 1;
                 $checked = $subset->selectCount && $subset->selectCount == $subset->allCount;
                 $checkID = "allChecker{$subsetName}";
-                $privBodyHtml[] = "<th class='text-middle text-left  module' rowspan='$rowspan' data-module='$subsetName' all-privs='$subset->allCount' select-privs='$subset->selectCount'>";
+                $privBodyHtml[] = "<th zui-key='module' class='text-middle text-left  module' rowspan='$rowspan' data-module='$subsetName' all-privs='$subset->allCount' select-privs='$subset->selectCount'>";
                 $privBodyHtml[] = '<div class="checkbox-inline checkbox-left check-all"><div class="checkbox-primary">';
                 $privBodyHtml[] = "<input type='checkbox' id='$checkID' value='1'" . ($checked ? ' checked' : '') . ">";
                 $privBodyHtml[] = "<label for='$checkID' class='" . ($subset->selectCount && $subset->selectCount != $subset->allCount ? 'text-left checkbox-indeterminate-block' : 'text-left') . "'>$subsetTitle</label>";
@@ -262,14 +262,14 @@ else
             $thClass = $i == 1 ? ' td-sm' : ' td-md';
             $checked = $package->allCount == $package->selectCount;
             $checkID = "allCheckerModule{$subsetName}Package{$packageID}";
-            $privBodyHtml[] = "<th class='text-middle text-left package $thClass' data-module='$subsetName' data-package='$packageID' data-divid='{$subsetName}{$packageID}' all-privs='$package->allCount' select-privs='$package->selectCount'>";
+            $privBodyHtml[] = "<th zui-key='package' class='text-middle text-left package $thClass' data-module='$subsetName' data-package='$packageID' data-divid='{$subsetName}{$packageID}' all-privs='$package->allCount' select-privs='$package->selectCount'>";
             $privBodyHtml[] = '<div class="checkbox-inline checkbox-left check-all"><div class="checkbox-primary">';
             $privBodyHtml[] = "<input type='checkbox' id='$checkID' value='browse'" . ($checked ? ' checked' : '') . ">";
             $privBodyHtml[] = "<label for='$checkID' class='" . ($package->selectCount && $package->selectCount != $package->allCount ? 'text-left checkbox-indeterminate-block' : 'text-left') . "'>{$lang->group->package->$packageID}</label>";
             $privBodyHtml[] = '</div></div>';
             $privBodyHtml[] = '</th>';
 
-            $privBodyHtml[] = "<td id='$subsetName'>";
+            $privBodyHtml[] = "<td zui-key='privs' id='$subsetName'>";
             $privBodyHtml[] = $getMethodItemsHtml($package, $subsetName, $packageID, $groupPrivs);
             $privBodyHtml[] = '</td>';
 

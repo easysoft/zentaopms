@@ -201,7 +201,7 @@ else
         if($subset->allCount == 0) continue;
         $subsetTitle = isset($lang->$subsetName) && isset($lang->$subsetName->common) ? $lang->$subsetName->common : $subsetName;
 
-        $privBodyHtml[] = '<tr>';
+        $privBodyHtml[] = "<tr zui-key='$subsetName'>";
 
         $checked = $subset->selectCount && $subset->selectCount == $subset->allCount;
         $checkID = "allChecker{$subsetName}";
