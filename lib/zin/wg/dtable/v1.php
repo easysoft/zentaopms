@@ -385,6 +385,10 @@ class dtable extends wg
             $this->setProp('unassignedText', $lang->noAssigned);
         }
 
-        return zui::dtable(inherit($this));
+        return zui::dtable
+        (
+            $this->hasProp('id') ? set::_id($this->prop('id') . '_table') : null,
+            inherit($this)
+        );
     }
 }
