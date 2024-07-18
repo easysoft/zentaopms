@@ -239,12 +239,23 @@ window.clickCell = function(col, {colName, rowInfo})
     if(!Array.isArray(drillConditions) || !drillConditions.length) return false;
     if(Array.isArray(value)) value = value[0];
 
-    const [originField, conditions] = drillConditions;
-    const filterValues = getFilterValues();
+    let [originField, conditions] = drillConditions;
+    let filterValues = getFilterValues();
 
-    const drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${btoa(JSON.stringify(conditions))}&filterValues=${btoa(JSON.stringify(filterValues))}&value=${value}`);
+    conditions   = latin1ToBase64(JSON.stringify(conditions))
+    filterValues = latin1ToBase64(JSON.stringify(filterValues))
+
+    const drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${conditions}&filterValues=${filterValues}&value=${value}`);
 
     zui.Modal.open({url: drillModalLink, size: 'lg'});
+}
+
+latin1ToBase64 = function(str)
+{
+    const encoder = new TextEncoder();
+    const latin1Array  = encoder.encode(str);
+    const latin1String = String.fromCharCode.apply(null, latin1Array);
+    return btoa(latin1String);
 }
 
 /**
