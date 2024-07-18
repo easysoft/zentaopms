@@ -2608,7 +2608,7 @@ class pivotModel extends model
         $conditionSQLs = array_filter($conditionSQLs);
         $conditionSQL  = 'WHERE ' . implode(' AND ', $conditionSQLs);
 
-        $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSQL, $conditionSQL);
+        $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSql, $conditionSQL, $conditions);
         $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
 
         if($queryResult['result'] != 'success') return array();
