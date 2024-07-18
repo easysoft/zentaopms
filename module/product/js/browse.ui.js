@@ -97,14 +97,15 @@ window.renderCell = function(result, info)
 
         let gradeLabel = '';
         let showGrade  = false;
+        const gradeMap = gradeGroup[story.type] || {};
 
         if(story.type != storyType) showGrade = true;
-        if((story.type == 'epic' || story.type == 'requirement') && Object.keys(gradeGroup[story.type]).length >= 2) showGrade = true;
-        if(story.type == 'story' && Object.keys(gradeGroup[story.type]).length >= 3) showGrade = true;
+        if((story.type == 'epic' || story.type == 'requirement') && Object.keys(gradeMap).length >= 2) showGrade = true;
+        if(story.type == 'story' && Object.keys(gradeMap).length >= 3) showGrade = true;
         if(story.grade > 1) showGrade  = true;
         if(tab != 'product') showGrade = true;
 
-        if(showGrade) gradeLabel = gradeGroup[story.type][story.grade];
+        if(showGrade) gradeLabel = gradeMap[story.grade];
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
@@ -113,13 +114,13 @@ window.renderCell = function(result, info)
     {
         result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
     }
-    if(info.col.name == 'assignedTo' && info.row.data.status == 'closed' && result[0] && result[0]['props'])
+    if(info.col.name == 'assignedTo' && info.row.data.status == 'closed')
     {
         delete result[0]['props']['data-toggle'];
         delete result[0]['props']['href'];
         result[0]['props']['className'] += ' disabled';
     }
-    if(info.col.name == 'childItem' && result[1] && result[1]['attrs'])
+    if(info.col.name == 'childItem')
     {
         result[1]['attrs']['title'] = info.row.data?.childItemTitle;
     }
