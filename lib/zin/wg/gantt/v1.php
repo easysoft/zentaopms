@@ -64,6 +64,7 @@ class gantt extends wg
         if(empty($colsWidth))    $colsWidth = '600';
         if($showChart !== false) $showChart = true;
 
+        $colResize    = $showChart;
         $fileName     = data('fileName');
         $ganttType    = data('ganttType');
         $project      = data('project');
@@ -85,6 +86,7 @@ class gantt extends wg
             jsVar('showFields',      $showFields),
             jsVar('colsWidth',       $colsWidth),
             jsVar('showChart',       $showChart),
+            jsVar('colResize',       $colResize),
             jsVar('userList',        $this->getUserList()),
             jsVar('ganttLang',       $this->prop('ganttLang')),
             jsVar('canGanttEdit',    $this->prop('canEdit')),
