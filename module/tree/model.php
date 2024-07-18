@@ -537,7 +537,7 @@ class treeModel extends model
                 $menuItem->name   = $product;
                 $menuItem->parent = 0;
                 $menuItem->url    = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
-                $menu[] = $menuItem;
+                $menu["product-$id"] = $menuItem;
             }
 
             /* tree menu. */
@@ -555,7 +555,7 @@ class treeModel extends model
                     if(!isset($executionModules[$module->id]) && strpos($extra['extra'], 'allModule') === false) continue;
 
                     $module->url = helper::createLink('execution', 'task', "executionID={$rootID}&type=byModule&param={$module->id}");
-                    $menu[] = $module;
+                    $menu[$module->id] = $module;
                 }
             }
         }
@@ -573,10 +573,10 @@ class treeModel extends model
             while($module = $stmt->fetch())
             {
                 $module->url = helper::createLink('execution', 'task', "executionID={$rootID}&type=byModule&param={$module->id}");
-                $menu[] = $module;
+                $menu[$module->id] = $module;
             }
         }
-        return $menu;
+        return array_values($menu);
     }
 
     /**
