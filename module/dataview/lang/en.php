@@ -140,6 +140,7 @@ $lang->dataview->groupList['project']   = 'project';
 $lang->dataview->groupList['execution'] = $lang->execution->common;
 $lang->dataview->groupList['kanban']    = 'Kanban';
 $lang->dataview->groupList['qa']        = 'Test';
+$lang->dataview->groupList['feedback']  = 'Feedback';
 $lang->dataview->groupList['doc']       = 'Doc';
 $lang->dataview->groupList['assetlib']  = 'Assetlib';
 $lang->dataview->groupList['report']    = 'Report';

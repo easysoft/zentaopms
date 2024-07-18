@@ -283,8 +283,8 @@ $lang->pivot->notEmpty      = '不能为空。';
 
 $lang->pivot->noPivotTip      = '保存设置后，即可显示透视表';
 $lang->pivot->noQueryTip      = '暂时没有筛选器。';
-$lang->pivot->noDrillTip      = '未配置数据下钻。';
 $lang->pivot->noPivot         = '暂时没有透视表';
+$lang->pivot->noDrillTip      = '未配置数据下钻。';
 $lang->pivot->dataError       = '"%s" 填写的不是合法的值';
 $lang->pivot->noChartSelected = '请选择至少一个图表。';
 $lang->pivot->beginGtEnd      = '开始时间不得大于结束时间。';

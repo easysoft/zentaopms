@@ -81,8 +81,8 @@ $lang->product->reviewingStories        = "评审中{$lang->SRCommon}";
 $lang->product->reviewingStoriesTitle   = "评审中{$lang->SRCommon}";
 $lang->product->closedStories           = "已关闭{$lang->SRCommon}";
 $lang->product->closedStoriesTitle      = "已关闭{$lang->SRCommon}";
-$lang->product->totalStories            = "{$lang->SRCommon}数";
 $lang->product->storyCompleteRate       = "{$lang->SRCommon}完成率";
+$lang->product->totalStories            = "{$lang->SRCommon}数";
 $lang->product->activeRequirements      = "激活{$lang->URCommon}";
 $lang->product->changedRequirements     = "已变更{$lang->URCommon}";
 $lang->product->draftRequirements       = "草稿{$lang->URCommon}";
@@ -103,8 +103,8 @@ $lang->product->assignToNullBugs        = '未指派Bug';
 $lang->product->assignToNullBugsTitle   = '未指派Bug';
 $lang->product->closedBugs              = '关闭Bug';
 $lang->product->bugFixedRate            = '修复率';
-$lang->product->totalBugs               = 'Bug总数';
 $lang->product->unfoldClosed            = '展开已关闭';
+$lang->product->totalBugs               = 'Bug总数';
 $lang->product->storyDeliveryRate       = "需求交付率";
 $lang->product->storyDeliveryRateTip    = "需求交付率 = 阶段为已发布或关闭原因是已完成需求数 /（研发需求总数 - 关闭原因不是已完成的需求数）* 100%";
 
@@ -261,6 +261,7 @@ $lang->product->featureBar['project']['wait']      = '未开始';
 $lang->product->featureBar['project']['doing']     = '进行中';
 $lang->product->featureBar['project']['suspended'] = '已挂起';
 $lang->product->featureBar['project']['closed']    = '已关闭';
+
 
 $lang->product->moreSelects['browse']['more']['reviewedbyme']   = $lang->product->reviewedByMe;
 $lang->product->moreSelects['browse']['more']['assignedbyme']   = $lang->product->assignedByMe;
