@@ -48,7 +48,7 @@ $lang->testsuite->confirmUnlinkCase = 'Voulez-vous retirer ce CasTest ?';
 $lang->testsuite->noticeNone        = "Vous n'avez pas encore créé de Cahier de Recette pour l'instant.";
 $lang->testsuite->noModule          = '<div>Vous avez aucun Module.</div><div>Gérer les Modules maintenant.</div>';
 $lang->testsuite->noTestsuite       = 'Aucun Cahier de Recette.';
-$lang->testsuite->summary           = "Total suites: <strong>%d</strong>, public: <strong>%d</strong>, private: <strong>%de</strong>.";
+$lang->testsuite->summary           = "Total suites: <strong>%d</strong>, public: <strong>%d</strong>, private: <strong>%d</strong>.";
 
 $lang->testsuite->lblCases      = 'CasTests';
 $lang->testsuite->lblUnlinkCase = 'Retirer CasTest';
