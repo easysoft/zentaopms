@@ -386,6 +386,7 @@
     function renderWithHtml($target, html, selector, noMorph)
     {
         if(typeof selector === 'string') selector = parseSelector(selector);
+        if($target.hasClass('no-morph')) noMorph = true;
         if(selector.inner)
         {
             if(noMorph)
@@ -460,13 +461,13 @@
         }
 
         beforeUpdate($target, info, options);
-        $target = renderWithHtml($target, info.data, selector, !options.partial && options.isDiffPage);
+        $target = renderWithHtml($target, info.data, selector, options.noMorph);
         afterUpdate($target, info, options);
     }
 
     function renderPage(list, options)
     {
-        if(DEBUG) showLog('Render', [options.id, list.length, (!options.partial && options.isDiffPage) ? 'html' : 'morph'], list, {options});
+        if(DEBUG) showLog('Render', [options.id, list.length, options.noMorph ? 'html' : 'morph'], list, {options});
         let hasUpdatePage = false;
         list.forEach(item =>
         {
@@ -529,12 +530,14 @@
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
         options.isDiffPage = isDiffPage(url);
+        options.pageID     = getUrlID(url);
         if(!options.cache && options.cache !== false) options.cache = (requestMethod === 'GET' && config.clientCache && !options.partial) ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
         const cacheKey = options.cache;
         let cache;
         let cacheHit;
         const renderPageData = (data, onlyZinDebug) =>
         {
+            const renderOptions = $.extend({noMorph: !options.partial && options.isDiffPage}, options);
             if(!onlyZinDebug) updatePerfInfo(options, 'renderBegin');
             renderPage(data.reduce((list, item, idx) =>
             {
@@ -542,7 +545,7 @@
                 item.selector = selectors[idx];
                 if(!onlyZinDebug || item.name === 'zinDebug') list.push(item);
                 return list;
-            }, []), options);
+            }, []), renderOptions);
             if(!onlyZinDebug) updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
         };
         updatePerfInfo(options, 'requestBegin', {perf: {renderBegin: undefined, renderEnd: undefined}});
