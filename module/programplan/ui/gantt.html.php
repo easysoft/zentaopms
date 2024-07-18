@@ -21,8 +21,9 @@ if($app->rawModule == 'programplan')
     {
         $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;
         $items    = array();
-        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), 'active' => $productID == $key);
-        featureBar(
+        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"));
+        featureBar
+        (
             dropdown
             (
                 btn(set::type('link'), setClass('no-underline'), $viewName),

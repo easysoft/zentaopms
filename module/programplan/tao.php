@@ -754,7 +754,7 @@ class programplanTao extends programplanModel
      */
     protected function buildTaskDataForGantt(object $task, array $dateLimit, int $groupID = 0, array $tasksMap = array()): object
     {
-        $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
+        $taskPri  = "<span class='pri-%s align-middle' title='%s'>%s</span> ";
         $pri      = zget($this->lang->task->priList, $task->pri);
         $priIcon  = sprintf($taskPri, $task->pri, $pri, $pri);
         $progress = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
@@ -762,7 +762,7 @@ class programplanTao extends programplanModel
         $data = new stdclass();
         $data->id           = $task->id;
         $data->type         = 'task';
-        $data->text         = $priIcon . $task->name;
+        $data->text         = $priIcon . "<span class='gantt_title'>{$task->name}</span>";
         $data->percent      = '';
         $data->status       = $this->processStatus('task', $task);
         $data->owner_id     = $task->assignedTo;
