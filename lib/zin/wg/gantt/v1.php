@@ -95,6 +95,9 @@ class gantt extends wg
             jsVar('zooming',         $this->prop('zooming')),
             jsVar('options',         $this->prop('options')),
             jsVar('height',          (int)$this->prop('height')),
+            jsVar('canViewReview',   common::hasPriv('review', 'view')),
+            jsVar('canViewTaskList', common::hasPriv('execution', 'task')),
+            jsVar('canViewTask',     common::hasPriv('task', 'view')),
             setID('ganttContainer'),
             div(setID($id), setClass('gantt')),
             div(setID('myCover'), div(setID('gantt_here')))
