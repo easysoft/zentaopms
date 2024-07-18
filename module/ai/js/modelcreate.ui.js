@@ -45,7 +45,6 @@ const handleVendorChange = () =>
     $('.vendor-tips').html(vendorTip ? vendorTip : '');
     $('.vendor-row').each((_, el) => {$(el).toggle(requiredFields.includes($(el).find('input').attr('name')));});
 };
-handleVendorChange();
 
 const handleProxyTypeChange = () =>
 {
@@ -54,6 +53,7 @@ const handleProxyTypeChange = () =>
 
 $(() =>
 {
+    handleVendorChange();
     $('select[name="type"]').on('change', handleModelTypeChange);
     $('select[name="vendor"]').on('change', handleVendorChange);
     $('select[name="proxyType"]').on('change', handleProxyTypeChange);
