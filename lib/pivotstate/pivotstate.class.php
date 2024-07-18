@@ -517,8 +517,8 @@ class pivotState
                     if(!empty($begin)) $begin = date('Y-m-d 00:00:00', strtotime($begin));
                     if(!empty($end))   $end   = date('Y-m-d 23:59:59', strtotime($end));
 
-                    if(!empty($begin) &&  empty($end)) $filterWheres[$field] = array('operator' => '>',       'type' => $type, 'value' => "'{$begin}'");
-                    if( empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => '<',       'type' => $type, 'value' => "'{$end}'");
+                    if(!empty($begin) &&  empty($end)) $filterWheres[$field] = array('operator' => '>=',      'type' => $type, 'value' => "'{$begin}'");
+                    if( empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => '<=',      'type' => $type, 'value' => "'{$end}'");
                     if(!empty($begin) && !empty($end)) $filterWheres[$field] = array('operator' => 'BETWEEN', 'type' => $type, 'value' => "'{$begin}' AND '{$end}'");
                     break;
                 default:

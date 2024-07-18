@@ -697,8 +697,8 @@ class pivotModel extends model
                         if(!empty($begin)) $begin = date('Y-m-d 00:00:00', strtotime($begin));
                         if(!empty($end))   $end   = date('Y-m-d 23:59:59', strtotime($end));
 
-                        if(!empty($begin) &&  empty($end)) $filterFormat[$field] = array('operator' => '>',       'value' => "'{$begin}'");
-                        if( empty($begin) && !empty($end)) $filterFormat[$field] = array('operator' => '<',       'value' => "'{$end}'");
+                        if(!empty($begin) &&  empty($end)) $filterFormat[$field] = array('operator' => '>=',       'value' => "'{$begin}'");
+                        if( empty($begin) && !empty($end)) $filterFormat[$field] = array('operator' => '<=',       'value' => "'{$end}'");
                         if(!empty($begin) && !empty($end)) $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => "'{$begin}' AND '{$end}'");
                         break;
                 }
@@ -2282,11 +2282,10 @@ class pivotModel extends model
         $field = $condition['queryField'];
         if(!isset($filters[$field])) return '';
 
-        $filter     = $filters[$field];
-        $drillField = $condition['drillField'];
+        $filter = $filters[$field];
         extract($filter);
 
-        return "$operator $value";
+        return " $operator $value";
     }
 
     /**
@@ -2549,6 +2548,24 @@ class pivotModel extends model
     }
 
     /**
+     * getReferSQL
+     *
+     * @param  string $object
+     * @param  string $whereSQL
+     * @param  array $fields
+     * @access public
+     * @return string
+     */
+    public function getReferSQL(string $object, string $whereSQL = '', array $fields = array()): string
+    {
+        $fieldStr = empty($fields) ? '' : (',' . implode(',', $fields));
+        $table    = $this->config->db->prefix . $object;
+        $referSQL = "SELECT t1.* {$fieldStr} FROM $table AS t1";
+
+        return "$referSQL $whereSQL";
+    }
+
+    /**
      * Get drill sql.
      *
      * @param  string $objectTable
@@ -2559,24 +2576,24 @@ class pivotModel extends model
      */
     public function getDrillSQL($objectTable, $whereSQL = '', $conditions = array())
     {
-        $table = $this->config->db->prefix . $objectTable;
-
-        $fieldList    = '';
+        $fieldList     = array();
         $conditionSQLs = array('1=1');
         foreach($conditions as $condition)
         {
             extract($condition);
-            if(!empty($drillAlias) && $drillAlias != 't1') $fieldList .= ",{$drillAlias}.{$drillField} AS {$drillAlias}{$drillField}";
+            if($drillAlias != 't1')
+            {
+                $fieldList[] = "{$drillAlias}.{$drillField} AS {$drillAlias}{$drillField}";
+                $drillField  = $drillAlias . $drillField;
+            }
 
-            $conditionField  = $drillAlias != 't1' ? $drillAlias . $drillField : $drillField;
-            $conditionSQLs[] = "t1.{$conditionField}{$value}";
+            $conditionSQLs[] = "t1.{$drillField}{$value}";
         }
 
-        $referSQL = "SELECT t1.* {$fieldList} FROM $table AS t1";
+        $referSQL     = $this->getReferSQL($objectTable, $whereSQL, $fieldList);
         $conditionSQL = 'WHERE ' . implode(' AND ', $conditionSQLs);
 
-        $drillSQL = $referSQL . " $whereSQL";
-        return "SELECT t1.* FROM ($referSQL $whereSQL) AS t1 {$conditionSQL}";
+        return "SELECT t1.* FROM ($referSQL) AS t1 {$conditionSQL}";
     }
 
     /**
@@ -2600,7 +2617,7 @@ class pivotModel extends model
 
         foreach($conditions as $index => $condition)
         {
-            $conditions[$index]['value'] = isset($condition['value']) ? "='{$condition['value']}'" : $this->setConditionValueWithFilters($condition, $filters);
+            $conditions[$index]['value'] = isset($condition['value']) ? " = '{$condition['value']}'" : $this->setConditionValueWithFilters($condition, $filters);
         }
 
         $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSql, $conditions);
