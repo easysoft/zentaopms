@@ -193,8 +193,12 @@ class header extends wg
         /* Zentao desktop client menu. */
         if(isset($config->xxserver->installed) && $config->xuanxuan->turnon)
         {
+            $mobileSubMenu   = array();
+            $mobileSubMenu[] = array('content' => array('html' => "<img src='{$config->webRoot}static/images/app-qrcode.png' />"));
+
             $clientSubMenu = array();
             $clientSubMenu[] = array('text' => $lang->downloadClient, 'url' => createLink('misc', 'downloadClient'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
+            $clientSubMenu[] = array('text' => $lang->downloadMobile, 'items' => $mobileSubMenu);
             $clientSubMenu[] = array('text' => $lang->clientHelp, 'url' => $lang->clientHelpLink, 'attrs' => array('data-app' => 'help'));
             $items[] = array('text' => $lang->clientName, 'icon' => 'desktop', 'items' => $clientSubMenu);
         }
