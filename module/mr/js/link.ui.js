@@ -37,7 +37,7 @@ window.showLink = function(obj)
 {
     const $tabContent = $(obj).closest('.tab-pane');
     const link        = $tabContent.find('.link').data('url');
-    $tabContent.load(link);
+    loadTarget(link, $tabContent.attr('id'));
 };
 
 window.onSearchLinks = function(type, result)
