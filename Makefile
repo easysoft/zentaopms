@@ -141,6 +141,7 @@ zentaoxx:
 	sed -i "s/'gtalk', //g" zentaoxx/extension/xuan/im/config.php
 	sed -i "s/'wangwang', //g" zentaoxx/extension/xuan/im/config.php
 	sed -i "s/'site', //g" zentaoxx/extension/xuan/im/config.php
+	sed -i 's/xuanim.com/zentao.net/g' zentaoxx/extension/xuan/im/config.php
 	sed -i "s/'reload'/inlink('browse')/g" zentaoxx/extension/xuan/client/control.php
 	sed -i 's/tree/dept/' zentaoxx/extension/xuan/im/model.php
 	sed -i 's/tree/dept/' zentaoxx/extension/xuan/im/control.php
