@@ -91,7 +91,7 @@ class filter extends wg
     protected function build()
     {
         list($type, $layout) = $this->prop(array('type', 'layout'));
-        $class = $this->prop('class', $layout === 'horz' ? 'w-1/4' : '');
+        $class = $this->prop('class', $layout === 'horz' ? 'w-1/2' : '');
 
         return inputGroup
         (
