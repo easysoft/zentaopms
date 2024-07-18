@@ -2549,6 +2549,26 @@ class pivotModel extends model
     }
 
     /**
+     * Get drill sql.
+     *
+     * @param  string $objectTable
+     * @param  string $whereSQL
+     * @param  string $conditionsSQL
+     * @access public
+     * @return string
+     */
+    public function getDrillSQL($objectTable, $whereSQL = '', $conditionsSQL = '')
+    {
+        $table = $this->config->db->prefix . $objectTable;
+        $referSQL = "SELECT t1.* FROM $table AS t1" ;
+
+        $drillSQL = $referSQL . " $whereSQL";
+        if(!empty($conditionsSQL)) $drillSQL = "SELECT t1.* FROM ($drillSQL) AS t1 {$conditionsSQL}";
+
+        return $drillSQL;
+    }
+
+    /**
      * Get drill datas.
      *
      * @param  int $pivotID
