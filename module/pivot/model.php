@@ -2562,9 +2562,16 @@ class pivotModel extends model
         $table = $this->config->db->prefix . $objectTable;
 
         $fieldList = '';
-        foreach($conditions as $condition) $fieldList .= "{$condition['drillAlias']}.{$condition['drillField']},";
+        foreach($conditions as $condition)
+        {
+            if(!empty($condition['drillAlias']) && $condition['drillAlias'] != 't1')
+            {
+                $fieldAlias = "{$condition['drillAlias']}{$condition['drillField']}";
+                $fieldList .= "{$condition['drillAlias']}.{$condition['drillField']} AS $fieldAlias,";
+            }
+        }
         $fieldList = rtrim($fieldList, ',');
-        $referSQL = empty($conditions) ? "SELECT t1.* FROM $table AS t1" : "SELECT t1.*, {$fieldList} FROM $table AS t1";
+        $referSQL = empty($fieldList) ? "SELECT t1.* FROM $table AS t1" : "SELECT t1.*, {$fieldList} FROM $table AS t1";
 
         $drillSQL = $referSQL . " $whereSQL";
         if(!empty($conditionsSQL)) $drillSQL = "SELECT t1.* FROM ($drillSQL) AS t1 {$conditionsSQL}";
