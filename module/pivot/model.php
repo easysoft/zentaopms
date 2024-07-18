@@ -2269,7 +2269,7 @@ class pivotModel extends model
     }
 
     /**
-     * 将筛选器的值填写到查询条件中并返回sql。
+     * 将筛选器的值填写到查询条件中。
      * Set condition value with filters.
      *
      * @param  array $condition
@@ -2286,8 +2286,7 @@ class pivotModel extends model
         $drillField = $condition['drillField'];
         extract($filter);
 
-        $field = $drillAlias != 't1' ? $drillAlias . $drillField : $drillField;
-        return "t1.{$field} $operator $value";
+        return "$operator $value";
     }
 
     /**
@@ -2558,26 +2557,26 @@ class pivotModel extends model
      * @access public
      * @return string
      */
-    public function getDrillSQL($objectTable, $whereSQL = '', $conditionsSQL = '', $conditions = array())
+    public function getDrillSQL($objectTable, $whereSQL = '', $conditions = array())
     {
         $table = $this->config->db->prefix . $objectTable;
 
-        $fieldList = '';
+        $fieldList    = '';
+        $conditionSQLs = array('1=1');
         foreach($conditions as $condition)
         {
-            if(!empty($condition['drillAlias']) && $condition['drillAlias'] != 't1')
-            {
-                $fieldAlias = "{$condition['drillAlias']}{$condition['drillField']}";
-                $fieldList .= "{$condition['drillAlias']}.{$condition['drillField']} AS $fieldAlias,";
-            }
+            extract($condition);
+            if(!empty($drillAlias) && $drillAlias != 't1') $fieldList .= ",{$drillAlias}.{$drillField} AS {$drillAlias}{$drillField}";
+
+            $conditionField  = $drillAlias != 't1' ? $drillAlias . $drillField : $drillField;
+            $conditionSQLs[] = "t1.{$conditionField}{$value}";
         }
-        $fieldList = rtrim($fieldList, ',');
-        $referSQL = empty($fieldList) ? "SELECT t1.* FROM $table AS t1" : "SELECT t1.*, {$fieldList} FROM $table AS t1";
+
+        $referSQL = "SELECT t1.* {$fieldList} FROM $table AS t1";
+        $conditionSQL = 'WHERE ' . implode(' AND ', $conditionSQLs);
 
         $drillSQL = $referSQL . " $whereSQL";
-        if(!empty($conditionsSQL)) $drillSQL = "SELECT t1.* FROM ($drillSQL) AS t1 {$conditionsSQL}";
-
-        return $drillSQL;
+        return "SELECT t1.* FROM ($referSQL $whereSQL) AS t1 {$conditionSQL}";
     }
 
     /**
@@ -2599,26 +2598,12 @@ class pivotModel extends model
         $filters = $pivotState->setFiltersDefaultValue($filterValues);
         $filters = $pivotState->convertFiltersToWhere($filters);
 
-        $conditionSQLs = array('1=1');
-        foreach($conditions as $condition)
+        foreach($conditions as $index => $condition)
         {
-            if(!isset($condition['value']))
-            {
-                $conditionSQLs[] = $this->setConditionValueWithFilters($condition, $filters);
-            }
-            else
-            {
-                extract($condition);
-
-                $field = $drillAlias != 't1' ? $drillAlias . $drillField : $drillField;
-                $conditionSQLs[] = "t1.{$field}='{$value}'";
-            }
+            $conditions[$index]['value'] = isset($condition['value']) ? "='{$condition['value']}'" : $this->setConditionValueWithFilters($condition, $filters);
         }
 
-        $conditionSQLs = array_filter($conditionSQLs);
-        $conditionSQL  = 'WHERE ' . implode(' AND ', $conditionSQLs);
-
-        $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSql, $conditionSQL, $conditions);
+        $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSql, $conditions);
         $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
 
         if($queryResult['result'] != 'success') return array();
