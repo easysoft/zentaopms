@@ -128,7 +128,7 @@
         body:          (data) => $('body').html(data).zuiInit(),
         title:         (data) => document.title = data,
         featureBar:    updateFeatureBar,
-        pageCSS:       (data) => $('style.zin-page-css').html(data),
+        pageCSS:       updatePageCSS,
         pageJS:        updatePageJS,
         configJS:      updateConfigJS,
         activeMenu:    (data) => activeNav(data),
@@ -176,6 +176,13 @@
         const classList = ($body.attr('class') || '').split(' ').filter(x => x.length && !x.startsWith('m-'));
         classList.push(`m-${config.currentModule}-${config.currentMethod}`);
         $body.attr('class', classList.join(' '));
+    }
+
+    function updatePageCSS(data, _info, options)
+    {
+        let $style = $(`style.zin-page-css[data-id="${options.pageID}"]`);
+        if(!$style.length) $style = $('body>style.zin-page-css');
+        $style.html(data);
     }
 
     function updatePageJS(data, _info, options)
