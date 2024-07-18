@@ -19,7 +19,7 @@ featureBar
     set::method('build'),
     div
     (
-        set::className('w-44 mr-4'),
+        set::className('w-44 mx-4'),
         picker
         (
             set::name('product'),
