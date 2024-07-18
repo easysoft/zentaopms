@@ -63,7 +63,7 @@ foreach($sons as $son)
         (
             inputGroup
             (
-                setClass('row-module'),
+                setClass('row-module no-morph'),
                 input
                 (
                     setClass('col-module'),
@@ -118,7 +118,7 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
         (
             inputGroup
             (
-                setClass('row-module'),
+                setClass('row-module no-morph'),
                 input
                 (
                     setClass('col-module'),
