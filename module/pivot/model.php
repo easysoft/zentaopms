@@ -2557,10 +2557,14 @@ class pivotModel extends model
      * @access public
      * @return string
      */
-    public function getDrillSQL($objectTable, $whereSQL = '', $conditionsSQL = '')
+    public function getDrillSQL($objectTable, $whereSQL = '', $conditionsSQL = '', $conditions = array())
     {
         $table = $this->config->db->prefix . $objectTable;
-        $referSQL = "SELECT t1.* FROM $table AS t1" ;
+
+        $fieldList = '';
+        foreach($conditions as $condition) $fieldList .= "{$condition['drillAlias']}.{$condition['drillField']},";
+        $fieldList = rtrim($fieldList, ',');
+        $referSQL = !empty($conditions) ? "SELECT t1.* FROM $table AS t1" : "SELECT t1.*, {$fieldList} FROM $table AS t1";
 
         $drillSQL = $referSQL . " $whereSQL";
         if(!empty($conditionsSQL)) $drillSQL = "SELECT t1.* FROM ($drillSQL) AS t1 {$conditionsSQL}";
