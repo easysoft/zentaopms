@@ -22,6 +22,7 @@ foreach($cols as $colKey => $colConfig) $cols[$colKey]['sort'] = true;
 
 searchForm
 (
+    set('zui-key', 'searchForm'),
     set::module('bug'),
     set::simple(true),
     set::show(true),
@@ -41,11 +42,12 @@ dtable
     (
         'items' => array(array
         (
-            'text'      => $lang->productplan->linkBug,
-            'btnType'   => 'secondary',
-            'className' => 'size-sm linkObjectBtn',
-            'data-type' => 'bug',
-            'data-url'  => inlink('linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")
+            'text'         => $lang->productplan->linkBug,
+            'btnType'      => 'secondary',
+            'className'    => 'size-sm linkObjectBtn',
+            'data-type'    => 'bug',
+            'data-url'     => inlink('linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy"),
+            'zui-on-click' => 'handleLinkObjectClick($target)'
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),

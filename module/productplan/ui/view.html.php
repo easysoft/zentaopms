@@ -216,6 +216,7 @@ detailHeader
 detailBody
 (
     set::hasExtraMain(false),
+    on::click('.batch-btn > a, .batch-btn')->call('handleClickBatchBtn', jsRaw('$this')),
     sectionList
     (
         tabs

@@ -89,31 +89,30 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         .replace('%rate%', rate)};
 }
 
-$(document).off('click', '.batch-btn > a, .batch-btn').on('click', '.batch-btn > a, .batch-btn', function()
+window.handleClickBatchBtn = function($this)
 {
-    const $this  = $(this);
     const type   = $this.data('type');
     const dtable = zui.DTable.query($('#' + type + 'DTable'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
     const postData = new FormData();
+    const url      = $this.data('url');
     checkedList.forEach((id) => postData.append(type + 'IdList[]', id));
-    if($(this).data('account')) postData.append('assignedTo', $(this).data('account'));
+    if($this.data('account')) postData.append('assignedTo', $this.data('account'));
 
-    if($(this).data('page') == 'batch')
+    if($this.data('page') == 'batch')
     {
-        postAndLoadPage($(this).data('url'), postData);
+        postAndLoadPage(url, postData);
     }
     else
     {
-        $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
+        $.ajaxSubmit({url: url, data: postData});
     }
-});
+};
 
-$(document).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
+window.handleLinkObjectClick = function($this)
 {
-    const $this  = $(this);
     const type   = $this.data('type');
     const dtable = zui.DTable.query($this);
     const checkedList = dtable.$.getChecks();
@@ -123,16 +122,13 @@ $(document).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', functio
     const postData = new FormData();
     checkedList.forEach((id) => postData.append(postKey + '[]', id));
 
-    $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
-});
+    $.ajaxSubmit({url: $this.data('url'), data: postData});
+};
 
 $(function()
 {
-    if(initLink == 'true')
-    {
-        window.showLink(type, linkParams);
-    }
-})
+    if(initLink == 'true') window.showLink(type, linkParams);
+});
 
 window.onSortEnd = function(from, to, type)
 {

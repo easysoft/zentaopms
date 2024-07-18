@@ -30,6 +30,7 @@ foreach($allStories as $story) $story->estimate = $story->estimate . $config->ho
 $config->product->search['fields']['title'] = $lang->productplan->storyTitle;
 searchForm
 (
+    set('zui-key', 'searchForm'),
     set::module('story'),
     set::simple(true),
     set::show(true),
@@ -48,11 +49,12 @@ dtable
     set::loadPartial(true),
     set::footToolbar(array('items' => array(array
         (
-            'text'      => $lang->productplan->linkStory,
-            'btnType'   => 'secondary',
-            'className' => 'size-sm linkObjectBtn',
-            'data-type' => 'story',
-            'data-url'  => inlink('linkStory', "planID={$plan->id}&browseType=$browseType&param=$param&orderBy=$orderBy")
+            'text'         => $lang->productplan->linkStory,
+            'btnType'      => 'secondary',
+            'className'    => 'size-sm linkObjectBtn',
+            'data-type'    => 'story',
+            'data-url'     => inlink('linkStory', "planID={$plan->id}&browseType=$browseType&param=$param&orderBy=$orderBy"),
+            'zui-on-click' => 'handleLinkObjectClick($target)'
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
