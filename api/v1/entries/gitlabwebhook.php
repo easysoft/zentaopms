@@ -33,6 +33,7 @@ class gitlabWebhookEntry extends baseEntry
         $repo = $this->loadModel('repo')->getByID($repoID);
         if(empty($repo)) return;
 
+        $this->loadController('user', 'login');
         $this->repo->handleWebhook($event, $this->requestBody, $repo);
     }
 }

@@ -2752,9 +2752,11 @@ class repoModel extends model
      */
     public function setBugStatusByCommit(array $bugs, array $actions, object $action, array $changes): array
     {
+        global $app;
         $productsAndExecutions = $this->loadModel('bug')->getByIdList($bugs);
         foreach($actions['bug'] as $bugID => $bugActions)
         {
+            $app->rawModule = 'bug';
             $bug = $this->bug->getByID($bugID);
             if(empty($bug)) continue;
 
@@ -2767,6 +2769,7 @@ class repoModel extends model
                 $_POST = array();
                 if($bugAction == 'resolve' && $bug->status == 'active')
                 {
+                    $app->rawMethod = 'resolve';
                     $this->post->set('resolvedBuild', 'trunk');
                     $this->post->set('resolution', 'fixed');
 
