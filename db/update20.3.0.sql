@@ -1,1 +1,0 @@
-ALTER TABLE `zt_job` ADD INDEX `idx_repo_deleted`(`repo`,`deleted`);
