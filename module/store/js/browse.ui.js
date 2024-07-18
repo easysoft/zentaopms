@@ -26,11 +26,11 @@ window.installApp = function()
     });
 }
 
-$('#actionBar').on('keydown', '#name', function(event)
+window.searchApp = function(event)
 {
     if (event.key === 'Enter')
     {
-        const keyword = $('#name').val();
+        const keyword = $('#searchName').val();
         loadPage($.createLink('store', 'browse', `sortType=${sortType}&categoryID=${currentCategoryID}&keyword=${keyword}`));
     }
-});
+}

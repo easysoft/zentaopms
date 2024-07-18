@@ -104,8 +104,10 @@ toolbar
     formGroup
     (
         set::name('name'),
+        on::keyup('searchApp'),
         set::control(array
         (
+            'id'          => 'searchName',
             'type'        => 'inputControl',
             'prefixWidth' => 'icon',
             'placeholder' => $lang->store->searchApp,
