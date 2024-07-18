@@ -43,6 +43,6 @@ $planTester = new productPlan('admin');
 r($planTester->updateTest($planIdList[0], $postData))        && p('0:old,new') && e('计划1,测试修改');                                                 // 修改planId=1的数据,打印出旧的名称
 r($planTester->updateTest($planIdList[0], $postData))        && p('0:old')     && e('0');                                                              // 二次修改旧的数据，由于数据发生变化，理应失败
 r($planTester->updateTest($planIdList[1], $beginData))       && p('begin')     && e('父计划的开始日期：2021-03-01，开始日期不能小于父计划的开始日期'); // 测试子计划开始日期不能小于父计划的开始日期
-r($planTester->updateTest($planIdList[1], $endData))         && p('end')       && e('父计划的完成日期：2021-06-15，完成日期不能大于父计划的完成日期'); // 测试子计划完成日期不能大于父计划的完成日期
+r($planTester->updateTest($planIdList[1], $endData))         && p('end')       && e('父计划的结束日期：2021-06-15，结束日期不能大于父计划的结束日期'); // 测试子计划完成日期不能大于父计划的完成日期
 r($planTester->updateTest($planIdList[0], $parentErrorData)) && p('end:0')     && e('『结束日期』应当不小于『2022-03-01』。');                         // 测试完成日期不能小于开始日期
 r($planTester->updateTest($planIdList[0], $titleErrorData))  && p('title:0')   && e('『计划名称』不能为空。');                                         // 测试计划名称不能为空

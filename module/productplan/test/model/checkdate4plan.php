@@ -21,8 +21,8 @@ $planTester = new productplan('admin');
 r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[0])) && p('0')     && e('测试通过');                                                       // 父计划输入正确的开始日期，检查通过
 r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[0])) && p('0')     && e('测试通过');                                                       // 父计划输入正确的结束日期，检查通过
 r($planTester->checkDate4PlanTest($planIdList[0], $beginList[1], $endList[0])) && p('begin') && e('子计划的开始日期：2021-06-01，开始日期不能大于子计划的开始日期'); // 父计划输入错误的开始日期，检查报错提示信息
-r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[1])) && p('end')   && e('子计划的完成日期：2021-06-15，完成日期不能小于子计划的完成日期'); // 父计划输入错误的结束日期，检查报错提示信息
+r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[1])) && p('end')   && e('子计划的结束日期：2021-06-15，结束日期不能小于子计划的结束日期'); // 父计划输入错误的结束日期，检查报错提示信息
 r($planTester->checkDate4PlanTest($planIdList[1], $beginList[1], $endList[1])) && p('0')     && e('测试通过');                                                       // 子计划输入正确的开始日期，检查通过
 r($planTester->checkDate4PlanTest($planIdList[1], $beginList[1], $endList[1])) && p('0')     && e('测试通过');                                                       // 子计划输入正确的结束日期，检查通过
 r($planTester->checkDate4PlanTest($planIdList[1], $beginList[2], $endList[1])) && p('begin') && e('父计划的开始日期：2021-01-01，开始日期不能小于父计划的开始日期'); // 子计划输入错误的开始日期，检查报错提示信息
-r($planTester->checkDate4PlanTest($planIdList[1], $beginList[1], $endList[2])) && p('end')   && e('父计划的完成日期：2021-06-30，完成日期不能大于父计划的完成日期'); // 子计划输入错误的结束日期，检查报错提示信息
+r($planTester->checkDate4PlanTest($planIdList[1], $beginList[1], $endList[2])) && p('end')   && e('父计划的结束日期：2021-06-30，结束日期不能大于父计划的结束日期'); // 子计划输入错误的结束日期，检查报错提示信息
