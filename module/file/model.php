@@ -589,7 +589,7 @@ class fileModel extends model
 
         if($objectType == 'build')
         {
-            $build = $this->dao->findByID('project,execution')->from(TABLE_BUILD)->fetch();
+            $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq($objectID)->fetch();
             if($build->execution) return $this->loadModel('execution')->checkPriv($build->execution);
             return $this->loadModel('project')->checkPriv($build->project);
         }
