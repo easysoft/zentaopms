@@ -112,7 +112,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             $filters ? div
             (
                 setID('conditions'),
-                setClass('flex justify-start bg-canvas mt-4 mb-2 w-full'),
+                setClass('flex flex-wrap justify-start bg-canvas mt-4 mb-2 w-full'),
                 $filters,
                 button(setClass('btn primary'), on::click('loadCustomPivot'), $lang->pivot->query)
             ) : div(setClass('mb-4')),
