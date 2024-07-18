@@ -26,6 +26,7 @@ foreach($cols as $colKey => $colConfig) $cols[$colKey]['sort'] = true;
 
 searchForm
 (
+    set('zui-key', 'searchForm'),
     set::module('story'),
     set::simple(true),
     set::show(true),
@@ -46,11 +47,12 @@ dtable
     (
         'items' => array(array
         (
-            'text'      => $lang->release->linkStory,
-            'btnType'   => 'primary',
-            'className' => 'size-sm linkObjectBtn',
-            'data-type' => 'story',
-            'data-url'  => createLink($buildModule, 'linkStory', "releaseID={$release->id}&browseType={$browseType}&param={$param}"),
+            'text'         => $lang->release->linkStory,
+            'btnType'      => 'primary',
+            'className'    => 'size-sm linkObjectBtn',
+            'data-type'    => 'story',
+            'data-url'     => createLink($buildModule, 'linkStory', "releaseID={$release->id}&browseType={$browseType}&param={$param}"),
+            'zui-on-click' => 'handleLinkObjectClick($target)'
         ))
     )),
     set::extraHeight('+144'),

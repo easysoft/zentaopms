@@ -1,17 +1,17 @@
-$(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer .batch-btn', function(e)
+window.handleClickBatchBtn = function($this)
 {
-    const dtable = zui.DTable.query(e.target);
+    const dtable = zui.DTable.query($this);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const tabType  = $(this).data('type');
+    const tabType  = $this.data('type');
 
-    const url   = $(this).data('url');
+    const url   = $this.data('url');
     const form  = new FormData();
-    const field = $(this).hasClass('bug-batch-close') ? 'unlinkBugs[]' : `${tabType}IdList[]`;
+    const field = $this.hasClass('bug-batch-close') ? 'unlinkBugs[]' : `${tabType}IdList[]`;
     checkedList.forEach((id) => form.append(field, id));
 
-    if($(this).hasClass('load-btn'))
+    if($this.hasClass('load-btn'))
     {
         postAndLoadPage(url, form);
     }
@@ -19,10 +19,12 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     {
         $.ajaxSubmit({url, data: form});
     }
-}).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
+};
+
+window.handleLinkObjectClick = function($this)
 {
-    const type   = $(this).data('type');
-    const dtable = zui.DTable.query($(this));
+    const type   = $this.data('type');
+    const dtable = zui.DTable.query($this);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
@@ -30,8 +32,8 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     const postData = new FormData();
     checkedList.forEach((id) => postData.append(postKey + '[]', id));
 
-    $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
-});
+    $.ajaxSubmit({url: $this.data('url'), data: postData});
+};
 
 /**
  * 计算表格任务信息的统计。

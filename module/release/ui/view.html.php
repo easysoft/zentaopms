@@ -95,7 +95,7 @@ $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
 if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($releaseModule, 'batchUnlinkBug', "release={$release->id}"));
-if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn bug-batch-close', 'text' => $lang->bug->batchClose,      'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "release={$release->id}&viewType=release"));
+if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn bug-batch-close', 'text' => $lang->bug->batchClose, 'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose', "release={$release->id}&viewType=release"));
 
 /* Table data and setting for left bugs tab. */
 jsVar('confirmunlinkleftbug', $lang->release->confirmUnlinkBug);
@@ -193,6 +193,7 @@ if($canBeChanged)
 detailBody
 (
     set::hasExtraMain(false),
+    on::click('.batch-btn > a, .batch-btn')->call('handleClickBatchBtn', jsRaw('$this')),
     setClass('release-view-body'),
     sectionList(
         tabs

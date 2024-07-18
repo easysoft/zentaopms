@@ -26,6 +26,7 @@ $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 
 searchForm
 (
+    set('zui-key', 'searchForm'),
     set::module('bug'),
     set::simple(true),
     set::show(true),
@@ -46,11 +47,12 @@ dtable
     (
         'items' => array(array
         (
-            'text'      => $lang->release->linkBug,
-            'btnType'   => 'primary',
-            'className' => 'size-sm linkObjectBtn',
-            'data-type' => 'bug',
-            'data-url'  => createLink($buildModule, 'linkBug', "releaseID={$release->id}&browseType={$browseType}&param={$param}&type={$type}")
+            'text'         => $lang->release->linkBug,
+            'btnType'      => 'primary',
+            'className'    => 'size-sm linkObjectBtn',
+            'data-type'    => 'bug',
+            'data-url'     => createLink($buildModule, 'linkBug', "releaseID={$release->id}&browseType={$browseType}&param={$param}&type={$type}"),
+            'zui-on-click' => 'handleLinkObjectClick($target)'
         ))
     )),
     set::extraHeight('+144'),
