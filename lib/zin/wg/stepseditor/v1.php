@@ -63,9 +63,11 @@ class stepsEditor extends wg
         $sameLevelText     = $this->prop('sameLevelText', data('lang.testcase.stepSameLevel'));
         $subLevelText      = $this->prop('subLevelText', data('lang.testcase.stepSubLevel'));
         $id                = $this->prop('id') ? $this->prop('id') : $this->gid;
-        $expectDisabledTip = $this->prop('expectDisabledTip', data('lang.testcase.expectDisabledTip'));
-        $deleteStepTip     = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
-        $dragNestedTip     = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
+
+        $options = $this->props->pick(array('name', 'expectsName', 'data'));
+        $options['expectDisabledTip'] = $this->prop('expectDisabledTip', data('lang.testcase.expectDisabledTip'));
+        $options['deleteStepTip'] = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
+        $options['dragNestedTip'] = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
 
         return div
         (
@@ -99,14 +101,7 @@ class stepsEditor extends wg
             (
                 set::className('steps-editor-body')
             ),
-            zui::stepsEditor
-            (
-                set::_to("#$id"),
-                set::expectDisabledTip($expectDisabledTip),
-                set::deleteStepTip($deleteStepTip),
-                set::dragNestedTip($dragNestedTip),
-                set($this->props->pick(array('name', 'expectsName', 'data')))
-            )
+            zui::create('stepsEditor', $options)
         );
     }
 }
