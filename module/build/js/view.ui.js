@@ -1,5 +1,6 @@
-window.handleClickBatchBtn = function($this)
+$(document).off('click', '.batch-btn > a, .batch-btn').on('click', '.batch-btn > a, .batch-btn', function()
 {
+    const $this = $(this);
     const dtable = zui.DTable.query($this);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
@@ -21,7 +22,7 @@ window.handleClickBatchBtn = function($this)
     {
         postAndLoadPage(url, form);
     }
-};
+});
 
 window.showLink = function(type, params, onlyUpdateTable)
 {

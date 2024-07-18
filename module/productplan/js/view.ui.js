@@ -89,8 +89,9 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         .replace('%rate%', rate)};
 }
 
-window.handleClickBatchBtn = function($this)
+$(document).off('click', '.batch-btn > a, .batch-btn').on('click', '.batch-btn > a, .batch-btn', function()
 {
+    const $this  = $(this);
     const type   = $this.data('type');
     const dtable = zui.DTable.query($('#' + type + 'DTable'));
     const checkedList = dtable.$.getChecks();
@@ -109,7 +110,7 @@ window.handleClickBatchBtn = function($this)
     {
         $.ajaxSubmit({url: url, data: postData});
     }
-};
+});
 
 window.handleLinkObjectClick = function($this)
 {
