@@ -23,7 +23,7 @@ zenData('mr')->loadYaml('mr')->gen(1);
 $mrModel = new mrTest();
 
 $MR = new stdclass();
-$MR->title              = 'test-merge';
+$MR->title              = 'test-merge（不要关闭或删除）';
 $MR->assignee           = 'admin';
 $MR->repoID             = 1;
 $MR->needCI             = 0;

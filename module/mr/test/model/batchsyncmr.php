@@ -30,7 +30,7 @@ $mrYaml->jobID->range(1);
 $mrYaml->title->range('1-100')->prefix('MR-');
 $mrYaml->gen(5);
 
-su('admin', false);
+su('admin');
 
 global $tester;
 $mrModel = $tester->loadModel('mr');
