@@ -69,7 +69,7 @@ detailHeader(
                 ),
                 set::items($dropMenus)
             ),
-            backBtn
+            btn
             (
                 $lang->store->install,
                 setClass('primary btn install-btn w-20'),
