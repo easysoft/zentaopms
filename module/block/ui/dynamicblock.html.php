@@ -37,6 +37,6 @@ else
     );
 }
 
-blockPanel(setClass('dynamic-block'), $content);
+blockPanel(setClass('dynamic-block'), $content, set::moreLink(createLink('company', 'dynamic')));
 
 render();
