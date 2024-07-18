@@ -91,5 +91,5 @@ formBatch
             'suffix'      => $lang->task->suffixHour,
             'suffixWidth' => 20
         ))
-    ),
+    )
 );
