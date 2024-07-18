@@ -35,6 +35,7 @@ $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 
 searchForm
 (
+    set('zui-key', 'searchForm'),
     set::module('bug'),
     set::simple(true),
     set::show(true),
@@ -56,11 +57,12 @@ dtable
     (
         'items' => array(array
         (
-            'text'      => $lang->build->linkBug,
-            'btnType'   => 'primary',
-            'className' => 'size-sm linkObjectBtn',
-            'data-type' => 'bug',
-            'data-url'  => createLink($buildModule, 'linkBug', "buildID=$build->id&browseType=$browseType&param=$param")
+            'text'         => $lang->build->linkBug,
+            'btnType'      => 'primary',
+            'className'    => 'size-sm linkObjectBtn',
+            'data-type'    => 'bug',
+            'data-url'     => createLink($buildModule, 'linkBug', "buildID=$build->id&browseType=$browseType&param=$param"),
+            'zui-on-click' => 'handleLinkObjectClick($target)'
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(createLink($buildModule, 'view', "buildID=$build->id&type=bug"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),

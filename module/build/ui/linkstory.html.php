@@ -32,6 +32,7 @@ jsVar('showGrade', $showGrade);
 
 searchForm
 (
+    set('zui-key', 'searchForm'),
     set::module('story'),
     set::simple(true),
     set::show(true),
@@ -52,11 +53,12 @@ dtable
     set::checkedRows($checkedRows),
     set::footToolbar(array('items' => array(array
     (
-        'text'      => $lang->productplan->linkStory,
-        'btnType'   => 'primary',
-        'className' => 'size-sm linkObjectBtn',
-        'data-type' => 'linkStory',
-        'data-url'  => createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param")
+        'text'         => $lang->productplan->linkStory,
+        'btnType'      => 'primary',
+        'className'    => 'size-sm linkObjectBtn',
+        'data-type'    => 'linkStory',
+        'data-url'     => createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param"),
+        'zui-on-click' => 'handleLinkObjectClick($target)'
     )))),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink($buildModule, 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager())
