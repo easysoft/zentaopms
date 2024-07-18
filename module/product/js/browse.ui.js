@@ -113,13 +113,13 @@ window.renderCell = function(result, info)
     {
         result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
     }
-    if(info.col.name == 'assignedTo' && info.row.data.status == 'closed')
+    if(info.col.name == 'assignedTo' && info.row.data.status == 'closed' && result[0] && result[0]['props'])
     {
         delete result[0]['props']['data-toggle'];
         delete result[0]['props']['href'];
         result[0]['props']['className'] += ' disabled';
     }
-    if(info.col.name == 'childItem')
+    if(info.col.name == 'childItem' && result[1] && result[1]['attrs'])
     {
         result[1]['attrs']['title'] = info.row.data?.childItemTitle;
     }
