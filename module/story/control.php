@@ -537,8 +537,17 @@ class story extends control
         /* Set menu. */
         if($this->app->tab == 'project')
         {
-            $projectID = $param ? $param : $this->session->project;
-            $project   = $this->loadModel('project')->fetchByID((int)$projectID);
+            if($product->shadow)
+            {
+                $project   = $this->loadModel('project')->getByShadowProduct($product->id);
+                $projectID = $project->id;
+
+            }
+            else
+            {
+                $projectID = $param ? $param : $this->session->project;
+                $project   = $this->loadModel('project')->fetchByID((int)$projectID);
+            }
             $this->view->projectID = $projectID;
             $this->view->project   = $project;
             if(!$project->multiple)
