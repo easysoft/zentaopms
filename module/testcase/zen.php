@@ -2780,11 +2780,7 @@ class testcaseZen extends testcase
         $relatedFiles   = $this->testcase->getRelatedFiles(array_keys($cases));
         $relatedScenes  = $this->testcase->getSceneMenu($productID, 0);
 
-        if($taskID)
-        {
-            $this->app->loadLang('testtask');
-            $this->lang->testcase->statusList = $this->lang->testtask->statusList;
-        }
+        if($taskID) $this->app->loadLang('testtask');
 
         $cases = $this->testcase->appendData($cases);
         foreach($cases as $case) $this->processCaseForExport($case, $products, $branches, $users, $results, $relatedModules, $relatedStories, $relatedCases, $relatedSteps, $relatedFiles, $relatedScenes);
