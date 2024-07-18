@@ -2286,7 +2286,8 @@ class pivotModel extends model
         $drillField = $condition['drillField'];
         extract($filter);
 
-        return "t1.{$drillField} $operator $value";
+        $field = $drillAlias != 't1' ? $drillAlias . $drillField : $drillField;
+        return "t1.{$field} $operator $value";
     }
 
     /**
@@ -2608,7 +2609,9 @@ class pivotModel extends model
             else
             {
                 extract($condition);
-                $conditionSQLs[] = "t1.{$drillField}='{$value}'";
+
+                $field = $drillAlias != 't1' ? $drillAlias . $drillField : $drillField;
+                $conditionSQLs[] = "t1.{$field}='{$value}'";
             }
         }
 
