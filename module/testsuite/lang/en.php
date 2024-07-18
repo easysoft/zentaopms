@@ -48,7 +48,7 @@ $lang->testsuite->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testsuite->noticeNone        = 'You have not created any suite yet.';
 $lang->testsuite->noModule          = '<div>You have no modules.</div><div>Manage it now.</div>';
 $lang->testsuite->noTestsuite       = 'No suites yet.';
-$lang->testsuite->summary           = "Total suites: <strong>%total%</strong>, public: <strong>%public%</strong>, private: <strong>%private%</strong>.";
+$lang->testsuite->summary           = "Total suites: <strong>%d</strong>, public: <strong>%d</strong>, private: <strong>%de</strong>.";
 
 $lang->testsuite->lblCases      = 'Cases';
 $lang->testsuite->lblUnlinkCase = 'Unlink Case';
