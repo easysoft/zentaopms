@@ -350,6 +350,7 @@ detailBody
         set::className('col gap-1 grow'),
         tabs
         (
+            on::show('.tab-pane')->call('handleTabChange', jsRaw('event')),
             tabPane
             (
                 set::key('basic'),

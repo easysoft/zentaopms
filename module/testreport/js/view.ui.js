@@ -1,8 +1,8 @@
-$('.nav.nav-tabs').on('show', function(event, info)
+window.handleTabChange = function(event)
 {
-    const tabID = info[1].replaceAll('#', '');
-    $('#' + tabID + ' canvas').each(function()
+    $(event.target).find('[z-use-echarts]').each(function()
     {
-        $(this).parent().parent().data('zui.ECharts').chart.resize();
+        const echart = $(this).zui();
+        if(echart) echart.chart.resize();
     });
-});
+};
