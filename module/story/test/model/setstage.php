@@ -48,7 +48,8 @@ $story = zenData('story');
 $story->product->range('1,2,2,1,1');
 $story->plan->range('1,0,1,1,1');
 $story->branch->range('0,0,1,0,0');
-$story->stage->range('defining,testing,closed,planned,planning');
+$story->assignedTo->range('admin,user1,user2,user3,user4');
+$story->stage->range('developing,testing,closed,planned,delivering');
 $story->gen(5);
 
 $task = zenData('task');
