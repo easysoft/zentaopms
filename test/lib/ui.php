@@ -318,7 +318,7 @@ class tester extends result
             if($ext)
             {
                 $extDir = is_dir(dirname(__FILE__, 3). "/extension/$ext/$module/ext/test") ? dirname(__FILE__, 3). "/extension/$ext/$module/ext/test" : dirname(__FILE__, 3). "/extension/$ext/$module/test";
-                include dirname(__FILE__, 3). "$extDir/ui/page/$method.php";
+                include "$extDir/ui/page/$method.php";
             }
             else
             {
