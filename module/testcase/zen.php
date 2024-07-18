@@ -681,6 +681,7 @@ class testcaseZen extends testcase
             ->remove('files,labels,scriptFile,scriptName')
             ->removeIF($formData->data->auto == 'auto' && !$formData->data->script, 'script')
             ->get();
+        if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib'])) $case->lib = $this->post->lib;
 
         return $case;
     }
