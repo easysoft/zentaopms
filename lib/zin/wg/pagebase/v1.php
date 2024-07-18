@@ -63,6 +63,7 @@ class pageBase extends wg
         $webRoot     = $app->getWebRoot();
         $themeName   = $app->cookie->theme;
         $zuiPath     = $config->zin->zuiPath;
+        $pageID      = $jsConfig->currentModule . '-' . $jsConfig->currentMethod;
 
         $zinMode       = isset($config->zin->mode) ? $config->zin->mode : '';
         $jsConfig->zin = !empty($zinMode) ? $zinMode : true;
@@ -134,11 +135,11 @@ class pageBase extends wg
                 set::className($bodyClass),
                 $setXuanClass,
                 empty($imports) ? null : h::import($imports),
-                h::css($css, setClass('zin-page-css')),
+                h::css($css, setClass('zin-page-css'), setData('id', $pageID)),
                 $body,
                 $rawContent ? rawContent() : null,
                 $hookContent ? hookContent() : null,
-                h::js($js, setClass('zin-page-js'))
+                h::js($js, setClass('zin-page-js'), setData('id', $pageID))
             )
         );
     }
