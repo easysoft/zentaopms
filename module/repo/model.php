@@ -1840,6 +1840,7 @@ class repoModel extends model
             $log->author   = isset($commit->author->identity->name) ? $commit->author->identity->name : $commit->author->name;
             $log->date     = date("Y-m-d H:i:s", strtotime($time));
             $log->files    = array();
+            $log->repo     = $repo;
 
             if(!isset($commit->added))
             {
