@@ -40,6 +40,7 @@ $config->visions     = ',rnd,lite,or,';           // 支持的界面类型。   
 /* ZIN 设置。 ZIN settings. */
 $config->zin         = new stdclass();
 $config->clientCache = true; // 启用客户端缓存。
+$config->morphUpdate = true; // 平滑更新。
 
 /* 支持的主题和语言。Supported themes and languages. */
 $config->themes['default'] = 'default';

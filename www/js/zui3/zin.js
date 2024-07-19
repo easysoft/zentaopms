@@ -387,7 +387,7 @@
     function renderWithHtml($target, html, selector, noMorph)
     {
         if(typeof selector === 'string') selector = parseSelector(selector);
-        if($target.hasClass('no-morph')) noMorph = true;
+        if(config.morphUpdate === false || $target.hasClass('no-morph')) noMorph = true;
         if(selector.inner)
         {
             if(noMorph)
@@ -539,7 +539,7 @@
         let cacheHit;
         const renderPageData = (data, onlyZinDebug) =>
         {
-            const renderOptions = $.extend({noMorph: !options.partial && options.isDiffPage}, options);
+            const renderOptions = $.extend({noMorph: config.morphUpdate && !options.partial && options.isDiffPage}, options);
             if(!onlyZinDebug) updatePerfInfo(options, 'renderBegin');
             renderPage(data.reduce((list, item, idx) =>
             {
