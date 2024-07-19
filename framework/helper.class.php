@@ -759,10 +759,10 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         $actions = $model->loadModel('workflowaction')->getList($module);
         $model->loadModel('flow');
         $model->enables = array();
-        foreach($actions as $action)
+        foreach($actions as $flowAction)
         {
-            $model->enables[$action->action] = $action->status == 'enable';
-            if($action->status == 'enable' && $action->extensionType != 'none' && !empty($action->conditions)) $model->enables[$action->action] = $model->flow->checkConditions($action->conditions, $item);
+            $model->enables[$flowAction->action] = $flowAction->status == 'enable';
+            if($flowAction->status == 'enable' && $flowAction->extensionType != 'none' && !empty($flowAction->conditions)) $model->enables[$flowAction->action] = $model->flow->checkConditions($flowAction->conditions, $item);
         }
     }
     if(isset($model->enables[$method]) && !$model->enables[$method]) $isClickable = false;
