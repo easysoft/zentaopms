@@ -1136,7 +1136,7 @@ class myModel extends model
             $data->id     = $review->id;
             $data->title  = $review->title;
             $data->type   = 'projectreview';
-            $data->time   = $review->createdDate;
+            $data->time   = date('Y-m-d H:i:s', strtotime($review->createdDate));
             $data->status = $review->status;
             $reviewList[] = $data;
         }
