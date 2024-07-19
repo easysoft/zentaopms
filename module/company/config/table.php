@@ -15,7 +15,7 @@ if(!empty($config->sso->turnon))
 $config->company->user->actionList['unlock']['icon']         = 'unlock';
 $config->company->user->actionList['unlock']['text']         = $lang->user->unlock;
 $config->company->user->actionList['unlock']['hint']         = $lang->user->unlock;
-$config->company->user->actionList['unlock']['url']          = array('module' => 'user', 'method' => 'unlock', 'params' => 'account={account}');
+$config->company->user->actionList['unlock']['url']          = array('module' => 'user', 'method' => 'unlock', 'params' => 'userID={id}');
 $config->company->user->actionList['unlock']['className']    = 'ajax-submit';
 $config->company->user->actionList['unlock']['data-confirm'] = $lang->user->confirmUnlock;
 

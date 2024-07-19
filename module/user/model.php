@@ -1385,10 +1385,10 @@ class userModel extends model
      */
     public function checkLocked(string $account): bool
     {
-        if($this->session->{"{$account}.loginLocked"} && (time() - strtotime($this->session->{"{$account}.loginLocked"})) <= $this->config->user->lockMinutes * 60) return true;
-
         $user = $this->dao->select('locked')->from(TABLE_USER)->where('account')->eq($account)->fetch();
-        if(empty($user) || is_null($user->locked)) return false;
+        if(empty($user) || empty($user->locked)) return false;
+
+        if($this->session->{"{$account}.loginLocked"} && (time() - strtotime($this->session->{"{$account}.loginLocked"})) <= $this->config->user->lockMinutes * 60) return true;
 
         if((time() - strtotime($user->locked)) > $this->config->user->lockMinutes * 60) return false;
 
