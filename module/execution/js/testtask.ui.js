@@ -73,9 +73,11 @@ window.setStatistics = function(element, checkedIDList)
     };
 }
 
+let initialOptions;
+
 $(function()
 {
-    const options  = zui.DTable.query().options;
+    const options  = zui.evalValue($('[zui-create-dtable]').attr('zui-create-dtable'));
     initialOptions = $.extend(true, {}, options);
 });
 
