@@ -30,11 +30,16 @@ function handleEditColsSubmit()
         }
     }
 
-    $.ajaxSubmit({
+    $.ajaxSubmit(
+    {
         url: ajaxSaveUrl,
-        type: 'POST',
-        contentType: 'application/json',
         data: {fields: JSON.stringify(formData)},
         closeModal: true,
+        onSuccess: function()
+        {
+            let $table = $(`#table-${config.currentModule}-${config.currentMethod}`).closest('[z-use-dtable]');
+            if(!$table.length) $table = $('#main [z-use-dtable]');
+            $table.attr('zui-create-dtable', '');
+        },
     });
 }
