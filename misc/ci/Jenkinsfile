@@ -635,7 +635,7 @@ pipeline {
         stage("Upload rongpm") {
           agent {
             kubernetes {
-              inheritFrom "zentao-package-test xuanim"
+              inheritFrom "zentao-package-test xuanim upload-azure"
               yamlFile 'misc/ci/normal.yaml'
             }
           }
@@ -643,7 +643,6 @@ pipeline {
             allOf {
               environment name:'BUILD_KIND', value:'release'
             }
-
             beforeAgent true
           }
 
@@ -659,9 +658,10 @@ pipeline {
                 sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
               }
 
-              container('jnlp') {
-                sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./output --key-prefix $OBJECT_KEY_PREFIX'
+              withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
+                container('azcopy') {
+                  sh 'azcopy cp --recursive "./output/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
+                }
               }
             }
           }
