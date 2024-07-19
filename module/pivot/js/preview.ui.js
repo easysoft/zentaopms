@@ -245,6 +245,7 @@ window.clickCell = function(col, {colName, rowInfo})
     let [originField, conditions] = drillConditions;
     let filterValues = getFilterValues();
 
+    conditions   = conditions.map(condition => condition.value);
     conditions   = latin1ToBase64(JSON.stringify(conditions))
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
 

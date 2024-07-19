@@ -85,8 +85,15 @@ class pivot extends control
         $conditions   = json_decode(base64_decode($conditions), true);
         $filterValues = json_decode(base64_decode($filterValues), true);
 
+        $mergeConditions = array();
+        foreach($drill->condition as $index => $condition)
+        {
+            $condition['value'] = $conditions[$index];
+            $mergeConditions[] = $condition;
+        }
+
         $cols  = $this->pivot->getDrillCols($drill->object);
-        $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $conditions, $filterValues);
+        $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $mergeConditions, $filterValues);
 
         if($drill->object == 'task') $datas = $this->pivot->processTaskDatas($datas);
 
