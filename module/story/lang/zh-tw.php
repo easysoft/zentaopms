@@ -177,8 +177,8 @@ $lang->story->statusList['']          = '';
 $lang->story->statusList['draft']     = '草稿';
 $lang->story->statusList['reviewing'] = '评审中';
 $lang->story->statusList['active']    = '激活';
-$lang->story->statusList['closed']    = '已關閉';
 $lang->story->statusList['changing']  = '變更中';
+$lang->story->statusList['closed']    = '已關閉';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未開始';

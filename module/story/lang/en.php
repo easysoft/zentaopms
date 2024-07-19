@@ -242,8 +242,8 @@ $lang->story->statusList['']          = '';
 $lang->story->statusList['draft']     = 'Draft';
 $lang->story->statusList['reviewing'] = 'Reviewing';
 $lang->story->statusList['active']    = 'Active';
-$lang->story->statusList['closed']    = 'Closed';
 $lang->story->statusList['changing']  = 'Changing';
+$lang->story->statusList['closed']    = 'Closed';
 
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Waiting';
