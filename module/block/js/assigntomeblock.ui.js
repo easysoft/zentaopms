@@ -53,6 +53,14 @@ window.renderCell = function(result, info)
 
     if(info.col.name == 'confirmed' && info.row.data.confirmed == 0) result[0] = {html: '<span class="text-gray">' + result[0] + '</span>'};
 
+    if(info.col.name == 'title')
+    {
+        if(info.row.data.module == 'story')
+        {
+            result[0] = {html: '<a href="' + $.createLink(info.row.data.storyType, 'view', `id=${info.row.data.id}`) + '">' + info.row.data.title + '</a>'};
+        }
+    }
+
     return result;
 }
 

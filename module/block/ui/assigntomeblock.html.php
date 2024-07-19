@@ -105,7 +105,6 @@ foreach($hasViewPriv as $type => $bool)
                 if($review->storyType == 'epic')        $typeName = $lang->ERCommon;
             }
             if($review->type == 'projectreview') $typeName = $lang->project->common;
-            if(in_array($reviewType, array('story', 'epic', 'requirement'))) $config->block->review->dtable->fieldList['title']['link']['method'] = 'storyView';
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);
