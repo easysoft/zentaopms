@@ -2596,6 +2596,23 @@ class pivotModel extends model
         return "SELECT t1.* FROM ($referSQL) AS t1 {$conditionSQL}";
     }
 
+    public function execDrillSQL($object, $drillSQL)
+    {
+        $limitSQL = "SELECT * FROM ($drillSQL) AS t1 LIMIT 10";
+        $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $limitSQL);
+
+        $result = array();
+        if($queryResult['result'] == 'success')
+        {
+            $result['data'] = $queryResult['rows'];
+            $result['cols'] = $this->getDrillCols($object);
+        }
+
+        if($queryResult['result'] == 'fail') $result['error'] = $queryResult['message'];
+        $result['status'] = $queryResult['result'];
+        return $result;
+    }
+
     /**
      * Parse query filter, then get drill result.
      *
