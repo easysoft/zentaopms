@@ -311,7 +311,11 @@ class tester extends result
     {
         if($this->module && !$module) $module = $this->module;
         if($this->method && !$method) $method = $this->method;
+        $edition = $this->config->edition;
 
+        if($edition != 'open' || !$ext) $ext = $edition;
+
+        $method    = strtolower($method);
         $pageClass = "{$method}Page";
         if(!class_exists($pageClass))
         {
