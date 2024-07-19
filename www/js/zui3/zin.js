@@ -975,7 +975,7 @@
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
         delete options.selector;
-        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector, modal: isInModal}, options));
+        return loadComponent(target, $.extend({cache: isDiffPage(url), component: 'dtable', url: url, selector: selector, modal: isInModal}, options));
     }
 
     /**
@@ -1113,12 +1113,12 @@
             if(DEBUG) console.warn('[APP] ', 'loadCurrentPage() should not be called with an event or element.');
         }
         if(typeof options === 'string') options = {selector: options};
-        return loadPage(options);
+        return loadPage($.extend({cache: false}, options));
     }
 
     function reloadPage()
     {
-        loadPage({url: currentAppUrl, selector: 'body>*,title>*,#configJS'});
+        loadPage({cache: false, url: currentAppUrl, selector: 'body>*,title>*,#configJS'});
     }
 
     /**
