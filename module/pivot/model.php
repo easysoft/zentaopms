@@ -2629,7 +2629,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getDrillResult($object, $whereSQL, $filters, $conditions = '', $emptyFilters = true)
+    public function getDrillResult($object, $whereSQL, $filters, $conditions = array(), $emptyFilters = true)
     {
         $drillSQL     = $this->getDrillSQL($object, $whereSQL, $conditions);
         $sql          = $this->loadModel('bi')->processVars($drillSQL, $filters, $emptyFilters);
