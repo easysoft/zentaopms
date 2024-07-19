@@ -567,6 +567,11 @@
             },
             success(rawData)
             {
+                if(!ridSet.has(rid))
+                {
+                    if(DEBUG) showLog('Request', `error:canceled request ${rid} on success`, {url, rid, options});
+                    return;
+                }
                 const response = this.response;
                 if(response && response.redirected)
                 {
@@ -685,6 +690,11 @@
             },
             error: (error, type) =>
             {
+                if(!ridSet.has(rid))
+                {
+                    if(DEBUG) showLog('Request', `error:canceled request ${rid} on error`, {url, rid, options});
+                    return;
+                }
                 const data = ajax.data;
                 if(!data && !ajax.sendedAgain)
                 {
@@ -731,6 +741,11 @@
         {
             $.db.getCache(cacheKey, 'zinFetch').then(localCache =>
             {
+                if(!ridSet.has(rid))
+                {
+                    if(DEBUG) showLog('Request', `error:canceled request ${rid} on load cache`, {url, rid, options});
+                    return;
+                }
                 cache = localCache;
                 if(cache)
                 {
