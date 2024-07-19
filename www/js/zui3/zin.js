@@ -125,7 +125,7 @@
     const renderMap =
     {
         html:          updatePageWithHtml,
-        body:          (data) => $('body').html(data).zuiInit(),
+        body:          (data) => $('body').html(data),
         title:         (data) => document.title = data,
         featureBar:    updateFeatureBar,
         pageCSS:       updatePageCSS,
@@ -182,7 +182,7 @@
     {
         let $style = $(`style.zin-page-css[data-id="${options.pageID}"]`);
         if(!$style.length) $style = $('body>style.zin-page-css');
-        $style.html(data);
+        $style.html(data, false);
     }
 
     function updatePageJS(data, _info, options)
@@ -272,7 +272,7 @@
             else if(skipTags.has(nodeName)) return;
             else html.push(node.outerHTML);
         });
-        $('body').html(html.join('')).zuiInit();
+        $('body').html(html.join(''));
         window.zin = {config: window.config};
         if(DEBUG) console.log('[ZIN] ', window.zin);
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
@@ -343,7 +343,7 @@
     {
         const $featureBar = $('#featureBar');
         const isOpenSearch = $featureBar.find('.search-form-toggle.active').length && $featureBar.closest('.show-search-form').length;
-        $featureBar.html(data).zuiInit();
+        $featureBar.html(data);
         if(isOpenSearch)
         {
             const $searchToggle = $featureBar.find('.search-form-toggle');
@@ -391,7 +391,7 @@
         {
             if(noMorph)
             {
-                $target.html(html).zuiInit();
+                $target.html(html);
             }
             else
             {
@@ -404,7 +404,7 @@
             if(noMorph)
             {
                 $target.replaceWith(html);
-                $target = $(selector.select).zuiInit();
+                $target = $(selector.select);
             }
             else
             {
@@ -1068,7 +1068,7 @@
                 if(options.selector) $content = $('<div>').append($content).find(options.selector);
                 if(options.replace) $target.replaceWith($content);
                 else $target.empty().append($content);
-                $target.data('zin-target-load', Date.now()).zuiInit();
+                $target.data('zin-target-load', Date.now());
             },
             error: (xhr, type, error) =>
             {
