@@ -620,6 +620,7 @@ class bug extends control
             {
                 /* 设置模块数据源。 */
                 /* Set module data source. */
+                $this->config->bug->dtable->fieldList['module']['dataSource']['module'] = 'tree';
                 $this->config->bug->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
                 $this->config->bug->dtable->fieldList['module']['dataSource']['params'] = 'bug';
 
