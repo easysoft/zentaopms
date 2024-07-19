@@ -11,7 +11,7 @@ class closeprojectTester extends tester
      */
     public function closeProject(array $project)
     {
-        $form = $this->initForm('project', 'browse', 'appIframe-project');
+        $form       = $this->initForm('project', 'browse', 'appIframe-project');
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['wait'])->click();
@@ -28,7 +28,7 @@ class closeprojectTester extends tester
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['more'])->click();
         $form->dom->closed->click();
-        $form->dom->search(array("项目名称,=,{$title}"));
+        $form->dom->search(array("{$this->lang->project->name},=,{$title}"));
         $form->wait(1);
 
         if($title != $form->dom->projectName->getText()) return $this->failed('关闭项目失败');

@@ -11,7 +11,7 @@ class activeprojectTester extends tester
      */
     public function activeProject(array $project)
     {
-        $form = $this->initForm('project', 'browse', 'appIframe-project');
+        $form       = $this->initForm('project', 'browse', 'appIframe-project');
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['more'])->click();
@@ -27,7 +27,7 @@ class activeprojectTester extends tester
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['doing'])->click();
-        $form->dom->search(array("项目名称,=,{$title}"));
+        $form->dom->search(array("{$this->lang->project->name},=,{$title}"));
         $form->wait(1);
 
         if($title != $form->dom->projectName->getText()) return $this->failed('激活项目失败');
