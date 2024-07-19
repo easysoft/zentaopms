@@ -2498,6 +2498,12 @@ class storyModel extends model
             $showGrades = isset($matches[1]) ? $matches[1] : null;
         }
 
+        if($fieldValue == 'launched' && $fieldName == 'status')
+        {
+            $fieldValue = 'projected';
+            $fieldName  = 'stage';
+        }
+
         $stories = $sql->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
