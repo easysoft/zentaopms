@@ -35,6 +35,7 @@
     const currentCode = (window.frameElement ? window.frameElement.name : window.name).split('-')[1];
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
+    const ridSet      = new Set();
     const timers      = {timeout: [], interval: []};
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
@@ -533,6 +534,7 @@
         options.pageID     = getUrlID(url);
         if(!options.cache && options.cache !== false) options.cache = (requestMethod === 'GET' && config.clientCache && !options.partial) ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
         const cacheKey = options.cache;
+        const rid = options.rid;
         let cache;
         let cacheHit;
         const renderPageData = (data, onlyZinDebug) =>
@@ -630,7 +632,6 @@
                     }
                     $(document).trigger('pagerender.app');
                     if(options.success) options.success(data);
-                    if(onFinish) onFinish(null, data);
                     if(cacheKey)
                     {
                         const cacheTime = +response.headers.get('X-Zin-Cache-Time');
@@ -707,7 +708,6 @@
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {type, error});
                 if(!data) zui.Messager.show('ZIN: Fetch data failed from ' + url);
                 if(options.error) options.error(data, error);
-                if(onFinish) onFinish(error);
             },
             complete: () =>
             {
@@ -723,7 +723,7 @@
                 }
             }
         });
-        if(DEBUG) showLog('Request', `${ajax.setting.type}:${getUrlID(url)}`, options, {cacheKey, ajax});
+        if(DEBUG) showLog('Request', `${ajax.setting.type}:${options.id} ${getUrlID(url)} task ${rid}`, options, {cacheKey, ajax});
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
         {
@@ -784,15 +784,23 @@
         const id = selectors.includes('pageJS') ? 'page' : (options.id || selectors);
         options = $.extend({}, options, {url: url, selectors: selectors, id: id});
 
-        const task = fetchTasks.get(id) || {url: url, selectors: selectors, options: options};
-        if(task.xhr)
+        let task = fetchTasks.get(id);
+        if(task)
         {
-            if(task.url === url) return;
-            task.xhr.abort();
-            task.xhr = null;
+            if(task.url === url)
+            {
+                if(DEBUG) showLog('Request', [`success:same request ${task.rid}`, url], {task, options});
+                return;
+            }
+            if (task.xhr) task.xhr.abort();
+            if(task.timerID) clearTimeout(task.timerID);
+            if(task.rid) ridSet.delete(task.rid);
         }
+        const rid = $.guid++;
+        task = {url: url, selectors: selectors, options: options, rid: rid};
         fetchTasks.set(id, task);
-        if(task.timerID) clearTimeout(task.timerID);
+        ridSet.add(rid);
+        options.rid = rid;
         task.timerID = setTimeout(() =>
         {
             task.timerID = 0;
@@ -805,6 +813,7 @@
                     task.xhr = null;
                 }
                 fetchTasks.delete(id);
+                ridSet.delete(rid);
             });
         }, options.delayTime || 0);
     }
