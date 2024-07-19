@@ -172,8 +172,9 @@ $config->pivot->objectTableFields->ticket['openedBy']['title'] = $lang->ticket->
 $config->pivot->objectTableFields->ticket['openedBy']['type']  = 'user';
 
 $config->pivot->objectTableFields->story = array();
-$config->pivot->objectTableFields->story['title']['title'] = $lang->pivot->drill->storyName;
-$config->pivot->objectTableFields->story['title']['link']  = array('url' => helper::createLink('{type}', 'view', 'storyID={id}'), 'target' => '_blank');
+$config->pivot->objectTableFields->story['title']['title']   = $lang->pivot->drill->storyName;
+$config->pivot->objectTableFields->story['title']['link']    = array('url' => helper::createLink('{type}', 'view', 'storyID={id}'), 'target' => '_blank');
+$config->pivot->objectTableFields->story['reviewer']['name'] = 'reviewedBy';
 
 $config->pivot->objectTableFields->testcase = array();
 $config->pivot->objectTableFields->testcase['id']['name']    = 'id';
