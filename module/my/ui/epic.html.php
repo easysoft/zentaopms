@@ -18,7 +18,7 @@ jsVar('gradeGroup', $gradeGroup);
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=epic&type={key}&param={$param}"),
+    set::linkParams("mode=epic&type={key}&param="),
     li(searchToggle(set::module($this->app->rawMethod . 'Epic'), set::open($type == 'bysearch')))
 );
 

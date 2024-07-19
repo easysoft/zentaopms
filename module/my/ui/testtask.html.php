@@ -15,7 +15,7 @@ include 'header.html.php';
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=testtask&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
+    set::linkParams("mode=testtask&type={key}&param=&orderBy={$orderBy}")
 );
 
 foreach($config->my->testtask->dtable->fieldList['actions']['list'] as $actionKey => $action)

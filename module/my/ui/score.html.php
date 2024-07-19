@@ -12,10 +12,7 @@ namespace zin;
 
 jsVar('methods', $lang->score->methods);
 
-featureBar
-(
-    set::current('all'),
-);
+featureBar(set::current('all'));
 
 $cols = array_values($config->my->score->dtable->fieldList);
 $data = array_values($scores);

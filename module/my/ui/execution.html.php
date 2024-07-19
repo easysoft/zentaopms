@@ -17,7 +17,7 @@ jsVar('delayed', $lang->execution->delayed);
 featurebar
 (
     set::current($type),
-    set::linkParams("type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
+    set::linkParams("type={key}&orderBy={$orderBy}")
 );
 
 foreach($executions as $execution) $execution->isParent = isset($parentGroup[$execution->id]);

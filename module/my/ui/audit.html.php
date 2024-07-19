@@ -34,10 +34,10 @@ jsVar('projectReviewLink', createLink('review', 'assess', 'reviewID={id}'));
 $rawMethod = $app->rawMethod;
 if($rawMethod != 'audit' && isset($lang->my->featureBar[$rawMethod]['audit'])) $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
 
-$linkParam = "browseType={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+$linkParam = "browseType={key}&param=&orderBy={$orderBy}";
 if($rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
 
-featurebar
+featureBar
 (
     set::current($browseType),
     set::linkParams($linkParam)

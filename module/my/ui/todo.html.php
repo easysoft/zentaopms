@@ -14,7 +14,7 @@ jsVar('changeDateLabel', $lang->todo->changeDate);
 featureBar
 (
     set::current($type),
-    set::linkParams("type={key}&userID={$user->id}&status=all&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("type={key}&userID={$user->id}&status=all&orderBy={$orderBy}"),
     set::itemLink(array('before' => createLink($app->rawModule, $app->rawMethod, "type=before&userID={$user->id}&status=undone&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"))),
     datePicker
     (

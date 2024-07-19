@@ -17,7 +17,7 @@ jsVar('unexecuted', $lang->testcase->unexecuted);
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=testcase&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("mode=testcase&type={key}&param=&orderBy={$orderBy}"),
     li(searchToggle(set::module($this->app->rawMethod . 'Testcase'), set::open($type == 'bysearch')))
 );
 

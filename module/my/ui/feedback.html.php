@@ -18,7 +18,7 @@ jsVar('errorNoExecution', $lang->feedback->noExecution);
 featureBar
 (
     set::current($type),
-    set::linkParams("mode={$mode}&type={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("mode={$mode}&type={key}&param=&orderBy={$orderBy}"),
     li(searchToggle(set::module($this->app->rawMethod . 'Feedback'), set::open($type == 'bysearch')))
 );
 

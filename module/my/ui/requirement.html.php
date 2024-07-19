@@ -21,7 +21,7 @@ jsVar('recallChange', $lang->story->recallChange);
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=requirement&type={key}&param={$param}"),
+    set::linkParams("mode=requirement&type={key}&param="),
     li(searchToggle(set::module($this->app->rawMethod . 'Requirement'), set::open($type == 'bysearch')))
 );
 

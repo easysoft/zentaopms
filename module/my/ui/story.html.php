@@ -21,7 +21,7 @@ jsVar('window.globalSearchType', 'story');
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=story&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("mode=story&type={key}&param=&orderBy={$orderBy}"),
     li(searchToggle(set::module($this->app->rawMethod . 'Story'), set::open($type == 'bysearch')))
 );
 

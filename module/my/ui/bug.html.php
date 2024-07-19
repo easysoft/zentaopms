@@ -19,12 +19,10 @@ jsVar('testcaseTitle', $testcaseTitle);
 jsVar('testcaseLink', $testcaseLink);
 jsVar('checkedSummary', isset($checkedSummary) ? $checkedSummary : '');
 
-$linkParam = "mode=bug&type={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-if($app->rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
 featurebar
 (
     set::current($type),
-    set::linkParams($linkParam),
+    set::linkParams("mode=bug&type={key}&param=&orderBy={$orderBy}"),
     li(searchToggle(set::module($this->app->rawMethod . 'Bug'), set::open($type == 'bySearch')))
 );
 
