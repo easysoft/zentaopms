@@ -21,6 +21,7 @@ class actionItem extends wg
         'target?:string',
         'active?:bool',
         'disabled?:bool',
+        'selected?:bool',
         'trailingIcon?:string',
         'outerProps?:array',
         'outerClass?:string',
@@ -107,7 +108,7 @@ class actionItem extends wg
         $methodName = "build{$type}Item";
         if(method_exists($this, $methodName)) return $this->$methodName();
 
-        list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled, $badge, $textClass) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled', 'badge', 'textClass'));
+        list($tagName, $icon, $text, $trailingIcon, $url, $target, $active, $disabled, $badge, $textClass, $selected) = $this->prop(array('tagName', 'icon', 'text', 'trailingIcon', 'url', 'target', 'active', 'disabled', 'badge', 'textClass', 'selected'));
 
         if(is_string($badge))     $badge = label($badge);
         else if(is_array($badge)) $badge = label(set($badge));
@@ -116,7 +117,7 @@ class actionItem extends wg
         (
             $tagName,
             set($tagName === 'a' ? array('href' => $url, 'target' => $target) : array('data-url' => $url, 'data-target' => $target)),
-            setClass(array('active' => $active, 'disabled' => $disabled)),
+            setClass(array('active' => $active, 'disabled' => $disabled, 'selected' => $selected)),
             set($this->getRestProps()),
             set($this->prop('props')),
             $icon ? icon($icon) : null,
