@@ -1094,7 +1094,7 @@
                 if(options.selector) $content = $('<div>').append($content).find(options.selector);
                 if(options.replace) $target.replaceWith($content);
                 else $target.empty().append($content);
-                $target.data('zin-target-load', Date.now());
+                $target.data('zin-target-load', Date.now()).zuiInit();
             },
             error: (xhr, type, error) =>
             {
