@@ -539,7 +539,7 @@
         let cacheHit;
         const renderPageData = (data, onlyZinDebug) =>
         {
-            const renderOptions = $.extend({noMorph: config.morphUpdate && !options.partial && options.isDiffPage}, options);
+            const renderOptions = $.extend({noMorph: !config.morphUpdate || (!options.partial && options.isDiffPage)}, options);
             if(!onlyZinDebug) updatePerfInfo(options, 'renderBegin');
             renderPage(data.reduce((list, item, idx) =>
             {
