@@ -752,6 +752,21 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
 
     if(!$method || !common::hasPriv($module, $method, $item)) return $isClickable;
 
+    /* Check flow conditions for this object. */
+    if(empty($model->enables) && $model->config->edition != 'open')
+    {
+        $enables = array();
+        $actions = $model->loadModel('workflowaction')->getList($module);
+        $model->loadModel('flow');
+        $model->enables = array();
+        foreach($actions as $action)
+        {
+            $model->enables[$action->action] = $action->status == 'enable';
+            if($action->status == 'enable' && $action->extensionType != 'none' && !empty($action->conditions)) $model->enables[$action->action] = $model->flow->checkConditions($action->conditions, $item);
+        }
+    }
+    if(isset($model->enables[$method]) && !$model->enables[$method]) $isClickable = false;
+
     $item->actions[] = array('name' => $action, 'disabled' => !$isClickable);
 
     return $isClickable;
