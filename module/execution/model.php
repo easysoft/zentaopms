@@ -349,7 +349,7 @@ class executionModel extends model
 
         /* Check the begin date and end date. */
         $parentExecution = !empty($postData->parent) ? $postData : $oldExecution;
-        if(empty($postData->project) || $postData->project == $oldExecution->project) $this->checkBeginAndEndDate($oldExecution->project, $postData->begin, $postData->end, $parentExecution->parent);
+        if($oldExecution->mutiple &&(empty($postData->project) || $postData->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $postData->begin, $postData->end, $parentExecution->parent);
         if(dao::isError()) return false;
 
         /* Child stage inherits parent stage permissions. */
