@@ -709,11 +709,11 @@ function initAppsMenu(items)
             .attr('href', item.url || '#')
             .attr('target', item.notApp ? '_blank' : undefined)
             .addClass('rounded' + (item.notApp ? '' : ' show-in-app'))
-            .html(item.title);
+            .html(item.title, false);
 
         item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
         item.text = $link.text().trim();
-        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
+        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
         if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
 
