@@ -21,7 +21,7 @@ cid=73
 chdir(__DIR__);
 include '../lib/createwaterfall.ui.class.php';
 
-zendata('projet')->loadYaml('project', false, 2)->gen(10);
+zendata('project')->loadYaml('project', false, 2)->gen(10);
 $tester = new createWaterfallTester();
 $tester->login();
 

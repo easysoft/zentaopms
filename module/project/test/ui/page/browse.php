@@ -11,11 +11,11 @@ class browsePage extends page
             'projectName'   => "//*[@id='table-project-browse']/div[2]/div[1]/div/div[2]/div/a",
             'scrumName'     => "//*[@id='mainContent']/div[2]/div/div/div[2]/div/div/div[2]/div/a",
             'moreBtn'       => "//*[@id='table-project-browse']/div[2]/div[3]/div/div[1]/div/nav/button[1]/span",
-            'closeBtn'      => "//*[@title='关闭项目']",
-            'closeProject'  => "//span[text()='关闭项目']",
+            'closeBtn'      => "//*[@class='icon item-icon icon-off']",
+            'closeProject'  => "//*[@class='modal modal-async load-indicator modal-trans show in']/div/div/div[3]/div/div/form/div[3]/div/button",
             'closed'        => "//*[@id='more']/menu/menu/li[2]/a/div",
-            'activeBtn'     => "//*[@title='激活项目']",
-            'activeProject' => "//span[text()='激活项目']",
+            'activeBtn'     => "//*[@id='table-project-browse']/div[2]/div[3]/div/div/div/nav/a[1]/i",
+            'activeProject' => "//*[@class='modal modal-async load-indicator modal-trans show in']/div/div/div[3]/div/div/form/div[3]/div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

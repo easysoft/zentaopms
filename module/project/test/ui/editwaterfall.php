@@ -13,7 +13,6 @@ cid=73
 chdir(__DIR__);
 include '../lib/editwaterfall.ui.class.php';
 
-zendata('projet')->loadYaml('project', false, 2)->gen(10);
 $tester = new editWaterfallTester();
 $tester->login();
 
