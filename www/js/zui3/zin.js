@@ -1187,7 +1187,7 @@
 
                     if(options.updateOrders)
                     {
-                        const formGrid = $form.zui();
+                        const formGrid = $form.zui('formGrid');
                         if(formGrid)
                         {
                             const orders = [];
@@ -1198,8 +1198,8 @@
                 }
                 else
                 {
-                    $form.html(info.data).zuiInit();
-                    const formGrid = $form.zui();
+                    $form.html(info.data);
+                    const formGrid = $form.zui('formGrid');
                     if(formGrid) formGrid.toggleMode(formGrid.mode, true);
                 }
 
