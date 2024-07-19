@@ -14,6 +14,9 @@ fields:
   - field: createdBy
     range: 'admin'
   - field: createdDate
-    range: '2022-04-29 08:46:40'
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
   - field: type
     range: 'project'

@@ -10,10 +10,13 @@ fields:
   - field: version
     range: 1
   - field: nodes
-    range: '\[\{"type":"start","ccs":\[\]\},{"id":"3ewcj92p55e","type":"approval","title":"审批","reviewType":"manual","multiple":"and","agentType":"pass","reviewers":\[\{"type":"select"\}\],"ccs":\[\]\},\{"type":"end","ccs":\[\]\}\]'
+    range: `[{"type":"start","ccs":[]},{"id":"3ewcj92p55e","type":"approval","title":"审批","reviewType":"manual","multiple":"and","agentType":"pass","reviewers":[{"type":"select"}],"ccs":[]},{"type":"end","ccs":[]}]`
   - field: code
     range: 'simple'
   - field: createdBy
     range: 'admin'
   - field: createdDate
-    range: '2022-04-29 08:46:40'
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
