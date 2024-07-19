@@ -2597,6 +2597,24 @@ class pivotModel extends model
     }
 
     /**
+     * Parse query filter, then get drill result.
+     *
+     * @param  array $drill
+     * @param  array $filters
+     * @access public
+     * @return array
+     */
+    public function getDrillResult($object, $whereSQL, $filters, $conditions = '', $emptyFilters = true)
+    {
+        $drillSQL     = $this->getDrillSQL($object, $whereSQL, $conditions);
+        $filterFormat = $this->getFilterFormat($drillSQL, $filters);
+        $sql          = $this->loadModel('bi')->processVars($drillSQL, $filterFormat, $emptyFilters);
+        $result       = $this->execDrillSQL($object, $sql);
+
+        return $result;
+    }
+
+    /**
      * Get drill datas.
      *
      * @param  int $pivotID
