@@ -2596,6 +2596,14 @@ class pivotModel extends model
         return "SELECT t1.* FROM ($referSQL) AS t1 {$conditionSQL}";
     }
 
+    /**
+     * Execute drill sql.
+     *
+     * @param  string $object
+     * @param  string $drillSQL
+     * @access public
+     * @return array
+     */
     public function execDrillSQL($object, $drillSQL)
     {
         $limitSQL = "SELECT * FROM ($drillSQL) AS t1 LIMIT 10";
