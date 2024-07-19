@@ -14,7 +14,16 @@ function randomString($length = 4)
     }
     return $randomString;
 }
-$application = array('customName' => 'zdoo' . time(), 'customDomain' => randomString());
+
+$application = array(
+    'customName'   => 'zdoo' . time(),
+    'customDomain' => randomString(),
+    'appType'      => 'GitLab',
+    'name'         => 'app' . time(),
+    'url'          => 'http://10.0.7.242:9980',
+    'token'        => 'y2UBqwPPzaLxsniy8R6A'
+);
+
 $url  = array('id' => 55);
 
 r($tester->createApplication($url, $application)) && p('message,status') && e('创建应用成功,SUCCESS'); //验证创建zdoo应用
