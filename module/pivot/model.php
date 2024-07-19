@@ -2613,15 +2613,27 @@ class pivotModel extends model
         $pivotState = new pivotState($pivot, array(), $this->app->getClientLang());
 
         $filters = $pivotState->setFiltersDefaultValue($filterValues);
-        $filters = $pivotState->convertFiltersToWhere($filters);
-
         foreach($conditions as $index => $condition)
         {
-            $conditions[$index]['value'] = isset($condition['value']) ? " = '{$condition['value']}'" : $this->setConditionValueWithFilters($condition, $filters);
+            if(isset($condition['value'])) $conditions[$index]['value'] = " = '{$condition['value']}'";
         }
 
-        $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSql, $conditions);
-        $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
+        if($pivotState->isQueryFilter())
+        {
+            $queryResult = $this->getDrillResult($drill->object, $drill->whereSql, $filters, $conditions);
+        }
+        else
+        {
+            $filters = $pivotState->convertFiltersToWhere($filters);
+
+            foreach($conditions as $index => $condition)
+            {
+                if(!isset($condition['value'])) $conditions[$index]['value'] = $this->setConditionValueWithFilters($condition, $filters);
+            }
+
+            $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSql, $conditions);
+            $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
+        }
 
         if($queryResult['result'] != 'success') return array();
 

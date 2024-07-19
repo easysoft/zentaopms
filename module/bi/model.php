@@ -1455,7 +1455,6 @@ class biModel extends model
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
         {
-
             $index           = 0;
             $columnKeys      = array_keys($rowData);
             $rowData         = array_values($rowData);
