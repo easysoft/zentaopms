@@ -321,21 +321,31 @@ $lang->action->desc->published   = '$date, published by <strong>$actor</strong>.
 $lang->action->desc->unpublished = '$date, unpublished by <strong>$actor</strong>.' . "\n";
 
 /* 用来描述应用的历史操作记录。*/
-$lang->action->desc->install                 = '$date, installed by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->uninstall               = '$date, uninstalled by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->start                   = '$date, started by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->stop                    = '$date, closed by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->editname                = '$date, updated from <strong>$oldname</strong> to <strong>$newName</strong> by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->upgrade                 = '$date, upgraded from <strong>$oldVersion</strong> to <strong>$newVersion</strong> by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->backup                  = '$date, backuped by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->adjustmemory            = '$date, resized to <strong>$newValue</strong> memory by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->adjustcpu               = '$date, resized to <strong>$newValue</strong> CPU by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->adjustvol               = '$date, resized to <strong>$newValue</strong> GB disk space by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->enableldap              = '$date, enabled by <strong>$actor</strong> of LDAP。' . "\n";
-$lang->action->desc->disableldap             = '$date, disabled by <strong>$actor</strong> of LDAP。' . "\n";
-$lang->action->desc->enablesmtp              = '$date, enabled by <strong>$actor</strong> of SMTP。' . "\n";
-$lang->action->desc->disablesmtp             = '$date, disabled by <strong>$actor</strong> of SMTP。' . "\n";
-$lang->action->desc->updatecustom            = '$date, updated by <strong>$actor</strong> of custom settings.' . "\n";
+$lang->action->desc->install             = '$date, installed by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->uninstall           = '$date, uninstalled by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->start               = '$date, started by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->stop                = '$date, closed by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->editname            = '$date, updated from <strong>$oldname</strong> to <strong>$newName</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->upgrade             = '$date, upgraded from <strong>$oldVersion</strong> to <strong>$newVersion</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->backup              = '$date, backuped by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->adjustmemory        = '$date, resized to <strong>$newValue</strong> memory by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->adjustcpu           = '$date, resized to <strong>$newValue</strong> CPU by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->adjustvol           = '$date, resized to <strong>$newValue</strong> GB disk space by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->adjustmemorychange  = '$date, modify the memory from <strong>$oldValue</strong> to <strong>$newValue</strong> by <strong>$actor</strong>.' . "\n";
+if(empty($oldValue))
+{
+    $lang->action->desc->adjustcpuchange = '$date, modify CPU from <strong>unlimit</strong> to <strong>$newValue</strong>-core by <strong>$actor</strong>.' . "\n";
+}
+else
+{
+    $lang->action->desc->adjustcpuchange = '$date, modify CPU from <strong>$oldValue</strong>-core to <strong>$newValue</strong>-core by <strong>$actor</strong>.' . "\n";
+}
+$lang->action->desc->adjustvolchange     = '$date, modify this disk space from <strong>oldValue</strong>GB to <strong>newValue</strong>GB。' . "\n";
+$lang->action->desc->enableldap          = '$date, enabled by <strong>$actor</strong> of LDAP。' . "\n";
+$lang->action->desc->disableldap         = '$date, disabled by <strong>$actor</strong> of LDAP。' . "\n";
+$lang->action->desc->enablesmtp          = '$date, enabled by <strong>$actor</strong> of SMTP。' . "\n";
+$lang->action->desc->disablesmtp         = '$date, disabled by <strong>$actor</strong> of SMTP。' . "\n";
+$lang->action->desc->updatecustom        = '$date, updated by <strong>$actor</strong> of custom settings.' . "\n";
 
 $lang->action->desc->delist  = '$date, delist by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->publish = '$date, publish by <strong>$actor</strong>.' . "\n";
@@ -1088,16 +1098,3 @@ $lang->action->desc->approve                      = '$date, <strong>$actor</stro
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
 $lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
 $lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';
-$lang->action->desc->adjustmemory                 = '$date, resized to <strong>$newValue</strong> memory by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->adjustcpu                    = '$date, resized to <strong>$newValue</strong> CPU by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->adjustvol                    = '$date, resized to <strong>$newValue</strong> GB disk space by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->adjustmemorychange           = '$date, modify the memory from <strong>$oldValue</strong> to <strong>$newValue</strong> by <strong>$actor</strong>.' . "\n";
-if(empty($oldValue))
-{
-    $lang->action->desc->adjustcpuchange          = '$date, modify CPU from <strong>unlimit</strong> to <strong>$newValue</strong>-core by <strong>$actor</strong>.' . "\n";
-}
-else
-{
-    $lang->action->desc->adjustcpuchange          = '$date, modify CPU from <strong>$oldValue</strong>-core to <strong>$newValue</strong>-core by <strong>$actor</strong>.' . "\n";
-}
-$lang->action->desc->adjustvolchange              = '$date, modify this disk space from <strong>oldValue</strong>GB to <strong>newValue</strong>GB。' . "\n";
