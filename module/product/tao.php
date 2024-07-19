@@ -783,7 +783,7 @@ class productTao extends productModel
             }
             else
             {
-                $executionName = $execution->name;
+                $executionName = $withProjectName ? '/' . $execution->name : $execution->name;
             }
             if($withProjectName) $executionName = $execution->projectName . $executionName;
             if(empty($execution->multiple)) $executionName = $execution->projectName . "({$this->lang->project->disableExecution})";
