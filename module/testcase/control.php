@@ -99,7 +99,7 @@ class testcase extends control
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
         $suiteID    = $browseType == 'bysuite'  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? (int)$this->cookie->caseSuite : 0) : 0);
         $queryID    = $browseType == 'bysearch' ? $param : 0;
-        if($browseType == 'bymodule') $browseType = $this->session->caseBrowseType;
+        if($browseType == 'bymodule' && $this->session->caseBrowseType) $browseType = $this->session->caseBrowseType;
 
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
