@@ -316,7 +316,7 @@ class context extends \zin\utils\dataset
             }
         }
 
-        $isJson = $name[0] !== '$';
+        $isJson = !str_starts_with($name, '$');
         $data   = $values;
         if($isJson)
         {
