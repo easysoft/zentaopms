@@ -694,8 +694,19 @@ class biModel extends model
             if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
             if(!isset($pivot->driver))  $pivot->driver   = $this->config->bi->defaultDriver;
 
-            $exists = $this->dao->select('id')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
-            if(!$exists) $currentOperate = 'insert';
+            $exists = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
+            if(!$exists)
+            {
+                $currentOperate = 'insert';
+            }
+            else
+            {
+                if($exists->name != $pivot->name)
+                {
+                    unset($pivot->id);
+                    $currentOperate = 'insert';
+                }
+            }
 
             $stmt = null;
             if($currentOperate == 'insert')
