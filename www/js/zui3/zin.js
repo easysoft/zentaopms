@@ -712,6 +712,8 @@
             complete: () =>
             {
                 if(ajax.canceled) return;
+                if(onFinish) onFinish();
+                $(document).data('zinCache', null);
                 if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, false, options.loadingClass);
                 if(options.complete) options.complete();
                 $(document).trigger('pageload.app');
