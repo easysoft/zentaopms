@@ -2587,7 +2587,7 @@ class pivotModel extends model
                 $drillField  = $drillAlias . $drillField;
             }
 
-            $conditionSQLs[] = "t1.{$drillField}{$value}";
+            if(!empty($condition['value'])) $conditionSQLs[] = "t1.{$drillField}{$value}";
         }
 
         $referSQL     = $this->getReferSQL($objectTable, $whereSQL, $fieldList);
