@@ -52,7 +52,6 @@ pipeline {
     PUBLISH_IMAGE = "${params.publish_image}"
     PUBLISH_ZBOX = "${params.publish_zbox}"
     PUBLISH_ENGLISH = "${params.publish_en}"
-    BUILD_KIND = "${params.build_kind}"
   }
 
   stages {
