@@ -24,6 +24,7 @@ if($this->config->edition != 'open')
 
 jsVar('dimensionID', $dimensionID);
 jsVar('groupID', $groupID);
+jsVar('emptyDrillTip', $this->lang->pivot->emptyDrillTip);
 
 $commonGroups = array_slice($groups, 0, $config->pivot->maxFeatureItem, true);
 $moreGroups   = array_slice($groups, $config->pivot->maxFeatureItem, null, true);

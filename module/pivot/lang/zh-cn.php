@@ -313,6 +313,7 @@ $lang->pivot->queryConditionTip   = '根据步骤一中的SQL查询语句，调�
 $lang->pivot->drillSQLTip         = '您可以将右侧第一步的查询语句复制到此处，并做相应的修改。';
 $lang->pivot->drillResultEmptyTip = '点击“预览”按钮，即可在此查看下钻结果。';
 $lang->pivot->previewResultTip    = '下钻结果将显示对象相关字段，默认只显示10行数据。';
+$lang->pivot->emptyDrillTip       = '暂无数据';
 
 $lang->pivot->emptyGroupError       = '分组不能为空。';
 $lang->pivot->emptyColumnFieldError = '列字段不能为空。';
