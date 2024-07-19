@@ -2604,9 +2604,9 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function execDrillSQL($object, $drillSQL)
+    public function execDrillSQL($object, $drillSQL, $limit = 10)
     {
-        $limitSQL = "SELECT * FROM ($drillSQL) AS t1 LIMIT 10";
+        $limitSQL = "SELECT * FROM ($drillSQL) AS t1 LIMIT $limit";
         $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $limitSQL);
 
         $result = array();
@@ -2629,11 +2629,11 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getDrillResult($object, $whereSQL, $filters, $conditions = array(), $emptyFilters = true)
+    public function getDrillResult($object, $whereSQL, $filters, $conditions = array(), $emptyFilters = true, $limit = 10)
     {
         $drillSQL     = $this->getDrillSQL($object, $whereSQL, $conditions);
         $sql          = $this->loadModel('bi')->processVars($drillSQL, $filters, $emptyFilters);
-        $result       = $this->execDrillSQL($object, $sql);
+        $result       = $this->execDrillSQL($object, $sql, $limit);
 
         return $result;
     }
@@ -2664,7 +2664,7 @@ class pivotModel extends model
         $status = null;
         if($pivotState->isQueryFilter())
         {
-            $queryResult = $this->getDrillResult($drill->object, $drill->whereSql, $filters, $conditions, false);
+            $queryResult = $this->getDrillResult($drill->object, $drill->whereSql, $filters, $conditions, false, 999999);
 
             $data   = $queryResult['data'];
             $status = $queryResult['status'];
