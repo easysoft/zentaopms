@@ -2607,8 +2607,7 @@ class pivotModel extends model
     public function getDrillResult($object, $whereSQL, $filters, $conditions = '', $emptyFilters = true)
     {
         $drillSQL     = $this->getDrillSQL($object, $whereSQL, $conditions);
-        $filterFormat = $this->getFilterFormat($drillSQL, $filters);
-        $sql          = $this->loadModel('bi')->processVars($drillSQL, $filterFormat, $emptyFilters);
+        $sql          = $this->loadModel('bi')->processVars($drillSQL, $filters, $emptyFilters);
         $result       = $this->execDrillSQL($object, $sql);
 
         return $result;
@@ -2640,7 +2639,7 @@ class pivotModel extends model
         $status = null;
         if($pivotState->isQueryFilter())
         {
-            $queryResult = $this->getDrillResult($drill->object, $drill->whereSql, $filters, $conditions);
+            $queryResult = $this->getDrillResult($drill->object, $drill->whereSql, $filters, $conditions, false);
 
             $data   = $queryResult['data'];
             $status = $queryResult['status'];
