@@ -201,7 +201,7 @@ $product ? toolbar
         'class' => 'ghost',
         'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
     ))) : null,
-    hasPriv('story', 'export') ? item(set(array
+    hasPriv('story', 'export') && $type == 'byproduct' ? item(set(array
     (
         'text'        => $lang->export,
         'icon'        => 'export',
