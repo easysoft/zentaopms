@@ -464,3 +464,5 @@ $lang->pivot->drill->save           = '保存';
 $lang->pivot->drill->drillFieldText = "%s(%s).%s";
 $lang->pivot->drill->storyName      = '需求名称';
 $lang->pivot->drill->releaseStories = "完成的需求";
+$lang->pivot->drill->productName    = "产品名称";
+$lang->pivot->drill->activatedBug   = "激活的Bug数";
