@@ -132,6 +132,7 @@ pipeline {
                     sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
                     sh 'git config --global --add safe.directory $PWD/xuansrc'
+                    sh 'git config --global --add safe.directory $PWD/zentaoext'
                     sh 'git config --global --add safe.directory $PWD/downRepo'
                     sh 'git config --global --add safe.directory $PWD/downRepoExt'
                     // sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
