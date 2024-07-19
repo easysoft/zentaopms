@@ -2618,9 +2618,14 @@ class pivotModel extends model
             if(isset($condition['value'])) $conditions[$index]['value'] = " = '{$condition['value']}'";
         }
 
+        $data   = array();
+        $status = null;
         if($pivotState->isQueryFilter())
         {
             $queryResult = $this->getDrillResult($drill->object, $drill->whereSql, $filters, $conditions);
+
+            $data   = $queryResult['data'];
+            $status = $queryResult['status'];
         }
         else
         {
@@ -2633,11 +2638,14 @@ class pivotModel extends model
 
             $drillSQL    = $this->getDrillSQL($drill->object, $drill->whereSql, $conditions);
             $queryResult = $this->loadModel('bi')->querySQL($drillSQL, $drillSQL);
+
+            $data   = $queryResult['rows'];
+            $status = $queryResult['result'];
         }
 
-        if($queryResult['result'] != 'success') return array();
+        if($status != 'success') return array();
 
-        return $queryResult['rows'];
+        return $data;
     }
 
     /**
