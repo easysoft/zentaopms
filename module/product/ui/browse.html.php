@@ -206,6 +206,7 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
 $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
 if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']['link'] = array('url' => helper::createLink('projectstory', 'view', 'storyID={id}&projectID={project}'));
 
+$config->$storyType->dtable->fieldList['assignedTo']['assignLink']['module'] = $storyType;
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
 if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 if($storyType == 'story' && $config->edition == 'ipd') unset($setting['roadmap']);
@@ -420,6 +421,7 @@ if($this->app->rawModule == 'projectstory') $sortLink = createLink('projectstory
 $emptyTip = $lang->story->noStory;
 if($storyType == 'requirement') $emptyTip = $lang->story->noRequirement;
 if($storyType == 'epic')        $emptyTip = $lang->story->noEpic;
+
 dtable
 (
     set::id('stories'),
