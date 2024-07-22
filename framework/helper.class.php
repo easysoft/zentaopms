@@ -755,11 +755,10 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
     /* Check flow conditions for this object. */
     if(empty($model->enables) && $model->config->edition != 'open')
     {
-        $enables = array();
-        $actions = $model->loadModel('workflowaction')->getList($module);
         $model->loadModel('flow');
+        $flowActions    = $model->loadModel('workflowaction')->getList($module);
         $model->enables = array();
-        foreach($actions as $flowAction)
+        foreach($flowActions as $flowAction)
         {
             $model->enables[$flowAction->action] = $flowAction->status == 'enable';
             if($flowAction->status == 'enable' && $flowAction->extensionType != 'none' && !empty($flowAction->conditions)) $model->enables[$flowAction->action] = $model->flow->checkConditions($flowAction->conditions, $item);
