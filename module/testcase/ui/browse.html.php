@@ -120,6 +120,7 @@ foreach($cases as $case)
     if($actionType == 'testcase' && !$this->config->testcase->needReview && empty($config->testcase->forceReview)) unset($cols['actions']['menu'][1][0]);
     if($actionType == 'scene') $case->bugs = $case->results = $case->stepNumber = $case->version = '';
     if(!empty($case->needconfirm)) $case->status = 'changed';
+    if(isset($case->script)) unset($case->script);
 
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
