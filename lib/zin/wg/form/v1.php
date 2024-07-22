@@ -286,6 +286,10 @@ class form extends formBase
             $labelWidth = $this->prop('labelWidth');
             if(!empty($labelWidth)) $props[] = setCssVar('form-horz-label-width', $labelWidth);
         }
+        else
+        {
+            $props[] = setClass('no-morph');
+        }
 
         return $props;
     }
