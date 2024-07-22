@@ -79,6 +79,7 @@ class storyBasicInfo extends wg
         $statusText = $this->prop('statusText', $story->status);
         $users      = $this->prop('users', data('users'));
         $gradePairs = $this->prop('gradePairs', data('gradePairs'));
+        $roadmaps   = $this->prop('roadmaps', data('roadmaps'));
         $showGrade  = $this->prop('showGrade', data('showGrade'));
         $items      = array();
 
@@ -109,6 +110,15 @@ class storyBasicInfo extends wg
                 'control' => 'text',
                 'content' => zget($gradePairs, $story->grade)
             );
+        }
+        if($config->edition == 'ipd' && $story->type != 'story')
+        {
+            $items[$lang->story->roadmap] = hasPriv('roadmap', 'view') ? array
+            (
+                'control' => 'link',
+                'url'     => createLink('roadmap', 'view', "roadmapID=$story->roadmap"),
+                'content' => zget($roadmaps, $story->roadmap)
+            ) : zget($roadmaps, $story->roadmap, '');
         }
         if(!$hiddenPlan)
         {
