@@ -761,10 +761,14 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         foreach($flowActions as $flowAction)
         {
             $model->enables[$flowAction->action] = $flowAction->status == 'enable';
-            if($flowAction->status == 'enable' && $flowAction->extensionType != 'none' && !empty($flowAction->conditions)) $model->enables[$flowAction->action] = $model->flow->checkConditions($flowAction->conditions, $item);
+            if($flowAction->status == 'enable' && $flowAction->extensionType != 'none' && !empty($flowAction->conditions)) $model->enables[$flowAction->action] = $flowAction->conditions;
         }
     }
-    if(isset($model->enables[$method]) && !$model->enables[$method]) $isClickable = false;
+    if(isset($model->enables[$method]))
+    {
+        if(!$model->enables[$method]) $isClickable = false;
+        if(is_array($model->enables[$method]) && !$model->flow->checkConditions($model->enables[$method], $item)) $isClickable = false;
+    }
 
     $item->actions[] = array('name' => $action, 'disabled' => !$isClickable);
 
