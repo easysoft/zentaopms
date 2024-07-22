@@ -16,3 +16,5 @@ UPDATE `zt_workflowaction` SET conditions = '' WHERE `action` = 'approvalsubmit'
 ALTER TABLE `zt_job` ADD INDEX `idx_repo_deleted`(`repo`,`deleted`);
 
 UPDATE `zt_workflowfield` SET options = '{"wait":"\\u5f85\\u5ba1\\u6279","doing":"\\u5ba1\\u6279\\u4e2d","pass":"\\u901a\\u8fc7","reject":"\\u4e0d\\u901a\\u8fc7","reverting":"\\u56de\\u9000\\u4e2d"}' WHERE field = 'reviewStatus';
+
+UPDATE `zt_workflowaction` SET `role` = 'buildin' WHERE `buildin` = '1' AND `module` IN ('requirement', 'epic');
