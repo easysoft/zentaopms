@@ -49,7 +49,8 @@ class tabs extends wg
 
         return li
         (
-            setClass('nav-item', $navClass, $key, $tabPane->prop('hide') ? 'hidden' : ''),
+            setClass('nav-item', $navClass, $tabPane->prop('hide') ? 'hidden' : ''),
+            setData('key', $key),
             a
             (
                 set('data-toggle', 'tab'),
