@@ -13,7 +13,7 @@ $(document).ready(function()
 function getCheckedItems()
 {
     var checkedItems = [];
-    $('#casesForm [name^=caseIDList]:checked').each(function(index, ele)
+    $('#caseForm [name^=caseIDList]:checked').each(function(index, ele)
     {
         checkedItems.push($(ele).val());
     });
