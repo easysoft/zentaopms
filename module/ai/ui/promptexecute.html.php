@@ -15,6 +15,9 @@ requestAnimationFrame(() =>
         const isRegen = window.sessionStorage.getItem('ai-prompt-regen') === 'true';
         if(currentURL.href === formURL.href && !isRegen) return;
 
+        /* Go back to prompts page when entering audit, prevent showing a blank page. */
+        if($.apps.currentCode == 'admin') goBack();
+
         openUrl(`{$formLocation}`);
     }, 1000);
 });
