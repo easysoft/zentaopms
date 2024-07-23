@@ -242,7 +242,6 @@ detailBody
             (
                 to::prefix(icon('bug')),
                 set::key('generatedBug'),
-                set::id('generatedBug'),
                 set::title($lang->build->generatedBugs),
                 set::active($type == 'generatedBug'),
                 dtable
