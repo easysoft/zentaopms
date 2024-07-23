@@ -142,9 +142,17 @@ class message extends control
         $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')->andWhere('status')->ne('wait')->exec();
     }
 
+    /**
+     * Ajax: 获取消息下拉菜单。
+     * Ajax get dropmenu.
+     *
+     * @access public
+     * @return void
+     */
     public function ajaxGetDropmenu()
     {
-        $messages       = $this->message->getMessages('', 'createdDate_desc');
+        $messages = $this->message->getMessages('all', 'createdDate_desc');
+
         $unreadCount    = 0;
         $unreadMessages = $allMessages = array();
         array_map(function($message) use (&$unreadCount, &$unreadMessages, &$allMessages)
@@ -156,6 +164,7 @@ class message extends control
             $unreadCount++;
             $unreadMessages[$date][] = $message;
         }, $messages);
+
         $this->view->allMessages    = $allMessages;
         $this->view->unreadCount    = $unreadCount;
         $this->view->unreadMessages = $unreadMessages;
