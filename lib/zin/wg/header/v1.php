@@ -40,8 +40,9 @@ class header extends wg
         {
             $toolbar = new toolbar
             (
-                setClass('gap-5'),
+                setClass('gap-2'),
                 static::quickAddMenu(),
+                static::messageBar(),
                 static::userBar()
             );
         }
@@ -245,6 +246,21 @@ class header extends wg
             set::arrow(true),
             set::items($items)
         );
+    }
+
+    static function messageBar()
+    {
+        global $app, $lang, $config;
+
+        $app->loadConfig('message');
+        if(!$config->message->browser->turnon) return null;
+
+        $messages = $app->dbh->query("SELECT * FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND `toList` like('%,{$app->user->account},%')")->fetchAll();
+        $unread   = array();
+        array_map(function($message) use (&$unread) { if($message->status == 'wait') $unread[] = $message; }, $messages);
+
+        $unreadCount = count($unread);
+        $dotStyle    = array('top' => '0px', 'right' => '-5px', 'aspect-ratio' => '0', 'padding' => '2px');
     }
 
     static function quickAddMenu()
