@@ -76,6 +76,7 @@ class repoModel extends model
             $repo = $this->getByID($repoID);
             if(!$repo || !$this->checkPriv($repo)) $repoID = 0;
             if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->tag);
         }
 
         if(!in_array($this->app->methodName, array('maintain', 'create', 'createrepo', 'edit','import'))) common::setMenuVars('devops', $repoID);

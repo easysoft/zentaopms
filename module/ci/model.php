@@ -34,6 +34,7 @@ class ciModel extends model
         {
             $repo = $this->loadModel('repo')->getByID($this->session->repoID);
             if(!empty($repo) && !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->tag);
         }
     }
 
