@@ -105,10 +105,15 @@ $auditInject = function() use($module, $method)
                 publishLink.className = 'ajax-submit';
                 publishLink.style.display = 'none';
                 document.body.appendChild(publishLink);
-                publishLink.click();
 
-                /* TODO: find a way to close app. */
-                if($.apps.currentCode != 'admin') $.apps.closeApp($.apps.currentCode);
+                if($.apps.currentCode != 'admin')
+                {
+                    window.addEventListener('popstate', function()
+                    {
+                        $.apps.closeApp($.apps.currentCode);
+                    });
+                }
+                publishLink.click();
             });
         }
         const auditExitButton = document.getElementById('promptAuditExit');
