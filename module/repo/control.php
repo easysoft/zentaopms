@@ -1797,6 +1797,26 @@ class repo extends control
             if(isset($tag->tagger->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->tagger->when));
         }
 
+        /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        $keyword   = (string)$this->post->keyword;
+        foreach($tagList as $index => $tag)
+        {
+            if($keyword && strpos($tag->name, $keyword) === false)
+            {
+                unset($tagList[$index]);
+                continue;
+            }
+            $orderList[] = $tag->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $tagList);
+
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal = count($tagList);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $tagList  = array_chunk($tagList, (int)$pager->recPerPage);
         $this->display();
     }
 }
