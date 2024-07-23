@@ -45,7 +45,7 @@ class treeEditor extends wg
                 set::_tag('menu'),
                 set::lines(),
                 set::preserve($id),
-                set($treeProps),
+                set($treeProps)
             )
         );
     }
