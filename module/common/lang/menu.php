@@ -272,12 +272,14 @@ $lang->scrum->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->module}|tree|browse|product=%s&view=story");
 
-$lang->scrum->menu->devops['subMenu']       = new stdclass();
-$lang->scrum->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
-$lang->scrum->menu->devops['subMenu']->tag  = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->scrum->menu->devops['subMenu']->mr   = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+$lang->scrum->menu->devops['subMenu']         = new stdclass();
+$lang->scrum->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
+$lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->scrum->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->scrum->menu->devops['menuOrder'][5]  = 'repo';
+$lang->scrum->menu->devops['menuOrder'][10] = 'branch';
 $lang->scrum->menu->devops['menuOrder'][15] = 'tag';
 $lang->scrum->menu->devops['menuOrder'][20] = 'mr';
 
@@ -326,12 +328,14 @@ $lang->waterfall->menu->design['subMenu']->dds  = array('link' => "{$lang->desig
 $lang->waterfall->menu->design['subMenu']->dbds = array('link' => "{$lang->design->DBDS}|design|browse|projectID=%s&productID=0&browseType=DBDS");
 $lang->waterfall->menu->design['subMenu']->ads  = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
 
-$lang->waterfall->menu->devops['subMenu']       = new stdclass();
-$lang->waterfall->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
-$lang->waterfall->menu->devops['subMenu']->tag  = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->waterfall->menu->devops['subMenu']->mr   = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+$lang->waterfall->menu->devops['subMenu']         = new stdclass();
+$lang->waterfall->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
+$lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->waterfall->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->waterfall->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->waterfall->menu->devops['menuOrder'][5]  = 'repo';
+$lang->waterfall->menu->devops['menuOrder'][10] = 'branch';
 $lang->waterfall->menu->devops['menuOrder'][15] = 'tag';
 $lang->waterfall->menu->devops['menuOrder'][20] = 'mr';
 
@@ -410,12 +414,14 @@ $lang->execution->menu->qa['menuOrder'][10] = 'bug';
 $lang->execution->menu->qa['menuOrder'][15] = 'testcase';
 $lang->execution->menu->qa['menuOrder'][20] = 'testtask';
 
-$lang->execution->menu->devops['subMenu']       = new stdclass();
-$lang->execution->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
-$lang->execution->menu->devops['subMenu']->tag  = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
-$lang->execution->menu->devops['subMenu']->mr   = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+$lang->execution->menu->devops['subMenu']         = new stdclass();
+$lang->execution->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
+$lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->execution->menu->devops['menuOrder'][5]  = 'repo';
+$lang->execution->menu->devops['menuOrder'][10] = 'branch';
 $lang->execution->menu->devops['menuOrder'][15] = 'tag';
 $lang->execution->menu->devops['menuOrder'][20] = 'mr';
 
@@ -506,17 +512,19 @@ $lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|brow
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->branch  = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
 $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
-$lang->devops->menuOrder[20] = 'tag';
-$lang->devops->menuOrder[25] = 'mr';
-$lang->devops->menuOrder[30] = 'compile';
-$lang->devops->menuOrder[35] = 'deploy';
-$lang->devops->menuOrder[40] = 'apps';
+$lang->devops->menuOrder[20] = 'branch';
+$lang->devops->menuOrder[25] = 'tag';
+$lang->devops->menuOrder[30] = 'mr';
+$lang->devops->menuOrder[35] = 'compile';
+$lang->devops->menuOrder[40] = 'deploy';
+$lang->devops->menuOrder[45] = 'apps';
 
 $lang->devops->dividerMenu = ',apps,';
 

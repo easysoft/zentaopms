@@ -216,6 +216,7 @@ $lang->devops->common       = 'DevOps';
 $lang->doc->common          = '文档';
 $lang->repo->common         = '代码库';
 $lang->repo->tag            = '标签';
+$lang->repo->branch         = '分支';
 $lang->repo->codeRepo       = '代码库';
 $lang->bi->common           = 'BI';
 $lang->screen->common       = '大屏';
