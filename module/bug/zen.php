@@ -2388,6 +2388,14 @@ class bugZen extends bug
                 'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));
 
             $bug = $this->updateBug($bug, $fields);
+
+            if($this->config->edition != 'open')
+            {
+                $fields       = array();
+                $extendFields = $this->loadModel('workflowaction')->getFields('bug', 'create');
+                foreach(array_keys($extendFields) as $field) $fields[$field]= $bugInfo->{$field};
+                $bug = $this->updateBug($bug, $fields);
+            }
         }
 
         /* 获取测试单的版本。 */
