@@ -1782,6 +1782,21 @@ class repo extends control
      */
     public function browseTag(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $repoID = $this->repo->saveState($repoID, $objectID);
+        $this->commonAction($repoID, $objectID);
+
+        $repo = $this->repo->getByID($repoID);
+        $this->scm->setEngine($repo);
+        $tagList = $this->scm->tags('all');
+        foreach($tagList as &$tag)
+        {
+            $tag->committer = isset($tag->commit->author_name) ? $tag->commit->author_name : '';
+            if(isset($tag->tagger->identity->name)) $tag->committer = $tag->tagger->identity->name;
+
+            $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
+            if(isset($tag->tagger->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->tagger->when));
+        }
+
         $this->display();
     }
 }
