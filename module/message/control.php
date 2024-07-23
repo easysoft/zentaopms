@@ -141,4 +141,24 @@ class message extends control
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')->andWhere('status')->ne('wait')->exec();
     }
+
+    public function ajaxGetDropmenu()
+    {
+        $messages       = $this->message->getMessages('', 'createdDate_desc');
+        $unreadCount    = 0;
+        $unreadMessages = $allMessages = array();
+        array_map(function($message) use (&$unreadCount, &$unreadMessages, &$allMessages)
+        {
+            $date = substr($message->createdDate, 0, 10);
+            $allMessages[$date][] = $message;
+            if($message->status == 'read') return;
+
+            $unreadCount++;
+            $unreadMessages[$date][] = $message;
+        }, $messages);
+        $this->view->allMessages    = $allMessages;
+        $this->view->unreadCount    = $unreadCount;
+        $this->view->unreadMessages = $unreadMessages;
+        $this->display();
+    }
 }
