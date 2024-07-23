@@ -10,4 +10,18 @@ window.markRead = function(e)
     $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
     $messageItem.removeClass('unread');
     $.get($.createLink('message', 'ajaxMarkRead', "id=" + messageID));
+
+    /* Rerender unread count. */
+    let $unreadTab  = $this.closest('#unread-messages.tab-pane');
+    let unreadCount = $unreadTab.find('.message-item.unread').length;
+    let $messageBarDot = $('#messageBar .label-dot.danger');
+    $('[href="#unread-messages"] span').html(unreadLangTempate.replace(/%s/, unreadCount));
+    if($unreadTab.hasClass('active')) $this.hide();
+    if($messageBarDot.html()) $messageBarDot.html(unreadCount);
+    if(unreadCount == 0)
+    {
+        $messageBarDot.remove();
+        $unreadTab.find('ul').hide();
+        $unreadTab.append("<div class='text-center text-gray'>" + noDataLang + "</div>");
+    }
 }
