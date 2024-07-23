@@ -199,6 +199,7 @@ detailBody
         tabs
         (
             set::className('w-full'),
+            set::id('releaseTabs'),
             set::headerClass('border-b'),
 
             /* Linked story table. */
