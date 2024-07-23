@@ -315,17 +315,26 @@ class tester extends result
 
         $method    = strtolower($method);
         $pageClass = "{$method}Page";
+
+        $openPage = dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
         if(!class_exists($pageClass))
         {
             if($edition != 'open')
             {
                 if(!$ext) $ext = $edition;
-                $extDir = is_dir(dirname(__FILE__, 3). "/extension/$ext/$module/ext/test") ? dirname(__FILE__, 3). "/extension/$ext/$module/ext/test" : dirname(__FILE__, 3). "/extension/$ext/$module/test";
-                include "$extDir/ui/page/$method.php";
+                if(file_exists($openPage))
+                {
+                    include $openPage;
+                }
+                else
+                {
+                    $extDir = is_dir(dirname(__FILE__, 3). "/extension/$ext/$module/ext/test") ? dirname(__FILE__, 3). "/extension/$ext/$module/ext/test" : dirname(__FILE__, 3). "/extension/$ext/$module/test";
+                    include "$extDir/ui/page/$method.php";
+                }
             }
             else
             {
-                include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
+                include $openPage;
             }
         }
 
