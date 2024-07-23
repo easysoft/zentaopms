@@ -1800,3 +1800,8 @@
         }
     });
 }());
+
+window.fetchMessage = function(event)
+{
+  console.log(event.target);
+};

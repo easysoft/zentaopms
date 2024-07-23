@@ -261,6 +261,21 @@ class header extends wg
 
         $unreadCount = count($unread);
         $dotStyle    = array('top' => '0px', 'right' => '-5px', 'aspect-ratio' => '0', 'padding' => '2px');
+
+        return dropdown
+        (
+            btn
+            (
+                setID('messageBar'),
+                set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
+                icon('bell', set::size('lg')),
+                setClass('ring-primary bg-inherit'),
+                set::square(true),
+                set::size('sm'),
+                set::caret(false),
+                $unreadCount ? label(setClass('danger label-dot absolute'), set::style($dotStyle), $unreadCount) : null
+            ),
+        );
     }
 
     static function quickAddMenu()
