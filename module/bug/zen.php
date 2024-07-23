@@ -2392,8 +2392,8 @@ class bugZen extends bug
             if($this->config->edition != 'open')
             {
                 $fields       = array();
-                $extendFields = $this->loadModel('workflowaction')->getFields('bug', 'create');
-                foreach(array_keys($extendFields) as $field) $fields[$field]= $bugInfo->{$field};
+                $extendFields = $this->loadModel('flow')->getExtendFields('bug', 'create');
+                foreach($extendFields as $field) $fields[$field->field] = $bugInfo->{$field->field};
                 $bug = $this->updateBug($bug, $fields);
             }
         }
