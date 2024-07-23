@@ -4011,6 +4011,7 @@ $config->group->package->browseCode->privs['repo-view']           = array('editi
 $config->group->package->browseCode->privs['repo-log']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
 $config->group->package->browseCode->privs['repo-revision']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
 $config->group->package->browseCode->privs['repo-browseTag']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-browse'), 'recommend' => array('repo-log', 'repo-revision', 'repo-maintain'));
+$config->group->package->browseCode->privs['repo-browseBranch']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('repo-browse'), 'recommend' => array('repo-log', 'repo-revision', 'repo-maintain'));
 
 $config->group->package->manageCode = new stdclass();
 $config->group->package->manageCode->order  = 2560;

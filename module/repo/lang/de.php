@@ -69,6 +69,7 @@ $lang->repo->showHidden         = 'Show hidden repositories';
 $lang->repo->gitlabList         = 'Gitlab Repo';
 $lang->repo->batchCreate        = 'Batch link repo';
 $lang->repo->browseTag          = 'Browse Tag';
+$lang->repo->browseBranch       = 'Browse Branch';
 
 $lang->repo->createRepoAction = 'Create origin repository';
 
