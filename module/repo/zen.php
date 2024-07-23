@@ -734,7 +734,8 @@ class repoZen extends repo
                     $branches = $default + $branches;
                 }
             }
-            if(!empty($result['branches']->headers) && !is_null($result['tags']->headers->offsetGet('x-total')))
+
+            if(!empty($result['tags']->headers) && !is_null($result['tags']->headers->offsetGet('x-total')))
             {
                 $tagList    = json_decode($result['tags']->body);
                 $totalPages = $result['tags']->headers->offsetGet('x-total-pages');
