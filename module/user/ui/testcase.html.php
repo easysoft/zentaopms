@@ -41,6 +41,7 @@ foreach($cases as $case)
     $case->caseID = $case->id;
 
     if((isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version) || $case->needconfirm) $case->status = 'changed';
+    if(isset($case->script)) unset($case->script);
 }
 
 div

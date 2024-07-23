@@ -57,6 +57,7 @@ foreach($cases as $case)
     $stages = array_filter(explode(',', $case->stage));
     foreach($stages as $key => $stage) $stages[$key] = zget($lang->testcase->stageList, $stage);
     $case->stage = implode($lang->comma, $stages);
+    if(isset($case->script)) unset($case->script);
 }
 
 $cols = $config->testcase->dtable->fieldList;
