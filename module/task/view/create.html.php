@@ -109,7 +109,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
-        <?php $this->printExtendFields('', 'table', 'columns=3');?>
+        <?php $this->printExtendFields($task, 'table', 'columns=3');?>
         <?php $hiddenStory = (strpos(",$showFields,", ',story,') !== false and $features['story']) ? '' : 'hidden'?>
         <tr class="<?php echo $hiddenStory?> storyBox">
           <th><?php echo $lang->task->story;?></th>
