@@ -6,13 +6,6 @@ require_once dirname(__DIR__) . DS . 'tabpane' . DS . 'v1.php';
 
 class tabs extends wg
 {
-    private $children = array();
-
-    /**
-     * @var tabPane[]
-     */
-    private $tabPanes = array();
-
     protected static array $defineProps = array(
         /* Tabs direction: h - horizontal, v - vertical */
         'direction?:string="h"',
@@ -42,6 +35,7 @@ class tabs extends wg
         $key      = $tabPane->prop('key');
         $title    = $tabPane->prop('title');
         $active   = $tabPane->prop('active');
+        $hide     = $tabPane->prop('hide');
         $param    = $tabPane->prop('param');
         $prefix   = $tabPane->block('prefix');
         $suffix   = $tabPane->block('suffix');
@@ -49,7 +43,7 @@ class tabs extends wg
 
         return li
         (
-            setClass('nav-item', $navClass, $tabPane->prop('hide') ? 'hidden' : ''),
+            setClass('nav-item', $navClass, $hide ? 'hidden' : ''),
             setData('key', $key),
             a
             (
@@ -100,21 +94,26 @@ class tabs extends wg
         );
     }
 
-    private function filterChildren()
+    private function processTabs(): array
     {
+        $tabPanes   = array();
+        $children   = array();
         $hasActived = false;
+
         foreach ($this->children() as $child)
         {
             if($child instanceof tabPane)
             {
-                $this->tabPanes[] = $child;
+                $tabPanes[] = $child;
                 if($child->prop('active')) $hasActived = true;
                 continue;
             }
 
-            $this->children[] = $child;
+            $children[] = $child;
         }
-        if(!$hasActived && !empty($this->tabPanes)) $this->tabPanes[0]->setProp('active', true);
+
+        if(!$hasActived && !empty($tabPanes)) $tabPanes[0]->setProp('active', true);
+        return array($tabPanes, $children);
     }
 
     private function buildCollapseBtn(): ?node
@@ -133,18 +132,15 @@ class tabs extends wg
     protected function build()
     {
         $isVertical = $this->prop('direction') === 'v';
-        $titleClass  = $this->prop('titleClass');
+        $titleClass = $this->prop('titleClass');
 
-        $this->filterChildren();
+        list($tabPanes, $children) = $this->processTabs();
 
         $titleViews = array();
-        $tabPanes   = array();
-        foreach($this->tabPanes as $tabPane)
+        foreach($tabPanes as $tabPane)
         {
             $titleViews[] = $this->buildTitleView($tabPane, $titleClass);
             if($tabPane->prop('divider')) $titleViews[] = div(set::className('divider'));
-
-            $tabPanes[] = $tabPane;
         }
 
         return div
@@ -154,7 +150,7 @@ class tabs extends wg
 
             $this->buildTabHeader($titleViews),
             $this->buildTabBody($tabPanes),
-            $this->children
+            $children
         );
     }
 }
