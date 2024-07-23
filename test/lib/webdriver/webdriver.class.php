@@ -544,8 +544,16 @@ class dom
         }
         else
         {
-            $frame = $this->driver->findElement(WebDriverBy::id($selector));
-            $this->driver->switchTo()->frame($frame);
+            try
+            {
+                $frame = $this->driver->findElement(WebDriverBy::id($selector));
+                $this->driver->switchTo()->frame($frame);
+            }
+            catch(Exception $e)
+            {
+                $frame = $this->driver->findElement(WebDriverBy::xpath($selector));
+                $this->driver->switchTo()->frame($frame);
+            }
         }
 
         return $this;

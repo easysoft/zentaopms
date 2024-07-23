@@ -313,14 +313,13 @@ class tester extends result
         if($this->method && !$method) $method = $this->method;
         $edition = $this->config->edition;
 
-        if($edition != 'open' || !$ext) $ext = $edition;
-
         $method    = strtolower($method);
         $pageClass = "{$method}Page";
         if(!class_exists($pageClass))
         {
-            if($ext)
+            if($edition != 'open')
             {
+                if(!$ext) $ext = $edition;
                 $extDir = is_dir(dirname(__FILE__, 3). "/extension/$ext/$module/ext/test") ? dirname(__FILE__, 3). "/extension/$ext/$module/ext/test" : dirname(__FILE__, 3). "/extension/$ext/$module/test";
                 include "$extDir/ui/page/$method.php";
             }
