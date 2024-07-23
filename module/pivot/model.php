@@ -1819,9 +1819,9 @@ class pivotModel extends model
         $showMode   = zget($column, 'showMode', 'default');
         $monopolize = $showMode == 'default' ? '' : zget($column, 'monopolize', '');
 
-        $isDrilling = isset($column['drill']) && isset($column['drill']->condition);
-        $drillField = $isDrilling ? $column['drill']->field : '';
-        $condition  = $isDrilling ? $column['drill']->condition : '';
+        $isDrilling = isset($column['drill']) && zget($column['drill'], 'condition', '');
+        $drillField = $isDrilling ? zget($column['drill'], 'field', '') : '';
+        $condition  = $isDrilling ? zget($column['drill'], 'condition', '') : '';
 
         $col = new stdclass();
         $col->name       = $column['field'];
