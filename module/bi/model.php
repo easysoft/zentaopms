@@ -145,6 +145,25 @@ class biModel extends model
         return $tableList;
     }
 
+    public function getFieldsWithTable($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+
+        $fieldList = array();
+        foreach($statement->expr as $expr)
+        {
+            if(!empty($expr->column) && !empty($expr->table))
+            {
+                $table = $this->getTableByAlias($statement, $expr->table);
+                $fieldList[$expr->column] = $table;
+            }
+        }
+
+        return $fieldList;
+    }
+
     /**
      * 根据表的别名获取其在sql语句中的表名。
      * Get table name by it's alias.
