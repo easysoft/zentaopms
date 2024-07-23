@@ -13,8 +13,10 @@ su('admin');
 /**
 
 title=测试 messageModel->getMessages();
-cid=1
-pid=1
+cid=0
+
+- 测试获取status为 wait 的数据信息 @1,4,10
+- 测试获取数据信息 @1,2,3,4,5,10
 
 */
 

@@ -2,11 +2,11 @@
 $lang->message->common    = 'Nachrichten';
 $lang->message->index     = 'Index';
 $lang->message->setting   = 'Einstellungen';
-$lang->message->browser   = 'Browser Notification';
+$lang->message->browser   = 'System Notification';
 $lang->message->blockUser = 'Block User';
 
 $lang->message->typeList['mail']     = 'Mail';
-$lang->message->typeList['message']  = 'Browser Benachrichtigungen';
+$lang->message->typeList['message']  = 'System Benachrichtigungen';
 $lang->message->typeList['webhook']  = 'Webhook';
 
 $lang->message->browserSetting = new stdclass();
@@ -18,6 +18,12 @@ $lang->message->browserSetting->pollTimePlaceholder = 'Notify the time intervals
 
 $lang->message->browserSetting->turnonList[1] = 'On';
 $lang->message->browserSetting->turnonList[0] = 'Off';
+
+$lang->message->unread = 'Unread Messages(%s)';
+$lang->message->all    = 'All Messages';
+
+$lang->message->timeLabel['minute'] = '%s minute ago';
+$lang->message->timeLabel['hour']   = '1 hour ago';
 
 $lang->message->label = new stdclass();
 $lang->message->label->created      = 'create';

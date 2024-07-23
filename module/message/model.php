@@ -16,16 +16,18 @@ class messageModel extends model
      * 获取消息。
      * Get messages.
      *
-     * @param  string $status
+     * @param  string $status    all|wait|sended
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getMessages(string $status = ''): array
+    public function getMessages(string $status = 'all', string $orderBy = 'createdDate'): array
     {
         return $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('message')
             ->andWhere('toList')->like("%,{$this->app->user->account},%")
-            ->beginIF($status)->andWhere('status')->eq($status)->fi()
+            ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 

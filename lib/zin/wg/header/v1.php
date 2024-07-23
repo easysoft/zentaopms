@@ -257,7 +257,7 @@ class header extends wg
 
         $messages = $app->dbh->query("SELECT * FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND `toList` like('%,{$app->user->account},%')")->fetchAll();
         $unread   = array();
-        array_map(function($message) use (&$unread) { if($message->status == 'wait') $unread[] = $message; }, $messages);
+        array_map(function($message) use (&$unread) { if($message->status != 'read') $unread[] = $message; }, $messages);
 
         $unreadCount = count($unread);
         $dotStyle    = array('top' => '0px', 'right' => '-5px', 'aspect-ratio' => '0', 'padding' => '2px');
