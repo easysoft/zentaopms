@@ -1,0 +1,18 @@
+title: zt_release
+author: Jie Li
+version: 1.0.0
+fields:
+  - field: id
+    range: 1-4
+  - field: name
+    range: '未发布{1}, 已发布{2}, 停止维护发布{1}'
+  - field: product
+    range: 1
+  - field: branch
+    range: 0
+  - field: status
+    range: 'wait{10},released{2},terminate{1}'
+  - field: date
+    range: '`2024-01-01`,`2024-06-01`,`2024-07-23`,`2022-07-01`,`2030-01-01`'
+  - field: stories
+    range: '`,1`,`,1,2`,[]{2}'
