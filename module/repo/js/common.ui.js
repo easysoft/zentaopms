@@ -372,3 +372,8 @@ window.treeClick = function(info)
     openTab(info.item.id, info.item.text);
     arrowTabs('monacoTabs', -2);
 }
+
+window.searchList = function()
+{
+    loadPage({method: 'post', data: {keyword: $('#keyword').val()}, target: '#mainContent'});
+}
