@@ -23,6 +23,25 @@ $buildMessageList = function($messageGroup) use ($lang)
     foreach($messageGroup as $date => $messages)
     {
         $dateList[] = h::li(setClass('message-date font-bold'), $date);
+        $itemList[] = array();
+        foreach($messages as $message)
+        {
+            $isUnread   = $message->status != 'read';
+            $dotColor   = $isUnread ? 'danger' : 'gray';
+            $itemList[] = h::li
+            (
+                setClass('message-item border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
+                setData('id', $message->id),
+                row
+                (
+                    setClass('text-gray justify-between'),
+                    cell(label(setClass("label-dot {$dotColor} mr-2")), $lang->message->browser),
+                    cell($time, icon(setClass('ml-2 cursor-pointer delete-message-btn'), 'close'))
+                ),
+                div(setClass('pt-1'), html($message->data))
+            );
+        }
+        $dateList[] = h::li(h::ul(setClass('list-unstyled'), $itemList));
     }
     return h::ul(setClass('list-unstyled'), $dateList);
 };
