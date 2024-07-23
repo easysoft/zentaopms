@@ -1766,4 +1766,22 @@ class repo extends control
 
         echo json_encode(array('branches' => $branches, 'tags' => $tags));
     }
+
+    /**
+     * 浏览Tag列表。
+     * Browse tag list.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseTag(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->display();
+    }
 }
