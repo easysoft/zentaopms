@@ -18,13 +18,15 @@ class treeEditor extends wg
         'canUpdateOrder?: bool=false',
         'canEdit?: bool=false',
         'canDelete?: bool=false',
-        'canSplit?: bool=true'
+        'canSplit?: bool=true',
+        'checkbox?: bool=false',
+        'checkOnClick?: bool=false'
     );
 
     protected function build()
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort', 'canSortTo'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort', 'canSortTo', 'checkbox', 'checkOnClick'));
         $id = $this->prop('id');
 
         if(empty($id))
@@ -43,7 +45,7 @@ class treeEditor extends wg
                 set::_tag('menu'),
                 set::lines(),
                 set::preserve($id),
-                set($treeProps)
+                set($treeProps),
             )
         );
     }
