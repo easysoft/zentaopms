@@ -2,11 +2,11 @@
 $lang->message->common    = '消息';
 $lang->message->index     = '首页';
 $lang->message->setting   = '设置';
-$lang->message->browser   = '浏览器通知';
+$lang->message->browser   = '系统通知';
 $lang->message->blockUser = '不通知人员';
 
 $lang->message->typeList['mail']     = '邮件';
-$lang->message->typeList['message']  = '浏览器通知';
+$lang->message->typeList['message']  = '系统通知';
 $lang->message->typeList['webhook']  = 'Webhook';
 
 $lang->message->browserSetting = new stdclass();
@@ -18,6 +18,12 @@ $lang->message->browserSetting->pollTimePlaceholder = '通知的时间间隔，�
 
 $lang->message->browserSetting->turnonList[1] = '打开';
 $lang->message->browserSetting->turnonList[0] = '关闭';
+
+$lang->message->unread = '未读消息(%s)';
+$lang->message->all    = '全部消息';
+
+$lang->message->timeLabel['minute'] = '%s分钟前';
+$lang->message->timeLabel['hour']   = '1小时前';
 
 $lang->message->label = new stdclass();
 $lang->message->label->created      = '创建';
