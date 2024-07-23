@@ -11,3 +11,21 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+
+jsVar('unreadLangTempate', $lang->message->unread);
+jsVar('noDataLang', $lang->noData);
+
+tabs
+(
+    tabPane
+    (
+        set::key('unread-messages'),
+        set::title(sprintf($lang->message->unread, $unreadCount)),
+        set::active(true),
+    ),
+    tabPane
+    (
+        set::key('all-messages'),
+        set::title($lang->message->all),
+    )
+);
