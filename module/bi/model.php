@@ -145,6 +145,14 @@ class biModel extends model
         return $tableList;
     }
 
+    /**
+     * 解析sql语句，返回sql中查询的字段名和字段所属表的键值对。
+     * Parse sql to field => table list.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
     public function getFieldsWithTable($sql)
     {
         $this->app->loadClass('sqlparser', true);
