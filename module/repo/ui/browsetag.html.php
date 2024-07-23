@@ -17,3 +17,21 @@ dropmenu
     set::tab($module),
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
+
+featureBar
+(
+    form
+    (
+        setID('searchForm'),
+        set::actions(array()),
+        formRow
+        (
+            input
+            (
+                set::placeholder($lang->searchAB),
+                set::name('keyword'),
+                set::value($keyword)
+            )
+        )
+    )
+);
