@@ -31,7 +31,23 @@ featureBar
                 set::placeholder($lang->searchAB),
                 set::name('keyword'),
                 set::value($keyword)
+            ),
+            btn
+            (
+                setClass('primary ml-2'),
+                $lang->searchAB,
+                on::click('searchList')
             )
         )
     )
+);
+
+$tagList = initTableData($tagList, $config->repo->dtable->tag->fieldList);
+dtable
+(
+    set::cols($config->repo->dtable->tag->fieldList),
+    set::data($tagList),
+    set::sortLink(createLink('repo', 'browsetag', "repoID={$repo->id}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
+    set::footPager(usePager())
 );
