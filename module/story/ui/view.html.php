@@ -243,7 +243,7 @@ foreach($actions as $key => $action)
     }
 }
 
-if($this->config->edition == 'ipd' and $story->type == 'story') $story = $this->story->getAffectObject(array(), $story->type, $story);
+if($config->edition == 'ipd' && $config->vision == 'rnd' && $story->type == 'story') $story = $this->story->getAffectObject(array(), $story->type, $story);
 if($config->edition == 'ipd' && $story->type == 'story' && !empty($story->confirmeActionType))
 {
     $actions   = array();
@@ -252,6 +252,8 @@ if($config->edition == 'ipd' && $story->type == 'story' && !empty($story->confir
     $actions[] = array('name' => $method, 'text' => $lang->story->$method, 'icon' => 'search', 'hint' => $lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
 }
 
+$hiddenActions = $config->vision == 'or' && $story->type == 'story';
+
 detail
 (
     set::urlFormatter(array('{id}' => $story->id, '{type}' => $story->type, '{product}' => $story->product, '{branch}' => $story->branch, '{module}' => $story->module, '{execution}' => isset($executionID) ? $executionID : (isset($projectID) ? $projectID : 0))),
@@ -259,7 +261,7 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions(array_values($actions)),
+    $hiddenActions ? null : set::actions(array_values($actions)),
     $parentTitle,
     $parentUrl,
     $versionBtn
