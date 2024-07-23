@@ -2624,8 +2624,12 @@ class pivotModel extends model
     /**
      * Parse query filter, then get drill result.
      *
-     * @param  array $drill
-     * @param  array $filters
+     * @param  string $object
+     * @param  string $whereSQL
+     * @param  array  $filters
+     * @param  array  $conditions
+     * @param  bool   $emptyFilters
+     * @param  int    $limit
      * @access public
      * @return array
      */
