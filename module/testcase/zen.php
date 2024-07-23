@@ -1971,6 +1971,12 @@ class testcaseZen extends testcase
             $case->color        = $testcase->color;
             $case->auto         = $testcase->auto;
             $case->script       = $testcase->script;
+
+            if($this->config->edition != 'open')
+            {
+                $extendFields = $this->loadModel('flow')->getExtendFields('testcase', 'create');
+                foreach($extendFields as $field) $case->{$field->field} = $testcase->{$field->field};
+            }
         }
 
         /* 如果 bug id 大于 0，使用这个 bug 数据作为模板。 */

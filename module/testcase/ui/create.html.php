@@ -30,6 +30,7 @@ formGridPanel
     set::modeSwitcher(false),
     set::title($lang->testcase->create),
     set::fields($fields),
+    set::data($case),
     set::loadUrl(helper::createLink('testcase', 'create', "productID={product}&branch={branch}&moduleID={module}")),
     !empty($gobackLink) ? set::backUrl($gobackLink) : null,
     on::change('#story', 'changeStory'),
