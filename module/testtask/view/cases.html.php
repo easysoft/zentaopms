@@ -43,7 +43,7 @@
     <div class="cell" id="queryBox" data-module='testcase'></div>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
-    $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+    $useDatatable = false;
     ?>
     <form class='main-table table-case' data-nested='true' data-expand-nest-child='false' data-checkable='true' data-enable-empty-nested-row='true' data-replace-id='caseTableList' data-preserve-nested='true'
     id='caseForm' method='post' <?php if(!$useDatatable) echo "data-ride='table'";?>>
