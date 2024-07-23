@@ -12,10 +12,11 @@ class productRoadmapBox extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'preProducts?: array',  // 预设产品列表。
-        'products?: array',     // 产品下拉列表。
-        'branchGroups?: array', // 产品分支分组列表。
-        'roadmapGroups?: array' // 产品路标分组列表。
+        'preProducts?: array',   // 预设产品列表。
+        'products?: array',      // 产品下拉列表。
+        'branchGroups?: array',  // 产品分支分组列表。
+        'roadmapGroups?: array', // 产品路标分组列表。
+        'storyGrades?: array'    // 需求层级列表
     );
 
     public static function getPageCSS(): ?string
@@ -47,7 +48,7 @@ class productRoadmapBox extends wg
     protected function initProductsBox(): array
     {
         global $lang;
-        list($preProducts, $products, $branchGroups, $roadmapGroups) = $this->prop(array('preProducts', 'products', 'branchGroups', 'roadmapGroups'));
+        list($preProducts, $products, $branchGroups, $roadmapGroups, $storyGrades) = $this->prop(array('preProducts', 'products', 'branchGroups', 'roadmapGroups', 'storyGrades'));
 
         $productsBox = array();
         foreach(array_values($preProducts) as $index => $productID)
@@ -62,7 +63,7 @@ class productRoadmapBox extends wg
                 set::className('productBox flex'),
                 formGroup
                 (
-                    set::width('1/2'),
+                    set::width('1/3'),
                     setClass('distributeProduct'),
                     set::required(true),
                     $index == 0 ? set::label($lang->demand->distributeProduct) : null,
@@ -104,8 +105,20 @@ class productRoadmapBox extends wg
                 ),
                 formGroup
                 (
+                    setClass('storyGrade'),
+                    set::width('1/5'),
+                    set::label($lang->demand->storyGrade),
+                    picker
+                    (
+                        set::name("storyGrade[$index]"),
+                        set::required(true),
+                        set::items($storyGrades)
+                    )
+                ),
+                formGroup
+                (
                     set::width('1/2'),
-                    $index == 0 ? set::label($lang->demand->roadmap) : null,
+                    $index == 0 ? set::label($lang->demand->roadmapOrPlan) : null,
                     set::className('roadmapBox'),
                     inputGroup
                     (
