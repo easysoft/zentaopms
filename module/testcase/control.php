@@ -2139,13 +2139,14 @@ class testcase extends control
         unset($this->config->testcase->search['fields']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
-        $this->loadModel('testsuite');
-        foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testsuite->getCanImportModules($productID, $libID, $branchID);
-        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0, $toLib ? $currentLib : 0);
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $recPerPage, $pageID);
+
+        $this->loadModel('testsuite');
+        $cases = $this->testsuite->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, $queryID);
+        foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testsuite->getCanImportModules($productID, $libID, $branchID, 0, 0, $cases);
+        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0, $toLib ? $currentLib : 0, 0, $cases);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
         $this->view->position[] = $this->lang->testcase->importFromLib;
@@ -2155,7 +2156,7 @@ class testcase extends control
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
-        $this->view->cases            = $this->testsuite->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, $queryID);
+        $this->view->cases            = $cases;
         $this->view->libModules       = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager            = $pager;
         $this->view->orderBy          = $orderBy;
