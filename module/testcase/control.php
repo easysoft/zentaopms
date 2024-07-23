@@ -51,12 +51,12 @@ class testcase extends control
             if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
-                $products = $this->product->getProducts($objectID, 'all', '', false);
+                $products = $this->product->getProducts((int)$objectID, 'all', '', false);
             }
             elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
-                $products = $this->product->getProducts($objectID, 'all', '', false);
+                $products = $this->product->getProducts((int)$objectID, 'all', '', false);
             }
             else
             {
