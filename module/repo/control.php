@@ -1817,6 +1817,15 @@ class repo extends control
         $recTotal = count($tagList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $tagList  = array_chunk($tagList, (int)$pager->recPerPage);
+
+        $this->view->title    = $this->lang->repo->browseTag;
+        $this->view->repoID   = $repoID;
+        $this->view->objectID = $objectID;
+        $this->view->repo     = $repo;
+        $this->view->pager    = $pager;
+        $this->view->tagList  = empty($tagList) ? $tagList: $tagList[$pageID - 1];
+        $this->view->orderBy  = $orderBy;
+        $this->view->keyword  = $keyword;
         $this->display();
     }
 }
