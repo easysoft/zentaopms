@@ -36,7 +36,7 @@ class scm
     /**
      * Get tags.
      *
-     * @param  string $path
+     * @param  string $path     svn use path, git service filter return data.
      * @param  string $revision
      * @param  bool   $onlyDir
      * @access public

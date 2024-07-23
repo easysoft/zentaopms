@@ -129,12 +129,11 @@ class gitlabRepo
     /**
      * Get tags
      *
-     * @param  string $path
-     * @param  string $revision
+     * @param  string $showDetail
      * @access public
      * @return array
      */
-    public function tags($path, $revision = 'HEAD')
+    public function tags($showDetail = '')
     {
         $api  = "tags";
         $tags = array();
@@ -149,7 +148,7 @@ class gitlabRepo
             $list = $this->fetch($api, $params);
             if(empty($list) || !is_array($list)) break;
 
-            foreach($list as $tag) $tags[] = $tag->name;
+            foreach($list as $tag) $tags[] = $showDetail ? $tag : $tag->name;
             if(count($list) < $params['per_page']) break;
         }
 
