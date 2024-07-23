@@ -159,9 +159,10 @@ class gitlabRepo
      * Get branches.
      *
      * @access public
+     * @param  string $showDetail
      * @return array
      */
-    public function branch()
+    public function branch(string $showDetail = '')
     {
         /* Max size of per_page in gitlab API is 100. */
         $params = array();
@@ -180,11 +181,11 @@ class gitlabRepo
                 if(!isset($branch->name)) continue;
                 if($branch->default)
                 {
-                    $default[$branch->name] = $branch->name;
+                    $default[$branch->name] = $showDetail ? $branch : $branch->name;
                 }
                 else
                 {
-                    $branches[$branch->name] = $branch->name;
+                    $branches[$branch->name] = $showDetail ? $branch : $branch->name;
                 }
             }
 

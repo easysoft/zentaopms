@@ -52,11 +52,12 @@ class scm
      * Get branch.
      *
      * @access public
+     * @param  string $showDetail
      * @return array
      */
-    public function branch()
+    public function branch(string $showDetail = '')
     {
-        return $this->engine->branch();
+        return $this->engine->branch($showDetail);
     }
 
     /**

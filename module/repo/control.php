@@ -1828,4 +1828,67 @@ class repo extends control
         $this->view->keyword  = $keyword;
         $this->display();
     }
+
+    /**
+     * 浏览分支列表。
+     * Browse branch list.
+     *
+     * @param  int $repoID
+     * @param  int $objectID
+     * @param  string $orderBy
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function browseBranch(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $repoID = $this->repo->saveState($repoID, $objectID);
+        $this->commonAction($repoID, $objectID);
+
+        $repo = $this->repo->getByID($repoID);
+        $this->scm->setEngine($repo);
+        $branchList = $this->scm->branch('all');
+
+        foreach($branchList as &$branch)
+        {
+            $branch->committer = isset($branch->commit->author_name) ? $branch->commit->author_name : '';
+            if(isset($branch->branchger->identity->name)) $branch->committer = $branch->branchger->identity->name;
+
+            $branch->date = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
+            if(isset($branch->branchger->when)) $branch->date = date('Y-m-d H:i:s', strtotime($branch->branchger->when));
+        }
+
+        /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        $keyword   = (string)$this->post->keyword;
+        foreach($branchList as $index => $branch)
+        {
+            if($keyword && strpos($branch->name, $keyword) === false)
+            {
+                unset($branchList[$index]);
+                continue;
+            }
+            $orderList[] = $branch->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
+
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal   = count($branchList);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $branchList = array_chunk($branchList, (int)$pager->recPerPage);
+
+        $this->view->title      = $this->lang->repo->browseBranch;
+        $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
+        $this->view->repo       = $repo;
+        $this->view->pager      = $pager;
+        $this->view->branchList = empty($branchList) ? $branchList: $branchList[$pageID - 1];
+        $this->view->orderBy    = $orderBy;
+        $this->view->keyword    = $keyword;
+        $this->display();
+    }
 }
