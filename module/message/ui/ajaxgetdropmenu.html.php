@@ -28,6 +28,12 @@ $buildMessageList = function($messageGroup) use ($lang)
         {
             $isUnread   = $message->status != 'read';
             $dotColor   = $isUnread ? 'danger' : 'gray';
+            $secondDiff = time() - strtotime($message->createdDate);
+            if($secondDiff < 60)    $time = sprintf($lang->message->timeLabel['minute'], 1);
+            if($secondDiff >= 60)   $time = sprintf($lang->message->timeLabel['minute'], ceil($secondDiff / 60));
+            if($secondDiff >= 3600) $time = $lang->message->timeLabel['hour'];
+            if($secondDiff > 5400)  $time = substr($message->createdDate, 5, 11);
+
             $itemList[] = h::li
             (
                 setClass('message-item border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
