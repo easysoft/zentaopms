@@ -9274,4 +9274,251 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 导入内置工作流。
+     * Import buildin workflow.
+     *
+     * @param  string $vision
+     * @access public
+     * @return void
+     */
+    public function importBuildinWorkflow($vision = 'all')
+    {
+        $this->loadModel('workflow');
+        $this->loadModel('workflowaction');
+        $this->loadModel('workflowfield');
+        $this->loadModel('workflowlayout');
+
+        $modules         = $this->config->workflow->buildin->modules;
+        $visions         = $this->config->workflow->buildin->visions;
+        $actions         = $this->config->workflowaction->buildin->actions;
+        $actionTypes     = $this->config->workflowaction->buildin->types;
+        $actionMethods   = $this->config->workflowaction->buildin->methods;
+        $actionOpens     = $this->config->workflowaction->buildin->opens;
+        $actionLayouts   = $this->config->workflowaction->buildin->layouts;
+        $actionPositions = $this->config->workflowaction->buildin->positions;
+        $actionShows     = $this->config->workflowaction->buildin->shows;
+        $fields          = $this->config->workflowfield->buildin->fields;
+        $layouts         = $this->config->workflowlayout->buildin->layouts;
+
+        $account = isset($this->app->user->account) ? $this->app->user->account : 'admin';
+        $now     = helper::now();
+
+        /* Insert buildin modules to TABLE_WORKFLOW. */
+        $data = new stdclass();
+        $data->buildin     = 1;
+        $data->createdBy   = $account;
+        $data->createdDate = $now;
+        $data->status      = 'normal';
+        foreach($modules as $app => $appModules)
+        {
+            $data->app = $app;
+            foreach($appModules as $module => $options)
+            {
+                $this->app->loadLang($module);
+
+                $data->vision    = 'rnd';
+                $data->module    = $module;
+                $data->name      = isset($this->lang->$module->common) ? $this->lang->$module->common : $module;
+                $data->table     = str_replace('`', '', zget($options, 'table', ''));
+                $data->navigator = zget($options, 'navigator', 'secondary');
+
+                if(!empty($visions[$module]))  $data->vision = $visions[$module];
+                if($module == 'execution')     $data->name   = $this->lang->workflow->execution;
+                if($module == 'story')         $data->name   = $this->lang->SRCommon;
+                if($module == 'epic')          $data->name   = $this->lang->ERCommon;
+                if($module == 'requirement')   $data->name   = $this->lang->URCommon;
+
+                if($vision != 'all' && $vision != $data->vision) continue;
+
+                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->exec();
+                $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
+            }
+        }
+
+        /* Insert actions of buildin modules to TABLE_WORKFLOWACTION. */
+        $data = new stdclass();
+        $data->buildin       = 1;
+        $data->role          = 'buildin';
+        $data->extensionType = 'none';
+        $data->createdBy     = $account;
+        $data->createdDate   = $now;
+        foreach($actions as $module => $moduleActions)
+        {
+            $data->module = $module;
+            foreach($moduleActions as $action)
+            {
+                $data->action = $action;
+
+                /* Use default action name if not set flow action name. */
+                $name = '';
+                if(isset($this->lang->$module->$action)) $name = $this->lang->$module->$action;
+                if(empty($name) && in_array($action, array_keys($this->config->flowAction)))
+                {
+                    $methodName = $this->config->flowAction[$action];
+                    if(isset($this->lang->$module->$methodName)) $name = $this->lang->$module->$methodName;
+                }
+                if(empty($name) && isset($this->lang->workflowaction->default->actions[$action])) $name = $this->lang->workflowaction->default->actions[$action];
+                if(empty($name)) $name = $action;
+
+                $data->name     = $name;
+                $data->method   = $data->action;
+                $data->open     = 'normal';
+                $data->layout   = 'normal';
+                $data->type     = 'single';
+                $data->position = 'browseandview';
+                $data->show     = 'direct';
+                $data->vision   = 'rnd';
+                if(isset($actionMethods[$module][$action]))   $data->method   = $actionMethods[$module][$action];
+                if(isset($actionOpens[$module][$action]))     $data->open     = $actionOpens[$module][$action];
+                if(isset($actionLayouts[$module][$action]))   $data->layout   = $actionLayouts[$module][$action];
+                if(isset($actionTypes[$module][$action]))     $data->type     = $actionTypes[$module][$action];
+                if(isset($actionPositions[$module][$action])) $data->position = $actionPositions[$module][$action];
+                if(isset($actionShows[$module][$action]))     $data->show     = $actionShows[$module][$action];
+                if(!empty($visions[$module]))                 $data->vision   = $visions[$module];
+
+                if($vision != 'all' && $vision != $data->vision) continue;
+
+                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->exec();
+                $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+            }
+        }
+
+        /* Insert fields of buildin modules to TABLE_WORKFLOWFIELD. */
+        $data = new stdclass();
+        $data->role        = 'buildin';
+        $data->createdBy   = $account;
+        $data->createdDate = $now;
+        foreach($fields as $module => $moduleFields)
+        {
+            $order = 1;
+            $data->module = $module;
+
+            $currentVision = 'rnd';
+            if(!empty($visions[$module])) $currentVision = $visions[$module];
+            if($vision != 'all' && $vision != $currentVision) continue;
+
+            foreach($moduleFields as $field => $options)
+            {
+                $data->field    = $field;
+                $data->name     = isset($this->lang->$module->$field) ? $this->lang->$module->$field : $field;
+                $data->type     = zget($options, 'type', 'varchar');
+                $data->length   = zget($options, 'length', '');
+                $data->control  = zget($options, 'control', 'input');
+                $data->options  = zget($options, 'options', '[]');
+                $data->default  = zget($options, 'default', '');
+                $data->buildin  = zget($options, 'buildin', 1);
+                $data->order    = $order++;
+                $data->readonly = ($field == 'subStatus') ? '0' : '1';
+                $data->rules    = zget($options, 'rules', '');
+
+                if($module == 'execution')
+                {
+                    $execField = 'exec' . ucfirst($field);
+                    if(isset($this->lang->$module->$execField)) $data->name = $this->lang->$module->$execField;
+                }
+
+                if(is_object($data->options) or is_array($data->options)) $data->options = helper::jsonEncode($data->options);
+
+                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->exec();
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
+            }
+        }
+
+        /* Insert layouts of buildin modules to TABLE_WORKFLOWLAYOUT. */
+        $data = new stdclass();
+        foreach($layouts as $module => $moduleLayouts)
+        {
+            $data->module = $module;
+            foreach($moduleLayouts as $action => $layoutFields)
+            {
+                $order = 1;
+                $data->action = $action;
+                foreach($layoutFields as $field => $options)
+                {
+                    $data->field      = $field;
+                    $data->width      = zget($options, 'width', 0);
+                    $data->mobileShow = zget($options, 'mobileShow', 0);
+                    $data->order      = $order++;
+                    $data->vision     = 'rnd';
+
+                    if(!empty($visions[$module])) $data->vision = $visions[$module];
+                    if($data->width == 'auto')    $data->width  = 0;
+
+                    if($vision != 'all' && $vision != $data->vision) continue;
+
+                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->exec();
+                    $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
+                }
+            }
+        }
+
+        /* Insert labels of buildin modules to TABLE_WORKFLOWLABEL. */
+        $data = new stdclass();
+        $data->buildin     = 1;
+        $data->role        = 'buildin';
+        $data->params      = '[]';
+        $data->createdBy   = $account;
+        $data->createdDate = $now;
+        foreach($modules as $app => $appModules)
+        {
+            foreach($appModules as $module => $options)
+            {
+                $labels = array();
+                if($module == 'product')
+                {
+                    if(isset($this->lang->product->featureBar['all'])) $labels = $this->lang->product->featureBar['all'];
+                }
+                elseif($module == 'story')
+                {
+                    if(isset($this->lang->product->featureBar['browse'])) $labels = $this->lang->product->featureBar['browse'];
+                }
+                elseif($module == 'execution')
+                {
+                    if(isset($this->lang->execution->featureBar['all'])) $labels = $this->lang->execution->featureBar['all'];
+                }
+                elseif($module == 'task')
+                {
+                    if(isset($this->lang->execution->featureBar['task'])) $labels = $this->lang->execution->featureBar['task'];
+                }
+                elseif($module == 'bug')
+                {
+                    if(isset($this->lang->bug->featureBar['browse'])) $labels = $this->lang->bug->featureBar['browse'];
+                }
+                elseif($module == 'feedback')
+                {
+                    if(isset($this->lang->feedback->menu) && (is_object($this->lang->feedback->menu) || is_array($this->lang->feedback->menu)))
+                    {
+                        foreach($this->lang->feedback->menu as $key => $menuItem)
+                        {
+                            $menus = explode('|', zget($menuItem, 'link', $menuItem));
+                            $labels[$key] = zget($menus, 0, $menuItem);
+                        }
+                    }
+                }
+                else
+                {
+                    if(isset($this->lang->$module->featureBar['browse'])) $labels = $this->lang->$module->featureBar['browse'];
+                }
+
+                $order = 1;
+                $data->module = $module;
+
+                $currentVision = 'rnd';
+                if(!empty($visions[$module])) $currentVision = $visions[$module];
+                if($vision != 'all' && $vision != $currentVision) continue;
+
+                foreach($labels as $key => $label)
+                {
+                    $data->code  = $key;
+                    $data->label = trim(strip_tags($label));
+                    $data->order = $order++;
+
+                    $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->exec();
+                    $this->dao->insert(TABLE_WORKFLOWLABEL)->data($data)->exec();
+                }
+            }
+        }
+    }
 }
