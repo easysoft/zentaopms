@@ -215,6 +215,7 @@ $lang->qa->common           = 'QA';
 $lang->devops->common       = 'DevOps';
 $lang->doc->common          = 'Doc';
 $lang->repo->common         = 'Code Repo';
+$lang->repo->tag            = 'Tag';
 $lang->repo->codeRepo       = 'Code Repo';
 $lang->bi->common           = 'BI';
 $lang->screen->common       = 'Screen';
