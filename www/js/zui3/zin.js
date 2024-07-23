@@ -1552,6 +1552,14 @@
         });
     }
 
+    function fetchMessage()
+    {
+        let $this     = $('#messageBar');
+        let $dropmenu = $("#dropdownMessageMenu");
+        let fetchUrl  = $this.attr('data-fetcher');
+        $dropmenu.load(fetchUrl);
+    }
+
     function waitDom(selector, func, times, interval)
     {
         var _times    = times || 100;   //100次
@@ -1705,7 +1713,7 @@
         if($firstControl) $firstControl[0]?.focus();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1800,8 +1808,3 @@
         }
     });
 }());
-
-window.fetchMessage = function(event)
-{
-  console.log(event.target);
-};

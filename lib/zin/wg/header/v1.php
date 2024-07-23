@@ -264,17 +264,26 @@ class header extends wg
 
         return dropdown
         (
-            btn
+            set::arrow(true),
+            to::trigger
             (
-                setID('messageBar'),
-                set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
-                icon('bell', set::size('lg')),
-                setClass('ring-primary bg-inherit'),
-                set::square(true),
-                set::size('sm'),
-                set::caret(false),
-                $unreadCount ? label(setClass('danger label-dot absolute'), set::style($dotStyle), $unreadCount) : null
+                btn
+                (
+                    setID('messageBar'),
+                    set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
+                    setClass('ring-primary bg-inherit'),
+                    set::square(true),
+                    set::caret(false),
+                    icon('bell', set::size('lg')),
+                    $unreadCount ? label(setClass('danger label-dot absolute'), set::style($dotStyle), $unreadCount) : null
+                )
             ),
+            to::menu(menu
+            (
+                setClass('dropdown-menu not-hide-menu load-indicator'),
+                set::style(array('padding' => '0')),
+                div(setID('dropdownMessageMenu'))
+            ))
         );
     }
 
