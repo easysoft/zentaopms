@@ -20,7 +20,7 @@ cid=1
  - 属性title @string
 
 */
-$bi=new biTest();
+$bi = new biTest();
 
 r($bi->getColumns('select * from zt_product')) && p('id,name')  && e('INT24,VAR_STRING');  //获取产品表ID和name字段的类型。
 r($bi->getColumns('select * from zt_bug')    ) && p('id,title') && e('INT24,VAR_STRING');  //获取BUG表ID和name字段的类型。

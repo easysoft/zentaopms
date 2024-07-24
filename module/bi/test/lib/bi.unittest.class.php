@@ -51,4 +51,17 @@ class biTest
 
         return $nativeTypes;
     }
+
+    /**
+     * get tables and fields
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getTableAndFields($sql)
+    {
+        $tableAndFields = $this->objectModel->getTableAndFields($sql);
+        return $tableAndFields;
+    }
 }

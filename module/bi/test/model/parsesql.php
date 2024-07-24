@@ -89,7 +89,7 @@ WHERE t1.name LIKE '%zentaopms%'
 order by t1.id
 EOT;
 
-$bi=new biTest();
+$bi = new biTest();
 r($bi->parseSqlTest($sqls[0])) && p('id,name,bugID,type,fixedBugs,caseTitle') && e('zt_product=>id,zt_product=>name,zt_bug=>id,zt_bug=>type,zt_product=>fixedBugs,zt_case=>title'); // 测试第1条sql
 r($bi->parseSqlTest($sqls[1])) && p('id,name,consumed')                       && e('zt_task=>id,zt_task=>name,zt_task=>consumed');                                                  // 测试第2条sql
 r($bi->parseSqlTest($sqls[2])) && p('id,estimate')                            && e('zt_story=>id,zt_story=>estimate');                                                              // 测试第3条sql
