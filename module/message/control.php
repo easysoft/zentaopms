@@ -206,4 +206,17 @@ class message extends control
             ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
     }
+
+    public function ajaxSetting()
+    {
+        if($_POST)
+        {
+            $data    = fixer::input('post')->setDefault('show', 0)->setDefault('count', 0)->get();
+            $account = $this->app->user->account;
+            $this->loadModel('setting')->setItems("{$account}.message.browser", $data);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        }
+
+        $this->display();
+    }
 }

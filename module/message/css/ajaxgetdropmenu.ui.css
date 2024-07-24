@@ -1,1 +1,2 @@
 #messageTabs .tabs-header{border-bottom-width: 1px;}
+#header .messageDropdownBox{z-index:100 !important;}

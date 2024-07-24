@@ -49,3 +49,6 @@ $config->message->browser = new stdclass();
 $config->message->browser->turnon      = 1;
 $config->message->browser->pollTime    = 300;
 $config->message->browser->minPollTime = 30;
+$config->message->browser->show        = 1;
+$config->message->browser->count       = 1;
+$config->message->browser->maxDays     = 30;
