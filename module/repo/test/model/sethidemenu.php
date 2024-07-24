@@ -18,3 +18,15 @@ cid=1
 */
 
 zenData('repo')->loadYaml('repo')->gen(5);
+
+$repoModel = new repoTest();
+
+$tab = 'execution';
+r($repoModel->setHideMenuTest($tab, 11)) && p('tag:link') && e('标签|repo|browsetag|repoID=0&objectID=%s'); // Gitlab代码库显示标签菜单
+r($repoModel->setHideMenuTest($tab, 13)) && p('tag') && e('~~'); // Gitea代码库不显示标签菜单
+
+$tab = 'project';
+r($repoModel->setHideMenuTest($tab, 14)) && p('tag') && e('0'); // SVN 代码库不显示标签菜单
+
+su('user1');
+r($repoModel->setHideMenuTest($tab, 11)) && p() && e('0'); // 没有权限，不显示标签
