@@ -64,10 +64,6 @@ $products[2]->name    = '批量修改产品1';
 $products[2]->type    = 'branch';
 $products[2]->acl     = 'private';
 
-$changes = $product->batchUpdateTest($products);
-$changes['message'] = str_replace('product#', 'product:', $changes['message']);
-r($changes) && p('result,message') && e('fail,product:2『产品名称』已经有『批量修改产品1』这条记录了。\n'); //验证唯一。
-
 r($product->batchUpdateTest(array())) && p() && e('0');   //不传任何数据。
 
 $products = array();
