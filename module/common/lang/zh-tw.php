@@ -162,6 +162,7 @@ $lang->qa->common         = '測試';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文檔';
 $lang->repo->common       = '代碼';
+$lang->repo->commit       = '提交';
 $lang->repo->codeRepo     = '代碼庫';
 $lang->report->common     = '统计';
 $lang->system->common     = '組織';

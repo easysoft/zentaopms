@@ -215,6 +215,7 @@ $lang->qa->common           = 'QA';
 $lang->devops->common       = 'DevOps';
 $lang->doc->common          = 'Doc';
 $lang->repo->common         = 'Code';
+$lang->repo->commit         = 'Commit';
 $lang->repo->tag            = 'Tag';
 $lang->repo->branch         = 'Branch';
 $lang->repo->codeRepo       = 'Code Repo';
