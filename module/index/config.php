@@ -23,7 +23,6 @@ $config->index->appGroup['effort']      = 'my';
 $config->index->appGroup['user']        = 'admin';
 
 $config->index->oldPages = array();
-$config->index->oldPages[] = 'screen-view';
 $config->index->oldPages[] = 'screen-burn';
 $config->index->oldPages[] = 'report-annualdata';
 $config->index->oldPages[] = 'ai-adminindex';
