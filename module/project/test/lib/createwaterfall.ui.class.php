@@ -51,7 +51,6 @@ class createWaterfallTester extends tester
                 $endTipText = $form->dom->endTipgetText();
                 $endTip     = sprintf($this->lang->project->copyProject->endTips,'');
                 return ($endTipText == $endTip) ? $this->success('创建瀑布项目表单页提示信息正确') : $this->failed('创建瀑布项目表单页提示信息不正确');
-                $form->wait(1);
             }
             return $this->failed('创建瀑布项目表单页提示信息不正确');
         }
