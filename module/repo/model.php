@@ -3022,9 +3022,10 @@ class repoModel extends model
         $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : array('execution');
         $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID);
 
-        $showMR    = false;
-        $showTag   = false;
-        $hasTagSCM = array_map('strtolower', $this->config->repo->notSyncSCM);
+        $showMR     = false;
+        $showTag    = false;
+        $showBranch = false;
+        $hasTagSCM  = array_map('strtolower', $this->config->repo->notSyncSCM);
         foreach($repoPairs as $repoName)
         {
             preg_match('/^\[(\w+)\]/', $repoName, $matches);
@@ -3034,13 +3035,15 @@ class repoModel extends model
             if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
-        $showMR     = $showMR    && common::hasPriv('mr', 'browse');
-        $showTag    = $showTag   && common::hasPriv('repo', 'browsetag');
-        $showReview = $repoPairs && common::hasPriv('repo', 'review');
+        $showMR     = $showMR     && common::hasPriv('mr', 'browse');
+        $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
+        $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
+        $showReview = $repoPairs  && common::hasPriv('repo', 'review');
         foreach($menuGroup as $module)
         {
             if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->mr);
             if(!$showTag)    unset($this->lang->{$module}->menu->devops['subMenu']->tag);
+            if(!$showBranch) unset($this->lang->{$module}->menu->devops['subMenu']->branch);
             if(!$showReview) unset($this->lang->{$module}->menu->devops['subMenu']->review);
             if(count((array)$this->lang->{$module}->menu->devops['subMenu']) < 2) unset($this->lang->{$module}->menu->devops['subMenu']);
         }

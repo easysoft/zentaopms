@@ -1863,7 +1863,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1898,9 +1898,9 @@ class repo extends control
 
         /* Pager. */
         $this->app->loadClass('pager', true);
-        $branchTotal   = count($branchList);
-        $pager      = new pager($branchTotal, $recPerPage, $pageID);
-        $branchList = array_chunk($branchList, (int)$pager->recPerPage);
+        $branchTotal = count($branchList);
+        $pager       = new pager($branchTotal, $recPerPage, $pageID);
+        $branchList  = array_chunk($branchList, (int)$pager->recPerPage);
 
         $this->view->title      = $this->lang->repo->browseBranch;
         $this->view->repoID     = $repoID;

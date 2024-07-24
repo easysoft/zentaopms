@@ -20,24 +20,28 @@ dropmenu
 
 featureBar
 (
-    form
+    (in_array($app->tab, array('project', 'execution')) && count($repoPairs) > 1) ? dropmenu
     (
-        setID('searchForm'),
+        set::id('repoDropmenu'),
+        set::text($repo->name),
+        set::objectID($repo->id),
+        set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browsebranch&projectID={$objectID}"))
+    ) : null,
+    div
+    (
+        setID('flex'),
         set::actions(array()),
-        formRow
+        input
         (
-            input
-            (
-                set::placeholder($lang->searchAB),
-                set::name('keyword'),
-                set::value($keyword)
-            ),
-            btn
-            (
-                setClass('primary ml-2'),
-                $lang->searchAB,
-                on::click('searchList')
-            )
+            set::placeholder($lang->searchAB),
+            set::name('keyword'),
+            set::value($keyword)
+        ),
+        btn
+        (
+            setClass('primary ml-2'),
+            $lang->searchAB,
+            on::click('searchList')
         )
     )
 );
@@ -47,7 +51,7 @@ dtable
 (
     set::cols($config->repo->dtable->branch->fieldList),
     set::data($branchList),
-    set::sortLink(createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );
