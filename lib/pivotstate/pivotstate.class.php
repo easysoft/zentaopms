@@ -552,7 +552,25 @@ class pivotState
             if(!isset($filterValues[$index])) continue;
 
             $default = $filterValues[$index];
-            if($filter['type'] == 'select' && is_array($default)) $default = array_filter($default);
+            $type    = $filter['type'];
+            if($type == 'select' && is_array($default)) $default = array_filter($default);
+            if($type == 'date' || $type == 'datetime')
+            {
+                if(is_array($default))
+                {
+                    $begin = $default['begin'];
+                    $end   = $default['end'];
+
+                    $begin = date('Y-m-d H:i:s', $begin / 1000);
+                    $end = date('Y-m-d H:i:s', $end / 1000);
+
+                    $default = array('begin' => $begin, 'end' => $end);
+                }
+                else
+                {
+                    $default = array('begin' => '', 'end' => '');
+                }
+            }
             $filter['default'] = $default;
             $filters[] = $filter;
         }
