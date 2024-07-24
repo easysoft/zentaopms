@@ -27,6 +27,8 @@ $lang->message->timeLabel['hour']   = '1小时前';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->confirmDelete = "您确定要删除消息吗？";
+$lang->message->notice->allMarkRead   = '一键已读';
+$lang->message->notice->deleteAllRead = '清空已读';
 
 $lang->message->label = new stdclass();
 $lang->message->label->created      = '创建';

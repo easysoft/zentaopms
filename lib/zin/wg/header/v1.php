@@ -255,12 +255,9 @@ class header extends wg
         $app->loadConfig('message');
         if(!$config->message->browser->turnon) return null;
 
-        $messages = $app->dbh->query("SELECT * FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND `toList` like('%,{$app->user->account},%')")->fetchAll();
-        $unread   = array();
-        array_map(function($message) use (&$unread) { if($message->status != 'read') $unread[] = $message; }, $messages);
-
-        $unreadCount = count($unread);
-        $dotStyle    = array('top' => '0px', 'right' => '-5px', 'aspect-ratio' => '0', 'padding' => '2px');
+        $dotStyle    = array('top' => '5px', 'left' => '18px', 'aspect-ratio' => '0', 'padding' => '2px');
+        $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` like('%,{$app->user->account},%')")->fetch()->count;
+        if($unreadCount > 99) $unreadCount = '99+';
 
         return dropdown
         (

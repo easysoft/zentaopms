@@ -176,7 +176,7 @@ class message extends control
      * Ajax: 标记消息已读。
      * Ajax mark read.
      *
-     * @param  string $messageID
+     * @param  string $messageID  all|int
      * @access public
      * @return void
      */
@@ -185,7 +185,7 @@ class message extends control
         if($messageID != 'all') $messageID = (int)$messageID;
         $this->dao->update(TABLE_NOTIFY)->set('status')->eq('read')->where('objectType')->eq('message')
             ->andWhere('toList')->like("%,{$this->app->user->account},%")
-            ->beginIF($messageID != 'all')->andWhere('id')->eq($messageID)->fi()
+            ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
     }
 
@@ -193,16 +193,17 @@ class message extends control
      * Ajax: 删除消息。
      * Ajax delete message.
      *
-     * @param  string $messageID
+     * @param  string $messageID  all|allread|int
      * @access public
      * @return void
      */
     public function ajaxDelete(string $messageID)
     {
-        if($messageID != 'all') $messageID = (int)$messageID;
+        if($messageID != 'all' || $messageID != 'allread') $messageID = (int)$messageID;
         $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')
             ->andWhere('toList')->like("%,{$this->app->user->account},%")
-            ->beginIF($messageID != 'all')->andWhere('id')->eq($messageID)->fi()
+            ->beginIF($messageID == 'allread')->andWhere('status')->eq('read')->fi()
+            ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
     }
 }
