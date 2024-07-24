@@ -1056,6 +1056,22 @@ class screenModel extends model
                 $count ++;
             }
 
+            $drills = array();
+            $groupFields = array_fill(0, $groupCount, 'groupCol');
+            $dataHeader  = end($header);
+            foreach($options->drills as $drill)
+            {
+                $drillFields = array_values($drill['drillFields']);
+                $drillRow = array();
+                foreach($drillFields as $index => $drillField)
+                {
+                    $drillConfig = $drillConfigs[$index];
+                    $drillRow[] = $drillConfig ? array('fields' => $fields, 'config' => $drillConfig) : false;
+                }
+                $drillRow = array_merge($groupFields, $drillRow);
+                $drills[] = $drillRow;
+            }
+
             if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
             $component->option->header      = $headers;
             $component->option->align       = $align;
@@ -1063,6 +1079,7 @@ class screenModel extends model
             $component->option->rowspan     = $config;
             $component->option->colspan     = $colspan;
             $component->option->dataset     = $dataset;
+            $component->option->drills      = $drills;
         }
 
         return $this->setComponentDefaults($component);
