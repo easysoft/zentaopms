@@ -12,8 +12,28 @@ window.markRead = function(e)
     $.get($.createLink('message', 'ajaxMarkRead', "id=" + messageID));
 
     /* Rerender unread count. */
-    let $unreadTab = $this.closest('#unread-messages.tab-pane');
-    if($unreadTab.hasClass('active')) $this.addClass('hidden');
+    $('messageTabs #unread-messages.tab-pane').find('.message-item[data-id="' + messageID + '"]').addClass('hidden');
+    renderUnreadCount();
+}
+
+window.markAllRead = function(e)
+{
+    let $messageItem = $('#messageTabs .message-item.unread');
+    $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
+    $messageItem.removeClass('unread');
+    $('#messageTabs #unread-messages.tab-pane .message-item').addClass('hidden');
+    $.get($.createLink('message', 'ajaxMarkRead', "id=all"));
+    renderUnreadCount();
+}
+
+window.deleteAllRead = function(e)
+{
+    let result = confirm(confirmDeleteLang);
+    if(!result) return;
+
+    let $messageItem = $('#messageTabs .message-item:not(.unread)');
+    $messageItem.addClass('hidden');
+    $.get($.createLink('message', 'ajaxDelete', "id=allread"));
     renderUnreadCount();
 }
 
