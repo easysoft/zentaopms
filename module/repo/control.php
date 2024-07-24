@@ -1334,7 +1334,7 @@ class repo extends control
      */
     public function ajaxGetDropMenu(int $repoID, string $module = 'repo', string $method = 'browse', int $projectID = 0)
     {
-        if($module == 'repo' and !in_array($method, array('review', 'diff'))) $method = 'browse';
+        if($module == 'repo' and !in_array($method, array('review', 'diff', 'browsetag', 'browsebranch'))) $method = 'browse';
         if($module == 'mr' && $method != 'create')  $method = 'browse';
         if($module == 'job') $method = 'browse';
         if($module == 'compile' and $method == 'logs') $method = 'browse';
