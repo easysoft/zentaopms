@@ -198,12 +198,20 @@ class biModel extends model
         $fieldList = array();
         foreach($statement->expr as $expr)
         {
-            if(empty($expr->column)) continue;
+            $table = empty($expr->table) ? $statement->from[0]->table : $this->getTableByAlias($statement, $expr->table);
 
-            $alias = !empty($expr->alias) ? $expr->alias : $expr->column;
-            $field = $expr->column;
+            if(str_ends_with($expr->expr, '*'))
+            {
+                $fields = $this->dev->getFields($table);
+                foreach($fields as $field => $fieldInfo) $fieldList[$field] = $field;
+            }
+            else
+            {
+                $alias = !empty($expr->alias) ? $expr->alias : $expr->column;
+                $field = $expr->column;
 
-            $fieldList[$alias] = $field;
+                $fieldList[$alias] = $field;
+            }
         }
 
         return $fieldList;
