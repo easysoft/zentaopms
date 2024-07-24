@@ -138,10 +138,10 @@ function setTag(string $id): set
 /**
  * Set widget zui-key attribute.
  *
- * @param string $key
+ * @param null|int|string $key
  * @return set
  */
-function setKey(string $key): set
+function setKey(null|int|string $key): set
 {
     return set('zui-key', $key);
 }
