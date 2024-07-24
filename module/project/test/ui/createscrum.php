@@ -25,16 +25,22 @@ zendata('project')->loadYaml('project', false, 2)->gen(10);
 $tester = new createScrumTester();
 $tester->login();
 
-$scrum = array();
-$scrum['null'] = '';
-$scrum['hasproduct'] = '一个产品型项目'.time();
-$scrum['noproduct'] = '一个项目型项目'.time();
-$scrum['end'] = date("Y-m-d",strtotime("+1 month"));
-$scrum['PM'] = 'admin';
+//设置敏捷项目数据
+$scrum = array(
+    array('name' => '', 'end' => date('Y-m-d', strtotime('+30 days'))),
+    array('name' => '一个产品型项目'.time(), 'end' => ''),
+    array('type' => 1, 'name' => '一个产品型项目'.time(), 'end' => date('Y-m-d', strtotime('+1 month')), 'PM' => 'admin'),
+    array('type' => 1, 'name' => '一个产品型项目'.time(), 'end' => date('Y-m-d', strtotime('+1 month')), 'PM' => 'admin'),
+    array('type' => 1, 'name' => '一个长期的产品型项目'.time(), 'PM' => 'admin'),
+    array('type' => 0, 'name' => '一个项目型项目'.time(), 'end' => date('Y-m-d', strtotime('+1 month')), 'PM' => 'admin'),
+);
 
-r($tester->createScrum($scrum['null']))       && p('message')       && e('创建敏捷项目表单页提示信息正确');    // 缺少项目名称，创建失败
-r($tester->createScrum($scrum['hasproduct'])) && p('status')        && e('SUCCESS');                           // 创建产品型项目
-r($tester->createScrum($scrum['hasproduct'])) && p('message')       && e('创建敏捷项目表单页提示信息正确');    // 创建重复名称的产品
-r($tester->checkLocating($scrum) )            && p('module,method') && e('project,browse');                    // 创建项目型敏捷项目后的跳转链接检查
+r($tester->checkInput($scrum['0'])) && p('message') && e('创建敏捷项目表单页提示信息正确');   // 缺少项目名称，检查提示信息
+r($tester->checkInput($scrum['1'])) && p('message') && e('创建敏捷项目表单页提示信息正确');   // 计划完成时间置空，检查提示信息
+r($tester->checkInput($scrum['2'])) && p('status')  && e('SUCCESS');                          // 创建有日期的产品型项目
+r($tester->checkInput($scrum['3'])) && p('message') && e('创建敏捷项目表单页提示信息正确');   // 创建重复名称的项目，检查提示信息
+r($tester->checkInput($scrum['4'])) && p('status')  && e('SUCCESS');                          // 创建一个长期的产品型项目，检查提示信息
+r($tester->checkInput($scrum['5'])) && p('status')  && e('SUCCESS');                          // 创建有日期的项目型项目
+
 
 $tester->closeBrowser();
