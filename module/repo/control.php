@@ -1854,10 +1854,10 @@ class repo extends control
         foreach($branchList as &$branch)
         {
             $branch->committer = isset($branch->commit->author_name) ? $branch->commit->author_name : '';
-            if(isset($branch->branchger->identity->name)) $branch->committer = $branch->branchger->identity->name;
+            if(isset($branch->commit->committer->identity->name)) $branch->committer = $branch->commit->committer->identity->name;
 
             $branch->date = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
-            if(isset($branch->branchger->when)) $branch->date = date('Y-m-d H:i:s', strtotime($branch->branchger->when));
+            if(isset($branch->commit->committer->when)) $branch->date = date('Y-m-d H:i:s', strtotime($branch->commit->committer->when));
         }
 
         /* Data sort. */
