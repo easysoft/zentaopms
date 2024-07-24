@@ -453,10 +453,20 @@ class installModel extends model
     */
     public function execDMSQL()
     {
-        $dbFile = $this->app->getAppRoot() . 'db' . DS . 'dm.sql';
-        $tables = explode(';', file_get_contents($dbFile));
+        $dbPath     = $this->app->getAppRoot() . 'db' . DS;
+        $dbFile     = $dbPath . 'dm.sql';
+        $dbFuncFile = $dbPath . 'dm_function.sql';
 
-        foreach($tables as $table) $this->dbh->exec($table);
+        $tables   = explode(';', file_get_contents($dbFile));
+        $tables[] = file_get_contents($dbFuncFile);
+
+        foreach($tables as $table)
+        {
+            $table = trim($table);
+            if($table) $this->dbh->exec($table);
+        }
+
+        return true;
     }
 
     /**
