@@ -126,7 +126,7 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['18_3']['functions'] .= ',processDataset,processChart,processReport,processDashboard';
     $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,checkPivotSQL';
 
-    $config->upgrade->execFlow['18_12']['functions'] .= 'addFlowFields';
+    $config->upgrade->execFlow['18_12']['functions'] = 'addFlowFields';
     $config->upgrade->execFlow['18_12']['params']['addFlowFields']  = array('biz8.12');
 }
 
