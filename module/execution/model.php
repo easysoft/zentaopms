@@ -136,23 +136,7 @@ class executionModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($executionID, (string)$this->app->rawModule, (string)$this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
 
-        if($execution->type != 'kanban' && $this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')
-        {
-            $repoPairs = $this->loadModel('repo')->getRepoPairs('execution', $executionID);
-
-            $showMR = false;
-            if(common::hasPriv('mr', 'browse'))
-            {
-                foreach($repoPairs as $repoName)
-                {
-                    preg_match('/^\[(\w+)\]/', $repoName, $matches);
-                    if(isset($matches[1]) && in_array($matches[1], $this->config->repo->gitServiceList)) $showMR = true;
-                }
-            }
-            if(!$showMR) unset($this->lang->execution->menu->devops['subMenu']->mr);
-            if(!$repoPairs || !common::hasPriv('repo', 'review')) unset($this->lang->execution->menu->devops['subMenu']->review);
-            if(empty($this->lang->execution->menu->devops['subMenu']->mr) && empty($this->lang->execution->menu->devops['subMenu']->review)) unset($this->lang->execution->menu->devops['subMenu']);
-        }
+        if($execution->type != 'kanban' && $this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($executionID);
 
         /* Set stroy navigation for no-product project. */
         $this->loadModel('project')->setNoMultipleMenu($executionID);

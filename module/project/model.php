@@ -2142,6 +2142,8 @@ class projectModel extends model
         $this->setNoMultipleMenu($projectID);
 
         if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
+
+        if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($projectID);
         return $projectID;
     }
 
