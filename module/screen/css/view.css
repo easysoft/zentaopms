@@ -3,3 +3,4 @@
 .go-preview.scrollY {background: #001028 !important;}
 .go-preview-entity {width: auto !important; height: auto !important;}
 .hint-layer {width: 400px; white-space: break-spaces!important;}
+.drill-item {text-decoration: underline; color: #3883fa;}

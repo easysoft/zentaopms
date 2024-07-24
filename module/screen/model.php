@@ -1065,7 +1065,7 @@ class screenModel extends model
                 foreach($drillFields as $index => $drillField)
                 {
                     $drillConfig = $drillConfigs[$index];
-                    $drillRow[] = $drillConfig ? array('fields' => $fields, 'config' => $drillConfig) : false;
+                    $drillRow[] = $drillConfig ? array('fields' => $drillField, 'config' => $drillConfig) : false;
                 }
                 $drillRow = array_merge($groupFields, $drillRow);
                 $drills[] = $drillRow;
