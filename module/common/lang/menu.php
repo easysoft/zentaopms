@@ -273,12 +273,14 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->module}|tree|browse|product=%s&view=story");
 
 $lang->scrum->menu->devops['subMenu']         = new stdclass();
-$lang->scrum->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch');
-$lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse');
-$lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse');
+$lang->scrum->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log');
+$lang->scrum->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create');
+$lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
+$lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->scrum->menu->devops['menuOrder'][5]  = 'repo';
+$lang->scrum->menu->devops['menuOrder'][10] = 'commit';
 $lang->scrum->menu->devops['menuOrder'][15] = 'branch';
 $lang->scrum->menu->devops['menuOrder'][20] = 'tag';
 $lang->scrum->menu->devops['menuOrder'][25] = 'mr';
@@ -329,12 +331,14 @@ $lang->waterfall->menu->design['subMenu']->dbds = array('link' => "{$lang->desig
 $lang->waterfall->menu->design['subMenu']->ads  = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
 
 $lang->waterfall->menu->devops['subMenu']         = new stdclass();
-$lang->waterfall->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch');
-$lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&&objectID=%s", 'exclude' => 'repo-browse');
-$lang->waterfall->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse');
+$lang->waterfall->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log');
+$lang->waterfall->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create');
+$lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&&objectID=%s", 'exclude' => 'repo-browse,repo-log');
+$lang->waterfall->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->waterfall->menu->devops['menuOrder'][5]  = 'repo';
+$lang->waterfall->menu->devops['menuOrder'][10] = 'commit';
 $lang->waterfall->menu->devops['menuOrder'][15] = 'branch';
 $lang->waterfall->menu->devops['menuOrder'][20] = 'tag';
 $lang->waterfall->menu->devops['menuOrder'][25] = 'mr';
@@ -415,12 +419,14 @@ $lang->execution->menu->qa['menuOrder'][15] = 'testcase';
 $lang->execution->menu->qa['menuOrder'][20] = 'testtask';
 
 $lang->execution->menu->devops['subMenu']         = new stdclass();
-$lang->execution->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch');
-$lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse');
-$lang->execution->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse');
+$lang->execution->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log');
+$lang->execution->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create');
+$lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
+$lang->execution->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->execution->menu->devops['menuOrder'][5]  = 'repo';
+$lang->execution->menu->devops['menuOrder'][10] = 'commit';
 $lang->execution->menu->devops['menuOrder'][15] = 'branch';
 $lang->execution->menu->devops['menuOrder'][20] = 'tag';
 $lang->execution->menu->devops['menuOrder'][25] = 'mr';

@@ -541,8 +541,10 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function log(int $repoID = 0, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $type = 'dir', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
+    public function log(int $repoID = 0, string $branchID = '', int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $type = 'dir', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
     {
+        $repoID = $this->repo->saveState($repoID, $objectID);
+        $this->commonAction($repoID, $objectID);
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $this->repoZen->setBackSession('log', true);
         if($repoID == 0) $repoID = $this->session->repoID;
