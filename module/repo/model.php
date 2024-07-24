@@ -3025,6 +3025,22 @@ class repoModel extends model
         $showMR    = false;
         $showTag   = false;
         $hasTagSCM = array_map('strtolower', $this->config->repo->notSyncSCM);
+        foreach($repoPairs as $repoName)
+        {
+            preg_match('/^\[(\w+)\]/', $repoName, $matches);
+
+            $result = isset($matches[1]) ? $matches[1] : '';
+            if(in_array($result, $hasTagSCM)) $showTag = true;
+            if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
+        }
+
+        foreach($menuGroup as $module)
+        {
+            if(!$showMR || !common::hasPriv('mr', 'browse'))       unset($this->lang->{$module}->menu->devops['subMenu']->mr);
+            if(!$showTag || !common::hasPriv('repo', 'browsetag')) unset($this->lang->{$module}->menu->devops['subMenu']->tag);
+            if(!$repoPairs || !common::hasPriv('repo', 'review'))  unset($this->lang->{$module}->menu->devops['subMenu']->review);
+            if(count((array)$this->lang->{$module}->menu->devops['subMenu']) < 2) unset($this->lang->{$module}->menu->devops['subMenu']);
+        }
         return $objectID;
     }
 }
