@@ -27,7 +27,6 @@ $repo = $tester->loadModel('repo');
 
 $type      = 'project';
 $projectID = 1;
-$repoType  = 'git';
 
 $result = $repo->getRepoGroup($type);
 r($result)             && p('4:text') && e('正常产品4'); //按项目分组
@@ -40,5 +39,5 @@ $projectID = 11;
 $result    = $repo->getRepoGroup($type, $projectID);
 r(count($result)) && p() && e(1); //指定存在的projectID获取项目分组
 
-$result = $repo->getRepoGroup($type, 0, $repoType);
+$result = $repo->getRepoGroup($type, 0, $repo->config->repo->gitServiceTypeList);
 r(count($result)) && p() && e(3); //指定repoType获取项目分组个数
