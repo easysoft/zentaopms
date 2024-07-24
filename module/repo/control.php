@@ -1355,8 +1355,10 @@ class repo extends control
         }
 
         /* Get repo group by type. */
-        $repoType  = $module == 'mr' ? 'git' : '';
-        $repoGroup = $this->repo->getRepoGroup('project', $projectID, $repoType);
+        $scmList = array();
+        if($module == 'mr') $scmList = $this->config->repo->gitServiceTypeList;
+        if(in_array($method, array('browsetag', 'browsebranch'))) $scmList = $this->config->repo->notSyncSCM;
+        $repoGroup = $this->repo->getRepoGroup('project', $projectID, $scmList);
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;
@@ -1781,13 +1783,12 @@ class repo extends control
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  string $orderBy
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTag(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseTag(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1851,7 +1852,7 @@ class repo extends control
      */
     public function browseBranch(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
 
         $repo = $this->repo->getByID($repoID);

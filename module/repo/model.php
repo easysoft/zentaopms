@@ -568,13 +568,13 @@ class repoModel extends model
      *
      * @param  string $type
      * @param  int    $projectID
-     * @param  string $repoType
+     * @param  array  $scmList
      * @access public
      * @return array
      */
-    public function getRepoGroup(string $type, int $projectID = 0, string $repoType = ''): array
+    public function getRepoGroup(string $type, int $projectID = 0, array $scmList = array()): array
     {
-        $repos      = $this->getList(0, $repoType == 'git' ? implode(',', $this->config->repo->gitServiceTypeList) : '');
+        $repos      = $this->getList(0, implode(',', $scmList));
         $productIds = $productItems = array();
         if($projectID)
         {
