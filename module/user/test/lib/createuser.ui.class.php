@@ -36,7 +36,6 @@ class createUserTester extends tester
      * @access public
      * @return object
      */
-
     public function createEmptyAccountUser($user)
     {
         $form = $this->initForm('user', 'create', array(), 'appIframe-admin');
@@ -54,5 +53,23 @@ class createUserTester extends tester
         }
 
         return $this->failed('用户名为空提示错误');
+    }
+
+    public function createEmptyPasswordUser($user)
+    {
+        $form = $this->initForm('user', 'create', array(), 'appIframe-admin');
+        $form->dom->account->setValue($user->account);
+        $form->dom->realname->setValue($user->realname);
+        $form->dom->verifyPassword->setValue($user->verifyPassword);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'browse')
+        {
+            if($this->checkFormTips('user')) return $this->success('密码为空提示正确');
+            return $this->failed('密码为空提示错误');
+        }
+
+        return $this->failed('密码为空提示错误');
     }
 }
