@@ -156,6 +156,7 @@ class biModel extends model
      */
     public function getFieldsWithTable($sql)
     {
+        $this->loadModel('dev');
         $this->app->loadClass('sqlparser', true);
         $parser    = new sqlparser($sql);
         $statement = $parser->statements[0];
@@ -163,18 +164,36 @@ class biModel extends model
         $fieldList = array();
         foreach($statement->expr as $expr)
         {
-            if(!empty($expr->table) && $expr->expr == "{$expr->table}.*")
+            if(empty($expr->table))
             {
-                $table  = $this->getTableByAlias($statement, $expr->table);
-                $fields = $this->loadModel('dev')->getFields($table);
-                foreach($fields as $field => $fieldInfo) $fieldList[$field] = $table;
-            }
+                $table  = $statement->from[0]->table;
+                if($expr->expr == "*")
+                {
+                    $fields = $this->dev->getFields($table);
+                    foreach($fields as $field => $fieldInfo) $fieldList[$field] = $table;
+                }
 
-            if(!empty($expr->column) && !empty($expr->table))
+                if(!empty($expr->column))
+                {
+                    $field = !empty($expr->alias) ? $expr->alias : $expr->column;
+                    $fieldList[$field] = $table;
+                }
+            }
+            else
             {
-                $table = $this->getTableByAlias($statement, $expr->table);
-                $field = !empty($expr->alias) ? $expr->alias : $expr->column;
-                $fieldList[$field] = $table;
+                if($expr->expr == "{$expr->table}.*")
+                {
+                    $table  = $this->getTableByAlias($statement, $expr->table);
+                    $fields = $this->dev->getFields($table);
+                    foreach($fields as $field => $fieldInfo) $fieldList[$field] = $table;
+                }
+
+                if(!empty($expr->column))
+                {
+                    $table = $this->getTableByAlias($statement, $expr->table);
+                    $field = !empty($expr->alias) ? $expr->alias : $expr->column;
+                    $fieldList[$field] = $table;
+                }
             }
         }
 
