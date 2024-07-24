@@ -341,7 +341,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             <th><?php echo $lang->story->verify;?></th>
             <td colspan="4"><?php echo html::textarea('verify', $verify, "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
-          <?php $this->printExtendFields('', 'table', 'columns=4');?>
+          <?php $this->printExtendFields($story, 'table', 'columns=4');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
             <td colspan='4'>
