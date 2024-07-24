@@ -136,6 +136,17 @@ function setTag(string $id): set
 }
 
 /**
+ * Set widget zui-key attribute.
+ *
+ * @param string $key
+ * @return set
+ */
+function setKey(string $key): set
+{
+    return set('zui-key', $key);
+}
+
+/**
  * Set widget data-* attribute.
  *
  * @param  string|array $name
