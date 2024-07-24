@@ -1024,14 +1024,31 @@ class screenModel extends model
                 }
             }
 
-            $align   = array();
-            $headers = array();
+            $align       = array();
+            $headers     = array();
+            $groupCount  = 0;
+            $drillConfigs = array();
             foreach($options->cols as $cols)
             {
                 $count  = 1;
                 $header = array();
                 foreach($cols as $data)
                 {
+                    $colspan    = zget($data, 'colspan', 0);
+                    $isDrilling = zget($data, 'isDrilling', false);
+                    $conditions = zget($data, 'condition', array());
+                    $drillField = zget($data, 'drillField', '');
+                    $isGroup    = zget($data, 'isGroup', false);
+
+                    if($isGroup)
+                    {
+                        $groupCount += 1;
+                    }
+                    else if($colspan == 1)
+                    {
+                        $drillConfigs[] = $isDrilling ? array('drillField' => $drillField, 'conditions' => $conditions) : false;
+                    }
+
                     $header[] = $data;
                     if($count == 1) $align[] = 'center';
                 }
