@@ -15,5 +15,25 @@ class editStoryTester extends tester
     /**
      * Edit a story.
      *
+     * @param   string $storyFrom
+     * @access  public
+     * @return  object
+     */
+    public function editStory($storyFrom)
+    {
+        $editStoryParam = array(
+            'storyID'     => '4',
+            'kanbanGroup' => 'default',
+            'storyType'   => 'story',
+        );
+        /* 提交表单 */
+        $form = $this->initForm('story', 'edit', $editStoryParam, 'appIframe-product');
+        $form->dom->source->picker($storyFrom);
+        $form->dom->assignedTo->picker('admin');
+        $from->dom-btn($this->lang->save)->click();
+        $form->wait(1);
+
+        /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
+        $browsePage = $this->loadPage('product', 'browse');
 }
 }
