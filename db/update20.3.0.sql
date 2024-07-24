@@ -6,3 +6,6 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `datasource`, `view
 
 ALTER TABLE `zt_charter` MODIFY `product` text NULL;
 ALTER TABLE `zt_charter` MODIFY `roadmap` text NULL;
+
+ALTER TABLE `zt_release` ADD `releasedDate` date NULL AFTER `date`;
+UPDATE `zt_release` SET `releasedDate` = `date`;
