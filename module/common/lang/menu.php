@@ -517,20 +517,24 @@ if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' =>
 $lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,blame,showsynccommit');
+$lang->devops->menu->commit  = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s");
 $lang->devops->menu->branch  = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
+
 $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
-$lang->devops->menuOrder[20] = 'branch';
-$lang->devops->menuOrder[25] = 'tag';
-$lang->devops->menuOrder[30] = 'mr';
-$lang->devops->menuOrder[35] = 'compile';
-$lang->devops->menuOrder[40] = 'deploy';
-$lang->devops->menuOrder[45] = 'apps';
+$lang->devops->menuOrder[20] = 'commit';
+$lang->devops->menuOrder[25] = 'branch';
+$lang->devops->menuOrder[30] = 'tag';
+$lang->devops->menuOrder[35] = 'mr';
+$lang->devops->menuOrder[40] = 'compile';
+$lang->devops->menuOrder[45] = 'deploy';
+$lang->devops->menuOrder[50] = 'apps';
+
 
 $lang->devops->dividerMenu = ',apps,';
 
