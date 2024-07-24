@@ -3019,7 +3019,7 @@ class repoModel extends model
      */
     public function setHideMenu(int $objectID): int
     {
-        $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : 'execution';
+        $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : array('execution');
         $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID);
 
         $showMR    = false;
@@ -3034,11 +3034,14 @@ class repoModel extends model
             if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
+        $showMR     = $showMR    && common::hasPriv('mr', 'browse');
+        $showTag    = $showTag   && common::hasPriv('repo', 'browsetag');
+        $showReview = $repoPairs && common::hasPriv('repo', 'review');
         foreach($menuGroup as $module)
         {
-            if(!$showMR || !common::hasPriv('mr', 'browse'))       unset($this->lang->{$module}->menu->devops['subMenu']->mr);
-            if(!$showTag || !common::hasPriv('repo', 'browsetag')) unset($this->lang->{$module}->menu->devops['subMenu']->tag);
-            if(!$repoPairs || !common::hasPriv('repo', 'review'))  unset($this->lang->{$module}->menu->devops['subMenu']->review);
+            if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->mr);
+            if(!$showTag)    unset($this->lang->{$module}->menu->devops['subMenu']->tag);
+            if(!$showReview) unset($this->lang->{$module}->menu->devops['subMenu']->review);
             if(count((array)$this->lang->{$module}->menu->devops['subMenu']) < 2) unset($this->lang->{$module}->menu->devops['subMenu']);
         }
         return $objectID;
