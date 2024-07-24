@@ -1753,4 +1753,24 @@ class repoZen extends repo
         if(empty($branches)) unset($options[0]);
         return $options;
     }
+
+    protected function processRepoID(int $repoID, int $objectID, array $scmList = array()): int
+    {
+        $repoPairs = array();
+        if($this->app->tab == 'project' || $this->app->tab == 'execution')
+        {
+            if(!$scmList) $scmList = $this->config->repo->notSyncSCM;
+            $repoList = $this->repo->getList($objectID);
+            foreach($repoList as $repo)
+            {
+                if(!in_array($repo->SCM, $scmList)) continue;
+
+                $repoPairs[$repo->id] = $repo->name;
+            }
+
+            if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
+        }
+
+        return $this->repo->saveState($repoID, $objectID);
+    }
 }
