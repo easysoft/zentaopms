@@ -11,7 +11,7 @@ class editWaterfallTester extends tester
      */
     public function editWaterfall(array $waterfall)
     {
-        $form = $this->initForm('project', 'edit', array('projecID' => 5), 'appIframe-project');
+        $form = $this->initForm('project', 'edit', array('projecID' => 1), 'appIframe-project');
         $form->dom->name->setValue($waterfall['name']);
         $form->wait(1);
         $form->dom->btn($this->lang->save)->click();

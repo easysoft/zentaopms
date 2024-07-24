@@ -11,12 +11,10 @@ class createWaterfallTester extends tester
      */
    public function checkLocating(array $waterfall)
     {
-        $form         = $this->initForm('project', 'create', array('model' => 'waterfall'));
-        $categoryLang = (array)$this->lang->project->projectTypeList;
-        $form->dom->btn($categoryLang[0])->click();
-        $form->dom->name->setValue($waterfall['name']);
-        $form->dom->end->datePicker($waterfall['end']);
-        $form->dom->PM->picker($waterfall['PM']);
+        $form = $this->initForm('project', 'create', array('model' => 'waterfall'));
+        if(isset($waterfall['name'])) $form->dom->name->setValue($waterfall['name']);
+        if(isset($waterfall['end']))  $form->dom->end->datePicker($waterfall['end']);
+        if(isset($waterfall['PM']))   $form->dom->PM->picker($waterfall['PM']);
         $form->wait(1);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
@@ -32,9 +30,14 @@ class createWaterfallTester extends tester
      */
     public function createDefault(array $waterfall)
     {
-        $form = $this->initForm('project', 'create', array('model' => 'waterfall'));
-        $form->dom->name->setValue($waterfall['name']);
-        $form->dom->longTime->click();
+        $form         = $this->initForm('project', 'create', array('model' => 'waterfall'));
+        $categoryLang = (array)$this->lang->project->projectTypeList;
+        if(isset($waterfall['parent']))   $form->dom->parent->setValue($waterfall['parent']);
+        if(isset($waterfall['name']))     $form->dom->name->setValue($waterfall['name']);
+        if(isset($waterfall['type']))     $form->dom->btn($categoryLang[$waterfall['type']])->click();
+        if(isset($waterfall['longTime'])) $form->dom->longTime->click();
+        if(isset($waterfall['end']))      $form->dom->end->datePicker($waterfall['end']);
+        if(isset($waterfall['PM']))       $form->dom->PM->picker($waterfall['PM']);
         $form->wait(1);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
@@ -42,6 +45,14 @@ class createWaterfallTester extends tester
         if($this->response('module') != 'programplan')
         {
             if($this->checkFormTips('project')) return $this->success('创建瀑布项目表单页提示信息正确');
+            if($form->dom->endTip)
+            {
+                //检查结束日期不能为空
+                $endTipText = $form->dom->endTipgetText();
+                $endTip     = sprintf($this->lang->project->copyProject->endTips,'');
+                return ($endTipText == $endTip) ? $this->success('创建瀑布项目表单页提示信息正确') : $this->failed('创建瀑布项目表单页提示信息不正确');
+                $form->wait(1);
+            }
             return $this->failed('创建瀑布项目表单页提示信息不正确');
         }
 
@@ -49,10 +60,10 @@ class createWaterfallTester extends tester
         $programplanPage = $this->loadPage('programplan', 'create');
         $programplanPage->dom->settings->click();
 
-        $viewPage = $this->loadPage('project', 'view');
-        if($viewPage->dom->projectName->getText() != $waterfall['name']) return $this->failed('名称错误');
+        $viewPage     = $this->loadPage('project', 'view');
         $categoryLang = (array)$this->lang->project->projectTypeList;
-        if($viewPage->dom->category->getText() != $categoryLang['1']) return $this->failed('类型错误');
+        if($viewPage->dom->projectName->getText() != $waterfall['name'])               return $this->failed('名称错误');
+        if($viewPage->dom->category->getText() != $categoryLang[$waterfall['type']])   return $this->failed('类型错误');
         if($viewPage->dom->acl->getText() != $this->lang->project->shortAclList->open) return $this->failed('权限错误');
 
         return $this->success();

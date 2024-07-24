@@ -10,6 +10,9 @@ class viewPage extends page
             'acl'           => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/span[5]",
             'hasproductend' => "//*[@id='mainContent']/div/div/div[2]/div/table[3]/tbody/tr/td/div/div[2]/span[2]",
             'noproductend'  => "//*[@id='mainContent']/div/div/div[2]/div/table[2]/tbody/tr/td/div/div[2]/span[2]",
+            'projectName'   => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/span[2]",
+            'acl'           => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/span[5]",
+            'end'           => "//*[@id='mainContent']/div[1]/div[1]/div[2]/div/table[3]/tbody/tr/td/div/div[2]/span[2]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
