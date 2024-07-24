@@ -79,7 +79,7 @@ class entityTitle extends wg
             $id ? idLabel::create
             (
                 $id,
-                array('class' => array($this->prop('idClass'), $this->prop('inline') ? 'mr' . $this->prop('gap', 2) : '')),
+                array('class' => array($this->prop('idClass'), $this->prop('inline') ? 'mr-' . $this->prop('gap', 2) : '')),
             ) : null,
             $this->block('leading'),
             $this->buildParentTitle(),
