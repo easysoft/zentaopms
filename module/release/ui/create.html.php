@@ -33,6 +33,7 @@ if(!empty($projectID))
 formPanel
 (
     set::title($lang->release->create),
+    on::change('[name=status]', 'changeStatus'),
     formRow
     (
         formGroup
@@ -89,6 +90,18 @@ formPanel
             set::width(isInModal() ? '1/2' : '1/4'),
             set::name('date'),
             set::label($lang->release->date),
+            set::value(helper::today()),
+            set::control('date')
+        )
+    ),
+    formRow
+    (
+        setClass('hidden'),
+        formGroup
+        (
+            set::width(isInModal() ? '1/2' : '1/4'),
+            set::name('releasedDate'),
+            set::label($lang->release->releasedDate),
             set::value(helper::today()),
             set::control('date')
         )
