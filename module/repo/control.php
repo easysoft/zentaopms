@@ -1816,8 +1816,8 @@ class repo extends control
 
         /* Pager. */
         $this->app->loadClass('pager', true);
-        $recTotal = count($tagList);
-        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $tagTotal = count($tagList);
+        $pager    = new pager($tagTotal, $recPerPage, $pageID);
         $tagList  = array_chunk($tagList, (int)$pager->recPerPage);
 
         $this->view->title    = $this->lang->repo->browseTag;
@@ -1879,8 +1879,8 @@ class repo extends control
 
         /* Pager. */
         $this->app->loadClass('pager', true);
-        $recTotal   = count($branchList);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $branchTotal   = count($branchList);
+        $pager      = new pager($branchTotal, $recPerPage, $pageID);
         $branchList = array_chunk($branchList, (int)$pager->recPerPage);
 
         $this->view->title      = $this->lang->repo->browseBranch;
