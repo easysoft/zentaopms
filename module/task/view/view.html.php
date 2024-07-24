@@ -384,7 +384,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->consumed;?></th>
-                <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
+                <td><?php echo $task->consumed . $lang->workingHour;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>

@@ -2417,6 +2417,9 @@ class taskModel extends model
         $task->closedDate     = substr($task->closedDate, 0, 19)     ? substr($task->closedDate, 0, 19)     : '';
         $task->lastEditedDate = substr($task->lastEditedDate, 0, 19) ? substr($task->lastEditedDate, 0, 19) : '';
         $task->realStarted    = substr($task->realStarted, 0, 19)    ? substr($task->realStarted, 0, 19)    : '';
+        $task->estimate       = rtrim(rtrim(number_format($task->estimate, 2, '.', ''), '0'), '.');
+        $task->left           = rtrim(rtrim(number_format($task->left, 2, '.', ''), '0'), '.');
+        $task->consumed       = rtrim(rtrim(number_format($task->consumed, 2, '.', ''), '0'), '.');
 
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
         $task->children = $children;
