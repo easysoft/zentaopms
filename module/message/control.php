@@ -172,6 +172,14 @@ class message extends control
         $this->display();
     }
 
+    /**
+     * Ajax: 标记消息已读。
+     * Ajax mark read.
+     *
+     * @param  string $messageID
+     * @access public
+     * @return void
+     */
     public function ajaxMarkRead(string $messageID)
     {
         if($messageID != 'all') $messageID = (int)$messageID;
@@ -181,6 +189,14 @@ class message extends control
             ->exec();
     }
 
+    /**
+     * Ajax: 删除消息。
+     * Ajax delete message.
+     *
+     * @param  string $messageID
+     * @access public
+     * @return void
+     */
     public function ajaxDelete(string $messageID)
     {
         if($messageID != 'all') $messageID = (int)$messageID;
