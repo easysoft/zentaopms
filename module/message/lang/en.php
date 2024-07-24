@@ -19,6 +19,11 @@ $lang->message->browserSetting->pollTimePlaceholder = 'Notify the time intervals
 $lang->message->browserSetting->turnonList[1] = 'On';
 $lang->message->browserSetting->turnonList[0] = 'Off';
 
+$lang->message->browserSetting->more    = 'More Settings';
+$lang->message->browserSetting->show    = 'Browser Notification';
+$lang->message->browserSetting->count   = 'Count Reminder';
+$lang->message->browserSetting->maxDays = 'Retention Days';
+
 $lang->message->unread = 'Unread Messages(%s)';
 $lang->message->all    = 'All Messages';
 
@@ -27,6 +32,8 @@ $lang->message->timeLabel['hour']   = '1 hour ago';
 
 $lang->message->notice = new stdclass();
 $lang->message->notice->confirmDelete = "Are you sure you want to delete the message?";
+$lang->message->notice->allMarkRead   = 'One-click read';
+$lang->message->notice->deleteAllRead = 'Clear read';
 
 $lang->message->label = new stdclass();
 $lang->message->label->created      = 'create';
