@@ -28,4 +28,23 @@ class createUserTester extends tester
 
         return $this->success('创建用户成功');
     }
+
+    public function createEmptyAccountUser($user)
+    {
+        $form = $this->initForm('user', 'create', array(), 'appIframe-admin');
+        $form->dom->password1->setValue($user->password);
+        $form->dom->password2->setValue($user->confirmPassword);
+        $form->dom->realname->setValue($user->realname);
+        $form->dom->verifyPassword->setValue($user->verifyPassword);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'browse')
+        {
+            if($this->checkFormTips('user')) return $this->success('用户名为空提示正确');
+            return $this->failed('用户名为空提示错误');
+        }
+
+        return $this->failed('用户名为空提示错误');
+    }
 }
