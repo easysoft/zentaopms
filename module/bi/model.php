@@ -182,6 +182,13 @@ class biModel extends model
         return $fieldList;
     }
 
+    /**
+     * Parse sql to alias => field pairs.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
     public function getFieldsWithAlias($sql)
     {
         $this->app->loadClass('sqlparser', true);
