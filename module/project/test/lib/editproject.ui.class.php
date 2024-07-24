@@ -3,7 +3,7 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class editProjectTester extends tester
 {
  /**
-     * Edit a  project.
+     * Edit a project.
      *
      * @param  array  $project
      * @access public
