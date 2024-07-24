@@ -1044,7 +1044,7 @@ class screenModel extends model
                     {
                         $groupCount += 1;
                     }
-                    else if($colspan == 1)
+                    elseif($colspan == 1)
                     {
                         $drillConfigs[] = $isDrilling ? array('drillField' => $drillField, 'conditions' => $conditions) : false;
                     }
@@ -1058,7 +1058,6 @@ class screenModel extends model
 
             $drills = array();
             $groupFields = array_fill(0, $groupCount, 'groupCol');
-            $dataHeader  = end($header);
             foreach($options->drills as $drill)
             {
                 $drillFields = array_values($drill['drillFields']);
