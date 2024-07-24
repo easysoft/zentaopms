@@ -20,24 +20,27 @@ dropmenu
 
 featureBar
 (
-    form
+    (in_array($app->tab, array('project', 'execution')) && count($repoPairs) > 1) ? dropmenu
     (
-        setID('searchForm'),
-        set::actions(array()),
-        formRow
+        set::id('repoDropmenu'),
+        set::text($repo->name),
+        set::objectID($repo->id),
+        set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browsetag&projectID={$objectID}"))
+    ) : null,
+    div
+    (
+        setClass('flex'),
+        input
         (
-            input
-            (
-                set::placeholder($lang->searchAB),
-                set::name('keyword'),
-                set::value($keyword)
-            ),
-            btn
-            (
-                setClass('primary ml-2'),
-                $lang->searchAB,
-                on::click('searchList')
-            )
+            set::placeholder($lang->searchAB),
+            set::name('keyword'),
+            set::value($keyword)
+        ),
+        btn
+        (
+            setClass('primary ml-2'),
+            $lang->searchAB,
+            on::click('searchList')
         )
     )
 );
