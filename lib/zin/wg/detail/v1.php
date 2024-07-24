@@ -186,6 +186,7 @@ CSS;
         (
             set::icon('back'),
             set::text($lang->goback),
+            setKey('backBtn'),
             set($backBtn)
         );
     }
@@ -199,6 +200,7 @@ CSS;
         return new entityTitle
         (
             setClass('min-w-0'),
+            setKey('title'),
             set::id($objectID),
             set::object($object),
             set::title($title),
@@ -228,6 +230,7 @@ CSS;
         return div
         (
             setClass('detail-toolbar'),
+            setKey('toolbar'),
             $toolbar ? toolbar::create($toolbar, set::urlFormatter($this->prop('urlFormatter'))) : null,
             $toolbarBlock
         );
@@ -240,6 +243,7 @@ CSS;
         return div
         (
             setClass('detail-header row gap-2 items-center flex-none'),
+            setKey('header'),
             $isSimple ? null : $this->buildBackBtn(array('type' => 'primary-outline', 'class' => 'mr-2 size-md')),
             $this->buildTitle(),
             $this->block('header'),
@@ -267,6 +271,7 @@ CSS;
         return div
         (
             setClass('detail-section'),
+            setKey($title),
             $title ? div
             (
                 setClass('detail-section-title row items-center gap-2'),
@@ -311,6 +316,7 @@ CSS;
         return div
         (
             setClass('detail-sections canvas shadow rounded'),
+            setKey('historyWrapper'),
             new history
             (
                 set::className('detail-section overflow-visible'),
@@ -341,6 +347,7 @@ CSS;
         return div
         (
             setClass('detail-actions center sticky mt-4 bottom-4 z-10'),
+            setKey('actions'),
             div
             (
                 setClass('bg-black text-fore-in-dark backdrop-blur bg-opacity-60 rounded p-1.5'),
@@ -363,6 +370,7 @@ CSS;
             div
             (
                 setClass('detail-sections canvas shadow rounded px-6 py-4'),
+                setKey('main'),
                 $this->buildMainSections(),
                 $this->block('main')
             ),
@@ -390,6 +398,7 @@ CSS;
         (
             setClass('canvas rounded shadow'),
             setData('group', $group),
+            setKey($group),
             set::collapse(true)
         );
         foreach($tabs as $tab)
@@ -430,6 +439,7 @@ CSS;
         (
             setClass('detail-side flex-none'),
             setStyle('width', $this->prop('sideWidth') . 'px'),
+            setKey('side'),
             $this->buildTabsList(),
             $this->block('side')
         );
@@ -440,6 +450,7 @@ CSS;
         return div
         (
             setClass('detail-body row gap-2 items-start'),
+            setKey('body'),
             $this->buildMain(),
             $this->buildSide()
         );
