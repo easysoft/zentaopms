@@ -267,6 +267,14 @@ class pivotState
     public $step2FinishSql = '';
 
     /**
+     * First enter design.
+     *
+     * @var bool
+     * @access public
+     */
+    public $firstEnterDesign = false;
+
+    /**
      * __construct method.
      *
      * @param  pivot      object
@@ -732,7 +740,11 @@ class pivotState
      */
     public function updateFromPost($post)
     {
-        if(!isset($post['pivotState'])) return;
+        if(!isset($post['pivotState']))
+        {
+            $this->firstEnterDesign = true;
+            return;
+        }
         $json = $post['pivotState'];
         $array = json_decode($json, true);
 
