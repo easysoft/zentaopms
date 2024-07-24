@@ -156,6 +156,7 @@ class productRoadmapBox extends wg
                 (
                     set::label(''),
                     set::labelClass('hidden'),
+                    set::className('actionsBox'),
                     div
                     (
                         setClass('pl-2 flex self-center line-btn c-actions', $index == 0 ? 'first-action' : ''),
@@ -167,7 +168,7 @@ class productRoadmapBox extends wg
                         btn
                         (
                             setClass('btn btn-link text-gray removeLine'),
-                            setClass($index == 0 && count(array_filter($preProducts)) == 0 ? 'hidden' : ''),
+                            setClass($index == 0 && count(array_filter($preProducts)) <= 1 ? 'hidden' : ''),
                             icon('trash')
                         )
                     )
