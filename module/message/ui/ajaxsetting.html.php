@@ -11,3 +11,16 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+
+formPanel
+(
+    set::title($lang->message->browserSetting->more),
+    set::actions(array('submit')),
+    formGroup
+    (
+        set::width('1/3'),
+        setClass('content-center'),
+        set::label($lang->message->browserSetting->show),
+        switcher(set::name('show'), set::value(1), set::checked($config->message->browser->show)),
+    ),
+);

@@ -19,6 +19,11 @@ $lang->message->browserSetting->pollTimePlaceholder = '通知的时间间隔，�
 $lang->message->browserSetting->turnonList[1] = '打开';
 $lang->message->browserSetting->turnonList[0] = '关闭';
 
+$lang->message->browserSetting->more    = '更多设置';
+$lang->message->browserSetting->show    = '浏览器通知';
+$lang->message->browserSetting->count   = '计数提醒';
+$lang->message->browserSetting->maxDays = '保留天数';
+
 $lang->message->unread = '未读消息(%s)';
 $lang->message->all    = '全部消息';
 
