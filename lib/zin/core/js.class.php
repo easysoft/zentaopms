@@ -421,8 +421,8 @@ class js implements \JsonSerializable, iDirective
     }
 
     /**
-     * Encode php value to JS code.
-     * 将 PHP 值编码为 JS 代码。
+     * Encode php value to JS code and decode html special chars.
+     * 将 PHP 值编码为 JS 代码，并解码 HTML 实体字符。
      *
      * @access public
      * @param mixed $data PHP value.
