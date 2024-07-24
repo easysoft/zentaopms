@@ -270,11 +270,11 @@ $config->repo->dtable->tag->fieldList['name']['title'] = $lang->repo->tag;
 $config->repo->dtable->tag->fieldList['name']['type']  = 'title';
 $config->repo->dtable->tag->fieldList['name']['name']  = 'name';
 
-$config->repo->dtable->tag->fieldList['committer']['title']    = $lang->repo->committer;
+$config->repo->dtable->tag->fieldList['committer']['title']    = $lang->repo->lastCommit;
 $config->repo->dtable->tag->fieldList['committer']['type']     = 'text';
 $config->repo->dtable->tag->fieldList['committer']['sortType'] = true;
 
-$config->repo->dtable->tag->fieldList['date']['title']      = $lang->repo->date;
+$config->repo->dtable->tag->fieldList['date']['title']      = $lang->repo->lastUpdateTime;
 $config->repo->dtable->tag->fieldList['date']['name']       = 'date';
 $config->repo->dtable->tag->fieldList['date']['type']       = 'datetime';
 $config->repo->dtable->tag->fieldList['date']['formatDate'] = 'YYYY-MM-dd hh:mm';
