@@ -233,6 +233,7 @@ class formPanel extends panel
      */
     protected function buildForm(): node
     {
+        $fields       = $this->prop('fields', array());
         $customFields = $this->prop('customFields', array());
         $listFields   = zget($customFields, 'list', array());
         $showFields   = zget($customFields, 'show', array());
@@ -269,7 +270,7 @@ class formPanel extends panel
             set::className($this->prop('formClass')),
             set($this->props->pick($formProps)),
             $this->children(),
-            $this->prop('showExtra') ? $this->buildExtraMain() : null,
+            $this->prop('showExtra') && !$fields ? $this->buildExtraMain() : null,
             $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
         );
     }
