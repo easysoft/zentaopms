@@ -41,6 +41,7 @@ function computeImportTimes()
 
 function importNextPage()
 {
+    $.cookie.set('maxImport', $('#maxImport').val(), {expires:config.cookieLife, path:config.webRoot});
     link = $.createLink('testcase', 'showImport', "productID=" + productID + "&branch=" + branch + "&pageID=1&maxImport=" + $('#maxImport').val());
     loadPage(link);
 }
