@@ -66,7 +66,8 @@ class productRoadmapBox extends wg
                     set::width('1/3'),
                     setClass('distributeProduct'),
                     set::required(true),
-                    $index == 0 ? set::label($lang->demand->distributeProduct) : null,
+                    set::label($lang->demand->distributeProduct),
+                    $index != 0 ? set::labelClass('hidden') : null,
                     count($products) ? null : set::checkbox(array('text' => $lang->demand->addProduct, 'name' => 'addProduct', 'checked' => false)),
                     on::change('[name=addProduct]', 'addProduct'),
                     inputGroup
@@ -105,20 +106,23 @@ class productRoadmapBox extends wg
                 ),
                 formGroup
                 (
-                    setClass('storyGrade'),
+                    set::className('storyGradeBox'),
                     set::width('1/5'),
-                    $index == 0 ? set::label($lang->demand->storyGrade) : null,
+                    set::label($lang->demand->storyGrade),
+                    $index != 0 ? set::labelClass('hidden') : null,
                     picker
                     (
+                        set::className('storyGrade'),
                         set::name("storyGrade[$index]"),
                         set::required(true),
-                        set::items($storyGrades)
+                        set::items(isset($storyGrades[$productID]) ? $storyGrades[$productID] : array())
                     )
                 ),
                 formGroup
                 (
                     set::width('1/2'),
-                    $index == 0 ? set::label($lang->demand->roadmapOrPlan) : null,
+                    set::label($lang->demand->roadmapOrPlan),
+                    $index != 0 ? set::labelClass('hidden') : null,
                     set::className('roadmapBox'),
                     inputGroup
                     (
@@ -148,19 +152,24 @@ class productRoadmapBox extends wg
                         )
                     )
                 ),
-                count($products) ? div
+                count($products) ? formGroup
                 (
-                    setClass('pl-2 flex self-center line-btn c-actions', $index == 0 ? 'first-action' : ''),
-                    btn
+                    set::label(''),
+                    set::labelClass('hidden'),
+                    div
                     (
-                        setClass('btn btn-link text-gray addLine'),
-                        icon('plus')
-                    ),
-                    btn
-                    (
-                        setClass('btn btn-link text-gray removeLine'),
-                        setClass($index == 0 ? 'hidden' : ''),
-                        icon('trash')
+                        setClass('pl-2 flex self-center line-btn c-actions', $index == 0 ? 'first-action' : ''),
+                        btn
+                        (
+                            setClass('btn btn-link text-gray addLine'),
+                            icon('plus')
+                        ),
+                        btn
+                        (
+                            setClass('btn btn-link text-gray removeLine'),
+                            setClass($index == 0 && count(array_filter($preProducts)) == 0 ? 'hidden' : ''),
+                            icon('trash')
+                        )
                     )
                 ) : null
             );
