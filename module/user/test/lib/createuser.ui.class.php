@@ -55,6 +55,13 @@ class createUserTester extends tester
         return $this->failed('用户名为空提示错误');
     }
 
+    /**
+     * Check the page jump after created a empty password user.
+     *
+     * @param  string    $user
+     * @access public
+     * @return object
+     */
     public function createEmptyPasswordUser($user)
     {
         $form = $this->initForm('user', 'create', array(), 'appIframe-admin');
