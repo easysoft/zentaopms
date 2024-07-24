@@ -1,5 +1,5 @@
 <?php
-$lang->message->common    = '消息';
+$lang->message->common    = '系统通知';
 $lang->message->index     = '首页';
 $lang->message->setting   = '设置';
 $lang->message->browser   = '系统通知';

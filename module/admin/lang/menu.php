@@ -161,7 +161,7 @@ $lang->admin->menuList->feature['dividerMenu'] = ',user,';
 
 $lang->admin->menuList->message['subMenu']['mail']    = array('link' => "{$lang->mail->common}|mail|edit|", 'subModule' => 'mail');
 $lang->admin->menuList->message['subMenu']['webhook'] = array('link' => "Webhook|webhook|browse|", 'subModule' => 'webhook');
-$lang->admin->menuList->message['subMenu']['browser'] = array('link' => "{$lang->browser}|message|browser|");
+$lang->admin->menuList->message['subMenu']['browser'] = array('link' => "{$lang->message->common}|message|browser|");
 $lang->admin->menuList->message['subMenu']['setting'] = array('link' => "{$lang->settings}|message|setting|");
 
 $lang->admin->menuList->message['menuOrder']['5']  = 'mail';

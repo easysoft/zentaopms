@@ -316,7 +316,7 @@ $lang->personnel->accessible = 'Accessible';
 
 $lang->stakeholder->common = 'Stakeholder';
 $lang->release->common     = 'Release';
-$lang->message->common     = 'Message';
+$lang->message->common     = 'Notification';
 $lang->mail->common        = 'Mail';
 
 $lang->my->shortCommon          = 'My';
