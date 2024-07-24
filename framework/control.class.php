@@ -557,7 +557,7 @@ class control extends baseControl
         if(!$flow) return '';
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        if(!$action || $action->extensionType != 'extend') return '';
+        if(!$action || $action->extensionType == 'none') return '';
 
         $fieldList = $this->workflowaction->getFields($flow->module, !empty($action->action) ? $action->action: '');
 
