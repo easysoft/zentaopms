@@ -18,14 +18,14 @@
     <div class="page-title">
       <strong>
       <?php
-      echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
+      echo html::a($this->repo->createLink('log', "repoID=$repoID&branchID=&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
       $paths= explode('/', $entry);
       $fileName = array_pop($paths);
       $postPath = '';
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID&ojbectID=$objectID&entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->tab}'");
+          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID&branchID=&objectID=$objectID&entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'), '', "data-app='{$app->tab}'");
       }
       echo '/' . ' ' . $fileName;
       ?>
@@ -84,7 +84,7 @@
       <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
       <?php if($repo->SCM == 'Gitlab'):?>
       <?php
-      $params = "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&revision=$revision&type=$type&recTotal={$pager->recTotal}";
+      $params = "repoID=$repoID&branchID=&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&revision=$revision&type=$type&recTotal={$pager->recTotal}";
       $total  = count($logs) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1)
       ?>
       <ul id="repoPageSize" data-page-cookie='pagerRepoLog' class="pager" data-ride="pager" data-elements="size_menu,prev_icon,next_icon" data-rec-total="<?php echo $total;?>" data-rec-per-page="<?php echo $pager->recPerPage;?>" data-page="<?php echo $pager->pageID;?>" data-link-creator="<?php echo $this->repo->createLink('log', $params . '&recPerPage={recPerPage}&pageID={page}');?>"></ul>

@@ -531,6 +531,7 @@ class repo extends control
      * show repo log.
      *
      * @param  int    $repoID
+     * @param  string $branchID
      * @param  int    $objectID
      * @param  string $entry
      * @param  string $revision

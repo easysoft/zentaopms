@@ -27,7 +27,7 @@ jsVar('appTab', $app->tab);
 $breadcrumbItems   = array();
 $breadcrumbItems[] = h::a
 (
-    set::href($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID")),
+    set::href($this->repo->createLink('log', "repoID=$repoID&branchID=&objectID=$objectID")),
     $repo->name
 );
 $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
@@ -40,7 +40,7 @@ foreach($paths as $pathName)
     $postPath .= $pathName . '/';
     $breadcrumbItems[] = h::a
     (
-        set::href($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($postPath))),
+        set::href($this->repo->createLink('log', "repoID=$repoID&branchID=&objectID=$objectID&entry=" . $this->repo->encodePath($postPath))),
         trim($pathName, '/')
     );
     $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
