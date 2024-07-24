@@ -12,11 +12,11 @@ class productRoadmapBox extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'preProducts?: array',   // 预设产品列表。
-        'products?: array',      // 产品下拉列表。
-        'branchGroups?: array',  // 产品分支分组列表。
-        'roadmapGroups?: array', // 产品路标分组列表。
-        'storyGrades?: array'    // 需求层级列表
+        'preProducts?: array',       // 预设产品列表。
+        'products?: array',          // 产品下拉列表。
+        'branchGroups?: array',      // 产品分支分组列表。
+        'roadmapPlanGroups?: array', // 产品路标分组列表。
+        'storyGrades?: array'        // 需求层级列表
     );
 
     public static function getPageCSS(): ?string
@@ -40,7 +40,6 @@ class productRoadmapBox extends wg
             on::click('.productsBox .removeLine', 'window.removeLine'),
             on::change('.linkProduct .pick-value', 'window.refreshPicker(e.target)'),
             on::change('[name^=branch]', 'window.loadBranch'),
-            on::change('[name^=addRoadmap]', 'window.addRoadmap'),
             $productsBox
         );
     }
@@ -48,7 +47,7 @@ class productRoadmapBox extends wg
     protected function initProductsBox(): array
     {
         global $lang;
-        list($preProducts, $products, $branchGroups, $roadmapGroups, $storyGrades) = $this->prop(array('preProducts', 'products', 'branchGroups', 'roadmapGroups', 'storyGrades'));
+        list($preProducts, $products, $branchGroups, $roadmapPlanGroups, $storyGrades) = $this->prop(array('preProducts', 'products', 'branchGroups', 'roadmapPlanGroups', 'storyGrades'));
 
         $productsBox = array();
         foreach(array_values($preProducts) as $index => $productID)
@@ -56,7 +55,7 @@ class productRoadmapBox extends wg
             $hasBranch     = !empty($branchGroups[$productID]);
             $branches      = isset($branchGroups[$productID]) ? $branchGroups[$productID] : array();
             $defaultBranch = !empty($branches) ? key($branches) : 0;
-            $roadmaps      = !empty($roadmapGroups[$productID][$defaultBranch]) ? $roadmapGroups[$productID][$defaultBranch] : array();
+            $roadmapPlans  = !empty($roadmapPlanGroups[$productID][$defaultBranch]) ? $roadmapPlanGroups[$productID][$defaultBranch] : array();
 
             $productsBox[] = div
             (
@@ -132,22 +131,7 @@ class productRoadmapBox extends wg
                             picker
                             (
                                 set::name("roadmap[$index]"),
-                                set::items($roadmaps)
-                            ),
-                            input
-                            (
-                                setClass('hidden'),
-                                set::disabled(true),
-                                set::name("roadmapName[$index]")
-                            )
-                        ),
-                        div
-                        (
-                            setClass('ml-px addRoadmap btn btn-default' . ((count($roadmaps) || empty($products) || !$productID) ? ' hidden' : '')),
-                            checkbox
-                            (
-                                set::name("addRoadmap[$index]"),
-                                set::text($lang->demand->addRoadmap)
+                                set::items($roadmapPlans)
                             )
                         )
                     )
