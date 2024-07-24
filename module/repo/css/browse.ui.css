@@ -7,5 +7,3 @@
 #actionBar .dropdown-menu {margin-top: 10px; padding: 10px; display: none;}
 #actionBar .dropdown-menu.show{display: block;}
 #actionBar>.dropdown {position: absolute!important;}
-
-#repoDropmenu .icon-angle-right {display: none;}

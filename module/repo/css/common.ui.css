@@ -59,3 +59,5 @@
 .codicon-light-bulb.lightbulb-glyph {display: none;}
 
 span.menu-toggle.nested-toggle-icon.is-empty {width: 0.1rem;}
+
+#repoDropmenu .icon-angle-right {display: none;}
