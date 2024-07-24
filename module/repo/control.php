@@ -1854,12 +1854,11 @@ class repo extends control
      * 浏览分支列表。
      * Browse branch list.
      *
-     * @param  int $repoID
-     * @param  int $objectID
+     * @param  int    $repoID
+     * @param  int    $objectID
      * @param  string $orderBy
-     * @param  int $recTotal
-     * @param  int $recPerPage
-     * @param  int $pageID
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
