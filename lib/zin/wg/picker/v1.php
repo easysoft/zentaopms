@@ -55,6 +55,7 @@ class picker extends wg
         'menu?: array',                     // 附加的菜单选项。
         'tree?: array|bool',                // 是否启用树形菜单样式。
         'hotkey?: boolean',                 // 是否启用快捷键。
+        'cache?: boolean',                  // 当使用动态选项列表时是否启用缓存，默认 true。
         'search?: boolean|number',          // 是否启用搜索。
         'searchDelay?: number',             // 搜索延迟时间，单位：毫秒。
         'searchHint?: string',              // 搜索提示文本。
