@@ -23,4 +23,11 @@ formPanel
         set::label($lang->message->browserSetting->show),
         switcher(set::name('show'), set::value(1), set::checked($config->message->browser->show)),
     ),
+    formGroup
+    (
+        set::width('1/3'),
+        setClass('content-center'),
+        set::label($lang->message->browserSetting->count),
+        switcher(set::name('count'), set::value(1), set::checked($config->message->browser->count)),
+    ),
 );
