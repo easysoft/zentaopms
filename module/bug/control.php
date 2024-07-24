@@ -536,6 +536,7 @@ class bug extends control
             $feedbackBy  = $bug->feedbackBy;
             $notifyEmail = $bug->notifyEmail;
             if($pri == 0) $pri = '3';
+            $this->view->bug = $bug;
         }
 
         if($testtask)

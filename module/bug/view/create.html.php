@@ -333,7 +333,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td><?php echo html::hidden('status', 'active');?></td>
             <td><?php echo html::hidden('issueKey', $issueKey);?></td>
           </tr>
-          <?php $this->printExtendFields('', 'table');?>
+          <?php $this->printExtendFields(isset($bug) ? $bug : '', 'table');?>
           <tr>
             <th><?php echo $lang->bug->files;?></th>
             <td colspan='2'>
