@@ -251,7 +251,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
             <th><?php echo $lang->testcase->status;?></th>
             <td><?php echo html::hidden('status', 'normal');?></td>
           </tr>
-          <?php $this->printExtendFields('', 'table');?>
+          <?php $this->printExtendFields(isset($testcase) ? $testcase : '', 'table');?>
           <tr>
             <th><?php echo $lang->testcase->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>

@@ -521,6 +521,7 @@ class testcase extends control
             $steps        = $testcase->steps;
             $color        = $testcase->color;
             $auto         = $testcase->auto;
+            $this->view->testcase = $testcase;
         }
 
         /* If bugID large than 0, use this bug as template. */
