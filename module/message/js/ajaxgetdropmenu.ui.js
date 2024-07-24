@@ -13,7 +13,7 @@ window.markRead = function(e)
 
     /* Rerender unread count. */
     $('messageTabs #unread-messages.tab-pane').find('.message-item[data-id="' + messageID + '"]').addClass('hidden');
-    renderUnreadCount();
+    renderMessage();
 }
 
 window.markAllRead = function(e)
@@ -23,18 +23,18 @@ window.markAllRead = function(e)
     $messageItem.removeClass('unread');
     $('#messageTabs #unread-messages.tab-pane .message-item').addClass('hidden');
     $.get($.createLink('message', 'ajaxMarkRead', "id=all"));
-    renderUnreadCount();
+    renderMessage();
 }
 
-window.deleteAllRead = function(e)
+window.clearRead = function(e)
 {
-    let result = confirm(confirmDeleteLang);
+    let result = confirm(confirmClearLang);
     if(!result) return;
 
     let $messageItem = $('#messageTabs .message-item:not(.unread)');
     $messageItem.addClass('hidden');
     $.get($.createLink('message', 'ajaxDelete', "id=allread"));
-    renderUnreadCount();
+    renderMessage();
 }
 
 window.deleteMessage = function(e)
@@ -51,10 +51,10 @@ window.deleteMessage = function(e)
     $.get($.createLink('message', 'ajaxDelete', "id=" + messageID));
 
     /* Rerender unread count. */
-    renderUnreadCount();
+    renderMessage();
 }
 
-window.renderUnreadCount = function()
+window.renderMessage = function()
 {
     let $unreadTab = $('#messageTabs #unread-messages.tab-pane');
     let unreadCount = $unreadTab.find('.message-item.unread').length;
@@ -65,7 +65,7 @@ window.renderUnreadCount = function()
     {
         $messageBarDot.remove();
         $unreadTab.find('ul').addClass('hidden');
-        $unreadTab.append("<div class='text-center text-gray'>" + noDataLang + "</div>");
+        if($unreadTab.find('.nodata').length == 0) $unreadTab.append("<div class='text-center text-gray nodata'>" + noDataLang + "</div>");
     }
 
     let $allTab  = $('#messageTabs #all-messages.tab-pane');
@@ -73,6 +73,6 @@ window.renderUnreadCount = function()
     if(allCount == 0)
     {
         $allTab.find('ul').addClass('hidden');
-        $allTab.append("<div class='text-center text-gray'>" + noDataLang + "</div>");
+        if($allTab.find('.nodata').length == 0) $allTab.append("<div class='text-center text-gray nodata'>" + noDataLang + "</div>");
     }
 }

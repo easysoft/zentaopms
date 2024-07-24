@@ -15,10 +15,11 @@ namespace zin;
 jsVar('unreadLangTempate', $lang->message->unread);
 jsVar('noDataLang', $lang->noData);
 jsVar('confirmDeleteLang', $lang->message->notice->confirmDelete);
+jsVar('confirmClearLang', $lang->message->notice->confirmClear);
 
 $buildMessageList = function($messageGroup) use ($lang)
 {
-    if(empty($messageGroup)) return div(setClass('text-gray text-center'), $lang->noData);
+    if(empty($messageGroup)) return div(setClass('text-gray text-center nodata'), $lang->noData);
 
     $dateList = array();
     foreach($messageGroup as $date => $messages)
@@ -60,15 +61,15 @@ tabs
     set::style(array('width' => '400px', 'background-color' => '#fff')),
     on::click('.delete-message-btn', 'deleteMessage'),
     on::click('.message-item', 'markRead'),
-    on::click('.deleteAllRead', 'deleteAllRead'),
+    on::click('.clearRead', 'clearRead'),
     on::click('.allMarkRead', 'markAllRead'),
     div
     (
         setClass('absolute top-2 right-5'),
         set::style(array('z-index' => '100')),
-        btn(set::size('sm'), set::type('link'), setClass('allMarkRead'),   set::hint($lang->message->notice->allMarkRead),   icon('eye')),
-        btn(set::size('sm'), set::type('link'), setClass('deleteAllRead'), set::hint($lang->message->notice->deleteAllRead), icon('trash')),
-        btn(set::size('sm'), set::type('link'), set::url(createLink('message', 'ajaxSetOneself')), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
+        btn(set::size('sm'), set::type('link'), setClass('allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('eye')),
+        btn(set::size('sm'), set::type('link'), setClass('clearRead'),   set::hint($lang->message->notice->clearRead),   icon('trash')),
+        btn(set::size('sm'), set::type('link'), set::hint($lang->message->browserSetting->more), set::url(createLink('message', 'ajaxSetOneself')), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
     ),
     tabPane
     (
