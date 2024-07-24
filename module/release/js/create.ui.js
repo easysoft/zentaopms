@@ -11,3 +11,16 @@ function loadBuilds(event)
     });
 
 }
+
+window.changeStatus = function(e)
+{
+    const status = e.target.value;
+    if(status == 'normal')
+    {
+        $('#releasedDate').closest('.form-row').removeClass('hidden');
+    }
+    else
+    {
+        $('#releasedDate').closest('.form-row').addClass('hidden');
+    }
+}
