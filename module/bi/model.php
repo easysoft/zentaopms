@@ -163,6 +163,13 @@ class biModel extends model
         $fieldList = array();
         foreach($statement->expr as $expr)
         {
+            if(!empty($expr->table) && $expr->expr == "{$expr->table}.*")
+            {
+                $table  = $this->getTableByAlias($statement, $expr->table);
+                $fields = $this->loadModel('dev')->getFields($table);
+                foreach($fields as $field => $fieldInfo) $fieldList[$field] = $table;
+            }
+
             if(!empty($expr->column) && !empty($expr->table))
             {
                 $table = $this->getTableByAlias($statement, $expr->table);
