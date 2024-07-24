@@ -1754,6 +1754,16 @@ class repoZen extends repo
         return $options;
     }
 
+    /**
+     * 获取代码库ID，并且设置页面的代码库数据。
+     * Process repoID and set page repo data.
+     *
+     * @param  int       $repoID
+     * @param  int       $objectID
+     * @param  array     $scmList
+     * @access protected
+     * @return int
+     */
     protected function processRepoID(int $repoID, int $objectID, array $scmList = array()): int
     {
         $repoPairs = array();
@@ -1771,6 +1781,8 @@ class repoZen extends repo
             if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
         }
 
+        $this->view->repoID    = $repoID;
+        $this->view->repoPairs = $repoPairs;
         return $this->repo->saveState($repoID, $objectID);
     }
 }

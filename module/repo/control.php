@@ -1348,7 +1348,11 @@ class repo extends control
         }
 
         $params = '';
-        if($projectID && $method == 'browse') $params = "&branchID=&objectID=$projectID";
+        if($projectID)
+        {
+            if($method == 'browse') $params = "&branchID=&objectID=$projectID";
+            if(in_array($method, array('browsetag', 'browsebranch'))) $params = "&objectID=$projectID";
+        }
 
         /* Get repo group by type. */
         $repoType  = $module == 'mr' ? 'git' : '';
@@ -1785,7 +1789,7 @@ class repo extends control
      */
     public function browseTag(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
 
         $repo = $this->repo->getByID($repoID);
