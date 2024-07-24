@@ -10,3 +10,13 @@ declare(strict_types = 1);
  */
 
 namespace zin;
+
+h::iframe
+(
+    set('width', '100%'),
+    set('height', '100%'),
+    set('scrolling', 'no'),
+    set('frameborder', '0'),
+    set('marginheight', '0'),
+    set('src', $this->inlink('view', "screenID={$screen->id}") . "?zin=0&_single=1")
+);
