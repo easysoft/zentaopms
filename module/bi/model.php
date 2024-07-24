@@ -164,36 +164,18 @@ class biModel extends model
         $fieldList = array();
         foreach($statement->expr as $expr)
         {
-            if(empty($expr->table))
-            {
-                $table  = $statement->from[0]->table;
-                if($expr->expr == "*")
-                {
-                    $fields = $this->dev->getFields($table);
-                    foreach($fields as $field => $fieldInfo) $fieldList[$field] = $table;
-                }
+            $table = empty($expr->table) ? $statement->from[0]->table : $this->getTableByAlias($statement, $expr->table);
 
-                if(!empty($expr->column))
-                {
-                    $field = !empty($expr->alias) ? $expr->alias : $expr->column;
-                    $fieldList[$field] = $table;
-                }
+            if((empty($expr->table) && $expr->expr == "*") || (!empty($expr->table) && $expr->expr == "{$expr->table}.*"))
+            {
+                $fields = $this->dev->getFields($table);
+                foreach($fields as $field => $fieldInfo) $fieldList[$field] = $table;
             }
-            else
-            {
-                if($expr->expr == "{$expr->table}.*")
-                {
-                    $table  = $this->getTableByAlias($statement, $expr->table);
-                    $fields = $this->dev->getFields($table);
-                    foreach($fields as $field => $fieldInfo) $fieldList[$field] = $table;
-                }
 
-                if(!empty($expr->column))
-                {
-                    $table = $this->getTableByAlias($statement, $expr->table);
-                    $field = !empty($expr->alias) ? $expr->alias : $expr->column;
-                    $fieldList[$field] = $table;
-                }
+            if(!empty($expr->column))
+            {
+                $field = !empty($expr->alias) ? $expr->alias : $expr->column;
+                $fieldList[$field] = $table;
             }
         }
 
