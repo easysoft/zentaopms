@@ -31,4 +31,24 @@ class biTest
 
         return $result;
     }
+
+    /**
+     * get columns native type
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getColumns($sql)
+    {
+        $columns = $this->objectModel->getColumns($sql, 'mysql');
+
+        $nativeTypes = array();
+        foreach($columns as $field => $fieldInfo)
+        {
+            $nativeTypes[$field] = $fieldInfo['native_type'];
+        }
+
+        return $nativeTypes;
+    }
 }

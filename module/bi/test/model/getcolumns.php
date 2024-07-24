@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 su('admin');
 
 zenData('product')->gen(10);
@@ -19,8 +20,7 @@ cid=1
  - 属性title @string
 
 */
-global $tester;
-$tester->loadModel('dataview');
+$bi=new biTest();
 
-r($tester->dataview->getColumns('select * from zt_product')) && p('id,name')  && e('number,string');  //获取产品表ID和name字段的类型。
-r($tester->dataview->getColumns('select * from zt_bug')    ) && p('id,title') && e('number,string');  //获取BUG表ID和name字段的类型。
+r($bi->getColumns('select * from zt_product')) && p('id,name')  && e('INT24,VAR_STRING');  //获取产品表ID和name字段的类型。
+r($bi->getColumns('select * from zt_bug')    ) && p('id,title') && e('INT24,VAR_STRING');  //获取BUG表ID和name字段的类型。
