@@ -6687,8 +6687,9 @@ class upgradeModel extends model
     {
         $this->loadModel('workflowfield');
 
-        $upgradeLang   = $this->lang->workflowfield->upgrade[$version];
-        $upgradeConfig = $this->config->workflowfield->upgrade[$version];
+        $upgradeLang        = $this->lang->workflowfield->upgrade[$version];
+        $upgradeConfig      = $this->config->workflowfield->upgrade[$version];
+        $workFlowDataSource = $this->dao->select('code,id')->from(TABLE_WORKFLOWDATASOURCE)->fetchPairs();
 
         $now = helper::now();
         foreach($upgradeLang as $module => $fields)
@@ -6707,6 +6708,7 @@ class upgradeModel extends model
 
                 $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
+                if($field->control == 'select' && is_string($field->options) && isset($workFlowDataSource[$field->options])) $field->options = $workFlowDataSource[$field->options];
 
                 $this->dao->replace(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
             }
