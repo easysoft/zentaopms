@@ -38,7 +38,7 @@ su('admin');
 $metric = new metricTest();
 
 r($metric->getCalcInstanceList()) && p('count_of_task_in_project:dataset,id')           && e('getTasks,221');                 // 测试count_of_task_in_project的数据源和编号
-r($metric->getCalcInstanceList()) && p('count_of_unclosed_story_in_project:dataset,id') && e('getDevStoriesWithProject,213'); // 测试count_of_unclosed_story_in_project的数据源和编号
+r($metric->getCalcInstanceList()) && p('count_of_unclosed_story_in_project:dataset,id') && e('getAllStoriesWithProject,213'); // 测试count_of_unclosed_story_in_project的数据源和编号
 r($metric->getCalcInstanceList()) && p('count_of_user_in_project:dataset,id')           && e('getTeamMembers,236');           // 测试count_of_user_in_project的数据源和编号
 r($metric->getCalcInstanceList()) && p('count_of_valid_story_in_project:dataset,id')    && e('getDevStoriesWithProject,216'); // 测试count_of_valid_story_in_project的数据源和编号
 r($metric->getCalcInstanceList()) && p('consume_of_all_in_project:dataset,id')          && e('getProjectEfforts,237');        // 测试consume_of_all_in_project的数据源和编号

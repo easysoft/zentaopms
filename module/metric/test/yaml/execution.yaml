@@ -29,4 +29,6 @@ fields:
   range: "20120101 000000-20220101 000000:10D"
   type: timestamp
   format: YYYY-MM-DD
+- field: progress
+  range: 50
 ...
