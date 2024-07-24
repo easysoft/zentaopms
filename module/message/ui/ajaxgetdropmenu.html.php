@@ -68,7 +68,7 @@ tabs
         set::style(array('z-index' => '100')),
         btn(set::size('sm'), set::type('link'), setClass('allMarkRead'),   set::hint($lang->message->notice->allMarkRead),   icon('eye')),
         btn(set::size('sm'), set::type('link'), setClass('deleteAllRead'), set::hint($lang->message->notice->deleteAllRead), icon('trash')),
-        btn(set::size('sm'), set::type('link'), set::url(createLink('message', 'ajaxSetting')), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
+        btn(set::size('sm'), set::type('link'), set::url(createLink('message', 'ajaxSetOneself')), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
     ),
     tabPane
     (

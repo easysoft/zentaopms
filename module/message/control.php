@@ -58,7 +58,7 @@ class message extends control
 
             $this->loadModel('setting')->setItems('system.message.browser', $browserConfig);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => array('url' => $this->createLink('message', 'browser'), 'selector' => array('#header', '#mainContainer'))));
         }
 
         $this->view->title         = $this->lang->message->browser;
@@ -207,14 +207,21 @@ class message extends control
             ->exec();
     }
 
-    public function ajaxSetting()
+    /**
+     * Ajax: 设置自己的消息配置。
+     * Ajax: Set for oneself
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetOneself()
     {
         if($_POST)
         {
             $data    = fixer::input('post')->setDefault('show', 0)->setDefault('count', 0)->get();
             $account = $this->app->user->account;
             $this->loadModel('setting')->setItems("{$account}.message.browser", $data);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage("#messageBar")'));
         }
 
         $this->display();
