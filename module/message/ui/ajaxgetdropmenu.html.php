@@ -14,6 +14,7 @@ namespace zin;
 
 jsVar('unreadLangTempate', $lang->message->unread);
 jsVar('noDataLang', $lang->noData);
+jsVar('confirmDeleteLang', $lang->message->notice->confirmDelete);
 
 $buildMessageList = function($messageGroup) use ($lang)
 {

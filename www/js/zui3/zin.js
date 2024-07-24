@@ -1557,6 +1557,9 @@
         let $this     = $('#messageBar');
         let $dropmenu = $("#dropdownMessageMenu");
         let fetchUrl  = $this.attr('data-fetcher');
+        let maxHeight = $(window).height() - $('#header').height() - 5;
+
+        $dropmenu.css('height', maxHeight).css('max-height', maxHeight).css('overflow-y', 'auto').css('background-color', '#fff');
         $dropmenu.load(fetchUrl);
     }
 

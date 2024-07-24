@@ -13,18 +13,21 @@ window.markRead = function(e)
 
     /* Rerender unread count. */
     let $unreadTab = $this.closest('#unread-messages.tab-pane');
-    if($unreadTab.hasClass('active')) $this.hide();
+    if($unreadTab.hasClass('active')) $this.addClass('hidden');
     renderUnreadCount();
 }
 
 window.deleteMessage = function(e)
 {
+    let result = confirm(confirmDeleteLang);
+    if(!result) return;
+
     let $this = $(e.target);
     if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
 
     let messageID = $this.data("id");
     let $messageItem = $('#messageTabs .message-item[data-id="' + messageID + '"]');
-    $messageItem.hide();
+    $messageItem.addClass('hidden');
     $.get($.createLink('message', 'ajaxDelete', "id=" + messageID));
 
     /* Rerender unread count. */
@@ -41,7 +44,15 @@ window.renderUnreadCount = function()
     if(unreadCount == 0)
     {
         $messageBarDot.remove();
-        $unreadTab.find('ul').hide();
+        $unreadTab.find('ul').addClass('hidden');
         $unreadTab.append("<div class='text-center text-gray'>" + noDataLang + "</div>");
+    }
+
+    let $allTab  = $('#messageTabs #all-messages.tab-pane');
+    let allCount = $allTab.find('.message-item:not(.hidden)').length;
+    if(allCount == 0)
+    {
+        $allTab.find('ul').addClass('hidden');
+        $allTab.append("<div class='text-center text-gray'>" + noDataLang + "</div>");
     }
 }
