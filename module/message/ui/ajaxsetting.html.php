@@ -30,4 +30,15 @@ formPanel
         set::label($lang->message->browserSetting->count),
         switcher(set::name('count'), set::value(1), set::checked($config->message->browser->count)),
     ),
+    formGroup
+    (
+        set::width('1/3'),
+        set::label($lang->message->browserSetting->maxDays),
+        inputControl
+        (
+            input(set::name('maxDays'), set::value($config->message->browser->maxDays)),
+            set::suffixWidth('30'),
+            set::suffix('天'),
+        )
+    )
 );
