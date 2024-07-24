@@ -105,6 +105,7 @@ class message extends control
      */
     public function ajaxGetMessage(string $windowBlur = 'false')
     {
+        return;
         if($this->config->message->browser->turnon == 0) return;
 
         $todos        = $this->message->getNoticeTodos();
@@ -169,5 +170,23 @@ class message extends control
         $this->view->unreadCount    = $unreadCount;
         $this->view->unreadMessages = $unreadMessages;
         $this->display();
+    }
+
+    public function ajaxMarkRead(string $messageID)
+    {
+        if($messageID != 'all') $messageID = (int)$messageID;
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('read')->where('objectType')->eq('message')
+            ->andWhere('toList')->like("%,{$this->app->user->account},%")
+            ->beginIF($messageID != 'all')->andWhere('id')->eq($messageID)->fi()
+            ->exec();
+    }
+
+    public function ajaxDelete(string $messageID)
+    {
+        if($messageID != 'all') $messageID = (int)$messageID;
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')
+            ->andWhere('toList')->like("%,{$this->app->user->account},%")
+            ->beginIF($messageID != 'all')->andWhere('id')->eq($messageID)->fi()
+            ->exec();
     }
 }
