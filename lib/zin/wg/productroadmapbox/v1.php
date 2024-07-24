@@ -107,7 +107,7 @@ class productRoadmapBox extends wg
                 (
                     setClass('storyGrade'),
                     set::width('1/5'),
-                    set::label($lang->demand->storyGrade),
+                    $index == 0 ? set::label($lang->demand->storyGrade) : null,
                     picker
                     (
                         set::name("storyGrade[$index]"),
