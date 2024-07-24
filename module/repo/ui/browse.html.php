@@ -73,6 +73,7 @@ foreach($paths as $index => $pathName)
 }
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
+
 /* zin: Define the set::module('repo') feature bar on main menu. */
 \zin\featureBar(
     formGroup
@@ -269,8 +270,7 @@ $config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => ro
 if(in_array($repo->SCM, $config->repo->notSyncSCM)) unset($config->repo->commentDtable->fieldList['commit']);
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
-
-$readAllLink = $this->repo->createLink('log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&type=$logType");
+$readAllLink = $this->repo->createLink('log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&branchOrTag=$branchOrTag&type=$logType&source=repo-browse");
 $footToolbar['items'][] = array('text' => $lang->repo->diff, 'className' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
 $footToolbar['items'][] = array('text' => $lang->repo->allLog, 'url' => $readAllLink, 'data-app' => $this->app->tab);
 

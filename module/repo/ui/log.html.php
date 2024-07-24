@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
+
+/* Project switch in second level nav. */
 dropmenu
 (
     set::module($module),
@@ -25,12 +27,12 @@ jsVar('appTab', $app->tab);
 
 /* Prepare breadcrumb navigation data. */
 $breadcrumbItems   = array();
-$breadcrumbItems[] = h::a
+$path ? $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('log', "repoID=$repoID&branchID=&objectID=$objectID")),
-    $repo->name
-);
-$breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
+    set('data-app', $app->tab),
+    h::span('/', setStyle('margin', '0 5px'))
+) : null;
 
 $paths    = explode('/', $entry);
 $fileName = array_pop($paths);
@@ -41,6 +43,7 @@ foreach($paths as $pathName)
     $breadcrumbItems[] = h::a
     (
         set::href($this->repo->createLink('log', "repoID=$repoID&branchID=&objectID=$objectID&entry=" . $this->repo->encodePath($postPath))),
+        set('data-app', $app->tab),
         trim($pathName, '/')
     );
     $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
@@ -61,14 +64,61 @@ $logs = initTableData($logs, $config->repo->logDtable->fieldList);
 
 $footToolbar['items'][] = array('text' => $lang->repo->diff, 'className' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
 
+/* Prepare repo select data. */
+$branchMenus = array();
+$tagMenus    = array();
+$selected    = '';
+
+foreach($branches as $branchName)
+{
+    $selected       = ($branchName == $branchID and $branchOrTag == 'branch') ? $branchName : $selected;
+    $base64BranchID = helper::safe64Encode(base64_encode($branchName));
+    $branchLink     = $this->createLink('repo', 'log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
+    $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink, 'data-app' => $app->tab);
+}
+
+foreach($tags as $tagName)
+{
+    $selected    = ($tagName == $branchID and $branchOrTag == 'tag') ? $tagName : $selected;
+    $base64TagID = helper::safe64Encode(base64_encode($tagName));
+    $tagLink     = $this->createLink('repo', 'log', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
+    $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink, 'data-app' => $app->tab);
+}
+$menuData = array('branch' => $branchMenus, 'tag' => $tagMenus);
+$tabs     = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
+
 \zin\featureBar(
-    backBtn
+    /* Set back button. */
+    in_array($source, array('repo-browse')) ? backBtn
     (
         setClass('mr-5'),
         set::icon('back'),
         set::type('secondary'),
         set::back('repo-browse'),
         $lang->goback
+    ) : null,
+    formGroup
+    (
+        set::className('repo-select'),
+        set::required(true),
+
+        /* Switch projects. */
+        (in_array($app->tab, array('project', 'execution')) && count($repoPairs) > 1) ? dropmenu
+        (
+            set::id('logRepoDropmenu'),
+            set::text($repo->name),
+            set::objectID($repo->id),
+            set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=log&projectID={$objectID}"))
+        ) : null,
+
+        /* Switch branches and labels. */
+        ($repo->SCM != 'Subversion' && ($branches || $tags)) ? dropmenu
+        (
+            setID('logRepoBranchDropMenu'),
+            set::objectID($selected),
+            set::text($selected),
+            set::data(array('data' => $menuData, 'tabs' => $tabs))
+        ) : null
     ),
     ...$breadcrumbItems
 );

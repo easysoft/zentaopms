@@ -1,1 +1,4 @@
 #featureBar .nav .btn>.icon {color: #ffffff;}
+.repo-select {margin-right: 10px;}
+.repo-select > div {display: inline-block;}
+.dtable-cell-html {width: 100%;}
