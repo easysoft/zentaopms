@@ -3008,4 +3008,23 @@ class repoModel extends model
 
         return array_keys($importedProjects);
     }
+
+    /**
+     * 隐藏DevOps菜单，执行和项目模块使用。
+     * Hide DevOps menu.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return int
+     */
+    public function setHideMenu(int $objectID): int
+    {
+        $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : 'execution';
+        $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID);
+
+        $showMR    = false;
+        $showTag   = false;
+        $hasTagSCM = array_map('strtolower', $this->config->repo->notSyncSCM);
+        return $objectID;
+    }
 }
