@@ -173,7 +173,8 @@ class biModel extends model
             if(!empty($expr->column) && !empty($expr->table))
             {
                 $table = $this->getTableByAlias($statement, $expr->table);
-                $fieldList[$expr->column] = $table;
+                $field = !empty($expr->alias) ? $expr->alias : $expr->column;
+                $fieldList[$field] = $table;
             }
         }
 
