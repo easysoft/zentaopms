@@ -889,4 +889,19 @@ class repoTest
 
         return $importedProjects;
     }
+
+    /**
+     * Test setHideMenu method.
+     *
+     * @param  string $tab
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function setHideMenuTest(string $tab, int $objectID)
+    {
+        $this->objectModel->app->tab = $tab;
+        $this->objectModel->setHideMenu($objectID);
+        return $this->objectModel->lang->{$tab}->menu->devops['subMenu'];
+    }
 }
