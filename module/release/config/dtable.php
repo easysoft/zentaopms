@@ -42,9 +42,15 @@ $config->release->dtable->fieldList['status']['name']      = 'status';
 $config->release->dtable->fieldList['status']['type']      = 'status';
 $config->release->dtable->fieldList['status']['statusMap'] = $lang->release->statusList;
 
-$config->release->dtable->fieldList['date']['title'] = $lang->release->date;
-$config->release->dtable->fieldList['date']['name']  = 'date';
-$config->release->dtable->fieldList['date']['type']  = 'date';
+$config->release->dtable->fieldList['date']['title']    = $lang->release->date;
+$config->release->dtable->fieldList['date']['name']     = 'date';
+$config->release->dtable->fieldList['date']['type']     = 'date';
+$config->release->dtable->fieldList['date']['minWidth'] = '100';
+
+$config->release->dtable->fieldList['releasedDate']['title']    = $lang->release->releasedDate;
+$config->release->dtable->fieldList['releasedDate']['name']     = 'releasedDate';
+$config->release->dtable->fieldList['releasedDate']['type']     = 'date';
+$config->release->dtable->fieldList['releasedDate']['minWidth'] = '100';
 
 $config->release->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->release->dtable->fieldList['actions']['name']  = 'actions';
