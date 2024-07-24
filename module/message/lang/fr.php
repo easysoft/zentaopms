@@ -25,6 +25,9 @@ $lang->message->all    = 'All Messages';
 $lang->message->timeLabel['minute'] = '%s minute ago';
 $lang->message->timeLabel['hour']   = '1 hour ago';
 
+$lang->message->notice = new stdclass();
+$lang->message->notice->confirmDelete = "Are you sure you want to delete the message?";
+
 $lang->message->label = new stdclass();
 $lang->message->label->created      = 'create';
 $lang->message->label->opened       = 'open';
