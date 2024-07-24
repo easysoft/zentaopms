@@ -357,6 +357,12 @@ class storyZen extends story
         $initStory->category    = $story->category;
         $initStory->feedbackBy  = $story->feedbackBy;
         $initStory->notifyEmail = $story->notifyEmail;
+
+        if($this->config->edition != 'open')
+        {
+            $extendFields = $this->loadModel('flow')->getExtendFields($story->type, 'create');
+            foreach($extendFields as $field) $initStory->{$field->field} = $story->{$field->field};
+        }
         return $initStory;
     }
 

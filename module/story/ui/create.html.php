@@ -116,6 +116,7 @@ formGridPanel
     )),
     set::fields($createFields),
     set::pinnedItems($pinnedItems),
+    set::data($initStory),
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=module]', 'loadURS'),
     on::change('[name=parent]', 'loadGrade'),
