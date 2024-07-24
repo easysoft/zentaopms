@@ -29,6 +29,14 @@ class createUserTester extends tester
         return $this->success('创建用户成功');
     }
 
+    /**
+     * Check the page jump after created a empty account user.
+     *
+     * @param  string    $user
+     * @access public
+     * @return object
+     */
+
     public function createEmptyAccountUser($user)
     {
         $form = $this->initForm('user', 'create', array(), 'appIframe-admin');
