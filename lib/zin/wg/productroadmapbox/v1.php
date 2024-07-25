@@ -40,6 +40,7 @@ class productRoadmapBox extends wg
             on::click('.productsBox .removeLine', 'window.removeLine'),
             on::change('.linkProduct .pick-value', 'window.refreshPicker(e.target)'),
             on::change('[name^=branch]', 'window.loadBranch'),
+            on::change('[name^=storyGrade]', 'window.loadRoadmapPlans'),
             $productsBox
         );
     }
