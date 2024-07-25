@@ -3,10 +3,10 @@ window.clickCell = function(col, {colName, rowInfo})
     const drillConditions = rowInfo.data.conditions[colName];
     let value             = rowInfo.data[colName];
 
-    if(value == 0) return zui.Modal.alert(emptyDrillTip);
-
     if(!Array.isArray(drillConditions) || !drillConditions.length) return false;
     if(Array.isArray(value)) value = value[0];
+
+    if(value == 0) return zui.Modal.alert(emptyDrillTip);
 
     let [originField, conditions] = drillConditions;
     let filterValues = getFilterValues();
