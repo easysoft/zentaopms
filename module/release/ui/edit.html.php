@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->release->edit),
+    on::change('[name=status]', 'changeStatus'),
     formRow
     (
         formGroup
