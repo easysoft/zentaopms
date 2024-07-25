@@ -44,6 +44,7 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh && ($this->app->isServing() || (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
+            $this->extendRequireFields();
             $this->extendExportFields();
             $this->extendEditorFields();
 
@@ -680,111 +681,28 @@ class control extends baseControl
     }
 
     /**
-     * Check require with flow field when post data.
+     * 将工作流扩展的必填字段加到requiredFields里，类似批量操作的会在checkFlow之前手动校验。
+     * append workflow extension fields to requiredFields.
      *
      * @access public
      * @return void
      */
-    public function checkRequireFlowField()
+    public function extendRequireFields()
     {
-        if($this->config->edition == 'open') return false;
-        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return false;
-        if(empty($_POST)) return false;
-
-        $action = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($this->moduleName)->andWhere('action')->eq($this->methodName)->fetch();
-        if(empty($action)) return false;
-        if($action->extensionType == 'none' and $action->buildin == 1) return false;
-
-        $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
-        $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
-        $layouts = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
-        $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
-
-        $requiredFields = '';
-        $mustPostFields = '';
-        $numberFields   = '';
-        $message        = array();
+        $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         foreach($fields as $field)
         {
-            if(!empty($field->buildin)) continue;
-            if(empty($field->show)) continue;
-            if(!isset($layouts[$field->field])) continue;
-
-            $fieldRules = explode(',', trim((string) $field->rules, ','));
-            $fieldRules = array_unique($fieldRules);
-            foreach($fieldRules as $ruleID)
+            if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false)
             {
-                if(!isset($rules[$ruleID])) continue;
-                if(!empty($_POST[$field->field]) and !is_string($_POST[$field->field])) continue;
-
-                $rule = $rules[$ruleID];
-                if($rule->type == 'system' and $rule->rule == 'notempty')
-                {
-                    $requiredFields .= ",{$field->field}";
-                    if($field->control == 'radio' or $field->control == 'checkbox') $mustPostFields .= ",{$field->field}";
-                    if(str_contains((string) $field->type, 'int') and $field->control == 'select') $numberFields .= ",{$field->field}";
-                }
-                elseif($rule->type == 'system' and isset($_POST[$field->field]))
-                {
-                    $pass = true;
-                    if($rule->rule == 'unique')
-                    {
-                        if(!empty($_POST[$field->field]))
-                        {
-                            $sqlClass = new sql();
-                            $sql      = "SELECT COUNT(1) AS count FROM $flow->table WHERE `$field->field` = " . $sqlClass->quote(fixer::input('post')->get($field->field));
-                            if(isset($_POST['id'])) $sql .= ' AND `id` != ' . (int)$_POST['id'];
-
-                            $row = $this->dbh->query($sql)->fetch();
-                            if($row->count != 0) $pass = false;
-                        }
-                    }
-                    else
-                    {
-                        $checkFunc = 'check' . $rule->rule;
-                        if(validater::$checkFunc($_POST[$field->field]) === false) $pass = false;
-                    }
-
-                    if(!$pass)
-                    {
-                        $error = zget($this->lang->error, $rule->rule, '');
-                        if($rule->rule == 'unique') $error = sprintf($error, $field->name, $_POST[$field->field]);
-                        if($error) $error = sprintf($error, $field->name);
-                        if(empty($error)) $error = sprintf($this->lang->error->reg, $field->name, $rule->rule);
-
-                        $message[$field->field][] = $error;
-                    }
-                }
-                elseif($rule->type == 'regex' and isset($_POST[$field->field]))
-                {
-                    if(validater::checkREG($_POST[$field->field], $rule->rule) === false) $message[$field->field][] = sprintf($this->lang->error->reg, $field->name, $rule->rule);
-                }
+                if(!isset($this->config->{$this->moduleName})) $this->config->{$this->moduleName} = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->{$this->methodName})) $this->config->{$this->moduleName}->{$this->methodName} = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $this->config->{$this->moduleName}->{$this->methodName}->requiredFields = '';
+                $this->config->{$this->moduleName}->{$this->methodName}->requiredFields .= ",{$field->field}";
             }
         }
-
-        if($requiredFields)
-        {
-            if(isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $requiredFields .= ',' . $this->config->{$this->moduleName}->{$this->methodName}->requiredFields;
-
-            foreach(explode(',', $requiredFields) as $requiredField)
-            {
-                if(empty($requiredField)) continue;
-                if(!isset($fields[$requiredField])) continue;
-                if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')
-                {
-                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
-                }
-                elseif(str_contains(",{$numberFields},", ",{$requiredField},") and empty($_POST[$requiredField]))
-                {
-                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
-                }
-                elseif(str_contains(",{$mustPostFields},", ",{$requiredField},") and !isset($_POST[$requiredField]))
-                {
-                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
-                }
-            }
-        }
-        if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
 
     /**
