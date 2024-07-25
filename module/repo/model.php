@@ -3041,7 +3041,7 @@ class repoModel extends model
 
         $showMR     = $showMR     && common::hasPriv('mr', 'browse');
         $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
-        $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
+        $showBranch = $repoPairs && common::hasPriv('repo', 'browsebranch');
         $showReview = $repoPairs  && common::hasPriv('repo', 'review');
         $showCommit = $repoPairs && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
