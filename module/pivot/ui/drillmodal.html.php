@@ -18,6 +18,7 @@ modalHeader
 
 dtable
 (
+    $from == 'screen' ? set::_class('dark') : null,
     set::striped(true),
     set::bordered(true),
     set::cols($cols),
