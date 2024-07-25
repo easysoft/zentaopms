@@ -1019,7 +1019,10 @@ class releaseModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->in($branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
+        foreach($stories as $index => $story)
+        {
+            if(isset($stages[$story->id])) $stories[$index]->stage = $stages[$story->id];
+        }
 
         return $stories;
     }
