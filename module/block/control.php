@@ -195,8 +195,15 @@ class block extends control
         {
             $block = $blockList[$blockID];
             if(!isset($block)) continue;
-            $block->order = $order;
-            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
+
+            $block->order = $order + 1000;
+            unset($block->id);
+            $this->dao->update(TABLE_BLOCK)->data($block)->where('id')->eq($blockID)->exec();
+        }
+
+        foreach ($orders as $order => $blockID)
+        {
+            $this->dao->update(TABLE_BLOCK)->set('`order`')->eq($order)->where('id')->eq($blockID)->exec();
         }
 
         if(dao::isError()) return $this->send(array('result' => 'fail'));
@@ -222,7 +229,8 @@ class block extends control
 
             $block->$field = $data;
             $block->params = helper::jsonEncode($block->params);
-            $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
+            unset($block->id);
+            $this->dao->update(TABLE_BLOCK)->data($block)->where('id')->eq($id)->exec();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'code' => 500));
             return $this->send(array('result' => 'success'));
         }
