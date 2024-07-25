@@ -359,6 +359,13 @@ class messageModel extends model
         return $this->dao->select('COUNT(1) as count')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('status')->ne('read')->fetch('count');
     }
 
+    /**
+     * 删除过期消息。
+     * Delete expire messages.
+     *
+     * @access public
+     * @return void
+     */
     public function deleteExpired(): void
     {
         $days       = $this->config->message->browser->maxDays;
