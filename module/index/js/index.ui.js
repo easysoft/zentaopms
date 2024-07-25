@@ -923,7 +923,7 @@ window.notifyMessage = function(data)
 
     var notify  = null;
     var message = data;
-    if(typeof data.message == 'string') message = data.message;
+    if(typeof data.text == 'string') message = data.text;
     if(Notification.permission == "granted")
     {
         notify = new Notification("", {body:message, tag:'zentao', data:data});
@@ -950,6 +950,7 @@ window.notifyMessage = function(data)
 window.browserNotify = function()
 {
     let windowBlur = false;
+    let preCount   = 0;
     setInterval(function()
     {
         if(window.Notification && Notification.permission == 'default') Notification.requestPermission();
@@ -977,24 +978,37 @@ window.browserNotify = function()
         $.get($.createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
         {
             if(!data) return;
-            if(!windowBlur)
+            if(typeof data == 'string') data = JSON.parse(data);
+            for(i in data.messages)
             {
-                if(!$(data).hasClass('browser-message-content')) return false;
-
-                zui.Messager.show(
+                let message = data.messages[i];
+                if(windowBlur)
                 {
-                    content: {html: data},
-                    placement: 'bottom-right',
-                    time: 0,
-                    icon: 'envelope-o',
-                    className: 'bg-secondary-50 text-secondary-600 messager-notice'
-                });
+                    if(typeof message.text == 'string') notifyMessage(message);
+                }
+                else
+                {
+                    if(!$(message).hasClass('browser-message-content')) continue;
+                    zui.Messager.show(
+                    {
+                        content: {html: message},
+                        placement: 'bottom-right',
+                        time: 0,
+                        icon: 'envelope-o',
+                        className: 'bg-secondary-50 text-secondary-600 messager-notice'
+                    });
+                }
             }
-            else
+
+            let newCount  = data.newCount;
+            let showCount = data.showCount != '0';
+            let dotHtml   = '<span class="label danger label-dot absolute" style="top: 5px; left: 18px; aspect-ratio: ' + (showCount ? '0' : '1 / 1') + '; padding: 2px;">' + (showCount ? unreadCount : '') + '</span>';
+            $('#apps .app-container').each(function()
             {
-                if(typeof data == 'string') data = JSON.parse(data);
-                if(typeof data.message == 'string') notifyMessage(data);
-            }
+                let $iframeMessageBar = $(this).find('iframe').contents().find('#messageBar');
+                $iframeMessageBar.find('.label-dot.danger').remove();
+                if(newCount) $iframeMessageBar.append(dotHtml);
+            });
         });
     }, pollTime * 1000);
 };
@@ -1003,7 +1017,9 @@ window.clickMessage = function(obj)
 {
     let $obj = $(obj);
     let url  = $obj.attr('data-url').replace(/\?onlybody=yes/g, '').replace(/\&onlybody=yes/g, '');
+    let messageID = $obj.parent().attr('data-id');
     openApp(url);
+    $.get($.createLink('message', 'ajaxMarkRead', 'id=' + messageID));
     $(obj).closest('.alert.messager').find('.alert-close').trigger('click');
 }
 
