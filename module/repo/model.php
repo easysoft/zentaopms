@@ -3028,6 +3028,7 @@ class repoModel extends model
         $showMR     = false;
         $showTag    = false;
         $showBranch = false;
+        $showCommit = false;
         $hasTagSCM  = array_map('strtolower', $this->config->repo->notSyncSCM);
         foreach($repoPairs as $repoName)
         {
@@ -3042,12 +3043,14 @@ class repoModel extends model
         $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
         $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
         $showReview = $repoPairs  && common::hasPriv('repo', 'review');
+        $showCommit = $repoPairs && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
         {
             if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->mr);
             if(!$showTag)    unset($this->lang->{$module}->menu->devops['subMenu']->tag);
             if(!$showBranch) unset($this->lang->{$module}->menu->devops['subMenu']->branch);
             if(!$showReview) unset($this->lang->{$module}->menu->devops['subMenu']->review);
+            if(!$showCommit) unset($this->lang->{$module}->menu->devops['subMenu']->commit);
             if(count((array)$this->lang->{$module}->menu->devops['subMenu']) < 2) unset($this->lang->{$module}->menu->devops['subMenu']);
         }
         return $objectID;
