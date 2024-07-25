@@ -508,7 +508,7 @@ class weeklyModel extends model
     {
         if($pv == 0) return 0;
         $sv = -1 * (1- ($ev / $pv));
-        return number_format($sv * 100, 2);
+        return sprintf("%.2f", $sv * 100);
     }
 
     /**
@@ -523,7 +523,7 @@ class weeklyModel extends model
     {
         if($ac == 0) return 0;
         $cv = -1 * (1 - ($ev / $ac));
-        return number_format($cv * 100, 2);
+        return sprintf("%.2f", $cv * 100);
     }
 
     /**

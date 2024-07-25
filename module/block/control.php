@@ -1303,9 +1303,10 @@ class block extends control
         $this->weekly->save($this->session->project, $date);
 
         $PVEV = $this->weekly->getPVEV($this->session->project, $today);
+        $AC   = (float)$this->weekly->getAC($this->session->project, $today);
         $this->view->pv = (float)$PVEV['PV'];
         $this->view->ev = (float)$PVEV['EV'];
-        $this->view->ac = (float)$this->weekly->getAC($this->session->project, $today);
+        $this->view->ac = number_format($AC, 2);
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
