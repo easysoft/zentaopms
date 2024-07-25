@@ -105,42 +105,33 @@ class message extends control
      */
     public function ajaxGetMessage(string $windowBlur = 'false')
     {
-        return;
         if($this->config->message->browser->turnon == 0) return;
 
-        $todos        = $this->message->getNoticeTodos();
-        $waitMessages = $this->message->getMessages('wait');
-        if(empty($waitMessages) && empty($todos)) return;
+        $this->message->deleteExpired();
+
+        $todos        = $this->message->batchSaveTodoNotice();
+        $waitMessages = array_merge($todos, $this->message->getMessages('wait'));
+        $unreadCount  = $this->message->getUnreadCount();
+        if(!$this->config->message->browser->show) return print(json_encode(array('newCount' => $unreadCount, 'showCount' => $this->config->message->browser->count)));
+        if(empty($waitMessages)) return;
 
         $windowBlur = !empty($windowBlur) && $windowBlur != 'false';
 
-        $messages = '';
-        $idList   = array();
+        $messages = array();
         $newline  = $windowBlur ? "\n" : '<br />';
-        foreach($waitMessages as $message)
-        {
-            $messages .= $message->data . $newline;
-            $idList[]  = $message->id;
-        }
-        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq(helper::now())->where('id')->in($idList)->exec();
+        foreach($waitMessages as $message) $messages[$message->id] = $message->data;
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq(helper::now())->where('id')->in(array_keys($messages))->exec();
 
-        foreach($todos as $todo) $messages .= $todo->data . $newline;
-
-        if($windowBlur)
+        foreach($messages as $id => $message)
         {
-            preg_match_all("/<a href='([^\']+)'/", $messages, $out);
+            preg_match_all("/<a href='([^\']+)'/", $message, $out);
             $link = count($out[1]) ? $out[1][0] : '';
-            $messages = strip_tags($messages);
-            echo json_encode(array('message' => $messages, 'url' => $link));
-        }
-        else
-        {
-            $messages = preg_replace("/<a href='([^\']+)'/", "<a data-url='$1' href='###' onclick='clickMessage(this)'", $messages);
-            $messages = preg_replace("/data-app='([^\']+)'/", '', $messages);
-            echo html_entity_decode("<div class='browser-message-content'><span class='text-secondary-500'>{$messages}</span></div>");
-        }
+            $message = $windowBlur ? strip_tags($message) : str_replace("<a href='$link'", "<a data-url='{$link}' href='###' onclick='clickMessage(this)'", $message);
+            $message = preg_replace("/data-app='([^\']+)'/", '', $message);
 
-        $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')->andWhere('status')->ne('wait')->exec();
+            $browserMessages[] = $windowBlur ? array('text' => $message, 'url' => $link) : "<div class='browser-message-content'><span class='text-secondary-500' data-id={$id}>{$message}</span></div>";
+        }
+        echo json_encode(array('newCount' => $unreadCount, 'messages' => $browserMessages, 'showCount' => $this->config->message->browser->count));
     }
 
     /**
@@ -184,7 +175,7 @@ class message extends control
     {
         if($messageID != 'all') $messageID = (int)$messageID;
         $this->dao->update(TABLE_NOTIFY)->set('status')->eq('read')->where('objectType')->eq('message')
-            ->andWhere('toList')->like("%,{$this->app->user->account},%")
+            ->andWhere('toList')->eq(",{$this->app->user->account},")
             ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
     }
@@ -201,7 +192,7 @@ class message extends control
     {
         if($messageID != 'all' || $messageID != 'allread') $messageID = (int)$messageID;
         $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')
-            ->andWhere('toList')->like("%,{$this->app->user->account},%")
+            ->andWhere('toList')->eq(",{$this->app->user->account},")
             ->beginIF($messageID == 'allread')->andWhere('status')->eq('read')->fi()
             ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
@@ -221,7 +212,11 @@ class message extends control
             $data    = fixer::input('post')->setDefault('show', 0)->setDefault('count', 0)->get();
             $account = $this->app->user->account;
             $this->loadModel('setting')->setItems("{$account}.message.browser", $data);
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage("#messageBar")'));
+
+            $this->config->message->browser->maxDays = $data->maxDays;
+            $this->message->deleteExpired();
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateAllDot({$data->count});"));
         }
 
         $this->display();
