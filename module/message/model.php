@@ -130,6 +130,13 @@ class messageModel extends model
         }
     }
 
+    /**
+     * 批量保存待办消息。
+     * Batch save todo notice.
+     *
+     * @access public
+     * @return array
+     */
     public function batchSaveTodoNotice(): array
     {
         $todos = $this->getNoticeTodos();
@@ -339,6 +346,13 @@ class messageModel extends model
         return array('turnon' => $this->config->message->browser->turnon, 'pollTime' => $this->config->message->browser->pollTime);
     }
 
+    /**
+     * 获取未读消息数量。
+     * Get unread count.
+     *
+     * @access public
+     * @return int
+     */
     public function getUnreadCount(): int
     {
         $account = $this->app->user->account;
