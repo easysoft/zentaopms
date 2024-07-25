@@ -24,8 +24,6 @@ dropmenu
 
 $noEditBranch = $MR->status == 'merged' || $MR->status == 'closed' || $host->type == 'gogs';
 
-dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
-
 formPanel
 (
     set::title($lang->mr->edit),
