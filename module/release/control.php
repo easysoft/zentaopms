@@ -204,13 +204,17 @@ class release extends control
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->in($release->branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         $recTotal   = count($stories);
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
         $stories    = array_chunk($stories, $storyPager->recPerPage);
         $stories    = empty($stories) ? $stories : $stories[$pageID - 1];
+
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->in($release->branch)->fetchPairs('story', 'stage');
+        foreach($stories as $index => $story)
+        {
+            if(isset($stages[$story->id])) $stories[$index]->stage = $stages[$story->id];
+        }
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $sort = common::appendOrder($orderBy);
