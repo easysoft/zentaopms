@@ -1,3 +1,4 @@
+window.pivotID = pivotID;
 /**
  * 查询条件改变时重新加载 Bug 创建表。
  * Reload bug create table when query conditions changed.
