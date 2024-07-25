@@ -3,6 +3,20 @@
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
+/**
+
+title=测试 messageModel->batchSaveTodoNotice();
+timeout=0
+cid=0
+
+- 检查代表信息的链接是否正确 @1
+- 检查第一条数据
+ - 属性toList @,admin,
+ - 属性objectType @message
+ - 属性status @wait
+
+*/
+
 zenData('todo')->loadYaml('todo')->gen(20);
 zenData('user')->gen(3);
 zenData('notify')->gen(0);
