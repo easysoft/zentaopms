@@ -466,3 +466,4 @@ $lang->pivot->drill->storyName      = '需求名称';
 $lang->pivot->drill->releaseStories = "完成的需求";
 $lang->pivot->drill->productName    = "产品名称";
 $lang->pivot->drill->activatedBug   = "激活的Bug数";
+$lang->pivot->drill->auto           = "自动";

@@ -466,3 +466,4 @@ $lang->pivot->drill->storyName      = 'Story Name';
 $lang->pivot->drill->releaseStories = "Finished Stories";
 $lang->pivot->drill->productName    = "Product Name";
 $lang->pivot->drill->activatedBug   = "Activated Bug Count";
+$lang->pivot->drill->auto           = "Auto";
