@@ -3,6 +3,16 @@
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
+/**
+
+title=测试 messageModel->deleteExpired();
+cid=0
+
+- 过期时间为10，检查剩余条目数 @10
+- 过期时间为5，检查剩余条目数 @5
+
+*/
+
 $notify = zenData('notify');
 $notify->objectType->range('message');
 $notify->toList->range('`,admin,`,`,user1,`');
