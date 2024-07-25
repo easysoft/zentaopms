@@ -242,6 +242,9 @@ class releaseModel extends model
         if($release->build) $release = $this->processReleaseForCreate($release, $isSync);
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], (string)$this->post->uid);
 
+        if($release->status == 'wait')   $this->config->release->create->requiredFields = str_replace(',releasedDate', '', $this->config->release->create->requiredFields);
+        if($release->status == 'normal') $this->config->release->create->requiredFields = str_replace(',date', '', $this->config->release->create->requiredFields);
+
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')

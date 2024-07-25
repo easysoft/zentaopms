@@ -9,7 +9,6 @@ function loadBuilds(event)
             $('[name*="build"]').zui('picker').render({items: data});
         }
     });
-
 }
 
 window.changeStatus = function(e)
@@ -18,9 +17,11 @@ window.changeStatus = function(e)
     if(status == 'normal')
     {
         $('#releasedDate').closest('.form-row').removeClass('hidden');
+        $('[data-name=date] .form-label').removeClass('required');
     }
     else
     {
         $('#releasedDate').closest('.form-row').addClass('hidden');
+        $('[data-name=date] .form-label').addClass('required');
     }
 }

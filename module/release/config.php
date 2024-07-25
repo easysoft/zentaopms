@@ -2,8 +2,8 @@
 $config->release = new stdclass();
 $config->release->create = new stdclass();
 $config->release->edit   = new stdclass();
-$config->release->create->requiredFields = 'name,date';
-$config->release->edit->requiredFields   = 'name,date';
+$config->release->create->requiredFields = 'name,date,releasedDate';
+$config->release->edit->requiredFields   = 'name,date,releasedDate';
 
 $config->release->editor = new stdclass();
 $config->release->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
