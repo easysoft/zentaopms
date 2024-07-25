@@ -6,7 +6,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 messageModel->batchSaveTodoNotice();
-timeout=0
 cid=0
 
 - 检查代表信息的链接是否正确 @1
