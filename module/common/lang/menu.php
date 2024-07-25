@@ -525,15 +525,16 @@ $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|re
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
 
+/* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
 $lang->devops->menuOrder[20] = 'commit';
 $lang->devops->menuOrder[25] = 'branch';
-$lang->devops->menuOrder[30] = 'tag';
-$lang->devops->menuOrder[35] = 'mr';
-$lang->devops->menuOrder[40] = 'compile';
-$lang->devops->menuOrder[45] = 'deploy';
-$lang->devops->menuOrder[50] = 'apps';
+$lang->devops->menuOrder[35] = 'tag';
+$lang->devops->menuOrder[40] = 'mr';
+$lang->devops->menuOrder[45] = 'compile';
+$lang->devops->menuOrder[50] = 'deploy';
+$lang->devops->menuOrder[55] = 'apps';
 
 
 $lang->devops->dividerMenu = ',apps,';
