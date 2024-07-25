@@ -895,6 +895,18 @@ class pivotState
     }
 
     /**
+     * Set drills.
+     *
+     * @param  array    $drills
+     * @access public
+     * @return void
+     */
+    public function setDrills($drills)
+    {
+        $this->drills = json_decode(json_encode($drills), true);
+    }
+
+    /**
      * Set field related object.
      *
      * @param  array  $relatedObject
