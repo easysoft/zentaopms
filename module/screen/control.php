@@ -88,6 +88,16 @@ class screen extends control
      */
     public function view(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
+        $this->view->screenID = $screenID;
+        $this->view->year     = $year;
+        $this->view->month    = $month;
+        $this->view->dept     = $dept;
+        $this->view->account  = $account;
+        $this->display();
+    }
+
+    public function viewOld(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
+    {
         if(empty($year))  $year  = date('Y');
         if(empty($month)) $month = date('n');
 

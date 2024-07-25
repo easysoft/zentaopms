@@ -18,5 +18,5 @@ h::iframe
     set('scrolling', 'no'),
     set('frameborder', '0'),
     set('marginheight', '0'),
-    set('src', $this->inlink('view', "screenID={$screen->id}") . "?zin=0&_single=1")
+    set('src', $this->inlink('viewOld', "screenID={$screenID}&year={$year}&month={$month}&dept={$dept}&account={$account}"))
 );

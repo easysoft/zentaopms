@@ -348,6 +348,7 @@ $config->logonMethods[] = 'user.cropavatar';
 $config->logonMethods[] = 'user.deny';
 $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
+$config->logonMethods[] = 'screen.viewold';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
