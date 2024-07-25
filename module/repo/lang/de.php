@@ -292,6 +292,7 @@ $lang->repo->errorLang[2] = 'Branch .* already exists';
 $lang->repo->errorLang[3] = 'Forbidden';
 $lang->repo->errorLang[4] = 'Cannot have ASCII control characters';
 $lang->repo->errorLang[5] = 'Created fail';
+$lang->repo->errorLang[6] = 'Forbidden';
 
 $lang->repo->apiError[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
 $lang->repo->apiError[1] = 'Branch is exists';
@@ -299,3 +300,4 @@ $lang->repo->apiError[2] = 'branch.* already exists';
 $lang->repo->apiError[3] = 'Forbidden';
 $lang->repo->apiError[4] = 'cannot have ASCII control characters';
 $lang->repo->apiError[5] = 'Created fail';
+$lang->repo->apiError[6] = 'Project Not Found';
