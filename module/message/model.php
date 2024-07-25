@@ -25,7 +25,7 @@ class messageModel extends model
     {
         return $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('message')
-            ->andWhere('toList')->like("%,{$this->app->user->account},%")
+            ->andWhere('toList')->eq(",{$this->app->user->account},")
             ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -171,16 +171,20 @@ class messageModel extends model
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
-        $notify = new stdclass();
-        $notify->objectType  = 'message';
-        $notify->action      = $actionID;
-        $notify->toList      = str_replace(",{$actor},", '', ",$toList,");
-        $notify->data        = $data;
-        $notify->status      = 'wait';
-        $notify->createdBy   = $actor;
-        $notify->createdDate = helper::now();
+        foreach(explode(',', trim($toList, ',')) as $to)
+        {
+            if($to == $actor) continue;
+            $notify = new stdclass();
+            $notify->objectType  = 'message';
+            $notify->action      = $actionID;
+            $notify->toList      = ",{$to},";
+            $notify->data        = $data;
+            $notify->status      = 'wait';
+            $notify->createdBy   = $actor;
+            $notify->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+            $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        }
         return true;
     }
 
@@ -307,5 +311,19 @@ class messageModel extends model
     public function getBrowserMessageConfig(): array
     {
         return array('turnon' => $this->config->message->browser->turnon, 'pollTime' => $this->config->message->browser->pollTime);
+    }
+
+    public function getUnreadCount(): int
+    {
+        $account = $this->app->user->account;
+        return $this->dao->select('COUNT(1) as count')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('status')->ne('read')->fetch('count');
+    }
+
+    public function deleteExpired(): void
+    {
+        $days       = $this->config->message->browser->maxDays;
+        $account    = $this->app->user->account;
+        $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->exec();
     }
 }
