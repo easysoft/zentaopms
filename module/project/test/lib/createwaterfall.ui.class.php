@@ -32,7 +32,7 @@ class createWaterfallTester extends tester
     {
         $form         = $this->initForm('project', 'create', array('model' => 'waterfall'));
         $categoryLang = (array)$this->lang->project->projectTypeList;
-        if(isset($waterfall['parent']))   $form->dom->parent->setValue($waterfall['parent']);
+        if(isset($waterfall['parent']))   $form->dom->parent->picker($waterfall['parent']);
         if(isset($waterfall['name']))     $form->dom->name->setValue($waterfall['name']);
         if(isset($waterfall['type']))     $form->dom->btn($categoryLang[$waterfall['type']])->click();
         if(isset($waterfall['longTime'])) $form->dom->longTime->click();
@@ -64,8 +64,18 @@ class createWaterfallTester extends tester
         if($viewPage->dom->projectName->getText() != $waterfall['name'])               return $this->failed('名称错误');
         if($viewPage->dom->category->getText() != $categoryLang[$waterfall['type']])   return $this->failed('类型错误');
         if($viewPage->dom->acl->getText() != $this->lang->project->shortAclList->open) return $this->failed('权限错误');
+        //检查项目计划完成日期是否正确
+        if($waterfall['type'] == 1)
+        {
+            if(isset($waterfall['longTime']) && trim($viewPage->dom->waterfallend->getText()) != $this->$lang->project->longTime) return $this->failed('计划完成日期错误');
+            if(isset($waterfall['end']) && $viewPage->dom->waterfallend->getText() != $waterfall['end']) return $this->failed('计划完成日期错误');
+        }
+        else
+        {
+            if(isset($waterfall['longTime']) && trim($viewPage->dom->waterfallnoproductend->getText()) != $this->$lang->project->longTime) return $this->failed('计划完成日期错误');
+            if(isset($waterfall['end']) && $viewPage->dom->waterfallnoproductend->getText() != $waterfall['end']) return $this->failed('计划完成日期错误');
+        }
 
         return $this->success();
     }
-
 }
