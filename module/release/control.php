@@ -127,6 +127,7 @@ class release extends control
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
         $this->commonAction($productID, $branch);
+        unset($this->lang->release->statusList['fail']);
         unset($this->lang->release->statusList['terminate']);
 
         $this->view->title       = $this->view->product->name . $this->lang->hyphen . $this->lang->release->create;

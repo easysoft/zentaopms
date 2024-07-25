@@ -88,8 +88,12 @@ $lang->release->exportTypeList['story']   = $lang->release->stories;
 $lang->release->exportTypeList['bug']     = $lang->release->bugs;
 $lang->release->exportTypeList['leftbug'] = $lang->release->leftBugs;
 
+$lang->release->resultList['normal'] = '发布成功';
+$lang->release->resultList['fail']   = '发布失败';
+
 $lang->release->statusList['wait']      = '未开始';
 $lang->release->statusList['normal']    = '已发布';
+$lang->release->statusList['fail']      = '发布失败';
 $lang->release->statusList['terminate'] = '停止维护';
 
 $lang->release->changeStatusList['wait']      = '发布';
