@@ -1034,19 +1034,21 @@ class screenModel extends model
                 $header = array();
                 foreach($cols as $data)
                 {
-                    $colspan    = zget($data, 'colspan', 0);
-                    $isDrilling = zget($data, 'isDrilling', false);
+                    $colspan    = zget($data, 'colspan', 1);
+                    $isDrilling = zget($data, 'isDrilling', 0);
                     $conditions = zget($data, 'condition', array());
                     $drillField = zget($data, 'drillField', '');
-                    $isGroup    = zget($data, 'isGroup', false);
+                    $isGroup    = zget($data, 'isGroup', 0);
+                    $isSlice    = zget($data, 'isSlice', 0);
 
                     if($isGroup)
                     {
                         $groupCount += 1;
                     }
-                    elseif($colspan == 1)
+                    elseif(!$isSlice)
                     {
                         $drillConfigs[] = $isDrilling ? array('drillField' => $drillField, 'conditions' => $conditions) : false;
+                        if($colspan > 1) $drillConfigs = array_merge($drillConfigs, array_fill(0, $colspan - 1, false));
                     }
 
                     $header[] = $data;
