@@ -29,7 +29,7 @@ $cron = new cronTest();
 $cron->init();
 
 $cronInfo1 = $cron->getByIdTest(2);
-$cronInfo2 = $cron->getByIdTest(16);
+$cronInfo2 = $cron->getByIdTest(11);
 
 r($cronInfo1) && p('command,remark,m,h,status') && e('moduleName=execution&methodName=computeburn,更新燃尽图,30,23,normal'); //获取ID为2的定时的命令，备注，分，时
-r($cronInfo2) && p('command,remark,m,h,status') && e('moduleName=effort&methodName=remindNotRecord,提醒录入日志,30,7,stop'); //获取ID为16的定时的命令，备注，分，时
+r($cronInfo2) && p('command,remark,m,h,status') && e('moduleName=todo&methodName=createCycle,生成周期性待办,1,1,normal');    //获取ID为11的定时的命令，备注，分，时

@@ -23,5 +23,5 @@ $crons = $tester->cron->getCrons('nostop');
 $parse = $cron->parseCronTest($crons);
 
 r($parse) && p('2:command') && e('moduleName=execution&methodName=computeburn'); //获取id为2的定时任务的定时信息和命令信息
-r($parse) && p('3:command') && e('moduleName=report&methodName=remind');         //获取id为3的定时任务的定时信息和命令信息
+r($parse) && p('3:command') && e('moduleName=execution&methodName=computecfd');  //获取id为3的定时任务的定时信息和命令信息
 r($parse) && p('1:command') && e('~~');                                          //获取id为1的定时任务的定时信息和命令信息

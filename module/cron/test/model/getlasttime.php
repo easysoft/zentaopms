@@ -17,4 +17,4 @@ su('admin');
 $cron     = new cronTest();
 $lastTime = $cron->getLastTimeTest();
 
-r(strlen($lastTime)) && p() && e('0');  //获取最后执行时间进行对比
+r(strlen($lastTime)) && p() && e('19');  //获取最后执行时间进行对比

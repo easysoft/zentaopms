@@ -22,4 +22,4 @@ $cron->logCronTest('cronlogtest');
 $info = file_get_contents($file);
 $strExists = strpos($info, 'cronlogtest');
 
-r($strExists) && p() && e('0');// 调用日志方法查看日志文件该字符串位置
+r($strExists) && p() && e('14');// 调用日志方法查看日志文件该字符串位置

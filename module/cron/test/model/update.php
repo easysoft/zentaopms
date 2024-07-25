@@ -23,6 +23,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
 su('admin');
 
+global $app;
+include($app->getModuleRoot() . '/cron/control.php');
+$app->control = new cron();
+
 $cron           = new cronTest();
 $cronID         = 1;
 $cron1          = new stdClass();
