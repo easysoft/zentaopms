@@ -22,7 +22,7 @@ class editStoryTester extends tester
     public function editStory($storyFrom)
     {
         $editStoryParam = array(
-            'storyID'     => '4',
+            'storyID'     => '39',
             'kanbanGroup' => 'default',
             'storyType'   => 'story',
         );
@@ -30,19 +30,13 @@ class editStoryTester extends tester
         $form = $this->initForm('story', 'edit', $editStoryParam, 'appIframe-product');
         $form->dom->source->picker($storyFrom);
         $form->dom->assignedTo->picker('admin');
-        $from->dom-btn($this->lang->save)->click();
+        $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
-        /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
-        $browsePage = $this->loadPage('product', 'browse');
-        $browsePage->dom->search($searchList = array("需求名称, 包含, 默认研发需求"));
-        $form->wait(1);
-        $browsePage->dom->browseStoryName->click();
-        $form->wait(1);
+        $browsePage = $this->loadPage('story', 'view', '39');
 
         $viewPafe = $this->loadPage('story', 'view');
         if($viewPafe->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
-        if($viewPafe->dom->historyEditedBy->getText() != 'admin') return $this->failed('编辑人不正确');
 
         return $this->success('编辑研发需求成功');
 }

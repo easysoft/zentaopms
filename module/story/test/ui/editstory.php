@@ -18,6 +18,7 @@ $tester->login();
 
 $storyFrom = '客户';
 
-r($tester->editStory($storyFrom))    && p('message,status') && e('创建需求页面名称为空提示正确,SUCCESS'); // 缺少需求名称，创建失败
+r($tester->editStory($storyFrom)) && p('module,method') && e('story,view'); // 编辑需求后跳转页面检查
+r($tester->editStory($storyFrom)) && p('message,status') && e('编辑需求成功,SUCCESS'); // 编辑需求成功
 
 $tester->closeBrowser();
