@@ -17,7 +17,7 @@ $tester = new editProjectTester();
 $tester->login();
 
 $project = array(
-    array('name' => '编辑项目'.time()),
+    array('name' => '编辑项目' . time()),
 );
 
 r($tester->editProject($project['0'])) && p('message') && e('编辑项目成功');  //编辑项目名称
