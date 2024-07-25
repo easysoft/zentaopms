@@ -29,8 +29,7 @@ featureBar
     ) : null,
     div
     (
-        setID('flex'),
-        set::actions(array()),
+        setClass('flex'),
         input
         (
             set::placeholder($lang->searchAB),
