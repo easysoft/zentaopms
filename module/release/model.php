@@ -1011,12 +1011,14 @@ class releaseModel extends model
             ->where('t1.id')->in($storyIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
-            ->page($pager, 't1.id')
             ->fetchAll('id');
+
+        $stories = array_chunk($stories, $pager->recPerPage);
+        $stories = empty($stories) ? $stories : $stories[$pager->pageID - 1];
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->in($branch)->fetchPairs('story', 'stage');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->in($branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         return $stories;
