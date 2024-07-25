@@ -532,7 +532,8 @@
         const requestMethod = (options.method || 'GET').toUpperCase();
         options.isDiffPage = isDiffPage(url);
         options.pageID     = getUrlID(url);
-        if(!options.cache && options.cache !== false) options.cache = (requestMethod === 'GET' && config.clientCache && !options.partial) ? (url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','))) : false;
+        if(!options.cache && options.cache !== false) options.cache = !!(requestMethod === 'GET' && config.clientCache && !options.partial);
+        if(options.cache === true) options.cache = url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','));
         const cacheKey = options.cache;
         const rid = options.rid;
         let cache;
@@ -804,7 +805,7 @@
         let task = fetchTasks.get(id);
         if(task)
         {
-            if(task.url === url)
+            if(!options.partial && task.url === url)
             {
                 if(DEBUG) showLog('Request', [`success:same request ${task.rid}`, url], {task, options});
                 return;
