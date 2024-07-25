@@ -608,6 +608,13 @@ class pivotState
         foreach($this->settings['columns'] as $index => $column)
         {
             $this->settings['columns'][$index] = array_merge($this->getDefaultColumn(), $column);
+
+            unset($this->settings['columns'][$index]['drill']);
+            foreach($this->drills as $drill)
+            {
+                if($drill['type'] == 'auto') continue;
+                if($drill['field'] == $column['field']) $this->settings['columns'][$index]['drill'] = $drill;
+            }
         }
     }
 
