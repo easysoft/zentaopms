@@ -1560,6 +1560,14 @@
         let fetchUrl  = $this.attr('data-fetcher');
         let maxHeight = $(window).height() - $('#header').height() - 5;
 
+        let isOpen = $this.hasClass('open');
+        if(isOpen)
+        {
+            $this.removeClass('open');
+            return;
+        }
+        $this.addClass('open');
+
         $dropmenu.css('height', maxHeight).css('max-height', maxHeight).css('overflow-y', 'auto').css('background-color', '#fff');
         $dropmenu.load(fetchUrl);
     }

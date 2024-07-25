@@ -130,6 +130,16 @@ class messageModel extends model
         }
     }
 
+    public function batchSaveTodoNotice(): array
+    {
+        $todos = $this->getNoticeTodos();
+        if(empty($todos)) return array();
+
+        $account  = $this->app->user->account;
+        $newTodos = array();
+        return $newTodos;
+    }
+
     /**
      * 存储提示消息。
      * Save notice.
