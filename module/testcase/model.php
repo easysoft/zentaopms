@@ -508,7 +508,7 @@ class testcaseModel extends model
         foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug->title;
 
         if($case->linkCase or $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
-        if($version == 0) $version = $case->version;
+        if(!$version) $version = $case->version;
         $case->files = $this->loadModel('file')->getByObject('testcase', $caseID);
         $case->currentVersion = $version ? $version : $case->version;
 
@@ -1326,8 +1326,8 @@ class testcaseModel extends model
      */
     public function batchChangeBranch($caseIDList, $sceneIDList, $branchID)
     {
-        $caseIDList  = array_filter($caseIDList);
-        $sceneIDList = array_filter($sceneIDList);
+        if(is_array($caseIDList))  $caseIDList  = array_filter($caseIDList);
+        if(is_array($sceneIDList)) $sceneIDList = array_filter($sceneIDList);
         if(!$caseIDList && !$sceneIDList) return false;
 
         $this->batchChangeCaseBranch($caseIDList, $branchID);
