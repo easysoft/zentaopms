@@ -36,8 +36,9 @@ class git extends control
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
+        $this->loadModel('repo');
         $path        = helper::safe64Decode($path);
-        $repos       = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea', 'haspriv');
+        $repos       = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
         $currentRepo = null;
         foreach($repos as $repo)
         {
@@ -77,8 +78,9 @@ class git extends control
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
+        $this->loadModel('repo');
         $path        = helper::safe64Decode($path);
-        $repos       = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea', 'haspriv');
+        $repos       = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
         $currentRepo = null;
         foreach($repos as $repo)
         {
