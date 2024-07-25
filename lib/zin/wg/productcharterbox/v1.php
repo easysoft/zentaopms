@@ -34,6 +34,7 @@ class productCharterBox extends wg
             setClass('productsBox'),
             on::click('.productsBox .addLine', 'window.addNewLine'),
             on::click('.productsBox .removeLine', 'window.removeLine'),
+            on::click('#loadRoadmapStories', 'window.loadRoadmapStories'),
             on::change('.linkProduct .pick-value', 'window.refreshPicker(e.target)'),
             $productsBox
         );
@@ -63,6 +64,8 @@ class productCharterBox extends wg
                         (
                             set::name("product[0]"),
                             set::items($products),
+                            set::defaultValue(''),
+                            set::emptyValue('')
                         )
                     )
                 )
@@ -85,6 +88,19 @@ class productCharterBox extends wg
                             set::required(true),
                             set::items(array())
                         )
+                    ),
+                    div
+                    (
+                        common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
+                        (
+                            setClass('p-0'),
+                            btn
+                            (
+                                setID('loadRoadmapStories'),
+                                setClass('ghost'),
+                                $lang->charter->loadStories
+                            )
+                        ) : null
                     )
                 )
             ),
