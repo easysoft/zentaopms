@@ -15,6 +15,10 @@ cid=1
 
 */
 
+global $app;
+include($app->getModuleRoot() . '/search/control.php');
+$app->control = new search();
+
 $search = new searchTest();
 
 r($search->saveDictTest('我是标题'))     && p('0:value') && e('我'); //创建我是标题的搜索索引

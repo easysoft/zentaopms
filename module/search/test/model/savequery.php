@@ -60,6 +60,10 @@ $field7['groupAndOr'] = 'and';
 
 $queryForm = array($field1, $field2, $field3, $field4, $field5, $field6, $field7);
 
+global $app;
+include($app->getModuleRoot() . '/search/control.php');
+$app->control = new search();
+
 $search = new searchTest();
 r($search->saveQueryTest($module, $title[0], $where, $queryForm))   && p('title:0') && e('『标题』不能为空。'); //标题非空测试
 r($search->saveQueryTest($module, $title[1], $where, $queryForm))   && p('module') && e('bug');                 //测试保存的查询的模块
