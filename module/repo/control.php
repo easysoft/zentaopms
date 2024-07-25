@@ -1888,14 +1888,14 @@ class repo extends control
         list($order, $sort) = explode('_', $orderBy);
         $orderList = array();
         $keyword   = (string)$this->post->keyword;
-        foreach($branchList as $index => $branch)
+        foreach($branchList as $index => $orderBranch)
         {
-            if($keyword && strpos($branch->name, $keyword) === false)
+            if($keyword && strpos($orderBranch->name, $keyword) === false)
             {
                 unset($branchList[$index]);
                 continue;
             }
-            $orderList[] = $branch->$order;
+            $orderList[] = $orderBranch->$order;
         }
         if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
 
