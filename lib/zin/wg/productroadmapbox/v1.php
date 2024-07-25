@@ -58,13 +58,22 @@ class productRoadmapBox extends wg
             $defaultBranch = !empty($branches) ? key($branches) : 0;
             $roadmapPlans  = !empty($roadmapPlanGroups[$productID][$defaultBranch]) ? $roadmapPlanGroups[$productID][$defaultBranch] : array();
 
+            /* Add label for options. */
+            $roadmapPlanItems = array();
+            foreach($roadmapPlans as $value => $text)
+            {
+                $type      = strpos($value, '-') !== false ? substr($value, 0, strpos($value, '-')) : 'roadmap';
+                $labelName = $type == 'roadmap' ? $lang->roadmap->common : $lang->productplan->shortCommon;
+                $roadmapPlanItems[] = array('value' => $value, 'text' => $text, 'leading' => array('html' => "<span class='label gray-pale rounded-xl clip'>{$labelName}</span> "));
+            }
+
             $productsBox[] = div
             (
                 set::className('productBox flex'),
                 formGroup
                 (
                     set::width('1/3'),
-                    setClass('distributeProduct'),
+                    setClass('distributeProduct text-clip'),
                     set::required(true),
                     set::label($lang->demand->distributeProduct),
                     $index != 0 ? set::labelClass('hidden') : null,
@@ -132,7 +141,7 @@ class productRoadmapBox extends wg
                             picker
                             (
                                 set::name("roadmap[$index]"),
-                                set::items($roadmapPlans)
+                                set::items($roadmapPlanItems)
                             )
                         )
                     )
