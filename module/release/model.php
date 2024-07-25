@@ -375,6 +375,15 @@ class releaseModel extends model
             $release->project = ',' . trim(implode(',', $projects), ',') . ',';
         }
 
+        if($release->status == 'wait')
+        {
+            $this->config->release->create->requiredFields = str_replace(',releasedDate', '', $this->config->release->create->requiredFields);
+        }
+        else
+        {
+            $this->config->release->create->requiredFields = str_replace(',date', '', $this->config->release->create->requiredFields);
+        }
+
         $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')

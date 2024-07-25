@@ -67,6 +67,17 @@ formPanel
         formGroup
         (
             set::width('1/4'),
+            set::name('releasedDate'),
+            set::label($lang->release->releasedDate),
+            set::value($release->releasedDate),
+            set::control('date')
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/4'),
             set::name('status'),
             set::label($lang->release->status),
             set::control(array('control' => 'picker', 'required' => true)),
