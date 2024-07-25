@@ -191,17 +191,17 @@ class block extends control
         $orders    = explode(',', $orders);
         $blockList = $this->block->getBlockList($module);
 
-        foreach ($orders as $order => $blockID)
+        foreach($orders as $order => $blockID)
         {
             $block = $blockList[$blockID];
             if(!isset($block)) continue;
 
-            $block->order = $order + 1000;
+            $block->order = $order + 100;
             unset($block->id);
             $this->dao->update(TABLE_BLOCK)->data($block)->where('id')->eq($blockID)->exec();
         }
 
-        foreach ($orders as $order => $blockID)
+        foreach($orders as $order => $blockID)
         {
             $this->dao->update(TABLE_BLOCK)->set('`order`')->eq($order)->where('id')->eq($blockID)->exec();
         }
