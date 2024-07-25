@@ -4503,7 +4503,7 @@ class executionModel extends model
             $taskSum ++;
         }
 
-        return sprintf($this->lang->execution->taskSummary, $taskSum, $statusWait, $statusDoing, round($totalEstimate, 1), round($totalConsumed, 1), round($totalLeft, 1));
+        return sprintf($this->lang->execution->taskSummary, $taskSum, $statusWait, $statusDoing, sprintf("%.1f", $totalEstimate), sprintf("%.1f", $totalConsumed), sprintf("%.1f", $totalLeft));
     }
 
     /**
