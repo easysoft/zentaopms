@@ -275,6 +275,14 @@ class pivotState
     public $firstEnterDesign = false;
 
     /**
+     * Auto gen drills.
+     *
+     * @var bool
+     * @access public
+     */
+    public $autoGenDrills = false;
+
+    /**
      * __construct method.
      *
      * @param  pivot      object
@@ -795,8 +803,9 @@ class pivotState
         $this->settings  = $settings;
         $this->filters   = $filters;
 
-        $this->drills       = $drills;
-        $this->defaultDrill = $defaultDrill;
+        $this->drills        = $drills;
+        $this->defaultDrill  = $defaultDrill;
+        $this->autoGenDrills = $autoGenDrills;
 
         $this->action        = $action;
         $this->queryCols     = $queryCols;
