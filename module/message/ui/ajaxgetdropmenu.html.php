@@ -14,8 +14,7 @@ namespace zin;
 
 jsVar('unreadLangTempate', $lang->message->unread);
 jsVar('noDataLang', $lang->noData);
-jsVar('confirmDeleteLang', $lang->message->notice->confirmDelete);
-jsVar('confirmClearLang', $lang->message->notice->confirmClear);
+jsVar('showCount', $config->message->browser->count);
 
 $buildMessageList = function($messageGroup) use ($lang)
 {
@@ -36,6 +35,12 @@ $buildMessageList = function($messageGroup) use ($lang)
             if($secondDiff >= 3600) $time = $lang->message->timeLabel['hour'];
             if($secondDiff > 5400)  $time = substr($message->createdDate, 5, 11);
 
+            preg_match_all("/<a href='([^\']+)'/", $message->data, $out);
+            $link    = count($out[1]) ? $out[1][0] : '';
+            $content = str_replace("<a href='$link'", "<a data-url='{$link}' href='###' onclick='clickMessage(this)'", $message->data);
+            $content = preg_replace("/data-app='([^\']+)'/", '', $content);
+            $content = preg_replace("/(\?|\&)onlybody=yes'/", '', $content);
+
             $itemList[] = h::li
             (
                 setClass('message-item border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
@@ -46,7 +51,7 @@ $buildMessageList = function($messageGroup) use ($lang)
                     cell(label(setClass("label-dot {$dotColor} mr-2")), $lang->message->browser),
                     cell($time, icon(setClass('ml-2 cursor-pointer delete-message-btn'), 'close'))
                 ),
-                div(setClass('pt-1'), html($message->data))
+                div(setClass('pt-1'), html($content))
             );
         }
         $dateList[] = h::li(h::ul(setClass('list-unstyled'), $itemList));
@@ -59,8 +64,8 @@ tabs
     setID('messageTabs'),
     setClass('text-black pt-1 px-5 pb-5 relative'),
     set::style(array('width' => '400px', 'background-color' => '#fff')),
-    on::click('.delete-message-btn', 'deleteMessage'),
-    on::click('.message-item', 'markRead'),
+    on::click('.delete-message-btn', 'deleteMessage(e.target)'),
+    on::click('.message-item', 'markRead(e.target)'),
     on::click('.clearRead', 'clearRead'),
     on::click('.allMarkRead', 'markAllRead'),
     div

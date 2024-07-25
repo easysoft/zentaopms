@@ -1,6 +1,6 @@
-window.markRead = function(e)
+window.markRead = function(obj)
 {
-    let $this = $(e.target);
+    let $this = $(obj);
     if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
     let isUnread = $this.hasClass('unread');
     if(!isUnread) return;
@@ -14,9 +14,9 @@ window.markRead = function(e)
     /* Rerender unread count. */
     $('messageTabs #unread-messages.tab-pane').find('.message-item[data-id="' + messageID + '"]').addClass('hidden');
     renderMessage();
-}
+};
 
-window.markAllRead = function(e)
+window.markAllRead = function()
 {
     let $messageItem = $('#messageTabs .message-item.unread');
     $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
@@ -24,25 +24,19 @@ window.markAllRead = function(e)
     $('#messageTabs #unread-messages.tab-pane .message-item').addClass('hidden');
     $.get($.createLink('message', 'ajaxMarkRead', "id=all"));
     renderMessage();
-}
+};
 
-window.clearRead = function(e)
+window.clearRead = function()
 {
-    let result = confirm(confirmClearLang);
-    if(!result) return;
-
     let $messageItem = $('#messageTabs .message-item:not(.unread)');
     $messageItem.addClass('hidden');
     $.get($.createLink('message', 'ajaxDelete', "id=allread"));
     renderMessage();
-}
+};
 
-window.deleteMessage = function(e)
+window.deleteMessage = function(obj)
 {
-    let result = confirm(confirmDeleteLang);
-    if(!result) return;
-
-    let $this = $(e.target);
+    let $this = $(obj);
     if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
 
     let messageID = $this.data("id");
@@ -52,18 +46,25 @@ window.deleteMessage = function(e)
 
     /* Rerender unread count. */
     renderMessage();
-}
+};
+
+window.clickMessage = function(obj)
+{
+    let $obj = $(obj);
+    let url  = $obj.attr('data-url').replace(/\?onlybody=yes/g, '').replace(/\&onlybody=yes/g, '');
+    markRead(obj);
+    $('#header #messageBar').trigger('click');
+    $.apps.openApp(url);
+    rederMessage();
+};
 
 window.renderMessage = function()
 {
-    let $unreadTab = $('#messageTabs #unread-messages.tab-pane');
+    let $unreadTab  = $('#messageTabs #unread-messages.tab-pane');
     let unreadCount = $unreadTab.find('.message-item.unread').length;
-    let $messageBarDot = $('#messageBar .label-dot.danger');
-    $('[href="#unread-messages"] span').html(unreadLangTempate.replace(/%s/, unreadCount));
-    if($messageBarDot.html()) $messageBarDot.html(unreadCount);
+    if(typeof(unreadLangTempate) != 'undefined') $('[href="#unread-messages"] span').html(unreadLangTempate.replace(/%s/, unreadCount));
     if(unreadCount == 0)
     {
-        $messageBarDot.remove();
         $unreadTab.find('ul').addClass('hidden');
         if($unreadTab.find('.nodata').length == 0) $unreadTab.append("<div class='text-center text-gray nodata'>" + noDataLang + "</div>");
     }
@@ -75,4 +76,8 @@ window.renderMessage = function()
         $allTab.find('ul').addClass('hidden');
         if($allTab.find('.nodata').length == 0) $allTab.append("<div class='text-center text-gray nodata'>" + noDataLang + "</div>");
     }
-}
+
+    updateAllDot(showCount);
+};
+
+$(function(){ updateAllDot(showCount); });

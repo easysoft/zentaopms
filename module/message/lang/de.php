@@ -31,10 +31,8 @@ $lang->message->timeLabel['minute'] = '%s minute ago';
 $lang->message->timeLabel['hour']   = '1 hour ago';
 
 $lang->message->notice = new stdclass();
-$lang->message->notice->confirmDelete = "Are you sure you want to delete this message?";
-$lang->message->notice->confirmClear  = "Are you sure you want to clear the read messages?";
-$lang->message->notice->allMarkRead   = 'One-click read';
-$lang->message->notice->clearRead     = 'Clear read';
+$lang->message->notice->allMarkRead = 'One-click read';
+$lang->message->notice->clearRead   = 'Clear read';
 
 $lang->message->label = new stdclass();
 $lang->message->label->created      = 'create';
