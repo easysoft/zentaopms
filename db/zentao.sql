@@ -15582,7 +15582,7 @@ CREATE TABLE `zt_pivotdrill` (
   `whereSql`  mediumtext   NOT NULL,
   `condition` mediumtext   NOT NULL,
   `status`    enum('design', 'published') NOT NULL DEFAULT 'published',
-  `account`   varchar(30) NOT NULL
+  `account`   varchar(30) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_sqlview`;
