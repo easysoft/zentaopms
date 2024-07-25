@@ -1437,36 +1437,11 @@ class pivotModel extends model
     public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql')
     {
         $sql = $this->bi->processVars($sql, $filters);
-
-        /* Process rows. */
-        $connectSQL = '';
-        if(!empty($filters) && !isset($filters[0]['from']))
-        {
-            $wheres = array();
-            foreach($filters as $field => $filter)
-            {
-                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
-            }
-
-            $whereStr    = implode(' and ', $wheres);
-            $connectSQL .= " where $whereStr";
-        }
-
-        $this->app->loadClass('sqlparser', true);
-        $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0];
-        if(!$statement->limit)
-        {
-            $statement->limit = new stdclass();
-            $statement->limit->offset   = 0;
-            $statement->limit->rowCount = 99999999;
-        }
-        $sql = $statement->build();
-
-        $columnSQL = "select * from ($sql) tt" . $connectSQL;
+        $sql = $this->trimSemicolon($sql);
+        $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
         $dbh  = $this->app->loadDriver($driver);
-        $rows = $dbh->query($columnSQL)->fetchAll();
+        $rows = $dbh->query($sql)->fetchAll();
         $rows = json_decode(json_encode($rows), true);
 
         $cols = array();
@@ -1482,15 +1457,9 @@ class pivotModel extends model
 
             $fieldObject  = $field['object'];
             $relatedField = $field['field'];
+            $colLabel     = $field[$this->app->getClientLang()];
+            $colLabel     = empty($colLabel) ? $key : $colLabel;
 
-            $colLabel = $key;
-            if($fieldObject)
-            {
-                $this->app->loadLang($fieldObject);
-                if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
-            }
-
-            if(isset($langs[$key]) and !empty($langs[$key][$clientLang])) $colLabel = $langs[$key][$clientLang];
             $col->label = $colLabel;
 
             $cols[0][] = $col;
@@ -1833,16 +1802,8 @@ class pivotModel extends model
 
         $fieldObject  = $fields[$column['field']]['object'];
         $relatedField = $fields[$column['field']]['field'];
-
-        $colLabel = $column['field'];
-        if($fieldObject)
-        {
-            $this->app->loadLang($fieldObject);
-            if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
-        }
-
-        $clientLang = $this->app->getClientLang();
-        if(isset($langs[$column['field']]) and !empty($langs[$column['field']][$clientLang])) $colLabel = $langs[$column['field']][$clientLang];
+        $colLabel     = $fields[$column['field']][$this->app->getClientLang()];
+        $colLabel     = empty($colLabel) ? $column['field'] : $colLabel;
 
         if(!$showOrigin)
         {

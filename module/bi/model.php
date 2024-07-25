@@ -1271,6 +1271,12 @@ class biModel extends model
         }
         list($fieldPairs, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
 
+        foreach($fieldPairs as $field => $name)
+        {
+            // 只保留中文、英文和下划线的字符
+            $fieldPairs[$field] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-Z_]/u', '', $name);
+        }
+
         return array($moduleNames, $aliasNames, $fieldPairs, $relatedObjects);
     }
 
