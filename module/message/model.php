@@ -137,6 +137,22 @@ class messageModel extends model
 
         $account  = $this->app->user->account;
         $newTodos = array();
+        foreach($todos as $todo)
+        {
+            $notice = new stdclass();
+            $notice->objectType  = 'message';
+            $notice->action      = 0;
+            $notice->toList      = ",{$account},";
+            $notice->data        = $todo->data;
+            $notice->status      = 'wait';
+            $notice->createdBy   = $account;
+            $notice->createdDate = helper::now();
+            $this->dao->insert(TABLE_NOTIFY)->data($notice)->exec();
+
+            $noticeID = $this->dao->lastInsertID();
+            $todo->id = $noticeID;
+            $newTodos[$noticeID] = $todo;
+        }
         return $newTodos;
     }
 
