@@ -96,6 +96,17 @@ class screen extends control
         $this->display();
     }
 
+    /**
+     * 查看一个大屏(旧页面方式)。
+     * View a screen(old page).
+     *
+     * @param  int    $screenID
+     * @param  int    $year
+     * @param  int    $dept
+     * @param  string $account
+     * @access public
+     * @return void
+     */
     public function viewOld(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
         if(empty($year))  $year  = date('Y');
