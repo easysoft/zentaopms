@@ -26,6 +26,11 @@ zenData('repo')->loadYaml('repo')->gen(1);
 zenData('mr')->loadYaml('mr')->gen(1);
 su('admin');
 
+global $app;
+include($app->getModuleRoot() . '/mr/control.php');
+$app->control = new mr();
+
+
 $mrModel = new mrTest();
 
 /* Post params. */

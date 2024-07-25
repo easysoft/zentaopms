@@ -18,6 +18,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 zenData('pipeline')->gen(5);
+su('admin');
 
 $mr = zenData('mr')->loadYaml('mr');
 $mr->mriid->range(45);
