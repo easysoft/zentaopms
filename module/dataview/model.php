@@ -242,7 +242,7 @@ class dataviewModel extends model
      */
     public function checkUniColumn(string $sql, string $driverName = 'mysql', bool $repeat = false, $columns = array()): bool|array
     {
-        if(empty($columns)) $columns = $this->bi->getColumns($sql, $driverName);
+        if(empty($columns)) $columns = $this->bi->getColumns($sql, $driverName, true);
 
         $isUnique     = true;
         $repeatFields = array();

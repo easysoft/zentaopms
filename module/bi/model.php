@@ -332,10 +332,11 @@ class biModel extends model
      *
      * @param  string     $sql
      * @param  string     $driver mysql|duckdb
+     * @param  bool       $returnOrigin
      * @access public
      * @return array|false
      */
-    public function getColumns(string $sql, $driver = 'mysql'): array|false
+    public function getColumns(string $sql, $driver = 'mysql', $returnOrigin = false): array|false
     {
         if(!in_array($driver, $this->config->bi->drivers)) return false;
 
@@ -348,6 +349,7 @@ class biModel extends model
             $dbh     = $this->app->loadDriver('duckdb');
             $columns = $dbh->query("DESCRIBE $sql")->fetchAll();
         }
+        if($returnOrigin) return $columns;
 
         $result = array();
         foreach($columns as $column)
@@ -1310,6 +1312,12 @@ class biModel extends model
         catch(Exception $e)
         {
             return $stateObj->setError($e);
+        }
+
+        if(!$stateObj->isError())
+        {
+            list($isUnique, $repeatColumn) = $this->loadModel('dataview')->checkUniColumn($sql, $driver, true);
+            if(!$isUnique) $stateObj->setError(sprintf($this->lang->dataview->duplicateField, implode(',', $repeatColumn)));
         }
 
         return $stateObj;
