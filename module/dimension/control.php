@@ -36,6 +36,8 @@ class dimension extends control
             $items[] = $item;
         }
 
+        if($module == 'pivot' && $method == 'design') $method = 'browse';
+
         $params = 'dimensionID={id}';
         if($this->app->tab == 'bi' && $module == 'tree' && $method == 'browsegroup')
         {
