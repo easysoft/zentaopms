@@ -24,7 +24,7 @@ class editStoryTester extends tester
         $editStoryParam = array(
             'storyID'     => '39',
             'kanbanGroup' => 'default',
-            'storyType'   => 'story',
+            'storyType'   => 'story'
         );
         /* 提交表单 */
         $form = $this->initForm('story', 'edit', $editStoryParam, 'appIframe-product');
@@ -39,5 +39,5 @@ class editStoryTester extends tester
         if($viewPafe->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
 
         return $this->success('编辑研发需求成功');
-}
+    }
 }
