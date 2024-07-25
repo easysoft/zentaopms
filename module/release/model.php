@@ -1013,10 +1013,9 @@ class releaseModel extends model
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->fetchAll('id');
 
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $stories = array_chunk($stories, $pager->recPerPage);
         $stories = empty($stories) ? $stories : $stories[$pager->pageID - 1];
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->in($branch)->fetchPairs('story', 'stage');
         foreach($stories as $index => $story)
