@@ -3,6 +3,23 @@
 class biModel extends model
 {
     /**
+     * 解析sql语句。
+     * Parse sql to statement.
+     *
+     * @param  string $sql
+     * @access public
+     * @return object|false
+     */
+    public function parseToStatement($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+        $statement = $parser->statements[0];
+
+        return !empty($statement) ? $statement : false;
+    }
+
+    /**
      * 获取sql中的表、字段。
      * Get tables and fields form sql.
      *
@@ -12,9 +29,7 @@ class biModel extends model
      */
     public function getTableAndFields(string $sql): array|false
     {
-        $this->app->loadClass('sqlparser', true);
-        $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0];
+        $statement = $this->parseToStatement($sql);
 
         if(empty($statement)) return false;
         return array('tables' => array_unique($this->getTables($statement, true)), 'fields' => $this->getFields($statement));
@@ -101,9 +116,7 @@ class biModel extends model
      */
     public function parseTableList($sql)
     {
-        $this->app->loadClass('sqlparser', true);
-        $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0];
+        $statement = $this->parseToStatement($sql);
 
         $tableList = array();
         if($statement->from)
@@ -157,9 +170,7 @@ class biModel extends model
     public function getFieldsWithTable($sql)
     {
         $this->loadModel('dev');
-        $this->app->loadClass('sqlparser', true);
-        $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0];
+        $statement = $this->parseToStatement($sql);
 
         $fieldList = array();
         foreach($statement->expr as $expr)
@@ -191,9 +202,7 @@ class biModel extends model
      */
     public function getFieldsWithAlias($sql)
     {
-        $this->app->loadClass('sqlparser', true);
-        $parser    = new sqlparser($sql);
-        $statement = $parser->statements[0];
+        $statement = $this->parseToStatement($sql);
 
         $fieldList = array();
         foreach($statement->expr as $expr)
