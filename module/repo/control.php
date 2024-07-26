@@ -1806,10 +1806,15 @@ class repo extends control
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
 
+        /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        $keyword   = (string)$this->post->keyword;
+
         $repo = $this->repo->getByID($repoID);
         $this->scm->setEngine($repo);
         $tagList = $this->scm->tags('all');
-        foreach($tagList as &$tag)
+        foreach($tagList as $index => &$tag)
         {
             $tag->repoID    = $repoID;
             $tag->tagName   = helper::safe64Encode($tag->name);
@@ -1818,14 +1823,7 @@ class repo extends control
 
             $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
             if(isset($tag->tagger->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->tagger->when));
-        }
 
-        /* Data sort. */
-        list($order, $sort) = explode('_', $orderBy);
-        $orderList = array();
-        $keyword   = (string)$this->post->keyword;
-        foreach($tagList as $index => $tag)
-        {
             if($keyword && strpos($tag->name, $keyword) === false)
             {
                 unset($tagList[$index]);
@@ -1833,6 +1831,7 @@ class repo extends control
             }
             $orderList[] = $tag->$order;
         }
+
         if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $tagList);
 
         /* Pager. */
