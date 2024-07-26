@@ -21,6 +21,7 @@ class demandBasicInfo extends wg
         $demandpools = data('demandpools');
         $products    = data('products');
         $users       = data('users');
+        $demands     = data('demands');
 
         $productList = '';
         $mailtoList  = '';
@@ -29,6 +30,7 @@ class demandBasicInfo extends wg
 
         $items = array();
         $items[$lang->demand->pool]         = zget($demandpools, $demand->pool, '');
+        if(!empty($demand->parent) && $demand->parent > 0) $items[$lang->demand->parent] = zget($demands, $demand->parent);
         $items[$lang->demand->status]       = array('control' => 'status', 'class' => 'status-story', 'status' => $demand->status, 'text' => zget($lang->demand->statusList, $demand->status));
         $items[$lang->demand->stage]        = zget($lang->demand->stageList, $demand->stage);
         $items[$lang->demand->product]      = trim($productList, ', ') ? trim($productList, ', ') : $lang->demand->undetermined;
