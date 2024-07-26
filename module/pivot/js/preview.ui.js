@@ -189,7 +189,7 @@ renderCell = function(result, {row, col})
         result.push({className: 'gap-0 px-0'});
         values.forEach((value, index) =>
           result.push({
-            html: value || !Number.isNaN(value) ? (isDrill ? "<a href='#'>" + `${value}` + '</a>' : `${value}`) : '&nbsp;',
+            html: value || !Number.isNaN(value) ? (isDrill && index == 0 ? "<a href='#'>" + `${value}` + '</a>' : `${value}`) : '&nbsp;',
             className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
             style: 'border-color: var(--dtable-border-color)'
           })
