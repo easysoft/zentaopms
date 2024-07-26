@@ -548,12 +548,27 @@ class release extends control
         return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type={$type}")));
     }
 
+    public function publish(int $releaseID)
+    {
+        if($_POST)
+        {
+            $this->release->changeStatus($releaseID, $this->post->status, $this->post->releasedDate);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment);
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+        }
+
+        $this->view->release = $this->release->getByID($releaseID);
+        $this->display();
+    }
+
     /**
      * 激活/停止维护发布。
      * Change status.
      *
      * @param  int    $releaseID
-     * @param  string $action    publish|play|pause
+     * @param  string $action    play|pause
      * @access public
      * @return void
      */
