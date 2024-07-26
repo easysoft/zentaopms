@@ -74,6 +74,7 @@ class productsBox extends wg
     {
         global $lang, $app;
         list($productItems, $project, $isStage, $hasNewProduct, $type) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct', 'type'));
+        $type = empty($type) ? 'plan' : $type;
 
         $typeLang     = $type == 'plan' ? $lang->project->associatePlan : $lang->project->manageRoadmap;
         $typeClass    = $type == 'plan' ? 'planBox'    : 'roadmapBox';
@@ -215,6 +216,7 @@ class productsBox extends wg
         global $lang;
         list($productItems, $branchGroups, $planGroups, $productPlans, $type, $roadmapGroups) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans', 'type', 'roadmapGroups'));
         list($linkedBranches, $currentProduct, $currentPlan, $project, $isStage) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project', 'isStage'));
+        $type = empty($type) ? 'plan' : $type;
 
         $unmodifiableProducts = data('unmodifiableProducts') ? data('unmodifiableProducts') : array();
 
