@@ -131,6 +131,7 @@ $config->pivot->objectTableFields->productLine['root']['link']  = array('url' =>
 $config->pivot->objectTableFields->project = array();
 $config->pivot->objectTableFields->project['model']['title']   = $lang->project->model;
 $config->pivot->objectTableFields->project['model']['map']     = $lang->project->modelList;
+$config->pivot->objectTableFields->project['model']['width']   = 120;
 $config->pivot->objectTableFields->project['consumed']['type'] = 'number';
 
 $config->pivot->objectTableFields->user = array();
