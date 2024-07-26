@@ -887,6 +887,7 @@ class pivotState
             if(!empty($oldSetting))
             {
                 $newFieldSettings[$field] = $this->processFieldSettingLang($field, $oldSetting);
+                if($setting['type'] != $oldSetting['type']) $newFieldSettings[$field]['type'] = $setting['type'];
             }
             else
             {

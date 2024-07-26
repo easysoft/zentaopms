@@ -2059,12 +2059,14 @@ EOT
         'id'         => array('object' => 'product', 'field' => 'id', 'type' => 'string'),
         'name'       => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
         'bugID'      => array('object' => 'project', 'field' => 'bugID', 'type' => 'string'),
-        'resolution' => array('object' => 'bug', 'field' => 'resolution', 'type' => 'string')
+        'resolution' => array('object' => 'bug', 'field' => 'resolution', 'type' => 'option')
     ),
     'langs'     => array
     (
-        'count' => array('zh-cn' => '需求数', 'zh-tw' => '需求数', 'en' => 'Stories'),
-        'done'  => array('zh-cn' => '完成数', 'zh-tw' => '完成数', 'en' => 'Done')
+        'id'         => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'name'       => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'bugID'      => array('zh-cn' => 'bugID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'resolution' => array('zh-cn' => '解决方案', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
     ),
     'stage'     => 'published',
     'builtin'   => '0'
