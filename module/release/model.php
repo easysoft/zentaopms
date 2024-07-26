@@ -646,13 +646,19 @@ class releaseModel extends model
      * Change status.
      *
      * @param  int    $releaseID
-     * @param  string $status    normal|terminate
+     * @param  string $status       normal|fail|terminate
+     * @param  string $releasedDate
      * @access public
      * @return bool
      */
-    public function changeStatus(int $releaseID, string $status): bool
+    public function changeStatus(int $releaseID, string $status, string $releasedDate = ''): bool
     {
-        $this->dao->update(TABLE_RELEASE)->set('status')->eq($status)->where('id')->eq($releaseID)->exec();
+        $this->dao->update(TABLE_RELEASE)
+             ->set('status')->eq($status)
+             ->beginIF($releasedDate)->set('releasedDate')->eq($releasedDate)->fi()
+             ->where('id')->eq($releaseID)
+             ->exec();
+
         if($status == 'normal') $this->setStoriesStage($releaseID);
         return !dao::isError();
     }
