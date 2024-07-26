@@ -1765,7 +1765,17 @@ class pivotModel extends model
         return $sql;
     }
 
-    public function getColLabel($key, $fields, $langs)
+    /**
+     * 获取列名称。
+     * Get col label.
+     *
+     * @param  string  $key
+     * @param  array   $fields
+     * @param  array   $langs
+     * @access public
+     * @return string
+     */
+    public function getColLabel(string $key, array $fields, array $langs): string
     {
         $clientLang = $this->app->getClientLang();
 
