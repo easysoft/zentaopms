@@ -16,6 +16,18 @@ modalHeader
     set::title($lang->pivot->step3->drillView)
 );
 
+foreach($datas as $index => $data)
+{
+    foreach($data as $key => $value)
+    {
+        foreach($cols as $col)
+        {
+            if($col['name'] != $key) continue;
+            if($col['type'] == 'user' && strpos($value, ',') !== false) $datas[$index]->$key = explode(',', $value);
+        }
+    }
+}
+
 dtable
 (
     $from == 'screen' ? set::_class('dark') : null,

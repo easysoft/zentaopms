@@ -2528,6 +2528,7 @@ class pivotModel extends model
                     if((!in_array($fieldKey, $nameTypeCols) && $settingKey == 'link') || $object == 'doc') unset($fieldSetting['link']);
                     if(isset($this->config->pivot->objectTableFields->$object[$fieldKey][$settingKey])) $fieldSetting[$settingKey] = $this->config->pivot->objectTableFields->$object[$fieldKey][$settingKey];
                 }
+
                 $cols[$fieldKey] = $fieldSetting;
             }
         }

@@ -130,6 +130,7 @@ $config->story->dtable->fieldList['estimate']['show']     = true;
 $config->story->dtable->fieldList['estimate']['group']    = 5;
 
 $config->story->dtable->fieldList['reviewer']['name']     = 'reviewer';
+$config->story->dtable->fieldList['reviewer']['type']     = 'text';
 $config->story->dtable->fieldList['reviewer']['title']    = $lang->story->reviewer;
 $config->story->dtable->fieldList['reviewer']['width']    = '100';
 $config->story->dtable->fieldList['reviewer']['sortType'] = false;
