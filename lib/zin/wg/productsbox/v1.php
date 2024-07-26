@@ -276,8 +276,8 @@ class productsBox extends wg
                 $plans  = !empty($productPlans) ? $productPlans : array();
                 $planID = isset($currentPlan) && isset($productPlans[$currentPlan]) ? $currentPlan : '';
 
-                $roadmaps  = !empty($productRoadmaps) ? $productRoadmaps : array();
-                $roadmapID = isset($currentRoadmap) && isset($productRoadmaps[$currentRoadmap]) ? $currentRoadmap : '';
+                $roadmaps  = array();
+                $roadmapID = '';
 
                 $objects  = $type == 'plan' ? $plans  : $roadmaps;
                 $objectID = $type == 'plan' ? $planID : $roadmapID;
