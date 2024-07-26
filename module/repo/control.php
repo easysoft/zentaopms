@@ -1795,13 +1795,14 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID
+     * @param  string $keyword
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTag(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
+    public function browseTag(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1809,7 +1810,7 @@ class repo extends control
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
         $orderList = array();
-        $keyword   = (string)$this->post->keyword;
+        $keyword   = htmlspecialchars(base64_decode($keyword));
 
         $repo = $this->repo->getByID($repoID);
         $this->scm->setEngine($repo);
@@ -1847,7 +1848,7 @@ class repo extends control
         $this->view->pager    = $pager;
         $this->view->tagList  = empty($tagList) ? $tagList: $tagList[$pageID - 1];
         $this->view->orderBy  = $orderBy;
-        $this->view->keyword  = $keyword;
+        $this->view->keyword  = base64_encode($keyword);
         $this->display();
     }
 
@@ -1857,13 +1858,14 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID
+     * @param  string $keyword
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1886,7 +1888,7 @@ class repo extends control
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
         $orderList = array();
-        $keyword   = (string)$this->post->keyword;
+        $keyword   = htmlspecialchars(base64_decode($keyword));
         foreach($branchList as $index => $orderBranch)
         {
             if($keyword && strpos($orderBranch->name, $keyword) === false)
@@ -1911,7 +1913,7 @@ class repo extends control
         $this->view->pager      = $pager;
         $this->view->branchList = empty($branchList) ? $branchList: $branchList[$pageID - 1];
         $this->view->orderBy    = $orderBy;
-        $this->view->keyword    = $keyword;
+        $this->view->keyword    = base64_encode($keyword);
         $this->display();
     }
 }

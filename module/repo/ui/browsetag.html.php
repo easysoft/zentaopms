@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('searchUrl', createLink('repo', 'browsetag', "repoID={$repo->id}&objectID={$objectID}&keyword=%s"));
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
 (
@@ -34,7 +35,7 @@ featureBar
         (
             set::placeholder($lang->searchAB),
             set::name('keyword'),
-            set::value($keyword)
+            set::value(base64_decode($keyword))
         ),
         btn
         (
@@ -50,7 +51,7 @@ dtable
 (
     set::cols($config->repo->dtable->tag->fieldList),
     set::data($tagList),
-    set::sortLink(createLink('repo', 'browsetag', "repoID={$repo->id}&objectID={$objectID}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'browsetag', "repoID={$repo->id}&objectID={$objectID}&keyword={$keyword}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );

@@ -375,5 +375,7 @@ window.treeClick = function(info)
 
 window.searchList = function()
 {
-    loadPage({method: 'post', data: {keyword: $('#keyword').val()}, target: '#mainContent'});
+    const dom     = new DOMParser().parseFromString($('#keyword').val(), "text/html");
+    const keyword = dom.body.textContent;
+    loadPage(searchUrl.replace('%s', btoa(keyword)));
 }
