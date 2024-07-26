@@ -87,6 +87,18 @@ formPanel
     (
         formGroup
         (
+            set::width('1/4'),
+            set::name('status'),
+            set::label($lang->release->status),
+            set::control(array('control' => 'picker', 'required' => true)),
+            set::value($status),
+            set::items($lang->release->statusList)
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
             set::width(isInModal() ? '1/2' : '1/4'),
             set::name('date'),
             set::label($lang->release->date),
@@ -104,18 +116,6 @@ formPanel
             set::label($lang->release->releasedDate),
             set::value(helper::today()),
             set::control('date')
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/4'),
-            set::name('status'),
-            set::label($lang->release->status),
-            set::control(array('control' => 'picker', 'required' => true)),
-            set::value($status),
-            set::items($lang->release->statusList)
         )
     ),
     formGroup

@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('oldStatus', $release->status);
 formPanel
 (
     set::title($lang->release->edit),
@@ -57,6 +58,18 @@ formPanel
         formGroup
         (
             set::width('1/4'),
+            set::name('status'),
+            set::label($lang->release->status),
+            set::control(array('control' => 'picker', 'required' => true)),
+            set::value($release->status),
+            set::items($lang->release->statusList)
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/4'),
             set::name('date'),
             set::label($lang->release->date),
             set::value($release->date),
@@ -65,6 +78,7 @@ formPanel
     ),
     formRow
     (
+        $release->status == 'wait' ? setClass('hidden') : null,
         formGroup
         (
             set::width('1/4'),
@@ -72,18 +86,6 @@ formPanel
             set::label($lang->release->releasedDate),
             set::value($release->releasedDate),
             set::control('date')
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/4'),
-            set::name('status'),
-            set::label($lang->release->status),
-            set::control(array('control' => 'picker', 'required' => true)),
-            set::value($release->status),
-            set::items($lang->release->statusList)
         )
     ),
     formGroup
