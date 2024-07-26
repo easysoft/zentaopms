@@ -1,4 +1,4 @@
 .productBox {position: relative; padding-top: 5px;}
-.productBox .distributeProduct, .productsBox .addProductBox .form-group{padding-left: 0px;}
+.productBox .distributeProduct, .productsBox .addProductBox .form-group{padding-left: 1px;}
 .productBox .roadmapBox {padding-right: 0px;}
 .productBox .actionsBox {padding: 6px 0px;}

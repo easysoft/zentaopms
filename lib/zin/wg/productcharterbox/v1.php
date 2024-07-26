@@ -52,7 +52,7 @@ class productCharterBox extends wg
             formGroup
             (
                 set::width('1/2'),
-                setClass('distributeProduct'),
+                setClass('distributeProduct text-clip'),
                 set::required(true),
                 set::label($lang->charter->product),
                 inputGroup
