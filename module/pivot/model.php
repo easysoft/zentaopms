@@ -1454,13 +1454,7 @@ class pivotModel extends model
             $col = new stdclass();
             $col->name    = $key;
             $col->isGroup = true;
-
-            $fieldObject  = $field['object'];
-            $relatedField = $field['field'];
-            $colLabel     = $field[$this->app->getClientLang()];
-            $colLabel     = empty($colLabel) ? $key : $colLabel;
-
-            $col->label = $colLabel;
+            $col->label   = $this->getColLabel($key, $fields, $langs);
 
             $cols[0][] = $col;
         }
@@ -1771,6 +1765,25 @@ class pivotModel extends model
         return $sql;
     }
 
+    public function getColLabel($key, $fields, $langs)
+    {
+        $clientLang = $this->app->getClientLang();
+
+        if(isset($langs[$key]))
+        {
+            $lang = zget($langs[$key], $clientLang, '');
+            if(!empty($lang)) return $lang;
+        }
+
+        $fieldLang = zget($fields[$key], $clientLang, '');
+        if(!empty($fieldLang)) return $fieldLang;
+
+        $name = zget($fields[$key], 'name', '');
+        if(!empty($name)) return $name;
+
+        return $key;
+    }
+
     /**
      * Get the header of the table.
      *
@@ -1802,8 +1815,7 @@ class pivotModel extends model
 
         $fieldObject  = $fields[$column['field']]['object'];
         $relatedField = $fields[$column['field']]['field'];
-        $colLabel     = $fields[$column['field']][$this->app->getClientLang()];
-        $colLabel     = empty($colLabel) ? $column['field'] : $colLabel;
+        $colLabel     = $this->getColLabel($column['field'], $fields, $langs);
 
         if(!$showOrigin)
         {
