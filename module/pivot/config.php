@@ -112,6 +112,7 @@ $config->pivot->drillObjectFields['ticket']      = array();
 $config->pivot->drillObjectFields['productLine'] = array();
 $config->pivot->drillObjectFields['user']        = array();
 
+$app->loadLang('project');
 $app->loadLang('product');
 $app->loadLang('user');
 $app->loadLang('ticket');
@@ -123,9 +124,13 @@ $config->pivot->objectTableFields->productLine['id']['title']   = $lang->idAB;
 $config->pivot->objectTableFields->productLine['id']['type']    = 'id';
 $config->pivot->objectTableFields->productLine['name']['title'] = $lang->product->line;
 $config->pivot->objectTableFields->productLine['name']['type']  = 'title';
-$config->pivot->objectTableFields->productLine['root']['title'] = $this->lang->product->program;
+$config->pivot->objectTableFields->productLine['root']['title'] = $lang->product->program;
 $config->pivot->objectTableFields->productLine['root']['type']  = 'title';
 $config->pivot->objectTableFields->productLine['root']['link']  = array('url' => array('module' => 'program', 'method' => 'project', "programID={root}"), 'target' => '_blank');
+
+$config->pivot->objectTableFields->project = array();
+$config->pivot->objectTableFields->project['model']['title'] = $lang->project->model;
+$config->pivot->objectTableFields->project['model']['map']   = $lang->project->modelList;
 
 $config->pivot->objectTableFields->user = array();
 $config->pivot->objectTableFields->user['id']['title']       = $lang->idAB;
