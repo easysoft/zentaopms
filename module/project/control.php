@@ -584,7 +584,7 @@ class project extends control
                 foreach($product->branches as $branchID)
                 {
                     $linkedBranches[$branchID] = $branchID;
-                    $product->roadmaps .= ',' . trim($projectBranches[$product->id][$branchID]->roadmap, ',');
+                    $product->roadmaps .= !empty($projectBranches[$product->id][$branchID]->roadmap) ? ',' . trim($projectBranches[$product->id][$branchID]->roadmap, ',') : '';
                 }
             }
             $product->roadmaps = trim($product->roadmaps, ',');
