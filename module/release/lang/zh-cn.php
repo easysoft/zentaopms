@@ -107,6 +107,7 @@ $lang->release->changeStatusList['pause']     = '停止维护';
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
 $lang->release->action->notified     = array('main' => '$date, 由 <strong>$actor</strong> 发送通知。');
+$lang->release->action->published    = array('main' => '$date, 由 <strong>$actor</strong> 发布，结果为<strong>$extra</strong>。', 'extra' => 'resultList');
 
 $lang->release->notifyList['FB'] = "反馈者";
 $lang->release->notifyList['PO'] = "{$lang->productCommon}负责人";

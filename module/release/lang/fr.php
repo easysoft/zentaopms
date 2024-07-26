@@ -107,6 +107,7 @@ $lang->release->changeStatusList['pause']     = 'Terminée';
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, $extra by  <strong>$actor</strong>.', 'extra' => 'changeStatusList');
 $lang->release->action->notified     = array('main' => '$date, <strong>$actor</strong> send notify.');
+$lang->release->action->published    = array('main' => '$date, published by <strong>$actor</strong>, result is <strong>$extra</strong>.', 'extra' => 'resultList');
 
 $lang->release->notifyList['FB'] = "Feedback By";
 $lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
