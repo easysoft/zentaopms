@@ -708,16 +708,16 @@ class releaseModel extends model
         /* Get mail content. */
         $modulePath = $this->app->getModulePath('', 'release');
         $oldcwd     = getcwd();
-        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        $viewFile   = $modulePath . 'view/mail.html.php';
         chdir($modulePath . 'view');
-        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        if(file_exists($modulePath . 'ext/view/mail.html.php'))
         {
-            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            $viewFile = $modulePath . 'ext/view/mail.html.php';
             chdir($modulePath . 'ext/view');
         }
         ob_start();
         include $viewFile;
-        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        foreach(glob($modulePath . 'ext/view/mail.*.html.hook.php') as $hookFile) include $hookFile;
         $mailContent = ob_get_contents();
         ob_end_clean();
         chdir($oldcwd);
