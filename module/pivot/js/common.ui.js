@@ -15,7 +15,8 @@ window.clickCell = function(col, {colName, rowInfo})
     conditions   = latin1ToBase64(JSON.stringify(conditions))
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
 
-    const drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${conditions}&filterValues=${filterValues}&value=${value}`);
+    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${conditions}&filterValues=${filterValues}&value=${value}`);
+    drillModalLink = drillModalLink.replace(/\+/g, '%2B');
 
     zui.Modal.open({url: drillModalLink, size: 'lg'});
 }

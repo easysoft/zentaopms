@@ -1447,10 +1447,8 @@ class pivotModel extends model
         $cols   = array();
         $drills = $settings['drills'];
         /* Build cols. */
-        foreach($fields as $field)
+        foreach($fields as $key => $field)
         {
-            $key = $field['field'];
-
             $col = new stdclass();
             $col->name    = $key;
             $col->isGroup = true;
@@ -1466,11 +1464,13 @@ class pivotModel extends model
             $cols[0][] = $col;
         }
 
-        $fieldOptions = $this->getFieldsOptions($fields, $sql);
-        $dataDrills   = array();
+        $fieldOptions    = $this->getFieldsOptions($fields, $sql);
+        $dataDrills      = array();
+        $rowsAfterFields = array();
         foreach($rows as $key => $row)
         {
-            $drillFields  = array();
+            $drillFields    = array();
+            $rowAfterFields = array();
             foreach($row as $field => $value)
             {
                 if(isset($drills[$field]))
@@ -1484,16 +1484,16 @@ class pivotModel extends model
                     $drillFields[$field] = $drillField;
                 }
                 $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
-                $row[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
+                $rowAfterFields[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
             }
             $dataDrills[$key] = array('drillFields' => $drillFields);
 
-            $rows[$key] = $row;
+            $rowsAfterFields[$key] = $rowAfterFields;
         }
 
         $data = new stdclass();
-        $data->cols  = $cols;
-        $data->array = $rows;
+        $data->cols   = $cols;
+        $data->array  = $rowsAfterFields;
         $data->drills = $dataDrills;
 
         $configs = array_fill(0, count($rows), array_fill(0, count($fields), 1));
@@ -1800,14 +1800,14 @@ class pivotModel extends model
     {
         $clientLang = $this->app->getClientLang();
 
+        $fieldLang = zget($fields[$key], $clientLang, '');
+        if(!empty($fieldLang)) return $fieldLang;
+
         if(isset($langs[$key]))
         {
             $lang = zget($langs[$key], $clientLang, '');
             if(!empty($lang)) return $lang;
         }
-
-        $fieldLang = zget($fields[$key], $clientLang, '');
-        if(!empty($fieldLang)) return $fieldLang;
 
         $name = zget($fields[$key], 'name', '');
         if(!empty($name)) return $name;
