@@ -25,7 +25,6 @@ $versionList = array('18.1', '18.3', 'biz8.1', 'biz8.3', 'max4.1', 'max4.3');
 function getResult()
 {
     global $tester;
-    unset(dao::$cache['zt_config']);
     return $tester->dao->select('value')
         ->from('zt_config')
         ->where('owner')->eq('system')

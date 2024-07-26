@@ -284,7 +284,7 @@ class upgradeTao extends upgradeModel
             ->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('action')->eq('linked2release')
-            ->groupBy('objectID')
+            ->groupBy('objectID,extra,action')
             ->get();
     }
 

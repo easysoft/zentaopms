@@ -27,6 +27,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 su('admin');
+global $app;
+include($app->getModuleRoot() . '/upgrade/control.php');
+$app->control = new upgrade();
 
 $project = zenData('project');
 $project->name->range('项目集1,项目1,项目2,项目3');
