@@ -75,6 +75,7 @@ class release extends control
 
         $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
         $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
+        foreach($releases as $release) $release->desc = strip_tags($release->desc);
 
         $this->view->title       = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->releases    = $this->releaseZen->processReleaseListData($releases);

@@ -26,35 +26,50 @@ $config->release->dtable->fieldList['branch']['title']    = $lang->release->bran
 $config->release->dtable->fieldList['branch']['name']     = 'branchName';
 $config->release->dtable->fieldList['branch']['type']     = 'text';
 $config->release->dtable->fieldList['branch']['sortType'] = true;
+$config->release->dtable->fieldList['branch']['show']     = true;
 
 $config->release->dtable->fieldList['project']['title'] = $lang->release->project;
 $config->release->dtable->fieldList['project']['name']  = 'project';
 $config->release->dtable->fieldList['project']['type']  = 'text';
 $config->release->dtable->fieldList['project']['group'] = 1;
+$config->release->dtable->fieldList['project']['show']  = true;
 
 $config->release->dtable->fieldList['build']['title'] = $lang->release->includedBuild;
 $config->release->dtable->fieldList['build']['name']  = 'build';
 $config->release->dtable->fieldList['build']['type']  = 'desc';
 $config->release->dtable->fieldList['build']['group'] = 1;
+$config->release->dtable->fieldList['build']['show']  = true;
 
 $config->release->dtable->fieldList['status']['title']     = $lang->release->status;
 $config->release->dtable->fieldList['status']['name']      = 'status';
 $config->release->dtable->fieldList['status']['type']      = 'status';
 $config->release->dtable->fieldList['status']['statusMap'] = $lang->release->statusList;
+$config->release->dtable->fieldList['status']['show']      = true;
 
 $config->release->dtable->fieldList['date']['title']    = $lang->release->date;
 $config->release->dtable->fieldList['date']['name']     = 'date';
 $config->release->dtable->fieldList['date']['type']     = 'date';
 $config->release->dtable->fieldList['date']['minWidth'] = '100';
+$config->release->dtable->fieldList['date']['show']     = true;
 
 $config->release->dtable->fieldList['releasedDate']['title']    = $lang->release->releasedDate;
 $config->release->dtable->fieldList['releasedDate']['name']     = 'releasedDate';
 $config->release->dtable->fieldList['releasedDate']['type']     = 'date';
 $config->release->dtable->fieldList['releasedDate']['minWidth'] = '100';
+$config->release->dtable->fieldList['releasedDate']['show']     = true;
+
+$config->release->dtable->fieldList['desc']['title']    = $lang->release->desc;
+$config->release->dtable->fieldList['desc']['name']     = 'desc';
+$config->release->dtable->fieldList['desc']['type']     = 'html';
+$config->release->dtable->fieldList['desc']['width']    = '160';
+$config->release->dtable->fieldList['desc']['sortType'] = false;
+$config->release->dtable->fieldList['desc']['hint']     = true;
+$config->release->dtable->fieldList['desc']['show']     = true;
 
 $config->release->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->release->dtable->fieldList['actions']['name']  = 'actions';
 $config->release->dtable->fieldList['actions']['type']  = 'actions';
+$config->release->dtable->fieldList['actions']['width'] = 'auto';
 $config->release->dtable->fieldList['actions']['list']  = $config->release->actionList;
 $config->release->dtable->fieldList['actions']['menu']  = array('linkStory', 'linkBug', 'publish|play|pause', 'edit', 'notify', 'delete');
 
