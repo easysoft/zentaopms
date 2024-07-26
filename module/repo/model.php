@@ -76,8 +76,11 @@ class repoModel extends model
             $repo = $this->getByID($repoID);
             if(!$repo || !$this->checkPriv($repo)) $repoID = 0;
             if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
-            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->tag);
-            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->branch);
+            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM))
+            {
+                unset($this->lang->devops->menu->tag);
+                unset($this->lang->devops->menu->branch);
+            }
         }
 
         if(!in_array($this->app->methodName, array('maintain', 'create', 'createrepo', 'edit','import'))) common::setMenuVars('devops', $repoID);
@@ -3031,7 +3034,7 @@ class repoModel extends model
             preg_match('/^\[(\w+)\]/', $repoName, $matches);
 
             $result = isset($matches[1]) ? $matches[1] : '';
-            if(in_array($result, $hasTagSCM)) $showTag = true;
+            if(in_array($result, $hasTagSCM)) $showTag = $showBranch = true;
             if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
