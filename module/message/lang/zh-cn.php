@@ -69,3 +69,5 @@ $lang->message->label->compilefail  = '构建失败';
 $lang->message->label->archived     = '归档';
 $lang->message->label->restore      = '还原';
 $lang->message->label->moved        = '移动';
+$lang->message->label->published    = '发布';
+$lang->message->label->changestatus = '修改发布状态';

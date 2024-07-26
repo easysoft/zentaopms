@@ -69,3 +69,5 @@ $lang->message->label->compilefail  = 'compile fail';
 $lang->message->label->archived     = 'archive';
 $lang->message->label->restore      = 'restore';
 $lang->message->label->moved        = 'move';
+$lang->message->label->published    = 'publish';
+$lang->message->label->changestatus = 'change status';
