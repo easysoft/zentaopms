@@ -29,7 +29,7 @@ class demandBasicInfo extends wg
         foreach(explode(',', $demand->mailto)  as $user)    $mailtoList  .= zget($users,    $user)    . ', ';
 
         $items = array();
-        $items[$lang->demand->pool]         = zget($demandpools, $demand->pool, '');
+        $items[$lang->demand->pool] = zget($demandpools, $demand->pool, '');
         if(!empty($demand->parent) && $demand->parent > 0) $items[$lang->demand->parent] = zget($demands, $demand->parent);
         $items[$lang->demand->status]       = array('control' => 'status', 'class' => 'status-story', 'status' => $demand->status, 'text' => zget($lang->demand->statusList, $demand->status));
         $items[$lang->demand->stage]        = zget($lang->demand->stageList, $demand->stage);
