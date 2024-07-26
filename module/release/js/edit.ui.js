@@ -13,4 +13,6 @@ window.changeStatus = function(e)
     }
 }
 
-changeStatus({target: {value: $('#status').val()}});
+setTimeout(() => {
+    changeStatus({target: {value: oldStatus}});
+}, 100);
