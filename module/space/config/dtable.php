@@ -57,7 +57,7 @@ $config->space->dtable->fieldList['actions']['list']['ajaxStop']['data-confirm']
 $config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['icon']         = 'trash';
 $config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['hint']         = $lang->instance->uninstall;
 $config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['className']    = 'ajax-submit';
-$config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['data-confirm'] = $lang->instance->notices['confirmUninstall'];
+$config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['data-confirm'] = array('message' => $lang->instance->notices['confirmUninstall'], 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->space->dtable->fieldList['actions']['list']['ajaxUninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={orgID}&type={type}');
 
 $config->space->dtable->fieldList['actions']['list']['visit']['icon']      = 'menu-my';

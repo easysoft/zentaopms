@@ -36,6 +36,13 @@ if($type !== 'store')
     $lang->instance->defaultPassword = $lang->instance->password;
 }
 
+if(!empty($actions['suffixActions']))
+{
+    foreach($actions['suffixActions'] as $suffix => &$action)
+    {
+        if($type == 'store' && $action['icon'] == 'trash' && !empty($action['data-confirm']['message'])) $action['data-confirm']['message'] = $lang->instance->notices['confirmUninstallStoreApp'];
+    }
+}
 $dbListWg = array();
 foreach($dbList as $db)
 {

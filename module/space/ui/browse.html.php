@@ -57,8 +57,27 @@ toolBar
     ))) : null
 );
 
+$langConfirmUninstal          = $lang->instance->notices['confirmUninstall'];
+$langConfirmUninstallStoreApp = $lang->instance->notices['confirmUninstallStoreApp'];
 dtable
 (
+    set::actionItemCreator(jsRaw(<<<JS
+        (item, info) => {
+            if(info.row.data.type != 'store' && item.icon == 'trash')
+            {
+                item['data-confirm']['message'] = '$langConfirmUninstal';
+                Object.assign(item, item);
+                return item
+            }
+            if(info.row.data.type == 'store' && item.icon == 'trash')
+            {
+                item['data-confirm']['message'] = '$langConfirmUninstallStoreApp';
+                Object.assign(item, item);
+                return item
+            }
+            return item
+        }
+    JS)),
     set::userMap($users),
     set::cols($config->space->dtable->fieldList),
     set::data($instances),
