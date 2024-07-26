@@ -67,15 +67,15 @@ dtable
             {
                 item['data-confirm']['message'] = '$langConfirmUninstal';
                 Object.assign(item, item);
-                return item
+                return item;
             }
             if(info.row.data.type == 'store' && item.icon == 'trash')
             {
                 item['data-confirm']['message'] = '$langConfirmUninstallStoreApp';
                 Object.assign(item, item);
-                return item
+                return item;
             }
-            return item
+            return item;
         }
     JS)),
     set::userMap($users),
