@@ -17,6 +17,7 @@ $lang->release->delete           = 'Delete Release';
 $lang->release->deleted          = 'Deleted';
 $lang->release->view             = 'Release Detail';
 $lang->release->browse           = 'Release List';
+$lang->release->publish          = 'Publish';
 $lang->release->changeStatus     = 'Change Status';
 $lang->release->batchUnlink      = 'Batch Unlink';
 $lang->release->batchUnlinkStory = 'Batch Unlink Stories';

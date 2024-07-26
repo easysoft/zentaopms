@@ -17,6 +17,7 @@ $lang->release->delete           = '删除发布';
 $lang->release->deleted          = '已删除';
 $lang->release->view             = '发布详情';
 $lang->release->browse           = '发布列表';
+$lang->release->publish          = '发布';
 $lang->release->changeStatus     = '修改状态';
 $lang->release->batchUnlink      = '批量移除';
 $lang->release->batchUnlinkStory = "批量移除{$lang->SRCommon}";

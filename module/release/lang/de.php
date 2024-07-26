@@ -17,6 +17,7 @@ $lang->release->delete           = 'Löschen';
 $lang->release->deleted          = 'Gelöscht';
 $lang->release->view             = 'Übersicht';
 $lang->release->browse           = 'Durchsuchen';
+$lang->release->publish          = 'Publish';
 $lang->release->changeStatus     = 'Status ändern';
 $lang->release->batchUnlink      = 'Mehrere entfernen';
 $lang->release->batchUnlinkStory = 'Mehrere Storys entfernen';
