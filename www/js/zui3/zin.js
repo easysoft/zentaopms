@@ -1553,15 +1553,17 @@
         });
     }
 
-    function fetchMessage()
+    function fetchMessage(force, fetchUrl)
     {
         let $this     = $('#messageBar');
         let $dropmenu = $("#dropdownMessageMenu");
-        let fetchUrl  = $this.attr('data-fetcher');
         let maxHeight = $(window).height() - $('#header').height() - 5;
 
+        if(typeof(force) === 'undefined' || typeof(force) === 'object') force = false;
+        if(typeof(fetchUrl) === 'undefined') fetchUrl = $this.attr('data-fetcher');
+
         let isOpen = $this.hasClass('open');
-        if(isOpen)
+        if(isOpen && !force)
         {
             $this.removeClass('open');
             return;

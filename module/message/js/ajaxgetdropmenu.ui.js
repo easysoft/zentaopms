@@ -31,6 +31,7 @@ window.markUnread = function(obj)
     $.get($.createLink('message', 'ajaxMarkUnread', "id=" + messageID));
 
     /* Rerender unread count. */
+    fetchMessage(true, $.createLink('message', 'ajaxGetDropmenu', 'active=all'));
     renderMessage();
 };
 
@@ -102,6 +103,12 @@ window.renderMessage = function()
     });
 
     updateAllDot(showCount);
+};
+
+window.hideContextMenu = function()
+{
+    if(contextmenu != null) $(contextmenu._element).trigger('contextmenu');
+    contextmenu = null;
 };
 
 window.clickContextMenu = function(obj)

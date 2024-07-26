@@ -182,6 +182,14 @@ class message extends control
             ->exec();
     }
 
+    /**
+     * Ajax: 标记消息未读。
+     * Ajax: Mark message to unread
+     *
+     * @param  int    $messageID
+     * @access public
+     * @return void
+     */
     public function ajaxMarkUnread(int $messageID)
     {
         $messageID = (int)$messageID;
