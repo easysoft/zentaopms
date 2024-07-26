@@ -14,4 +14,22 @@ modalHeader();
 formPanel
 (
     set::actions(array('submit')),
+    formRow
+    (
+        formGroup
+        (
+            set::label($lang->release->common . $lang->release->status),
+            set::control('radioListInline'),
+            set::name('status'),
+            set::value('normal'),
+            set::items($lang->release->resultList)
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::label($lang->comment),
+        )
+    )
 );
