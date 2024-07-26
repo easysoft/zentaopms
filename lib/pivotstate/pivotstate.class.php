@@ -569,8 +569,8 @@ class pivotState
                     $begin = $default['begin'];
                     $end   = $default['end'];
 
-                    $begin = date('Y-m-d H:i:s', $begin / 1000);
-                    $end = date('Y-m-d H:i:s', $end / 1000);
+                    if(is_numeric($begin)) $begin = date('Y-m-d H:i:s', $begin / 1000);
+                    if(is_numeric($end))   $end   = date('Y-m-d H:i:s', $end / 1000);
 
                     $default = array('begin' => $begin, 'end' => $end);
                 }
@@ -605,7 +605,11 @@ class pivotState
      */
     public function completeSettings()
     {
-        if($this->isSummaryNotUse()) return;
+        if($this->isSummaryNotUse())
+        {
+            $this->settings['drills'] = array_column($this->drills, 'condition', 'field');
+            return;
+        }
 
         $settings = $this->settings;
         if(!isset($settings['summary']) || $settings['summary'] !== 'notuse') $this->settings['summary'] = 'use';
