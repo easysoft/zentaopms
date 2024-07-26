@@ -94,6 +94,8 @@ pipeline {
               zCheckout([
                 [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
+                [name: "zentaomax", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaomax.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
+                [name: "zentaoipd", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaoipd.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
                 [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_pms_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ],
                 [name: "downRepoExt", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_ext_version}", j.getReplaySHA("${env.DOWNGRADE_EXT_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
               ])
@@ -135,6 +137,12 @@ pipeline {
                     sh 'git config --global --add safe.directory $PWD/zentaoext'
                     sh 'git config --global --add safe.directory $PWD/downRepo'
                     sh 'git config --global --add safe.directory $PWD/downRepoExt'
+                    sh 'test -d $PWD/zentaoext/zentaomax && rm -rf $PWD/zentaoext/zentaomax'
+                    sh 'test -d $PWD/zentaoext/zentaoipd && rm -rf $PWD/zentaoext/zentaoipd'
+                    sh 'mv $PWD/zentaomax $PWD/zentaoext/'
+                    sh 'mv $PWD/zentaoipd $PWD/zentaoext/'
+                    sh 'git config --global --add safe.directory $PWD/zentaoext/zentaomax'
+                    sh 'git config --global --add safe.directory $PWD/zentaoext/zentaoipd'
                     // sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
                     sh 'pwd && ls -l && make ciCommon'
                   }
@@ -600,15 +608,16 @@ pipeline {
               }
             }
             script {
+              def j = job.newJob()
+              j.SaveHeadReport('./.head.md')
+              ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: './.head.md')
+
               if (env.BUILD_KIND=='release') {
                 stage("离线镜像包") {
                   offlineImage.save()
                   offlineImage.release()
                 }
               }
-              def j = job.newJob()
-              j.SaveHeadReport('./.head.md')
-              ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: './.head.md')
 
               if (env.DEPLOY_ZENTAOPAAS=='true') {
                 deploy.upgradePaas(env.ZENTAOPAAS_SERVER, env.CNE_API_TOKEN)
