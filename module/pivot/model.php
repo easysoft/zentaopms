@@ -1444,8 +1444,8 @@ class pivotModel extends model
         $rows = $dbh->query($sql)->fetchAll();
         $rows = json_decode(json_encode($rows), true);
 
-        $cols = array();
-        $clientLang = $this->app->getClientLang();
+        $cols   = array();
+        $drills = $settings['drills'];
         /* Build cols. */
         foreach($fields as $field)
         {
@@ -1456,17 +1456,33 @@ class pivotModel extends model
             $col->isGroup = true;
             $col->label   = $this->getColLabel($key, $fields, $langs);
 
+            if(isset($drills[$key]))
+            {
+                $col->isDrilling = true;
+                $col->condition  = $drills[$key];
+                $col->drillField = $key;
+            }
+
             $cols[0][] = $col;
         }
 
         $fieldOptions = $this->getFieldsOptions($fields, $sql);
+        $dataDrills   = array();
         foreach($rows as $key => $row)
         {
+            $drillFields  = array();
             foreach($row as $field => $value)
             {
+                if(isset($drills[$field]))
+                {
+                    $drillField = array();
+                    foreach($drills[$field] as $condition) $drillField[$queryField] = $condition['queryField'];
+                    $drillFields[$field] = $drillField;
+                }
                 $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
                 $row[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
             }
+            $dataDrills[$key] = array('drillFields' => $drillFields);
 
             $rows[$key] = $row;
         }
@@ -1474,6 +1490,7 @@ class pivotModel extends model
         $data = new stdclass();
         $data->cols  = $cols;
         $data->array = $rows;
+        $data->drills = $dataDrills;
 
         $configs = array_fill(0, count($rows), array_fill(0, count($fields), 1));
 
