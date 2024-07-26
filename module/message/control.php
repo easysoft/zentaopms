@@ -209,7 +209,7 @@ class message extends control
      */
     public function ajaxDelete(string $messageID)
     {
-        if($messageID != 'all' || $messageID != 'allread') $messageID = (int)$messageID;
+        if($messageID != 'all' && $messageID != 'allread') $messageID = (int)$messageID;
         $this->dao->delete()->from(TABLE_NOTIFY)->where('objectType')->eq('message')
             ->andWhere('toList')->eq(",{$this->app->user->account},")
             ->beginIF($messageID == 'allread')->andWhere('status')->eq('read')->fi()
