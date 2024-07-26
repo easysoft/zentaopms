@@ -1476,7 +1476,11 @@ class pivotModel extends model
                 if(isset($drills[$field]))
                 {
                     $drillField = array();
-                    foreach($drills[$field] as $condition) $drillField[$queryField] = $condition['queryField'];
+                    foreach($drills[$field] as $condition)
+                    {
+                        $queryField = $condition['queryField'];
+                        $drillField[$queryField] = $row[$queryField];
+                    }
                     $drillFields[$field] = $drillField;
                 }
                 $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
