@@ -368,7 +368,7 @@ class productsBox extends wg
                     setClass('hidden roadmapBoxHidden'),
                     picker
                     (
-                        set::name("roadmap[$product->id][]"),
+                        set::name("roadmaps[$product->id][]"),
                         set::items($objects),
                         set::value($objectID),
                         set::multiple(true)
