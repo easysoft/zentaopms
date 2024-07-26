@@ -138,10 +138,11 @@ class message extends control
      * Ajax: 获取消息下拉菜单。
      * Ajax get dropmenu.
      *
+     * @param  string $active  unread|all
      * @access public
      * @return void
      */
-    public function ajaxGetDropmenu()
+    public function ajaxGetDropmenu(string $active = 'unread')
     {
         $messages = $this->message->getMessages('all', 'createdDate_desc');
 
@@ -160,6 +161,7 @@ class message extends control
         $this->view->allMessages    = $allMessages;
         $this->view->unreadCount    = $unreadCount;
         $this->view->unreadMessages = $unreadMessages;
+        $this->view->active         = $active;
         $this->display();
     }
 
@@ -175,6 +177,15 @@ class message extends control
     {
         if($messageID != 'all') $messageID = (int)$messageID;
         $this->dao->update(TABLE_NOTIFY)->set('status')->eq('read')->where('objectType')->eq('message')
+            ->andWhere('toList')->eq(",{$this->app->user->account},")
+            ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
+            ->exec();
+    }
+
+    public function ajaxMarkUnread(int $messageID)
+    {
+        $messageID = (int)$messageID;
+        $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->where('objectType')->eq('message')
             ->andWhere('toList')->eq(",{$this->app->user->account},")
             ->beginIF(is_int($messageID))->andWhere('id')->eq($messageID)->fi()
             ->exec();
@@ -207,18 +218,21 @@ class message extends control
      */
     public function ajaxSetOneself()
     {
-        if($_POST)
-        {
-            $data    = fixer::input('post')->setDefault('show', 0)->setDefault('count', 0)->get();
-            $account = $this->app->user->account;
-            $this->loadModel('setting')->setItems("{$account}.message.browser", $data);
+        if(empty($_POST)) return;
 
-            $this->config->message->browser->maxDays = $data->maxDays;
-            $this->message->deleteExpired();
+        $data = fixer::input('post')->setDefault('show', 0)->setDefault('count', 0)->get();
+        if(!is_numeric($data->maxDays)) dao::$errors['maxDays'] = $this->lang->message->error->maxDaysFormat;
 
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateAllDot({$data->count});"));
-        }
+        $data->maxDays = (int)$data->maxDays;
+        if($data->maxDays < 0) dao::$errors['maxDays'] = $this->lang->message->error->maxDaysValue;
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->display();
+        $account = $this->app->user->account;
+        $this->loadModel('setting')->setItems("{$account}.message.browser", $data);
+
+        $this->config->message->browser->maxDays = $data->maxDays;
+        $this->message->deleteExpired();
+
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateAllDot({$data->count});"));
     }
 }
