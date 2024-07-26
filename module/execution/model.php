@@ -4118,7 +4118,14 @@ class executionModel extends model
             ->get();
         if(!is_numeric($data->estimate)) return false;
 
-        $this->dao->replace(TABLE_BURN)->data($data)->exec();
+        if(empty($burn))
+        {
+            $this->dao->insert(TABLE_BURN)->data($data)->exec();
+        }
+        else
+        {
+            $this->dao->update(TABLE_BURN)->data($data)->exec();
+        }
     }
 
     /**
