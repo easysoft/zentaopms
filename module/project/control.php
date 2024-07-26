@@ -573,22 +573,30 @@ class project extends control
             return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('project', 'browse'))));
         }
 
-        $products = $this->loadModel('product')->getProducts($projectID);
-        $linkedBranches = array();
+        $products        = $this->loadModel('product')->getProducts($projectID);
+        $projectBranches = $this->project->getBranchesByProject($projectID);
+        $linkedBranches  = array();
         foreach($products as $product)
         {
+            $product->roadmaps = '';
             if(isset($product->branches))
             {
-                foreach($product->branches as $branchID) $linkedBranches[$branchID] = $branchID;
+                foreach($product->branches as $branchID)
+                {
+                    $linkedBranches[$branchID] = $branchID;
+                    $product->roadmaps .= ',' . trim($projectBranches[$product->id][$branchID]->roadmap, ',');
+                }
             }
+            $product->roadmaps = trim($product->roadmaps, ',');
         }
 
         if($this->config->edition == 'ipd')
         {
-            $charter = $this->loadModel('charter')->getByID($project->charter);
+            $charter         = $this->loadModel('charter')->getByID($project->charter);
+            $productRoadmaps = $this->charter->getGroupDataByID($project->charter);
 
-            $this->view->charter = $charter;
-            $this->view->roadmap = !empty($charter) ? $this->loadModel('roadmap')->getByID($charter->roadmap) : new stdclass();
+            $this->view->charter  = $charter;
+            $this->view->roadmaps = !empty($charter) ? $productRoadmaps : array();
         }
 
         $this->executeHooks($projectID);

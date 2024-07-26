@@ -12,21 +12,24 @@ class productsBox extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'productItems?: array',         // 产品列表。
-        'branchGroups?: array',         // 产品分支分组列表。
-        'planGroups?: array',           // 产品计划分组列表。
-        'linkedProducts?: array',       // 关联的产品。
-        'linkedBranches?: array',       // 关联的分支。
-        'currentProduct?: int=0',       // 来源产品ID。
-        'currentPlan?: int=0',          // 来源计划。
-        'productPlans?: array=array()', // 同来源计划所属产品的计划列表。
-        'project?: object',             // 关联的项目。
-        'isStage?: bool',               // 是否是阶段类型。
-        'hasNewProduct?: bool=false',   // 是否有新产品。
-        'errorSameProducts?: string',   // 选择同一个产品的提示。
-        'required?: bool=false',        // 是否是必填。
-        'from?: string=project',        // 来源类型。
-        'selectTip?: string=""'         // 产品下拉提示。
+        'productItems?: array',          // 产品列表。
+        'branchGroups?: array',          // 产品分支分组列表。
+        'planGroups?: array',            // 产品计划分组列表。
+        'roadmapGroups?: array=array()', // 产品路标分组列表。
+        'linkedProducts?: array',        // 关联的产品。
+        'linkedBranches?: array',        // 关联的分支。
+        'currentProduct?: int=0',        // 来源产品ID。
+        'currentPlan?: int=0',           // 来源计划。
+        'currentRoadmap?: int=0',        // 来源路标。
+        'productPlans?: array=array()',  // 同来源计划所属产品的计划列表。
+        'project?: object',              // 关联的项目。
+        'isStage?: bool',                // 是否是阶段类型。
+        'hasNewProduct?: bool=false',    // 是否有新产品。
+        'errorSameProducts?: string',    // 选择同一个产品的提示。
+        'required?: bool=false',         // 是否是必填。
+        'from?: string=project',         // 来源类型。
+        'type?: string=plan',            // 类型。 plan|roadmap
+        'selectTip?: string=""'          // 产品下拉提示。
     );
 
     public static function getPageCSS(): ?string
@@ -70,7 +73,12 @@ class productsBox extends wg
     protected function initProductsBox(): array
     {
         global $lang, $app;
-        list($productItems, $project, $isStage, $hasNewProduct) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct'));
+        list($productItems, $project, $isStage, $hasNewProduct, $type) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct', 'type'));
+
+        $typeLang     = $type == 'plan' ? $lang->project->associatePlan : $lang->project->manageRoadmap;
+        $typeClass    = $type == 'plan' ? 'planBox'    : 'roadmapBox';
+        $typeIdAttr   = $type == 'plan' ? 'plan0'      : 'roadmap0';
+        $typeNameAttr = $type == 'plan' ? 'plans[0][]' : 'roadmaps[0][]';
 
         $productsBox   = array();
         $hidden        = !empty($project) && empty($project->hasProduct) ? 'hidden' : '';
@@ -128,14 +136,14 @@ class productsBox extends wg
             formGroup
             (
                 set::width('1/2'),
-                set::label($lang->project->associatePlan),
-                set::className('planBox'),
+                set::label($typeLang),
+                set::className($typeClass),
                 inputGroup
                 (
-                    set::id("plan0"),
+                    set::id($typeIdAttr),
                     picker
                     (
-                        set::name('plans[0][]'),
+                        set::name($typeNameAttr),
                         set::items(array()),
                         set::multiple(true)
                     )
@@ -205,10 +213,13 @@ class productsBox extends wg
         if(empty($linkedProducts)) return array();
 
         global $lang;
-        list($productItems, $branchGroups, $planGroups, $productPlans) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans'));
+        list($productItems, $branchGroups, $planGroups, $productPlans, $type, $roadmapGroups) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans', 'type', 'roadmapGroups'));
         list($linkedBranches, $currentProduct, $currentPlan, $project, $isStage) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project', 'isStage'));
 
         $unmodifiableProducts = data('unmodifiableProducts') ? data('unmodifiableProducts') : array();
+
+        $typeLang  = $type == 'plan' ? $lang->project->associatePlan : $lang->project->manageRoadmap;
+        $typeClass = $type == 'plan' ? 'planBox' : 'roadmapBox';
 
         $linkedProductsBox = array();
         foreach(array_values($linkedProducts) as $i => $product)
@@ -216,31 +227,60 @@ class productsBox extends wg
             $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
             $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
 
-            $disabledProduct = !empty($project) && (in_array($product->id, $unmodifiableProducts) || $isStage);
+            $disabledProduct = !empty($project) && (in_array($product->id, $unmodifiableProducts) || $isStage || data('disableModel'));
 
             $branchIdList = '';
             if(isset($product->branches))             $branchIdList = $product->branches;
             if(!empty($linkedBranches[$product->id])) $branchIdList = is_array($linkedBranches) ? array_keys($linkedBranches[$product->id]) : $linkedBranches[$product->id];
 
-            $planID = 0;
+            $objectID = 0;
             if(empty($currentProduct) || ($currentProduct != $product->id))
             {
-                $plans = array();
-                if(is_array($branchIdList) && isset($planGroups[$product->id]))
+                $objects      = array();
+                $objectGroups = $type == 'plan' ? $planGroups : $roadmapGroups;
+                if(is_array($branchIdList) && isset($objectGroups[$product->id]))
                 {
                     foreach($branchIdList as $branchID)
                     {
-                        if(isset($planGroups[$product->id][$branchID])) $plans += $planGroups[$product->id][$branchID];
+                        if(isset($objectGroups[$product->id][$branchID])) $objects += $objectGroups[$product->id][$branchID];
                     }
                 }
-                $planID = isset($product->plans) && is_array($product->plans)? implode(',', $product->plans) : '';
+                if($type == 'roadmap' && empty($product->branches) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
+
+                if($product->type == 'normal')
+                {
+                    $planID    = isset($product->plans) && is_array($product->plans) ? implode(',', $product->plans) : '';
+                    $roadmapID = isset($product->roadmaps) && is_array($product->roadmaps) ? implode(',', $product->roadmaps) : '';
+                }
+                else
+                {
+                    $planID = '';
+                    if(isset($product->plans) && is_array($product->plans))
+                    {
+                        foreach($product->plans as $branchGroup) $planID .= ',' . implode(',', $branchGroup);
+                    }
+
+                    $roadmapID = '';
+                    if(isset($product->roadmaps) && is_array($product->roadmaps))
+                    {
+                        foreach($product->roadmaps as $branchGroup) $roadmapID .= ',' . implode(',', $branchGroup);
+                    }
+                }
+
+                $objectID = $type == 'plan' ? trim($planID, ',') : trim($roadmapID, ',');
             }
             else
             {
                 $plans  = !empty($productPlans) ? $productPlans : array();
                 $planID = isset($currentPlan) && isset($productPlans[$currentPlan]) ? $currentPlan : '';
+
+                $roadmaps  = !empty($productRoadmaps) ? $productRoadmaps : array();
+                $roadmapID = isset($currentRoadmap) && isset($productRoadmaps[$currentRoadmap]) ? $currentRoadmap : '';
+
+                $objects  = $type == 'plan' ? $plans  : $roadmaps;
+                $objectID = $type == 'plan' ? $planID : $roadmapID;
             }
-            if($planID and empty($plans)) $planID = '';
+            if($objectID && empty($objects)) $objectID = '';
 
             $linkedProductsBox[] = div
             (
@@ -249,7 +289,7 @@ class productsBox extends wg
                 (
                     set::width($hasBranch ? '1/4' : '1/2'),
                     setClass('linkProduct'),
-                    set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
+                    set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus'))) || $type == 'roadmap'),
                     $i == 0 ? set::label($lang->project->manageProducts) : null,
                     inputGroup
                     (
@@ -258,7 +298,7 @@ class productsBox extends wg
                             setClass('grow'),
                             picker
                             (
-                                bind::change('loadBranches(event)'),
+                                $type == 'plan' ? bind::change('loadBranches(event)') : on::change('loadBranches(event)'),
                                 set::name("products[$i]"),
                                 set::value($product->id),
                                 set::items($productItems),
@@ -305,20 +345,34 @@ class productsBox extends wg
                 formGroup
                 (
                     set::width('1/2'),
-                    $i == 0 ? set::label($lang->project->associatePlan) : null,
-                    set::className('planBox'),
+                    $i == 0 ? set::label($typeLang) : null,
+                    set::required($type == 'roadmap'),
+                    $type == 'roadmap' ? set::checkbox(array('text' => $lang->project->linkStoryToProject, 'name' => 'isLinkStory', 'checked' => true)) : null,
+                    set::className($typeClass),
                     inputGroup
                     (
-                        set::id("plan{$i}"),
+                        set::id($type == 'plan' ? "plan{$i}" : "roadmap{$i}"),
                         picker
                         (
-                            set::name("plans[$product->id][]"),
-                            set::items($plans),
-                            set::value($planID),
-                            set::multiple(true)
+                            set::name($type == 'plan' ? "plans[$product->id][]" : "roadmaps[$product->id][]"),
+                            set::items($objects),
+                            set::value($objectID),
+                            set::multiple(true),
+                            set::disabled($disabledProduct && $type == 'roadmap')
                         )
                     )
                 ),
+                $disabledProduct && $type == 'roadmap' ? div
+                (
+                    setClass('hidden roadmapBoxHidden'),
+                    picker
+                    (
+                        set::name("roadmap[$product->id][]"),
+                        set::items($objects),
+                        set::value($objectID),
+                        set::multiple(true)
+                    )
+                ) : null,
                 $disabledProduct ? null : div
                 (
                     setClass('pl-2 flex self-center line-btn c-actions', $i == 0 ? 'first-action' : ''),

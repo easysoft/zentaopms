@@ -1886,17 +1886,20 @@ class projectModel extends model
         }
 
         /* Set the product information linked with the project. */
-        $branches        = isset($_POST['branch']) ? $_POST['branch'] : array();
-        $plans           = isset($_POST['plans']) ? $_POST['plans'] : array();
+        $branches        = isset($_POST['branch'])   ? $_POST['branch']   : array();
+        $plans           = isset($_POST['plans'])    ? $_POST['plans']    : array();
+        $charter         = isset($_POST['charter'])  ? $_POST['charter']  : 0;
+        $roadmaps        = isset($_POST['roadmaps']) ? $_POST['roadmaps'] : array();
         $existedProducts = array();
         foreach($products as $index => $productID)
         {
             if(empty($productID)) continue;
             if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
-            $oldPlan = 0;
-            $branch  = isset($branches[$index]) ? $branches[$index] : 0;
-            $branch  = !is_array($branch) ? array($branch => $branch) : $branch;
+            $oldPlan    = 0;
+            $oldRoadmap = 0;
+            $branch     = isset($branches[$index]) ? $branches[$index] : 0;
+            $branch     = !is_array($branch) ? array($branch => $branch) : $branch;
             foreach($branch as $branchID)
             {
                 if(isset($existedProducts[$productID][$branchID])) continue;
@@ -1913,6 +1916,13 @@ class projectModel extends model
                 $data->plan    = (isset($plans[$productID]) && !empty($plans[$productID])) ? implode(',', $plans[$productID]) : $oldPlan;
                 $data->plan    = trim((string)$data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+
+                if($charter)
+                {
+                    $data->roadmap = (isset($roadmaps[$productID]) && !empty($roadmaps[$productID])) ? implode(',', $roadmaps[$productID]) : $oldRoadmap;
+                    $data->roadmap = trim((string)$data->roadmap, ',');
+                    $data->roadmap = empty($data->roadmap) ? 0 : ",$data->roadmap,";
+                }
 
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 $existedProducts[$productID][$branchID] = true;

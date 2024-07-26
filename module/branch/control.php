@@ -255,10 +255,11 @@ class branch extends control
      * @param  string $isTwins
      * @param  string $fieldID
      * @param  string $multiple
+     * @param  int    $charterID
      * @access public
      * @return void
      */
-    public function ajaxGetBranches(int $productID, string $oldBranch = '0', string $browseType = 'all', int $projectID = 0, bool $withMainBranch = true, string $isTwins = 'no', string $fieldID = '0', string $multiple = '')
+    public function ajaxGetBranches(int $productID, string $oldBranch = '0', string $browseType = 'all', int $projectID = 0, bool $withMainBranch = true, string $isTwins = 'no', string $fieldID = '0', string $multiple = '', int $charterID = 0)
     {
         $product = $this->loadModel('product')->getByID($productID);
         if(empty($product) || $product->type == 'normal') return print(json_encode(array()));
@@ -274,6 +275,14 @@ class branch extends control
         {
             $branch = $this->branch->getByID($oldBranch, $productID, '');
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
+        }
+
+        /* Remove the branches that do not belong to the current charter. */
+        if($charterID && $this->config->edition == 'ipd')
+        {
+            $charterGroups   = $this->loadModel('charter')->getGroupDataByID($charterID);
+            $charterBranches = isset($charterGroups[$productID]) ? array_column($charterGroups[$productID], 'branch', 'branch') : array();
+            $branchTagOption = array_intersect_key($branchTagOption, $charterBranches);
         }
 
         $items = array();

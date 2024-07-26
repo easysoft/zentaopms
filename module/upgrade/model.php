@@ -9523,4 +9523,38 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * 将项目关联的Charter的路标放到projectproduct表中。
+     * Process project roadmap by charter.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processProjectRoadmapsByCharter()
+    {
+        $projectCharters = $this->dao->select('id,charter')->from(TABLE_PROJECT)->where('charter')->ne('0')->fetchPairs('id', 'charter');
+        if(empty($projectCharters)) return true;
+
+        $charterGroups  = $this->dao->select('t1.*,t2.id as charterID')->from(TABLE_ROADMAP)->alias('t1')
+            ->leftJoin(TABLE_CHARTER)->alias('t2')->on('FIND_IN_SET(t1.id, t2.roadmap)')
+            ->where('t2.id')->in($projectCharters)
+            ->fetchGroup('charterID');
+
+        foreach($projectCharters as $projectID => $charter)
+        {
+            foreach($charterGroups[$charter] as $roadmap)
+            {
+                $productRoadmap = new stdclass();
+                $productRoadmap->project = $projectID;
+                $productRoadmap->product = $roadmap->product;
+                $productRoadmap->branch  = $roadmap->branch;
+                $productRoadmap->roadmap = ",$roadmap->id,";
+
+                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($productRoadmap)->exec();
+            }
+        }
+
+        return true;
+    }
 }

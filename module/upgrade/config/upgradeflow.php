@@ -99,7 +99,7 @@ $config->upgrade->execFlow['20_0_beta2']  = array('functions' => 'updateWorkflow
 $config->upgrade->execFlow['20_0']        = array('functions' => 'openCacheByAPCu');
 $config->upgrade->execFlow['20_1_0']      = array('functions' => 'completeClassifyLang');
 $config->upgrade->execFlow['20_1_1']      = array('functions' => 'syncActivityAndOutput,changeCustomStoryStage,processStoryRelation,processLinkStories,addERName,addTR4APoint');
-$config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinWorkflow,addFlowFields', 'params' => array('importBuildinWorkflow' => array('or'), 'addFlowFields' => array('biz10.2')));
+$config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinWorkflow,addFlowFields,processProjectRoadmapsByCharter', 'params' => array('importBuildinWorkflow' => array('or'), 'addFlowFields' => array('biz10.2')));
 
 if(!empty($config->isINT))
 {
