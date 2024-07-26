@@ -23,8 +23,7 @@ $buildMessageList = function($messageGroup) use ($lang)
     $dateList = array();
     foreach($messageGroup as $date => $messages)
     {
-        $dateList[] = h::li(setClass('message-date font-bold'), $date);
-        $itemList[] = array();
+        $itemList = array();
         foreach($messages as $message)
         {
             $isUnread   = $message->status != 'read';
@@ -44,7 +43,9 @@ $buildMessageList = function($messageGroup) use ($lang)
             $itemList[] = h::li
             (
                 setClass('message-item border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
-                setData('id', $message->id),
+                setData('msgid', $message->id),
+                set(array('zui-create' => "contextMenu")),
+                setData('target', $isUnread ? '#unreadContextMenu' : '#readContextMenu'),
                 row
                 (
                     setClass('text-gray justify-between'),
@@ -54,7 +55,7 @@ $buildMessageList = function($messageGroup) use ($lang)
                 div(setClass('pt-1'), html($content))
             );
         }
-        $dateList[] = h::li(h::ul(setClass('list-unstyled'), $itemList));
+        $dateList[] = h::li(setClass('message-date mt-2'), $date, h::ul(setClass('list-unstyled'), $itemList));
     }
     return h::ul(setClass('list-unstyled'), $dateList);
 };
@@ -62,7 +63,7 @@ $buildMessageList = function($messageGroup) use ($lang)
 tabs
 (
     setID('messageTabs'),
-    setClass('text-black pt-1 px-5 pb-5 relative'),
+    setClass('text-black pt-2.5 px-5 pb-5 relative'),
     set::style(array('width' => '400px', 'background-color' => '#fff')),
     on::click('.delete-message-btn', 'deleteMessage(e.target)'),
     on::click('.message-item', 'markRead(e.target)'),
@@ -70,23 +71,64 @@ tabs
     on::click('.allMarkRead', 'markAllRead'),
     div
     (
-        setClass('absolute top-2 right-5'),
+        setClass('absolute top-3 right-5'),
         set::style(array('z-index' => '100')),
         btn(set::size('sm'), set::type('link'), setClass('allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('eye')),
         btn(set::size('sm'), set::type('link'), setClass('clearRead'),   set::hint($lang->message->notice->clearRead),   icon('trash')),
-        btn(set::size('sm'), set::type('link'), set::hint($lang->message->browserSetting->more), set::url(createLink('message', 'ajaxSetOneself')), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
+        btn(set::size('sm'), set::type('link'), set::hint($lang->message->browserSetting->more), setData('target', '#messageSettingModal'), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
     ),
     tabPane
     (
         set::key('unread-messages'),
         set::title(sprintf($lang->message->unread, $unreadCount)),
-        set::active(true),
+        set::active($active == 'unread'),
         $buildMessageList($unreadMessages)
     ),
     tabPane
     (
         set::key('all-messages'),
         set::title($lang->message->all),
+        set::active($active == 'all'),
         $buildMessageList($allMessages)
+    )
+);
+
+menu(setClass('contextmenu text-black'), setID('unreadContextMenu'), set::items(array(array('text' => $lang->delete, 'value' => 'delete', 'onclick' => 'clickContextMenu(this)'))));
+menu(setClass('contextmenu text-black'), setID('readContextMenu'),   set::items(array(array('text' => $lang->delete, 'value' => 'delete', 'onclick' => 'clickContextMenu(this)'), array('text' => $lang->message->markUnread, 'value' => 'markunread', 'onclick' => 'clickContextMenu(this)'))));
+
+modal
+(
+    setID('messageSettingModal'),
+    setClass('text-black'),
+    set::title($lang->message->browserSetting->more),
+    form
+    (
+        set::url(inlink('ajaxSetOneself')),
+        set::actions(array('submit')),
+        formGroup
+        (
+            set::width('2/3'),
+            setClass('content-center'),
+            set::label($lang->message->browserSetting->show),
+            switcher(set::name('show'), set::value(1), set::checked($config->message->browser->show)),
+        ),
+        formGroup
+        (
+            set::width('2/3'),
+            setClass('content-center'),
+            set::label($lang->message->browserSetting->count),
+            switcher(set::name('count'), set::value(1), set::checked($config->message->browser->count)),
+        ),
+        formGroup
+        (
+            set::width('2/3'),
+            set::label($lang->message->browserSetting->maxDays),
+            inputControl
+            (
+                input(set::name('maxDays'), set::value($config->message->browser->maxDays)),
+                set::suffixWidth('30'),
+                set::suffix($lang->day),
+            )
+        )
     )
 );

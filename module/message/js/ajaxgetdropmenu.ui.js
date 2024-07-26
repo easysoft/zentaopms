@@ -5,24 +5,33 @@ window.markRead = function(obj)
     let isUnread = $this.hasClass('unread');
     if(!isUnread) return;
 
-    let messageID    = $this.data("id");
-    let $messageItem = $('#messageTabs .message-item.unread[data-id="' + messageID + '"]');
+    let messageID    = $this.data("msgid");
+    let $messageItem = $('#messageTabs .message-item.unread[data-msgid="' + messageID + '"]');
     $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
     $messageItem.removeClass('unread');
+    $messageItem.attr('data-target', '#readContextMenu');
     $.get($.createLink('message', 'ajaxMarkRead', "id=" + messageID));
 
     /* Rerender unread count. */
-    $('messageTabs #unread-messages.tab-pane').find('.message-item[data-id="' + messageID + '"]').addClass('hidden');
+    $('#messageTabs #unread-messages.tab-pane').find('.message-item[data-msgid="' + messageID + '"]').addClass('hidden');
     renderMessage();
 };
 
-window.markAllRead = function()
+window.markUnread = function(obj)
 {
-    let $messageItem = $('#messageTabs .message-item.unread');
-    $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
-    $messageItem.removeClass('unread');
-    $('#messageTabs #unread-messages.tab-pane .message-item').addClass('hidden');
-    $.get($.createLink('message', 'ajaxMarkRead', "id=all"));
+    let $this = $(obj);
+    if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
+    let isUnread = $this.hasClass('unread');
+    if(isUnread) return;
+
+    let messageID    = $this.data("msgid");
+    let $messageItem = $('#messageTabs .message-item[data-msgid="' + messageID + '"]');
+    $messageItem.find('.label-dot.gray').removeClass('gray').addClass('danger');
+    $messageItem.addClass('unread');
+    $.get($.createLink('message', 'ajaxMarkUnread', "id=" + messageID));
+
+    /* Rerender unread count. */
+    fetchMessage(true, $.createLink('message', 'ajaxGetDropmenu', 'active=all'));
     renderMessage();
 };
 
@@ -39,8 +48,9 @@ window.deleteMessage = function(obj)
     let $this = $(obj);
     if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
 
-    let messageID = $this.data("id");
-    let $messageItem = $('#messageTabs .message-item[data-id="' + messageID + '"]');
+    let messageID = $this.data("msgid");
+    let $messageItem = $('#messageTabs .message-item[data-msgid="' + messageID + '"]');
+    $messageItem.removeClass('unread');
     $messageItem.addClass('hidden');
     $.get($.createLink('message', 'ajaxDelete', "id=" + messageID));
 
@@ -77,7 +87,16 @@ window.renderMessage = function()
         if($allTab.find('.nodata').length == 0) $allTab.append("<div class='text-center text-gray nodata'>" + noDataLang + "</div>");
     }
 
+    $('#messageTabs .message-date').each(function()
+    {
+        if($(this).find('.message-item:not(.hidden)').length == 0) $(this).addClass('hidden');
+    });
+
     updateAllDot(showCount);
 };
 
-$(function(){ updateAllDot(showCount); });
+let contextmenu = null;
+$(document).on('contextmenu', '.message-item', function(event){ contextmenu = $(this).zui('ContextMenu'); });
+$('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
+
+$(function() { updateAllDot(showCount) });
