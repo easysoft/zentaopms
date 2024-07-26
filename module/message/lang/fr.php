@@ -1,9 +1,10 @@
 <?php
-$lang->message->common    = 'Notification';
-$lang->message->index     = 'Accueil';
-$lang->message->setting   = 'Paramétrage';
-$lang->message->browser   = 'System Notification';
-$lang->message->blockUser = 'Block User';
+$lang->message->common     = 'Notification';
+$lang->message->index      = 'Accueil';
+$lang->message->setting    = 'Paramétrage';
+$lang->message->browser    = 'System Notification';
+$lang->message->blockUser  = 'Block User';
+$lang->message->markUnread = 'Mark unread';
 
 $lang->message->typeList['mail']     = 'Email';
 $lang->message->typeList['message']  = 'System Notifications';
@@ -33,6 +34,10 @@ $lang->message->timeLabel['hour']   = '1 hour ago';
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = 'One-click read';
 $lang->message->notice->clearRead   = 'Clear read';
+
+$lang->message->error = new stdclass();
+$lang->message->error->maxDaysFormat  = 'Retention Days can only be filled in with numbers.';
+$lang->message->error->maxDaysValue   = 'Retention Days cannot be less than 0.';
 
 $lang->message->label = new stdclass();
 $lang->message->label->created      = 'create';

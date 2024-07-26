@@ -1,9 +1,10 @@
 <?php
-$lang->message->common    = '系统通知';
-$lang->message->index     = '首页';
-$lang->message->setting   = '设置';
-$lang->message->browser   = '系统通知';
-$lang->message->blockUser = '不通知人员';
+$lang->message->common     = '系统通知';
+$lang->message->index      = '首页';
+$lang->message->setting    = '设置';
+$lang->message->browser    = '系统通知';
+$lang->message->blockUser  = '不通知人员';
+$lang->message->markUnread = '标为未读';
 
 $lang->message->typeList['mail']     = '邮件';
 $lang->message->typeList['message']  = '系统通知';
@@ -33,6 +34,10 @@ $lang->message->timeLabel['hour']   = '1小时前';
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = '一键已读';
 $lang->message->notice->clearRead   = '清空已读';
+
+$lang->message->error = new stdclass();
+$lang->message->error->maxDaysFormat  = '保留天数只能填写数字。';
+$lang->message->error->maxDaysValue   = '保留天数不能小于0。';
 
 $lang->message->label = new stdclass();
 $lang->message->label->created      = '创建';
