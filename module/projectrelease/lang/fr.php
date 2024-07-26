@@ -27,6 +27,7 @@ $lang->projectrelease->unlinkBug        = 'Unlink Bug';
 $lang->projectrelease->export           = 'Export HTML';
 $lang->projectrelease->browseAction     = "Release List";
 $lang->projectrelease->notify           = 'notify';
+$lang->projectrelease->publish          = "Publish";
 $lang->projectrelease->product          = $lang->productCommon;
 $lang->projectrelease->name             = "Name";
 

@@ -141,6 +141,9 @@ class projectrelease extends control
         $this->project->setMenu($projectID);
         $this->projectreleaseZen->commonAction($projectID);
 
+        unset($this->lang->release->statusList['fail']);
+        unset($this->lang->release->statusList['terminate']);
+
         /* Get the builds that can select. */
         $builds         = $this->loadModel('build')->getBuildPairs(array($this->view->product->id), 'all', 'notrunk|withbranch|hasproject', $projectID, 'project', '', false);
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
@@ -372,6 +375,19 @@ class projectrelease extends control
     public function batchUnlinkBug(int $releaseID, string $type = 'bug')
     {
         echo $this->fetch('release', 'batchUnlinkBug', "releaseID={$releaseID}&type={$type}");
+    }
+
+    /**
+     * 发布页面。
+     * Publish page.
+     *
+     * @param  int    $releaseID
+     * @access public
+     * @return void
+     */
+    public function publish(int $releaseID)
+    {
+        return $this->fetch('release', 'publish', "releaseID={$releaseID}");
     }
 
     /**

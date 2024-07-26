@@ -27,6 +27,7 @@ $lang->projectrelease->unlinkBug        = '移除Bug';
 $lang->projectrelease->export           = '导出HTML';
 $lang->projectrelease->browseAction     = "发布列表";
 $lang->projectrelease->notify           = "通知";
+$lang->projectrelease->publish          = "发布";
 $lang->projectrelease->product          = "所属{$lang->productCommon}";
 $lang->projectrelease->name             = "发布名称";
 
