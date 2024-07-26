@@ -88,6 +88,9 @@ class screen extends control
      */
     public function view(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account, false);
+
+        $this->view->title    = $screen->name;
         $this->view->screenID = $screenID;
         $this->view->year     = $year;
         $this->view->month    = $month;
