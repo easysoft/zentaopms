@@ -38,7 +38,7 @@ $config->instance->actionList['ajaxUninstall']['icon']         = 'trash';
 $config->instance->actionList['ajaxUninstall']['hint']         = $lang->instance->uninstall;
 $config->instance->actionList['ajaxUninstall']['text']         = $lang->instance->uninstall;
 $config->instance->actionList['ajaxUninstall']['className']    = 'ajax-submit';
-$config->instance->actionList['ajaxUninstall']['data-confirm'] = array('message' => $lang->instance->notices['confirmUninstall'], 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');;
+$config->instance->actionList['ajaxUninstall']['data-confirm'] = array('message' => $lang->instance->notices['confirmUninstall'], 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->instance->actionList['ajaxUninstall']['url']          = array('module' => 'instance', 'method' => 'ajaxUninstall', 'params' => 'id={id}&type={type}');
 
 $config->instance->actionList['visit']['icon']  = 'menu-my';
