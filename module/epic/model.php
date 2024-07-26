@@ -10,6 +10,6 @@ class epicModel extends model
 
     public function getToAndCcList(object $story, string $actionType)
     {
-        $this->loadModel('story')->getToAndCcList($story, $actionType);
+        return $this->loadModel('story')->getToAndCcList($story, $actionType);
     }
 }
