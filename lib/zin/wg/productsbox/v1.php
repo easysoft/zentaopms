@@ -28,7 +28,7 @@ class productsBox extends wg
         'errorSameProducts?: string',    // 选择同一个产品的提示。
         'required?: bool=false',         // 是否是必填。
         'from?: string=project',         // 来源类型。
-        'type?: string=plan',            // 类型。 plan|roadmap
+        'type?: string="plan"',          // 类型。 plan|roadmap
         'selectTip?: string=""'          // 产品下拉提示。
     );
 
@@ -44,7 +44,7 @@ class productsBox extends wg
 
     protected function build()
     {
-        list($project, $productItems, $linkedProducts, $errorSameProducts) = $this->prop(array('project', 'productItems', 'linkedProducts', 'errorSameProducts'));
+        list($project, $productItems, $linkedProducts, $errorSameProducts, $type) = $this->prop(array('project', 'productItems', 'linkedProducts', 'errorSameProducts', 'type'));
 
         $productsBox = array();
         if((!empty($project->hasProduct) || is_null($project)) && $linkedProducts)
@@ -74,7 +74,6 @@ class productsBox extends wg
     {
         global $lang, $app;
         list($productItems, $project, $isStage, $hasNewProduct, $type) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct', 'type'));
-        $type = empty($type) ? 'plan' : $type;
 
         $typeLang     = $type == 'plan' ? $lang->project->associatePlan : $lang->project->manageRoadmap;
         $typeClass    = $type == 'plan' ? 'planBox'    : 'roadmapBox';
@@ -216,7 +215,6 @@ class productsBox extends wg
         global $lang;
         list($productItems, $branchGroups, $planGroups, $productPlans, $type, $roadmapGroups) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans', 'type', 'roadmapGroups'));
         list($linkedBranches, $currentProduct, $currentPlan, $project, $isStage) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project', 'isStage'));
-        $type = empty($type) ? 'plan' : $type;
 
         $unmodifiableProducts = data('unmodifiableProducts') ? data('unmodifiableProducts') : array();
 
@@ -224,6 +222,7 @@ class productsBox extends wg
         $typeClass = $type == 'plan' ? 'planBox' : 'roadmapBox';
 
         $linkedProductsBox = array();
+        $hiddenPlusBtn     = $type == 'roadmap' && count($productItems) == count(array_keys($linkedProducts)) ? ' hidden' : '';
         foreach(array_values($linkedProducts) as $i => $product)
         {
             $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
@@ -381,7 +380,7 @@ class productsBox extends wg
                     btn
                     (
                         bind::click('addNewLine(event)'),
-                        setClass('btn btn-link text-gray addLine'),
+                        setClass("btn btn-link text-gray addLine $hiddenPlusBtn"),
                         icon('plus')
                     ),
                     btn
