@@ -223,10 +223,15 @@ class transferModel extends model
         $workflowFields = $this->loadModel('workflowaction')->getFields($moduleName, $methodName);
         foreach($workflowFields as $field)
         {
+            if(empty($fieldList[$field->field])) continue;
             if(!empty($field->buildin)) continue;
             if(empty($field->show)) continue;
             if(!isset($layouts[$field->field])) continue;
-            if($field->control == 'file') continue;
+            if($field->control == 'file')
+            {
+                unset($fieldList[$field->field]);
+                continue;
+            }
 
             $fieldList[$field->field]['name']  = $field->field;
             $fieldList[$field->field]['label'] = $field->name;
@@ -234,21 +239,22 @@ class transferModel extends model
 
             if($notEmptyRule && strpos(",{$field->rules},", ",{$notEmptyRule->id},") !== false) $fieldList[$field->field]['required'] = true;
 
-            if(!in_array($field->control, array('select', 'radio', 'multi-select', 'checkbox'))) continue;
-            if(empty($field->options)) continue;
-
-            $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
-            $options = $this->workflowfield->getFieldOptions($field, true);
-            if($options)
+            $fieldList[$field->field]['control'] = $this->loadModel('flow')->buildFormControl($field);
+            if(in_array($field->control, array('select', 'radio', 'multi-select', 'checkbox')))
             {
-                $fieldList[$field->field]['control'] = 'picker';
-                $fieldList[$field->field]['items']   = $options;
-                if($field->control == 'multi-select') $fieldList[$field->field]['multiple'] = true;
+                if(empty($field->options)) continue;
 
-                $this->moduleListFields[] = $field->field;
-                $this->config->$module->listFields .=  ',' . $field->field;
+                $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
+                $options = $this->workflowfield->getFieldOptions($field, true);
+                if($options)
+                {
+                    $fieldList[$field->field]['items']   = $options;
+                    if($field->control == 'multi-select') $fieldList[$field->field]['multiple'] = true;
+
+                    $this->moduleListFields[] = $field->field;
+                    $this->config->$module->listFields .=  ',' . $field->field;
+                }
             }
-            if(in_array($field->control, array('date', 'datetime'))) $fieldList[$field->field]['control'] = $field->control . 'Picker';
         }
         return $fieldList;
     }
