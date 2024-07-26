@@ -31,7 +31,16 @@ window.markUnread = function(obj)
     $.get($.createLink('message', 'ajaxMarkUnread', "id=" + messageID));
 
     /* Rerender unread count. */
-    fetchMessage(true, $.createLink('message', 'ajaxGetDropmenu', 'active=all'));
+    renderMessage();
+};
+
+window.markAllRead = function()
+{
+    let $messageItem = $('#messageTabs .message-item.unread');
+    $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
+    $messageItem.removeClass('unread');
+    $('#messageTabs #unread-messages.tab-pane .message-item').addClass('hidden');
+    $.get($.createLink('message', 'ajaxMarkRead', "id=all"));
     renderMessage();
 };
 
@@ -93,6 +102,14 @@ window.renderMessage = function()
     });
 
     updateAllDot(showCount);
+};
+
+window.clickContextMenu = function(obj)
+{
+    let action = $(obj).attr('value');
+    let $this  = $(contextmenu._element);
+    if(action == 'delete')     deleteMessage($this);
+    if(action == 'markunread') markUnread($this);
 };
 
 let contextmenu = null;
