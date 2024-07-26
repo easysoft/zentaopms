@@ -548,10 +548,24 @@ class release extends control
         return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type={$type}")));
     }
 
+    /**
+     * 发布页面。
+     * Publish page.
+     *
+     * @param  int    $releaseID
+     * @access public
+     * @return void
+     */
     public function publish(int $releaseID)
     {
         if($_POST)
         {
+            if(!$this->post->releasedDate)
+            {
+                dao::$errors['releasedDate'] = sprintf($this->lang->error->notempty, $this->lang->release->releasedDate);
+                return $this->sendError(dao::getError());
+            }
+
             $this->release->changeStatus($releaseID, $this->post->status, $this->post->releasedDate);
             if(dao::isError()) return $this->sendError(dao::getError());
 
