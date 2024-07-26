@@ -1814,13 +1814,15 @@ class repo extends control
 
         $repo = $this->repo->getByID($repoID);
         $this->scm->setEngine($repo);
-        $tagList = $this->scm->tags('all');
+        $tagList    = $this->scm->tags('all');
+        $committers = $this->loadModel('user')->getCommiters('account');
         foreach($tagList as $index => &$tag)
         {
             $tag->repoID    = $repoID;
             $tag->tagName   = helper::safe64Encode($tag->name);
             $tag->committer = isset($tag->commit->author_name) ? $tag->commit->author_name : '';
             if(isset($tag->tagger->identity->name)) $tag->committer = $tag->tagger->identity->name;
+            $tag->committer = zget($committers, $tag->committer);
 
             $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
             if(isset($tag->tagger->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->tagger->when));
@@ -1849,6 +1851,7 @@ class repo extends control
         $this->view->tagList  = empty($tagList) ? $tagList: $tagList[$pageID - 1];
         $this->view->orderBy  = $orderBy;
         $this->view->keyword  = base64_encode($keyword);
+        $this->view->users    = $this->user->getPairs('noletter');
         $this->display();
     }
 
@@ -1874,12 +1877,14 @@ class repo extends control
         $this->scm->setEngine($repo);
         $branchList = $this->scm->branch('all');
 
+        $committers = $this->loadModel('user')->getCommiters('account');
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
             $branch->branchName = helper::safe64Encode($branch->name);
             $branch->committer  = isset($branch->commit->author_name) ? $branch->commit->author_name : '';
             if(isset($branch->commit->committer->identity->name)) $branch->committer = $branch->commit->committer->identity->name;
+            $branch->committer = zget($committers, $branch->committer);
 
             $branch->date = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
             if(isset($branch->commit->committer->when)) $branch->date = date('Y-m-d H:i:s', strtotime($branch->commit->committer->when));
@@ -1914,6 +1919,7 @@ class repo extends control
         $this->view->branchList = empty($branchList) ? $branchList: $branchList[$pageID - 1];
         $this->view->orderBy    = $orderBy;
         $this->view->keyword    = base64_encode($keyword);
+        $this->view->users      = $this->user->getPairs('noletter');
         $this->display();
     }
 }

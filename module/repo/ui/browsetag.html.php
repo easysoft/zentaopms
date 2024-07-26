@@ -46,6 +46,7 @@ featureBar
     )
 );
 
+$config->repo->dtable->tag->fieldList['committer']['map'] = $users;
 $tagList = initTableData($tagList, $config->repo->dtable->tag->fieldList);
 dtable
 (

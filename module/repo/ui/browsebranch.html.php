@@ -46,6 +46,7 @@ featureBar
     )
 );
 
+$config->repo->dtable->branch->fieldList['committer']['map'] = $users;
 $branchList = initTableData($branchList, $config->repo->dtable->branch->fieldList);
 dtable
 (
