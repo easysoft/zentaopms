@@ -263,25 +263,12 @@ $('.copy-btn').on('click', function()
     copyText[0].selectionStart = copyText[0].selectionEnd;
     copyText[0].blur();
 
-    var that = this;
-    setTimeout(function()
-    {
-        $(that).tooltip('hide');
-    }, 2000)
+    zui.Messager.show({
+        type:    'success',
+        content: copied,
+        time:    2000
+    });
 })
-
-window.afterPageUpdate = function()
-{
-    setTimeout(function()
-    {
-        $('.copy-btn').tooltip({
-            trigger: 'click',
-            placement: 'bottom',
-            title: copied,
-            tipClass: 'success',
-        });
-    }, 1);
-};
 
 $(function()
 {
