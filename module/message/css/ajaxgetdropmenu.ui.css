@@ -1,2 +1,3 @@
 #messageTabs .tabs-header{border-bottom-width: 1px;}
 #header .messageDropdownBox{z-index:100 !important;}
+#messageTabs .label-dot{width:5px; height:5px; vertical-align: middle;}

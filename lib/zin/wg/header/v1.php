@@ -41,10 +41,11 @@ class header extends wg
             $toolbar = new toolbar
             (
                 setClass('gap-2'),
-                static::quickAddMenu(),
-                static::messageBar(),
+                $messageBar = static::messageBar(),
+                $addMenu    = static::quickAddMenu(),
                 static::userBar()
             );
+            if(empty($addMenu)) $messageBar->setProp('offset', array('alignmentAxis' => -50));
         }
         $pageToolbar = data('pageToolbar');
         return h::div
@@ -256,13 +257,20 @@ class header extends wg
         if(!$config->message->browser->turnon) return null;
 
         $dotStyle    = array('top' => '5px', 'left' => '18px', 'aspect-ratio' => '0', 'padding' => '2px');
-        $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` like('%,{$app->user->account},%')")->fetch()->count;
+        $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
         if($unreadCount > 99) $unreadCount = '99+';
-        if(!$config->message->browser->count) $dotStyle['aspect-ratio'] = '1 / 1';
+        if(!$config->message->browser->count)
+        {
+            $dotStyle['aspect-ratio'] = '1 / 1';
+            $dotStyle['width']        = '5px';
+            $dotStyle['height']       = '5px';
+        }
 
         return dropdown
         (
             set::arrow(true),
+            set::placement('bottom-end'),
+            set::offset(array("alignmentAxis" => -80)),
             to::trigger
             (
                 btn
