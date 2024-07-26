@@ -178,18 +178,25 @@ renderCell = function(result, {row, col})
 {
     if(result && col.setting.colspan)
     {
-        let values = result.shift();
-        if(typeof(values.type) != 'undefined' && values.type == 'a') values = values.props['children'];
+        let values  = result.shift();
+        let isDrill = false;
+        if(typeof(values.type) != 'undefined' && values.type == 'a')
+        {
+            values = values.props['children'];
+            if(typeof(row.data['field0_colspan']) == 'undefined') isDrill = true;
+        }
 
         result.push({className: 'gap-0 px-0'});
         values.forEach((value, index) =>
           result.push({
-            html: value || !Number.isNaN(value) ? `${value}` : '&nbsp;',
+            html: value || !Number.isNaN(value) ? (isDrill ? "<a href='#'>" + `${value}` + '</a>' : `${value}`) : '&nbsp;',
             className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
             style: 'border-color: var(--dtable-border-color)'
           })
         );
     }
+
+    if(typeof(row.data['field0_colspan']) != 'undefined' && !Array.isArray(row.data[col.name])) result[0] = row.data[col.name];
 
     return result;
 }
