@@ -29,7 +29,25 @@ formPanel
     (
         formGroup
         (
+            set::label($lang->release->releasedDate),
+            set::width('1/3'),
+            set::required(true),
+            datePicker
+            (
+                set::name('releasedDate'),
+                set::value(helper::today())
+            )
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
             set::label($lang->comment),
+            editor
+            (
+                set::name('comment'),
+            )
         )
     )
 );
