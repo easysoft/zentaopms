@@ -1,13 +1,15 @@
 <?php
 $config->release = new stdclass();
-$config->release->create = new stdclass();
-$config->release->edit   = new stdclass();
-$config->release->create->requiredFields = 'name,date,releasedDate';
-$config->release->edit->requiredFields   = 'name,date,releasedDate';
+$config->release->create  = new stdclass();
+$config->release->edit    = new stdclass();
+$config->release->publish = new stdclass();
+$config->release->create->requiredFields  = 'name,date,releasedDate';
+$config->release->edit->requiredFields    = 'name,date,releasedDate';
+$config->release->publish->requiredFields = 'releasedDate';
 
 $config->release->editor = new stdclass();
-$config->release->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->release->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->release->editor->create  = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->release->editor->edit    = array('id' => 'desc', 'tools' => 'simpleTools');
 
 global $lang, $app;
 $config->release->actionList['linkStory']['icon'] = 'link';
@@ -33,10 +35,9 @@ $config->release->actionList['unlinkLeftBug']['url']  = 'javascript: unlinkObjec
 $config->release->actionList['publish']['icon']         = 'publish';
 $config->release->actionList['publish']['text ']        = $this->lang->release->changeStatusList['wait'];
 $config->release->actionList['publish']['hint']         = $this->lang->release->changeStatusList['wait'];
-$config->release->actionList['publish']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=publish');
+$config->release->actionList['publish']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'publish', 'params' => 'releaseID={id}');
 $config->release->actionList['publish']['notLoadModel'] = true;
-$config->release->actionList['publish']['className']    = 'ajax-submit';
-$config->release->actionList['publish']['data-confirm'] = array('message' => $lang->release->confirmPublish, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->release->actionList['publish']['data-toggle']  = 'modal';
 
 $config->release->actionList['play']['icon']         = 'play';
 $config->release->actionList['play']['text ']        = $this->lang->release->changeStatusList['normal'];
