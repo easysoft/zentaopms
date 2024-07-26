@@ -340,6 +340,11 @@ detailBody
                             ),
                             item
                             (
+                                set::name($lang->release->releasedDate),
+                                $release->releasedDate
+                            ),
+                            item
+                            (
                                 set::name($lang->release->desc),
                                 html($release->desc)
                             )
