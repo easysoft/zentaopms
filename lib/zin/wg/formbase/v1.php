@@ -92,7 +92,7 @@ class formBase extends wg
         $props = array
         (
             set::id($id),
-            set::className('form load-indicator', $target === 'ajax' ? 'form-ajax' : '')
+            set::className('form load-indicator no-morph', $target === 'ajax' ? 'form-ajax' : '')
         );
         if($tagName === 'form')
         {
