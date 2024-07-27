@@ -41,6 +41,7 @@
     let zinbar        = null;
     let historyState  = parent.window.history.state;
     const hasZinBar   = DEBUG && window.zin && window.zin.zinTool && !isIndexPage;
+    const localCacheFirst = config.cache === 'local-first';
 
     function getUrlID(url)
     {
@@ -627,7 +628,7 @@
                         if(parts.length > 1) newCacheData = parts[0] + ']';
                     }
                     cacheHit = !hasFatal && cache && newCacheData === cache.data.data;
-                    if(!cacheHit)
+                    if(!cacheHit || !localCacheFirst)
                     {
                         renderPageData(data);
                     }
@@ -641,7 +642,10 @@
                     if(cacheKey)
                     {
                         const cacheTime = +response.headers.get('X-Zin-Cache-Time');
-                        $.db.setCacheData(cacheKey, {data: newCacheData, url: currentAppUrl, partial: options.partial, selectors: selectors.join(','), clientTime: Date.now()}, cacheTime, 'zinFetch');
+                        if(cacheTime)
+                        {
+                            $.db.setCacheData(cacheKey, {data: newCacheData, url: currentAppUrl, partial: options.partial, selectors: selectors.join(','), clientTime: Date.now()}, cacheTime, 'zinFetch');
+                        }
                     }
                 }
                 else
@@ -748,7 +752,7 @@
                     return;
                 }
                 cache = localCache;
-                if(cache)
+                if(cache && localCacheFirst)
                 {
                     ajax.setting.headers['X-Zin-Cache-Time'] = cache.updateTime;
                     if($(document).data('zinCache') !== [cache.key, cache.time].join('#'))
@@ -775,7 +779,7 @@
                 }
                 else
                 {
-                    if(DEBUG) showLog('Request', 'no local cache', {url, cacheKey, options});
+                    if(DEBUG && localCacheFirst) showLog('Request', 'no local cache', {url, cacheKey, options});
                 }
                 ajax.send();
             });
