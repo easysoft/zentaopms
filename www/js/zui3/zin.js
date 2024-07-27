@@ -563,7 +563,7 @@
             {
                 updatePerfInfo(options, 'requestBegin');
                 if(isDebugRequest) return;
-                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, cache ? '5s' : '1s');
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, options.loadingIndicatorDelay || (options.partial ? '.2s' : (cache ? '5s' : '1s')));
                 if(options.before) options.before();
             },
             success(rawData)
