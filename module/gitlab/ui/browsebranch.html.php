@@ -17,7 +17,7 @@ detailHeader
         set::icon('plus'),
         set::url(createLink('gitlab', 'createBranch', "gitlabID={$gitlabID}&projectID={$projectID}")),
         set::type('primary'),
-        $lang->gitlab->createTag
+        $lang->gitlab->createBranch
     )) : null
 );
 
