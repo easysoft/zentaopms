@@ -511,6 +511,7 @@ class repoModel extends model
      */
     public function saveState(int $repoID = 0, int $objectID = 0): int
     {
+        session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
         $repos = $this->getRepoPairs($this->app->tab, $objectID);
@@ -518,7 +519,10 @@ class repoModel extends model
 
         if(!isset($repos[$this->session->repoID])) $this->session->set('repoID', key($repos));
 
-        return (int)$this->session->repoID;
+        $repoID = (int)$this->session->repoID;
+        session_write_close();
+
+        return $repoID;
     }
 
     /**

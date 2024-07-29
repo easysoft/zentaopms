@@ -16,7 +16,7 @@ dropmenu
 (
     set::module($module),
     set::tab($module),
-    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$module}&method={$app->rawMethod}"))
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
 featureBar
