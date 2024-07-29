@@ -13615,7 +13615,7 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '反馈状态',       'feedbackStatus',           '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'feedbackStatus', '',     '',     ''),
 ('lang',        'Bug解决方案',    'bugResolution',            '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'bugResolution',  '',     '',     ''),
 ('sql',         '用例',           'cases',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_case where deleted=\"0\"',     'view_datasource_41',   'id',   'title'),
-('system',      '反馈分支',       'feedbackModules',          '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     ''),
+('system',      '反馈分支',       'feedbackModules',          '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"sessionKey\": \r\n \"feedbackProduct\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":    \"0\"}]}',   '',     '',     ''),
 ('lang',        '需求类型',       'storyType',                '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyType',    '',     '',     ''),
 ('system',	'执行',	          'executions',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"execution\",\"method\":\"getPairs\",\"methodDesc\":\"Get execution pairs.\",\"params\":[{\"name\":\"projectID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"all|sprint|stage|kanban\",\"value\":\"all\"},{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"all|noclosed|stagefilter or empty\",\"value\":\"\"}]}',  '',     '',     ''),
 ('lang',        '项目模型',       'projectModel',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'projectModel', '', '', ''),
@@ -13642,7 +13642,9 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '反馈类型',       'litefeedbackType',         '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackType',         '', '', ''),
 ('lang',        '反馈处理方案',   'litefeedbackSolution',     '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackSolution',     '', '', ''),
 ('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackclosedReason', '', '', ''),
-('lang',        '任务关闭原因',   'litetaskReason',           '1', 'lite', 'admin', '1970-01-01 00:00:01', 'taskReason',           '', '', '');
+('lang',        '任务关闭原因',   'litetaskReason',           '1', 'lite', 'admin', '1970-01-01 00:00:01', 'taskReason',           '', '', ''),
+('lang',        '反馈优先级',     'feedbackPri',              '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'feedbackPri',          '', '', ''),
+('lang',        '反馈优先级',     'litefeedbackclosedPri',    '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackPri',          '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_4`;
 DROP VIEW IF EXISTS `view_datasource_5`;
