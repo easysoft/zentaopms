@@ -21,7 +21,7 @@ class treeEditor extends wg
         'canSplit?: bool=true',
         'checkbox?: bool=false',
         'checkOnClick?: bool=false',
-        'preserve?: bool=true',
+        'preserve?: bool=true'
     );
 
     protected function build()
