@@ -86,7 +86,7 @@ class pivotZen extends pivot
             if($this->config->edition == 'open' && $group->grade == 1) continue;
 
             $pivots = $this->pivot->getAllPivotByGroupID($group->id);
-            if(empty($group->collector) && empty($pivots)) continue;
+            if(empty($pivots)) continue;
 
             if($group->grade > 1) $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
 
