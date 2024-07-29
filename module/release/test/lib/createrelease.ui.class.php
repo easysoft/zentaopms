@@ -38,3 +38,15 @@ class createReleaseTeaster extends Tester
         /*查看对应状态下的计划时间显示*/
         if($form->dom->releasedStatus->getText() != $releaseStatus) return $this->fail('状态不符');
         if($releasedStatus == wait)
+        {
+            if($form->dom->planedDate->getText() != date('Y-m-d')) return $this->fail('状态选择未开始时，计划发布日期不正确');
+        }
+        if($releasedStatus == normal)
+        {
+            if($form->dom->planedDate->getText()   != date('Y-m-d')) return $this->fail('状态选择已发布时，计划发布日期不正确');
+            if($form->dom->releasedDate->getText() != date('Y-m-d')) return $this->fail('状态选择已发布时，计划发布日期不正确');
+        }
+
+        return $this->success();
+    }
+}
