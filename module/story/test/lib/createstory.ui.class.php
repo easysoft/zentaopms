@@ -27,7 +27,7 @@ class createStoryTester extends tester
             'branch'   => 'all',
             'moduleID' => '0',
             'storyID'  => '0',
-            'project'  => '0',
+            'project'  => '0'
         );
         $form = $this->initForm('story', 'create', $createStoryParam, 'appIframe-product');
         $form->dom->title->setValue($storyName);
