@@ -80,14 +80,15 @@ class scm
      * Creates a new tag with the given name and optional comment.
      *
      * @param string $tagName The name of the tag to be created.
+     * @param string $ref     The revision from which the tag is created, it can be a commit SHA, another tag name, or branch name.
      * @param string $comment An optional comment for the tag.
      * @return bool  Returns false if the engine is Subversion, otherwise returns the result of the createTag method of the engine object.
      */
-    public function createTag($tagName = '', $comment = '')
+    public function createTag($tagName, $ref, $comment = '')
     {
-        if(!in_array(get_class($this->engine), array('gitlab', 'gitfox'))) return false;
+        if(!in_array(get_class($this->engine), array('gitlabRepo', 'gitfoxRepo'))) return false;
 
-        return $this->engine->createTag($tagName, $comment);
+        return $this->engine->createTag($tagName, $ref, $comment);
     }
 
     /**
