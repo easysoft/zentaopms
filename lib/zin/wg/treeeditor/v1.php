@@ -20,13 +20,14 @@ class treeEditor extends wg
         'canDelete?: bool=false',
         'canSplit?: bool=true',
         'checkbox?: bool=false',
-        'checkOnClick?: bool=false'
+        'checkOnClick?: bool=false',
+        'preserve?: bool=true',
     );
 
     protected function build()
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort', 'canSortTo', 'checkbox', 'checkOnClick'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort', 'canSortTo', 'checkbox', 'checkOnClick', 'preserve'));
         $id = $this->prop('id');
 
         if(empty($id))
