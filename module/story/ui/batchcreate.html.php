@@ -30,8 +30,10 @@ foreach(explode(',', $this->config->{$type}->create->requiredFields) as $require
     if(isset($customFields[$requiredField]) and strpos(",{$showFields},", ",{$requiredField},") === false) $showFields .= ',' . $requiredField;
 }
 
+$roadmaps = !empty($roadmaps) ? $roadmaps : array();
+
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $customFields, $showFields, $storyID, $gradeRule, $hiddenGrade)
+$fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $customFields, $showFields, $storyID, $gradeRule, $hiddenGrade, $roadmaps)
 {
     global $config;
 
@@ -70,6 +72,7 @@ $fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $cust
         if($colName == 'source')   $cols[$index]['items']    = $lang->{$type}->sourceList;
         if($colName == 'category') $cols[$index]['items']    = $lang->{$type}->categoryList;
         if($colName == 'pri')      $cols[$index]['items']    = $lang->{$type}->priList;
+        if($colName == 'roadmap')  $cols[$index]['items']    = $roadmaps;
         if($colName == 'grade')    $cols[$index]['required'] = true;
     }
 
