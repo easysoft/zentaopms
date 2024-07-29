@@ -32,13 +32,13 @@ $buildMessageList = function($messageGroup) use ($lang)
             if($secondDiff < 60)    $time = sprintf($lang->message->timeLabel['minute'], 1);
             if($secondDiff >= 60)   $time = sprintf($lang->message->timeLabel['minute'], ceil($secondDiff / 60));
             if($secondDiff >= 3600) $time = $lang->message->timeLabel['hour'];
-            if($secondDiff > 5400)  $time = substr($message->createdDate, 5, 11);
+            if($secondDiff > 5400)  $time = substr($message->createdDate, 11, 5);
 
             preg_match_all("/<a href='([^\']+)'/", $message->data, $out);
             $link    = count($out[1]) ? $out[1][0] : '';
             $content = str_replace("<a href='$link'", "<a data-url='{$link}' href='###' onclick='clickMessage(this)'", $message->data);
             $content = preg_replace("/data-app='([^\']+)'/", '', $content);
-            $content = preg_replace("/(\?|\&)onlybody=yes'/", '', $content);
+            $content = preg_replace("/(\?|\&)onlybody=yes/", '', $content);
 
             $itemList[] = h::li
             (
