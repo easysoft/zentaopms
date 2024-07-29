@@ -29,7 +29,7 @@ else
         (
             checkList
             (
-                set::name('setting'),
+                set::name('setting[]'),
                 set::items($lang->backup->settingList),
                 set::value(isset($config->backup->setting) ? $config->backup->setting : '')
             )
