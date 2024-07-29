@@ -352,8 +352,12 @@ class dbh
             case 'USE':
                 return '';
             case 'DESC';
-                $tableName = str_replace('DESC ', '', $sql);
-                return "select COLUMN_NAME as Field from all_tab_columns where Table_Name='$tableName'";
+                $tableName = str_replace(array('DESC ', '`'), '', $sql);
+                $tableName = trim($tableName);
+                if(strpos($sql, ' ') !== false) list($tableName, $columnName) = explode(' ', $tableName);
+                $sql =  "select COLUMN_NAME as Field from all_tab_columns where Table_Name='$tableName'";
+                if(!empty($columnName)) $sql .= " and COLUMN_NAME='$columnName'";
+                return $sql;
             case 'DROP':
                 return $this->formatField($sql);
         }
