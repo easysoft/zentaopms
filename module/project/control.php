@@ -272,7 +272,7 @@ class project extends control
             $executions = $this->execution->getList($project->id);
             foreach($executions as $execution)
             {
-                if(!$execution->multiple) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}"));
+                if(!$execution->multiple) $this->locate($this->createLink('execution', 'task', "executionID={$execution->id}") . '#app=project');
             }
         }
 
