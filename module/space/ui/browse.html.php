@@ -75,6 +75,7 @@ dtable
                 Object.assign(item, item);
                 return item;
             }
+            if(item.url) item.url = zui.formatString(item.url, info.row.data);
             return item;
         }
     JS)),
