@@ -591,6 +591,7 @@ class story extends control
         $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
         $this->view->gradePairs    = $this->story->getGradePairs($story->type, 'all');
         $this->view->roadmaps      = $this->config->edition == 'ipd' ? array(0 => '') + $this->loadModel('roadmap')->getPairs() : array();
+        $this->view->demand        = $this->config->edition == 'ipd' ? $this->loadModel('demand')->getByID($story->demand) : new stdclass();
         $this->view->showGrade     = $this->config->edition == 'ipd';
         $this->view->actions       = $this->action->getList('story', $storyID);
         $this->view->branch        = $story->branch;

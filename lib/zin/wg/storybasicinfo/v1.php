@@ -80,6 +80,7 @@ class storyBasicInfo extends wg
         $users      = $this->prop('users', data('users'));
         $gradePairs = $this->prop('gradePairs', data('gradePairs'));
         $roadmaps   = $this->prop('roadmaps', data('roadmaps'));
+        $demand     = $this->prop('demand', data('demand'));
         $showGrade  = $this->prop('showGrade', data('showGrade'));
         $items      = array();
 
@@ -96,6 +97,38 @@ class storyBasicInfo extends wg
             'control' => 'breadcrumb',
             'items'   => $this->getModuleItems($story, $product)
         );
+        if(!empty($story->demand) && !empty($demand) && $story->parent <= 0)
+        {
+            $demandHtml = hasPriv('demand', 'view') ? div
+            (
+                a
+                (
+                    $demand->title,
+                    set::href(helper::createLink('demand', 'view', "demandID=$story->demand")),
+                    setData('toggle', 'modal'),
+                    setData('size', 'lg')
+                ),
+                $story->demandVersion < $demand->version && common::hasPriv($story->type, 'processStoryChange') ? span
+                (
+                    ' (',
+                    $lang->story->storyChange . ' ',
+                    a
+                    (
+                        setClass('btn primary-pale border-primary size-xs'),
+                        set::href(createLink($story->type, 'processStoryChange', "storyID={$story->id}")),
+                        $lang->confirm,
+                    ),
+                    ')'
+                ) : null,
+            ) : $demand->title;
+
+            $items[$lang->story->upstreamDemand] = array
+            (
+                'control' => 'div',
+                'content' => $demandHtml
+            );
+
+        }
         if(isset($story->parentName))
         {
 
@@ -108,14 +141,14 @@ class storyBasicInfo extends wg
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ),
-                $story->parentChanged && common::hasPriv('story', 'processStoryChange') ? span
+                $story->parentChanged && common::hasPriv($story->type, 'processStoryChange') ? span
                 (
                     ' (',
                     $lang->story->storyChange . ' ',
                     a
                     (
                         setClass('btn primary-pale border-primary size-xs'),
-                        set::href(createLink('story', 'processStoryChange', "storyID={$story->id}")),
+                        set::href(createLink($story->type, 'processStoryChange', "storyID={$story->id}")),
                         $lang->confirm,
                     ),
                     ')'

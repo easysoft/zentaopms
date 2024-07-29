@@ -41,6 +41,7 @@ $lang->story->track              = '跟踪矩阵';
 $lang->story->trackAB            = '矩阵';
 $lang->story->processStoryChange = '确认父需求变更';
 $lang->story->storyChange        = '需求变更';
+$lang->story->upstreamDemand     = '上游需求';
 $lang->story->split              = '拆分';
 $lang->story->close              = '关闭';
 $lang->story->batchClose         = '批量关闭';
