@@ -1445,7 +1445,7 @@ class pivotModel extends model
         $rows = json_decode(json_encode($rows), true);
 
         $cols   = array();
-        $drills = $settings['drills'];
+        $drills = zget($settings, 'drills', array());
         /* Build cols. */
         foreach($fields as $key => $field)
         {
