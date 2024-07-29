@@ -68,11 +68,8 @@ class projectrelease extends control
         $showBranch = false;
         foreach($releases as $release)
         {
-            if($release->productType != 'normal')
-            {
-                $showBranch = true;
-                break;
-            }
+            $release->desc = strip_tags($release->desc);
+            if($release->productType != 'normal') $showBranch = true;
         }
 
         $project   = $this->project->getByID($projectID);

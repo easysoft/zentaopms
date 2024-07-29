@@ -31,15 +31,17 @@ toolbar
 jsVar('markerTitle', $lang->release->marker);
 jsVar('canViewProjectbuild', hasPriv('projectbuild', 'view'));
 
-if(!$showBranch) unset($config->projectrelease->dtable->fieldList['branch']);
-$config->projectrelease->dtable->fieldList['product']['map'] = $products;
-if(empty($project->hasProduct)) unset($config->projectrelease->dtable->fieldList['product']);
+$cols = $this->loadModel('datatable')->getSetting('projectrelease');
+if(!$showBranch) unset($cols['branch']);
+$cols['product']['map'] = $products;
+if(empty($project->hasProduct)) unset($cols['product']);
 
-$tableData = initTableData($releases, $config->projectrelease->dtable->fieldList);
+$tableData = initTableData($releases, $cols);
 dtable
 (
-    set::cols($config->projectrelease->dtable->fieldList),
+    set::cols(array_values($cols)),
     set::data($tableData),
+    set::customCols(true),
     set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
