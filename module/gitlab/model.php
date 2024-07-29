@@ -941,6 +941,25 @@ class gitlabModel extends model
     }
 
     /**
+     * 通过API创建一个标签。
+     * Creates a new tag in the GitLab repository using the GitLab API.
+     * @link  https://docs.gitlab.com/ee/api/tags.html#create-a-new-tag
+     *
+     * @param int    $gitlabID  The ID of the GitLab instance.
+     * @param int    $projectID The ID of the project in GitLab.
+     * @param object $tag    An object containing the tag details, including the tag name and reference.
+     * @return object|array|null|false The response from the GitLab API, or false if the tag name or reference is empty.
+     */
+    public function apiCreateTag(int $gitlabID, int $projectID, object $tag): object|array|null|false
+    {
+        if(empty($tag->tag_name) or empty($tag->ref)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
+        return json_decode(commonModel::http($url, $tag, array(), array(), 'json'));
+    }
+
+    /**
      * 通过api获取一个项目信息。
      * Get single project by API.
      *
