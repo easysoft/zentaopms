@@ -114,6 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['20.4']        = '2024-08-02';
 $lang->misc->releaseDate['20.3.0']      = '2024-07-22';
 $lang->misc->releaseDate['20.2.0']      = '2024-07-10';
 $lang->misc->releaseDate['20.1.1']      = '2024-06-21';
@@ -231,6 +232,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['20.4'][]        = array('title' => '', 'desc' => '');
 $lang->misc->feature->all['20.3.0'][]      = array('title' => '透视表自定义下钻；需求池需求矩阵支持查看多层级的需求池需求、业务需求、用户需求和研发需求；上游需求池需求发生变更时，下级需求将需要进行确认；产品路标支持关联任意级的业务需求和用户需求；优化了需求池需求、业务需求和用户需求的操作按钮逻辑；优化了需求池需求、业务需求和用户需求的检索标签条件；还原已删除需求时重算上游需求的阶段。', 'desc' => '');
 $lang->misc->feature->all['20.2.0'][]      = array('title' => '产品矩阵的优化，增加平台版应用配置功能，优化审批流，OR界面新增业务需求，用需新增已设路标和Charter立项阶段，支持业用需求的无限层级，支持业用需求研发阶段的推算，支持分发和拆分OR需求时交付阶段的推算，OR需求支持分发为业务需求，实现老版本升级时OR需求和用户需求的推算，开发阶段增加TR4A评审点。', 'desc' => '');
 $lang->misc->feature->all['20.1.1'][]      = array('title' => '重构底层PHP和UI框架，重构核心表单和仪表盘，用户体验全新升级。支持APCu 缓存，大幅提升系统性能。基线评审列表中的搜索功能。OR界面增加待处理功能、IPD项目的阶段和评审点支持自定义、基线评审列表中的搜索功能。', 'desc' => '');
