@@ -220,6 +220,28 @@ class gitlabRepo
     }
 
     /**
+     * Creates a new tag in the GitLab repository.
+     *
+     * @param string $tagName The name of the tag to be created.
+     * @param string $ref     The revision of the tag, a commit SHA, another tag name, or branch name.
+     * @param string $comment An optional comment for the tag.
+     * @return array Returns an array with the result of the operation and a message. If the tag already exists, the result will be 'fail' and the message will be 'Tag is exists'. If the operation fails, the result will be 'fail' and the message will be 'Created fail.'. Otherwise, the result will be 'success' and the message will be an empty string.
+     */
+    public function createTag($tagName = '', $ref = 'master', $comment = '')
+    {
+        global $app;
+
+        $tag = new stdclass();
+        $tag->tag_name = $tagName;
+        $tag->ref      = $ref;     /* Create a tag from a commit SHA, another tag name, or branch name. */
+        $tag->comment  = $comment;
+
+        $result = $app->control->loadModel('gitlab')->apiCreateTag($this->repo->serviceHost, $this->repo->serviceProject, $tag);
+
+        return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => empty($result->name) ? $result->message : '');
+    }
+
+    /**
      * Get last log.
      *
      * @param  string $path
