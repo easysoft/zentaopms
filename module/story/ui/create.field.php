@@ -67,21 +67,6 @@ if(isset($createFields['URS']))
         ->items($createFields['parent']['options'])
         ->value($createFields['parent']['default']);
 }
-if(isset($createFields['duration']))
-{
-    $fields->field('duration')
-        ->required($createFields['duration']['required'])
-        ->items($createFields['duration']['options'])
-        ->value($createFields['duration']['default']);
-}
-
-if(isset($createFields['BSA']))
-{
-    $fields->field('BSA')
-        ->required($createFields['BSA']['required'])
-        ->items($createFields['BSA']['options'])
-        ->value($createFields['BSA']['default']);
-}
 
 $fields->field('reviewer')
     ->width('full')
