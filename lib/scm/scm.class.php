@@ -76,6 +76,21 @@ class scm
     }
 
     /**
+     * 创建标签。
+     * Creates a new tag with the given name and optional comment.
+     *
+     * @param string $tagName The name of the tag to be created.
+     * @param string $comment An optional comment for the tag.
+     * @return bool  Returns false if the engine is Subversion, otherwise returns the result of the createTag method of the engine object.
+     */
+    public function createTag($tagName = '', $comment = '')
+    {
+        if(!in_array(get_class($this->engine), array('gitlab', 'gitfox'))) return false;
+
+        return $this->engine->createTag($tagName, $comment);
+    }
+
+    /**
      * Get log.
      *
      * @param  string $path
