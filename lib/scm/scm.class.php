@@ -79,10 +79,10 @@ class scm
      * 创建标签。
      * Creates a new tag with the given name and optional comment.
      *
-     * @param string $tagName The name of the tag to be created.
-     * @param string $ref     The revision from which the tag is created, it can be a commit SHA, another tag name, or branch name.
-     * @param string $comment An optional comment for the tag.
-     * @return bool  Returns false if the engine is Subversion, otherwise returns the result of the createTag method of the engine object.
+     * @param  string $tagName The name of the tag to be created.
+     * @param  string $ref     The revision from which the tag is created, it can be a commit SHA, another tag name, or branch name.
+     * @param  string $comment An optional comment for the tag.
+     * @return array|false  Returns false if the engine is Subversion, otherwise returns the result of the createTag method of the engine object.
      */
     public function createTag($tagName, $ref, $comment = '')
     {
