@@ -132,7 +132,7 @@ class productRoadmapBox extends wg
                     set::width('1/2'),
                     set::label($lang->demand->roadmapOrPlan),
                     $index != 0 ? set::labelClass('hidden') : null,
-                    set::className('roadmapBox'),
+                    set::className('roadmapBox text-clip'),
                     inputGroup
                     (
                         div
