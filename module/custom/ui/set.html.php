@@ -593,7 +593,7 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
         $sidebarMenu,
         formPanel(
             set::title($lang->custom->story->fields['grade']),
-            setClass('ml-0.5'),
+            setClass('ml-0.5 flex-auto'),
             on::click('.btn-add-grade', 'addGrade'),
             set::actions(array()),
             h::table(
