@@ -44,6 +44,7 @@ $lang->repo->unlink          = '解除关联';
 $lang->repo->visit           = '访问';
 
 $lang->repo->createBranchAction = '创建分支';
+$lang->repo->createTagAction    = '创建标签';
 $lang->repo->browseAction       = '浏览代码库';
 $lang->repo->createAction       = '关联代码库';
 $lang->repo->editAction         = '编辑代码库';

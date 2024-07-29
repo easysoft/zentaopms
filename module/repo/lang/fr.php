@@ -44,6 +44,7 @@ $lang->repo->unlink          = 'Unlink';
 $lang->repo->visit           = 'Visit';
 
 $lang->repo->createBranchAction = 'Create Branch';
+$lang->repo->createTagAction    = 'Create Tag';
 $lang->repo->browseAction       = 'Browse Repo';
 $lang->repo->createAction       = 'Créer Ref';
 $lang->repo->editAction         = 'Editer Ref';
