@@ -3033,20 +3033,22 @@ class repoModel extends model
         $showTag    = false;
         $showBranch = false;
         $showCommit = false;
+        $svnRepo    = false;
         $hasTagSCM  = array_map('strtolower', $this->config->repo->notSyncSCM);
-        foreach($repoPairs as $repoName)
+        foreach($repoPairs as $repoID => $repoName)
         {
             preg_match('/^\[(\w+)\]/', $repoName, $matches);
 
             $result = isset($matches[1]) ? $matches[1] : '';
+            if($result == 'svn' && $repoID == $this->session->repoID) $svnRepo = true;
             if(in_array($result, $hasTagSCM)) $showTag = $showBranch = true;
             if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
-        $showMR     = $showMR     && common::hasPriv('mr', 'browse');
-        $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
-        $showBranch = $repoPairs && common::hasPriv('repo', 'browsebranch');
-        $showReview = $repoPairs  && common::hasPriv('repo', 'review');
+        $showMR     = $showMR    && common::hasPriv('mr', 'browse');
+        $showTag    = $showTag   && !$svnRepo && common::hasPriv('repo', 'browsetag');
+        $showBranch = $repoPairs && !$svnRepo && common::hasPriv('repo', 'browsebranch');
+        $showReview = $repoPairs && common::hasPriv('repo', 'review');
         $showCommit = $repoPairs && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
         {
