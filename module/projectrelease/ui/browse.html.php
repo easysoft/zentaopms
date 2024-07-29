@@ -33,7 +33,7 @@ jsVar('canViewProjectbuild', hasPriv('projectbuild', 'view'));
 
 $cols = $this->loadModel('datatable')->getSetting('projectrelease');
 if(!$showBranch) unset($cols['branch']);
-$cols['product']['map'] = $products;
+if(isset($cols['product'])) $cols['product']['map'] = $products;
 if(empty($project->hasProduct)) unset($cols['product']);
 
 $tableData = initTableData($releases, $cols);
