@@ -15,9 +15,9 @@ class createStoryTester extends tester
     /**
      * Create a default story.
      *
-     * @param   string $storyName
-     * @access  public
-     * @return  object
+     * @param  string $storyName
+     * @access public
+     * @return object
      */
     public function createDefault($storyName)
     {

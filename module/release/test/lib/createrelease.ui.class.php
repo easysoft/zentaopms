@@ -5,8 +5,8 @@ class createReleaseTeaster extends Tester
     /**
      * Check create release page planDate fields display.
      *
-     * @param string $releaseName
-     * @param string $releaseStatus
+     * @param  string $releaseName
+     * @param  string $releaseStatus
      * @access public
      * @return object
      */
