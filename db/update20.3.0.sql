@@ -12,6 +12,7 @@ UPDATE `zt_release` SET `releasedDate` = `date`;
 
 ALTER TABLE `zt_pivotdrill` ADD `status` enum('design', 'published') NOT NULL DEFAULT 'published';
 ALTER TABLE `zt_pivotdrill` ADD `account` varchar(30) NOT NULL DEFAULT '';
+ALTER TABLE `zt_pivotdrill` ADD `type` enum('auto', 'manual') NOT NULL DEFAULT 'manual';
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'repo', 'browseTag' FROM `zt_grouppriv` WHERE `module` = 'repo' AND `method` = 'browse';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'repo', 'browseBranch' FROM `zt_grouppriv` WHERE `module` = 'repo' AND `method` = 'browse';
