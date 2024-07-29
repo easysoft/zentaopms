@@ -180,6 +180,29 @@ class gogsRepo
     }
 
     /**
+     * 创建标签。
+     * Create a tag in the repository.
+     *
+     * @param string $tagName The name of the tag to be created.
+     * @param string $ref     The revision of the tag, a commit SHA, another tag name, or branch name..
+     * @param string $comment An optional comment for the tag.
+     * @return array Returns an array with the result of the operation and a message. If the tag already exists, the result will be 'fail' and the message will be 'Tag is exists'. If the operation fails, the result will be 'fail' and the message will be 'Created fail.'. Otherwise, the result will be 'success' and the message will be an empty string.
+     */
+    public function createTag($tagName, $ref, $comment = '')
+    {
+        $tags = $this->tags('', 'HEAD');
+        if(isset($tags[$tagName])) return array('result' => 'fail', 'message' => 'Tag is exists');
+
+        chdir($this->root);
+        execCmd(escapeCmd("{$this->client} stash"));
+        $res = execCmd(escapeCmd("{$this->client} tag {$tagName} {$ref} -m '{$comment}'"), 'array');
+        if(empty($res[0])) return array('result' => 'fail', 'message' => 'Created fail.');
+
+        execCmd(escapeCmd("{$this->client} push origin {$tagName}"), 'array');
+        return array('result' => 'success', 'message' => '');
+    }
+
+    /**
      * Get last log.
      *
      * @param  string $path
