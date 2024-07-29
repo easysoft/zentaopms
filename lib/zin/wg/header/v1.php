@@ -256,10 +256,11 @@ class header extends wg
         $app->loadConfig('message');
         if(!$config->message->browser->turnon) return null;
 
-        $dotStyle    = array('top' => '5px', 'left' => '18px', 'aspect-ratio' => '0', 'padding' => '2px');
+        $showCount   = $config->message->browser->count;
+        $dotStyle    = array('top' => '0px', 'right' => '0px', 'aspect-ratio' => '0', 'padding' => '2px');
         $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
         if($unreadCount > 99) $unreadCount = '99+';
-        if(!$config->message->browser->count)
+        if(!$showCount)
         {
             $dotStyle['aspect-ratio'] = '1 / 1';
             $dotStyle['width']        = '5px';
@@ -277,11 +278,13 @@ class header extends wg
                 (
                     setID('messageBar'),
                     set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
-                    setClass('ring-primary bg-inherit'),
+                    setClass('ring-primary bg-inherit border border-gray-50'),
+                    setStyle(array('--tw-border-opacity' => 1, 'border-color' => "rgba(var(--color-gray-200-rgb), var(--tw-border-opacity))")),
                     set::square(true),
                     set::caret(false),
+                    set::size('sm'),
                     icon('bell', set::size('lg')),
-                    $unreadCount ? label(setClass('danger label-dot absolute'), set::style($dotStyle), $config->message->browser->count ? $unreadCount : null) : null
+                    $unreadCount ? label(setClass('danger label-dot absolute' . ($showCount ? ' rounded-sm' : '')), set::style($dotStyle), $showCount ? $unreadCount : null) : null
                 )
             ),
             to::menu(menu

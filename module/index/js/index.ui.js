@@ -1002,11 +1002,11 @@ window.browserNotify = function()
 
             let newCount  = data.newCount;
             let showCount = data.showCount != '0';
-            let dotStyle  = 'top: 5px; left: 18px; padding: 2px; aspect-ratio: ' + (showCount ? '0;' : '1 / 1;');
+            let dotStyle  = 'top: 0px; right: 0px; padding: 2px; aspect-ratio: ' + (showCount ? '0;' : '1 / 1;');
             if(!showCount) dotStyle += 'width: 5px; height: 5px;';
             if(newCount > 99) newCount = '99+';
 
-            let dotHtml = '<span class="label danger label-dot absolute" style="' + dotStyle + '">' + (showCount ? unreadCount : '') + '</span>';
+            let dotHtml = '<span class="label danger label-dot absolute' + (showCount ? ' rounded-sm' : '') + '" style="' + dotStyle + '">' + (showCount ? unreadCount : '') + '</span>';
             $('#apps .app-container').each(function()
             {
                 let $iframeMessageBar = $(this).find('iframe').contents().find('#messageBar');
