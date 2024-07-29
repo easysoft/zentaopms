@@ -308,6 +308,7 @@ detailBody
                             item
                             (
                                 set::name($lang->build->scmPath),
+                                set::trClass('scmPath'),
                                 h::a
                                 (
                                     $build->scmPath,
@@ -319,6 +320,7 @@ detailBody
                             item
                             (
                                 set::name($lang->build->filePath),
+                                set::trClass('filePath'),
                                 h::a
                                 (
                                     $build->filePath,
