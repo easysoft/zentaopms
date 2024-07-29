@@ -98,10 +98,36 @@ class storyBasicInfo extends wg
         );
         if(isset($story->parentName))
         {
-            $items[$lang->story->parent] = array(
-                'control' => 'text',
-                'content' => $story->parentName
+
+            $storyHtml = hasPriv($story->type, 'view') ? div
+            (
+                a
+                (
+                    $story->parentName,
+                    set::href(helper::createLink($story->type, 'view', "storyID=$story->parent")),
+                    setData('toggle', 'modal'),
+                    setData('size', 'lg')
+                ),
+                $story->parentChanged && common::hasPriv('story', 'processStoryChange') ? span
+                (
+                    ' (',
+                    $lang->story->storyChange . ' ',
+                    a
+                    (
+                        setClass('btn primary-pale border-primary size-xs'),
+                        set::href(createLink('story', 'processStoryChange', "storyID={$story->id}")),
+                        $lang->confirm,
+                    ),
+                    ')'
+                ) : null,
+            ) : $story->parentName;
+
+            $items[$lang->story->parent] = array
+            (
+                'control' => 'div',
+                'content' => $storyHtml
             );
+
         }
         if($showGrade)
         {

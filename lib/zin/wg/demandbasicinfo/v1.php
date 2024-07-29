@@ -30,7 +30,39 @@ class demandBasicInfo extends wg
 
         $items = array();
         $items[$lang->demand->pool] = zget($demandpools, $demand->pool, '');
-        if(!empty($demand->parent) && $demand->parent > 0) $items[$lang->demand->parent] = zget($demands, $demand->parent);
+
+        if(!empty($demand->parent) && $demand->parent > 0)
+        {
+            $demandHtml = hasPriv('demand', 'view') ? div
+            (
+                a
+                (
+                    zget($demands, $demand->parent),
+                    set::href(helper::createLink('demand', 'view', "demandID=$demand->parent")),
+                    setData('toggle', 'modal'),
+                    setData('size', 'lg')
+                ),
+                $demand->parentVersion < $demand->parentInfo->version && common::hasPriv('demand', 'processDemandChange') ? span
+                (
+                    ' (',
+                    $lang->story->storyChange . ' ',
+                    a
+                    (
+                        setClass('btn primary-pale border-primary size-xs'),
+                        set::href(createLink('demand', 'processDemandChange', "demandID={$demand->id}")),
+                        $lang->confirm,
+                    ),
+                    ')'
+                ) : null,
+
+            ) : zget($demands, $demand->parent);
+            $items[$lang->demand->parent] = array
+            (
+                'control' => 'div',
+                'content' => $demandHtml
+            );
+        }
+
         $items[$lang->demand->status]       = array('control' => 'status', 'class' => 'status-story', 'status' => $demand->status, 'text' => zget($lang->demand->statusList, $demand->status));
         $items[$lang->demand->stage]        = zget($lang->demand->stageList, $demand->stage);
         $items[$lang->demand->product]      = trim($productList, ', ') ? trim($productList, ', ') : $lang->demand->undetermined;

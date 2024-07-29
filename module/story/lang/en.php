@@ -40,6 +40,7 @@ $lang->story->unlink             = 'Unlink';
 $lang->story->track              = 'Track';
 $lang->story->trackAB            = 'Track';
 $lang->story->processStoryChange = 'Confirm Story Change';
+$lang->story->storyChange        = 'Story Change';
 $lang->story->split              = 'Decompose';
 $lang->story->close              = 'Close';
 $lang->story->batchClose         = 'Batch Close';
