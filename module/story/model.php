@@ -2882,6 +2882,8 @@ class storyModel extends model
             ->fetchAll('id');
 
         $parents = $epics + $requirements;
+        if(!$this->config->enableER) $parents = $requirements;
+
         return $this->addGradeLabel($parents);
     }
 
