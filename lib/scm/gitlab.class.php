@@ -234,7 +234,7 @@ class gitlabRepo
         $tag = new stdclass();
         $tag->tag_name = $tagName;
         $tag->ref      = $ref;     /* Create a tag from a commit SHA, another tag name, or branch name. */
-        $tag->comment  = $comment;
+        $tag->message  = $comment;
 
         $result = $app->control->loadModel('gitlab')->apiCreateTag($this->repo->serviceHost, $this->repo->serviceProject, $tag);
 
