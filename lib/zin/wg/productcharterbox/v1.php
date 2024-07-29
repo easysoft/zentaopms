@@ -48,81 +48,88 @@ class productCharterBox extends wg
 
         $productsBox[] = div
         (
-            set::className('productBox flex'),
-            formGroup
+            set::className('productBox'),
+            div
             (
-                set::width('1/2'),
-                setClass('distributeProduct text-clip'),
-                set::required(true),
-                set::label($lang->charter->product),
-                inputGroup
+                set::className('flex'),
+                formGroup
                 (
-                    div
+                    set::width('1/2'),
+                    setClass('distributeProduct text-clip'),
+                    set::required(true),
+                    set::label($lang->charter->product),
+                    inputGroup
                     (
-                        setClass('grow linkProduct w-1/2'),
-                        picker
+                        div
                         (
-                            set::name("product[0]"),
-                            set::items($products),
-                            set::defaultValue(''),
-                            set::emptyValue('')
-                        )
-                    )
-                )
-            ),
-            formGroup
-            (
-                set::width('1/2'),
-                set::label($lang->charter->roadmap),
-                set::className('roadmapBox'),
-                set::required(true),
-                inputGroup
-                (
-                    div
-                    (
-                        setClass('grow linkRoadmap w-1/2'),
-                        picker
-                        (
-                            set::name("roadmap[0]"),
-                            set::multiple(true),
-                            set::required(true),
-                            set::items(array())
-                        )
-                    ),
-                    div
-                    (
-                        common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
-                        (
-                            setClass('p-0'),
-                            btn
+                            setClass('grow linkProduct w-1/2'),
+                            picker
                             (
-                                setID('loadRoadmapStories'),
-                                setClass('ghost'),
-                                $lang->charter->loadStories
+                                set::name("product[0]"),
+                                set::items($products),
+                                set::defaultValue(''),
+                                set::emptyValue('')
                             )
-                        ) : null
+                        )
+                    )
+                ),
+                formGroup
+                (
+                    set::width('1/2'),
+                    set::label($lang->charter->roadmap),
+                    set::className('roadmapBox'),
+                    set::required(true),
+                    inputGroup
+                    (
+                        div
+                        (
+                            setClass('grow linkRoadmap w-1/2'),
+                            picker
+                            (
+                                set::name("roadmap[0]"),
+                                set::multiple(true),
+                                set::required(true),
+                                set::items(array())
+                            )
+                        ),
+                        div
+                        (
+                            common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
+                            (
+                                setClass('p-0'),
+                                btn
+                                (
+                                    setID('loadRoadmapStories'),
+                                    setClass('ghost'),
+                                    $lang->charter->loadStories
+                                )
+                            ) : null
+                        )
                     )
                 )
             ),
-            count($products) ? formGroup
+            div
             (
-                set::label(''),
                 set::className('actionsBox'),
-                div
+                count($products) ? formGroup
                 (
-                    setClass('pl-2 flex self-center line-btn'),
-                    btn
+                    set::label(''),
+                    div
                     (
-                        setClass('btn btn-link text-gray addLine'),
-                        icon('plus')
-                    ),
-                    btn
-                    (
-                        setClass('btn btn-link text-gray hidden removeLine'),
-                        icon('trash')
+                        setClass('pl-2 flex self-center line-btn'),
+                        btn
+                        (
+                            setClass('btn btn-link text-gray addLine'),
+                            icon('plus')
+                        ),
+                        btn
+                        (
+                            setClass('btn btn-link text-gray hidden removeLine'),
+                            icon('trash')
+                        )
                     )
-                )
-            ) : null
+                ) : null
+            )
         );
 
         return $productsBox;

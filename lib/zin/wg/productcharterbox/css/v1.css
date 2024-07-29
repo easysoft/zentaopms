@@ -2,4 +2,4 @@
 .productBox .distributeProduct, .productsBox .addProductBox .form-group{padding-left: 1px;}
 .productBox .roadmapBox {padding-right: 0px;}
 .productBox .roadmapBox div .input-group-addon{padding: 0px;}
-.productBox .actionsBox {padding: 6px 0px;}
+.productBox .actionsBox {position: absolute; top: 5px; right: -100px; width: 100px}
