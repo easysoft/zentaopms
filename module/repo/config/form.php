@@ -51,12 +51,6 @@ $config->repo->form->createBranch['codeRepo']   = array('required' => true, 'typ
 $config->repo->form->createBranch['branchFrom'] = array('required' => true, 'type' => 'string', 'filter' => 'trim');
 $config->repo->form->createBranch['branchName'] = array('required' => true, 'type' => 'string', 'filter' => 'trim');
 
-$config->repo->form->createTag = array();
-$config->repo->form->createTag['codeRepo'] = array('required' => true, 'type' => 'int');
-$config->repo->form->createTag['tagName']  = array('required' => true, 'type' => 'string', 'filter' => 'trim');
-$config->repo->form->createTag['tagFrom']  = array('required' => true, 'type' => 'string', 'filter' => 'trim');
-$config->repo->form->createTag['comment']  = array('required' => true, 'type' => 'string', 'filter' => 'trim');
-
 $config->repo->form->import = array();
 $config->repo->form->import['serviceProject'] = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->repo->form->import['product']        = array('required' => false, 'type' => 'array',  'filter' => 'join', 'default' => array(), 'base' => true);
