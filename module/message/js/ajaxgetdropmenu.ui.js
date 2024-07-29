@@ -86,7 +86,7 @@ window.renderMessage = function()
     if(unreadCount == 0)
     {
         $unreadTab.find('ul').addClass('hidden');
-        if($unreadTab.find('.nodata').length == 0) $unreadTab.append("<div class='text-center text-gray nodata'>" + noDataLang + "</div>");
+        if($unreadTab.find('.nodata').length == 0) $unreadTab.append(noDataHtml);
     }
 
     let $allTab  = $('#messageTabs #all-messages.tab-pane');
@@ -94,7 +94,7 @@ window.renderMessage = function()
     if(allCount == 0)
     {
         $allTab.find('ul').addClass('hidden');
-        if($allTab.find('.nodata').length == 0) $allTab.append("<div class='text-center text-gray nodata'>" + noDataLang + "</div>");
+        if($allTab.find('.nodata').length == 0) $allTab.append(noDataHtml);
     }
 
     $('#messageTabs .message-date').each(function()
@@ -107,20 +107,34 @@ window.renderMessage = function()
 
 window.hideContextMenu = function()
 {
-    if(contextmenu != null) $(contextmenu._element).trigger('contextmenu');
-    contextmenu = null;
+    if(thisContextmenu != null) thisContextmenu.hide();
+    thisContextmenu = null;
 };
 
 window.clickContextMenu = function(obj)
 {
     let action = $(obj).attr('value');
-    let $this  = $(contextmenu._element);
+    let $this  = $(thisContextmenu._element);
     if(action == 'delete')     deleteMessage($this);
     if(action == 'markunread') markUnread($this);
 };
 
-let contextmenu = null;
-$(document).on('contextmenu', '.message-item', function(event){ contextmenu = $(this).zui('ContextMenu'); });
-$('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
+let thisContextmenu = null;
 
-$(function() { updateAllDot(showCount) });
+$(function()
+{
+    updateAllDot(showCount);
+    $(document).on('contextmenu', '.message-item', function(event)
+    {
+        if(thisContextmenu != null)
+        {
+            hideContextMenu();
+            return false;
+        }
+
+        thisContextmenu = $(this).zui('ContextMenu');
+        thisContextmenu.show(event);
+    });
+    $('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
+    $('#unreadContextMenu,#readContextMenu').on('click', function(event){event.stopPropagation();});
+});

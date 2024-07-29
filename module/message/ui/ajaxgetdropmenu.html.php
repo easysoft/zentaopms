@@ -12,8 +12,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$noDataHtml = "<div class='text-gray text-center nodata'>{$lang->noData}</div>";
+
 jsVar('unreadLangTempate', $lang->message->unread);
-jsVar('noDataLang', $lang->noData);
+jsVar('noDataHtml', $noDataHtml);
 jsVar('showCount', $config->message->browser->count);
 
 $buildMessageList = function($messageGroup) use ($lang)
@@ -32,7 +34,8 @@ $buildMessageList = function($messageGroup) use ($lang)
             if($secondDiff < 60)    $time = sprintf($lang->message->timeLabel['minute'], 1);
             if($secondDiff >= 60)   $time = sprintf($lang->message->timeLabel['minute'], ceil($secondDiff / 60));
             if($secondDiff >= 3600) $time = $lang->message->timeLabel['hour'];
-            if($secondDiff > 5400)  $time = substr($message->createdDate, 11, 5);
+            if($secondDiff >= 5400) $time = substr($message->createdDate, 11, 5);
+            if($secondDiff > 86400) $time = substr($message->createdDate, 5, 11);
 
             preg_match_all("/<a href='([^\']+)'/", $message->data, $out);
             $link    = count($out[1]) ? $out[1][0] : '';
