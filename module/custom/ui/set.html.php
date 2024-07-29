@@ -589,7 +589,6 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
 
     div
     (
-        setID('mainContent'),
         setClass('row has-sidebar-left'),
         $sidebarMenu,
         formPanel(
@@ -627,7 +626,6 @@ else
 {
     div
     (
-        setID('mainContent'),
         setClass('row has-sidebar-left'),
         isset($sidebarMenu) ? $sidebarMenu : null,
         formPanel
