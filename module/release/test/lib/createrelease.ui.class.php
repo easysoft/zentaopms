@@ -3,7 +3,7 @@ include dirname(__FILE__, 5) . '/test/lib/ui.ph';
 class createReleaseTeaster extends Tester
 {
     /**
-     * Check create release page planDate fields display
+     * Check create release page planDate fields display.
      *
      * @param string $releaseName
      * @param string $releaseStatus
