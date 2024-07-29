@@ -137,4 +137,9 @@ $(function()
     });
     $('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
     $('#unreadContextMenu,#readContextMenu').on('click', function(event){event.stopPropagation();});
+    $(window).on('resize', function(event)
+    {
+        let maxHeight = $(window).height() - $('#header').height() - 5;
+        $("#dropdownMessageMenu").css('height', maxHeight).css('max-height', maxHeight)
+    });
 });

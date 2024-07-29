@@ -1566,16 +1566,16 @@
         if(typeof(force) === 'undefined' || typeof(force) === 'object') force = false;
         if(typeof(fetchUrl) === 'undefined') fetchUrl = $this.attr('data-fetcher');
 
-        let isOpen = $this.hasClass('open');
-        if(isOpen && !force)
+        setTimeout(function()
         {
-            $this.removeClass('open');
-            return;
-        }
-        $this.addClass('open');
+            let dropdown = $this.zui('Dropdown');
+            let isOpen   = true;
+            if(dropdown) isOpen = dropdown.shown;
+            if(!isOpen && !force) return;
 
-        $dropmenu.css('height', maxHeight).css('max-height', maxHeight).css('overflow-y', 'auto').css('background-color', '#fff');
-        $dropmenu.load(fetchUrl);
+            $dropmenu.css('height', maxHeight).css('max-height', maxHeight).css('overflow-y', 'auto').css('background-color', '#fff');
+            $dropmenu.load(fetchUrl);
+        }, 100);
     }
 
     function waitDom(selector, func, times, interval)
