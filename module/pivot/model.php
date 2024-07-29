@@ -2704,12 +2704,25 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function processTaskDatas(array $datas): array
+    public function processKanbanDatas(string $object, array $datas): array
     {
-        $kanbanExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('kanban')->fetchPairs();
+        $kanbans = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('kanban')->fetchPairs();
+
+        if($object == 'story') $projectStory = $this->dao->select('story, project')->from(TABLE_PROJECTSTORY)->fetchPairs();
+
         foreach($datas as $data)
         {
-            if($data->execution && isset($kanbanExecutions[$data->execution])) $data->isModal = true;
+            $projectID = 0;
+            if($object == 'story')
+            {
+                $projectID = isset($projectStory[$data->id]) ? $projectStory[$data->id] : 0;
+            }
+            else
+            {
+                $projectID = zget($data, 'execution', 0);
+            }
+
+            if($projectID && isset($kanbans[$projectID])) $data->isModal = true;
         }
 
         return $datas;
