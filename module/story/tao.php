@@ -1264,6 +1264,72 @@ class storyTao extends storyModel
 
     /**
      * 通过子需求更新父需求的阶段。
+     * Update parent stage by children.
+     *
+     * @param  object $story
+     * @access public
+     * @return void
+     */
+    public function computeParentStage(object $story)
+    {
+        $demandList = array();
+        if(empty($story->parent))
+        {
+            if($this->config->edition == 'ipd' && !empty($story->demand))
+            {
+                if($story->type == 'story')
+                {
+                    /* OR需求分发的研发需求推算虚拟用需的阶段。*/
+                    $distributedStory        = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)->where('id')->eq($story->id)->fetch();
+                    $virtualRequirementStage = $this->computeStage(array($distributedStory));
+
+                    $virtualRequirement = new stdClass();
+                    $virtualRequirement->stage        = empty($virtualRequirementStage) ? $distributedStory->stage : $virtualRequirementStage;
+                    $virtualRequirement->closedReason = '';
+
+                    $demandList[$story->demand] = $story->demand;
+                    $this->loadModel('demand')->updateDemandStage($demandList, array($story->demand => $virtualRequirement));
+                    return;
+                }
+
+                $demandList[$story->demand] = $story->demand;
+                $this->loadModel('demand')->updateDemandStage($demandList);
+            }
+            return;
+        }
+
+        $parent   = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
+        $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
+            ->where('parent')->eq($story->parent)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        $computedStage = $this->computeStage($children);
+        $parentStage   = empty($computedStage) ? $parent->stage : $computedStage;
+
+        if($parentStage == 'wait' && !empty($parent->roadmap))
+        {
+            $roadmapStatus = $this->dao->select('status')->from(TABLE_ROADMAP)->where('id')->eq($parent->roadmap)->fetch('status');
+            $parentStage = $roadmapStatus == 'launched' ? 'incharter' : 'inroadmap';
+        }
+
+        if($parentStage != $parent->stage && $parent->status != 'closed')
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
+
+            if($this->config->edition == 'ipd')
+            {
+                if(!empty($parent->demand)) $demandList[$parent->demand] = $parent->demand;
+                if(!empty($story->demand))  $demandList[$story->demand]  = $story->demand;
+                if(!empty($demandList)) $this->loadModel('demand')->updateDemandStage($demandList);
+            }
+
+            if($parent->parent > 0) $this->computeParentStage($parent);
+        }
+    }
+
+    /**
+     * 通过子需求推算父需求的阶段。
      * 子需求阶段范围：未开始、已计划、研发立项、设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败、已发布、已关闭。
      * 父需求阶段范围：未开始、已计划、研发立项、研发中、交付中、已交付、已关闭。
      *
@@ -1300,29 +1366,12 @@ class storyTao extends storyModel
      * 7. Closed:
      * All child stories are closed.
      *
-     * @param  object    $story
+     * @param  array  $children
      * @access public
-     * @return void
+     * @return string
      */
-    public function computeParentStage(object $story)
+    public function computeStage(array $children): string
     {
-        $demandList = array();
-        if(empty($story->parent))
-        {
-            if($this->config->edition == 'ipd' && !empty($story->demand))
-            {
-                $demandList[$story->demand] = $story->demand;
-                if($this->config->edition == 'ipd') $this->loadModel('demand')->updateDemandStage($demandList);
-            }
-            return;
-        }
-
-        $parent   = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
-        $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
-            ->where('parent')->eq($story->parent)
-            ->andWhere('deleted')->eq(0)
-            ->fetchAll('id');
-
         $allWait      = true;
         $hasInRoadmap = false;
         $hasInCharter = false;
@@ -1336,7 +1385,7 @@ class storyTao extends storyModel
             if(strpos(',wait,inroadmap,incharter,', ",{$child->stage},") === false) $allIpdStage = false;
         }
 
-        $parentStage = $parent->stage;
+        $parentStage = '';
         if($allWait)
         {
             $parentStage = 'wait';
@@ -1442,25 +1491,7 @@ class storyTao extends storyModel
             }
         }
 
-        if($parentStage == 'wait' && !empty($parent->roadmap))
-        {
-            $roadmapStatus = $this->dao->select('status')->from(TABLE_ROADMAP)->where('id')->eq($parent->roadmap)->fetch('status');
-            $parentStage = $roadmapStatus == 'launched' ? 'incharter' : 'inroadmap';
-        }
-
-        if($parentStage != $parent->stage && $parent->status != 'closed')
-        {
-            $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
-
-            if($this->config->edition == 'ipd')
-            {
-                if(!empty($parent->demand)) $demandList[$parent->demand] = $parent->demand;
-                if(!empty($story->demand))  $demandList[$story->demand]  = $story->demand;
-                if(!empty($demandList)) $this->loadModel('demand')->updateDemandStage($demandList);
-            }
-
-            if($parent->parent > 0) $this->computeParentStage($parent);
-        }
+        return $parentStage;
     }
 
     /**
