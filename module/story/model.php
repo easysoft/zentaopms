@@ -851,10 +851,6 @@ class storyModel extends model
         if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory);
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
         if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
-
-        /* Compute parent stage. */
-        $story->id   = $storyID;
-        $story->type = $oldStory->type;
         $this->storyTao->computeParentStage($story);
 
         /* Set new stage and update story sort of plan when story plan has changed. */
@@ -1666,9 +1662,7 @@ class storyModel extends model
             if(!$planID) $this->setStage((int)$storyID);
             if(isset($story->stage) && $story->stage != $oldStory->stage)
             {
-                $story->id     = $oldStory->id;
                 $story->parent = $oldStory->parent;
-                $story->type   = $oldStory->type;
                 $this->storyTao->computeParentStage($story);
             }
             if(!dao::isError())

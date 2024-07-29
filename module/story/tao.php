@@ -1277,21 +1277,6 @@ class storyTao extends storyModel
         {
             if($this->config->edition == 'ipd' && !empty($story->demand))
             {
-                if($story->type == 'story')
-                {
-                    /* OR需求分发的研发需求推算虚拟用需的阶段。*/
-                    $distributedStory        = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)->where('id')->eq($story->id)->fetch();
-                    $virtualRequirementStage = $this->computeStage(array($distributedStory));
-
-                    $virtualRequirement = new stdClass();
-                    $virtualRequirement->stage        = empty($virtualRequirementStage) ? $distributedStory->stage : $virtualRequirementStage;
-                    $virtualRequirement->closedReason = '';
-
-                    $demandList[$story->demand] = $story->demand;
-                    $this->loadModel('demand')->updateDemandStage($demandList, array($story->demand => $virtualRequirement));
-                    return;
-                }
-
                 $demandList[$story->demand] = $story->demand;
                 $this->loadModel('demand')->updateDemandStage($demandList);
             }
@@ -1319,25 +1304,9 @@ class storyTao extends storyModel
 
             if($this->config->edition == 'ipd')
             {
-                $distributedStoryList = array();
                 if(!empty($parent->demand)) $demandList[$parent->demand] = $parent->demand;
-                if(!empty($story->demand))
-                {
-                    $demandList[$story->demand]  = $story->demand;
-                    if($story->type == 'story')
-                    {
-                        /* OR需求分发的研发需求推算虚拟用需的阶段。*/
-                        $distributedStory        = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)->where('id')->eq($story->id)->fetch();
-                        $virtualRequirementStage = $this->computeStage(array($distributedStory));
-
-                        $virtualRequirement = new stdClass();
-                        $virtualRequirement->stage        = empty($virtualRequirementStage) ? $distributedStory->stage : $virtualRequirementStage;
-                        $virtualRequirement->closedReason = '';
-
-                        $distributedStoryList = array($story->demand => $virtualRequirement);
-                    }
-                }
-                if(!empty($demandList)) $this->loadModel('demand')->updateDemandStage($demandList, $distributedStoryList);
+                if(!empty($story->demand))  $demandList[$story->demand]  = $story->demand;
+                if(!empty($demandList)) $this->loadModel('demand')->updateDemandStage($demandList);
             }
 
             if($parent->parent > 0) $this->computeParentStage($parent);
