@@ -94,6 +94,12 @@ $config->projectrelease->dtable->fieldList['date']['minWidth'] = '100';
 $config->projectrelease->dtable->fieldList['date']['group']    = '3';
 $config->projectrelease->dtable->fieldList['date']['show']     = true;
 
+$config->projectrelease->dtable->fieldList['releasedDate']['title']    = $lang->release->releasedDate;
+$config->projectrelease->dtable->fieldList['releasedDate']['name']     = 'releasedDate';
+$config->projectrelease->dtable->fieldList['releasedDate']['type']     = 'date';
+$config->projectrelease->dtable->fieldList['releasedDate']['minWidth'] = '100';
+$config->projectrelease->dtable->fieldList['releasedDate']['show']     = true;
+
 $config->projectrelease->dtable->fieldList['desc']['title']    = $lang->release->desc;
 $config->projectrelease->dtable->fieldList['desc']['name']     = 'desc';
 $config->projectrelease->dtable->fieldList['desc']['type']     = 'html';
