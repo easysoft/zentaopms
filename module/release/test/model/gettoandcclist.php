@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 releaseModel->getToAndCcList();
 timeout=0
 cid=1
+
+- 测试获取状态为正常的发布的通知人员属性1 @,admin,dev1
+- 测试获取状态为停止维护的发布的通知人员属性1 @,admin,dev1
+- 测试获取已删除的发布的通知人员属性1 @,admin,dev1
 
 */
 
@@ -30,6 +35,6 @@ su('admin');
 $releases = array(1, 2, 3);
 
 $releaseTester = new releaseTest();
-r($releaseTester->getToAndCcListTest($releases[0])) && p('1', ';') && e('admin,,test1'); // 测试获取状态为正常的发布的通知人员
-r($releaseTester->getToAndCcListTest($releases[1])) && p('1', ';') && e('~~');           // 测试获取状态为停止维护的发布的通知人员
-r($releaseTester->getToAndCcListTest($releases[2])) && p('1', ';') && e('admin,,test1'); // 测试获取已删除的发布的通知人员
+r($releaseTester->getToAndCcListTest($releases[0])) && p('1', ';') && e(',admin,dev1'); // 测试获取状态为正常的发布的通知人员
+r($releaseTester->getToAndCcListTest($releases[1])) && p('1', ';') && e(',admin,dev1'); // 测试获取状态为停止维护的发布的通知人员
+r($releaseTester->getToAndCcListTest($releases[2])) && p('1', ';') && e(',admin,dev1'); // 测试获取已删除的发布的通知人员

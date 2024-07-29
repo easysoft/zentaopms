@@ -708,16 +708,16 @@ class releaseModel extends model
         /* Get mail content. */
         $modulePath = $this->app->getModulePath('', 'release');
         $oldcwd     = getcwd();
-        $viewFile   = $modulePath . 'view/mail.html.php';
+        $viewFile   = $modulePath . 'ui/mail.html.php';
         chdir($modulePath . 'view');
-        if(file_exists($modulePath . 'ext/view/mail.html.php'))
+        if(file_exists($modulePath . 'ext/ui/mail.html.php'))
         {
-            $viewFile = $modulePath . 'ext/view/mail.html.php';
+            $viewFile = $modulePath . 'ext/ui/mail.html.php';
             chdir($modulePath . 'ext/view');
         }
         ob_start();
         include $viewFile;
-        foreach(glob($modulePath . 'ext/view/mail.*.html.hook.php') as $hookFile) include $hookFile;
+        foreach(glob($modulePath . 'ext/ui/mail.*.html.hook.php') as $hookFile) include $hookFile;
         $mailContent = ob_get_contents();
         ob_end_clean();
         chdir($oldcwd);
@@ -725,7 +725,7 @@ class releaseModel extends model
         if(strpos(",{$release->notify},", ',FB,') !== false) $this->sendMail2Feedback($release, $subject);
 
         /* Get the sender. */
-        $sendUsers = $this->getToAndCcList($release);
+        $sendUsers = $this->getNotifyList($release);
         if(!$sendUsers) return;
 
         list($toList, $ccList) = $sendUsers;
@@ -736,13 +736,13 @@ class releaseModel extends model
 
     /**
      * 获取发送邮件的人员。
-     * Get toList and ccList.
+     * Get notify list.
      *
      * @param  object      $release
      * @access public
      * @return false|array
      */
-    public function getToAndCcList(object $release): false|array
+    public function getNotifyList(object $release): false|array
     {
         /* Set toList and ccList. */
         $toList = $this->app->user->account;
@@ -758,6 +758,43 @@ class releaseModel extends model
         }
 
         $ccList = trim($ccList, ',');
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+
+        return array($toList, $ccList);
+    }
+
+    /**
+     * 获取通过动作触发的邮件通知人员。
+     * Get toList and ccList.
+     *
+     * @param  object    $release
+     * @param  string    $actionType
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList(object $release, string $actionType = ''): bool|array
+    {
+        /* Set toList and ccList. */
+        $toList = $release->createdBy;
+        $ccList = isset($release->mailto) ? str_replace(' ', '', trim($release->mailto, ',')) : '';
+
+        $product = $this->loadModel('product')->fetchByID($release->product);
+        if($product) $ccList .= ',' . $product->PO . ',' . $product->RD;
+
         if(empty($toList))
         {
             if(empty($ccList)) return false;
