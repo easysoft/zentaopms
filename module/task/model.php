@@ -376,7 +376,8 @@ class taskModel extends model
             $estStarted = (!isset($tasks->estStarted[$i]) or isset($tasks->estStartedDitto[$i])) ? $estStarted : $tasks->estStarted[$i];
             $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
 
-            if(empty($tasks->name[$i]))
+            $taskName = trim($tasks->name[$i]);
+            if($taskName)
             {
                 if($this->common->checkValidRow('task', $tasks, $i))
                 {
@@ -1171,6 +1172,8 @@ class taskModel extends model
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,teamSource,contactListMenu')
             ->get();
 
+        $task->name = trim($task->name);
+
         if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
 
         /* Fix bug#1388, Check children task executionID and moduleID. */
@@ -1348,6 +1351,13 @@ class taskModel extends model
         /* Process data if the value is 'ditto'. */
         foreach($taskIDList as $taskID)
         {
+            $taskName = trim($data->names[$taskID]);
+            if(empty($taskName))
+            {
+                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->name);
+                return false;
+            }
+
             if(isset($data->modules[$taskID]) and ($data->modules[$taskID] == 'ditto')) $data->modules[$taskID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->types[$taskID]       == 'ditto') $data->types[$taskID]       = isset($prev['type'])       ? $prev['type']       : '';
             if($data->pris[$taskID]        == 'ditto') $data->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
