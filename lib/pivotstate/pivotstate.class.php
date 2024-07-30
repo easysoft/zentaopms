@@ -624,8 +624,6 @@ class pivotState
             unset($this->settings['columns'][$index]['drill']);
             foreach($this->drills as $drill)
             {
-                $type = zget($drill, 'type', 'manual');
-                if($type == 'auto') continue;
                 if($drill['field'] == $column['field']) $this->settings['columns'][$index]['drill'] = $drill;
             }
         }
