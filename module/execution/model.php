@@ -136,7 +136,7 @@ class executionModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($executionID, (string)$this->app->rawModule, (string)$this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
 
-        if($execution->type != 'kanban' && $this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($executionID);
+        if($execution->type != 'kanban' && ($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')) $this->loadModel('repo')->setHideMenu($executionID);
 
         /* Set stroy navigation for no-product project. */
         $this->loadModel('project')->setNoMultipleMenu($executionID);

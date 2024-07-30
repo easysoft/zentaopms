@@ -1781,9 +1781,7 @@ class repoZen extends repo
 
                 $repoPairs[$repo->id] = $repo->name;
             }
-            if($repoID && !isset($repoPairs[$repoID])) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
-
-            if(!$repoID) $repoID = key($repoPairs);
+            if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
         }
 
         $this->view->repoID    = $repoID;
