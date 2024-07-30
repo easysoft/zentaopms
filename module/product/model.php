@@ -1592,7 +1592,7 @@ class productModel extends model
         $fields = explode(',', $fields);
         $fields = trim(implode(',t1.', $fields), ',');
 
-        return $this->dao->select("DISTINCT t1.$fields,t2.order")->from(TABLE_PRODUCT)->alias('t1')
+        return $this->dao->select("DISTINCT t1.$fields,t2.order,t1.line,t1.order")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
             ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
