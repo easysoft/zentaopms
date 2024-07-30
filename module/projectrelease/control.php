@@ -384,7 +384,7 @@ class projectrelease extends control
      */
     public function publish(int $releaseID)
     {
-        return $this->fetch('release', 'publish', "releaseID={$releaseID}");
+        echo $this->fetch('release', 'publish', "releaseID={$releaseID}");
     }
 
     /**

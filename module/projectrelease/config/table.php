@@ -14,11 +14,11 @@ $config->projectrelease->actionList['linkBug']['hint'] = $lang->release->linkBug
 $config->projectrelease->actionList['linkBug']['url']  = helper::createLink('projectrelease', 'view', 'releaseID={id}&type=bug&link=true');
 
 $config->projectrelease->actionList['publish']['icon']         = 'publish';
+$config->projectrelease->actionList['publish']['text ']        = $this->lang->release->changeStatusList['wait'];
 $config->projectrelease->actionList['publish']['hint']         = $this->lang->release->changeStatusList['wait'];
-$config->projectrelease->actionList['publish']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=publish');
+$config->projectrelease->actionList['publish']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'publish', 'params' => 'releaseID={id}');
 $config->projectrelease->actionList['publish']['notLoadModel'] = true;
-$config->projectrelease->actionList['publish']['className']    = 'ajax-submit';
-$config->projectrelease->actionList['publish']['data-confirm'] = array('message' => $lang->release->confirmPublish, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->projectrelease->actionList['publish']['data-toggle']  = 'modal';
 
 $config->projectrelease->actionList['play']['icon']         = 'play';
 $config->projectrelease->actionList['play']['hint']         = $lang->release->changeStatusList['normal'];
