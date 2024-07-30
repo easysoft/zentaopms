@@ -2325,6 +2325,24 @@ class baseSQL
     }
 
     /**
+     * 创建子查询IN部分。
+     * Create subquery in part.
+     *
+     * @param  string|dao
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function subIn($subquery)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+
+        if(!is_string($subquery)) $subquery = $this->dbh->formatSQL($subquery->processSQL());
+
+        $this->sql .= ' IN (' . $subquery . ')';
+        return $this;
+    }
+
+    /**
      * 创建LIKE部分。
      * Create the like by part.
      *
