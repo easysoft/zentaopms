@@ -995,11 +995,16 @@ window.browserNotify = function()
                 }
             }
 
-            let newCount  = data.newCount;
-            let showCount = data.showCount != '0';
-            let dotStyle  = 'top: 0px; right: 0px; padding: 2px; aspect-ratio: ' + (showCount ? '0;' : '1 / 1;');
+            let newCount   = parseInt(data.newCount);
+            let showCount  = data.showCount != '0';
+            let dotStyle   = 'padding: 2px;';
+            let rightStyle = showCount ? 'right: -10px;' : 'right: -2px;';
             if(!showCount) dotStyle += 'width: 5px; height: 5px;';
             if(newCount > 99) newCount = '99+';
+            if(newCount < 10) rightStyle = 'right: -5px;';
+
+            dotStyle += showCount ? 'top: -5px; aspect-ratio: 0;' : 'top: -2px; aspect-ratio: 1 / 1;';
+            dotStyle += rightStyle;
 
             let dotHtml = '<span class="label danger label-dot absolute' + (showCount ? ' rounded-sm' : '') + '" style="' + dotStyle + '">' + (showCount ? newCount : '') + '</span>';
             $('#apps .app-container').each(function()

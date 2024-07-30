@@ -40,7 +40,7 @@ class header extends wg
         {
             $toolbar = new toolbar
             (
-                setClass('gap-2'),
+                setClass('gap-4'),
                 $messageBar = static::messageBar(),
                 $addMenu    = static::quickAddMenu(),
                 static::userBar()
@@ -256,14 +256,17 @@ class header extends wg
         if(!$config->message->browser->turnon) return null;
 
         $showCount   = $config->message->browser->count;
-        $dotStyle    = array('top' => '0px', 'right' => '0px', 'aspect-ratio' => '0', 'padding' => '2px');
+        $dotStyle    = array('top' => '-5px', 'right' => '-10px', 'aspect-ratio' => '0', 'padding' => '2px');
         $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
         if($unreadCount > 99) $unreadCount = '99+';
+        if($unreadCount < 10) $dotStyle['right'] = '-5px';
         if(!$showCount)
         {
             $dotStyle['aspect-ratio'] = '1 / 1';
             $dotStyle['width']        = '5px';
             $dotStyle['height']       = '5px';
+            $dotStyle['right']        = '-2px';
+            $dotStyle['top']          = '-2px';
         }
 
         return dropdown
@@ -277,8 +280,7 @@ class header extends wg
                 (
                     setID('messageBar'),
                     set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
-                    setClass('ring-primary bg-inherit border border-gray-50'),
-                    setStyle(array('--tw-border-opacity' => 1, 'border-color' => "rgba(var(--color-gray-200-rgb), var(--tw-border-opacity))")),
+                    setClass('bg-inherit ring ring-opacity-40'),
                     set::square(true),
                     set::caret(false),
                     set::size('sm'),

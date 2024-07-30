@@ -76,7 +76,7 @@ tabs
     (
         setClass('absolute top-3 right-5'),
         set::style(array('z-index' => '100')),
-        btn(set::size('sm'), set::type('link'), setClass('allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('eye')),
+        btn(set::size('sm'), set::type('link'), setClass('allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('clear')),
         btn(set::size('sm'), set::type('link'), setClass('clearRead'),   set::hint($lang->message->notice->clearRead),   icon('trash')),
         btn(set::size('sm'), set::type('link'), set::hint($lang->message->browserSetting->more), setData('target', '#messageSettingModal'), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
     ),
