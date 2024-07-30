@@ -544,11 +544,6 @@ function goBack(target, url, startState)
             while(state && state.path && !pathSet.has(state.path.toLowerCase())) state = state.prev;
             if(state && pathSet.has(state.path.toLowerCase()))
             {
-                if(state.index === preState.index)
-                {
-                    if(url) return openApp(url, null, false);
-                    return window.history.back();
-                }
                 return openApp(state.url, state.code, false);
             }
         }
