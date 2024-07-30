@@ -266,16 +266,25 @@ class projectrelease extends control
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $sort .= ',buildID_asc';
 
-        $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
+        $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
             ->where('t1.id')->in($release->stories)
             ->andWhere('t1.deleted')->eq(0)
-            ->groupBy('t1.id')
             ->beginIF($type == 'story')->orderBy($sort)->fi()
-            ->page($storyPager, 't1.id')
             ->fetchAll('id');
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+
+        $recTotal   = count($stories);
+        $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
+        $stories    = array_chunk($stories, $storyPager->recPerPage);
+        $stories    = empty($stories) ? $stories : $stories[$pageID - 1];
+
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->in($release->branch)->fetchPairs('story', 'stage');
+        foreach($stories as $index => $story)
+        {
+            if(isset($stages[$story->id])) $stories[$index]->stage = $stages[$story->id];
+        }
 
         $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
