@@ -511,7 +511,7 @@ class repoModel extends model
      */
     public function saveState(int $repoID = 0, int $objectID = 0): int
     {
-        session_start();
+        if(!session_id()) session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
         $repos = $this->getRepoPairs($this->app->tab, $objectID);
@@ -3045,7 +3045,7 @@ class repoModel extends model
             if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
-        $showMR     = $showMR    && common::hasPriv('mr', 'browse');
+        $showMR     = $showMR    && !$svnRepo && common::hasPriv('mr', 'browse');
         $showTag    = $showTag   && !$svnRepo && common::hasPriv('repo', 'browsetag');
         $showBranch = $repoPairs && !$svnRepo && common::hasPriv('repo', 'browsebranch');
         $showReview = $repoPairs && common::hasPriv('repo', 'review');

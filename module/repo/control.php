@@ -1368,14 +1368,11 @@ class repo extends control
         }
 
         /* Get repo group by type. */
-        $scmList = array();
-        if($module == 'mr') $scmList = $this->config->repo->gitServiceTypeList;
-        if(in_array($method, array('browsetag', 'browsebranch'))) $scmList = $this->config->repo->notSyncSCM;
-        $repoGroup = $this->repo->getRepoGroup('project', $projectID, $scmList);
+        $repoGroup = $this->repo->getRepoGroup('project', $projectID);
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;
-        $this->view->link      = $this->createLink($module, $method, "repoID=%s" . $params) . ($projectID ? '#app=project' : '');
+        $this->view->link      = $this->createLink($module, $method, "repoID=%s" . $params);
 
         $this->display();
     }
@@ -1813,6 +1810,8 @@ class repo extends control
         $keyword   = htmlspecialchars(base64_decode($keyword));
 
         $repo = $this->repo->getByID($repoID);
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->locate(inLink('browse', "repoID=$repoID"));
+
         $this->scm->setEngine($repo);
         $tagList    = $this->scm->tags('all');
         $committers = $this->loadModel('user')->getCommiters('account');
@@ -1874,6 +1873,7 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         $repo = $this->repo->getByID($repoID);
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->locate(inLink('browse', "repoID=$repoID"));
         $this->scm->setEngine($repo);
         $branchList = $this->scm->branch('all');
 
