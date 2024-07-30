@@ -776,6 +776,10 @@ class biModel extends model
             if(isset($pivot->langs))    $pivot->langs    = $this->jsonEncode($pivot->langs);
             if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
             if(!isset($pivot->driver))  $pivot->driver   = $this->config->bi->defaultDriver;
+            if(!isset($pivot->drills))  $pivot->drills   = array();
+
+            $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $pivot->drills));
+            unset($pivot->drills);
 
             $exists = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
             if(!$exists)
@@ -812,6 +816,35 @@ class biModel extends model
         }
 
         return $pivotSQLs;
+    }
+
+    /**
+     * 准备内置透视表的下钻sql。
+     * Prepare built-in pivot drill sql.
+     *
+     * @param  int    $pivotID
+     * @param  array  $drills
+     * @access public
+     * @return array
+     */
+    public function prepareBuilitinPivotDrillSQL($pivotID, $drills)
+    {
+        if(empty($drills)) return array();
+
+        $sqls = array();
+        $sqls[] = $this->dao->delete()->from(TABLE_PIVOTDRILL)->where('pivot')->eq($pivotID)->get();
+        foreach($drills as $drill)
+        {
+            $drill = (object)$drill;
+            $drill->condition = $this->jsonEncode($drill->condition);
+            $drill->pivot     = $pivotID;
+            $drill->status    = 'published';
+            $drill->type      = 'manual';
+
+            $sqls[] = $this->dao->insert(TABLE_PIVOTDRILL)->data($drill)->get();
+        }
+
+        return $sqls;
     }
 
     /**
