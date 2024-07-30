@@ -286,9 +286,6 @@ class projectrelease extends control
             if(isset($stages[$story->id])) $stories[$index]->stage = $stages[$story->id];
         }
 
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
-        foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
-
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $sort = common::appendOrder($orderBy);
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
