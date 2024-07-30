@@ -255,9 +255,9 @@ function getCurrentCheckedIds()
     return currentCheckedIds;
 }
 
-$('.copy-btn').on('click', function()
+window.copyLink = function(dom)
 {
-    var copyText = $(this).parent().parent().find('input');
+    var copyText = $(dom).parent().parent().find('input');
     copyText[0].select();
     document.execCommand("Copy");
     copyText[0].selectionStart = copyText[0].selectionEnd;
@@ -268,7 +268,7 @@ $('.copy-btn').on('click', function()
         content: copied,
         time:    2000
     });
-})
+}
 
 $(function()
 {
