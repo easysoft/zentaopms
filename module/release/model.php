@@ -375,6 +375,8 @@ class releaseModel extends model
             $release->project = ',' . trim(implode(',', $projects), ',') . ',';
         }
 
+        if($oldRelease->status != $release->status && $release->status == 'wait') $release->releasedDate = null;
+
         $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
