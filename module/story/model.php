@@ -5342,6 +5342,7 @@ class storyModel extends model
             $children = $this->getByList($childIdList);
             foreach($children as $child)
             {
+                if($child->type != $oldStory->type) continue;
                 $grade = (int)$child->grade + (int)$story->grade - (int)$oldStory->grade;
                 $this->dao->update(TABLE_STORY)->set('grade')->eq($grade)->where('id')->eq($child->id)->exec();
                 $this->action->create('story', $child->id, 'syncGrade', '', $grade);

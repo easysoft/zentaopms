@@ -118,7 +118,6 @@ formGridPanel
     set::pinnedItems($pinnedItems),
     set::data($initStory),
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
-    on::change('[name=module]', 'loadURS'),
     on::change('[name=parent]', 'loadGrade'),
     on::change('[name=product]', 'loadProduct'),
     on::change('[name=source]', "toggleFeedback(e.target)"),
