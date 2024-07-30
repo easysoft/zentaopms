@@ -13,7 +13,7 @@ class demandBasicInfo extends wg
 
     protected function getItems(): array
     {
-        global $lang;
+        global $lang, $config;
 
         $demand = $this->prop('demand', data('demand'));
         if(!$demand) return array();
