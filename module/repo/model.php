@@ -511,7 +511,8 @@ class repoModel extends model
      */
     public function saveState(int $repoID = 0, int $objectID = 0): int
     {
-        if(!session_id()) session_start();
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
         $repos = $this->getRepoPairs($this->app->tab, $objectID);
@@ -520,7 +521,7 @@ class repoModel extends model
         if(!isset($repos[$this->session->repoID])) $this->session->set('repoID', key($repos));
 
         $repoID = (int)$this->session->repoID;
-        session_write_close();
+        if(!$hasSession) session_write_close();
 
         return $repoID;
     }
@@ -3033,23 +3034,25 @@ class repoModel extends model
         $showTag    = false;
         $showBranch = false;
         $showCommit = false;
-        $svnRepo    = false;
         $hasTagSCM  = array_map('strtolower', $this->config->repo->notSyncSCM);
         foreach($repoPairs as $repoID => $repoName)
         {
             preg_match('/^\[(\w+)\]/', $repoName, $matches);
 
             $result = isset($matches[1]) ? $matches[1] : '';
-            if($result == 'svn' && $repoID == $this->session->repoID) $svnRepo = true;
-            if(in_array($result, $hasTagSCM)) $showTag = $showBranch = true;
-            if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
+            if($repoID == $this->session->repoID && in_array($result, $hasTagSCM))
+            {
+                $showTag    = true;
+                $showBranch = true;
+            }
+            if($repoID == $this->session->repoID && in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
-        $showMR     = $showMR    && !$svnRepo && common::hasPriv('mr', 'browse');
-        $showTag    = $showTag   && !$svnRepo && common::hasPriv('repo', 'browsetag');
-        $showBranch = $repoPairs && !$svnRepo && common::hasPriv('repo', 'browsebranch');
-        $showReview = $repoPairs && common::hasPriv('repo', 'review');
-        $showCommit = $repoPairs && common::hasPriv('repo', 'log');
+        $showMR     = $showMR     && common::hasPriv('mr', 'browse');
+        $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
+        $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
+        $showReview = $repoPairs  && common::hasPriv('repo', 'review');
+        $showCommit = $repoPairs  && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
         {
             if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->mr);

@@ -1766,7 +1766,8 @@ class repoZen extends repo
      */
     protected function processRepoID(int $repoID, int $objectID, array $scmList = array()): int
     {
-        if(!session_id()) session_start();
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
         if(!$repoID) $repoID = (int)$this->session->repoID;
 
         $repoPairs = array();
@@ -1780,15 +1781,16 @@ class repoZen extends repo
 
                 $repoPairs[$repo->id] = $repo->name;
             }
+            if($repoID && !isset($repoPairs[$repoID])) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
-            if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
+            if(!$repoID) $repoID = key($repoPairs);
         }
 
         $this->view->repoID    = $repoID;
         $this->view->repoPairs = $repoPairs;
         $repoID = $this->repo->saveState($repoID, $objectID);
 
-        session_write_close();
+        if(!$hasSession) session_write_close();
         return $repoID;
     }
 }

@@ -83,7 +83,7 @@ class mr extends control
         $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
-        if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID"));
+        if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
 
         if(!$repoID) $repoID = key($repoList);
         $repoID = $this->repo->saveState($repoID, $objectID);

@@ -1810,7 +1810,7 @@ class repo extends control
         $keyword   = htmlspecialchars(base64_decode($keyword));
 
         $repo = $this->repo->getByID($repoID);
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->locate(inLink('browse', "repoID=$repoID"));
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
         $this->scm->setEngine($repo);
         $tagList    = $this->scm->tags('all');
@@ -1873,7 +1873,8 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         $repo = $this->repo->getByID($repoID);
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->locate(inLink('browse', "repoID=$repoID"));
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
+
         $this->scm->setEngine($repo);
         $branchList = $this->scm->branch('all');
 
