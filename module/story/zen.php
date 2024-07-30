@@ -720,12 +720,13 @@ class storyZen extends story
 
         $fields['grade']['default']      = current($grades);
         $fields['module']['options']     = $modules;
-        $fields['plan']['options']       = $plans;
         $fields['grade']['options']      = $grades;
         $fields['reviewer']['options']   = $reviewers;
         $fields['assignedTo']['options'] = $users;
         $fields['mailto']['options']     = $users;
         $fields['parent']['options']     = array_filter($stories);
+
+        if(!empty($fields['plan'])) $fields['plan']['options'] = $plans;
 
         if($this->story->checkForceReview($storyType)) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
