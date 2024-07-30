@@ -66,7 +66,7 @@ class tableChart extends wg
             if(!next($colorList)) reset($colorList);
         }
 
-        $tableWdith  = $this->prop('tableWidth', '50%');
+        $tableWidth  = $this->prop('tableWidth', '50%');
         $chartHeight = $this->prop('chartHeight', 300);
         $overflow    = $this->prop('overflow', true);
         return div
@@ -75,6 +75,7 @@ class tableChart extends wg
             cell
             (
                 set::id($item),
+                setKey('chart'),
                 setClass('border-r chart flex-auto'),
                 div(set::className('center text-base font-bold py-2'), $title),
                 echarts
@@ -107,7 +108,8 @@ class tableChart extends wg
             ),
             cell
             (
-                set::width($tableWdith),
+                setKey('table'),
+                set::width($tableWidth),
                 div
                 (
                     setClass('overflow-y-auto'),
@@ -119,7 +121,8 @@ class tableChart extends wg
                         $tableTR
                     )
                 )
-            )
+            ),
+            set($this->getRestProps())
         );
     }
 }
