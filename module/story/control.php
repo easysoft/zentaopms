@@ -326,7 +326,7 @@ class story extends control
 
         $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->hyphen . $this->view->story->title;
         $this->view->story        = $story;
-        $this->view->showGrade    = $this->config->edition == 'ipd';
+        $this->view->showGrade    = !empty($this->config->showStoryGrade);
         $this->view->twins        = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->fields       = $fields;
         $this->view->branches     = $this->view->product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
@@ -592,7 +592,7 @@ class story extends control
         $this->view->gradePairs    = $this->story->getGradePairs($story->type, 'all');
         $this->view->roadmaps      = $this->config->edition == 'ipd' ? array(0 => '') + $this->loadModel('roadmap')->getPairs() : array();
         $this->view->demand        = $this->config->edition == 'ipd' ? $this->loadModel('demand')->getByID($story->demand) : new stdclass();
-        $this->view->showGrade     = $this->config->edition == 'ipd';
+        $this->view->showGrade     = !empty($this->config->showStoryGrade);
         $this->view->actions       = $this->action->getList('story', $storyID);
         $this->view->branch        = $story->branch;
 
