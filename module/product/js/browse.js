@@ -197,7 +197,7 @@ function setStatistics()
 cols = JSON.parse(cols);
 data = JSON.parse(data).map(function(row)
 {
-    row.key = row.parent > 0 ? (row.parent + '-' + row.id) : row.id;
+    row.key = row.id;
     return row;
 });
 const options =
