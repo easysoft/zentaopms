@@ -113,7 +113,15 @@ function loadProductBranches(productID)
     });
 
     window.loadProductModules(productID, branch);
-    window.loadProductPlans(productID, branch);
+
+    if($('[name=roadmap]').length)
+    {
+        window.loadProductRoadmaps(productID, branch);
+    }
+    else
+    {
+        window.loadProductPlans(productID, branch);
+    }
 }
 
 window.loadProductModules = function(productID, branch)

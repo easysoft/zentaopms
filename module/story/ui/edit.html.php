@@ -215,6 +215,7 @@ detailBody
                     on::change('[name=branch]')->call('loadBranch'),
                     picker
                     (
+                        setID('product'),
                         set::name('product'),
                         set::items($fields['product']['options']),
                         set::value($fields['product']['default']),

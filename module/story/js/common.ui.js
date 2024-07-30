@@ -94,7 +94,15 @@ window.loadBranch = function()
     var productID = $('[name=product]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    window.loadProductPlans(productID, branch);
+    if($('[name=roadmap]').length)
+    {
+        window.loadProductRoadmaps(productID, branch);
+    }
+    else
+    {
+        window.loadProductPlans(productID, branch);
+    }
+
     window.loadBranchModule(productID);
 };
 
