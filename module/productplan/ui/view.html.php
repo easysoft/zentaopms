@@ -113,9 +113,9 @@ if($canBatchEditStory)   $navStoryActionItems[] = array('text' => $lang->edit, '
 if($canBatchReviewStory) $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->review, 'items' => $reviewResultItems);
 if($canBatchChangeBranchStory && $product->type != 'normal') $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->product->branchName[$product->type], 'items' => $branchItems);
 if($canBatchChangeModuleStory) $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->moduleAB, 'items' => $moduleItems);
-if($canBatchChangePlanStory)   $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems);
+if($canBatchChangePlanStory)   $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems, 'listProps' => array('searchBox' => true, 'maxHeight' => 400));
 if($canBatchChangeStageStory)  $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->stageAB, 'items' => $stageItems);
-if($canBatchAssignToStory)     $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->assignedTo, 'items' => $assignItems);
+if($canBatchAssignToStory)     $navStoryActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->assignedTo, 'items' => $assignItems, 'listProps' => array('searchBox' => true, 'maxHeight' => 400));
 
 $storyFootToolbar = array();
 if($canBatchActionStory)
@@ -135,7 +135,7 @@ foreach($plans as $planID => $planName) $planItems[] = array('text' => $planName
 
 $navBugActionItems = array();
 if($canBatchEditBug)       $navBugActionItems[] = array('text' => $lang->edit, 'class' => 'batch-btn', 'data-type' => 'bug', 'data-page' => 'batch', 'data-url' => helper::createLink('bug', 'batchEdit', "productID=$plan->product&branch=$branch"));
-if($canBatchChangePlanBug) $navBugActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems);
+if($canBatchChangePlanBug) $navBugActionItems[] = array('class' => 'not-hide-menu', 'text' => $lang->story->planAB, 'items' => $planItems, 'listProps' => array('searchBox' => true, 'maxHeight' => 400));
 
 $bugFootToolbar = array();
 if($canBatchActionBug)
