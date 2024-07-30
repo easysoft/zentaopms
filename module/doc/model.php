@@ -663,13 +663,18 @@ class docModel extends model
         $hasPrivDocIdList = $this->getPrivDocs($allLibIDList);
         if(in_array($type, array('view', 'collect')))
         {
-            $docs = $this->dao->select('t1.*,t3.name as libName,t3.type as objectType,max(t2.`date`) as date')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
+            $docSQL = $this->dao->select('MAX(id)')->from(TABLE_DOCACTION)
+                ->where('action')->eq($type)
+                ->andWhere('actor')->eq($this->app->user->account)
+                ->groupBy('doc')
+                ->get();
+
+            $docs = $this->dao->select('t1.*,t2.date,t3.name as libName')->from(TABLE_DOC)->alias('t1')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
                 ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t2.action')->eq($type)
-                ->andWhere('t2.actor')->eq($this->app->user->account)
+                ->andWhere('t2.id')->subIn($docSQL)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t3.type')->ne('custom')->fi()
@@ -677,7 +682,6 @@ class docModel extends model
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
-                ->groupBy('t1.id')
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');

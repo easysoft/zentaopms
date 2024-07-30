@@ -569,9 +569,10 @@ class baseDAO
          * Remove the part after order and limit.
          **/
         $subLength = strlen($sql);
-        $groupPOS  = strripos($sql, 'group by');
-        $orderPOS  = strripos($sql, 'order by');
-        $limitPOS  = strripos($sql, 'limit');
+        $lastRight = strrpos($sql, ')') > 0 ? strrpos($sql, ')') : 0;
+        $groupPOS  = strripos($sql, 'group by', $lastRight);
+        $orderPOS  = strripos($sql, 'order by', $lastRight);
+        $limitPOS  = strripos($sql, 'limit', $lastRight);
         if($limitPOS) $subLength = $limitPOS;
         if($orderPOS) $subLength = $orderPOS;
         if($groupPOS) $subLength = $groupPOS;
