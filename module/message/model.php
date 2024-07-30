@@ -368,7 +368,7 @@ class messageModel extends model
      */
     public function deleteExpired(): void
     {
-        $days       = $this->config->message->browser->maxDays;
+        $days       = (int)$this->config->message->browser->maxDays;
         $account    = $this->app->user->account;
         $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
         $this->dao->delete()->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->exec();
