@@ -261,6 +261,7 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
+    set::backBtn(array('url' => createLink('product', 'browse', "productID=$story->product&$story->branch=&browseType=unclosed&param=0&storyType=$story->type"))),
     $hiddenActions ? null : set::actions(array_values($actions)),
     $parentTitle,
     $parentUrl,
