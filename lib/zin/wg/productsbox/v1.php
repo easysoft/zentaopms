@@ -234,7 +234,7 @@ class productsBox extends wg
             if(isset($product->branches))             $branchIdList = $product->branches;
             if(!empty($linkedBranches[$product->id])) $branchIdList = is_array($linkedBranches) ? array_keys($linkedBranches[$product->id]) : $linkedBranches[$product->id];
 
-            $objectID = 0;
+            $objectID = '';
             if(empty($currentProduct) || ($currentProduct != $product->id))
             {
                 $objects      = array();
@@ -248,27 +248,26 @@ class productsBox extends wg
                 }
                 if($type == 'roadmap' && empty($product->branches) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
 
-                if($product->type == 'normal')
+                if($type == 'plan')
                 {
-                    $planID    = isset($product->plans) && is_array($product->plans) ? implode(',', $product->plans) : '';
-                    $roadmapID = isset($product->roadmaps) && is_array($product->roadmaps) ? implode(',', $product->roadmaps) : '';
+                    $objectID = isset($product->plans) && is_array($product->plans) ? implode(',', $product->plans) : '';
                 }
-                else
+                elseif($type == 'roadmap')
                 {
-                    $planID = '';
-                    if(isset($product->plans) && is_array($product->plans))
+                    if($product->type == 'normal')
                     {
-                        foreach($product->plans as $branchGroup) $planID .= ',' . implode(',', $branchGroup);
+                        $objectID = isset($product->roadmaps) && is_array($product->roadmaps) ? implode(',', $product->roadmaps) : '';
                     }
-
-                    $roadmapID = '';
-                    if(isset($product->roadmaps) && is_array($product->roadmaps))
+                    else
                     {
-                        foreach($product->roadmaps as $branchGroup) $roadmapID .= ',' . implode(',', $branchGroup);
+                        if(isset($product->roadmaps) && is_array($product->roadmaps))
+                        {
+                            foreach($product->roadmaps as $branchGroup) $objectID .= ',' . implode(',', $branchGroup);
+                        }
                     }
                 }
 
-                $objectID = $type == 'plan' ? trim($planID, ',') : trim($roadmapID, ',');
+                $objectID = trim($objectID, ',');
             }
             else
             {
