@@ -109,6 +109,7 @@ $canCreate ? formPanel
         setID('repoID'),
         set::label($lang->repo->codeRepo),
         set::required(true),
+        set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
         picker
         (
             set::required(true),
@@ -124,6 +125,7 @@ $canCreate ? formPanel
         setID('branchFrom'),
         set::label($lang->repo->branchFrom),
         set::required(true),
+        set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
         picker
         (
             set::name('branchFrom'),
@@ -137,6 +139,7 @@ $canCreate ? formPanel
     (
         set::name('branchName'),
         set::label($lang->repo->branchName),
+        set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
         set::required(true),
         set::value("{$objectType}-{$objectID}")
     ),
