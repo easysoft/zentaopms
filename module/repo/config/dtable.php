@@ -143,7 +143,7 @@ $config->repo->logDtable = new stdclass();
 $config->repo->logDtable->fieldList['id']['hidden'] = true;
 
 $config->repo->logDtable->fieldList['revision']['type']         = 'revision';
-$config->repo->logDtable->fieldList['revision']['width']        = '128';
+$config->repo->logDtable->fieldList['revision']['width']        = '160';
 $config->repo->logDtable->fieldList['revision']['checkbox']     = true;
 $config->repo->logDtable->fieldList['revision']['nestedToggle'] = false;
 $config->repo->logDtable->fieldList['revision']['data-app']     = $app->tab;
@@ -151,13 +151,13 @@ $config->repo->logDtable->fieldList['revision']['data-app']     = $app->tab;
 $config->repo->logDtable->fieldList['date']['name']     = 'time';
 $config->repo->logDtable->fieldList['date']['type']     = 'datetime';
 $config->repo->logDtable->fieldList['date']['sortType'] = false;
-$config->repo->logDtable->fieldList['date']['width']    = '128';
+$config->repo->logDtable->fieldList['date']['width']    = '160';
 
 $config->repo->logDtable->fieldList['committer']['name']  = 'committer';
-$config->repo->logDtable->fieldList['committer']['width'] = '128';
+$config->repo->logDtable->fieldList['committer']['width'] = '160';
 
 $config->repo->logDtable->fieldList['comment']['type']  = 'html';
-$config->repo->logDtable->fieldList['comment']['width'] = '656';
+$config->repo->logDtable->fieldList['comment']['width'] = '400';
 
 $config->repo->blameDtable = new stdclass();
 
