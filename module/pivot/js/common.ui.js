@@ -10,12 +10,21 @@ window.clickCell = function(col, {colName, rowInfo})
 
     let [originField, conditions] = drillConditions;
     let filterValues = getFilterValues();
+    let filters = '';
+    let id      = pivotID;
+    let status  = 'published';
 
     conditions   = conditions.map(condition => condition.value);
     conditions   = latin1ToBase64(JSON.stringify(conditions))
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
+    if(typeof(pivotState) != 'undefined')
+    {
+        filters = latin1ToBase64(JSON.stringify(pivotState.filters));
+        id      = pivotState.id;
+        status  = 'design';
+    }
 
-    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${pivotID}&colName=${originField}&drillFields=${conditions}&filterValues=${filterValues}&value=${value}`);
+    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&colName=${originField}&status=${status}&drillFields=${conditions}&filters=${filters}&filterValues=${filterValues}&value=${value}`);
     drillModalLink = drillModalLink.replace(/\+/g, '%2B');
 
     zui.Modal.open({url: drillModalLink, size: 'lg'});

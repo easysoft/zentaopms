@@ -2655,10 +2655,12 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filterValues): array
+    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filters, array $filterValues): array
     {
+        $pivot = $this->getById($pivotID);
+        if(!empty($filters)) $pivot->filters = $filters;
+
         $this->app->loadClass('pivotstate', true);
-        $pivot      = $this->getById($pivotID);
         $pivotState = new pivotState($pivot, array(), $this->app->getClientLang());
 
         $filters = $pivotState->setFiltersDefaultValue($filterValues);
@@ -2706,7 +2708,7 @@ class pivotModel extends model
      */
     public function processKanbanDatas(string $object, array $datas): array
     {
-        $kanbans = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->eq('kanban')->fetchPairs();
+        $kanbans = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('kanban')->fetchPairs();
 
         if($object == 'story') $projectStory = $this->dao->select('story, project')->from(TABLE_PROJECTSTORY)->fetchPairs();
 

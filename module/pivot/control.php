@@ -79,11 +79,12 @@ class pivot extends control
      * @access public
      * @return void
      */
-    public function drillModal(int $pivotID, string $colName, string $conditions, string $filterValues, string $value)
+    public function drillModal(int $pivotID, string $colName, string $status, string $conditions, string $filters, string $filterValues, string $value)
     {
-        $drill        = $this->pivot->fetchPivotDrill($pivotID, $colName);
+        $drill        = $this->pivot->fetchPivotDrill($pivotID, $colName, $status);
         $conditions   = json_decode(base64_decode($conditions), true);
         $filterValues = json_decode(base64_decode($filterValues), true);
+        $filters      = $filters ? json_decode(base64_decode($filters), true) : array();
 
         $mergeConditions = array();
         foreach($drill->condition as $index => $condition)
@@ -93,7 +94,7 @@ class pivot extends control
         }
 
         $cols  = $this->pivot->getDrillCols($drill->object);
-        $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $mergeConditions, $filterValues);
+        $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $mergeConditions, $filters, $filterValues);
 
         if(strpos(',story,task,bug,', ",{$drill->object},") !== false) $datas = $this->pivot->processKanbanDatas($drill->object, $datas);
 

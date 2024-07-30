@@ -430,16 +430,18 @@ EOT)->from(TABLE_TASK)->alias('t1')
      * 获取透视表汇总列的下钻配置。
      * Get drill config of pivot summary column field.
      *
-     * @param  int $pivotID
+     * @param  int    $pivotID
      * @param  string $field
+     * @param  string $status
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function fetchPivotDrill(int $pivotID, string $field): object|bool
+    public function fetchPivotDrill(int $pivotID, string $field, string $status = 'published'): object|bool
     {
         $record = $this->dao->select('*')->from(TABLE_PIVOTDRILL)
             ->where('pivot')->eq($pivotID)
             ->andWhere('field')->eq($field)
+            ->beginIF($status == 'design')->andWhere('status')->eq('design')->andWhere('account')->eq($this->app->user->account)->fi()
             ->fetch();
 
         if($record) $record->condition = json_decode($record->condition, true);
