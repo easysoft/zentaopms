@@ -86,7 +86,8 @@ class backBtn extends btn
             'service'        => 'service-browse,service-manage,service-view',
             'domain'         => 'domain-browse,domain-view',
             'researchtask'   => 'marketresearch-task,my-index',
-            'review'         => 'review-browse,my-index'
+            'review'         => 'review-browse,my-index',
+            'charter'        => 'charter-browse'
         );
 
         $props  = parent::getProps();
