@@ -1879,16 +1879,17 @@ class repo extends control
         $branchList = $this->scm->branch('all');
 
         $committers = $this->loadModel('user')->getCommiters('account');
+        a($branchList);
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
             $branch->branchName = helper::safe64Encode($branch->name);
             $branch->committer  = isset($branch->commit->author_name) ? $branch->commit->author_name : '';
-            if(isset($branch->commit->committer->identity->name)) $branch->committer = $branch->commit->committer->identity->name;
+            if(isset($branch->commit->author->identity->name)) $branch->committer = $branch->commit->author->identity->name;
             $branch->committer = zget($committers, $branch->committer);
 
             $branch->date = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
-            if(isset($branch->commit->committer->when)) $branch->date = date('Y-m-d H:i:s', strtotime($branch->commit->committer->when));
+            if(isset($branch->commit->author->when)) $branch->date = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
         }
 
         /* Data sort. */
