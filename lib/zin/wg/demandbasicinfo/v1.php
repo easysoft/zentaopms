@@ -29,10 +29,7 @@ class demandBasicInfo extends wg
         foreach(explode(',', $demand->mailto)  as $user)    $mailtoList  .= zget($users,    $user)    . ', ';
 
         $items = array();
-        if($config->vision == 'or')
-        {
-            $items[$lang->demand->pool] = zget($demandpools, $demand->pool, '');
-        }
+        if($config->vision == 'or') $items[$lang->demand->pool] = zget($demandpools, $demand->pool, '');
 
         if(!empty($demand->parent) && $demand->parent > 0)
         {

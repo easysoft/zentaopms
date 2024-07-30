@@ -23,7 +23,7 @@ class storyModel extends model
      */
     public function getByID(int $storyID, int $version = 0, bool $setImgSize = false): object|false
     {
-        $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")->fetch();
+        $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         if(!$story) return false;
 
         $story->children = array();
