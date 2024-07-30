@@ -66,6 +66,7 @@
         </tr>
         <?php if(!empty($project->model) and in_array($project->model, array('agileplus', 'ipd', 'waterfallplus'))):?>
         <?php if($project->model == 'agileplus' ) unset($lang->execution->typeList['stage']);?>
+        <?php if($project->model == 'waterfallplus' ) unset($lang->execution->typeList['sprint'], $lang->execution->typeList['kanban']);?>
         <tr>
           <th><?php echo $lang->execution->method;?></th>
           <td class="col-main"><?php echo html::select("type", $lang->execution->typeList, $type, "class='form-control chosen' required onchange='setType(this.value)'");?></td>
