@@ -75,7 +75,7 @@ window.clickMessage = function(obj)
     markRead(obj);
     $('#header #messageBar').trigger('click');
     $.apps.openApp(url);
-    rederMessage();
+    renderMessage();
 };
 
 window.renderMessage = function()
