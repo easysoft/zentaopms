@@ -782,10 +782,10 @@ $lang->navGroup->upgrade = 'upgrade';
 
 if(!$config->enableER) unset($lang->product->menu->epic, $lang->product->menuOrder[10]);
 if(!$config->URAndSR)  unset($lang->product->menu->requirement, $lang->product->menuOrder[15]);
-if(!helper::hasFeature('product_roadmap')) unset($lang->product->menu->roadmap, $lang->product->menuOrder[30]);
+if(!helper::hasFeature('product_roadmap')) unset($lang->product->menu->roadmap, $lang->product->menuOrder[45]);
 if(!helper::hasFeature('product_track'))
 {
-    unset($lang->product->menu->track, $lang->product->menuOrder[40]);
+    unset($lang->product->menu->track, $lang->product->menuOrder[30]);
     $lang->product->dividerMenu = str_replace(',track,', ',doc,', $lang->product->dividerMenu);
 }
 
