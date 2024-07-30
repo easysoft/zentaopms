@@ -375,7 +375,10 @@ window.treeClick = function(info)
 
 window.searchList = function()
 {
-    const dom     = new DOMParser().parseFromString($('#keyword').val(), "text/html");
-    const keyword = dom.body.textContent;
-    loadPage(searchUrl.replace('%s', btoa(keyword)));
+    $.getLib(config.webRoot + 'js/misc/base64.js', {root: false}, function()
+    {
+        const dom     = new DOMParser().parseFromString($('#keyword').val(), "text/html");
+        const keyword = dom.body.textContent;
+        loadPage(searchUrl.replace('%s', Base64.encode(keyword)));
+    });
 }
