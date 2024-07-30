@@ -99,15 +99,15 @@ class storyBasicInfo extends wg
         );
         if(!empty($story->demand) && !empty($demand) && $story->parent <= 0)
         {
-            $demandHtml = hasPriv('demand', 'view') ? div
+            $demandHtml = div
             (
-                a
+                hasPriv('demand', 'view') ? a
                 (
                     $demand->title,
                     set::href(helper::createLink('demand', 'view', "demandID=$story->demand")),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
-                ),
+                ) : $demand->title,
                 $story->demandVersion < $demand->version && common::hasPriv($story->type, 'processStoryChange') ? span
                 (
                     ' (',
@@ -120,7 +120,7 @@ class storyBasicInfo extends wg
                     ),
                     ')'
                 ) : null,
-            ) : $demand->title;
+            );
 
             $items[$lang->story->upstreamDemand] = array
             (
