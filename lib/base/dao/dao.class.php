@@ -2343,6 +2343,24 @@ class baseSQL
     }
 
     /**
+     * 创建子查询'NOT IN'部分。
+     * Create subquery not in part.
+     *
+     * @param  string|dao
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function subNotIn($subquery)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+
+        if(!is_string($subquery)) $subquery = $this->dbh->formatSQL($subquery->processSQL());
+
+        $this->sql .= ' NOT IN (' . $subquery . ')';
+        return $this;
+    }
+
+    /**
      * 创建LIKE部分。
      * Create the like by part.
      *
