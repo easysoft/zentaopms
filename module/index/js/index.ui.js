@@ -1006,7 +1006,7 @@ window.browserNotify = function()
             if(!showCount) dotStyle += 'width: 5px; height: 5px;';
             if(newCount > 99) newCount = '99+';
 
-            let dotHtml = '<span class="label danger label-dot absolute' + (showCount ? ' rounded-sm' : '') + '" style="' + dotStyle + '">' + (showCount ? unreadCount : '') + '</span>';
+            let dotHtml = '<span class="label danger label-dot absolute' + (showCount ? ' rounded-sm' : '') + '" style="' + dotStyle + '">' + (showCount ? newCount : '') + '</span>';
             $('#apps .app-container').each(function()
             {
                 let $iframeMessageBar = $(this).find('iframe').contents().find('#messageBar');
