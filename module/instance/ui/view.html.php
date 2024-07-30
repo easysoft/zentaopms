@@ -86,6 +86,7 @@ detailHeader(
 div
 (
     setClass('flex flex-normal gap-x-5 justify-center'),
+    on::click('.copy-btn')->call('copyText', jsRaw('this')),
     div
     (
         setClass('flex-none w-2/3'),

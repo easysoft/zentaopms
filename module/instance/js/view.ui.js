@@ -59,25 +59,17 @@ function refreshStatus()
     });
 }
 
-$('.copy-btn').on('click', function()
+window.copyText = function(dom)
 {
-    var copyText = $(this).parent().find('input');
+    var copyText = $(dom).parent().find('input');
     copyText.show();
     copyText[0].select();
     document.execCommand("Copy");
     copyText.hide();
 
-    var that = this;
-    $(that).tooltip
-    ({
-        trigger: 'click',
-        placement: 'bottom',
-        title: copied,
-        tipClass: 'success',
-        show:true
+    zui.Messager.show({
+        type:    'success',
+        content: copied,
+        time:    2000
     });
-    setTimeout(function()
-    {
-        $(that).tooltip('hide');
-    }, 2000)
-})
+}
