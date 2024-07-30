@@ -349,6 +349,18 @@ class pivotState
         if($init) $this->completeSettings();
     }
 
+    public function clearColumnDrill()
+    {
+        if(empty($this->settings)) return;
+        if(!isset($this->settings['columns']) || empty($this->settings['columns'])) return;
+
+        $columns = $this->settings['columns'];
+        foreach($columns as $index => $column)
+        {
+            if(isset($column['drill'])) unset($this->settings['columns'][$index]['drill']);
+        }
+    }
+
     /**
      * Clear filters.
      *
