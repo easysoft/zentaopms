@@ -455,6 +455,7 @@
             const component = $target.zui(info.name);
             if(typeof component === 'object' && typeof component.render === 'function')
             {
+                $target.closest('[zui-create-dtable]').attr(`zui-create-${component.constructor.ZUI || info.name}`, '');
                 beforeUpdate($target, info, options);
                 component.render(props);
                 afterUpdate($target, info, options);
