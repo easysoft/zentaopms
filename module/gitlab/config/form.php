@@ -24,8 +24,9 @@ $config->gitlab->form->user->create['username']         = array('type' => 'strin
 $config->gitlab->form->user->create['email']            = array('type' => 'string', 'required' => false, 'default' => '');
 $config->gitlab->form->user->create['password']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->gitlab->form->user->create['password_repeat']  = array('type' => 'string', 'required' => false, 'default' => '');
-$config->gitlab->form->user->create['can_create_group'] = array('type' => 'bool', 'required' => false, 'default' => false);
-$config->gitlab->form->user->create['external']         = array('type' => 'bool', 'required' => false, 'default' => false);
+$config->gitlab->form->user->create['projects_limit']   = array('type' => 'int',    'required' => false, 'default' => 100);
+$config->gitlab->form->user->create['can_create_group'] = array('type' => 'bool',   'required' => false, 'default' => false);
+$config->gitlab->form->user->create['external']         = array('type' => 'bool',   'required' => false, 'default' => false);
 
 $config->gitlab->form->user->edit = array();
 $config->gitlab->form->user->edit['id']               = array('type' => 'int', 'required' => true);

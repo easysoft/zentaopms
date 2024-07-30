@@ -61,17 +61,13 @@ formPanel
         set::width('1/2'),
         set::type('password')
     ),
-    formRow
+    formGroup
     (
-        setClass('hidden'),
-        formGroup
-        (
-            set::name('projects_limit'),
-            set::label($lang->gitlab->user->projectsLimit),
-            set::placeholder($lang->gitlab->user->projectsLimit),
-            set::value('100000'),
-            set::width('1/2')
-        )
+        set::name('projects_limit'),
+        set::label($lang->gitlab->user->projectsLimit),
+        set::placeholder($lang->gitlab->user->projectsLimit),
+        set::value('100'),
+        set::width('1/2')
     ),
     formGroup
     (
@@ -112,5 +108,3 @@ formPanel
         )
     )
 );
-
-render();
