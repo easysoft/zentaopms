@@ -1359,6 +1359,8 @@ eof;
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
         /* Check the method is openMethod. */
+        if($app->config->vision == 'or') $app->config->logonMethods[] = 'story.view';
+        if($app->config->vision != 'or') $app->config->logonMethods[] = 'demand.view';
         if(in_array("$module.$method", $app->config->openMethods)) return true;
         if(in_array("$module.$method", $app->config->logonMethods)) return true;
 
