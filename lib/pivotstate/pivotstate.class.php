@@ -349,6 +349,12 @@ class pivotState
         if($init) $this->completeSettings();
     }
 
+    /**
+     * Clear column drill.
+     *
+     * @access public
+     * @return void
+     */
     public function clearColumnDrill()
     {
         if(empty($this->settings)) return;
