@@ -1232,7 +1232,7 @@ class blockZen extends block
         $data = $this->project->getWaterfallPVEVAC($this->session->project);
         $this->view->pv = (float)$data['PV'];
         $this->view->ev = (float)$data['EV'];
-        $this->view->ac = (float)$data['AC'];
+        $this->view->ac = sprintf("%.2f", (float)$data['AC']);
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
@@ -1320,9 +1320,11 @@ class blockZen extends block
         $workhour  = $this->loadModel('project')->getWorkhour($projectID);
         if(empty($budget)) $budget = new stdclass();
 
+        $consumed = $this->dao->select('sum(cast(consumed as decimal)) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
+
         $this->view->people    = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($this->session->project)->fetch('people');
         $this->view->members   = count($members) ? count($members) - 1 : 0;
-        $this->view->consumed  = $this->dao->select('sum(cast(consumed as decimal(10,2))) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
+        $this->view->consumed  = sprintf("%.2f", $consumed);
         $this->view->budget    = $budget;
         $this->view->totalLeft = (float)$workhour->totalLeft;
     }
