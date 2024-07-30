@@ -64,9 +64,6 @@ $lang->custom->setPercent           = "Enable or Disable {$lang->stage->percent}
 $lang->custom->beginAndEndDate      = 'Begin & End';
 $lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
 $lang->custom->limitTaskDateAction  = 'Set start and end date required';
-$lang->custom->closeGrade           = 'Close Story Grade';
-$lang->custom->activateGrade        = 'Activate Story Grade';
-$lang->custom->deleteGrade          = 'Delete Story Grade';
 $lang->custom->closeSetting         = 'Close Setting';
 $lang->custom->gradeRule            = 'Allow cross-level segmentation';
 
@@ -228,10 +225,6 @@ $lang->custom->notice->selectAllTip        = 'After selecting all people, the re
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
 $lang->custom->notice->readOnlyOfCode      = "A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of {$lang->productCommon}, {$lang->projectCommon}, and execution in the system will be displayed in the creation, editing, detail, and list pages.";
 $lang->custom->notice->readOnlyOfPercent   = "The \"Workload Ratio\" is used to divide the workload of a {$lang->projectCommon} into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the \"Workload Ratio\", users have to fill in the ratio fields when setting up the stages in the Waterfall {$lang->projectCommon} and Waterfall Plus {$lang->projectCommon} management models.";
-$lang->custom->notice->closeGrade          = "After closing, the grade cannot be used to create new stories.";
-$lang->custom->notice->activateGrade       = "After activating, the grade can be used to create new stories.";
-$lang->custom->notice->gradeNotEmpty       = 'There are stories in this grade, and it cannot be deleted!';
-$lang->custom->notice->deleteGrade         = 'Are you sure you want to delete this grade?';
 $lang->custom->notice->gradeRule           = 'Cross-lavel segmentation: Requirements can be created from any requirement system and support cross-system associated parent relationships. For example: you can create third-level requirements directly under first-level requirements.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
