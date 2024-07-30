@@ -279,6 +279,7 @@ $config->repo->dtable->tag->fieldList['committer']['sortType'] = true;
 $config->repo->dtable->tag->fieldList['date']['title']      = $lang->repo->lastUpdateTime;
 $config->repo->dtable->tag->fieldList['date']['name']       = 'date';
 $config->repo->dtable->tag->fieldList['date']['type']       = 'datetime';
+$config->repo->dtable->tag->fieldList['date']['width']      = 300;
 $config->repo->dtable->tag->fieldList['date']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->repo->dtable->branch = new stdclass();
@@ -293,4 +294,5 @@ $config->repo->dtable->branch->fieldList['committer']['sortType'] = true;
 $config->repo->dtable->branch->fieldList['date']['title']      = $lang->repo->lastUpdateTime;
 $config->repo->dtable->branch->fieldList['date']['name']       = 'date';
 $config->repo->dtable->branch->fieldList['date']['type']       = 'datetime';
+$config->repo->dtable->branch->fieldList['date']['width']      = 300;
 $config->repo->dtable->branch->fieldList['date']['formatDate'] = 'YYYY-MM-dd hh:mm';
