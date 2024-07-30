@@ -264,7 +264,6 @@ div
                         btn
                         (
                             setID('hisTrigger'),
-                            set::url('###)'),
                             setClass('btn ghost'),
                             icon('clock'),
                             set('data-on', 'click'),

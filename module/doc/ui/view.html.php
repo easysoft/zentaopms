@@ -199,7 +199,6 @@ $contentDom = div
                 btn
                 (
                     set::id('hisTrigger'),
-                    set::url('###)'),
                     setClass('btn ghost'),
                     icon('clock'),
                     on::click('showHistory')
