@@ -2747,7 +2747,8 @@ EOF;
         if($app->config->vision != 'lite')
         {
             $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
-            if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
+            $projectID = empty($object->id) ? $app->session->project : $object->id;
+            if($inProject and $projectID and (strpos(",{$app->user->rights['projects']},", ",{$projectID},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
 
             $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
             if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
