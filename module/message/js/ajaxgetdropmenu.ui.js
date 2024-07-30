@@ -136,7 +136,7 @@ $(function()
         thisContextmenu.show(event);
     });
     $('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
-    $('#unreadContextMenu,#readContextMenu').on('click', function(event){event.stopPropagation();});
+    $('#unreadContextMenu,#readContextMenu').on('click', function(event){hideContextMenu(); event.stopPropagation();});
     $(window).on('resize', function(event)
     {
         let maxHeight = $(window).height() - $('#header').height() - 5;
