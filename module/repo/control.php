@@ -1879,7 +1879,6 @@ class repo extends control
         $branchList = $this->scm->branch('all');
 
         $committers = $this->loadModel('user')->getCommiters('account');
-        a($branchList);
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
