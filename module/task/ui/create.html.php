@@ -70,6 +70,7 @@ formGridPanel
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),
     on::click('.assignedToList .picker-multi-selection', 'removeTeamMember'),
+    on::click('#teamTable .team-saveBtn', 'checkTeamMember'),
     on::keyup('[name=name]', 'saveTaskName'),
     on::keyup('[name=estimate]', 'saveTaskEstimate'),
     modal

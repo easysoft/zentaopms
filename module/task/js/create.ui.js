@@ -439,7 +439,7 @@ window.removeItem = function(obj)
     $(obj).closest('tr').remove();
 }
 
-$('#teamTable .team-saveBtn').on('click.team', '.btn', function()
+window.checkTeamMember = function()
 {
     $('div.assignedToList').html('');
 
@@ -490,7 +490,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
 
     zui.Modal.hide();
     return false;
-})
+};
 
 window.removeTeamMember = function()
 {
