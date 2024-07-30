@@ -1388,13 +1388,20 @@ class pivotModel extends model
         $mergeRecords = $mergeRecords ? array_values($mergeRecords) : array();
         $mergeRecords = $this->orderByRecordsGroups($records, $mergeRecords, $groups);
 
+        $mergeDrillRecords = array();
+        foreach($mergeRecords as $index => $lineRecord)
+        {
+            $lineGroupKey = $this->getGroupsKey($groups, $lineRecord);
+            $mergeDrillRecords[$lineGroupKey] = isset($drillRecords[$lineGroupKey]) ? $drillRecords[$lineGroupKey] : array();
+        }
+
         $data              = new stdclass();
         $data->groups      = $groups;
         $data->cols        = $cols;
         $data->array       = json_decode(json_encode($mergeRecords), true);
         if($showColTotal == 'sum' && count($data->array)) $this->processLastRow($data->array[count($data->array) - 1]);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
-        $data->drills      = $drillRecords;
+        $data->drills      = $mergeDrillRecords;
 
         $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
 
