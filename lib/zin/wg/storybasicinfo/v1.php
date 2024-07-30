@@ -131,17 +131,16 @@ class storyBasicInfo extends wg
         }
         if(isset($story->parentName))
         {
-
-            $storyHtml = hasPriv($story->type, 'view') ? div
+            $storyHtml = hasPriv($story->parentType, 'view') ? div
             (
                 a
                 (
                     $story->parentName,
-                    set::href(helper::createLink($story->type, 'view', "storyID=$story->parent")),
+                    set::href(helper::createLink($story->parentType, 'view', "storyID=$story->parent")),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ),
-                $story->parentChanged && common::hasPriv($story->type, 'processStoryChange') ? span
+                $story->parentChanged && common::hasPriv($story->parentType, 'processStoryChange') ? span
                 (
                     ' (',
                     $lang->story->storyChange . ' ',

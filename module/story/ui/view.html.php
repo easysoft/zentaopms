@@ -99,6 +99,8 @@ if($story->children)
         $cols['title']['data-size']   = 'lg';
     }
 
+    if(($story->type == 'story' && $config->vision == 'or') || ($story->vision == 'or' && $config->vision == 'rnd')) unset($cols['actions']);
+
     foreach(array_keys($cols) as $fieldName) $cols[$fieldName]['sortType'] = false;
 
     $options = array('users' => $users);
