@@ -293,7 +293,6 @@ $lang->pivot->clearSettings   = 'The configuration of the query data has been mo
 $lang->pivot->draftSave       = 'The pivot table has been published and will be in draft state. Do you want to continue?';
 $lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
 $lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
-$lang->pivot->emptyDrillField = 'Setting columns field change, please check';
 //$lang->pivot->cannotAddDrill  = 'GROUP BY exists in the query statement or filters are configured. Therefore, data cannot be configured to drill down';
 
 $lang->pivot->drillModalTip       = <<<EOT
@@ -450,20 +449,21 @@ $lang->datepicker->dpText->TEXT_MONTH_BEGIN = 'Begin Month';
 $lang->datepicker->dpText->TEXT_MONTH_END   = 'End Month';
 
 $lang->pivot->drill = new stdclass();
-$lang->pivot->drill->common         = 'Data Drill';
-$lang->pivot->drill->drillCondition = 'Drill Condition';
-$lang->pivot->drill->drillResult    = 'Drill Result';
-$lang->pivot->drill->selectField    = 'Select Drill Field';
-$lang->pivot->drill->selectObject   = 'Select Link Object';
-$lang->pivot->drill->setCondition   = 'Set Drill Condition';
-$lang->pivot->drill->equal          = '=';
-$lang->pivot->drill->inDrillField   = 'Drill table field';
-$lang->pivot->drill->inQueryField   = 'Query field';
-$lang->pivot->drill->preview        = 'Preview';
-$lang->pivot->drill->save           = 'Save';
-$lang->pivot->drill->drillFieldText = "%s(%s).%s";
-$lang->pivot->drill->storyName      = 'Story Name';
-$lang->pivot->drill->releaseStories = "Finished Stories";
-$lang->pivot->drill->productName    = "Product Name";
-$lang->pivot->drill->activatedBug   = "Activated Bug Count";
-$lang->pivot->drill->auto           = "Auto";
+$lang->pivot->drill->common           = 'Data Drill';
+$lang->pivot->drill->drillCondition   = 'Drill Condition';
+$lang->pivot->drill->drillResult      = 'Drill Result';
+$lang->pivot->drill->selectField      = 'Select Drill Field';
+$lang->pivot->drill->selectObject     = 'Select Link Object';
+$lang->pivot->drill->setCondition     = 'Set Drill Condition';
+$lang->pivot->drill->equal            = '=';
+$lang->pivot->drill->inDrillField     = 'Drill table field';
+$lang->pivot->drill->inQueryField     = 'Query field';
+$lang->pivot->drill->preview          = 'Preview';
+$lang->pivot->drill->save             = 'Save';
+$lang->pivot->drill->drillFieldText   = "%s(%s).%s";
+$lang->pivot->drill->storyName        = 'Story Name';
+$lang->pivot->drill->releaseStories   = "Finished Stories";
+$lang->pivot->drill->productName      = "Product Name";
+$lang->pivot->drill->activatedBug     = "Activated Bug Count";
+$lang->pivot->drill->auto             = "Auto";
+$lang->pivot->drill->designChangedTip = 'Setting columns field change, please check';

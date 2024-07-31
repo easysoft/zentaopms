@@ -293,7 +293,6 @@ $lang->pivot->clearSettings   = '查询数据的配置已修改，是否清空�
 $lang->pivot->draftSave       = '该透视表已发布，将变为草稿态，是否继续？';
 $lang->pivot->cannotAddQuery  = '已添加结果筛选器，无法添加查询筛选器';
 $lang->pivot->cannotAddResult = '已添加查询筛选器，无法添加结果筛选器';
-$lang->pivot->emptyDrillField = '设计变更，请检查';
 //$lang->pivot->cannotAddDrill  = '查询语句中存在GROUP BY或配置了筛选器，暂时无法配置数据下钻';
 
 $lang->pivot->drillModalTip       = <<<EOT
@@ -450,20 +449,21 @@ $lang->datepicker->dpText->TEXT_MONTH_BEGIN = '本月初';
 $lang->datepicker->dpText->TEXT_MONTH_END   = '本月末';
 
 $lang->pivot->drill = new stdclass();
-$lang->pivot->drill->common         = '数据下钻';
-$lang->pivot->drill->drillCondition = '下钻条件';
-$lang->pivot->drill->drillResult    = '下钻结果';
-$lang->pivot->drill->selectField    = '选择要下钻的列';
-$lang->pivot->drill->selectObject   = '关联目标对象';
-$lang->pivot->drill->setCondition   = '设置下钻的查询条件';
-$lang->pivot->drill->equal          = '=';
-$lang->pivot->drill->inDrillField   = '下钻查询表中的';
-$lang->pivot->drill->inQueryField   = '查询结果字段';
-$lang->pivot->drill->preview        = '预览';
-$lang->pivot->drill->save           = '保存';
-$lang->pivot->drill->drillFieldText = "%s(%s).%s";
-$lang->pivot->drill->storyName      = '需求名称';
-$lang->pivot->drill->releaseStories = "完成的需求";
-$lang->pivot->drill->productName    = "产品名称";
-$lang->pivot->drill->activatedBug   = "激活的Bug数";
-$lang->pivot->drill->auto           = "自动";
+$lang->pivot->drill->common           = '数据下钻';
+$lang->pivot->drill->drillCondition   = '下钻条件';
+$lang->pivot->drill->drillResult      = '下钻结果';
+$lang->pivot->drill->selectField      = '选择要下钻的列';
+$lang->pivot->drill->selectObject     = '关联目标对象';
+$lang->pivot->drill->setCondition     = '设置下钻的查询条件';
+$lang->pivot->drill->equal            = '=';
+$lang->pivot->drill->inDrillField     = '下钻查询表中的';
+$lang->pivot->drill->inQueryField     = '查询结果字段';
+$lang->pivot->drill->preview          = '预览';
+$lang->pivot->drill->save             = '保存';
+$lang->pivot->drill->drillFieldText   = "%s(%s).%s";
+$lang->pivot->drill->storyName        = '需求名称';
+$lang->pivot->drill->releaseStories   = "完成的需求";
+$lang->pivot->drill->productName      = "产品名称";
+$lang->pivot->drill->activatedBug     = "激活的Bug数";
+$lang->pivot->drill->auto             = "自动";
+$lang->pivot->drill->designChangedTip = '设计变更，请检查';
