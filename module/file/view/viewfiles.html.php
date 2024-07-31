@@ -132,6 +132,7 @@ function setFileName(fileID)
     var fileName  = $('#fileName' + fileID).val();
     var extension = $('#extension' + fileID).val();
     var postData  = {'fileName' : fileName, 'extension' : extension};
+    var sizeHtml  = $('#fileTitle' + fileID).find('.text-muted').prop('outerHTML');
     $.ajax(
     {
         url:createLink('file', 'edit', 'fileID=' + fileID),
@@ -140,7 +141,7 @@ function setFileName(fileID)
         data: postData,
         success: function(data)
         {
-            $('#fileTitle' + fileID).html("<i class='icon icon-file-text'></i> &nbsp;" + data['title']);
+            $('#fileTitle' + fileID).html("<i class='icon icon-file-text'></i> &nbsp;" + data['title'] + sizeHtml);
             $('#renameFile' + fileID).closest('li').removeClass('hidden');
             $('#renameBox' + fileID).closest('li').addClass('hidden');
         }
