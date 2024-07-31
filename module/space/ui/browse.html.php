@@ -63,6 +63,11 @@ dtable
 (
     set::actionItemCreator(jsRaw(<<<JS
         (item, info) => {
+            if(item.url)
+            {
+                if(typeof item.url == 'string') item.url = zui.formatString(item.url, info.row.data);
+                else item.url.params = zui.formatString(item.url.params, info.row.data);
+            }
             if(info.row.data.type != 'store' && item.icon == 'trash')
             {
                 item['data-confirm']['message'] = '$langConfirmUninstal';
@@ -75,7 +80,6 @@ dtable
                 Object.assign(item, item);
                 return item;
             }
-            if(item.url) item.url = zui.formatString(item.url, info.row.data);
             return item;
         }
     JS)),
