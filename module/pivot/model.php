@@ -34,7 +34,7 @@ class pivotModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $pivotID, bool $processDateVar = true, $isPreview = false): object|bool
+    public function getByID(int $pivotID, bool $processDateVar = false, bool $isPreview = false, string $filterStatus = 'published'): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)
             ->where('id')->eq($pivotID)
@@ -52,7 +52,9 @@ class pivotModel extends model
         $pivotFilters = array();
         if(!empty($pivot->filters))
         {
-            $filters      = json_decode($pivot->filters, true);
+            $filters = json_decode($pivot->filters, true);
+            $filters = $this->processFilters($filters, $filterStatus);
+
             $pivotFilters = $this->setFilterDefault($filters, $processDateVar);
         }
 
@@ -2084,6 +2086,34 @@ class pivotModel extends model
     }
 
     /**
+     * 根据透视表不同阶段获取不同状态的筛选器。
+     * Process filters.
+     *
+     * @param  array  $filters
+     * @param  string $filterStatus
+     * @access public
+     * @return void
+     */
+    public function processFilters(array $filters, string $filterStatus): array
+    {
+        foreach($filters as $index => $filter)
+        {
+            if($filterStatus == 'published' && isset($filter['status']) && $filter['status'] == 'design' && isset($filter['account']) && $filter['account'] == $this->app->user->account)
+            {
+                unset($filters[$index]);
+            }
+
+            if($filterStatus == 'design')
+            {
+                if(isset($filter['status']) && $filter['status'] == 'design' && isset($filter['account']) && $filter['account'] == $this->app->user->account) continue;
+                unset($filters[$index]);
+            }
+        }
+
+        return array_values($filters);
+    }
+
+    /**
      * 将筛选器的值填写到查询条件中。
      * Set condition value with filters.
      *
@@ -2463,12 +2493,13 @@ class pivotModel extends model
      * @param  object $drill
      * @param  array  $conditions
      * @param  array  $filterValues
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filterValues = array()): array
+    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filterValues = array(), string $status): array
     {
-        $pivot = $this->getById($pivotID);
+        $pivot = $this->getById($pivotID, false, $status);
 
         $this->app->loadClass('pivotstate', true);
         $pivotState = new pivotState($pivot, array(), $this->app->getClientLang());

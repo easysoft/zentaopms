@@ -74,8 +74,10 @@ class pivot extends control
      *
      * @param  int    $pivotID
      * @param  string $colName
+     * @param  string $status
      * @param  string $drillFields
      * @param  string $filterValues
+     * @param  string $value
      * @access public
      * @return void
      */
@@ -94,7 +96,7 @@ class pivot extends control
         }
 
         $cols  = $this->pivot->getDrillCols($drill->object);
-        $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $mergeConditions, $filterValues);
+        $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $mergeConditions, $filterValues, $status);
 
         if(strpos(',story,task,bug,', ",{$drill->object},") !== false) $datas = $this->pivot->processKanbanDatas($drill->object, $datas);
 
