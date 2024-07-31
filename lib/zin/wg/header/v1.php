@@ -280,7 +280,7 @@ class header extends wg
                 (
                     setID('messageBar'),
                     set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
-                    setClass('bg-inherit ring ring-opacity-40'),
+                    setClass('bg-inherit ring ring-opacity-40 text-primary'),
                     set::square(true),
                     set::caret(false),
                     set::size('sm'),
