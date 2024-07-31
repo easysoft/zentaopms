@@ -88,6 +88,9 @@ class screen extends control
      */
     public function view(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
+        if(empty($year))  $year  = date('Y');
+        if(empty($month)) $month = date('m');
+
         if($screenID == 3)
         {
             echo $this->fetch('report', 'annualData', "year={$year}&dept={$dept}&account={$account}");
@@ -128,7 +131,6 @@ class screen extends control
      */
     public function viewOld(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
-        if(empty($year))  $year  = date('Y');
         if(empty($year))  $year  = date('Y');
         if(empty($month)) $month = date('m');
 
