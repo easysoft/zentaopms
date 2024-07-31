@@ -1389,7 +1389,7 @@ class pivotModel extends model
         $mergeRecords = $this->orderByRecordsGroups($records, $mergeRecords, $groups);
 
         $mergeDrillRecords = array();
-        foreach($mergeRecords as $index => $lineRecord)
+        foreach($mergeRecords as $lineRecord)
         {
             $lineGroupKey = $this->getGroupsKey($groups, $lineRecord);
             $mergeDrillRecords[$lineGroupKey] = isset($drillRecords[$lineGroupKey]) ? $drillRecords[$lineGroupKey] : array();
