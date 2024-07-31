@@ -108,7 +108,7 @@ class storyBasicInfo extends wg
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ) : $demand->title,
-                $story->demandVersion < $demand->version && common::hasPriv($story->type, 'processStoryChange') ? span
+                $demand->status == 'active' && $story->demandVersion < $demand->version && common::hasPriv($story->type, 'processStoryChange') ? span
                 (
                     ' (',
                     $lang->story->storyChange . ' ',
