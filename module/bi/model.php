@@ -313,18 +313,13 @@ class biModel extends model
 
         try
         {
-            if($driver == 'mysql')
-            {
-                $rows      = $dbh->query($limitSql)->fetchAll();
-                $count     = $dbh->query("SELECT FOUND_ROWS() as count")->fetch();
-                $rowsCount = $count->count;
-            }
-            elseif($driver == 'duckdb')
-            {
-                $rows      = $dbh->query($limitSql)->fetchAll();
-                $allRows   = $dbh->query("SELECT COUNT(1) as count FROM ( $sql )")->fetch();
-                $rowsCount = $allRows->count;
-            }
+            $rows     = $dbh->query($limitSql)->fetchAll();
+            $querySQL = "SELECT FOUND_ROWS() as count";
+            if($driver == 'duckdb') $querySQL = "SELECT COUNT(1) as count FROM ( $sql )";
+            if($driver == 'dm')     $querySQL = "SELECT COUNT(1) as count";
+
+            $count     = $dbh->query($querySQL)->fetch();
+            $rowsCount = $count->count;
         }
         catch(Exception $e)
         {
