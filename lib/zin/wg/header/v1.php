@@ -41,11 +41,10 @@ class header extends wg
             $toolbar = new toolbar
             (
                 setClass('gap-4'),
-                $messageBar = static::messageBar(),
-                $addMenu    = static::quickAddMenu(),
+                static::quickAddMenu(),
+                static::messageBar(),
                 static::userBar()
             );
-            if(empty($addMenu)) $messageBar->setProp('offset', array('alignmentAxis' => -50));
         }
         $pageToolbar = data('pageToolbar');
         return h::div
@@ -273,14 +272,14 @@ class header extends wg
         (
             set::arrow(true),
             set::placement('bottom-end'),
-            set::offset(array("alignmentAxis" => -80)),
+            set::offset(array("alignmentAxis" => -50)),
             to::trigger
             (
                 btn
                 (
                     setID('messageBar'),
                     set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
-                    setClass('bg-inherit ring ring-opacity-40 text-primary'),
+                    setClass('text-primary bg-inherit ring-primary ring-opacity-40'),
                     set::square(true),
                     set::caret(false),
                     set::size('sm'),
