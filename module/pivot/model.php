@@ -1613,6 +1613,13 @@ class pivotModel extends model
             if(!empty($lang)) return $lang;
         }
 
+        $object = zget($fields[$key], 'object', '');
+        if($object)
+        {
+            $this->app->loadLang($object);
+            if(isset($this->lang->{$object}->{$key})) return $this->lang->{$object}->{$key};
+        }
+
         $name = zget($fields[$key], 'name', '');
         if(!empty($name)) return $name;
 
