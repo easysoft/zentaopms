@@ -1,3 +1,4 @@
+window.pivotID = pivotID;
 window.clickCell = function(col, {colName, rowInfo})
 {
     const drillConditions = rowInfo.data.conditions[colName];
@@ -9,7 +10,7 @@ window.clickCell = function(col, {colName, rowInfo})
     let conditions   = [];
     let filterValues = {};
     let originField  = '0';
-    let id           = pivotID;
+    let id           = window.pivotID;
     let status       = 'published';
 
     if(Array.isArray(value)) value = value[0];
@@ -22,11 +23,7 @@ window.clickCell = function(col, {colName, rowInfo})
     }
     conditions   = latin1ToBase64(JSON.stringify(conditions))
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
-    if(typeof(pivotState) != 'undefined')
-    {
-        id     = pivotState.id;
-        status = 'design';
-    }
+    if(typeof(pivotState) != 'undefined') status = 'design';
 
     let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&colName=${originField}&status=${status}&conditions=${conditions}&filterValues=${filterValues}&value=${value}`);
     drillModalLink = drillModalLink.replace(/\+/g, '%2B');
