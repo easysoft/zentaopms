@@ -288,7 +288,7 @@ class productsBox extends wg
                             setClass('grow'),
                             picker
                             (
-                                $type == 'plan' ? bind::change('loadBranches(event)') : setData(array('on' => 'change', 'call' => 'loadBranches', 'params' => 'event')),
+                                setData(array('on' => 'change', 'call' => 'loadBranches', 'params' => 'event')),
                                 set::name("products[$i]"),
                                 set::value($product->id),
                                 set::items($productItems),
