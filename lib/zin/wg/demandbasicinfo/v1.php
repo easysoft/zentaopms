@@ -48,7 +48,7 @@ class demandBasicInfo extends wg
                     $lang->story->storyChange . ' ',
                     a
                     (
-                        setClass('btn primary-pale border-primary size-xs'),
+                        setClass('btn primary-pale border-primary size-xs ajax-submit'),
                         set::href(createLink('demand', 'processDemandChange', "demandID={$demand->id}")),
                         $lang->confirm,
                     ),
