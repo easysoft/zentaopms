@@ -1446,7 +1446,7 @@ class biModel extends model
      */
     public function rebuildFieldSettings(array $fieldPairs, object $columns, array $relatedObject, object|array $fieldSettings, array $objectFields): object|array
     {
-        $isArray          = is_array($fieldSettings);
+        $isArray = is_array($fieldSettings);
         if($isArray) $fieldSettings = json_decode(json_encode($fieldSettings));
         $fieldSettingsNew = new stdclass();
 

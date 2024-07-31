@@ -3173,7 +3173,7 @@ $config->bi->builtin->pivots[] = array
     'driver'    => 'mysql',
     'group'     => '59,61',
     'sql'       => <<<EOT
-select t2.id,t2.name,t1.id as bugID,t1.resolution from zt_bug as t1
+select t1.product,t2.name,t1.id as bugID,t1.resolution from zt_bug as t1
 left join zt_product as t2 on t2.id=t1.product
 left join zt_project as t3 on t2.program=t3.id
 where t2.deleted='0' and t1.deleted='0'
@@ -3182,7 +3182,7 @@ order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
     (
-        'group1'      => 'id',
+        'group1'      => 'product',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -3193,14 +3193,14 @@ EOT,
     'filters'   => array(),
     'fields'    => array
     (
-        'id'         => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
+        'product'    => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
         'name'       => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
         'bugID'      => array('object' => 'bug', 'field' => 'id', 'type' => 'number'),
         'resolution' => array('object' => 'bug', 'field' => 'resolution', 'type' => 'option')
     ),
     'langs'     => array
     (
-        'id'         => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'product'    => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'name'       => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'bugID'      => array('zh-cn' => 'bugID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'resolution' => array('zh-cn' => '解决方案', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
@@ -3216,7 +3216,7 @@ EOT,
             'condition' => array
             (
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolution', 'queryField' => 'resolution'),
-                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'id')
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'product')
             )
         )
     ),
