@@ -25,17 +25,31 @@ foreach($cases as $caseID => $case)
     $stepItems = array();
     if(!empty($steps[$caseID]))
     {
-        $stepId = $childId = 0;
+        $lastGradeId = array();
+        $grades      = array();
+        $preGrade    = 0;
         foreach($steps[$caseID] as $stepID => $step)
         {
-            if($step->type == 'group' || $step->type == 'step')
+            if(empty($step->parent))  $grades[$step->id] = 1;
+            if(!empty($step->parent)) $grades[$step->id] = $grades[$step->parent] + 1;
+
+            $grade = $grades[$step->id];
+            if(!isset($lastGradeId[$grade])) $lastGradeId[$grade] = 0;
+            $lastGradeId[$grade] ++;
+            if($preGrade > $grade)
             {
-                $stepId ++;
-                $childId = 0;
+                foreach($lastGradeId as $thisGrade => $thisId)
+                {
+                    if($thisGrade > $grade) unset($lastGradeId[$thisGrade]);
+                }
             }
-            $currentID  = $step->type == 'item' ? "{$stepId}.{$childId}" : $stepId;
-            $stepClass  = $step->type == 'item' ? 'step-item pl-2' : 'step-group';
+
+            $currentID  = $lastGradeId[1];
+            if($grade > 1) $currentID .= '.' . $lastGradeId[2];
+            if($grade > 2) $currentID .= '.' . $lastGradeId[3];
+            $stepClass  = "step-{$step->type} pl-" . ($grade - 1) * 2;
             $stepResult = count($steps[$caseID]) == count($stepItems) + 1 ? 'fail' : 'pass';
+            $preGrade   = $grade;
 
             $stepItems[] = h::tr
             (
@@ -82,7 +96,6 @@ foreach($cases as $caseID => $case)
                     )
                 ) : null
             );
-            $childId ++;
         }
     }
 
