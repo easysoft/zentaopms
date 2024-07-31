@@ -264,7 +264,7 @@ class storyTao extends storyModel
                  ->fetchPairs();
         }
 
-        $demands = $this->dao->select('id,version')->from(TABLE_DEMAND)->where('deleted')->eq(0)->fetchPairs();
+        $demands = $this->dao->select('id,version')->from(TABLE_DEMAND)->where('deleted')->eq(0)->andWhere('status')->eq('active')->fetchPairs();
         foreach($stories as $story)
         {
             /* Judge parent story has changed. */
