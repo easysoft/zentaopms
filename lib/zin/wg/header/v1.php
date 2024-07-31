@@ -256,7 +256,7 @@ class header extends wg
         if(!$config->message->browser->turnon) return null;
 
         $showCount   = $config->message->browser->count;
-        $dotStyle    = array('top' => '-5px', 'right' => '-10px', 'aspect-ratio' => '0', 'padding' => '2px');
+        $dotStyle    = array('top' => '-3px', 'right' => '-10px', 'aspect-ratio' => '0', 'padding' => '2px');
         $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
         if($unreadCount > 99) $unreadCount = '99+';
         if($unreadCount < 10) $dotStyle['right'] = '-5px';
