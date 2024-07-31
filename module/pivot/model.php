@@ -2662,7 +2662,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filterValues): array
+    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filterValues = array()): array
     {
         $pivot = $this->getById($pivotID);
 
