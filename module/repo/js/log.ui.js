@@ -9,7 +9,7 @@ var checkedIds  = [];
  * @access public
  * @return void
  */
-window.checkedChange = function(changes)
+window.checkedChange = function()
 {
     checkedIds = getCurrentCheckedIds();
 
