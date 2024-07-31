@@ -36,7 +36,7 @@ $lang->message->notice->allMarkRead = 'One-click read';
 $lang->message->notice->clearRead   = 'Clear read';
 
 $lang->message->error = new stdclass();
-$lang->message->error->maxDaysFormat  = 'Retention Days can only be filled in with numbers.';
+$lang->message->error->maxDaysFormat  = 'Retention Days can only be filled in with positive integer.';
 $lang->message->error->maxDaysValue   = 'Retention Days cannot be less than 0.';
 
 $lang->message->label = new stdclass();

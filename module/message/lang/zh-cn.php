@@ -36,7 +36,7 @@ $lang->message->notice->allMarkRead = '一键已读';
 $lang->message->notice->clearRead   = '清空已读';
 
 $lang->message->error = new stdclass();
-$lang->message->error->maxDaysFormat  = '保留天数只能填写数字。';
+$lang->message->error->maxDaysFormat  = '保留天数只能填写正整数';
 $lang->message->error->maxDaysValue   = '保留天数不能小于0。';
 
 $lang->message->label = new stdclass();

@@ -230,6 +230,7 @@ class message extends control
 
         $data = fixer::input('post')->setDefault('show', 0)->setDefault('count', 0)->get();
         if(!is_numeric($data->maxDays)) dao::$errors['maxDays'] = $this->lang->message->error->maxDaysFormat;
+        if(strpos($data->maxDays, '.') !== false) dao::$errors['maxDays'] = $this->lang->message->error->maxDaysFormat;
 
         $data->maxDays = (int)$data->maxDays;
         if($data->maxDays < 0) dao::$errors['maxDays'] = $this->lang->message->error->maxDaysValue;
@@ -241,6 +242,6 @@ class message extends control
         $this->config->message->browser->maxDays = $data->maxDays;
         $this->message->deleteExpired();
 
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "reloadSettingModal(" . json_encode($data) .")"));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "reloadSettingModal({$data->count})"));
     }
 }

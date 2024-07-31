@@ -27,12 +27,10 @@ window.closeSettingDropdown = function()
     $('#dropdownMessageMenu #messageSettingDropdown-toggle.with-popover-show').trigger('click');
 }
 
-window.reloadSettingModal = function(data)
+window.reloadSettingModal = function(showCount)
 {
-    let $messageSettingModal = $('#dropdownMessageMenu #messageSettingDropdown');
-    $messageSettingModal.find('#maxDays').val(data.maxDays);
-    $messageSettingModal.find('form').removeClass('loading');
+    $('#dropdownMessageMenu #messageSettingDropdown').find('form').removeClass('loading');
 
-    updateAllDot(data.count);
+    updateAllDot(showCount);
     closeSettingDropdown();
 }
