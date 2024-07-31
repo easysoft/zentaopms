@@ -133,6 +133,8 @@ class taskModel extends model
             ->add('version', 1)
             ->get();
 
+        $task->name = trim($task->name);
+
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
 
         foreach($this->post->assignedTo as $assignedTo)
