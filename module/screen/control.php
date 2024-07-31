@@ -88,10 +88,26 @@ class screen extends control
      */
     public function view(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
+        if($screenID == 3)
+        {
+            echo $this->fetch('report', 'annualData', "year={$year}&dept={$dept}&account={$account}");
+            return;
+        }
+
         $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account, false);
 
         $this->view->title    = $screen->name;
         $this->view->screenID = $screenID;
+
+        if($screenID == 5)
+        {
+            $this->loadModel('execution');
+            $this->view->executions = $this->screen->getBurnData();
+            $this->view->date       = date('Y-m-d H:i:s');
+            $this->display('screen', 'burn');
+            return;
+        }
+
         $this->view->year     = $year;
         $this->view->month    = $month;
         $this->view->dept     = $dept;
@@ -113,37 +129,18 @@ class screen extends control
     public function viewOld(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
         if(empty($year))  $year  = date('Y');
-        if(empty($month)) $month = date('n');
-
-        if($screenID == 3)
-        {
-            echo $this->fetch('report', 'annualData', "year={$year}&dept={$dept}&account={$account}");
-            return;
-        }
-
-        if(empty($year)) $year = date('Y');
+        if(empty($year))  $year  = date('Y');
+        if(empty($month)) $month = date('m');
 
         $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account, false);
 
-        $this->view->title  = $screen->name;
-        $this->view->screen = $screen;
-
-        if($screenID == 5)
-        {
-            $this->loadModel('execution');
-            $this->view->executions = $this->screen->getBurnData();
-            $this->view->date       = date('Y-m-d H:i:s');
-            $this->display('screen', 'burn');
-        }
-        else
-        {
-            if(empty($month)) $month = date('m');
-            $this->view->year    = $year;
-            $this->view->month   = $month;
-            $this->view->dept    = $dept;
-            $this->view->account = $account;
-            $this->display();
-        }
+        $this->view->title   = $screen->name;
+        $this->view->screen  = $screen;
+        $this->view->year    = $year;
+        $this->view->month   = $month;
+        $this->view->dept    = $dept;
+        $this->view->account = $account;
+        $this->display();
     }
 
     public function ajaxGetScreenScheme(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
