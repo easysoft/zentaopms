@@ -389,7 +389,7 @@ EOT,
     'filters'   => array(),
     'fields'    => array
     (
-        'product' => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
+        'product' => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
         'name'    => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
         'done'    => array('object' => 'project', 'field' => '', 'type' => 'number'),
         'count'   => array('object' => 'project', 'field' => '', 'type' => 'number')

@@ -579,22 +579,39 @@ class pivotState
 
             $default = $filterValues[$index];
             $type    = $filter['type'];
+            $from    = zget($filter, 'from', 'result');
             if($type == 'select' && is_array($default)) $default = array_filter($default);
             if($type == 'date' || $type == 'datetime')
             {
-                if(is_array($default))
+                if($from == 'query')
                 {
-                    $begin = $default['begin'];
-                    $end   = $default['end'];
-
-                    if(is_numeric($begin)) $begin = date('Y-m-d H:i:s', $begin / 1000);
-                    if(is_numeric($end))   $end   = date('Y-m-d H:i:s', $end / 1000);
-
-                    $default = array('begin' => $begin, 'end' => $end);
+                    $format = $type == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
+                    switch($default)
+                    {
+                        case '$MONDAY':     $default = date($format, time() - (date('N') - 1) * 24 * 3600); break;
+                        case '$SUNDAY':     $default = date($format, time() + (7 - date('N')) * 24 * 3600); break;
+                        case '$MONTHBEGIN': $default = date($format, time() - (date('j') - 1) * 24 * 3600); break;
+                        case '$MONTHEND':   $default = date($format, time() + (date('t') - date('j')) * 24 * 3600); break;
+                        default:
+                        break;
+                    }
                 }
                 else
                 {
-                    $default = array('begin' => '', 'end' => '');
+                    if(is_array($default))
+                    {
+                        $begin = $default['begin'];
+                        $end   = $default['end'];
+
+                        if(is_numeric($begin)) $begin = date('Y-m-d H:i:s', $begin / 1000);
+                        if(is_numeric($end))   $end   = date('Y-m-d H:i:s', $end / 1000);
+
+                        $default = array('begin' => $begin, 'end' => $end);
+                    }
+                    else
+                    {
+                        $default = array('begin' => '', 'end' => '');
+                    }
                 }
             }
             $filter['default'] = $default;
