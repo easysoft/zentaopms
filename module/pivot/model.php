@@ -2499,7 +2499,7 @@ class pivotModel extends model
      */
     public function getDrillDatas(int $pivotID, object $drill, string $status, array $conditions, array $filterValues = array()): array
     {
-        $pivot = $this->getById($pivotID, false, $status);
+        $pivot = $this->getById($pivotID, false, false, $status);
 
         $this->app->loadClass('pivotstate', true);
         $pivotState = new pivotState($pivot, array(), $this->app->getClientLang());
