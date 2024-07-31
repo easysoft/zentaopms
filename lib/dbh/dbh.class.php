@@ -73,7 +73,8 @@ class dbh
         $dsn = "{$config->driver}:host={$config->host};port={$config->port}";
         if($setSchema) $dsn .= ";dbname={$config->name}";
 
-        $pdo = new PDO($dsn, $config->user, $config->password);
+        $password = helper::decryptPassword($config->password);
+        $pdo = new PDO($dsn, $config->user, $password);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
