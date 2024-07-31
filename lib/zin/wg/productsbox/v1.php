@@ -254,17 +254,7 @@ class productsBox extends wg
                 }
                 elseif($type == 'roadmap')
                 {
-                    if($product->type == 'normal')
-                    {
-                        $objectID = isset($product->roadmaps) && is_array($product->roadmaps) ? implode(',', $product->roadmaps) : '';
-                    }
-                    else
-                    {
-                        if(isset($product->roadmaps) && is_array($product->roadmaps))
-                        {
-                            foreach($product->roadmaps as $branchGroup) $objectID .= ',' . implode(',', $branchGroup);
-                        }
-                    }
+                    $objectID = isset($product->roadmaps) && is_array($product->roadmaps) ? implode(',', $product->roadmaps) : '';
                 }
 
                 $objectID = trim($objectID, ',');
