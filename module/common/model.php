@@ -2398,6 +2398,7 @@ eof;
      * Build operate actions menu.
      *
      * @param  object $data
+     * @param  string $moduleName
      * @access public
      * @return array
      */
