@@ -1434,8 +1434,8 @@ class productZen extends product
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
         $this->view->reports    = in_array($this->config->edition, array('max', 'ipd')) ? $this->loadModel('researchreport')->getPairs() : array();
 
-        $this->view->roadmaps         = ($this->config->edition == 'ipd' && $storyType != 'story') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($product->id) : array();
-        $this->view->noclosedRoadmaps = ($this->config->edition == 'ipd' && $storyType != 'story') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($product->id, '', 'noclosed') : array();
+        $this->view->roadmaps         = ($this->config->edition == 'ipd' && $storyType != 'story') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($productID) : array();
+        $this->view->noclosedRoadmaps = ($this->config->edition == 'ipd' && $storyType != 'story') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($productID, '', 'noclosed') : array();
 
         $this->display();
     }
