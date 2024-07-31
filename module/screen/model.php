@@ -1062,6 +1062,7 @@ class screenModel extends model
             $groupFields = array_fill(0, $groupCount, 'groupCol');
             foreach($options->drills as $drill)
             {
+                if(!isset($drill['drillFields'])) continue;
                 $drillFields = array_values($drill['drillFields']);
                 $drillRow = array();
                 foreach($drillFields as $index => $drillField)
