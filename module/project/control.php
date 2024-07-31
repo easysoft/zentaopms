@@ -928,7 +928,7 @@ class project extends control
         $this->view->projectID    = $projectID;
         $this->view->project      = $project;
         $this->view->products     = $products;
-        $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->actions      = $this->loadModel('action')->getList('project', $projectID, 100);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->statData     = $this->project->getStatData($projectID);

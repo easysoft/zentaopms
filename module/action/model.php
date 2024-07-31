@@ -347,10 +347,11 @@ class actionModel extends model
      *
      * @param  int    $objectType
      * @param  int    $objectID
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getList($objectType, $objectID)
+    public function getList($objectType, $objectID, $limit = 0)
     {
         $orderBy   = isset($_COOKIE['historyOrder']) && $this->cookie->historyOrder == 'desc' ? 'date_desc, id_desc' : 'date_asc, id_asc';
         $objectID  = is_array($objectID) ? $objectID : (int)$objectID;
@@ -379,6 +380,7 @@ class actionModel extends model
             ->andWhere('objectID')->in($objectID)
             ->fi()
             ->orderBy($orderBy)
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
 
         $histories = $this->getHistory(array_keys($actions));
