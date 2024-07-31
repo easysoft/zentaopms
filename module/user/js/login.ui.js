@@ -81,7 +81,12 @@ window.safeSubmit = function(e)
                 zui.Modal.alert(data.message);
                 if($('.captchaBox').length == 1) refreshCaptcha($('.captchaBox .input-group .input-group-addon img'));
                 clearTimeout(timeoutID);
-                $('#submit').removeAttr('disabled');
+                $('#submit').removeAttr('disabled').trigger('blur');
+                waitDom('.modal.show .btn.primary', function()
+                {
+                    let $this = $(this);
+                    setTimeout(function(){$this.trigger('focus')}, 200);
+                })
                 return false;
             }
 
