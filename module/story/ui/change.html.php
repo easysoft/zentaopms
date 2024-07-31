@@ -36,6 +36,7 @@ $formItems['reviewer'] = section
             setID('reviewer'),
             set::name('reviewer[]'),
             set::multiple(true),
+            set::disabled($needReview),
             set::items($fields['reviewer']['options']),
             set::value($fields['reviewer']['default'])
         ),
@@ -181,7 +182,6 @@ detailHeader
         )
     )
 );
-
 
 detailBody
 (

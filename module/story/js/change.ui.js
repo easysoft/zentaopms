@@ -4,7 +4,6 @@ $(function()
     {
         toggleReviewer();
     });
-    toggleReviewer();
 });
 
 function toggleReviewer()
