@@ -26,19 +26,54 @@ class treeModel extends model
     /**
      * Get all module pairs with path.
      *
+     * @param  string $moduleID
+     * @param  string $rootType
+     * @param  array  $rootIDList
      * @access public
-     * @return object
+     * @return array
      */
-    public function getAllModulePairs($type = 'task')
+    public function getAllModulePairs($type, $rootType, $rootIDList)
     {
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)
-            ->where('type')->eq('story')
-            ->beginIF($type == 'task')->orWhere('type')->eq('task')->fi()
-            ->beginIF($type == 'bug')->orWhere('type')->eq('bug')->fi()
-            ->beginIF($type == 'case')->orWhere('type')->eq('case')->fi()
-            ->andWhere('deleted')->eq('0')
-            ->orderBy('grade asc')
-            ->fetchAll();
+        /* 所有的模块都会跟产品相关，所以首先获取产品模块 */
+        /* Get modules by product. */
+        $modules = array();
+
+        $productIDList = array();
+        if(in_array($rootType, array('execution', 'project')))
+        {
+            if(!empty($rootIDList))
+            {
+                $productIDList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($rootIDList)->fetchPairs('product');
+            }
+        }
+        else
+        {
+            $productIDList = $rootIDList;
+        }
+
+        if(!empty($productIDList))
+        {
+            $modules = $this->dao->select('id,name,grade,parent')->from(TABLE_MODULE)
+                ->where('root')->in($productIDList)
+                ->beginIF(in_array($type, array('story', 'task')))->andWhere('type')->eq("story")->fi()
+                ->beginIF(!in_array($type, array('story', 'task')))->andWhere('type')->in("story,$type")->fi()
+                ->andWhere('deleted')->eq('0')
+                ->orderBy('grade asc')
+                ->fetchAll();
+        }
+
+        /* Get task modules. */
+        if($type == 'task')
+        {
+            $taskModules = $this->dao->select('id,name,grade,parent')->from(TABLE_MODULE)
+                ->beginIF($projectCount == 1)->where('root')->eq(current($rootIDList))->fi()
+                ->beginIF($projectCount != 1)->where('root')->in($rootIDList)->fi()
+                ->andWhere('type')->eq('task')
+                ->andWhere('deleted')->eq('0')
+                ->orderBy('grade asc')
+                ->fetchAll();
+            $modules = array_merge($modules, $taskModules);
+        }
 
         $pairs    = array();
         $pairs[0] = '/';
