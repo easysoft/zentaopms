@@ -31,3 +31,5 @@
 #taskTeamEditor .hourBox {padding-bottom: 7px; width: 135px;}
 #taskTeamEditor .estimateBox {width: 120px;}
 #modalTeam .modal-content {padding: 0;}
+
+#modalTeam .modal-body {overflow-y: unset !important; max-height: unset !important;}
