@@ -778,22 +778,17 @@ class biModel extends model
             if(!isset($pivot->driver))  $pivot->driver   = $this->config->bi->defaultDriver;
             if(!isset($pivot->drills))  $pivot->drills   = array();
 
+            if(!isset($pivot->settings)) $pivot->settings = null;
+            if(!isset($pivot->filters))  $pivot->filters = null;
+            if(!isset($pivot->fields))   $pivot->fields = null;
+            if(!isset($pivot->langs))    $pivot->langs = null;
+            if(!isset($pivot->vars))     $pivot->vars = null;
+
             $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $pivot->drills));
             unset($pivot->drills);
 
             $exists = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
-            if(!$exists)
-            {
-                $currentOperate = 'insert';
-            }
-            else
-            {
-                if($exists->name != $pivot->name)
-                {
-                    unset($pivot->id);
-                    $currentOperate = 'insert';
-                }
-            }
+            if(!$exists) $currentOperate = 'insert';
 
             $stmt = null;
             if($currentOperate == 'insert')
