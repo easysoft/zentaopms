@@ -1805,8 +1805,7 @@ class kanbanModel extends model
     public function getCols4Group(int $executionID, string $browseType): array
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
-
-        return $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
+        $cards     = $this->dao->select('t1.*, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
             ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
@@ -1816,9 +1815,18 @@ class kanbanModel extends model
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
             ->fi()
-            ->groupBy('t1.id, t1.cards, t2.`type`, t2.parent, t2.limit, t2.name, t2.color')
             ->orderBy('column_asc')
-            ->fetchAll('columnType');
+            ->fetchAll();
+
+        $columns = array();
+        foreach($cards as $card)
+        {
+            if(!isset($columns[$card->columnType])) $columns[$card->columnType] = $card;
+
+            $columns[$card->columnType]->cards .= ",$card->id,";
+            $columns[$card->columnType]->cards  = ',' . trim($columns[$card->columnType]->cards, ',') . ',';
+        }
+        return $columns;
     }
 
     /**
