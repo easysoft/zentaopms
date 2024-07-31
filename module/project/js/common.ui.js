@@ -17,12 +17,12 @@ function changeType()
 {
     if($(this).val() == 0)
     {
-        $('.productsBox').addClass('hidden');
+        if(!$('[name=charter]').length || ($('[name=charter]').length && !parseInt($('[name=charter]').val()))) $('.productsBox').addClass('hidden');
         $('.stageByBox').addClass('hidden');
     }
     else
     {
-        $('.productsBox').removeClass('hidden');
+        if(!$('[name=charter]').length || ($('[name=charter]').length && parseInt($('[name=charter]').val()))) $('.productsBox').removeClass('hidden');
     }
 }
 

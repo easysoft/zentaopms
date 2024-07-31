@@ -47,7 +47,8 @@ class productsBox extends wg
         list($project, $productItems, $linkedProducts, $errorSameProducts, $type) = $this->prop(array('project', 'productItems', 'linkedProducts', 'errorSameProducts', 'type'));
 
         $productsBox = array();
-        if((!empty($project->hasProduct) || is_null($project)) && $linkedProducts)
+
+        if((!empty($project->hasProduct) || is_null($project) || $type == 'roadmap') && $linkedProducts)
         {
             $productsBox = $this->buildLinkedProducts($linkedProducts);
         }

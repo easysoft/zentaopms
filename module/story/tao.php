@@ -526,13 +526,14 @@ class storyTao extends storyModel
      * @param  array       $executionIdList
      * @param  string      $orderBy
      * @param  object|null $pager
+     * @param  object|null $project
      * @access protected
      * @return int[]
      */
-    protected function fetchProjectStories(dao $storyDAO, int $productID, string $type, string $branch, array $executionStoryIdList, string $orderBy, object|null $pager = null): array
+    protected function fetchProjectStories(dao $storyDAO, int $productID, string $type, string $branch, array $executionStoryIdList, string $orderBy, object|null $pager = null, object|null $project = null): array
     {
         $unclosedStatus = $this->getUnclosedStatusKeys();
-        return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+        return $storyDAO->beginIF(!empty($productID) && (!$project->charter || ($project->charter && $project->hasProduct)))->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($type == 'bybranch' and $branch !== '')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
             ->beginIF($type == 'unclosed')->andWhere('t2.status')->in($unclosedStatus)->fi()

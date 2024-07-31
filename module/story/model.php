@@ -296,7 +296,7 @@ class storyModel extends model
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi();
 
             /* 根据传入的 ID 是项目还是执行分别查询需求。 */
-            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $browseType, $branchParam, $storyIdList, $orderBy, $pager);
+            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $browseType, $branchParam, $storyIdList, $orderBy, $pager, $execution);
             if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, (int)$productParam, $browseType, $branchParam, $orderBy, $pager);
         }
 
