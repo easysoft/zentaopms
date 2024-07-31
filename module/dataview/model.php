@@ -174,7 +174,7 @@ class dataviewModel extends model
                 }
                 elseif(isset($aliasNames[$table]))
                 {
-                    $moduleName = $aliasNames[$table];
+                    $moduleName = $moduleNames[$aliasNames[$table]];
                     if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
                     $mergeFields[$field]   = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
                     $relatedObject[$field] = $moduleName;

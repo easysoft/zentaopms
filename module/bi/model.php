@@ -51,7 +51,15 @@ class biModel extends model
         foreach($statement->expr as $fieldInfo)
         {
             $field = $fieldInfo->expr;
-            $alias = !empty($fieldInfo->alias) ? $fieldInfo->alias : $field;
+            $alias = $field;
+            if(!empty($fieldInfo->alias))
+            {
+                $alias = $fieldInfo->alias;
+            }
+            elseif(strrpos($field, '.') !== false)
+            {
+                $alias = explode('.', $field)[1];
+            }
             $fields[$alias] = $field;
         }
         return $fields;

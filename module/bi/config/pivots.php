@@ -3173,12 +3173,12 @@ $config->bi->builtin->pivots[] = array
     'driver'    => 'mysql',
     'group'     => '59,61',
     'sql'       => <<<EOT
-select t1.id,t1.name,t2.id as bugID,t2.resolution from zt_product as t1
-left join zt_bug as t2 on t1.id=t2.product
-left join zt_project as t3 on t1.program=t3.id
-where t1.deleted='0' and t2.deleted='0'
-and t2.resolution != ''
-order by t3.`order` asc, t1.line desc, t1.`order` asc
+select t2.id,t2.name,t1.id as bugID,t1.resolution from zt_bug as t1
+left join zt_product as t2 on t2.id=t1.product
+left join zt_project as t3 on t2.program=t3.id
+where t2.deleted='0' and t1.deleted='0'
+and t1.resolution != ''
+order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
     (
@@ -3193,7 +3193,7 @@ EOT,
     'filters'   => array(),
     'fields'    => array
     (
-        'id'         => array('object' => 'product', 'field' => 'name', 'type' => 'number'),
+        'id'         => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
         'name'       => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
         'bugID'      => array('object' => 'bug', 'field' => 'id', 'type' => 'number'),
         'resolution' => array('object' => 'bug', 'field' => 'resolution', 'type' => 'option')
