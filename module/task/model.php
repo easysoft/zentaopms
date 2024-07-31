@@ -377,7 +377,7 @@ class taskModel extends model
             $deadline   = (!isset($tasks->deadline[$i]) or isset($tasks->deadlineDitto[$i]))     ? $deadline   : $tasks->deadline[$i];
 
             $taskName = trim($tasks->name[$i]);
-            if($taskName)
+            if(empty($taskName))
             {
                 if($this->common->checkValidRow('task', $tasks, $i))
                 {
