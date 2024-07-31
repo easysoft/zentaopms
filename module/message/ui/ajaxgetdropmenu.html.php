@@ -63,6 +63,7 @@ $buildMessageList = function($messageGroup) use ($lang)
     return h::ul(setClass('list-unstyled'), $dateList);
 };
 
+$browserSetting = $config->message->browser;
 tabs
 (
     setID('messageTabs'),
@@ -78,7 +79,44 @@ tabs
         set::style(array('z-index' => '100')),
         btn(set::size('sm'), set::type('link'), setClass('allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('clear')),
         btn(set::size('sm'), set::type('link'), setClass('clearRead'),   set::hint($lang->message->notice->clearRead),   icon('trash')),
-        btn(set::size('sm'), set::type('link'), set::hint($lang->message->browserSetting->more), setData('target', '#messageSettingModal'), setData('toggle', 'modal'), setData('size', 'sm'), icon('cog-outline'))
+        dropdown
+        (
+            setID('messageSettingDropdown'),
+            to::trigger(btn(set::icon('cog-outline'), set::hint($lang->message->browserSetting->more), setClass('ghost'), set::caret(false))),
+            to::menu(menu
+            (
+                setClass('dropdown-menu w-60'),
+                on::click('e.stopPropagation();'),
+                form
+                (
+                    set::url(inlink('ajaxSetOneself')),
+                    set::actions(false),
+                    formRow(setClass('font-bold pl-2 pt-2'), $lang->message->browserSetting->more),
+                    formGroup
+                    (
+                        set::label($lang->message->browserSetting->show),
+                        switcher(set::name('show'), set::value(1), set::checked($browserSetting->show)),
+                    ),
+                    formGroup
+                    (
+                        set::label($lang->message->browserSetting->count),
+                        switcher(set::name('count'), set::value(1), set::checked($browserSetting->count)),
+                    ),
+                    formGroup
+                    (
+                        set::width('3/4'),
+                        set::label($lang->message->browserSetting->maxDays),
+                        inputControl(input(set::name('maxDays'), set::value($browserSetting->maxDays)), set::suffixWidth('30'), set::suffix($lang->day))
+                    ),
+                    formGroup
+                    (
+                        setClass('justify-center form-actions'),
+                        btn(set::text($lang->save), setClass('primary'), set::btnType('submit')),
+                        btn(set::text($lang->cancel), set::type('button'), on::click('closeSettingDropdown'))
+                    )
+                )
+            ))
+        )
     ),
     tabPane
     (
@@ -98,40 +136,3 @@ tabs
 
 menu(setClass('contextmenu text-black'), setID('unreadContextMenu'), set::items(array(array('text' => $lang->delete, 'value' => 'delete', 'onclick' => 'clickContextMenu(this)'))));
 menu(setClass('contextmenu text-black'), setID('readContextMenu'),   set::items(array(array('text' => $lang->delete, 'value' => 'delete', 'onclick' => 'clickContextMenu(this)'), array('text' => $lang->message->markUnread, 'value' => 'markunread', 'onclick' => 'clickContextMenu(this)'))));
-
-modal
-(
-    setID('messageSettingModal'),
-    setClass('text-black'),
-    set::title($lang->message->browserSetting->more),
-    form
-    (
-        set::url(inlink('ajaxSetOneself')),
-        set::actions(array('submit')),
-        formGroup
-        (
-            set::width('2/3'),
-            setClass('content-center'),
-            set::label($lang->message->browserSetting->show),
-            switcher(set::name('show'), set::value(1), set::checked($config->message->browser->show)),
-        ),
-        formGroup
-        (
-            set::width('2/3'),
-            setClass('content-center'),
-            set::label($lang->message->browserSetting->count),
-            switcher(set::name('count'), set::value(1), set::checked($config->message->browser->count)),
-        ),
-        formGroup
-        (
-            set::width('2/3'),
-            set::label($lang->message->browserSetting->maxDays),
-            inputControl
-            (
-                input(set::name('maxDays'), set::value($config->message->browser->maxDays)),
-                set::suffixWidth('30'),
-                set::suffix($lang->day),
-            )
-        )
-    )
-);

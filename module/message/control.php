@@ -241,6 +241,6 @@ class message extends control
         $this->config->message->browser->maxDays = $data->maxDays;
         $this->message->deleteExpired();
 
-        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "updateAllDot({$data->count});"));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "reloadSettingModal(" . json_encode($data) .")"));
     }
 }
