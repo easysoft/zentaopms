@@ -128,6 +128,20 @@ foreach($config->bi->builtin->pivots as $pivot)
     if(isset($pivot['langs']))    $pivot['langs']    = jsonEncode($pivot['langs']);
     if(isset($pivot['vars']))     $pivot['vars']     = jsonEncode($pivot['vars']);
 
+    if(!isset($pivot['drills']))  $pivot['drills']   = array();
+
+    foreach($pivot['drills'] as $drill)
+    {
+        $drill = (object)$drill;
+        $drill->condition = jsonEncode($drill->condition);
+        $drill->status    = 'published';
+        $drill->type      = 'manual';
+        $drill->pivot     = $pivot['id'];
+
+        insert('zt_pivotdrill', (array)$drill);
+    }
+    unset($pivot['drills']);
+
     insert('zt_pivot', $pivot);
 }
 
