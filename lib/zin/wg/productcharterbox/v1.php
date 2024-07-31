@@ -65,6 +65,7 @@ class productCharterBox extends wg
                         (
                             set::width('1/2'),
                             setClass('distributeProduct text-clip'),
+                            $index != 0 ? set::labelClass('hidden') : null,
                             set::required(true),
                             set::label($lang->charter->product),
                             inputGroup
@@ -74,7 +75,7 @@ class productCharterBox extends wg
                                     setClass('grow linkProduct w-1/2'),
                                     picker
                                     (
-                                        set::name("product[0]"),
+                                        set::name("product[$index]"),
                                         set::items($products),
                                         set::value($productID)
                                     )
@@ -86,6 +87,7 @@ class productCharterBox extends wg
                             set::width('1/2'),
                             set::label($lang->charter->roadmap),
                             set::className('roadmapBox'),
+                            $index != 0 ? set::labelClass('hidden') : null,
                             set::required(true),
                             inputGroup
                             (
@@ -94,7 +96,7 @@ class productCharterBox extends wg
                                     setClass('grow linkRoadmap w-1/2'),
                                     picker
                                     (
-                                        set::name("roadmap[0]"),
+                                        set::name("roadmap[$index]"),
                                         set::multiple(true),
                                         set::required(true),
                                         set::items($roadmapGroup[$productID]),
@@ -123,6 +125,7 @@ class productCharterBox extends wg
                         formGroup
                         (
                             set::label(''),
+                            $index != 0 ? set::labelClass('hidden') : null,
                             div
                             (
                                 setClass('pl-2 flex self-center line-btn'),
@@ -133,7 +136,7 @@ class productCharterBox extends wg
                                 ),
                                 btn
                                 (
-                                    setClass('btn btn-link text-gray removeLine', $index ? '' : 'hidden'),
+                                    setClass('btn btn-link text-gray removeLine', $index == 0 && count($charterProductMaps) <= 1 ? 'hidden' : ''),
                                     icon('trash')
                                 )
                             )
