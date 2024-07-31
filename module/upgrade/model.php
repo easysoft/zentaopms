@@ -184,7 +184,6 @@ class upgradeModel extends model
         $this->loadModel('program')->refreshStats(true);
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
-        $this->upgradeBIData();
         $this->processDataset();
     }
 
