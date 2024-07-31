@@ -89,7 +89,7 @@ $tabs     = array(array('name' => 'branch', 'text' => $lang->repo->branch), arra
 
 \zin\featureBar(
     /* Set back button. */
-    in_array($source, array('repo-browse')) ? backBtn
+    in_array($source, array('browse')) ? backBtn
     (
         setClass('mr-5'),
         set::icon('back'),
