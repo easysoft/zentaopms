@@ -4,13 +4,13 @@ var tabTemp;
 var diffAppose = $.cookie.get('renderSideBySide') == 'true';
 
 /* Close tab. */
-$('#monacoTabs').off('click', '.monaco-close').on('click', '.monaco-close', function()
+window.closeTab = function(dom)
 {
-    var eleId    = $(this).parent().attr('href');
-    var tabsEle  = $(this).parent().parent().parent();
-    var isActive = $(this).parent().hasClass('active');
+    const eleId    = $(dom).parent().attr('href');
+    const tabsEle  = $(dom).parent().parent().parent();
+    const isActive = $(dom).parent().hasClass('active');
 
-    $(this).parent().parent().remove();
+    $(dom).parent().parent().remove();
     $(eleId).remove();
     $('#' + eleId.substring(5)).parent().removeClass('selected');
     if(isActive) tabsEle.children().last().find('a').trigger('click');
@@ -18,7 +18,7 @@ $('#monacoTabs').off('click', '.monaco-close').on('click', '.monaco-close', func
 
     const fileKey = eleId.substring(5).replace(/-/g, '=');
     $('li[z-key="' + fileKey + '"] .listitem').removeClass('selected');
-});
+}
 
 $(function()
 {
