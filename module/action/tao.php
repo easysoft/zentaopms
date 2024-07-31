@@ -367,7 +367,7 @@ class actionTao extends actionModel
 
             $name = $execution->name;
             if($execution->type == 'kanban') $method = 'kanban';
-            if($name) $action->extra = !common::hasPriv('execution', $method) || ($method == 'kanban' && isonlybody()) ? $name : html::a(helper::createLink('execution', $method, "executionID={$action->execution}"), $name, '', "data-app='execution'");
+            if($name) $action->extra = !common::hasPriv('execution', $method) || ($method == 'kanban' && isonlybody()) || $this->config->vision == 'or' ? $name : html::a(helper::createLink('execution', $method, "executionID={$action->execution}"), $name, '', "data-app='execution'");
         }
         elseif($type == 'project')
         {
@@ -380,7 +380,7 @@ class actionTao extends actionModel
         elseif($type == 'plan' || $type == 'productplan')
         {
             $plan = $this->fetchObjectInfoByID($table, (int)$action->extra, 'title');
-            if($plan && $plan->title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title) : $plan->title;
+            if($plan && $plan->title) $action->extra = common::hasPriv('productplan', 'view') && $this->config->vision != 'or' ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title) : $plan->title;
         }
         elseif(in_array($type, array('build', 'bug', 'release', 'testtask', 'roadmap')))
         {
@@ -395,11 +395,6 @@ class actionTao extends actionModel
                 $revision = substr($commit->revision, 0, 10);
                 $action->extra = common::hasPriv('repo', 'revision') ? html::a(helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) : $revision;
             }
-        }
-        elseif($type == 'roadmap')
-        {
-            $object = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name');
-            if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#$action->extra " . $object->name) : "#$action->extra " . $object->name;
         }
         return true;
     }
@@ -428,10 +423,11 @@ class actionTao extends actionModel
      * @param  string $type
      * @param  string $method
      * @param  bool   $onlyBody
+     * @param  bool   $addlink
      * @access public
      * @return void
      */
-    public function processActionExtra(string $table, object $action, string $fields, string $type, string $method = 'view', bool $onlyBody = false): void
+    public function processActionExtra(string $table, object $action, string $fields, string $type, string $method = 'view', bool $onlyBody = false, bool $addLink = true): void
     {
         $object = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
         $condition = common::hasPriv($type, $method);
@@ -445,7 +441,7 @@ class actionTao extends actionModel
                 $isMultipleProject = $this->dao->select('multiple')->from(TABLE_PROJECT)->where('id')->eq($action->project)->fetch('multiple');
                 if(!$isMultipleProject) $misc = "data-app='project'";
             }
-            $action->extra = $condition ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#{$action->extra} " . $object->{$fields}, '', $misc) : "#{$action->extra} " . $object->{$fields};
+            $action->extra = $condition && $addLink ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), "#{$action->extra} " . $object->{$fields}, '', $misc) : "#{$action->extra} " . $object->{$fields};
         }
     }
 
