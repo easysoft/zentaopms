@@ -95,6 +95,7 @@ class blockZen extends block
             /* 被永久关闭的区块删除对应选项。 */
             /* Delete corresponding options for blocks that have been permanently closed. */
             if(strpos(",$closedBlock,", ",$moduleKey|$moduleKey,") !== false) unset($modules[$moduleKey]);
+            if(isset($this->lang->block->modules[$moduleKey]) && !$this->getAvailableCodes($moduleKey)) unset($modules[$moduleKey]);
         }
 
         return $modules;
