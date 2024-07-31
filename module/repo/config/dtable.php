@@ -273,7 +273,7 @@ $config->repo->dtable->tag->fieldList['name']['type']  = 'title';
 $config->repo->dtable->tag->fieldList['name']['name']  = 'name';
 $config->repo->dtable->tag->fieldList['name']['order'] = 10;
 
-$config->repo->dtable->tag->fieldList['committer']['title']    = $lang->repo->lastCommit;
+$config->repo->dtable->tag->fieldList['committer']['title']    = $lang->repo->lastCommitter;
 $config->repo->dtable->tag->fieldList['committer']['type']     = 'text';
 $config->repo->dtable->tag->fieldList['committer']['sortType'] = true;
 $config->repo->dtable->tag->fieldList['committer']['order']    = 20;
@@ -290,12 +290,17 @@ $config->repo->dtable->branch->fieldList['name']['title'] = $lang->repo->branch;
 $config->repo->dtable->branch->fieldList['name']['type']  = 'title';
 $config->repo->dtable->branch->fieldList['name']['name']  = 'name';
 
-$config->repo->dtable->branch->fieldList['committer']['title']    = $lang->repo->lastCommit;
+$config->repo->dtable->branch->fieldList['commitID']['title']    = $lang->repo->commit;
+$config->repo->dtable->branch->fieldList['commitID']['type']     = 'text';
+$config->repo->dtable->branch->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
+$config->repo->dtable->branch->fieldList['commitID']['sortType'] = true;
+
+$config->repo->dtable->branch->fieldList['committer']['title']    = $lang->repo->lastCommitter;
 $config->repo->dtable->branch->fieldList['committer']['type']     = 'text';
 $config->repo->dtable->branch->fieldList['committer']['sortType'] = true;
 
-$config->repo->dtable->branch->fieldList['date']['title']      = $lang->repo->lastUpdateTime;
-$config->repo->dtable->branch->fieldList['date']['name']       = 'date';
-$config->repo->dtable->branch->fieldList['date']['type']       = 'datetime';
-$config->repo->dtable->branch->fieldList['date']['width']      = 300;
-$config->repo->dtable->branch->fieldList['date']['formatDate'] = 'YYYY-MM-dd hh:mm';
+$config->repo->dtable->branch->fieldList['commitDate']['title']      = $lang->repo->lastSubmitTime;
+$config->repo->dtable->branch->fieldList['commitDate']['name']       = 'commitDate';
+$config->repo->dtable->branch->fieldList['commitDate']['type']       = 'datetime';
+$config->repo->dtable->branch->fieldList['commitDate']['width']      = 300;
+$config->repo->dtable->branch->fieldList['commitDate']['formatDate'] = 'YYYY-MM-dd hh:mm';

@@ -1867,7 +1867,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'commitDate_desc', int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1883,12 +1883,17 @@ class repo extends control
         {
             $branch->repoID     = $repoID;
             $branch->branchName = helper::safe64Encode($branch->name);
+
+            $branch->commitID = isset($branch->commit->id) ? $branch->commit->id : '';
+            if(isset($branch->commit->sha)) $branch->commitID = $branch->commit->sha;
+            $branch->commitID = substr($branch->commitID, 0, 10);
+
             $branch->committer  = isset($branch->commit->author_name) ? $branch->commit->author_name : '';
             if(isset($branch->commit->author->identity->name)) $branch->committer = $branch->commit->author->identity->name;
             $branch->committer = zget($committers, $branch->committer);
 
-            $branch->date = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
-            if(isset($branch->commit->author->when)) $branch->date = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
+            $branch->commitDate = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
+            if(isset($branch->commit->author->when)) $branch->commitDate = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
         }
 
         /* Data sort. */

@@ -143,7 +143,7 @@ $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlink             = 'Unlink';
 $lang->repo->viewBugs           = 'View Bugs';
 $lang->repo->lastSubmitTime     = 'Final submission time';
-$lang->repo->lastCommit         = 'Final submission';
+$lang->repo->lastCommitter      = 'Last committer';
 $lang->repo->lastUpdateTime     = 'Last update time';
 
 $lang->repo->title      = 'Titre';
