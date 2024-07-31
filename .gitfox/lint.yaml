@@ -12,18 +12,28 @@ spec:
               container:
                 image: hub.zentao.net/ci/git:2.45.2
               script:
-              - git diff --name-only --diff-filter=d ${DRONE_COMMIT_AFTER} ${DRONE_COMMIT_BEFORE} | tee /tmp/changes
+              - git diff --name-only --diff-filter=d ${DRONE_COMMIT_AFTER} ${DRONE_COMMIT_BEFORE} | tee .changes
               - |
                 cat > sonar-project.properties <<EOL
                 sonar.projectKey=$(echo $CI_REPO_NAME | tr '/' ':')
                 sonar.sources=.
                 sonar.language=php
                 sonar.branch.name=${DRONE_TARGET_BRANCH}
-                sonar.inclusions=$(xargs < /tmp/changes | tr ' ' ',')
+                sonar.inclusions=$(xargs < .changes | tr ' ' ',')
                 sonar.working.directory=/tmp
                 sonar.exclusions=**/extension/**/ext/**,**/*.bak,**/*.sql,**/*.js,**/*.css,**/*.yaml,**/*.zip,**/*.out,**/lang/*,doc/*
                 EOL
               - cat sonar-project.properties
+          - name: 降级测试
+            type: run
+            spec:
+              container:
+                image: hub.zentao.net/ci/zentao-package:master
+              script:
+              - DOWNGRADE_CODE_DIR=$(mktemp -d)
+              - mkdir $DOWNGRADE_CODE_DIR/diff
+              - grep -E '\.php$' .changes >/dev/null && (tar zcf - --files-from .changes | tar zxvf - -C $DOWNGRADE_CODE_DIR/diff) || exit 0
+              - ${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -i -p 7.2,7.1,7.0 -c ${PWD}/misc -r $DOWNGRADE_CODE_DIR -o ${ZENTAO_BUILD_PATH} diff
           - name: 扫描
             type: run
             spec:
@@ -33,5 +43,3 @@ spec:
                 image: hub.zentao.net/app/sonar-scanner-cli:10
               script:
               - sonar-scanner -Dsonar.token=${{ secrets.get("sq_sonar_token") }}
-            
-
