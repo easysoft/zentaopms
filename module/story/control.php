@@ -765,7 +765,7 @@ class story extends control
         if($confirm == 'no')
         {
             $confirmTips = $story->status == 'changing' ? $this->lang->story->confirmRecallChange : $this->lang->story->confirmRecallReview;
-            $confirmURL  = $this->createLink('story', 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType");
+            $confirmURL  = $this->createLink($story->type, 'recall', "storyID=$storyID&from=$from&confirm=yes&storyType=$storyType");
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'{$confirmTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
 
@@ -780,7 +780,7 @@ class story extends control
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
         if($from == 'view')
         {
-            $module = 'story';
+            $module = $story->type;
             $method = 'view';
             $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
             if($this->app->tab == 'project')
