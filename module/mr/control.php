@@ -42,6 +42,9 @@ class mr extends control
                 $this->view->projectID   = $this->session->project;
                 $this->loadModel('project')->setMenu((int)$this->session->project);
             }
+
+            /* Unlock session for wait to get data of repo. */
+            session_write_close();
         }
     }
 
@@ -79,6 +82,7 @@ class mr extends control
         }
 
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
+        session_write_close();
 
         $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
