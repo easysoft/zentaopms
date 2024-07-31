@@ -586,7 +586,7 @@ EOT,
     'filters'   => array(),
     'fields'    => array
     (
-        'product'  => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
+        'product'  => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
         'name'     => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
         'releases' => array('object' => 'product', 'field' => '', 'type' => 'number')
     ),
