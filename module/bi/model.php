@@ -1588,6 +1588,7 @@ class biModel extends model
             $columnKeys      = array_keys($rowData);
             $rowData         = array_values($rowData);
             $drillConditions = array();
+            $isDrill         = array();
 
             for($i = 0; $i < count($rowData); $i++)
             {
@@ -1609,6 +1610,7 @@ class biModel extends model
                 $rows[$rowKey][$field]   = $value;
                 $drillFields             = $this->getDrillFields($rowKey, $columnKey, $drills);
                 $drillConditions[$field] = $this->processDrills($field, $drillFields, $columns);
+                $isDrill[$field]         = isset($columns[$field]['link']);
 
                 if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
 
@@ -1632,6 +1634,7 @@ class biModel extends model
             }
 
             $rows[$rowKey]['conditions'] = $drillConditions;
+            $rows[$rowKey]['isDrill']    = $isDrill;
             $rows[$rowKey]['ROW_ID']     = $rowKey;
         }
 
@@ -1668,7 +1671,6 @@ class biModel extends model
      */
     public function processDrills(string $field, array $drillFields, array $columns): array
     {
-        if(empty($drillFields)) return array();
         $column = $columns[$field];
         if(!isset($column['drillField'])) return array();
 

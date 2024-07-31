@@ -1,19 +1,25 @@
 window.clickCell = function(col, {colName, rowInfo})
 {
     const drillConditions = rowInfo.data.conditions[colName];
+    const isDrill         = rowInfo.data.isDrill[colName];
     let value             = rowInfo.data[colName];
 
-    if(!Array.isArray(drillConditions) || !drillConditions.length) return false;
+    if(!isDrill || rowInfo.data.field0_colspan) return false;
+
+    let conditions   = [];
+    let filterValues = {};
+    let originField  = '0';
+    let id           = pivotID;
+    let status       = 'published';
+
     if(Array.isArray(value)) value = value[0];
 
-    if(value == 0) return zui.Modal.alert(emptyDrillTip);
-
-    let [originField, conditions] = drillConditions;
-    let filterValues = getFilterValues();
-    let id     = pivotID;
-    let status = 'published';
-
-    conditions   = conditions.map(condition => condition.value);
+    if(Array.isArray(drillConditions) && drillConditions.length)
+    {
+        [originField, conditions] = drillConditions;
+        filterValues = getFilterValues();
+        conditions   = conditions.map(condition => condition.value);
+    }
     conditions   = latin1ToBase64(JSON.stringify(conditions))
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
     if(typeof(pivotState) != 'undefined')
@@ -22,7 +28,7 @@ window.clickCell = function(col, {colName, rowInfo})
         status = 'design';
     }
 
-    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&colName=${originField}&status=${status}&drillFields=${conditions}&filterValues=${filterValues}&value=${value}`);
+    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&colName=${originField}&status=${status}&conditions=${conditions}&filterValues=${filterValues}&value=${value}`);
     drillModalLink = drillModalLink.replace(/\+/g, '%2B');
 
     zui.Modal.open({url: drillModalLink, size: 'lg'});
@@ -51,7 +57,8 @@ window.getFilterValues = function()
         const $filter = $(this);
         if ($filter.hasClass('filter-input'))
         {
-            filterValues[index] = $filter.find('input').val();
+            filterValues[
+                index] = $filter.find('input').val();
         }
         else if($filter.hasClass('filter-select'))
         {
