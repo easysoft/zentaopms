@@ -75,4 +75,148 @@ class createProgramTester extends tester
 
         return $this->success('创建私有项目集成功');
     }
+
+    /**
+     * 添加子项目集。
+     *
+     * @param  string $programName
+     * @param  array  $whitelist
+     * @access public
+     * @return void
+     */
+    public function addChildProgram()
+    {
+        $this->openUrl('program', 'browse');
+        $form = $this->loadPage('program', 'browse');
+        $form->dom->addChildBtn->click();
+        $form->wait(1);
+        $form->dom->name->setValue('子项目集');
+        $form->dom->longTime->click();
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+    }
+
+    /**
+     * 编辑项目集。
+     *
+     * @param  string $programName
+     * @param  array  $whitelist
+     * @access public
+     * @return void
+     */
+    public function editProgram()
+    {
+        /*编辑列表第一个项目集*/
+        $this->openUrl('program', 'browse');
+        $form = $this->loadPage('program', 'browse');
+        $form->dom->editBtn->click();
+        $form->dom->name->setValue($programName);
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+        if($this->response('method') != 'browse')
+        {
+            if($this->checkFormTips('program')) return $this->success('编辑项目集表单提示信息正确');
+            return $this->failed('编辑项目集表单页提示信息不正确');
+        }
+    }
+
+    /**
+     * 开始项目集。
+     *
+     * @param  string $programName
+     * @param  array  $whitelist
+     * @access public
+     * @return void
+     */
+    public function startProgram()
+    {
+        /*开始列表第一个项目集*/
+        $this->openUrl('program', 'browse');
+        $form = $this->loadpage('program', 'browse');
+        $form->dom->startBtn->click();
+    }
+
+    /**
+     * 关闭项目集。
+     *
+     * @param  string $programName
+     * @param  array  $whitelist
+     * @access public
+     * @return void
+     */
+    public function closeProgram()
+    {
+        /*关闭列表第一个项目集*/
+        $this->openUrl('program', 'browse');
+        $form = $this->loadpage('program', 'browse');
+        $form->dom->closeBtn->click();
+        $form->dom->closeConfirm->click();
+        $form->dom->search(array("项目集名称,=,{$programName}"));
+        $form->wait(1);
+
+        if($form->dom->programStatus->getText() != '已关闭') return $this->failed('关闭项目集后项目集状态不是已关闭');
+        $this->openUrl('program', 'browse');
+
+        return $this->success('关闭项目集成功');
+    }
+
+    /**
+     * 激活项目集。
+     *
+     * @param  string $programName
+     * @param  array  $whitelist
+     * @access public
+     * @return void
+     */
+    public function activateProgram()
+    {
+        $this->openUrl('program', 'browse');
+        $form = $this->loadpage('program', 'browse');
+        $form->dom->search(array("项目集名称,=,{$programName}"));
+        $form->wait(1);
+        $form->dom->activateBtn->click();
+        $form->dom->activateConfirm->click();
+
+        $this->openUrl('program', 'browse');
+        $form = $this->loadpage('program', 'browse');
+        $form->dom->search(array("项目集名称,=,{$programName}"));
+        $form->wait(1);
+
+        if($form->dom->programStatus->getText() != '进行中') return $this->failed('激活项目集后项目集状态不是进行中');
+        $this->openUrl('program', 'browse');
+
+        return $this->success('激活项目集成功');
+    }
+
+    /**
+     * 删除项目集。
+     *
+     * @param  string $programName
+     * @param  array  $whitelist
+     * @access public
+     * @return void
+     */
+    public function deleteProgram()
+    {
+        /*删除列表第一个项目集*/
+        $this->openUrl('program', 'browse');
+        $form = $this->loadPage('program', 'browse');
+        $form->dom->fstdeleteBtn->click();
+        $form->dom->undeleteConfirm->click();
+        $form->dom->thrdeleteBtn->click();
+        $form->dom->deleteCancel->click();
+        $form->dom->thrdeleteBtn->click();
+        $form->dom->deleteConfirm->click();
+        $form->wait(1);
+
+        $this->openUrl('program', 'browse');
+        $form = $this->loadpage('program', 'browse');
+        $form->dom->search(array("项目集名称,=,子项目集"));
+        $form->wait(1);
+
+        if($form->dom->formText->getText() != '暂时没有项目集') return $this->failed('删除项目集失败');
+        $this->openUrl('program', 'browse');
+        return $this->success('删除项目集成功');
+    }
 }
