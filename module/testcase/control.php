@@ -1801,7 +1801,7 @@ class testcase extends control
             }
 
             /* Get related objects title or names. */
-            $relatedModules = $this->loadModel('tree')->getAllModulePairs('case');
+            $relatedModules = $this->loadModel('tree')->getAllModulePairs('case', 'product', array($productID));
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
             $relatedSteps   = $this->dao->select('id,parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case', 'id');

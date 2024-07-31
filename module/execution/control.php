@@ -1134,7 +1134,7 @@ class execution extends control
         $bugs = $this->bug->processBuildForBugs($bugs);
 
         $moduleID = $type != 'bysearch' ? $param : 0;
-        $modules  = $this->tree->getAllModulePairs('bug');
+        $modules  = $this->tree->getAllModulePairs('bug', 'execution', array($executionID));
 
         /* Get module tree.*/
         $extra = array('projectID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
@@ -1238,7 +1238,7 @@ class execution extends control
         $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
-        $modules = $this->tree->getAllModulePairs('case');
+        $modules = $this->tree->getAllModulePairs('case', 'execution', array($executionID));
 
         /* Get module tree.*/
         if($executionID and empty($productID))

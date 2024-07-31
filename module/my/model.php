@@ -518,7 +518,8 @@ class myModel extends model
         $executions = $this->execution->getPairs(0, 'all', 'multiple');
         $this->config->execution->search['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
 
-        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
+        $executionIDList = $this->dao->select("execution")->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->fetchPairs('execution');
+        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs('task', 'execution', $executionIDList);
 
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
     }
@@ -655,7 +656,7 @@ class myModel extends model
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
         $this->config->bug->search['params']['product']['values']       = $products + array('' => '');
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
-        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs('bug', 'product', array_keys($products));
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($products, 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
@@ -929,10 +930,10 @@ class myModel extends model
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
         $this->config->ticket->search['params']['product']['values'] = array('' => '') + $this->loadModel('feedback')->getGrantProducts();
-        $this->config->ticket->search['params']['module']['values']  = array('' => '') + $this->loadModel('tree')->getAllModulePairs();
         $grantProducts = $this->loadModel('feedback')->getGrantProducts();
-        $productIDlist = array_keys($grantProducts);
-        $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDlist, 'all', 'releasetag');
+        $productIDList = array_keys($grantProducts);
+        $this->config->ticket->search['params']['module']['values']  = array('' => '') + $this->loadModel('tree')->getAllModulePairs('feedback', 'product', $productIDList);
+        $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDList, 'all', 'releasetag');
 
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
     }

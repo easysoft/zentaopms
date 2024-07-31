@@ -1249,7 +1249,7 @@ class project extends control
         }
 
         $moduleID = $type != 'bysearch' ? $param : 0;
-        $modules  = $this->tree->getAllModulePairs('bug');
+        $modules  = $this->tree->getAllModulePairs('bug', 'project', array($projectID));
 
         /* Get module tree.*/
         $extra = array('projectID' => $projectID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branchID);

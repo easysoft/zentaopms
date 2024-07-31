@@ -2208,7 +2208,7 @@ class task extends control
             /* Get related objects title or names. */
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-            $relatedModules = $this->loadModel('tree')->getAllModulePairs('task');
+            $relatedModules = $this->loadModel('tree')->getAllModulePairs('task', 'execution', $executionID);
 
             if($tasks)
             {
