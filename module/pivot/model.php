@@ -2655,17 +2655,16 @@ class pivotModel extends model
     /**
      * Get drill datas.
      *
-     * @param  int $pivotID
+     * @param  int    $pivotID
      * @param  object $drill
-     * @param  array $conditions
-     * @param  array $filterValues
+     * @param  array  $conditions
+     * @param  array  $filterValues
      * @access public
      * @return array
      */
-    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filters, array $filterValues): array
+    public function getDrillDatas(int $pivotID, object $drill, array $conditions, array $filterValues): array
     {
         $pivot = $this->getById($pivotID);
-        if(!empty($filters)) $pivot->filters = $filters;
 
         $this->app->loadClass('pivotstate', true);
         $pivotState = new pivotState($pivot, array(), $this->app->getClientLang());
