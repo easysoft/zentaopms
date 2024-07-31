@@ -981,7 +981,7 @@ $config->my->audit->actionList = array();
 $config->my->audit->actionList['review']['icon']        = 'glasses';
 $config->my->audit->actionList['review']['text']        = $lang->review->common;
 $config->my->audit->actionList['review']['hint']        = $lang->review->common;
-$config->my->audit->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}');
+$config->my->audit->actionList['review']['url']         = array('module' => 'index', 'method' => 'index');
 $config->my->audit->actionList['review']['data-toggle'] = 'modal';
 
 $config->my->audit->dtable = new stdclass();
