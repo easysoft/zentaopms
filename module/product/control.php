@@ -803,6 +803,8 @@ class product extends control
      */
     public function track(int $productID, string $branch = '', int $projectID = 0, string $browseType = 'allstory', int $param = 0, string $storyType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
+        $this->config->morphUpdate = false;
+
         $trackOrder = "type,grade,{$orderBy}";
         $browseType = strtolower($browseType);
         $branch     = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
