@@ -18,7 +18,7 @@ jsVar('initLink', $link);
 jsVar('type', $type);
 jsVar('loadFileUrl', createLink($releaseModule, 'view', "releaseID={$release->id}&type=releaseInfo"));
 $canBeChanged = common::canBeChanged($releaseModule, $release);
-$actions      = $this->loadModel('common')->buildOperateMenu($release);
+$actions      = $this->loadModel('common')->buildOperateMenu($release, $releaseModule);
 foreach($actions as $actionType => $typeActions)
 {
     foreach($typeActions as $key => $action)

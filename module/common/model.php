@@ -2401,12 +2401,12 @@ eof;
      * @access public
      * @return array
      */
-    public function buildOperateMenu(object $data): array
+    public function buildOperateMenu(object $data, string $moduleName = ''): array
     {
         global $app, $config;
 
         /* build operate menu. */
-        $moduleName  = $app->moduleName;
+        $moduleName  = $moduleName ? $moduleName : $app->moduleName;
         $methodName  = $app->methodName;
         $actionsMenu = array();
         $isInModal   = helper::isAjaxRequest('modal');

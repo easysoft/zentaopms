@@ -46,7 +46,7 @@ $config->projectrelease->actionList['notify']['data-toggle'] = 'modal';
 $config->projectrelease->actionList['delete']['icon']         = 'trash';
 $config->projectrelease->actionList['delete']['hint']         = $lang->release->delete;
 $config->projectrelease->actionList['delete']['url']          = helper::createLink('projectrelease', 'delete', 'releaseID={id}');
-$config->projectrelease->actionList['delete']['class']        = 'btn ghost toolbar-item text-primary square size-sm ajax-submit';
+$config->projectrelease->actionList['delete']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['delete']['data-confirm'] = array('message' => $lang->release->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->dtable = new stdclass();
