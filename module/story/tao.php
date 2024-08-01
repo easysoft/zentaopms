@@ -2500,7 +2500,7 @@ class storyTao extends storyModel
         $storyCount = count($stories);
 
         /* 按照需求的层级倒序排序。*/
-        usort($stories, function($a, $b) {return $b->grade - $a->grade;});
+        uasort($stories, function($a, $b) {return $b->grade - $a->grade;});
 
         /* 将需求按照父子关系组成树形结构。*/
         foreach($stories as $id => $story)
