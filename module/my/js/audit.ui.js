@@ -6,6 +6,7 @@ window.onRenderCell = function(result, {row, col})
         {
             result[0].props.items[0]['disabled']    = projectPriv ? false: true;
             result[0].props.items[0]['url']         = projectReviewLink.replace('{id}', row.data.id);
+            delete result[0].props.items[0]['data-toggle'];
         }
         else if(reviewPrivs[row.data.module])
         {
