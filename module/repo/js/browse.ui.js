@@ -25,13 +25,20 @@ window.afterRender = function()
 {
     if(repo.SCM != 'Gitlab') return;
 
-    const dtable  = $('#table-repo-browse').zui('dtable');
+    const dtable = $('#table-repo-browse').zui('dtable');
     if(!dtable) return;
 
     const oldData = dtable.options.data;;
     if(oldData.length == 0) return;
 
-     // 如果正在加载提交信息或已经加载提交信息，直接返回
+    // 如果正在加载提交信息或已经加载提交信息，直接返回
+    if(!dtable.repoID || dtable.repoID != repo.id)
+    {
+        dtable.isLoadingCommits   = false;
+        dtable.isLoadedAllCommits = false;
+    }
+
+    dtable.repoID = repo.id;
     if(dtable.isLoadingCommits || dtable.isLoadedAllCommits) return;
 
     // 设置正在加载提交信息
