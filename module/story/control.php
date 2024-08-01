@@ -506,6 +506,8 @@ class story extends control
      */
     public function view(int $storyID, int $version = 0, int $param = 0, string $storyType = 'story')
     {
+        $this->config->morphUpdate = false;
+
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
         $story   = $this->story->getById($storyID, $version, true);
