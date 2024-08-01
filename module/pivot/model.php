@@ -236,14 +236,20 @@ class pivotModel extends model
 
         /* 获取field的键值对以及相关联的对象。 */
         /* Get field key value pairs and related objects. */
-        $moduleNames = $tables ? $this->dataview->getModuleNames($tables) : array();
-        list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
+        $this->loadModel('dataview');
+        if($tables)
+        {
+            $statement = $this->bi->sql2Statement($sql);
+            $moduleNames = $this->dataview->getModuleNames($tables);
+            $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
+        }
+        list($fieldPairs, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
 
         $objectFields = $this->loadModel('dataview')->getObjectFields();
 
         /* 重建fieldSettings字段。 */
         /* Rebuild fieldSettings field. */
-        $pivot->fieldSettings = $this->bi->rebuildFieldSettings($fieldPairs, $columns, $relatedObject, $fieldSettings, $objectFields);
+        $pivot->fieldSettings = $this->bi->rebuildFieldSettings($fieldPairs, $columns, $relatedObjects, $fieldSettings, $objectFields);
     }
 
 

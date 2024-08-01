@@ -1294,9 +1294,9 @@ class biModel extends model
 
         $moduleNames = array();
         $aliasNames  = array();
+        $this->loadModel('dataview');
         if($tables)
         {
-            $this->loadModel('dataview');
             $moduleNames = $this->dataview->getModuleNames($tables);
             $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
         }
