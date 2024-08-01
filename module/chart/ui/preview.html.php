@@ -16,17 +16,15 @@ jsVar('previewUrl', inlink('preview', "dimension={$dimensionID}&group={$groupID}
 jsVar('maxPreviewCount', $config->chart->chartMaxChecked);
 jsVar('maxPreviewTips', sprintf($lang->chart->chartMaxChecked, $config->chart->chartMaxChecked));
 
-$items = array();
-foreach($groups as $id => $name)
-{
-    $items[] = array
-    (
-        'text' => $name,
-        'url' => inlink('preview', "dimension={$dimensionID}&group={$id}"),
-        'badge' => $id == $groupID ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
-        'active' => $id == $groupID
-    );
-}
+$lang->chart->featureBar['preview'] = array();
+foreach($groups as $id => $name) $lang->chart->featureBar['preview'][$id] = $name;
+
+featureBar
+(
+    set::current($groupID),
+    set::load(''),
+    set::linkParams("dimension={$dimensionID}&group={key}"),
+);
 
 featureBar(set::items($items));
 
