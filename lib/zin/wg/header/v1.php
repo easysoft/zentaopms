@@ -278,7 +278,7 @@ class header extends wg
                 btn
                 (
                     setID('messageBar'),
-                    set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-params' => 'event', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
+                    set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
                     setClass('text-primary bg-inherit ring-primary ring-opacity-40'),
                     set::square(true),
                     set::caret(false),
