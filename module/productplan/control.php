@@ -378,6 +378,8 @@ class productplan extends control
         /* Get stories of plan. */
         $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
+
+        if($planStories) $this->productplanZen->reorderStories();
         foreach($planStories as $story)
         {
             if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName((array)$story->module);

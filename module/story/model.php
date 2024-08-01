@@ -439,21 +439,7 @@ class storyModel extends model
                 ->fetchAll('id');
         }
 
-        $sql = $this->dao->get();
-        $this->loadModel('common')->saveQueryCondition($sql, 'story', false);
-
-        if($stories)
-        {
-            /* 对需求重新按照父子关系排序，保证进入需求详情后上一页下一页的URL符合预期。 */
-            if(strpos($sql, 'LIMIT')) $sql = substr($sql, 0, strpos($sql, 'LIMIT'));
-
-            $parents = array();
-            $query   = $this->dao->query($sql);
-            while($story = $query->fetch()) $parents[$story->id] = $story->parent;
-
-            $objectList = $this->storyTao->reorderStories($parents);
-            if($objectList) $this->session->set('storyBrowseList', array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList), $this->app->tab);
-        }
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         /* Add parent list for display. */
         foreach($stories as $story)

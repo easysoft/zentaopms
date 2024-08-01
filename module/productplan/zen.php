@@ -423,4 +423,25 @@ class productplanZen extends productplan
 
         return $menu;
     }
+
+    /**
+     * 对计划需求按照父子关系重新排序。
+     * Reorder stories by parent-child relationship.
+     *
+     * @access public
+     * @return void
+     */
+    public function reorderStories()
+    {
+        /* 对需求重新按照父子关系排序，保证进入需求详情后上一页下一页的URL符合预期。 */
+        $sql = $this->dao->get();
+        if(strpos($sql, 'LIMIT')) $sql = substr($sql, 0, strpos($sql, 'LIMIT'));
+
+        $parents = array();
+        $query   = $this->dao->query($sql);
+        while($story = $query->fetch()) $parents[$story->id] = $story->parent;
+
+        $objectList = $this->loadModel('story')->reorderStories($parents);
+        if($objectList) $this->session->set('storyBrowseList', array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList), $this->app->tab);
+    }
 }
