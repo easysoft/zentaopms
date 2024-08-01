@@ -659,6 +659,7 @@ class pivotState
             unset($this->settings['columns'][$index]['drill']);
             foreach($this->drills as $drill)
             {
+                if(empty($drill)) continue;
                 if($drill['field'] == $column['field']) $this->settings['columns'][$index]['drill'] = $drill;
             }
         }
