@@ -1842,6 +1842,7 @@ class repo extends control
         $tagTotal = count($tagList);
         $pager    = new pager($tagTotal, $recPerPage, $pageID);
         $tagList  = array_chunk($tagList, (int)$pager->recPerPage);
+        if($tagList && !isset($tagList[$pageID - 1])) $pageID = 1;
 
         $this->view->title    = $this->lang->repo->browseTag;
         $this->view->repoID   = $repoID;
@@ -1918,6 +1919,7 @@ class repo extends control
         $branchTotal = count($branchList);
         $pager       = new pager($branchTotal, $recPerPage, $pageID);
         $branchList  = array_chunk($branchList, (int)$pager->recPerPage);
+        if($branchList && !isset($branchList[$pageID - 1])) $pageID = 1;
 
         $this->view->title      = $this->lang->repo->browseBranch;
         $this->view->repoID     = $repoID;
