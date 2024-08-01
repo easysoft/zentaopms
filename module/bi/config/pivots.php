@@ -2816,8 +2816,8 @@ select
     t1.id,
     t2.project as project,
     t3.name as projectname,
-    case when t3.multiple = '1' then t1.id else '' end as execution,
-    case when t3.multiple = '1' then t1.name else '' end as executionname,
+    t1.id as execution,
+    t1.name as executionname,
     t2.id as bugID,
     t2.type from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
@@ -2835,7 +2835,7 @@ EOT,
             array('field' => 'type', 'slice' => 'type', 'stat' => 'count', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
+        'group1'      => 'projectname',
         'group2'      => 'executionname'
     ),
     'filters'   => array
@@ -2857,7 +2857,7 @@ EOT,
     (
         'id'            => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'bugID'         => array('zh-cn' => 'bugID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
@@ -2877,10 +2877,11 @@ EOT,
         (
             'field'     => 'type',
             'object'    => 'bug',
-            'whereSql'  => "left join zt_project as t2 on t2.id=t1.execution  left join zt_project as t3 on t3.id=t2.project  where t1.deleted='0' and t2.deleted='0'  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end) ",
+            'whereSql'  => "left join zt_project as t2 on t2.id=t1.execution left join zt_project as t3 on t3.id=t2.project where t1.deleted='0' and t2.deleted='0'",
             'condition' => array
             (
-                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname'),
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'type', 'queryField' => 'type')
             )
         )
