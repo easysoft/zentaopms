@@ -293,6 +293,7 @@ $config->repo->dtable->branch->fieldList['name']['name']  = 'name';
 $config->repo->dtable->branch->fieldList['commitID']['title']    = $lang->repo->commit;
 $config->repo->dtable->branch->fieldList['commitID']['type']     = 'text';
 $config->repo->dtable->branch->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
+$config->repo->dtable->branch->fieldList['commitID']['data-app'] = $app->tab;
 $config->repo->dtable->branch->fieldList['commitID']['sortType'] = true;
 
 $config->repo->dtable->branch->fieldList['committer']['title']    = $lang->repo->lastCommitter;
