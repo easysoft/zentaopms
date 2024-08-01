@@ -2486,4 +2486,23 @@ class storyTao extends storyModel
         }
         return $newStories;
     }
+
+    /**
+     * 根据父子关系重新对需求排序。
+     * Build track data by stories.
+     *
+     * @param  array  $stories
+     * @access public
+     * @return array
+     */
+    public function reorderStories(array $stories): array
+    {
+        $tree = $this->buildStoryTree($stories);
+
+        $result = array();
+        $this->buildReorderResult($tree, $result);
+
+        /* 重排后数量如果和重排之前不一致，说明该列表只有子任务、没有父任务，使用重排之前的顺序。*/
+        return count($stories) == count($result) ? $result : array_keys($stories);
+    }
 }
