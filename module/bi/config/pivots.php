@@ -657,8 +657,8 @@ EOT,
             array('field' => 'taskID', 'slice' => 'status', 'stat' => 'count', 'showTotal' => 'sum', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -680,11 +680,11 @@ EOT,
     ),
     'langs'     => array
     (
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'status'        => array('zh-cn' => '状态', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'taskID'        => array('zh-cn' => '不同状态任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'timeout'       => array('zh-cn' => 'timeout', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
@@ -753,8 +753,8 @@ EOT,
             array('field' => 'taskID', 'slice' => 'type', 'stat' => 'count', 'showTotal' => 'sum', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -777,10 +777,10 @@ EOT,
     'langs'     => array
     (
         'id'            => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'type'          => array('zh-cn' => '任务类型', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'taskID'        => array('zh-cn' => '不同类型任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
@@ -850,8 +850,8 @@ EOT,
             array('field' => 'taskID', 'slice' => 'assignedTo', 'stat' => 'count', 'showTotal' => 'sum', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -874,10 +874,10 @@ EOT,
     'langs'     => array
     (
         'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'assignedTo'    => array('zh-cn' => '指派给', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'taskID'        => array('zh-cn' => '人员被指派任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
