@@ -596,7 +596,6 @@ class repo extends control
         $this->view->repoPairs   = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branches    = $branches;
         $this->view->tags        = $tags;
-        $this->view->branchID    = $branchID;
         $this->view->branchOrTag = $branchOrTag;
         $this->view->source      = $source;
         $this->display();
@@ -1364,7 +1363,7 @@ class repo extends control
         if($projectID)
         {
             if($method == 'browse') $params = "&branchID=&objectID=$projectID";
-            if(in_array($method, array('browsetag', 'browsebranch'))) $params = "&objectID=$projectID";
+            if(in_array($method, array('browsetag', 'browsebranch', 'log'))) $params = "&objectID=$projectID";
         }
 
         /* Get repo group by type. */
