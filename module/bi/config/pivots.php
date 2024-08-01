@@ -1511,8 +1511,8 @@ select
     t1.id,
     t3.name as projectname,
     t3.id as projectID,
-    (case when t3.multiple='1' then t1.name else '' end) as executionname,
-    (case when t3.multiple='1' then t1.id else '' end) as execution,
+    t1.name as executionname,
+    t1.id as execution,
     t2.id as bugID,
     t2.openedBy
 from zt_project as t1
@@ -1573,10 +1573,11 @@ EOT,
         (
             'field'     => 'openedBy',
             'object'    => 'bug',
-            'whereSql'  => "left join zt_project as t2 on t2.id=t1.execution  left join zt_project as t3 on t3.id=t2.project  where t1.deleted='0' and t2.deleted='0'  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)",
+            'whereSql'  => "left join zt_project as t2 on t2.id=t1.execution  left join zt_project as t3 on t3.id=t2.project  where t1.deleted='0' and t2.deleted='0'",
             'condition' => array
             (
                 array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname'),
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'openedBy', 'queryField' => 'openedBy')
             )
         )
