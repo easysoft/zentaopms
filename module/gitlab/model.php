@@ -809,7 +809,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/users");
-        return json_decode(commonModel::http($url, $user, array(), array(), 'json'));
+        return json_decode(commonModel::http($url, $user, array(CURLOPT_CUSTOMREQUEST => 'POST')));
     }
 
     /**
