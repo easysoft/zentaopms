@@ -2515,7 +2515,7 @@ class storyTao extends storyModel
      * @access public
      * @return array
      */
-    public function buildStoryTree(array &$stories, int $parentId = 0)
+    public function buildStoryTree(array &$stories, int $parentId = 0): array
     {
         $tree = array();
         foreach($stories as $id => $parent)
