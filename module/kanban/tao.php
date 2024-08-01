@@ -301,6 +301,8 @@ class kanbanTao extends kanbanModel
             $objectCard->children = !empty($children) ? $children : 0;
         }
 
+        $objectCard->originDesc   = str_replace(array('<p>', '</p>'), "\n", $object->desc);
+        $objectCard->originDesc   = strip_tags($objectCard->originDesc);
         $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));
         $objectCard->objectStatus = $objectCard->status;
         $objectCard->status       = $objectCard->progress == 100 ? 'done' : 'doing';
@@ -534,6 +536,7 @@ class kanbanTao extends kanbanModel
         $item['fromID']       = !empty($card->fromID) ? $card->fromID : 0;
         $item['fromType']     = !empty($card->fromType) ? $card->fromType : '';
         $item['desc']         = !empty($card->desc) ? $card->desc : '';
+        $item['originDesc']   = !empty($card->originDesc) ? $card->originDesc : '';
         $item['delay']        = !empty($card->delay) ? $card->delay : 0;
         $item['status']       = !empty($card->status) ? $card->status : '';
         $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
