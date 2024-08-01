@@ -4787,7 +4787,7 @@ class executionModel extends model
             $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
-            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows);
+            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList);
         }
 
         return $rows;
@@ -4799,10 +4799,12 @@ class executionModel extends model
      *
      * @param  array  $tasks
      * @param  array  $rows
+     * @param  array  $users
+     * @param  array  $avatarList
      * @access public
      * @return array
      */
-    public function appendTasks(array $tasks, array $rows): array
+    public function appendTasks(array $tasks, array $rows, array $users = array(), array $avatarList = array()): array
     {
         $this->loadModel('task');
         $this->app->loadConfig('project');
@@ -4832,6 +4834,15 @@ class executionModel extends model
             $task->begin         = $task->estStarted;
             $task->end           = $task->deadline;
             $task->PM            = $task->assignedTo;
+            if($task->PM)
+            {
+                $realname = zget($users, $task->PM);
+                if(empty($realname)) continue;
+
+                $task->PMAccount = $task->PM;
+                $task->PM        = $realname;
+                $task->PMAvatar  = zget($avatarList, $task->PMAccount, $task->PMAccount);
+            }
 
             $rows[] = $task;
         }
