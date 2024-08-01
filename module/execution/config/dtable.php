@@ -265,9 +265,10 @@ $config->execution->linkStory->dtable->fieldList['pri']['sortType'] = true;
 $config->execution->linkStory->dtable->fieldList['pri']['fixed']    = 'left';
 $config->execution->linkStory->dtable->fieldList['pri']['group']    = 3;
 
+$app->loadLang('requirement');
 $config->execution->linkStory->dtable->fieldList['stage']['title']     = $lang->story->stageAB;
 $config->execution->linkStory->dtable->fieldList['stage']['type']      = 'status';
-$config->execution->linkStory->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList;
+$config->execution->linkStory->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList + $lang->requirement->stageList;
 $config->execution->linkStory->dtable->fieldList['stage']['sortType']  = true;
 $config->execution->linkStory->dtable->fieldList['stage']['group']     = 4;
 
