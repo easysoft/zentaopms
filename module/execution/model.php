@@ -2400,7 +2400,7 @@ class executionModel extends model
                 if(isset($oldProducts[$productID][$branchID]))
                 {
                     $oldProduct = $oldProducts[$productID][$branchID];
-                    if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
+                    if($this->app->rawModule == 'project' || $this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
                 }
 
                 $data = new stdclass();

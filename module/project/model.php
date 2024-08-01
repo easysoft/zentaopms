@@ -1833,6 +1833,7 @@ class projectModel extends model
             if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
             {
                 $this->loadModel('execution');
+                unset($postProductData->plans);
                 foreach($executions as $executionID) $this->execution->updateProducts($executionID, $postProductData);
             }
         }
