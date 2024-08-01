@@ -29,7 +29,8 @@ class productsBox extends wg
         'required?: bool=false',         // 是否是必填。
         'from?: string=project',         // 来源类型。
         'type?: string="plan"',          // 类型。 plan|roadmap
-        'selectTip?: string=""'          // 产品下拉提示。
+        'selectTip?: string=""',         // 产品下拉提示。
+        'hidden?: bool=false'            // 是否隐藏
     );
 
     public static function getPageCSS(): ?string
@@ -44,7 +45,7 @@ class productsBox extends wg
 
     protected function build()
     {
-        list($project, $productItems, $linkedProducts, $errorSameProducts, $type) = $this->prop(array('project', 'productItems', 'linkedProducts', 'errorSameProducts', 'type'));
+        list($project, $productItems, $linkedProducts, $errorSameProducts, $type, $hidden) = $this->prop(array('project', 'productItems', 'linkedProducts', 'errorSameProducts', 'type', 'hidden'));
 
         $productsBox = array();
 
@@ -63,7 +64,7 @@ class productsBox extends wg
 
         return div
         (
-            setClass('productsBox'),
+            setClass('productsBox', $hidden ? ' hidden' : ''),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
             jsVar('errorSameProducts', $errorSameProducts),
