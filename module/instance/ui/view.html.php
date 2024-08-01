@@ -66,7 +66,8 @@ foreach($dbList as $db)
                 setClass('btn text-primary ghost db-management ' .  $disabledClass),
                 setData('dbname', $db->name),
                 setData('dbtype', $db->db_type),
-                setData('id',   $instance->id)
+                setData('id',   $instance->id),
+                on::click()->call('loadDBAuthUrl', jsRaw('this'))
             )
         )
     );

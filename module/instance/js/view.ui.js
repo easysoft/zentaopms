@@ -1,8 +1,10 @@
-$('#mainContent').on('click', '.db-management', function()
+window.loadDBAuthUrl = function(dom)
 {
-    var dbName     = $(this).data('dbname');
-    var dbType     = $(this).data('dbtype');
-    var instanceID = $(this).data('id');
+    if($(dom).hasClass('disabled')) return false;
+
+    var dbName     = $(dom).data('dbname');
+    var dbType     = $(dom).data('dbtype');
+    var instanceID = $(dom).data('id');
 
     $.ajaxSubmit
     (
@@ -22,7 +24,7 @@ $('#mainContent').on('click', '.db-management', function()
             }
         }
     );
-});
+}
 
 var timer             = null;
 const postData = new FormData();
