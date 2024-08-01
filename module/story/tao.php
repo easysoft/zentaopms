@@ -2510,6 +2510,9 @@ class storyTao extends storyModel
      * 递归将一维需求数组构造成父子关系的嵌套数组。
      * Build story tree by parent and children.
      *
+     * @param  array  $stories
+     * @param  int    $parentId
+     * @access public
      * @return array
      */
     public function buildStoryTree(array &$stories, int $parentId = 0)
@@ -2524,5 +2527,22 @@ class storyTao extends storyModel
         }
 
         return $tree;
+    }
+
+    /**
+     * 递归将父子关系的嵌套数组构造成一维需求数组。
+     * Build story result by parent and children.
+     *
+     * @param  array  $parent
+     * @param  array  $result
+     * @access public
+     */
+    public function buildReorderResult(array $parent, array &$result)
+    {
+        foreach($parent as $key => $children)
+        {
+            $result[$key] = $key;
+            if(!empty($children)) $this->buildReorderResult($children, $result);
+        }
     }
 }
