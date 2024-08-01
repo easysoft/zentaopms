@@ -628,8 +628,8 @@ select
     t1.project,
     t3.name as projectname,
     t2.status,
-    (case when t3.multiple='1' then t1.name else '' end) as executionname,
-    (case when t3.multiple='1' then t2.execution else '' end) as execution,
+    t1.name as executionname,
+    t2.execution as execution,
     t2.id as taskID,
     t1.status as projectstatus,
     (case when cast(t2.deadline as date) < current_date()
@@ -703,10 +703,11 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id left join zt_project as t3 on t3.id=t2.project WHERE t1.deleted='0'",
             'condition' => array
             (
                 array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname'),
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'status', 'queryField' => 'status')
             )
         )
@@ -729,8 +730,8 @@ select
     t1.id,
     t3.name as projectname,
     t3.id as project,
-    (case when t3.multiple='1' then t1.name else '' end) as executionname,
-    (case when t3.multiple='1' then t1.id else '' end) as execution,
+    t1.name as executionname,
+    t1.id as execution,
     t2.type,
     t2.id as taskID,
     t1.status as projectstatus
@@ -799,10 +800,11 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id left join zt_project as t3 on t3.id=t2.project WHERE t1.deleted='0'",
             'condition' => array
             (
                 array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname'),
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'type', 'queryField' => 'type')
             )
         )
