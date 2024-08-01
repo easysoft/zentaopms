@@ -922,8 +922,8 @@ select
  t1.id,
  t3.name as projectname,
  t3.id as project,
- (case when t3.multiple='1' then t1.name else '' end) as executionname,
- (case when t3.multiple='1' then t2.execution else '' end) as execution,
+ t1.name as executionname,
+ t2.execution as execution,
  t2.finishedBy,
  t2.id as taskID,
  t1.status as projectstatus
@@ -994,7 +994,7 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id left join zt_user t3 on t1.finishedBy=t3.account WHERE t1.deleted='0' AND t1.finishedBy!=''  and (case when \$project='' then 1 else t1.project=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$dept='' then 1 else t3.dept=\$dept end)  and (case when \$user='' then 1 else t1.finishedBy=\$user end)",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id left join zt_user t3 on t1.finishedBy=t3.account WHERE t1.deleted='0' AND t1.finishedBy!=''",
             'condition' => array
             (
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'finishedBy', 'queryField' => 'finishedBy'),
