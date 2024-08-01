@@ -1,5 +1,5 @@
 library 'z-common@master'
-library 'z-zentaopms@feat-240715'
+library 'z-zentaopms@feat-240801'
 
 pipeline {
   agent {
@@ -426,7 +426,7 @@ pipeline {
                 stage("Zbox win") {
                   agent {
                     kubernetes {
-                      inheritFrom "upload-azure"
+                      inheritFrom "upload-azure code-sign"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -444,6 +444,11 @@ pipeline {
 
                     stage("Build") {
                       steps {
+                        withCredentials([string(credentialsId: 'osslsigncode-cert', variable: 'CODE_SIGN_CERT')]) {
+                          container('osslsigncode') {
+                            sh 'echo -ne $CODE_SIGN_CERT | base64 -d > .codesign.p12'
+                          }
+                        }
                         script {
                           buildZboxWin.doBuild()
                           buildZboxWin.doUploadInternal()
