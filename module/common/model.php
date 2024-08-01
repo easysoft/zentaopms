@@ -554,6 +554,23 @@ class commonModel extends model
     }
 
     /**
+     * 检查字符串是否以给定的子字符串结尾。
+     * Checks if a string ends with a given substring.
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    public static function strEndsWith(string $haystack, string $needle): bool
+    {
+        $length = strlen($needle);
+        if ($length === 0) return true;
+
+        $position = strpos($haystack, $needle);
+        return $position !== false && $position === strlen($haystack) - $length;
+    }
+
+    /**
      * 创建菜单项链接。
      * Create menu item link
      *
