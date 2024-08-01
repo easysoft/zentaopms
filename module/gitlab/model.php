@@ -1786,7 +1786,7 @@ class gitlabModel extends model
         if(dao::isError()) return false;
         if($gitlabUser->password != $gitlabUser->password_repeat)
         {
-            dao::$errors[] = $this->lang->gitlab->user->passwordError;
+            dao::$errors['password_repeat'][] = $this->lang->gitlab->user->passwordError;
             return false;
         }
         /* Check whether the user has been bind. */
@@ -1838,7 +1838,7 @@ class gitlabModel extends model
         if(dao::isError()) return false;
         if(!empty($gitlabUser->password) and $gitlabUser->password != $gitlabUser->password_repeat)
         {
-            dao::$errors[] = $this->lang->gitlab->user->passwordError;
+            dao::$errors['password_repeat'][] = $this->lang->gitlab->user->passwordError;
             return false;
         }
         /* Check whether the user has been bind. */
@@ -1848,7 +1848,7 @@ class gitlabModel extends model
             $changeBind = (!$zentaoBindUser or $zentaoBindUser->openID != $gitlabUser->id) ? true : false;
             if($zentaoBindUser && $changeBind)
             {
-                dao::$errors['bind'][] = $this->lang->gitlab->user->bindError;
+                dao::$errors['account'][] = $this->lang->gitlab->user->bindError;
                 return false;
             }
         }

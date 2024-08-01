@@ -558,7 +558,7 @@ class gitlab extends control
             {
                 $message = dao::getError();
                 foreach($message as &$msg) if(is_string($msg)) $msg = zget($this->lang->gitlab->errorResonse, $msg, $msg);
-                return $this->send(array('result' => 'fail', 'message' => $message));
+                return $this->sendError(is_numeric(key($message)) ? implode("\n", $message) : $message);
             }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
@@ -603,7 +603,12 @@ class gitlab extends control
 
             $this->gitlab->editUser($gitlabID, $gitlabUser);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $message = dao::getError();
+                foreach($message as &$msg) if(is_string($msg)) $msg = zget($this->lang->gitlab->errorResonse, $msg, $msg);
+                return $this->sendError(is_numeric(key($message)) ? implode("\n", $message) : $message);
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
