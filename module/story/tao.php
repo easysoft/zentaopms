@@ -2497,53 +2497,43 @@ class storyTao extends storyModel
      */
     public function reorderStories(array $stories): array
     {
-        $tree = $this->buildStoryTree($stories);
+        $storyCount = count($stories);
 
-        $result = array();
-        $this->buildReorderResult($tree, $result);
+        /* 按照需求的层级倒序排序。*/
+        usort($stories, function($a, $b) {return $b->grade - $a->grade;});
+
+        /* 将需求按照父子关系组成树形结构。*/
+        foreach($stories as $id => $story)
+        {
+            if(!isset($stories[$story->parent])) continue;
+
+            $stories[$story->parent]->children[] = $story;
+            unset($stories[$id]);
+        }
+
+        /* 把树形嵌套数组提取成一维数组。*/
+        $orderedStories = $this->extractStories($stories);
 
         /* 重排后数量如果和重排之前不一致，说明该列表只有子任务、没有父任务，使用重排之前的顺序。*/
-        return count($stories) == count($result) ? $result : array_keys($stories);
+        return $storyCount == count($orderedStories) ? $orderedStories : array_keys($stories);
     }
 
     /**
-     * 递归将一维需求数组构造成父子关系的嵌套数组。
-     * Build story tree by parent and children.
+     * 把树形嵌套数组提取成一维数组。
+     * Extract stories from nested array.
      *
      * @param  array  $stories
-     * @param  int    $parentId
      * @access public
      * @return array
      */
-    public function buildStoryTree(array &$stories, int $parentId = 0): array
+    public function extractStories(array $stories): array
     {
-        $tree = array();
-        foreach($stories as $id => $parent)
+        $result = [];
+        foreach($stories as $story)
         {
-            if($parent == $parentId)
-            {
-                $tree[$id] = $this->buildStoryTree($stories, $id);
-            }
+            $result[$story->id] = $story->id;
+            if(!empty($story->children)) $result += $this->extractStories($story->children);
         }
-
-        return $tree;
-    }
-
-    /**
-     * 递归将父子关系的嵌套数组构造成一维需求数组。
-     * Build story result by parent and children.
-     *
-     * @param  array  $parent
-     * @param  array  $result
-     * @access public
-     * @return void
-     */
-    public function buildReorderResult(array $parent, array &$result)
-    {
-        foreach($parent as $key => $children)
-        {
-            $result[$key] = $key;
-            if(!empty($children)) $this->buildReorderResult($children, $result);
-        }
+        return $result;
     }
 }
