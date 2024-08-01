@@ -90,14 +90,7 @@ class pivot extends control
         $mergeConditions = array();
         foreach($drill->condition as $index => $condition)
         {
-            if(isset($conditions[$index]) && $conditions[$index])
-            {
-                $condition['value'] = $conditions[$index];
-            }
-            else
-            {
-                $condition['value'] = '';
-            }
+            if(isset($conditions[$index]) && $conditions[$index]) $condition['value'] = $conditions[$index];
             $mergeConditions[] = $condition;
         }
 
