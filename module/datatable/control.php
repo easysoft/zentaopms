@@ -366,7 +366,7 @@ class datatable extends control
             $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$storyCustom}&key=cols");
             $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$requirementCustom}&key=cols");
         }
-        return $this->send(array('result' => 'success', 'load' => true, 'callback' => "$('#table-$module-$method').closest('[z-use-dtable]').attr('zui-create-dtable', '')"));
+        return $this->send(array('result' => 'success', 'load' => true, 'callback' => "$('#table-$module-$method,[zui-create-dtable]').first().closest('[z-use-dtable]').attr('zui-create-dtable', '')"));
     }
 
     /**
