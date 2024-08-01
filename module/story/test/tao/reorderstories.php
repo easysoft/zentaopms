@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 storyModel->getAffectedBugs();
+title=测试 storyModel->reorderStories();
 timeout=0
 cid=0
 
