@@ -2505,4 +2505,24 @@ class storyTao extends storyModel
         /* 重排后数量如果和重排之前不一致，说明该列表只有子任务、没有父任务，使用重排之前的顺序。*/
         return count($stories) == count($result) ? $result : array_keys($stories);
     }
+
+    /**
+     * 递归将一维需求数组构造成父子关系的嵌套数组。
+     * Build story tree by parent and children.
+     *
+     * @return array
+     */
+    public function buildStoryTree(array &$stories, int $parentId = 0)
+    {
+        $tree = array();
+        foreach($stories as $id => $parent)
+        {
+            if($parent == $parentId)
+            {
+                $tree[$id] = $this->buildStoryTree($stories, $id);
+            }
+        }
+
+        return $tree;
+    }
 }
