@@ -274,7 +274,7 @@ $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->
 
 $lang->scrum->menu->devops['subMenu']         = new stdclass();
 $lang->scrum->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log');
-$lang->scrum->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create,repo-diff');
+$lang->scrum->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create,repo-diff,repo-showsynccommit');
 $lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
