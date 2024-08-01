@@ -18,10 +18,12 @@ cid=1
 */
 
 zenData('repo')->loadYaml('repo')->gen(5);
+zenData('project')->loadYaml('execution')->gen(5);
 
 $repoModel = new repoTest();
 
 $tab = 'execution';
+$tester->session->set('repoID', 1);
 r($repoModel->setHideMenuTest($tab, 11)) && p('tag:link') && e('标签|repo|browsetag|repoID=0&objectID=%s'); // Gitlab代码库显示标签菜单
 r($repoModel->setHideMenuTest($tab, 13)) && p('tag') && e('~~'); // Gitea代码库不显示标签菜单
 
