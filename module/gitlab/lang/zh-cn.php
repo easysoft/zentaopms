@@ -117,6 +117,7 @@ $lang->gitlab->apiError[11] = 'Missing CI config file';
 $lang->gitlab->apiError[12] = 'is too big (should be at most 200.0 KB)';
 $lang->gitlab->apiError[13] = 'Reference not found';
 $lang->gitlab->apiError[14] = 'avatar is invalid';
+$lang->gitlab->apiError[15] = 'file format is not supported. Please try one of the following supported formats: image/png, image/jpeg, image/gif, image/bmp, image/tiff, image/vnd.microsoft.icon';
 
 $lang->gitlab->errorLang[0]  = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[1]  = '私有分组的项目，可见性级别不能设为公开。';
@@ -133,6 +134,7 @@ $lang->gitlab->errorLang[11] = '缺少CI配置文件';
 $lang->gitlab->errorLang[12] = '头像大小不能超过200KB';
 $lang->gitlab->errorLang[13] = '引用不存在';
 $lang->gitlab->errorLang[14] = '头像格式不正确';
+$lang->gitlab->errorLang[15] = '文件格式不支持，请尝试以下格式：image/png,image/jpeg,image/gif,image/bmp,image/tiff,image/vnd.microsoft.icon';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
 $lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';

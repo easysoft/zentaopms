@@ -117,6 +117,7 @@ $lang->gitlab->apiError[11] = 'Missing CI config file';
 $lang->gitlab->apiError[12] = 'is too big (should be at most 200.0 KB)';
 $lang->gitlab->apiError[13] = 'Reference not found';
 $lang->gitlab->apiError[14] = 'avatar is invalid';
+$lang->gitlab->apiError[15] = 'file format is not supported. Please try one of the following supported formats: image/png, image/jpeg, image/gif, image/bmp, image/tiff, image/vnd.microsoft.icon';
 
 $lang->gitlab->errorLang[0]  = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[1]  = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
@@ -133,6 +134,7 @@ $lang->gitlab->errorLang[11] = 'Missing CI config file';
 $lang->gitlab->errorLang[12] = 'is too big (should be at most 200.0 KB)';
 $lang->gitlab->errorLang[13] = 'Reference not found';
 $lang->gitlab->errorLang[14] = 'Avatar is invalid';
+$lang->gitlab->errorLang[15] = 'File format is not supported. Please try one of the following supported formats: image/png, image/jpeg, image/gif, image/bmp, image/tiff, image/vnd.microsoft.icon';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = 'Email has already been taken';
 $lang->gitlab->errorResonse['Username has already been taken'] = 'Username has already been taken';
