@@ -436,7 +436,7 @@ pipeline {
                       steps {
                         checkout scmGit(branches: [[name: "main"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                          userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
+                          userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                         )
                         unstash 'misc'
                       }
@@ -488,7 +488,7 @@ pipeline {
                       steps {
                         checkout scmGit(branches: [[name: "main"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                          userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
+                          userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                         )
                         unstash 'misc'
                       }
@@ -530,7 +530,7 @@ pipeline {
               steps {
                 checkout scmGit(branches: [[name: "main"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                  userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
+                  userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                 )
                 sh 'script/lib/gen_report.sh > zbox-success.md'
                 script {
