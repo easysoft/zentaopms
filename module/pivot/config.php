@@ -169,7 +169,7 @@ $config->pivot->objectTableFields->ticket['type']['map']   = $lang->ticket->type
 
 $config->pivot->objectTableFields->ticket['assignedTo']['name']  = 'assignedTo';
 $config->pivot->objectTableFields->ticket['assignedTo']['title'] = $lang->ticket->assignedTo;
-$config->pivot->objectTableFields->ticket['assignedTo']['type']  = 'text';
+$config->pivot->objectTableFields->ticket['assignedTo']['type']  = 'user';
 
 $config->pivot->objectTableFields->ticket['estimate']['title'] = $lang->ticket->estimate;
 $config->pivot->objectTableFields->ticket['estimate']['type']  = 'number';
