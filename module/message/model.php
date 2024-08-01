@@ -243,11 +243,8 @@ class messageModel extends model
         if(empty($toList) and $objectType == 'feedback')   $toList = $object->openedBy;
         if(empty($toList) && $objectType == 'release')
         {
-            /* Get notifiy persons. */
-            $notifyPersons = array();
-            if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object);
-
-            if(!empty($notifyPersons)) $toList = implode(',', $notifyPersons);
+            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
+            $toList = $toList . $ccList;
         }
         if(empty($toList) && $objectType == 'task' && $object->mode == 'multi')
         {
