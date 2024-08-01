@@ -160,7 +160,7 @@ class upgradeModel extends model
             }
         }
 
-        $this->executeOthers($fromEdition);
+        $this->executeOthers($fromEdition, $fromVersion);
     }
 
     /**
@@ -171,7 +171,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function executeOthers(string $fromEdition): void
+    public function executeOthers(string $fromEdition, string $fromVersion): void
     {
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
@@ -185,6 +185,19 @@ class upgradeModel extends model
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
         $this->processDataset();
+
+        if($fromEdition == 'open')
+        {
+            if(version_compare($fromVersion, '18.4', '<=')) $this->upgradeBIData();
+        }
+        elseif($fromEdition == 'pro' || $fromEdition == 'biz')
+        {
+            if(version_compare($fromVersion, 'biz8.4', '<=')) $this->upgradeBIData();
+        }
+        elseif($fromEdition == 'max')
+        {
+            if(version_compare($fromVersion, 'max4.4', '<=')) $this->upgradeBIData();
+        }
     }
 
     /**
