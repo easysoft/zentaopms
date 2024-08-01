@@ -110,7 +110,8 @@ $canCreate ? formPanel
         set::label($lang->repo->codeRepo),
         set::required(true),
         set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
-        picker
+        $app->tab == 'devops' ? set::control("static") : null,
+        $app->tab == 'devops' ? set::value(zget($repoPairs, $repoID)) : picker
         (
             set::required(true),
             set::name('codeRepo'),
