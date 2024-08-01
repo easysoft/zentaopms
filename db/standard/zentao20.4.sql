@@ -2521,7 +2521,8 @@ CREATE TABLE `zt_pivotdrill` (
   `whereSql` mediumtext NOT NULL,
   `condition` mediumtext NOT NULL,
   `status` enum('design','published') NOT NULL DEFAULT 'published',
-  `account` varchar(30) NOT NULL DEFAULT ''
+  `account` varchar(30) NOT NULL DEFAULT '',
+  `type` enum('auto','manual') NOT NULL DEFAULT 'manual'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_planstory` (
   `plan` mediumint(8) unsigned NOT NULL DEFAULT 0,
@@ -2912,6 +2913,7 @@ CREATE TABLE `zt_release` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `marker` enum('0','1') NOT NULL DEFAULT '0',
   `date` date DEFAULT NULL,
+  `releasedDate` date DEFAULT NULL,
   `stories` text DEFAULT NULL,
   `bugs` text DEFAULT NULL,
   `leftBugs` text DEFAULT NULL,
