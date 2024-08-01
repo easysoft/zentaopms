@@ -2536,6 +2536,7 @@ class storyTao extends storyModel
      * @param  array  $parent
      * @param  array  $result
      * @access public
+     * @return void
      */
     public function buildReorderResult(array $parent, array &$result)
     {
