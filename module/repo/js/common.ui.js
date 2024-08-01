@@ -379,6 +379,6 @@ window.searchList = function()
     {
         const dom     = new DOMParser().parseFromString($('#keyword').val(), "text/html");
         const keyword = dom.body.textContent;
-        loadPage(searchUrl.replace('%s', Base64.encode(keyword)));
+        loadPage(searchUrl.replace('%s', encodeURIComponent(Base64.encode(keyword))));
     });
 }
