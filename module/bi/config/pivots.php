@@ -1966,7 +1966,7 @@ $config->bi->builtin->pivots[] = array
     'group'     => '59,61',
     'sql'       => <<<EOT
 select
-    t1.id,
+    t2.product,
     t1.name,
     t2.id as bugID,
     t2.type
@@ -1979,7 +1979,7 @@ order by t3.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array
     (
-        'group1'      => 'id',
+        'group1'      => 'product',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -1990,17 +1990,17 @@ EOT,
     'filters'   => array(),
     'fields'    => array
     (
-        'id'    => array('object' => 'product', 'field' => 'name', 'type' => 'number'),
-        'name'  => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
-        'bugID' => array('object' => 'project', 'field' => '', 'type' => 'number'),
-        'type'  => array('object' => 'bug', 'field' => 'type', 'type' => 'option')
+        'product' => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
+        'name'    => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
+        'bugID'   => array('object' => 'project', 'field' => '', 'type' => 'number'),
+        'type'    => array('object' => 'bug', 'field' => 'type', 'type' => 'option')
     ),
     'langs'     => array
     (
-        'id'    => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'name'  => array('zh-cn' => '产品', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'bugID' => array('zh-cn' => 'bugID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'type'  => array('zh-cn' => '不同类型Bug', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'product' => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'name'    => array('zh-cn' => '产品', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'bugID'   => array('zh-cn' => 'bugID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'type'    => array('zh-cn' => '不同类型Bug', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array(),
     'drills'    => array
@@ -2012,7 +2012,7 @@ EOT,
             'whereSql'  => "WHERE t1.deleted='0'",
             'condition' => array
             (
-                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'id'),
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'product'),
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'type', 'queryField' => 'type')
             )
         )
@@ -2049,7 +2049,7 @@ order by t4.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array
     (
-        'group1'      => 'id',
+        'group1'      => 'name',
         'columnTotal' => 'sum',
         'columns'     => array
         (
@@ -2065,7 +2065,7 @@ EOT,
     'filters'   => array(),
     'fields'    => array
     (
-        'id'           => array('object' => 'product', 'field' => 'name', 'type' => 'number'),
+        'id'           => array('object' => 'product', 'field' => 'id', 'type' => 'number'),
         'name'         => array('object' => 'product', 'field' => 'name', 'type' => 'string'),
         'stories'      => array('object' => 'project', 'field' => '', 'type' => 'string'),
         'doneStory'    => array('object' => 'project', 'field' => '', 'type' => 'number'),
@@ -2076,8 +2076,8 @@ EOT,
     ),
     'langs'     => array
     (
-        'id'           => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'name'         => array('zh-cn' => 'name', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'id'           => array('zh-cn' => '产品ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'name'         => array('zh-cn' => '产品名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'stories'      => array('zh-cn' => '需求总数', 'zh-tw' => '需求总数', 'en' => 'Stories', 'de' => '', 'fr' => ''),
         'doneStory'    => array('zh-cn' => '关闭需求数', 'zh-tw' => '关闭需求数', 'en' => 'Closed Stories', 'de' => '', 'fr' => ''),
         'bugs'         => array('zh-cn' => 'Bug数', 'zh-tw' => 'Bug数', 'en' => 'Bugs', 'de' => '', 'fr' => ''),
@@ -2092,50 +2092,50 @@ EOT,
         (
             'field'     => 'stories',
             'object'    => 'story',
-            'whereSql'  => "where t1.deleted='0' ",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id where t1.deleted='0' ",
             'condition' => array
             (
-                array('drillObject' => 'zt_story', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'id')
+                array('drillObject' => 'zt_story', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'name')
             )
         ),
         array
         (
             'field'     => 'doneStory',
             'object'    => 'story',
-            'whereSql'  => "where t1.deleted='0' and t1.status='closed'",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id where t1.deleted='0' and t1.status='closed'",
             'condition' => array
             (
-                array('drillObject' => 'zt_story', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'id')
+                array('drillObject' => 'zt_story', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'name')
             )
         ),
         array
         (
             'field'     => 'bugs',
             'object'    => 'bug',
-            'whereSql'  => "where t1.deleted='0'",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id where t1.deleted='0'",
             'condition' => array
             (
-                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'id')
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'name')
             )
         ),
         array
         (
             'field'     => 'resolutions',
             'object'    => 'bug',
-            'whereSql'  => "where t1.deleted='0' and t1.resolution !=' '",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id where t1.deleted='0' and t1.resolution !=' '",
             'condition' => array
             (
-                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'id')
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'name')
             )
         ),
         array
         (
             'field'     => 'seriousBugs',
             'object'    => 'bug',
-            'whereSql'  => "where t1.deleted and t1.severity<='2'",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id  where t1.deleted and t1.severity<='2'",
             'condition' => array
             (
-                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'id')
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'name')
             )
         )
     ),
@@ -2153,7 +2153,11 @@ $config->bi->builtin->pivots[] = array
     'driver'    => 'mysql',
     'group'     => '62',
     'sql'       => <<<EOT
-select actor,LEFT(`date`,10) as `day` from zt_action where `action`='login' and if(\$startDate='',1,`date`>=\$startDate) and if(\$endDate='',1,`date`<=\$endDate) order by `date` asc, actor asc
+select actor,LEFT(`date`,10) as `day` from zt_action
+where `action`='login'
+and if(\$startDate='',1,`date`>=cast(\$startDate as date))
+and if(\$endDate='',1,`date`<=cast(\$endDate as date))
+order by `date` asc, actor asc
 EOT,
     'settings'  => array
     (
@@ -2178,7 +2182,7 @@ EOT,
     'langs'     => array
     (
         'actor' => array('name' => '操作者', 'zh-cn' => '操作者', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'day'   => array('name' => 'day', 'zh-cn' => 'day', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'day'   => array('name' => 'day', 'zh-cn' => '日期', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
@@ -2227,9 +2231,7 @@ left join zt_dept as t3 on t2.dept = t3.id
 where t1.`deleted` = '0'
 and (case when \$startDate='' then 1 else cast(t1.`date` as date) >= cast(\$startDate as date) end)
 and (case when \$endDate='' then 1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)
-and (case when \$dept='' then 1
-else t3.path like concat((select path from zt_dept where id=coalesce(cast(nullif(\$dept, '') as integer), 0)), '%')
-end)
+and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0)
 order by t1.`date` asc
 EOT,
     'settings'  => array
@@ -2261,7 +2263,7 @@ EOT,
         'account'  => array('name' => 'account', 'zh-cn' => '名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'consumed' => array('name' => 'consumed', 'zh-cn' => '消耗工时', 'zh-tw' => '消耗工时', 'en' => 'Cost', 'de' => '', 'fr' => ''),
         'date'     => array('name' => 'date', 'zh-cn' => '日期', 'zh-tw' => '日期', 'en' => 'Date', 'de' => '', 'fr' => ''),
-        'dept'     => array('name' => 'dept', 'zh-cn' => 'dept', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'dept'     => array('name' => 'dept', 'zh-cn' => '部门', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
@@ -2277,7 +2279,7 @@ EOT,
         (
             'field'     => 'consumed',
             'object'    => 'effort',
-            'whereSql'  => "left join zt_user as t2 on t1.account = t2.account left join zt_dept as t3 on t2.dept = t3.id where t1.`deleted` = '0' and (case when \$startDate='' then 1 else cast(t1.`date` as date) >= cast(\$startDate as date) end) and (case when \$endDate='' then 1 else cast(t1.`date` as date) <= cast(\$endDate as date) end) and (case when \$dept='' then 1 else t3.path like concat((select path from zt_dept where id=coalesce(cast(nullif(\$dept, '') as integer), 0)), '%') end) order by t1.`date` asc",
+            'whereSql'  => "left join zt_user as t2 on t1.account = t2.account left join zt_dept as t3 on t2.dept = t3.id where t1.`deleted` = '0' and (case when \$startDate='' then 1 else cast(t1.`date` as date) >= cast(\$startDate as date) end) and (case when \$endDate='' then 1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)  and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0) order by t1.`date` asc",
             'condition' => array
             (
                 array('drillObject' => 'zt_effort', 'drillAlias' => 't1', 'drillField' => 'account', 'queryField' => 'account'),
@@ -2696,8 +2698,8 @@ EOT,
             array('field' => 'consumed', 'slice' => 'noSlice', 'stat' => 'sum', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -2708,10 +2710,10 @@ EOT,
     'fields'    => array
     (
         'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'string'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'number'),
-        'executionname' => array('object' => 'project', 'field' => '', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'     => array('object' => 'project', 'field' => 'id', 'type' => 'string'),
         'status'        => array('object' => 'project', 'field' => 'status', 'type' => 'option'),
         'tasks'         => array('object' => 'project', 'field' => '', 'type' => 'string'),
         'consumed'      => array('object' => 'project', 'field' => '', 'type' => 'number'),
@@ -2724,10 +2726,10 @@ EOT,
     'langs'     => array
     (
         'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'status'        => array('zh-cn' => '状态', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'tasks'         => array('zh-cn' => '任务数', 'zh-tw' => '任务数', 'en' => 'Tasks', 'de' => '', 'fr' => ''),
         'consumed'      => array('zh-cn' => '已消耗工时', 'zh-tw' => '已消耗工时', 'en' => 'Cost(h)', 'de' => '', 'fr' => ''),
@@ -2754,7 +2756,7 @@ EOT,
             'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in ('sprint','stage') and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$execution='' then 1 else t3.id=\$execution end)  and (case when \$status='' then 1 else t3.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'id', 'queryField' => 'execution')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
@@ -2764,7 +2766,7 @@ EOT,
             'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in ('sprint','stage')  and t1.status !='closed' and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$execution='' then 1 else t3.id=\$execution end)  and (case when \$status='' then 1 else t3.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'id', 'queryField' => 'execution')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
@@ -2774,7 +2776,7 @@ EOT,
             'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage')  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
@@ -2784,7 +2786,7 @@ EOT,
             'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage') and t1.status not in ('closed','done') and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
@@ -2794,7 +2796,7 @@ EOT,
             'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage') and t1.status not in ('closed','done') and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
@@ -2804,7 +2806,7 @@ EOT,
             'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage')  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         )
     ),
@@ -2824,7 +2826,7 @@ $config->bi->builtin->pivots[] = array
     'sql'       => <<<EOT
 select
     t1.id,
-    t3.id as project,
+    t2.project as project,
     t3.name as projectname,
     case when t3.multiple = '1' then t1.id else '' end as execution,
     case when t3.multiple = '1' then t1.name else '' end as executionname,
@@ -2846,7 +2848,7 @@ EOT,
         ),
         'columnTotal' => 'sum',
         'group1'      => 'project',
-        'group2'      => 'execution'
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -2855,11 +2857,11 @@ EOT,
     ),
     'fields'    => array
     (
-        'id'            => array('object' => 'project', 'field' => '', 'type' => 'number'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'executionname' => array('object' => 'bug', 'field' => '', 'type' => 'string'),
+        'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'     => array('object' => 'project', 'field' => 'id', 'type' => 'string'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'bugID'         => array('object' => 'bug', 'field' => '', 'type' => 'number'),
         'type'          => array('object' => 'bug', 'field' => 'type', 'type' => 'option')
     ),
@@ -2869,7 +2871,7 @@ EOT,
         'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'bugID'         => array('zh-cn' => 'bugID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'type'          => array('zh-cn' => '不同类型的Bug', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
