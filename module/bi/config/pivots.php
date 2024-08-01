@@ -17,7 +17,7 @@ select
     t1.end,
     t1.realbegan,
     t1.realend,
-    t1.closeddate,
+    t1.closedDate,
     t1.realduration,
     t1.realduration - t1.planduration as duration_deviation,
     round((t1.realduration - t1.planduration) / t1.planduration, 3) as rate
@@ -26,12 +26,12 @@ from
         name,
         substr(path,2,4) as program1,
         begin,
-        "end",
+        end,
         realbegan,
         realend,
-        cast(closeddate as date) as closeddate,
-        datediff('day', begin, "end") as planduration,
-        coalesce((case when realEnd is not null then datediff('day',realbegan,realend) else datediff('day',realbegan, closeddate) end),0) as realduration
+        left(closedDate, 10) as closedDate,
+        datediff(`end`, `begin`) as planduration,
+        ifnull(if(left(`realEnd`,4) != '0000',datediff(`realEnd`,`realBegan`),datediff(`closedDate`,`realBegan`)),0) realduration
     from zt_project
     where type='project' and status='closed' and deleted='0') t1
 left join
@@ -646,8 +646,8 @@ and t1.type in ('sprint','stage')
 and t2.deleted='0'
 and (case when \$project='' then 1 else t3.id=\$project end)
 and (case when \$status='' then 1 else t1.status=\$status end)
-and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
-and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
+and (case when \$beginDate='' then 1 else t1.begin>=cast(\$beginDate as date) end)
+and (case when \$endDate='' then 1 else t1.end<=cast(\$endDate as date) end)
 EOT,
     'settings'  => array
     (
@@ -669,11 +669,11 @@ EOT,
     ),
     'fields'    => array
     (
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'object'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'status'        => array('object' => 'task', 'field' => 'status', 'type' => 'option'),
-        'executionname' => array('object' => 'task', 'field' => '', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'     => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
         'taskID'        => array('object' => 'task', 'field' => '', 'type' => 'object'),
         'projectstatus' => array('object' => 'task', 'field' => '', 'type' => 'object'),
         'timeout'       => array('object' => 'task', 'field' => '', 'type' => 'number')
@@ -703,10 +703,10 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=\$beginDate end)  and (case when \$endDate='' then 1 else t2.end<=\$endDate end)",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'status', 'queryField' => 'status')
             )
         )
@@ -742,8 +742,8 @@ and t1.type in ('sprint','stage')
 and t2.deleted='0'
 and (case when \$project='' then 1 else t3.id=\$project end)
 and (case when \$status='' then 1 else t1.status=\$status end)
-and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
-and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
+and (case when \$beginDate='' then 1 else t1.begin>=cast(\$beginDate as date) end)
+and (case when \$endDate='' then 1 else t1.end<=cast(\$endDate as date) end)
 EOT,
     'settings'  => array
     (
@@ -766,9 +766,9 @@ EOT,
     'fields'    => array
     (
         'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'object'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'executionname' => array('object' => 'task', 'field' => '', 'type' => 'string'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
         'type'          => array('object' => 'task', 'field' => 'type', 'type' => 'option'),
         'taskID'        => array('object' => 'task', 'field' => '', 'type' => 'object'),
@@ -799,10 +799,10 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=\$beginDate end)  and (case when \$endDate='' then 1 else t2.end<=\$endDate end)",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'id', 'queryField' => 'execution'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'type', 'queryField' => 'type')
             )
         )
@@ -839,8 +839,8 @@ and t1.type in ('sprint','stage')
 and t2.deleted='0'
 and (case when \$project='' then 1 else t4.id=\$project end)
 and (case when \$status='' then 1 else t1.status=\$status end)
-and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
-and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
+and (case when \$beginDate='' then 1 else t1.begin>=cast(\$beginDate as date) end)
+and (case when \$endDate='' then 1 else t1.end<=cast(\$endDate as date) end)
 EOT,
     'settings'  => array
     (
@@ -863,9 +863,9 @@ EOT,
     'fields'    => array
     (
         'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'string'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'executionname' => array('object' => 'team', 'field' => '', 'type' => 'string'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
         'assignedTo'    => array('object' => 'task', 'field' => 'assignedTo', 'type' => 'user'),
         'taskID'        => array('object' => 'team', 'field' => '', 'type' => 'number'),
@@ -896,10 +896,10 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.project=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=\$beginDate end)  and (case when \$endDate='' then 1 else t2.end<=\$endDate end)",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.project=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'assignedTo', 'queryField' => 'assignedTo')
             )
         )
@@ -948,8 +948,8 @@ EOT,
             array('field' => 'taskID', 'slice' => 'finishedBy', 'stat' => 'count', 'showTotal' => 'sum', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -961,9 +961,9 @@ EOT,
     'fields'    => array
     (
         'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'string'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'executionname' => array('object' => 'task', 'field' => '', 'type' => 'string'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
         'finishedBy'    => array('object' => 'task', 'field' => 'finishedBy', 'type' => 'user'),
         'taskID'        => array('object' => 'task', 'field' => '', 'type' => 'number'),
@@ -972,10 +972,10 @@ EOT,
     'langs'     => array
     (
         'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'finishedBy'    => array('zh-cn' => '由谁完成', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'taskID'        => array('zh-cn' => '不同完成者完成的任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
@@ -998,7 +998,7 @@ EOT,
             'condition' => array
             (
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'finishedBy', 'queryField' => 'finishedBy'),
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         )
     ),
@@ -1037,8 +1037,8 @@ where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and (case when \$project='' then 1 else t5.id=\$project end)
 and (case when \$status='' then 1 else t1.status=\$status end)
-and (case when \$beginDate='' then 1 else t1.begin>=\$beginDate end)
-and (case when \$endDate='' then 1 else t1.end<=\$endDate end)
+and (case when \$beginDate='' then 1 else t1.begin>=cast(\$beginDate as date) end)
+and (case when \$endDate='' then 1 else t1.end<=cast(\$endDate as date) end)
 EOT,
     'settings'  => array
     (
@@ -1051,8 +1051,8 @@ EOT,
             array('field' => 'consumed', 'slice' => 'noSlice', 'stat' => 'sum', 'showTotal' => 'noShow', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -1064,9 +1064,9 @@ EOT,
     'fields'    => array
     (
         'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'object'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'executionname' => array('object' => 'project', 'field' => '', 'type' => 'string'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
         'timeLimit'     => array('object' => 'project', 'field' => '', 'type' => 'string'),
         'teams'         => array('object' => 'project', 'field' => '', 'type' => 'string'),
@@ -1078,10 +1078,10 @@ EOT,
     'langs'     => array
     (
         'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'timeLimit'     => array('zh-cn' => '工期', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'teams'         => array('zh-cn' => '人数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'stories'       => array('zh-cn' => '需求数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
@@ -1103,40 +1103,40 @@ EOT,
         (
             'field'     => 'number',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project as t2 on t1.execution=t2.id left join zt_project as t3 on t2.project=t3.id  where t1.deleted='0' and t2.deleted='0' and t2.type in ('sprint','stage')  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=\$beginDate end)  and (case when \$endDate='' then 1 else t2.end<=\$endDate end)",
+            'whereSql'  => "left join zt_project as t2 on t1.execution=t2.id left join zt_project as t3 on t2.project=t3.id  where t1.deleted='0' and t2.deleted='0' and t2.type in ('sprint','stage')  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
         (
             'field'     => 'stories',
             'object'    => 'story',
-            'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in('sprint', 'stage')  and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$status='' then 1 else t1.status=\$status end)  and (case when \$beginDate='' then 1 else t3.begin>=\$beginDate end)  and (case when \$endDate='' then 1 else t3.end<=\$endDate end)",
+            'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in('sprint', 'stage')  and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$status='' then 1 else t1.status=\$status end)  and (case when \$beginDate='' then 1 else t3.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t3.end<=cast(\$endDate as date) end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'id', 'queryField' => 'execution')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
         (
             'field'     => 'teams',
             'object'    => 'user',
-            'whereSql'  => "left join zt_team t2 on t1.account=t2.account left join zt_project t3 on t2.root=t3.id left join zt_project t4 on t3.project=t4.id where t2.type ='execution' and t3.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$status='' then 1 else t3.status=\$status end)  and (case when \$beginDate='' then 1 else t3.begin>=\$beginDate end)  and (case when \$endDate='' then 1 else t3.end<=\$endDate end)",
+            'whereSql'  => "left join zt_team t2 on t1.account=t2.account left join zt_project t3 on t2.root=t3.id left join zt_project t4 on t3.project=t4.id where t2.type ='execution' and t3.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$status='' then 1 else t3.status=\$status end)  and (case when \$beginDate='' then 1 else t3.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t3.end<=cast(\$endDate as date) end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_team', 'drillAlias' => 't2', 'drillField' => 'root', 'queryField' => 'execution')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         ),
         array
         (
             'field'     => 'consumed',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project as t2 on t1.execution=t2.id left join zt_project as t3 on t2.project=t3.id  where t1.deleted='0' and t2.deleted='0' and t2.type in ('sprint','stage') and t1.parent>='0' and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=\$beginDate end)  and (case when \$endDate='' then 1 else t2.end<=\$endDate end)",
+            'whereSql'  => "left join zt_project as t2 on t1.execution=t2.id left join zt_project as t3 on t2.project=t3.id  where t1.deleted='0' and t2.deleted='0' and t2.type in ('sprint','stage') and t1.parent>='0' and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'id', 'queryField' => 'execution')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
             )
         )
     ),
@@ -1179,8 +1179,8 @@ EOT,
             array('field' => 'status', 'slice' => 'status', 'stat' => 'count', 'showTotal' => 'sum', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -1191,19 +1191,19 @@ EOT,
     'fields'    => array
     (
         'id'            => array('object' => 'project', 'field' => '', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'object'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'executionname' => array('object' => 'story', 'field' => '', 'type' => 'string'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'status'        => array('object' => 'story', 'field' => 'status', 'type' => 'option')
     ),
     'langs'     => array
     (
         'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'status'        => array('zh-cn' => '不同状态需求', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
@@ -1223,7 +1223,7 @@ EOT,
             'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in('sprint', 'stage')  and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$execution='' then 1 else t3.id=\$execution end)  and (case when \$status='' then 1 else t3.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_projectstory', 'drillAlias' => 't2', 'drillField' => 'project', 'queryField' => 'execution'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname'),
                 array('drillObject' => 'zt_story', 'drillAlias' => 't1', 'drillField' => 'status', 'queryField' => 'status')
             )
         )
@@ -1267,8 +1267,8 @@ EOT,
             array('field' => 'stage', 'slice' => 'stage', 'stat' => 'count', 'showTotal' => 'sum', 'showMode' => 'default', 'monopolize' => 0, 'showOrigin' => 0)
         ),
         'columnTotal' => 'sum',
-        'group1'      => 'project',
-        'group2'      => 'execution'
+        'group1'      => 'projectname',
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -1279,19 +1279,19 @@ EOT,
     'fields'    => array
     (
         'id'            => array('object' => 'project', 'field' => '', 'type' => 'number'),
-        'projectname'   => array('object' => '', 'field' => '', 'type' => 'object'),
-        'project'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'executionname' => array('object' => 'story', 'field' => '', 'type' => 'string'),
+        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
         'stage'         => array('object' => 'story', 'field' => 'stage', 'type' => 'option')
     ),
     'langs'     => array
     (
-        'id'            => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => 'projectname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'stage'         => array('zh-cn' => '不同阶段Bug', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
@@ -1311,7 +1311,7 @@ EOT,
             'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in('sprint', 'stage')  and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$execution='' then 1 else t3.id=\$execution end)  and (case when \$status='' then 1 else t3.status=\$status end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_projectstory', 'drillAlias' => 't2', 'drillField' => 'project', 'queryField' => 'execution'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname'),
                 array('drillObject' => 'zt_story', 'drillAlias' => 't1', 'drillField' => 'stage', 'queryField' => 'stage')
             )
         )
@@ -1356,7 +1356,7 @@ EOT,
         ),
         'columnTotal' => 'sum',
         'group1'      => 'project',
-        'group2'      => 'execution'
+        'group2'      => 'executionname'
     ),
     'filters'   => array
     (
@@ -1379,7 +1379,7 @@ EOT,
         'project'       => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'projectID'     => array('zh-cn' => '执行', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'execution'     => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => 'executionname', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'bugID'         => array('zh-cn' => 'bugID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'resolution'    => array('zh-cn' => '解决方案', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
@@ -1400,7 +1400,7 @@ EOT,
             'whereSql'  => "left join zt_project as t2 on t1.execution=t2.id left join zt_project as t3 on t3.id=t2.project  where t1.deleted='0' and t2.deleted='0' and t1.resolution!=''  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)",
             'condition' => array
             (
-                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'execution', 'queryField' => 'execution'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'execution', 'queryField' => 'execution'),
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolution', 'queryField' => 'resolution')
             )
         )
