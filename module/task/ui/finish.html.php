@@ -91,7 +91,7 @@ else
         (
             span
             (
-                setClass('flex gap-x-2 mr-3'),
+                setClass('flex gap-x-2 mr-3 nowrap'),
                 !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed,
                 span
                 (
@@ -101,7 +101,7 @@ else
             ),
             span
             (
-                setClass('flex gap-x-2'),
+                setClass('flex gap-x-2 nowrap'),
                 $lang->task->consumed,
                 span
                 (

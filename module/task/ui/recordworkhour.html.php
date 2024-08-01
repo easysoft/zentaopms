@@ -21,7 +21,7 @@ modalHeader
     (
         span
         (
-            setClass('flex gap-x-2 mx-3'),
+            setClass('flex gap-x-2 mx-3 nowrap'),
             $lang->task->estimate,
             span
             (
@@ -31,7 +31,7 @@ modalHeader
         ),
         span
         (
-            setClass('flex gap-x-2 pr-4'),
+            setClass('flex gap-x-2 pr-4 nowrap'),
             $lang->task->consumed,
             span
             (
