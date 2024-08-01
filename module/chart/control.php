@@ -36,6 +36,7 @@ class chart extends control
     {
         $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
 
+        if(!is_int($groupID)) $groupID = 0;
         if(!$groupID) $groupID = $this->chart->getFirstGroup($dimensionID);
 
         $charts = array();
