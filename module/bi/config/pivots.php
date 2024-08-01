@@ -2654,8 +2654,8 @@ select
     t1.id,
     t4.name as projectname,
     t4.id as project,
-    (case when t4.multiple='1' then t1.name else '' end) as executionname,
-    (case when t4.multiple='1' then t1.id else '' end) as execution,
+    t1.name as executionname,
+    t1.id as execution,
     t1.status,
     t2.number as tasks,
     round(t2.consumed,2) as consumed,
@@ -2741,60 +2741,66 @@ EOT,
         (
             'field'     => 'stories',
             'object'    => 'story',
-            'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in ('sprint','stage') and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$execution='' then 1 else t3.id=\$execution end)  and (case when \$status='' then 1 else t3.status=\$status end)",
+            'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in ('sprint','stage') and t1.deleted='0'",
             'condition' => array
             (
-                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't4', 'drillField' => 'name', 'queryField' => 'projectname')
             )
         ),
         array
         (
             'field'     => 'undoneStory',
             'object'    => 'story',
-            'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in ('sprint','stage')  and t1.status !='closed' and t1.deleted='0' and (case when \$project='' then 1 else t4.id=\$project end)  and (case when \$execution='' then 1 else t3.id=\$execution end)  and (case when \$status='' then 1 else t3.status=\$status end)",
+            'whereSql'  => "right join zt_projectstory as t2 on t2.story=t1.id left join zt_project as t3 on t2.project=t3.id  left join zt_project as t4 on t4.id=t3.project  where t3.deleted='0' and t3.type in ('sprint','stage')  and t1.status !='closed' and t1.deleted='0'",
             'condition' => array
             (
-                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname')
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't4', 'drillField' => 'name', 'queryField' => 'projectname')
             )
         ),
         array
         (
             'field'     => 'tasks',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage')  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
+            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage')",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname')
             )
         ),
         array
         (
             'field'     => 'undoneTask',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage') and t1.status not in ('closed','done') and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
+            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage') and t1.status not in ('closed','done')",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname')
             )
         ),
         array
         (
             'field'     => 'left',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage') and t1.status not in ('closed','done') and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
+            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage') and t1.status not in ('closed','done')",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname')
             )
         ),
         array
         (
             'field'     => 'consumed',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage')  and (case when \$project='' then 1 else t3.id=\$project end)  and (case when \$execution='' then 1 else t2.id=\$execution end)  and (case when \$status='' then 1 else t2.status=\$status end)",
+            'whereSql'  => "left join zt_project as t2 on t1.execution = t2.id left join zt_project as t3 on t3.id=t2.project  where t2.deleted='0' and t1.deleted='0' and t2.type in ('sprint','stage')",
             'condition' => array
             (
-                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname')
+                array('drillObject' => 'zt_task', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname')
             )
         )
     ),
