@@ -22,7 +22,7 @@ function changeType()
     }
     else
     {
-        if(!$('[name=charter]').length || ($('[name=charter]').length && parseInt($('[name=charter]').val()))) $('.productsBox').removeClass('hidden');
+        $('.productsBox').removeClass('hidden');
     }
 }
 
