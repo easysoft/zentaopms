@@ -2960,14 +2960,17 @@ class story extends control
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {
+                $rootType = $productID ? 'product'  : 'execution';
+                $rootID   = $productID ? $productID : $executionID;
+
                 $this->config->story->datatable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
                 $this->config->story->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-                $this->config->story->datatable->fieldList['module']['dataSource']['params'] = 'story';
+                $this->config->story->datatable->fieldList['module']['dataSource']['params'] = "story&{$rootType}&{$rootID}";
 
                 $this->config->story->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
                 $this->config->story->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
 
-                $productIdList = implode(',', array_flip($this->session->exportProductList));
+                $productIdList = implode(',', array_flip(is_array($this->session->exportProductList) ? $this->session->exportProductList : array()));
 
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
