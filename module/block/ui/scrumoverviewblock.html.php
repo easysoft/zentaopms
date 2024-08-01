@@ -129,7 +129,7 @@ panel
                     $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
                 )
             ),
-            $config->edition != 'open' ? cell
+            $config->edition != 'open' && $config->edition != 'biz' ? cell
             (
                 setClass('flex-1 text-left' . (!$longBlock ? ' w-full' : '')),
                 icon('bullhorn text-warning'),

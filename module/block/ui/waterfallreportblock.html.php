@@ -42,8 +42,8 @@ if($project)
             $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
         )
     );
-    $projectOverview[] = $config->edition != 'open' ? div(setClass('divider mx-1 my-auto h-4')) : null;
-    $projectOverview[] = $config->edition != 'open' ? cell
+    $projectOverview[] = $config->edition != 'open' && $config->edition != 'biz' ? div(setClass('divider mx-1 my-auto h-4')) : null;
+    $projectOverview[] = $config->edition != 'open' && $config->edition != 'biz' ? cell
     (
         setClass('flex-0 text-left' . (!$longBlock ? ' w-full' : '')),
         span
