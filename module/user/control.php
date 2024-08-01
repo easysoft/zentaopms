@@ -685,6 +685,10 @@ class user extends control
     {
         $viewType = $this->app->getViewType();
 
+        /* 如果禅道没有SN，则设置SN。*/
+        /* Set sn when zentao has not sn. */
+        if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
+
         /* 重新加载语言项。*/
         /* Reload lang. */
         if($viewType == 'json' && $this->get->lang && $this->get->lang != $this->app->getClientLang()) $this->userZen->reloadLang($this->get->lang);

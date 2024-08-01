@@ -324,7 +324,14 @@ class settingModel extends model
     public function setSN()
     {
         $sn = $this->getItem('owner=system&module=common&section=global&key=sn');
-        if($this->snNeededUpdate($sn)) $this->setItem('system.common.global.sn', $this->computeSN());
+        if($this->snNeededUpdate($sn))
+        {
+            $sn = $this->computeSN();
+            $this->setItem('system.common.global.sn', $sn);
+        }
+
+        if(!isset($this->config->global)) $this->config->global = new stdclass();
+        $this->config->global->sn = $sn;
     }
 
     /**

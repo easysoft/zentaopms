@@ -366,7 +366,6 @@ class install extends control
 
             $this->loadModel('setting');
             $this->setting->updateVersion($this->config->version);
-            $this->setting->setSN();
             $this->setting->setItem('system.common.global.flow', $data->flow);
             $this->setting->setItem('system.common.safe.mode', '1');
             $this->setting->setItem('system.common.safe.changeWeak', '1');
