@@ -1818,7 +1818,7 @@ class repo extends control
         foreach($tagList as $index => &$tag)
         {
             $tag->repoID    = $repoID;
-            $tag->tagName   = helper::safe64Encode($tag->name);
+            $tag->tagName   = urlencode(helper::safe64Encode($tag->name));
             $tag->committer = isset($tag->commit->author_name) ? $tag->commit->author_name : '';
             if(isset($tag->tagger->identity->name)) $tag->committer = $tag->tagger->identity->name;
             $tag->committer = zget($committers, $tag->committer);
@@ -1882,7 +1882,7 @@ class repo extends control
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
-            $branch->branchName = helper::safe64Encode($branch->name);
+            $branch->branchName = urlencode(helper::safe64Encode($branch->name));
 
             $branch->commitID = isset($branch->commit->id) ? $branch->commit->id : '';
             if(isset($branch->commit->sha)) $branch->commitID = $branch->commit->sha;
