@@ -84,12 +84,13 @@ $config->testcase->group->dtable->fieldList['bugs']['link']['params']  = 'runID=
 foreach($config->testcase->group->dtable->fieldList as $colName => $col) $cols[$colName]['sortType'] = false;
 
 $cases = initTableData($cases, $config->testcase->group->dtable->fieldList);
+$cols  = array_map(function($col){$col['sortType'] = false; return $col;}, $config->testcase->group->dtable->fieldList); // Disable sort by table header for dtable.
 
 dtable
 (
     set::id('groupCaseTable'),
     set::userMap($users),
-    set::cols($config->testcase->group->dtable->fieldList),
+    set::cols($cols),
     set::data($cases),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
