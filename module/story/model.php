@@ -4970,7 +4970,7 @@ class storyModel extends model
         $story->stage        = zget($this->lang->{$story->type}->stageList,    $story->stage);
 
         if($story->parent < 0) $story->parent = 0;
-        if(empty($options['execution'])) $story->isParent = isset($story->children);
+        if(empty($options['execution'])) $story->isParent = isset($story->childItem);
 
         /* Format user list. */
         foreach(array('mailto', 'reviewer') as $fieldName)
