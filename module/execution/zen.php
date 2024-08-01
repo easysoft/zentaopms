@@ -1874,7 +1874,7 @@ class executionZen extends execution
         if(isset($project->hasProduct) and empty($project->hasProduct))
         {
             $shadowProduct = $this->loadModel('product')->getShadowProductByProject($project->id);
-            $this->view->productPlan = $this->loadModel('productplan')->getPairs($shadowProduct->id, '0,0', 'noclosed,unexpired', true);
+            $this->view->productPlan = $this->loadModel('productplan')->getPairs($shadowProduct->id ?? 0, '0,0', 'noclosed,unexpired', true);
         }
     }
 

@@ -470,7 +470,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, (string)$param, $project->storyType, '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, (string)$param, $project->storyType ?? 'story', '', $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
@@ -2300,7 +2300,7 @@ class execution extends control
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
         $project   = (strpos('sprint,stage,kanban', $object->type) !== false) ? $this->loadModel('project')->getByID($object->project) : $object;
-        $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? $project->storyType : 'story';
+        $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? ($project->storyType ?? 'story') : 'story';
 
         if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
         if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
