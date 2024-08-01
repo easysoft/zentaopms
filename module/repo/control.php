@@ -1807,7 +1807,8 @@ class repo extends control
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
         $orderList = array();
-        $keyword   = htmlspecialchars(base64_decode(urldecode($keyword)));
+        $keyword   = str_replace(' ', '+', urldecode($keyword));
+        $keyword   = htmlspecialchars(base64_decode($keyword));
 
         $repo = $this->repo->getByID($repoID);
         if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
@@ -1899,7 +1900,8 @@ class repo extends control
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
         $orderList = array();
-        $keyword   = htmlspecialchars(base64_decode(urldecode($keyword)));
+        $keyword   = str_replace(' ', '+', urldecode($keyword));
+        $keyword   = htmlspecialchars(base64_decode($keyword));
         foreach($branchList as $index => $orderBranch)
         {
             if($keyword && strpos($orderBranch->name, $keyword) === false)
