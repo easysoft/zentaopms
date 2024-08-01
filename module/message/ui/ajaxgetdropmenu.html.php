@@ -85,34 +85,37 @@ tabs
             to::trigger(btn(set::icon('cog-outline'), set::hint($lang->message->browserSetting->more), setClass('ghost'), set::caret(false))),
             to::menu(menu
             (
-                setClass('dropdown-menu w-60'),
+                setClass('dropdown-menu w-52'),
                 on::click('e.stopPropagation();'),
                 form
                 (
+                    setClass('gap-1'),
                     set::url(inlink('ajaxSetOneself')),
                     set::actions(false),
-                    formRow(setClass('font-bold pl-2 pt-2'), $lang->message->browserSetting->more),
+                    formRow(setClass('font-bold border-b pb-2 pl-2 pt-2'), $lang->message->browserSetting->more),
                     formGroup
                     (
+                        setStyle(array('align-items' => 'center')),
                         set::label($lang->message->browserSetting->show),
                         switcher(set::name('show'), set::value(1), set::checked($browserSetting->show)),
                     ),
                     formGroup
                     (
+                        setStyle(array('align-items' => 'center')),
                         set::label($lang->message->browserSetting->count),
                         switcher(set::name('count'), set::value(1), set::checked($browserSetting->count)),
                     ),
                     formGroup
                     (
-                        set::width('3/4'),
+                        set::width('5/6'),
                         set::label($lang->message->browserSetting->maxDays),
                         inputControl(input(set::name('maxDays'), set::value($browserSetting->maxDays)), set::suffixWidth('30'), set::suffix($lang->day))
                     ),
                     formGroup
                     (
-                        setClass('justify-center form-actions'),
-                        btn(set::text($lang->save), setClass('primary'), set::btnType('submit')),
-                        btn(set::text($lang->cancel), set::type('button'), on::click('closeSettingDropdown'))
+                        setClass('justify-center form-actions mt-2'),
+                        btn(set::text($lang->save),   setStyle(array('min-width' => '20px')), setClass('primary size-sm'), set::btnType('submit')),
+                        btn(set::text($lang->cancel), setStyle(array('min-width' => '20px')), setClass('size-sm'), set::type('button'), on::click('closeSettingDropdown'))
                     )
                 )
             ))
