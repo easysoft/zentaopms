@@ -825,8 +825,8 @@ select
     t1.id,
     t4.name as projectname,
     t4.id as project,
-    (case when t4.multiple='1' then t1.name else '' end) as executionname,
-    (case when t4.multiple='1' then t2.execution else '' end) as execution,
+    t1.name as executionname,
+    t2.execution as execution,
     (case when t3.account is not null then t3.account else t2.assignedTo end) as assignedTo,
     t2.id as taskID,
     t1.status as projectstatus
@@ -896,10 +896,11 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id WHERE t1.deleted='0'  and (case when \$project='' then 1 else t1.project=\$project end)  and (case when \$status='' then 1 else t2.status=\$status end)  and (case when \$beginDate='' then 1 else t2.begin>=cast(\$beginDate as date) end)  and (case when \$endDate='' then 1 else t2.end<=cast(\$endDate as date) end)",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id left join zt_project as t3 on t2.project=t3.id WHERE t1.deleted='0'",
             'condition' => array
             (
                 array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
+                array('drillObject' => 'zt_project', 'drillAlias' => 't3', 'drillField' => 'name', 'queryField' => 'projectname'),
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'assignedTo', 'queryField' => 'assignedTo')
             )
         )
