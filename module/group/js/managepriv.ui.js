@@ -50,43 +50,43 @@ window.handlePrivPackageListClick = function(event)
 
 function handlePrivToggleClick($target)
 {
-    if($target.hasClass('open'))
+    let thisIsOpen = $target.hasClass('open');
+
+    $target.closest('#privPackageList').find('.priv-toggle.open').removeClass('open');
+    $('.privs.popover').remove();
+    if(thisIsOpen) return;
+
+    const $td            = $target.closest('td');
+    const $packages      = $td.find('.package');
+    const $parentPackage = $target.closest('.package');
+
+    $target.addClass('open');
+    var moduleName = $parentPackage.attr('data-module');
+    var packageID  = $parentPackage.attr('data-package');
+
+    /* The privs should be inserted after which permission package. */
+    var perRowPackages = Math.floor($td.width() / $packages.width());
+    var packageIndex   = $parentPackage.index() / 2 ;
+    var appendIndex    = (Math.floor(packageIndex / perRowPackages) + 1) * perRowPackages - 1;
+
+    var $privs     = $(".privs.hidden[data-module='" + moduleName + "'][data-package='" + packageID + "']")
+    var $showPrivs = $('<div class="privs popover bottom" data-module="' + moduleName + '" data-package="' + packageID + '">'
+        + $privs.html().replace(/actions/g, 'showPrivs')
+        + '</div>');
+
+    /* Calculate the triangle position of privs popover. */
+    var position = $packages.width() * (packageIndex % perRowPackages) + 15;
+
+    $showPrivs.find('.arrow').css('left', position + 'px');
+
+    if($packages.eq(appendIndex).length == 0)
     {
-        $target.removeClass('open');
-        $('.privs.popover').remove();
+        $packages.eq(-1).after($showPrivs);
+        $showPrivs.css('margin-bottom', '0');
     }
     else
     {
-        const $td = $target.closest('td');
-        const $package = $td.find('.package');
-        $target.addClass('open');
-        var moduleName = $target.closest('.package').attr('data-module');
-        var packageID  = $target.closest('.package').attr('data-package');
-
-        /* The privs should be inserted after which permission package. */
-        var perRowPackages = Math.floor($td.width() / $package.width());
-        var packageIndex   = $target.closest('.package').index() / 2 ;
-        var appendIndex    = (Math.floor(packageIndex / perRowPackages) + 1) * perRowPackages - 1;
-
-        var $privs     = $(".privs.hidden[data-module='" + moduleName + "'][data-package='" + packageID + "']")
-        var $showPrivs = $('<div class="privs popover bottom" data-module="' + moduleName + '" data-package="' + packageID + '">'
-            + $privs.html().replace(/actions/g, 'showPrivs')
-            + '</div>');
-
-        /* Calculate the triangle position of privs popover. */
-        var position = $package.width() * (packageIndex % perRowPackages) + 15;
-
-        $showPrivs.find('.arrow').css('left', position + 'px');
-
-        if($package.eq(appendIndex).length == 0)
-        {
-            $package.eq(-1).after($showPrivs);
-            $showPrivs.css('margin-bottom', '0');
-        }
-        else
-        {
-            $package.eq(appendIndex).after($showPrivs);
-        }
+        $packages.eq(appendIndex).after($showPrivs);
     }
 }
 
