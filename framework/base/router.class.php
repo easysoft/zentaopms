@@ -1224,7 +1224,7 @@ class baseRouter
     }
 
     /**
-     * 从cookie中获取当前的group, 即URL锚链接'#tab=?'。
+     * 从cookie中获取当前的group, 即URL锚链接'#app=?'。
      * Get current group from cookie, original source is url '#tab=?'.
      *
      * @access public
