@@ -22,7 +22,14 @@ formPanel
             set::control('radioListInline'),
             set::name('status'),
             set::value('normal'),
-            set::items($lang->release->resultList)
+            set::items($lang->release->resultList),
+            btn
+            (
+                set::size('sm'),
+                set::icon('help'),
+                setClass('ghost form-label-hint text-gray-300 ml-2 mt-1'),
+                toggle::tooltip(array('title' => $lang->release->failTips, 'className' => 'text-gray border border-gray-300', 'type' => 'white', 'placement' => 'right'))
+            )
         )
     ),
     formRow

@@ -125,3 +125,5 @@ $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['
 
 $lang->release->markerList[1] = '是';
 $lang->release->markerList[0] = '否';
+
+$lang->release->failTips = '部署/上线失败';

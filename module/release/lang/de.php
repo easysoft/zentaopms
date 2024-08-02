@@ -125,3 +125,5 @@ $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['
 
 $lang->release->markerList[1] = 'Yes';
 $lang->release->markerList[0] = 'No';
+
+$lang->release->failTips = 'Deployment/Launch Failed';
