@@ -17,6 +17,8 @@ $noDataHtml = "<div class='text-gray text-center nodata'>{$lang->noData}</div>";
 jsVar('unreadLangTempate', $lang->message->unread);
 jsVar('noDataHtml', $noDataHtml);
 jsVar('showCount', $config->message->browser->count);
+jsVar('unreadContextMenu', array(array('text' => $lang->delete, 'value' => 'delete')));
+jsVar('readContextMenu', array(array('text' => $lang->delete, 'value' => 'delete'), array('text' => $lang->message->markUnread, 'value' => 'markunread')));
 
 $buildMessageList = function($messageGroup) use ($lang)
 {
@@ -35,8 +37,6 @@ $buildMessageList = function($messageGroup) use ($lang)
             (
                 setClass('message-item break-all border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
                 setData('msgid', $message->id),
-                set(array('zui-create' => "contextMenu")),
-                setData('target', $isUnread ? '#unreadContextMenu' : '#readContextMenu'),
                 row
                 (
                     setClass('text-gray justify-between'),
@@ -124,6 +124,3 @@ tabs
         $buildMessageList($allMessages)
     )
 );
-
-menu(setClass('contextmenu text-black'), setID('unreadContextMenu'), set::items(array(array('text' => $lang->delete, 'value' => 'delete', 'onclick' => 'clickContextMenu(this)'))));
-menu(setClass('contextmenu text-black'), setID('readContextMenu'),   set::items(array(array('text' => $lang->delete, 'value' => 'delete', 'onclick' => 'clickContextMenu(this)'), array('text' => $lang->message->markUnread, 'value' => 'markunread', 'onclick' => 'clickContextMenu(this)'))));

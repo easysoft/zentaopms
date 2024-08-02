@@ -109,36 +109,46 @@ window.hideContextMenu = function()
 {
     if(thisContextmenu != null) thisContextmenu.hide();
     thisContextmenu = null;
+    contextmenuEle  = null;
 };
 
-window.clickContextMenu = function(obj)
+window.clickContextMenu = function(item)
 {
-    let action = $(obj).attr('value');
-    let $this  = $(thisContextmenu._element);
+    let action = item.value;
+    let $this  = contextmenuEle;
     if(action == 'delete')     deleteMessage($this);
     if(action == 'markunread') markUnread($this);
 };
 
 let thisContextmenu = null;
+let contextmenuEle  = null;
 $(function()
 {
     updateAllDot(showCount);
 
     /* Bind contextmenu for message dropdown. */
-    $(document).on('contextmenu', '.message-item', function(event)
+    $(document).on('contextmenu', '*', function(event)
     {
-        if(thisContextmenu != null)
+        hideContextMenu();
+        let $this = $(this);
+        if($this.hasClass('message-item') || $this.closest('.message-item').length)
         {
-            hideContextMenu();
-            return false;
-        }
+            event.preventDefault();
+            event.stopPropagation();
 
-        thisContextmenu = $(this).zui('ContextMenu');
-        thisContextmenu.show(event);
+            if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
+            thisContextmenu = zui.ContextMenu.show(
+            {
+                triggerEvent: event,
+                items: $this.hasClass('unread') ? unreadContextMenu : readContextMenu,
+                menu: { onClickItem: (info) => { clickContextMenu(info.item); }}
+            });
+            contextmenuEle = $this;
+            return;
+        }
     });
 
     /* Hidden dropdown and contextmenu. */
-    $(document).on('contextmenu', function(event){hideContextMenu(); });
     $('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
     $('#dropdownMessageMenu').on('scroll', function(event){hideContextMenu();});
     $('#unreadContextMenu,#readContextMenu').on('click', function(event){hideContextMenu(); event.stopPropagation();});

@@ -995,18 +995,18 @@ window.browserNotify = function()
                 }
             }
 
-            let newCount   = parseInt(data.newCount);
-            let showCount  = data.showCount != '0';
-            let dotStyle   = 'padding: 2px;';
-            let rightStyle = showCount ? 'right: -10px;' : 'right: -2px;';
+            let unreadCount = parseInt(data.newCount);
+            let showCount   = data.showCount != '0';
+            let dotStyle    = 'padding: 2px;';
+            let rightStyle  = showCount ? 'right: -10px;' : 'right: -2px;';
             if(!showCount) dotStyle += 'width: 5px; height: 5px;';
-            if(newCount < 10 && showCount) rightStyle = 'right: -5px;';
-            if(newCount > 99) newCount = '99+';
+            if(unreadCount < 10 && showCount) rightStyle = 'right: -5px;';
+            if(unreadCount > 99) unreadCount = '99+';
 
             dotStyle += showCount ? 'top: -3px; aspect-ratio: 0;' : 'top: -2px; aspect-ratio: 1 / 1;';
             dotStyle += rightStyle;
 
-            let dotHtml = '<span class="label danger label-dot absolute' + (showCount ? ' rounded-sm' : '') + '" style="' + dotStyle + '">' + (showCount ? newCount : '') + '</span>';
+            let dotHtml = '<span class="label danger label-dot absolute' + (showCount ? ' rounded-sm' : '') + '" style="' + dotStyle + '">' + (showCount ? unreadCount : '') + '</span>';
             $('#apps .app-container').each(function()
             {
                 let $iframeMessageBar = $(this).find('iframe').contents().find('#messageBar');
@@ -1023,7 +1023,7 @@ window.browserNotify = function()
                     if($iframeMessageBar.length  == 0) return;
 
                     $iframeMessageBar.find('.label-dot.danger').remove();
-                    if(newCount) $iframeMessageBar.append(dotHtml);
+                    if(unreadCount) $iframeMessageBar.append(dotHtml);
                 }
             });
         });

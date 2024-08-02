@@ -380,11 +380,15 @@ $(function()
     });
 
     /* Hidden dropdown and contextmenu. */
-    $(document).on('click', '.contextmenu-menu', function(event){hideContextMenu(); event.stopPropagation();});
     $(document).on('click', '*', function(event)
     {
         hideContextMenu();
         let $this = $(this);
+        if($this.hasClass('.contextmenu-menu') || $this.closest('.contextmenu-menu').length)
+        {
+            event.stopPropagation();
+            return;
+        }
         if($this.attr('id') == 'messageDropdown' || $this.closest('#messageDropdown').length)
         {
             if($this.attr('id') == 'messageDropdown') event.stopPropagation();
