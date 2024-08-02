@@ -368,6 +368,14 @@ $(function()
         {
             event.preventDefault();
             event.stopPropagation();
+
+            if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
+            $.zui.ContextMenu.show($this.hasClass('unread') ? unreadContextMenu : readContextMenu,
+            {
+                event: event,
+                onClickItem: function(item) {clickContextMenu(item);}
+            }, function() { contextmenuEle = $this; });
+            return;
         }
     });
 
