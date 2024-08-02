@@ -140,7 +140,7 @@ CODE_SAMPLE
             return \false;
         }
         if ($classMethod->isMagic()) {
-            return \true;
+            return \false;
         }
         if ($this->sealedClassAnalyzer->isSealedClass($classReflection)) {
             return \true;
@@ -151,7 +151,7 @@ CODE_SAMPLE
         if ($this->hasParamAlreadyNonTyped($classMethod)) {
             return \true;
         }
-        return $this->isSafeType($classReflection, $classMethod);
+        return \false;
     }
     private function processRemoveParamTypeFromMethod(ClassReflection $classReflection, ClassMethod $classMethod) : ?ClassMethod
     {
