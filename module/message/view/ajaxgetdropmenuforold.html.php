@@ -328,4 +328,22 @@ window.clickContextMenu = function(item)
     if(action == 'delete')     deleteMessage($this);
     if(action == 'markunread') markUnread($this);
 };
+
+window.toggleSettingDropdown = function(isOpen)
+{
+    if(typeof(isOpen) == 'undefined') isOpen = $('#messageSettingDropdown-toggle').hasClass('open');
+    $('#messageSettingDropdown-toggle').toggleClass('open', !isOpen);
+    $('#messageSettingDropdown').toggleClass('show', !isOpen);
+};
+
+window.closeSettingDropdown = function(){toggleSettingDropdown(true); }
+window.reloadSettingModal   = function(showCount)
+{
+    updateAllDot(showCount);
+    setTimeout(function()
+    {
+        $('#dropdownMessageMenu #messageSettingDropdown').find('form :submit').popover('destroy');
+        closeSettingDropdown();
+    }, 1000)
+}
 </script>
