@@ -1336,3 +1336,23 @@ function handleKanbanWidthAttr ()
         }
     });
 }
+
+function fetchMessage(force, fetchUrl)
+{
+    let $this     = $('#messageBar');
+    let $dropmenu = $("#dropdownMessageMenu");
+    let maxHeight = $(window).height() - $('#header').height() - 5;
+    let isOpen    = $this.hasClass('open');
+
+    if(typeof(force) === 'undefined' || typeof(force) === 'object') force = false;
+    if(typeof(fetchUrl) === 'undefined') fetchUrl = $this.attr('data-fetcher');
+    if(!force)
+    {
+        $('#messageDropdown #messageBar').toggleClass('open', !isOpen);
+        $('#messageDropdown .messageDropdownBox').toggleClass('show', !isOpen);
+    }
+    if(isOpen && !force) return;
+
+    $dropmenu.css('height', maxHeight).css('max-height', maxHeight).css('overflow-y', 'auto').css('background-color', '#fff');
+    $dropmenu.load(fetchUrl);
+}
