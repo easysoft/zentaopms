@@ -120,10 +120,11 @@ window.clickContextMenu = function(obj)
 };
 
 let thisContextmenu = null;
-
 $(function()
 {
     updateAllDot(showCount);
+
+    /* Bind contextmenu for message dropdown. */
     $(document).on('contextmenu', '.message-item', function(event)
     {
         if(thisContextmenu != null)
@@ -135,8 +136,14 @@ $(function()
         thisContextmenu = $(this).zui('ContextMenu');
         thisContextmenu.show(event);
     });
+
+    /* Hidden dropdown and contextmenu. */
+    $(document).on('contextmenu', function(event){hideContextMenu(); });
     $('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
+    $('#dropdownMessageMenu').on('scroll', function(event){hideContextMenu();});
     $('#unreadContextMenu,#readContextMenu').on('click', function(event){hideContextMenu(); event.stopPropagation();});
+
+    /* Adjust dropdown height when resize. */
     $(window).on('resize', function(event)
     {
         let maxHeight = $(window).height() - $('#header').height() - 5;

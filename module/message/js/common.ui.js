@@ -7,8 +7,8 @@ window.updateAllDot = function(showCount)
 
     let $unreadTab  = $('#messageTabs #unread-messages.tab-pane');
     let unreadCount = $unreadTab.find('.message-item.unread').length;
-    if(unreadCount > 99) unreadCount = '99+';
     if(unreadCount < 10 && showCount) rightStyle = 'right: -5px;';
+    if(unreadCount > 99) unreadCount = '99+';
 
     dotStyle += showCount ? 'top: -3px; aspect-ratio: 0;' : 'top: -2px; aspect-ratio: 1 / 1;';
     dotStyle += rightStyle;
@@ -17,8 +17,21 @@ window.updateAllDot = function(showCount)
     parent.$('#apps .app-container').each(function()
     {
         let $iframeMessageBar = $(this).find('iframe').contents().find('#messageBar');
-        $iframeMessageBar.find('.label-dot.danger').remove();
-        if(unreadCount) $iframeMessageBar.append(dotHtml);
+        if($iframeMessageBar.length > 0)
+        {
+            $iframeMessageBar.find('.label-dot.danger').remove();
+            if(unreadCount) $iframeMessageBar.append(dotHtml);
+        }
+
+        let $oldPage = $(this).find('iframe').contents().find('#oldPage');
+        if($oldPage.length > 0)
+        {
+            $iframeMessageBar = $oldPage.find('iframe').contents().find('#messageBar');
+            if($iframeMessageBar.length  == 0) return;
+
+            $iframeMessageBar.find('.label-dot.danger').remove();
+            if(unreadCount) $iframeMessageBar.append(dotHtml);
+        }
     });
 };
 
