@@ -68,6 +68,7 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
 #messageTabs .font-bold { font-weight: 700; }
 #messageTabs .justify-center { justify-content: center; }
 #messageTabs #messageSettingDropdown { padding: 8px;}
+#messageTabs .message-item a[data-url]{color: rgb(43, 71, 162);}
 
 #messageTabs .form, #messageTabs .form-label { display: flex;}
 #messageTabs .form {flex-direction: column; gap: 4px;}
@@ -78,36 +79,37 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
 #messageTabs .form-label { align-items: center; color: #3d4667; flex-direction: row; gap: 4px; height: 32px; overflow: hidden; position: relative; text-overflow: ellipsis; white-space: nowrap; }
 #messageTabs .form-horz .form-label { justify-content: flex-end; left: 0; padding-left: 16px; padding-right: 8px; position: absolute; top: 0; width: 96px; }
 
-.switch { position: relative; }
-.switch>input { position: absolute; top: 0; left: 0; display: block; width: 100%; height: 100%; margin: 0; opacity: 0; }
-.switch>label { display: block; padding: 5px 0 5px 35px; margin: 0; font-weight: 400; line-height: 20px; }
+.switch { display: flex; gap: .6px; min-height: 20px; padding-left: 40px; position: relative; }
+.switch>input { bottom: 0; left: 0; opacity: 0; position: absolute; right: 0; top: 0; }
+.switch>label:before { cursor: pointer; box-shadow:rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 2px 4px 0px inset; }
 .switch>label:after, .switch>label:before {
-    position: absolute;
-    top: 5px;
+    border-radius: 9999px;
+    border-width: 1px;
+    height: 16px;
     left: 0;
-    display: block;
-    width: 30px;
-    height: 20px;
-    pointer-events: none;
-    content: ' ';
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    -webkit-transition: all .4s cubic-bezier(.175,.885,.32,1);
-    -o-transition: all .4s cubic-bezier(.175, .885, .32, 1);
-    transition: all .4s cubic-bezier(.175,.885,.32,1);
+    position: absolute;
+    top: 2px;
+    width: 32px;
+    border-color: rgb(210, 214, 229);
+    background-color: rgb(239, 241, 243);
+    transition-duration: .3s;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    content: "";
 }
 .switch>label:after {
-    top: 6px;
-    width: 18px;
-    height: 18px;
-    border-color: #ccc;
-    border-radius: 9px;
-    -webkit-box-shadow: rgba(0, 0, 0, .05) 0 1px 4px, rgba(0, 0, 0, .12) 0 1px 2px;
-    box-shadow: rgba(0, 0, 0, .05) 0 1px 4px, rgba(0, 0, 0, .12) 0 1px 2px;
+    height: 12px;
+    left: 2px;
+    top: 4px;
+    width: 12px;
+    border-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.04) 0px 3px 8px 0px, rgba(0, 0, 0, 0.01) 0px 1px 2px -1px;
 }
-.switch>input:checked+label:before { background-color: #3280fc; border-color: #3280fc; }
-.switch>input:checked+label:after { left: 11px; border-color: #fff; }
+.switch>input:checked+label:before { background-color: rgb(56, 131, 250); border-color: rgba(var(--color-inverse-rgb), .2); }
+.switch>label:hover:before { border-color: gba(235, 237, 243); }
+.switch>input:checked+label:after { color: #3883fa; left: 18px; }
+
 #header .messageDropdownBox{z-index:100 !important;}
 </style>
 
