@@ -174,7 +174,7 @@ CODE_SAMPLE
             return;
         }
         // Add the current type in the PHPDoc
-        $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
+        // $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
         $param->type = null;
     }
     private function hasParamAlreadyNonTyped(ClassMethod $classMethod) : bool
