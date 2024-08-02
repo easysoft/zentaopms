@@ -3493,6 +3493,13 @@ eof;
         echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->tab}") : html::a($link, $label, '', "class='$className' data-app={$app->tab}");
     }
 
+    /**
+     * Print messageBar.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
     public static function printMessageBar()
     {
         global $app, $config;
@@ -3769,6 +3776,16 @@ $(function()
 EOF;
     }
 
+    /**
+     * Get messageBar dot style.
+     *
+     * @param bool $showCount
+     * @param int  $unreadCount
+     *
+     * @static
+     * @access public
+     * @return mixed
+     */
     public static function getDotStyle(bool $showCount, int $unreadCount): array
     {
         $dotStyle    = array('top' => '-3px', 'right' => '-10px', 'aspect-ratio' => '0', 'padding' => '2px');
