@@ -33,7 +33,7 @@
     }
   },
   "downgrade": {
-    "versions": "7.2,7.1,7.0"
+    "versions": "8.1,7.2,7.1,7.0"
   },
   "upload": {
     "bucket": "download",
