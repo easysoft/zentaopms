@@ -101,10 +101,13 @@ class storyBasicInfo extends wg
         {
             $demandHtml = div
             (
+                setClass('flex'),
                 hasPriv('demand', 'view') ? a
                 (
                     $demand->title,
                     set::href(helper::createLink('demand', 'view', "demandID=$story->demand")),
+                    set::title($demand->title),
+                    setClass('w-1/5 text-clip mr-2.5'),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ) : $demand->title,
@@ -133,10 +136,13 @@ class storyBasicInfo extends wg
         {
             $storyHtml = hasPriv($story->parentType, 'view') ? div
             (
+                setClass('flex'),
                 a
                 (
                     $story->parentName,
                     set::href(helper::createLink($story->parentType, 'view', "storyID=$story->parent")),
+                    set::title($story->parentName),
+                    setClass('w-1/5 text-clip mr-2.5'),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ),

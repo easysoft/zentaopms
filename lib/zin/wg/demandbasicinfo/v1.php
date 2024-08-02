@@ -35,10 +35,13 @@ class demandBasicInfo extends wg
         {
             $demandHtml = hasPriv('demand', 'view') ? div
             (
+                setClass('flex'),
                 a
                 (
                     zget($demands, $demand->parent),
                     set::href(helper::createLink('demand', 'view', "demandID=$demand->parent")),
+                    set::title(zget($demands, $demand->parent)),
+                    setClass('w-1/5 text-clip mr-2.5'),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ),
