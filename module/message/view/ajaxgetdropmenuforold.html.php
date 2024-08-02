@@ -39,3 +39,23 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
     return "<ul class='list-unstyled'>" . implode("\n", $dateList) . "</ul>";
 };
 ?>
+
+<style>
+#messageTabs.text-black {color: rgb(49, 60, 82);}
+#messageTabs.pt-10px {padding-top:10px;}
+#messageTabs.px-5 {padding-left: 20px; padding-right: 20px;}
+#messageTabs.pb-5 {padding-bottom: 20px;}
+#messageTabs .border {border-width: 1px; border-color: rgb(235, 237, 243); border-style: solid;}
+#messageTabs .rounded-lg {border-radius: 6px;}
+#messageTabs .p-2 {padding:8px;}
+#messageTabs .pt-2 {padding-top:8px;}
+#messageTabs .pl-2 { padding-left: 8px; }
+#messageTabs .pb-2 { padding-bottom: 8px; }
+#messageTabs .pt-2 { padding-top: 8px; }
+#messageTabs .mt-2 {margin-top:8px;}
+#messageTabs .mr-2 {margin-right:8px;}
+#messageTabs .ml-2 {margin-left:8px;}
+#messageTabs .cursor-pointer {cursor: pointer;}
+#messageTabs .tabs-header{border-bottom-width: 1px;}
+#messageTabs .label-dot{width:5px; height:5px; vertical-align: middle;}
+#messageTabs .label-dot.gray { background-color: rgb(100, 117, 139); box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgb(100, 117, 139) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;}
