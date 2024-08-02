@@ -13,7 +13,7 @@ namespace zin;
 set::zui(true);
 
 $checkTrs    = array();
-$extendItems = array('pdo', 'pdoMySQL', 'json', 'openssl', 'mbstring', 'zlib', 'curl', 'filter', 'iconv', 'apcu');
+$extendItems = array('pdo', 'pdoMySQL', 'json', 'openssl', 'mbstring', 'zlib', 'curl', 'filter', 'iconv');
 $dirItems    = array('tmpRoot', 'dataRoot', 'session');
 foreach($extendItems as $extendItem)
 {
@@ -21,7 +21,6 @@ foreach($extendItems as $extendItem)
     $failLang = $extendItem . 'Fail';
 
     $resultClass = $result == 'ok' ? 'bg-success' : 'bg-danger';
-    if($extendItem == 'apcu' && $result != 'ok') $resultClass = 'bg-warning';
 
     $checkTrs[] = h::tr
     (
