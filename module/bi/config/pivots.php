@@ -761,7 +761,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
         array('from' => 'query', 'field' => 'status', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => ''),
-        array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => ''),
+        array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
     'fields'    => array
@@ -859,7 +859,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
         array('from' => 'query', 'field' => 'status', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => ''),
-        array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => ''),
+        array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
     'fields'    => array
@@ -1061,7 +1061,7 @@ EOT,
     (
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
         array('from' => 'query', 'field' => 'status', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => ''),
-        array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => ''),
+        array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
     'fields'    => array
@@ -2179,8 +2179,8 @@ EOT,
     ),
     'filters'   => array
     (
-        array('from' => 'query', 'field' => 'startDate', 'name' => '起始时间', 'type' => 'date', 'typeOption' => '', 'default' => '2024-07-01'),
-        array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '2024-07-30')
+        array('from' => 'query', 'field' => 'startDate', 'name' => '起始时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
+        array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
     'fields'    => array
     (

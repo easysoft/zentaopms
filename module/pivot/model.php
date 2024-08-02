@@ -34,7 +34,7 @@ class pivotModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $pivotID, bool $processDateVar = false, bool $isPreview = false, string $filterStatus = 'published'): object|bool
+    public function getByID(int $pivotID, bool $processDateVar = false, string $filterStatus = 'published'): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)
             ->where('id')->eq($pivotID)
@@ -61,7 +61,7 @@ class pivotModel extends model
         $pivot->filters = $pivotFilters;
 
         $pivot = $this->processPivot($pivot);
-        if($isPreview && isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);
+        if(isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);
 
         return $pivot;
     }
