@@ -187,4 +187,22 @@ window.markRead = function(obj)
     $('#messageTabs #unread-messages.tab-pane').find('.message-item[data-msgid="' + messageID + '"]').addClass('hidden');
     renderMessage();
 };
+
+window.markUnread = function(obj)
+{
+    let $this = $(obj);
+    if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
+    let isUnread = $this.hasClass('unread');
+    if(isUnread) return;
+
+    let messageID    = $this.data("msgid");
+    let $messageItem = $('#messageTabs .message-item[data-msgid="' + messageID + '"]');
+    $messageItem.find('.label-dot.gray').removeClass('gray').addClass('danger');
+    $messageItem.addClass('unread');
+    $.get($.createLink('message', 'ajaxMarkUnread', "id=" + messageID));
+
+    /* Rerender unread count. */
+    fetchMessage(true, $.createLink('message', 'ajaxGetDropmenuForOld', 'active=all'));
+    renderMessage();
+};
 </script>
