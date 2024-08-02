@@ -379,6 +379,26 @@ $(function()
         }
     });
 
+    /* Hidden dropdown and contextmenu. */
+    $(document).on('click', '.contextmenu-menu', function(event){hideContextMenu(); event.stopPropagation();});
+    $(document).on('click', '*', function(event)
+    {
+        hideContextMenu();
+        let $this = $(this);
+        if($this.attr('id') == 'messageDropdown' || $this.closest('#messageDropdown').length)
+        {
+            if($this.attr('id') == 'messageDropdown') event.stopPropagation();
+
+            if($(event.target).closest('.messageSettingBox').length == 0 && $('#messageSettingDropdown-toggle').hasClass('open')) closeSettingDropdown();
+            return;
+        }
+
+        $('#messageDropdown #messageBar').removeClass('open');
+        $('#messageDropdown .messageDropdownBox').removeClass('show');
+    });
+    $('#dropdownMessageMenu').on('scroll', function(event){hideContextMenu();});
+    $(window).on('scroll', function(event){hideContextMenu();});
+
     /* Adjust dropdown height when resize. */
     $(window).on('resize', function(event)
     {
