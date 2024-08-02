@@ -255,18 +255,9 @@ class header extends wg
         if(!$config->message->browser->turnon) return null;
 
         $showCount   = $config->message->browser->count;
-        $dotStyle    = array('top' => '-3px', 'right' => '-10px', 'aspect-ratio' => '0', 'padding' => '2px');
         $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
+        $dotStyle    = commonModel::getDotStyle($showCount != '0', $unreadCount);
         if($unreadCount > 99) $unreadCount = '99+';
-        if($unreadCount < 10) $dotStyle['right'] = '-5px';
-        if(!$showCount)
-        {
-            $dotStyle['aspect-ratio'] = '1 / 1';
-            $dotStyle['width']        = '5px';
-            $dotStyle['height']       = '5px';
-            $dotStyle['right']        = '-2px';
-            $dotStyle['top']          = '-2px';
-        }
 
         return dropdown
         (

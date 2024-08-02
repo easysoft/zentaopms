@@ -3750,6 +3750,22 @@ $(function()
 </script>
 EOF;
     }
+
+    public static function getDotStyle(bool $showCount, int $unreadCount): array
+    {
+        $dotStyle    = array('top' => '-3px', 'right' => '-10px', 'aspect-ratio' => '0', 'padding' => '2px');
+        if($unreadCount < 10) $dotStyle['right'] = '-5px';
+        if(!$showCount)
+        {
+            $dotStyle['aspect-ratio'] = '1 / 1';
+            $dotStyle['width']        = '5px';
+            $dotStyle['height']       = '5px';
+            $dotStyle['right']        = '-2px';
+            $dotStyle['top']          = '-2px';
+        }
+
+        return $dotStyle;
+    }
 }
 
 class common extends commonModel
