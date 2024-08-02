@@ -11,6 +11,14 @@ declare(strict_types=1);
  */
 class messageZen extends message
 {
+    /**
+     * 设置下拉菜单的相关变量。
+     * Assign for dropmenu vars.
+     *
+     * @param  string $active  unread|all
+     * @access public
+     * @return void
+     */
     public function assignDropmenuVars(string $active = 'unread')
     {
         $messages = $this->message->getMessages('all', 'createdDate_desc');
