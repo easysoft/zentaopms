@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= ',productER';
+
 $rows = array();
 foreach($config->featureGroup as $group => $features)
 {
