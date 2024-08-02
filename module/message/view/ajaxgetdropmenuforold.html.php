@@ -109,3 +109,19 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
 .switch>input:checked+label:before { background-color: #3280fc; border-color: #3280fc; }
 .switch>input:checked+label:after { left: 11px; border-color: #fff; }
 #header .messageDropdownBox{z-index:100 !important;}
+</style>
+
+<div id='messageTabs' class='text-black pt-10px px-5 pb-5 relative' style='width:400px; background-color:#fff; color: rgb(49, 60, 82)'>
+  <ul class="nav nav-tabs">
+    <li class='<?php echo $active == 'unread' ? 'active' : '';?>'><a data-tab href="#unread-messages"><span><?php printf($lang->message->unread, $unreadCount)?></span></a></li>
+    <li class='<?php echo $active == 'all'    ? 'active' : '';?>'><a data-tab href="#all-messages"><span><?php echo $lang->message->all;?></span></a></li>
+  </ul>
+  <div class="tab-content" style='padding-top: 10px;'>
+    <div class="tab-pane <?php echo $active == 'unread' ? 'active' : '';?>" id="unread-messages">
+      <?php echo $buildMessageList($unreadMessages);?>
+    </div>
+    <div class="tab-pane <?php echo $active == 'all' ? 'active' : '';?>" id="all-messages">
+      <?php echo $buildMessageList($allMessages);?>
+    </div>
+  </div>
+</div>
