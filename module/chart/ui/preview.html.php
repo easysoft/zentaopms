@@ -26,8 +26,6 @@ featureBar
     set::linkParams("dimension={$dimensionID}&group={key}"),
 );
 
-featureBar(set::items($items));
-
 if($config->edition != 'open')
 {
     toolbar
