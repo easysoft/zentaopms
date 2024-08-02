@@ -67,6 +67,8 @@ pipeline {
               zCheckout([
                 [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", "${env.XUANVERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
+                [name: "zentaomax", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaomax.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
+                [name: "zentaoipd", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaoipd.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
                 [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["downgrade/blank"] ],
                 [name: "downRepoExt", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["downgrade/blank"] ]
               ])
@@ -122,6 +124,12 @@ pipeline {
               steps {
                 container('package') {
                   sh 'echo ${GIT_BRANCH}'
+                  sh 'test -d $SRC_ZENTAOEXT_PATH/zentaomax && rm -rf $SRC_ZENTAOEXT_PATH/zentaomax'
+                  sh 'test -d $SRC_ZENTAOEXT_PATH/zentaoipd && rm -rf $SRC_ZENTAOEXT_PATH/zentaoipd'
+                  sh 'mv $PWD/zentaomax $SRC_ZENTAOEXT_PATH/zentaoext/'
+                  sh 'mv $PWD/zentaoipd $SRC_ZENTAOEXT_PATH/zentaoext/'
+                  sh 'git config --global --add safe.directory $SRC_ZENTAOEXT_PATH/zentaomax'
+                  sh 'git config --global --add safe.directory $SRC_ZENTAOEXT_PATH/zentaoipd'
                   sh 'cd $SRC_ZENTAOEXT_PATH;make build'
                   
                   withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
