@@ -281,3 +281,21 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 #adminMenu > li.disabled img {filter: grayscale(100%); opacity: .6;}
 
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding: 6px;}
+
+.relative {position: relative;}
+.absolute {position: absolute;}
+.label-dot.danger {background-color: rgb(252, 89, 89); box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgb(252, 89, 89) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;}
+#userNav>li#messageDropdown>a#messageBar:hover:before {border: none;}
+#userNav>li#messageDropdown>a#messageBar.open:before{
+    position: absolute;
+    bottom: -12px;
+    left: calc(50% - 5px);
+    width: 0;
+    height: 0;
+    content: ' ';
+    border-color: transparent transparent #fff transparent;
+    border-style: solid;
+    border-width: 0 6px 6px 6px;
+}
+#messageDropdown #messageBar {height:26px; width:26px; padding: 0;}
+.label-dot.rounded-sm {border-radius: 2px; text-indent: 0; line-height: 8px; width: auto; height: auto;}
