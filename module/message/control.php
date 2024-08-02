@@ -144,24 +144,21 @@ class message extends control
      */
     public function ajaxGetDropmenu(string $active = 'unread')
     {
-        $messages = $this->message->getMessages('all', 'createdDate_desc');
+        $this->messageZen->assignDropmenuVars($active);
+        $this->display();
+    }
 
-        $unreadCount    = 0;
-        $unreadMessages = $allMessages = array();
-        array_map(function($message) use (&$unreadCount, &$unreadMessages, &$allMessages)
-        {
-            $date = substr($message->createdDate, 0, 10);
-            $allMessages[$date][] = $message;
-            if($message->status == 'read') return;
-
-            $unreadCount++;
-            $unreadMessages[$date][] = $message;
-        }, $messages);
-
-        $this->view->allMessages    = $allMessages;
-        $this->view->unreadCount    = $unreadCount;
-        $this->view->unreadMessages = $unreadMessages;
-        $this->view->active         = $active;
+    /**
+     * Ajax: 获取旧页面消息下拉菜单。
+     * Ajax get dropmenu for old.
+     *
+     * @param  string $active  unread|all
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropmenuForOld(string $active = 'unread')
+    {
+        $this->messageZen->assignDropmenuVars($active);
         $this->display();
     }
 
