@@ -260,6 +260,19 @@ window.renderMessage = function()
         if($unreadTab.find('.nodata').length == 0) $unreadTab.append(noDataHtml);
     }
 
+    let $allTab  = $('#messageTabs #all-messages.tab-pane');
+    let allCount = $allTab.find('.message-item:not(.hidden)').length;
+    if(allCount == 0)
+    {
+        $allTab.find('ul').addClass('hidden');
+        if($allTab.find('.nodata').length == 0) $allTab.append(noDataHtml);
+    }
+
+    $('#messageTabs .message-date').each(function()
+    {
+        if($(this).find('.message-item:not(.hidden)').length == 0) $(this).addClass('hidden');
+    });
+
     updateAllDot(showCount);
 };
 </script>
