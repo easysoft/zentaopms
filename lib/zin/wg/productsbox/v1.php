@@ -287,7 +287,7 @@ class productsBox extends wg
                     (
                         div
                         (
-                            setClass('grow'),
+                            setClass('grow w-full'),
                             picker
                             (
                                 setData(array('on' => 'change', 'call' => 'loadBranches', 'params' => 'event')),
