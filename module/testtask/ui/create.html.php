@@ -19,8 +19,8 @@ formPanel
 (
     set::title($lang->testtask->create),
 
-    on::change('#product', isset($executionID) ? 'loadProductRelated' : 'loadTestReports(this.value)'),
-    on::change('#execution', 'loadExecutionRelated'),
+    on::change('[name=product]', isset($executionID) ? 'loadProductRelated' : 'loadTestReports(this.value)'),
+    on::change('[name=execution]', 'loadExecutionRelated'),
     formGroup
     (
         set::width('1/2'),
@@ -70,6 +70,7 @@ formPanel
                 set::className('input-group-addon', !empty($buildExecutionID) && empty($builds) ? '' : 'hidden'),
                 a
                 (
+                    setID('buildCreateLink'),
                     set('href', createLink('build', 'create', "executionID=$buildExecutionID&productID={$product->id}&projectID={$projectID}")),
                     set('data-toggle', 'modal'),
                     $lang->build->create
