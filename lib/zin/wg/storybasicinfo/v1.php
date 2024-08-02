@@ -114,7 +114,7 @@ class storyBasicInfo extends wg
                     $lang->story->storyChange . ' ',
                     a
                     (
-                        setClass('btn primary-pale border-primary size-xs'),
+                        setClass('btn primary-pale border-primary size-xs ajax-submit'),
                         set::href(createLink($story->type, 'processStoryChange', "storyID={$story->id}")),
                         $lang->confirm,
                     ),
