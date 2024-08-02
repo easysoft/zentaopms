@@ -124,4 +124,20 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
       <?php echo $buildMessageList($allMessages);?>
     </div>
   </div>
+  <div class="absolute top-3 right-5" style="z-index: 100;">
+    <?php echo html::commonButton("", "title='{$lang->message->notice->allMarkRead}' onclick='markAllRead()'", 'allMarkRead btn btn-sm btn-link', 'clear');?>
+    <?php echo html::commonButton("", "title='{$lang->message->notice->clearRead}' onclick='clearRead()'", 'clearRead btn btn-sm btn-link', 'trash');?>
+    <span class='messageSettingBox relative'>
+      <?php echo html::commonButton("", "id='messageSettingDropdown-toggle' title={$lang->message->browserSetting->more} onclick='toggleSettingDropdown()'", 'btn btn-sm btn-link', 'cog-outline');?>
+      <div class="dropdown-menu w-52 absolute" id="messageSettingDropdown" style='left:-170px;top:25px;'>
+        <form class="form ajaxForm form-horz" action="<?php echo inlink('ajaxSetOneself');?>" method="post">
+          <div class="form-row font-bold border-b pb-2 pl-2 pt-2"><?php echo $lang->message->browserSetting->more;?></div>
+          <div class="form-group justify-center form-actions mt-2 no-label">
+            <?php echo html::submitButton($lang->save,   "style='min-width:20px;'", "btn btn-sm btn-primary");?>
+            <?php echo html::commonButton($lang->cancel, "style='min-width:20px;' onclick='closeSettingDropdown()'", "btn btn-sm");?>
+          </div>
+        </form>
+      </div>
+    </span>
+  </div>
 </div>
