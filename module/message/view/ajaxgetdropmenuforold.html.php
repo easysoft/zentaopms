@@ -238,4 +238,14 @@ window.deleteMessage = function(obj)
     /* Rerender unread count. */
     renderMessage();
 };
+
+window.clickMessage = function(obj)
+{
+    let $obj = $(obj);
+    let url  = $obj.attr('data-url').replace(/\?onlybody=yes/g, '').replace(/\&onlybody=yes/g, '');
+    markRead(obj);
+    $('#header #messageBar').trigger('click');
+    $.apps.openApp(url);
+    renderMessage();
+};
 </script>
