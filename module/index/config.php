@@ -36,3 +36,4 @@ $config->index->oldPages[] = 'api-debug';
 $config->index->oldPages[] = 'datatable-ajaxoldcustom';
 $config->index->oldPages[] = 'weekly-index';
 $config->index->oldPages[] = 'kanban-importticket';
+$config->index->oldPages[] = 'message-ajaxgetdropmenuforold';

@@ -3506,6 +3506,24 @@ eof;
 
         $fetcher = helper::createLink('message', 'ajaxGetDropMenuForOld');
         foreach($dotStyle as $cssKey => $cssValue) $dotStyle[$cssKey] = $cssKey . ':' . $cssValue;
+
+        $html  = "<li id='messageDropdown' class='relative'>\n";
+        $html .= "<a class='dropdown-toggle' id='messageBar' data-fetcher='{$fetcher}' onclick='fetchMessage()'>";
+        $html .= "<i class='icon icon-bell'></i>";
+        if($unreadCount)
+        {
+            $html .= "<span class='label label-dot danger absolute";
+            if($showCount) $html .= ' rounded-sm';
+            $html .= "' style='" . implode('; ', $dotStyle) . "'>";
+            $html .= $showCount ? $unreadCount : '';
+            $html .= '</span>';
+        }
+        $html .= "</a>";
+
+        $html .= "<div class='dropdown-menu messageDropdownBox absolute' style='padding:0;left:-320px;'><div id='dropdownMessageMenu' class='not-clear-menu'></div></div>";
+        $html .= "</li>";
+
+        echo $html;
     }
 
     /**
