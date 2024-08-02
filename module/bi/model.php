@@ -790,7 +790,7 @@ class biModel extends model
             $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $pivot->drills));
             unset($pivot->drills);
 
-            $exists = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
+            $exists = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->orWhere('name')->eq($pivot->name)->fetch();
             if(!$exists) $currentOperate = 'insert';
 
             $stmt = null;
