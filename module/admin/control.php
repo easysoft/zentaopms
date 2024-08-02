@@ -614,4 +614,17 @@ class admin extends control
         $this->view->title = $this->lang->admin->cache;
         $this->display();
     }
+
+    /**
+     * 清除数据缓存。
+     * Clear data cache.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxClearCache()
+    {
+        $this->dao->clearCache();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->admin->clearSuccess, 'load' => true));
+    }
 }

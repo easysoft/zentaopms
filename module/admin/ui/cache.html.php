@@ -12,6 +12,12 @@ namespace zin;
 
 formPanel
 (
+    set::actions
+    ([
+        'submit',
+        $config->cache->dao->enable ? ['text' => $lang->admin->clearCache, 'url' => inlink('ajaxClearCache'), 'class' => 'secondary ajax-submit'] : null,
+        'cancel'
+    ]),
     formGroup
     (
         set::label($lang->admin->daoCache),
@@ -21,7 +27,8 @@ formPanel
             set::items($lang->admin->cacheStatusList),
             set::value($config->cache->dao->enable),
             set::inline(true)
-        )
+        ),
+        span(setClass('ml-4 mt-1.5'), icon('info text-warning mr-2'), $lang->admin->apcuNotice)
     ),
     helper::isAPCuEnabled() && $this->config->cache->dao->driver == 'Apcu' ? formRow
     (
