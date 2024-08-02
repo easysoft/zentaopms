@@ -1000,8 +1000,8 @@ window.browserNotify = function()
             let dotStyle   = 'padding: 2px;';
             let rightStyle = showCount ? 'right: -10px;' : 'right: -2px;';
             if(!showCount) dotStyle += 'width: 5px; height: 5px;';
-            if(newCount > 99) newCount = '99+';
             if(newCount < 10 && showCount) rightStyle = 'right: -5px;';
+            if(newCount > 99) newCount = '99+';
 
             dotStyle += showCount ? 'top: -3px; aspect-ratio: 0;' : 'top: -2px; aspect-ratio: 1 / 1;';
             dotStyle += rightStyle;
@@ -1010,8 +1010,21 @@ window.browserNotify = function()
             $('#apps .app-container').each(function()
             {
                 let $iframeMessageBar = $(this).find('iframe').contents().find('#messageBar');
-                $iframeMessageBar.find('.label-dot.danger').remove();
-                if(newCount) $iframeMessageBar.append(dotHtml);
+                if($iframeMessageBar.length > 0)
+                {
+                    $iframeMessageBar.find('.label-dot.danger').remove();
+                    if(unreadCount) $iframeMessageBar.append(dotHtml);
+                }
+
+                let $oldPage = $(this).find('iframe').contents().find('#oldPage');
+                if($oldPage.length > 0)
+                {
+                    $iframeMessageBar = $oldPage.find('iframe').contents().find('#messageBar');
+                    if($iframeMessageBar.length  == 0) return;
+
+                    $iframeMessageBar.find('.label-dot.danger').remove();
+                    if(newCount) $iframeMessageBar.append(dotHtml);
+                }
             });
         });
     }, pollTime * 1000);
