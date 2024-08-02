@@ -150,14 +150,16 @@ $config->pivot->objectTableFields->user['role']['map']       = $lang->user->role
 $config->pivot->objectTableFields->ticket = array();
 $config->pivot->objectTableFields->ticket['id']['name']     = 'id';
 $config->pivot->objectTableFields->ticket['id']['title']    = $lang->idAB;
-$config->pivot->objectTableFields->ticket['id']['type']     = 'checkID';
+$config->pivot->objectTableFields->ticket['id']['type']     = 'id';
 $config->pivot->objectTableFields->ticket['id']['sortType'] = false;
 
 $config->pivot->objectTableFields->ticket['title']['name']  = 'title';
+$config->pivot->objectTableFields->ticket['title']['type']  = 'title';
 $config->pivot->objectTableFields->ticket['title']['title'] = $lang->ticket->title;
 $config->pivot->objectTableFields->ticket['title']['link']  = array('module' => 'ticket', 'method' => 'view', 'params' => "ticketID={id}");
 
 $config->pivot->objectTableFields->ticket['pri']['name']  = 'pri';
+$config->pivot->objectTableFields->ticket['pri']['type']  = 'pri';
 $config->pivot->objectTableFields->ticket['pri']['title'] = $lang->ticket->pri;
 
 $config->pivot->objectTableFields->ticket['status']['name']      = 'status';
