@@ -292,5 +292,24 @@ window.updateAllDot = function(showCount)
     dotStyle += rightStyle;
 
     let dotHtml = '<span class="label danger label-dot absolute' + (showCount ? ' rounded-sm' : '') + '" style="' + dotStyle + '">' + (showCount ? unreadCount : '') + '</span>';
+    top.$('#apps .app-container').each(function()
+    {
+        let $iframeMessageBar = $(this).find('iframe').contents().find('#messageBar');
+        if($iframeMessageBar.length > 0)
+        {
+            $iframeMessageBar.find('.label-dot.danger').remove();
+            if(unreadCount) $iframeMessageBar.append(dotHtml);
+        }
+
+        let $oldPage = $(this).find('iframe').contents().find('#oldPage');
+        if($oldPage.length > 0)
+        {
+            $iframeMessageBar = $oldPage.find('iframe').contents().find('#messageBar');
+            if($iframeMessageBar.length  == 0) return;
+
+            $iframeMessageBar.find('.label-dot.danger').remove();
+            if(unreadCount) $iframeMessageBar.append(dotHtml);
+        }
+    });
 };
 </script>
