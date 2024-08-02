@@ -19,6 +19,22 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
     $dateList = array();
     foreach($messageGroup as $date => $messages)
     {
+        $itemList = array();
+        foreach($messages as $message)
+        {
+            $isUnread = $message->status != 'read';
+            $dotColor = $isUnread ? 'danger' : 'gray';
+
+            $li  = "<li class='message-item border rounded-lg p-2 mt-2" . ($isUnread ? ' unread' : '') . "' data-msgid='{$message->id}' style='word-break: break-all;' onclick='markRead(this)'>\n";
+            $li .= "<div class='text-gray relative'>";
+            $li .= "<div><span class='label label-dot mr-2 {$dotColor}'></span><span>{$lang->message->browser}</span></div>\n";
+            $li .= "<div class='absolute' style='top:0px; right:0px;'><span>{$message->showTime}</span><i class='icon icon-close ml-2 cursor-pointer delete-message-btn' onclick='deleteMessage(this)'></i></div>\n";
+            $li .= "</div>\n";
+            $li .= "<div class='pt-1'>{$message->data}</div>\n";
+            $li .= "</li>\n";
+            $itemList[] = $li;
+        }
+        $dateList[] = "<li class='message-date mt-2'>{$date}\n <ul class='list-unstyled'>" . implode("\n", $itemList) . "</ul>";
     }
     return "<ul class='list-unstyled'>" . implode("\n", $dateList) . "</ul>";
 };
