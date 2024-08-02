@@ -132,6 +132,25 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
       <div class="dropdown-menu w-52 absolute" id="messageSettingDropdown" style='left:-170px;top:25px;'>
         <form class="form ajaxForm form-horz" action="<?php echo inlink('ajaxSetOneself');?>" method="post">
           <div class="form-row font-bold border-b pb-2 pl-2 pt-2"><?php echo $lang->message->browserSetting->more;?></div>
+          <div class="form-group" style="align-items: center;">
+            <label class="form-label"><?php echo $lang->message->browserSetting->show;?></label>
+            <div class="switch">
+              <input type="checkbox" id="show_1" name="show" <?php echo $browserSetting->show ? "checked='checked'" : ''; ?> value="1"><label for="show_1">&nbsp; </label>
+            </div>
+          </div>
+          <div class="form-group" style="align-items: center;">
+            <label class="form-label"><?php echo $lang->message->browserSetting->count;?></label>
+            <div class="switch">
+              <input type="checkbox" id="count_1" name="count" <?php echo $browserSetting->count ? "checked='checked'" : ''; ?> value="1"><label for="count_1">&nbsp; </label>
+            </div>
+          </div>
+          <div class="form-group w-5/6">
+            <label class="form-label"><?php echo $lang->message->browserSetting->maxDays;?></label>
+            <div class="input-control has-icon-right">
+              <?php echo html::input('maxDays', $browserSetting->maxDays, "class='form-control'");?>
+              <label for='maxDays' class="input-control-icon-right"><?php echo $lang->day;?></label>
+            </div>
+          </div>
           <div class="form-group justify-center form-actions mt-2 no-label">
             <?php echo html::submitButton($lang->save,   "style='min-width:20px;'", "btn btn-sm btn-primary");?>
             <?php echo html::commonButton($lang->cancel, "style='min-width:20px;' onclick='closeSettingDropdown()'", "btn btn-sm");?>
