@@ -82,6 +82,11 @@ pipeline {
             stage("开源版降级") {
               steps {
                 container('package') {
+                  sh 'git config --global --add safe.directory $PWD/xuansrc'
+                  sh 'git config --global --add safe.directory $PWD/zentaoext'
+                  sh 'git config --global --add safe.directory $PWD/downRepo'
+                  sh 'git config --global --add safe.directory $PWD/downRepoExt'
+                  
                   sh 'echo ${GIT_BRANCH}'
                   sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                   sh 'make ciCommon'
