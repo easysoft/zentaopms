@@ -332,7 +332,7 @@ $lang->waterfall->menu->design['subMenu']->ads  = array('link' => "{$lang->desig
 
 $lang->waterfall->menu->devops['subMenu']         = new stdclass();
 $lang->waterfall->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log');
-$lang->waterfall->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create,repo-diff');
+$lang->waterfall->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create,repo-diff,repo-showsynccommit');
 $lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
@@ -420,7 +420,7 @@ $lang->execution->menu->qa['menuOrder'][20] = 'testtask';
 
 $lang->execution->menu->devops['subMenu']         = new stdclass();
 $lang->execution->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log');
-$lang->execution->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create,repo-diff');
+$lang->execution->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-browse,repo-browsebranch,repo-browsetag,repo-review,repo-create,repo-diff,repo-showsynccommit');
 $lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
@@ -518,7 +518,7 @@ $lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|brow
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,blame,showsynccommit');
-$lang->devops->menu->commit  = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s");
+$lang->devops->menu->commit  = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'exclude' => 'repo-showsynccommit');
 $lang->devops->menu->branch  = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
