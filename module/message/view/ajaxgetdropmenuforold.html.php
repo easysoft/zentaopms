@@ -169,4 +169,22 @@ js::set('noDataHtml', $noDataHtml);
 js::set('showCount', $config->message->browser->count);
 ?>
 <script>
+window.markRead = function(obj)
+{
+    let $this = $(obj);
+    if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
+    let isUnread = $this.hasClass('unread');
+    if(!isUnread) return;
+
+    let messageID    = $this.data("msgid");
+    let $messageItem = $('#messageTabs .message-item.unread[data-msgid="' + messageID + '"]');
+    $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
+    $messageItem.removeClass('unread');
+    $messageItem.attr('data-target', '#readContextMenu');
+    $.get($.createLink('message', 'ajaxMarkRead', "id=" + messageID));
+
+    /* Rerender unread count. */
+    $('#messageTabs #unread-messages.tab-pane').find('.message-item[data-msgid="' + messageID + '"]').addClass('hidden');
+    renderMessage();
+};
 </script>
