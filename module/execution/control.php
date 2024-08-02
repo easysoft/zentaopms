@@ -1804,7 +1804,10 @@ class execution extends control
 
         foreach($kanbanGroup as $laneKey => $laneData)
         {
-            $lanes[] = array('name' => $laneKey, 'title' => zget($projects, $laneKey, $this->lang->execution->myExecutions));
+            $laneTitle = zget($projects, $laneKey, $this->lang->execution->myExecutions);
+
+            $laneKey ++;
+            $lanes[] = array('name' => $laneKey, 'title' => $laneTitle);
             foreach(array('wait', 'doing', 'suspended', 'closed') as $columnKey)
             {
                 $cardList = !empty($laneData[$columnKey]) ? $laneData[$columnKey] : array();
