@@ -135,13 +135,15 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
           <div class="form-group" style="align-items: center;">
             <label class="form-label"><?php echo $lang->message->browserSetting->show;?></label>
             <div class="switch">
-              <input type="checkbox" id="show_1" name="show" <?php echo $browserSetting->show ? "checked='checked'" : ''; ?> value="1"><label for="show_1">&nbsp; </label>
+              <input type="checkbox" id="show_1" name="show" <?php echo $browserSetting->show ? "checked='checked'" : ''; ?> value="1">
+              <label for="show_1">&nbsp; </label>
             </div>
           </div>
           <div class="form-group" style="align-items: center;">
             <label class="form-label"><?php echo $lang->message->browserSetting->count;?></label>
             <div class="switch">
-              <input type="checkbox" id="count_1" name="count" <?php echo $browserSetting->count ? "checked='checked'" : ''; ?> value="1"><label for="count_1">&nbsp; </label>
+              <input type="checkbox" id="count_1" name="count" <?php echo $browserSetting->count ? "checked='checked'" : ''; ?> value="1">
+              <label for="count_1">&nbsp; </label>
             </div>
           </div>
           <div class="form-group w-5/6">
@@ -160,3 +162,11 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
     </span>
   </div>
 </div>
+
+<?php
+js::set('unreadLangTempate', $lang->message->unread);
+js::set('noDataHtml', $noDataHtml);
+js::set('showCount', $config->message->browser->count);
+?>
+<script>
+</script>
