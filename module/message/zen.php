@@ -11,4 +11,22 @@ declare(strict_types=1);
  */
 class messageZen extends message
 {
+    public function assignDropmenuVars(string $active = 'unread')
+    {
+        $messages = $this->message->getMessages('all', 'createdDate_desc');
+
+        $unreadCount    = 0;
+        $unreadMessages = $allMessages = array();
+        array_map(function($message) use (&$unreadCount, &$unreadMessages, &$allMessages)
+        {
+            $date = substr($message->createdDate, 0, 10);
+
+            $allMessages[$date][] = $message;
+        }, $messages);
+
+        $this->view->allMessages    = $allMessages;
+        $this->view->unreadCount    = $unreadCount;
+        $this->view->unreadMessages = $unreadMessages;
+        $this->view->active         = $active;
+    }
 }
