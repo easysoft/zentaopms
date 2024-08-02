@@ -149,9 +149,12 @@ $(function()
     });
 
     /* Hidden dropdown and contextmenu. */
-    $('#dropdownMessageMenu').on('click', function(event){hideContextMenu();});
+    $('#dropdownMessageMenu').on('click', function(event)
+    {
+        hideContextMenu();
+        if($(event.target).closest('.messageSettingBox').length == 0 && $('#messageSettingDropdown-toggle').hasClass('open')) closeSettingDropdown();
+    });
     $('#dropdownMessageMenu').on('scroll', function(event){hideContextMenu();});
-    $('#unreadContextMenu,#readContextMenu').on('click', function(event){hideContextMenu(); event.stopPropagation();});
 
     /* Adjust dropdown height when resize. */
     $(window).on('resize', function(event)

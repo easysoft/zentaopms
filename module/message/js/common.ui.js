@@ -35,11 +35,14 @@ window.updateAllDot = function(showCount)
     });
 };
 
-window.closeSettingDropdown = function()
+window.toggleSettingDropdown = function(isOpen)
 {
-    $('#dropdownMessageMenu #messageSettingDropdown-toggle.with-popover-show').trigger('click');
-}
+    if(typeof(isOpen) == 'undefined') isOpen = $('#messageSettingDropdown-toggle').hasClass('open');
+    $('#messageSettingDropdown-toggle').toggleClass('open', !isOpen);
+    $('#messageSettingDropdown').toggleClass('show', !isOpen);
+};
 
+window.closeSettingDropdown = function(){ toggleSettingDropdown(true); }
 window.reloadSettingModal = function(showCount)
 {
     $('#dropdownMessageMenu #messageSettingDropdown').find('form').removeClass('loading');

@@ -67,14 +67,15 @@ tabs
         set::style(array('z-index' => '100')),
         btn(set::size('sm'), setClass('ghost allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('clear')),
         btn(set::size('sm'), setClass('ghost clearRead'),   set::hint($lang->message->notice->clearRead),   icon('trash')),
-        dropdown
+        span
         (
-            setID('messageSettingDropdown'),
-            to::trigger(btn(set::icon('cog-outline'), set::hint($lang->message->browserSetting->more), setClass('ghost'), set::caret(false))),
-            to::menu(menu
+            setClass('messageSettingBox relative'),
+            btn(set::icon('cog-outline'), setID('messageSettingDropdown-toggle'), set::hint($lang->message->browserSetting->more), setClass('ghost'), set::caret(false), setData(array('on' => 'click', 'call' => 'toggleSettingDropdown'))),
+            menu
             (
-                setClass('dropdown-menu w-52'),
-                on::click('e.stopPropagation();'),
+                setClass('dropdown-menu w-52 absolute popup in'),
+                setID('messageSettingDropdown'),
+                setStyle(array('left' => '-170px', 'top' => '25px')),
                 form
                 (
                     setClass('gap-1'),
@@ -106,7 +107,7 @@ tabs
                         btn(set::text($lang->cancel), setStyle(array('min-width' => '20px')), setClass('size-sm'), set::type('button'), on::click('closeSettingDropdown'))
                     )
                 )
-            ))
+            )
         )
     ),
     tabPane
