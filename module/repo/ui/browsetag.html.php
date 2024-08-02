@@ -48,11 +48,19 @@ featureBar
 
 $config->repo->dtable->tag->fieldList['committer']['map'] = $users;
 $tagList = initTableData($tagList, $config->repo->dtable->tag->fieldList);
+$urlParams = array(
+    'repoID'     => $repo->id,
+    'objectID'   => $objectID,
+    'keyword'    => urlencode($keyword),
+    'orderBy'    => '{name}_{sortType}',
+    'recPerPage' => $pager->recPerPage,
+    'pageID'     => $pager->pageID
+);
 dtable
 (
     set::cols($config->repo->dtable->tag->fieldList),
     set::data($tagList),
-    set::sortLink(createLink('repo', 'browsetag', "repoID={$repo->id}&objectID={$objectID}&keyword={$keyword}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'browsetag', $urlParams)),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );

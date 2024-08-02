@@ -48,11 +48,19 @@ featureBar
 
 $config->repo->dtable->branch->fieldList['committer']['map'] = $users;
 $branchList = initTableData($branchList, $config->repo->dtable->branch->fieldList);
+$urlParams = array(
+    'repoID'     => $repo->id,
+    'objectID'   => $objectID,
+    'keyword'    => urlencode($keyword),
+    'orderBy'    => '{name}_{sortType}',
+    'recPerPage' => $pager->recPerPage,
+    'pageID'     => $pager->pageID
+);
 dtable
 (
     set::cols($config->repo->dtable->branch->fieldList),
     set::data($branchList),
-    set::sortLink(createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&keyword={$keyword}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'browsebranch', $urlParams)),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );
