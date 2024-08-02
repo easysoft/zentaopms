@@ -21,6 +21,7 @@ include 'chosen.html.php';
         <div id='userMenu'>
           <ul id="userNav" class="nav nav-default">
             <li class='dropdown dropdown-hover' id='globalCreate'><?php common::printCreateList();?></li>
+            <?php common::printMessageBar();?>
             <li class='dropdown dropdown-hover has-avatar' id='userDropDownMenu'><?php common::printUserBar();?></li>
           </ul>
         </div>
