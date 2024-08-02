@@ -44,10 +44,10 @@ class programTao extends programModel
         if($program->type == 'project') $this->loadModel('project');
 
         $actionsMap         = array();
-        $canStartProgram    = common::hasPriv($program->type, 'start');
-        $canSuspendProgram  = common::hasPriv($program->type, 'suspend');
-        $canCloseProgram    = common::hasPriv($program->type, 'close');
-        $canActivateProgram = common::hasPriv($program->type, 'activate');
+        $canStartProgram    = common::hasPriv($program->type, 'start', $program);
+        $canSuspendProgram  = common::hasPriv($program->type, 'suspend', $program);
+        $canCloseProgram    = common::hasPriv($program->type, 'close', $program);
+        $canActivateProgram = common::hasPriv($program->type, 'activate', $program);
         $normalActions      = array('start', 'close', 'activate');
         foreach($normalActions as $action)
         {
@@ -71,7 +71,7 @@ class programTao extends programModel
             $otherActions = array('suspend', 'close', 'activate');
             foreach($otherActions as $action)
             {
-                if(!common::hasPriv($program->type, $action)) continue;
+                if(!common::hasPriv($program->type, $action, $program)) continue;
                 if($action == 'close' && $program->status == 'doing') continue;
 
                 $item = new stdclass();

@@ -341,24 +341,29 @@ class commonTao extends commonModel
      * Check if the user is in the administrator of the project, product, plan, and execution.
      *
      * @param  string    $module
+     * @param  mixed     $object
      * @access protected
      * @return bool
      */
-    protected static function isProjectAdmin(string $module): bool
+    protected static function isProjectAdmin(string $module, mixed $object): bool
     {
         global $app, $lang;
 
-        $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
-        if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
+        $inProject = ((isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project') || (!empty($object->type) and $object->type == 'project'));
+        $projectID = empty($object->id) ? $app->session->project : $object->id;
+        if($inProject and $projectID and (strpos(",{$app->user->rights['projects']},", ",{$projectID},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
 
         $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
-        if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
+        $productID = empty($object->id) ? $app->session->product : $object->id;
+        if($inProduct and $productID and (strpos(",{$app->user->rights['products']},", ",{$productID},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
 
         $inProgram = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program');
-        if($inProgram and $app->session->program and (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
+        $programID = empty($object->id) ? $app->session->program : $object->id;
+        if($inProgram and $programID and (strpos(",{$app->user->rights['programs']},", ",{$programID},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
 
         $inExecution = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution');
-        if($inExecution and $app->session->execution and (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
+        $executionID = empty($object->id) ? $app->session->execution : $object->id;
+        if($inExecution and $executionID and (strpos(",{$app->user->rights['executions']},", ",{$executionID},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
 
         return false;
     }
