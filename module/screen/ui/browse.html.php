@@ -64,7 +64,13 @@ else
             (
                 setClass('px-4 py-3 h-20 relative'),
                 setData(array('builtin' => $screen->builtin, 'status' => $screen->status)),
-                div(setClass('text-black text-md overflow-hidden'), set::title($screen->name), $screen->name),
+                div
+                (
+                    setClass('text-black text-md overflow-hidden'),
+                    set::title($screen->name),
+                    $screen->status == 'draft' ? label(setClass('secondary-pale mr-1'), $lang->screen->draft) : null,
+                    $screen->name
+                ),
                 div(setClass('text-gray text-sm overflow-hidden'), set::title($screen->name), $screen->desc ?: $lang->screen->noDesc),
                 !empty($screen->actions) ? div
                 (
