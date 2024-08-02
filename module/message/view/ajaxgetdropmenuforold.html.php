@@ -223,4 +223,19 @@ window.clearRead = function()
     $.get($.createLink('message', 'ajaxDelete', "id=allread"));
     renderMessage();
 };
+
+window.deleteMessage = function(obj)
+{
+    let $this = $(obj);
+    if(!$this.hasClass('message-item')) $this = $this.closest('.message-item');
+
+    let messageID = $this.data("msgid");
+    let $messageItem = $('#messageTabs .message-item[data-msgid="' + messageID + '"]');
+    $messageItem.removeClass('unread');
+    $messageItem.addClass('hidden');
+    $.get($.createLink('message', 'ajaxDelete', "id=" + messageID));
+
+    /* Rerender unread count. */
+    renderMessage();
+};
 </script>
