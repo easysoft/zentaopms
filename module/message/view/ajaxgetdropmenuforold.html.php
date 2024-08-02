@@ -312,4 +312,20 @@ window.updateAllDot = function(showCount)
         }
     });
 };
+
+window.hideContextMenu = function()
+{
+    if($.zui.ContextMenu.isShow()) $.zui.ContextMenu.hide();
+    contextmenuEle = null;
+};
+
+window.clickContextMenu = function(item)
+{
+    if(contextmenuEle == null) return;
+
+    let action = item.value;
+    let $this  = contextmenuEle;
+    if(action == 'delete')     deleteMessage($this);
+    if(action == 'markunread') markUnread($this);
+};
 </script>
