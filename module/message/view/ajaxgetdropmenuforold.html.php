@@ -9,3 +9,17 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+
+$noDataHtml       = "<div class='text-gray text-center nodata'>{$lang->noData}</div>";
+$browserSetting   = $config->message->browser;
+$buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
+{
+    if(empty($messageGroup)) return $noDataHtml;
+
+    $dateList = array();
+    foreach($messageGroup as $date => $messages)
+    {
+    }
+    return "<ul class='list-unstyled'>" . implode("\n", $dateList) . "</ul>";
+};
+?>
