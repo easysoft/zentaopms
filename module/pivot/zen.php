@@ -165,7 +165,8 @@ class pivotZen extends pivot
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 
-        if(isset($pivot->settings['summary']) and $pivot->settings['summary'] == 'notuse')
+        $showOrigin = isset($pivot->settings['summary']) && $pivot->settings['summary'] == 'notuse';
+        if($showOrigin)
         {
             list($data, $configs) = $this->pivot->genOriginSheet($fields, $pivot->settings, $sql, $filterFormat, $langs, $driver);
         }
@@ -179,6 +180,7 @@ class pivotZen extends pivot
         $this->view->currentMenu  = $groupID . '_' . $pivot->id;
         $this->view->currentGroup = $groupID;
         $this->view->pivot        = $pivot;
+        $this->view->showOrigin   = $showOrigin;
         $this->view->data         = $data;
         $this->view->configs      = $configs;
     }

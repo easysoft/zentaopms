@@ -42,7 +42,7 @@ foreach($pivot->filters as $filter)
     }
 }
 
-$generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs)
+$generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs, $showOrigin)
 {
     $clickable = !$pivot->builtin;
     list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs);
@@ -109,7 +109,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 ))) : null) : null
             ),
             div(setClass('divider')),
-            $filters ? div
+            !$showOrigin && $filters ? div
             (
                 setID('conditions'),
                 setClass('flex justify-start bg-canvas mt-4 mb-2 w-full' . (count($filters) == 1 ? ' flex-wrap' : ' items-center')),
@@ -119,7 +119,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     $filters
                 ),
                 button(setClass('btn primary mb-2'), on::click('loadCustomPivot'), $lang->pivot->query)
-            ) : div(setClass('mb-4')),
+            ) : div(setID('conditions'), setClass('mb-4')),
             dtable
             (
                 set::striped(true),
