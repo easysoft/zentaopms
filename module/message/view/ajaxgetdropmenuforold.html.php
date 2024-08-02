@@ -59,3 +59,21 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
 #messageTabs .tabs-header{border-bottom-width: 1px;}
 #messageTabs .label-dot{width:5px; height:5px; vertical-align: middle;}
 #messageTabs .label-dot.gray { background-color: rgb(100, 117, 139); box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgb(100, 117, 139) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px;}
+#messageTabs .w-52{width:208px;}
+#messageTabs .top-3{top:12px;}
+#messageTabs .right-5{right:20px;}
+#messageTabs .btn-link{background: 0 0; border-color:rgba(0, 0, 0, 0);}
+#messageTabs .w-5\/6 { width: 83.333333%; }
+#messageTabs .border-b { border-bottom: 1px solid rgb(235, 237, 243); }
+#messageTabs .font-bold { font-weight: 700; }
+#messageTabs .justify-center { justify-content: center; }
+#messageTabs #messageSettingDropdown { padding: 8px;}
+
+#messageTabs .form, #messageTabs .form-label { display: flex;}
+#messageTabs .form {flex-direction: column; gap: 4px;}
+#messageTabs .form-horz .form-group,
+#messageTabs .form-horz .form-row { align-items: flex-start; display: flex; flex-direction: row;}
+#messageTabs .form-horz .form-group { flex-grow: 1; flex-wrap: wrap; min-height: 32px; min-width: 0; padding-left: 96px; position: relative; }
+#messageTabs .form-horz .form-group.no-label { padding-left: 0; }
+#messageTabs .form-label { align-items: center; color: #3d4667; flex-direction: row; gap: 4px; height: 32px; overflow: hidden; position: relative; text-overflow: ellipsis; white-space: nowrap; }
+#messageTabs .form-horz .form-label { justify-content: flex-end; left: 0; padding-left: 16px; padding-right: 8px; position: absolute; top: 0; width: 96px; }
