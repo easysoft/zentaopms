@@ -336,7 +336,7 @@ window.toggleSettingDropdown = function(isOpen)
     $('#messageSettingDropdown').toggleClass('show', !isOpen);
 };
 
-window.closeSettingDropdown = function(){toggleSettingDropdown(true); }
+window.closeSettingDropdown = function(){ toggleSettingDropdown(true); }
 window.reloadSettingModal   = function(showCount)
 {
     updateAllDot(showCount);
@@ -345,5 +345,19 @@ window.reloadSettingModal   = function(showCount)
         $('#dropdownMessageMenu #messageSettingDropdown').find('form :submit').popover('destroy');
         closeSettingDropdown();
     }, 1000)
-}
+};
+
+let contextmenuEle = null;
+$(function()
+{
+    $.ajaxForm('.ajaxForm');
+    updateAllDot(showCount);
+
+    /* Adjust dropdown height when resize. */
+    $(window).on('resize', function(event)
+    {
+        let maxHeight = $(window).height() - $('#header').height() - 5;
+        $("#dropdownMessageMenu").css('height', maxHeight).css('max-height', maxHeight)
+    });
+});
 </script>
