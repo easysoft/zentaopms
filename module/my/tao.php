@@ -200,6 +200,7 @@ class myTao extends myModel
                 ->orWhere('t1.id')->in($epicIDList)
                 ->markRight(1)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
@@ -218,6 +219,7 @@ class myTao extends myModel
                 ->markRight(1)
                 ->markRight(1)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
@@ -252,6 +254,7 @@ class myTao extends myModel
                 ->orWhere('t1.id')->in($requirementIDList)
                 ->markRight(1)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
@@ -267,6 +270,7 @@ class myTao extends myModel
                 ->orWhere('t3.reviewer')->eq($this->app->user->account)
                 ->markRight(1)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id');
