@@ -1,4 +1,4 @@
-window.pivotID = pivotID;
+window.pivotID = typeof(pivotID) != 'undefined' ? pivotID : 0;
 window.clickCell = function(col, {colName, rowInfo})
 {
     const drillConditions = rowInfo.data.conditions[colName];
