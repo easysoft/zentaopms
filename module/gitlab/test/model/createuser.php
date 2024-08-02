@@ -38,7 +38,7 @@ $user->username = '';
 r($gitlab->createUserTest($gitlabID, $user)) && p('username:0') && e('用户名不能为空'); //使用空的username创建gitlab用户
 
 $user->username = 'apiuser17';
-r($gitlab->createUserTest($gitlabID, $user)) && p('0') && e('二次密码不一致！'); //检查二次密码不一致的情况
+r($gitlab->createUserTest($gitlabID, $user)) && p('password_repeat:0') && e('二次密码不一致！'); //检查二次密码不一致的情况
 
 $user->password_repeat = '12345678';
 $result = $gitlab->createUserTest($gitlabID, $user); //

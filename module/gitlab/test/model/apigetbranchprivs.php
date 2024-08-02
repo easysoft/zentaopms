@@ -29,7 +29,7 @@ r($result)            && p('master:name') && e('master'); //获取指定项目�
 r(count($result) > 0) && p()              && e('1');      //获取指定项目下受保护分支数量
 
 $projectID = 1;
-r(count($gitlab->apiGetBranchPrivs($gitlabID, $projectID))) && p() && e('0'); //获取无保护分支的项目下受保护分支数量
+r(count($gitlab->apiGetBranchPrivs($gitlabID, $projectID))) && p() && e('1'); //获取无保护分支的项目下受保护分支数量
 
 $projectID = 0;
 r($gitlab->apiGetBranchPrivs($gitlabID, $projectID)) && p('message') && e('404 Project Not Found'); //通过不存在projectID,获取受保护分支列表

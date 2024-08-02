@@ -49,7 +49,7 @@ $gitlabTest = new gitlabTest();
 r($gitlabTest->editUserTest($gitlabID, $user)) && p('account:0') && e('禅道用户不能为空'); //使用空的account更新gitlab用户
 
 $user->account = 'admin';
-r($gitlabTest->editUserTest($gitlabID, $user)) && p('0') && e('二次密码不一致！'); //设置了密码的情况下更新gitlab用户
+r($gitlabTest->editUserTest($gitlabID, $user)) && p('password_repeat:0') && e('二次密码不一致！'); //设置了密码的情况下更新gitlab用户
 
 unset($user->password);
 $user->id = $userID;

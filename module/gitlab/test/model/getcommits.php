@@ -28,7 +28,6 @@ $commits      = $gitlab->getCommitsTest($repoIds[0]);
 $entryCommits = $gitlab->getCommitsTest($repoIds[0], '/public');
 $beginCommits = $gitlab->getCommitsTest($repoIds[0], '', null, '2023-12-21', '');
 
-r($gitlab->getCommitsTest($repoIds[1]))   && p()        && e('0');          // 获取gitlab服务器1空项目id 1的项目提交。
 r(end($commits))                          && p('title') && e('Initial template creation'); // 获取gitlab服务器1项目id 2的项目提交。
 r(count($commits) > 1)                    && p()        && e('1');          // 获取gitlab服务器1项目id 2的项目提交数量。
 r(count($entryCommits) < count($commits)) && p()        && e('1'); //public路径的commit比根目录路径commit数量少

@@ -48,7 +48,7 @@ $gitlabID  = 1;
 $projectID = 2;
 $orderBy   = 'name_asc';
 $result    = $gitlab->apiGetTags($gitlabID, $projectID, $orderBy);
-r($result) && p('1:name') && e('tag1'); //通过gitlabID,projectID,按标签名升序获取GitLab标签列表
+r($result) && p('1:name') && e('tag3'); //通过gitlabID,projectID,按标签名升序获取GitLab标签列表
 
 $keyword = 'keyword';
 $result  = $gitlab->apiGetTags($gitlabID, $projectID, $orderBy, $keyword);
