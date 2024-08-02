@@ -190,6 +190,7 @@ class story extends control
             {
                 if(isset($fields['parent'])) $fields['parent']['default'] = $storyID;
                 $gradeOptions = $this->story->getGradeOptions($story, $storyType);
+                if(empty($gradeOptions)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorNoGradeSplit, 'locate' => $this->session->storyList)));
                 $fields['grade']['options'] = $gradeOptions;
                 $fields['grade']['default'] = current($gradeOptions);
             }
