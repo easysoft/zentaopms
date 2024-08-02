@@ -28,24 +28,12 @@ $buildMessageList = function($messageGroup) use ($lang)
         $itemList = array();
         foreach($messages as $message)
         {
-            $isUnread   = $message->status != 'read';
-            $dotColor   = $isUnread ? 'danger' : 'gray';
-            $secondDiff = time() - strtotime($message->createdDate);
-            if($secondDiff < 60)    $time = sprintf($lang->message->timeLabel['minute'], 1);
-            if($secondDiff >= 60)   $time = sprintf($lang->message->timeLabel['minute'], ceil($secondDiff / 60));
-            if($secondDiff >= 3600) $time = $lang->message->timeLabel['hour'];
-            if($secondDiff >= 5400) $time = substr($message->createdDate, 11, 5);
-            if($secondDiff > 86400) $time = substr($message->createdDate, 5, 11);
-
-            preg_match_all("/<a href='([^\']+)'/", $message->data, $out);
-            $link    = count($out[1]) ? $out[1][0] : '';
-            $content = str_replace("<a href='$link'", "<a data-url='{$link}' href='###' onclick='clickMessage(this)'", $message->data);
-            $content = preg_replace("/data-app='([^\']+)'/", '', $content);
-            $content = preg_replace("/(\?|\&)onlybody=yes/", '', $content);
+            $isUnread = $message->status != 'read';
+            $dotColor = $isUnread ? 'danger' : 'gray';
 
             $itemList[] = h::li
             (
-                setClass('message-item border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
+                setClass('message-item break-all border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
                 setData('msgid', $message->id),
                 set(array('zui-create' => "contextMenu")),
                 setData('target', $isUnread ? '#unreadContextMenu' : '#readContextMenu'),
@@ -53,9 +41,9 @@ $buildMessageList = function($messageGroup) use ($lang)
                 (
                     setClass('text-gray justify-between'),
                     cell(label(setClass("label-dot {$dotColor} mr-2")), $lang->message->browser),
-                    cell($time, icon(setClass('ml-2 cursor-pointer delete-message-btn'), 'close'))
+                    cell($message->showTime, icon(setClass('ml-2 cursor-pointer delete-message-btn'), 'close'))
                 ),
-                div(setClass('pt-1'), html($content))
+                div(setClass('pt-1'), html($message->data))
             );
         }
         $dateList[] = h::li(setClass('message-date mt-2'), $date, h::ul(setClass('list-unstyled'), $itemList));
@@ -77,8 +65,8 @@ tabs
     (
         setClass('absolute top-3 right-5'),
         set::style(array('z-index' => '100')),
-        btn(set::size('sm'), set::type('link'), setClass('allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('clear')),
-        btn(set::size('sm'), set::type('link'), setClass('clearRead'),   set::hint($lang->message->notice->clearRead),   icon('trash')),
+        btn(set::size('sm'), setClass('ghost allMarkRead'), set::hint($lang->message->notice->allMarkRead), icon('clear')),
+        btn(set::size('sm'), setClass('ghost clearRead'),   set::hint($lang->message->notice->clearRead),   icon('trash')),
         dropdown
         (
             setID('messageSettingDropdown'),

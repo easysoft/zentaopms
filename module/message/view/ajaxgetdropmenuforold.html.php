@@ -77,3 +77,35 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
 #messageTabs .form-horz .form-group.no-label { padding-left: 0; }
 #messageTabs .form-label { align-items: center; color: #3d4667; flex-direction: row; gap: 4px; height: 32px; overflow: hidden; position: relative; text-overflow: ellipsis; white-space: nowrap; }
 #messageTabs .form-horz .form-label { justify-content: flex-end; left: 0; padding-left: 16px; padding-right: 8px; position: absolute; top: 0; width: 96px; }
+
+.switch { position: relative; }
+.switch>input { position: absolute; top: 0; left: 0; display: block; width: 100%; height: 100%; margin: 0; opacity: 0; }
+.switch>label { display: block; padding: 5px 0 5px 35px; margin: 0; font-weight: 400; line-height: 20px; }
+.switch>label:after, .switch>label:before {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    display: block;
+    width: 30px;
+    height: 20px;
+    pointer-events: none;
+    content: ' ';
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    -webkit-transition: all .4s cubic-bezier(.175,.885,.32,1);
+    -o-transition: all .4s cubic-bezier(.175, .885, .32, 1);
+    transition: all .4s cubic-bezier(.175,.885,.32,1);
+}
+.switch>label:after {
+    top: 6px;
+    width: 18px;
+    height: 18px;
+    border-color: #ccc;
+    border-radius: 9px;
+    -webkit-box-shadow: rgba(0, 0, 0, .05) 0 1px 4px, rgba(0, 0, 0, .12) 0 1px 2px;
+    box-shadow: rgba(0, 0, 0, .05) 0 1px 4px, rgba(0, 0, 0, .12) 0 1px 2px;
+}
+.switch>input:checked+label:before { background-color: #3280fc; border-color: #3280fc; }
+.switch>input:checked+label:after { left: 11px; border-color: #fff; }
+#header .messageDropdownBox{z-index:100 !important;}
