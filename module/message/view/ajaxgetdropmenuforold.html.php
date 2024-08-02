@@ -205,4 +205,22 @@ window.markUnread = function(obj)
     fetchMessage(true, $.createLink('message', 'ajaxGetDropmenuForOld', 'active=all'));
     renderMessage();
 };
+
+window.markAllRead = function()
+{
+    let $messageItem = $('#messageTabs .message-item.unread');
+    $messageItem.find('.label-dot.danger').removeClass('danger').addClass('gray');
+    $messageItem.removeClass('unread');
+    $('#messageTabs #unread-messages.tab-pane .message-item').addClass('hidden');
+    $.get($.createLink('message', 'ajaxMarkRead', "id=all"));
+    renderMessage();
+};
+
+window.clearRead = function()
+{
+    let $messageItem = $('#messageTabs .message-item:not(.unread)');
+    $messageItem.addClass('hidden');
+    $.get($.createLink('message', 'ajaxDelete', "id=allread"));
+    renderMessage();
+};
 </script>
