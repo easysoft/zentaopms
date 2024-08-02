@@ -353,6 +353,24 @@ $(function()
     $.ajaxForm('.ajaxForm');
     updateAllDot(showCount);
 
+    let unreadContextMenu = [{'label': '<?php echo $lang->delete;?>', 'value': 'delete'}];
+    let readContextMenu   = [
+        {'label': '<?php echo $lang->delete;?>', 'value': 'delete'},
+        {'label': '<?php echo $lang->message->markUnread;?>', 'value': 'markunread'}
+    ];
+
+    /* Bind contextmenu for message dropdown. */
+    $(document).on('contextmenu', '*', function(event)
+    {
+        hideContextMenu();
+        let $this = $(this);
+        if($this.hasClass('message-item') || $this.closest('.message-item').length)
+        {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    });
+
     /* Adjust dropdown height when resize. */
     $(window).on('resize', function(event)
     {
