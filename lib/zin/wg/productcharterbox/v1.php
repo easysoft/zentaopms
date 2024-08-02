@@ -55,7 +55,7 @@ class productCharterBox extends wg
             $charterProductMaps = $app->control->loadModel('charter')->getGroupDataByID($charter->id);
             foreach($charterProductMaps as $productID => $roadmaps)
             {
-                $nolaunchRoadmaps = array_keys($roadmapGroup[$productID]);
+                $nolaunchRoadmaps = isset($roadmapGroup[$productID]) ? array_keys($roadmapGroup[$productID]) : array();
                 $roadmaps         = array_intersect($nolaunchRoadmaps, array_keys($roadmaps));
 
                 $productsBox[] = div
@@ -102,7 +102,7 @@ class productCharterBox extends wg
                                         set::name("roadmap[$index]"),
                                         set::multiple(true),
                                         set::required(true),
-                                        set::items($roadmapGroup[$productID]),
+                                        set::items(isset($roadmapGroup[$productID]) ? $roadmapGroup[$productID] : array()),
                                         set::value($roadmaps)
                                     )
                                 ),
