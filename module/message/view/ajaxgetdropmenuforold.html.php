@@ -248,4 +248,18 @@ window.clickMessage = function(obj)
     $.apps.openApp(url);
     renderMessage();
 };
+
+window.renderMessage = function()
+{
+    let $unreadTab  = $('#messageTabs #unread-messages.tab-pane');
+    let unreadCount = $unreadTab.find('.message-item.unread').length;
+    if(typeof(unreadLangTempate) != 'undefined') $('[href="#unread-messages"] span').html(unreadLangTempate.replace(/%s/, unreadCount));
+    if(unreadCount == 0)
+    {
+        $unreadTab.find('ul').addClass('hidden');
+        if($unreadTab.find('.nodata').length == 0) $unreadTab.append(noDataHtml);
+    }
+
+    updateAllDot(showCount);
+};
 </script>
