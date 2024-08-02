@@ -120,6 +120,7 @@ $lang->release->notifyList['CT'] = "Copy To";
 $lang->release->featureBar['browse']['all']       = $lang->release->all;
 $lang->release->featureBar['browse']['wait']      = $lang->release->statusList['wait'];
 $lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['fail']      = $lang->release->statusList['fail'];
 $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];
 
 $lang->release->markerList[1] = 'Yes';
