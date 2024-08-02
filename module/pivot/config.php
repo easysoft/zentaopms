@@ -192,7 +192,7 @@ $config->pivot->objectTableFields->story['reviewer']['type'] = 'user';
 
 $config->pivot->objectTableFields->testcase = array();
 $config->pivot->objectTableFields->testcase['id']['name']    = 'id';
-$config->pivot->objectTableFields->testcase['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+$config->pivot->objectTableFields->testcase['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}", 'target' => '_blank');
 
 $config->pivot->objectTableFields->release = array();
 $config->pivot->objectTableFields->release['stories']['name']   = 'stories';
