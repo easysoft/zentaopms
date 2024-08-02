@@ -2017,8 +2017,9 @@ class productModel extends model
         if($module == 'testtask'   && $method == 'unitcases')   return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
 
         if(in_array($module, array('story', 'epic', 'requirement')) && in_array($method, array('create', 'edit', 'batchcreate'))) return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}&browseType=" . ($this->config->vision == 'or' ? 'assignedtome' : 'unclosed') . "&param=0&storyType=$module");
-        if($module == 'product' && $method == 'browse') return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}&browseType=" . ($this->config->vision == 'or' ? 'assignedtome' : 'unclosed') . "&param=0&storyType=$extra");
-        if($module == 'story'   && $method == 'view')   return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}");
+        if($module == 'product' && $method == 'browse')    return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}&browseType=" . ($this->config->vision == 'or' ? 'assignedtome' : 'unclosed') . "&param=0&storyType=$extra");
+        if($module == 'story'   && $method == 'view')      return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}");
+        if($module == 'story'   && $method == 'storyview') return helper::createLink('product', 'browse', "productID=%s&branch={$branchID}");
 
         if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
         if($module == 'product'    && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
