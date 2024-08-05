@@ -946,6 +946,18 @@ class pivotState
     }
 
     /**
+     * Set filters.
+     *
+     * @param  array    $drills
+     * @access public
+     * @return void
+     */
+    public function setFilters($filters)
+    {
+        $this->filters = json_decode(json_encode($filters), true);
+    }
+
+    /**
      * Set field related object.
      *
      * @param  array  $relatedObject
