@@ -9,7 +9,7 @@ function onChangeType()
     if($('[name=hostType]').val() == 'physics')
     {
         $("[name^='parent']").closest('.form-row').hide();
-        $("[name^='image']").closest('.form-row').hide();
+        $("[name^='image']").closest('.form-group').hide();
         $('#extranet').closest('.form-row').removeClass('hidden');
         $('#osName').closest('.form-row').addClass('hidden');
         $('#osNamePhysicsContainer').removeClass('hidden');
@@ -17,7 +17,7 @@ function onChangeType()
     else
     {
         $("[name^='parent']").closest('.form-row').show();
-        $("[name^='image']").closest('.form-row').show();
+        $("[name^='image']").closest('.form-group').show();
         $('#extranet').closest('.form-row').addClass('hidden');
         $('#osName').closest('.form-row').removeClass('hidden');
         $('#osNamePhysicsContainer').addClass('hidden');

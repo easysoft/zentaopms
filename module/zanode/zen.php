@@ -58,6 +58,8 @@ class zanodeZen extends zanode
      */
     protected function prepareCreateExtras(): object
     {
+        if($this->post->hostType == 'physics') $this->config->zanode->create->requiredFields = $this->config->zanode->create->physicsRequiredFields;
+
         $data = form::data()
             ->setDefault('type', 'node')
             ->setDefault('createdDate', helper::now())
