@@ -1124,7 +1124,7 @@ class baseControl
         {
             if(!empty($data['message'])) echo js::alert($data['message']);
             $locate = $data['locate'] ?? $_SERVER['HTTP_REFERER'] ?? '';
-            if($locate && preg_match('/\(/', $locate)) $locate = $this->config->webRoot;
+            if($locate && strpos($locate, '(') !== false) $locate = $this->config->webRoot;
             if(!empty($locate)) return helper::end(js::locate($locate));
             return helper::end($data['message'] ?? 'success');
         }
@@ -1137,7 +1137,7 @@ class baseControl
                 {
                     echo js::alert($data['message']);
                     $locate = $data['locate'] ?? $_SERVER['HTTP_REFERER'] ?? '';
-                    if($locate && preg_match('/\(/', $locate)) $locate = $this->config->webRoot;
+                    if($locate && strpos($locate, '(') !== false) $locate = $this->config->webRoot;
                     if (!empty($locate)) return helper::end(js::locate($locate));
                     return helper::end($data['message'] ?? 'fail');
                 }
