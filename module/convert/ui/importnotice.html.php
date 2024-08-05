@@ -14,7 +14,7 @@ $labelWidth = $method == 'db' ? '80px' : '20px';
 
 formPanel
 (
-    set::title($method == 'db' ? $lang->convert->jira->importFromDB : $lang->convert->jira->importFromDB),
+    set::title($method == 'db' ? $lang->convert->jira->importFromDB : $lang->convert->jira->importFromFile),
     set::headingClass('justify-start'),
     set::bodyClass('px-0'),
     set::submitBtnText($lang->convert->jira->next),
