@@ -320,41 +320,37 @@ class convertModel extends model
         $file     = $filePath . $fileName;
         $handle   = fopen($file, "r");
 
-        $headerList = array('<Action', '<Project', '<Status', '<Resolution', '<User', '<Issue', '<ChangeGroup', '<ChangeItem', '<IssueLink', '<IssueLinkType', '<FileAttachment', '<Version', '<IssueType', '<NodeAssociation', '<ApplicationUser');
-        $footerList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>');
+        $tagList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>');
 
         while(!feof($handle))
         {
             $itemStr = fgets($handle);
-            foreach($headerList as $object)
+            foreach($tagList as $startName => $endName)
             {
-                $itemName  = $object;
-                $itemName .= ' ';
-
-                if(strpos($itemStr, $itemName) === false) continue;
+                $startName .= ' ';
+                if(strpos($itemStr, $startName) === false) continue;
 
                 if(strpos($itemStr, '/>') === false)
                 {
-                    $end = $footerList[$object];
                     while(true)
                     {
                         $followItemStr = fgets($handle);
                         $itemStr      .= $followItemStr;
-                        if(strpos($itemStr, $end) !== false) break;
+                        if(strpos($itemStr, $endName) !== false) break;
                     }
                 }
 
-                $object = str_replace('<', '', $object);
-                $object = strtolower($object);
+                $object = str_replace('<', '', $startName);
+                $object = trim(strtolower($object));
                 $data   = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $itemStr);
                 if(!file_exists($filePath . $object . '.xml')) $data = "<?xml version='1.0' encoding='UTF-8'?>\n  <entity-engine-xml>\n" . $data;
                 file_put_contents($filePath . $object . '.xml', $data, FILE_APPEND);
             }
         }
 
-        foreach($headerList as $object)
+        foreach($tagList as $startName => $endName)
         {
-            $object   = str_replace('<', '', $object);
+            $object   = str_replace('<', '', $startName);
             $object   = strtolower($object);
             $filename = $filePath . $object . '.xml';
             if(file_exists($filename)) file_put_contents($filename, '</entity-engine-xml>', FILE_APPEND);
