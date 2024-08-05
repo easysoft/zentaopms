@@ -386,6 +386,7 @@ class js implements \JsonSerializable, iDirective
      * @access public
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
         $js = trim($this->toJS());

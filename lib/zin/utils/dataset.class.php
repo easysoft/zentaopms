@@ -155,6 +155,7 @@ class dataset implements \JsonSerializable
      * @access public
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
         return $this->toArray();
