@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('path', $path);
 jsVar('copied', $lang->repo->copied);
 jsVar('base64BranchID', $base64BranchID);
 
