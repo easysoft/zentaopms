@@ -27,7 +27,7 @@ class style extends \zin\utils\dataset implements iDirective
     public function __call(string $name, array $args): style
     {
         $value = empty($args) ? true : (count($args) === 1 ? $args[0] : $args);
-        return $this->setVal($name, $value);;
+        return $this->setVal($name, $value);
     }
 
     /**
@@ -66,6 +66,16 @@ class style extends \zin\utils\dataset implements iDirective
 
         if($style) $node->setProp('style', $style);
         if($class) $node->setProp('class', $class);
+    }
+
+    public function var(string|array $nameOrMap, mixed $value = null): style
+    {
+        if(is_array($nameOrMap))
+        {
+            foreach($nameOrMap as $name => $val) $this->setVal('--' . $name, $val);
+            return $this;
+        }
+        return $this->setVal('--' . $nameOrMap, $value);
     }
 
     /**
@@ -107,6 +117,10 @@ class style extends \zin\utils\dataset implements iDirective
         if(!is_string($value) && is_numeric($value) && (str_ends_with($name, '-width') || str_ends_with($name, '-height') || str_ends_with($name, '-radius') || in_array($name, array('width', 'height', 'radius', 'top', 'left', 'right', 'bottom', 'inset'))))
         {
             $value .= 'px';
+        }
+        elseif(is_string($value) && str_starts_with($value, '--'))
+        {
+            $value = 'var(' . $value . ')';
         }
 
         return is_string($value) ? $value : (string)$value;
