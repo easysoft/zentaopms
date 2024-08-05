@@ -32,13 +32,14 @@ window.afterRender = function()
     if(oldData.length == 0) return;
 
     // 如果正在加载提交信息或已经加载提交信息，直接返回
-    if(!dtable.repoID || dtable.repoID != repo.id)
+    if(!dtable.repoID || dtable.repoID != repo.id || !dtable.branch || dtable.branch != base64BranchID)
     {
         dtable.isLoadingCommits   = false;
         dtable.isLoadedAllCommits = false;
     }
 
     dtable.repoID = repo.id;
+    dtable.branch = base64BranchID;
     if(dtable.isLoadingCommits || dtable.isLoadedAllCommits) return;
 
     // 设置正在加载提交信息
