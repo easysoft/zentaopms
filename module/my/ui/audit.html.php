@@ -67,7 +67,7 @@ foreach($reviewList as $review)
         }
         elseif($review->storyType == 'requirement')
         {
-            $typeName = $lang->ERCommon;
+            $typeName = $lang->URCommon;
         }
     }
 
