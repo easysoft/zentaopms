@@ -79,7 +79,7 @@ class simpleList extends wg
             {
                 if(is_callable($onRenderItem)) $item = $onRenderItem($item, $key);
                 if(is_string($item)) $item = array('title' => $item);
-                if(is_array($item) && is_string($key))  $item['title'] = $key;
+                if(is_array($item) && is_string($key) && !isset($item['title']))  $item['title'] = $key;
 
                 $itemsView[] = $this->onBuildItem($item);
             }
