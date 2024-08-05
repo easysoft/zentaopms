@@ -41,6 +41,7 @@ class listItem extends wg
         'subtitleClass' => '?string|array',
         'hint'          => '?string',
         'trailing'      => '?mixed',
+        'trailingIcon'  => '?string|array',
         'actions'       => '?array',
         'actionsClass'  => '?array|string',
         'content'       => '?mixed',
