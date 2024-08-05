@@ -13,7 +13,7 @@ UPDATE `zt_workflowaction` SET conditions = '' WHERE `action` = 'approvalreview'
 UPDATE `zt_workflowaction` SET conditions = '' WHERE `action` = 'approvalcancel' AND `conditions` = '[{"conditionType":"data","fields":[{"field":"deleted","operator":"equal","param":"0","logicalOperator":"and"},{"field":"reviewStatus","operator":"equal","param":"doing","logicalOperator":"and"},{"field":"openedBy","operator":"equal","param":"currentUser"}]}]';
 UPDATE `zt_workflowaction` SET conditions = '' WHERE `action` = 'approvalsubmit' AND `conditions` = '[{"conditionType":"data","fields":[{"field":"deleted","operator":"equal","param":"0","logicalOperator":"and"},{"field":"reviewStatus","operator":"equal","param":"wait","logicalOperator":"and"},{"field":"openedBy","operator":"equal","param":"currentUser"}]},{"conditionType":"data","fields":[{"field":"deleted","operator":"equal","param":"0","logicalOperator":"and"},{"field":"reviewStatus","operator":"equal","param":"reject","logicalOperator":"and"},{"field":"openedBy","operator":"equal","param":"currentUser"}]}]';
 
-ALTER TABLE `zt_job` ADD INDEX `idx_repo_deleted`(`repo`,`deleted`);
+CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
 
 UPDATE `zt_workflowfield` SET options = '{"wait":"\\u5f85\\u5ba1\\u6279","doing":"\\u5ba1\\u6279\\u4e2d","pass":"\\u901a\\u8fc7","reject":"\\u4e0d\\u901a\\u8fc7","reverting":"\\u56de\\u9000\\u4e2d"}' WHERE field = 'reviewStatus';
 

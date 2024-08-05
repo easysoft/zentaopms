@@ -16696,4 +16696,4 @@ UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
 
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
-ALTER TABLE `zt_job` ADD INDEX `idx_repo_deleted`(`repo`,`deleted`);
+CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
