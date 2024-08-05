@@ -2104,7 +2104,7 @@ class pivotModel extends model
     {
         foreach($filters as $index => $filter)
         {
-            if($filterStatus == 'published' && isset($filter['status']) && $filter['status'] == 'design' && isset($filter['account']) && $filter['account'] == $this->app->user->account)
+            if($filterStatus == 'published' && isset($filter['status']) && $filter['status'] == 'design')
             {
                 unset($filters[$index]);
             }
