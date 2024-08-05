@@ -669,7 +669,9 @@ class docModel extends model
                 ->groupBy('doc')
                 ->get();
 
-            $docs = $this->dao->select('t1.*,t2.date,t3.name as libName')->from(TABLE_DOC)->alias('t1')
+            $docs = $this->dao->select('t1.*,t2.date,t3.name as libName,t3.type as objectType')->from(TABLE_DOC)->alias('t1')
+                ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
+                ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
