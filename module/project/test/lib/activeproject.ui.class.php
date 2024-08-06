@@ -30,7 +30,8 @@ class activeprojectTester extends tester
         $form->dom->search(array("{$this->lang->project->name},=,{$title}"));
         $form->wait(1);
 
-        if($title != $form->dom->projectName->getText()) return $this->failed('激活项目失败');
+        $featureBar['index'] = (array)$featureBar['index'];
+        if($featureBar['index']['doing'] != $form->dom->browseStatus->getText()) return $this->failed('激活项目失败');
 
         return $this->success('激活项目成功');
     }

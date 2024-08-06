@@ -31,7 +31,8 @@ class closeprojectTester extends tester
         $form->dom->search(array("{$this->lang->project->name},=,{$title}"));
         $form->wait(1);
 
-        if($title != $form->dom->projectName->getText()) return $this->failed('关闭项目失败');
+        $featureBar['index'] = (array)$featureBar['index'];
+        if($featureBar['index']['closed'] != $form->dom->browseStatus->getText()) return $this->failed('关闭项目失败');
 
         return $this->success('关闭项目成功');
     }
