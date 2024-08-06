@@ -91,6 +91,7 @@ $lang->app         = new stdclass();
 $lang->host        = new stdclass();
 $lang->zahost      = new stdclass();
 $lang->zanode      = new stdclass();
+$lang->autotest    = new stdclass();
 $lang->holiday     = new stdclass();
 $lang->contact     = new stdclass();
 $lang->dimension   = new stdclass();

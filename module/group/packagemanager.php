@@ -221,13 +221,9 @@ $config->group->subset->testreport = new stdclass();
 $config->group->subset->testreport->order = 710;
 $config->group->subset->testreport->nav   = 'qa';
 
-$config->group->subset->zahost = new stdclass();
-$config->group->subset->zahost->order = 720;
-$config->group->subset->zahost->nav   = 'qa';
-
-$config->group->subset->zanode = new stdclass();
-$config->group->subset->zanode->order = 730;
-$config->group->subset->zanode->nav   = 'qa';
+$config->group->subset->autotest = new stdclass();
+$config->group->subset->autotest->order = 715;
+$config->group->subset->autotest->nav   = 'qa';
 
 $config->group->subset->caselib = new stdclass();
 $config->group->subset->caselib->order = 740;
@@ -2035,29 +2031,35 @@ $config->group->package->importTestreport->subset = 'testreport';
 $config->group->package->importTestreport->privs  = array();
 $config->group->package->importTestreport->privs['testreport-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array(), 'recommend' => array());
 
+$config->group->package->autotestInstruction = new stdclass();
+$config->group->package->autotestInstruction->order  = 5;
+$config->group->package->autotestInstruction->subset = 'autotest';
+$config->group->package->autotestInstruction->privs  = array();
+$config->group->package->autotestInstruction->privs['zanode-instruction'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('qa-index'), 'recommend' => array('zanode-view'));
+
 $config->group->package->browseZAHost = new stdclass();
 $config->group->package->browseZAHost->order  = 5;
-$config->group->package->browseZAHost->subset = 'zahost';
+$config->group->package->browseZAHost->subset = 'autotest';
 $config->group->package->browseZAHost->privs  = array();
-$config->group->package->browseZAHost->privs['zahost-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('qa-index'), 'recommend' => array('zahost-view'));
+$config->group->package->browseZAHost->privs['zahost-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('zanode-instruction'), 'recommend' => array('zahost-view'));
 $config->group->package->browseZAHost->privs['zahost-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('zahost-browse'), 'recommend' => array());
 
 $config->group->package->manageZAHost = new stdclass();
 $config->group->package->manageZAHost->order  = 10;
-$config->group->package->manageZAHost->subset = 'zahost';
+$config->group->package->manageZAHost->subset = 'autotest';
 $config->group->package->manageZAHost->privs  = array();
 $config->group->package->manageZAHost->privs['zahost-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('zahost-browse'), 'recommend' => array('zahost-edit'));
 $config->group->package->manageZAHost->privs['zahost-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('zahost-browse'), 'recommend' => array('zahost-create'));
 
 $config->group->package->deleteZAHost = new stdclass();
 $config->group->package->deleteZAHost->order  = 15;
-$config->group->package->deleteZAHost->subset = 'zahost';
+$config->group->package->deleteZAHost->subset = 'autotest';
 $config->group->package->deleteZAHost->privs  = array();
 $config->group->package->deleteZAHost->privs['zahost-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('zahost-browse'), 'recommend' => array());
 
 $config->group->package->image = new stdclass();
 $config->group->package->image->order  = 20;
-$config->group->package->image->subset = 'zahost';
+$config->group->package->image->subset = 'autotest';
 $config->group->package->image->privs  = array();
 $config->group->package->image->privs['zahost-browseImage']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('zahost-browse'), 'recommend' => array());
 $config->group->package->image->privs['zahost-downloadImage']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('zahost-browseImage', 'zahost-cancelDownload'), 'recommend' => array());
@@ -2065,14 +2067,14 @@ $config->group->package->image->privs['zahost-cancelDownload'] = array('edition'
 
 $config->group->package->browseZANode = new stdclass();
 $config->group->package->browseZANode->order  = 5;
-$config->group->package->browseZANode->subset = 'zanode';
+$config->group->package->browseZANode->subset = 'autotest';
 $config->group->package->browseZANode->privs  = array();
-$config->group->package->browseZANode->privs['zanode-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('qa-index'), 'recommend' => array('zanode-view'));
+$config->group->package->browseZANode->privs['zanode-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('zanode-instruction'), 'recommend' => array('zanode-view'));
 $config->group->package->browseZANode->privs['zanode-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('zanode-browse'), 'recommend' => array());
 
 $config->group->package->manageZANode = new stdclass();
 $config->group->package->manageZANode->order  = 10;
-$config->group->package->manageZANode->subset = 'zanode';
+$config->group->package->manageZANode->subset = 'autotest';
 $config->group->package->manageZANode->privs  = array();
 $config->group->package->manageZANode->privs['zanode-create']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('zanode-browse', 'zanode-view'), 'recommend' => array('zanode-close', 'zanode-edit', 'zanode-getVNC', 'zanode-reboot', 'zanode-resume', 'zanode-start', 'zanode-suspend'));
 $config->group->package->manageZANode->privs['zanode-edit']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('zanode-browse', 'zanode-view'), 'recommend' => array('zanode-close', 'zanode-create', 'zanode-getVNC', 'zanode-reboot', 'zanode-resume', 'zanode-start', 'zanode-suspend'));
@@ -2085,13 +2087,13 @@ $config->group->package->manageZANode->privs['zanode-suspend'] = array('edition'
 
 $config->group->package->importZANode = new stdclass();
 $config->group->package->importZANode->order  = 15;
-$config->group->package->importZANode->subset = 'zanode';
+$config->group->package->importZANode->subset = 'autotest';
 $config->group->package->importZANode->privs  = array();
 $config->group->package->importZANode->privs['zanode-createImage'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('zanode-browse'), 'recommend' => array());
 
 $config->group->package->snapshot = new stdclass();
 $config->group->package->snapshot->order  = 25;
-$config->group->package->snapshot->subset = 'zanode';
+$config->group->package->snapshot->subset = 'autotest';
 $config->group->package->snapshot->privs  = array();
 $config->group->package->snapshot->privs['zanode-browseSnapshot']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array('zanode-view'), 'recommend' => array());
 $config->group->package->snapshot->privs['zanode-createSnapshot']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array('zanode-browse', 'zanode-view'), 'recommend' => array('zanode-editSnapshot'));

@@ -365,6 +365,7 @@ $lang->group->package->browseTestreport      = 'Browse Testreport';
 $lang->group->package->manageTestreport      = 'Manage Testreport';
 $lang->group->package->deleteTestreport      = 'Delete Testreport';
 $lang->group->package->importTestreport      = 'Import Testreport';
+$lang->group->package->autotestInstruction   = 'Instruction';
 $lang->group->package->browseZAHost          = 'Browse Z A Host';
 $lang->group->package->manageZAHost          = 'Manage Z A Host';
 $lang->group->package->deleteZAHost          = 'Delete Z A Host';

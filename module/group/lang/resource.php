@@ -1358,6 +1358,7 @@ $lang->resource->zanode->createSnapshot  = 'createSnapshot';
 $lang->resource->zanode->editSnapshot    = 'editSnapshot';
 $lang->resource->zanode->restoreSnapshot = 'restoreSnapshot';
 $lang->resource->zanode->deleteSnapshot  = 'deleteSnapshot';
+$lang->resource->zanode->instruction     = 'instruction';
 
 $lang->zanode->methodOrder[0]  = 'browse';
 $lang->zanode->methodOrder[5]  = 'create';
@@ -1376,6 +1377,7 @@ $lang->zanode->methodOrder[65] = 'createSnapshot';
 $lang->zanode->methodOrder[70] = 'editSnapshot';
 $lang->zanode->methodOrder[75] = 'restoreSnapshot';
 $lang->zanode->methodOrder[80] = 'deleteSnapshot';
+$lang->zanode->methodOrder[85] = 'instruction';
 
 $lang->resource->repo = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';

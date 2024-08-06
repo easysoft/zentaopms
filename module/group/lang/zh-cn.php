@@ -365,6 +365,7 @@ $lang->group->package->browseTestreport      = '浏览测试报告';
 $lang->group->package->manageTestreport      = '创建维护测试报告';
 $lang->group->package->deleteTestreport      = '删除测试报告';
 $lang->group->package->importTestreport      = '导入导出测试报告';
+$lang->group->package->autotestInstruction   = '说明';
 $lang->group->package->browseZAHost          = '浏览宿主机';
 $lang->group->package->manageZAHost          = '创建维护宿主机';
 $lang->group->package->deleteZAHost          = '删除宿主机';
