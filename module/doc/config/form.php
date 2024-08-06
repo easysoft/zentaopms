@@ -6,6 +6,8 @@ global $app, $config;
 $config->doc->form = new stdclass();
 
 $config->doc->form->createlib['name']      = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
+$config->doc->form->createlib['spaceName'] = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
+$config->doc->form->createlib['parent']    = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->createlib['baseUrl']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->createlib['acl']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->createlib['type']      = array('type' => 'string',   'required' => false, 'default' => '');

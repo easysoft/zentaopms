@@ -138,6 +138,8 @@ class doc extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $libID = $this->doc->createLib($lib, (string)$this->post->type, (string)$this->post->libType);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             return $this->docZen->responseAfterCreateLib($type, $objectID, $libID);
         }
 
@@ -147,7 +149,7 @@ class doc extends control
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
-            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
+            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
             if($this->app->tab == 'doc')
             {
                 $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
@@ -161,6 +163,8 @@ class doc extends control
             $execution = $this->execution->getByID($objectID);
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
+
+        if($type == 'custom') $this->view->spaces = $this->doc->getTeamSpaces();
 
         $this->docZen->setAclForCreateLib($type);
 

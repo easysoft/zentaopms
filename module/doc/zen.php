@@ -292,8 +292,6 @@ class docZen extends doc
      */
     protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0): bool|int
     {
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
         if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
         if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
         if($type == 'execution' && $this->post->execution) $objectID = $this->post->execution;
