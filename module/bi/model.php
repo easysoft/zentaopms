@@ -1300,7 +1300,7 @@ class biModel extends model
             $moduleNames = $this->dataview->getModuleNames($tables);
             $aliasNames  = $this->dataview->getAliasNames($statement, $moduleNames);
         }
-        list($fieldPairs, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames, $aliasNames);
+        list($fieldPairs, $relatedObjects) = $this->dataview->mergeFields($columnFields, $fields, !empty($moduleNames) ? $moduleNames : $tables, $aliasNames);
 
         foreach($fieldPairs as $field => $name)
         {

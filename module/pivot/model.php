@@ -2041,7 +2041,7 @@ class pivotModel extends model
                     if($this->config->edition != 'open')
                     {
                         $fieldObject = $this->loadModel('workflowfield')->getByField($object, $field);
-                        $options     = $this->workflowfield->getFieldOptions($fieldObject);
+                        if($fieldObject) $options = $this->workflowfield->getFieldOptions($fieldObject);
                         if(!empty($options)) break;
                     }
 
