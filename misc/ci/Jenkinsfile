@@ -513,7 +513,7 @@ pipeline {
 
           agent {
             kubernetes {
-              inheritFrom "dind2 xuanim"
+              inheritFrom "dind2 xuanim upload-azure"
               yamlFile 'misc/ci/publish-image.yaml'
             }
           }
