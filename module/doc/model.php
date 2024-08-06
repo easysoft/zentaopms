@@ -236,7 +236,7 @@ class docModel extends model
             $this->checkApiLibName($lib, $type);
         }
 
-        $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
+        $this->dao->insert(TABLE_DOCLIB)->data($lib, 'spaceName')->autoCheck()
             ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
             ->exec();
 
@@ -851,6 +851,23 @@ class docModel extends model
     }
 
     /**
+     * 获取团队空间下的空间。
+     * Get team spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTeamSpaces(): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchPairs();
+    }
+
+    /**
      * 创建独立的文档。
      * Create a seperate docs.
      *
@@ -1269,7 +1286,8 @@ class docModel extends model
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
-                ->andWhere('type')->eq($type)
+                ->beginIF($type == 'mine')->andWhere('type')->eq($type)->fi()
+                ->beginIF($type == 'custom')->andWhere('type')->in('custom,space')->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
                 ->orderBy('`order` asc, id_asc')
@@ -2300,6 +2318,7 @@ class docModel extends model
 
             if($item->type == 'apiLib') $apiLibIDList[] = $lib->id;
         }
+
         return array($libTree, $apiLibs, $apiLibIDList);
     }
 
@@ -2330,6 +2349,7 @@ class docModel extends model
         $item->id         = $lib->id;
         $item->type       = $lib->type == 'api' ? 'apiLib' : 'docLib';
         $item->name       = $lib->name;
+        $item->parent     = $lib->parent;
         $item->order      = $lib->order;
         $item->objectType = $type;
         $item->objectID   = $objectID;
