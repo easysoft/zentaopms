@@ -23,6 +23,7 @@ $lang->doclib->apiLibName   = 'Library Name';
 $lang->doclib->defaultSpace = 'Default Space';
 $lang->doclib->spaceName    = 'Space Name';
 $lang->doclib->createSpace  = 'Create Space';
+$lang->doclib->editSpace    = 'Edit Space';
 $lang->doclib->privateACL   = "Private (Only creators and whitelisted users with %s permissions can access it)";
 
 $lang->doclib->tip = new stdclass();

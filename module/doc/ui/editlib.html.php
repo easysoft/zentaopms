@@ -13,7 +13,7 @@ jsVar('doclibID', $lib->id);
 jsVar('libType', $lib->type);
 modalHeader
 (
-    set::title($lang->doc->editLib),
+    set::title($lib->type == 'custom' && $lib->parent == 0 ? $lang->doclib->editSpace : $lang->doc->editLib),
     set::entityID($lib->id),
     set::entityText($lib->name),
 );
@@ -28,7 +28,7 @@ formPanel
     ) : null,
     formGroup
     (
-        set::label($lang->doc->libName),
+        set::label($lib->type == 'custom' && $lib->parent == 0 ? $lang->doclib->spaceName : $lang->doc->libName),
         set::name('name'),
         set::value($lib->name),
         radioList

@@ -23,6 +23,7 @@ $lang->doclib->apiLibName   = '库名称';
 $lang->doclib->defaultSpace = '默认空间';
 $lang->doclib->spaceName    = '空间名称';
 $lang->doclib->createSpace  = '新建空间';
+$lang->doclib->editSpace    = '编辑空间';
 $lang->doclib->privateACL   = "私有 （仅创建者和有%s权限的白名单用户可访问）";
 
 $lang->doclib->tip = new stdclass();
