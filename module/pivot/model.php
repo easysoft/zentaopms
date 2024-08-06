@@ -1911,6 +1911,12 @@ class pivotModel extends model
             {
                 $this->app->loadLang($fieldObject);
                 if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+
+                if($this->config->edition != 'open')
+                {
+                    $workflowFields = $this->loadModel('workflowfield')->getFieldPairs($fieldObject);
+                    if(isset($workflowFields[$relatedField])) $colLabel = $workflowFields[$relatedField];
+                }
             }
 
             if(isset($langs[$group]) and !empty($langs[$group][$clientLang])) $colLabel = $langs[$group][$clientLang];
@@ -2001,10 +2007,10 @@ class pivotModel extends model
      */
     public function genSheet($fields, $settings, $sql, $filters, $langs = array())
     {
-        $groups = $this->getGroupsFromSettings($settings);
-        $cols   = $this->generateTableCols($fields, $groups, $langs);
+        $groups       = $this->getGroupsFromSettings($settings);
+        $cols         = $this->generateTableCols($fields, $groups, $langs);
         $selectFields = $this->getSelectFieldsFromSettings($settings);
-        $fields = $this->filterWithSelectFields($fields, $selectFields);
+        $fields       = $this->filterWithSelectFields($fields, $selectFields);
 
         /* Replace the variable with the default value. */
         $sql = $this->initVarFilter($filters, $sql);
@@ -2262,6 +2268,12 @@ class pivotModel extends model
         {
             $this->app->loadLang($fieldObject);
             if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+
+            if($this->config->edition != 'open')
+            {
+                $workflowFields = $this->loadModel('workflowfield')->getFieldPairs($fieldObject);
+                if(isset($workflowFields[$relatedField])) $colLabel = $workflowFields[$relatedField];
+            }
         }
 
         $clientLang = $this->app->getClientLang();
@@ -2643,6 +2655,13 @@ class pivotModel extends model
             case 'number':
                 if($field)
                 {
+                    if($this->config->edition != 'open')
+                    {
+                        $fieldObject = $this->loadModel('workflowfield')->getByField($object, $field);
+                        $options     = $this->workflowfield->getFieldOptions($fieldObject);
+                        break;
+                    }
+
                     $options = array();
                     if(is_array($source))
                     {
