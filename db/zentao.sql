@@ -800,6 +800,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` smallint(6) unsigned NOT NULL auto_increment,
   `type` varchar(30) NOT NULL DEFAULT '',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `parent`  mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
