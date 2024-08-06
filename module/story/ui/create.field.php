@@ -2,6 +2,7 @@
 namespace zin;
 global $lang, $config;
 
+$uid          = uniqid();
 $fields       = defineFieldList('story.create');
 $createFields = data('fields');
 $type         = data('type');
@@ -111,14 +112,14 @@ $fields->field('estimate')
 $fields->field('spec')
     ->width('full')
     ->required($createFields['spec']['required'])
-    ->control(array('control' => 'editor', 'templateType' => 'story'))
+    ->control(array('control' => 'editor', 'templateType' => 'story', 'uid' => $uid))
     ->placeholder($lang->story->specTemplate . "\n" . $lang->noticePasteImg)
     ->value($createFields['spec']['default']);
 
 $fields->field('verify')
     ->width('full')
     ->required($createFields['verify']['required'])
-    ->control('editor')
+    ->control(array('control' => 'editor', 'uid' => $uid))
     ->value($createFields['verify']['default']);
 
 $fields->field('files')->width('full')->control('fileSelector');

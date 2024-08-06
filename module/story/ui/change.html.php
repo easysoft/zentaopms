@@ -24,6 +24,7 @@ jsVar('storyType', $story->type);
 jsVar('rawModule', $this->app->rawModule);
 jsVar('page', $this->app->rawMethod);
 
+$uid       = uniqid();
 $formItems = array();
 $formItems['reviewer'] = section
 (
@@ -113,6 +114,7 @@ $formItems['spec'] = section
     editor
     (
         set::name('spec'),
+        set::uid($uid),
         html($fields['spec']['default'])
     )
 );
@@ -135,6 +137,7 @@ foreach($fields as $field => $attr)
             editor
             (
                 set::name($fieldName),
+                set::uid($uid),
                 html($attr['default'])
             )
         );
@@ -199,5 +202,3 @@ detailBody
     h::hr(),
     history(set::objectID($story->id))
 );
-
-render();

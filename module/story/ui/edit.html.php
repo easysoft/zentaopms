@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$uid            = uniqid();
 $canEditContent = str_contains(',draft,changing,', ",{$story->status},");
 $forceReview    = $this->story->checkForceReview($story->type);
 $assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $users;
@@ -148,13 +149,13 @@ detailBody
         section
         (
             set::title($lang->story->legendSpec),
-            $canEditContent ? formGroup(editor(set::name('spec'), html($story->spec))) : set::content($story->spec),
+            $canEditContent ? formGroup(editor(set::name('spec'), set::uid($uid), html($story->spec))) : set::content($story->spec),
             $canEditContent ? null : set::useHtml(true)
         ),
         section
         (
             set::title($lang->story->verify),
-            $canEditContent ? formGroup(editor(set::name('verify'), html($story->verify))) : set::content($story->verify),
+            $canEditContent ? formGroup(editor(set::name('verify'), set::uid($uid), html($story->verify))) : set::content($story->verify),
             $canEditContent ? null : set::useHtml(true)
         ),
         empty($twins) ? null : section
@@ -195,7 +196,7 @@ detailBody
         section
         (
             set::title($lang->story->comment),
-            formGroup(editor(set::name('comment')))
+            formGroup(editor(set::name('comment'), set::uid($uid)))
         )
     ),
     history(set::objectID($story->id)),
