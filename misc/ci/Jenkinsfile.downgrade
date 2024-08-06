@@ -74,7 +74,7 @@ pipeline {
                 container('package') {
                   sh 'echo ${GIT_BRANCH}'
                   sh '''find module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +'''
-                  
+                  sh 'git config --global --add safe.directory $PWD'
                   sh 'git config --global --add safe.directory $PWD/downRepo'
                   withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
                     sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade.sh -r $PWD -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" framework lib module/* extension'
