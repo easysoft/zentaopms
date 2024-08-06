@@ -870,6 +870,12 @@ class pivotModel extends model
             {
                 $this->app->loadLang($fieldObject);
                 if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+
+                if($this->config->edition != 'open')
+                {
+                    $workflowFields = $this->loadModel('workflowfield')->getFieldPairs($fieldObject);
+                    if(isset($workflowFields[$relatedField])) $colLabel = $workflowFields[$relatedField];
+                }
             }
 
             if(isset($langs[$group]) and !empty($langs[$group][$clientLang])) $colLabel = $langs[$group][$clientLang];
@@ -1624,6 +1630,12 @@ class pivotModel extends model
         $object = zget($fields[$key], 'object', '');
         if($object)
         {
+            if($this->config->edition != 'open')
+            {
+                $workflowFields = $this->loadModel('workflowfield')->getFieldPairs($object);
+                if(isset($workflowFields[$key])) return $workflowFields[$key];
+            }
+
             $this->app->loadLang($object);
             if(isset($this->lang->{$object}->{$key})) return $this->lang->{$object}->{$key};
         }
@@ -2026,6 +2038,13 @@ class pivotModel extends model
             case 'number':
                 if($source)
                 {
+                    if($this->config->edition != 'open')
+                    {
+                        $fieldObject = $this->loadModel('workflowfield')->getByField($object, $field);
+                        $options     = $this->workflowfield->getFieldOptions($fieldObject);
+                        if(!empty($options)) break;
+                    }
+
                     $options = array();
                     if(is_array($source))
                     {
