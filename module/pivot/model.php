@@ -3151,6 +3151,12 @@ class pivotModel extends model
             {
                 $this->app->loadLang($fieldObject);
                 if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+
+                if($this->config->edition != 'open')
+                {
+                    $workflowFields = $this->loadModel('workflowfield')->getFieldPairs($fieldObject);
+                    if(isset($workflowFields[$relatedField])) $colLabel = $workflowFields[$relatedField];
+                }
             }
 
             if(isset($langs[$key]) and !empty($langs[$key][$clientLang])) $colLabel = $langs[$key][$clientLang];
