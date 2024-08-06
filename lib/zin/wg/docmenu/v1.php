@@ -286,7 +286,7 @@ class docMenu extends wg
         {
             $itemID     = $item->id ? $item->id : $item->parentID;
             $moduleName = $item->type == 'docLib' ? 'doc' : 'api';
-            if(hasPriv($moduleName, 'addCatalog') && !($item->objectType == 'custom' && $item->parent == 0))
+            if(hasPriv($moduleName, 'addCatalog') && !(isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0))
             {
                 $menus[] = array(
                     'key'     => 'adddirectory',
@@ -301,7 +301,7 @@ class docMenu extends wg
                 $menus[] = array(
                     'key'         => 'editlib',
                     'icon'        => 'edit',
-                    'text'        => $item->objectType == 'custom' && $item->parent == 0 ? $this->lang->doc->libDropdown['editSpace'] : $this->lang->doc->libDropdown['editLib'],
+                    'text'        => (isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) ? $this->lang->doc->libDropdown['editSpace'] : $this->lang->doc->libDropdown['editLib'],
                     'data-toggle' => 'modal',
                     'data-url'    => createlink($moduleName, 'editLib', "libID={$itemID}")
                 );
@@ -312,10 +312,10 @@ class docMenu extends wg
                 $menus[] = array(
                     'key'          => 'dellib',
                     'icon'         => 'trash',
-                    'text'         => $item->objectType == 'custom' && $item->parent == 0 ? $this->lang->doc->libDropdown['deleteSpace'] : $this->lang->doc->libDropdown['deleteLib'],
+                    'text'         => (isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) ? $this->lang->doc->libDropdown['deleteSpace'] : $this->lang->doc->libDropdown['deleteLib'],
                     'innerClass'   => 'ajax-submit',
                     'data-url'     => createLink($moduleName, 'deleteLib', "libID={$itemID}"),
-                    'data-confirm' => $item->objectType == 'custom' && $item->parent == 0 ? $this->lang->doc->confirmDeleteSpace : $this->lang->{$moduleName}->confirmDeleteLib
+                    'data-confirm' => (isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) ? $this->lang->doc->confirmDeleteSpace : $this->lang->{$moduleName}->confirmDeleteLib
                 );
             }
         }
@@ -368,7 +368,7 @@ class docMenu extends wg
 
     private function getIcon($item): string
     {
-        if($item->objectType == 'custom' && $item->parent == 0) return ''; // 团队空间下的空间不显示图标
+        if(isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) return ''; // 团队空间下的空间不显示图标
 
         $type = $item->type;
         if($type == 'apiLib')    return 'interface-lib';
