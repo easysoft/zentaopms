@@ -38,7 +38,7 @@ if($planID)
 else
 {
     $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
-    $title .= '（' . $lang->project->common . $lang->execution->beginAndEnd . ' : ' . $project->begin . ' ~ ' . $project->end . '）';
+    $title .= '（' . $project->name . '-' . $lang->execution->beginAndEnd . ' : ' . $project->begin . ' ~ ' . $project->end . '）';
 }
 
 /* Generate product list dropdown menu while stage by product. */
