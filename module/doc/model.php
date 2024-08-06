@@ -224,6 +224,27 @@ class docModel extends model
      */
     public function createLib(object $lib, string $type = '', string $libType = ''): int|bool
     {
+        if(!empty($_POST['newSpace']))
+        {
+            if(!$lib->spaceName)
+            {
+                dao::$errors['spaceName'] = sprintf($this->lang->error->notempty, $this->lang->doc->space);
+                return false;
+            }
+
+            $space = clone $lib;
+            $space->name   = $space->spaceName;
+            $space->parent = 0;
+
+            $this->dao->insert(TABLE_DOCLIB)->data($space, 'spaceName')->autoCheck()->exec();
+            $lib->parent = $this->dao->lastInsertID();
+        }
+        elseif($lib->parent <= 0 && $type == 'custom')
+        {
+            dao::$errors['parent'] = sprintf($this->lang->error->notempty, $this->lang->doc->space);
+            return false;
+        }
+
         if($lib->execution) $lib->type = 'execution';
         if($lib->type == 'execution' && $lib->execution && !$lib->project)
         {
