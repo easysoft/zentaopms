@@ -2319,6 +2319,19 @@ class docModel extends model
             if($item->type == 'apiLib') $apiLibIDList[] = $lib->id;
         }
 
+        /* 将团队空间下的库分为空间和库的结构。 */
+        if($type == 'custom' && !empty($libTree['custom']))
+        {
+            foreach($libTree['custom'] as $id => $lib)
+            {
+                if($lib->parent > 0)
+                {
+                    if(isset($libTree['custom'][$lib->parent])) $libTree['custom'][$lib->parent]->children[] = $lib;
+                    unset($libTree['custom'][$id]);
+                }
+            }
+        }
+
         return array($libTree, $apiLibs, $apiLibIDList);
     }
 
