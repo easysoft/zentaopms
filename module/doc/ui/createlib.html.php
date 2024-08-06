@@ -68,6 +68,26 @@ formPanel
             )
         )
     ) : null,
+    $type == 'custom' ? formRow
+    (
+        formGroup
+        (
+            set::label($lang->doc->space),
+            set::required(true),
+            set::width('5/6'),
+            inputGroup
+            (
+                set::seg(true),
+                picker
+                (
+                    $spaces ? null : setClass('hidden'),
+                    set::name('parent'),
+                    set::items($spaces),
+                    set::required(true)
+                ),
+            )
+        )
+    ) : null,
     formRow
     (
         setClass('normalLib'),
