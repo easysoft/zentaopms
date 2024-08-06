@@ -136,3 +136,5 @@ EOT;
 
 $lang->im->bot->upgradeWelcome->link = 'https://www.zentao.net/downloads.html';
 $lang->im->detachedConferenceUpgradeMessage->content = '管理员已将会议机制更新，支持 v7.2.beta 及以上版本，为了不影响您的使用体验，建议您重启应用，我们将更新您的会议机制。更多详情请移步禅道官网查看。';
+
+$lang->im->jitsiConferenceInviteFailMessage->upgradeWithLink = '您收到一条会议邀请，由于您版本过低无法通过大桌面入会，可以点击下方链接从浏览器入会，建议您及时升级到9.0及以上版本，方便您正常使用会议功能。';

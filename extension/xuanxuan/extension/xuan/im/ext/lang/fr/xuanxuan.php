@@ -126,3 +126,5 @@ The Task Edit command supports making status changes to tasks.
 EOT;
 
 $lang->im->bot->upgradeWelcome->link = 'https://www.zentao.net/downloads.html';
+
+$lang->im->jitsiConferenceInviteFailMessage->upgradeWithLink = 'You have received a conference invitation. Since your version is too low, you cannot join the conference through the ZenDesktop. You can click the link below to join the conference through the browser. It is recommended that you upgrade to version 9.0 or above in time to facilitate your normal use of conference functions. ';
