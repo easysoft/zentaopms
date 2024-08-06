@@ -12,7 +12,8 @@
 #pick-docDropmenuMenu .is-caret {display: none;}
 
 .doc-menu .tree .tree-item .item-content {overflow: clip;}
-.doc-menu .tree .tree-item .toolbar {margin-left: 0;}
+.doc-menu .tree .tree-item .toolbar {margin-left: 0; visibility: hidden;}
+.doc-menu .tree .tree-item .listitem:hover .toolbar {visibility: visible;}
 .doc-menu .tree .tree-item .toolbar .versions-list .text{overflow: hidden; width: 25px;}
 .doc-menu .tree .tree-item .tree-link {text-overflow: clip; overflow: hidden; flex: 1 10 auto;}
 .doc-menu .tree .tree-item .tree-actions {margin-left: 0;}

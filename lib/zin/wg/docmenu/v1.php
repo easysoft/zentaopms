@@ -286,7 +286,7 @@ class docMenu extends wg
         {
             $itemID     = $item->id ? $item->id : $item->parentID;
             $moduleName = $item->type == 'docLib' ? 'doc' : 'api';
-            if(hasPriv($moduleName, 'addCatalog'))
+            if(hasPriv($moduleName, 'addCatalog') && !($item->objectType == 'custom' && $item->parent == 0))
             {
                 $menus[] = array(
                     'key'     => 'adddirectory',
@@ -301,7 +301,7 @@ class docMenu extends wg
                 $menus[] = array(
                     'key'         => 'editlib',
                     'icon'        => 'edit',
-                    'text'        => $this->lang->doc->libDropdown['editLib'],
+                    'text'        => $item->objectType == 'custom' && $item->parent == 0 ? $this->lang->doc->libDropdown['editSpace'] : $this->lang->doc->libDropdown['editLib'],
                     'data-toggle' => 'modal',
                     'data-url'    => createlink($moduleName, 'editLib', "libID={$itemID}")
                 );
@@ -312,10 +312,10 @@ class docMenu extends wg
                 $menus[] = array(
                     'key'          => 'dellib',
                     'icon'         => 'trash',
-                    'text'         => $this->lang->doc->libDropdown['deleteLib'],
+                    'text'         => $item->objectType == 'custom' && $item->parent == 0 ? $this->lang->doc->libDropdown['deleteSpace'] : $this->lang->doc->libDropdown['deleteLib'],
                     'innerClass'   => 'ajax-submit',
                     'data-url'     => createLink($moduleName, 'deleteLib', "libID={$itemID}"),
-                    'data-confirm' => $this->lang->{$moduleName}->confirmDeleteLib
+                    'data-confirm' => $item->objectType == 'custom' && $item->parent == 0 ? $this->lang->doc->confirmDeleteSpace : $this->lang->{$moduleName}->confirmDeleteLib
                 );
             }
         }
@@ -368,6 +368,8 @@ class docMenu extends wg
 
     private function getIcon($item): string
     {
+        if($item->objectType == 'custom' && $item->parent == 0) return ''; // 团队空间下的空间不显示图标
+
         $type = $item->type;
         if($type == 'apiLib')    return 'interface-lib';
         if($type == 'docLib')    return 'wiki-lib';
