@@ -85,6 +85,22 @@ formPanel
                     set::items($spaces),
                     set::required(true)
                 ),
+                input
+                (
+                    $spaces ? setClass('hidden') : null,
+                    set::name('spaceName'),
+                ),
+                div
+                (
+                    setClass('ml-2 w-1/6 items-center flex'),
+                    checkbox
+                    (
+                        on::change('toggleNewSpace'),
+                        set::name('newSpace'),
+                        set::checked(empty($spaces)),
+                        set::text($lang->doclib->createSpace)
+                    )
+                )
             )
         )
     ) : null,
