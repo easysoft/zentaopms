@@ -39,7 +39,7 @@ class think4p extends thinkModel
                 div(setClass('item-step-title text-center text-clip', "text-$blockColor"), set::title($blockTitle), $blockTitle),
                 !isset($block->steps) ? null : div(setClass('py-3 flex flex-wrap gap-2.5 relative z-10'), $this->buildQuestion($block->steps))
             ),
-            div(setClass('item-desc text-center leading-tight text-canvas', $descSize), $lang->thinkwizard->fourpDesc[$order])
+            div(setClass('item-desc text-center leading-tight text-canvas', $descSize), $lang->thinkwizard->blockDescOf4p[$order])
         );
     }
 
