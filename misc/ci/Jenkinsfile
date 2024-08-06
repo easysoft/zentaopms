@@ -138,6 +138,14 @@ pipeline {
               when { expression { return params.publish_open } }
               steps {
                 echo "DOWNGRADE_VERSION in jenkinsfile is ${env.DOWNGRADE_VERSION}"
+                container('package') {
+                  sh 'git config --global pull.ff only'
+                  sh 'git config --global --add safe.directory $PWD/xuansrc'
+                  sh 'git config --global --add safe.directory $PWD/zentaoext'
+                  sh 'git config --global --add safe.directory $PWD/downRepo'
+                  sh 'git config --global --add safe.directory $PWD/zdoo'
+                  sh 'git config --global --add safe.directory $PWD/zdooext'
+                }
                 script { downgrade.increase() }
               }
               post {
@@ -153,12 +161,6 @@ pipeline {
                 withCredentials([gitUsernamePassword(credentialsId: 'git-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
                     sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
-                    sh 'git config --global pull.ff only'
-                    sh 'git config --global --add safe.directory $PWD/xuansrc'
-                    sh 'git config --global --add safe.directory $PWD/zentaoext'
-                    sh 'git config --global --add safe.directory $PWD/downRepo'
-                    sh 'git config --global --add safe.directory $PWD/zdoo'
-                    sh 'git config --global --add safe.directory $PWD/zdooext'
                     //sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
                     sh 'pwd && ls -l && make ciCommon'
                     sh 'ls -l ${ZENTAO_RELEASE_PATH}'
