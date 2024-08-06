@@ -669,6 +669,7 @@ class doc extends control
         $this->view->spaceType         = $type;
         $this->view->objectType        = $type;
         $this->view->browseType        = $browseType;
+        $this->view->param             = $param;
         $this->view->libID             = 0;
         $this->view->moduleID          = 0;
         $this->view->defaultNestedShow = $this->docZen->getDefaultNestedShow(0, 0, $type);

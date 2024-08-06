@@ -12,117 +12,100 @@ namespace zin;
 
 jsVar('imageExtensionList', $config->file->imageExtensions);
 jsVar('sessionString', session_name() . '=' . session_id());
-jsVar('+searchLink', createLink('doc', 'showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&searchTitle=%s"));
+jsVar('+searchLink', createLink('doc', 'showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType={$browseType}&param={$param}&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&searchTitle=%s"));
 
 $filesBody = null;
 $canExport = $config->edition != 'open' && common::hasPriv('doc', 'exportFiles');
-if(!empty($files))
+$linkTpl = array('linkCreator' => helper::createLink('doc', $app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&searchTitle={$searchTitle}"));
+if($viewType == 'list')
 {
-    $linkTpl = array('linkCreator' => helper::createLink('doc', $app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&searchTitle={$searchTitle}"));
-    if($viewType == 'list')
+    $fieldList = $config->doc->showfiles->dtable->fieldList;
+    if($canExport) $fieldList['id']['type'] = 'checkID';
+
+    $tableData = initTableData($files, $fieldList);
+    $filesBody = dtable
+    (
+        set::checkable($canExport),
+        set::userMap($users),
+        set::cols($fieldList),
+        set::data($tableData),
+        set::emptyTip($lang->pager->noRecord),
+        set::sortLink(inlink('showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
+        set::orderBy($orderBy),
+        set::onRenderCell(jsRaw('window.renderCell')),
+        set::footPager(usePager($linkTpl))
+    );
+}
+elseif($files)
+{
+    $cardsBox = null;
+    foreach($files as $file)
     {
-        $fieldList = $config->doc->showfiles->dtable->fieldList;
-        if($canExport) $fieldList['id']['type'] = 'checkID';
+        $url  = helper::createLink('file', 'download', "fileID={$file->id}");
+        $url .= strpos($url, '?') === false ? '?' : '&';
+        $url .= session_name() . '=' . session_id();
 
-        $tableData = initTableData($files, $fieldList);
-        $filesBody = dtable
-            (
-                set::checkable($canExport),
-                set::userMap($users),
-                set::cols($fieldList),
-                set::data($tableData),
-                set::sortLink(inlink('showFiles', "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
-                set::orderBy($orderBy),
-                set::onRenderCell(jsRaw('window.renderCell')),
-                set::footPager(usePager($linkTpl))
-            );
+        $downloadLink = $this->createLink('file', 'download', "fileID={$file->id}&mouse=left");
+        $cardsBox[] = div
+         (
+             setClass('col'),
+             div
+             (
+                 setClass('lib-file'),
+                 div
+                 (
+                     setClass('file'),
+                     a
+                     (
+                         set::href($url),
+                         set::title($file->title),
+                         set::target('_blank'),
+                         in_array($file->extension, array('jpg', 'jpeg', 'gif', 'png', 'bmp')) ? set('onclick', "return downloadFile({$file->id}, '{$file->extension}', {$file->imageWidth})") : null,
+                         in_array($file->extension, $config->file->imageExtensions) ? div
+                         (
+                             setClass('img-holder'),
+                             set('style', "background-image: url({$file->webPath})"),
+                             img(setClass(empty($file->imageWidth) ? 'not-exist' : ''), set('src', $file->webPath))
+                         ) : html($file->fileIcon)
+                     ),
+                     div(setClass('file-name'), set::title($file->title), $file->title),
+                     div
+                     (
+                         setClass('file-name text-gray'),
+                         $file->objectName,
+                         a
+                         (
+                             set::href(createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID={$file->objectID}")),
+                             set::title($file->sourceName),
+                             $file->sourceName,
+                             $file->objectType != 'doc' ? set(array('data-toggle' => 'modal', 'data-size' => 'lg')) : null
+                         )
+                     )
+                 )
+             )
+         );
     }
-    else
-    {
-        $cardsBox = null;
-        foreach($files as $file)
-        {
-            $url  = helper::createLink('file', 'download', "fileID={$file->id}");
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= session_name() . '=' . session_id();
 
-            $downloadLink = $this->createLink('file', 'download', "fileID={$file->id}&mouse=left");
-            $cardsBox[] = div
-                (
-                    setClass('col'),
-                    div
-                    (
-                        setClass('lib-file'),
-                        div
-                        (
-                            setClass('file'),
-                            a
-                            (
-                                set::href($url),
-                                set::title($file->title),
-                                set::target('_blank'),
-                                in_array($file->extension, array('jpg', 'jpeg', 'gif', 'png', 'bmp')) ? set('onclick', "return downloadFile({$file->id}, '{$file->extension}', {$file->imageWidth})") : null,
-                                in_array($file->extension, $config->file->imageExtensions) ? div
-                                (
-                                    setClass('img-holder'),
-                                    set('style', "background-image: url({$file->webPath})"),
-                                    img
-                                    (
-                                        setClass(empty($file->imageWidth) ? 'not-exist' : ''),
-                                        set('src', $file->webPath)
-                                    )
-                                ) : html($file->fileIcon)
-                            ),
-                            div
-                            (
-                                setClass('file-name'),
-                                set::title($file->title),
-                                $file->title
-                            ),
-                            div
-                            (
-                                setClass('file-name text-gray'),
-                                $file->objectName,
-                                a
-                                (
-                                    set::href(createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID={$file->objectID}")),
-                                    set::title($file->sourceName),
-                                    $file->sourceName,
-                                    $file->objectType != 'doc' ? set(array('data-toggle' => 'modal', 'data-size' => 'lg')) : null
-                                )
-                            )
-                        )
-                    )
-                );
-        }
-
-        $filesBody = panel
-            (
-                setClass('block-files'),
-                div
-                (
-                    setClass('row row-grid files-grid'),
-                    set('data-size', 300),
-                    $cardsBox
-                ),
-                pager(
-                    set::_className('flex justify-end items-center'),
-                    set(usePager($linkTpl))
-                )
-            );
-    }
+    $filesBody = panel
+    (
+        setClass('block-files'),
+        div
+        (
+            setClass('row row-grid files-grid'),
+            set('data-size', 300),
+            $cardsBox
+        ),
+        pager(set::_className('flex justify-end items-center'), set(usePager($linkTpl)))
+    );
 }
 else
 {
     $filesBody = div
-        (
-            setClass('table-empty-tip flex justify-center items-center'),
-            span
-            (
-                setClass('text-gray'),
-                $lang->pager->noRecord
-            )
-        );
+    (
+        setClass('table-empty-tip shadow ring rounded flex justify-center items-center'),
+        setStyle(array('min-height' => '212px')),
+        span(setClass('text-gray'), $lang->pager->noRecord)
+    );
 }
 
 include 'lefttree.html.php';
@@ -153,7 +136,7 @@ toolbar
                 icon('bars'),
                 setClass('btn switchBtn'),
                 setClass($viewType == 'list' ? ' text-primary' : ''),
-                set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
+                set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
                 set('data-app', $app->tab)
             ),
             a
@@ -161,7 +144,7 @@ toolbar
                 icon('cards-view'),
                 setClass('btn switchBtn'),
                 setClass($viewType != 'list' ? ' text-primary' : ''),
-                set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle=$searchTitle")),
+                set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle=$searchTitle")),
                 set('data-app', $app->tab)
             )
         ),
@@ -175,13 +158,10 @@ toolbar
         ) : null
     )
 );
+
 div
 (
-    div
-    (
-        setClass('mt-2'),
-        $filesBody
-    )
+    div(setClass('mt-2'), $filesBody)
 );
 /* ====== Render page ====== */
 render();
