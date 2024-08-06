@@ -31,7 +31,15 @@ if($executionType == 'agileplus')
 
 /* Generate title that is tailored to specific situation. */
 $title = $lang->programplan->create;
-if($planID) $title = $programPlan->name . $lang->project->stage . '（' . $programPlan->begin . $lang->project->to . $programPlan->end . '）';
+if($planID)
+{
+    $title = $programPlan->name . $lang->project->stage . '（' . $programPlan->begin . $lang->project->to . $programPlan->end . '）';
+}
+else
+{
+    $project->end = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+    $title .= '（' . $lang->project->common . $lang->execution->beginAndEnd . ' : ' . $project->begin . ' ~ ' . $project->end . '）';
+}
 
 /* Generate product list dropdown menu while stage by product. */
 $fnGenerateStageByProductList = function() use ($productID, $productList, $project, $planID)
