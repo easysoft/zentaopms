@@ -605,6 +605,8 @@ class doc extends control
      * @param  string $type
      * @param  int    $objectID
      * @param  string $viewType
+     * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -613,7 +615,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function showFiles(string $type, int $objectID, string $viewType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $searchTitle = '')
+    public function showFiles(string $type, int $objectID, string $viewType = '', string $browseType = '', int $param = 0,  string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $searchTitle = '')
     {
         $this->loadModel('file');
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
@@ -635,7 +637,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $files       = $this->doc->getLibFiles($type, $objectID, $this->post->title, $orderBy, $pager);
+        $files       = $this->doc->getLibFiles($type, $objectID, $browseType, $param, $orderBy, $pager);
         $fileIcon    = $this->doc->getFileIcon($files);
         $sourcePairs = $this->doc->getFileSourcePairs($files);
 
@@ -644,6 +646,8 @@ class doc extends control
             $objectVar = $this->app->tab . 'ID';
             $this->view->{$objectVar} = $objectID;
         }
+
+        $this->docZen->buildSearchFormForShowFiles($type, $objectID, $viewType, $param);
 
         $this->view->title             = $object->name;
         $this->view->type              = $type;
@@ -664,6 +668,7 @@ class doc extends control
         $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
         $this->view->spaceType         = $type;
         $this->view->objectType        = $type;
+        $this->view->browseType        = $browseType;
         $this->view->libID             = 0;
         $this->view->moduleID          = 0;
         $this->view->defaultNestedShow = $this->docZen->getDefaultNestedShow(0, 0, $type);

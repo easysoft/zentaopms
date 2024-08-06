@@ -799,4 +799,34 @@ class docZen extends doc
         $this->view->apiLibID          = key($apiLibs);
         $this->view->pager             = $pager;
     }
+
+    public function buildSearchFormForShowFiles(string $type, int $objectID, string $viewType = '', int $param = 0)
+    {
+        $this->loadModel('file');
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType=bySearch&queryID=0");
+
+        $objectTypeList = array();
+        $objectTypeList['bug']         = $this->lang->bug->common;
+        $objectTypeList['testreport']  = $this->lang->testreport->common;
+        $objectTypeList['testcase']    = $this->lang->case->common;
+        $objectTypeList['doc']         = $this->lang->doc->common;
+        $objectTypeList['story']       = $this->lang->story->common;
+        $objectTypeList['productplan'] = $this->lang->productplan->shortCommon;
+        $objectTypeList['release']     = $this->lang->release->common;
+        $objectTypeList['review']      = $this->lang->review->common;
+        $objectTypeList['design']      = $this->lang->design->common;
+        $objectTypeList['execution']   = $this->lang->execution->common;
+        $objectTypeList['task']        = $this->lang->task->common;
+        $objectTypeList['build']       = $this->lang->build->common;
+        $objectTypeList['testtask']    = $this->lang->testtask->common;
+        if(isset($this->lang->issue->common))   $objectTypeList['issue']   = $this->lang->issue->common;
+        if(isset($this->lang->meeting->common)) $objectTypeList['meeting'] = $this->lang->meeting->common;
+        $this->config->file->search['params']['objectType']['values'] = $objectTypeList;
+
+        $this->config->file->search['module']    = "{$type}DocFile";
+        $this->config->file->search['onMenuBar'] = 'no';
+        $this->config->file->search['queryID']   = $param;
+        $this->config->file->search['actionURL'] = $actionURL;
+        $this->loadModel('search')->setSearchParams($this->config->file->search);
+    }
 }

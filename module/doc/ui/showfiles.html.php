@@ -128,24 +128,7 @@ else
 include 'lefttree.html.php';
 featureBar
 (
-    div
-    (
-        setClass('searchBox'),
-        inputControl
-        (
-            input
-            (
-                set::name('title'),
-                set::value($searchTitle),
-                set::placeholder($lang->doc->fileTitle)
-            ),
-            span
-            (
-                setClass('input-control-suffix'),
-                btn(set(array('icon' => 'search', 'class' => 'ghost', 'onclick' => 'searchTitle()')))
-            )
-        )
-    )
+    li(searchToggle(set::module($type . 'DocFile'), set::open($browseType == 'bySearch')))
 );
 
 toolbar
