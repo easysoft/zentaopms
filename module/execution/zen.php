@@ -2032,7 +2032,7 @@ class executionZen extends execution
                 if($execution->type == 'stage') $importPlanStoryTips = str_replace($this->lang->executionCommon, $this->lang->execution->stage, $importPlanStoryTips);
                 $confirmURL = inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes");
                 $cancelURL  = inlink('create', "projectID=$projectID&executionID=$executionID");
-                return $this->send(array('result' => 'success', 'open' => array('confirm' => $importPlanStoryTips, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+                return $this->send(array('result' => 'success', 'open' => array('confirm' => $importPlanStoryTips, 'url' => $confirmURL, 'canceled' => $cancelURL)));
             }
         }
 
