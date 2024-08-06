@@ -9588,5 +9588,17 @@ class upgradeModel extends model
         $doclib->addedBy   = 'admin';
         $doclib->addedDate = helper::now();
 
+        foreach(array('or', 'lite', 'rnd') as $vision)
+        {
+            $doclib->vision = $vision;
+            $this->dao->insert(TABLE_DOCLIB)->data($doclib)->exec();
+            $doclibID = $this->dao->lastInsertID();
+
+            $this->dao->update(TABLE_DOCLIB)
+                 ->set('parent')->eq($doclibID)
+                 ->where('vision')->eq($vision)
+                 ->andWhere('type')->eq('custom')
+                 ->exec();
+        }
     }
 }
