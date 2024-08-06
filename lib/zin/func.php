@@ -215,6 +215,7 @@ function thinkCover(): thinkCover {return createWg('thinkCover', func_get_args()
 function affected(): affected {return createWg('affected', func_get_args());}
 function thinkPffa(): thinkPffa {return createWg('thinkPffa', func_get_args());}
 function thinkPestel(): thinkPestel {return createWg('thinkPestel', func_get_args());}
+function think4p(): think4p {return createWg('think4p', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'boardeditor'))
 {
