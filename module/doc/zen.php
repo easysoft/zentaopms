@@ -800,6 +800,17 @@ class docZen extends doc
         $this->view->pager             = $pager;
     }
 
+    /**
+     * 构建附件库的搜索表单
+     * Build search form for showFiles.
+     *
+     * @param  string  $type     product|project|execution
+     * @param  int     $objectID
+     * @param  string  $viewType
+     * @param  int     $param
+     * @access public
+     * @return void
+     */
     public function buildSearchFormForShowFiles(string $type, int $objectID, string $viewType = '', int $param = 0)
     {
         $this->loadModel('file');
