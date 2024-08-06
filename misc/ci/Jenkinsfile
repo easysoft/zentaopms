@@ -283,6 +283,7 @@ pipeline {
                             returnStdout: true,
                             script: 'test ${ZLANG} = cn && echo -n "int." || echo -n ""'
                   ).trim()}"""
+                  PUBLISH_BIZ = "true"
                 }
 
                 stages {
@@ -290,6 +291,7 @@ pipeline {
                     steps{
                         echo "${env.ZLANG} <=> ${env.PHPVERSION}"
                         container('package') {
+                          sh 'env'
                           sh 'mkdir $ZENTAO_RELEASE_PATH'
                           sh '${ZENTAO_BUILD_PATH}/package.sh zip'
                           sh 'mkdir $OUTPUT_PKG_PATH'
