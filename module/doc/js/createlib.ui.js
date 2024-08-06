@@ -34,3 +34,18 @@ window.changeDoclibAcl = function(e)
     }
     $('#whiteListBox').addClass('hidden');
 }
+
+window.toggleNewSpace = function()
+{
+    const isChecked = $("[name='newSpace']").prop('checked');
+    if(isChecked)
+    {
+        $('#spaceName').removeClass('hidden');
+        $('#spaceName').prev('div').addClass('hidden');
+    }
+    else
+    {
+        $('#spaceName').addClass('hidden');
+        $('#spaceName').prev('div').removeClass('hidden');
+    }
+}
