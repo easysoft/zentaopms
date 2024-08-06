@@ -9569,4 +9569,24 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 为文档库的团队空间创建默认空间。
+     * Create default doclib space for team space.
+     *
+     * @access public
+     * @return void
+     */
+    public function createDefaultDoclibSpace()
+    {
+        $this->app->loadLang('doclib');
+
+        $doclib = new stdclass();
+        $doclib->type      = 'custom';
+        $doclib->name      = $this->lang->doclib->defaultSpace;
+        $doclib->acl       = 'open';
+        $doclib->addedBy   = 'admin';
+        $doclib->addedDate = helper::now();
+
+    }
 }
