@@ -141,12 +141,14 @@ class dataviewModel extends model
      */
     public function mergeFields($dataFields, $sqlFields, $moduleNames, $aliasNames = array())
     {
-        $mergeFields   = array();
-        $relatedObject = array();
+        $mergeFields    = array();
+        $relatedObject  = array();
+        $workflowFields = array();
         foreach($dataFields as $field)
         {
             $mergeFields[$field]   = $field;
             $relatedObject[$field] = current($moduleNames);
+            $fieldName             = $field;
 
             /* Such as $sqlFields['id'] = zt_task.id. */
             if(isset($sqlFields[$field]) and strrpos($sqlFields[$field], '.') !== false)
@@ -158,17 +160,13 @@ class dataviewModel extends model
                 if(isset($moduleNames[$table]))
                 {
                     $moduleName = $moduleNames[$table];
-                    if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
-                    $mergeFields[$field]   = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
-                    $relatedObject[$field] = $moduleName;
+                    list($mergeFields[$field], $relatedObject[$field], $workflowFields) = $this->processMergeFields($moduleName, $field, $fieldName, $workflowFields);
                     continue;
                 }
                 elseif(isset($aliasNames[$table]))
                 {
                     $moduleName = $aliasNames[$table];
-                    if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
-                    $mergeFields[$field]   = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
-                    $relatedObject[$field] = $moduleName;
+                    list($mergeFields[$field], $relatedObject[$field], $workflowFields) = $this->processMergeFields($moduleName, $field, $fieldName, $workflowFields);
                     continue;
                 }
             }
@@ -185,9 +183,7 @@ class dataviewModel extends model
                         if(isset($moduleNames[$table]))
                         {
                             $moduleName = $moduleNames[$table];
-                            if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
-                            $mergeFields[$field]   = isset($this->lang->$moduleName->$field) ? $this->lang->$moduleName->$field : $field;
-                            $relatedObject[$field] = $moduleName;
+                            list($mergeFields[$field], $relatedObject[$field], $workflowFields) = $this->processMergeFields($moduleName, $field, $fieldName, $workflowFields);
                             $existField = true;
                             break;
                         }
@@ -198,16 +194,7 @@ class dataviewModel extends model
 
             foreach($moduleNames as $table => $moduleName)
             {
-                if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
-
-                if(isset($this->lang->$moduleName) and isset($this->lang->$moduleName->$field) and is_string($this->lang->$moduleName->$field))
-                {
-                    $mergeFields[$field]   = $this->lang->$moduleName->$field;
-                    $relatedObject[$field] = $moduleName;
-                    break;
-                }
-                $mergeFields[$field]   = $field;
-                $relatedObject[$field] = $moduleName;
+                list($mergeFields[$field], $relatedObject[$field], $workflowFields) = $this->processMergeFields($moduleName, $field, $fieldName, $workflowFields);
             }
         }
 
@@ -218,6 +205,33 @@ class dataviewModel extends model
 
         foreach($mergeFields as $field => $name) $mergeFields[$field] = $this->replace4Workflow($name);
         return array($mergeFields, $relatedObject);
+    }
+
+    /**
+     * Process merge fields.
+     *
+     * @param  string $moduleName
+     * @param  string $field
+     * @param  string $fieldName
+     * @param  array  $workflowFields
+     * @access public
+     * @return array
+     */
+    public function processMergeFields($moduleName, $field, $fieldName, $workflowFields)
+    {
+        if(strpos($moduleName, '_flow_') !== false)
+        {
+            $flowPos    = strpos($moduleName, '_flow_');
+            $moduleName = substr($moduleName, $flowPos + 6);
+        }
+        if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
+
+        $mergeField = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
+
+        if(!isset($workflowFields[$moduleName]) && $this->config->edition != 'open') $workflowFields[$moduleName] = $this->loadModel('workflowfield')->getFieldPairs($moduleName);
+        if(isset($workflowFields[$moduleName][$fieldName])) $mergeField = $workflowFields[$moduleName][$fieldName];
+
+        return array($mergeField, $moduleName, $workflowFields);
     }
 
     /**
