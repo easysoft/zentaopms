@@ -140,6 +140,7 @@ pipeline {
                 echo "DOWNGRADE_VERSION in jenkinsfile is ${env.DOWNGRADE_VERSION}"
                 container('package') {
                   sh 'git config --global pull.ff only'
+                  sh 'git config --global --add safe.directory $PWD'
                   sh 'git config --global --add safe.directory $PWD/xuansrc'
                   sh 'git config --global --add safe.directory $PWD/zentaoext'
                   sh 'git config --global --add safe.directory $PWD/downRepo'
@@ -180,9 +181,6 @@ pipeline {
                 container('docker') {
                   sh 'docker build --pull -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG} -f Dockerfile.release.ext ${ZENTAO_RELEASE_PATH}'
                   sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
-                }
-                script {
-                  buildPkg.uploadSource()
                 }
 
               }
@@ -313,7 +311,8 @@ pipeline {
                           sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.zip'
                           sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.tar.xz'
                         }
-                        buildPkg.uploadExt()
+                        buildPkg.uploadPMS(env.PHPVERSION)
+                        buildPkg.doUploadExt()
                       }
 
                       
@@ -407,7 +406,7 @@ pipeline {
                       steps {
                         script {
                           buildZboxWin.doBuild()
-                          buildZboxWin.uploadInternal()
+                          buildZboxWin.doUploadInternal()
                         }
                       }
                     }
@@ -457,7 +456,7 @@ pipeline {
                         script {
                           buildZboxLinux.doBuild()
                           //buildZboxLinux.test()
-                          buildZboxLinux.uploadInternal()
+                          buildZboxLinux.doUploadInternal()
                         }
                       }
                     }
