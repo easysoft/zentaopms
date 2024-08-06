@@ -5,8 +5,8 @@
       "version": "8.0.3"
     },
     "zentaoext": {
-      "gitVersion": "18.x",
-      "gitRepo": "easycorp/zentaoext"
+      "gitVersion": "feature/18.13",
+      "gitRepo": "zentao/zentaoext"
     },
     "zdoo": {
       "gitVersion": "master"
@@ -15,7 +15,7 @@
       "gitVersion": "master"
     },
     "downgrade": {
-      "gitVersion": "18.x",
+      "gitVersion": "feature/18.13",
       "gitRepo": "devops/zentaopms-downgrade"
     }
   },
