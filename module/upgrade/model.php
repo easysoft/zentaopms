@@ -9590,6 +9590,9 @@ class upgradeModel extends model
 
         foreach(array('or', 'lite', 'rnd') as $vision)
         {
+            $hasDocLib = $this->dao->select('id')->from(TABLE_DOCLIB)->where('vision')->eq($vision)->andWhere('type')->eq('custom')->fetch('id');
+            if(!$hasDocLib) continue;
+
             $doclib->vision = $vision;
             $this->dao->insert(TABLE_DOCLIB)->data($doclib)->exec();
             $doclibID = $this->dao->lastInsertID();
