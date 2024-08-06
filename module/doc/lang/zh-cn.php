@@ -10,17 +10,20 @@
  * @link        https://www.zentao.net
  */
 $lang->doclib = new stdclass();
-$lang->doclib->name       = '库名称';
-$lang->doclib->control    = '访问控制';
-$lang->doclib->group      = '分组';
-$lang->doclib->user       = '用户';
-$lang->doclib->files      = '附件库';
-$lang->doclib->all        = '所有文档库';
-$lang->doclib->select     = '选择文档库';
-$lang->doclib->execution  = $lang->executionCommon . '库';
-$lang->doclib->product    = $lang->productCommon . '库';
-$lang->doclib->apiLibName = '库名称';
-$lang->doclib->privateACL = "私有 （仅创建者和有%s权限的白名单用户可访问）";
+$lang->doclib->name         = '库名称';
+$lang->doclib->control      = '访问控制';
+$lang->doclib->group        = '分组';
+$lang->doclib->user         = '用户';
+$lang->doclib->files        = '附件库';
+$lang->doclib->all          = '所有文档库';
+$lang->doclib->select       = '选择文档库';
+$lang->doclib->execution    = $lang->executionCommon . '库';
+$lang->doclib->product      = $lang->productCommon . '库';
+$lang->doclib->apiLibName   = '库名称';
+$lang->doclib->defaultSpace = '默认空间';
+$lang->doclib->spaceName    = '空间名称';
+$lang->doclib->createSpace  = '新建空间';
+$lang->doclib->privateACL   = "私有 （仅创建者和有%s权限的白名单用户可访问）";
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
@@ -316,6 +319,7 @@ $lang->doc->mail->edit->title   = "%s编辑了文档 #%s:%s";
 
 $lang->doc->confirmDelete        = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib     = "您确定删除该文档库吗？";
+$lang->doc->confirmDeleteSpace   = "您确定删除该空间吗？";
 $lang->doc->confirmDeleteBook    = "您确定删除该手册吗？";
 $lang->doc->confirmDeleteChapter = "您确定删除该章节吗？";
 $lang->doc->confirmDeleteModule  = "您确定删除该目录吗？";
@@ -373,6 +377,8 @@ $lang->doc->point   = '、';
 
 $lang->doc->libDropdown['editLib']       = '编辑库';
 $lang->doc->libDropdown['deleteLib']     = '删除库';
+$lang->doc->libDropdown['editSpace']     = '编辑空间';
+$lang->doc->libDropdown['deleteSpace']   = '删除空间';
 $lang->doc->libDropdown['addModule']     = '添加目录';
 $lang->doc->libDropdown['addSameModule'] = '添加同级目录';
 $lang->doc->libDropdown['addSubModule']  = '添加子目录';

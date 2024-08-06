@@ -10,17 +10,20 @@
  * @link        https://www.zentao.net
  */
 $lang->doclib = new stdclass();
-$lang->doclib->name       = 'Name';
-$lang->doclib->control    = 'Access Control';
-$lang->doclib->group      = 'Group';
-$lang->doclib->user       = 'User';
-$lang->doclib->files      = 'Attachments';
-$lang->doclib->all        = 'All Libraries';
-$lang->doclib->select     = 'Select';
-$lang->doclib->execution  = $lang->executionCommon . ' Library';
-$lang->doclib->product    = $lang->productCommon . ' Library';
-$lang->doclib->apiLibName = 'Library Name';
-$lang->doclib->privateACL = "Private (Only creators and whitelisted users with %s permissions can access it)";
+$lang->doclib->name         = 'Name';
+$lang->doclib->control      = 'Access Control';
+$lang->doclib->group        = 'Group';
+$lang->doclib->user         = 'User';
+$lang->doclib->files        = 'Attachments';
+$lang->doclib->all          = 'All Libraries';
+$lang->doclib->select       = 'Select';
+$lang->doclib->execution    = $lang->executionCommon . ' Library';
+$lang->doclib->product      = $lang->productCommon . ' Library';
+$lang->doclib->apiLibName   = 'Library Name';
+$lang->doclib->defaultSpace = 'Default Space';
+$lang->doclib->spaceName    = 'Space Name';
+$lang->doclib->createSpace  = 'Create Space';
+$lang->doclib->privateACL   = "Private (Only creators and whitelisted users with %s permissions can access it)";
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
@@ -316,6 +319,7 @@ $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete        = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib     = "Do you want to delete this document library?";
+$lang->doc->confirmDeleteSpace   = "Do you want to delete this space?";
 $lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
 $lang->doc->confirmDeleteModule  = "Do you want to delete this module?";
@@ -373,6 +377,8 @@ $lang->doc->point   = '.';
 
 $lang->doc->libDropdown['editLib']       = 'Edit Library';
 $lang->doc->libDropdown['deleteLib']     = 'Delete Library';
+$lang->doc->libDropdown['editSpace']     = 'Edit Space';
+$lang->doc->libDropdown['deleteSpace']   = 'Delete Space';
 $lang->doc->libDropdown['addModule']     = 'Add Directory';
 $lang->doc->libDropdown['addSameModule'] = 'Add Same Directory';
 $lang->doc->libDropdown['addSubModule']  = 'Add Sub Directory';
