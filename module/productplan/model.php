@@ -124,7 +124,11 @@ class productplanModel extends model
             if(!empty($product) && $product->type == 'normal')
             {
                 $stories = zget($storyGroups, $plan->id, array());
-                foreach($stories as $story) $storyPairs[$story->id] = $story->estimate;
+                foreach($stories as $story)
+                {
+                    if($story->isParent == '1') continue;
+                    $storyPairs[$story->id] = $story->estimate;
+                }
             }
             else
             {
