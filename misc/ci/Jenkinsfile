@@ -20,11 +20,9 @@ pipeline {
     separator(name: "action", sectionHeader: "构建动作")
     choice choices: ['auto', 'snapshot', 'release'], description: '构建包类型（快照或发版）', name: 'build_kind'
     string defaultValue: "open,biz,max,ipd", description: '发布产品', name: 'publish_exts', trim: true
-    booleanParam defaultValue: true, description: '制作开源版', name: 'publish_open'
-    booleanParam defaultValue: true, description: '制作企业版', name: 'publish_biz'
-    booleanParam defaultValue: false, description: '制作SAFe插件', name: 'publish_plugin_safe'
-    booleanParam defaultValue: true, description: '制作镜像', name: 'publish_image'
-    booleanParam defaultValue: true, description: '制作一键安装包', name: 'publish_zbox'
+    booleanParam defaultValue: true, description: '构建源码', name: 'source_build'
+    booleanParam defaultValue: true, description: '构建一键安装包', name: 'publish_zbox'
+    booleanParam defaultValue: true, description: '构建镜像', name: 'publish_image'
 
     separator(name: "replay", sectionHeader: "仓库切换")
     string description: '指定一个构建Id用于回放', name: 'REPLAY_ID', trim: true
@@ -35,6 +33,7 @@ pipeline {
     string description: '指定全量降级 revision', name: 'fulldown_version', trim: true
 
     separator(name: "other", sectionHeader: "其它")
+    booleanParam defaultValue: false, description: '制作英文版', name: 'publish_en'
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
   }
 
@@ -48,8 +47,6 @@ pipeline {
     SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
 
     OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
-    QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
-    QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
 
     MIRROR = "true"
 
@@ -57,7 +54,7 @@ pipeline {
     PUBLISH_ZIP = "${params.publish_zip}"
     PUBLISH_IMAGE = "${params.publish_image}"
     PUBLISH_ZBOX = "${params.publish_zbox}"
-
+    PUBLISH_ENGLISH = "${params.publish_en}"
   }
 
   stages {
@@ -132,10 +129,9 @@ pipeline {
         }
 
         stage("Build") {
-          when { expression { return params.publish_open || params.publish_biz || params.publish_plugin_safe } }
+          when { expression { return params.source_build } }
           stages {
             stage("增量降级") {
-              when { expression { return params.publish_open } }
               steps {
                 echo "DOWNGRADE_VERSION in jenkinsfile is ${env.DOWNGRADE_VERSION}"
                 container('package') {
@@ -157,7 +153,6 @@ pipeline {
             }
 
             stage("make ciCommon") {
-              when { expression { return params.publish_open } }
               steps {
                 withCredentials([gitUsernamePassword(credentialsId: 'git-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
@@ -171,7 +166,6 @@ pipeline {
             }
 
             stage("zentaoext") {
-              when { expression { return params.publish_biz } }
               steps {
                 container('package') {
                   sh 'cd $SRC_ZENTAOEXT_PATH && make'
@@ -230,7 +224,7 @@ pipeline {
     stage("Publish") {
       stages {
         stage("Merge and Upload") {
-          when { expression { return params.publish_biz } }
+          when { expression { return params.source_build } }
           matrix {
             agent {
               kubernetes {
@@ -356,7 +350,7 @@ pipeline {
         } // End Merge and Upload Max
 
         stage("Notice ZIP") {
-          when { expression { return params.publish_biz || params.publish_plugin_safe } }
+          when { expression { return params.source_build } }
           steps {
             checkout scmGit(branches: [[name: "master"]],
               extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
@@ -390,6 +384,7 @@ pipeline {
                 stage("Zbox win") {
                   agent {
                     kubernetes {
+                      inheritFrom "upload-azure code-sign"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -406,6 +401,11 @@ pipeline {
 
                     stage("Build") {
                       steps {
+                        withCredentials([string(credentialsId: 'osslsigncode-cert', variable: 'CODE_SIGN_CERT')]) {
+                          container('osslsigncode') {
+                            sh 'echo -ne $CODE_SIGN_CERT | base64 -d > .codesign.p12'
+                          }
+                        }
                         script {
                           buildZboxWin.doBuild()
                           buildZboxWin.doUploadInternal()
@@ -439,6 +439,7 @@ pipeline {
                 stage("Zbox linux") {
                   agent {
                     kubernetes {
+                      inheritFrom "upload-azure"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
