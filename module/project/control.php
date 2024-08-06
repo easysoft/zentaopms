@@ -784,8 +784,12 @@ class project extends control
 
         $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
 
+        $sort = $orderBy;
+        if(strpos($sort, 'rawID_') !== false) $sort = str_replace('rawID_', 'id_', $sort);
+        if(strpos($sort, 'nameCol_') !== false) $sort = str_replace('nameCol_', 'name_', $sort);
+
         $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, (bool)$this->cookie->showTask, '', $orderBy, $pager);
+        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, (bool)$this->cookie->showTask, '', $sort, $pager);
         $this->view->productList    = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID      = $productID;
         $this->view->product        = $this->product->getByID($productID);
