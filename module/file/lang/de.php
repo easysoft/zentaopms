@@ -53,6 +53,10 @@ $lang->file->addedDate = 'Angelegt am';
 $lang->file->downloads = 'Downloads';
 $lang->file->extra     = 'Extra';
 
+$lang->file->attachmentName = "Attachment Name";
+$lang->file->sourceObject   = "Source Object";
+$lang->file->sourceID       = "Source ID";
+
 $lang->file->dragFile            = 'Bitte hier ablegen.';
 $lang->file->childTaskTips       = 'It\'s a child task if there is a \'>\' before the name.';
 $lang->file->uploadImagesExplain = 'Hinweis: Beim Upload von .jpg, .jpeg, .gif, und .png Dateien. Der Dateiname wird als Titel der Story genutzt und das Bild als der Inhalt.';

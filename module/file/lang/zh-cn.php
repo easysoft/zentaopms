@@ -53,6 +53,10 @@ $lang->file->addedDate = '添加时间';
 $lang->file->downloads = '下载次数';
 $lang->file->extra     = '备注';
 
+$lang->file->attachmentName = "附件名称";
+$lang->file->sourceObject   = "来源对象";
+$lang->file->sourceID       = "来源ID";
+
 $lang->file->dragFile            = '请拖拽文件到此处';
 $lang->file->childTaskTips       = "任务名称前有'>'标记的为子任务";
 $lang->file->uploadImagesExplain = '注：请上传"jpg, jpeg, gif, png"格式的图片，程序会以文件名作为标题，以图片作为内容。';

@@ -53,6 +53,10 @@ $lang->file->addedDate = 'Ajouté le';
 $lang->file->downloads = 'Téléchargements';
 $lang->file->extra     = 'Commentaires';
 
+$lang->file->attachmentName = "Attachment Name";
+$lang->file->sourceObject   = "Source Object";
+$lang->file->sourceID       = "Source ID";
+
 $lang->file->dragFile            = 'Faites glisser images ici.';
 $lang->file->childTaskTips       = 'Il s\'agit d\'une sous-tâche s\'il y a un \'>\' devant le nom.';
 $lang->file->uploadImagesExplain = "Note : Chargez images au format .jpg, .jpeg, .gif, ou .png. Le nom de l'image sera le nom de la Story et l'image en sera sa description.";
